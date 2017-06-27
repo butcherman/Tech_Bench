@@ -17,7 +17,6 @@ class Dashboard extends Controller
     
     public function index()
     {
-        Logs::writeLog('test', 'this is a test');
         $this->view('tech.dashboard');
         $this->render();
     }
