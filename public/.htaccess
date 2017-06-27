@@ -1,0 +1,10 @@
+#  .htaccess file will take a url in the format of sitename.com/controller/method/vairables
+#  and change it to index.php?url=controller/method/variables to be processed by the application
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	
+	RewriteRule ^(.*)$ index.php?url=$1 [PT,L]
+</IfModule>

@@ -1,0 +1,8 @@
+# Ignore File
+
+/logs/*.log
+/app/controllers/tech.php
+/vendor/*
+/node_modules
+/public/source/lib/*
+/config

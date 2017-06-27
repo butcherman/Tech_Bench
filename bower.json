@@ -1,0 +1,12 @@
+{
+    "name": "tech_bench",
+    "version": "2.1.0",
+    "dependencies": {
+        "jquery": "~2.0.3",
+        "bootstrap": "~3.3.7",
+        "bootstrap-toggle": "*",
+        "jquery-validation": "*",
+        "tinymce": "*",
+        "tablesorter": "*"
+    }
+}
