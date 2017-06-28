@@ -9,7 +9,7 @@ class Database
     
     //  Initialize the database
     public static function init()
-    {
+    {   
         $dbHost = Config::getDB('host');
         $dbUser = Config::getDB('dbUser');
         $dbPass = Config::getDB('dbPass');
