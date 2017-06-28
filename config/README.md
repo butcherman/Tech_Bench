@@ -1,1 +1,0 @@
-This file contains the configuration information for the Tech Bench

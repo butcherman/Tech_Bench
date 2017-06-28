@@ -23,6 +23,11 @@ class Config
                 die();
             }
         }
+        else
+        {
+            header('Location: /setup');
+            die();
+        }
     }
     
     //  Return a core value from the config file

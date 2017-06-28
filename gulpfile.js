@@ -1,9 +1,15 @@
 var gulp = require('gulp'),
-    bower = require('gulp-bower');
+    bower = require('gulp-bower'),
+    file = require('gulp-file');
  
 var config = {
      bowerDir: './vendor'
 }
+
+gulp.task('config', function() {
+    var str = "[core]\n logo =\n baseURL =\n title = ";
+        return gulp.src('config').pipe(file('config.ini', str)).pipe(gulp.dest('config'));
+});
 
 gulp.task('bower', function() {
     return bower()
@@ -25,4 +31,4 @@ gulp.task('copy', ['bower'], function() {
             .pipe(gulp.dest('public/source/lib/tinymce'))
 });
 
-gulp.task('default', ['bower', 'copy']);
+gulp.task('default', ['bower', 'copy', 'config']);

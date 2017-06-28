@@ -33,5 +33,6 @@ require_once __DIR__.'/../app/core/template.php';
 Config::init();
 Database::init();
 
+
 //  Begin the application
 $app = new App;
