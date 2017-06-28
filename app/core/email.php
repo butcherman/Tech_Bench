@@ -7,10 +7,7 @@ class Email
     private static $mail, $body, $sendTo;
     
     public static function init()
-    {
-        //  Include the PHPMailer library
-   //     require_once __DIR__.'/../../vendor/PHPMailer/PHPMailerAutoload.php';
-        
+    {        
         //  Setup initial paramaters for the email
         self::$mail = new PHPMailer(true);
         self::$mail->IsSMTP();

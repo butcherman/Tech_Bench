@@ -7,7 +7,7 @@ var config = {
 }
 
 gulp.task('config', function() {
-    var str = "[core]\n logo =\n baseURL =\n title = ";
+    var str = "[core]\n logo =\n baseURL =\n title =\n [database]\n host =\n dbUser =\n dbPass =\n dbName =\n";
         return gulp.src('config').pipe(file('config.ini', str)).pipe(gulp.dest('config'));
 });
 
