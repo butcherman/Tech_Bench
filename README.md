@@ -48,7 +48,8 @@ Run Composer to fetch all dependencies
 ```
 $ composer install
 ```
-All necessary files will be downloaded and moved to the necessary directories.
+Composer will install all necessary dependencies with their latest versions and move necessary files 
+into the proper folders for use.
 
 Website Setup
 -------------
