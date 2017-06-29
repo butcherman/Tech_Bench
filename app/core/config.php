@@ -16,7 +16,7 @@ class Config
         //  Check if the config file exists, if it does, assign it to the $conf variable
         if(file_exists($configLocation))
         {
-            self::$conf = parse_ini_file($configLocation, 1);
+            Self::$conf = parse_ini_file($configLocation, 1);
             if(empty(self::getCore('baseURL')) && $_GET['url'] != 'setup')
             {
                 header('Location: /setup');

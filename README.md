@@ -36,6 +36,14 @@ Install 'gulp'
 ```
 $ npm install gulp
 ```
+Install 'gulp-bower'
+```
+$ npm install gulp-bower
+```
+Install 'gulp-file'
+```
+$ npm install gulp-file
+```
 Run Composer to fetch all dependencies
 ```
 $ composer install
