@@ -6,6 +6,6 @@ class Setup extends Controller
 {
     public function index()
     {
-        echo 'setup page';
+        echo 'Setup form goes here.';
     }
 }
