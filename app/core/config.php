@@ -42,4 +42,10 @@ class Config
     {
         return self::$conf['email'][$var];
     }
+    
+    //  Return a file information value from the config file
+    public static function getFile($var)
+    {
+        return self::$conf['upload_paths'][$var];
+    }
 }

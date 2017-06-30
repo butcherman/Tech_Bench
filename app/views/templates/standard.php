@@ -12,6 +12,7 @@
     <script src="/source/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="/source/lib/jquery-validation/jquery.validate.min.js"></script>
     <script src="/source/lib/jquery-validation/additional-methods.min.js"></script>
+    <script>var maxFile = <?= Config::getFile('maxUpload'); ?></script>
 
     <title><?= Config::getCore('title'); ?></title>
 </head>

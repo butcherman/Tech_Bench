@@ -123,4 +123,30 @@ class Template
         
         return $nav;
     }
+    
+    //  Pull a users full name from the database
+    public static function getUserName($userID)
+    {
+        $qry = 'SELECT `first_name`, `last_name` FROM `users` WHERE `user_id` = :userID';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['userID' => $userID]);
+        $name = $result->fetch();
+        
+        return $name->first_name.' '.$name->last_name;
+    }
+    
+    //  Notify all users
+    public static function notifyAllUsers($description, $link)
+    {
+        $qry = 'SELECT `user_id` FROM `users` WHERE `active` = 1';
+        $result = Database::getDB()->query($qry);
+        $data = $result->fetchAll();
+        
+        $qry = 'INSERT INTO `user_notifications` (`user_id`, `description`, `link`) VALUES (:userID, :desc, :link)';
+        $result = Database::getDB()->prepare($qry);
+        foreach($data as $d)
+        {
+            $result->execute(['userID' => $d->user_id, 'desc' => $description, 'link' => $link]);
+        }
+    }
 }

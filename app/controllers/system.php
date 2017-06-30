@@ -74,7 +74,7 @@ class System extends Controller
         $model = $this->model('systems');
         
         //  Verify that the system is valid
-        if(!($sysID = $model->getSysID($sys)))
+        if(!($sysID = $model->getSysID(str_replace('-', ' ', $sys))))
         {
             $msg = 'User: '.$_SESSION['id'].' attempted to access an invalid system: '.$_GET['url'];
             Logs::writeLog('Invalid', $msg);
@@ -94,38 +94,102 @@ class System extends Controller
             $fileList .= $i == 0 ? 'class="active">' : '>';
             $fileList .= '<a href="#'.str_replace(' ', '-', $type->description).'" data-toggle="tab">'.$type->description.'</a></li>';
 
-            $fileList .= '<div id="'.str_replace(' ', '-', $type->description).'"class="tab-pane table-responsive ';
-            $fileList .= $i == 0 ? 'active">' : 'fade">';
-            $fileList .= '<table class="table table-striped ajax-table" data-load="'.str_replace(' ', '-', $type->description).'"><thead><tr><th>File</th><th>Added By</th><th>Date Added</th></tr></thead><tbody><tr><td colspan="4" class="text-center">No Files</td></tr></tbody></table></div>';
+            $fileData .= '<div id="'.str_replace(' ', '-', $type->description).'"class="tab-pane table-responsive ';
+            $fileData .= $i == 0 ? 'active">' : 'fade">';
+            $fileData .= '<table class="table table-striped ajax-table" data-load="'.str_replace(' ', '-', $type->description).'"><thead><tr><th>File</th><th>Added By</th><th>Date Added</th></tr></thead><tbody><tr><td colspan="4" class="text-center">No Files</td></tr></tbody></table></div>';
 
             $optList .= '<option value="'.str_replace(' ', '-', $type->description).'">'.$type->description.'</option>';
 
             $i++;
         }
         $fileList .= '</ul>';
-        $dataList .= '</div>';
-        
+        $fileData .= '</div>';
         
         //  Create view data
         $data['sysName'] = $sys;
         $data['fileList'] = $fileList;
-        $data['dataList'] = $dataList;
+        $data['fileData'] = $fileData;
         $data['optList']  = $optList;
-        
-        ////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        /////////////////////////////////////
         
         $this->view('system.systemData', $data);
     }
+    
+    //  Ajax call to pull all files for a specifi system
+    public function getSysFiles($sysName, $fileType)
+    {
+        $model = $this->model('systems');
+        
+        //  Verify that the system is valid
+        if(!($sysID = $model->getSysID(str_replace('-', ' ', $sysName))))
+        {
+            $msg = 'User: '.$_SESSION['id'].' attempted to access an invalid system: '.$_GET['url'];
+            Logs::writeLog('Invalid', $msg);
+            header('Location: /err/invalid-system');
+            die();
+        }
+        
+        //  Pull the files from the database
+        $files = $model->getSysFiles(str_replace('-', ' ', $sysName), str_replace('-', ' ', $fileType));
+        
+        //  Sort through files and arrange them
+        if(empty($files))
+        {
+            $fileData = '<tr><td colspan="4" class="text-center">No Files</td></tr>';
+        }
+        else
+        {
+            $fileData = '';
+            foreach($files as $file)
+            {
+                $author = Template::getUserName($file->user_id);
+                
+                $fileData .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'" data-content="'.$file->description.'" data-toggle="popover">'.$file->name.'</a></td><td>'.$author.'</td><td>'.date('M j, Y', strtotime($file->added_on)).'</td></tr>';
+            }
+        }
+        
+        $this->render($fileData);
+    }
+    
+    //  Ajax call to submit a new system file
+    public function submitNewFile($sysName)
+    {
+        $model = $this->model('systems');
+        $fileModel = $this->model('files');
+        $success = false;
+        
+        //  Verify that the system is valid
+        if(!($sysID = $model->getSysID(str_replace('-', ' ', $sysName))))
+        {
+            $msg = 'User: '.$_SESSION['id'].' attempted to access an invalid system: '.$_GET['url'];
+            Logs::writeLog('Invalid', $msg);
+            header('Location: /err/invalid-system');
+            die();
+        }
+        
+        $filePath = Config::getFile('uploadRoot').Config::getFile('sysPath').$model->getSysFolder($sysName);
+        
+        if(!empty($_FILES))
+        {
+            $fileModel->setFileLocation($filePath);
+            $fileID = $fileModel->processFiles($_FILES, $_SESSION['id'], 'tech');
+            $fileData = $_POST;
+            $fileData['fileID'] = $fileID[0];
+            $fileData['sysID'] = $model->getSysID(str_replace('-', ' ', $sysName));
+            $fileData['user'] = $_SESSION['id'];
+            
+            $model->addSysFile($fileData, $_SESSION['id']);
+            $success = true;
+            
+            //  Write a log file noting file was uploaded
+            $msg = 'New file added for '.$sysName.'. File ID: '.$fileData['fileID'].' User: '.$fileData['user'].'.';
+            Logs::writeLog('File-Upload', $msg);
+            
+            //  Notify users that the file was added
+            $notifyMsg = 'New File Added For '.str_replace('-', ' ', $sysName);
+            $notifyLnk = '/system/'.$model->getSysCategory($sysName).'/'.$sysName;
+            Template::notifyAllUsers($notifyMsg, $notifyLnk);
+        }
+        
+        $this->render($success);
+    }
 }
-
-
-
-
-
-
-
-
-
-

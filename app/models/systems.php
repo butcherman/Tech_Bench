@@ -20,6 +20,13 @@ class Systems
         return $result->fetchAll();
     }
     
+    //  Get system category
+    public function getSysCategory($sysName)
+    {
+        $qry = 'SELECT `description` FROM `system_categories` JOIN `system_types` ON `system_categories`.`cat_id` = `system_types`.`cat_id` WHERE `system_types`.`name` = :name';
+        $this->db->prepare($qry)->execute(['name' => $sysName]);
+    }
+    
     //  Function to return all the systems for a specific category
     public function getSystems($category)
     {
@@ -55,5 +62,34 @@ class Systems
         $result = $this->db->query($qry);
         
         return $result->fetchAll();
+    }
+    
+    //  Pull the files for a specific system and file type
+    public function getSysFiles($sys, $fileType)
+    {
+        $qry = 'SELECT * FROM `sys_files_view` WHERE `sys_name` = :sys AND `file_desc` = :type';
+        $result = $this->db->prepare($qry);
+        $result->execute(['sys' => $sys, 'type' => $fileType]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Pull the folder that the files are stored in for a selected system
+    public function getSysFolder($sysName)
+    {
+        $qry = 'SELECT `system_types`.`folder_location`, `system_categories`.`description` FROM `system_types` JOIN `system_categories` ON `system_types`.`cat_id` = `system_categories`.`cat_id` WHERE `name` = :sysName';
+        $result = $this->db->prepare($qry);
+        $result->execute(['sysName' => str_replace('-', ' ', $sysName)]);
+        
+        $data = $result->fetch();
+       
+        return str_replace(' ', '_', $data->description).Config::getFile('slash').$data->folder_location.Config::getFile('slash');
+    }
+    
+    //  Function to add a file to the System
+    public function addSysFile($fileArr)
+    {
+        $qry = 'INSERT INTO `system_files` (`sys_id`, `type_id`, `file_id`, `name`, `description`, `user_id`) VALUES (:sysID, (SELECT `type_id` FROM `system_file_types` WHERE `description` = :fileType), :fileID, :name, :description, :user)';
+        $this->db->prepare($qry)->execute($fileArr);        
     }
 }

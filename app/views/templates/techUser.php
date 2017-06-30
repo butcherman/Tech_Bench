@@ -14,6 +14,8 @@
         <script src="/source/lib/bootstrap-toggle/bootstrap-toggle.min.js"></script>
         <script src="/source/lib/jquery-validation/jquery.validate.js"></script>
         <script src="/source/lib/jquery-validation/additional-methods.js"></script>
+        <script src="/source/js/functions.tech.js"></script>
+        <script>var maxFile = <?= Config::getFile('maxUpload'); ?></script>
         
         <title><?= Config::getCore('title'); ?></title>
     </head>
