@@ -83,7 +83,7 @@
     
     $('#new-file').on('hide.bs.modal', function()
     {
-        $('#new-file-form').find('input[type=text], intput[type=file], textarea').val('');
+        $('#new-file-form').get(0).reset();
     });
     
     $('#file').on('change', function()

@@ -56,6 +56,7 @@ class Controller
         }
         else if(!empty($this->view))
         {
+            $data = $this->viewData;
             include __DIR__.'/../views/standard/'.$this->view.'.php';
         }
     }

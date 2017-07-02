@@ -23,7 +23,7 @@ gulp.task('copy', ['bower'], function() {
             .pipe(gulp.dest('public/source/lib/bootstrap/')),
         gulp.src(['vendor/bootstrap-toggle/js/*', 'vendor/bootstrap-toggle/css/*'])
             .pipe(gulp.dest('public/source/lib/bootstrap-toggle')),
-        gulp.src(['vendor/tablesorter/jquery.*'])
+        gulp.src(['vendor/jquery.tablesorter/dist/js/jquery.tablesorter.combined.min.js', 'vendor/jquery.tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js'])
             .pipe(gulp.dest('public/source/lib/tablesorter')),
         gulp.src(['vendor/jquery-validation/dist/*'])
             .pipe(gulp.dest('public/source/lib/jquery-validation')),

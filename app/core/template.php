@@ -100,7 +100,7 @@ class Template
                 //  Determine if the parent item has children or is a stand alone
                 if(isset($menuItem['parent']) && $menuItem['parent'])
                 {
-                    $nav .= '<li class="folder-icn"><a href="/systems/'.$catObj->description.'/'.str_replace(' ', '-', $menuItem['name']).'">'.$menuItem['name'].'</a>';
+                    $nav .= '<li><span class="glyphicon glyphicon-folder-close"></span> <a href="/systems/'.$catObj->description.'/'.str_replace(' ', '-', $menuItem['name']).'">'.$menuItem['name'].'</a>';
                     $nav .= '<ul class="nav-toggle">';
                     //  Cycle through sub menus
                     foreach($subMenu as $sub)

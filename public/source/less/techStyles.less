@@ -10,6 +10,8 @@
 // Global Variables
 @hideNavWidth: 768px;
 @white: #FFFFFF;
+@uncheckedFav:#C4C4C4;
+@checkedFav: #D46E70;
 
 
 
@@ -201,4 +203,15 @@ html, body, #wrapper {
     width: 75%;
     display: none;
     .centerDiv;
+}
+
+
+.item-fav-unchecked {
+    color: @uncheckedFav;
+    .pointer;
+}
+
+.item-fav-checked {
+    color: @checkedFav;
+    .pointer;
 }

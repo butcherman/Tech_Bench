@@ -7,6 +7,6 @@
         "bootstrap-toggle": "*",
         "jquery-validation": "*",
         "tinymce": "*",
-        "tablesorter": "*"
+        "jquery.tablesorter": "*"
     }
 }
