@@ -48,4 +48,10 @@ class Config
     {
         return self::$conf['upload_paths'][$var];
     }
+    
+    //  Return the encryption key
+    public static function getKey()
+    {
+        return self::$conf['encryption']['customerKey'];
+    }
 }

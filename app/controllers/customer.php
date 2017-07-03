@@ -133,14 +133,171 @@ class Customer extends Controller
     public function editCustDataSubmit($custID)
     {
         $model = $this->model('customers');
-        echo $custID;
-        die();
         
         $model->updateCustData($custID, $_POST);
         
         $msg = 'Customer ID: '.$custID.' Updated By: '.$_SESSION['id'];
         Logs::writeLog('Customer-Change', $msg);
         
-        render('success');
+        $this->render('success');
+    }
+    
+    //  Ajax call to load the customers systems
+    public function loadSystems($custID)
+    {
+        $model = $this->model('customers');
+        $sysModel = $this->model('systems');
+        
+        $custSystems = $model->getCustSystem($custID);
+        
+        function arangeSystem($custID, $sysName, $model, $sysModel)
+        {
+            //  Pull all system information
+            $sysID = $sysModel->getSysID($sysName->name);
+            $table = $sysModel->getSysTable($sysID);
+            $cols  = $sysModel->getCols($table);
+            $data  = $model->getSysData($table, $cols, $custID);
+
+            //  Sort the information into a readable format
+            $content = '<dl class="dl-horizontal"><dt>SYSTEM TYPE:</dt><dd>'.$sysName->name.'</dd>';
+            foreach($data as $key => $item)
+            {
+                $content .= '<dt>'.strtoupper(str_replace('_', ' ', $key)).':</dt><dd>'.$item.'</dd>';
+            }
+            $content .= '</dl>';
+            
+            return $content;
+        }
+        
+        //  Determine if there are any systems at all
+        if(!$custSystems)
+        {
+            $content = '<h4>No Systems, Please Add One</h4>';
+        }
+        //  If there is only one system
+        else if(count($custSystems) == 1)
+        {   
+            $content = arangeSystem($custID, $custSystems[0], $model, $sysModel);
+        }
+        else
+        {
+            $i = 0;
+            $sysTabs = '<ul class="nav nav-tabs">';
+            $sysCont = '<div class="tab-content">';
+            foreach($custSystems as $syst)
+            {
+                $content = arangeSystem($custID, $syst, $model, $sysModel);
+                
+                $sysTabs .= '<li ';
+                $sysTabs .= $i == 0 ? 'class="active">' : '>';
+                $sysTabs .= '<a href="#'.str_replace(' ', '-', $syst->name).'" data-toggle="tab">'.$syst->name.'</a></li>';
+
+                $sysCont .= '<div id="'.str_replace(' ', '-', $syst->name).'" class="tab-pane ';
+                $sysCont .= $i == 0 ? 'active">' : 'fade">';
+                $sysCont .= $content.'</div>';
+
+                $i++;
+            }
+            
+            $sysTabs .= '</ul>';
+            $sysCont .= '</div>';
+            
+            $content = $sysTabs.$sysCont;
+        }
+        
+        $this->render($content);
+    }
+    
+    //  Ajax call to load the form to adjust a customer system
+    public function editCustSystemLoad($custID, $sysName)
+    {
+        $model = $this->model('customers');
+        $sysModel = $this->model('systems');
+        
+  //      $custSystems = $model->getCustSystem($custID);
+        
+//        function arangeSystem($custID, $sysName, $model, $sysModel)
+//        {
+            //  Pull all system information
+            $sysID = $sysModel->getSysID($sysName);
+            $table = $sysModel->getSysTable($sysID);
+            $cols  = $sysModel->getCols($table);
+            $data  = $model->getSysData($table, $cols, $custID);
+
+            //  Sort the information into a readable format
+            $content = '<form class="system-edit-form"><div class="form-group"><label for="editSysType">SYSTEM TYPE:</label><input type="text" name="editSysType" id="editSysType" class="form-control" value="'.$sysName.'" readonly /></div>';
+            foreach($data as $key => $item)
+            {
+                $content .= '<div class="form-group"><label for="'.$key.'">'.strtoupper(str_replace('_', ' ', $key)).'</label><input type="text" name="'.$key.'" id="'.$key.'" class="form-control" value="'.$item.'" /></div>';
+            }
+            $content .= '<input type="submit" id="editCustSystemSubmit" class="form-control btn btn-default" value="Submit" /></form>';
+            
+//            return $content;
+//        }
+        
+//        //  Determine if there are any systems at all
+//        if(!$custSystems)
+//        {
+//            $content = '<h4>No Systems, Please Add One</h4>';
+//        }
+//        //  If there is only one system
+//        else if(count($custSystems) == 1)
+//        {   
+//            $content = arangeSystem($custID, $custSystems[0], $model, $sysModel);
+//        }
+//        else
+//        {
+//            $i = 0;
+//            $sysTabs = '<ul class="nav nav-tabs">';
+//            $sysCont = '<div class="tab-content">';
+//            foreach($custSystems as $syst)
+//            {
+//                $content = arangeSystem($custID, $syst, $model, $sysModel);
+//                
+//                $sysTabs .= '<li ';
+//                $sysTabs .= $i == 0 ? 'class="active">' : '>';
+//                $sysTabs .= '<a href="#'.str_replace(' ', '-', $syst->name).'" data-toggle="tab">'.$syst->name.'</a></li>';
+//
+//                $sysCont .= '<div id="'.str_replace(' ', '-', $syst->name).'" class="tab-pane ';
+//                $sysCont .= $i == 0 ? 'active">' : 'fade">';
+//                $sysCont .= $content.'</div>';
+//
+//                $i++;
+//            }
+//            
+//            $sysTabs .= '</ul>';
+//            $sysCont .= '</div>';
+//            
+//            $content = $sysTabs.$sysCont;
+//        }
+        
+        $this->render($content);
+    }
+    
+    //  Ajax call to submit the customers system
+    public function editCustSystemSubmit($custID)
+    {
+        $model = $this->model('customers');
+        $sysModel = $this->model('systems');
+        
+        print_r($_POST);
+        die();
+        
+        $sysType = $_POST['editSysType'];
+        if(!$sysID = $sysModel->getSysID($sysType))
+        {
+            $msg = 'Customer ID '.$custID.' failed to update system.  Error: Bad System Type.';
+            Logs::writeLog('Customer-Update-Error', $msg);
+            $content = 'failed';
+        }
+        else
+        {
+            $table = $sysModel->getSysTable($sysID);
+            $cols  = $sysModel->getCols($table);
+            
+            $model->updateCustSystem($table, $cols, $custID, $_POST);
+            
+            $msg = 'Customer ID: '.$custID.' Update System information for '.$sysType.' By User ID: '.$_SESSION['id'];
+        }
     }
 }

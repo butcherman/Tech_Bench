@@ -1,11 +1,11 @@
 <div class="container-fluid">
     <div>
-        <h2><span id="customer-fav" class="glyphicon glyphicon-bookmark <?= $data['custFav']; ?>" title="Bookmark Customer" data-tooltip="tooltip"></span><?= $data['custName']; ?></h2>
-        <h5><?= $data['dbaName']; ?></h5>
+        <h2><span id="customer-fav" class="glyphicon glyphicon-bookmark <?= $data['custFav']; ?>" title="Bookmark Customer" data-tooltip="tooltip"></span><span id="name-span"><?= $data['custName']; ?></span></h2>
+        <h5 id="dba-span"><?= $data['dbaName']; ?></h5>
     </div>
     <div id="customer-address">
         <address>
-            <a href="https://maps.google.com/?q=<?= $data['addrLink']; ?>" target="_blank"><?= $data['address']; ?></a>
+            <a href="https://maps.google.com/?q=<?= $data['addrLink']; ?>" target="_blank" id="addr-span"><?= $data['address']; ?></a>
             <span data-toggle="modal" data-target="#edit-modal">
                 <span id="customer-edit" class="glyphicon glyphicon-pencil pointer" title="Edit Customer Information" data-tooltip="tooltip"></span>
             </span>
@@ -17,7 +17,7 @@
             <div id="customer-system-information"></div>
              <div class="text-center">
                 <a href="#add-system-modal" class="btn btn-default" data-toggle="modal">Add System</a>
-                <a href="#edit-system-modal" class="btn btn-default" data-toggle="modal">Edit System</a>
+                <a href="#edit-modal" id="edit-system-link" class="btn btn-default" data-toggle="modal">Edit System</a>
              </div>
         </div>
         <div class="col-md-5">

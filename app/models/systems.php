@@ -92,4 +92,24 @@ class Systems
         $qry = 'INSERT INTO `system_files` (`sys_id`, `type_id`, `file_id`, `name`, `description`, `user_id`) VALUES (:sysID, (SELECT `type_id` FROM `system_file_types` WHERE `description` = :fileType), :fileID, :name, :description, :user)';
         $this->db->prepare($qry)->execute($fileArr);        
     }
+    
+    //  Pull the name of the table that holds the customer's system information
+    public function getSysTable($sysID)
+    {
+        $qry = 'SELECT `folder_location` FROM `system_types` WHERE `sys_id` = :sysID';
+        $result = $this->db->prepare($qry);
+        $result->execute(['sysID' => $sysID]);
+        
+        return 'data_'.$result->fetch()->folder_location;
+    }
+    
+    //  Pull the table names about the system from the database
+    public function getCols($table)
+    {
+        $qry = 'SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = :schema AND `TABLE_NAME` = :table';
+        $result = $this->db->prepare($qry);
+        $result->execute(['schema' => Config::getDB('dbName'), 'table' => $table]);
+        
+        return $result->fetchAll();
+    }
 }

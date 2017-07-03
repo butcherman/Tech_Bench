@@ -9,7 +9,8 @@ $('body').tooltip({
     selector: '[data-tooltip="tooltip"]', 
     trigger: 'hover'
 });
-
+//  Load the System information from the database
+$('#customer-system-information').load('/customer/loadSystems/'+custID);
 
 
 
@@ -45,7 +46,6 @@ $('#customer-edit').on('click', function()
 //  Validate the customer edit form
 $(document).on('click', '#submit-cust-edit', function(e)
 {
- //   e.preventDefault();
     $('#customer-edit-form').validate(
     {
         rules:
@@ -59,9 +59,53 @@ $(document).on('click', '#submit-cust-edit', function(e)
         {
             $.post('/customer/editCustDataSubmit/'+custID, $('#customer-edit-form').serialize(), function(data)
             {
-                alert(data);
-  //              window.location.replace(url);
+                if(data === 'success')
+                {
+                    //  Load the new customer information into the web page
+                    var name = $('#custName').val();
+                    var dba  = $('#custDBA').val();
+                    var addr = $('#custAddr').val()+',<br />'+$('#custCity').val()+' '+$('#state').val()+' '+$('#zipCode').val();
+                    var link = $('#custAddr').val()+', '+$('#custCity').val()+' '+$('#state').val()+' '+$('#zipCode').val();
+                    
+                    $('#name-span').html(name);
+                    $('#dba-span').html(dba);
+                    $('#addr-span').html(addr);
+                    $('#addr-span').attr('href', 'https://maps.google.com/?q='+link);
+                    
+                    $('#edit-modal').modal('hide');
+                }
+                else
+                {
+                    alert('Sorry, there was an issue processing your request.\nA log has been generated.');
+                }
             });
         }
+    });
+});
+
+//  Load the modal to edit the system information
+$('#edit-system-link').on('click', function()
+{
+    var system = $('.tab-content').children('.active').attr('id');
+    $('#modal-header').html('Edit System');
+    $('#modal-body').load('/customer/editCustSystemLoad/'+custID+'/'+system);
+});
+
+
+$(document).on('click', '#editCustSystemSubmit', function(e)
+{
+    e.preventDefault();
+    $.post('/customer/editCustSystemSubmit/'+custID, $(this).parents('form:first').serialize(), function(data)
+    {
+        $('#edit-modal').modal('hide');
+        alert(data);
+//        if(data == 'success')
+//        {
+//            $('#customer-system-information').load('/customer/loadSystems/'+custID);
+//        }
+//        else
+//        {
+//            alert('There Was A Problem Updating The System.  A log has been generated.');
+//        }
     });
 });

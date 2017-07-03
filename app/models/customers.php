@@ -95,7 +95,46 @@ class Customers
             'zip' => $dataArr['zipCode'],
             'custID' => $custID
         ];
-        $qry = 'UPDATE `customers` SET `name` = :name, `dba_name` = :dba, `address` = :address, `city` = :city, `state` = :state, `zip` = :zip, WHERE `cust_id` = :custID';
+        $qry = 'UPDATE `customers` SET `name` = :name, `dba_name` = :dba, `address` = :address, `city` = :city, `state` = :state, `zip` = :zip WHERE `cust_id` = :custID';
         $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Pull the system specific information for the customer
+    public function getSysData($table, $tableCols, $custID)
+    {
+        $key = Config::getKey();
+        $colQry = [];
+        foreach($tableCols as $col)
+        {
+            $col = $col->COLUMN_NAME;
+            if($col != 'data_id' && $col != 'cust_id')
+            {
+                $colQry[] = 'AES_DECRYPT(`'.$col.'`, "'.$key.'") AS `'.$col.'`';
+            }
+        }
+        
+        $qry = 'SELECT '.implode(', ', $colQry).' FROM  `'.$table.'` WHERE `cust_id` = :custID';
+        $result = $this->db->prepare($qry);
+        $result->execute(['custID' => $custID]);
+        
+        return $result->fetch();
+    }
+    
+    //  Update the system specific information for the customer
+    public function updateSysData($table, $tableCols, $custID, $data)
+    {
+        $key = Config::getKey();
+        $colQry = [];
+        foreach($tableCols as $col)
+        {
+            $col = $col->COLUMN_NAME;
+            if($col != 'data_id' && $col != 'cust_id')
+            {
+                $colQry[] = '`'.$col.'` = AES_ENCRYPT(`'.$data[$col].'`, "'.$key.'")';
+            }
+        }
+        
+        $qry = 'UPDATE `'.$table.'` SET '.implode(', ', $colQry).' WHERE `cust_id` = :custID';
+        $this->db->prepare($qry)->execute(['custID' => $custID]);
     }
 }
