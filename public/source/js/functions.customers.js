@@ -91,21 +91,42 @@ $('#edit-system-link').on('click', function()
     $('#modal-body').load('/customer/editCustSystemLoad/'+custID+'/'+system);
 });
 
-
+//  Submit the edit system form
 $(document).on('click', '#editCustSystemSubmit', function(e)
 {
     e.preventDefault();
     $.post('/customer/editCustSystemSubmit/'+custID, $(this).parents('form:first').serialize(), function(data)
     {
         $('#edit-modal').modal('hide');
-        alert(data);
-//        if(data == 'success')
-//        {
-//            $('#customer-system-information').load('/customer/loadSystems/'+custID);
-//        }
-//        else
-//        {
-//            alert('There Was A Problem Updating The System.  A log has been generated.');
-//        }
+        if(data == 'success')
+        {
+            $('#customer-system-information').load('/customer/loadSystems/'+custID);
+        }
+        else
+        {
+            alert('There Was A Problem Updating The System.  A log has been generated.');
+        }
     });
+});
+
+//  Load the modal to add a new system
+$('#add-system-link').on('click', function()
+{
+    $('#model-header').html('Add System');
+    $('#modal-body').load('/customer/newSystemLoad/'+custID);
+});
+
+//  Load the form based on the selected system
+$(document).on('click', '#addSystemType', function()                    
+{
+    if($(this).val() == '')
+    {
+        $('#add-system-data').html('');
+        $('#add-system-form input[type=submit]').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('#add-system-data').load('/system/loadSystemForm/'+$(this).val());
+        $('#add-system-form input[type=submit]').removeAttr('disabled');
+    }
 });

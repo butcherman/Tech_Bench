@@ -16,7 +16,7 @@
             <h3>Systems:</h3>
             <div id="customer-system-information"></div>
              <div class="text-center">
-                <a href="#add-system-modal" class="btn btn-default" data-toggle="modal">Add System</a>
+                <a href="#edit-modal" id="add-system-link" class="btn btn-default" data-toggle="modal">Add System</a>
                 <a href="#edit-modal" id="edit-system-link" class="btn btn-default" data-toggle="modal">Edit System</a>
              </div>
         </div>

@@ -125,16 +125,21 @@ class Customers
     {
         $key = Config::getKey();
         $colQry = [];
+        $colValue = [];
+        $i = 0;
         foreach($tableCols as $col)
         {
             $col = $col->COLUMN_NAME;
             if($col != 'data_id' && $col != 'cust_id')
             {
-                $colQry[] = '`'.$col.'` = AES_ENCRYPT(`'.$data[$col].'`, "'.$key.'")';
+                $colQry[] = '`'.$col.'` = AES_ENCRYPT(:col'.$i.', "'.$key.'")';
+                $colValue['col'.$i] = $data[$col];
+                $i++;
             }
         }
+        $colValue['custID'] = $custID;
         
         $qry = 'UPDATE `'.$table.'` SET '.implode(', ', $colQry).' WHERE `cust_id` = :custID';
-        $this->db->prepare($qry)->execute(['custID' => $custID]);
+        $this->db->prepare($qry)->execute($colValue);
     }
 }

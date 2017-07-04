@@ -192,4 +192,26 @@ class System extends Controller
         
         $this->render($success);
     }
+    
+    //  Ajax call to load the form for a selected system
+    public function loadSystemForm($sysName)
+    {
+        $model = $this->model('systems');
+        
+        $sysID = $model->getSysID($sysName);
+        $table = $model->getSysTable($sysID);
+        $cols  = $model->getCols($table);
+        
+        $form = '';
+        foreach($cols as $col)
+        {
+            if($col->COLUMN_NAME != 'data_id' && $col->COLUMN_NAME != 'cust_id')
+            {
+                $form .= '<div class="form-group"><label for="'.$col->COLUMN_NAME.'">'.strtoupper(str_replace('_', ' ', $col->COLUMN_NAME)).'</label><input type="text" id="'.$col->COLUMN_NAME.'" name="'.$col->COLUMN_NAME.'" class="form-control" /></div>';
+            }
+        }
+        
+        $this->template('');
+        $this->render($form);
+    }
 }
