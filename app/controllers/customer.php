@@ -13,7 +13,6 @@ class Customer extends Controller
             header('Location: /err/restricted');
             die();
         }
-        $this->template('techUser');
     }
     
     public function index()
@@ -33,6 +32,7 @@ class Customer extends Controller
             $data['optList'] .= '</optgroup>';
         }
         
+        $this->template('techUser');
         $this->view('customers.search', $data);
         $this->render();
     }
@@ -64,6 +64,7 @@ class Customer extends Controller
             }
         }
         
+        $this->template('techUser');
         $this->render($custList);
     }
     
@@ -90,6 +91,7 @@ class Customer extends Controller
             $this->view('customers.customerDetails', $data);
         }
         
+        $this->template('techUser');
         $this->render();
     }
     
@@ -124,7 +126,6 @@ class Customer extends Controller
             'zip' => $custData->zip
         ];
         
-        $this->template('');
         $this->view('customers.editCustomerInformation', $data);
         $this->render();
     }
@@ -213,6 +214,13 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
         $sysModel = $this->model('systems');
+        
+        //  Determine if the customer only has one system
+        $systems = $model->getCustSystem($custID);
+        if(count($systems) == 1)
+        {
+            $sysName = $systems[0]->name;
+        }
 
         //  Pull all system information
         $sysID = $sysModel->getSysID($sysName);
@@ -255,7 +263,7 @@ class Customer extends Controller
             $content = 'success';
         }
         
-        echo $content;
+        $this->render($content);
     }
     
     //  Ajax call to load the form for a new system
@@ -276,8 +284,99 @@ class Customer extends Controller
             $data['optList'] .= '</optgroup>';
         }
         
-        $this->template('');
         $this->view('customers.newSysForm', $data);
         $this->render();
+    }
+    
+    //  Ajax call to submit a new customer system
+    public function newSystemSubmit($custID)
+    {
+        $model = $this->model('customers');
+        $sysModel = $this->model('systems');
+        
+        $custSystems = $model->getCustSystem($custID);
+
+        if(!$sysID = $sysModel->getSysID($_POST['addSystemType']))
+        {
+            $content = 'Bad System Type';
+            $msg = 'Customer ID '.$custID.' failed to add system. Error: Bad System Type - '.$_POST['addSystemType'];
+            Logs::writeLog('Customer-Update', $msg);
+        }
+        else
+        {
+            $dup = false;
+            //  Determine if the customer already has the system type
+            if(!empty($custSystems))
+            {
+                foreach($custSystems as $sys)
+                {
+                    if($sys->name == $_POST['addSystemType'])
+                    {
+                        $dup = true;
+                        $content = 'duplicate';
+                    }
+                }
+            }
+            if(!$dup)
+            {
+                $sysModel->addSysType($custID, $sysID, $_POST);
+                $content = 'success';
+            }
+        }
+         
+        $this->render($content);
+    }
+    
+    //  Ajax call to pull all customer contacts from the database
+    public function loadContacts($custID)
+    {
+        $model = $this->model('customers');
+        
+        $contacts = $model->getContacts($custID);
+        $data = '';
+        if(!$contacts)
+        {
+            $data = '<tr><td colspan="4" class="text-center">No Contacts Please Add One</td></tr>';
+        }
+        else
+        {
+            foreach($contacts as $cont)
+            {
+                $data .= '<tr><td>'.$cont->name.'</td><td><a href="tel:'.$cont->phone.'">'.Template::readablePhoneNumber($cont->phone).'</a></td><td><a href="mailto:'.$cont->email.'">'.$cont->email.'</a></td><td><a href="#edit-modal" title="Edit Contact" class="edit-contact-link" data-tooltip="tooltip" data-toggle="modal" data-contid="'.$cont->cont_id.'"><span class="glyphicon glyphicon-pencil"></span></a> <a href="#" title="Delete Contact" data-tooltip="tooltip" data-contid="'.$cont->cont_id.'" class="delete-contact-link"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+            }
+        }
+        
+        $this->render($data);
+    }
+    
+    //  Ajax call to load the new contact form
+    public function newContactLoad()
+    {
+        $this->view('customers.newContactForm');
+        $this->render();
+    }
+    
+    //  Ajax call to submit the new contact form
+    public function newContactSubmit($custID)
+    {
+        $model = $this->model('customers');
+
+        $model->addContact($custID, $_POST);
+        $msg = 'Customer ID: '.$custID.' Contact - '.$_POST['contName'].' added by User ID: '.$_SESSION['id'];
+        Logs::writeLog('Customer-Change', $msg);
+        
+        $this->render('success');
+    }
+    
+    //  Ajax call to load the customer contact edit form
+    public function editContactLoad($contID)
+    {
+        $model = $this->model('customers');
+        
+        $contactData = $model->getOneContact($contID);
+        //////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////
     }
 }

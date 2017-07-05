@@ -112,4 +112,39 @@ class Systems
         
         return $result->fetchAll();
     }
+    
+    //  Add a new system type for a customer
+    public function addSysType($custID, $sysID, $sysData)
+    {   
+        //  Add the system type into the database
+        $qry = 'INSERT INTO `customer_systems` (`cust_id`, `sys_id`) VALUES (:cust, :sys)';
+        $this->db->prepare($qry)->execute(['cust' => $custID, 'sys' => $sysID]);
+        
+        //  Get the database informaiton necessary for the system data
+        $table = $this->getSysTable($sysID);
+        $cols  = $this->getCols($table);
+        
+        //  Create the query values for the database
+        $key = Config::getKey();
+        $colQry = [];
+        $valQry = [];
+        $colValue = [];
+        $i = 0;
+        foreach($cols as $col)
+        {
+            $col = $col->COLUMN_NAME;
+            if($col != 'data_id' && $col != 'cust_id')
+            {
+                $colQry[] = '`'.$col.'`'; // = AES_ENCRYPT(:col'.$i.', "'.$key.'")';
+                $valQry[] = 'AES_ENCRYPT(:col'.$i.', "'.$key.'")';
+                $colValue['col'.$i] = $sysData[$col];
+                $i++;
+            }
+        }
+        $colValue['custID'] = $custID;
+        
+        //  Add the syste data to the databse
+        $qry = 'INSERT INTO `'.$table.'` (`cust_id`, '.implode(', ', $colQry).') VALUES (:custID, '.implode(', ', $valQry).')';
+        $this->db->prepare($qry)->execute($colValue);
+    }
 }

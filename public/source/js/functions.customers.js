@@ -11,12 +11,18 @@ $('body').tooltip({
 });
 //  Load the System information from the database
 $('#customer-system-information').load('/customer/loadSystems/'+custID);
+//  Load the Contact information from the database
+$('#contact-information').children('tbody').load('/customer/loadContacts/'+custID);
 
 
 
 
-
-
+//  Clear any data in the Modal body when the Modal closes
+$('#edit-modal').on('hidden.bs.modal', function()
+{
+    $('#modal-header').html('Modal Dialog');
+    $('#modal-body').html('');
+});
 
 
 //  Add or remove a bookmark for a customer
@@ -112,7 +118,7 @@ $(document).on('click', '#editCustSystemSubmit', function(e)
 //  Load the modal to add a new system
 $('#add-system-link').on('click', function()
 {
-    $('#model-header').html('Add System');
+    $('#modal-header').html('Add System');
     $('#modal-body').load('/customer/newSystemLoad/'+custID);
 });
 
@@ -129,4 +135,78 @@ $(document).on('click', '#addSystemType', function()
         $('#add-system-data').load('/system/loadSystemForm/'+$(this).val());
         $('#add-system-form input[type=submit]').removeAttr('disabled');
     }
+});
+
+
+//  Submit the new system form
+$(document).on('click', '#add-system-submit', function(e)
+{
+    e.preventDefault();
+    $.post('/customer/newSystemSubmit/'+custID, $(this).parents('form:first').serialize(), function(data)
+    {
+        if(data == 'success')
+        {
+            $('#edit-modal').modal('hide');
+            $('#customer-system-information').load('/customer/loadSystems/'+custID);
+        }
+        else if(data == 'duplicate')
+        {
+            $('#add-system-data').html('<h4 class="text-center">This Customer Already Has This System Type</h4>');
+        }
+        else
+        {
+            alert('There was a problem adding the system.  A log has been generated');
+        }
+    });
+});
+
+//  Load the form to add a new contact
+$('#add-contact-btn').on('click', function()
+{
+    $('#modal-header').html('Add Contact');
+    $('#modal-body').load('/customer/newContactLoad');
+});
+
+$(document).on('click', '#submit-new-contact', function()
+{
+    $('#add-contact-form').validate(
+    {
+        rules:
+        {
+            contName: "required",
+            contPhone: "phoneUS",
+            contEmail: "email"
+        },
+        messages:
+        {
+            contName: "A Name Must Be Entered",
+            contPhone: "Please Enter Valid Phone Number Including Area Code",
+            contEmail: "Please Enter A Valid Email Address"
+        },
+        submitHandler: function()
+        {
+            $.post('/customer/newContactSubmit/'+custID, $('#add-contact-form').serialize(), function(data)
+            {
+                $('#edit-modal').modal('hide');
+
+                if(data == 'success')
+                {
+                    $('#contact-information').children('tbody').load('/customer/loadContacts/'+custID);
+                }
+                else
+                {
+                    alert('There Was A Problem Adding Contact.')
+                }
+            });
+        }
+    });
+});
+
+$('.edit-contact-link').on('click', function()
+{
+    alert('triggered');
+//    var linkID = $(this).data('contid');
+//    alert(linkID);
+//    $('#modal-header').html('Edit Contactd');
+//    $('#modal-body').load('/cusomer/editContatLoad/'+linkID);
 });

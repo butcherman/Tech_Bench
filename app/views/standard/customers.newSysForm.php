@@ -8,6 +8,6 @@
     </div>
     <div id="add-system-data"></div>
     <div class="form-group">
-        <input type="submit" class="form-control btn btn-default" value="Add System" disabled />
+        <input type="submit" id="add-system-submit" class="form-control btn btn-default" value="Add System" disabled />
     </div>
 </form>

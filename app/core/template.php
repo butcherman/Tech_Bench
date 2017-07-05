@@ -149,4 +149,16 @@ class Template
             $result->execute(['userID' => $d->user_id, 'desc' => $description, 'link' => $link]);
         }
     }
+    
+    //  Format a 10 digit phone number into a readable format
+    public static function readablePhoneNumber($number)
+    {
+        return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '($1) $2-$3', $number);
+    }
+    
+    //  Change a formatted phone number into 10 direct digits for placement into a database
+    public static function cleanPhoneNumber($number)
+    {
+        return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '$1$2$3', $number);
+    }
 }

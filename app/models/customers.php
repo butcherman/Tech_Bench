@@ -142,4 +142,36 @@ class Customers
         $qry = 'UPDATE `'.$table.'` SET '.implode(', ', $colQry).' WHERE `cust_id` = :custID';
         $this->db->prepare($qry)->execute($colValue);
     }
+    
+    //  Pull all customer contacts from the database
+    public function getContacts($custID)
+    {
+        $qry = 'SELECT * FROM `customer_contacts` WHERE `cust_id` = :custID';
+        $result = $this->db->prepare($qry);
+        $result->execute(['custID' => $custID]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Pull only one contact from the database
+    public function getOneContact($contID)
+    {
+        $qry = 'SELECT * FROM `customer_contacts` WHERE `cont_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $contID]);
+    }
+    
+    //  Add a new contact to the database
+    public function addContact($custID, $contData)
+    {
+        $qry = 'INSERT INTO `customer_contacts` (`cust_id`, `name`, `phone`, `email`) VALUES (:custID, :name, :phone, :email)';
+        $data = [
+            'custID' => $custID,
+            'name' => $contData['contName'],
+            'phone' => $contData['contPhone'],
+            'email' => $contData['contEmail']
+        ];
+
+        $this->db->prepare($qry)->execute($data);
+    }
 }

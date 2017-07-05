@@ -12,7 +12,6 @@ class System extends Controller
             $_SESSION['returnURL'] = $_GET['url'];
             header('Location: /err/restricted');
         }
-        $this->template('techUser');
     }
     
     //  Index function will determine the category and system type being called and display the information for that system
@@ -31,6 +30,7 @@ class System extends Controller
             $this->showCategories();
         }
         
+        $this->template('techUser');
         $this->render();
     }
     
@@ -48,6 +48,7 @@ class System extends Controller
             $data['list'] .= '<li class="list-group-item"><a href="/system/'.str_replace(' ', '-', $cat->description).'" class="btn btn-default btn-block">'.strtoupper($cat->description).'</a></li>';
         }
         
+        $this->template('techUser');
         $this->view('system.systemList', $data);
     }
     
@@ -65,6 +66,7 @@ class System extends Controller
             $data['list'] .= '<li class="list-group-item"><a href="/system/'.str_replace(' ', '-', $cat).'/'.str_replace(' ', '-', $sys->name).'" class="btn btn-default btn-block">'.strtoupper($sys->name).'</a></li>';
         }
         
+        $this->template('techUser');
         $this->view('system.systemList', $data);
     }
     
@@ -111,6 +113,7 @@ class System extends Controller
         $data['fileData'] = $fileData;
         $data['optList']  = $optList;
         
+        $this->template('techUser');
         $this->view('system.systemData', $data);
     }
     
@@ -211,7 +214,6 @@ class System extends Controller
             }
         }
         
-        $this->template('');
         $this->render($form);
     }
 }

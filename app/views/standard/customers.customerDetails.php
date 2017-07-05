@@ -35,7 +35,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="4" class="text-center">
-                                <a href="#add-contact-modal" class="btn btn-default" data-toggle="modal">
+                                <a href="#edit-modal" id="add-contact-btn" class="btn btn-default" data-toggle="modal">
                                     <span class="glyphicon glyphicon-plus"></span> 
                                     Add Contact
                                 </a>
@@ -51,6 +51,7 @@
             </div>
         </div>   
     </div>
+<!--
     <div class="row">
         <div class="col-md-12">
             <h3>Notes:</h3>
@@ -87,7 +88,7 @@
         </div>
     </div>
 </div>
-
+-->
 <div class="modal fade" id="edit-modal">
     <div class="modal-dialog">
         <div class="modal-content">
