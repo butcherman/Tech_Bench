@@ -142,6 +142,13 @@ class Home extends Controller
         $this->render($valid);
     }
     
+    //  Function that only shows yes or no dialog boxes
+    public function yesOrNo()
+    {
+        $this->view('confirm.yesorno');
+        $this->render();
+    }
+    
     //  Function to create the necessary session variables to log the user in
     private function logInUser($userData)
     {

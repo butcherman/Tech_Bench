@@ -342,7 +342,7 @@ class Customer extends Controller
         {
             foreach($contacts as $cont)
             {
-                $data .= '<tr><td>'.$cont->name.'</td><td><a href="tel:'.$cont->phone.'">'.Template::readablePhoneNumber($cont->phone).'</a></td><td><a href="mailto:'.$cont->email.'">'.$cont->email.'</a></td><td><a href="#edit-modal" title="Edit Contact" class="edit-contact-link" data-tooltip="tooltip" data-toggle="modal" data-contid="'.$cont->cont_id.'"><span class="glyphicon glyphicon-pencil"></span></a> <a href="#" title="Delete Contact" data-tooltip="tooltip" data-contid="'.$cont->cont_id.'" class="delete-contact-link"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+                $data .= '<tr><td>'.$cont->name.'</td><td><a href="tel:'.$cont->phone.'">'.Template::readablePhoneNumber($cont->phone).'</a></td><td><a href="mailto:'.$cont->email.'">'.$cont->email.'</a></td><td><a href="#edit-modal" title="Edit Contact" class="edit-contact-link" data-tooltip="tooltip" data-toggle="modal" data-contid="'.$cont->cont_id.'"><span class="glyphicon glyphicon-pencil"></span></a> <a href="#edit-modal" title="Delete Contact" class="delete-contact-link"  data-tooltip="tooltip" data-toggle="modal" data-contid="'.$cont->cont_id.'" class="delete-contact-link"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
             }
         }
         
@@ -374,9 +374,21 @@ class Customer extends Controller
         $model = $this->model('customers');
         
         $contactData = $model->getOneContact($contID);
-        //////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////
+        $data = [
+            'contID' => $contID,
+            'name' => $contactData->name,
+            'phone' => Template::readablePhoneNumber($contactData->phone),
+            'email' => $contactData->email
+        ];
+        $this->view('customers.editContactForm', $data);
+        $this->render();  
+    }
+    
+    //  Ajax call to submit the customer contact edit form
+    public function editContactSubmit($contID)
+    {
+        $model = $this->model('customers');
+        $model->editContact($contID, $_POST);
+        $this->render('success');
     }
 }

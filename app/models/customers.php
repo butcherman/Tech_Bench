@@ -159,6 +159,8 @@ class Customers
         $qry = 'SELECT * FROM `customer_contacts` WHERE `cont_id` = :id';
         $result = $this->db->prepare($qry);
         $result->execute(['id' => $contID]);
+        
+        return $result->fetch();
     }
     
     //  Add a new contact to the database
@@ -173,5 +175,13 @@ class Customers
         ];
 
         $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Edit an existing contact to the database
+    public function editContact($contID, $contData)
+    {
+        $qry = 'UPDATE `customer_contacts` SET `name` = :contName, `phone` = :contPhone, `email` = :contEmail WHERE `cont_id` = :contID';
+        $contData['contID'] = $contID;
+        $this->db->prepare($qry)->execute($contData);
     }
 }

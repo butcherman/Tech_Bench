@@ -167,6 +167,7 @@ $('#add-contact-btn').on('click', function()
     $('#modal-body').load('/customer/newContactLoad');
 });
 
+//  Submit the form to add a new contact
 $(document).on('click', '#submit-new-contact', function()
 {
     $('#add-contact-form').validate(
@@ -202,11 +203,54 @@ $(document).on('click', '#submit-new-contact', function()
     });
 });
 
-$('.edit-contact-link').on('click', function()
+//  Bring up the form to edit an existing contact
+$(document).on('click', '.edit-contact-link', function()
 {
-    alert('triggered');
-//    var linkID = $(this).data('contid');
-//    alert(linkID);
-//    $('#modal-header').html('Edit Contactd');
-//    $('#modal-body').load('/cusomer/editContatLoad/'+linkID);
+    var linkID = $(this).data('contid');
+    $('#modal-header').html('Edit Contact');
+    $('#modal-body').load('/customer/editContactLoad/'+linkID);
+});
+
+//  Submit the for to edit an existing contact
+$(document).on('click', '#submit-edit-contact', function()
+{
+    $('#edit-contact-form').validate(
+    {
+        rules:
+        {
+            contName: "required",
+            contPhone: "phoneUS",
+            contEmail: "email"
+        },
+        messages:
+        {
+            contName: "A Name Must Be Entered",
+            contPhone: "Please Enter Valid Phone Number Including Area Code",
+            contEmail: "Please Enter A Valid Email Address"
+        },
+        submitHandler: function()
+        {
+            $.post('/customer/editContactSubmit/'+$('#contID').val(), $('#edit-contact-form').serialize(), function(data)
+            {
+                $('#edit-modal').modal('hide');
+
+                if(data == 'success')
+                {
+                    $('#contact-information').children('tbody').load('/customer/loadContacts/'+custID);
+                }
+                else
+                {
+                    alert('There Was A Problem Updating Contact.')
+                }
+            });
+        }
+    });
+});
+
+//  Delete an existing contact
+$(document).on('click', '.delete-contact-link', function()
+{
+    $('#modal-header').html('Delete Contact');
+    $('#modal-body').load('/home/yesorno');
+    $('#yes-or-no-wrapper').addClass('delete-contact-wrapper');
 });
