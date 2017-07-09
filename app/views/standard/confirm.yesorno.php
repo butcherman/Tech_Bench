@@ -10,7 +10,7 @@
             <button class="btn btn-default select-yes">Yes</button>
         </div>
         <div class="col-sm-2">
-            <button class="btn btn-default select-no">No</button>
+            <button class="btn btn-default select-no" data-dismiss="modal">No</button>
         </div>
     </div>
 </div>

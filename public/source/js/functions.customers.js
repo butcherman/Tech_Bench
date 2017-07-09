@@ -13,6 +13,10 @@ $('body').tooltip({
 $('#customer-system-information').load('/customer/loadSystems/'+custID);
 //  Load the Contact information from the database
 $('#contact-information').children('tbody').load('/customer/loadContacts/'+custID);
+//  Load the customer notes
+$('#notes-wrapper').load('/customer/loadNotes/'+custID);
+//  Load the customer files
+$('#customer-files-table').children('tbody').load('/customer/loadFiles/'+custID);
 
 
 
@@ -250,7 +254,275 @@ $(document).on('click', '#submit-edit-contact', function()
 //  Delete an existing contact
 $(document).on('click', '.delete-contact-link', function()
 {
+    var contact = $(this).data('contid');
     $('#modal-header').html('Delete Contact');
-    $('#modal-body').load('/home/yesorno');
-    $('#yes-or-no-wrapper').addClass('delete-contact-wrapper');
+    $('#modal-body').load('/home/yesorno', function()
+    {
+        $('.select-yes').addClass('delete-contact');
+        $('.select-yes').attr('data-contactid', contact);
+    });
+});
+
+//  Confirm delete existing contact
+$(document).on('click', '.select-yes.delete-contact', function()
+{
+    var contactID = $(this).data('contactid');
+    $.get('/customer/deleteContactSubmit/'+contactID, function(data)
+    {
+        $('#edit-modal').modal('hide');
+        if(data == 'success')
+        {
+            $('#contact-information').children('tbody').load('/customer/loadContacts/'+custID);
+        }
+        else
+        {
+            alert('There was a problem deleting the contact');
+        }
+    });
+});
+
+//  Open and close notes
+$('#notes-wrapper').on('click', '.panel-heading', function()
+{
+    $(this).parent().parent().toggleClass('col-lg-12');
+    $(this).parent().parent().toggleClass('panel-minimized');
+});
+
+//  Load the New Note form
+$('#new-note-link').click(function()
+{
+    $('#modal-header').html('New Customer Note');
+    $('#modal-body').load('/customer/newNoteForm', function()
+    {
+        tinymce.init(
+        { 
+            selector:'textarea',
+            height: '400'
+        });
+    });
+});
+
+//  Validate and submit the new note form
+$(document).on('click', '#submit-new-note-btn', function()
+{
+    $('#add-note-form').validate(
+    {
+        rules:
+        {
+            noteSubject: "required",
+            noteDescription: 
+            {
+                required: true,
+                minlength: 10
+            }
+        },
+        messages:
+        {
+            noteSubject: "Please Give An Easy To Identify Subject",
+            noteDescription: "Please Enter Some Information"
+        },
+        submitHandler: function()
+        {
+            tinymce.triggerSave();
+            $.post('/customer/newNoteSubmit/'+custID, $('#add-note-form').serialize(), function(data)
+            {
+                $('#edit-modal').modal('hide');
+                if(data == 'success')
+                {
+                    $('#notes-wrapper').load('/customer/loadNotes/'+custID);
+                }
+                else
+                {
+                    alert('There Was A Problem Adding Note.\nPlease Contact System Administrator');
+                }
+            });
+        }
+    });
+});
+
+//  Load the edit customer note form
+$(document).on('click', '.edit-note', function()
+{
+    var noteID = $(this).data('noteid');
+    $('#modal-header').html('Edit Customer Note');
+    $('#modal-body').load('/customer/editNoteForm/'+noteID, function()
+    {
+        $('#edit-note-form').data('noteid', noteID);
+        tinymce.init(
+        { 
+            selector:'textarea',
+            height: '400'
+        });
+    });
+});
+
+//  Validate and submit the edit note form
+$(document).on('click', '#submit-edit-note-btn', function()
+{
+    $('#edit-note-form').validate(
+    {
+        rules:
+        {
+            noteSubject: "required",
+            noteDescription: 
+            {
+                required: true,
+                minlength: 10
+            }
+        },
+        messages:
+        {
+            noteSubject: "Please Give An Easy To Identify Subject",
+            noteDescription: "Please Enter Some Information"
+        },
+        submitHandler: function()
+        {
+            var noteID = $('#edit-note-form').data('noteid');
+            tinymce.triggerSave();
+            $.post('/customer/editNoteSubmit/'+noteID, $('#edit-note-form').serialize(), function(data)
+            {
+                $('#edit-modal').modal('hide');
+                if(data == 'success')
+                {
+                    $('#notes-wrapper').load('/customer/loadNotes/'+custID);
+                }
+                else
+                {
+                    alert('There Was A Problem Adding Note.\nPlease Contact System Administrator');
+                }
+            });
+        }
+    });
+});
+
+//  Load the new file form
+$('#add-file-link').click(function()
+{
+    $('#modal-header').html('Add New File');
+    $('#modal-body').load('/customer/newFileForm');
+});
+
+//  Validate and submit the new file form
+$(document).on('click', '#new-file-submit-lnk', function()
+{
+    $('#new-file-form').validate(
+    {
+        rules:
+        {
+            fileName: "required",
+            fileType: "required",
+            custFile: "required",
+            file:
+            {
+                filesize: maxFile
+            }
+        },
+        messages:
+        {
+            fileName: "Please Enter A Valid Name To Identify The File",
+            file: "File size must be less than 2Gb"
+        },
+        submitHandler: function()
+        {
+            submitFile('/customer/newFileSubmit/'+custID, 'new-file-form');
+        }
+    });
+});
+
+//  Copy the file name into the "name" field if left empty
+$(document).on('change', '#file', function()
+{
+    var fileName = $('input[type=file]').val().split('\\').pop();
+    if (!$("#fileName").val())
+    {
+        $("#fileName").val(fileName);
+    }
+});
+
+//  Reload notes after a file has been uploaded
+function uploadComplete(res)
+{
+    $('#edit-modal').modal('hide');
+    if(res == '1')
+    {
+        $('#customer-files-table').children('tbody').load('/customer/loadFiles/'+custID);
+    }
+    else
+    {
+        alert('There was a problem uploading the file');
+    }
+}
+
+//  Load the edit file form
+$(document).on('click', '.edit-file-lnk', function()
+{
+    var fileID = $(this).data('fileid');
+    $('#modal-header').html('Edit File');
+    $('#modal-body').load('/customer/editFileLoad/'+fileID, function()
+    {
+        $('#edit-file-form').data('fileid', fileID);
+    });
+});
+
+//  Submit the edit file form
+$(document).on('click', '#edit-file-submit-lnk', function()
+{
+    $('#edit-file-form').validate(
+    {
+        rules:
+        {
+            fileName: "required",
+            fileType: "required"
+        },
+        messages:
+        {
+            fileName: "Please Enter A Valid Name To Identify The File",
+        },
+        submitHandler: function()
+        {
+            var fileID = $('#edit-file-form').data('fileid');
+            $.post('/customer/editFileSubmit/'+fileID, $('#edit-file-form').serialize(), function(data)
+            {
+                $('#edit-modal').modal('hide');
+                if(data == 'success')
+                {
+                    $('#customer-files-table').children('tbody').load('/customer/loadFiles/'+custID);
+                }
+                else
+                {
+                    alert('There Was A Problem Updating File.\nPlease Contact System Administrator');
+                }
+            });
+        }
+    });
+});
+
+//  Open the delete file confirmation
+$(document).on('click', '.delete-file', function()
+{
+    var fileID = $(this).data('fileid');
+    $('#modal-header').html('Delete File');
+    $('#modal-body').load('/home/yesorno', function()
+    {
+        $('.select-yes').addClass('delete-file');
+        $('.select-yes').attr('data-fileid', fileID);
+    });
+});
+
+//  Confirm delete existing contact
+$(document).on('click', '.select-yes.delete-file', function()
+{
+    var fileID = $(this).data('fileid');
+    $.get('/customer/deleteFileSubmit/'+fileID, function(data)
+    {
+        $('#edit-modal').modal('hide');
+        if(data == 'success')
+        {
+            $('#customer-files-table').children('tbody').load('/customer/loadFiles/'+custID);
+        }
+        else
+        {
+            alert('There was a problem deleting the file');
+        }
+    });
 });

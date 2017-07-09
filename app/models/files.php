@@ -89,6 +89,38 @@ class Files
         return $success;
     }
     
+    //  Function to create a new folder
+    public function createFolder($absolutePath)
+    {
+        mkdir($absolutePath, 0777, true);
+    }
+    
+    //  Function to delete a file from the dabase and file structure
+    public function deleteFile($fileID)
+    {
+        $qry = 'SELECT `file_name`, `file_link` FROM `files` WHERE `file_id` = :fileID';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['fileID' => $fileID]);
+        $res = $result->fetch();
+        $valid = false;
+        
+        $fileName = $res->file_link.$res->file_name;
+        if(file_exists($fileName))
+        {
+            $this->eraseFile($fileName);
+            $msg = 'File ID: '.$fileID.' deleted by User ID: '.$_SESSION['id'];
+            Logs::writeLog('Files', $msg);
+            $valid = true;
+        }
+        else
+        {
+            $msg = 'Attempted to delete file that did not exist - File ID: '.$fileID;
+            Logs::writeLog('File-Error', $msg);
+        }
+        
+        return $valid;
+    }
+    
     //  Function to clean the name of the file and remove all illegal characters and spaces
     private function cleanName($name)
     {
@@ -134,5 +166,11 @@ class Files
         {
             return $fileName;
         }
+    }
+    
+    //  Function to delete a file from the folder structure
+    private function eraseFile($filePath)
+    {
+        unlink($filePath);
     }
 }

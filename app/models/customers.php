@@ -11,6 +11,22 @@ class Customers
         $this->db = Database::getDB();
     }
     
+    //  Add a new customer to the database
+    public function addCustomer($custData)
+    {
+        $data = [
+            'id' => $custData['custID'],
+            'name' => $custData['custName'],
+            'dba' => $custData['custDBA'],
+            'addr' => $custData['custAddr'],
+            'city' => $custData['custCity'],
+            'state' => $custData['state'],
+            'zip' => $custData['zipCode']
+        ];
+        $qry = 'INSERT INTO `customers` (`cust_id`, `name`, `dba_name`, `address`, `city`, `state`, `zip`) VALUES (:id, :name, :dba, :addr, :city, :state, :zip)';
+        $this->db->prepare($qry)->execute($data);
+    }
+    
     //  Search customer function will find a customer based on search paramaters
     public function searchCustomer($name = '', $city = '', $syst = '')
     {
@@ -183,5 +199,120 @@ class Customers
         $qry = 'UPDATE `customer_contacts` SET `name` = :contName, `phone` = :contPhone, `email` = :contEmail WHERE `cont_id` = :contID';
         $contData['contID'] = $contID;
         $this->db->prepare($qry)->execute($contData);
+    }
+    
+    //  Delete an existing contact from the database
+    public function deleteContact($contID)
+    {
+        $qry = 'DELETE FROM `customer_contacts` WHERE `cont_id` = :id';
+        if(!empty($contID))
+        {
+            $this->db->prepare($qry)->execute(['id' => $contID]);
+        }
+    }
+    
+    //  Get all customer notes
+    public function getAllNotes($custID)
+    {
+        $qry = 'SELECT `note_id`, `subject`, `description`, `updated`, `user_id` FROM `customer_notes` WHERE `cust_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $custID]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Get one customer note
+    public function getNote($noteID)
+    {
+        $qry = 'SELECT `subject`, `description` FROM `customer_notes` WHERE `note_id` = :note';
+        $result = $this->db->prepare($qry);
+        $result->execute(['note' => $noteID]);
+        
+        return $result->fetch();
+    }
+    
+    //  Add a new customer note
+    public function addNewNote($custID, $userID, $noteData)
+    {
+        $data = [
+            'custID' => $custID,
+            'subject' => $noteData['noteSubject'],
+            'body' => $noteData['noteDescription'],
+            'user' => $userID
+        ];
+        $qry = 'INSERT INTO `customer_notes` (`cust_id`, `subject`, `description`, `user_id`) VALUES (:custID, :subject, :body, :user)';
+        $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Edit an existing note
+    public function updateNote($noteID, $userID, $noteData)
+    {
+        $data = [
+            'note' => $noteID,
+            'user' => $userID,
+            'subj' => $noteData['noteSubject'],
+            'body' => $noteData['noteDescription']
+        ];
+        $qry = 'UPDATE `customer_notes` SET `subject` = :subj, `description` = :body, `updated` = CURRENT_TIMESTAMP, `user_id` = :user WHERE `note_id` = :note';
+        $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Get the types of files that can be added for a customer
+    public function getFileTypes()
+    {
+        $qry = 'SELECT `description` FROM `customer_file_types`';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Get all customer files
+    public function getAllFiles($custID)
+    {
+        $qry = 'SELECT `customer_files`.`cust_file_id`, `customer_files`.`name`, `customer_files`.`file_id`, `customer_files`.`user_id`, `customer_files`.`added_on`, `files`.`file_name`, `customer_file_types`.`description` FROM `customer_files` 
+        JOIN `files` ON `customer_files`.`file_id` = `files`.`file_id`  
+        LEFT JOIN `customer_file_types` ON `customer_files`.`file_type_id` = `customer_file_types`.`file_type_id` 
+        WHERE `cust_id` = :cust ORDER BY `customer_file_types`.`file_type_id` ASC';
+        $result = $this->db->prepare($qry);
+        $result->execute(['cust' => $custID]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Get one specific file
+    public function getFile($fileID)
+    {
+        $qry = 'SELECT `customer_files`.`file_id`, `customer_files`.`name`, `customer_file_types`.`description` FROM `customer_files` JOIN `customer_file_types` ON `customer_files`.`file_type_id` = `customer_file_types`.`file_type_id` WHERE `cust_file_id` = :fileID';
+        $result = $this->db->prepare($qry);
+        $result->execute(['fileID' => $fileID]);
+        
+        return $result->fetch();
+    }
+    
+    //  Add a customer file
+    public function addFile($custID, $userID, $fileData)
+    {
+        $fileData['custID'] = $custID;
+        $fileData['userID'] = $userID;
+        $qry = 'INSERT INTO `customer_files` (`file_id`, `cust_id`, `file_type_id`, `name`, `user_id`) VALUES (:fileID, :custID, (SELECT `file_type_id` FROM `customer_file_types` WHERE `description` = :type), :name, :userID)';
+        $this->db->prepare($qry)->execute($fileData);
+    }
+    
+    //  Edit a customer file
+    public function editFile($fileID, $fileData)
+    {
+        $fileData['fileID'] = $fileID;
+        $qry = 'UPDATE `customer_files` SET `name` = :fileName, `file_type_id` = (SELECT `file_type_id` FROM `customer_file_types` WHERE `description` = :fileType) WHERE `cust_file_id` = :fileID';
+        $this->db->prepare($qry)->execute($fileData);
+    }
+    
+    //  Delete a customer file
+    public function deleteFile($fileID)
+    {
+        $qry = 'DELETE FROM `customer_files` WHERE `cust_file_id` = :fileID';
+        if(!empty($fileID))
+        {
+            $this->db->prepare($qry)->execute(['fileID' => $fileID]);
+        }
     }
 }

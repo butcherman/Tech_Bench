@@ -4,6 +4,7 @@
 */
 class Customer extends Controller
 {
+    //  Constructor sets the page security level and reroutes if user is not logged in
     public function __construct()
     {
         Security::setPageLevel('tech');
@@ -15,6 +16,11 @@ class Customer extends Controller
         }
     }
     
+/****************************************************************************
+*                           Search Customer Section                         *
+*****************************************************************************/
+    
+    //  Index function brings up the customer search page
     public function index()
     {
         $model = $this->model('systems');
@@ -67,6 +73,50 @@ class Customer extends Controller
         $this->template('techUser');
         $this->render($custList);
     }
+    
+/****************************************************************************
+*                       New Customer Add Section                            *
+*****************************************************************************/
+    
+    //  Open the add a new customer form
+    public function add()
+    {
+        $this->view('customers.newCustomerForm');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the new customer form
+    public function addCustomerSubmit()
+    {
+        $model = $this->model('customers');
+        $result = 'failed';
+        
+        //  Determine if the customer already exists
+        if($custData = $model->getCustData($_POST['custID']))
+        {
+            $result = 'duplicate';
+        }
+        else
+        {
+            $model->addCustomer($_POST);
+            
+            $fileModel = $this->model('files');
+            $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$_POST['custID'];
+            $fileModel->createFolder($filePath);
+            
+            $msg = 'New Customer ID: '.$_POST['custID'].' Name: '.$_POST['custName'].' Added By User ID: '.$_SESSION['id'];
+            Logs::writeLog('Customer-Change', $msg);
+            
+            $result = 'success';
+        }
+        
+        $this->render($result);
+    }
+    
+/****************************************************************************
+*                      Display Customer Data Section                        *
+*****************************************************************************/
     
     //  Display customer information for a specific customer
     public function id($custID = '')
@@ -142,6 +192,10 @@ class Customer extends Controller
         
         $this->render('success');
     }
+    
+/****************************************************************************
+*                          Customer Systems Section                         *
+*****************************************************************************/
     
     //  Ajax call to load the customers systems
     public function loadSystems($custID)
@@ -327,6 +381,10 @@ class Customer extends Controller
         $this->render($content);
     }
     
+/****************************************************************************
+*                         Customer Contacts Section                         *
+*****************************************************************************/
+    
     //  Ajax call to pull all customer contacts from the database
     public function loadContacts($custID)
     {
@@ -389,6 +447,214 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
         $model->editContact($contID, $_POST);
+        $this->render('success');
+    }
+    
+    //  Ajax call to delete a valid customer contact
+    public function deleteContactSubmit($contID)
+    {
+        $model = $this->model('customers');
+        $model->deleteContact($contID);
+        $msg = 'Contact ID: '.$contID.' deleted by user ID: '.$_SESSION['id'];
+        Logs::writeLog('Customer-Change', $msg);
+        $this->render('success');
+    }
+    
+/****************************************************************************
+*                           Customer Notes Section                          *
+*****************************************************************************/
+    
+    //  Ajax call to load all customer notes
+    public function loadNotes($custID)
+    {
+        $model = $this->model('customers');
+        $notes = $model->getAllnotes($custID);
+        
+        if(empty($notes))
+        {
+            $content = '<div class="row"><div class="col-sm=12 text-center"><h3>No Notes</h3></div></div>';
+        }
+        else
+        {
+            $i = 0; //  Counter to determine how many notes are in the row
+            $r = 4; //  Maximum of four notes per row
+            $content = '<div class="row">';
+            foreach($notes as $note)
+            {
+                $content .= '<div class="col-md-3 panel-wrapper panel-minimized"><div class="panel panel-info"><div class="panel-heading" title="Click to Expand" data-tooltip="tooltip"><h5>'.$note->subject.'</h5></span></div><div class="panel-body"><span>'.$note->description.'</span></div><div class="panel-footer"><strong>Updated By: </strong>'.Template::getUserName($note->user_id).'<span class="pull-right">Updated: '.date('M j, Y', strtotime($note->updated)).'</span><div class="text-center"><a href="#edit-modal" data-toggle="modal" class="btn btn-default edit-note" data-noteid="'.$note->note_id.'">Edit Note</a></div><div class="clearfix"></div></div></div></div>';
+                
+                if($i % $r == 0 && $i != 0)
+                {
+                    $content .= '</div><div class="row">';
+                }
+            }
+            $content .= '</div>';
+        }
+        
+        $this->render($content);
+    }
+    
+    //  Ajax call to load the new note form
+    public function newNoteForm()
+    {
+        $this->view('customers.newNoteForm');
+        $this->render();
+    }
+    
+    //  Submit the new note form
+    public function newNoteSubmit($custID)
+    {
+        $model = $this->model('customers');
+        
+        $model->addNewNote($custID, $_SESSION['id'], $_POST);
+        $msg = 'User ID: '.$_SESSION['id'].' added a note for Customer ID: '.$custID;
+        Logs::writeLog('Customer-Change', $msg);
+        
+        $this->render('success');
+    }
+    
+    //  Ajax call to load the edit note form
+    public function editNoteForm($noteID)
+    {
+        $model = $this->model('customers');
+        $noteData = $model->getNote($noteID);
+        $data = [
+            'subject' => $noteData->subject,
+            'body' => $noteData->description
+        ];
+        
+        $this->view('customers.editNoteForm', $data);
+        $this->render();
+    }
+    
+    //  Submit the edit note form
+    public function editNoteSubmit($noteID)
+    {
+        $model = $this->model('customers');
+        $model->updateNote($noteID, $_SESSION['id'], $_POST);
+        $msg = 'User ID: '.$_SESSION['id'].' updated note id: '.$noteID;
+        Logs::writeLog('Customer-Change', $msg);
+        $this->render('success');
+    }
+
+/****************************************************************************
+*                           Customer Files Section                          *
+*****************************************************************************/
+    
+    //  Load all customer files
+    public function loadFiles($custID)
+    {
+        $model = $this->model('customers');
+        $files = $model->getAllFiles($custID);
+        
+        if(empty($files))
+        {
+            $content = '<tr><td colspan="5"><h3 class="text-center">No Files</h3></td></tr>';
+        }
+        else
+        {
+            $content = '';
+            foreach($files as $file)
+            {
+                $content .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'">'.$file->name.'</a></td><td>'.$file->description.'</td><td>'.Template::getUserName($file->user_id).'</td><td>'.$file->added_on.'</td><td><a href="#edit-modal" class="edit-file-lnk" title="Edit File" data-tooltip="tooltip" data-toggle="modal" data-fileid="'.$file->cust_file_id.'"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;<a href="#edit-modal" class="delete-file" title="Delete File" data-toggle="modal" data-tooltip="tooltip" data-fileid="'.$file->cust_file_id.'"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+            }
+        }
+        
+        $this->render($content);
+    }
+    
+    //  Load the new file form
+    public function newFileForm()
+    {
+        $model = $this->model('customers');
+        $fileTypes = $model->getFileTypes();
+        
+        $data['types'] = '';
+        foreach($fileTypes as $type)
+        {
+            $data['types'] .= '<option value="'.$type->description.'">'.$type->description.'</option>';
+        }
+        
+        $this->view('customers.newFileForm', $data);
+        $this->render();
+    }
+    
+    //  Submit the new file form
+    public function newFileSubmit($custID)
+    {
+        $model = $this->model('customers');
+        $fileModel = $this->model('files');
+        $success = false;
+        
+        $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID.Config::getFile('slash');
+
+        if(!empty($_FILES))
+        {
+            $fileModel->setFileLocation($filePath);
+            $fileID = $fileModel->processFiles($_FILES, $_SESSION['id'], 'tech');
+            
+            $fileData = [
+                'fileID' => $fileID[0],
+                'name' => $_POST['fileName'],
+                'type' => $_POST['fileType']
+            ];
+            
+            $model->addFile($custID, $_SESSION['id'], $fileData);
+            $success = true;
+            
+            $msg = 'New file added for customer ID: '.$custID.' File ID: '.$fileID[0].' By: '.$_SESSION['id'];
+            Logs::writeLog('Customer-Change', $msg);
+        }
+        
+        $this->render($success);
+    }
+    
+    //  Ajax call to load the edit file form
+    public function editFileLoad($fileID)
+    {
+        $model = $this->model('customers');
+        $fileData = $model->getFile($fileID);
+        $fileTypes = $model->getFileTypes();
+        
+        $data['name'] = $fileData->name;
+        $data['types'] = '';
+        foreach($fileTypes as $type)
+        {
+            if($type->description === $fileData->description)
+            {
+                $data['types'] .= '<option value="'.$type->description.'" selected>'.$type->description.'</option>';
+            }
+            else
+            {
+                $data['types'] .= '<option value="'.$type->description.'">'.$type->description.'</option>';
+            }
+        }
+        
+        $this->view('customers.editFileForm', $data);
+        $this->render();
+    }
+    
+    //  Submit the edit file form
+    public function editFileSubmit($fileID)
+    {
+        $model = $this->model('customers');
+        $model->editFile($fileID, $_POST);
+        
+        $this->render('success');
+    }
+    
+    //  Submit the delete file link
+    public function deleteFileSubmit($fileID)
+    {
+        $model = $this->model('customers');
+        $fileData = $model->getFile($fileID);
+        
+        $fileModel = $this->model('files');
+        if($fileModel->deleteFile($fileData->file_id))
+        {
+            $model->deleteFile($fileID);
+        }
+        
         $this->render('success');
     }
 }

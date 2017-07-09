@@ -51,7 +51,6 @@
             </div>
         </div>   
     </div>
-<!--
     <div class="row">
         <div class="col-md-12">
             <h3>Notes:</h3>
@@ -60,7 +59,7 @@
     <div id="notes-wrapper"></div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <a href="#add-note-modal" class="btn btn-default btn-block" data-toggle="modal">Add Note</a>
+            <a href="#edit-modal" id="new-note-link" class="btn btn-default btn-block" data-toggle="modal">Add Note</a>
         </div>
     </div>
     <div class="row">
@@ -84,11 +83,10 @@
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <a href="#add-file-modal" class="btn btn-default btn-block" data-toggle="modal">Add File</a>
+            <a href="#edit-modal" id="add-file-link" class="btn btn-default btn-block" data-toggle="modal">Add File</a>
         </div>
     </div>
 </div>
--->
 <div class="modal fade" id="edit-modal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -107,6 +105,6 @@
 <script>
     var custID = <?= $data['custID']; ?>;
 </script>
-<script src="/source/lib/tinymce/jquery.tinymce.min.js"></script>
+<script src="/source/lib/tinymce/tinymce.min.js"></script>
 <script src="/source/js/functions.files.js"></script>
 <script src="/source/js/functions.customers.js"></script>
