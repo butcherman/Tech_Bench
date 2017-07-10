@@ -6,6 +6,11 @@ var config = {
      bowerDir: './vendor'
 }
 
+gulp.copy=function(src,dest){
+    return gulp.src(src, {base:"."})
+        .pipe(gulp.dest(dest));
+};
+
 gulp.task('config', function() {
     var str = '[core]\n logo = "TechBenchLogo.png"\n baseURL = ""\n title = "Tech Bench"\n';
         return gulp.src('config').pipe(file('config.ini', str)).pipe(gulp.dest('config'));
@@ -16,7 +21,8 @@ gulp.task('bower', function() {
         .pipe(gulp.dest(config.bowerDir))
 });
 
-gulp.task('copy', ['bower'], function() { 
+gulp.task('moveFiles', ['bower'], function() { 
+//    gulp.src(['vendor/jquery/**/*.*']).pipe(gulp.dest('public/source/lib/file2'))
         gulp.src(['vendor/jquery/jquery.min.js'])
             .pipe(gulp.dest('public/source/lib/jquery')),
         gulp.src(['vendor/bootstrap/dist/**/*'])
@@ -27,8 +33,8 @@ gulp.task('copy', ['bower'], function() {
             .pipe(gulp.dest('public/source/lib/tablesorter')),
         gulp.src(['vendor/jquery-validation/dist/*'])
             .pipe(gulp.dest('public/source/lib/jquery-validation')),
-        gulp.src(['vendor/tinymce/*', 'vendor/tinymce/**/*', '!vendor/tinymce/bower', '!vendor/tinymce/.bower'])
+        gulp.src(['vendor/tinymce/**/*.*', '!vendor/tinymce/bower.*', '!vendor/tinymce/.bower'])
             .pipe(gulp.dest('public/source/lib/tinymce'))
 });
 
-gulp.task('default', ['bower', 'copy', 'config']);
+gulp.task('default', ['bower', 'moveFiles', 'config']);
