@@ -27,7 +27,7 @@ gulp.task('copy', ['bower'], function() {
             .pipe(gulp.dest('public/source/lib/tablesorter')),
         gulp.src(['vendor/jquery-validation/dist/*'])
             .pipe(gulp.dest('public/source/lib/jquery-validation')),
-        gulp.src(['vendor/tinymce/*', '!vendor/tinymce/bower', '!vendor/tinymce/.bower'])
+        gulp.src(['vendor/tinymce/*', 'vendor/tinymce/**/*', '!vendor/tinymce/bower', '!vendor/tinymce/.bower'])
             .pipe(gulp.dest('public/source/lib/tinymce'))
 });
 
