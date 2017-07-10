@@ -32,19 +32,7 @@ Open a console and go to the project directory
 ```
 $ cd Tech_Bench
 ```
-Install 'gulp'
-```
-$ npm install gulp
-```
-Install 'gulp-bower'
-```
-$ npm install gulp-bower
-```
-Install 'gulp-file'
-```
-$ npm install gulp-file
-```
-Run Composer to fetch all dependencies
+Run Composer to fetch and install all dependencies
 ```
 $ composer install
 ```
@@ -56,7 +44,7 @@ Website Setup
 Open a browser and browse to the website.  If all is working correctly, you should be directed to the
 setup page.
 
-Fill out the setup form to create your Tech Bench instance and begin using the Tech Bench.
+Fill out the setup form to create your Tech Bench instance and begin using the Tech Bench.  For more information, visit the docs folder.
 
 
 
