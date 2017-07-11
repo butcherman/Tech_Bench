@@ -12,7 +12,7 @@ gulp.copy=function(src,dest){
 };
 
 gulp.task('config', function() {
-    var str = '[core]\n logo = "TechBenchLogo.png"\n baseURL = ""\n title = "Tech Bench"\n';
+    var str = '[core]\n logo = "TechBenchLogo.png"\n baseURL = ""\n title = "Tech Bench"\n[upload_paths]\n maxUpload = "500"';
         return gulp.src('config').pipe(file('config.ini', str)).pipe(gulp.dest('config'));
 });
 
@@ -22,7 +22,6 @@ gulp.task('bower', function() {
 });
 
 gulp.task('moveFiles', ['bower'], function() { 
-//    gulp.src(['vendor/jquery/**/*.*']).pipe(gulp.dest('public/source/lib/file2'))
         gulp.src(['vendor/jquery/jquery.min.js'])
             .pipe(gulp.dest('public/source/lib/jquery')),
         gulp.src(['vendor/bootstrap/dist/**/*'])
