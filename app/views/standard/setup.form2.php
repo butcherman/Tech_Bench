@@ -1,14 +1,14 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="page-header">
-            <h1 class="text-center">Databasee Information</h1>
+            <h1 class="text-center">Database Information</h1>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="jumbotron">
-            <form id="step2" action="/setup/step-2" method="post">
+            <form id="step2">
                 <div class="form-group">
                     <label for="dbServer">Database Server:</label>
                     <input type="text" name="dbServer" id="dbServer" class="form-control" value="localhost" placeholder="Name or IP Address of Database Server" required />
@@ -29,7 +29,7 @@
                     <button class="btn btn-info btn-block" id="test-database">Test Connection</button>
                 </div>
                 <div class="form-group">
-                    <input type="submit" id="step-2-submit" class="form-control btn btn-default" value="Continue to Database Setup" />
+                    <input type="submit" id="step-2-submit" class="form-control btn btn-default" value="Continue to Email Setup" />
                 </div>
             </form>
         </div>

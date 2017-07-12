@@ -29,23 +29,6 @@
         var step = steps[key];
         var str = 'Creating '+step;
         
-        var dataArr = {};
-        dataArr.siteURL = '<?php echo $data['siteURL']; ?>';
-//        dataArr.siteLogo = '<?php // echo $data['siteLogo']; ?>';
-        dataArr.siteUser = '<?php echo $data['siteUser']; ?>';
-        dataArr.siteEmail = '<?php echo $data['siteEmail']; ?>';
-        dataArr.sitePass = '<?php echo $data['sitePass']; ?>';
-        dataArr.dbServer = '<?php echo $data['dbServer']; ?>';
-        dataArr.dbName = '<?php echo $data['dbName']; ?>';
-        dataArr.dbUser = '<?php echo $data['dbUser']; ?>';
-        dataArr.dbPass = '<?php echo $data['dbPass']; ?>';
-        dataArr.emHost = '<?php echo $data['emHost']; ?>';
-        dataArr.emPort = '<?php echo $data['emPort']; ?>';
-        dataArr.emUser = '<?php echo $data['emUser']; ?>';
-        dataArr.emAddr = '<?php echo $data['emAddr']; ?>';
-        dataArr.emPass = '<?php echo $data['emPass']; ?>';
-        dataArr.fileUp = '<?php // echo $data['fileUpload']; ?>';
-        
         $('#install-process').append('<div class="install-step"><img src="/source/img/loader.gif" alt="loading" id="img-'+key+'" /><span id="msg-'+key+'">'+str+'</span></div>');
         
         $.post('/setup/create/'+step, dataArr, function(data)

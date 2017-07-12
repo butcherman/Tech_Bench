@@ -8,7 +8,11 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="jumbotron">
-            <form id="step1" action="/setup/step-2" method="post">
+            <form id="step1">
+                <div class="form-group">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" name="companyName" id="companyName" class="form-control" placeholder="Enter Your Company Name" required />
+                </div>
                 <div class="form-group">
                     <label for="siteURL">Site URL:</label>
                     <input type="url" name="siteURL" id="siteURL" class="form-control" placeholder="Enter the website URL - example: http://weburl.com" required />

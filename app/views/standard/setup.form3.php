@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="jumbotron">
-            <form id="step3" action="/setup/step-2" method="post">
+            <form id="step3">
                 <div class="form-group">
                     <label for="emHost">Email Host:</label>
                     <input type="text" name="emHost" id="emHost" class="form-control" placeholder="SMTP Host" required />
@@ -33,7 +33,7 @@
                     <button class="btn btn-info btn-block" id="test-email">Test Connection</button>
                 </div>
                 <div class="form-group">
-                    <input type="submit" id="step-3-submit" class="form-control btn btn-default" value="Continue to Database Setup" />
+                    <input type="submit" id="step-3-submit" class="form-control btn btn-default" value="Continue to File Setup" />
                 </div>
             </form>
         </div>
@@ -79,7 +79,7 @@
             {
                 if(data == 'success')
                 {
-                    window.location.replace('/setup/finish');
+                    window.location.replace('/setup/step-4');
                 }
             });
         }

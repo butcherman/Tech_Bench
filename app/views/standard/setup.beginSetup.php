@@ -36,8 +36,7 @@
                             <li>It is necessary to make sure that the following directories have write access:
                                 <ul>
                                     <li><img src="/source/img/<?= $data['logs']; ?>" alt="Check Log Folder" /> WebRoot/logs</li>
-                                    <li><img src="/source/img/<?= $data['config']; ?>" alt="Check Config Folder" /> WebRoot/configWebRoot/logs</li>
-                                    <li><img src="/source/img/<?= $data['files']; ?>" alt="Check Files Folder" /> WebRoot/_filesWebRoot/logs</li>
+                                    <li><img src="/source/img/<?= $data['config']; ?>" alt="Check Config Folder" /> WebRoot/config</li>
                                 </ul>
                             </li>
                             <li>It is highly recommended to use HTTPS connections for secure encrypted communication between the web browser and server.</li>

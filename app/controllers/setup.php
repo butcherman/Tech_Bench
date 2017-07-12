@@ -14,7 +14,6 @@ class Setup extends Controller
         //  Determine if the necessary folders are writeable.  These are the folders to store logs, store the confi file, and upload files
         is_writable(__DIR__.'/../../logs') ? $data['logs'] = $valid : $data['logs'] = $inval;
         is_writable(__DIR__.'/../../config') ? $data['config'] = $valid : $data['config'] = $inval;
-        is_writable(__DIR__.'/../../_files') ? $data['files'] = $valid : $data['files'] = $inval;
         
         $this->view('setup.beginSetup', $data);
         $this->template('standard');
@@ -41,6 +40,16 @@ class Setup extends Controller
     public function step3()
     {
         $this->view('setup.form3');
+        $this->template('standard');
+        $this->render();
+    }
+    
+    //  Step 4 is file information
+    public function step4()
+    {
+        $data['fileLocal'] = $_SERVER['DOCUMENT_ROOT'].'/_files';
+        
+        $this->view('setup.form4', $data);
         $this->template('standard');
         $this->render();
     }
