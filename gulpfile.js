@@ -33,7 +33,11 @@ gulp.task('moveFiles', ['bower'], function() {
         gulp.src(['vendor/jquery-validation/dist/*'])
             .pipe(gulp.dest('public/source/lib/jquery-validation')),
         gulp.src(['vendor/tinymce/**/*.*', '!vendor/tinymce/bower.*', '!vendor/tinymce/.bower'])
-            .pipe(gulp.dest('public/source/lib/tinymce'))
+            .pipe(gulp.dest('public/source/lib/tinymce')),
+        gulp.src(['vendor/seiyria-bootstrap-slider/dist/**/*'])
+            .pipe(gulp.dest('public/source/lib/bootstrap-slider')),
+        gulp.src(['vendor/filesize/lib/*'])
+            .pipe(gulp.dest('public/source/lib/filesize'))
 });
 
 gulp.task('default', ['bower', 'moveFiles', 'config']);

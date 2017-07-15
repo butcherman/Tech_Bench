@@ -10,7 +10,7 @@ class Database
     //  Initialize the database
     public static function init()
     {   
-        if(!empty(Config::getCore('baseURL')))
+        if(!empty(Config::getCore('baseURL')) && (isset($_GET['url']) && !preg_match('/^setup/', $_GET['url'])))
         {
             $dbHost = Config::getDB('host');
             $dbUser = Config::getDB('dbUser');

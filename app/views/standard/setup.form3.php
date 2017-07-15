@@ -8,6 +8,16 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="jumbotron">
+            <div class="breadcrumb-outer-wrapper">
+                <div class="breadcrumb-inner-wrapper">
+                    <a href="#" class="breadcrumb-link active">Step 1</a>
+                    <a href="#" class="breadcrumb-link active">Step 2</a>
+                    <a href="#" class="breadcrumb-link active">Step 3</a>
+                    <a href="#" class="breadcrumb-link">Step 4</a>
+                    <a href="#" class="breadcrumb-link">Step 5</a>
+                </div>
+            </div>
+            <div class="clearfix pad-bottom"></div>
             <form id="step3">
                 <div class="form-group">
                     <label for="emHost">Email Host:</label>
@@ -36,6 +46,16 @@
                     <input type="submit" id="step-3-submit" class="form-control btn btn-default" value="Continue to File Setup" />
                 </div>
             </form>
+            <div>
+                <h4 class="text-center">Tips:</h4>
+                <ul>
+                    <li><strong>Email Host:</strong> Enter the SMTP host IP Address or URL.  Example: For GMail enter &quot;ssl://smtp.gmail.com&quot;</li>
+                    <li><strong>Email Port:</strong> Enter the SMTP port used by the SMTP host.  Example: For GMail use port 465.</li>
+                    <li><strong>Email Username:</strong> This is the username or email address used to authenticate the SMTP user.</li>
+                    <li><strong>Email Address:</strong> Enter the return email address such as &quot;no-reply@companyname.com&quot;</li>
+                    <li><strong>Test Connection:</strong> Be sure to test your connection before continuing to ensure that your credentials are correct.</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

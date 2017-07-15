@@ -31,7 +31,7 @@
         
         $('#install-process').append('<div class="install-step"><img src="/source/img/loader.gif" alt="loading" id="img-'+key+'" /><span id="msg-'+key+'">'+str+'</span></div>');
         
-        $.post('/setup/create/'+step, dataArr, function(data)
+        $.post('/setup/create/'+step, function(data)
         {
             if(data === 'success')
             {

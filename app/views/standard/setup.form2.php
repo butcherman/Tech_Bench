@@ -8,6 +8,16 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="jumbotron">
+            <div class="breadcrumb-outer-wrapper">
+                <div class="breadcrumb-inner-wrapper">
+                    <a href="#" class="breadcrumb-link active">Step 1</a>
+                    <a href="#" class="breadcrumb-link active">Step 2</a>
+                    <a href="#" class="breadcrumb-link">Step 3</a>
+                    <a href="#" class="breadcrumb-link">Step 4</a>
+                    <a href="#" class="breadcrumb-link">Step 5</a>
+                </div>
+            </div>
+            <div class="clearfix pad-bottom"></div>
             <form id="step2">
                 <div class="form-group">
                     <label for="dbServer">Database Server:</label>
@@ -32,6 +42,16 @@
                     <input type="submit" id="step-2-submit" class="form-control btn btn-default" value="Continue to Email Setup" />
                 </div>
             </form>
+            
+            <div>
+                <h4 class="text-center">Tips:</h4>
+                <ul>
+                    <li><strong>Database Server:</strong> Enter the FQDN or IP Address of the server that will host the MySQL Database.  In most cases, it will be &quot;localhost&quot;</li>
+                    <li><strong>Database Name:</strong> Enter the name of the database to be used. If the database does not exist, it will be created. <strong>Important:</strong> If the database already exists, the databse must be empty, any tables that are currently in the database will be removed and overwritten.</li>
+                    <li><strong>Database User:</strong> The Database User must have full write access to the Tech Bench database.  It is not recommended to use the &quot;root&quot; user as this could present a security risk.</li>
+                    <li><strong>Test Connection:</strong> Be sure to test your connection before continuing to ensure that your credentials are correct.</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
