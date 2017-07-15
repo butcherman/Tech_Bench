@@ -54,7 +54,7 @@
                         <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/forms">Company Forms</a></li>
                     </ul>
                     <?= Template::getAdminLinks(); ?>
-                    <?= Template::getSysLinks(); ?>
+                    <span id="systemNavLinks"><?= Template::getSysLinks(); ?></span>
                     <h3>Customers</h3>
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-search"></span> <a href="/customer">Search Customers</a></li>
