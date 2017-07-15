@@ -3,7 +3,7 @@
         "phpmailer/phpmailer": "~5.2"
     },
     "scripts": {
-        "pre-install-cmd": ["npm install"],
+        "pre-install-cmd": ["npm install", "npm install gulp"],
         "post-install-cmd": ["gulp"],
         "post-update-cmd": ["gulp"]
     }
