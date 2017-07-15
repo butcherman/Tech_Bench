@@ -1,4 +1,5 @@
 @black: #000000;
+@white: #FFFFFF;
 
 .center {
     margin-left: auto;
@@ -7,6 +8,10 @@
 
 .hide {
     display: none;
+}
+
+.pad-bottom {
+    margin-bottom: 20px;
 }
 
 body { 
@@ -46,6 +51,133 @@ body {
     color: @black;
 }
 
+.jumbotron#install-process {
+    min-height: 75vh;
+}
+
 .reset-container {
     padding-top: 10%;
 }
+
+.valid-input {
+    background: #DBFFDB url(/source/img/go.png) center right no-repeat;
+}
+
+.invalid-input {
+    background: #FFE8E9 url(/source/img/stop.png) center right no-repeat;
+}
+
+.install-step img {
+    height: 20px;
+    margin-right: 3px;
+}
+
+.loading-modal {
+    width: 20%;
+    display: block;
+    .center;
+}
+
+@breadcrumb-background: #1C91E9;
+@breadcrumb-hover: #41A4F0;
+@breadcrumb-active: #000099;
+
+.breadcrumb-outer-wrapper {
+    float: right;
+    position: relative;
+    left: -50%;
+}
+
+.breadcrumb-inner-wrapper {
+    position: relative;
+    left: 50%; 
+}
+
+.breadcrumb-link {
+    display: block;
+    float: left; 
+    font-weight: bold;
+    background: @breadcrumb-background;
+    padding-right: 10px;
+    height: 30px;
+    line-height: 32px;
+    margin-right: 33px;
+    position: relative;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    &:before {
+        content: " ";
+        display: block;
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 0;
+        left: -30px;
+        border: 15px solid transparent;
+        border-color: @breadcrumb-background;
+        border-left-color: transparent;
+    }
+    &:after {
+        content: " ";
+        display: block;
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 0;
+        right: -30px;
+        border: 15px solid transparent;
+        border-left-color: @breadcrumb-background;
+    }
+    &:first-of-type {
+        border-radius: 8px 0 0 8px;
+        padding-left: 15px;
+        &:before {
+            display: none;
+        }
+    }
+    &:last-of-type {
+        border-radius: 0 8px 8px 0;
+        margin-right: 25px;
+        padding-right: 15px;
+        &:after {
+            display: none;
+        }
+    }
+    &:hover {
+/*
+      background: @breadcrumb-hover;
+      border-color: @breadcrumb-hover;
+      color: @white;
+*/
+        text-decoration: none;
+        color: @black;
+/*
+      &:before {
+        border-color: @breadcrumb-hover;
+        border-left-color: transparent;
+      }
+      &:after {
+        border-left-color: @breadcrumb-hover;
+      }
+*/
+    }
+    &.active {
+        background: @breadcrumb-active;
+        color: @white;
+        &:before {
+            border-color: @breadcrumb-active;
+            border-left-color: transparent;
+        }
+        &:after {
+            border-left-color: @breadcrumb-active;
+        }
+    }
+}
+
+#maxFileValue {
+    width: 100%;
+}
+
+
+

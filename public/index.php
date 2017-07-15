@@ -33,6 +33,7 @@ require_once __DIR__.'/../app/core/template.php';
 Config::init();
 Database::init();
 
+date_default_timezone_set('America/Los_Angeles');
 
 //  Begin the application
 $app = new App;

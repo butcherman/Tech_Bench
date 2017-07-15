@@ -11,6 +11,7 @@ class Dashboard extends Controller
         {
             $_SESSION['returnURL'] = $_GET['url'];
             header('Location: /err/restricted');
+            die();
         }
         $this->template('techUser');
     }

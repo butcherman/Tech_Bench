@@ -14,6 +14,8 @@
         <script src="/source/lib/bootstrap-toggle/bootstrap-toggle.min.js"></script>
         <script src="/source/lib/jquery-validation/jquery.validate.js"></script>
         <script src="/source/lib/jquery-validation/additional-methods.js"></script>
+        <script src="/source/js/functions.tech.js"></script>
+        <script>var maxFile = <?= Config::getFile('maxUpload'); ?></script>
         
         <title><?= Config::getCore('title'); ?></title>
     </head>
@@ -55,8 +57,8 @@
                     <?= Template::getSysLinks(); ?>
                     <h3>Customers</h3>
                     <ul class="nav-toggle">
-                        <li><span class="glyphicon glyphicon-search"></span> <a href="/customers">Search Customers</a></li>
-                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/customers/add">Add Customer</a></li>
+                        <li><span class="glyphicon glyphicon-search"></span> <a href="/customer">Search Customers</a></li>
+                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/customer/add">Add Customer</a></li>
                     </ul>
                     <h3>Tech Tips</h3>
                     <ul class="nav-toggle">

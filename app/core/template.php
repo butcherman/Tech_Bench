@@ -100,7 +100,7 @@ class Template
                 //  Determine if the parent item has children or is a stand alone
                 if(isset($menuItem['parent']) && $menuItem['parent'])
                 {
-                    $nav .= '<li class="folder-icn"><a href="/systems/'.$catObj->description.'/'.str_replace(' ', '-', $menuItem['name']).'">'.$menuItem['name'].'</a>';
+                    $nav .= '<li><span class="glyphicon glyphicon-folder-close"></span> <a href="/systems/'.$catObj->description.'/'.str_replace(' ', '-', $menuItem['name']).'">'.$menuItem['name'].'</a>';
                     $nav .= '<ul class="nav-toggle">';
                     //  Cycle through sub menus
                     foreach($subMenu as $sub)
@@ -122,5 +122,43 @@ class Template
         }
         
         return $nav;
+    }
+    
+    //  Pull a users full name from the database
+    public static function getUserName($userID)
+    {
+        $qry = 'SELECT `first_name`, `last_name` FROM `users` WHERE `user_id` = :userID';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['userID' => $userID]);
+        $name = $result->fetch();
+        
+        return $name->first_name.' '.$name->last_name;
+    }
+    
+    //  Notify all users
+    public static function notifyAllUsers($description, $link)
+    {
+        $qry = 'SELECT `user_id` FROM `users` WHERE `active` = 1';
+        $result = Database::getDB()->query($qry);
+        $data = $result->fetchAll();
+        
+        $qry = 'INSERT INTO `user_notifications` (`user_id`, `description`, `link`) VALUES (:userID, :desc, :link)';
+        $result = Database::getDB()->prepare($qry);
+        foreach($data as $d)
+        {
+            $result->execute(['userID' => $d->user_id, 'desc' => $description, 'link' => $link]);
+        }
+    }
+    
+    //  Format a 10 digit phone number into a readable format
+    public static function readablePhoneNumber($number)
+    {
+        return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '($1) $2-$3', $number);
+    }
+    
+    //  Change a formatted phone number into 10 direct digits for placement into a database
+    public static function cleanPhoneNumber($number)
+    {
+        return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '$1$2$3', $number);
     }
 }

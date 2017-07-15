@@ -5,6 +5,9 @@ class Err // extends Controller
     
     public function index()
     {
-        echo 'oops';
+        echo 'oops<br>';
+        echo $_GET['url'].'<pre>';
+        print_r($_SESSION);
+        echo '</pre>';
     }
 }

@@ -46,13 +46,17 @@ class Controller
         {
             ob_start();
                 $data = $this->viewData;
-                include __DIR__.'/../views/standard/'.$this->view.'.php';
+                if(!empty($this->view))
+                {
+                    include __DIR__.'/../views/standard/'.$this->view.'.php';
+                }
             $content = ob_get_clean();
             
             include __DIR__.'/../views/templates/'.$this->template.'.php';
         }
         else if(!empty($this->view))
         {
+            $data = $this->viewData;
             include __DIR__.'/../views/standard/'.$this->view.'.php';
         }
     }

@@ -14,6 +14,7 @@ class Security
         if(isset($_SESSION['id']) && isset($_SESSION['username']))
         {
             $qry = 'SELECT COUNT(`user_id`) FROM `users` WHERE `user_id` = :userID AND `username` = :username';
+            
             $result = Database::getDB()->prepare($qry);
             $result->execute(['userID' => $_SESSION['id'], 'username' => $_SESSION['username']]);
             

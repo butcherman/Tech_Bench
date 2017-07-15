@@ -17,7 +17,8 @@ class Config
         if(file_exists($configLocation))
         {
             Self::$conf = parse_ini_file($configLocation, 1);
-            if(empty(self::getCore('baseURL')) && $_GET['url'] != 'setup')
+  //          if(empty(self::getCore('baseURL')) && $_GET['url'] != 'setup')
+            if(empty(self::getCore('baseURL')) && !preg_match('/^setup/', $_GET['url']))
             {
                 header('Location: /setup');
                 die();
@@ -41,5 +42,17 @@ class Config
     public static function getEmail($var)
     {
         return self::$conf['email'][$var];
+    }
+    
+    //  Return a file information value from the config file
+    public static function getFile($var)
+    {
+        return self::$conf['upload_paths'][$var];
+    }
+    
+    //  Return the encryption key
+    public static function getKey()
+    {
+        return self::$conf['encryption']['customerKey'];
     }
 }

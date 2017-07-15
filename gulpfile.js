@@ -6,8 +6,13 @@ var config = {
      bowerDir: './vendor'
 }
 
+gulp.copy=function(src,dest){
+    return gulp.src(src, {base:"."})
+        .pipe(gulp.dest(dest));
+};
+
 gulp.task('config', function() {
-    var str = '[core]\n logo = "TechBenchLogo.png"\n baseURL = ""\n title = "Tech Bench"\n';
+    var str = '[core]\n logo = "TechBenchLogo.png"\n baseURL = ""\n title = "Tech Bench"\n[upload_paths]\n maxUpload = "500"';
         return gulp.src('config').pipe(file('config.ini', str)).pipe(gulp.dest('config'));
 });
 
@@ -16,19 +21,23 @@ gulp.task('bower', function() {
         .pipe(gulp.dest(config.bowerDir))
 });
 
-gulp.task('copy', ['bower'], function() { 
+gulp.task('moveFiles', ['bower'], function() { 
         gulp.src(['vendor/jquery/jquery.min.js'])
             .pipe(gulp.dest('public/source/lib/jquery')),
         gulp.src(['vendor/bootstrap/dist/**/*'])
             .pipe(gulp.dest('public/source/lib/bootstrap/')),
         gulp.src(['vendor/bootstrap-toggle/js/*', 'vendor/bootstrap-toggle/css/*'])
             .pipe(gulp.dest('public/source/lib/bootstrap-toggle')),
-        gulp.src(['vendor/tablesorter/jquery.*'])
+        gulp.src(['vendor/jquery.tablesorter/dist/js/jquery.tablesorter.combined.min.js', 'vendor/jquery.tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js'])
             .pipe(gulp.dest('public/source/lib/tablesorter')),
         gulp.src(['vendor/jquery-validation/dist/*'])
             .pipe(gulp.dest('public/source/lib/jquery-validation')),
-        gulp.src(['vendor/tinymce/*', '!vendor/tinymce/bower', '!vendor/tinymce/.bower'])
-            .pipe(gulp.dest('public/source/lib/tinymce'))
+        gulp.src(['vendor/tinymce/**/*.*', '!vendor/tinymce/bower.*', '!vendor/tinymce/.bower'])
+            .pipe(gulp.dest('public/source/lib/tinymce')),
+        gulp.src(['vendor/seiyria-bootstrap-slider/dist/**/*'])
+            .pipe(gulp.dest('public/source/lib/bootstrap-slider')),
+        gulp.src(['vendor/filesize/lib/*'])
+            .pipe(gulp.dest('public/source/lib/filesize'))
 });
 
-gulp.task('default', ['bower', 'copy', 'config']);
+gulp.task('default', ['bower', 'moveFiles', 'config']);

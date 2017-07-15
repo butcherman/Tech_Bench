@@ -10,6 +10,8 @@
 // Global Variables
 @hideNavWidth: 768px;
 @white: #FFFFFF;
+@uncheckedFav:#C4C4C4;
+@checkedFav: #D46E70;
 
 
 
@@ -201,4 +203,59 @@ html, body, #wrapper {
     width: 75%;
     display: none;
     .centerDiv;
+}
+
+
+.item-fav-unchecked {
+    color: @uncheckedFav;
+    .pointer;
+}
+
+.item-fav-checked {
+    color: @checkedFav;
+    .pointer;
+}
+
+.dl-horizontal dt {
+    width: 50%;
+    padding-right: 10px;
+}
+
+a .glyphicon {
+    color: #000000;
+}
+
+.panel-wrapper {
+    .fade-in; 
+}
+
+.panel-heading {
+    cursor: pointer;
+}
+
+.panel-minimized {
+    .fade-in;
+}
+
+.panel-minimized p {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
+    overflow-x:  hidden;
+    overflow-y: hidden;
+}
+
+.panel-minimized .panel-heading {
+    max-height: 56px;
+}
+
+.panel-minimized .panel-body {
+    max-height: 50px;
+    margin: 5px;
+    overflow: hidden;
+}
+
+.panel-minimized .panel-footer {
+    display: none;
 }
