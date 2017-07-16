@@ -44,10 +44,10 @@
                         <input type="submit" id="submit" value="Submit File" class="btn btn-default" />
                     </div>
                     <div class="progress" id="forProgressBar">
-                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="progressBar">
-                        <span id="progressStatus"></span>
+                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="progressBar">
+                            <span id="progressStatus"></span>
+                        </div>
                     </div>
-                </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -129,6 +129,13 @@
         }
         var load = $('.tab-content .active .ajax-table').data('load');
         $('#new-file').modal('hide');
+        $('#name').val('');
+        $('#fileType').val('');
+        $('#file').val('');
+        $('#description').val('');
+        $('#progressBar').css('width', '0%').attr('aria-valuenow', 0);
+        $('#progressStatus').text('');
+        $('#forProgressBar').hide();
         $('.tab-content .active .ajax-table').children('tbody').load('/system/getSysFiles/<?= $data['sysName']; ?>/'+load);
     }
 </script>

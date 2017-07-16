@@ -170,10 +170,12 @@ CREATE TABLE IF NOT EXISTS `customer_systems` (
 );
 
 CREATE TABLE IF NOT EXISTS `customer_contacts` (
+    `cont_id` INT(11) NOT NULL UNIQUE,
     `cust_id` INT(11) NOT NULL,
     `name` VARCHAR(120) NOT NULL,
     `phone` VARCHAR(30),
     `email` VARCHAR(255),
+    PRIMARY KEY (`cont_id`),
     FOREIGN KEY (`cust_id`) REFERENCES `customers` (`cust_id`) 
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -271,13 +273,10 @@ CREATE TABLE IF NOT EXISTS `company_files` (
 
 CREATE TABLE IF NOT EXISTS `tech_tips` (
     `tip_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `sys_id` INT(11) NOT NULL,
     `title` VARCHAR(120) NOT NULL,
     `user_id` INT(11) NOT NULL,
     `added_on` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`tip_id`),
-    FOREIGN KEY (`sys_id`) REFERENCES `system_types` (`sys_id`) 
-        ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) 
         ON UPDATE CASCADE
 );
@@ -286,6 +285,15 @@ CREATE TABLE IF NOT EXISTS `tech_tip_details` (
     `tip_id` INT(11) NOT NULL UNIQUE,
     `details` LONGTEXT NOT NULL,
     FOREIGN KEY (`tip_id`) REFERENCES `tech_tips` (`tip_id`) 
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `tech_tip_tags` (
+    `tip_id` INT(11) NOT NULL,
+    `sys_id` INT(11) NOT NULL,
+    FOREIGN KEY (`tip_id`) REFERENCES `tech_tips` (`tip_id`) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`sys_id`) REFERENCES `system_types` (`sys_id`)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -377,4 +385,8 @@ INSERT INTO `permissions` (`permission_id`, `permission_description`) VALUES (1,
 
 INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (2, 2), (2, 3), (2, 4), (2, 5), (3, 3), (3, 4), (3, 5), (4, 3), (4, 5);
 
-INSERT INTO `alert_levels` (`alert_level_id`, `description`) VALUES (1, "alert-success"), (2, "alert-info"), (3, "alert-warning"), (4, "alert-danger");';
+INSERT INTO `alert_levels` (`alert_level_id`, `description`) VALUES (1, "alert-success"), (2, "alert-info"), (3, "alert-warning"), (4, "alert-danger");
+
+INSERT INTO `system_file_types` (`description`) VALUES ("Manuals"), ("Notes"), ("Handouts"), ("Firmware"), ("Software"), ("User Guides");
+
+INSERT INTO `customer_file_types` (`description`) VALUES ("Backup"), ("Handout"), ("License"), ("Site Map"), ("Other");';

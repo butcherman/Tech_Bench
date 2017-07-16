@@ -41,7 +41,7 @@ class siteAdministration extends Controller
         $model->createCategory($_POST['category']);
         
         //  Create the category folder
-        $path = Config::getFile('uploadRoot').Config::getFile('sysPath').$_POST['category'];
+        $path = Config::getFile('uploadRoot').Config::getFile('sysPath').str_replace(' ', '_', $_POST['category']);
         $fileMod = $this->model('files');
         $fileMod->createFolder($path);
         

@@ -18,8 +18,7 @@ CREATE VIEW `sys_files_view` AS
 $views[] = '
 USE `'.$_SESSION['setupData']['dbName'].'`;
 CREATE VIEW `tech_tips_view` AS 
-    SELECT `tech_tips`.`tip_id`, `tech_tips`.`title`, `tech_tips`.`added_on`, `tech_tip_details`.`details`, `system_types`.`name` AS `system`, `users`.`user_id`, CONCAT(`users`.`first_name`, \' \',  `users`.`last_name`) AS `user` FROM `tech_tips` 
+    SELECT `tech_tips`.`tip_id`, `tech_tips`.`title`, `tech_tips`.`added_on`, `tech_tip_details`.`details`,  `users`.`user_id` FROM `tech_tips` 
     JOIN `tech_tip_details` ON `tech_tips`.`tip_id` = `tech_tip_details`.`tip_id` 
-    JOIN `system_types` ON `tech_tips`.`sys_id` = `system_types`.`sys_id` 
     JOIN `users` ON `tech_tips`.`user_id` = `users`.`user_id`;
 ';

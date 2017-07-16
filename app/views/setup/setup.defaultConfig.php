@@ -17,7 +17,7 @@
 baseURL = "<?= $_SESSION['setupData']['siteURL']; ?>/"
 ;   Logo is the location of the Tech Bench logo
 logo = "TechBenchLogo.png"
-:   Title is the tab title displayed in the browser
+;   Title is the tab title displayed in the browser
 title = "Tech Bench"
 ;
 ;  The database setion contains all credentials required for the MYSQL connection

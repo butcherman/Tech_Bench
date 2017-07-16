@@ -63,7 +63,7 @@
                     <h3>Tech Tips</h3>
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/tips">View Tech Tips</a></li>
-                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/tips/add">New Tech Tip</a></li>
+                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/tips/new-tip">New Tech Tip</a></li>
                     </ul>
                     <h3>Account</h3>
                     <ul class="nav-toggle">

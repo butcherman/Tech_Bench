@@ -72,4 +72,20 @@ class Email
         
         return $success;
     }
+    
+    //  Get email addresses based on user settings
+    public static function getAddresses($settingField)
+    {
+        $qry = 'SELECT `email` FROM `users` JOIN `user_settings` ON `users`.`user_id` = `user_settings`.`user_id` WHERE `'.$settingField.'` = 1';
+        $result = Database::getDB()->query($qry);
+        $result = $result->fetchAll();
+        
+        $address = [];
+        foreach($result as $res)
+        {
+            $address[] = $res->email;
+        }
+        
+        return $address;
+    }
 }

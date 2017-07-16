@@ -201,7 +201,7 @@ class System extends Controller
     {
         $model = $this->model('systems');
         
-        $sysID = $model->getSysID($sysName);
+        $sysID = $model->getSysID(str_replace('_', ' ', $sysName));
         $table = $model->getSysTable($sysID);
         $cols  = $model->getCols($table);
         
