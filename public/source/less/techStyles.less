@@ -11,6 +11,7 @@
 @hideNavWidth: 768px;
 @white: #FFFFFF;
 @black: #000000;
+@lightGray: #ccc;
 @uncheckedFav:#C4C4C4;
 @checkedFav: #D46E70;
 
@@ -293,4 +294,27 @@ a .glyphicon {
     width: 20%;
     display: block;
     .centerDiv;
+}
+
+.tech-tip-details span {
+    padding: 0 5px;
+    border-left: 1px solid @lightGray;
+    color: @lightGray;
+}
+
+.tech-tip-details .first {
+    border-left: none;
+}
+
+#tip-wrapper {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    margin: 15px;
+    padding: 15px;
+    min-height: 60vh;
+}
+
+.tip-files {
+    color: #8F8686;
+    border-bottom: 1px solid black;
 }

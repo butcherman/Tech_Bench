@@ -18,9 +18,47 @@ class Tips extends Controller
     //  Landing page shows tech tip search page
     public function index()
     {
-        $this->view('tips.search');
+        $model = $this->model('systems');
+        
+        $data['optList'] = '';
+        $cats = $model->getCategories();
+        foreach($cats as $cat)
+        {
+            $data['optList'] .= '<optgroup label="'.strtoupper($cat->description).'">';
+            $systems = $model->getSystems($cat->description);
+            foreach($systems as $sys)
+            {
+                $data['optList'] .= '<option value="'.$sys->name.'">'.$sys->name.'</option>';
+            }
+            $data['optList'] .= '</optgroup>';
+        }
+        
+        $this->view('tips.search', $data);
         $this->template('techUser');
         $this->render();
+    }
+    
+    //  Ajax call to search for a tech tip
+    public function searchTips()
+    {
+        $model = $this->model('techTips');
+        
+        $tipData = $model->searchTips($_POST['keyword'], $_POST['systemType']);
+        
+        $tipList = '';
+        if(!$tipData)
+        {
+            $tipList = '<tr><td colspan="2" class="text-center"><h3>No Results</h3></tr></tr>';
+        }
+        else
+        {
+            foreach($tipData as $tip)
+            {
+                $tipList .= '<tr><td><a href="/tips/id/'.$tip->tip_id.'/'.str_replace(' ', '-', $tip->title).'">'.$tip->title.'</a></td><td>'.date('M j, Y', strtotime($tip->added_on)).'</td></tr>';
+            }
+        }
+        
+        $this->render($tipList);
     }
     
     //  Add a new tech tip
@@ -98,5 +136,47 @@ class Tips extends Controller
         Email::send();
         
         $this->render($tipID);
+    }
+    
+    //  Display tech tip details
+    public function id($tipID)
+    {
+        $model = $this->model('techTips');
+        $tipData = $model->getTipData($tipID);
+        $tipTagsArr = $model->getTipTags($tipID);
+        $tipTags = '';
+        foreach($tipTags as $tag)
+        {
+            $tipTags .= $tag->name;
+        }
+        
+        $data = [
+            'title' => $tipData->title,
+            'tipID' => $tipData->tip_id,
+            'author' => Template::getUserName($tipData->user_id),
+            'date' => date('M j, Y', strtotime($tipData->added_on)),
+            'tip' => $tipData->details,
+            'tipFav' => $model->isTipFav($tipID, $_SESSION['id']) ? 'item-fav-checked' : 'item-fav-unchecked',
+            'tipTags' => $tipTags
+        ];
+        
+        $this->view('tips.tipDetails', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Ajax call to toggle whether the tip is in the users favorites list
+    public function toggleFav($tipID)
+    {
+        $model = $this->model('techTips');
+        
+        if($model->isTipFav($tipID, $_SESSION['id']))
+        {
+            $model->removeTipFav($tipID, $_SESSION['id']);
+        }
+        else
+        {
+            $model->addTipFav($tipID, $_SESSION['id']);
+        }
     }
 }

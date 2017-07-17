@@ -12,7 +12,7 @@
                 <div class="col-md-3">
                     <select name="systemType" id="systemType" class="form-control">
                         <option value="">Select System Type</option>
-                        <?php // echo $data['optList']; ?>
+                        <?= $data['optList']; ?>
                     </select>
                 </div>
                 <div class="col-md-1">
@@ -56,14 +56,12 @@
     </div>
 </div>
 
-<script src="/source/js/tablesorter/jquery.tablesorter.js"></script>
-<script src="/source/js/tablesorter/jquery.tablesorter.widgets.js"></script>
-<script src="/source/js/tablesorter/extras/jquery.tablesorter.pager.min.js"></script>
-<script src="/source/js/tablesorter/widgets/widget-pager.min.js"></script>
+<script src="/source/lib/tablesorter/jquery.tablesorter.combined.min.js"></script>
+<script src="/source/lib/tablesorter/jquery.tablesorter.pager.min.js"></script>
 <script>
     function search()
     {
-        $.post('/_tips/searchTips', $('#tip-search-form').serialize())
+        $.post('/tips/searchTips', $('#tip-search-form').serialize())
          .done(function(data)
          {
             $('#search-tech-tips > tbody').html(data);
