@@ -15,7 +15,7 @@ class Customers
     public function addCustomer($custData)
     {
         $data = [
-            'id' => $custData['custID'],
+            'id' => ltrim($custData['custID'], '0'),
             'name' => $custData['custName'],
             'dba' => $custData['custDBA'],
             'addr' => $custData['custAddr'],
@@ -30,22 +30,36 @@ class Customers
     //  Search customer function will find a customer based on search paramaters
     public function searchCustomer($name = '', $city = '', $syst = '')
     {
-        $qry = 'SELECT `customers`.`cust_id`, `customers`.`name`, `customers`.`city`, `customers`.`state` FROM `customers` 
-                LEFT JOIN `customer_systems` ON `customers`.`cust_id` = `customer_systems`.`cust_id` 
-                LEFT JOIN `system_types` ON `customer_systems`.`sys_id` = `system_types`.`sys_id` 
-                WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` LIKE :name3) AND `city` LIKE :city';
-        $data = [
-            'name1' => '%'.$name.'%',
-            'name2' => '%'.$name.'%',
-            'name3' => '%'.$name.'%',
-            'city'  => '%'.$city.'%'
-        ];
+        //  Select the full query based on whether or not the system type is being searched for as well
         if(!empty($syst))
         {
-            $qry .= ' AND `system_types`.`name` LIKE :syst';
-            $data['syst'] = $syst;
+            $qry = 'SELECT `customers`.`cust_id`, `customers`.`name`, `customers`.`city`, `customers`.`state` FROM `customers` 
+                LEFT JOIN `customer_systems` ON `customers`.`cust_id` = `customer_systems`.`cust_id` 
+                LEFT JOIN `system_types` ON `customer_systems`.`sys_id` = `system_types`.`sys_id` 
+                WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` 
+                LIKE :name3) AND `city` LIKE :city 
+                AND `system_types`.`name` LIKE :syst 
+                ORDER BY `customers`.`name` ASC';
+            $data = [
+                'name1' => '%'.$name.'%',
+                'name2' => '%'.$name.'%',
+                'name3' => '%'.$name.'%',
+                'city'  => '%'.$city.'%',
+                'syst' => $syst
+            ];
         }
-        $qry .= ' ORDER BY `customers`.`name` ASC';
+        else
+        {
+            $qry = 'SELECT `customers`.`cust_id`, `customers`.`name`, `customers`.`city`, `customers`.`state` FROM `customers` 
+                    WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` LIKE :name3) AND `city` LIKE :city 
+                     ORDER BY `customers`.`name` ASC';
+            $data = [
+                'name1' => '%'.$name.'%',
+                'name2' => '%'.$name.'%',
+                'name3' => '%'.$name.'%',
+                'city'  => '%'.$city.'%'
+            ];
+        }
         
         $result = $this->db->prepare($qry);
         $result->execute($data);

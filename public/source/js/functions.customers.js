@@ -1,9 +1,3 @@
-//  Load the TinyMCE WYSIWYG Editor for all text area boxes
-//tinymce.init(
-//{ 
-//    selector:'textarea',
-//    height: '500'
-//});
 //  Load tooltips
 $('body').tooltip({
     selector: '[data-tooltip="tooltip"]', 
@@ -18,16 +12,12 @@ $('#notes-wrapper').load('/customer/loadNotes/'+custID);
 //  Load the customer files
 $('#customer-files-table').children('tbody').load('/customer/loadFiles/'+custID);
 
-
-
-
 //  Clear any data in the Modal body when the Modal closes
 $('#edit-modal').on('hidden.bs.modal', function()
 {
     $('#modal-header').html('Modal Dialog');
     $('#modal-body').html('');
 });
-
 
 //  Add or remove a bookmark for a customer
 $('#customer-fav').click(function()
