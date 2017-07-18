@@ -84,6 +84,16 @@ class TechTips
         $this->db->prepare($qry)->execute(['tip' => $tipID, 'file' => $fileID]);
     }
     
+    //  Get the files associated with a tech tip
+    public function getTipFiles($tipID)
+    {
+        $qry = 'SELECT `files`.`file_id`, `file_name` FROM `files` JOIN `tech_tip_files` ON `files`.`file_id` = `tech_tip_files`.`file_id` WHERE `tech_tip_files`.`tip_id` = :tip';
+        $result = $this->db->prepare($qry);
+        $result->execute(['tip' => $tipID]);
+        
+        return $result->fetchAll();
+    }
+    
     //  Get tip information from the tech bench
     public function getTipData($tipID)
     {

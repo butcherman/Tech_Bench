@@ -143,24 +143,51 @@ class Tips extends Controller
     {
         $model = $this->model('techTips');
         $tipData = $model->getTipData($tipID);
-        $tipTagsArr = $model->getTipTags($tipID);
-        $tipTags = '';
-        foreach($tipTags as $tag)
+        
+        //  Determine if a valid tip has been selected
+        if(!$tipData)
         {
-            $tipTags .= $tag->name;
+            $this->view('tips.badID');
+        }
+        else
+        {
+            //  Get the system tags associated with the tech tip
+            $tipTagsArr = $model->getTipTags($tipID);
+            $tipTags = '';
+            foreach($tipTagsArr as $tag)
+            {
+                $tipTags .= '<div class="tech-tip-tag" name="tipTag[]">'.$tag->name.'</div>';            
+            }
+            
+            //  Get the files associated with the tech tip
+            $tipFilesArr = $model->getTipFiles($tipID);
+            if(!$tipFilesArr)
+            {
+                $tipFiles = '<h4>No Files</h4>';
+            }
+            else
+            {
+                $tipFiles = '';
+                foreach($tipFilesArr as $file)
+                {
+                    $tipFiles .= '<li><a href="/download/'.$file->file_id.'/'.$file->file_name.'">'.$file->file_name.'</a></li>';
+                }
+            }
+
+            $data = [
+                'title' => $tipData->title,
+                'tipID' => $tipData->tip_id,
+                'author' => Template::getUserName($tipData->user_id),
+                'date' => date('M j, Y', strtotime($tipData->added_on)),
+                'tip' => $tipData->details,
+                'tipFav' => $model->isTipFav($tipID, $_SESSION['id']) ? 'item-fav-checked' : 'item-fav-unchecked',
+                'tipTags' => $tipTags,
+                'files' => $tipFiles
+            ];
+
+            $this->view('tips.tipDetails', $data);
         }
         
-        $data = [
-            'title' => $tipData->title,
-            'tipID' => $tipData->tip_id,
-            'author' => Template::getUserName($tipData->user_id),
-            'date' => date('M j, Y', strtotime($tipData->added_on)),
-            'tip' => $tipData->details,
-            'tipFav' => $model->isTipFav($tipID, $_SESSION['id']) ? 'item-fav-checked' : 'item-fav-unchecked',
-            'tipTags' => $tipTags
-        ];
-        
-        $this->view('tips.tipDetails', $data);
         $this->template('techUser');
         $this->render();
     }

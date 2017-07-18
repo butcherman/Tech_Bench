@@ -377,6 +377,8 @@ CREATE TABLE IF NOT EXISTS `user_password_links` (
         ON UPDATE CASCADE
 );
 
+CREATE UNIQUE INDEX `tag_unique` ON `tech_tip_tags` (`tip_id`, `sys_id`);
+
 INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "2.1");
 
 INSERT INTO `roles` (`role_id`, `role_name`, `role_home`) VALUES (1, "site admin", "/dashboard"), (2, "admin", "/dashboard"), (3, "report", "/dashboard"), (4, "tech", "/dashboard");

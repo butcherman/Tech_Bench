@@ -12,6 +12,16 @@ class Files
         $this->fileLocation = $fileLocation;
     }
     
+    //  Function to get all data associated with a file
+    public function getFileData($fileID, $fileName)
+    {
+        $qry = 'SELECT `file_name`, `file_link`, `mime_type`, `permissions`.`permission_description` FROM `files` JOIN `permissions` ON `files`.`permission_id` = `permissions`.`permission_id` WHERE `file_id` = :id AND `file_name` = :name';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['id' => $fileID, 'name' => $fileName]);
+        
+        return $result->fetch();
+    } 
+    
     //  Function to process an uploaded file - also allows for multiple file uploads
     public function processFiles($fileData, $userID = '', $permission = 'admin')
     {
