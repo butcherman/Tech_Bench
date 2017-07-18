@@ -197,12 +197,12 @@ class Setup extends Controller
         //  Run the queries to create the triggers
         foreach($triggers as $trigger)
         {
-            $mysqli->query($trigger);
+            $mysqli->multi_query($trigger);
         }
         //  Run the queries to create the views
         foreach($views as $view)
         {
-            $mysqli->query($view);
+            $mysqli->multi_query($view);
         }
         
         return 'success';

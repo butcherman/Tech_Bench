@@ -20,6 +20,16 @@ class Systems
         return $result->fetchAll();
     }
     
+    //  Function to get the category ID
+    public function getCategoryID($catName)
+    {
+        $qry = 'SELECT `cat_id` FROM `system_categories` WHERE `description` = :desc';
+        $result = $this->db->prepare($qry);
+        $result->execute(['desc' => $catName]);
+        
+        return $result->fetch()->cat_id;
+    }
+    
     //  Get system category
     public function getSysCategory($sysName)
     {

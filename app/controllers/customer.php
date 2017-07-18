@@ -49,6 +49,7 @@ class Customer extends Controller
         $model = $this->model('customers');
         
         $custData = $model->searchCustomer($_POST['customer'], $_POST['city'], $_POST['systemType']);
+        
         $custList = '';
         
         if(!$custData)
@@ -92,8 +93,11 @@ class Customer extends Controller
         $model = $this->model('customers');
         $result = 'failed';
         
+        //  Strip any leading zero's from the customer ID - these cannot be stored in the database and will cause file location errors
+        $custID = ltrim($_POST['custID'], '0');
+        
         //  Determine if the customer already exists
-        if($custData = $model->getCustData($_POST['custID']))
+        if($custData = $model->getCustData($custID))
         {
             $result = 'duplicate';
         }
@@ -102,10 +106,10 @@ class Customer extends Controller
             $model->addCustomer($_POST);
             
             $fileModel = $this->model('files');
-            $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$_POST['custID'];
+            $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID;
             $fileModel->createFolder($filePath);
             
-            $msg = 'New Customer ID: '.$_POST['custID'].' Name: '.$_POST['custName'].' Added By User ID: '.$_SESSION['id'];
+            $msg = 'New Customer ID: '.$custID.' Name: '.$_POST['custName'].' Added By User ID: '.$_SESSION['id'];
             Logs::writeLog('Customer-Change', $msg);
             
             $result = 'success';
@@ -275,6 +279,7 @@ class Customer extends Controller
         {
             $sysName = $systems[0]->name;
         }
+        $sysName = str_replace('-', ' ', $sysName);
 
         //  Pull all system information
         $sysID = $sysModel->getSysID($sysName);
@@ -333,7 +338,7 @@ class Customer extends Controller
             $systems = $model->getSystems($cat->description);
             foreach($systems as $sys)
             {
-                $data['optList'] .= '<option value="'.$sys->name.'">'.$sys->name.'</option>';
+                $data['optList'] .= '<option value="'.str_replace(' ', '_', $sys->name).'">'.$sys->name.'</option>';
             }
             $data['optList'] .= '</optgroup>';
         }
@@ -350,7 +355,7 @@ class Customer extends Controller
         
         $custSystems = $model->getCustSystem($custID);
 
-        if(!$sysID = $sysModel->getSysID($_POST['addSystemType']))
+        if(!$sysID = $sysModel->getSysID(str_replace('_', ' ', $_POST['addSystemType'])))
         {
             $content = 'Bad System Type';
             $msg = 'Customer ID '.$custID.' failed to add system. Error: Bad System Type - '.$_POST['addSystemType'];
