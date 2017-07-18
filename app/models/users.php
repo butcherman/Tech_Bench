@@ -97,6 +97,16 @@ class Users
         return $result->fetch();
     }
     
+    //  Function to get the settings of the individual user
+    public function getUserSettings($userID)
+    {
+        $qry = 'SELECT * FROM `user_settings` WHERE `user_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $userID]);
+        
+        return $result->fetch();
+    }
+    
     //  Function to return the home location of the user based on their permission level
     public function getHomeLocation($userID)
     {
