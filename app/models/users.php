@@ -34,6 +34,18 @@ class Users
         return $valid;
     }
     
+    //  Function to only check the users password
+    public function checkPassword($userID, $password)
+    {
+        $qry = 'SELECT `password`, `salt` FROM `users` WHERE `user_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $userID])->fetch();
+        
+        $pass = $this->sprinkleSalt($result->salt, $result->password);
+        
+        return $pass === $password ? true : false;
+    }
+    
     //  Function to check email address and username for the forgotten password controller
     public function checkForgottenData($username, $email)
     {
@@ -95,6 +107,22 @@ class Users
         $result->execute(['userID' => $userID]);
         
         return $result->fetch();
+    }
+    
+    //  Function to update the users information based on the user ID
+    public function updateUserData($userID, $userData)
+    {
+        $userData['id'] = $userID;
+        $qry = 'UPDATE `users` SET `username` = :username, `first_name` = :first_name, `last_name` = :last_name, `email` = :email WHERE `user_id` = :id';
+        $this->db->prepare($qry)->execute($userData);
+    }
+    
+    //  Function to update the users notification settings
+    public function updateUserSettings($userID, $userSettings)
+    {
+        $userSettings['id'] = $userID;
+        $qry = 'UPDATE `user_settings` SET `em_tech_tip` = :tech_tip, `em_file_link` = :file_link, `em_sys_notification` = :notificaton WHERE `user_id` = :id';
+        $this->db->prepare($qry)->execute($userSettings);
     }
     
     //  Function to get the settings of the individual user

@@ -91,19 +91,19 @@
         },
         submitHandler: function()
         {
-//            $.post('/_account/submitUserSettings', $('#userSettings').serialize(), function(data)
-//            {
-//                if(data === 'success')
-//                {
-//                    $('#settings-changed').removeClass('text-hide');
-//                    var name = $('#firstName').val()+' '+$('#lastName').val();
-//                    $('#nav-user-name').text(name);
-//                }
-//                else
-//                {
-//                    alert('There was a problem updating your settings.')
-//                }
-//            });
+            $.post('/account/submitUserSettings', $('#userSettings').serialize(), function(data)
+            {
+                if(data === 'success')
+                {
+                    $('#settings-changed').removeClass('text-hide');
+                    var name = $('#firstName').val()+' '+$('#lastName').val();
+                    $('#nav-user-name').text(name);
+                }
+                else
+                {
+                    alert('There was a problem updating your settings.')
+                }
+            });
         }
     });
 </script>

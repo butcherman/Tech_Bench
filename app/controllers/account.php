@@ -21,11 +21,7 @@ class Account extends Controller
         $model = $this->model('users');
         $userData = $model->getUserData($_SESSION['id']);
         $userSettings = $model->getUserSettings($_SESSION['id']);
-        
-        
-        
-        
-        
+
         $data = [
             'username' => $userData->username,
             'first_name' => $userData->first_name,
@@ -36,10 +32,51 @@ class Account extends Controller
             'em_sys_notification' => $userSettings->em_sys_notification ? ' checked' : '',
             'auto_delete_link' => $userSettings->auto_delete_link ? ' checked' : ''
         ];
-        
-        
+            
         $this->view('tech.account', $data);
         $this->template('techUser');
         $this->render();
+    }
+    
+    //  Ajax call to submit the user settings
+    public function submitUserSettings()
+    {
+        $model = $this->model('users');
+        
+        //  Update primary user information
+        $userData = [
+            'username' => $_POST['username'],
+            'first_name' => $_POST['firstName'],
+            'last_name' => $_POST['lastName'],
+            'email' => $_POST['email']
+        ];
+        $model->updateUserData($_SESSION['id'], $userData);
+        
+        //  Update notification settings
+        $userSettings = [
+            'tech_tip' => isset($_POST['emailTechTip']) ? 1 : 0,
+            'file_link' => isset($_POST['emailFileLink']) ? 1 : 0,
+            'notificaton' => isset($_POST['emailNotifications']) ? 1 : 0
+        ];
+        $model->updateUserSettings($_SESSION['id'], $userSettings);
+        
+        $this->render('success');
+    }
+    
+    //  Change password page
+    public function password()
+    {
+        $this->view('tech.changePassword');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Ajax call to confirm that the current password is valid
+    public function checkPassword()
+    {
+        $model = $this->model('users');
+        $valid = $model->checkPassword($userID, $_POST['current']);
+        
+        $this->render($valid);
     }
 }
