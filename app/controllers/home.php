@@ -17,6 +17,8 @@ class Home extends Controller
             $model = $this->model('users');
             if($userID = $model->checkCookie())
             {
+                $userData = $model->getUserData($userID);
+                $this->logInUser($userData);
                 $userHome = $model->getHomeLocation($userID);
                 header('Location: '.$userHome);
                 die();
