@@ -75,8 +75,18 @@ class Account extends Controller
     public function checkPassword()
     {
         $model = $this->model('users');
-        $valid = $model->checkPassword($userID, $_POST['current']);
+        $valid = $model->checkPassword($_SESSION['id'], $_POST['current']);
         
-        $this->render($valid);
+        $this->render(json_encode($valid));
+    }
+    
+    //  Ajax call to submit the users new password
+    public function updatePassword()
+    {
+        $model = $this->model('users');
+        
+        $model->setPassword($_SESSION['id'], $_POST['newpass']);
+        
+        $this->render('success');
     }
 }

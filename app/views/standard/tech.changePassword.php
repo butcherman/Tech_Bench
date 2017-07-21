@@ -51,6 +51,10 @@
                             return $('#current').val();
                         }
                     }
+//                    complete: function(data)
+//                    {
+//                        alert(data.responseText);
+//                    }
                 }
             },
             newpass: {
@@ -79,14 +83,14 @@
                 equalTo: "Passwords do not match"
             }
         },
-//        success: function(element)
-//        {
-//            $(element).closest('.form-group').addClass('has-success has-feedback');
-//            $(element).next('.form-control-feedback').addClass('glyphicon glyphicon-ok');
-//        },
+        success: function(element)
+        {
+            $(element).closest('.form-group').addClass('has-success has-feedback');
+            $(element).next('.form-control-feedback').addClass('glyphicon glyphicon-ok');
+        },
         submitHandler: function()
         {
-            $.post('/_account/updatePassword', $('#changePassword').serialize(), function(data)
+            $.post('/account/updatePassword', $('#changePassword').serialize(), function(data)
             {
                 $('#settings-changed').removeClass('text-hide');
                 $('#change-password').addClass('text-hide');

@@ -39,11 +39,12 @@ class Users
     {
         $qry = 'SELECT `password`, `salt` FROM `users` WHERE `user_id` = :id';
         $result = $this->db->prepare($qry);
-        $result->execute(['id' => $userID])->fetch();
-        
-        $pass = $this->sprinkleSalt($result->salt, $result->password);
-        
-        return $pass === $password ? true : false;
+        $result->execute(['id' => $userID]);
+        $data = $result->fetch();
+
+        $password = $this->sprinkleSalt($data->salt, $password);
+
+        return $data->password === $password ? true : false;
     }
     
     //  Function to check email address and username for the forgotten password controller
