@@ -51,10 +51,6 @@
                             return $('#current').val();
                         }
                     }
-//                    complete: function(data)
-//                    {
-//                        alert(data.responseText);
-//                    }
                 }
             },
             newpass: {
