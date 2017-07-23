@@ -2,6 +2,9 @@
     <h1 class="text-center">Change Password</h1>
 </div>
 <div>
+    <h3 class="text-center text-warning"><?= $data['change']; ?></h3>
+</div>
+<div>
     <h3 class="text-hide text-center text-warning" id="settings-changed">Password Updated</h3>
 </div>
 <div>

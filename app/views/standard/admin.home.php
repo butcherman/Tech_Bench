@@ -45,7 +45,7 @@
             </div>
             <div class="row top-buffer">
                 <div class="col-sm-12">
-                    <a href="/admin/new-user" class="btn btn-default btn-block">Add New User</a>
+                    <a href="/admin/new-user" class="btn btn-default btn-block">Add New Tech User</a>
                 </div>
             </div>
             <div class="row top-buffer">

@@ -9,6 +9,7 @@
         "tinymce": "*",
         "jquery.tablesorter": "*",
         "seiyria-bootstrap-slider": "*",
-        "filesize": "*"
+        "filesize": "*",
+        "select2": "*"
     }
 }

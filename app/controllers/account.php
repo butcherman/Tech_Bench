@@ -66,7 +66,9 @@ class Account extends Controller
     //  Change password page
     public function password()
     {
-        $this->view('tech.changePassword');
+        $data['change'] = $_SESSION['changePassword'] ? 'You Must Change Your Password' : '';
+        
+        $this->view('tech.changePassword', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -86,6 +88,8 @@ class Account extends Controller
         $model = $this->model('users');
         
         $model->setPassword($_SESSION['id'], $_POST['newpass']);
+        $model->removeForcePasswordChange($_SESSION['id']);
+        $_SESSION['changePassword'] = 0;
         
         $this->render('success');
     }
