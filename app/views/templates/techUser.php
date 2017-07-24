@@ -39,7 +39,7 @@
             <div id="sidebar-wrapper">
                 <div id="user-data">
                     <p>
-                        <a href="/dahsboard">
+                        <a href="/dashboard">
                             <span class="glyphicon glyphicon-user"></span>
                             <span id="nav-user-name"><?= $_SESSION['name']; ?></span>
                             (<span id="nav-user-notifications"><?= Template::getNotifications(); ?></span>)  
