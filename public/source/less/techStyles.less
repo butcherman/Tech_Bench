@@ -14,6 +14,7 @@
 @lightGray: #ccc;
 @uncheckedFav:#C4C4C4;
 @checkedFav: #D46E70;
+@bookmarkColor: #E4E4E4;
 
 
 
@@ -317,4 +318,58 @@ a .glyphicon {
 .tip-files {
     color: #8F8686;
     border-bottom: 1px solid black;
+}
+
+.mark-notification, .delete-notification {
+    color: @lightGray;
+    .pointer;
+}
+
+.mark-notification:hover, .delete-notification:hover {
+    color: #000;
+}
+
+#notifications-panel {
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.alert {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.row.dashboard {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row.dashboard > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.well.bookmark {
+    height: 100%;
+    background-color: @bookmarkColor;
+}
+
+.bookmark {
+    height: 95%;
+    display: block;
+    margin-bottom: 20px;
+    color: #000;
+    
+    background: #e2e2e2;
+    background: -moz-linear-gradient(top,  #e2e2e2 20%, #dbdbdb 42%, #d1d1d1 60%, #fefefe 100%); 
+    background: -webkit-linear-gradient(top,  #e2e2e2 20%, #dbdbdb 42%, #d1d1d1 60%, #fefefe 100%); 
+    background: linear-gradient(top,  #e2e2e2 20%, #dbdbdb 42%, #d1d1d1 60%, #fefefe 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 );
+
+    -webkit-box-shadow: 0 1px 3px 0 rgba(2, 2, 2, 0.3);
+    -moz-box-shadow: 0 1px 3px 0 rgba(2, 2, 2, 0.3);
+    box-shadow: 0 1px 3px 0 rgba(2, 2, 2, 0.3);
 }

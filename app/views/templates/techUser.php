@@ -39,7 +39,7 @@
             <div id="sidebar-wrapper">
                 <div id="user-data">
                     <p>
-                        <a href="/tech">
+                        <a href="/dahsboard">
                             <span class="glyphicon glyphicon-user"></span>
                             <span id="nav-user-name"><?= $_SESSION['name']; ?></span>
                             (<span id="nav-user-notifications"><?= Template::getNotifications(); ?></span>)  
@@ -50,8 +50,10 @@
                     <h3>Dashboard</h3>
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-home"></span> <a href="/dashboard">Dashboard Home</a></li>
+<!--
                         <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/links">File Links</a></li>
                         <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/forms">Company Forms</a></li>
+-->
                     </ul>
                     <?= Template::getAdminLinks(); ?>
                     <span id="systemNavLinks"><?= Template::getSysLinks(); ?></span>
