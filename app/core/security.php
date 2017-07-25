@@ -41,9 +41,9 @@ class Security
         }
         else if(Self::isLoggedIn())
         {
-            if(isset($_SESSION['changePassword']) && $_SESSION['changePassword'])
+            if(isset($_SESSION['changePassword']) && $_SESSION['changePassword'] && !preg_match('/^account/', $_GET['url']))
             {
-                header('Location: /accont/password');
+                header('Location: /account/password');
                 die();
             }
             $qry = 'SELECT COUNT(*) FROM `role_permissions` 

@@ -18,7 +18,130 @@ class Dashboard extends Controller
     
     public function index()
     {
-        $this->view('tech.dashboard');
+        $model = $this->model('dashboardModel');
+        
+        $custFavs = $model->getCustFavs($_SESSION['id']);
+        $tipFavs = $model->getTechTipFavs($_SESSION['id']);
+        
+        
+
+        
+        
+        
+        
+        
+        
+        $i = 0;
+        $p = 4;
+        $data['customerFavs'] = '<div class="row dashboard">';
+        if(!empty($custFavs))
+        {
+            foreach($custFavs as $fav)
+            {
+                if($i % $p == 0 && $i != 0)
+                {
+                    $data['customerFavs'] .= '</div><div class="row dashboard">';
+                }
+                $data['customerFavs'] .= '<div class="col-md-3 col-xs-12"><a href="/customer/id/'.$fav->cust_id.'/'.str_replace(' ', '-', $fav->name).'" class="bookmark"><div class="well bookmark text-center">'.$fav->name.'</div></a></div>';
+
+                $i++;
+            }
+        }
+        else
+        {
+            $data['customerFavs'] .= '<div class="col-sm-12"><h3 class="text-center">No Bookmarks</h3></div>';
+        }  
+        $data['customerFavs'] .= '</div>';
+
+        $i = 0;
+        $p = 4;
+        $data['techTipFavs'] = '<div class="row dashboard">';
+        if(!empty($tipFavs))
+        {
+            foreach($tipFavs as $fav)
+            {
+                if($i % $p == 0 && $i != 0)
+                {
+                    $data['techTipFavs'] .= '</div><div class="row dashboard">';
+                }
+                $data['techTipFavs'] .= '<div class="col-md-3 col-xs-12"><a href="/tips/id/'.$fav->tip_id.'/'.str_replace(' ', '-', $fav->title).'" class="bookmark"><div class="well bookmark text-center">'.$fav->title.'</div></a></div>';
+
+                $i++;
+            }
+        }
+        else
+        {
+            $data['techTipFavs'] .= '<div class="col-sm-12"><h3 class="text-center">No Bookmarks</h3></div>';
+        }  
+        $data['techTipFavs'] .= '</div>';
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        $this->view('tech.dashboard', $data);
         $this->render();
+    }
+    
+    //  Load all user notifications
+    public function loadNotifications()
+    {
+        $model = $this->model('dashboardModel');
+        
+        $notifications = $model->getNotifications($_SESSION['id']);
+        
+        if(!empty($notifications))
+        {
+            $note = '';
+            foreach($notifications as $notify)
+            {
+                if(!$notify->viewed)
+                {
+                    $link = '<strong>'.$notify->description.'</strong>';
+                    $date = '<strong>'.date('M j, Y', strtotime($notify->added_on)).'</strong>';
+                }
+                else
+                {
+                    $link = $notify->description;
+                    $date = date('M j, Y', strtotime($notify->added_on));
+                }
+
+                $note .= '<tr><td><span class="glyphicon glyphicon-ok mark-notification" data-tooltip="tooltip" title="Mark Read" data-id="'.$notify->notification_id.'"></span> <span class="glyphicon glyphicon-remove delete-notification" data-tooltip="tooltip" title="Delete" data-id="'.$notify->notification_id.'"></span></td><td><a href="'.$notify->link.'" class="notification-link" data-id="'.$notify->notification_id.'">'.$link.'</a></td><td>'.$date.'</td></tr>';
+            }
+        }
+        else
+        {
+            $note = '<tr><td colspan="3" class="text-center">No Notifications</td></tr>';
+        }
+        
+        $this->render($note);
+    }
+    
+    //  Ajax call to mark a notification as read
+    public function markNotification($noteID)
+    {
+        $model = $this->model('dashboardModel');
+        $model->markNotification($noteID);
+    }
+    
+    //  Ajax call to delete a user notification
+    public function deleteNotification($noteID)
+    {
+        $model = $this->model('dashboardModel');
+        $model->deleteNotification($noteID);
     }
 }

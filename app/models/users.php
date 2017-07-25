@@ -34,6 +34,28 @@ class Users
         return $valid;
     }
     
+    //  Get a list of all users - Note:  will not return Initial System Admin with user ID of 1
+    public function getUserList()
+    {
+        $qry = 'SELECT `user_id`, `username`, `first_name`, `last_name` FROM `users` WHERE `user_id` > 1 AND `active` = 1';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Function to only check the users password
+    public function checkPassword($userID, $password)
+    {
+        $qry = 'SELECT `password`, `salt` FROM `users` WHERE `user_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $userID]);
+        $data = $result->fetch();
+
+        $password = $this->sprinkleSalt($data->salt, $password);
+
+        return $data->password === $password ? true : false;
+    }
+    
     //  Function to check email address and username for the forgotten password controller
     public function checkForgottenData($username, $email)
     {
@@ -87,12 +109,69 @@ class Users
         return $valid;
     }
     
+    //  Function to create a new user
+    public function createUser($username, $firstName, $lastName, $email, $pass)
+    {
+        $salt = $this->createSalt();
+        $data = [
+            'username' => $username,
+            'first' => $firstName,
+            'last' => $lastName,
+            'email' => $email,
+            'salt' => $salt,
+            'pass' => $this->sprinkleSalt($salt, $pass)
+        ];
+        
+        $qry = 'INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `salt`, `active`, `change_password`) VALUES (:username, :first, :last, :email, :pass, :salt, 1, 1)';
+        $this->db->prepare($qry)->execute($data);
+        
+        $userID = $this->db->lastInsertId();
+        $qry = 'INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (:id, (SELECT `role_id` FROM `roles` WHERE `role_name` = "tech"))';
+        $this->db->prepare($qry)->execute(['id' => $userID]);
+    }
+    
+    //  Function to deactivate existing user
+    public function deactivateUser($userID)
+    {
+        $qry = 'UPDATE `users` SET `active` = 0 WHERE `user_id` = :id';
+        if(!empty($userID))
+        {
+            $this->db->prepare($qry)->execute(['id' => $userID]);
+        }
+    }
+    
     //  Function to pull basic user information from the database based on the userID
     public function getUserData($userID)
     {
         $qry = 'SELECT `user_id`, `username`, `first_name`, `last_name`, `email`, `change_password` FROM `users` WHERE `user_id` = :userID';
         $result = $this->db->prepare($qry);
         $result->execute(['userID' => $userID]);
+        
+        return $result->fetch();
+    }
+    
+    //  Function to update the users information based on the user ID
+    public function updateUserData($userID, $userData)
+    {
+        $userData['id'] = $userID;
+        $qry = 'UPDATE `users` SET `username` = :username, `first_name` = :first_name, `last_name` = :last_name, `email` = :email WHERE `user_id` = :id';
+        $this->db->prepare($qry)->execute($userData);
+    }
+    
+    //  Function to update the users notification settings
+    public function updateUserSettings($userID, $userSettings)
+    {
+        $userSettings['id'] = $userID;
+        $qry = 'UPDATE `user_settings` SET `em_tech_tip` = :tech_tip, `em_file_link` = :file_link, `em_sys_notification` = :notificaton WHERE `user_id` = :id';
+        $this->db->prepare($qry)->execute($userSettings);
+    }
+    
+    //  Function to get the settings of the individual user
+    public function getUserSettings($userID)
+    {
+        $qry = 'SELECT * FROM `user_settings` WHERE `user_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $userID]);
         
         return $result->fetch();
     }
@@ -158,6 +237,20 @@ class Users
         $qry = 'UPDATE `users` SET `password` = :pass, `salt` = :salt WHERE `user_id` = :userID';
         $qryData = ['pass' => $pass, 'salt' => $salt, 'userID' => $userID];
         $this->db->prepare($qry)->execute($qryData);
+    }
+    
+    //  Function to turn on force password change
+    public function setForcePasswordChange($userID)
+    {
+        $qry = 'UPDATE `users` SET `change_password` = 1 WHERE `user_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $userID]);
+    }
+    
+    //  Function to turn off force password update
+    public function removeForcePasswordChange($userID)
+    {
+        $qry = 'UPDATE `users` SET `change_password` = 0 WHERE `user_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $userID]);
     }
     
     //  Function to generate a salt hash for a user password

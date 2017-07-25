@@ -8,6 +8,7 @@ class Err // extends Controller
         echo 'oops<br>';
         echo $_GET['url'].'<pre>';
         print_r($_SESSION);
+        print_r($_COOKIE);
         echo '</pre>';
     }
 }

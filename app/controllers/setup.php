@@ -198,11 +198,14 @@ class Setup extends Controller
         foreach($triggers as $trigger)
         {
             $mysqli->multi_query($trigger);
+            sleep(2);
         }
         //  Run the queries to create the views
         foreach($views as $view)
         {
+            Logs::writeLog('triggered', 'triggered');
             $mysqli->multi_query($view);
+            sleep(2);
         }
         
         return 'success';

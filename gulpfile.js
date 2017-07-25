@@ -37,7 +37,9 @@ gulp.task('moveFiles', ['bower'], function() {
         gulp.src(['vendor/seiyria-bootstrap-slider/dist/**/*'])
             .pipe(gulp.dest('public/source/lib/bootstrap-slider')),
         gulp.src(['vendor/filesize/lib/*'])
-            .pipe(gulp.dest('public/source/lib/filesize'))
+            .pipe(gulp.dest('public/source/lib/filesize')),
+        gulp.src(['vendor/select2/dist/**/*'])
+            .pipe(gulp.dest('public/source/lib/select2'))
 });
 
 gulp.task('default', ['bower', 'moveFiles', 'config']);
