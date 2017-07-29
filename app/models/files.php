@@ -26,7 +26,7 @@ class Files
     public function processFiles($fileData, $userID = '', $permission = 'admin')
     {
         $success = [];
-        
+
         //  Determine if the file location has been set or not
         if(empty($this->fileLocation))
         {
