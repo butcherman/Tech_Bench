@@ -410,7 +410,7 @@ $(document).on('click', '#new-file-submit-lnk', function()
         messages:
         {
             fileName: "Please Enter A Valid Name To Identify The File",
-            file: "File size must be less than 2Gb"
+            file: "File size must be less than "+filesize(maxFile)
         },
         submitHandler: function()
         {
