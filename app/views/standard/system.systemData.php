@@ -58,6 +58,7 @@
 </div>
 
 <script src="/source/js/functions.files.js"></script>
+<script src="/source/lib/filesize/filesize.min.js"></script>
 <script>
     $('body').popover({
         selector: '[data-toggle="popover"]',
@@ -111,7 +112,7 @@
             name: "Please Give A Descriptive Name For The File",
             file: 
             {
-                filesize: "File size must be less than "+maxFile,
+                filesize: "File size must be less than "+filesize(maxFile),
                 required: "Please Select A File"
             }
         },

@@ -47,6 +47,7 @@
 <script src="/source/lib/tinymce/tinymce.min.js"></script>
 <script src="/source/lib/tinymce/plugins/autolink/plugin.min.js"></script>
 <script src="/source/js/functions.files.js"></script>
+<script src="/source/lib/filesize/filesize.min.js"></script>
 <script>
     tinymce.init(
     {
@@ -72,7 +73,14 @@
         rules:
         {
             title: "required",
-            tip: "required"
+            tip: "required",
+            "file[]": {
+                filesize: maxFile
+            }
+        },
+        messages:
+        {
+            "file[]": "File size must be less than "+filesize(maxFile)
         },
         submitHandler: function()
         {
