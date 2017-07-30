@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php // echo $data['linkList']; ?>
+                    <?= $data['linkList']; ?>
                 </tbody>
             </table>
         </div>
@@ -29,10 +29,27 @@
 <div class="row">
     <div class="col-xs-8 col-xs-offset-2">
         <p>
-            <span class="bg-danger">Links in Red</span> are more than 30 days expired and are in danger of being deleted on the next maintenance cycle.
+            <span class="bg-warning">Links in Yellow</span> are expired and should be deleted
         </p>
         <p>
-            <span class="bg-warning">Links in Yellow</span> are expired and should be deleted
+            <span class="bg-danger">Links in Red</span> are more than 30 days expired and are in danger of being deleted on the next maintenance cycle.
         </p>
     </div>
 </div>
+<div class="modal fade" id="edit-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="text-center" id="modal-header">Delete Link</h4>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/source/lib/filesize/filesize.min.js"></script>
+<script src="/source/js/functions.fileLinks.js"></script>

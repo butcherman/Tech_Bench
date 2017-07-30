@@ -28,6 +28,67 @@ class FileLinks
         return $this->db->lastInsertID();
     }
     
+    //  Funciton to update an existing link
+    public function updateLink($linkID, $linkData)
+    {
+        $qry = 'UPDATE `upload_links` SET `link_name` = :name, `expire` = :expire, `allow_user_upload` = :allow WHERE `link_id` = :link';
+        $linkData['link'] = $linkID;
+        $this->db->prepare($qry)->execute($linkData);
+    }
+    
+    //  Function to remove a link from the database
+    public function deleteLink($linkID)
+    {
+        $qry = 'DELETE FROM `upload_links` WHERE `link_id` = :link';
+        if(!empty($linkID))
+        {
+            $this->db->prepare($qry)->execute(['link' => $linkID]);
+        }
+    }
+    
+    //  Function to return the details about a link
+    public function getLinkDetails($linkID)
+    {
+        $qry = 'SELECT `link_hash`, `link_name`, `expire`, `allow_user_upload` FROM `upload_links` WHERE `link_id` = :link';
+        $result = $this->db->prepare($qry);
+        $result->execute(['link' => $linkID]);
+        
+        return $result->fetch();
+    }
+    
+    //  Function to get the links belonging to a specific user, or all users
+    public function getLinks($userID = '')
+    {
+        if(empty($userID))
+        {
+            $qry = 'SELECT `link_id`, `link_name`, `expire` FROM `upload_links`';
+            $result = $this->db->prepare($qry);
+            $result->execute();
+        }
+        else
+        {
+            $qry = 'SELECT `link_id`, `link_name`, `expire` FROM `upload_links` WHERE `user_id` = :user';
+            $result = $this->db->prepare($qry);
+            $result->execute(['user' => $userID]);
+        }
+    
+        return $result->fetchAll();
+    }
+    
+    //  Get the files belonging to a link
+    public function getLinkFiles($linkID)
+    {
+        $qry = 'SELECT `upload_link_files`.`added_on`, `upload_link_files`.`added_by`, `files`.`file_id`, `files`.`file_name`, `upload_link_notes`.`upload_note_id` FROM `upload_link_files` 
+                LEFT JOIN `files` ON `upload_link_files`.`file_id` = `files`.`file_id` 
+                LEFT JOIN `upload_link_notes` ON `files`.`file_id` = `upload_link_notes`.`file_id` 
+                WHERE `upload_link_files`.`link_id` = :link 
+                ORDER BY `upload_link_files`.`added_by`, `upload_link_files`.`added_on` ASC';
+        $result = $this->db->prepare($qry);
+        $result->execute(['link' => $linkID]);
+        
+        return $result->fetchAll();
+    }
+    
     //  Attach a file to a link ID
     public function insertLinkFile($linkID, $fileID, $userID)
     {
@@ -38,6 +99,16 @@ class FileLinks
         ];
         $qry = 'INSERT INTO `upload_link_files` (`link_id`, `file_id`, `added_by`) VALUES (:link, :file, :user)';
         $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Count how many files a link has
+    public function countLinkFiles($linkID)
+    {
+        $qry = 'SELECT COUNT(`file_id`) FROM `upload_link_files` WHERE `link_id` = :link';
+        $result = $this->db->prepare($qry);
+        $result->execute(['link' => $linkID]);
+        
+        return $result->fetchColumn();
     }
     
     //  Enable the ability for a user to upload files to a link
