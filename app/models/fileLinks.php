@@ -46,6 +46,24 @@ class FileLinks
         }
     }
     
+    //  Function to get the ID of a link based on the link hash
+    public function getLinkID($linkHash)
+    {
+        $qry = 'SELECT `link_id` FROM `upload_links` WHERE `link_hash` = :hash';
+        $result = $this->db->prepare($qry);
+        $result->execute(['hash' => $linkHash]);
+        
+        return $result->fetch();
+    }
+    
+    //  Determine if the link is valid or expired
+    public function isLinkExpired($linkID)
+    {
+        $details = $this->getLinkDetails($linkID);
+        
+        return $details->expire <= date('Y-m-d') ? true : false;
+    }
+    
     //  Function to return the details about a link
     public function getLinkDetails($linkID)
     {
@@ -99,6 +117,16 @@ class FileLinks
         ];
         $qry = 'INSERT INTO `upload_link_files` (`link_id`, `file_id`, `added_by`) VALUES (:link, :file, :user)';
         $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Delete a file attached to a link
+    public function deleteLinkFile($fileID)
+    {
+        $qry = 'DELETE FROM `files` WHERE `file_id` = :file';
+        if(!empty($fileID))
+        {
+            $this->db->prepare($qry)->execute(['file' => $fileID]);
+        }
     }
     
     //  Count how many files a link has

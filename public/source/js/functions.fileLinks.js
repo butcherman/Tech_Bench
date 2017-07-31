@@ -4,40 +4,6 @@ $('body').tooltip({
     trigger: 'hover'
 });
 
-//  validate and create a new upload link
-$('#new-file-link').validate(
-{
-    rules:
-    {
-        file: {
-            filesize: maxFile
-        }
-    },
-    messages:
-    {
-        file: "File size must be less than "+filesize(maxFile)
-    },
-    submitHandler: function()
-    {
-        if($('#file').val() == '')
-        {
-            $.post('/links/createSubmit', $('#new-file-link').serialize(), function(data)
-            {
-                uploadComplete(data);
-            });
-        }
-        else
-        {
-            submitFile('/links/createSubmit', 'new-file-link');
-        }
-    }
-});
-//  After the upload link is created, navigate to that upload link page
-function uploadComplete(res)
-{
-    window.location.replace('/links/details/'+res);
-}
-
 //  Delete an existing upload link along with all related files
 $(document).on('click', '.delete-link', function()
 {
@@ -177,3 +143,32 @@ function uploadComplete(res)
     $('#edit-modal').modal('hide');
     $('#modal-body').html('');
 }
+
+//  Delete a file
+$(document).on('click', '.delete-file-link', function()
+{
+    var fileID = $(this).data('fileid');
+    $('#modal-header').text('Confirm Delete File');
+    $('#modal-body').load('/home/yesorno', function()
+    {
+        $('.select-yes').addClass('delete-file-confirm');
+        $('.select-yes').attr('data-fileid', fileID);
+    });
+});
+//  Confirm to delete the file
+$(document).on('click', '.delete-file-confirm', function()
+{
+    $.get('/links/deleteFile/'+$(this).data('fileid'), function(data)
+    {
+        if(data === 'success')
+        {
+            userUploadedFiles();
+            customerUploadedFiles();
+            $('#edit-modal').modal('hide');
+        }
+        else
+        {
+            alert(data);
+        }
+    });
+});

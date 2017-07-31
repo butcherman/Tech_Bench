@@ -117,16 +117,24 @@ class Links extends Controller
         $model = $this->model('fileLinks');
         $details = $model->getLinkDetails($linkID);
         
-        $data = [
-            'linkName' => $details->link_name,
-            'linkID' => $linkID,
-            'expire' => $details->expire,
-            'link' => Config::getCore('baseURL').'file-link/'.$details->link_hash,
-            'allow' => $details->allow_user_upload ? 'Yes' : 'No'
-        ];
+        if(!$details)
+        {
+            $this->view('error.badLink');
+        }
+        else
+        {
+            $data = [
+                'linkName' => $details->link_name,
+                'linkID' => $linkID,
+                'expire' => $details->expire,
+                'link' => Config::getCore('baseURL').'file-link/'.$details->link_hash,
+                'allow' => $details->allow_user_upload ? 'Yes' : 'No'
+            ];
+
+            $this->view('links.details', $data);
+        }
         
         $this->template('techUser');
-        $this->view('links.details', $data);
         $this->render();
     }
     
@@ -149,7 +157,7 @@ class Links extends Controller
                 {
                     $note = '';
                 }
-                $data .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'">'.$file->file_name.'</a></td><td class="hidden-xs">'.date('M j, Y', strtotime($file->added_on)).'</td><td>'.$note.'</td><td class="hidden-xs"><a title="Delete File" class="delete-file-link pointer" data-fileID="'.$file->file_id.'" data-tooltip="tooltip"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+                $data .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'">'.$file->file_name.'</a></td><td class="hidden-xs">'.date('M j, Y', strtotime($file->added_on)).'</td><td>'.$note.'</td><td class="hidden-xs"><a href="#edit-modal" title="Delete File" class="delete-file-link pointer" data-fileID="'.$file->file_id.'" data-tooltip="tooltip" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
             }
         }
             
@@ -181,7 +189,7 @@ class Links extends Controller
                     $note = '';
                 }
                 
-                $data .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'">'.$file->file_name.'</a></td><td class="hidden-xs">'.date('M j, Y', strtotime($file->added_on)).'</td><td>'.$note.'</td><td class="hidden-xs"><a title="Delete File" class="delete-file-link pointer" data-fileID="'.$file->file_id.'" data-tooltip="tooltip"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+                $data .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'">'.$file->file_name.'</a></td><td class="hidden-xs">'.date('M j, Y', strtotime($file->added_on)).'</td><td>'.$note.'</td><td class="hidden-xs"><a href="#edit-modal" title="Delete File" class="delete-file-link pointer" data-fileID="'.$file->file_id.'" data-tooltip="tooltip" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
             }
         }
         
@@ -213,6 +221,18 @@ class Links extends Controller
         {
             $model->insertLinkFile($linkID, $id, $_SESSION['id']);
         }
+        
+        $this->render('success');
+    }
+    
+    //  Delete one of the files attached to the link
+    public function deleteFile($fileID)
+    {
+        $model = $this->model('fileLinks');
+        $fileModel = $this->model('files');
+        
+        $fileModel->deleteFile($fileID);
+        $model->deleteLinkFile($fileID);
         
         $this->render('success');
     }

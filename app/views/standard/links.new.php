@@ -52,4 +52,40 @@
 
 <script src="/source/js/functions.files.js"></script>
 <script src="/source/lib/filesize/filesize.min.js"></script>
-<script src="/source/js/functions.fileLinks.js"></script>
+<script>
+//  validate and create a new upload link
+$('#new-file-link').validate(
+{
+    rules:
+    {
+        file: {
+            filesize: maxFile
+        }
+    },
+    messages:
+    {
+        file: "File size must be less than "+filesize(maxFile)
+    },
+    submitHandler: function()
+    {
+        if($('#file').val() == '')
+        {
+            $.post('/links/createSubmit', $('#new-file-link').serialize(), function(data)
+            {
+                alert(data);
+                uploadComplete(data);
+            });
+        }
+        else
+        {
+            submitFile('/links/createSubmit', 'new-file-link');
+        }
+    }
+});
+//  After the upload link is created, navigate to that upload link page
+function uploadComplete(res)
+{
+    alert(res);
+    window.location.replace('/links/details/'+res);
+}
+</script>

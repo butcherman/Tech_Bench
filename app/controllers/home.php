@@ -120,7 +120,7 @@ class Home extends Controller
         }
         else
         {
-            $this->view('home.badLink');
+            $this->view('error.badLink');
         }
         
         $this->template('standard');
