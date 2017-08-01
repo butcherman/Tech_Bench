@@ -56,6 +56,17 @@ class FileLinks
         return $result->fetch();
     }
     
+    //  Function to return the user ID of the user who created the link
+    public function getLinkOwner($linkID)
+    {
+        $qry = 'SELECT `user_id` FROM `upload_links` WHERE `link_id` = :link';
+        $result = $this->db->prepare($qry);
+        $result->execute(['link' => $linkID]);
+        
+        $name = $result->fetch();
+        return $name->user_id;
+    }
+    
     //  Determine if the link is valid or expired
     public function isLinkExpired($linkID)
     {
@@ -117,6 +128,8 @@ class FileLinks
         ];
         $qry = 'INSERT INTO `upload_link_files` (`link_id`, `file_id`, `added_by`) VALUES (:link, :file, :user)';
         $this->db->prepare($qry)->execute($data);
+        
+        return $this->db->lastInsertID();
     }
     
     //  Delete a file attached to a link
@@ -137,6 +150,13 @@ class FileLinks
         $result->execute(['link' => $linkID]);
         
         return $result->fetchColumn();
+    }
+    
+    //  Add a note to a file
+    public function insertFileLinkNote($fileID, $note)
+    {
+        $qry = 'INSERT INTO `upload_link_notes` (`file_id`, `note`) VALUES (:file, :note)';
+        $this->db->prepare($qry)->execute(['file' => $fileID, 'note' => $note]);
     }
     
     //  Enable the ability for a user to upload files to a link

@@ -135,6 +135,14 @@ class Template
         return $name->first_name.' '.$name->last_name;
     }
     
+    //  Create notification for one user
+    public static function notifyOneUser($description, $link, $userID)
+    {
+        $qry = 'INSERT INTO `user_notifications` (`user_id`, `description`, `link`) VALUES (:userID, :desc, :link)';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['userID' => $userID, 'desc' => $description, 'link' => $link]);
+    }
+    
     //  Notify all users
     public static function notifyAllUsers($description, $link)
     {

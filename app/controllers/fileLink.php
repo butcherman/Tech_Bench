@@ -45,6 +45,50 @@ class FileLink extends Controller
     
     public function submitNewFIle($linkID)
     {
-        print_r($_POST);
+        $user = $_POST['name'];
+        $model = $this->model('fileLinks');
+        $fileModel = $this->model('files');
+        
+        $path = Config::getFile('uploadRoot').Config::getFile('uploadPath').$linkID.Config::getFile('slash');
+        $fileModel->setFileLocation($path);
+        $owner = $model->getLinkOwner($linkID);
+        
+        //  Insert the file
+        $fileID = $fileModel->processFiles($_FILES, $user, 'open');
+        $model->insertLinkFile($linkID, $fileID[0], $user);
+        if(!empty($_POST['notes']))
+        {
+            $model->insertFileLinkNote($fileID[0], $_POST['notes']);
+        }
+        
+        //  Write a log to note the tech tip
+        $msg = 'New File added to link ID: '.$linkID.' by '.$user;
+        Logs::writeLog('File-Links', $msg);
+        
+        //  Create a notification for the dashboard
+        $msg = 'New File added to link ID: '.$linkID.' by '.$user;
+        $lnk = '/links/details/'.$linkID;
+        Template::notifyOneUser($msg, $lnk, $owner);
+        
+        //  Email all users about the tech tip
+//        $tipData = $model->getTipData($tipID);        
+//        
+//        $data = [
+//            'baseURL' => Config::getCore('baseURL'),
+//            'title' => $tipData->title,
+//            'tipID' => $tipData->tip_id,
+//            'date' => $tipData->added_on,
+//            'author' => Template::getUserName($tipData->user_id),
+//            'tip' => $tipData->details
+//        ];
+//        $emBody = $this->emailView('tips.newTechTip', $data);
+//        Email::init();
+//        $emailAddresses = Email::getAddresses('em_tech_tip');
+//        Email::addSubject('Tech Bench Notification: New Tech Tip');
+//        Email::addUser($emailAddresses);
+//        Email::addBody($emBody);
+//        Email::send();
+        
+        $this->render('success');
     }
 }

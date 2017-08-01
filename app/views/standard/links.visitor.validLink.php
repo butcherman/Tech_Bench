@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group">
                     <label for="file">File:</label>
-                    <input type="file" name="file" id="file" class="form-control" />
+                    <input type="file" name="file" id="file" class="form-control" required />
                 </div>
                 <div class="form-group">
                     <label for="notes">Notes For File:</label>
@@ -62,6 +62,17 @@
 <script src="/source/js/functions.files.js"></script>
 <script src="/source/lib/filesize/filesize.min.js"></script>
 <script>
+    jQuery.validator.addMethod("notEqualTo", function(value, element, param) {
+        return this.optional(element) || value != $(param).val();
+    }, "This has to be different...");
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'File size must be less than {0}');
+    tinymce.init(
+    { 
+        selector:'textarea',
+        height: '400'
+    });
     var maxFile = <?= Config::getFile('maxUpload'); ?>;
     $('#customer-add-file').validate(
     {
@@ -72,12 +83,15 @@
                 filesize: maxFile
             }
         },
-//        messages:
-//        {
-//            file: "File size must be less than "+filesize(maxFile)
-//        },
+        messages:
+        {
+            file: { 
+                filesize: "File size must be less than "+filesize(maxFile)
+            }
+        },
         submitHandler: function()
         {
+            tinymce.triggerSave();
             submitFile('/fileLink/submitNewFile/<?= $data['linkID']; ?>', 'customer-add-file')
         }
     });
