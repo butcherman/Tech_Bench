@@ -50,10 +50,8 @@
                     <h3>Dashboard</h3>
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-home"></span> <a href="/dashboard">Dashboard Home</a></li>
-<!--
                         <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/links">File Links</a></li>
-                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/forms">Company Forms</a></li>
--->
+<!--                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/forms">Company Forms</a></li>-->
                     </ul>
                     <?= Template::getAdminLinks(); ?>
                     <span id="systemNavLinks"><?= Template::getSysLinks(); ?></span>
