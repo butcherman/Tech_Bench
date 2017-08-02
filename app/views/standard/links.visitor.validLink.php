@@ -28,7 +28,7 @@
             <div class="page-header">
                 <h2>Add A File:</h2>
             </div>
-            <div id="updateNotice" class="text-center">
+            <div id="updateNotice" class="text-center hidden">
                 <h3>File Successfully Added</h3>
                 <h4>You Can Add Additional Files If Necessary</h4>
             </div>
@@ -98,6 +98,13 @@
     
     function uploadComplete(res)
     {
-        alert(res);
+        if(res === 'success')
+        {
+            $('#updateNotice').removeClass('hidden');
+            $('#forProgressBar').hide();
+            $('#progressBar').css('width', '0');
+            $('#customer-add-file').find('input[type=file]').val('');
+            tinymce.activeEditor.setContent('');
+        }
     }
 </script>

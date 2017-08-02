@@ -152,6 +152,16 @@ class FileLinks
         return $result->fetchColumn();
     }
     
+    //  Get a note linked to a file
+    public function getFileLinkNote($noteID)
+    {
+        $qry = 'SELECT `note` FROM `upload_link_notes` WHERE `upload_note_id` = :note';
+        $result = $this->db->prepare($qry);
+        $result->execute(['note' => $noteID]);
+        
+        return $result->fetch();
+    }
+    
     //  Add a note to a file
     public function insertFileLinkNote($fileID, $note)
     {

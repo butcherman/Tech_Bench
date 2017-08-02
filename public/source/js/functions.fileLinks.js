@@ -172,3 +172,11 @@ $(document).on('click', '.delete-file-confirm', function()
         }
     });
 });
+
+//  View a note added to a file
+$(document).on('click', '.view-note-link', function()
+{
+    var noteID = $(this).data('noteid');
+    $('#modal-header').text('File Note');
+    $('#modal-body').load('/links/loadNote/'+noteID);
+});

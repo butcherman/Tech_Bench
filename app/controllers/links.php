@@ -169,7 +169,7 @@ class Links extends Controller
         $this->render($data);
     }
     
-    //  Ajax call to load the user added files
+    //  Ajax call to load the customer added files
     public function customerUploadedFiles($linkID)
     {
         $model = $this->model('fileLinks');
@@ -182,7 +182,7 @@ class Links extends Controller
             {
                 if(!empty($file->upload_note_id))
                 {
-                    $note = '<a href="#edit-modal" title="Click to view Note" data-toggle="modal" data-tooltip="tooltip" data-noteid="'.$file->upload_note_id.'"><span class="glyphicon glyphicon-open-file"></span></a>';
+                    $note = '<a href="#edit-modal" class="view-note-link" title="Click to view Note" data-toggle="modal" data-tooltip="tooltip" data-noteid="'.$file->upload_note_id.'"><span class="glyphicon glyphicon-open-file"></span></a>';
                 }
                 else
                 {
@@ -235,6 +235,15 @@ class Links extends Controller
         $model->deleteLinkFile($fileID);
         
         $this->render('success');
+    }
+    
+    //  Load a note attached to a file
+    public function loadNote($noteID)
+    {
+        $model = $this->model('fileLinks');
+        $note = $model->getFileLinkNote($noteID);
+        
+        $this->render($note->note);
     }
     
     //  Load the edit link form

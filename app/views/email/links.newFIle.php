@@ -146,7 +146,7 @@
                 <div class="content">
                     <table bgcolor="#999999">
                         <tr>
-                            <td><h1 style="color: white">New Tech Tip</h1></td>
+                            <td><h1 style="color: white">New File Upload</h1></td>
                         </tr>
                     </table>
                 </div>
@@ -162,18 +162,13 @@
                     <table>
                         <tr>
                             <td>
-                                <h3><?php echo $data['title']; ?></h3>
-                                <div class="tip-details">
-                                    <span class="first"><strong>ID#: </strong> <?php echo $data['tipID']; ?></span>
-                                    <span><strong>Author:</strong> <?php echo $data['author']; ?></span>
-                                    <span><strong>Date:</strong> <?php echo $data['date']; ?></span>
-                                </div>
+                                <h3><?= $data['title']; ?></h3>
                                 <br />
                                 <br />
 
-                                <?php echo $data['tip']; ?>
+                                <p>A file has been uploaded to the file link by <?= $data['addedBy']; ?>.</p>
                                 <p class="callout">
-                                    To view this tip and download any attached files <a href="<?php echo $data['baseURL']; ?>tips/id/<?php echo $data['tipID']; ?>/<?php echo $data['title']; ?>">Click here &raquo;</a>
+                                    To view this file link and download any attached files <a href="<?= $data['baseURL']; ?>links/details/<?= str_replace(' ', '-', $data['linkID']); ?>/<?= $data['title']; ?>">Click here &raquo;</a>
                                 </p>
                             </td>
                         </tr>

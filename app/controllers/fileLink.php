@@ -52,6 +52,7 @@ class FileLink extends Controller
         $path = Config::getFile('uploadRoot').Config::getFile('uploadPath').$linkID.Config::getFile('slash');
         $fileModel->setFileLocation($path);
         $owner = $model->getLinkOwner($linkID);
+        $linkData = $model->getLinkDetails($linkID);
         
         //  Insert the file
         $fileID = $fileModel->processFiles($_FILES, $user, 'open');
@@ -71,23 +72,24 @@ class FileLink extends Controller
         Template::notifyOneUser($msg, $lnk, $owner);
         
         //  Email all users about the tech tip
-//        $tipData = $model->getTipData($tipID);        
-//        
-//        $data = [
-//            'baseURL' => Config::getCore('baseURL'),
-//            'title' => $tipData->title,
-//            'tipID' => $tipData->tip_id,
-//            'date' => $tipData->added_on,
-//            'author' => Template::getUserName($tipData->user_id),
-//            'tip' => $tipData->details
-//        ];
-//        $emBody = $this->emailView('tips.newTechTip', $data);
-//        Email::init();
-//        $emailAddresses = Email::getAddresses('em_tech_tip');
-//        Email::addSubject('Tech Bench Notification: New Tech Tip');
-//        Email::addUser($emailAddresses);
-//        Email::addBody($emBody);
-//        Email::send();
+        $data = [
+            'baseURL' => Config::getCore('baseURL'),
+            'title' => $linkData->link_name,
+            'addedBy' => $user,
+            'linkID' => $linkID
+        ];
+        
+        Email::init();
+        if(Email::getValidAddress('em_file_link', $owner))
+        {
+            $emailAddresses = Email::getValidAddress('em_file_link', $owner);
+            $emBody = $this->emailView('links.newFile', $data);
+            
+            Email::addSubject('New File Uploaded for File LInk '.$linkData->link_name);
+            Email::addUser($emailAddresses);
+            Email::addBody($emBody);
+            Email::send();
+        }
         
         $this->render('success');
     }

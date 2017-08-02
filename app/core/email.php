@@ -88,4 +88,15 @@ class Email
         
         return $address;
     }
+    
+    //  Determine if a specific user should be emailed based on user settings
+    public static function getValidAddress($settingField, $userID)
+    {
+        $qry = 'SELECT `email` FROM `users` JOIN `user_settings` ON `users`.`user_id` = `user_settings`.`user_id` WHERE `'.$settingField.'` AND `users`.`user_id` = :id';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['id' => $userID]);
+        
+        $data = $result->fetch();
+        return $data ? $data->email : false;
+    }
 }
