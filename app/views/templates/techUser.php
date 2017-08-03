@@ -51,7 +51,7 @@
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-home"></span> <a href="/dashboard">Dashboard Home</a></li>
                         <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/links">File Links</a></li>
-<!--                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/forms">Company Forms</a></li>-->
+                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/forms">Company Forms</a></li>
                     </ul>
                     <?= Template::getAdminLinks(); ?>
                     <span id="systemNavLinks"><?= Template::getSysLinks(); ?></span>
@@ -70,7 +70,7 @@
                         <li><span class="glyphicon glyphicon-user"></span> <a href="/account">Settings</a></li>
                         <li><span class="glyphicon glyphicon-log-out"></span> <a href="/logout">Logout</a></li>
                     </ul>
-                    <h3>&nbsp;</h3>
+                    <h3 class="top-buffer">&nbsp;</h3>
                 </div>
             </div>
             <div id="page-content-wrapper">
