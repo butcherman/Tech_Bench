@@ -224,8 +224,11 @@ class Users
         $qry = 'SELECT `user_id` FROM `users` WHERE `login_session` = :cookie';
         $result = $this->db->prepare($qry);
         $result->execute(['cookie' => $_COOKIE[str_replace(' ', '', Config::getCore('title'))]]);
+        $data = $result->fetch();
         
-        return $result->fetch()->user_id;
+        return $data ? $data->user_id : false;
+        
+//        return $result->fetch()->user_id;
     }
     
     //  Function to assign a new password to a user

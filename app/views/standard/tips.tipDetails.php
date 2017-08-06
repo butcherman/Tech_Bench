@@ -27,6 +27,11 @@
             </ul>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <?= $data['editLink']; ?>
+        </div>
+    </div>
 </div>
 
 <script>

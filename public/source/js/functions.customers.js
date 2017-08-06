@@ -281,13 +281,17 @@ $('#notes-wrapper').on('click', '.panel-heading', function()
 //  Load the New Note form
 $('#new-note-link').click(function()
 {
+    if (typeof tinymce != 'undefined' && tinymce != null) {
+        tinymce.remove();
+    }
     $('#modal-header').html('New Customer Note');
     $('#modal-body').load('/customer/newNoteForm', function()
     {
         tinymce.init(
         { 
             selector:'textarea',
-            height: '400'
+            height: '400', 
+            plugins: 'autolink'
         });
     });
 });
@@ -334,6 +338,9 @@ $(document).on('click', '#submit-new-note-btn', function()
 $(document).on('click', '.edit-note', function()
 {
     var noteID = $(this).data('noteid');
+    if (typeof tinymce != 'undefined' && tinymce != null) {
+        tinymce.remove();
+    }
     $('#modal-header').html('Edit Customer Note');
     $('#modal-body').load('/customer/editNoteForm/'+noteID, function()
     {
@@ -341,7 +348,8 @@ $(document).on('click', '.edit-note', function()
         tinymce.init(
         { 
             selector:'textarea',
-            height: '400'
+            height: '400', 
+            plugins: 'autolink'
         });
     });
 });

@@ -82,11 +82,6 @@
                 equalTo: "Passwords do not match"
             }
         },
-        success: function(element)
-        {
-            $(element).closest('.form-group').addClass('has-success has-feedback');
-            $(element).next('.form-control-feedback').addClass('glyphicon glyphicon-ok');
-        },
         submitHandler: function()
         {
             $.post('/account/updatePassword', $('#changePassword').serialize(), function(data)
