@@ -58,23 +58,38 @@ class TechTips
         //  If there are any system tags, insert those into the database as well
         if(!empty($tags))
         {
-            $tagQry = [];
-            $tagData = [];
-            $i = 1;
-            foreach($tags as $tag)
-            {
-                $tagQry[] = '(:tip'.$i.', (SELECT `sys_id` FROM `system_types` WHERE `name` = :tag'.$i.'))';
-                $tagData['tip'.$i] = $tipID;
-                $tagData['tag'.$i] = $tag;
-                $i++;
-            }
-            
-            //  Run the query to add tags
-            $qry = 'INSERT INTO `tech_tip_tags` (`tip_id`, `sys_id`) VALUES '.implode(',', $tagQry);
-            $this->db->prepare($qry)->execute($tagData);
+            $this->addSysTags($tipID, $tags);
         }
         
         return $tipID;
+    }
+    
+    //  Update an existing tech tip
+    public function updateTip($tipID, $title, $body, $tags)
+    {
+        //  Update the tip subject
+        $qry = 'UPDATE `tech_tips` SET `title` = :title WHERE `tip_id` = :tipID';
+        $this->db->prepare($qry)->execute(['title' => $title, 'tipID' => $tipID]);
+        
+        //  Update the tip body
+        $qry = 'UPDATE `tech_tip_details` SET `details` = :body WHERE `tip_id` = :tipID';
+        $this->db->prepare($qry)->execute(['body' => $body, 'tipID' => $tipID]);
+        
+        //  Check the tip tags and add any that are not in there
+        $currentTags = $this->getTipTags($tipID);
+        //  Sort the current tags into readable array from its object
+        $curTags = [];
+        foreach($currentTags as $cur)
+        {
+            $curTags[] = $cur->name;
+        }
+        //  Check if each tag needs to be added or removed
+        $delTags = array_diff($curTags, $tags);
+        $newTags = array_diff($tags, $curTags);
+        
+        //  Add and remove system tags
+        if(!empty($newTags)) $this->addSysTags($tipID, $newTags);
+        if(!empty($delTags)) $this->remSysTags($tipID, $delTags);
     }
     
     //  link a file to a tech tip
@@ -92,6 +107,16 @@ class TechTips
         $result->execute(['tip' => $tipID]);
         
         return $result->fetchAll();
+    }
+    
+    //  Delete a customer file
+    public function deleteFile($fileID)
+    {
+        $qry = 'DELETE FROM `tech_tip_files` WHERE `file_id` = :fileID';
+        if(!empty($fileID))
+        {
+            $this->db->prepare($qry)->execute(['fileID' => $fileID]);
+        }
     }
     
     //  Get tip information from the tech bench
@@ -136,5 +161,44 @@ class TechTips
         $result->execute(['tipID' => $tipID]);
         
         return $result->fetchAll();
+    }
+    
+    //  Function to add new tags
+    public function addSysTags($tipID, $newTags)
+    {
+        $tagQry = [];
+        $tagData = [];
+        $i = 1;
+        foreach($newTags as $tag)
+        {
+            $tagQry[] = '(:tip'.$i.', (SELECT `sys_id` FROM `system_types` WHERE `name` = :tag'.$i.'))';
+            $tagData['tip'.$i] = $tipID;
+            $tagData['tag'.$i] = $tag;
+            $i++;
+        }
+
+        //  Run the query to add tags
+        $qry = 'INSERT INTO `tech_tip_tags` (`tip_id`, `sys_id`) VALUES '.implode(',', $tagQry);
+        $this->db->prepare($qry)->execute($tagData);
+    }
+    
+    //  Function to delete existing system tags
+    public function remSysTags($tipID, $delTags)
+    {
+        $i = 1;
+        $tagQry = [];
+        $data = [];
+        foreach($delTags as $tag)
+        {
+            $tagQry[] = '(:tip'.$i.',(SELECT `sys_id` FROM `system_types` WHERE `name` = :tag'.$i.'))';
+
+            $data['tip'.$i] = $tipID;
+            $data['tag'.$i] = $tag;
+            $i++;
+        }
+        
+        $qry = 'DELETE FROM `tech_tip_tags` WHERE (`tip_id`, `sys_id`) IN ('.implode(', ', $tagQry).')';
+        
+        $this->db->prepare($qry)->execute($data);
     }
 }

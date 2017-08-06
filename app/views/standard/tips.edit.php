@@ -1,20 +1,22 @@
 <div class="page-header">
-    <h1 class="text-center">New Tech Tip</h1>
+    <h1 class="text-center">Edit Tech Tip</h1>
 </div>
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
-        <form id="new-tech-tip">
+        <form id="edit-tech-tip">
             <div class="form-group">
                 <label for="subject">Subject:</label>
-                <input type="text" name="subject" id="subject" class="form-control" placeholder="Enter A Descriptive Subject" />
+                <input type="text" name="subject" id="subject" class="form-control" placeholder="Enter A Descriptive Subject" value="<?= $data['title']; ?>" />
             </div>
             <div class="form-group">
                 <label for="tipData">Tech Tip:</label>
-                <textarea name="tipData" id="tipData" class="form-control" rows="20"></textarea>
+                <textarea name="tipData" id="tipData" class="form-control" rows="20"><?= $data['tip']; ?></textarea>
             </div>
             <div class="form-group">
                 <label for="tags">System Tags</label>
-                <div id="tags" class="form-control tech-tip-tag-wrapper"></div>
+                <div id="tags" class="form-control tech-tip-tag-wrapper">
+                    <?= $data['tipTags']; ?>
+                </div>
             </div>
             <div class="form-group">
                 <label for="selectSystem">Select Systems To Tag:</label>
@@ -24,7 +26,14 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="file">File:</label>
+                <label for="file">Files:</label>
+                <div class="row">
+                    <div class="col-md-10">
+                        <ul>
+                            <?= $data['files']; ?>
+                        </ul>
+                    </div>
+                </div>
                 <input type="file" name="file[]" id="file" class="form-control" multiple />
             </div>
             <div class="progress" id="forProgressBar">
@@ -33,7 +42,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" class="form-control btn btn-default" value="Add Tech Tip" />
+                <input type="submit" class="form-control btn btn-default" value="Modify Tech Tip" />
             </div>
         </form>
     </div>
@@ -68,7 +77,27 @@
         $(this).parent().remove();
     });
     
-    $('#new-tech-tip').validate(
+    $('.delete-file').on('click', function()
+    {
+        var ele = $(this);
+        var fileID = ele.data('fileid');
+        if(confirm('Delete File?\nThis Cannot Be Undone'))
+        {
+            $.get('/tips/removeFile/'+fileID, function(data)
+            {
+                if(data === 'success')
+                {
+                    ele.remove();
+                }
+                else
+                {
+                    alert('There Was An Issue Deleting the File');
+                }
+            });
+        }
+    });
+    
+    $('#edit-tech-tip').validate(
     {
         rules:
         {
@@ -90,19 +119,19 @@
                 $('<input />').attr('type', 'hidden')
                     .attr('name', 'sysTags[]')
                     .attr('value', $(this).data('value'))
-                    .appendTo('#new-tech-tip');
+                    .appendTo('#edit-tech-tip');
             });
             if($('#file').val() == '')
             {
                 $('#loadingModal').modal('show');
-                $.post('/tips/newTipSubmit', $('#new-tech-tip').serialize(), function(data)
+                $.post('/tips/editTipSubmit/<?= $data['tipID']; ?>', $('#edit-tech-tip').serialize(), function(data)
                 {
                     uploadComplete(data);
                 });
             }
             else
             {
-                submitFile('/tips/newTipSubmit', 'new-tech-tip');
+                submitFile('/tips/editTipSubmit/<?= $data['tipID']; ?>', 'edit-tech-tip');
                 $('#loadingModal').modal('show');
             }
         }
@@ -116,7 +145,7 @@
         }
         else
         {
-            var msg = 'There was a problem adding the Tech Tip.\nPlease contact the system administrator';
+            var msg = 'There was a problem updating the Tech Tip.\nPlease contact the system administrator';
             alert(msg+res);
         }
     }

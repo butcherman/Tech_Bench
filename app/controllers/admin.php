@@ -24,6 +24,10 @@ class Admin extends Controller
         $this->render();
     }
     
+/************************************************************************
+*                         User Administration                           *
+*************************************************************************/
+    
     //  Page to reset a users password for them
     public function resetPassword()
     {

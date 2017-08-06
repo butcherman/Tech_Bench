@@ -182,8 +182,15 @@ class Tips extends Controller
                 'tip' => $tipData->details,
                 'tipFav' => $model->isTipFav($tipID, $_SESSION['id']) ? 'item-fav-checked' : 'item-fav-unchecked',
                 'tipTags' => $tipTags,
-                'files' => $tipFiles
+                'files' => $tipFiles,
+                'editLink' => ''
             ];
+            
+            //  Determine if the user has access to the "Edit Tip Link"
+            if(!empty(Template::getAdminLinks()))
+            {
+                $data['editLink'] = '<a href="/tips/edit-tip/'.$tipData->tip_id.'/'.str_replace(' ', '-', $tipData->title).'" class="btn btn-default btn-block">Edit This Tech Tip</a>';
+            }
 
             $this->view('tips.tipDetails', $data);
         }
@@ -205,5 +212,118 @@ class Tips extends Controller
         {
             $model->addTipFav($tipID, $_SESSION['id']);
         }
+    }
+    
+    //  Load the Edit Tip form
+    public function editTip($tipID)
+    {
+        //  Reset page security to Administrator
+        Security::setPageLevel('admin');
+        if(!Security::doIBelong())
+        {
+            $_SESSION['returnURL'] = $_GET['url'];
+            header('Location: /err/restricted');
+            die();
+        }
+        
+        $tipModel = $this->model('techTips');
+        $model = $this->model('systems');
+        $tipData = $tipModel->getTipData($tipID);
+        
+        $optList = '';
+        $cats = $model->getCategories();
+        foreach($cats as $cat)
+        {
+            $optList .= '<optgroup label="'.strtoupper($cat->description).'">';
+            $systems = $model->getSystems($cat->description);
+            foreach($systems as $sys)
+            {
+                $optList .= '<option value="'.$sys->name.'">'.$sys->name.'</option>';
+            }
+            $optList .= '</optgroup>';
+        }
+        
+        
+        //  Get the system tags associated with the tech tip
+        $tipTagsArr = $tipModel->getTipTags($tipID);
+        $tipTags = '';
+        foreach($tipTagsArr as $tag)
+        {
+            $tipTags .= '<div class="tech-tip-tag" name="tipTag[]" data-value="'.$tag->name.'">'.$tag->name.' <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';            
+        }
+
+        //  Get the files associated with the tech tip
+        $tipFilesArr = $tipModel->getTipFiles($tipID);
+        if(!$tipFilesArr)
+        {
+            $tipFiles = '<h4>No Files</h4>';
+        }
+        else
+        {
+            $tipFiles = '';
+            foreach($tipFilesArr as $file)
+            {
+                $tipFiles .= '<li class="delete-file pointer" data-fileid="'.$file->file_id.'"><span class="glyphicon glyphicon-trash"></span> '.$file->file_name.'</li>';
+            }
+        }
+
+        $data = [
+            'title' => $tipData->title,
+            'tipID' => $tipData->tip_id,
+            'author' => Template::getUserName($tipData->user_id),
+            'date' => date('M j, Y', strtotime($tipData->added_on)),
+            'tip' => $tipData->details,
+            'tipTags' => $tipTags,
+            'files' => $tipFiles,
+            'optList' => $optList,
+            'editLink' => ''
+        ];
+    
+        $this->view('tips.edit', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Ajax call to remove a file attached to a tech tip
+    public function removeFIle($fileID)
+    {   
+        $model = $this->model('techTips');
+        $fileModel = $this->model('files');
+        
+        if($fileModel->deleteFile($fileID))
+        {
+            $model->deleteFile($fileID);
+        }
+        
+        $this->render('success');
+    }
+    
+    //  Ajax call to submit editing a tech tip
+    public function editTipSubmit($tipID)
+    {
+        $model = $this->model('techTips');
+        
+        //  Add the tip information into the database
+        $tags = isset($_POST['sysTags']) ? $_POST['sysTags'] : '';
+        $model->updateTip($tipID, $_POST['subject'], $_POST['tipData'], $tags);
+        
+        //  If there are any files, add them as part of the tech tip
+        if(isset($_FILES) && !empty($_FILES))
+        {
+            $fileModel = $this->model('files');
+            $path = Config::getFile('uploadRoot').Config::getFile('tipPath').$tipID;
+            $fileModel->setFileLocation($path.Config::getFile('slash'));
+            $fileID = $fileModel->processFiles($fileModel->reArrayFiles($_FILES['file']), $_SESSION['id'], 'tech');
+            foreach($fileID as $id)
+            {
+                $model->insertTipFile($tipID, $id);
+            }
+        }
+        
+        //  Write a log to note the tech tip
+        $msg = 'Updated Tech Tip: '.$_POST['subject'].', Tip ID: '.$tipID.' updated by USER ID: '.$_SESSION['id'];
+        Logs::writeLog('Tech-Tips', $msg);
+        
+        $this->render($tipID);
     }
 }
