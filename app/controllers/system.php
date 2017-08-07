@@ -106,12 +106,33 @@ class System extends Controller
         }
         $fileList .= '</ul>';
         $fileData .= '</div>';
+                
+        //  Get the last fiew tech tips for this system
+        $howMany = 10;  
+        $tipModel = $this->model('techTips');
+        $tips = $tipModel->searchtips('', $sys);
         
+        $howMany = count($tips) < $howMany ? count($tips) : $howMany;
+
+        $tipList = '';
+        for($i = 0; $i < $howMany; $i++)
+        {
+            $tipList .= '<tr><td><a href="/tips/id/'.$tips[$i]->tip_id.'/'.str_replace(' ', '-', $tips[$i]->title).'">'.$tips[$i]->title.'</a></td><td>'.date('M j, Y', strtotime($tips[$i]->added_on)).'</td></tr>';
+        }
+        
+        if(empty($tipList))
+        {
+            $tipList = '<tr><td colspan="2"><h4 class="text-center">No Recent Tech Tips</h4</td></tr>';
+        }
+                
         //  Create view data
-        $data['sysName'] = $sys;
-        $data['fileList'] = $fileList;
-        $data['fileData'] = $fileData;
-        $data['optList']  = $optList;
+        $data = [
+            'sysName' => $sys,
+            'fileList' => $fileList,
+            'fileData' => $fileData,
+            'optList' => $optList,
+            'tips' => $tipList
+        ];
         
         $this->template('techUser');
         $this->view('system.systemData', $data);

@@ -36,7 +36,7 @@ dbName = "<?= $_SESSION['setupData']['dbName']; ?>"
 ;  Only customer system information is encrypted.  This is the area of the customer records that 
 ;  can contain sensitive information such as IP Addresses and Login credentials.
 [encryption]
-customerKey = <?= substr(md5(uniqid(rand(), true)), 0, 20); ?>
+customerKey = "<?= $_SESSION['setupData']['encKey']; ?>"
 ;
 ;  Email settings for all emails that are sent via the Tech Bench.
 ;  Tech Bench uses the PHPMailer Plugin in order to properly send emails.

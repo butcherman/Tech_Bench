@@ -13,7 +13,7 @@
 session_start();
 
 //  Define version information as Global Variables
-define('VERSION', '2.2.1');
+define('VERSION', '2.2.22');
 define('RELEASE', 'August 5, 2017');
 define('DBVERSION', '2.1');
 

@@ -49,6 +49,7 @@ class Setup extends Controller
     {
         $data['fileLocal'] = $_SERVER['DOCUMENT_ROOT'].'/_files';
         $data['maxFile'] = preg_replace("/[^0-9]/", "", ini_get('upload_max_filesize'));
+        $data['encryptionKey'] = substr(md5(uniqid(rand(), true)), 0, 20);
         
         $this->view('setup.form4', $data);
         $this->template('standard');
