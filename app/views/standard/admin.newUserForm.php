@@ -81,8 +81,8 @@
                     $('#firstName').val('');
                     $('#lastName').val('');
                     $('#email').val('');
-                    $('#newpass').val('');
-                    $('#confpass').val('');
+                    $('#password').val('');
+                    $('#confPass').val('');
                 }
                 else
                 {
