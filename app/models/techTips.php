@@ -66,7 +66,7 @@ class TechTips
     
     //  Update an existing tech tip
     public function updateTip($tipID, $title, $body, $tags)
-    {
+    {   
         //  Update the tip subject
         $qry = 'UPDATE `tech_tips` SET `title` = :title WHERE `tip_id` = :tipID';
         $this->db->prepare($qry)->execute(['title' => $title, 'tipID' => $tipID]);
@@ -90,6 +90,16 @@ class TechTips
         //  Add and remove system tags
         if(!empty($newTags)) $this->addSysTags($tipID, $newTags);
         if(!empty($delTags)) $this->remSysTags($tipID, $delTags);
+    }
+    
+    //  Delete a tech tip
+    public function deleteTechTip($tipID)
+    {
+        $qry = 'DELETE FROM `tech_tips` WHERE `tip_id` = :tipID';
+        if(!empty($tipID))
+        {
+            $this->db->prepare($qry)->execute(['tipID' => $tipID]);
+        }
     }
     
     //  link a file to a tech tip

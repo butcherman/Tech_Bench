@@ -20,6 +20,10 @@
             <div class="clearfix pad-bottom"></div>
             <form id="step4">
                 <div class="form-group">
+                    <label for="encKey">Encryption Key - PLEASE COPY THIS KEY TO A SECURE LOCATION</label>
+                    <input type="text" id="encKey" name="encKey" class="form-control" value="<?= $data['encryptionKey']; ?>" required />
+                </div>
+                <div class="form-group">
                     <label for="fileLocation">Root File Location:</label>
                     <input type="text" id="fileLocation" name="fileLocation" class="form-control" value="<?= $data['fileLocal']; ?>" placeholder="Enter The Root Location All Files Should Be Stored" />
                 </div>
@@ -43,6 +47,7 @@
             <div>
                 <h4 class="text-center">Tips:</h4>
                 <ul>
+                    <li><strong>Encryption Key:</strong> All customer information is encrypted before being stored in the database.  This is the key used for encrypting and decrypting this data. <span style="color: red">Please make a copy of this key and paste to a secure location in the event the config file is damaged.</span></li>
                     <li><strong>Root File Location:</strong> Enter the base location that all files will be stored.  Only change if you know that the required folder has write access.</li>
                     <li><strong>Max File Size:</strong> Select the maximum size that is allowed to be uploaded by a user.</li>
                 </ul>
@@ -69,13 +74,16 @@
     {
         submitHandler: function()
         {
-            $.post('/setup/submit', $('#step4').serialize(), function(data)
+            if(confirm('Did You Make A Copy of The Encryption Key?'))
             {
-                if(data == 'success')
+                $.post('/setup/submit', $('#step4').serialize(), function(data)
                 {
-                    window.location.replace('/setup/finish');
-                }
-            });
+                    if(data == 'success')
+                    {
+                        window.location.replace('/setup/finish');
+                    }
+                });
+            }
         }
     });
 </script>

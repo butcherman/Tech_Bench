@@ -183,13 +183,15 @@ class Tips extends Controller
                 'tipFav' => $model->isTipFav($tipID, $_SESSION['id']) ? 'item-fav-checked' : 'item-fav-unchecked',
                 'tipTags' => $tipTags,
                 'files' => $tipFiles,
-                'editLink' => ''
+                'editLink' => '',
+                'deleteLink' => ''
             ];
             
             //  Determine if the user has access to the "Edit Tip Link"
             if(!empty(Template::getAdminLinks()))
             {
                 $data['editLink'] = '<a href="/tips/edit-tip/'.$tipData->tip_id.'/'.str_replace(' ', '-', $tipData->title).'" class="btn btn-default btn-block">Edit This Tech Tip</a>';
+                $data['deleteLink'] = '<a href="/tips/delete-tip/'.$tipData->tip_id.'/'.str_replace(' ', '-', $tipData->title).'" class="btn btn-default btn-block">Delete This Tech Tip</a>';
             }
 
             $this->view('tips.tipDetails', $data);
@@ -304,7 +306,7 @@ class Tips extends Controller
         $model = $this->model('techTips');
         
         //  Add the tip information into the database
-        $tags = isset($_POST['sysTags']) ? $_POST['sysTags'] : '';
+        $tags = isset($_POST['sysTags']) ? $_POST['sysTags'] : [];
         $model->updateTip($tipID, $_POST['subject'], $_POST['tipData'], $tags);
         
         //  If there are any files, add them as part of the tech tip
@@ -325,5 +327,43 @@ class Tips extends Controller
         Logs::writeLog('Tech-Tips', $msg);
         
         $this->render($tipID);
+    }
+    
+    //  Load the delete tip page
+    public function deleteTip($tipID)
+    {
+        //  Reset page security to Administrator
+        Security::setPageLevel('admin');
+        if(!Security::doIBelong())
+        {
+            $_SESSION['returnURL'] = $_GET['url'];
+            header('Location: /err/restricted');
+            die();
+        }
+        
+        $data['tipID'] = $tipID;
+        $this->view('tips.deleteTip', $data);
+        $this->template('techuser');
+        $this->render();
+    }
+    
+    //  Delete a tech tip
+    public function deleteTipSubmit($tipID)
+    {
+        $model = $this->model('techTips');
+        
+        $files = $model->getTipFiles($tipID);
+        if(!empty($files))
+        {
+            $fileModel = $this->model('files');
+            foreach($files as $file)
+            {
+                $fileModel->deleteFile($file->file_id);
+            }
+        }
+        
+        $model->deleteTechTip($tipID);
+        
+        $this->render('success');
     }
 }

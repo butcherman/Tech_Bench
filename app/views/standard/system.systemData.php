@@ -9,6 +9,31 @@
             <a href="#new-file" data-toggle="modal" class="btn btn-default btn-block">Add File</a>
         </div>
     </div>
+    <div class="row top-buffer">
+        <div class="page-header">
+            <h2 class="text-center">Latest Tech Tips</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="table-responsive">
+                <table class="table table-striped" id="search-tech-tips">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?= $data['tips']; ?>
+                        <tr>
+                            <td colspan="2"><a href="/tips" class="btn btn-default btn-block">Click For More Tech Tips</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="new-file">
