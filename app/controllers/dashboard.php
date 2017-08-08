@@ -23,14 +23,6 @@ class Dashboard extends Controller
         $custFavs = $model->getCustFavs($_SESSION['id']);
         $tipFavs = $model->getTechTipFavs($_SESSION['id']);
         
-        
-
-        
-        
-        
-        
-        
-        
         $i = 0;
         $p = 4;
         $data['customerFavs'] = '<div class="row dashboard">';
@@ -74,24 +66,6 @@ class Dashboard extends Controller
             $data['techTipFavs'] .= '<div class="col-sm-12"><h3 class="text-center">No Bookmarks</h3></div>';
         }  
         $data['techTipFavs'] .= '</div>';
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         $this->view('tech.dashboard', $data);
         $this->render();

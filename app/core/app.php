@@ -26,7 +26,7 @@ class App
         {
             //  If an invalid controller was passed, route to a custom error page
             Logs::writeLog('404', 'Unknown Controller '.$_GET['url']);
-            header('Location: /err/404');
+            header('Location: /err/_404');
             die();
         }
         

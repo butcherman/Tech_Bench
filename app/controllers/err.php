@@ -1,14 +1,44 @@
 <?php
-class Err // extends Controller
+class Err extends Controller
 {
-    public function __construct(){}
+    public function __construct()
+    {
+        ob_start();
+            echo $_GET['url'].'\n';
+            print_r($_SESSION);
+        $msg = ob_get_clean();
+        
+        Logs::writeLog('err-page', $msg);
+    }
     
+    //  Generic error page 
     public function index()
     {
-        echo 'oops<br>';
-        echo $_GET['url'].'<pre>';
-        print_r($_SESSION);
-        print_r($_COOKIE);
-        echo '</pre>';
+        $this->view('error.generic');
+        $this->render();
+    }
+    
+    //  User trying to access a restricted page
+    public function restricted()
+    {
+        $this->template('errorPage');
+        $this->view('error.restricted');
+        $this->render();
+    }
+    
+    //  404 - page not found error
+    public function _404()
+    {
+        $this->template('errorPage');
+        $this->view('error.404');
+        $this->render();
+    }
+    
+    //  Invalid system type
+    public function invalidSystem()
+    {
+        $this->template('errorPage');
+        $this->view('error.invalidSystem');
+        $this->render();
     }
 }
