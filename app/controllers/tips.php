@@ -360,9 +360,48 @@ class Tips extends Controller
             {
                 $fileModel->deleteFile($file->file_id);
             }
+            $path = Config::getFile('uploadRoot').Config::getFile('tipPath').$tipID;
+            $fileModel->deleteFolder($path);
         }
         
         $model->deleteTechTip($tipID);
+        
+        $this->render('success');
+    }
+    
+    //  Ajax call to Load Tech Tip Comments
+    public function getComments($tipID)
+    {
+        $model = $this->model('techTips');
+        $tips = $model->getComments($tipID);
+        
+        $data = '';
+        foreach($tips as $tip)
+        {
+            $data .= '<tr><td>'.$tip->comment.' - <span class="comment-author">'.Template::getUserName($tip->user_id).' - '.date('M j, Y', strtotime($tip->added_on)).'</span></td></tr>';
+        }
+        
+        $data .= '<tr class="no-border">
+                    <td><a href="#" id="add-tip-comment">Add Comment</a></td>
+                </tr>
+                <tr class="no-border hidden" id="show-comment-form">
+                    <td>
+                        <form id="tech-tip-comment-form">
+                            <textarea id="commentInput" name="commentInput" rows="5"></textarea>
+                            <input type="submit" id="submit-comment-form" class="btn btn-default btn-block" value="Add Comment" />
+                        </form>
+                    </td>
+                </tr>';
+        
+        $this->render($data);
+    }
+    
+    //  Add a comment to a tech tip
+    public function addComment($tipID)
+    {
+        $model = $this->model('techTips');
+        
+        $model->addTipComment($tipID, $_POST['commentInput'], $_SESSION['id']);
         
         $this->render('success');
     }

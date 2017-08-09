@@ -105,6 +105,12 @@ class Files
         mkdir($absolutePath, 0777, true);
     }
     
+    //  Function to delete a folder
+    public function deleteFolder($absolutePath)
+    {
+        rmdir($absolutePath);
+    }
+    
     //  Function to delete a file from the dabase and file structure
     public function deleteFile($fileID)
     {

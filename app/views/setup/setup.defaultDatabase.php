@@ -307,14 +307,16 @@ CREATE TABLE IF NOT EXISTS `tech_tip_files` (
 );
 
 CREATE TABLE `tech_tip_comments` (
+	`comment_id` INT(11) NOT NULL AUTO_INCREMENT,
     `tip_id` INT(11) NOT NULL,
     `comment` LONGTEXT NOT NULL,
     `user_id` INT(11) NOT NULL,
-    `added_on` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`tip_id`) REFERENCES `tech_tips` (`tip_id`) 
-        ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) 
-        ON UPDATE CASCADE
+    `added_on` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`comment_id`),
+    FOREIGN KEY (`tip_id`) REFERENCES `tech_tips`(`tip_id`)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) 
+		ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `tech_tip_favs` (
@@ -379,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `user_password_links` (
 
 CREATE UNIQUE INDEX `tag_unique` ON `tech_tip_tags` (`tip_id`, `sys_id`);
 
-INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "2.1");
+INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "2.3");
 
 INSERT INTO `roles` (`role_id`, `role_name`, `role_home`) VALUES (1, "site admin", "/dashboard"), (2, "admin", "/dashboard"), (3, "report", "/dashboard"), (4, "tech", "/dashboard");
 
