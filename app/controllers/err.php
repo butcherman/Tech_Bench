@@ -41,4 +41,12 @@ class Err extends Controller
         $this->view('error.invalidSystem');
         $this->render();
     }
+    
+    //  User has tried to log in too many times
+    public function failedLogin()
+    {
+        $this->template('errorPage');
+        $this->view('error.failedLogin');
+        $this->render();
+    }
 }

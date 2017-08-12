@@ -4,6 +4,7 @@ class Home extends Controller
     //  index is the landing page that will allow the user to login
     public function index()
     {
+        $model = $this->model('users');
         //  Check to see if the user is already logged in
         if(Security::isLoggedIn())
         {
@@ -14,7 +15,6 @@ class Home extends Controller
         }
         else if(isset($_COOKIE[str_replace(' ', '', Config::getCore('title'))]))
         {
-            $model = $this->model('users');
             if($userID = $model->checkCookie())
             {
                 $userData = $model->getUserData($userID);
@@ -23,6 +23,11 @@ class Home extends Controller
                 header('Location: '.$userHome);
                 die();
             }
+        }
+        else if($model->countFailedLogin($this->getRealIpAddr()) > 5)
+        {
+            header('Location: /err/failed-login');
+            die();
         }
         
         $this->template('standard');
@@ -36,6 +41,12 @@ class Home extends Controller
         $model = $this->model('users');
         $userHome = false;
         
+        if($model->countFailedLogin($this->getRealIpAddr()) > 10)
+        {
+            header('Location: /err/failed-login');
+            die();
+        }
+        
         //  Make sure that the username and password were filled out before submitting to the database and check for valid user ID
         if(!empty($_POST['username']) && !empty($_POST['password']) && $userID = $model->checkLoginData($_POST['username'], $_POST['password']))
         {
@@ -47,6 +58,10 @@ class Home extends Controller
                 $model->setCookie($userID);
             }
             $userHome = $model->getHomeLocation($userID);
+        }
+        else if(!$model->checkLoginData($_POST['username'], $_POST['password']))
+        {
+            $model->logFailedLogin($this->getRealIpAddr());
         }
         
         $this->render($userHome);
@@ -160,5 +175,23 @@ class Home extends Controller
         $_SESSION['username'] = $userData->username;
         $_SESSION['name'] = $userData->first_name.' '.$userData->last_name;
         $_SESSION['changePassword'] = $userData->change_password;
+    }
+    
+    //  Function to get the real IP Address of the user
+    private function getRealIpAddr()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+        {
+            $ip=$_SERVER['HTTP_CLIENT_IP'];
+        }
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+        {
+            $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        else
+        {
+            $ip=$_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
     }
 }

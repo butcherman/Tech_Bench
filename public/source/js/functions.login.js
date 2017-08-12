@@ -2,6 +2,8 @@ $.validator.addMethod('filesize', function (value, element, param) {
     return this.optional(element) || (element.files[0].size <= param)
 }, 'File size must be less than {0}');
 
+var attempts = 1;
+
 $('#login-form').validate(
 {
     rules: 
@@ -21,6 +23,12 @@ $('#login-form').validate(
             if(data == '')
             {
                 $('#form-error').show();
+                attempts++;
+                
+                if(attempts > 5)
+                {
+                    window.location.replace('/err/failed-login');
+                }
             }
             else
             {
