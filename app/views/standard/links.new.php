@@ -72,7 +72,6 @@ $('#new-file-link').validate(
         {
             $.post('/links/createSubmit', $('#new-file-link').serialize(), function(data)
             {
-                alert(data);
                 uploadComplete(data);
             });
         }

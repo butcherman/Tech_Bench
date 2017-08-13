@@ -214,3 +214,32 @@ $(document).on('click', '.view-note-link', function()
     $('#modal-header').text('File Note');
     $('#modal-body').load('/links/loadNote/'+noteID);
 });
+
+//  Bring up form to share the link with another user
+$('#share-link').on('click', function()
+{
+    $('#modal-header').text('Share File Link');
+    $('#modal-body').load('/links/shareLinkForm');
+});
+
+$(document).on('click', $('#submit-share-form'), function()
+{
+    $('#share-form').validate(
+    {
+        submitHandler: function()
+        {
+            $.post('/links/shareLinkSubmit/'+linkID, $('#share-form').serialize(), function(data)
+            {
+                if(data === 'success')
+                {
+                    $('#edit-modal').modal('hide');
+                }
+                else
+                {
+                    alert('Sorry, there was an error processing your request');
+                }
+            });
+        }
+    });
+});
+

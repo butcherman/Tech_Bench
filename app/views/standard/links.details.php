@@ -2,7 +2,7 @@
     <h1 class="text-center">Link Details</h1>
 </div>
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-xl-6 col-xl-offset-3 col-md-8 col-md-offset-2">
         <dl class="dl-horizontal">
             <dt>Link Name:</dt>
             <dd id="link-name"><?= $data['linkName']; ?></dd>
@@ -16,11 +16,14 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-2 col-md-offset-3 col-xs-12">
+    <div class="col-md-2 col-md-offset-2 col-xs-12">
         <a href="#edit-modal" class="btn btn-default btn-block" id="add-file" data-toggle="modal">Add File</a>
     </div>
     <div class="col-md-2 col-xs-12">
         <a href="#edit-modal" class="btn btn-default btn-block" id="edit-link" data-toggle="modal">Edit Link Data</a>
+    </div>
+    <div class="col-md-2 col-xs-12">
+        <a href="#edit-modal" class="btn btn-default btn-block" id="share-link" data-toggle="modal">Share Link</a>
     </div>
 <!--
     <div class="col-md-2 col-xs-12">
@@ -104,12 +107,6 @@
 <script src="/source/lib/tinymce/tinymce.min.js"></script>
 <script src="/source/lib/tinymce/plugins/placeholder/plugin.min.js"></script>
 <script>
-//    tinymce.init(
-//    { 
-//        selector:'textarea',
-//        height: '400',
-//        plugins: 'placeholder'
-//    });
     var linkID = <?= $data['linkID']; ?>;
     userUploadedFiles();
     customerUploadedFiles();
