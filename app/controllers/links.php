@@ -76,7 +76,7 @@ class Links extends Controller
         if(!empty($_FILES))
         {
             $fileModel->setFileLocation($path.Config::getFile('slash'));
-            $fileID = $fileModel->processFiles($_FILES, $_SESSION['id'], 'open');
+            $fileID = $fileModel->processFiles($fileModel->reArrayFiles($_FILES['file']), $_SESSION['id'], 'open');
             foreach($fileID as $id)
             {
                 $model->insertLinkFile($linkID, $id, $_SESSION['id']);
@@ -216,7 +216,7 @@ class Links extends Controller
         $path = Config::getFile('uploadRoot').Config::getFile('uploadPath').$linkID;
         
         $fileModel->setFileLocation($path.Config::getFile('slash'));
-        $fileID = $fileModel->processFiles($_FILES, $_SESSION['id'], 'open');
+        $fileID = $fileModel->processFiles($fileModel->reArrayFiles($_FILES['file']), $_SESSION['id'], 'open');
         foreach($fileID as $id)
         {
             $model->insertLinkFile($linkID, $id, $_SESSION['id']);

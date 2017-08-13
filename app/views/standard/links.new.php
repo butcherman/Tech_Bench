@@ -18,7 +18,7 @@
         <div class="form-group row">
             <label for="file" class="col-sm-2 col-sm-offset-1 col-form-label -text-right">File</label>
             <div class="col-sm-6">
-                <input type="file" name="file" id="file" class="form-control" />
+                <input type="file" name="file[]" id="file" class="form-control" multiple />
             </div>
         </div>
         <div class="checkbox row">
@@ -85,7 +85,6 @@ $('#new-file-link').validate(
 //  After the upload link is created, navigate to that upload link page
 function uploadComplete(res)
 {
-    alert(res);
     window.location.replace('/links/details/'+res);
 }
 </script>
