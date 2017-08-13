@@ -25,8 +25,10 @@ class FileLink extends Controller
         {
             $linkID = $linkID->link_id;
             $linkFiles = $model->getLinkFiles($linkID);
+            $linkInstructions = $model->getLinkInstructions($linkID);
             
             $data['linkID'] = $linkID;
+            $data['instructions'] = $linkInstructions->instruction;
             $data['files'] = '';
             foreach($linkFiles as $file)
             {
@@ -56,6 +58,7 @@ class FileLink extends Controller
         
         //  Insert the file
         $fileID = $fileModel->processFiles($_FILES, $user, 'open');
+        
         $model->insertLinkFile($linkID, $fileID[0], $user);
         if(!empty($_POST['notes']))
         {

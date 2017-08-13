@@ -182,4 +182,21 @@ class FileLinks
         $qry = 'UPDATE `upload_links` SET `allow_user_upload` = 0 WHERE `link_id` = :link';
         $this->db->prepare($qry)->execute(['link' => $linkID]);
     }
+    
+    //  Update a custom instruction
+    public function updateLinkInstruction($linkID, $instruction)
+    {
+        $qry = 'UPDATE `upload_link_instructions` SET `instruction` = :ins WHERE `link_id` = :link';
+        $this->db->prepare($qry)->execute(['ins' => $instruction, 'link' => $linkID]);
+    }
+    
+    //  Get the custom instructions
+    public function getLinkInstructions($linkID)
+    {
+        $qry = 'SELECT `instruction` FROM `upload_link_instructions` WHERE `link_id` = :link';
+        $result = $this->db->prepare($qry);
+        $result->execute(['link' => $linkID]);
+        
+        return $result->fetch();
+    }
 }

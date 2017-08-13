@@ -276,4 +276,23 @@ class Links extends Controller
         
         $this->render('success');
     }
+    
+    //  Submit the custom instructions for a link
+    public function submitInstructions($linkID)
+    {
+        $model = $this->model('fileLinks');
+        
+        $model->updateLinkInstruction($linkID, $_POST['custom-note']);
+        $this->render('success');
+    }
+    
+    //  Load the custom instructions for a note
+    public function loadInstructions($linkID)
+    {
+        $model = $this->model('fileLinks');
+        
+        $data = $model->getLinkInstructions($linkID);
+        
+        $this->render($data->instruction);
+    }
 }

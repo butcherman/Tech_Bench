@@ -6,6 +6,12 @@
         </h1>
     </div>
     <div class="jumbotron">
+        <div class="page-header">
+            <h1 class="text-center">File Link</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 link-instructions-wrapper"><?= $data['instructions']; ?></div>
+        </div>
         <div id="fileWrapper">
             <div class="page-header">
                 <h2>You Have Files Available For Download:</h2>
@@ -62,6 +68,10 @@
 <script src="/source/js/functions.files.js"></script>
 <script src="/source/lib/filesize/filesize.min.js"></script>
 <script>
+    if($('.link-instructions-wrapper').is(':empty'))
+    {
+        $('.link-instructions-wrapper').addClass('hide');
+    }
     jQuery.validator.addMethod("notEqualTo", function(value, element, param) {
         return this.optional(element) || value != $(param).val();
     }, "This has to be different...");
@@ -105,6 +115,10 @@
             $('#progressBar').css('width', '0');
             $('#customer-add-file').find('input[type=file]').val('');
             tinymce.activeEditor.setContent('');
+        }
+        else
+        {
+            alert(res);
         }
     }
 </script>

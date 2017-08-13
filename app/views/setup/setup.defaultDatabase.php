@@ -379,6 +379,20 @@ CREATE TABLE IF NOT EXISTS `user_password_links` (
         ON UPDATE CASCADE
 );
 
+CREATE TABLE `failed_login_attempts` (
+	`attempt_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `user_ip_address` VARCHAR(15) NOT NULL,
+    `timestamp` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`attempt_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `upload_link_instructions` (
+	`link_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `instruction` LONGTEXT,
+    FOREIGN KEY (`link_id`) REFERENCES `upload_links`(`link_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE UNIQUE INDEX `tag_unique` ON `tech_tip_tags` (`tip_id`, `sys_id`);
 
 INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "2.3");

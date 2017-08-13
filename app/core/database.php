@@ -32,7 +32,7 @@ class Database
                 //  Check to see if the database version matches the release version
                 $qry = 'SELECT `version` FROM `_database_version` WHERE `version_id` = 1';
                 $result = self::$pdo->query($qry)->fetch()->version;
-                if($result != DBVERSION && $_GET['url'] != 'err/no-db')
+                if($result != DBVERSION && $_GET['url'] != 'err/database-version')
                 {
                     $msg = 'Database is running incorrect version '.$result.', expecting '.DBVERSION;
                     Logs::writeLog('Database-Error', $msg);
@@ -47,7 +47,7 @@ class Database
                 {
                     $msg = 'Connection Failed: '.$e->getMessage();
                     Logs::writeLog('Database-Error', $msg);
-                    header('Location: /err/no-db');
+                    header('Location: /err/database-version');
                     die();
                 }
             }

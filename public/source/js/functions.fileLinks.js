@@ -4,6 +4,40 @@ $('body').tooltip({
     trigger: 'hover'
 });
 
+//  Function to load custom notes
+function loadInstruction()
+{
+    if (typeof tinymce != 'undefined' && tinymce != null) {
+        tinymce.remove();
+    }
+    $('#custom-note').load('/links/loadInstructions/'+linkID);
+    tinymce.init(
+    { 
+        selector:'textarea',
+        height: '400',
+        plugins: 'placeholder'
+    });
+}
+
+$('#customNote').validate(
+{
+    submitHandler: function()
+    {
+        tinymce.triggerSave();
+        $.post('/links/submitInstructions/'+linkID, $('#customNote').serialize(), function(data)
+        {
+            if(data === 'success')
+            {
+                loadInstruction();
+            }
+            else
+            {
+                alert('There was an issue saving the note');
+            }
+        });
+    }
+});
+
 //  Delete an existing upload link along with all related files
 $(document).on('click', '.delete-link', function()
 {

@@ -71,6 +71,17 @@
         </div>
     </div>
 </div>
+<div class="page-header">
+    <h2 class="text-center">Custom Note</h2>
+</div>
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+        <form id="customNote">
+            <textarea name="custom-note" id="custom-note" class="form-control" placeholder="You can input a custom note that will be included with the file download link."></textarea>
+            <input type="submit" class="btn btn-block btn-default" value="Update Note" />
+        </form>
+    </div>
+</div>
 
 <div class="modal fade" id="edit-modal">
     <div class="modal-dialog">
@@ -90,8 +101,17 @@
 <script src="/source/js/functions.files.js"></script>
 <script src="/source/lib/filesize/filesize.min.js"></script>
 <script src="/source/js/functions.fileLinks.js"></script>
+<script src="/source/lib/tinymce/tinymce.min.js"></script>
+<script src="/source/lib/tinymce/plugins/placeholder/plugin.min.js"></script>
 <script>
+//    tinymce.init(
+//    { 
+//        selector:'textarea',
+//        height: '400',
+//        plugins: 'placeholder'
+//    });
     var linkID = <?= $data['linkID']; ?>;
     userUploadedFiles();
     customerUploadedFiles();
+    loadInstruction();
 </script>
