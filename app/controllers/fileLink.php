@@ -56,13 +56,15 @@ class FileLink extends Controller
         $owner = $model->getLinkOwner($linkID);
         $linkData = $model->getLinkDetails($linkID);
         
-        //  Insert the file
-        $fileID = $fileModel->processFiles($_FILES, $user, 'open');
-        
-        $model->insertLinkFile($linkID, $fileID[0], $user);
-        if(!empty($_POST['notes']))
+        //  Insert the files
+        $fileIDs = $fileModel->processFiles($fileModel->reArrayFiles($_FILES['file']), $user, 'open');
+        foreach($fileIDs as $fileID)
         {
-            $model->insertFileLinkNote($fileID[0], $_POST['notes']);
+            $model->insertLinkFile($linkID, $fileID, $user);
+            if(!empty($_POST['notes']))
+            {
+                $model->insertFileLinkNote($fileID, $_POST['notes']);
+            }
         }
         
         //  Write a log to note the tech tip

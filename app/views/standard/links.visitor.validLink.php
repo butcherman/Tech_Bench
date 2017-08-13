@@ -45,7 +45,7 @@
                 </div>
                 <div class="form-group">
                     <label for="file">File:</label>
-                    <input type="file" name="file" id="file" class="form-control" required />
+                    <input type="file" name="file[]" id="file" class="form-control" multiple required />
                 </div>
                 <div class="form-group">
                     <label for="notes">Notes For File:</label>
