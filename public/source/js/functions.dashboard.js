@@ -6,6 +6,11 @@ $('body').tooltip(
 
 $('#user-notifications').children('tbody').load('/dashboard/loadNotifications');
 
+$('.alert').on('close.bs.alert', function(e)
+{        
+    $.get('/dashboard/dismissUserAlert/'+$(this).data('id'));        
+});
+
 $(document).on('click', '.mark-notification', function()
 {
     $(this).closest('tr').find('strong').contents().unwrap();

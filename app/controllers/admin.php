@@ -177,4 +177,56 @@ class Admin extends Controller
         
         $this->render('success');
     }
+    
+/************************************************************************
+*                      Notifications and Alerts                         *
+*************************************************************************/
+    
+    //  Create a system alert
+    public function systemAlert()
+    {
+        $this->view('admin.newSystemAlert');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the system alert form
+    public function submitSystemAlert()
+    {
+        $model = $this->model('siteAdmin');
+        $model->addSystemAlert($_POST['message'], $_POST['expire'], $_POST['level']);
+            
+        $this->render('success');
+    }
+    
+    //  Create a user specific alert
+    public function userAlert()
+    {
+        $model = $this->model('users');
+        $userList = $model->getUserList();
+        
+        $optList = '';
+        foreach($userList as $user)
+        {
+            $optList .= '<option value="'.$user->user_id.'">'.$user->first_name.' '.$user->last_name.'</option>';
+        }
+        
+        $data['optList'] = $optList;
+        
+        $this->view('admin.newUserAlert', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the user specific alert
+    public function userAlertSubmit()
+    {
+        $model = $this->model('siteAdmin');
+        foreach($_POST['to'] as $userID)
+        {
+            $model->addUserAlert($_POST['message'], $_POST['expire'], $_POST['level'], $userID, $_POST['dismissable']);
+        }
+        
+        $this->render('success');
+    }
 }

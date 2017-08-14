@@ -40,8 +40,10 @@ gulp.task('moveFiles', ['bower'], function() {
             .pipe(gulp.dest('public/source/lib/filesize')),
         gulp.src(['vendor/select2/dist/**/*'])
             .pipe(gulp.dest('public/source/lib/select2')),
-        gulp.src(['vencor/tinymce-placeholder-attribute/placeholder/*'])
-            .pipe(gulp.dest('public/source/lib/tinymce/plugins/placeholder/'))
+        gulp.src(['vendor/tinymce-placeholder-attribute/placeholder/*'])
+            .pipe(gulp.dest('public/source/lib/tinymce/plugins/placeholder/')),
+        gulp.src(['vendor/multiselect-two-sides/dist/js/*'])
+            .pipe(gulp.dest('public/source/lib/multiselect-two-sides/*'))
 });
 
 gulp.task('default', ['bower', 'moveFiles', 'config']);

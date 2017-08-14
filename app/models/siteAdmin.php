@@ -74,4 +74,30 @@ class siteAdmin
        
         return $data->folder_location;
     }
+    
+    //  Add a system alert
+    public function addSystemAlert($message, $expire, $level)
+    {
+        $qry = 'INSERT INTO `broadcast_alerts` (`alert_level_id`, `description`, `expire_date`) VALUES ((SELECT `alert_level_id` FROM `alert_levels` WHERE `description` = :level), :msg, :expire)';
+        $data = [
+            'level' => 'alert-'.$level,
+            'msg' => $message,
+            'expire' => $expire
+        ];
+        $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Add a user alert
+    public function addUserAlert($message, $expire, $level, $user, $dismissable)
+    {
+        $qry = 'INSERT INTO `user_alerts` (`alert_level_id`, `user_id`, `description`, `expire_date`, `dismissable`) VALUES ((SELECT `alert_level_id` FROM `alert_levels` WHERE `description` = :level), :user, :message, :expire, :dismiss)';
+        $data = [
+            'level' => 'alert-'.$level,
+            'user' => $user,
+            'message' => $message,
+            'expire' => $expire,
+            'dismiss' => $dismissable
+        ];
+        $this->db->prepare($qry)->execute($data);
+    }
 }

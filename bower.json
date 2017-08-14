@@ -11,6 +11,7 @@
         "seiyria-bootstrap-slider": "*",
         "filesize": "*",
         "select2": "*",
-        "tinymce-placeholder-attribute"
+        "tinymce-placeholder-attribute": "*",
+        "multiselect-two-sides": "*"
     }
 }
