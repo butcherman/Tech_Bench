@@ -229,4 +229,68 @@ class Admin extends Controller
         
         $this->render('success');
     }
+    
+/************************************************************************
+*                     File Links Administration                         *
+*************************************************************************/
+    
+    //  View all links that exist but are expired
+    public function expiredLinks()
+    {
+        $model = $this->model('fileLinks');
+        
+        $links = $model->getLinks();
+        $today = date('Y-m-d');
+        $linkList = '';
+        
+        //  Cycle through the links and pull out expired ones
+        foreach($links as $link)
+        {
+            if($link->expire < $today)
+            {
+                $numFiles = $model->countLinkFiles($link->link_id);
+                
+                $linkList .= '<tr><td>'.Template::getUserName($link->user_id).'</td><td><a href="/links/details/'.$link->link_id.'/'.str_replace(' ', '-', $link->link_name).'">'.$link->link_name.'</td><td class="hidden-xs">'.date('M j, Y', strtotime($link->expire)).'</td><td>'.$numFiles.'</td><td class="hidden-xs"><a href="/links/details/'.$link->link_id.'/'.str_replace(' ', '-', $link->link_name).'" title="Edit Link" data-tooltip="tooltip"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;<a href="#edit-modal"  class="delete-link" title="Delete Link" data-tooltip="tooltip" data-toggle="modal" data-link="'.$link->link_id.'"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+            }
+        }
+        
+        $data = [
+            'linkList' => $linkList,
+            'header' => 'Expired File Links'
+        ];
+        
+        $this->template('techUser');
+        $this->view('admin.fileLinks', $data);
+        $this->render();
+    }
+    
+    //  View all currently active links
+    public function activeLinks()
+    {
+        $model = $this->model('fileLinks');
+        
+        $links = $model->getLinks();
+        $today = date('Y-m-d');
+        $linkList = '';
+        
+        //  Cycle through the links and pull out expired ones
+        foreach($links as $link)
+        {
+            if($link->expire >= $today)
+            {
+                $numFiles = $model->countLinkFiles($link->link_id);
+                
+                $linkList .= '<tr><td>'.Template::getUserName($link->user_id).'</td><td><a href="/links/details/'.$link->link_id.'/'.str_replace(' ', '-', $link->link_name).'">'.$link->link_name.'</td><td class="hidden-xs">'.date('M j, Y', strtotime($link->expire)).'</td><td>'.$numFiles.'</td><td class="hidden-xs"><a href="/links/details/'.$link->link_id.'/'.str_replace(' ', '-', $link->link_name).'" title="Edit Link" data-tooltip="tooltip"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;<a href="#edit-modal"  class="delete-link" title="Delete Link" data-tooltip="tooltip" data-toggle="modal" data-link="'.$link->link_id.'"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+            }
+        }
+        
+        $data = [
+            'linkList' => $linkList,
+            'header' => 'Active File Links'
+        ];
+        
+        $this->template('techUser');
+        $this->view('admin.fileLinks', $data);
+        $this->render();
+    }
 }

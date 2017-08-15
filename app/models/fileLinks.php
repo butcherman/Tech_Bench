@@ -90,7 +90,7 @@ class FileLinks
     {
         if(empty($userID))
         {
-            $qry = 'SELECT `link_id`, `link_name`, `expire` FROM `upload_links`';
+            $qry = 'SELECT `link_id`, `link_name`, `expire`, `user_id` FROM `upload_links`';
             $result = $this->db->prepare($qry);
             $result->execute();
         }
