@@ -76,7 +76,7 @@ class Email
     //  Get email addresses based on user settings
     public static function getAddresses($settingField)
     {
-        $qry = 'SELECT `email` FROM `users` JOIN `user_settings` ON `users`.`user_id` = `user_settings`.`user_id` WHERE `'.$settingField.'` = 1';
+        $qry = 'SELECT `email` FROM `users` JOIN `user_settings` ON `users`.`user_id` = `user_settings`.`user_id` WHERE `'.$settingField.'` = 1 AND `active` = 1';
         $result = Database::getDB()->query($qry);
         $result = $result->fetchAll();
         
@@ -92,7 +92,7 @@ class Email
     //  Determine if a specific user should be emailed based on user settings
     public static function getValidAddress($settingField, $userID)
     {
-        $qry = 'SELECT `email` FROM `users` JOIN `user_settings` ON `users`.`user_id` = `user_settings`.`user_id` WHERE `'.$settingField.'` AND `users`.`user_id` = :id';
+        $qry = 'SELECT `email` FROM `users` JOIN `user_settings` ON `users`.`user_id` = `user_settings`.`user_id` WHERE `'.$settingField.'` AND `users`.`user_id` = :id AND `active` = 1';
         $result = Database::getDB()->prepare($qry);
         $result->execute(['id' => $userID]);
         
