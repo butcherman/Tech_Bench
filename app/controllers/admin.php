@@ -394,4 +394,16 @@ class Admin extends Controller
         
         $this->render('success');
     }
+    
+    //  Search form to change a customers ID number
+    public function changeCustomerId()
+    {
+        $model = $this->model('systems');
+        
+        $data['header'] = 'Change Customer ID';
+        
+        $this->template('techUser');
+        $this->view('admin.searchCustomer', $data);
+        $this->render();
+    }
 }

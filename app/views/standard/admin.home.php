@@ -88,12 +88,12 @@
         </div>
         <div class="row top-buffer">
             <div class="col-sm-12">
-                <a href="/admin/delete-customer" class="btn btn-default btn-block">Delete Customer</a>
+                <a href="/admin/change-customer-id" class="btn btn-default btn-block">Change Customer ID Number</a>
             </div>
         </div>
         <div class="row top-buffer">
             <div class="col-sm-12">
-                <a href="/admin/change-customer-id" class="btn btn-default btn-block">Change Customer ID Number</a>
+                <a href="/admin/delete-customer" class="btn btn-default btn-block">Delete Customer</a>
             </div>
         </div>
     </div>
