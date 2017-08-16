@@ -157,4 +157,17 @@ class Systems
         $qry = 'INSERT INTO `'.$table.'` (`cust_id`, '.implode(', ', $colQry).') VALUES (:custID, '.implode(', ', $valQry).')';
         $this->db->prepare($qry)->execute($colValue);
     }
+    
+    //  Delete a system type for a customer
+    public function delSysType($custID, $sysID)
+    {
+        //  Delete the information from the system specific table
+        $table = $this->getSysTable($sysID);
+        $qry = 'DELETE FROM '.$table.' WHERE `cust_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $custID]);
+        
+        //  Delete the system from the customer
+        $qry = 'DELETE FROM `customer_systems` WHERE `cust_id` = :cust AND `sys_id` = :sys';
+        $this->db->prepare($qry)->execute(['cust' => $custID, 'sys' => $sysID]);
+    }
 }

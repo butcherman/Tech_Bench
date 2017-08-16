@@ -27,6 +27,16 @@ class Customers
         $this->db->prepare($qry)->execute($data);
     }
     
+    //  Delete a customer
+    public function deleteCustomer($custID)
+    {
+        $qry = 'DELETE FROM `customers` WHERE `cust_id` = :id';
+        if(!empty($custID))
+        {
+            $this->db->prepare($qry)->execute(['id' => $custID]);
+        }
+    }
+    
     //  Search customer function will find a customer based on search paramaters
     public function searchCustomer($name = '', $city = '', $syst = '')
     {

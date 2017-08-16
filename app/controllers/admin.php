@@ -293,4 +293,105 @@ class Admin extends Controller
         $this->view('admin.fileLinks', $data);
         $this->render();
     }
+    
+/************************************************************************
+*                      Customers Administration                         *
+*************************************************************************/
+    
+    //  search form to find a customer to delete
+    public function deleteCustomer()
+    {
+        $model = $this->model('systems');
+        
+        $data['header'] = 'Delete Customer';
+        
+        $this->template('techUser');
+        $this->view('admin.searchCustomer', $data);
+        $this->render();
+    }
+    
+    //  Ajax call to search the customer database based on the information inputed into the search form
+    public function customerSearchForm()
+    {
+        $model = $this->model('customers');
+        
+        $custData = $model->searchCustomer($_POST['customer']);
+        
+        $custList = '';
+        
+        if(!$custData)
+        {
+            $custList = '<tr><td colspan="4" class="text-center"><h3>No Results</h3></td></tr>';
+        }
+        else
+        {
+            foreach($custData as $cust)
+            {
+                
+                $custList .= '<tr><td><a href="/admin/delete-customer-confirm/'.$cust->cust_id.'/'.str_replace(' ', '-', $cust->name).'">'.$cust->name.'</a></td><td>'.$cust->city.', '.$cust->state.'</td>';
+            }
+        }
+        
+        $this->template('techUser');
+        $this->render($custList);
+    }
+    
+    //  Ask to confirm that the customer should be deleted
+    public function deleteCustomerConfirm($custID)
+    {
+        $model = $this->model('customers');
+        
+        if(!$custData = $model->getCustData($custID))
+        {
+            $this->view('customers.invalidID');
+        }
+        else
+        {
+            $data = [
+                'custID' => $custID,
+                'custName' => $custData->name,
+                'dbaName' => $custData->dba_name,
+                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+            ];
+            
+            $this->view('admin.confirmCustomerDelete', $data);
+        }
+
+        $this->template('techUser');
+        
+        $this->render();
+    }
+    
+    //  Delete an existing customer
+    public function deleteCustomerConfirmYes($custID)
+    {
+        $model = $this->model('customers');
+        $fileModel = $this->model('files');
+        $sysModel = $this->model('systems');
+        
+        //  Delete all files associated with the customer
+        $files = $model->getAllFiles($custID);
+        $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID;
+        foreach($files as $file)
+        {
+            if($fileModel->deleteFile($file->file_id))
+            {
+                $model->deleteFile($file->file_id);
+            }
+        }
+        $fileModel->deleteFolder($filePath);
+        
+        //  Delete all systems associated with the customer
+        $systems = $model->getCustSystem($custID);
+        foreach($systems as $sys)
+        {
+            $sysID = $sysModel->getSysID($sys->name);
+            $sysModel->delSysType($custID, $sysID);
+        }
+        
+        //  Remove the customer
+        $model->deleteCustomer($custID);
+        
+        $this->render('success');
+    }
 }
