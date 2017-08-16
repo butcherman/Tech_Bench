@@ -72,7 +72,6 @@ $('#new-file-link').validate(
         {
             $.post('/links/createSubmit', $('#new-file-link').serialize(), function(data)
             {
-                alert(data);
                 uploadComplete(data);
             });
         }
@@ -85,7 +84,6 @@ $('#new-file-link').validate(
 //  After the upload link is created, navigate to that upload link page
 function uploadComplete(res)
 {
-    alert(res);
     window.location.replace('/links/details/'+res);
 }
 </script>
