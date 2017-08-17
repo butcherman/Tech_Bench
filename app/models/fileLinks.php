@@ -169,14 +169,24 @@ class FileLinks
         $this->db->prepare($qry)->execute(['file' => $fileID, 'note' => $note]);
     }
     
-    //  Enable the ability for a user to upload files to a link
+    //  Check if a link has the ability for a visitor to upload a file to the link
+    public function checkLinkUpload($linkID)
+    {
+        $qry = 'SELECT `allow_user_upload` FROM `upload_links` WHERE `link_id` = :link';
+        $result = $this->db->prepare($qry);
+        $result->execute(['link' => $linkID]);
+        
+        return $result->fetchColumn();
+    }
+    
+    //  Enable the ability for a visitor to upload files to a link
     public function allowLinkUpload($linkID)
     {
         $qry = 'UPDATE `upload_links` SET `allow_user_upload` = 1 WHERE `link_id` = :link';
         $this->db->prepare($qry)->execute(['link' => $linkID]);
     }
     
-    //  Disable the ability for a user to upload files to a link
+    //  Disable the ability for a visitor to upload files to a link
     public function disableLinkUpload($linkID)
     {
         $qry = 'UPDATE `upload_links` SET `allow_user_upload` = 0 WHERE `link_id` = :link';
