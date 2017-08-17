@@ -17,9 +17,9 @@ class App
         {
             $this->controller = 'home';
         }
-        else if(file_exists(__DIR__.'/../controllers/'.str_replace('-', '', $url[0]).'.php'))
+        else if(file_exists(__DIR__.'/../controllers/'.strtolower(str_replace('-', '', $url[0])).'.php'))
         {
-            $this->controller = str_replace('-', '', $url[0]);
+            $this->controller = strtolower(str_replace('-', '', $url[0]));
             unset($url[0]);
         }
         else

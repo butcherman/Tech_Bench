@@ -1,7 +1,7 @@
 <?php
 /*
 |   File-Link Controller allows the visitors to upload files for users to access.
-|   This is generally helpful when a user needs access to a file that is too large to email
+|   This is generally helpful when a user needs access to a file that is too large to email 
 */
 
 class FileLink extends Controller
@@ -26,6 +26,7 @@ class FileLink extends Controller
             $linkID = $linkID->link_id;
             $linkFiles = $model->getLinkFiles($linkID);
             
+            $data['allow'] = $model->checkLinkUpload($linkID);
             $data['linkID'] = $linkID;
             $data['files'] = '';
             foreach($linkFiles as $file)
