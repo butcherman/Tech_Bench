@@ -56,7 +56,7 @@
 <script>
     function search()
     {
-        $.post('/admin/customerSearchForm', $('#customer-search-form').serialize())
+        $.post('/admin/customerSearchForm/<?= $data['link']; ?>', $('#customer-search-form').serialize())
          .done(function(data)
          {
             $('#customer-results > tbody').html(data);

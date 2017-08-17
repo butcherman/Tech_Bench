@@ -304,6 +304,7 @@ class Admin extends Controller
         $model = $this->model('systems');
         
         $data['header'] = 'Delete Customer';
+        $data['link'] = 'delete-customer-confirm';
         
         $this->template('techUser');
         $this->view('admin.searchCustomer', $data);
@@ -311,7 +312,7 @@ class Admin extends Controller
     }
     
     //  Ajax call to search the customer database based on the information inputed into the search form
-    public function customerSearchForm()
+    public function customerSearchForm($link)
     {
         $model = $this->model('customers');
         
@@ -328,7 +329,7 @@ class Admin extends Controller
             foreach($custData as $cust)
             {
                 
-                $custList .= '<tr><td><a href="/admin/delete-customer-confirm/'.$cust->cust_id.'/'.str_replace(' ', '-', $cust->name).'">'.$cust->name.'</a></td><td>'.$cust->city.', '.$cust->state.'</td>';
+                $custList .= '<tr><td><a href="/admin/'.$link.'/'.$cust->cust_id.'/'.str_replace(' ', '-', $cust->name).'">'.$cust->name.'</a></td><td>'.$cust->city.', '.$cust->state.'</td>';
             }
         }
         
@@ -401,9 +402,42 @@ class Admin extends Controller
         $model = $this->model('systems');
         
         $data['header'] = 'Change Customer ID';
+        $data['link'] = 'change-id-form';
         
         $this->template('techUser');
         $this->view('admin.searchCustomer', $data);
         $this->render();
+    }
+    
+    //  Change customer ID form
+    public function changeIDForm($custID)
+    {
+        $model = $this->model('customers');
+        
+        if(!$custData = $model->getCustData($custID))
+        {
+            $this->view('customers.invalidID');
+        }
+        else
+        {
+            $data = [
+                'custID' => $custID,
+                'custName' => $custData->name,
+                'dbaName' => $custData->dba_name,
+                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+            ];
+            
+            $this->view('admin.changeCustIDForm', $data);
+        }
+
+        $this->template('techUser');
+        
+        $this->render();
+    }
+    
+    //  Submit the customer change form
+    public function changeIDFormSubmit($custID)
+    {
+        echo 'submitted';
     }
 }
