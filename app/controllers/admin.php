@@ -438,6 +438,18 @@ class Admin extends Controller
     //  Submit the customer change form
     public function changeIDFormSubmit($custID)
     {
-        echo 'submitted';
+        $model = $this->model('customers');
+        
+        if($custData = $model->getCustData($_POST['newid']))
+        {
+            $content = 'duplicate';
+        }
+        else
+        {
+            $model->updateCustID($_POST['newid'], $custID);
+            $content = 'success';
+        }
+        
+        $this->render($content);
     }
 }

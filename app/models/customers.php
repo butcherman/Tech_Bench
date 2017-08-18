@@ -27,6 +27,13 @@ class Customers
         $this->db->prepare($qry)->execute($data);
     }
     
+    //  Update a customer's ID
+    public function updateCustID($newID, $oldID)
+    {
+        $qry = 'UPDATE `customers` SET `cust_id` = :newID WHERE `cust_id` = :oldID';
+        $this->db->prepare($qry)->execute(['newID' => $newID, 'oldID' => $oldID]);
+    }
+    
     //  Delete a customer
     public function deleteCustomer($custID)
     {

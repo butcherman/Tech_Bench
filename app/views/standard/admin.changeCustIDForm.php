@@ -9,7 +9,7 @@
     </address>
 </div>
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-6 col-md-offset-3" id="new-id-wrapper">
         <form id="change-cust-id">
             <div class="form-group">
                 <label for="newid">New Cust ID:</label>
@@ -40,7 +40,21 @@
         {
             $.post('/admin/change-id-form-submit/<?= $data['custID']; ?>', $('#change-cust-id').serialize(), function(data)
             {
-                alert(data);
+                var content = '';
+                if(data === 'success')
+                {
+                    content = 'Customer ID Successfully Changed';
+                }
+                else if(data === 'duplicate')
+                {
+                    content = 'This Customer ID Already Exists.  Reload Page and Try Again';
+                }
+                else
+                {
+                    content = 'There was an error updating the customer ID';
+                }
+                
+                $('#new-id-wrapper').html('<h3 class="text-center">'+content+'</h3>');
             });
         }
     });
