@@ -102,13 +102,29 @@ class Files
     //  Function to create a new folder
     public function createFolder($absolutePath)
     {
-        mkdir($absolutePath, 0777, true);
+        if(!file_exists($absolutePath))
+        {
+            mkdir($absolutePath, 0777, true);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     //  Function to delete a folder
     public function deleteFolder($absolutePath)
     {
-        rmdir($absolutePath);
+        if(file_exists($absolutePath))
+        {
+            rmdir($absolutePath);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     //  Function to delete a file from the dabase and file structure

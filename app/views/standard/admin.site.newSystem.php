@@ -88,10 +88,17 @@
     });
     $('#new-system-form').validate(
     {
+        rules:
+        {
+            sysName: 
+            {
+                alphanumeric: true
+            }
+        },
         messages:
         {
             category: "Please Select A Category",
-            sysName: "Please Enter A Descriptive Name"
+            sysName: "Please Enter A Descriptive Name. Special Characters Such as & and - Cannot be used"
         },
         submitHandler: function()
         {
@@ -102,6 +109,8 @@
                 {
                     $('#alert-notification').html('System Successfully Created.');
                     $('#systemNavLinks').load('/site-administration/reloadSysLinks');
+                    $('#sysName').val('');
+                    $('#customer-information').html('<legend class="text-center">Customer Information To Gather</legend><div class="form-group"><label for="col1">System Data:</label><input type="text" name="col1" id="col1" class="form-control" /></div><div class="form-group"><label for="col2">System Data:</label><input type="text" name="col2" id="col2" class="form-control" /></div><div class="form-group"><label for="col3">System Data:</label><input type="text" name="col3" id="col3" class="form-control" /></div><div class="form-group"><label for="col4">System Data:</label><input type="text" name="col4" id="col4" class="form-control" /></div><div class="form-group"><label for="col5">System Data:</label><input type="text" name="col5" id="col5" class="form-control" /></div>');
                 }
                 else
                 {
