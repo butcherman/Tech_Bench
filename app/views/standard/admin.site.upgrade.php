@@ -44,7 +44,7 @@
         {
             if(data === 'success')
             {
-                $('#upgrade-wrapper').html('<h3 class="text-center">Upgrade Complete</h3>');
+                $('#upgrade-wrapper').html('<h3 class="text-center">Upgrade Complete</h3><h4 class="text-center"><a href="/dashboard">Click</a> to return to application</h4>');
             }
             else
             {
