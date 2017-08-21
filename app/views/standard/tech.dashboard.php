@@ -3,12 +3,12 @@
 </div>
 <div class="row">
     <div class="col-md-12 text-center" id="system-alerts">
-        <?php // echo $data['sysAlerts']; ?>
+        <?= $data['sysAlerts']; ?>
     </div>
 </div>
 <div class="row">
     <div class="col-md-10 col-md-offset-1 text-center" id="tech-alerts">
-        <?php // echo $data['userAlerts']; ?>
+        <?= $data['userAlerts']; ?>
     </div>
 </div>
 <div class="row top-buffer">

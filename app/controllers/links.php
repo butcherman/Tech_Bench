@@ -76,7 +76,7 @@ class Links extends Controller
         if(!empty($_FILES))
         {
             $fileModel->setFileLocation($path.Config::getFile('slash'));
-            $fileID = $fileModel->processFiles($_FILES, $_SESSION['id'], 'open');
+            $fileID = $fileModel->processFiles($fileModel->reArrayFiles($_FILES['file']), $_SESSION['id'], 'open');
             foreach($fileID as $id)
             {
                 $model->insertLinkFile($linkID, $id, $_SESSION['id']);
@@ -96,14 +96,16 @@ class Links extends Controller
         //  Determine if there are any files attached to the link
         $files = $model->getLinkFiles($linkID);
 
+        $fileModel = $this->model('files');
         if(!empty($files))
         {
-            $fileModel = $this->model('files');
             foreach($files as $file)
             {
                 $fileModel->deleteFile($file->file_id);
             }
         }
+        $path = Config::getFile('uploadRoot').Config::getFile('uploadPath').$linkID;
+        $fileModel->deleteFolder($path);
         
         //  Delete the link
         $model->deleteLink($linkID);
@@ -216,7 +218,7 @@ class Links extends Controller
         $path = Config::getFile('uploadRoot').Config::getFile('uploadPath').$linkID;
         
         $fileModel->setFileLocation($path.Config::getFile('slash'));
-        $fileID = $fileModel->processFiles($_FILES, $_SESSION['id'], 'open');
+        $fileID = $fileModel->processFiles($fileModel->reArrayFiles($_FILES['file']), $_SESSION['id'], 'open');
         foreach($fileID as $id)
         {
             $model->insertLinkFile($linkID, $id, $_SESSION['id']);
@@ -273,6 +275,54 @@ class Links extends Controller
         ];
         
         $model->updateLink($linkID, $linkData);
+        
+        $this->render('success');
+    }
+    
+    //  Submit the custom instructions for a link
+    public function submitInstructions($linkID)
+    {
+        $model = $this->model('fileLinks');
+        
+        $model->updateLinkInstruction($linkID, $_POST['custom-note']);
+        $this->render('success');
+    }
+    
+    //  Load the custom instructions for a note
+    public function loadInstructions($linkID)
+    {
+        $model = $this->model('fileLinks');
+        $data = $model->getLinkInstructions($linkID);
+        
+        $this->render($data->instruction);
+    }
+    
+    //  Load the share link form
+    public function shareLinkForm()
+    {
+        $model = $this->model('users');
+        $userList = $model->getUserList();
+        
+        $optList = '<option></option>';
+        foreach($userList as $user)
+        {
+            $optList .= '<option value="'.$user->user_id.'">'.$user->first_name.' '.$user->last_name.'</option>';
+        }
+        
+        $data['optList'] = $optList;
+        
+        $this->view('links.shareLinkForm', $data);
+        $this->render();
+    }
+    
+    //  Subit the share link form
+    public function shareLinkSubmit($linkID)
+    {
+        $msg = Template::getUserName($_SESSION['id']).' has shared a file link with you.';
+        $link = '/links/details/'.$linkID;
+        $user = $_POST['selectUser'];
+        
+        Template::notifyOneUser($msg, $link, $user);
         
         $this->render('success');
     }

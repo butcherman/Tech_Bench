@@ -16,14 +16,6 @@
 @checkedFav: #D46E70;
 @bookmarkColor: #E4E4E4;
 
-
-
-
-
-
-
-
-
 //  Global Usable Classes
 .pointer {
     cursor: pointer;
@@ -312,12 +304,15 @@ a .glyphicon {
 
 .tech-tip-details span {
     padding: 0 5px;
-    border-left: 1px solid @lightGray;
+    border-right: 1px solid @lightGray;
     color: @lightGray;
-}
-
-.tech-tip-details .first {
-    border-left: none;
+    display: inline-block;
+    &:last-child {
+        border-right: none;
+    }
+    span {
+        display: inline-block;
+    }
 }
 
 #tip-wrapper {
@@ -331,6 +326,26 @@ a .glyphicon {
 .tip-files {
     color: #8F8686;
     border-bottom: 1px solid black;
+}
+
+#tech-tip-comments {
+    width: 85%;
+    margin: 5px 0 20px 0;
+    tr {
+        border-bottom: 1px solid @lightGray;
+        td {
+            padding: 5px 15px 5px 15px;
+        }
+        &:last-child, &.no-border {
+            border-bottom: none;
+        }
+        .comment-author {
+            color: @lightGray;
+        }
+        textarea {
+            width: 100%
+        }
+    }
 }
 
 .mark-notification, .delete-notification {

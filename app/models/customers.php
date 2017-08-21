@@ -27,6 +27,23 @@ class Customers
         $this->db->prepare($qry)->execute($data);
     }
     
+    //  Update a customer's ID
+    public function updateCustID($newID, $oldID)
+    {
+        $qry = 'UPDATE `customers` SET `cust_id` = :newID WHERE `cust_id` = :oldID';
+        $this->db->prepare($qry)->execute(['newID' => $newID, 'oldID' => $oldID]);
+    }
+    
+    //  Delete a customer
+    public function deleteCustomer($custID)
+    {
+        $qry = 'DELETE FROM `customers` WHERE `cust_id` = :id';
+        if(!empty($custID))
+        {
+            $this->db->prepare($qry)->execute(['id' => $custID]);
+        }
+    }
+    
     //  Search customer function will find a customer based on search paramaters
     public function searchCustomer($name = '', $city = '', $syst = '')
     {

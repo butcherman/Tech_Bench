@@ -177,4 +177,279 @@ class Admin extends Controller
         
         $this->render('success');
     }
+    
+/************************************************************************
+*                      Notifications and Alerts                         *
+*************************************************************************/
+    
+    //  Create a system alert
+    public function systemAlert()
+    {
+        $this->view('admin.newSystemAlert');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the system alert form
+    public function submitSystemAlert()
+    {
+        $model = $this->model('siteAdmin');
+        $model->addSystemAlert($_POST['message'], $_POST['expire'], $_POST['level']);
+            
+        $this->render('success');
+    }
+    
+    //  Create a user specific alert
+    public function userAlert()
+    {
+        $model = $this->model('users');
+        $userList = $model->getUserList();
+        
+        $optList = '';
+        foreach($userList as $user)
+        {
+            $optList .= '<option value="'.$user->user_id.'">'.$user->first_name.' '.$user->last_name.'</option>';
+        }
+        
+        $data['optList'] = $optList;
+        
+        $this->view('admin.newUserAlert', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the user specific alert
+    public function userAlertSubmit()
+    {
+        $model = $this->model('siteAdmin');
+        foreach($_POST['to'] as $userID)
+        {
+            $model->addUserAlert($_POST['message'], $_POST['expire'], $_POST['level'], $userID, $_POST['dismissable']);
+        }
+        
+        $this->render('success');
+    }
+    
+/************************************************************************
+*                     File Links Administration                         *
+*************************************************************************/
+    
+    //  View all links that exist but are expired
+    public function expiredLinks()
+    {
+        $model = $this->model('fileLinks');
+        
+        $links = $model->getLinks();
+        $today = date('Y-m-d');
+        $linkList = '';
+        
+        //  Cycle through the links and pull out expired ones
+        foreach($links as $link)
+        {
+            if($link->expire < $today)
+            {
+                $numFiles = $model->countLinkFiles($link->link_id);
+                
+                $linkList .= '<tr><td>'.Template::getUserName($link->user_id).'</td><td><a href="/links/details/'.$link->link_id.'/'.str_replace(' ', '-', $link->link_name).'">'.$link->link_name.'</td><td class="hidden-xs">'.date('M j, Y', strtotime($link->expire)).'</td><td>'.$numFiles.'</td><td class="hidden-xs"><a href="/links/details/'.$link->link_id.'/'.str_replace(' ', '-', $link->link_name).'" title="Edit Link" data-tooltip="tooltip"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;<a href="#edit-modal"  class="delete-link" title="Delete Link" data-tooltip="tooltip" data-toggle="modal" data-link="'.$link->link_id.'"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+            }
+        }
+        
+        $data = [
+            'linkList' => $linkList,
+            'header' => 'Expired File Links'
+        ];
+        
+        $this->template('techUser');
+        $this->view('admin.fileLinks', $data);
+        $this->render();
+    }
+    
+    //  View all currently active links
+    public function activeLinks()
+    {
+        $model = $this->model('fileLinks');
+        
+        $links = $model->getLinks();
+        $today = date('Y-m-d');
+        $linkList = '';
+        
+        //  Cycle through the links and pull out expired ones
+        foreach($links as $link)
+        {
+            if($link->expire >= $today)
+            {
+                $numFiles = $model->countLinkFiles($link->link_id);
+                
+                $linkList .= '<tr><td>'.Template::getUserName($link->user_id).'</td><td><a href="/links/details/'.$link->link_id.'/'.str_replace(' ', '-', $link->link_name).'">'.$link->link_name.'</td><td class="hidden-xs">'.date('M j, Y', strtotime($link->expire)).'</td><td>'.$numFiles.'</td><td class="hidden-xs"><a href="/links/details/'.$link->link_id.'/'.str_replace(' ', '-', $link->link_name).'" title="Edit Link" data-tooltip="tooltip"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;<a href="#edit-modal"  class="delete-link" title="Delete Link" data-tooltip="tooltip" data-toggle="modal" data-link="'.$link->link_id.'"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+            }
+        }
+        
+        $data = [
+            'linkList' => $linkList,
+            'header' => 'Active File Links'
+        ];
+        
+        $this->template('techUser');
+        $this->view('admin.fileLinks', $data);
+        $this->render();
+    }
+    
+/************************************************************************
+*                      Customers Administration                         *
+*************************************************************************/
+    
+    //  search form to find a customer to delete
+    public function deleteCustomer()
+    {
+        $model = $this->model('systems');
+        
+        $data['header'] = 'Delete Customer';
+        $data['link'] = 'delete-customer-confirm';
+        
+        $this->template('techUser');
+        $this->view('admin.searchCustomer', $data);
+        $this->render();
+    }
+    
+    //  Ajax call to search the customer database based on the information inputed into the search form
+    public function customerSearchForm($link)
+    {
+        $model = $this->model('customers');
+        
+        $custData = $model->searchCustomer($_POST['customer']);
+        
+        $custList = '';
+        
+        if(!$custData)
+        {
+            $custList = '<tr><td colspan="4" class="text-center"><h3>No Results</h3></td></tr>';
+        }
+        else
+        {
+            foreach($custData as $cust)
+            {
+                
+                $custList .= '<tr><td><a href="/admin/'.$link.'/'.$cust->cust_id.'/'.str_replace(' ', '-', $cust->name).'">'.$cust->name.'</a></td><td>'.$cust->city.', '.$cust->state.'</td>';
+            }
+        }
+        
+        $this->template('techUser');
+        $this->render($custList);
+    }
+    
+    //  Ask to confirm that the customer should be deleted
+    public function deleteCustomerConfirm($custID)
+    {
+        $model = $this->model('customers');
+        
+        if(!$custData = $model->getCustData($custID))
+        {
+            $this->view('customers.invalidID');
+        }
+        else
+        {
+            $data = [
+                'custID' => $custID,
+                'custName' => $custData->name,
+                'dbaName' => $custData->dba_name,
+                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+            ];
+            
+            $this->view('admin.confirmCustomerDelete', $data);
+        }
+
+        $this->template('techUser');
+        
+        $this->render();
+    }
+    
+    //  Delete an existing customer
+    public function deleteCustomerConfirmYes($custID)
+    {
+        $model = $this->model('customers');
+        $fileModel = $this->model('files');
+        $sysModel = $this->model('systems');
+        
+        //  Delete all files associated with the customer
+        $files = $model->getAllFiles($custID);
+        $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID;
+        foreach($files as $file)
+        {
+            if($fileModel->deleteFile($file->file_id))
+            {
+                $model->deleteFile($file->file_id);
+            }
+        }
+        $fileModel->deleteFolder($filePath);
+        
+        //  Delete all systems associated with the customer
+        $systems = $model->getCustSystem($custID);
+        foreach($systems as $sys)
+        {
+            $sysID = $sysModel->getSysID($sys->name);
+            $sysModel->delSysType($custID, $sysID);
+        }
+        
+        //  Remove the customer
+        $model->deleteCustomer($custID);
+        
+        $this->render('success');
+    }
+    
+    //  Search form to change a customers ID number
+    public function changeCustomerId()
+    {
+        $model = $this->model('systems');
+        
+        $data['header'] = 'Change Customer ID';
+        $data['link'] = 'change-id-form';
+        
+        $this->template('techUser');
+        $this->view('admin.searchCustomer', $data);
+        $this->render();
+    }
+    
+    //  Change customer ID form
+    public function changeIDForm($custID)
+    {
+        $model = $this->model('customers');
+        
+        if(!$custData = $model->getCustData($custID))
+        {
+            $this->view('customers.invalidID');
+        }
+        else
+        {
+            $data = [
+                'custID' => $custID,
+                'custName' => $custData->name,
+                'dbaName' => $custData->dba_name,
+                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+            ];
+            
+            $this->view('admin.changeCustIDForm', $data);
+        }
+
+        $this->template('techUser');
+        
+        $this->render();
+    }
+    
+    //  Submit the customer change form
+    public function changeIDFormSubmit($custID)
+    {
+        $model = $this->model('customers');
+        
+        if($custData = $model->getCustData($_POST['newid']))
+        {
+            $content = 'duplicate';
+        }
+        else
+        {
+            $model->updateCustID($_POST['newid'], $custID);
+            $content = 'success';
+        }
+        
+        $this->render($content);
+    }
 }

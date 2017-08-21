@@ -41,7 +41,8 @@
             category:
             {
                 required: true,
-                minlength: 3
+                minlength: 3,
+                alphanumeric: true
             }
         },
         messages:
@@ -49,7 +50,8 @@
             category:
             {
                 required: "Please enter a descriptive name for the category",
-                minlength: "Category name must be at least three characters long"
+                minlength: "Category name must be at least three characters long",
+                alphanumeric: "Special Characters Such As & and - Cannot Be Used"
             }
         },
         submitHandler: function()
@@ -59,8 +61,9 @@
                 $('#alert-notification').removeClass('hidden');
                 if(data === 'success')
                 {
-                    $('#alert-notification').html('Category Successfully Created.');
+                    $('#alert-notification').html('<h3>Category Successfully Created</h3><h4><a href="/site-administration/create-system">Click To Create System for this Category</a></h4>');
                     $('#systemNavLinks').load('/site-administration/reloadSysLinks');
+                    $('#category').val('');
                 }
                 else
                 {

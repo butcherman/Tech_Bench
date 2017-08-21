@@ -22,14 +22,20 @@ class Dashboard extends Controller
         
         $custFavs = $model->getCustFavs($_SESSION['id']);
         $tipFavs = $model->getTechTipFavs($_SESSION['id']);
+        $sysAlerts = $model->getSystemAlerts();
+        $techAlerts = $model->getUserAlerts($_SESSION['id']);
         
+        $data['sysAlerts'] = '';
+        foreach($sysAlerts as $alert)
+        {
+            $data['sysAlerts'] .= '<div class="alert '.$alert->alert_level.'">'.$alert->description.'</div>';
+        }
         
-
-        
-        
-        
-        
-        
+        $data['userAlerts'] = '';
+        foreach($techAlerts as $alert)
+        {
+            $data['userAlerts'] .= '<div role="alert" class="alert '.$alert->alert_level.' fade in" data-id="'.$alert->user_alert_id.'"><a href="#" class="close" data-dismiss="alert" aria-label="close" data-tooltip="tooltip" title="Dismiss">&times;</a>'.$alert->description.'</div>';
+        }
         
         $i = 0;
         $p = 4;
@@ -75,24 +81,6 @@ class Dashboard extends Controller
         }  
         $data['techTipFavs'] .= '</div>';
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         $this->view('tech.dashboard', $data);
         $this->render();
     }
@@ -129,6 +117,13 @@ class Dashboard extends Controller
         }
         
         $this->render($note);
+    }
+    
+    //  Ajax call to dismiss a user notification
+    public function dismissUserAlert($alertID)
+    {
+        $model = $this->model('dashboardModel');
+        $model->deleteUserNotification($alertID);
     }
     
     //  Ajax call to mark a notification as read

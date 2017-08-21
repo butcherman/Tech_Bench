@@ -139,6 +139,28 @@ class TechTips
         return $result->fetch();
     }
     
+    //  Pull all comments for a tech tip
+    public function getComments($tipID)
+    {
+        $qry = 'SELECT `comment`, `user_id`, `added_on` FROM `tech_tip_comments` WHERE `tip_id` = :tip';
+        $result = $this->db->prepare($qry);
+        $result->execute(['tip' => $tipID]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Add a comment to a tech tip
+    public function addTipComment($tipID, $comment, $userID)
+    {
+        $qry = 'INSERT INTO `tech_tip_comments` (`tip_id`, `comment`, `user_id`) VALUES (:tip, :comment, :user)';
+        $data = [
+            'tip' => $tipID,
+            'comment' => $comment,
+            'user' => $userID
+        ];
+        $this->db->prepare($qry)->execute($data);
+    }
+    
     //  Determine if the tip is in the users favorites
     public function isTipFav($tipID, $userID)
     {

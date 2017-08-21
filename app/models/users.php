@@ -176,6 +176,23 @@ class Users
         return $result->fetch();
     }
     
+    //  Function to note a failed login attempt
+    public function logFailedLogin($ipAddress)
+    {
+        $qry = 'INSERT INTO `failed_login_attempts` (`user_ip_address`) VALUES (:ip)';
+        $this->db->prepare($qry)->execute(['ip' => $ipAddress]);
+    }
+    
+    //  find the number of failed login attempt
+    public function countFailedLogin($ipAddress)
+    {
+        $qry = 'SELECT COUNT(`user_ip_address`) FROM `failed_login_attempts` WHERE `user_ip_address` = :ip AND `timestamp` > DATE_SUB(now(), INTERVAL 10 MINUTE)';
+        $result = $this->db->prepare($qry);
+        $result->execute(['ip' => $ipAddress]);
+        
+        return $result->fetchColumn();
+    }
+    
     //  Function to return the home location of the user based on their permission level
     public function getHomeLocation($userID)
     {

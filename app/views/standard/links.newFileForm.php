@@ -1,7 +1,7 @@
 <form id="add-file-form">
     <div class="form-group">
         <label for="file">File</label>
-        <input type="file" name="file" id="file" class="form-control" required />
+        <input type="file" name="file[]" id="file" class="form-control" multiple required />
     </div>
     <div class="form-group text-center">
         <input type="submit" id="submit-add-file" class="btn btn-default" value="Upload File" />

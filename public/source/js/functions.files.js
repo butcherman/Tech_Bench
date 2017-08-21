@@ -3,20 +3,20 @@ function submitFile(processor, formID)
 {
 	var formdata = new FormData($('#'+formID)[0]);
     
-    setTimeout(updateSession, 1000*60);//Timeout is 1 min
-
-    function updateSession() 
-    {
-        $.ajax(
-        {
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "/refresh",
-            data: "{}",
-            dataType: "json"
-        });
-        setTimeout(updateSession, 1000 * 60);
-    }
+//    setTimeout(updateSession, 1000*60);//Timeout is 1 min
+//
+//    function updateSession() 
+//    {
+//        $.ajax(
+//        {
+//            type: "POST",
+//            contentType: "application/json; charset=utf-8",
+//            url: "/refresh",
+//            data: "{}",
+//            dataType: "json"
+//        });
+//        setTimeout(updateSession, 1000 * 60);
+//    }
     
     $.ajax({
         url : processor,
