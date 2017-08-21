@@ -6,7 +6,7 @@
         <form id="new-tech-tip">
             <div class="form-group">
                 <label for="subject">Subject:</label>
-                <input type="text" name="subject" id="subject" class="form-control" placeholder="Enter A Descriptive Subject" />
+                <input type="text" name="subject" id="subject" class="form-control" placeholder="Enter A Descriptive Subject" required />
             </div>
             <div class="form-group">
                 <label for="tipData">Tech Tip:</label>
