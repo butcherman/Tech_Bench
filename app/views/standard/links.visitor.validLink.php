@@ -3,7 +3,7 @@
         <h1>
             <img src="/source/img/<?= Config::getCore('logo'); ?>" alt="Tech Bench" class="upload-logo" />
             Tech Bench
-        </h1>
+        </h1> 
     </div>
     <div class="jumbotron">
         <div class="page-header">
@@ -83,6 +83,15 @@
         selector:'textarea',
         height: '400'
     });
+    if('<?= $data['files']; ?>' != '')
+    {
+        $('#fileWrapper').show();
+    }
+    if('<?= $data['allow']; ?>' == '1')
+    {
+        $('#newFileWrapper').show();
+    }
+    
     var maxFile = <?= Config::getFile('maxUpload'); ?>;
     $('#customer-add-file').validate(
     {
@@ -105,7 +114,7 @@
             submitFile('/fileLink/submitNewFile/<?= $data['linkID']; ?>', 'customer-add-file')
         }
     });
-    
+//alert('<?= $data['allow']; ?>');    
     function uploadComplete(res)
     {
         if(res === 'success')
