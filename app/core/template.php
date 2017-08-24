@@ -41,11 +41,11 @@ class Template
         }
         
         //  Determine if the "Report" link belongs on the page
-//        $result->execute(['userID' => $_SESSION['id'], 'linkRole' => 'report']);
-//        if($result->fetchColumn())
-//        {
-//            $adminLink .= '<li><span class="glyphicon glyphicon-eye-open"></span> <a href="/reports">Reports</a></li>';
-//        }
+        $result->execute(['userID' => $_SESSION['id'], 'linkRole' => 'report']);
+        if($result->fetchColumn())
+        {
+            $adminLink .= '<li><span class="glyphicon glyphicon-eye-open"></span> <a href="/reports">Reports</a></li>';
+        }
         
         if(!empty($adminLink))
         {

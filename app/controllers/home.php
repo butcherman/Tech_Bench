@@ -169,6 +169,9 @@ class Home extends Controller
     //  Function to create the necessary session variables to log the user in
     private function logInUser($userData)
     {
+        $model = $this->model('users');
+        $model->noteuserLogin($userData->user_id);
+        
         session_regenerate_id();
         $_SESSION['valid'] = 1;
         $_SESSION['id'] = $userData->user_id;
