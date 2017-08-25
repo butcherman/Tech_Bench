@@ -40,14 +40,55 @@ class Reports extends Controller
                         <td>'.$model->loginData($user->user_id, '7').'</td>
                         <td>'.$model->loginData($user->user_id, '30').'</td>
                         <td>'.$model->loginData($user->user_id, '90').'</td></tr>';
-            
-//            echo 'User '.$user->user_id.'<pre>';
-//            print_r($logins);
-//            echo '</pre>';
         }
         
         $data['loginTable'] = $table;
         $this->view('reports.loginActivity', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Show statistics for a specific user
+    public function userStats($userID = '')
+    {
+        $model = $this->model('reportModel');
+        
+        if(empty($userID))
+        {
+            $userModel = $this->model('users');
+            $userList = $userModel->getUserList();
+
+            $optList = '<option></option>';
+            foreach($userList as $user)
+            {
+                $optList .= '<option value="'.$user->user_id.'">'.$user->first_name.' '.$user->last_name.'</option>';
+            }
+
+            $data['optList'] = $optList;
+
+            $this->view('reports.userStatsList', $data);
+        }
+        else
+        {
+            $data = [
+                'user' => Template::getUserName($userID),
+                'sysFiles'      => $model->countSysFiles($userID),
+                'sysFiles30'    => $model->countSysFiles($userID, true),
+                'custFiles'     => $model->countCustBackups($userID),
+                'custFiles30'   => $model->countCustBackups($userID, true),
+                'custNonBak'    => $model->countCustFiles($userID),
+                'custNonBak30'  => $model->countCustFiles($userID, true),
+                'custNotes'     => $model->countCustNotes($userID),
+                'custNotes30'   => $model->countCustNotes($userID, true),
+                'techTips'      => $model->countTechTips($userID),
+                'techTips30'    => $model->countTechTips($userID, true),
+                'tipComments'   => $model->countTipComments($userID),
+                'tipComments30' => $model->countTipComments($userID, true)
+            ];
+            
+            $this->view('reports.userStatsView', $data);
+        }
+        
         $this->template('techUser');
         $this->render();
     }

@@ -15,5 +15,10 @@
                 <a href="/reports/login-activity" class="btn btn-default btn-block">User Login Activity</a>
             </div>
         </div>
+        <div class="row top-buffer">
+            <div class="col-sm-12">
+                <a href="/reports/user-stats" class="btn btn-default btn-block">User Statistics</a>
+            </div>
+        </div>
     </div>
 </div>
