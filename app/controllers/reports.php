@@ -23,6 +23,10 @@ class Reports extends Controller
         $this->template('techUser');
         $this->render();
     }
+
+/*************************************************************************************************
+*                                          User Reports                                          *
+**************************************************************************************************/
     
     //  Show the login activity of all registered users
     public function loginActivity()
@@ -35,7 +39,7 @@ class Reports extends Controller
         foreach($userList as $user)
         {
             $lastLogin = $model->lastLoginDate($user->user_id) ? date('m-d-Y g:i a', strtotime($model->lastLoginDate($user->user_id))) : 'Never';
-            $table .= '<tr><td>'.$user->first_name.' '.$user->last_name.'</td>
+            $table .= '<tr><td><a href="/reports/user-stats/'.$user->user_id.'">'.$user->first_name.' '.$user->last_name.'</a></td>
                         <td>'.$lastLogin.'</td>
                         <td>'.$model->loginData($user->user_id, '7').'</td>
                         <td>'.$model->loginData($user->user_id, '30').'</td>
@@ -91,5 +95,61 @@ class Reports extends Controller
         
         $this->template('techUser');
         $this->render();
+    }
+    
+/*************************************************************************************************
+*                                        Customer Reports                                        *
+**************************************************************************************************/
+    
+    //  Landing page to determine which customers have a backup
+    public function customerBackups()
+    {
+        $this->view('reports.customerBackups');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit search form to see which customers have a backup
+    public function searchCustBackups()
+    {
+        $model = $this->model('customers');
+        
+        $data = '';
+        $custList = $model->searchCustomer($_POST['customer']);
+        
+        foreach($custList as $cust)
+        {
+            $backup = $model->hasBackup($cust->cust_id) > 0 ? 'go.png' : 'stop.png';
+            
+            $data .= '<tr><td>'.$cust->name.'</td><td><img src="/source/img/'.$backup.'" /></td></tr>';
+        }
+        
+        $this->render($data);
+    }
+    
+    //  Landing page to see which customers have a system assigned
+    public function customerSystems()
+    {
+        $this->view('reports.customerSystems');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit search form to see which customers have a system assigned
+    public function searchCustSystems()
+    {
+        $model = $this->model('customers');
+        
+        $data = '';
+        $custList = $model->searchCustomer($_POST['customer']);
+        
+        foreach($custList as $cust)
+        {
+            $backup = $model->hasSystem($cust->cust_id) > 0 ? 'go.png' : 'stop.png';
+            
+            $data .= '<tr><td>'.$cust->name.'</td><td><img src="/source/img/'.$backup.'" /></td></tr>';
+        }
+        
+        $this->render($data);
     }
 }
