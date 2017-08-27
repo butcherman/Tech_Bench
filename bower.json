@@ -12,6 +12,7 @@
         "filesize": "*",
         "select2": "*",
         "tinymce-placeholder-attribute": "*",
-        "multiselect-two-sides": "*"
+        "multiselect-two-sides": "*",
+        "chart.js": "*"
     }
 }

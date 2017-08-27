@@ -123,4 +123,23 @@ class ReportModel
         
         return $result->fetchColumn();
     }
+    
+    //  Find number of user logins for a specific month
+    public function userLoginsPerMonth($userID, $month)
+    {
+        $qry = 'SELECT COUNT(`timestamp`) FROM `login_activity` WHERE `user_id` = :id AND MONTH(`timestamp`) = :month';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $userID, 'month' => $month]);
+        
+        return $result->fetchColumn();
+    }
+    
+    //  Count the number of files in the system
+    public function countFiles()
+    {
+        $qry = 'SELECT COUNT(`file_id`) FROM `files`';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchColumn();
+    }
 }

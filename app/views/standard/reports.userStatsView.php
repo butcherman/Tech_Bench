@@ -2,6 +2,11 @@
     <h1 class="text-center">Stats for <?= $data['user'] ?></h1>
 </div>
 
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
 
 
 <table class="table">
@@ -45,3 +50,26 @@
         </tr>
     </tbody>
 </table>
+
+
+
+<script src="/source/lib/chart.js/Chart.bundle.min.js"></script>
+<script>
+    
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, 
+{
+    type: 'line',
+    data: 
+    {
+        labels: [<?= $data['months'] ?>],
+        datasets: [{
+            label: 'Times Logged In Each Month',
+            data: [<?= $data['loginData'] ?>],
+            fill: false,
+            backgroundColor: '#FF0000',
+            borderColor: '#FF0000'
+        }]
+    }
+});
+</script>

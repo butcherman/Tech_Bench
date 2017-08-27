@@ -57,6 +57,15 @@ class Reports extends Controller
     {
         $model = $this->model('reportModel');
         
+        //  Build and array that contains the names and numbers of the last six months
+        $first  = strtotime('first day next month');
+        $months = [];
+        $monthNum = [];
+        for ($i = 6; $i >= 1; $i--) {
+            array_push($months, date('M', strtotime("-$i month", $first)));
+            array_push($monthNum, date('n', strtotime("-$i month", $first)));
+        }
+        
         if(empty($userID))
         {
             $userModel = $this->model('users');
@@ -74,6 +83,14 @@ class Reports extends Controller
         }
         else
         {
+            //  Determine how many times the user has logged in each month for the last six months
+            $loginPerMonth = [];
+            $filesPerMonth = [];
+            foreach($monthNum as $key => $num)
+            {
+                $loginsPerMonth[$key] = $model->userLoginsPerMonth($userID, $num);
+            }
+            
             $data = [
                 'user' => Template::getUserName($userID),
                 'sysFiles'      => $model->countSysFiles($userID),
@@ -87,7 +104,9 @@ class Reports extends Controller
                 'techTips'      => $model->countTechTips($userID),
                 'techTips30'    => $model->countTechTips($userID, true),
                 'tipComments'   => $model->countTipComments($userID),
-                'tipComments30' => $model->countTipComments($userID, true)
+                'tipComments30' => $model->countTipComments($userID, true),
+                'months' => '"'.implode('", "', $months).'"',
+                'loginData' => '"'.implode('", "', $loginsPerMonth).'"'
             ];
             
             $this->view('reports.userStatsView', $data);
@@ -151,5 +170,30 @@ class Reports extends Controller
         }
         
         $this->render($data);
+    }
+    
+/*************************************************************************************************
+*                                          Files Reports                                         *
+**************************************************************************************************/
+    
+    //  Check how many valid files are in the system, and how much of th ehard drive is geing used
+    public function systemFiles()
+    {
+        $model = $this->model('reportModel');
+        
+        $space = disk_total_space('/');
+        $free = disk_free_space('/');
+        $used = number_format((($space - $free) / $space) * 100, 2).'%';
+
+        $data = [
+            'numFiles' => $model->countFiles(),
+            'totalSpace' => $space,
+            'freeSpace' => $free,
+            'percent' => $used
+        ];
+        
+        $this->view('reports.systemFiles', $data);
+        $this->template('techUser');
+        $this->render();
     }
 }

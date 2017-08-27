@@ -41,3 +41,19 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-4 col-md-offset-2">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-header">
+                    <h3 class="text-center">File Reports</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-sm-12">
+                <a href="/reports/system-files" class="btn btn-default btn-block">System Files Report</a>
+            </div>
+        </div>
+    </div>
+</div>
