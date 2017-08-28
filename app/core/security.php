@@ -31,11 +31,29 @@ class Security
     }
     
     //  Check the security level of the page vs. the users security level of the user
-    public static function doIBelong()
+    public static function doIBelong($allowMaint = false)
     {
         $valid = false;
         
-        if(Self::$securityLevel === 'open')
+        //  Determine if the system is in maintenance mode or not
+        if(Template::inMaintenanceMode() && !$allowMaint)
+        {
+            $qry = 'SELECT COUNT(*) FROM `role_permissions` 
+                    JOIN `user_roles` ON `role_permissions`.`role_id` = `user_roles`.`role_id` 
+                    JOIN `permissions` ON `role_permissions`.`permission_id` = `permissions`.`permission_id` 
+                    WHERE `user_roles`.`user_id` = :userID AND `permissions`.`permission_description` = :pageLevel';
+            $result = Database::getDB()->prepare($qry);
+            $result->execute(['userID' => $_SESSION['id'], 'pageLevel' => 'site admin']);
+            
+            $result->fetchColumn() ? $valid = true : $valid = false;
+            
+            if(!$valid)
+            {
+                header('Location: /err/maintenance');
+                die();
+            }
+        }
+        else if(Self::$securityLevel === 'open')
         {
             $valid = true;
         }

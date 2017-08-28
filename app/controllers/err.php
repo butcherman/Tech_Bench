@@ -18,6 +18,14 @@ class Err extends Controller
         $this->render();
     }
     
+    //  Maintenance Mode Page
+    public function maintenance()
+    {
+        $this->template('errorPage');
+        $this->view('error.maintenance');
+        $this->render();
+    }
+    
     //  User trying to access a restricted page
     public function restricted()
     {

@@ -16,7 +16,7 @@ session_start();
 //  Define version information as Global Variables
 define('VERSION', '2.4.0');
 define('RELEASE', 'TBA');
-define('DBVERSION', '2.3');
+define('DBVERSION', '2.4');
 
 //  Call necessary required files
 require_once __DIR__.'/../vendor/autoload.php';

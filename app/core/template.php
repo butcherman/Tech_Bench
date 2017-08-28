@@ -5,6 +5,22 @@
 
 class Template
 {
+    //  Determine if the site is in maintenance mode or not
+    public static function inMaintenanceMode()
+    {
+        $qry = 'SELECT `value` FROM `_settings` WHERE `setting` = "maintenance_mode"';
+        $result = Database::getDB()->query($qry);
+        
+        return $result->fetchColumn();
+    }
+    
+    //  Turn maintenance mode on or off
+    public static function toggleMaintMode($bool)
+    {
+        $qry = 'UPDATE `_settings` SET `value` = :bool WHERE `setting` = "maintenance_mode"';
+        Database::getDB()->prepare($qry)->execute(['bool' => $bool]);
+    }
+    
     //  Function to determine how many notification the user has
     public static function getNotifications()
     {
