@@ -7,10 +7,16 @@
 
 class Download extends Controller
 {
-//    public function __construct()
-//    {
-//        $this->setSecurity('open');
-//    }
+    public function __construct()
+    {
+        Security::setPageLevel('open');
+        if(!Security::doIBelong())
+        {
+            $_SESSION['returnURL'] = $_GET['url'];
+            header('Location: /err/restricted');
+            die();
+        }
+    }
     
     //  Function to download a file from the database
     public function index($fileID = '', $fileName = '')
