@@ -13,12 +13,12 @@ class Upgrade extends Controller
     public function __construct()
     {
         Security::setPageLevel('site admin');
-        if(!Security::doIBelong())
-        {
-            $_SESSION['returnURL'] = $_GET['url'];
-            header('Location: /err/restricted');
-            die();
-        }
+//        if(!Security::doIBelong())
+//        {
+//            $_SESSION['returnURL'] = $_GET['url'];
+//            header('Location: /err/restricted');
+//            die();
+//        }
     }
     
     //  Landing page to initiate upgrade process
@@ -80,5 +80,15 @@ class Upgrade extends Controller
             $qry = 'ALTER TABLE `data_'.$sys->folder_location.'` ADD FOREIGN KEY (`cust_id`) REFERENCES `customers`(`cust_id`) ON DELETE CASCADE ON UPDATE CASCADE';
             $db->query($qry);
         }
+    }
+    
+    //  Upgrade from database version 2.3 to 2.4
+    public function up_from_2_3()
+    {
+        require_once(__DIR__.'../../views/upgrades/2_4.php');
+        
+        //  Add new tables and trigger
+        $db = Database::getDB();
+        $db->exec($qry);
     }
 }
