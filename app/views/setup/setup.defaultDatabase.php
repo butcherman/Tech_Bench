@@ -2,7 +2,7 @@
 /*
 |   Default database settings for the Tech Bench
 |   Updated 7-14-17
-|   Database Version 2.1
+|   Database Version 2.4
 */
 
 $database = '
@@ -393,9 +393,16 @@ CREATE TABLE IF NOT EXISTS `upload_link_instructions` (
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE UNIQUE INDEX `tag_unique` ON `tech_tip_tags` (`tip_id`, `sys_id`);
+CREATE TABLE IF NOT EXISTS `_settings` (
+	`setting` VARCHAR(90) NOT NULL UNIQUE,
+    `value` VARCHAR(90) NOT NULL
+);
 
-INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "2.3");
+INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "2.4");
+
+INSERT INTO `_settings` (`setting`, `value`) VALUES ("maintenance_mode", 0);
+
+CREATE UNIQUE INDEX `tag_unique` ON `tech_tip_tags` (`tip_id`, `sys_id`);
 
 INSERT INTO `roles` (`role_id`, `role_name`, `role_home`) VALUES (1, "site admin", "/dashboard"), (2, "admin", "/dashboard"), (3, "report", "/dashboard"), (4, "tech", "/dashboard");
 

@@ -346,4 +346,24 @@ class Customers
             $this->db->prepare($qry)->execute(['fileID' => $fileID]);
         }
     }
+    
+    //  Determine if the customer has a backup or not
+    public function hasBackup($custID)
+    {
+        $qry = 'SELECT COUNT(`file_id`) FROM `customer_files` LEFT JOIN `customer_file_types` ON `customer_files`.`file_type_id` = `customer_file_types`.`file_type_id` WHERE `description` = "backup" AND `cust_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $custID]);
+        
+        return $result->fetchColumn();
+    }
+    
+    //  Determine if the customer has a system or not
+    public function hasSystem($custID)
+    {
+        $qry = 'SELECT COUNT(`sys_id`) FROM `customer_systems` WHERE `cust_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $custID]);
+        
+        return $result->fetchColumn();
+    }
 }

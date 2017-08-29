@@ -4,7 +4,7 @@ Tech Bench is a custom Content Management System (CMS) built to aid service tech
 
 The Tech Bench consists of three major sections:
 
-ystem Information
+System Information
 ------------------
 Users can store files for individual system types such as; documentation, firmware, and general notes.  This informaiton can be accessed by any registered user.  This gives a central location to store this information rather than relying on needing access to several different manufacturers web sites.
 

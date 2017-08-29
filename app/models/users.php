@@ -34,6 +34,13 @@ class Users
         return $valid;
     }
     
+    //  Mark in the database activity that the user logged in
+    public function noteUserLogin($userID)
+    {
+        $qry = 'INSERT INTO `login_activity` (`user_id`) VALUES (:id)';
+        $this->db->prepare($qry)->execute(['id' => $userID]);
+    }
+    
     //  Get a list of all users - Note:  will not return Initial System Admin with user ID of 1
     public function getUserList()
     {
@@ -284,5 +291,25 @@ class Users
     private function sprinkleSalt($salt, $pwd)
     {
         return hash('sha256', $salt.hash('sha256', $pwd));
+    }
+    
+    //  Reporting section to figure out how many users have logged in within the last XX days
+    public function loginData($userID, $interval)
+    {
+        $qry = 'SELECT COUNT(`timestamp`) FROM `login_activity` WHERE `timestamp` > CURDATE() - INTERVAL '.$interval.' DAY AND `user_id` = :id ORDER BY `timestamp`';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $userID]);
+        
+        return $result->fetchColumn();
+    }
+    
+    //  Reporting section to determine the last date the user logged in
+    public function lastLoginDate($userID)
+    {
+        $qry = 'SELECT `timestamp` FROM `login_activity` WHERE `user_id` = :id ORDER BY `timestamp` DESC LIMIT 1';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $userID]);
+        
+        return $result->fetchColumn();
     }
 }

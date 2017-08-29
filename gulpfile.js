@@ -43,7 +43,9 @@ gulp.task('moveFiles', ['bower'], function() {
         gulp.src(['vendor/tinymce-placeholder-attribute/placeholder/*'])
             .pipe(gulp.dest('public/source/lib/tinymce/plugins/placeholder/')),
         gulp.src(['vendor/multiselect-two-sides/dist/js/*'])
-            .pipe(gulp.dest('public/source/lib/multiselect-two-sides/'))
+            .pipe(gulp.dest('public/source/lib/multiselect-two-sides/')),
+        gulp.src(['vendor/chart.js/dist/Chart.bundle.min'])
+            .pipe(gulp.dest('public/source/lib/chart.js/'))
 });
 
 gulp.task('default', ['bower', 'moveFiles', 'config']);

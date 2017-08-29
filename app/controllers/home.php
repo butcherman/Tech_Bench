@@ -1,6 +1,17 @@
 <?php
 class Home extends Controller
 {    
+    public function __construct()
+    {
+        Security::setPageLevel('open');
+        if(!Security::doIBelong(true))
+        {
+            $_SESSION['returnURL'] = $_GET['url'];
+            header('Location: /err/restricted');
+            die();
+        }
+    }
+    
     //  index is the landing page that will allow the user to login
     public function index()
     {
@@ -70,6 +81,13 @@ class Home extends Controller
     //  forgot-password link allows user to request a new link to reset their password
     public function forgotPassword()
     {
+        if(!Security::doIBelong())
+        {
+            $_SESSION['returnURL'] = $_GET['url'];
+            header('Location: /err/restricted');
+            die();
+        }
+        
         //  Check to see if the user is already logged in
         if(Security::isLoggedIn())
         {
@@ -97,6 +115,13 @@ class Home extends Controller
     //  Ajax call to submit forgotten password form and email new password link to user
     public function submitForgotPassword()
     {
+        if(!Security::doIBelong())
+        {
+            $_SESSION['returnURL'] = $_GET['url'];
+            header('Location: /err/restricted');
+            die();
+        }
+        
         $model = $this->model('users');
         $valid = false;
         
@@ -126,6 +151,13 @@ class Home extends Controller
     //  Function to allow the user to recover their password
     public function resetPassword($link)
     {
+        if(!Security::doIBelong())
+        {
+            $_SESSION['returnURL'] = $_GET['url'];
+            header('Location: /err/restricted');
+            die();
+        }
+        
         $model = $this->model('users');
         
         if($userID = $model->checkResetLink($link))
@@ -145,6 +177,13 @@ class Home extends Controller
     //  Function to reset the users password from the forgotten password form
     public function submitResetPassword()
     {
+        if(!Security::doIBelong())
+        {
+            $_SESSION['returnURL'] = $_GET['url'];
+            header('Location: /err/restricted');
+            die();
+        }
+        
         $model = $this->model('users');
         $valid = false;
         
@@ -169,6 +208,9 @@ class Home extends Controller
     //  Function to create the necessary session variables to log the user in
     private function logInUser($userData)
     {
+        $model = $this->model('users');
+        $model->noteuserLogin($userData->user_id);
+        
         session_regenerate_id();
         $_SESSION['valid'] = 1;
         $_SESSION['id'] = $userData->user_id;

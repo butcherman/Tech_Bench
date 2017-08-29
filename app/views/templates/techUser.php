@@ -74,7 +74,9 @@
                 </div>
             </div>
             <div id="page-content-wrapper">
-                <?= $content; ?>
+                <div class="container-fluid">
+                    <?= $content; ?>
+                </div>
             </div>
         </div>
     </body>
