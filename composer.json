@@ -4,7 +4,6 @@
     },
     "scripts": {
         "pre-install-cmd": ["npm install", "npm install gulp"],
-        "post-install-cmd": ["gulp"],
-        "post-update-cmd": ["gulp"]
+        "post-install-cmd": ["gulp"]
     }
 }

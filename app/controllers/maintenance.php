@@ -48,4 +48,54 @@ class Maintenance extends Controller
             Template::toggleMaintMode(1);
         }
     }
+    
+    //  View logs landing page - show a list of all logs in the system
+    public function viewLogs()
+    {
+        $logFiles = scanDir(__DIR__.'/../../logs/');
+        
+        $logList = '';
+        foreach($logFiles as $file)
+        {
+            $parts = pathinfo($file);
+            if($parts['extension'] === 'log')
+            {
+                $logList .= '<li class="list-group-item"><a href="/maintenance/show-log/'.$parts['filename'].'">'.$file.'</a></li>';
+            }
+            
+        }
+        
+        $data = [
+            'logList' => $logList
+        ];
+        
+        $this->view('maintenance.logList', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  View a specific log file - base page
+    public function showLog($logName)
+    {
+        $fileName = $logName.'.log';
+        
+        $data = [
+            'logName' => $logName,
+            'fileName' => $fileName
+        ];
+        
+        $this->view('maintenance.showLog', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Ajax call to load a log file
+    public function loadLog($logName)
+    {
+        $fileName = __DIR__.'/../../logs/'.$logName.'.log';
+        $output = shell_exec('tail -n50 '.$fileName);
+        
+        $this->render(str_replace(PHP_EOL, '<br />', $output));
+        $this->render($output); 
+    }
 }
