@@ -83,13 +83,13 @@
         selector:'textarea',
         height: '400'
     });
-    if('<?= $data['files']; ?>' != '')
+    if('<?= $data['files']; ?>' == '')
     {
-        $('#fileWrapper').show();
+        $('#fileWrapper').hide();
     }
-    if('<?= $data['allow']; ?>' == '1')
+    if('<?= $data['allow']; ?>' != '1')
     {
-        $('#newFileWrapper').show();
+        $('#newFileWrapper').hide();
     }
     
     var maxFile = <?= Config::getFile('maxUpload'); ?>;
