@@ -100,7 +100,7 @@ class System extends Controller
             $fileData .= $i == 0 ? 'active">' : 'fade">';
             $fileData .= '<table class="table table-striped ajax-table" data-load="'.str_replace(' ', '-', $type->description).'"><thead><tr><th>File</th><th>Added By</th><th>Date Added</th></tr></thead><tbody><tr><td colspan="4" class="text-center">No Files</td></tr></tbody></table></div>';
 
-            $optList .= '<option value="'.str_replace(' ', '-', $type->description).'">'.$type->description.'</option>';
+            $optList .= '<option value="'.$type->description.'">'.$type->description.'</option>';
 
             $i++;
         }

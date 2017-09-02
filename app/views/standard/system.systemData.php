@@ -151,7 +151,9 @@
     {
         if(res != 1)
         {
-            alert('There Was A Problem Uploading Your File\nA Log Has Been Generated');
+            
+            alert(res);
+//            alert('There Was A Problem Uploading Your File\nA Log Has Been Generated');
         }
         var load = $('.tab-content .active .ajax-table').data('load');
         $('#new-file').modal('hide');
