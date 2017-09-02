@@ -108,7 +108,11 @@
 <script src="/source/lib/tinymce/plugins/placeholder/plugin.min.js"></script>
 <script>
     var linkID = <?= $data['linkID']; ?>;
-    userUploadedFiles();
-    customerUploadedFiles();
-    loadInstruction();
+    $(document).ready(function()
+    {
+        userUploadedFiles();
+        customerUploadedFiles();
+        loadInstruction();
+    });
+        
 </script>

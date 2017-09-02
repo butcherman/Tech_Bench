@@ -4,6 +4,9 @@ jQuery.validator.addMethod("notEqualTo", function(value, element, param) {
 $.validator.addMethod('filesize', function (value, element, param) {
     return this.optional(element) || (element.files[0].size <= param)
 }, 'File size must be less than {0}');
+$.validator.addMethod("loginRegex", function(value, element) {
+    return this.optional(element) || /^[a-z0-9\-\s]+$/i.test(value);
+}, "Username must contain only letters, numbers, or dashes.");
 
 $(document).ready(function()
 {
