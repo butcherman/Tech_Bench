@@ -60,6 +60,10 @@ class Account extends Controller
         ];
         $model->updateUserSettings($_SESSION['id'], $userSettings);
         
+        //  Note change in log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' updated settings';
+        Logs::writeLog('User-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -90,6 +94,10 @@ class Account extends Controller
         $model->setPassword($_SESSION['id'], $_POST['newpass']);
         $model->removeForcePasswordChange($_SESSION['id']);
         $_SESSION['changePassword'] = 0;
+        
+        //  Note change in log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' changed password';
+        Logs::writeLog('User-Change', $msg);
         
         $this->render('success');
     }

@@ -212,6 +212,10 @@ class System extends Controller
             $notifyMsg = 'New File Added For '.str_replace('-', ' ', $sysName);
             $notifyLnk = '/system/'.$model->getSysCategory($sysName).'/'.$sysName;
             Template::notifyAllUsers($notifyMsg, $notifyLnk);
+            
+            //  Note the change in the log files
+            $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' uploaded a new file for '.$sysName;
+            Logs::writeLog('System-Change', $msg);
         }
         
         $this->render($success);

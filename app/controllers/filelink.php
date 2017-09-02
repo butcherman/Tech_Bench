@@ -27,10 +27,18 @@ class FileLink extends Controller
         if(!$linkID)
         {
             $this->view('error.badLink');
+            
+            //  Note in log file
+            $msg = 'Visitor '.Security::getRealIpAddr().' attempted to acces a bad link hash - '.$linkHash;
+            Logs::writeLog('File-Links', $smg);
         }
         else if($model->isLinkExpired($linkID->link_id))
         {
             $this->view('links.expiredLink');
+            
+            //  Note in log file
+            $msg = 'Visitor '.Security::getRealIpAddr().' attempted to acces an expired link hash - '.$linkHash;
+            Logs::writeLog('File-Links', $smg);
         }
         else
         {
@@ -57,7 +65,7 @@ class FileLink extends Controller
         $this->render();
     }
     
-    public function submitNewFIle($linkID)
+    public function submitNewFile($linkID)
     {
         $user = $_POST['name'];
         $model = $this->model('fileLinks');

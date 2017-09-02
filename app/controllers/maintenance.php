@@ -42,10 +42,18 @@ class Maintenance extends Controller
         if(Template::inMaintenanceMode())
         {
             Template::toggleMaintMode(0);
+            
+            //  Note the change in the log files
+            $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' turned off maintenance mode';
+            Logs::writeLog('File-Link', $msg);
         }
         else
         {
             Template::toggleMaintMode(1);
+            
+            //  Note the change in the log files
+            $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' turned on maintenance mode';
+            Logs::writeLog('File-Link', $msg);
         }
     }
     

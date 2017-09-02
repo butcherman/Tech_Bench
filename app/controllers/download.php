@@ -22,7 +22,7 @@ class Download extends Controller
     public function index($fileID = '', $fileName = '')
     {
         $model = $this->model('files');
-        $userID = isset($_SESSION['id']) ? 'User '.$_SESSION['id'] : 'Guest '.$_SERVER['REMOTE_ADDR'];
+        $userID = isset($_SESSION['id']) ? 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']) : 'Guest '.Security::getRealIpAddr();
         
         $fileData = $model->getFileData($fileID, $fileName);
         

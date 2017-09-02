@@ -40,6 +40,10 @@ class Forms extends Controller
         $lnk = '/forms';
         Template::notifyAllUsers($msg, $lnk);
         
+        //  Log the change in the log file
+        $msg = 'New Company Form Loaded - '.$_POST['name'].' by ('.$_SESSION['id'].')'.Template::getUserName($_POST['name']);
+        Logs::writeLog('Company-Forms', $msg);
+        
         $this->render('success');
     }
     

@@ -4,7 +4,7 @@
 |   Tech Bench - information goes here.........
 |
 |   Author  - Ron Butcher
-|   Version - 2.3.0
+|   Version - 2.4.2
 |
 |   Index.php file is the initial file that will begin the application
 |   All necessary static classes will be called
@@ -14,8 +14,8 @@
 session_start();
 
 //  Define version information as Global Variables
-define('VERSION', '2.4.1');
-define('RELEASE', '8-28-2017');
+define('VERSION', '2.4.2');
+define('RELEASE', '9-1-2017');
 define('DBVERSION', '2.4');
 
 //  Call necessary required files
