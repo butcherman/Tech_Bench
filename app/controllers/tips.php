@@ -108,7 +108,7 @@ class Tips extends Controller
         }
         
         //  Write a log to note the tech tip
-        $msg = 'New Tech Tip Subject: '.$_POST['subject'].' added by USER ID: '.$_SESSION['id'];
+        $msg = 'New Tech Tip Subject: '.$_POST['subject'].' added by User('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('Tech-Tips', $msg);
         
         //  Create a notification for the dashboard
@@ -297,6 +297,10 @@ class Tips extends Controller
             $model->deleteFile($fileID);
         }
         
+        //  Write a log to note the tech tip
+        $msg = 'File ID '.$fileID.' deleted by User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('Tech-Tips', $msg);
+        
         $this->render('success');
     }
     
@@ -324,6 +328,10 @@ class Tips extends Controller
         
         //  Write a log to note the tech tip
         $msg = 'Updated Tech Tip: '.$_POST['subject'].', Tip ID: '.$tipID.' updated by USER ID: '.$_SESSION['id'];
+        Logs::writeLog('Tech-Tips', $msg);
+        
+        //  Write a log to note the tech tip
+        $msg = 'Tech Tip '.$tipID.' modified by  User('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('Tech-Tips', $msg);
         
         $this->render($tipID);
@@ -366,6 +374,10 @@ class Tips extends Controller
         
         $model->deleteTechTip($tipID);
         
+        //  Write a log to note the tech tip
+        $msg = 'Tech Tip '.$tipID.' deleted by  User('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('Tech-Tips', $msg);
+        
         $this->render('success');
     }
     
@@ -402,6 +414,10 @@ class Tips extends Controller
         $model = $this->model('techTips');
         
         $model->addTipComment($tipID, $_POST['commentInput'], $_SESSION['id']);
+        
+        //  Write a log to note the tech tip
+        $msg = 'User('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' added a comment to Tech Tip '.$tipID;
+        Logs::writeLog('Tech-Tips', $msg);
         
         $this->render('success');
     }

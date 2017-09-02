@@ -16,11 +16,17 @@
             <tbody>
                 <tr>
                     <td><?= $data['numFiles'] ?></td>
-                    <td><?= $data['totalSpace'] ?></td>
-                    <td><?= $data['freeSpace'] ?></td>
+                    <td id="total-space"><?= $data['totalSpace'] ?></td>
+                    <td id="free-space"><?= $data['freeSpace'] ?></td>
                     <td><?= $data['percent'] ?></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<script src="/source/lib/filesize/filesize.min.js"></script>
+<script>
+    $('#total-space').text(filesize('<?= $data['totalSpace'] ?>'));
+    $('#free-space').text(filesize('<?= $data['freeSpace'] ?>'));
+</script>

@@ -109,7 +109,8 @@ class Customer extends Controller
             $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID;
             $fileModel->createFolder($filePath);
             
-            $msg = 'New Customer ID: '.$custID.' Name: '.$_POST['custName'].' Added By User ID: '.$_SESSION['id'];
+            //  Note change in log file
+            $msg = 'New Customer ID: '.$custID.' Name: '.$_POST['custName'].' Added By User ( '.$_SESSION['id'].')'.Template(getUserName($_SESSION['id']));
             Logs::writeLog('Customer-Change', $msg);
             
             $result = 'success';
@@ -157,10 +158,18 @@ class Customer extends Controller
         if($model->isCustFav($custID, $_SESSION['id']))
         {
             $model->removeCustFav($custID, $_SESSION['id']);
+            
+            //  Note change in log file
+            $msg = 'Customer ID: '.$custID.' removed as a favorite for ( '.$_SESSION['id'].')'.Template(getUserName($_SESSION['id']));
+            Logs::writeLog('Customer-Change', $msg);
         }
         else
         {
             $model->addCustFav($custID, $_SESSION['id']);
+            
+            //  Note change in log file
+            $msg = 'Customer ID: '.$custID.' added as a favorite for ( '.$_SESSION['id'].')'.Template(getUserName($_SESSION['id']));
+            Logs::writeLog('Customer-Change', $msg);
         }
     }
     
@@ -192,6 +201,10 @@ class Customer extends Controller
         $model->updateCustData($custID, $_POST);
         
         $msg = 'Customer ID: '.$custID.' Updated By: '.$_SESSION['id'];
+        Logs::writeLog('Customer-Change', $msg);
+        
+        //  Note change in log files
+        $msg = 'Customer ('.$custID.')'.$_POST['name'].' information updated by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('Customer-Change', $msg);
         
         $this->render('success');
@@ -304,6 +317,8 @@ class Customer extends Controller
         $model = $this->model('customers');
         $sysModel = $this->model('systems');
         
+        $custName = $model->getCustData($custID)->name;
+        
         $sysType = $_POST['editSysType'];
         if(!$sysID = $sysModel->getSysID($sysType))
         {
@@ -318,7 +333,10 @@ class Customer extends Controller
             
             $model->updateSysData($table, $cols, $custID, $_POST);
             
-            $msg = 'Customer ID: '.$custID.' Update System information for '.$sysType.' By User ID: '.$_SESSION['id'];
+            //  Note change in log files
+            $msg = 'Customer ('.$custID.')'.$custName.' system - '.$sysType.' - updated by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+            Logs::writeLog('Customer-Change', $msg);
+            
             $content = 'success';
         }
         
@@ -353,13 +371,14 @@ class Customer extends Controller
         $model = $this->model('customers');
         $sysModel = $this->model('systems');
         
+        $custName = $model->getCustData($custID)->name;
         $custSystems = $model->getCustSystem($custID);
 
         if(!$sysID = $sysModel->getSysID(str_replace('_', ' ', $_POST['addSystemType'])))
         {
             $content = 'Bad System Type';
             $msg = 'Customer ID '.$custID.' failed to add system. Error: Bad System Type - '.$_POST['addSystemType'];
-            Logs::writeLog('Customer-Update', $msg);
+            Logs::writeLog('Customer-Change', $msg);
         }
         else
         {
@@ -380,6 +399,10 @@ class Customer extends Controller
             {
                 $sysModel->addSysType($custID, $sysID, $_POST);
                 $content = 'success';
+                
+                //  Note change in log files
+                $msg = 'Customer ('.$custID.')'.$custName.' new system - '.$_POST['addSystemType'].' -added by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+                Logs::writeLog('Customer-Change', $msg);
             }
         }
          
@@ -424,8 +447,11 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
 
+        $custName = $model->getCustData($custID)->name;
         $model->addContact($custID, $_POST);
-        $msg = 'Customer ID: '.$custID.' Contact - '.$_POST['contName'].' added by User ID: '.$_SESSION['id'];
+
+        //  Note change in log files
+        $msg = 'Customer ('.$custID.')'.$custName.' new contact - '.$_POST['contName'].' - added by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('Customer-Change', $msg);
         
         $this->render('success');
@@ -452,6 +478,11 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
         $model->editContact($contID, $_POST);
+        
+        //  Note change in log files
+        $msg = 'Customer contact ID '.$contID.' - '.$_POST['contName'].' - updated by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('Customer-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -460,8 +491,11 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
         $model->deleteContact($contID);
-        $msg = 'Contact ID: '.$contID.' deleted by user ID: '.$_SESSION['id'];
+        
+        //  Note change in log files
+        $msg = 'Customer contact ID '.$contID.' deleted by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('Customer-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -511,8 +545,11 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
         
+        $custName = $model->getCustData($custID)->name;
         $model->addNewNote($custID, $_SESSION['id'], $_POST);
-        $msg = 'User ID: '.$_SESSION['id'].' added a note for Customer ID: '.$custID;
+        
+        //  Note change in log files
+        $msg = 'Customer ('.$custID.')'.$custName.' new note - '.$_POST['subject'].' - added by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('Customer-Change', $msg);
         
         $this->render('success');
@@ -537,8 +574,14 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
         $model->updateNote($noteID, $_SESSION['id'], $_POST);
+        
         $msg = 'User ID: '.$_SESSION['id'].' updated note id: '.$noteID;
         Logs::writeLog('Customer-Change', $msg);
+        
+        //  Note change in log files
+        $msg = 'Customer Note - ID '.$noteID.' - updated by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('Customer-Change', $msg);
+        
         $this->render('success');
     }
 
@@ -591,6 +634,7 @@ class Customer extends Controller
         $fileModel = $this->model('files');
         $success = false;
         
+        $custName = $model->getCustData($custID)->name;
         $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID.Config::getFile('slash');
 
         if(!empty($_FILES))
@@ -607,7 +651,8 @@ class Customer extends Controller
             $model->addFile($custID, $_SESSION['id'], $fileData);
             $success = true;
             
-            $msg = 'New file added for customer ID: '.$custID.' File ID: '.$fileID[0].' By: '.$_SESSION['id'];
+            //  Note change in log file
+            $msg = 'New file added for customer ('.$custID.')'.$custName.' File ID: '.$fileID[0].' by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
             Logs::writeLog('Customer-Change', $msg);
         }
         
@@ -645,6 +690,10 @@ class Customer extends Controller
         $model = $this->model('customers');
         $model->editFile($fileID, $_POST);
         
+        //  Note change in log file
+        $msg = 'File edited for customer File ID: '.$fileID.' by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('Customer-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -658,6 +707,10 @@ class Customer extends Controller
         if($fileModel->deleteFile($fileData->file_id))
         {
             $model->deleteFile($fileID);
+            
+            //  Note change in log file
+            $msg = 'File deleted for customer File ID: '.$fileID.' by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+            Logs::writeLog('Customer-Change', $msg);
         }
         
         $this->render('success');

@@ -58,6 +58,10 @@ class Admin extends Controller
             $model->setForcePasswordChange($_POST['selectUser']);
         }
         
+        //  Note change in log files
+        $msg = 'User ('.$_POST['selectUser'].')'.Template::getUserName($_POST['selectUser']).' password changed by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('User-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -111,6 +115,10 @@ class Admin extends Controller
         
         $model->updateUserData($_POST['selectUser'], $data);
         
+        //  Note change in log files
+        $msg = 'User ('.$_POST['selectUser'].')'.Template::getUserName($_POST['selectUser']).' settings changed by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('User-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -127,6 +135,10 @@ class Admin extends Controller
     {
         $model = $this->model('users');
         $model->createUSer($_POST['username'], $_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password']);
+        
+        //  Note change in log files
+        $msg = 'New User - '.$_POST['username'].' created by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('User-Change', $msg);
         
         $this->render('success');
     }
@@ -175,6 +187,10 @@ class Admin extends Controller
         $model = $this->model('users');
         $model->deactivateUser($userID);
         
+        //  Note change in log files
+        $msg = 'User ('.$userID.')'.Template::getUserName($userID).' deactivated by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('User-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -195,6 +211,10 @@ class Admin extends Controller
     {
         $model = $this->model('siteAdmin');
         $model->addSystemAlert($_POST['message'], $_POST['expire'], $_POST['level']);
+        
+        //  Note change in log files
+        $msg = 'New system alert created by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('Alert-Message', $msg);
             
         $this->render('success');
     }
@@ -225,6 +245,10 @@ class Admin extends Controller
         foreach($_POST['to'] as $userID)
         {
             $model->addUserAlert($_POST['message'], $_POST['expire'], $_POST['level'], $userID, $_POST['dismissable']);
+            
+            //  Note change in log files
+            $msg = 'User alert created for ('.$userID.')'.Template::getUserName($userID).' by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+            Logs::writeLog('Alert-Message', $msg);
         }
         
         $this->render('success');
@@ -359,7 +383,6 @@ class Admin extends Controller
         }
 
         $this->template('techUser');
-        
         $this->render();
     }
     
@@ -369,6 +392,8 @@ class Admin extends Controller
         $model = $this->model('customers');
         $fileModel = $this->model('files');
         $sysModel = $this->model('systems');
+        
+        $custName = $model->getCustData($custID)->name;
         
         //  Delete all files associated with the customer
         $files = $model->getAllFiles($custID);
@@ -392,6 +417,10 @@ class Admin extends Controller
         
         //  Remove the customer
         $model->deleteCustomer($custID);
+        
+        //  Note change in log files
+        $msg = 'Customer ('.$custID.')'.$custName.' deleted by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        Logs::writeLog('Customer-Change', $msg);
         
         $this->render('success');
     }
@@ -448,6 +477,10 @@ class Admin extends Controller
         {
             $model->updateCustID($_POST['newid'], $custID);
             $content = 'success';
+            
+            //  Note change in log files
+            $msg = 'Customer ('.$custID.')'.$custName.' ID changed to '.$_POST['newid'].' by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+            Logs::writeLog('Customer-Change', $msg);
         }
         
         $this->render($content);

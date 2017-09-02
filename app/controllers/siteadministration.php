@@ -45,6 +45,10 @@ class siteAdministration extends Controller
         $fileMod = $this->model('files');
         $fileMod->createFolder($path);
         
+        //  Note the change in the log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' created a new system category '.$_POST['category'];
+        Logs::writeLog('Administration-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -93,6 +97,10 @@ class siteAdministration extends Controller
             $fileModel->createFolder($path.Config::getFile('slash').$folder);
         }
         
+        //  Note the change in the log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' modified a system category '.$_POST['category'];
+        Logs::writeLog('Administration-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -125,6 +133,10 @@ class siteAdministration extends Controller
         $path = Config::getFile('uploadRoot').Config::getFile('sysPath').$_POST['category'].Config::getFile('slash').$folder;
         $fileMod = $this->model('files');
         $fileMod->createFolder($path);
+        
+        //  Note the change in the log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' created a new system  '.$_POST['sysName'];
+        Logs::writeLog('Administration-Change', $msg);
         
         $this->render('success');
     }

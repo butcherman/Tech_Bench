@@ -8,7 +8,7 @@ class Err extends Controller
             print_r($_SESSION);
         $msg = ob_get_clean();
         
-        Logs::writeLog('err-page', $msg);
+        Logs::writeLog('Err-Page', $msg);
     }
     
     //  Generic error page 

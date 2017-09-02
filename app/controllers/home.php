@@ -143,6 +143,10 @@ class Home extends Controller
             Email::addUser($userData->email);
             Email::addBody($emBody);
             $valid = Email::send();
+            
+            //  Note the change in the log files
+            $msg = 'User ('.$userID.')'.Template::getUserName($userID).' created a reset password link';
+            Logs::writeLog('User-Change', $msg);
         }
 
         $this->render($valid);
@@ -193,6 +197,10 @@ class Home extends Controller
             $model->delResetLink($userID);
             Logs::writeLog('Users', 'Password Updated via Reset Link for User: '.$userID);
             $valid = 'success';
+            
+            //  Note the change in the log files
+            $msg = 'User ('.$userID.')'.Template::getUserName($userID).' reset their password via reset link';
+            Logs::writeLog('User-Change', $msg);
         }
         
         $this->render($valid);
@@ -209,7 +217,7 @@ class Home extends Controller
     private function logInUser($userData)
     {
         $model = $this->model('users');
-        $model->noteuserLogin($userData->user_id);
+        $model->noteUserLogin($userData->user_id);
         
         session_regenerate_id();
         $_SESSION['valid'] = 1;
