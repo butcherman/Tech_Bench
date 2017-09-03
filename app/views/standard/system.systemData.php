@@ -104,7 +104,7 @@
     $('#new-file').on('show.bs.modal', function()
     {
         var type = $('.tab-content .active').attr('id');
-        $('#fileType').val(type);
+        $('#fileType').val(type.replace('-', ' '));
     });
     
     $('#new-file').on('hide.bs.modal', function()
