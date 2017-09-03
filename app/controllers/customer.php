@@ -110,7 +110,7 @@ class Customer extends Controller
             $fileModel->createFolder($filePath);
             
             //  Note change in log file
-            $msg = 'New Customer ID: '.$custID.' Name: '.$_POST['custName'].' Added By User ( '.$_SESSION['id'].')'.Template(getUserName($_SESSION['id']));
+            $msg = 'New Customer ID: '.$custID.' Name: '.$_POST['custName'].' Added By User ( '.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
             Logs::writeLog('Customer-Change', $msg);
             
             $result = 'success';
@@ -160,7 +160,7 @@ class Customer extends Controller
             $model->removeCustFav($custID, $_SESSION['id']);
             
             //  Note change in log file
-            $msg = 'Customer ID: '.$custID.' removed as a favorite for ( '.$_SESSION['id'].')'.Template(getUserName($_SESSION['id']));
+            $msg = 'Customer ID: '.$custID.' removed as a favorite for ( '.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
             Logs::writeLog('Customer-Change', $msg);
         }
         else
@@ -168,7 +168,7 @@ class Customer extends Controller
             $model->addCustFav($custID, $_SESSION['id']);
             
             //  Note change in log file
-            $msg = 'Customer ID: '.$custID.' added as a favorite for ( '.$_SESSION['id'].')'.Template(getUserName($_SESSION['id']));
+            $msg = 'Customer ID: '.$custID.' added as a favorite for ( '.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
             Logs::writeLog('Customer-Change', $msg);
         }
     }
@@ -549,7 +549,7 @@ class Customer extends Controller
         $model->addNewNote($custID, $_SESSION['id'], $_POST);
         
         //  Note change in log files
-        $msg = 'Customer ('.$custID.')'.$custName.' new note - '.$_POST['subject'].' - added by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
+        $msg = 'Customer ('.$custID.')'.$custName.' new note - '.$_POST['noteSubject'].' - added by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('Customer-Change', $msg);
         
         $this->render('success');

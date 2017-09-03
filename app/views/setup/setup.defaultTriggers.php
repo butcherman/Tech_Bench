@@ -13,7 +13,9 @@ CREATE TRIGGER `'.$_SESSION['setupData']['dbName'].'`.`new_user_settings` AFTER 
     BEGIN
         INSERT INTO `user_settings` (`user_id`) VALUES (NEW.user_id);
     END;
-/
+';
+
+$triggers[] = '
 CREATE TRIGGER `'.$_SESSION['setupData']['dbName'].'`.`new_upload_link` AFTER INSERT ON `upload_links`
     FOR EACH ROW
     BEGIN

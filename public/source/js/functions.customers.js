@@ -190,6 +190,7 @@ $(document).on('click', '#submit-new-contact', function()
                 }
                 else
                 {
+                    alert(data);
                     alert('There Was A Problem Adding Contact.')
                 }
             });

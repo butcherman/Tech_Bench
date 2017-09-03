@@ -42,7 +42,7 @@
             {
                 required: true,
                 minlength: 3,
-                alphanumeric: true
+                loginRegex: true
             }
         },
         messages:

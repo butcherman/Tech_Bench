@@ -173,13 +173,25 @@ class Setup extends Controller
     //  Finalize step 2 is to create the database
     public function newDatabase()
     {
-        $mysqli = new mysqli($_SESSION['setupData']['dbServer'], $_SESSION['setupData']['dbUser'], $_SESSION['setupData']['dbPass']);
-        
-        //  If the databse connection fails, kick out error
-        if($mysqli->connect_errno)
+        //  Get information to create the database connection
+        $dbHost = $_SESSION['setupData']['dbServer'];
+        $dbUser = $_SESSION['setupData']['dbUser'];
+        $dbPass = $_SESSION['setupData']['dbPass'];
+        $charset = 'utf8';
+        $dsn = 'mysql:host='.$dbHost.';charset='.$charset;
+        $opt = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ];
+        //  Try to connect to the database and create PDO object.
+        try
         {
-            echo mysqli_connect_error();
-            die();
+            $db = new PDO($dsn, $dbUser, $dbPass, $opt);
+        }
+        catch(PDOException $e)
+        {
+            echo 'Error Connecting to Database Server';
         }
         
         //  Bring in default databse files
@@ -187,26 +199,43 @@ class Setup extends Controller
         require __DIR__.'/../views/setup/setup.defaultTriggers.php';
         require __DIR__.'/../views/setup/setup.defaultViews.php';       
         
-        //  Run the query to create the databse        
-        if($mysqli->multi_query($database))
+        //  Run the query to create the databse   
+        try
         {
-            do
-            {
-                //  Cycle through MySQL Queries
-            } while($mysqli->more_results() && $mysqli->next_result());
+            $db->exec($database);
         }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            die();
+        }
+
         //  Run the queries to create the triggers
         foreach($triggers as $trigger)
         {
-            $mysqli->multi_query($trigger);
-            sleep(2);
+            try
+            {
+                $db->exec($trigger);
+            }
+            catch(PDOException $e)
+            {
+                echo $e->getMessage();
+                die();
+            }
         }
+        
         //  Run the queries to create the views
         foreach($views as $view)
         {
-            Logs::writeLog('triggered', 'triggered');
-            $mysqli->multi_query($view);
-            sleep(2);
+            try
+            {
+                $db->exec($view);
+            }
+            catch(PDOException $e)
+            {
+                echo $e->getMessage();
+                die();
+            }
         }
         
         return 'success';
@@ -239,13 +268,6 @@ class Setup extends Controller
         $qry2 = 'INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (1, 1)';
         $mysqli->query($qry2);
         
-        session_regenerate_id();
-        $_SESSION['valid'] = 1;
-        $_SESSION['id'] = 1;
-        $_SESSION['username'] = $_SESSION['setupData']['siteUser'];
-        $_SESSION['name'] = 'Administrator User';
-        $_SESSION['changePassword'] = 0;
-        
         return 'success';
     }
     
@@ -269,6 +291,14 @@ class Setup extends Controller
         }
         
         sleep(2);
+        
+        //  Log user in     
+        session_regenerate_id();
+        $_SESSION['valid'] = 1;
+        $_SESSION['id'] = 1;
+        $_SESSION['username'] = $_SESSION['setupData']['siteUser'];
+        $_SESSION['name'] = 'Administrator User';
+        $_SESSION['changePassword'] = 0;
         
         return 'success';
     }

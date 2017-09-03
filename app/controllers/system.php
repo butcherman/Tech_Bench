@@ -1,7 +1,8 @@
 <?php
 /*
-|   System controller allows user to access documents and files for each system type in the databse
+|   System controller allows the user to access documents and files for each system type in the database
 */
+
 class System extends Controller
 {
     public function __construct()
@@ -11,10 +12,11 @@ class System extends Controller
         {
             $_SESSION['returnURL'] = $_GET['url'];
             header('Location: /err/restricted');
+            die();
         }
     }
     
-    //  Index function will determine the category and system type being called and display the information for that system
+    //  Index function will determin the category and system type being called and display the information for that system
     public function index($cat = '', $sys = '')
     {
         if(!empty($cat) && !empty($sys))
@@ -29,84 +31,88 @@ class System extends Controller
         {
             $this->showCategories();
         }
-        
+
         $this->template('techUser');
         $this->render();
     }
-    
-    //  Show categories function will list all of the available categories 
+
+    //  Show all categories that are in the database
     private function showCategories()
     {
         $model = $this->model('systems');
         $catList = $model->getCategories();
-        
-        $data['header'] = 'Select A System Category';
-        $data['list'] = '';
-        
+
+        $data = [
+            'header' => 'Select A System Category',
+            'list' => ''
+        ];
+
         foreach($catList as $cat)
         {
-            $data['list'] .= '<li class="list-group-item"><a href="/system/'.str_replace(' ', '-', $cat->description).'" class="btn btn-default btn-block">'.strtoupper($cat->description).'</a></li>';
+            $data['list'] .= '<a href="/system/'.str_replace(' ', '-', $cat->description).'" class="btn btn-default btn-block pad-bottom pad-top">'.strtoupper($cat->description).'</a>';
         }
-        
-        $this->template('techUser');
+
         $this->view('system.systemList', $data);
     }
     
-    //  Show the system types for a specific category
+    //  Show each of the systems related to a specific category
     private function showSystems($cat)
     {
         $model = $this->model('systems');
         $sysList = $model->getSystems($cat);
         
-        $data['header'] = 'Select A System';
-        $data['list'] = '';
+        $data = [
+            'header' => 'Select A System',
+            'list' => ''
+        ];
         
         foreach($sysList as $sys)
         {
-            $data['list'] .= '<li class="list-group-item"><a href="/system/'.str_replace(' ', '-', $cat).'/'.str_replace(' ', '-', $sys->name).'" class="btn btn-default btn-block">'.strtoupper($sys->name).'</a></li>';
+            $data['list'] .= '<a href="/system/'.str_replace(' ', '-', $cat).'/'.str_replace(' ', '-', $sys->name).'" class="btn btn-default btn-block">'.strtoupper($sys->name).'</a>';
         }
         
-        $this->template('techUser');
         $this->view('system.systemList', $data);
     }
     
-    //  Show system information for the selected system
+    //  Show the system information for the selected system
     private function showSystemData($cat, $sys)
     {
         $model = $this->model('systems');
         
-        //  Verify that the system is valid
-        if(!($sysID = $model->getSysID(str_replace('-', ' ', $sys))))
+        //  verify that the system is valid
+        if(!$sysID = $model->getSysID(str_replace('-', ' ', $sys)))
         {
-            $msg = 'User: '.$_SESSION['id'].' attempted to access an invalid system: '.$_GET['url'];
+            //  Note in the log that the system was bac
+            $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' attempted to access an invalid system - '.$_GET['url'];
             Logs::writeLog('Invalid', $msg);
+            //  Redirect to the error page
             header('Location: /err/invalid-system');
             die();
         }
         
-        //  Get the types of files that are saved for systems
+        //  Get the types of files that can be saved for the systems
         $fileTypes = $model->getFileTypes();
         $fileList = '<ul class="nav nav-tabs">';
         $fileData = '<div class="tab-content">';
-        $optList  = '';
+        $optList = '';
         $i = 0;
         foreach($fileTypes as $type)
         {
-            $fileList .= '<li ';
-            $fileList .= $i == 0 ? 'class="active">' : '>';
+            $fileList .= $i == 0 ? '<li class="active">' : '<li>';
             $fileList .= '<a href="#'.str_replace(' ', '-', $type->description).'" data-toggle="tab">'.$type->description.'</a></li>';
 
             $fileData .= '<div id="'.str_replace(' ', '-', $type->description).'"class="tab-pane table-responsive ';
             $fileData .= $i == 0 ? 'active">' : 'fade">';
             $fileData .= '<table class="table table-striped ajax-table" data-load="'.str_replace(' ', '-', $type->description).'"><thead><tr><th>File</th><th>Added By</th><th>Date Added</th></tr></thead><tbody><tr><td colspan="4" class="text-center">No Files</td></tr></tbody></table></div>';
 
-            $optList .= '<option value="'.str_replace(' ', '-', $type->description).'">'.$type->description.'</option>';
+            $optList .= '<option value="'.$type->description.'">'.$type->description.'</option>';
 
             $i++;
         }
+        
         $fileList .= '</ul>';
         $fileData .= '</div>';
-                
+        
         //  Get the last fiew tech tips for this system
         $howMany = 10;  
         $tipModel = $this->model('techTips');
@@ -124,7 +130,7 @@ class System extends Controller
         {
             $tipList = '<tr><td colspan="2"><h4 class="text-center">No Recent Tech Tips</h4</td></tr>';
         }
-                
+        
         //  Create view data
         $data = [
             'sysName' => $sys,

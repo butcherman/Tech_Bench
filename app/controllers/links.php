@@ -84,7 +84,7 @@ class Links extends Controller
         }
         
         //  Note the change in the log files
-        $msg = 'New File Link ID: '.$linkID.' created by User ('.$_SESSION['id'].')'Template::getUserName($_SESSION['id']);
+        $msg = 'New File Link ID: '.$linkID.' created by User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('File-Link', $msg);
         
         $this->render($linkID);
@@ -112,7 +112,7 @@ class Links extends Controller
         $model->deleteLink($linkID);
         
         //  Note the change in the log files
-        $msg = 'File Link ID: '.$linkID.' deleted by User ('.$_SESSION['id'].')'Template::getUserName($_SESSION['id']);
+        $msg = 'File Link ID: '.$linkID.' deleted by User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('File-Link', $msg);
         
         $this->render('success');
@@ -230,7 +230,7 @@ class Links extends Controller
         }
         
         //  Note the change in the log files
-        $msg = 'File added for Link ID: '.$linkID.' by User ('.$_SESSION['id'].')'Template::getUserName($_SESSION['id']);
+        $msg = 'File added for Link ID: '.$linkID.' by User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('File-Link', $msg);
         
         $this->render('success');
@@ -246,7 +246,7 @@ class Links extends Controller
         $model->deleteLinkFile($fileID);
         
         //  Note the change in the log files
-        $msg = 'File ID: '.$fileID.' deleted by User ('.$_SESSION['id'].')'Template::getUserName($_SESSION['id']);
+        $msg = 'File ID: '.$fileID.' deleted by User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('File-Link', $msg);
         
         $this->render('success');
@@ -290,7 +290,7 @@ class Links extends Controller
         $model->updateLink($linkID, $linkData);
         
         //  Note the change in the log files
-        $msg = 'File Link ID: '.$linkID.' edited by User ('.$_SESSION['id'].')'Template::getUserName($_SESSION['id']);
+        $msg = 'File Link ID: '.$linkID.' edited by User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('File-Link', $msg);
         
         $this->render('success');
@@ -304,7 +304,7 @@ class Links extends Controller
         $model->updateLinkInstruction($linkID, $_POST['custom-note']);
         
         //  Note the change in the log files
-        $msg = 'File Link ID: '.$linkID.' instructions updated by User ('.$_SESSION['id'].')'Template::getUserName($_SESSION['id']);
+        $msg = 'File Link ID: '.$linkID.' instructions updated by User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('File-Link', $msg);
         
         $this->render('success');
@@ -347,7 +347,7 @@ class Links extends Controller
         Template::notifyOneUser($msg, $link, $user);
         
         //  Note the change in the log files
-        $msg = 'File Link ID: '.$linkID.' shared with ('.$user.')'.Template::getUserName($user).' by User ('.$_SESSION['id'].')'Template::getUserName($_SESSION['id']);
+        $msg = 'File Link ID: '.$linkID.' shared with ('.$user.')'.Template::getUserName($user).' by User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('File-Link', $msg);
         
         $this->render('success');

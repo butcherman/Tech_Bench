@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `customer_systems` (
 );
 
 CREATE TABLE IF NOT EXISTS `customer_contacts` (
-    `cont_id` INT(11) NOT NULL UNIQUE,
+    `cont_id` INT(11) NOT NULL AUTO_INCREMENT,
     `cust_id` INT(11) NOT NULL,
     `name` VARCHAR(120) NOT NULL,
     `phone` VARCHAR(30),

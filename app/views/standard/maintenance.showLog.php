@@ -3,7 +3,9 @@
 </div>
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-        <div class="jumbotron" id="log-view"></div>
+        <div class="jumbotron">
+            <pre id="log-view"></pre>
+        </div>
     </div>
 </div>
 <div class="row">
