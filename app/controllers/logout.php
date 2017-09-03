@@ -7,7 +7,7 @@ class Logout extends Controller
     public function index()
     {
         //  Note the change in the log files
-        $msg = 'User ('.$_SESSION['id'].')'Template::getUserName($_SESSION['id']).' successfully logged out';
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' successfully logged out';
         Logs::writeLog('User-Change', $msg);
         
         //  Destroy session information and remember me cookie

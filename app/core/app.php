@@ -46,7 +46,7 @@ class App
         
         //  Log the page view
         //  Log the page view
-        if(!preg_match('/^setup/', $_GET['url']) && !preg_match('/^maintenance/', $_GET['url']))
+        if(isset($_GET['url']) && !preg_match('/^setup/', $_GET['url']) && !preg_match('/^maintenance/', $_GET['url']))
         {   
             $thisUser = isset($_SESSION['id']) ? $_SESSION['id'] : Security::getRealIpAddr();
             $username = isset($_SESSION['id']) ? Template::getUserName($_SESSION['id']) : 'Visitor';
