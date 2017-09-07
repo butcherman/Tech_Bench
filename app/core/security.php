@@ -57,6 +57,11 @@ class Security
         {
             $valid = true;
         }
+        else if(!Self::isLoggedIn())
+        {
+            header('Location: /');
+            die();
+        }
         else if(Self::isLoggedIn())
         {
             if(isset($_SESSION['changePassword']) && $_SESSION['changePassword'] && !preg_match('/^account/', $_GET['url']))
