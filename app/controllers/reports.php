@@ -138,7 +138,7 @@ class Reports extends Controller
         
         foreach($custList as $cust)
         {
-            $backup = $model->hasBackup($cust->cust_id) > 0 ? 'go.png' : 'stop.png';
+            $backup = $model->hasBackup($cust->cust_id) ? 'go.png' : 'stop.png';
             
             $data .= '<tr><td>'.$cust->name.'</td><td><img src="/source/img/'.$backup.'" /></td></tr>';
         }

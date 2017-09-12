@@ -242,10 +242,22 @@ class Customers
         }
     }
     
+    //  Get the alert level of the note types
+    public function getNoteLevels()
+    {
+        $qry = 'SELECT `note_level_id`, `description` FROM `customer_note_levels` ORDER BY `note_level_id` ASC';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
     //  Get all customer notes
     public function getAllNotes($custID)
     {
-        $qry = 'SELECT `note_id`, `subject`, `description`, `updated`, `user_id` FROM `customer_notes` WHERE `cust_id` = :id';
+        $qry = 'SELECT `note_id`, `subject`, `customer_notes`.`description`, `updated`, `user_id`, `customer_note_levels`.`description` AS `level` FROM `customer_notes` 
+            LEFT JOIN `customer_note_levels` ON `customer_notes`.`note_level_id` = `customer_note_levels`.`note_level_id` 
+            WHERE `cust_id` = :id
+            ORDER BY `customer_notes`.`note_level_id` DESC';
         $result = $this->db->prepare($qry);
         $result->execute(['id' => $custID]);
         
@@ -255,7 +267,8 @@ class Customers
     //  Get one customer note
     public function getNote($noteID)
     {
-        $qry = 'SELECT `subject`, `description` FROM `customer_notes` WHERE `note_id` = :note';
+        $qry = 'SELECT `subject`, `customer_notes`.`description`, `customer_note_levels`.`description` AS `level` FROM `customer_notes` 
+            LEFT JOIN `customer_note_levels` ON `customer_notes`.`note_level_id` = `customer_note_levels`.`note_level_id`WHERE `note_id` = :note';
         $result = $this->db->prepare($qry);
         $result->execute(['note' => $noteID]);
         
@@ -269,9 +282,10 @@ class Customers
             'custID' => $custID,
             'subject' => $noteData['noteSubject'],
             'body' => $noteData['noteDescription'],
-            'user' => $userID
+            'user' => $userID,
+            'level' => $noteData['level']
         ];
-        $qry = 'INSERT INTO `customer_notes` (`cust_id`, `subject`, `description`, `user_id`) VALUES (:custID, :subject, :body, :user)';
+        $qry = 'INSERT INTO `customer_notes` (`note_level_id`, `cust_id`, `subject`, `description`, `user_id`) VALUES (:level, :custID, :subject, :body, :user)';
         $this->db->prepare($qry)->execute($data);
     }
     
@@ -282,9 +296,10 @@ class Customers
             'note' => $noteID,
             'user' => $userID,
             'subj' => $noteData['noteSubject'],
-            'body' => $noteData['noteDescription']
+            'body' => $noteData['noteDescription'],
+            'level' => $noteData['level']
         ];
-        $qry = 'UPDATE `customer_notes` SET `subject` = :subj, `description` = :body, `updated` = CURRENT_TIMESTAMP, `user_id` = :user WHERE `note_id` = :note';
+        $qry = 'UPDATE `customer_notes` SET `subject` = :subj, `description` = :body, `updated` = CURRENT_TIMESTAMP, `user_id` = :user, `note_level_id` = :level WHERE `note_id` = :note';
         $this->db->prepare($qry)->execute($data);
     }
     
@@ -350,11 +365,11 @@ class Customers
     //  Determine if the customer has a backup or not
     public function hasBackup($custID)
     {
-        $qry = 'SELECT COUNT(`file_id`) FROM `customer_files` LEFT JOIN `customer_file_types` ON `customer_files`.`file_type_id` = `customer_file_types`.`file_type_id` WHERE `description` = "backup" AND `cust_id` = :id';
+        $qry = 'SELECT `added_on` FROM `customer_files` LEFT JOIN `customer_file_types` ON `customer_files`.`file_type_id` = `customer_file_types`.`file_type_id` WHERE `description` = "backup" AND `cust_id` = :id ORDER BY `added_on` ASC LIMIT 1';
         $result = $this->db->prepare($qry);
         $result->execute(['id' => $custID]);
         
-        return $result->fetchColumn();
+        return $result->fetch();
     }
     
     //  Determine if the customer has a system or not

@@ -66,8 +66,9 @@ class Customer extends Controller
                 {
                     $custSys .= $sys->name.'<br />';
                 }
+                $backup = $model->hasBackup($cust->cust_id) ? date('m-d-Y', strtotime($model->hasBackup($cust->cust_id)->added_on)) : 'None';
                 
-                $custList .= '<tr><td><a href="/customer/id/'.$cust->cust_id.'/'.str_replace(' ', '-', $cust->name).'">'.$cust->name.'</a></td><td>'.$cust->city.', '.$cust->state.'</td><td>'.$custSys.'</td>';
+                $custList .= '<tr><td><a href="/customer/id/'.$cust->cust_id.'/'.str_replace(' ', '-', $cust->name).'">'.$cust->name.'</a></td><td>'.$cust->city.', '.$cust->state.'</td><td>'.$custSys.'</td><td>'.$backup.'</td>';
             }
         }
         
@@ -85,6 +86,24 @@ class Customer extends Controller
         $this->view('customers.newCustomerForm');
         $this->template('techUser');
         $this->render();
+    }
+    
+    //  Check to see if the customer ID is already taken
+    public function checkID()
+    {
+        $model = $this->model('customers');
+        $result = true;
+                
+        //  Strip any leading zero's from the customer ID - these cannot be stored in the database and will cause file location errors
+        $custID = ltrim($_POST['custID'], '0');
+        
+        //  Determine if the customer already exists
+        if($custData = $model->getCustData($custID))
+        {
+            $result = 'This Customer ID Already Exists';
+        }
+        
+        $this->render(json_encode($result));
     }
     
     //  Submit the new customer form
@@ -306,7 +325,7 @@ class Customer extends Controller
         {
             $content .= '<div class="form-group"><label for="'.$key.'">'.strtoupper(str_replace('_', ' ', $key)).'</label><input type="text" name="'.$key.'" id="'.$key.'" class="form-control" value="'.$item.'" /></div>';
         }
-        $content .= '<input type="submit" id="editCustSystemSubmit" class="form-control btn btn-default" value="Submit" /></form>';
+        $content .= '<input type="submit" id="editCustSystemSubmit" class="form-control btn btn-default" value="Submit" /><button class="btn btn-danger btn-block pad-top" id="delete-system">Delete System</button></form>';
         
         $this->render($content);
     }
@@ -407,6 +426,20 @@ class Customer extends Controller
         }
          
         $this->render($content);
+    }
+    
+    //  Delete an existing customer system
+    public function deleteSystem($custID, $sysName)
+    {
+        $model = $this->model('systems');
+        $sysID = $model->getSysID($sysName);
+        $model->delSysType($custID, $sysID);
+        
+        //  Note the change in the log files 
+        $msg = 'Customer system '.$sysName.' deleted for customer ID '.$custID;
+        Logs::writeLog('Customer-Change', $msg);
+        
+        $this->render('success');
     }
     
 /****************************************************************************
@@ -520,7 +553,7 @@ class Customer extends Controller
             $content = '<div class="row">';
             foreach($notes as $note)
             {
-                $content .= '<div class="col-md-3 panel-wrapper panel-minimized"><div class="panel panel-info"><div class="panel-heading" title="Click to Expand" data-tooltip="tooltip"><h5>'.$note->subject.'</h5></span></div><div class="panel-body"><span>'.$note->description.'</span></div><div class="panel-footer"><strong>Updated By: </strong>'.Template::getUserName($note->user_id).'<span class="pull-right">Updated: '.date('M j, Y', strtotime($note->updated)).'</span><div class="text-center"><a href="#edit-modal" data-toggle="modal" class="btn btn-default edit-note" data-noteid="'.$note->note_id.'">Edit Note</a></div><div class="clearfix"></div></div></div></div>';
+                $content .= '<div class="col-md-3 panel-wrapper panel-minimized"><div class="panel panel-'.$note->level.'"><div class="panel-heading" title="Click to Expand" data-tooltip="tooltip"><h5>'.$note->subject.'</h5></span></div><div class="panel-body"><span>'.$note->description.'</span></div><div class="panel-footer"><strong>Updated By: </strong>'.Template::getUserName($note->user_id).'<span class="pull-right">Updated: '.date('M j, Y', strtotime($note->updated)).'</span><div class="text-center"><a href="#edit-modal" data-toggle="modal" class="btn btn-default edit-note" data-noteid="'.$note->note_id.'">Edit Note</a></div><div class="clearfix"></div></div></div></div>';
                 
                 if($i % $r == 0 && $i != 0)
                 {
@@ -536,7 +569,17 @@ class Customer extends Controller
     //  Ajax call to load the new note form
     public function newNoteForm()
     {
-        $this->view('customers.newNoteForm');
+        $model = $this->model('customers');
+        $noteLevels = $model->getNoteLevels();
+        
+        $levels = '';
+        foreach($noteLevels as $lev)
+        {
+            $levels .= '<option value="'.$lev->note_level_id.'" class="bg-'.$lev->description.'">'.$lev->description.'</option>';
+        }
+        $data['levels'] = $levels;
+        
+        $this->view('customers.newNoteForm', $data);
         $this->render();
     }
     
@@ -559,10 +602,20 @@ class Customer extends Controller
     public function editNoteForm($noteID)
     {
         $model = $this->model('customers');
+        $noteLevels = $model->getNoteLevels();
         $noteData = $model->getNote($noteID);
+        
+        $levels = '';
+        foreach($noteLevels as $lev)
+        {
+            $selected = $lev->description === $noteData->level ? ' selected' : '';
+            $levels .= '<option value="'.$lev->note_level_id.'" class="bg-'.$lev->description.'"'.$selected.'>'.$lev->description.'</option>';
+        }
+
         $data = [
             'subject' => $noteData->subject,
-            'body' => $noteData->description
+            'body' => $noteData->description,
+            'levels' => $levels
         ];
         
         $this->view('customers.editNoteForm', $data);
@@ -604,7 +657,7 @@ class Customer extends Controller
             $content = '';
             foreach($files as $file)
             {
-                $content .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'">'.$file->name.'</a></td><td>'.$file->description.'</td><td>'.Template::getUserName($file->user_id).'</td><td>'.$file->added_on.'</td><td><a href="#edit-modal" class="edit-file-lnk" title="Edit File" data-tooltip="tooltip" data-toggle="modal" data-fileid="'.$file->cust_file_id.'"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;<a href="#edit-modal" class="delete-file" title="Delete File" data-toggle="modal" data-tooltip="tooltip" data-fileid="'.$file->cust_file_id.'"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+                $content .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'">'.$file->name.'</a></td><td>'.$file->description.'</td><td>'.Template::getUserName($file->user_id).'</td><td>'.date('m-d-Y', strtotime($file->added_on)).'</td><td><a href="#edit-modal" class="edit-file-lnk" title="Edit File" data-tooltip="tooltip" data-toggle="modal" data-fileid="'.$file->cust_file_id.'"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;<a href="#edit-modal" class="delete-file" title="Delete File" data-toggle="modal" data-tooltip="tooltip" data-fileid="'.$file->cust_file_id.'"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
             }
         }
         

@@ -154,6 +154,36 @@ $(document).on('click', '#add-system-submit', function(e)
     });
 });
 
+//  Confirm yes or no to delete a customer system
+$(document).on('click', '#delete-system', function(e)
+{
+    e.preventDefault();
+    var sys = $('#editSysType').val();
+    $('#modal-header').html('Confirm Delete System');
+    $('#modal-body').load('/home/yesOrNo', function()
+    {
+        $('.select-yes').on('click', function()
+        {
+            $.get('/customer/deleteSystem/'+custID+'/'+sys, function(data)
+            {
+                if(data === 'success')
+                {
+                    $('#edit-modal').modal('hide');
+                    $('#customer-system-information').load('/customer/loadSystems/'+custID);
+                }
+                else
+                {
+                    alert(data);
+                }
+            });
+        });
+        $('.select-no').on('click', function()
+        {
+            $('#edit-modal').modal('hide');
+        });
+    });
+});
+
 //  Load the form to add a new contact
 $('#add-contact-btn').on('click', function()
 {
@@ -276,6 +306,7 @@ $(document).on('click', '.select-yes.delete-contact', function()
 $('#notes-wrapper').on('click', '.panel-heading', function()
 {
     $(this).parent().parent().toggleClass('col-lg-12');
+    $(this).parent().parent().toggleClass('col-md-3');
     $(this).parent().parent().toggleClass('panel-minimized');
 });
 

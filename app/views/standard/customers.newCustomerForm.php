@@ -104,6 +104,16 @@
             {
                 required: true,
                 number: true,
+                remote: {
+                    url: "/customer/checkID",
+                    type: "post",
+                    data: {
+                        custID: function()
+                        {
+                            return $('#custID').val();
+                        }
+                    }
+                }
             },
             custName: "required",
             custAddr: "required",
@@ -121,7 +131,7 @@
             {
                 if(data == 'success')
                 {
-                    var html = '<h3 class="text-center">Customer Successfully Added</h3><p class="text-center"><a href="/customer/id/'+$('#custID').val()+'/'+$('#custName').val()+'">Click</a> to go to profile</p><p class="text-center">Or, <a href="/customers/add">Click</a> to add another</p>';
+                    var html = '<h3 class="text-center">Customer Successfully Added</h3><p class="text-center"><a href="/customer/id/'+$('#custID').val()+'/'+$('#custName').val()+'">Click</a> to go to profile</p><p class="text-center">Or, <a href="/customer/add">Click</a> to add another</p>';
                     $('#customer-form-wrapper').html(html);
                 }
                 else if(data == 'duplicate')

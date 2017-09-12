@@ -180,8 +180,15 @@ CREATE TABLE IF NOT EXISTS `customer_contacts` (
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS `customer_note_levels` (
+	`note_level_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `description` VARCHAR(90) NOT NULL UNIQUE,
+    PRIMARY KEY (`note_level_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `customer_notes` (
     `note_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `note_level_id` INT(11) NOT NULL DEFAULT 1,
     `cust_id` INT(11) NOT NULL,
     `subject` VARCHAR(120) NOT NULL,
     `description` LONGTEXT NOT NULL,
@@ -191,7 +198,9 @@ CREATE TABLE IF NOT EXISTS `customer_notes` (
     FOREIGN KEY (`cust_id`) REFERENCES `customers` (`cust_id`)
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) 
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (`note_level_id`) REFERENCES `customer_note_levels`(`note_level_id`) 
+        ON UPDATE CASCADE;
 );
 
 CREATE TABLE IF NOT EXISTS `customer_file_types` (
@@ -398,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `_settings` (
     `value` VARCHAR(90) NOT NULL
 );
 
-INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "2.4");
+INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "3.0");
 
 INSERT INTO `_settings` (`setting`, `value`) VALUES ("maintenance_mode", 0);
 
@@ -414,4 +423,8 @@ INSERT INTO `alert_levels` (`alert_level_id`, `description`) VALUES (1, "alert-s
 
 INSERT INTO `system_file_types` (`description`) VALUES ("Manuals"), ("Notes"), ("Handouts"), ("Firmware"), ("Software"), ("User Guides");
 
-INSERT INTO `customer_file_types` (`description`) VALUES ("Backup"), ("Handout"), ("License"), ("Site Map"), ("Other");';
+INSERT INTO `customer_file_types` (`description`) VALUES ("Backup"), ("Handout"), ("License"), ("Site Map"), ("Other");
+
+INSERT INTO `customer_note_levels` (`note_level_id`, `description`) VALUES 
+	(1, "info"), (2, "warning"), (3, "danger");
+';
