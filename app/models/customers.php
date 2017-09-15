@@ -210,25 +210,72 @@ class Customers
         return $result->fetch();
     }
     
+    //  Get the phone number and type of phone number for a contact
+    public function getContactPhone($contID)
+    {
+        $qry = 'SELECT `customer_contact_phones`.`phone_number`, `phone_number_types`.`description` FROM `customer_contact_phones` 
+            LEFT JOIN `phone_number_types` ON `customer_contact_phones`.`phone_type_id` = `phone_number_types`.`phone_type_id` 
+            WHERE `cont_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $contID]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Delete all phone numbers for a contact
+    public function deleteContactPhone($contID)
+    {
+        $qry = 'DELETE FROM `customer_contact_phones` WHERE `cont_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $contID]);
+    }
+    
+    //  Get the possible types of phone numbers that can be assigned
+    public function getPhoneTypes()
+    {
+        $qry = 'SELECT * FROM `phone_number_types`';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
     //  Add a new contact to the database
     public function addContact($custID, $contData)
     {
-        $qry = 'INSERT INTO `customer_contacts` (`cust_id`, `name`, `phone`, `email`) VALUES (:custID, :name, :phone, :email)';
+        $qry = 'INSERT INTO `customer_contacts` (`cust_id`, `name`, `email`) VALUES (:custID, :name, :email)';
         $data = [
             'custID' => $custID,
             'name' => $contData['contName'],
-            'phone' => $contData['contPhone'],
             'email' => $contData['contEmail']
         ];
 
+        $this->db->prepare($qry)->execute($data);
+        
+        return $this->db->lastInsertID();
+    }
+    
+    //  Add a contact phone number into the database
+    public function addPhoneNumber($contID, $numType, $number)
+    {
+        $qry = 'INSERT INTO `customer_contact_phones` (`cont_id`, `phone_type_id`, `phone_number`) VALUES (:cont, :type, :number)';
+        $data = [
+            'cont' => $contID,
+            'type' => $numType,
+            'number' => $number
+        ];
+        
         $this->db->prepare($qry)->execute($data);
     }
     
     //  Edit an existing contact to the database
     public function editContact($contID, $contData)
     {
-        $qry = 'UPDATE `customer_contacts` SET `name` = :contName, `phone` = :contPhone, `email` = :contEmail WHERE `cont_id` = :contID';
-        $contData['contID'] = $contID;
+        $qry = 'UPDATE `customer_contacts` SET `name` = :contName, `email` = :contEmail WHERE `cont_id` = :contID';
+//        $contData['contID'] = $contID;
+        $contData = [
+            'contName' => $contData['contName'],
+            'contEmail' => $contData['contEmail'],
+            'contID' => $contID
+        ];
         $this->db->prepare($qry)->execute($contData);
     }
     

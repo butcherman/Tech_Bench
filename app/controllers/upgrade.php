@@ -91,4 +91,37 @@ class Upgrade extends Controller
         $db = Database::getDB();
         $db->exec($qry);
     }
+    
+    //  Upgrade from 2.4 to 3.0
+    public function up_from_2_4()
+    {
+        require_once(__DIR__.'../../views/upgrades/3_0.php');
+        
+        //  Add new databse tables
+        $db = Database::getDB();
+        $db->exec($qry);
+        
+        //  Change all customer contact phone numbers to new tables
+        $model = $this->model('customers');
+        //  Get all customer ID's
+        $custList = $model->searchCustomer();
+        //  Cycle through all customers and get the contacts
+        foreach($custList as $cust)
+        {
+            $contacts = $model->getContacts($cust->cust_id);
+            //  Cycle through contacts and move phone number over to new table
+            foreach($contacts as $cont)
+            {
+                if(!empty($cont->phone))
+               {
+                    $qry = 'INSERT INTO `customer_contact_phones` (`cont_id`, `phone_type_id`, `phone_number`) VALUES ('.$cont->cont_id.', 1, "'.$cont->phone.'")';
+                    $db->exec($qry);
+               } 
+            }
+        }
+        
+        //  Remove the "Phone" column from the contacts table
+        $qry = 'ALTER TABLE `customer_contacts` DROP COLUMN `phone`';
+        $db->query($qry);
+    }
 }

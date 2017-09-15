@@ -461,7 +461,17 @@ class Customer extends Controller
         {
             foreach($contacts as $cont)
             {
-                $data .= '<tr><td>'.$cont->name.'</td><td><a href="tel:'.$cont->phone.'">'.Template::readablePhoneNumber($cont->phone).'</a></td><td><a href="mailto:'.$cont->email.'">'.$cont->email.'</a></td><td><a href="#edit-modal" title="Edit Contact" class="edit-contact-link" data-tooltip="tooltip" data-toggle="modal" data-contid="'.$cont->cont_id.'"><span class="glyphicon glyphicon-pencil"></span></a> <a href="#edit-modal" title="Delete Contact" class="delete-contact-link"  data-tooltip="tooltip" data-toggle="modal" data-contid="'.$cont->cont_id.'" class="delete-contact-link"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
+                $numbers = $model->getContactPhone($cont->cont_id);
+                $numList = '';
+                if(!empty($numbers))
+                {
+                    foreach($numbers as $number)
+                    {
+                        $numList .= $number->description.' - <a href="tel:'.$number->phone_number.'">'.Template::readablePhoneNumber($number->phone_number).'</a><br />';
+                    }
+                }
+
+                $data .= '<tr><td>'.$cont->name.'</td><td>'.$numList.'</td><td><a href="mailto:'.$cont->email.'">'.$cont->email.'</a></td><td><a href="#edit-modal" title="Edit Contact" class="edit-contact-link" data-tooltip="tooltip" data-toggle="modal" data-contid="'.$cont->cont_id.'"><span class="glyphicon glyphicon-pencil"></span></a> <a href="#edit-modal" title="Delete Contact" class="delete-contact-link"  data-tooltip="tooltip" data-toggle="modal" data-contid="'.$cont->cont_id.'" class="delete-contact-link"><span class="glyphicon glyphicon-trash"></span></a></td></tr>';
             }
         }
         
@@ -471,7 +481,16 @@ class Customer extends Controller
     //  Ajax call to load the new contact form
     public function newContactLoad()
     {
-        $this->view('customers.newContactForm');
+        $model = $this->model('customers');
+        $numTypes = $model->getPhoneTypes();
+        
+        $data['numTypes'] = '';
+        foreach($numTypes as $type)
+        {
+            $data['numTypes'] .= '<option value="'.$type->phone_type_id.'">'.$type->description.'</option>';
+        }
+        
+        $this->view('customers.newContactForm', $data);
         $this->render();
     }
     
@@ -481,7 +500,16 @@ class Customer extends Controller
         $model = $this->model('customers');
 
         $custName = $model->getCustData($custID)->name;
-        $model->addContact($custID, $_POST);
+        //  Add the main contact information
+        $contID = $model->addContact($custID, $_POST);
+        //  Add each of the phone numbers for the contact
+        for($i=0; $i < count($_POST['numType'])+1; $i++)
+        {
+            if(!empty($_POST['contPhone'][$i]))
+            {
+                $model->addPhoneNumber($contID, $_POST['numType'][$i], $_POST['contPhone']{$i});
+            }
+        }
 
         //  Note change in log files
         $msg = 'Customer ('.$custID.')'.$custName.' new contact - '.$_POST['contName'].' - added by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
@@ -495,12 +523,38 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
         
+        //  Get the type of possible phone numbers
+        $numberTypes = $model->getPhoneTypes();
+        
+        //  Get contact information
         $contactData = $model->getOneContact($contID);
+        $contactPhones = $model->getContactPhone($contID);
+        
+        //  cycle through phone numbers
+        if(!empty($contactPhones))
+        {
+            $phns = '';
+            foreach($contactPhones as $phone)
+            {
+                $numTypes = '';
+                foreach($numberTypes as $type)
+                {
+                    $selected = $type->description == $phone->description ? ' selected' : '';
+                    
+                    $numTypes .= '<option value="'.$type->phone_type_id.'"'.$selected.'>'.$type->description.'</option>';
+                }
+                
+                $phns .= '<div class="row form-group"><div class="col-sm-3 col-sm-offset-1"><select id="numType" name="numType[]" class="form-control">'.$numTypes.'</select></div><div class="col-sm-7"><input type="tel" name="contPhone[]" class="form-control clearable" placeholder="Phone Number" value="'.$phone->phone_number.'" /><span class="number-clear glyphicon glyphicon-remove-circle"></span></div></div>';
+            }
+        }
+        
         $data = [
             'contID' => $contID,
             'name' => $contactData->name,
-            'phone' => Template::readablePhoneNumber($contactData->phone),
-            'email' => $contactData->email
+            'phone' => '',
+            'email' => $contactData->email,
+            'phoneNumbers' => $phns,
+            'numTypes' => $numTypes
         ];
         $this->view('customers.editContactForm', $data);
         $this->render();  
@@ -511,6 +565,16 @@ class Customer extends Controller
     {
         $model = $this->model('customers');
         $model->editContact($contID, $_POST);
+        $model->deleteContactPhone($contID);
+        
+        //  Add each of the phone numbers for the contact
+        for($i=0; $i < count($_POST['numType'])+1; $i++)
+        {
+            if(!empty($_POST['contPhone'][$i]))
+            {
+                $model->addPhoneNumber($contID, $_POST['numType'][$i], $_POST['contPhone']{$i});
+            }
+        }
         
         //  Note change in log files
         $msg = 'Customer contact ID '.$contID.' - '.$_POST['contName'].' - updated by user ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
