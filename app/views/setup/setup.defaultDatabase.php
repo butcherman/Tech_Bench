@@ -180,6 +180,22 @@ CREATE TABLE IF NOT EXISTS `customer_contacts` (
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS `phone_number_types` (
+	`phone_type_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `description` VARCHAR(90),
+    PRIMARY KEY (`phone_type_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `customer_contact_phones` (
+	`cont_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `phone_type_id` INT(11) NOT NULL DEFAULT 1,
+    `phone_number` VARCHAR(30),
+    FOREIGN KEY (`cont_id`) REFERENCES `customer_contacts` (`cont_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`phone_type_id`) REFERENCES `phone_number_types` (`phone_type_id`) 
+		ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS `customer_note_levels` (
 	`note_level_id` INT(11) NOT NULL AUTO_INCREMENT,
     `description` VARCHAR(90) NOT NULL UNIQUE,
@@ -427,4 +443,7 @@ INSERT INTO `customer_file_types` (`description`) VALUES ("Backup"), ("Handout")
 
 INSERT INTO `customer_note_levels` (`note_level_id`, `description`) VALUES 
 	(1, "info"), (2, "warning"), (3, "danger");
+    
+INSERT INTO `phone_number_types` (`phone_type_id`, `description`) VALUES 
+	(1, "Work"), (2, "Home"), (3, "Cell");
 ';

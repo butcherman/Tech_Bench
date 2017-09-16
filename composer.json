@@ -1,6 +1,7 @@
 {
     "require": {
-        "phpmailer/phpmailer": "~5.2"
+        "phpmailer/phpmailer": "~5.2",
+        "jeroendesloovere/vcard": "^1.5"
     },
     "scripts": {
         "pre-install-cmd": ["npm install", "npm install gulp"],

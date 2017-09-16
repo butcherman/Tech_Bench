@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `customer_contact_phones` (
 );
 
 INSERT INTO `phone_number_types` (`phone_type_id`, `description`) VALUES 
-	(1, "Work 1"), (2, "Work 2"), (3, "Mobile"), (4, "Home");
+	(1, "Work"), (2, "Home"), (3, "Cell");
 
 
 
