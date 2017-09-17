@@ -54,14 +54,6 @@ class App
             $msg = 'Page '.$page.' visited by ('.$thisUser.')'.$username;
             Logs::writeLog('Activity', $msg);
         }
-//        $thisUser = isset($_SESSION['id']) ? $_SESSION['id'] : Security::getRealIpAddr();
-//        $username = isset($_SESSION['id']) ? Template::getUserName($_SESSION['id']) : 'Visitor';
-//        $page = isset($_GET['url']) ? $_GET['url'] : 'Home';
-//        $msg = 'Page '.$page.' visited by ('.$thisUser.')'.$username;
-//        if(isset($_GET['url']) && !preg_match('/^maintenance/', $_GET['url']))
-//        {
-//            Logs::writeLog('Activity', $msg);
-//        }
         
         //  Take any remaining values in the url array and asign to paramaters
         $this->params = $url ? array_values($url) : array();

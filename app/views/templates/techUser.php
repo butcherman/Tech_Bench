@@ -50,20 +50,20 @@
                     <h3>Dashboard</h3>
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-home"></span> <a href="/dashboard">Dashboard Home</a></li>
-                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/links">File Links</a></li>
-                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/forms">Company Forms</a></li>
+                        <li><span class="glyphicon glyphicon-link"></span> <a href="/links">File Links</a></li>
+                        <li><span class="glyphicon glyphicon-file"></span> <a href="/forms">Company Forms</a></li>
                     </ul>
                     <?= Template::getAdminLinks(); ?>
                     <span id="systemNavLinks"><?= Template::getSysLinks(); ?></span>
                     <h3>Customers</h3>
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-search"></span> <a href="/customer">Search Customers</a></li>
-                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/customer/add">Add Customer</a></li>
+                        <li><span class="glyphicon glyphicon-plus"></span> <a href="/customer/add">Add Customer</a></li>
                     </ul>
                     <h3>Tech Tips</h3>
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-search"></span> <a href="/tips">View Tech Tips</a></li>
-                        <li><span class="glyphicon glyphicon-menu-hamburger"></span> <a href="/tips/new-tip">New Tech Tip</a></li>
+                        <li><span class="glyphicon glyphicon-plus"></span> <a href="/tips/new-tip">New Tech Tip</a></li>
                     </ul>
                     <h3>Account</h3>
                     <ul class="nav-toggle">

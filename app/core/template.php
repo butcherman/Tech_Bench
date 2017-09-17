@@ -46,7 +46,7 @@ class Template
         $result->execute(['userID' => $_SESSION['id'], 'linkRole' => 'site admin']);
         if($result->fetchColumn())
         {
-            $adminLink .= '<li><span class="glyphicon glyphicon-home"></span> <a href="/site-administration">Site Administration</a></li>';
+            $adminLink .= '<li><span class="glyphicon glyphicon-lock"></span> <a href="/site-administration">Site Administration</a></li>';
         }
         
         //  Determine if the "Admin" link belongs on the page

@@ -59,6 +59,7 @@ class Security
         }
         else if(!Self::isLoggedIn())
         {
+            $_SESSION['returnURL'] = $_GET['url'];
             header('Location: /');
             die();
         }
