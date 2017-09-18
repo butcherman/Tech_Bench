@@ -213,6 +213,12 @@ class Home extends Controller
         $this->render();
     }
     
+    //  Function to simply touch the server during large uploads to keep a session alive
+    public function refresh()
+    {
+        $this->render('success');
+    }
+    
     //  Function to create the necessary session variables to log the user in
     private function logInUser($userData)
     {
