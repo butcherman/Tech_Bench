@@ -54,4 +54,23 @@ class Config
     {
         return self::$conf['encryption']['customerKey'];
     }
+    
+    //  Return a setting that is in the database
+    public static function getSetting($setting)
+    {
+        $qry = 'SELECT `value` FROM `_settings` WHERE `setting` = :setting';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['setting' => $setting]);
+        
+        $res = $result->fetch();
+        
+        return $res->value;
+    }
+    
+    //  Update a setting that is in the database
+    public static function updateSetting($setting, $value)
+    {
+        $qry = 'UPDATE `_settings` SET `value` = :value WHERE `setting` = :setting';
+        Database::getDB()->prepare($qry)->execute(['value' => $value, 'setting' => $setting]);
+    }
 }

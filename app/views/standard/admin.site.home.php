@@ -36,18 +36,16 @@
 -->
     </div>
 </div>
-<!--
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
-        <h3 class="text-center">Global Settings</h3>
+        <div class="page-header">
+            <h3 class="text-center">Global Settings</h3>
+        </div>
     </div>
 </div>
--->
-<!--
 <div class="row pad-bottom">
     <div class="col-md-4 col-md-offset-4">
-        <a href="/site-administration/email-settings" class="btn btn-default btn-block">Email Settings</a>
-        <a href="/site-administration/database-settings" class="btn btn-default btn-block">Database Settings</a>
+        <a href="/site-administration/system-settings" class="btn btn-default btn-block">System Settings</a>
+<!--        <a href="/site-administration/email-settings" class="btn btn-default btn-block">Email Settings</a>-->
     </div>
 </div>
--->

@@ -36,9 +36,7 @@ CREATE TABLE IF NOT EXISTS `customer_contact_phones` (
 INSERT INTO `phone_number_types` (`phone_type_id`, `description`) VALUES 
 	(1, "Work"), (2, "Home"), (3, "Cell");
 
-
-
-
+INSERT INTO `_settings` (`setting`, `value`) VALUES ("allow_upload_links", 1), ("allow_my_files", 1), ("allow_company_forms", 1);
 
 UPDATE `_database_version` SET `version` = "3.0" WHERE `version_id` = 1;
 ';

@@ -50,8 +50,9 @@
                     <h3>Dashboard</h3>
                     <ul class="nav-toggle">
                         <li><span class="glyphicon glyphicon-home"></span> <a href="/dashboard">Dashboard Home</a></li>
-                        <li><span class="glyphicon glyphicon-link"></span> <a href="/links">File Links</a></li>
-                        <li><span class="glyphicon glyphicon-file"></span> <a href="/forms">Company Forms</a></li>
+                        <?= Config::getSetting('allow_upload_links') ? '<li><span class="glyphicon glyphicon-link"></span> <a href="/links">File Links</a></li>' : '' ?>
+                        <?= Config::getSetting('allow_company_forms') ? '<li><span class="glyphicon glyphicon-file"></span> <a href="/forms">Company Forms</a></li>' : ''; ?>
+                        <?= Config::getSetting('allow_my_files') ? '<li><span class="glyphicon glyphicon-file"></span> <a href="/my-files">My Files</a></li>' : ''; ?>
                     </ul>
                     <?= Template::getAdminLinks(); ?>
                     <span id="systemNavLinks"><?= Template::getSysLinks(); ?></span>
@@ -77,6 +78,7 @@
                 <div class="container-fluid">
                     <?= $content; ?>
                 </div>
+                <div class="pad-bottom pad-top">&nbsp;</div>
             </div>
         </div>
     </body>

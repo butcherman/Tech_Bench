@@ -6,7 +6,7 @@
     <?= $data['fileData']; ?>
     <div class="row">
         <div class="col-md-2 col-md-offset-5">
-            <a href="#new-file" data-toggle="modal" class="btn btn-default btn-block">Add File</a>
+            <a href="#new-file" data-toggle="modal" class="btn btn-default btn-block" data-backdrop="static" data-keyboard="false">Add File</a>
         </div>
     </div>
     <div class="row top-buffer">

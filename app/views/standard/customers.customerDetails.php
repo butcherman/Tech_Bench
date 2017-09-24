@@ -83,7 +83,7 @@
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <a href="#edit-modal" id="add-file-link" class="btn btn-default btn-block" data-toggle="modal">Add File</a>
+            <a href="#edit-modal" id="add-file-link" class="btn btn-default btn-block" data-toggle="modal" data-backdrop="static" data-keyboard="false">Add File</a>
         </div>
     </div>
 </div>

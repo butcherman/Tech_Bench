@@ -200,4 +200,55 @@ class siteAdministration extends Controller
         
         $this->render($sysData);
     }
+    
+    //  Global system settings for what features are allowed and what are not
+    public function systemSettings()
+    {
+        $data = [
+            'links' => Config::getSetting('allow_upload_links') ? ' checked' : '',
+            'forms' => Config::getSetting('allow_company_forms') ? ' checked' : ''
+        ];
+        
+        $this->view('admin.site.globalSettings', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the change settings form
+    public function submitSettingsForm()
+    {
+        //  Determine if the users can access the File upload Links section
+        if(isset($_POST['fileLinks']) && $_POST['fileLinks'] === 'on')
+        {
+            if(!Config::getSetting('allow_upload_links'))
+            {
+                Config::updateSetting('allow_upload_links', 1);
+            }
+        }
+        else
+        {
+            if(Config::getSetting('allow_upload_links'))
+            {
+                Config::updateSetting('allow_upload_links', 0);
+            }
+        }
+        
+        //  Determine if the users can access the Company Forms section
+        if(isset($_POST['companyForms']) && $_POST['companyForms'] === 'on')
+        {
+            if(!Config::getSetting('allow_company_forms'))
+            {
+                Config::updateSetting('allow_company_forms', 1);
+            }
+        }
+        else
+        {
+            if(Config::getSetting('allow_company_forms'))
+            {
+                Config::updateSetting('allow_company_forms', 0);
+            }
+        }
+        
+        $this->render('success');
+    }
 }
