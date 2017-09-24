@@ -123,5 +123,14 @@ class Upgrade extends Controller
         //  Remove the "Phone" column from the contacts table
         $qry = 'ALTER TABLE `customer_contacts` DROP COLUMN `phone`';
         $db->query($qry);
+        
+        //  Move the email settings from the config file over to the database
+        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
+                    ("email_user", '.Config::getEmail('emUser').'), 
+                    ("email_pass", '.Config::getEmail('emPass').'), 
+                    ("email_host", '.Config::getEmail('emHost').'), 
+                    ("email_port", '.Config::getEmail('emPort').'),
+                    ("email_from", '.Config::getEmail('emFrom').'), 
+                    ("email_name", '.Config::getEmail('emName').')';
     }
 }

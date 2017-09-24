@@ -238,6 +238,8 @@ class Setup extends Controller
             }
         }
         
+        //  Insert the email information into the 
+        
         return 'success';
     }
     
@@ -301,5 +303,40 @@ class Setup extends Controller
         $_SESSION['changePassword'] = 0;
         
         return 'success';
+    }
+    
+    //  Finalize step 5 is to input the default settings into the database
+    public function systemSettings()
+    {
+        //  Get information to create the database connection
+        $dbHost = $_SESSION['setupData']['dbServer'];
+        $dbUser = $_SESSION['setupData']['dbUser'];
+        $dbPass = $_SESSION['setupData']['dbPass'];
+        $charset = 'utf8';
+        $dsn = 'mysql:host='.$dbHost.';charset='.$charset;
+        $opt = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ];
+        //  Try to connect to the database and create PDO object.
+        try
+        {
+            $db = new PDO($dsn, $dbUser, $dbPass, $opt);
+        }
+        catch(PDOException $e)
+        {
+            echo 'Error Connecting to Database Server';
+        }
+        
+        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
+                    ("email_user", '.$_SESSION['setupData']['emUser'].'), 
+                    ("email_pass", '.$_SESSION['setupData']['emPass'].'), 
+                    ("email_host", '.$_SESSION['setupData']['emHost'].'), 
+                    ("email_port", '.$_SESSION['setupData']['emPort'].'),
+                    ("email_from", '.$_SESSION['setupData']['emAddr'].'), 
+                    ("email_name", "Tech Bench"),
+                    ("allow_company_forms", 1),
+                    ("allow_upload_links", 1)';
     }
 }

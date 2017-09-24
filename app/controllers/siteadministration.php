@@ -251,4 +251,27 @@ class siteAdministration extends Controller
         
         $this->render('success');
     }
+    
+    //  Modify the email settings form
+    public function emailSettings()
+    {
+        $this->view('admin.site.emailSettings');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the email settings form
+    public function emailSettingsSubmit()
+    {
+//        print_r($_POST);
+//        die();
+        
+        Config::updateSetting('email_from', $_POST['emAddr']);
+        Config::updateSetting('email_host', $_POST['emHost']);
+        Config::updateSetting('email_pass', $_POST['emPass']);
+        Config::updateSetting('email_port', $_POST['emPort']);
+        Config::updateSetting('email_user', $_POST['emUser']);
+        
+        $this->render('success');
+    }
 }

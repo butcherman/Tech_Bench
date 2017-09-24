@@ -12,12 +12,12 @@ class Email
         self::$mail = new PHPMailer(true);
         self::$mail->IsSMTP();
         self::$mail->Mailer = 'smtp';
-        self::$mail->Host = Config::getEmail('emHost');
-        self::$mail->Port = Config::getEmail('emPort');
+        self::$mail->Host = Config::getEmail('email_host');
+        self::$mail->Port = Config::getEmail('email_port');
         self::$mail->SMTPAuth = true;
-        self::$mail->Username = Config::getEmail('emUser');
-        self::$mail->Password = Config::getEmail('emPass');
-        self::$mail->setFrom(Config::getEmail('emFrom'));
+        self::$mail->Username = Config::getEmail('email_user');
+        self::$mail->Password = Config::getEmail('email_pass');
+        self::$mail->setFrom(Config::getEmail('email_from'));
         self::$mail->IsHTML(true);
     }
     

@@ -5,8 +5,8 @@
 ;  This is the Configuration file for the Tech Bench that is responsible for the configuration 
 ;  settings for the application.
 ;
-;  Config File Version:  2.1
-;  Updated: 7-14-2017
+;  Config File Version:  3.0
+;  Updated: 9-24-2017
 ;
 ;  Primary system information
 [core]
@@ -37,24 +37,6 @@ dbName = "<?= $_SESSION['setupData']['dbName']; ?>"
 ;  can contain sensitive information such as IP Addresses and Login credentials.
 [encryption]
 customerKey = "<?= $_SESSION['setupData']['encKey']; ?>"
-;
-;  Email settings for all emails that are sent via the Tech Bench.
-;  Tech Bench uses the PHPMailer Plugin in order to properly send emails.
-[email]
-;  Username for the email account
-emUser = "<?= $_SESSION['setupData']['emUser']; ?>"
-;  Password for the email account
-emPass = "<?= $_SESSION['setupData']['emPass']; ?>"
-;  Email host.  If SSL is required, be sure to note in the hostname.
-;  Example:  ssl://smtp.gmail.com
-emHost = "<?= $_SESSION['setupData']['emHost']; ?>"
-;  Connection port required by SMTP server
-emPort = "<?= $_SESSION['setupData']['emPort']; ?>"
-;  Email address that should show up in the "From" field of the email.
-;  Note:  This will also be the "reply to" email address as well
-emFrom = "<?= $_SESSION['setupData']['emAddr']; ?>"
-;  Name shown in the "from" field of the email
-emName = "Tech Bench"
 ;
 ;  File paths to collect all files.
 ;  Be sure that the folder's are all writeable by the web server user.

@@ -40,7 +40,8 @@ class Config
     //  Return an email value from the config file
     public static function getEmail($var)
     {
-        return self::$conf['email'][$var];
+//        return self::$conf['email'][$var];
+        return self::getSetting($var);
     }
     
     //  Return a file information value from the config file
