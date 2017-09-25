@@ -249,6 +249,10 @@ class siteAdministration extends Controller
             }
         }
         
+        //  Note the change in the log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' modified the global system settings';
+        Logs::writeLog('Administration-Change', $msg);
+        
         $this->render('success');
     }
     
@@ -263,14 +267,15 @@ class siteAdministration extends Controller
     //  Submit the email settings form
     public function emailSettingsSubmit()
     {
-//        print_r($_POST);
-//        die();
-        
         Config::updateSetting('email_from', $_POST['emAddr']);
         Config::updateSetting('email_host', $_POST['emHost']);
         Config::updateSetting('email_pass', $_POST['emPass']);
         Config::updateSetting('email_port', $_POST['emPort']);
         Config::updateSetting('email_user', $_POST['emUser']);
+        
+        //  Note the change in the log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' modified the email settings';
+        Logs::writeLog('Administration-Change', $msg);
         
         $this->render('success');
     }

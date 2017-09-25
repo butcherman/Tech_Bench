@@ -80,8 +80,7 @@
                 }
                 else
                 {
-//                    alert('There was a problem submitting your request');
-                    alert(data);
+                    alert('There was a problem submitting your request');
                 }
             });
         }
