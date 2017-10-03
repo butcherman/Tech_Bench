@@ -206,7 +206,8 @@ class siteAdministration extends Controller
     {
         $data = [
             'links' => Config::getSetting('allow_upload_links') ? ' checked' : '',
-            'forms' => Config::getSetting('allow_company_forms') ? ' checked' : ''
+            'forms' => Config::getSetting('allow_company_forms') ? ' checked' : '',
+            'files' => Config::getSetting('allow_my_files') ? ' checked' : ''
         ];
         
         $this->view('admin.site.globalSettings', $data);
@@ -246,6 +247,22 @@ class siteAdministration extends Controller
             if(Config::getSetting('allow_company_forms'))
             {
                 Config::updateSetting('allow_company_forms', 0);
+            }
+        }
+        
+        //  Determine if the users can access the My Files section
+        if(isset($_POST['myFiles']) && $_POST['myFiles'] === 'on')
+        {
+            if(!Config::getSetting('allow_my_files'))
+            {
+                Config::updateSetting('allow_my_files', 1);
+            }
+        }
+        else
+        {
+            if(Config::getSetting('allow_my_files'))
+            {
+                Config::updateSetting('allow_my_files', 0);
             }
         }
         

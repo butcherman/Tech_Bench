@@ -25,6 +25,12 @@ class Config
         }
     }
     
+    //  Return the entire config file
+    public static function getWholeConfig()
+    {
+        return self::$conf;
+    }
+    
     //  Return a core value from the config file
     public static function getCore($var)
     {

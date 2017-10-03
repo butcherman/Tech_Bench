@@ -23,6 +23,12 @@
                     Allow Access to Company Forms
                 </label>
             </div>
+            <div class="checkbox row">
+                <label for="companyForms" class="col-sm-12 col-form-label">
+                    <input type="checkbox" id="myFiles" name="myFiles" data-toggle="toggle" <?= $data['files'] ?> />
+                    Allow Access to My Files
+                </label>
+            </div>
             <input type="submit" class="form-control" value="Update Settings" />
         </form>
     </div>

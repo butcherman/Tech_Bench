@@ -136,6 +136,11 @@ class Admin extends Controller
         $model = $this->model('users');
         $model->createUSer($_POST['username'], $_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password']);
         
+        //  Create the user folder for the My Files section
+        $fileModel = $this->model('files');
+        $path = Config::getFile('uploadRoot').Config::getFile('userPath');
+        $fileModel->createFolder($path);
+        
         //  Note change in log files
         $msg = 'New User - '.$_POST['username'].' created by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('User-Change', $msg);

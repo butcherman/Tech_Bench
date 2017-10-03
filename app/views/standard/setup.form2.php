@@ -20,8 +20,8 @@
             <div class="clearfix pad-bottom"></div>
             <form id="step2">
                 <div class="form-group">
-                    <label for="dbServer">Database Server:</label>
-                    <input type="text" name="dbServer" id="dbServer" class="form-control" value="localhost" placeholder="Name or IP Address of Database Server" required />
+                    <label for="host">Database Server:</label>
+                    <input type="text" name="host" id="host" class="form-control" value="localhost" placeholder="Name or IP Address of Database Server" required />
                 </div>
                 <div class="form-group">
                     <label for="dbName">Database Name:</label>
@@ -60,7 +60,7 @@
     $('#test-database').click(function(e)
     {
         e.preventDefault();
-        $.post('/setup/testDatabase', {server: $('#dbServer').val(), database: $('#dbName').val(), user: $('#dbUser').val(), password: $('#dbPass').val()}, function(data)
+        $.post('/setup/testDatabase', {server: $('#host').val(), database: $('#dbName').val(), user: $('#dbUser').val(), password: $('#dbPass').val()}, function(data)
         {
             var result = $.parseJSON(data);
             

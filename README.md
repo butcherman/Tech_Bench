@@ -2,11 +2,11 @@
 
 Tech Bench is a custom Content Management System (CMS) built to aid service technicians store and share information for the systems and customers they maintain.
 
-The Tech Bench consists of three major sections:
+## The Tech Bench consists of three major sections:
 
 System Information
 ------------------
-Users can store files for individual system types such as; documentation, firmware, and general notes.  This informaiton can be accessed by any registered user.  This gives a central location to store this information rather than relying on needing access to several different manufacturers web sites.
+Users can store files for individual system types such as; documentation, firmware, and helpful notes.  This informaiton can be accessed by any registered user.  This gives your company a central location to store this information rather than relying on needing access to several different manufacturers web sites.
 
 Customer Information
 --------------------
@@ -15,9 +15,35 @@ This central storage location ensures that all users have access to the same inf
 
 Additional features for customers include the ability to create file links that will allow files to be accessed by visitors or allow the visitor to upload their own files.
 
+All system specific information for customers is encrypted in the database as an extra security precaution.
+
 Tech Tips
 ---------
 While working in the field, all service technicians run across tips and tricks that make their jobs easier.  Tech Tips allow for the users to share these tips with all registered users.  It also stores these tips and any files attached to them for later searching.
+
+
+
+
+## Additional Optional Sections:
+
+File Links
+-----------
+It can be difficult at times to get large file to or from the customer.  Email typically has limitations on the size of the files, and 3rd party apps such as Dropbox or OneDrive can force people to setup accounts before they can be used.  
+
+File Links allows users to create a unique file link and upload files to that link.  They can pass that link on to a customer and the customer will be able to download the files attached, or if allowed, upload files for the user to get access to.
+
+These file links have an expiration date, and once that date has passed the link is no longer active to non registered users.  Links are also random MD5 hashes so that they cannot be guessed by individuals that have not been given the full link.
+
+Company Forms
+--------------
+This section is a simple place that all internal company files can be loaded to.  All registered users will have access to these files.
+
+My Files
+---------
+This section allws the users to store files specific to them.  These files cannot be acceessed or shared with any other users.
+
+### Note:  Each of the three above sections can be disabled
+
 
 
 
@@ -27,7 +53,7 @@ Building Tech Bench
 System Requirements
 -------------------
 The following is required to run the Tech Bench:
-* PHP 5 or higher
+* PHP 7 or higher
 * MySQL Database
 * Apache Web Server
 
@@ -41,7 +67,6 @@ Dependency Management
 Tech Bench uses Composer and Bower to manage all 3rd party libraries.
 
 Instructions for installing these dependency managers can be found here:
-*
 
 * [Node.js](https://nodejs.org/en/)
 * [Composer](https://getcomposer.org/)

@@ -132,5 +132,46 @@ class Upgrade extends Controller
                     ("email_port", '.Config::getEmail('emPort').'),
                     ("email_from", '.Config::getEmail('emFrom').'), 
                     ("email_name", '.Config::getEmail('emName').')';
+        
+        //  Add the "My Files" folder for each user
+        $qry = 'SELECT `user_id` FROM `users`';
+        $result = $this->db->query($qry);
+        
+        $result = $result->fetchAll();
+        $fileModel = $this->model('files');
+        //  Create the 'user' folder for the root of the file structure
+        $path = Config::getFile('uploadRoot');
+        $fileModel->createFolder($path);
+        $path = Config::getFile('uploadRoot').'users/';
+        
+        //  Create folder for each specific user
+        foreach($result as $user)
+        {
+            $fileModel->createFolder($path.$user->user_id);
+        }  
+        
+        //  Recreate Config file (no new variables in this version)
+        $this->rewriteConfig();
+    }
+    
+    //  Get all config.ini information, and re-write the file with any new paramaters
+    private function rewriteConfig()
+    {
+        //  Get all values of the current config file
+        $config = Config::getWholeConfig();
+        foreach($config as $category)
+        {
+            foreach($category as $item => $value)
+            {
+                $_SESSION['setupData'][$item] = $value;
+            }
+        }
+        
+        //  Rewrite the config file
+        ob_start();
+            require __DIR__.'/../views/setup/setup.defaultConfig.php';
+        $configFile = ob_get_clean();
+        $configPath = __DIR__.'/../../config/config.ini';
+        file_put_contents($configPath, $configFile, LOCK_EX);
     }
 }

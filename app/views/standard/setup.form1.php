@@ -20,12 +20,12 @@
             <div class="clearfix pad-bottom"></div>
             <form id="step1">
                 <div class="form-group">
-                    <label for="companyName">Company Name:</label>
-                    <input type="text" name="companyName" id="companyName" class="form-control" placeholder="Enter Your Company Name" required />
+                    <label for="title">Company Name:</label>
+                    <input type="text" name="title" id="title" class="form-control" placeholder="Enter Your Company Name" required />
                 </div>
                 <div class="form-group">
-                    <label for="siteURL">Site URL:</label>
-                    <input type="url" name="siteURL" id="siteURL" class="form-control" placeholder="Enter the website URL - example: http://weburl.com" required />
+                    <label for="baseURL">Site URL:</label>
+                    <input type="url" name="baseURL" id="baseURL" class="form-control" placeholder="Enter the website URL - example: http://weburl.com" required />
                 </div>
                 <div class="form-group">
                     <label for="siteUser">Global Administrator Username:</label>

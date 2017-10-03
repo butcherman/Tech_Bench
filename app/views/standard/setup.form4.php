@@ -20,19 +20,19 @@
             <div class="clearfix pad-bottom"></div>
             <form id="step4">
                 <div class="form-group">
-                    <label for="encKey">Encryption Key - PLEASE COPY THIS KEY TO A SECURE LOCATION</label>
-                    <input type="text" id="encKey" name="encKey" class="form-control" value="<?= $data['encryptionKey']; ?>" required />
+                    <label for="customerKey">Encryption Key - PLEASE COPY THIS KEY TO A SECURE LOCATION</label>
+                    <input type="text" id="customerKey" name="customerKey" class="form-control" value="<?= $data['encryptionKey']; ?>" required />
                 </div>
                 <div class="form-group">
-                    <label for="fileLocation">Root File Location:</label>
-                    <input type="text" id="fileLocation" name="fileLocation" class="form-control" value="<?= $data['fileLocal']; ?>" placeholder="Enter The Root Location All Files Should Be Stored" />
+                    <label for="uploadRoot">Root File Location:</label>
+                    <input type="text" id="uploadRoot" name="uploadRoot" class="form-control" value="<?= $data['fileLocal']; ?>" placeholder="Enter The Root Location All Files Should Be Stored" />
                 </div>
                 <div class="form-group">
                     <label for="maxSize">Max File Size:</label>
                     <span id="maxValue"></span>
                     <div>
-                        <input type="text" id="maxFileValue" name="maxFileValue"  
-                               data-slider-id="maxFileValue" 
+                        <input type="text" id="maxUpload" name="maxUpload"  
+                               data-slider-id="maxUpload" 
                                data-slider-min="100000" 
                                data-slider-max="<?= $data['maxFile']; ?>"
                                data-slider-step="1000" 
@@ -40,6 +40,13 @@
                                data-slider-tooltip="hide"/>
                     </div>
                 </div>
+                <input type="hidden" name="default" value="default/" />
+                <input type="hidden" name="userPath" value="users/" />
+                <input type="hidden" name="custPath" value="cust_files/" />
+                <input type="hidden" name="sysPath" value="sys_files/" />
+                <input type="hidden" name="tipPath" value="tech_tips/" />
+                <input type="hidden" name="formPath" value="company_forms/" />
+                <input type="hidden" name="uploadPath" value="uploads/" />
                 <div class="form-group">
                     <input type="submit" id="step-1-submit" class="form-control btn btn-default" value="Finish Tech Bench Setup" />
                 </div>
@@ -60,8 +67,8 @@
 <script src="/source/lib/bootstrap-slider/bootstrap-slider.min.js"></script>
 <script src="/source/lib/filesize/filesize.min.js"></script>
 <script>
-    $('#maxFileValue').slider();
-    $('#maxFileValue').on('slide', function(e)
+    $('#maxUpload').slider();
+    $('#maxUpload').on('slide', function(e)
     {
         var file = e.value;
         $('#maxValue').text(filesize(file));
