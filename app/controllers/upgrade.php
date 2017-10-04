@@ -127,7 +127,7 @@ class Upgrade extends Controller
         //  Move the email settings from the config file over to the database
         $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
                     ("email_user", '.Config::getEmail('emUser').'), 
-                    ("email_pass", '.Config::getEmail('emPass').'), 
+                    ("email_pass", AES_ENCRYPT('.Config::getEmail('emPass').', "'.Config::getKey().'")), 
                     ("email_host", '.Config::getEmail('emHost').'), 
                     ("email_port", '.Config::getEmail('emPort').'),
                     ("email_from", '.Config::getEmail('emFrom').'), 

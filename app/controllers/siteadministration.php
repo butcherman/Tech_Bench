@@ -286,7 +286,8 @@ class siteAdministration extends Controller
     {
         Config::updateSetting('email_from', $_POST['emAddr']);
         Config::updateSetting('email_host', $_POST['emHost']);
-        Config::updateSetting('email_pass', $_POST['emPass']);
+        Config::emailPassword($_POST['emPass']);
+//        Config::updateSetting('email_pass', $_POST['emPass']);
         Config::updateSetting('email_port', $_POST['emPort']);
         Config::updateSetting('email_user', $_POST['emUser']);
         

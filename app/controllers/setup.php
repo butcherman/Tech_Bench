@@ -331,7 +331,7 @@ class Setup extends Controller
         
         $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
                     ("email_user", '.$_SESSION['setupData']['emUser'].'), 
-                    ("email_pass", '.$_SESSION['setupData']['emPass'].'), 
+                    ("email_pass", AES_ENCRYPT('.Config::getEmail('emPass').', "'.Config::getKey().'")), 
                     ("email_host", '.$_SESSION['setupData']['emHost'].'), 
                     ("email_port", '.$_SESSION['setupData']['emPort'].'),
                     ("email_from", '.$_SESSION['setupData']['emAddr'].'), 

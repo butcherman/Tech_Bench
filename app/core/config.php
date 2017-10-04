@@ -50,6 +50,26 @@ class Config
         return self::getSetting($var);
     }
     
+    //  Get or set the encrypted email password
+    public function emailPassword($set = false)
+    {
+        $key = Self::getKey();
+        //  Set the email password
+        if($set)
+        {
+            $qry = 'UPDATE `_settings` SET `value` = AES_ENCRYPT(:pass, "'.$key.'") WHERE `setting` = "email_pass"';
+            Database::getDB()->prepare($qry)->execute(['pass' => $set]);
+        }
+        else
+        {
+            $qry = 'SELECT AES_DECRYPT(`value`, "'.$key.'") AS `val` FROM `_settings` WHERE `setting` = "email_pass"';
+            $result = Database::getDB()->query($qry);
+            $res = $result->fetch();
+            
+            return $res->val;
+        }
+    }
+    
     //  Return a file information value from the config file
     public static function getFile($var)
     {

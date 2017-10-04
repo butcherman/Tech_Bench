@@ -16,7 +16,7 @@ class Email
         self::$mail->Port = Config::getEmail('email_port');
         self::$mail->SMTPAuth = true;
         self::$mail->Username = Config::getEmail('email_user');
-        self::$mail->Password = Config::getEmail('email_pass');
+        self::$mail->Password = Config::emailPassword();
         self::$mail->setFrom(Config::getEmail('email_from'));
         self::$mail->IsHTML(true);
     }
