@@ -31,14 +31,6 @@ require_once __DIR__.'/../app/core/email.php';
 require_once __DIR__.'/../app/core/template.php';
 require_once __DIR__.'/../app/core/vcardDownloader.php';
 
-//        use JeroenDesloovere\VCard\VCard;
-//
-//
-//
-//
-//$vcard = new VCard;
-
-
 //  Initialize the necessary static classes
 Config::init();
 Database::init();

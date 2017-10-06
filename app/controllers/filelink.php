@@ -50,13 +50,24 @@ class FileLink extends Controller
             $data['linkID'] = $linkID;
             $data['instructions'] = $linkInstructions->instruction;
             $data['files'] = '';
+            $fileNums = [];
             foreach($linkFiles as $file)
             {
                 if(is_numeric($file->added_by))
                 {
                     $data['files'] .= '<tr><td><a href="/download/'.$file->file_id.'/'.$file->file_name.'" title="Click to Download">'.$file->file_name.'</a></td><td>'.date('M j, Y', strtotime($file->added_on)).'</td></tr>';
+                    $fileNums[] = array($file->file_id, $file->file_name);
                 }
             }
+            
+            //  If there is more than one file, create download all link
+            if(count($linkFiles > 1))
+            {
+                $data['files'] .= '<tr><td colspan="2" class="text-center"><a href="/download/zipFile/" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download All Files</a></td></tr>';
+            }
+            
+            //  Allow a download all array
+            $_SESSION['download_all'] = $fileNums;
             
             $this->view('links.visitor.validLink', $data);
         }
