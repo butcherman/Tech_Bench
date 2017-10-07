@@ -83,6 +83,7 @@
                 else
                 {
                     alert('There Was A Problem Resetting The Password');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

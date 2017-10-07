@@ -77,6 +77,7 @@ $('#reset-password-form').validate(
             {
                 $('#form-error').html('There was an error processing your request');
                 alert(data);
+                $.post('/err/ajaxFail', {msg: data});
             }
             $('#form-error').show();
         });

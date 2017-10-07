@@ -52,6 +52,7 @@
                 else
                 {
                     content = 'There was an error updating the customer ID';
+                    $.post('/err/ajaxFail', {msg: data});
                 }
                 
                 $('#new-id-wrapper').html('<h3 class="text-center">'+content+'</h3>');

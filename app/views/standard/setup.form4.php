@@ -89,6 +89,10 @@
                     {
                         window.location.replace('/setup/finish');
                     }
+                    else
+                    {
+                        $.post('/err/ajaxFail', {msg: data});
+                    }
                 });
             }
         }

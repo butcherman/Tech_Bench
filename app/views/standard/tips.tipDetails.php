@@ -92,6 +92,7 @@
                     else
                     {
                         alert('Unable to Add Comment');
+                        $.post('/err/ajaxFail', {msg: data});
                     }
                 });
             }

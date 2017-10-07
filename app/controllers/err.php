@@ -57,4 +57,11 @@ class Err extends Controller
         $this->view('error.failedLogin');
         $this->render();
     }
+    
+    //  Any time an ajax call fails, the "data" error will be logged
+    public function ajaxFail()
+    {
+        $msg = $_POST['msg'];
+        Logs::writeLog('Ajax-Fail', $msg);
+    }
 }

@@ -141,8 +141,8 @@
                 }
                 else
                 {
-                    alert(data);
                     alert('There Was A Problem Adding Customer');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

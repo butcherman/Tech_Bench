@@ -128,6 +128,7 @@
         else
         {
             alert(res);
+            $.post('/err/ajaxFail', {msg: res});
         }
     }
 </script>

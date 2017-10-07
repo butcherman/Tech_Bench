@@ -56,8 +56,8 @@
                 }
                 else
                 {
-//                    alert('Sorry, there was a problem processing your request');
-                    alert(data);
+                    alert('Sorry, there was a problem processing your request');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

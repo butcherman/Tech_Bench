@@ -86,8 +86,8 @@
                 }
                 else
                 {
-                    alert(data);
                     alert('There was a problem adding the new user.');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

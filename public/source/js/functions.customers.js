@@ -79,6 +79,7 @@ $(document).on('click', '#submit-cust-edit', function(e)
                 else
                 {
                     alert('Sorry, there was an issue processing your request.\nA log has been generated.');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }
@@ -107,6 +108,7 @@ $(document).on('click', '#editCustSystemSubmit', function(e)
         else
         {
             alert('There Was A Problem Updating The System.  A log has been generated.');
+            $.post('/err/ajaxFail', {msg: data});
         }
     });
 });
@@ -152,6 +154,7 @@ $(document).on('click', '#add-system-submit', function(e)
         else
         {
             alert('There was a problem adding the system.  A log has been generated');
+            $.post('/err/ajaxFail', {msg: data});
         }
     });
 });
@@ -176,6 +179,7 @@ $(document).on('click', '#delete-system', function(e)
                 else
                 {
                     alert(data);
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         });
@@ -222,8 +226,8 @@ $(document).on('click', '#submit-new-contact', function()
                 }
                 else
                 {
-                    alert(data);
-                    alert('There Was A Problem Adding Contact.')
+                    alert('There Was A Problem Adding Contact.');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }
@@ -267,7 +271,8 @@ $(document).on('click', '#submit-edit-contact', function()
                 }
                 else
                 {
-                    alert('There Was A Problem Updating Contact.')
+                    alert('There Was A Problem Updating Contact.');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }
@@ -300,6 +305,7 @@ $(document).on('click', '.select-yes.delete-contact', function()
         else
         {
             alert('There was a problem deleting the contact');
+            $.post('/err/ajaxFail', {msg: data});
         }
     });
 });
@@ -362,6 +368,7 @@ $(document).on('click', '#submit-new-note-btn', function()
                 else
                 {
                     alert('There Was A Problem Adding Note.\nPlease Contact System Administrator');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }
@@ -421,6 +428,7 @@ $(document).on('click', '#submit-edit-note-btn', function()
                 else
                 {
                     alert('There Was A Problem Adding Note.\nPlease Contact System Administrator');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }
@@ -482,6 +490,7 @@ function uploadComplete(res)
     else
     {
         alert('There was a problem uploading the file');
+        $.post('/err/ajaxFail', {msg: data});
     }
 }
 
@@ -523,6 +532,7 @@ $(document).on('click', '#edit-file-submit-lnk', function()
                 else
                 {
                     alert('There Was A Problem Updating File.\nPlease Contact System Administrator');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }
@@ -555,6 +565,7 @@ $(document).on('click', '.select-yes.delete-file', function()
         else
         {
             alert('There was a problem deleting the file');
+            $.post('/err/ajaxFail', {msg: data});
         }
     });
 });
@@ -608,6 +619,7 @@ $('#add-linked-site').on('click', function()
                     else
                     {
                         alert('There Was An Issue Processing Your Request');
+                        $.post('/err/ajaxFail', {msg: data});
                     }
                 });
             }

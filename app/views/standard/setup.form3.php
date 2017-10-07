@@ -101,6 +101,10 @@
                 {
                     window.location.replace('/setup/step-4');
                 }
+                else
+                {
+                    $.post('/err/ajaxFail', {msg: data});
+                }
             });
         }
     });

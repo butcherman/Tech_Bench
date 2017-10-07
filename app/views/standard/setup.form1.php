@@ -83,6 +83,10 @@
                 {
                     window.location.replace('/setup/step-2');
                 }
+                else
+                {
+                    $.post('/err/ajaxFail', {msg: data});
+                }
             });
         }
     });

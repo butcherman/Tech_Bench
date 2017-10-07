@@ -101,7 +101,8 @@
                 }
                 else
                 {
-                    alert('There was a problem updating your settings.')
+                    alert('There was a problem updating your settings.');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

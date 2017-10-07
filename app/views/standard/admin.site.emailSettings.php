@@ -63,7 +63,7 @@
                     $('#test-email').addClass('btn-info');
                 }
                 $('#test-email').html('Test Connection');
-                alert(result);
+                $.post('/err/ajaxFail', {msg: result});
             }
         });
     });
@@ -81,6 +81,7 @@
                 else
                 {
                     alert('There was a problem submitting your request');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }
