@@ -33,6 +33,16 @@ CREATE TABLE IF NOT EXISTS `customer_contact_phones` (
 		ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS `customer_linked_sites` (
+	`parent_id` INT(11) NOT NULL,
+    `cust_id` INT(11) NOT NULL,
+    FOREIGN KEY (`parent_id`) REFERENCES `customers`(`cust_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`cust_id`) REFERENCES `customers`(`cust_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	UNIQUE KEY (`parent_id`, `cust_id`)
+);
+
 INSERT INTO `phone_number_types` (`phone_type_id`, `description`) VALUES 
 	(1, "Work"), (2, "Home"), (3, "Cell");
 

@@ -253,6 +253,16 @@ CREATE TABLE `customer_favs` (
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS `customer_linked_sites` (
+	`parent_id` INT(11) NOT NULL,
+    `cust_id` INT(11) NOT NULL,
+    FOREIGN KEY (`parent_id`) REFERENCES `customers`(`cust_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`cust_id`) REFERENCES `customers`(`cust_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	UNIQUE KEY (`parent_id`, `cust_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `upload_links` (
 	`link_id` INT(11) NOT NULL AUTO_INCREMENT,
 	`link_hash` VARCHAR(120) NOT NULL,

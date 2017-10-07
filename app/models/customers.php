@@ -428,4 +428,35 @@ class Customers
         
         return $result->fetchColumn();
     }
+    
+    //  Check for a valid parent customer ID
+    public function checkParentID($custID)
+    {
+        $qry = 'SELECT `parent_id` FROM `customer_linked_sites` WHERE `parent_id` = :custID';
+        $result = $this->db->prepare($qry);
+        $result->execute(['custID' => $custID]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Add a linked customer
+    public function addLinkedCustomer($parentID, $custID)
+    {
+        $qry = 'INSERT INTO `customer_linked_sites` (`parent_id`, `cust_id`) VALUES (:parent, :cust)';
+        $data = [
+            'parent' => $parentID,
+            'cust' => $custID
+        ];
+        $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Get all linked sites
+    public function getLinkedSites($custID)
+    {
+        $qry = 'SELECT `parent_id`, `cust_id` FROM `customer_linked_sites` WHERE `parent_id` = (SELECT `parent_id` FROM `customer_linked_sites` WHERE `cust_id` = :cust)';
+        $result = $this->db->prepare($qry);
+        $result->execute(['cust' => $custID]);
+        
+        return $result->fetchAll();
+    }
 }

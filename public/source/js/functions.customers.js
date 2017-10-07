@@ -11,6 +11,8 @@ $('#contact-information').children('tbody').load('/customer/loadContacts/'+custI
 $('#notes-wrapper').load('/customer/loadNotes/'+custID);
 //  Load the customer files
 $('#customer-files-table').children('tbody').load('/customer/loadFiles/'+custID);
+//  Load any linked sites
+$('#linked-sites-wrapper').load('/customer/loadLinkedSites/'+custID);
 
 //  Clear any data in the Modal body when the Modal closes
 $('#edit-modal').on('hidden.bs.modal', function()
@@ -554,5 +556,61 @@ $(document).on('click', '.select-yes.delete-file', function()
         {
             alert('There was a problem deleting the file');
         }
+    });
+});
+
+//  Load the "linked sites" modal
+$('#add-linked-site').on('click', function()
+{
+    $('#modal-header').html('Link To Another Site');
+    $('#modal-body').load('/customer/link-site-form', function()
+    {
+        $("[data-toggle='toggle']").bootstrapToggle();
+        $('#thisIsParent').on('change', function()
+        {
+            if(this.checked)
+            {
+                $('#parent-id-selection').hide();
+            }
+            else
+            {
+                $('#parent-id-selection').show();
+            }
+        });
+        $('#add-linked-site-form').validate(
+        {
+            rules:
+            {
+                customerParent:
+                {
+                    number: true,
+                    remote: {
+                        url: "/customer/checkParent",
+                        type: "post",
+                        data: {
+                            parentID: function()
+                            {
+                                return $('#customerParent').val();
+                            }
+                        }
+                    }
+                }
+            },
+            submitHandler: function()
+            {
+                $.post('/customer/submitLinkCustomer/'+custID, $('#add-linked-site-form').serialize(), function(data)
+                {
+                    if(data === 'success')
+                    {
+                        $('#edit-modal').modal('hide');
+                        $('#linked-sites-wrapper').load('/customer/loadLinkedSites/'+custID);
+                    }
+                    else
+                    {
+                        alert('There Was An Issue Processing Your Request');
+                    }
+                });
+            }
+        });
     });
 });

@@ -878,4 +878,72 @@ class Customer extends Controller
         
         $this->render('success');
     }
+    
+    /****************************************************************************
+    *                          Linked Customers Section                         *
+    *****************************************************************************/
+
+    //  Load all linked sites for this customer
+    public function loadLinkedSites($custID)
+    {
+        $model = $this->model('customers');
+        $linkedSites = $model->getLinkedSites($custID);
+        
+        $linkedView = '';
+        foreach($linkedSites as $site)
+        {
+            if($site->parent_id == $site->cust_id)
+            {
+                $custName = str_replace(' ', '-', $model->getCustData($site->cust_id)->name);
+                $linkedView .= '<div class="col-md-3 col-xs-12"><a href="customer/id/'.$site->cust_id.'/'.$custName.'" class="bookmark"><div class="well bookmark text-center"><strong>Parent Site</strong><br />'.$custName.'</div></a></div>';
+            }
+            else
+            {
+                $custName = str_replace(' ', '-', $model->getCustData($site->cust_id)->name);
+                $linkedView .= '<div class="col-md-3 col-xs-12"><a href="customer/id/'.$site->cust_id.'/'.$custName.'" class="bookmark"><div class="well bookmark text-center">'.$custName.'</div></a></div>';
+            }
+        }
+        
+        if(empty($linkedView))
+        {
+            $linkedView = '<div class="col-sm-12"><h3 class="text-center">No Linked Sites</h3></div>';
+        }
+        
+        $this->render($linkedView);
+    }
+    
+    //  Load the form to link a site to a parent site
+    public function linkSiteForm()
+    {
+        $this->view('customers.linkCustomerForm');
+        $this->render();
+    }
+    
+    //  Check if the parent site entered is actually a valid parent
+    public function checkParent()
+    {
+        $model = $this->model('customers');
+        $parentID = $_POST['parentID'];
+        $result = $model->checkParentID($parentID);
+        
+        $data = !$result ? 'This Is Not A Valid Parent ID' : true;
+        
+        $this->render(json_encode($data));
+    }
+    
+    //  Add the linked sites
+    public function submitLinkCustomer($custID)
+    {
+        $model = $this->model('customers');
+        if(isset($_POST['thisIsParent']) && $_POST['thisIsParent'] === 'on')
+        {
+            $model->addLinkedCustomer($custID, $custID);
+        }
+        else
+        {
+            $model->addLinkedCustomer($_POST['customerParent'], $custID);
+        }
+        
+        $this->render('success');
+    }
 }
