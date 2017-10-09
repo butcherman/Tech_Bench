@@ -157,6 +157,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
     `state` CHAR(2) NOT NULL,
     `zip` INT(5) NOT NULL,
     `added_on` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `active` TINYINT(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`cust_id`)
 );
 

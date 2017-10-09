@@ -44,6 +44,33 @@ class Customers
         }
     }
     
+    //  Deactivate a customer
+    public function deactivateCustomer($custID)
+    {
+        $qry = 'UPDATE `customers` SET `active` = 0 WHERE `cust_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $custID]);
+        
+        $qry2 = 'DELETE FROM `customer_favs` WHERE `cust_id` = :id';
+        $this->db->prepare($qry2)->execute(['id' => $custID]);
+    }
+    
+    //  Reactivate a customer
+    public function reactivateCustomer($custID)
+    {
+        $qry = 'UPDATE `customers` SET `active` = 1 WHERE `cust_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $custID]);
+    }
+    
+    //  Get a list of deactivated customers
+    public function searchDeactivated()
+    {
+        $qry = 'SELECT `cust_id`, `name`, `city`, `state` FROM `customers` 
+                    WHERE `active` = 0 ORDER BY `name` ASC';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
     //  Search customer function will find a customer based on search paramaters
     public function searchCustomer($name = '', $city = '', $syst = '')
     {
@@ -56,6 +83,7 @@ class Customers
                 WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` 
                 LIKE :name3) AND `city` LIKE :city 
                 AND `system_types`.`name` LIKE :syst 
+                AND `active` = 1
                 ORDER BY `customers`.`name` ASC';
             $data = [
                 'name1' => '%'.$name.'%',
@@ -68,7 +96,7 @@ class Customers
         else
         {
             $qry = 'SELECT `customers`.`cust_id`, `customers`.`name`, `customers`.`city`, `customers`.`state` FROM `customers` 
-                    WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` LIKE :name3) AND `city` LIKE :city 
+                    WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` LIKE :name3) AND `city` LIKE :city AND `active` = 1
                      ORDER BY `customers`.`name` ASC';
             $data = [
                 'name1' => '%'.$name.'%',
@@ -99,7 +127,7 @@ class Customers
     //  Pull all customer information from the database
     public function getCustData($custID)
     {
-        $qry = 'SELECT `name`, `dba_name`, `address`, `city`, `state`, `zip` FROM `customers` WHERE `cust_id` = :custID';
+        $qry = 'SELECT `name`, `dba_name`, `address`, `city`, `state`, `zip` FROM `customers` WHERE `cust_id` = :custID AND `active` = 1';
         $result = $this->db->prepare($qry);
         $result->execute(['custID' => $custID]);
         

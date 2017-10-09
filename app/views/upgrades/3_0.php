@@ -6,6 +6,10 @@ CREATE TABLE IF NOT EXISTS `customer_note_levels` (
     PRIMARY KEY (`note_level_id`)
 );
 
+ALTER TABLE `customers` 
+	ADD COLUMN `active` TINYINT(1) NOT NULL DEFAULT 1
+    AFTER `added_on`;
+
 INSERT INTO `customer_note_levels` (`note_level_id`, `description`) VALUES 
 	(1, "info"), (2, "warning"), (3, "danger");
 
