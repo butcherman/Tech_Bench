@@ -106,4 +106,36 @@ class Maintenance extends Controller
         $this->render(str_replace(PHP_EOL, '<br />', $output));
         $this->render($output); 
     }
+    
+    //  Archive all log files into a zip and clearstatcache
+    public function archiveLogs()
+    {
+        $today = date('Y-m-d');
+        $logFiles = scanDir(__DIR__.'/../../logs/');
+        
+        //  Create the zip archive and add all the log files
+        $zipName = __DIR__.'/../../logs/log_files-'.$today.'.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipName, ZipArchive::CREATE);
+        foreach($logFiles as $file)
+        {
+            $parts = pathinfo($file);
+            if($parts['extension'] === 'log')
+            {
+                $logFile = __DIR__.'/../../logs/'.$file;
+                $zip->addFile($logFile, $file);
+            }
+        }
+        $zip->close();
+        
+        //  Re-cycle through the logs and delete them
+        foreach($logFiles as $file)
+        {
+            $parts = pathinfo($file);
+            if($parts['extension'] === 'log')
+            {
+                unlink(__DIR__.'/../../logs/'.$file);
+            }
+        }
+    }
 }
