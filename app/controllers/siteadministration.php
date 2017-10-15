@@ -287,13 +287,78 @@ class siteAdministration extends Controller
         Config::updateSetting('email_from', $_POST['emAddr']);
         Config::updateSetting('email_host', $_POST['emHost']);
         Config::emailPassword($_POST['emPass']);
-//        Config::updateSetting('email_pass', $_POST['emPass']);
         Config::updateSetting('email_port', $_POST['emPort']);
         Config::updateSetting('email_user', $_POST['emUser']);
         
         //  Note the change in the log files
         $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' modified the email settings';
         Logs::writeLog('Administration-Change', $msg);
+        
+        $this->render('success');
+    }
+    
+    //  Company logo and company information form
+    public function companySettings()
+    {
+        $this->view('admin.site.newLogo');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the update company information form
+    public function submitCompanySettings()
+    {
+        //  Get all values of the current config file
+        $config = Config::getWholeConfig();
+        foreach($config as $category)
+        {
+            foreach($category as $item => $value)
+            {
+                $_SESSION['setupData'][$item] = $value;
+            }
+        }
+        
+        $_SESSION['setupData']['baseURL'] = $_POST['siteURL'];
+        $_SESSION['setupData']['title'] = $_POST['title'];
+        
+        //  Rewrite the config file
+        ob_start();
+            require __DIR__.'/../views/setup/setup.defaultConfig.php';
+        $configFile = ob_get_clean();
+        $configPath = __DIR__.'/../../config/config.ini';
+        file_put_contents($configPath, $configFile, LOCK_EX);
+        
+        $this->render('success');
+    }
+    
+    //  Submit a new company logo
+    public function submitNewLogo()
+    {
+        $fileModel = $this->model('files');
+        
+        $filePath = __DIR__.'/../../public/source/img/';
+        $fileModel->setFileLocation($filePath);
+        $fileID = $fileModel->processFiles($_FILES, $_SESSION['id'], 'open');
+        $fileName = $fileModel->getFileName($fileID[0]);
+        
+        //  Get all values of the current config file
+        $config = Config::getWholeConfig();
+        foreach($config as $category)
+        {
+            foreach($category as $item => $value)
+            {
+                $_SESSION['setupData'][$item] = $value;
+            }
+        }
+        
+        $_SESSION['setupData']['logo'] = $fileName->file_name;
+        
+        //  Rewrite the config file
+        ob_start();
+            require __DIR__.'/../views/setup/setup.defaultConfig.php';
+        $configFile = ob_get_clean();
+        $configPath = __DIR__.'/../../config/config.ini';
+        file_put_contents($configPath, $configFile, LOCK_EX);
         
         $this->render('success');
     }

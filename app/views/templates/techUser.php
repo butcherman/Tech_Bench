@@ -30,7 +30,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <span class="navbar-title centerBlock">
-                    <?= Template::inMaintenanceMode() ? 'Maintenance Mode' : 'Tech Bench'; ?>
+                    <?= Template::inMaintenanceMode() ? 'Maintenance Mode' : Config::getCore('companyName'); ?>
                     <a href="/about" title="About Tech Bench"><span class="glyphicon glyphicon-info-sign pull-right" style="color: white"></span></a>
                 </span>
             </nav>

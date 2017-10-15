@@ -22,6 +22,16 @@ class Files
         return $result->fetch();
     } 
     
+    //  Get the name of a file based on the file ID
+    public function getFileName($fileID)
+    {
+        $qry = 'SELECT `file_name` FROM `files` WHERE `file_id` = :id';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['id' => $fileID]);
+        
+        return $result->fetch();
+    }
+    
     //  Function to process an uploaded file - also allows for multiple file uploads
     public function processFiles($fileData, $userID = '', $permission = 'admin')
     {

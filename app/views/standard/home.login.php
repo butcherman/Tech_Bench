@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col-sm-4 col-sm-offset-4">
+        <h1 class="text-center"><?= Config::getCore('companyName') ?></h1>
         <img src="/source/img/<?= Config::getCore('logo'); ?>" alt="Company Logo" class="text-center" id="header-logo" />
         <h1 class="text-center">Tech Bench</h1>
     </div>

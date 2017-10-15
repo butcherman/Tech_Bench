@@ -159,6 +159,10 @@ class Setup extends Controller
     //  Finalize step 1 is to create the configuration file
     public function configurationFile()
     {
+        //  Modify some values that need appending
+        $_SESSION['setupData']['title'] = $_SESSION['setupData']['title'].' - Tech Bench';
+        $_SESSION['setupData']['uploadRoot'] = $_SESSION['setupData']['uploadRoot'].'/';
+        
         ob_start();
             require __DIR__.'/../views/setup/setup.defaultConfig.php';
         $configFile = ob_get_clean();
