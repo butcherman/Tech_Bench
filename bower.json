@@ -13,6 +13,7 @@
         "select2": "*",
         "tinymce-placeholder-attribute": "*",
         "multiselect-two-sides": "*",
-        "chart.js": "*"
+        "chart.js": "*",
+        "bootstrap-slider": "*"
     }
 }

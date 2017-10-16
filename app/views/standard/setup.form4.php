@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="page-header">
-            <h1 class="text-center">File Information</h1>
+            <h1 class="text-center">Customer and File Information</h1>
         </div>
     </div>
 </div>
@@ -24,6 +24,14 @@
                     <input type="text" id="customerKey" name="customerKey" class="form-control" value="<?= $data['encryptionKey']; ?>" required />
                 </div>
                 <div class="form-group">
+                    <label for="customCustID">Allow Custom Customer ID Numbers</label>
+                    <div class="row">
+                        <div class="col-lg-2 col-lg-offset-5">
+                            <input type="checkbox" id="customCustID" name="customCustID" data-toggle="toggle" >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="uploadRoot">Root File Location:</label>
                     <input type="text" id="uploadRoot" name="uploadRoot" class="form-control" value="<?= $data['fileLocal']; ?>" placeholder="Enter The Root Location All Files Should Be Stored" />
                 </div>
@@ -31,7 +39,7 @@
                     <label for="maxSize">Max File Size:</label>
                     <span id="maxValue"></span>
                     <div>
-                        <input type="text" id="maxUpload" name="maxUpload"  
+                        <input type="text" id="maxUpload" name="maxUpload" 
                                data-slider-id="maxUpload" 
                                data-slider-min="100000" 
                                data-slider-max="<?= $data['maxFile']; ?>"
@@ -55,6 +63,7 @@
                 <h4 class="text-center">Tips:</h4>
                 <ul>
                     <li><strong>Encryption Key:</strong> All customer information is encrypted before being stored in the database.  This is the key used for encrypting and decrypting this data. <span style="color: red">Please make a copy of this key and paste to a secure location in the event the config file is damaged.</span></li>
+                    <li><strong>Allow Custom Customer ID Numbers</strong> If this is turned on, when creating a new customer, the user will be allowed to enter a custom Customer ID number.  If not selected, the customer ID number will be auto generated.</li>
                     <li><strong>Root File Location:</strong> Enter the base location that all files will be stored.  Only change if you know that the required folder has write access.</li>
                     <li><strong>Max File Size:</strong> Select the maximum size that is allowed to be uploaded by a user.</li>
                 </ul>

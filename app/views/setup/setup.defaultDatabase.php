@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 );
 
 CREATE TABLE IF NOT EXISTS `customers` (
-	`cust_id` INT(11) NOT NULL UNIQUE,
+	`cust_id` INT(11) NOT NULL UNIQUE AUTO_INCREMENT,
     `name` VARCHAR(90) NOT NULL,
     `dba_name` VARCHAR(90),
     `address` VARCHAR(120) NOT NULL,
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `customer_notes` (
     FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) 
         ON UPDATE CASCADE,
     FOREIGN KEY (`note_level_id`) REFERENCES `customer_note_levels`(`note_level_id`) 
-        ON UPDATE CASCADE;
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `customer_file_types` (

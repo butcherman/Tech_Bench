@@ -4,10 +4,12 @@
 <div class="row">
     <div id="customer-form-wrapper" class="col-md-8 col-md-offset-2">
         <form id="new-customer-form">
+<?php if(Config::getCore('customCustID')) { echo '
             <div class="form-group">
                 <label for="custID">Customer Site ID: <span class="glyphicon glyphicon-question-sign" title="What is this?" data-toggle="popover"></span></label>
                 <input type="text" name="custID" id="custID" class="form-control" />
             </div>
+'; } ?>
             <div class="form-group">
                 <label for="custName">Customer Name:</label>
                 <input type="text" name="custName" id="custName" class="form-control" />
@@ -100,6 +102,7 @@
     {
         rules:
         {
+<?php if(Config::getCore('customCustID')) { echo '
             custID:
             {
                 required: true,
@@ -110,11 +113,12 @@
                     data: {
                         custID: function()
                         {
-                            return $('#custID').val();
+                            return $("#custID").val();
                         }
                     }
                 }
             },
+'; } ?>
             custName: "required",
             custAddr: "required",
             custCity: "required",

@@ -113,16 +113,16 @@ class Customer extends Controller
         $result = 'failed';
         
         //  Strip any leading zero's from the customer ID - these cannot be stored in the database and will cause file location errors
-        $custID = ltrim($_POST['custID'], '0');
+        $custID = isset($_POST['custID']) ? ltrim($_POST['custID'], '0') : '';
         
         //  Determine if the customer already exists
-        if($custData = $model->getCustData($custID))
+        if(!empty($custData) && $custData = $model->getCustData($custID))
         {
             $result = 'duplicate';
         }
         else
         {
-            $model->addCustomer($_POST);
+            $custID = $model->addCustomer($_POST);
             
             $fileModel = $this->model('files');
             $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID;

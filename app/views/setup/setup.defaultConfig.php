@@ -22,6 +22,8 @@ title = "<?= $_SESSION['setupData']['title'] ?>"
 ;  Company Name
 companyName = "<?= $_SESSION['setupData']['title'] ?>"
 ;
+;  Custom Customer ID allows users to match the customer ID number to internal billing customer ID's.
+customCustID = "<?= $_SESSION['setupData']['customCustID'] ?>"
 ;  The database setion contains all credentials required for the MYSQL connection
 [database]
 ;  The default host for the MySQL database is localhost.  If the database is to be stored to another 

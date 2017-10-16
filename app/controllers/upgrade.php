@@ -150,7 +150,8 @@ class Upgrade extends Controller
             $fileModel->createFolder($path.$user->user_id);
         }  
         
-        //  Recreate Config file (no new variables in this version)
+        //  Recreate Config file 
+        $_SESSION['setupData']['customCustID'] = "0";
         $this->rewriteConfig();
     }
     

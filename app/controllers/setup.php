@@ -178,7 +178,7 @@ class Setup extends Controller
     public function newDatabase()
     {
         //  Get information to create the database connection
-        $dbHost = $_SESSION['setupData']['dbServer'];
+        $dbHost = $_SESSION['setupData']['host'];
         $dbUser = $_SESSION['setupData']['dbUser'];
         $dbPass = $_SESSION['setupData']['dbPass'];
         $charset = 'utf8';
@@ -250,7 +250,7 @@ class Setup extends Controller
     //  Finalize step 3 is to build the system defaults
     public function defaults()
     {
-        $mysqli = new mysqli($_SESSION['setupData']['dbServer'], $_SESSION['setupData']['dbUser'], $_SESSION['setupData']['dbPass'], $_SESSION['setupData']['dbName']);
+        $mysqli = new mysqli($_SESSION['setupData']['host'], $_SESSION['setupData']['dbUser'], $_SESSION['setupData']['dbPass'], $_SESSION['setupData']['dbName']);
         
         //  If the databse connection fails, kick out error
         if($mysqli->connect_errno)
@@ -313,7 +313,7 @@ class Setup extends Controller
     public function systemSettings()
     {
         //  Get information to create the database connection
-        $dbHost = $_SESSION['setupData']['dbServer'];
+        $dbHost = $_SESSION['setupData']['host'];
         $dbUser = $_SESSION['setupData']['dbUser'];
         $dbPass = $_SESSION['setupData']['dbPass'];
         $charset = 'utf8';
@@ -335,12 +335,14 @@ class Setup extends Controller
         
         $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
                     ("email_user", '.$_SESSION['setupData']['emUser'].'), 
-                    ("email_pass", AES_ENCRYPT('.Config::getEmail('emPass').', "'.Config::getKey().'")), 
+                    ("email_pass", AES_ENCRYPT('.$_SESSION['setupData']['emPass'].', "'.$_SESSION['setupData']['customerKey'].'")), 
                     ("email_host", '.$_SESSION['setupData']['emHost'].'), 
                     ("email_port", '.$_SESSION['setupData']['emPort'].'),
                     ("email_from", '.$_SESSION['setupData']['emAddr'].'), 
                     ("email_name", "Tech Bench"),
                     ("allow_company_forms", 1),
                     ("allow_upload_links", 1)';
+        
+        return 'success';
     }
 }

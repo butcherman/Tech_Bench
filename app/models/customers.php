@@ -15,7 +15,7 @@ class Customers
     public function addCustomer($custData)
     {
         $data = [
-            'id' => ltrim($custData['custID'], '0'),
+            'id' => isset($custData['custID']) ? ltrim($custData['custID'], '0') : '',
             'name' => $custData['custName'],
             'dba' => $custData['custDBA'],
             'addr' => $custData['custAddr'],
@@ -25,6 +25,8 @@ class Customers
         ];
         $qry = 'INSERT INTO `customers` (`cust_id`, `name`, `dba_name`, `address`, `city`, `state`, `zip`) VALUES (:id, :name, :dba, :addr, :city, :state, :zip)';
         $this->db->prepare($qry)->execute($data);
+        
+        return $this->db->lastInsertID();
     }
     
     //  Update a customer's ID
