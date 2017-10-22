@@ -105,8 +105,8 @@ class Reports extends Controller
                 'techTips30'    => $model->countTechTips($userID, true),
                 'tipComments'   => $model->countTipComments($userID),
                 'tipComments30' => $model->countTipComments($userID, true),
-                'months' => '"'.implode('", "', $months).'"',
-                'loginData' => '"'.implode('", "', $loginsPerMonth).'"'
+                'months'        => '"'.implode('", "', $months).'"',
+                'loginData'     => '"'.implode('", "', $loginsPerMonth).'"'
             ];
             
             $this->view('reports.userStatsView', $data);
@@ -181,15 +181,39 @@ class Reports extends Controller
     {
         $model = $this->model('reportModel');
         
+        //  Determine disk space data
         $space = disk_total_space('/');
         $free = disk_free_space('/');
         $used = number_format((($space - $free) / $space) * 100, 2).'%';
+        
+        //  Determine file count information
+        $countCust = $model->compareFiles(Config::getFile('custPath'), 'customer_files');
+        $countSyst = $model->compareFiles(Config::getFile('sysPath'), 'system_files');
+        $countTips = $model->compareFiles(Config::getFile('tipPath'), 'tech_tip_files');
+        $countUser = $model->compareFiles(Config::getFile('userPath'), 'user_files');
+        $countComp = $model->compareFiles(Config::getFile('formPath'), 'company_files');
+        
 
         $data = [
-            'numFiles' => $model->countFiles(),
-            'totalSpace' => $space,
-            'freeSpace' => $free,
-            'percent' => $used
+            'numFiles'    => $model->countFiles(),
+            'totalSpace'  => $space,
+            'freeSpace'   => $free,
+            'percent'     => $used,
+            'custValid'   => $countCust['valid'],
+            'custMissing' => $countCust['missing'],
+            'custUnknown' => $countCust['unknown'],
+            'sysValid'    => $countSyst['valid'],
+            'sysMissing'  => $countSyst['missing'],
+            'sysUnknown'  => $countSyst['unknown'],
+            'tipValid'    => $countTips['valid'],
+            'tipMissing'  => $countTips['missing'],
+            'tipUnknown'  => $countTips['unknown'],
+            'usrValid'    => $countUser['valid'],
+            'usrMissing'  => $countUser['missing'],
+            'usrUnknown'  => $countUser['unknown'],
+            'compValid'   => $countComp['valid'],
+            'compMissing' => $countComp['missing'],
+            'compUnknown' => $countComp['unknown']
         ];
         
         $this->view('reports.systemFiles', $data);

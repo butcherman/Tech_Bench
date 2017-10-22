@@ -149,6 +149,9 @@ class Files
         $fileName = $res->file_link.$res->file_name;
         if(file_exists($fileName))
         {
+            $qry = 'DELETE FROM `files` WHERE `file_id` = :fileID';
+            $Database::getDB()->prepqre($qry)->execute(['fileID' => $fileID]);
+            
             $this->eraseFile($fileName);
             $msg = 'File ID: '.$fileID.' deleted by User ID: '.$_SESSION['id'];
             Logs::writeLog('Files', $msg);
@@ -161,6 +164,27 @@ class Files
         }
         
         return $valid;
+    }
+    
+    //  Function to delete a file based on the file's full link
+    public function deleteFileByName($fileLink)
+    {
+        $fileName = basename($fileLink);
+
+        $qry = 'SELECT `file_id` FROM `files` WHERE `file_name` = :fileName';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['fileName' => $fileName]);
+        $res = $result->fetch();
+        
+        if(isset($res->file_id))
+        {
+            $qry = 'DELETE FROM `files` WHERE `file_id` = :fileID';
+            Database::getDB()->prepare($qry)->execute(['fileID' => $res->file_id]);
+        }
+        else
+        {
+            $this->eraseFile($fileLink);
+        }
     }
     
     //  Function to clean the name of the file and remove all illegal characters and spaces
