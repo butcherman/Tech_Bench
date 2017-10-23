@@ -69,6 +69,8 @@
             $('#new-file').modal('hide');
             $('#name').val('');
             $('#file').val('');
+            $('#forProgressBar').hide();
+            $('#progressStatus').text('');
             loadForms();
         }
         else

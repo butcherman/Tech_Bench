@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 );
 
 CREATE TABLE IF NOT EXISTS `customers` (
-	`cust_id` INT(11) NOT NULL UNIQUE AUTO_INCREMENT,
+	`cust_id` INT(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(90) NOT NULL,
     `dba_name` VARCHAR(90),
     `address` VARCHAR(120) NOT NULL,

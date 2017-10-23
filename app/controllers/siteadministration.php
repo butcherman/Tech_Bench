@@ -337,9 +337,50 @@ class siteAdministration extends Controller
         $fileModel = $this->model('files');
         
         $filePath = __DIR__.'/../../public/source/img/';
-        $fileModel->setFileLocation($filePath);
-        $fileID = $fileModel->processFiles($_FILES, $_SESSION['id'], 'open');
-        $fileName = $fileModel->getFileName($fileID[0]);
+        
+        $file = $_FILES['newLogo'];
+        
+        //  Determine if there is an error in the file
+        if($file['error'] > 0)
+        {
+            $msg = 'FILE '.$file['name'].' failed to upload by user '.$userID.'. Error '.$file['error'];
+            Logs::writeLog('File-Error', $msg);
+            $success = false;
+        }
+        //  Determine if the file is too big
+        else if($file['size'] > Config::getFile('maxUpload'))
+        {
+            $msg = 'File '.$file['name'].' failed to upload by user '.$userID.'. Error: File is too big '.$file['size'];
+            Logs::writeLog('File-Error', $msg);
+            $success = false;
+        }
+        //  No errors, process file
+        else
+        {
+            $fileName = $file['name'];
+
+            //  Make sure that the destination folder is writable
+            if(is_dir($filePath) && is_writable($filePath))
+            {
+                //  Move the file to the proper location
+                if(move_uploaded_file($file['tmp_name'], $filePath.$fileName))
+                {
+                    $success = true;
+                }
+                else
+                {
+                    $success = false;
+                    $msg = 'Unable to Upload File '.$fileName.'. Unable to move file to folder '.$filePath.'.';
+                    Logs::writeLog('File-Error', $msg);
+                }
+            }
+            else
+            {
+                $success = false;
+                $msg = 'Unable to Upload File '.$fileName.'. Folder '.$this->fileLocation.' does not exist or cannot be written to.';
+                Logs::writeLog('File-Error', $msg);
+            }
+        }
         
         //  Get all values of the current config file
         $config = Config::getWholeConfig();
@@ -351,7 +392,7 @@ class siteAdministration extends Controller
             }
         }
         
-        $_SESSION['setupData']['logo'] = $fileName->file_name;
+        $_SESSION['setupData']['logo'] = $fileName;
         
         //  Rewrite the config file
         ob_start();

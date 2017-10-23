@@ -114,7 +114,6 @@
             submitFile('/fileLink/submitNewFile/<?= $data['linkID']; ?>', 'customer-add-file')
         }
     });
-//alert('<?= $data['allow']; ?>');    
     function uploadComplete(res)
     {
         if(res === 'success')

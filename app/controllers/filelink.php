@@ -38,7 +38,7 @@ class FileLink extends Controller
             
             //  Note in log file
             $msg = 'Visitor '.Security::getRealIpAddr().' attempted to acces an expired link hash - '.$linkHash;
-            Logs::writeLog('File-Links', $smg);
+            Logs::writeLog('File-Links', $msg);
         }
         else
         {
@@ -60,9 +60,9 @@ class FileLink extends Controller
                     $fileNums[] = array($file->file_id, $file->file_name);
                 }
             }
-            
+
             //  If there is more than one file, create download all link
-            if(count($fileNums > 1))
+            if(count($fileNums) > 1)
             {
                 $data['files'] .= '<tr><td colspan="2" class="text-center"><a href="/download/zipFile/" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download All Files</a></td></tr>';
             }

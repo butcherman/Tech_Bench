@@ -153,7 +153,6 @@
         {            
             alert('There Was A Problem Uploading Your File\nA Log Has Been Generated');
         }
-        var load = $('.tab-content .active .ajax-table').data('load');
         $('#new-file').modal('hide');
         $('#name').val('');
         $('#fileType').val('');
@@ -162,6 +161,6 @@
         $('#progressBar').css('width', '0%').attr('aria-valuenow', 0);
         $('#progressStatus').text('');
         $('#forProgressBar').hide();
-        $('.tab-content .active .ajax-table').children('tbody').load('/system/getSysFiles/<?= $data['sysName']; ?>/'+load);
+        loadDocs();
     }
 </script>

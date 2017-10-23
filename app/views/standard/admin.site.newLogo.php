@@ -101,8 +101,9 @@
         }
         else
         {
-            alert('There Was A Problem Processing Your Request');
-            $.post('/err/ajaxFail', {msg: data});
+            alert(res);
+//            alert('There Was A Problem Processing Your Request');
+            $.post('/err/ajaxFail', {msg: res});
         }
     }
 </script>

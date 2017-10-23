@@ -191,11 +191,10 @@ class Home extends Controller
         $model = $this->model('users');
         $valid = false;
         
-        if($userID = $model->checkResetLink($_POST['link']) && $_POST['newPass'] === $_POST['confPass'])
+        if(($userID = $model->checkResetLink($_POST['link'])) && ($_POST['newPass'] === $_POST['confPass']))
         {
             $model->setPassword($userID, $_POST['newPass']);
             $model->delResetLink($userID);
-            Logs::writeLog('Users', 'Password Updated via Reset Link for User: '.$userID);
             $valid = 'success';
             
             //  Note the change in the log files

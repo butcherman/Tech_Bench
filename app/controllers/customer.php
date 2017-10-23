@@ -598,48 +598,8 @@ class Customer extends Controller
     
     //  Ajax call to download a customer contact as a VCard
     public function downloadVCard($contID)
-    {
-//        require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/jeroendesloovere/vcard/src/VCard.php');
-        
+    {        
         VCardDownload::getVCard($contID);
-        
-//        $model = $this->model('customers');
-//        
-//        //  Get the contact information
-//        $contactData = $model->getOneContact($contID);
-//        $contactPhone = $model->getContactPhone($contID);
-//        $customerInfo = $model->getCustData($contactData->cust_id);
-//        
-//        $contactName = explode(' ', $contactData->name);
-//        $firstName = $contactName[0];
-//        $lastName = isset($contactName[1]) ? $contactName[1] : '';
-//        $additional = '';
-//        $prefix = '';
-//        $suffix = '';
-        
-        //  Create the VCard object
-        
-//        $vcard = new VCard;
-        
-//        //  Add personal data to VCard
-//        $vcard->addName($lastName, $firstName, $additional, $prefix, $suffix);
-//        
-//        //  Add Company Data to VCard
-//        $vcard->addCompany($customerInfo->name);
-//        $vcard->addEmail($contactData->email);
-//        $vcard->addAddress(null, null, $custData->address, $custData->city, $custData->state, $custData->zip, null);
-//        
-//        //  Add phone numbers to VCard
-//        if(!empty($contactPhone))
-//        {
-//            foreach($contactPhone as $phone)
-//            {
-//                $vcard->addPhoneNumber($phone->phone_number, $phone->description);
-//            }
-//        }
-//        
-//        //  Return the VCard
-//        $vcard->download();
     }
     
 /****************************************************************************

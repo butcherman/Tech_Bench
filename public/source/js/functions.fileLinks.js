@@ -244,4 +244,3 @@ $(document).on('click', $('#submit-share-form'), function()
         }
     });
 });
-

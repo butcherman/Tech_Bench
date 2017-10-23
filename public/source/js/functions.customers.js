@@ -135,7 +135,6 @@ $(document).on('click', '#addSystemType', function()
     }
 });
 
-
 //  Submit the new system form
 $(document).on('click', '#add-system-submit', function(e)
 {
