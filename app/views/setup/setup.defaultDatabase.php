@@ -434,6 +434,18 @@ CREATE TABLE IF NOT EXISTS `_settings` (
     `value` VARCHAR(90) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS `user_files` (
+	`user_file_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `file_id` INT(11) NOT NULL,
+    `name` VARCHAR(90) NOT NULL,
+    PRIMARY KEY (`user_file_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`file_id`) REFERENCES `files`(`file_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "3.0");
 
 INSERT INTO `_settings` (`setting`, `value`) VALUES ("maintenance_mode", 0);

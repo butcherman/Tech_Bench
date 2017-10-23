@@ -50,6 +50,7 @@ class FileLink extends Controller
             $data['linkID'] = $linkID;
             $data['instructions'] = $linkInstructions->instruction;
             $data['files'] = '';
+
             $fileNums = [];
             foreach($linkFiles as $file)
             {
@@ -61,7 +62,7 @@ class FileLink extends Controller
             }
             
             //  If there is more than one file, create download all link
-            if(count($linkFiles > 1))
+            if(count($fileNums > 1))
             {
                 $data['files'] .= '<tr><td colspan="2" class="text-center"><a href="/download/zipFile/" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download All Files</a></td></tr>';
             }
@@ -81,7 +82,7 @@ class FileLink extends Controller
         $user = $_POST['name'];
         $model = $this->model('fileLinks');
         $fileModel = $this->model('files');
-        
+
         $path = Config::getFile('uploadRoot').Config::getFile('uploadPath').$linkID.Config::getFile('slash');
         $fileModel->setFileLocation($path);
         $owner = $model->getLinkOwner($linkID);
@@ -89,6 +90,7 @@ class FileLink extends Controller
         
         //  Insert the files
         $fileIDs = $fileModel->processFiles($fileModel->reArrayFiles($_FILES['file']), $user, 'open');
+
         foreach($fileIDs as $fileID)
         {
             $model->insertLinkFile($linkID, $fileID, $user);

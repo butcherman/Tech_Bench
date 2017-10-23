@@ -162,6 +162,8 @@ class Setup extends Controller
         //  Modify some values that need appending
         $_SESSION['setupData']['title'] = $_SESSION['setupData']['title'].' - Tech Bench';
         $_SESSION['setupData']['uploadRoot'] = $_SESSION['setupData']['uploadRoot'].'/';
+        $_SESSION['setupData']['baseURL'] = $_SESSION['setupData']['baseURL'].'/';
+        $_SESSION['setupData']['logo'] = 'TechBenchLogo.png';
         
         ob_start();
             require __DIR__.'/../views/setup/setup.defaultConfig.php';
@@ -259,13 +261,28 @@ class Setup extends Controller
             die();
         }
         
-        //  Create password hash
+        //  Input all the initial settings and email settings
+        $allow_company_forms = isset($_SESSION['setupData']['companyForms']) && $_SESSION['setupData']['companyForms'] === 'on' ? 1 : 0;
+        $allow_my_files      = isset($_SESSION['setupData']['myFiles']) && $_SESSION['setupData']['myFiles'] === 'on' ? 1 : 0;
+        $allow_upload_links  = isset($_SESSION['setupData']['fileLinks']) && $_SESSION['setupData']['fileLinks'] === 'on' ? 1 : 0;
+        
+        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
+                    ("allow_company_forms", '.$allow_company_forms.'),
+                    ("allow_my_files", '.$allow_my_files.'),
+                    ("allow_upload_links", '.$allow_upload_links.'),
+                    ("email_from", "'.$_SESSION['setupData']['emAddr'].'"),
+                    ("email_host", "'.$_SESSION['setupData']['emHost'].'"),
+                    ("email_port", "'.$_SESSION['setupData']['emPort'].'"),
+                    ("email_user", "'.$_SESSION['setupData']['emUser'].'"),
+                    ("email_pass", AES_ENCRYPT("'.$_SESSION['setupData']['emPass'].'", "'.$_SESSION['setupData']['customerKey'].'"))';
+        $mysqli->query($qry);
+        
+        //  Create password hash for site admin user
         $salt = substr(md5(uniqid(rand(), true)), 0, 5);
         $pass = hash('sha256', $salt.hash('sha256', $_SESSION['setupData']['sitePass']));
         
         //  Insert the user
         $qry = 'INSERT INTO USERS (`username`, `first_name`, `last_name`, `email`, `password`, `salt`, `active`, `change_password`) VALUES ("'.$_SESSION['setupData']['siteUser'].'", "System", "Administrator", "'.$_SESSION['setupData']['siteEmail'].'", "'.$pass.'", "'.$salt.'", 1, 0)';
-        
         $mysqli->query($qry);
         
         sleep(2);
@@ -281,14 +298,15 @@ class Setup extends Controller
     public function directoryStructure()
     {
         //  Folder array for each folder used
-        $folders = array(
+        $folders = [
             Config::getFile('default'),
             Config::getFile('custPath'),
             Config::getFile('sysPath'),
             Config::getFile('tipPath'),
             Config::getFile('formPath'),
-            Config::getFile('uploadPath')
-        );
+            Config::getFile('uploadPath'),
+            Config::getFile('userPath')
+        ];
         
         //  Create the folders
         foreach($folders as $folder)

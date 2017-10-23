@@ -48,23 +48,23 @@ customerKey = "<?= $_SESSION['setupData']['customerKey']; ?>"
 ;  Upload Root is the base folder that all files will go into
 uploadRoot = "<?= $_SESSION['setupData']['uploadRoot']; ?>"
 ;  Slash depends on the server type.  "\" for Windows, and "/" for Linux
-slash = /
+slash = "/"
 ;  Default path is the path that is chosen if the Tech Bench cannot find a location to 
 ;  upload the file to.
-default = <?= $_SESSION['setupData']['default'] ?>
+default = "<?= $_SESSION['setupData']['default'] ?>" 
 ;  UserPath is for when the users save files to the "My Files" section
-userPath = <?= $_SESSION['setupData']['userPath'] ?>
+userPath = "<?= $_SESSION['setupData']['userPath'] ?>"
 ;  CustPath is where all customer files are uploaded to.  Sub folders will be created for each customer.
-custPath = <?= $_SESSION['setupData']['custPath'] ?>
+custPath = "<?= $_SESSION['setupData']['custPath'] ?>"
 ;  SysPath is for all system specific files.  Sub folders will be created for each system type
-sysPath = <?= $_SESSION['setupData']['sysPath'] ?>
+sysPath = "<?= $_SESSION['setupData']['sysPath'] ?>"
 ;  TipPath is for all files attached to Tech Tips.  Sub folders will be created for each Tip.
-tipPath = <?= $_SESSION['setupData']['tipPath'] ?>
+tipPath = "<?= $_SESSION['setupData']['tipPath'] ?>"
 ;  FormPath is for all company forms.
-formPath = <?= $_SESSION['setupData']['formPath'] ?>
+formPath = "<?= $_SESSION['setupData']['formPath'] ?>"
 ;  UploadPath is for File Links created by users for customers to upload files to.
 ;  Sub folders will be created for each upload link.
-uploadPath = <?= $_SESSION['setupData']['uploadPath'] ?>
+uploadPath = "<?= $_SESSION['setupData']['uploadPath'] ?>"
 ;
 ;  Max upload is the maximum size a file or group of files can be in order to be safely uploaded.
 ;  Be sure to make this value smaller than the settings in the PHP.ini file otherwise the files 

@@ -47,6 +47,18 @@ CREATE TABLE IF NOT EXISTS `customer_linked_sites` (
 	UNIQUE KEY (`parent_id`, `cust_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `user_files` (
+	`user_file_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `file_id` INT(11) NOT NULL,
+    `name` VARCHAR(90) NOT NULL,
+    PRIMARY KEY (`user_file_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`file_id`) REFERENCES `files`(`file_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 INSERT INTO `phone_number_types` (`phone_type_id`, `description`) VALUES 
 	(1, "Work"), (2, "Home"), (3, "Cell");
 

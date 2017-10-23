@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="page-header">
-            <h1 class="text-center">Customer and File Information</h1>
+            <h1 class="text-center">Additional Information</h1>
         </div>
     </div>
 </div>
@@ -23,13 +23,29 @@
                     <label for="customerKey">Encryption Key - PLEASE COPY THIS KEY TO A SECURE LOCATION</label>
                     <input type="text" id="customerKey" name="customerKey" class="form-control" value="<?= $data['encryptionKey']; ?>" required />
                 </div>
-                <div class="form-group">
-                    <label for="customCustID">Allow Custom Customer ID Numbers</label>
-                    <div class="row">
-                        <div class="col-lg-2 col-lg-offset-5">
-                            <input type="checkbox" id="customCustID" name="customCustID" data-toggle="toggle" >
-                        </div>
-                    </div>
+                <div class="checkbox row">
+                    <label for="customCustID" class="col-sm-12 col-lg-6 col-lg-offset-3 col-form-label">
+                        <input type="checkbox" id="customCustID" name="customCustID" data-toggle="toggle" checked />
+                        <strong>Allow Custom Customer ID Numbers</strong>
+                    </label>
+                </div>
+                <div class="checkbox row">
+                    <label for="fileLinks" class="col-sm-12 col-lg-6 col-lg-offset-3 col-form-label">
+                        <input type="checkbox" id="fileLinks" name="fileLinks" data-toggle="toggle" checked />
+                        <strong>Allow Access to File Links</strong>
+                    </label>
+                </div>
+                <div class="checkbox row">
+                    <label for="companyForms" class="col-sm-12 col-lg-6 col-lg-offset-3 col-form-label">
+                        <input type="checkbox" id="companyForms" name="companyForms" data-toggle="toggle" checked />
+                        <strong>Allow Access to Company Forms</strong>
+                    </label>
+                </div>
+                <div class="checkbox row">
+                    <label for="companyForms" class="col-sm-12 col-lg-6 col-lg-offset-3 col-form-label">
+                        <input type="checkbox" id="myFiles" name="myFiles" data-toggle="toggle" checked />
+                        <strong>Allow Access to My Files</strong>
+                    </label>
                 </div>
                 <div class="form-group">
                     <label for="uploadRoot">Root File Location:</label>
@@ -64,6 +80,9 @@
                 <ul>
                     <li><strong>Encryption Key:</strong> All customer information is encrypted before being stored in the database.  This is the key used for encrypting and decrypting this data. <span style="color: red">Please make a copy of this key and paste to a secure location in the event the config file is damaged.</span></li>
                     <li><strong>Allow Custom Customer ID Numbers</strong> If this is turned on, when creating a new customer, the user will be allowed to enter a custom Customer ID number.  If not selected, the customer ID number will be auto generated.</li>
+                     <li><strong>Allow Access to File Links</strong> This section will allow users to create a public link to share with customers to upload files that may be too big for email.  Each file link has an expiration date and a visitor cannot upload a file to this application without having a valid file link.</li>
+                    <li><strong>Allow Access to Company Forms</strong> This section is for global files that should be shared throughout the company.  Examples are "Time Off Requests" or "Incident Reports."</li>
+                    <li><strong>Allow Access to My Files:</strong> This section allows individual users to upload files that only they can access.  These files are specifically for the user that uploaded them and cannot be shared or accessed by other users.</li>
                     <li><strong>Root File Location:</strong> Enter the base location that all files will be stored.  Only change if you know that the required folder has write access.</li>
                     <li><strong>Max File Size:</strong> Select the maximum size that is allowed to be uploaded by a user.</li>
                 </ul>

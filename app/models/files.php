@@ -150,7 +150,7 @@ class Files
         if(file_exists($fileName))
         {
             $qry = 'DELETE FROM `files` WHERE `file_id` = :fileID';
-            $Database::getDB()->prepqre($qry)->execute(['fileID' => $fileID]);
+            Database::getDB()->prepare($qry)->execute(['fileID' => $fileID]);
             
             $this->eraseFile($fileName);
             $msg = 'File ID: '.$fileID.' deleted by User ID: '.$_SESSION['id'];
