@@ -4,6 +4,19 @@
 */
 class Setup extends Controller
 {
+    //  The controller will not allow anyone to access this page if the site is already setup
+    public function __construct()
+    {
+        if(!empty(Config::getCore('baseURL')))
+        {
+            $msg = 'Someone tried to access the setup page after site already configured.';
+            Logs::writeLog('Security-Alert', $msg);
+            
+            header('Location: /');
+            die();
+        }
+    }
+    
     //  Bring up the welcome page and test if the necessary folders are writable.
     public function index()
     {
