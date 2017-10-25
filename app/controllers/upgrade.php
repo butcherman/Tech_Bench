@@ -125,17 +125,19 @@ class Upgrade extends Controller
         $db->query($qry);
         
         //  Move the email settings from the config file over to the database
+        $config = Config::getWholeConfig();
         $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
-                    ("email_user", '.Config::getEmail('emUser').'), 
-                    ("email_pass", AES_ENCRYPT('.Config::getEmail('emPass').', "'.Config::getKey().'")), 
-                    ("email_host", '.Config::getEmail('emHost').'), 
-                    ("email_port", '.Config::getEmail('emPort').'),
-                    ("email_from", '.Config::getEmail('emFrom').'), 
-                    ("email_name", '.Config::getEmail('emName').')';
+                    ("email_user", "'.$config['email']['emUser'].'"), 
+                    ("email_pass", AES_ENCRYPT("'.$config['email']['emPass'].'", "'.Config::getKey().'")), 
+                    ("email_host", "'.$config['email']['emHost'].'"), 
+                    ("email_port", "'.$config['email']['emPort'].'"),
+                    ("email_from", "'.$config['email']['emFrom'].'"), 
+                    ("email_name", "'.$config['email']['emName'].'")';
+        $db->query($qry);
         
         //  Add the "My Files" folder for each user
         $qry = 'SELECT `user_id` FROM `users`';
-        $result = $this->db->query($qry);
+        $result = $db->query($qry);
         
         $result = $result->fetchAll();
         $fileModel = $this->model('files');
@@ -152,6 +154,7 @@ class Upgrade extends Controller
         
         //  Recreate Config file 
         $_SESSION['setupData']['customCustID'] = "0";
+        $_SESSION['setupData']['userPath'] = 'users/';
         $this->rewriteConfig();
     }
     

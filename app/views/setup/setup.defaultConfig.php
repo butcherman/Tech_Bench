@@ -6,7 +6,7 @@
 ;  settings for the application.
 ;
 ;  Config File Version:  3.0
-;  Updated: 9-24-2017
+;  Updated: 10-24-2017
 ;
 ;  Primary system information
 [core]
