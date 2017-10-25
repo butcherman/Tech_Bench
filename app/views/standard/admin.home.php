@@ -93,9 +93,18 @@
         </div>
         <div class="row top-buffer">
             <div class="col-sm-12">
+                <a href="/admin/deactivate-customer" class="btn btn-default btn-block">Deactivate Customer</a>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-sm-12">
+                <a href="/admin/reactivate-customer" class="btn btn-default btn-block">Reactivate Customer</a>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-sm-12">
                 <a href="/admin/delete-customer" class="btn btn-default btn-block">Delete Customer</a>
             </div>
         </div>
     </div>
 </div>
-

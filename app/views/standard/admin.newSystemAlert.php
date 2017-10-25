@@ -89,6 +89,7 @@
                 else
                 {
                     alert('There Was A Problem Adding Alert.\nPlease Contact System Administrator');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

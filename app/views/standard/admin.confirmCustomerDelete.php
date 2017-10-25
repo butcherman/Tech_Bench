@@ -55,6 +55,7 @@
             else
             {
                 $('#yes-or-no-wrapper').html('<h2 class="text-center">There Was A Problem Deleting the Customer.  Please review logs for more information</h2>');
+                $.post('/err/ajaxFail', {msg: data});
             }
         })
     });

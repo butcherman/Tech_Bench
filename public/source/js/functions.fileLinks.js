@@ -203,6 +203,7 @@ $(document).on('click', '.delete-file-confirm', function()
         else
         {
             alert(data);
+            $.post('/err/ajaxFail', {msg: data});
         }
     });
 });
@@ -237,9 +238,9 @@ $(document).on('click', $('#submit-share-form'), function()
                 else
                 {
                     alert('Sorry, there was an error processing your request');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }
     });
 });
-

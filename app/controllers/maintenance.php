@@ -106,4 +106,130 @@ class Maintenance extends Controller
         $this->render(str_replace(PHP_EOL, '<br />', $output));
         $this->render($output); 
     }
+    
+    //  Archive all log files into a zip and clearstatcache
+    public function archiveLogs()
+    {
+        $today = date('Y-m-d');
+        $logFiles = scanDir(__DIR__.'/../../logs/');
+        
+        //  Create the zip archive and add all the log files
+        $zipName = __DIR__.'/../../logs/log_files-'.$today.'.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipName, ZipArchive::CREATE);
+        foreach($logFiles as $file)
+        {
+            $parts = pathinfo($file);
+            if($parts['extension'] === 'log')
+            {
+                $logFile = __DIR__.'/../../logs/'.$file;
+                $zip->addFile($logFile, $file);
+            }
+        }
+        $zip->close();
+        
+        //  Re-cycle through the logs and delete them
+        foreach($logFiles as $file)
+        {
+            $parts = pathinfo($file);
+            if($parts['extension'] === 'log')
+            {
+                unlink(__DIR__.'/../../logs/'.$file);
+            }
+        }
+    }
+    
+    //  File Maintenance shows all valid, unknown, and missing files for whole system (includes non category files)
+    public function fileMaintenance()
+    {
+        $model = $this->model('reportModel');
+        
+        //  Determine disk space data
+        $space = disk_total_space('/');
+        $free = disk_free_space('/');
+        $used = number_format((($space - $free) / $space) * 100, 2).'%';
+        
+        $countFiles = $model->compareFiles('root', 'files');
+        
+        //  Put together all missing files
+        $missing = '';
+        foreach($countFiles['missingList'] as $mis)
+        {
+            $missing .= '<tr><td><input type="checkbox" class="missing-item" data-filename="'.$mis.'" /></td><td>'.$mis.'</td></tr>';
+        }
+        
+        //  Put together all unknown files 
+        $unknown = '';
+        foreach($countFiles['unknownList'] as $ukn)
+        {
+            $unknown .= '<tr><td><input type="checkbox" class="unknown-item" data-filename="'.$ukn.'" /></td><td>'.$ukn.'</td><td><span class="glyphicon glyphicon-trash"></span></td></tr>';
+        }
+        
+        $data = [
+            'numFiles'    => $model->countFiles(),
+            'totalSpace'  => $space,
+            'freeSpace'   => $free,
+            'percent'     => $used,
+            'missing'     => empty($missing) ? '<tr><td colspan=2"><h4 class="text-center">No Missing Files</h4></td></tr>' : $missing,
+            'unknown'     => empty($unknown) ? '<tr><td colspan=2"><h4 class="text-center">No Unknown Files</h4></td></tr>' : $unknown
+        ];
+        
+        $this->view('maintenance.systemFiles', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  File Maintenance shows all valid, unknown, and missing files for each Category
+    public function categoryFileMaintenance()
+    {
+        $model = $this->model('reportModel');
+        
+        //  Determine disk space data
+        $space = disk_total_space('/');
+        $free = disk_free_space('/');
+        $used = number_format((($space - $free) / $space) * 100, 2).'%';
+        
+        //  Determine file count information
+        $countCust = $model->compareFiles(Config::getFile('custPath'), 'customer_files');
+        $countSyst = $model->compareFiles(Config::getFile('sysPath'), 'system_files');
+        $countTips = $model->compareFiles(Config::getFile('tipPath'), 'tech_tip_files');
+        $countUser = $model->compareFiles(Config::getFile('userPath'), 'user_files');
+        $countComp = $model->compareFiles(Config::getFile('formPath'), 'company_files');
+        
+
+        $data = [
+            'numFiles'    => $model->countFiles(),
+            'totalSpace'  => $space,
+            'freeSpace'   => $free,
+            'percent'     => $used,
+            'custValid'   => $countCust['valid'],
+            'custMissing' => $countCust['missing'],
+            'custUnknown' => $countCust['unknown'],
+            'sysValid'    => $countSyst['valid'],
+            'sysMissing'  => $countSyst['missing'],
+            'sysUnknown'  => $countSyst['unknown'],
+            'tipValid'    => $countTips['valid'],
+            'tipMissing'  => $countTips['missing'],
+            'tipUnknown'  => $countTips['unknown'],
+            'usrValid'    => $countUser['valid'],
+            'usrMissing'  => $countUser['missing'],
+            'usrUnknown'  => $countUser['unknown'],
+            'compValid'   => $countComp['valid'],
+            'compMissing' => $countComp['missing'],
+            'compUnknown' => $countComp['unknown']
+        ];
+        
+        $this->view('reports.systemFiles', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Delete a missing file from the databse
+    public function deleteMissing()
+    {
+        $model = $this->model('files');
+        $model->deleteFileByName($_POST['fileName']);
+        
+        $this->render('success');
+    }    
 }

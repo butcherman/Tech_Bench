@@ -32,12 +32,12 @@
                     <th>Customer Name</th>
                     <th>City, State</th>
                     <th>System Type</th>
-            <!--    <th>Backup Loaded</th>  -->
+                    <th>Backup Loaded</th>  
                 </tr>
             </thead>
             <tfoot>
                 <tr id="pager" class="form-horizontal">
-                    <td colspan="3" class="text-center">
+                    <td colspan="4" class="text-center">
                         <button type="button" class="btn first"><span class="glyphicon glyphicon-step-backward"></span></button>
                         <button type="button" class="btn prev"><span class="glyphicon glyphicon-backward"></span></button>
                         <span class="pagedisplay"></span>
@@ -54,7 +54,7 @@
             </tfoot>
             <tbody>
                 <tr>
-                    <td colspan="3" id="results-header" class="text-center">Search For Customer By Name, City, Or System Type</td>
+                    <td colspan="4" id="results-header" class="text-center">Search For Customer By Name, City, Or System Type</td>
                 </tr>
             </tbody>
         </table>

@@ -91,4 +91,91 @@ class Upgrade extends Controller
         $db = Database::getDB();
         $db->exec($qry);
     }
+    
+    //  Upgrade from 2.4 to 3.0
+    public function up_from_2_4()
+    {
+        require_once(__DIR__.'../../views/upgrades/3_0.php');
+        
+        //  Add new databse tables
+        $db = Database::getDB();
+        $db->exec($qry);
+        
+        //  Change all customer contact phone numbers to new tables
+        $model = $this->model('customers');
+        //  Get all customer ID's
+        $custList = $model->searchCustomer();
+        //  Cycle through all customers and get the contacts
+        foreach($custList as $cust)
+        {
+            $contacts = $model->getContacts($cust->cust_id);
+            //  Cycle through contacts and move phone number over to new table
+            foreach($contacts as $cont)
+            {
+                if(!empty($cont->phone))
+               {
+                    $qry = 'INSERT INTO `customer_contact_phones` (`cont_id`, `phone_type_id`, `phone_number`) VALUES ('.$cont->cont_id.', 1, "'.$cont->phone.'")';
+                    $db->exec($qry);
+               } 
+            }
+        }
+        
+        //  Remove the "Phone" column from the contacts table
+        $qry = 'ALTER TABLE `customer_contacts` DROP COLUMN `phone`';
+        $db->query($qry);
+        
+        //  Move the email settings from the config file over to the database
+        $config = Config::getWholeConfig();
+        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
+                    ("email_user", "'.$config['email']['emUser'].'"), 
+                    ("email_pass", AES_ENCRYPT("'.$config['email']['emPass'].'", "'.Config::getKey().'")), 
+                    ("email_host", "'.$config['email']['emHost'].'"), 
+                    ("email_port", "'.$config['email']['emPort'].'"),
+                    ("email_from", "'.$config['email']['emFrom'].'"), 
+                    ("email_name", "'.$config['email']['emName'].'")';
+        $db->query($qry);
+        
+        //  Add the "My Files" folder for each user
+        $qry = 'SELECT `user_id` FROM `users`';
+        $result = $db->query($qry);
+        
+        $result = $result->fetchAll();
+        $fileModel = $this->model('files');
+        //  Create the 'user' folder for the root of the file structure
+        $path = Config::getFile('uploadRoot');
+        $fileModel->createFolder($path);
+        $path = Config::getFile('uploadRoot').'users/';
+        
+        //  Create folder for each specific user
+        foreach($result as $user)
+        {
+            $fileModel->createFolder($path.$user->user_id);
+        }  
+        
+        //  Recreate Config file 
+        $_SESSION['setupData']['customCustID'] = "0";
+        $_SESSION['setupData']['userPath'] = 'users/';
+        $this->rewriteConfig();
+    }
+    
+    //  Get all config.ini information, and re-write the file with any new paramaters
+    private function rewriteConfig()
+    {
+        //  Get all values of the current config file
+        $config = Config::getWholeConfig();
+        foreach($config as $category)
+        {
+            foreach($category as $item => $value)
+            {
+                $_SESSION['setupData'][$item] = $value;
+            }
+        }
+        
+        //  Rewrite the config file
+        ob_start();
+            require __DIR__.'/../views/setup/setup.defaultConfig.php';
+        $configFile = ob_get_clean();
+        $configPath = __DIR__.'/../../config/config.ini';
+        file_put_contents($configPath, $configFile, LOCK_EX);
+    }
 }

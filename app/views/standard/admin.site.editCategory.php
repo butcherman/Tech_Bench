@@ -79,8 +79,8 @@
                 }
                 else
                 {
-                    alert(data);
                     $('#alert-notification').html('There Was A Problem Creating The Category.<br />View Logs For More Infomation.');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

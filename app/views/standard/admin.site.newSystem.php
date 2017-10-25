@@ -114,10 +114,10 @@
                 }
                 else
                 {
-                    alert(data);
                     $('#alert-notification').removeClass('alert-success');
                     $('#alert-notification').addClass('alert-danger');
                     $('#alert-notification').html('There Was A Problem Creating the System.<br />View Logs For More Infomation.');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

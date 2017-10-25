@@ -15,7 +15,7 @@ class Customers
     public function addCustomer($custData)
     {
         $data = [
-            'id' => ltrim($custData['custID'], '0'),
+            'id' => isset($custData['custID']) ? ltrim($custData['custID'], '0') : '',
             'name' => $custData['custName'],
             'dba' => $custData['custDBA'],
             'addr' => $custData['custAddr'],
@@ -25,6 +25,8 @@ class Customers
         ];
         $qry = 'INSERT INTO `customers` (`cust_id`, `name`, `dba_name`, `address`, `city`, `state`, `zip`) VALUES (:id, :name, :dba, :addr, :city, :state, :zip)';
         $this->db->prepare($qry)->execute($data);
+        
+        return $this->db->lastInsertID();
     }
     
     //  Update a customer's ID
@@ -44,6 +46,33 @@ class Customers
         }
     }
     
+    //  Deactivate a customer
+    public function deactivateCustomer($custID)
+    {
+        $qry = 'UPDATE `customers` SET `active` = 0 WHERE `cust_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $custID]);
+        
+        $qry2 = 'DELETE FROM `customer_favs` WHERE `cust_id` = :id';
+        $this->db->prepare($qry2)->execute(['id' => $custID]);
+    }
+    
+    //  Reactivate a customer
+    public function reactivateCustomer($custID)
+    {
+        $qry = 'UPDATE `customers` SET `active` = 1 WHERE `cust_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $custID]);
+    }
+    
+    //  Get a list of deactivated customers
+    public function searchDeactivated()
+    {
+        $qry = 'SELECT `cust_id`, `name`, `city`, `state` FROM `customers` 
+                    WHERE `active` = 0 ORDER BY `name` ASC';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
     //  Search customer function will find a customer based on search paramaters
     public function searchCustomer($name = '', $city = '', $syst = '')
     {
@@ -56,6 +85,7 @@ class Customers
                 WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` 
                 LIKE :name3) AND `city` LIKE :city 
                 AND `system_types`.`name` LIKE :syst 
+                AND `active` = 1
                 ORDER BY `customers`.`name` ASC';
             $data = [
                 'name1' => '%'.$name.'%',
@@ -68,7 +98,7 @@ class Customers
         else
         {
             $qry = 'SELECT `customers`.`cust_id`, `customers`.`name`, `customers`.`city`, `customers`.`state` FROM `customers` 
-                    WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` LIKE :name3) AND `city` LIKE :city 
+                    WHERE (`customers`.`name` LIKE :name1 OR `dba_name` LIKE :name2 OR `customers`.`cust_id` LIKE :name3) AND `city` LIKE :city AND `active` = 1
                      ORDER BY `customers`.`name` ASC';
             $data = [
                 'name1' => '%'.$name.'%',
@@ -99,7 +129,7 @@ class Customers
     //  Pull all customer information from the database
     public function getCustData($custID)
     {
-        $qry = 'SELECT `name`, `dba_name`, `address`, `city`, `state`, `zip` FROM `customers` WHERE `cust_id` = :custID';
+        $qry = 'SELECT `name`, `dba_name`, `address`, `city`, `state`, `zip` FROM `customers` WHERE `cust_id` = :custID AND `active` = 1';
         $result = $this->db->prepare($qry);
         $result->execute(['custID' => $custID]);
         
@@ -210,25 +240,72 @@ class Customers
         return $result->fetch();
     }
     
+    //  Get the phone number and type of phone number for a contact
+    public function getContactPhone($contID)
+    {
+        $qry = 'SELECT `customer_contact_phones`.`phone_number`, `phone_number_types`.`description` FROM `customer_contact_phones` 
+            LEFT JOIN `phone_number_types` ON `customer_contact_phones`.`phone_type_id` = `phone_number_types`.`phone_type_id` 
+            WHERE `cont_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $contID]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Delete all phone numbers for a contact
+    public function deleteContactPhone($contID)
+    {
+        $qry = 'DELETE FROM `customer_contact_phones` WHERE `cont_id` = :id';
+        $this->db->prepare($qry)->execute(['id' => $contID]);
+    }
+    
+    //  Get the possible types of phone numbers that can be assigned
+    public function getPhoneTypes()
+    {
+        $qry = 'SELECT * FROM `phone_number_types`';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
     //  Add a new contact to the database
     public function addContact($custID, $contData)
     {
-        $qry = 'INSERT INTO `customer_contacts` (`cust_id`, `name`, `phone`, `email`) VALUES (:custID, :name, :phone, :email)';
+        $qry = 'INSERT INTO `customer_contacts` (`cust_id`, `name`, `email`) VALUES (:custID, :name, :email)';
         $data = [
             'custID' => $custID,
             'name' => $contData['contName'],
-            'phone' => $contData['contPhone'],
             'email' => $contData['contEmail']
         ];
 
+        $this->db->prepare($qry)->execute($data);
+        
+        return $this->db->lastInsertID();
+    }
+    
+    //  Add a contact phone number into the database
+    public function addPhoneNumber($contID, $numType, $number)
+    {
+        $qry = 'INSERT INTO `customer_contact_phones` (`cont_id`, `phone_type_id`, `phone_number`) VALUES (:cont, :type, :number)';
+        $data = [
+            'cont' => $contID,
+            'type' => $numType,
+            'number' => $number
+        ];
+        
         $this->db->prepare($qry)->execute($data);
     }
     
     //  Edit an existing contact to the database
     public function editContact($contID, $contData)
     {
-        $qry = 'UPDATE `customer_contacts` SET `name` = :contName, `phone` = :contPhone, `email` = :contEmail WHERE `cont_id` = :contID';
-        $contData['contID'] = $contID;
+        $qry = 'UPDATE `customer_contacts` SET `name` = :contName, `email` = :contEmail WHERE `cont_id` = :contID';
+//        $contData['contID'] = $contID;
+        $contData = [
+            'contName' => $contData['contName'],
+            'contEmail' => $contData['contEmail'],
+            'contID' => $contID
+        ];
         $this->db->prepare($qry)->execute($contData);
     }
     
@@ -242,10 +319,22 @@ class Customers
         }
     }
     
+    //  Get the alert level of the note types
+    public function getNoteLevels()
+    {
+        $qry = 'SELECT `note_level_id`, `description` FROM `customer_note_levels` ORDER BY `note_level_id` ASC';
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
     //  Get all customer notes
     public function getAllNotes($custID)
     {
-        $qry = 'SELECT `note_id`, `subject`, `description`, `updated`, `user_id` FROM `customer_notes` WHERE `cust_id` = :id';
+        $qry = 'SELECT `note_id`, `subject`, `customer_notes`.`description`, `updated`, `user_id`, `customer_note_levels`.`description` AS `level` FROM `customer_notes` 
+            LEFT JOIN `customer_note_levels` ON `customer_notes`.`note_level_id` = `customer_note_levels`.`note_level_id` 
+            WHERE `cust_id` = :id
+            ORDER BY `customer_notes`.`note_level_id` DESC';
         $result = $this->db->prepare($qry);
         $result->execute(['id' => $custID]);
         
@@ -255,7 +344,8 @@ class Customers
     //  Get one customer note
     public function getNote($noteID)
     {
-        $qry = 'SELECT `subject`, `description` FROM `customer_notes` WHERE `note_id` = :note';
+        $qry = 'SELECT `subject`, `customer_notes`.`description`, `customer_note_levels`.`description` AS `level` FROM `customer_notes` 
+            LEFT JOIN `customer_note_levels` ON `customer_notes`.`note_level_id` = `customer_note_levels`.`note_level_id`WHERE `note_id` = :note';
         $result = $this->db->prepare($qry);
         $result->execute(['note' => $noteID]);
         
@@ -269,9 +359,10 @@ class Customers
             'custID' => $custID,
             'subject' => $noteData['noteSubject'],
             'body' => $noteData['noteDescription'],
-            'user' => $userID
+            'user' => $userID,
+            'level' => $noteData['level']
         ];
-        $qry = 'INSERT INTO `customer_notes` (`cust_id`, `subject`, `description`, `user_id`) VALUES (:custID, :subject, :body, :user)';
+        $qry = 'INSERT INTO `customer_notes` (`note_level_id`, `cust_id`, `subject`, `description`, `user_id`) VALUES (:level, :custID, :subject, :body, :user)';
         $this->db->prepare($qry)->execute($data);
     }
     
@@ -282,9 +373,10 @@ class Customers
             'note' => $noteID,
             'user' => $userID,
             'subj' => $noteData['noteSubject'],
-            'body' => $noteData['noteDescription']
+            'body' => $noteData['noteDescription'],
+            'level' => $noteData['level']
         ];
-        $qry = 'UPDATE `customer_notes` SET `subject` = :subj, `description` = :body, `updated` = CURRENT_TIMESTAMP, `user_id` = :user WHERE `note_id` = :note';
+        $qry = 'UPDATE `customer_notes` SET `subject` = :subj, `description` = :body, `updated` = CURRENT_TIMESTAMP, `user_id` = :user, `note_level_id` = :level WHERE `note_id` = :note';
         $this->db->prepare($qry)->execute($data);
     }
     
@@ -350,11 +442,11 @@ class Customers
     //  Determine if the customer has a backup or not
     public function hasBackup($custID)
     {
-        $qry = 'SELECT COUNT(`file_id`) FROM `customer_files` LEFT JOIN `customer_file_types` ON `customer_files`.`file_type_id` = `customer_file_types`.`file_type_id` WHERE `description` = "backup" AND `cust_id` = :id';
+        $qry = 'SELECT `added_on` FROM `customer_files` LEFT JOIN `customer_file_types` ON `customer_files`.`file_type_id` = `customer_file_types`.`file_type_id` WHERE `description` = "backup" AND `cust_id` = :id ORDER BY `added_on` ASC LIMIT 1';
         $result = $this->db->prepare($qry);
         $result->execute(['id' => $custID]);
         
-        return $result->fetchColumn();
+        return $result->fetch();
     }
     
     //  Determine if the customer has a system or not
@@ -365,5 +457,36 @@ class Customers
         $result->execute(['id' => $custID]);
         
         return $result->fetchColumn();
+    }
+    
+    //  Check for a valid parent customer ID
+    public function checkParentID($custID)
+    {
+        $qry = 'SELECT `parent_id` FROM `customer_linked_sites` WHERE `parent_id` = :custID';
+        $result = $this->db->prepare($qry);
+        $result->execute(['custID' => $custID]);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Add a linked customer
+    public function addLinkedCustomer($parentID, $custID)
+    {
+        $qry = 'INSERT INTO `customer_linked_sites` (`parent_id`, `cust_id`) VALUES (:parent, :cust)';
+        $data = [
+            'parent' => $parentID,
+            'cust' => $custID
+        ];
+        $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Get all linked sites
+    public function getLinkedSites($custID)
+    {
+        $qry = 'SELECT `parent_id`, `cust_id` FROM `customer_linked_sites` WHERE `parent_id` = (SELECT `parent_id` FROM `customer_linked_sites` WHERE `cust_id` = :cust)';
+        $result = $this->db->prepare($qry);
+        $result->execute(['cust' => $custID]);
+        
+        return $result->fetchAll();
     }
 }

@@ -4,6 +4,12 @@
         <input type="text" name="noteSubject" id="noteSubject" class="form-control" placeholder="Subject" value="<?= $data['subject']; ?>" />
     </div>
     <div class="form-group">
+        <label for="level">Note Importance:</label>
+        <select id="level" name="level" class="form-control">
+            <?= $data['levels'] ?>
+        </select>
+    </div>
+    <div class="form-group">
         <label for="noteDescription">Description:</label>
         <textarea name="noteDescription" id="noteDescription" class="form-control" rows="40" required><?= $data['body']; ?></textarea>
     </div>

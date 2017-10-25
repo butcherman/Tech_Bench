@@ -4,10 +4,12 @@
 <div class="row">
     <div id="customer-form-wrapper" class="col-md-8 col-md-offset-2">
         <form id="new-customer-form">
+<?php if(Config::getCore('customCustID')) { echo '
             <div class="form-group">
                 <label for="custID">Customer Site ID: <span class="glyphicon glyphicon-question-sign" title="What is this?" data-toggle="popover"></span></label>
                 <input type="text" name="custID" id="custID" class="form-control" />
             </div>
+'; } ?>
             <div class="form-group">
                 <label for="custName">Customer Name:</label>
                 <input type="text" name="custName" id="custName" class="form-control" />
@@ -100,11 +102,23 @@
     {
         rules:
         {
+<?php if(Config::getCore('customCustID')) { echo '
             custID:
             {
                 required: true,
                 number: true,
+                remote: {
+                    url: "/customer/checkID",
+                    type: "post",
+                    data: {
+                        custID: function()
+                        {
+                            return $("#custID").val();
+                        }
+                    }
+                }
             },
+'; } ?>
             custName: "required",
             custAddr: "required",
             custCity: "required",
@@ -121,7 +135,7 @@
             {
                 if(data == 'success')
                 {
-                    var html = '<h3 class="text-center">Customer Successfully Added</h3><p class="text-center"><a href="/customer/id/'+$('#custID').val()+'/'+$('#custName').val()+'">Click</a> to go to profile</p><p class="text-center">Or, <a href="/customers/add">Click</a> to add another</p>';
+                    var html = '<h3 class="text-center">Customer Successfully Added</h3><p class="text-center"><a href="/customer/id/'+$('#custID').val()+'/'+$('#custName').val()+'">Click</a> to go to profile</p><p class="text-center">Or, <a href="/customer/add">Click</a> to add another</p>';
                     $('#customer-form-wrapper').html(html);
                 }
                 else if(data == 'duplicate')
@@ -131,8 +145,8 @@
                 }
                 else
                 {
-                    alert(data);
                     alert('There Was A Problem Adding Customer');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

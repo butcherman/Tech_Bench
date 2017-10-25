@@ -17,7 +17,7 @@
 </div>
 <div class="row">
     <div class="col-md-2 col-md-offset-2 col-xs-12">
-        <a href="#edit-modal" class="btn btn-default btn-block" id="add-file" data-toggle="modal">Add File</a>
+        <a href="#edit-modal" class="btn btn-default btn-block" id="add-file" data-toggle="modal" data-backdrop="static" data-keyboard="false">Add File</a>
     </div>
     <div class="col-md-2 col-xs-12">
         <a href="#edit-modal" class="btn btn-default btn-block" id="edit-link" data-toggle="modal">Edit Link Data</a>

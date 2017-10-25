@@ -18,7 +18,8 @@
         'configuration file',
         'new database',
         'defaults',
-        'directory structure'
+        'directory structure',
+        'system settings'
     ];
     
     $('#install-process').html('<h3 class="text-center">Creating Site</h3>');

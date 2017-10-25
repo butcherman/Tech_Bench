@@ -36,10 +36,10 @@
                         <input type="submit" id="submit" value="Submit File" class="btn btn-default" />
                     </div>
                     <div class="progress" id="forProgressBar">
-                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="progressBar">
-                        <span id="progressStatus"></span>
+                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="progressBar">
+                            <span id="progressStatus"></span>
+                        </div>
                     </div>
-                </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -69,11 +69,14 @@
             $('#new-file').modal('hide');
             $('#name').val('');
             $('#file').val('');
+            $('#forProgressBar').hide();
+            $('#progressStatus').text('');
             loadForms();
         }
         else
         {
             alert(res);
+            $.post('/err/ajaxFail', {msg: res});
         }
     }
     

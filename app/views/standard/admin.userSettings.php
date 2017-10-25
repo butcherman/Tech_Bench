@@ -54,6 +54,7 @@
                     else
                     {
                         alert(data);
+                        $.post('/err/ajaxFail', {msg: data});
                     }
                 });
             }

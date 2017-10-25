@@ -125,8 +125,8 @@
                 }
                 else
                 {
-                    alert(data);
-      //              alert('There Was A Problem Adding Alert.\nPlease Contact System Administrator');
+                    alert('There Was A Problem Adding Alert.\nPlease Contact System Administrator');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

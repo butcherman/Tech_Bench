@@ -114,7 +114,6 @@
             submitFile('/fileLink/submitNewFile/<?= $data['linkID']; ?>', 'customer-add-file')
         }
     });
-//alert('<?= $data['allow']; ?>');    
     function uploadComplete(res)
     {
         if(res === 'success')
@@ -128,6 +127,7 @@
         else
         {
             alert(res);
+            $.post('/err/ajaxFail', {msg: res});
         }
     }
 </script>

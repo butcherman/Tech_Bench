@@ -172,6 +172,12 @@ class Setup extends Controller
     //  Finalize step 1 is to create the configuration file
     public function configurationFile()
     {
+        //  Modify some values that need appending
+        $_SESSION['setupData']['title'] = $_SESSION['setupData']['title'].' - Tech Bench';
+        $_SESSION['setupData']['uploadRoot'] = $_SESSION['setupData']['uploadRoot'].'/';
+        $_SESSION['setupData']['baseURL'] = $_SESSION['setupData']['baseURL'].'/';
+        $_SESSION['setupData']['logo'] = 'TechBenchLogo.png';
+        
         ob_start();
             require __DIR__.'/../views/setup/setup.defaultConfig.php';
         $configFile = ob_get_clean();
@@ -187,7 +193,7 @@ class Setup extends Controller
     public function newDatabase()
     {
         //  Get information to create the database connection
-        $dbHost = $_SESSION['setupData']['dbServer'];
+        $dbHost = $_SESSION['setupData']['host'];
         $dbUser = $_SESSION['setupData']['dbUser'];
         $dbPass = $_SESSION['setupData']['dbPass'];
         $charset = 'utf8';
@@ -251,13 +257,15 @@ class Setup extends Controller
             }
         }
         
+        //  Insert the email information into the 
+        
         return 'success';
     }
     
     //  Finalize step 3 is to build the system defaults
     public function defaults()
     {
-        $mysqli = new mysqli($_SESSION['setupData']['dbServer'], $_SESSION['setupData']['dbUser'], $_SESSION['setupData']['dbPass'], $_SESSION['setupData']['dbName']);
+        $mysqli = new mysqli($_SESSION['setupData']['host'], $_SESSION['setupData']['dbUser'], $_SESSION['setupData']['dbPass'], $_SESSION['setupData']['dbName']);
         
         //  If the databse connection fails, kick out error
         if($mysqli->connect_errno)
@@ -266,13 +274,28 @@ class Setup extends Controller
             die();
         }
         
-        //  Create password hash
+        //  Input all the initial settings and email settings
+        $allow_company_forms = isset($_SESSION['setupData']['companyForms']) && $_SESSION['setupData']['companyForms'] === 'on' ? 1 : 0;
+        $allow_my_files      = isset($_SESSION['setupData']['myFiles']) && $_SESSION['setupData']['myFiles'] === 'on' ? 1 : 0;
+        $allow_upload_links  = isset($_SESSION['setupData']['fileLinks']) && $_SESSION['setupData']['fileLinks'] === 'on' ? 1 : 0;
+        
+        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
+                    ("allow_company_forms", '.$allow_company_forms.'),
+                    ("allow_my_files", '.$allow_my_files.'),
+                    ("allow_upload_links", '.$allow_upload_links.'),
+                    ("email_from", "'.$_SESSION['setupData']['emAddr'].'"),
+                    ("email_host", "'.$_SESSION['setupData']['emHost'].'"),
+                    ("email_port", "'.$_SESSION['setupData']['emPort'].'"),
+                    ("email_user", "'.$_SESSION['setupData']['emUser'].'"),
+                    ("email_pass", AES_ENCRYPT("'.$_SESSION['setupData']['emPass'].'", "'.$_SESSION['setupData']['customerKey'].'"))';
+        $mysqli->query($qry);
+        
+        //  Create password hash for site admin user
         $salt = substr(md5(uniqid(rand(), true)), 0, 5);
         $pass = hash('sha256', $salt.hash('sha256', $_SESSION['setupData']['sitePass']));
         
         //  Insert the user
         $qry = 'INSERT INTO USERS (`username`, `first_name`, `last_name`, `email`, `password`, `salt`, `active`, `change_password`) VALUES ("'.$_SESSION['setupData']['siteUser'].'", "System", "Administrator", "'.$_SESSION['setupData']['siteEmail'].'", "'.$pass.'", "'.$salt.'", 1, 0)';
-        
         $mysqli->query($qry);
         
         sleep(2);
@@ -288,14 +311,15 @@ class Setup extends Controller
     public function directoryStructure()
     {
         //  Folder array for each folder used
-        $folders = array(
+        $folders = [
             Config::getFile('default'),
             Config::getFile('custPath'),
             Config::getFile('sysPath'),
             Config::getFile('tipPath'),
             Config::getFile('formPath'),
-            Config::getFile('uploadPath')
-        );
+            Config::getFile('uploadPath'),
+            Config::getFile('userPath')
+        ];
         
         //  Create the folders
         foreach($folders as $folder)
@@ -312,6 +336,43 @@ class Setup extends Controller
         $_SESSION['username'] = $_SESSION['setupData']['siteUser'];
         $_SESSION['name'] = 'Administrator User';
         $_SESSION['changePassword'] = 0;
+        
+        return 'success';
+    }
+    
+    //  Finalize step 5 is to input the default settings into the database
+    public function systemSettings()
+    {
+        //  Get information to create the database connection
+        $dbHost = $_SESSION['setupData']['host'];
+        $dbUser = $_SESSION['setupData']['dbUser'];
+        $dbPass = $_SESSION['setupData']['dbPass'];
+        $charset = 'utf8';
+        $dsn = 'mysql:host='.$dbHost.';charset='.$charset;
+        $opt = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ];
+        //  Try to connect to the database and create PDO object.
+        try
+        {
+            $db = new PDO($dsn, $dbUser, $dbPass, $opt);
+        }
+        catch(PDOException $e)
+        {
+            echo 'Error Connecting to Database Server';
+        }
+        
+        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
+                    ("email_user", '.$_SESSION['setupData']['emUser'].'), 
+                    ("email_pass", AES_ENCRYPT('.$_SESSION['setupData']['emPass'].', "'.$_SESSION['setupData']['customerKey'].'")), 
+                    ("email_host", '.$_SESSION['setupData']['emHost'].'), 
+                    ("email_port", '.$_SESSION['setupData']['emPort'].'),
+                    ("email_from", '.$_SESSION['setupData']['emAddr'].'), 
+                    ("email_name", "Tech Bench"),
+                    ("allow_company_forms", 1),
+                    ("allow_upload_links", 1)';
         
         return 'success';
     }

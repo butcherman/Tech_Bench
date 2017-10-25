@@ -200,4 +200,207 @@ class siteAdministration extends Controller
         
         $this->render($sysData);
     }
+    
+    //  Global system settings for what features are allowed and what are not
+    public function systemSettings()
+    {
+        $data = [
+            'links' => Config::getSetting('allow_upload_links') ? ' checked' : '',
+            'forms' => Config::getSetting('allow_company_forms') ? ' checked' : '',
+            'files' => Config::getSetting('allow_my_files') ? ' checked' : ''
+        ];
+        
+        $this->view('admin.site.globalSettings', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the change settings form
+    public function submitSettingsForm()
+    {
+        //  Determine if the users can access the File upload Links section
+        if(isset($_POST['fileLinks']) && $_POST['fileLinks'] === 'on')
+        {
+            if(!Config::getSetting('allow_upload_links'))
+            {
+                Config::updateSetting('allow_upload_links', 1);
+            }
+        }
+        else
+        {
+            if(Config::getSetting('allow_upload_links'))
+            {
+                Config::updateSetting('allow_upload_links', 0);
+            }
+        }
+        
+        //  Determine if the users can access the Company Forms section
+        if(isset($_POST['companyForms']) && $_POST['companyForms'] === 'on')
+        {
+            if(!Config::getSetting('allow_company_forms'))
+            {
+                Config::updateSetting('allow_company_forms', 1);
+            }
+        }
+        else
+        {
+            if(Config::getSetting('allow_company_forms'))
+            {
+                Config::updateSetting('allow_company_forms', 0);
+            }
+        }
+        
+        //  Determine if the users can access the My Files section
+        if(isset($_POST['myFiles']) && $_POST['myFiles'] === 'on')
+        {
+            if(!Config::getSetting('allow_my_files'))
+            {
+                Config::updateSetting('allow_my_files', 1);
+            }
+        }
+        else
+        {
+            if(Config::getSetting('allow_my_files'))
+            {
+                Config::updateSetting('allow_my_files', 0);
+            }
+        }
+        
+        //  Note the change in the log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' modified the global system settings';
+        Logs::writeLog('Administration-Change', $msg);
+        
+        $this->render('success');
+    }
+    
+    //  Modify the email settings form
+    public function emailSettings()
+    {
+        $this->view('admin.site.emailSettings');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the email settings form
+    public function emailSettingsSubmit()
+    {
+        Config::updateSetting('email_from', $_POST['emAddr']);
+        Config::updateSetting('email_host', $_POST['emHost']);
+        Config::emailPassword($_POST['emPass']);
+        Config::updateSetting('email_port', $_POST['emPort']);
+        Config::updateSetting('email_user', $_POST['emUser']);
+        
+        //  Note the change in the log files
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' modified the email settings';
+        Logs::writeLog('Administration-Change', $msg);
+        
+        $this->render('success');
+    }
+    
+    //  Company logo and company information form
+    public function companySettings()
+    {
+        $this->view('admin.site.newLogo');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the update company information form
+    public function submitCompanySettings()
+    {
+        //  Get all values of the current config file
+        $config = Config::getWholeConfig();
+        foreach($config as $category)
+        {
+            foreach($category as $item => $value)
+            {
+                $_SESSION['setupData'][$item] = $value;
+            }
+        }
+        
+        $_SESSION['setupData']['baseURL'] = $_POST['siteURL'];
+        $_SESSION['setupData']['title'] = $_POST['title'];
+        
+        //  Rewrite the config file
+        ob_start();
+            require __DIR__.'/../views/setup/setup.defaultConfig.php';
+        $configFile = ob_get_clean();
+        $configPath = __DIR__.'/../../config/config.ini';
+        file_put_contents($configPath, $configFile, LOCK_EX);
+        
+        $this->render('success');
+    }
+    
+    //  Submit a new company logo
+    public function submitNewLogo()
+    {
+        $fileModel = $this->model('files');
+        
+        $filePath = __DIR__.'/../../public/source/img/';
+        
+        $file = $_FILES['newLogo'];
+        
+        //  Determine if there is an error in the file
+        if($file['error'] > 0)
+        {
+            $msg = 'FILE '.$file['name'].' failed to upload by user '.$userID.'. Error '.$file['error'];
+            Logs::writeLog('File-Error', $msg);
+            $success = false;
+        }
+        //  Determine if the file is too big
+        else if($file['size'] > Config::getFile('maxUpload'))
+        {
+            $msg = 'File '.$file['name'].' failed to upload by user '.$userID.'. Error: File is too big '.$file['size'];
+            Logs::writeLog('File-Error', $msg);
+            $success = false;
+        }
+        //  No errors, process file
+        else
+        {
+            $fileName = $file['name'];
+
+            //  Make sure that the destination folder is writable
+            if(is_dir($filePath) && is_writable($filePath))
+            {
+                //  Move the file to the proper location
+                if(move_uploaded_file($file['tmp_name'], $filePath.$fileName))
+                {
+                    $success = true;
+                }
+                else
+                {
+                    $success = false;
+                    $msg = 'Unable to Upload File '.$fileName.'. Unable to move file to folder '.$filePath.'.';
+                    Logs::writeLog('File-Error', $msg);
+                }
+            }
+            else
+            {
+                $success = false;
+                $msg = 'Unable to Upload File '.$fileName.'. Folder '.$this->fileLocation.' does not exist or cannot be written to.';
+                Logs::writeLog('File-Error', $msg);
+            }
+        }
+        
+        //  Get all values of the current config file
+        $config = Config::getWholeConfig();
+        foreach($config as $category)
+        {
+            foreach($category as $item => $value)
+            {
+                $_SESSION['setupData'][$item] = $value;
+            }
+        }
+        
+        $_SESSION['setupData']['logo'] = $fileName;
+        
+        //  Rewrite the config file
+        ob_start();
+            require __DIR__.'/../views/setup/setup.defaultConfig.php';
+        $configFile = ob_get_clean();
+        $configPath = __DIR__.'/../../config/config.ini';
+        file_put_contents($configPath, $configFile, LOCK_EX);
+        
+        $this->render('success');
+    }
 }

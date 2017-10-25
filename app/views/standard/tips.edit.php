@@ -92,6 +92,7 @@
                 else
                 {
                     alert('There Was An Issue Deleting the File');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         }

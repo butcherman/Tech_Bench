@@ -74,4 +74,90 @@ class Download extends Controller
             }
         }
     }
+    
+    //  Download multiple files at once as a zip file
+    public function zipFile()
+    {
+        //  Get the array of files to be downloaded - come in the format of xxx-xxx-xxx where - is the separater
+        $fileArr = $_SESSION['download_all'];
+        
+        $model = $this->model('files');
+        $userID = isset($_SESSION['id']) ? 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']) : 'Guest '.Security::getRealIpAddr();
+                
+        $zipName = Config::getFile('uploadRoot').Config::getFile('default').'files.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipName, ZipArchive::CREATE);
+        foreach($fileArr as $file)
+        {
+
+            $fileData = $model->getFileData($file[0], $file[1]);
+            $filePath = $fileData->file_link.$fileData->file_name;
+            
+            $zip->addFile($filePath, $file[1]);
+        }
+        $zip->close();
+
+        header('Content-type: application/zip');
+        header('Content-Disposition: attachment; filename="'.basename($zipName).'"');
+        header("Content-length: " . filesize($zipName));
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        
+        //  Begin the file download.  File is broken into sections to better be handled by browser
+        set_time_limit(0);
+        $file = @fopen($zipName,"rb");
+        while(!feof($file))
+        {
+            print(@fread($file, 1024*8));
+            ob_flush();
+            flush();
+        }
+        
+        unlink($zipName);
+    }
+    
+    //  Download All Log Files
+    public function allLogFiles()
+    {
+        Security::setPageLevel('site admin');
+        if(!Security::doIBelong())
+        {
+            header('Location: /err/restricted');
+            die();
+        }
+        
+        $logFiles = scanDir(__DIR__.'/../../logs/');
+        
+        $zipName = Config::getFile('uploadRoot').Config::getFile('default').'log_files.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipName, ZipArchive::CREATE);
+        foreach($logFiles as $file)
+        {
+            $parts = pathinfo($file);
+            if($parts['extension'] === 'log')
+            {
+                $logFile = __DIR__.'/../../logs/'.$file;
+                $zip->addFile($logFile, $file);
+            }
+        }
+        $zip->close();
+        
+        header('Content-type: application/zip');
+        header('Content-Disposition: attachment; filename="'.basename($zipName).'"');
+        header("Content-length: " . filesize($zipName));
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        
+        //  Begin the file download.  File is broken into sections to better be handled by browser
+        set_time_limit(0);
+        $file = @fopen($zipName,"rb");
+        while(!feof($file))
+        {
+            print(@fread($file, 1024*8));
+            ob_flush();
+            flush();
+        }
+        
+        unlink($zipName);
+    }
 }

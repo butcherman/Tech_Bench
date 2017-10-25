@@ -142,4 +142,77 @@ class ReportModel
         
         return $result->fetchColumn();
     }
+    
+    //  Get the full list of files and folders within a directory
+    public function listFolderFiles($dir)
+    {
+        $results = [];
+        $fileList = scandir($dir);
+        
+        unset($fileList[array_search('.', $fileList, true)]);
+        unset($fileList[array_search('..', $fileList, true)]);
+        
+        if(count($fileList) > 0)
+        {
+            foreach($fileList as $file)
+            {
+                if(is_dir($dir.'/'.$file))
+                {
+                    $path = rtrim($dir.$file, '/').'/';
+                    $results = array_merge($results, $this->listFolderFiles($path));
+                }
+                else
+                {
+                    $results[] = $dir.$file;
+                }
+            }
+        }
+        
+        return $results;
+    }
+    
+    //  Get the full list of files for a specific database folder
+    public function listTableFiles($table)
+    {
+        $qry1 = 'SELECT `'.$table.'`.`file_id`, `files`.`file_name`, `files`.`file_link` FROM `'.$table.'` JOIN `files` ON `'.$table.'`.`file_id` = `files`.`file_id`';
+        $qry2 = 'SELECT `files`.`file_name`, `files`.`file_link` FROM `files`';
+        
+        $qry = $table === 'files' ? $qry2 : $qry1;
+        
+        $result = $this->db->query($qry);
+        
+        return $result->fetchAll();
+    }
+    
+    //  Compare the files that are in a directory, verses what is supposed to be in the database
+    public function compareFiles($directory, $table)
+    {        
+        $path = $directory === 'root' ? Config::getFile('uploadRoot') : Config::getFile('uploadRoot').$directory;
+        
+        $fileList =  $this->listFolderFiles($path);
+        $inDatabase = [];
+        $tableList = $this->listTableFiles($table);
+        
+        foreach($tableList as $list)
+        {
+            $inDatabase[] = $list->file_link.$list->file_name;
+        }
+        
+        $missingList = array_diff($inDatabase, $fileList);
+        $missing = count($missingList);
+        $unknownList = array_diff($fileList, $inDatabase);
+        $unknown = count($unknownList);
+        
+        $validFiles = count($inDatabase) - $missing;
+        
+        $data = [
+            'missing' => $missing, 
+            'unknown' => $unknown, 
+            'valid' => $validFiles,
+            'missingList' => $missingList,
+            'unknownList' => $unknownList
+        ];
+            
+        return $data;
+    }
 }

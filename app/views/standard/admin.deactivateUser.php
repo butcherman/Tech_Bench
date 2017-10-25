@@ -81,8 +81,8 @@
                 }
                 else
                 {
-                    alert(data);
-//                    alert('There was an issue deelting user');
+                    alert('There was an issue deelting user');
+                    $.post('/err/ajaxFail', {msg: data});
                 }
             });
         });

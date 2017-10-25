@@ -25,6 +25,12 @@ class Config
         }
     }
     
+    //  Return the entire config file
+    public static function getWholeConfig()
+    {
+        return self::$conf;
+    }
+    
     //  Return a core value from the config file
     public static function getCore($var)
     {
@@ -40,7 +46,28 @@ class Config
     //  Return an email value from the config file
     public static function getEmail($var)
     {
-        return self::$conf['email'][$var];
+//        return self::$conf['email'][$var];
+        return self::getSetting($var);
+    }
+    
+    //  Get or set the encrypted email password
+    public function emailPassword($set = false)
+    {
+        $key = Self::getKey();
+        //  Set the email password
+        if($set)
+        {
+            $qry = 'UPDATE `_settings` SET `value` = AES_ENCRYPT(:pass, "'.$key.'") WHERE `setting` = "email_pass"';
+            Database::getDB()->prepare($qry)->execute(['pass' => $set]);
+        }
+        else
+        {
+            $qry = 'SELECT AES_DECRYPT(`value`, "'.$key.'") AS `val` FROM `_settings` WHERE `setting` = "email_pass"';
+            $result = Database::getDB()->query($qry);
+            $res = $result->fetch();
+            
+            return $res->val;
+        }
     }
     
     //  Return a file information value from the config file
@@ -53,5 +80,24 @@ class Config
     public static function getKey()
     {
         return self::$conf['encryption']['customerKey'];
+    }
+    
+    //  Return a setting that is in the database
+    public static function getSetting($setting)
+    {
+        $qry = 'SELECT `value` FROM `_settings` WHERE `setting` = :setting';
+        $result = Database::getDB()->prepare($qry);
+        $result->execute(['setting' => $setting]);
+        
+        $res = $result->fetch();
+        
+        return $res->value;
+    }
+    
+    //  Update a setting that is in the database
+    public static function updateSetting($setting, $value)
+    {
+        $qry = 'UPDATE `_settings` SET `value` = :value WHERE `setting` = :setting';
+        Database::getDB()->prepare($qry)->execute(['value' => $value, 'setting' => $setting]);
     }
 }

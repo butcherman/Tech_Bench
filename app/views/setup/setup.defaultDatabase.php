@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 );
 
 CREATE TABLE IF NOT EXISTS `customers` (
-	`cust_id` INT(11) NOT NULL UNIQUE,
+	`cust_id` INT(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(90) NOT NULL,
     `dba_name` VARCHAR(90),
     `address` VARCHAR(120) NOT NULL,
@@ -157,6 +157,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
     `state` CHAR(2) NOT NULL,
     `zip` INT(5) NOT NULL,
     `added_on` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `active` TINYINT(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`cust_id`)
 );
 
@@ -180,8 +181,31 @@ CREATE TABLE IF NOT EXISTS `customer_contacts` (
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS `phone_number_types` (
+	`phone_type_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `description` VARCHAR(90),
+    PRIMARY KEY (`phone_type_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `customer_contact_phones` (
+	`cont_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `phone_type_id` INT(11) NOT NULL DEFAULT 1,
+    `phone_number` VARCHAR(30),
+    FOREIGN KEY (`cont_id`) REFERENCES `customer_contacts` (`cont_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`phone_type_id`) REFERENCES `phone_number_types` (`phone_type_id`) 
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `customer_note_levels` (
+	`note_level_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `description` VARCHAR(90) NOT NULL UNIQUE,
+    PRIMARY KEY (`note_level_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `customer_notes` (
     `note_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `note_level_id` INT(11) NOT NULL DEFAULT 1,
     `cust_id` INT(11) NOT NULL,
     `subject` VARCHAR(120) NOT NULL,
     `description` LONGTEXT NOT NULL,
@@ -191,6 +215,8 @@ CREATE TABLE IF NOT EXISTS `customer_notes` (
     FOREIGN KEY (`cust_id`) REFERENCES `customers` (`cust_id`)
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) 
+        ON UPDATE CASCADE,
+    FOREIGN KEY (`note_level_id`) REFERENCES `customer_note_levels`(`note_level_id`) 
         ON UPDATE CASCADE
 );
 
@@ -226,6 +252,16 @@ CREATE TABLE `customer_favs` (
 		ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (`cust_id`) REFERENCES `customers` (`cust_id`) 
 		ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `customer_linked_sites` (
+	`parent_id` INT(11) NOT NULL,
+    `cust_id` INT(11) NOT NULL,
+    FOREIGN KEY (`parent_id`) REFERENCES `customers`(`cust_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`cust_id`) REFERENCES `customers`(`cust_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	UNIQUE KEY (`parent_id`, `cust_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `upload_links` (
@@ -398,7 +434,19 @@ CREATE TABLE IF NOT EXISTS `_settings` (
     `value` VARCHAR(90) NOT NULL
 );
 
-INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "2.4");
+CREATE TABLE IF NOT EXISTS `user_files` (
+	`user_file_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `file_id` INT(11) NOT NULL,
+    `name` VARCHAR(90) NOT NULL,
+    PRIMARY KEY (`user_file_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`file_id`) REFERENCES `files`(`file_id`) 
+		ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+INSERT INTO `_database_version` (`version_id`, `version`) VALUES (1, "3.0");
 
 INSERT INTO `_settings` (`setting`, `value`) VALUES ("maintenance_mode", 0);
 
@@ -414,4 +462,11 @@ INSERT INTO `alert_levels` (`alert_level_id`, `description`) VALUES (1, "alert-s
 
 INSERT INTO `system_file_types` (`description`) VALUES ("Manuals"), ("Notes"), ("Handouts"), ("Firmware"), ("Software"), ("User Guides");
 
-INSERT INTO `customer_file_types` (`description`) VALUES ("Backup"), ("Handout"), ("License"), ("Site Map"), ("Other");';
+INSERT INTO `customer_file_types` (`description`) VALUES ("Backup"), ("Handout"), ("License"), ("Site Map"), ("Other");
+
+INSERT INTO `customer_note_levels` (`note_level_id`, `description`) VALUES 
+	(1, "info"), (2, "warning"), (3, "danger");
+    
+INSERT INTO `phone_number_types` (`phone_type_id`, `description`) VALUES 
+	(1, "Work"), (2, "Home"), (3, "Cell");
+';

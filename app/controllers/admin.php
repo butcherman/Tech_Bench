@@ -136,6 +136,11 @@ class Admin extends Controller
         $model = $this->model('users');
         $model->createUSer($_POST['username'], $_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password']);
         
+        //  Create the user folder for the My Files section
+        $fileModel = $this->model('files');
+        $path = Config::getFile('uploadRoot').Config::getFile('userPath');
+        $fileModel->createFolder($path);
+        
         //  Note change in log files
         $msg = 'New User - '.$_POST['username'].' created by administrator ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']);
         Logs::writeLog('User-Change', $msg);
@@ -484,5 +489,85 @@ class Admin extends Controller
         }
         
         $this->render($content);
+    }
+    
+    //  Deactivate an existing customer - search customers
+    public function deactivateCustomer()
+    {
+        $data = [
+            'header' => 'Deactivate Customer',
+            'link' => 'deactivate-customer-form'
+        ];
+        
+        $this->template('techUser');
+        $this->view('admin.searchCustomer', $data);
+        $this->render();
+    }
+    
+    //  Deactivate customer form
+    public function deactivateCustomerForm($custID)
+    {
+        $model = $this->model('customers');
+        
+        if(!$custData = $model->getCustData($custID))
+        {
+            $this->view('customers.invalidID');
+        }
+        else
+        {
+            $data = [
+                'custID' => $custID,
+                'custName' => $custData->name,
+                'dbaName' => $custData->dba_name,
+                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+            ];
+            
+            $this->view('admin.confirmDeactivateCustomer', $data);
+        }
+
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Confirm to deactivate the customer
+    public function deactivateCustomerConfirmYes($custID)
+    {
+        $model = $this->model('customers');
+        
+        $model->deactivateCustomer($custID);
+        
+        $this->render('success');
+    }
+    
+    //  Reactive customer - search deactivated customers
+    public function reactivateCustomer()
+    {
+        $model = $this->model('customers');
+        $deactivated = $model->searchDeactivated();
+        
+        $data['custList'] = '';
+        foreach($deactivated as $cust)
+        {
+            $data['custList'] .= '<tr><td><a href="#edit-modal" data-customer="'.$cust->cust_id.'" class="reactivate-link" data-toggle="modal">'.$cust->name.'</a></td><td>'.$cust->city.', '.$cust->state.'</td></tr>';
+        }
+        
+        if(empty($data['custList']))
+        {
+            $data['custList'] = '<tr><td colspan="2">No Deactivated Users</td></tr>';
+        }
+        
+        $this->template('techUser');
+        $this->view('admin.listDeactivatedCustomers', $data);
+        $this->render();
+    }
+    
+    //  Confirm reactivating a customer
+    public function reactivateCustomerConfirm($custID)
+    {
+        $model = $this->model('customers');
+        
+        $model->reactivateCustomer($custID);
+        
+        $this->render('success');
     }
 }
