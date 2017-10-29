@@ -215,6 +215,7 @@ class Setup extends Controller
         catch(PDOException $e)
         {
             echo 'Error Connecting to Database Server';
+            die();
         }
         
         //  Bring in default databse files

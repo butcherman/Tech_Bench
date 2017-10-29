@@ -103,7 +103,6 @@ class Maintenance extends Controller
         $fileName = __DIR__.'/../../logs/'.$logName.'.log';
         $output = shell_exec('tail -n50 '.$fileName);
         
-        $this->render(str_replace(PHP_EOL, '<br />', $output));
         $this->render($output); 
     }
     
