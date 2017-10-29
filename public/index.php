@@ -37,5 +37,9 @@ Database::init();
 
 date_default_timezone_set('America/Los_Angeles');
 
+//echo '<pre>';
+//print_r($_SESSION);
+//die();
+
 //  Begin the application
 $app = new App;

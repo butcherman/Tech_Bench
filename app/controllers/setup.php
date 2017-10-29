@@ -7,14 +7,18 @@ class Setup extends Controller
     //  The controller will not allow anyone to access this page if the site is already setup
     public function __construct()
     {
-        if(!empty(Config::getCore('baseURL')))
-        {
-            $msg = 'Someone tried to access the setup page after site already configured.';
-            Logs::writeLog('Security-Alert', $msg);
-            
-            header('Location: /');
-            die();
-        }
+//        if(!empty(Config::getCore('baseURL')))
+//        {
+//            $msg = 'Someone tried to access the setup page after site already configured.';
+//            Logs::writeLog('Security-Alert', $msg);
+//            
+//            header('Location: /');
+//            die();
+//        }
+        
+//        echo '<pre>';
+//        print_r($_SESSION);
+//        die();
     }
     
     //  Bring up the welcome page and test if the necessary folders are writable.
@@ -265,19 +269,45 @@ class Setup extends Controller
     //  Finalize step 3 is to build the system defaults
     public function defaults()
     {
-        $mysqli = new mysqli($_SESSION['setupData']['host'], $_SESSION['setupData']['dbUser'], $_SESSION['setupData']['dbPass'], $_SESSION['setupData']['dbName']);
+//        $mysqli = new mysqli($_SESSION['setupData']['host'], $_SESSION['setupData']['dbUser'], $_SESSION['setupData']['dbPass'], $_SESSION['setupData']['dbName']);
+//        
+//        //  If the databse connection fails, kick out error
+//        if($mysqli->connect_errno)
+//        {
+//            echo mysqli_connect_error();
+//            die();
+//        }
         
-        //  If the databse connection fails, kick out error
-        if($mysqli->connect_errno)
+        //  Get information to create the database connection
+        $dbHost = $_SESSION['setupData']['host'];
+        $dbUser = $_SESSION['setupData']['dbUser'];
+        $dbPass = $_SESSION['setupData']['dbPass'];
+        $dbName = $_SESSION['setupData']['dbName'];
+        $charset = 'utf8';
+        $dsn = 'mysql:host='.$dbHost.';dbname='.$dbName.';charset='.$charset;
+        $opt = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ];
+        //  Try to connect to the database and create PDO object.
+        try
         {
-            echo mysqli_connect_error();
-            die();
+            $db = new PDO($dsn, $dbUser, $dbPass, $opt);
+        }
+        catch(PDOException $e)
+        {
+            echo 'Error Connecting to Database Server';
         }
         
         //  Input all the initial settings and email settings
         $allow_company_forms = isset($_SESSION['setupData']['companyForms']) && $_SESSION['setupData']['companyForms'] === 'on' ? 1 : 0;
         $allow_my_files      = isset($_SESSION['setupData']['myFiles']) && $_SESSION['setupData']['myFiles'] === 'on' ? 1 : 0;
         $allow_upload_links  = isset($_SESSION['setupData']['fileLinks']) && $_SESSION['setupData']['fileLinks'] === 'on' ? 1 : 0;
+        
+        //  Create password hash for site admin user
+        $salt = substr(md5(uniqid(rand(), true)), 0, 5);
+        $pass = hash('sha256', $salt.hash('sha256', $_SESSION['setupData']['sitePass']));
         
         $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
                     ("allow_company_forms", '.$allow_company_forms.'),
@@ -287,22 +317,30 @@ class Setup extends Controller
                     ("email_host", "'.$_SESSION['setupData']['emHost'].'"),
                     ("email_port", "'.$_SESSION['setupData']['emPort'].'"),
                     ("email_user", "'.$_SESSION['setupData']['emUser'].'"),
-                    ("email_pass", AES_ENCRYPT("'.$_SESSION['setupData']['emPass'].'", "'.$_SESSION['setupData']['customerKey'].'"))';
-        $mysqli->query($qry);
+                    ("email_pass", AES_ENCRYPT("'.$_SESSION['setupData']['emPass'].'", "'.$_SESSION['setupData']['customerKey'].'"));
+                INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `salt`, `active`, `change_password`) VALUES ("'.$_SESSION['setupData']['siteUser'].'", "System", "Administrator", "'.$_SESSION['setupData']['siteEmail'].'", "'.$pass.'", "'.$salt.'", 1, 0);
+                INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (1, 1);';
+//        $mysqli->multi_query($qry);
         
-        //  Create password hash for site admin user
-        $salt = substr(md5(uniqid(rand(), true)), 0, 5);
-        $pass = hash('sha256', $salt.hash('sha256', $_SESSION['setupData']['sitePass']));
+        try
+        {
+            $db->exec($qry);
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            die();
+        }
         
         //  Insert the user
-        $qry = 'INSERT INTO USERS (`username`, `first_name`, `last_name`, `email`, `password`, `salt`, `active`, `change_password`) VALUES ("'.$_SESSION['setupData']['siteUser'].'", "System", "Administrator", "'.$_SESSION['setupData']['siteEmail'].'", "'.$pass.'", "'.$salt.'", 1, 0)';
-        $mysqli->query($qry);
+//        $qry = '';
+//        $mysqli->query($qry);
         
         sleep(2);
         
         //  Give the user the Site Admin functionality
-        $qry2 = 'INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (1, 1)';
-        $mysqli->query($qry2);
+//        $qry2 = ';
+//        $mysqli->query($qry2);
         
         return 'success';
     }
