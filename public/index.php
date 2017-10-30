@@ -15,8 +15,8 @@
 session_start();
 
 //  Define version information as Global Variables
-define('VERSION', '3.0.0');
-define('RELEASE', '10-24-2017');
+define('VERSION', '3.0.1');
+define('RELEASE', '10-29-2017');
 define('DBVERSION', '3.0');
 
 //  Call necessary required files
@@ -36,6 +36,10 @@ Config::init();
 Database::init();
 
 date_default_timezone_set('America/Los_Angeles');
+
+//echo '<pre>';
+//print_r($_SESSION);
+//die();
 
 //  Begin the application
 $app = new App;

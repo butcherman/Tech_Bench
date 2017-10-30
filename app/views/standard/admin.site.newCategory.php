@@ -42,7 +42,7 @@
             {
                 required: true,
                 minlength: 3,
-                loginRegex: true
+                standardChar: true
             }
         },
         messages:
@@ -51,7 +51,7 @@
             {
                 required: "Please enter a descriptive name for the category",
                 minlength: "Category name must be at least three characters long",
-                alphanumeric: "Special Characters Such As & and - Cannot Be Used"
+                standardChar: "Special Characters Such As & and - Cannot Be Used"
             }
         },
         submitHandler: function()
