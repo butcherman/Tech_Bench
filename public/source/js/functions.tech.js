@@ -7,6 +7,9 @@ $.validator.addMethod('filesize', function (value, element, param) {
 $.validator.addMethod("loginRegex", function(value, element) {
     return this.optional(element) || /^[a-z0-9\-\s]+$/i.test(value);
 }, "Username must contain only letters, numbers, or dashes.");
+$.validator.addMethod("standardChar", function(value, element) {
+    return this.optional(element) || /^[a-zA-Z0-9\-\s]+$/.test(value);
+}, "Value cannot contain any special characters");
 
 $(document).ready(function()
 {

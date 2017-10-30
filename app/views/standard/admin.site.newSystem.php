@@ -92,7 +92,7 @@
         {
             sysName: 
             {
-                alphanumeric: true
+                standardChar: true
             }
         },
         messages:
