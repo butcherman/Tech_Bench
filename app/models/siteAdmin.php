@@ -100,4 +100,38 @@ class siteAdmin
         ];
         $this->db->prepare($qry)->execute($data);
     }
+    
+    //  Add a new file type for systems
+    public function addSysFileType($newType)
+    {
+        $qry = 'INSERT INTO `system_file_types` (`description`) VALUES (:type)';
+        $this->db->prepare($qry)->execute(['type' => $newType]);
+    }
+    
+    //  Edit an existing file type for a system
+    public function editSysFileType($name, $typeID)
+    {
+        $qry = 'UPDATE `system_file_types` SET `description` = :desc WHERE `type_id` = :id';
+        $this->db->prepare($qry)->execute(['desc' => $name, 'id' => $typeID]);
+    }
+    
+    //  Delete an exiting file type for a system
+    public function delSysFileType($typeID)
+    {
+        $qry = 'DELETE FROM `system_file_types` WHERE `type_id` = :id';
+        
+        try
+        {
+            $result = $this->db->prepare($qry);
+            $result->execute(['id' => $typeID]);
+            
+            $success = true;
+        }
+        catch (Exception $e)
+        {
+            $success = false;
+        }
+        
+        return $success;
+    }
 }

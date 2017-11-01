@@ -15,8 +15,8 @@
         <a href="/site-administration/create-system" class="btn btn-default btn-block">Create New System Type</a>
 <!--
         <a href="/site-administration/modify-system" class="btn btn-default btn-block">Modify System Type</a>
-        <a href="/site-administration/system-file-types" class="btn btn-default btn-block">Modify System File Types</a>
 -->
+        <a href="/site-administration/system-file-types" class="btn btn-default btn-block">Modify System File Types</a>
     </div>
 </div>
 <div class="row pad-bottom">

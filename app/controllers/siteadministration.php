@@ -403,4 +403,69 @@ class siteAdministration extends Controller
         
         $this->render('success');
     }
+    
+    //  Modify the types of file that can be saved for the systems - Note: these are global for all systems
+    public function systemFileTypes()
+    {
+        $model = $this->model('systems');
+        $fileTypes = $model->getFileTypes();
+        
+        $types = '';
+        foreach($fileTypes as $file)
+        {
+            $types .= '<li class="list-group-item text-center"><a href="#edit-modal" class="edit-type-link" data-toggle="modal" data-value="'.$file->type_id.'">'.$file->description.'</a></li>';
+        }
+        
+        $data = [
+            'fileTypes' => $types
+        ];
+        
+        $this->view('admin.site.systemFileTypes', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the new file type form
+    public function submitNewFileType()
+    {
+        $model = $this->model('siteAdmin');
+        $model->addSysFileType($_POST['typeName']);
+        
+        $this->render('success');
+    }
+    
+    //  Load the edit file type form
+    public function editFileTypeForm($typeID)
+    {
+        $model = $this->model('systems');
+        $desc = $model->getAFileType($typeID)->description;
+        
+        $data = [
+            'description' => $desc,
+            'typeID' => $typeID
+        ];
+        
+        $this->view('admin.site.editFileTypeForm', $data);
+        $this->render();
+    }
+    
+    //  Submit the edit file type form
+    public function submitEditFileType($typeID)
+    {
+        $model = $this->model('siteAdmin');
+        $model->editSysFileType($_POST['typeName'], $typeID);
+        
+        $this->render('success');
+    }
+    
+    //  Delete a file type 
+    public function deleteFileType($typeID)
+    {
+        $model = $this->model('siteAdmin');
+        $success = $model->delSysFileType($typeID);
+        
+        $result = $success ? 'success' : 'failed';
+        
+        $this->render($result);
+    }
 }
