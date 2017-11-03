@@ -64,6 +64,35 @@ class siteAdmin
         return $data['folder'];
     }
     
+    public function deleteSystem($sysName)
+    {
+        $success = false;
+        
+        //  Get the database for the system 
+        $table = 'data_'.$this->getSystemFolder($sysName);
+        
+        $qry = 'DELETE FROM `system_types` WHERE `name` = :sysName';
+        try
+        {
+            $result = $this->db->prepare($qry);
+            $result->execute(['sysName' => $sysName]);
+            
+            $success = true;
+        }
+        catch (Exception $e)
+        {
+            $success = false;
+        }
+        
+        if($success)
+        {
+            $qry = 'DROP TABLE IF EXISTS `'.$table.'`';
+            $this->db->query($qry);
+        }
+        
+        return $success;
+    }
+    
     public function getSystemFolder($sysName)
     {
         $qry = 'SELECT `folder_location` FROM `system_types` WHERE `name` = :sysName';

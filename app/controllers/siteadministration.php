@@ -141,6 +141,52 @@ class siteAdministration extends Controller
         $this->render('success');
     }
     
+    //  Form to delete an existing system
+    public function deleteSystem()
+    {
+        $model = $this->model('systems');
+        $cats = $model->getCategories();
+        
+        $data['categories'] = '';
+        foreach($cats as $cat)
+        {
+            $data['categories'] .= '<option value="'.$cat->description.'">'.$cat->description.'</option>';
+        }
+        
+        $this->view('site_admin/system_delete', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Load the system types for a category
+    public function loadSystemTypes($cat)
+    {
+        $model = $this->model('systems');
+        $sysList = $model->getSystems($cat);
+        
+        $sys = '';
+        foreach($sysList as $item)
+        {
+            $sys .= '<li class="list-group-item text-center"><a href="#edit-modal" class="confirm-delete" data-toggle="modal" data-value="'.$item->name.'">'.$item->name.'</a></li>';
+        }
+        
+        $this->render($sys);
+    }
+    
+    //  Confirm the deletion of a system
+    public function confirmDeleteSystem($sysName)
+    {
+        $model = $this->model('siteAdmin');
+        $result = $model->deleteSystem($sysName);
+        
+        $result = $result ? 'success' : 'false';
+        
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' deleted system type: '.$sysName;
+        Logs::writeLog('System-Change', $msg);
+        
+        $this->render($result);
+    }
+    
     //  Edit an existing system type under an existing category
     public function modifySystem()
     {

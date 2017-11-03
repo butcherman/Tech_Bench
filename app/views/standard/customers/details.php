@@ -91,14 +91,6 @@
     </div>
 </div>
 <div class="row dashboard" id="linked-sites-wrapper">
-<!--
-    <div class="col-md-3 col-xs-12"><a href="#" class="bookmark"><div class="well bookmark text-center"><strong>Parent Site</strong><br />Random Name</div></a></div>
-    <div class="col-md-3 col-xs-12"><a href="#" class="bookmark"><div class="well bookmark text-center">Random Name</div></a></div>
-
-    <div class="col-md-3 col-xs-12"><a href="#" class="bookmark"><div class="well bookmark text-center">Random Name</div></a></div>
-
-    <div class="col-md-3 col-xs-12"><a href="#" class="bookmark"><div class="well bookmark text-center">Random Name</div></a></div>
--->
 </div>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
