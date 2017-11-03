@@ -33,7 +33,7 @@ class Account extends Controller
             'auto_delete_link' => $userSettings->auto_delete_link ? ' checked' : ''
         ];
             
-        $this->view('tech.account', $data);
+        $this->view('user/account_settings', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -72,7 +72,7 @@ class Account extends Controller
     {
         $data['change'] = $_SESSION['changePassword'] ? 'You Must Change Your Password' : '';
         
-        $this->view('tech.changePassword', $data);
+        $this->view('user/account_change_password', $data);
         $this->template('techUser');
         $this->render();
     }

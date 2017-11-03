@@ -19,7 +19,7 @@ class Maintenance extends Controller
     //  Maintenance landing page
     public function index()
     {
-        $this->view('maintenance.home');
+        $this->view('maintenance/index');
         $this->template('techUser');
         $this->render();
     }
@@ -31,7 +31,7 @@ class Maintenance extends Controller
             'maintMode' => Template::inMaintenanceMode() ? 'checked' : ''
         ];
         
-        $this->view('maintenance.maintenanceMode', $data);
+        $this->view('maintenance/maintenance_mode_form', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -69,15 +69,14 @@ class Maintenance extends Controller
             if($parts['extension'] === 'log')
             {
                 $logList .= '<li class="list-group-item"><a href="/maintenance/show-log/'.$parts['filename'].'">'.$file.'</a></li>';
-            }
-            
+            } 
         }
         
         $data = [
             'logList' => $logList
         ];
         
-        $this->view('maintenance.logList', $data);
+        $this->view('maintenance/log_list', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -92,7 +91,7 @@ class Maintenance extends Controller
             'fileName' => $fileName
         ];
         
-        $this->view('maintenance.showLog', $data);
+        $this->view('maintenance/log_show', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -173,7 +172,7 @@ class Maintenance extends Controller
             'unknown'     => empty($unknown) ? '<tr><td colspan=2"><h4 class="text-center">No Unknown Files</h4></td></tr>' : $unknown
         ];
         
-        $this->view('maintenance.systemFiles', $data);
+        $this->view('maintenance/system_files', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -218,7 +217,7 @@ class Maintenance extends Controller
             'compUnknown' => $countComp['unknown']
         ];
         
-        $this->view('reports.systemFiles', $data);
+        $this->view('reports/system_files', $data);
         $this->template('techUser');
         $this->render();
     }

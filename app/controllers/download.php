@@ -32,7 +32,7 @@ class Download extends Controller
             $msg = $userID.' attempted to download a file that does not exist. File name: '.$fileName.' File ID: '.$fileID;
             Logs::writeLog('Download-Error', $msg);
             $this->template('standard');
-            $this->view('files.badFile');
+            $this->view('error/bad_file');
             $this->render();
         }
         else
@@ -44,7 +44,7 @@ class Download extends Controller
                 $msg = $userID.' attempted to download a file without the proper permissions. File name: '.$fileName.' File ID: '.$fileID;
                 Logs::writeLog('Download-Error', $msg);
                 $this->template('standard');
-                $this->view('files.badFile');
+                $this->view('error/bad_file');
                 $this->render();
             }
             else

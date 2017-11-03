@@ -30,7 +30,7 @@ class Upgrade extends Controller
             'actual' => Database::getVersion()
         ];
 
-        $this->view('admin.site.upgrade', $data);
+        $this->view('site_admin/upgrade', $data);
         $this->template('standard');
         $this->render();
     }

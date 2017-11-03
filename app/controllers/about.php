@@ -18,7 +18,7 @@ class About extends Controller
     
     public function index()
     {
-        $this->view('home.about');
+        $this->view('home/about');
         $this->render();
     }
 }

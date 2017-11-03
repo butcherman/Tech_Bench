@@ -20,7 +20,7 @@ class siteAdministration extends Controller
     //  Landing page for the Site Administrator
     public function index()
     {
-        $this->view('admin.site.home');
+        $this->view('site_admin/index');
         $this->template('techUser');
         $this->render();
     }
@@ -28,7 +28,7 @@ class siteAdministration extends Controller
     //  Add a new system category
     public function createCategory()
     {
-        $this->view('admin.site.newCategory');
+        $this->view('site_admin/category_new');
         $this->template('techUser');
         $this->render();
     }
@@ -64,7 +64,7 @@ class siteAdministration extends Controller
             $data['categories'] .= '<option value="'.$cat->description.'">'.$cat->description.'</option>';
         }
         
-        $this->view('admin.site.editCategory', $data);
+        $this->view('site_admin/category_edit', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -116,7 +116,7 @@ class siteAdministration extends Controller
             $data['categories'] .= '<option value="'.$cat->description.'">'.$cat->description.'</option>';
         }
         
-        $this->view('admin.site.newSystem', $data);
+        $this->view('site_admin/system_new', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -153,7 +153,7 @@ class siteAdministration extends Controller
             $data['categories'] .= '<option value="'.str_replace(' ', '_', $cat->description).'">'.$cat->description.'</option>';
         }
         
-        $this->view('admin.site.editSystem', $data);
+        $this->view('site_admin/system_edit', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -210,7 +210,7 @@ class siteAdministration extends Controller
             'files' => Config::getSetting('allow_my_files') ? ' checked' : ''
         ];
         
-        $this->view('admin.site.globalSettings', $data);
+        $this->view('site_admin/settings_global', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -276,7 +276,7 @@ class siteAdministration extends Controller
     //  Modify the email settings form
     public function emailSettings()
     {
-        $this->view('admin.site.emailSettings');
+        $this->view('site_admin/email_settings_form');
         $this->template('techUser');
         $this->render();
     }
@@ -300,7 +300,7 @@ class siteAdministration extends Controller
     //  Company logo and company information form
     public function companySettings()
     {
-        $this->view('admin.site.newLogo');
+        $this->view('site_admin/logo_new');
         $this->template('techUser');
         $this->render();
     }
@@ -420,7 +420,7 @@ class siteAdministration extends Controller
             'fileTypes' => $types
         ];
         
-        $this->view('admin.site.systemFileTypes', $data);
+        $this->view('site_admin/system_file_types_list', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -445,7 +445,7 @@ class siteAdministration extends Controller
             'typeID' => $typeID
         ];
         
-        $this->view('admin.site.editFileTypeForm', $data);
+        $this->view('site_admin/system_file_types_edit', $data);
         $this->render();
     }
     

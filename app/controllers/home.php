@@ -42,7 +42,7 @@ class Home extends Controller
         }
         
         $this->template('standard');
-        $this->view('home.login');
+        $this->view('home/login');
         $this->render();
     }
     
@@ -108,7 +108,7 @@ class Home extends Controller
         }
         
         $this->template('standard');
-        $this->view('home.reset');
+        $this->view('home/forgot_password_form');
         $this->render();
     }
     
@@ -167,11 +167,11 @@ class Home extends Controller
         if($userID = $model->checkResetLink($link))
         {
             $data['link'] = $link;
-            $this->view('home.resetPassword', $data);
+            $this->view('home/reset_password_form', $data);
         }
         else
         {
-            $this->view('error.badLink');
+            $this->view('error/bad_link');
         }
         
         $this->template('standard');
@@ -208,7 +208,7 @@ class Home extends Controller
     //  Function that only shows yes or no dialog boxes
     public function yesOrNo()
     {
-        $this->view('confirm.yesorno');
+        $this->view('home/confirm_yes_or_no');
         $this->render();
     }
     

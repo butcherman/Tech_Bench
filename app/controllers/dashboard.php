@@ -81,7 +81,7 @@ class Dashboard extends Controller
         }  
         $data['techTipFavs'] .= '</div>';
         
-        $this->view('tech.dashboard', $data);
+        $this->view('dashboard/index', $data);
         $this->render();
     }
     

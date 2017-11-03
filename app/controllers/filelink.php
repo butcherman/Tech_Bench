@@ -26,7 +26,7 @@ class FileLink extends Controller
         
         if(!$linkID)
         {
-            $this->view('error.badLink');
+            $this->view('error/bad_link');
             
             //  Note in log file
             $msg = 'Visitor '.Security::getRealIpAddr().' attempted to acces a bad link hash - '.$linkHash;
@@ -34,7 +34,7 @@ class FileLink extends Controller
         }
         else if($model->isLinkExpired($linkID->link_id))
         {
-            $this->view('links.expiredLink');
+            $this->view('links.expired_link');
             
             //  Note in log file
             $msg = 'Visitor '.Security::getRealIpAddr().' attempted to acces an expired link hash - '.$linkHash;
@@ -70,7 +70,7 @@ class FileLink extends Controller
             //  Allow a download all array
             $_SESSION['download_all'] = $fileNums;
             
-            $this->view('links.visitor.validLink', $data);
+            $this->view('links/visitor_valid_link', $data);
         }
         
         $this->template('standard');

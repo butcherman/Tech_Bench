@@ -39,7 +39,7 @@ class Customer extends Controller
         }
         
         $this->template('techUser');
-        $this->view('customers.search', $data);
+        $this->view('customers/search', $data);
         $this->render();
     }
     
@@ -83,7 +83,7 @@ class Customer extends Controller
     //  Open the add a new customer form
     public function add()
     {
-        $this->view('customers.newCustomerForm');
+        $this->view('customers/new_customer_form');
         $this->template('techUser');
         $this->render();
     }
@@ -149,7 +149,7 @@ class Customer extends Controller
         
         if(!$custData = $model->getCustData($custID))
         {
-            $this->view('customers.invalidID');
+            $this->view('customers/invalid_id');
         }
         else
         {
@@ -162,7 +162,7 @@ class Customer extends Controller
                 'custFav' => $model->isCustFav($custID, $_SESSION['id']) ? 'item-fav-checked' : 'item-fav-unchecked'
             ];
             
-            $this->view('customers.customerDetails', $data);
+            $this->view('customers/details', $data);
         }
         
         $this->template('techUser');
@@ -208,7 +208,7 @@ class Customer extends Controller
             'zip' => $custData->zip
         ];
         
-        $this->view('customers.editCustomerInformation', $data);
+        $this->view('customers/edit_customer_information_form', $data);
         $this->render();
     }
     
@@ -380,7 +380,7 @@ class Customer extends Controller
             $data['optList'] .= '</optgroup>';
         }
         
-        $this->view('customers.newSysForm', $data);
+        $this->view('customers/system_new_form', $data);
         $this->render();
     }
     
@@ -490,7 +490,7 @@ class Customer extends Controller
             $data['numTypes'] .= '<option value="'.$type->phone_type_id.'">'.$type->description.'</option>';
         }
         
-        $this->view('customers.newContactForm', $data);
+        $this->view('customers/contact_new_form', $data);
         $this->render();
     }
     
@@ -556,7 +556,7 @@ class Customer extends Controller
             'phoneNumbers' => $phns,
             'numTypes' => $numTypes
         ];
-        $this->view('customers.editContactForm', $data);
+        $this->view('customers/contact_edit_form', $data);
         $this->render();  
     }
     
@@ -649,7 +649,7 @@ class Customer extends Controller
         }
         $data['levels'] = $levels;
         
-        $this->view('customers.newNoteForm', $data);
+        $this->view('customers/note_new_form', $data);
         $this->render();
     }
     
@@ -688,7 +688,7 @@ class Customer extends Controller
             'levels' => $levels
         ];
         
-        $this->view('customers.editNoteForm', $data);
+        $this->view('customers/note_edit_form', $data);
         $this->render();
     }
     
@@ -746,7 +746,7 @@ class Customer extends Controller
             $data['types'] .= '<option value="'.$type->description.'">'.$type->description.'</option>';
         }
         
-        $this->view('customers.newFileForm', $data);
+        $this->view('customers/file_new_form', $data);
         $this->render();
     }
     
@@ -803,7 +803,7 @@ class Customer extends Controller
             }
         }
         
-        $this->view('customers.editFileForm', $data);
+        $this->view('customers/file_edit_form', $data);
         $this->render();
     }
     
@@ -875,7 +875,7 @@ class Customer extends Controller
     //  Load the form to link a site to a parent site
     public function linkSiteForm()
     {
-        $this->view('customers.linkCustomerForm');
+        $this->view('customers/link_customer_form');
         $this->render();
     }
     

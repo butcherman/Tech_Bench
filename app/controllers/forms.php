@@ -20,7 +20,7 @@ class Forms extends Controller
     public function index()
     {
         $this->template('techUser');
-        $this->view('forms.listForms');
+        $this->view('forms/list_all_forms');
         $this->render();
     }
     
