@@ -26,7 +26,9 @@ class Customers
         $qry = 'INSERT INTO `customers` (`cust_id`, `name`, `dba_name`, `address`, `city`, `state`, `zip`) VALUES (:id, :name, :dba, :addr, :city, :state, :zip)';
         $this->db->prepare($qry)->execute($data);
         
-        return $this->db->lastInsertID();
+        $custID = empty($data['id']) ? $this->db->lastInsertID() : $data['id'];
+        
+        return $custID;
     }
     
     //  Update a customer's ID
