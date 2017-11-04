@@ -26,6 +26,27 @@ class siteAdmin
         $this->db->prepare($qry)->execute(['name' => $newName, 'catID' => $catID]);
     }
     
+    //  Delete an existing category
+    public function deleteCategory($catName)
+    {
+        $success = false;
+        
+        $qry = 'DELETE FROM `system_categories` WHERE `description` = :category';
+        try
+        {
+            $result = $this->db->prepare($qry);
+            $result->execute(['category' => $catName]);
+            
+            $success = true;
+        }
+        catch (Exception $e)
+        {
+            $success = false;
+        }
+        
+        return $success;
+    }
+    
     //  Create a new system type
     public function createSystem($category, $system, $tables)
     {

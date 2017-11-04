@@ -52,8 +52,8 @@ class siteAdministration extends Controller
         $this->render('success');
     }
     
-    //  Modify an existing system category
-    public function modifyCategory()
+    //  Delete an existing category
+    public function deleteCategory()
     {
         $model = $this->model('systems');
         $cats = $model->getCategories();
@@ -61,47 +61,26 @@ class siteAdministration extends Controller
         $data['categories'] = '';
         foreach($cats as $cat)
         {
-            $data['categories'] .= '<option value="'.$cat->description.'">'.$cat->description.'</option>';
+            $data['categories'] .= '<li class="list-group-item text-center"><a href="#edit-modal" class="confirm-delete" data-toggle="modal" data-value="'.$cat->description.'">'.$cat->description.'</a></li>';
         }
         
-        $this->view('site_admin/category_edit', $data);
+        $this->view('site_admin/category_delete', $data);
         $this->template('techUser');
         $this->render();
     }
     
-    //  Ajax call to submit the new category
-    public function submitUpdateCategory()
+    //  Confirm to delete a system category
+    public function confirmDeleteCategory($catName)
     {
         $model = $this->model('siteAdmin');
-        $sysModel = $this->model('systems');
+        $result = $model->deleteCategory($catName);
         
-        //  Get the folders that are in the category folder
-        $folders = [];
-        $systems = $sysModel->getSystems($_POST['selectCategory']);
-        foreach($systems as $sys)
-        {
-            $folders[] = $model->getSystemFolder($sys->name);
-        }
+        $result = $result ? 'success' : 'false';
         
-        //  Update the category name in the database
-        $catID = $sysModel->getCategoryID($_POST['selectCategory']);
-        $model->updateCategory($catID, $_POST['category']);
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' deleted category type: '.$catName;
+        Logs::writeLog('System-Change', $msg);
         
-        //  Build new folder structure with the new category name and all of the folders within it.
-        //  Note:  old folder structure will stil exist as files will remain in those folders
-        $fileModel = $this->model('files');
-        $path = Config::getFile('uploadRoot').Config::getFile('sysPath').$_POST['category'];
-        $fileModel->createFolder($path);
-        foreach($folders as $folder)
-        {
-            $fileModel->createFolder($path.Config::getFile('slash').$folder);
-        }
-        
-        //  Note the change in the log files
-        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' modified a system category '.$_POST['category'];
-        Logs::writeLog('Administration-Change', $msg);
-        
-        $this->render('success');
+        $this->render($result);
     }
     
     //  Add a new system type under an existing category
