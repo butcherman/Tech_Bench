@@ -181,6 +181,8 @@ class Setup extends Controller
         $_SESSION['setupData']['uploadRoot'] = $_SESSION['setupData']['uploadRoot'].'/';
         $_SESSION['setupData']['baseURL'] = $_SESSION['setupData']['baseURL'].'/';
         $_SESSION['setupData']['logo'] = 'TechBenchLogo.png';
+        $_SESSION['setupData']['backupPath'] = 'backup/';
+        $_SESSION['setupData']['userPath'] = 'users/';
         
         ob_start();
             require __DIR__.'/../views/setup/setup.defaultConfig.php';

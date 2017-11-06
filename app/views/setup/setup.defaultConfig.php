@@ -52,6 +52,8 @@ slash = "/"
 ;  Default path is the path that is chosen if the Tech Bench cannot find a location to 
 ;  upload the file to.
 default = "<?= $_SESSION['setupData']['default'] ?>" 
+:  Backup path will store all system backups
+backupPath = "<?= $_SESSION['setupData']['backupPath'] = 'backup/' ?>"
 ;  UserPath is for when the users save files to the "My Files" section
 userPath = "<?= $_SESSION['setupData']['userPath'] ?>"
 ;  CustPath is where all customer files are uploaded to.  Sub folders will be created for each customer.

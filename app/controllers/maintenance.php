@@ -230,4 +230,20 @@ class Maintenance extends Controller
         
         $this->render('success');
     }    
+    
+    //  System backup home page
+    public function systemBackup()
+    {
+        
+        
+        $this->view('maintenance/backup_index');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Run the system backup
+    public function runBackup()
+    {
+        passthru($_SERVER['DOCUMENT_ROOT'].'')
+    }
 }

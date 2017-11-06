@@ -30,9 +30,7 @@
         <a href="/maintenance/view-logs" class="btn btn-default btn-block">View Logs</a>
         <a href="/maintenance/file-maintenance" class="btn btn-default btn-block">System File Maintenance</a>
         <a href="/maintenance/category-file-maintenance" class="btn btn-default btn-block">File Maintenance by Category</a>
-<!--
         <a href="/maintenance/system-backup" class="btn btn-default btn-block">System Backup</a>
--->
     </div>
 </div>
 <div class="row">
