@@ -373,9 +373,23 @@ class Customer extends Controller
         {
             $data['optList'] .= '<optgroup label="'.strtoupper($cat->description).'">';
             $systems = $model->getSystems($cat->description);
+            //  Pull the parent systems out of the array
+            $sysArr = [];
             foreach($systems as $sys)
             {
-                $data['optList'] .= '<option value="'.str_replace(' ', '_', $sys->name).'">'.$sys->name.'</option>';
+                $sysArr[$sys->sys_id] = $sys->name;
+            }
+            foreach($systems as $sys)
+            {
+                if(isset($sys->parent_id) && array_key_exists($sys->parent_id, $sysArr))
+                {
+                    unset($sysArr[$sys->parent_id]);
+                }
+            }
+            //  Build the list of available system types
+            foreach($sysArr as $s)
+            {
+                $data['optList'] .= '<option value="'.str_replace(' ', '_', $s).'">'.$s.'</option>';
             }
             $data['optList'] .= '</optgroup>';
         }
