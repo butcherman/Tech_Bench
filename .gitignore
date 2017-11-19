@@ -9,3 +9,5 @@
 /composer.lock
 /package-lock.json
 /_files
+/backups/*
+!/backups/*.MD

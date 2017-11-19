@@ -91,10 +91,10 @@ class Admin extends Controller
         $userData = $model->getUserData($userID);
         
          $data = [
-            'username' => $userData->username,
+            'username'   => $userData->username,
             'first_name' => $userData->first_name,
-            'last_name' => $userData->last_name,
-            'email' => $userData->email
+            'last_name'  => $userData->last_name,
+            'email'      => $userData->email
         ];
         
         $this->view('admin/user_settings_form', $data);
@@ -107,10 +107,10 @@ class Admin extends Controller
         $model = $this->model('users');
         
         $data = [
-            'username' => $_POST['username'],
+            'username'   => $_POST['username'],
             'first_name' => $_POST['firstName'],
-            'last_name' => $_POST['lastName'],
-            'email' => $_POST['email'],
+            'last_name'  => $_POST['lastName'],
+            'email'      => $_POST['email'],
         ];
         
         $model->updateUserData($_POST['selectUser'], $data);
@@ -285,7 +285,7 @@ class Admin extends Controller
         
         $data = [
             'linkList' => $linkList,
-            'header' => 'Expired File Links'
+            'header'   => 'Expired File Links'
         ];
         
         $this->template('techUser');
@@ -315,7 +315,7 @@ class Admin extends Controller
         
         $data = [
             'linkList' => $linkList,
-            'header' => 'Active File Links'
+            'header'   => 'Active File Links'
         ];
         
         $this->template('techUser');
@@ -333,7 +333,7 @@ class Admin extends Controller
         $model = $this->model('systems');
         
         $data['header'] = 'Delete Customer';
-        $data['link'] = 'delete-customer-confirm';
+        $data['link']   = 'delete-customer-confirm';
         
         $this->template('techUser');
         $this->view('admin/customer_search', $data);
@@ -378,10 +378,10 @@ class Admin extends Controller
         else
         {
             $data = [
-                'custID' => $custID,
+                'custID'   => $custID,
                 'custName' => $custData->name,
-                'dbaName' => $custData->dba_name,
-                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+                'dbaName'  => $custData->dba_name,
+                'address'  => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
             ];
             
             $this->view('admin/customer_confirm_delete', $data);
@@ -436,7 +436,7 @@ class Admin extends Controller
         $model = $this->model('systems');
         
         $data['header'] = 'Change Customer ID';
-        $data['link'] = 'change-id-form';
+        $data['link']   = 'change-id-form';
         
         $this->template('techUser');
         $this->view('admin/customer_search', $data);
@@ -455,10 +455,10 @@ class Admin extends Controller
         else
         {
             $data = [
-                'custID' => $custID,
+                'custID'   => $custID,
                 'custName' => $custData->name,
-                'dbaName' => $custData->dba_name,
-                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+                'dbaName'  => $custData->dba_name,
+                'address'  => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
             ];
             
             $this->view('admin/customer_change_id_form', $data);
@@ -495,7 +495,7 @@ class Admin extends Controller
     {
         $data = [
             'header' => 'Deactivate Customer',
-            'link' => 'deactivate-customer-form'
+            'link'   => 'deactivate-customer-form'
         ];
         
         $this->template('techUser');
@@ -515,10 +515,10 @@ class Admin extends Controller
         else
         {
             $data = [
-                'custID' => $custID,
+                'custID'   => $custID,
                 'custName' => $custData->name,
-                'dbaName' => $custData->dba_name,
-                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+                'dbaName'  => $custData->dba_name,
+                'address'  => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
             ];
             
             $this->view('admin/customer_deactivate_confirm', $data);

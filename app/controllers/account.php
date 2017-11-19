@@ -23,14 +23,14 @@ class Account extends Controller
         $userSettings = $model->getUserSettings($_SESSION['id']);
 
         $data = [
-            'username' => $userData->username,
-            'first_name' => $userData->first_name,
-            'last_name' => $userData->last_name,
-            'email' => $userData->email,
-            'em_tech_tip' => $userSettings->em_tech_tip ? ' checked' : '',
-            'em_file_link' => $userSettings->em_file_link ? ' checked' : '',
+            'username'            => $userData->username,
+            'first_name'          => $userData->first_name,
+            'last_name'           => $userData->last_name,
+            'email'               => $userData->email,
+            'em_tech_tip'         => $userSettings->em_tech_tip ? ' checked' : '',
+            'em_file_link'        => $userSettings->em_file_link ? ' checked' : '',
             'em_sys_notification' => $userSettings->em_sys_notification ? ' checked' : '',
-            'auto_delete_link' => $userSettings->auto_delete_link ? ' checked' : ''
+            'auto_delete_link'    => $userSettings->auto_delete_link ? ' checked' : ''
         ];
             
         $this->view('user/account_settings', $data);
@@ -45,17 +45,17 @@ class Account extends Controller
         
         //  Update primary user information
         $userData = [
-            'username' => $_POST['username'],
+            'username'   => $_POST['username'],
             'first_name' => $_POST['firstName'],
-            'last_name' => $_POST['lastName'],
-            'email' => $_POST['email']
+            'last_name'  => $_POST['lastName'],
+            'email'      => $_POST['email']
         ];
         $model->updateUserData($_SESSION['id'], $userData);
         
         //  Update notification settings
         $userSettings = [
-            'tech_tip' => isset($_POST['emailTechTip']) ? 1 : 0,
-            'file_link' => isset($_POST['emailFileLink']) ? 1 : 0,
+            'tech_tip'    => isset($_POST['emailTechTip']) ? 1 : 0,
+            'file_link'   => isset($_POST['emailFileLink']) ? 1 : 0,
             'notificaton' => isset($_POST['emailNotifications']) ? 1 : 0
         ];
         $model->updateUserSettings($_SESSION['id'], $userSettings);

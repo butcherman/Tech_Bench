@@ -26,7 +26,7 @@ class Forms extends Controller
     
     public function newFormSubmit()
     {
-        $model = $this->model('companyForms');
+        $model     = $this->model('companyForms');
         $fileModel = $this->model('files');
         
         $path = Config::getFile('uploadRoot').Config::getFile('formPath');
@@ -66,7 +66,7 @@ class Forms extends Controller
             foreach($files as $file)
             {
                 $fileData = new SplFileInfo($file->file_name);
-                $ext = $fileData->getExtension();
+                $ext      = $fileData->getExtension();
                 
                 $base = '/source/img/file_icons/';
                 if(file_exists('../public/source/img/file_icons/'.$ext.'.png'))

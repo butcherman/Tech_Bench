@@ -20,9 +20,9 @@ class Dashboard extends Controller
     {
         $model = $this->model('dashboardModel');
         
-        $custFavs = $model->getCustFavs($_SESSION['id']);
-        $tipFavs = $model->getTechTipFavs($_SESSION['id']);
-        $sysAlerts = $model->getSystemAlerts();
+        $custFavs   = $model->getCustFavs($_SESSION['id']);
+        $tipFavs    = $model->getTechTipFavs($_SESSION['id']);
+        $sysAlerts  = $model->getSystemAlerts();
         $techAlerts = $model->getUserAlerts($_SESSION['id']);
         
         $data['sysAlerts'] = '';

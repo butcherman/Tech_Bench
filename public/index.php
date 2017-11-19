@@ -30,6 +30,7 @@ require_once __DIR__.'/../app/core/security.php';
 require_once __DIR__.'/../app/core/email.php';
 require_once __DIR__.'/../app/core/template.php';
 require_once __DIR__.'/../app/core/vcardDownloader.php';
+require_once __DIR__.'/../app/core/dbBackup.php';
 
 //  Initialize the necessary static classes
 Config::init();

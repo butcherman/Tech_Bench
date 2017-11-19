@@ -19,7 +19,7 @@ class Home extends Controller
         //  Check to see if the user is already logged in
         if(Security::isLoggedIn())
         {
-            $model = $this->model('users');
+            $model    = $this->model('users');
             $userHome = $model->getHomeLocation($_SESSION['id']);
             header('Location: '.$userHome);
             die();
@@ -49,7 +49,7 @@ class Home extends Controller
     //  Ajax call to check the users login information
     public function submitLogin()
     {
-        $model = $this->model('users');
+        $model    = $this->model('users');
         $userHome = false;
         
         if($model->countFailedLogin($this->getRealIpAddr()) > 10)
@@ -91,14 +91,14 @@ class Home extends Controller
         //  Check to see if the user is already logged in
         if(Security::isLoggedIn())
         {
-            $model = $this->model('users');
+            $model    = $this->model('users');
             $userHome = $model->getHomeLocation($_SESSION['id']);
             header('Location: '.$userHome);
             die();
         }
         else if(isset($_COOKIE[str_replace(' ', '', Config::getCore('title'))]))
         {
-            $model = $this->model('users');
+            $model     = $this->model('users');
             if($userID = $model->checkCookie())
             {
                 $userHome = $model->getHomeLocation($userID);
@@ -131,7 +131,7 @@ class Home extends Controller
             //  Create the password reset link
             $userData = $model->getUserData($userID);
             $passLink = $model->createResetLink($userID);
-            $valid = 'success';
+            $valid    = 'success';
             
             //  Create the view for the email
             $data['resetLink'] = $passLink;

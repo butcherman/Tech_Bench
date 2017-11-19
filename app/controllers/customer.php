@@ -49,7 +49,6 @@ class Customer extends Controller
         $model = $this->model('customers');
         
         $custData = $model->searchCustomer($_POST['customer'], $_POST['city'], $_POST['systemType']);
-        
         $custList = '';
         
         if(!$custData)
@@ -60,7 +59,7 @@ class Customer extends Controller
         {
             foreach($custData as $cust)
             {
-                $system = $model->getCustSystem($cust->cust_id);
+                $system  = $model->getCustSystem($cust->cust_id);
                 $custSys = '';
                 foreach($system as $sys)
                 {
@@ -91,7 +90,7 @@ class Customer extends Controller
     //  Check to see if the customer ID is already taken
     public function checkID()
     {
-        $model = $this->model('customers');
+        $model  = $this->model('customers');
         $result = true;
                 
         //  Strip any leading zero's from the customer ID - these cannot be stored in the database and will cause file location errors
@@ -109,7 +108,7 @@ class Customer extends Controller
     //  Submit the new customer form
     public function addCustomerSubmit()
     {
-        $model = $this->model('customers');
+        $model  = $this->model('customers');
         $result = 'failed';
         
         //  Strip any leading zero's from the customer ID - these cannot be stored in the database and will cause file location errors
@@ -125,7 +124,7 @@ class Customer extends Controller
             $custID = $model->addCustomer($_POST);
             
             $fileModel = $this->model('files');
-            $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID;
+            $filePath  = Config::getFile('uploadRoot').Config::getFile('custPath').$custID;
             $fileModel->createFolder($filePath);
             
             //  Note change in log file
@@ -154,12 +153,12 @@ class Customer extends Controller
         else
         {
             $data = [
-                'custID' => $custID,
+                'custID'   => $custID,
                 'custName' => $custData->name,
-                'dbaName' => $custData->dba_name,
-                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+                'dbaName'  => $custData->dba_name,
+                'address'  => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
                 'addrLink' => $custData->address.',+'.$custData->city.',+'.$custData->state.',+'.$custData->zip,
-                'custFav' => $model->isCustFav($custID, $_SESSION['id']) ? 'item-fav-checked' : 'item-fav-unchecked'
+                'custFav'  => $model->isCustFav($custID, $_SESSION['id']) ? 'item-fav-checked' : 'item-fav-unchecked'
             ];
             
             $this->view('customers/details', $data);
@@ -199,13 +198,13 @@ class Customer extends Controller
         
         $custData = $model->getCustData($custID);
         $data = [
-            'custID' => $custID,
+            'custID'   => $custID,
             'custName' => $custData->name,
-            'dbaName' => $custData->dba_name,
-            'address' => $custData->address,
-            'city' => $custData->city,
-            'state' => $custData->state,
-            'zip' => $custData->zip
+            'dbaName'  => $custData->dba_name,
+            'address'  => $custData->address,
+            'city'     => $custData->city,
+            'state'    => $custData->state,
+            'zip'      => $custData->zip
         ];
         
         $this->view('customers/edit_customer_information_form', $data);
@@ -236,7 +235,7 @@ class Customer extends Controller
     //  Ajax call to load the customers systems
     public function loadSystems($custID)
     {
-        $model = $this->model('customers');
+        $model    = $this->model('customers');
         $sysModel = $this->model('systems');
         
         $custSystems = $model->getCustSystem($custID);
@@ -333,7 +332,7 @@ class Customer extends Controller
     //  Ajax call to submit the customers system
     public function editCustSystemSubmit($custID)
     {
-        $model = $this->model('customers');
+        $model    = $this->model('customers');
         $sysModel = $this->model('systems');
         
         $custName = $model->getCustData($custID)->name;
@@ -401,7 +400,7 @@ class Customer extends Controller
     //  Ajax call to submit a new customer system
     public function newSystemSubmit($custID)
     {
-        $model = $this->model('customers');
+        $model    = $this->model('customers');
         $sysModel = $this->model('systems');
         
         $custName = $model->getCustData($custID)->name;
@@ -495,7 +494,7 @@ class Customer extends Controller
     //  Ajax call to load the new contact form
     public function newContactLoad()
     {
-        $model = $this->model('customers');
+        $model    = $this->model('customers');
         $numTypes = $model->getPhoneTypes();
         
         $data['numTypes'] = '';
@@ -541,7 +540,7 @@ class Customer extends Controller
         $numberTypes = $model->getPhoneTypes();
         
         //  Get contact information
-        $contactData = $model->getOneContact($contID);
+        $contactData   = $model->getOneContact($contID);
         $contactPhones = $model->getContactPhone($contID);
         
         //  cycle through phone numbers
@@ -563,12 +562,12 @@ class Customer extends Controller
         }
         
         $data = [
-            'contID' => $contID,
-            'name' => $contactData->name,
-            'phone' => '',
-            'email' => $contactData->email,
+            'contID'       => $contID,
+            'name'         => $contactData->name,
+            'phone'        => '',
+            'email'        => $contactData->email,
             'phoneNumbers' => $phns,
-            'numTypes' => $numTypes
+            'numTypes'     => $numTypes
         ];
         $this->view('customers/contact_edit_form', $data);
         $this->render();  
@@ -653,7 +652,7 @@ class Customer extends Controller
     //  Ajax call to load the new note form
     public function newNoteForm()
     {
-        $model = $this->model('customers');
+        $model      = $this->model('customers');
         $noteLevels = $model->getNoteLevels();
         
         $levels = '';
@@ -685,21 +684,21 @@ class Customer extends Controller
     //  Ajax call to load the edit note form
     public function editNoteForm($noteID)
     {
-        $model = $this->model('customers');
+        $model      = $this->model('customers');
         $noteLevels = $model->getNoteLevels();
-        $noteData = $model->getNote($noteID);
+        $noteData   = $model->getNote($noteID);
         
         $levels = '';
         foreach($noteLevels as $lev)
         {
             $selected = $lev->description === $noteData->level ? ' selected' : '';
-            $levels .= '<option value="'.$lev->note_level_id.'" class="bg-'.$lev->description.'"'.$selected.'>'.$lev->description.'</option>';
+            $levels  .= '<option value="'.$lev->note_level_id.'" class="bg-'.$lev->description.'"'.$selected.'>'.$lev->description.'</option>';
         }
 
         $data = [
             'subject' => $noteData->subject,
-            'body' => $noteData->description,
-            'levels' => $levels
+            'body'    => $noteData->description,
+            'levels'  => $levels
         ];
         
         $this->view('customers/note_edit_form', $data);
@@ -751,7 +750,7 @@ class Customer extends Controller
     //  Load the new file form
     public function newFileForm()
     {
-        $model = $this->model('customers');
+        $model     = $this->model('customers');
         $fileTypes = $model->getFileTypes();
         
         $data['types'] = '';
@@ -767,9 +766,9 @@ class Customer extends Controller
     //  Submit the new file form
     public function newFileSubmit($custID)
     {
-        $model = $this->model('customers');
+        $model     = $this->model('customers');
         $fileModel = $this->model('files');
-        $success = false;
+        $success   = false;
         
         $custName = $model->getCustData($custID)->name;
         $filePath = Config::getFile('uploadRoot').Config::getFile('custPath').$custID.Config::getFile('slash');
@@ -781,8 +780,8 @@ class Customer extends Controller
             
             $fileData = [
                 'fileID' => $fileID[0],
-                'name' => $_POST['fileName'],
-                'type' => $_POST['fileType']
+                'name'   => $_POST['fileName'],
+                'type'   => $_POST['fileType']
             ];
             
             $model->addFile($custID, $_SESSION['id'], $fileData);
@@ -799,11 +798,11 @@ class Customer extends Controller
     //  Ajax call to load the edit file form
     public function editFileLoad($fileID)
     {
-        $model = $this->model('customers');
-        $fileData = $model->getFile($fileID);
+        $model     = $this->model('customers');
+        $fileData  = $model->getFile($fileID);
         $fileTypes = $model->getFileTypes();
         
-        $data['name'] = $fileData->name;
+        $data['name']  = $fileData->name;
         $data['types'] = '';
         foreach($fileTypes as $type)
         {
@@ -837,7 +836,7 @@ class Customer extends Controller
     //  Submit the delete file link
     public function deleteFileSubmit($fileID)
     {
-        $model = $this->model('customers');
+        $model    = $this->model('customers');
         $fileData = $model->getFile($fileID);
         
         $fileModel = $this->model('files');
@@ -860,7 +859,7 @@ class Customer extends Controller
     //  Load all linked sites for this customer
     public function loadLinkedSites($custID)
     {
-        $model = $this->model('customers');
+        $model       = $this->model('customers');
         $linkedSites = $model->getLinkedSites($custID);
         
         $linkedView = '';
@@ -896,9 +895,9 @@ class Customer extends Controller
     //  Check if the parent site entered is actually a valid parent
     public function checkParent()
     {
-        $model = $this->model('customers');
+        $model    = $this->model('customers');
         $parentID = $_POST['parentID'];
-        $result = $model->checkParentID($parentID);
+        $result   = $model->checkParentID($parentID);
         
         $data = !$result ? 'This Is Not A Valid Parent ID' : true;
         
