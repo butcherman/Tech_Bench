@@ -21,7 +21,7 @@ class MyFiles extends Controller
     //  Landing page shows all the files
     public function index()
     {
-        $this->view('tech.myFiles');
+        $this->view('user/user_my_files_index');
         $this->template('techUser');
         $this->render();
     }

@@ -19,7 +19,7 @@ class Home extends Controller
         //  Check to see if the user is already logged in
         if(Security::isLoggedIn())
         {
-            $model = $this->model('users');
+            $model    = $this->model('users');
             $userHome = $model->getHomeLocation($_SESSION['id']);
             header('Location: '.$userHome);
             die();
@@ -42,14 +42,14 @@ class Home extends Controller
         }
         
         $this->template('standard');
-        $this->view('home.login');
+        $this->view('home/login');
         $this->render();
     }
     
     //  Ajax call to check the users login information
     public function submitLogin()
     {
-        $model = $this->model('users');
+        $model    = $this->model('users');
         $userHome = false;
         
         if($model->countFailedLogin($this->getRealIpAddr()) > 10)
@@ -91,14 +91,14 @@ class Home extends Controller
         //  Check to see if the user is already logged in
         if(Security::isLoggedIn())
         {
-            $model = $this->model('users');
+            $model    = $this->model('users');
             $userHome = $model->getHomeLocation($_SESSION['id']);
             header('Location: '.$userHome);
             die();
         }
         else if(isset($_COOKIE[str_replace(' ', '', Config::getCore('title'))]))
         {
-            $model = $this->model('users');
+            $model     = $this->model('users');
             if($userID = $model->checkCookie())
             {
                 $userHome = $model->getHomeLocation($userID);
@@ -108,7 +108,7 @@ class Home extends Controller
         }
         
         $this->template('standard');
-        $this->view('home.reset');
+        $this->view('home/forgot_password_form');
         $this->render();
     }
     
@@ -131,7 +131,7 @@ class Home extends Controller
             //  Create the password reset link
             $userData = $model->getUserData($userID);
             $passLink = $model->createResetLink($userID);
-            $valid = 'success';
+            $valid    = 'success';
             
             //  Create the view for the email
             $data['resetLink'] = $passLink;
@@ -167,11 +167,11 @@ class Home extends Controller
         if($userID = $model->checkResetLink($link))
         {
             $data['link'] = $link;
-            $this->view('home.resetPassword', $data);
+            $this->view('home/reset_password_form', $data);
         }
         else
         {
-            $this->view('error.badLink');
+            $this->view('error/bad_link');
         }
         
         $this->template('standard');
@@ -208,7 +208,7 @@ class Home extends Controller
     //  Function that only shows yes or no dialog boxes
     public function yesOrNo()
     {
-        $this->view('confirm.yesorno');
+        $this->view('home/confirm_yes_or_no');
         $this->render();
     }
     

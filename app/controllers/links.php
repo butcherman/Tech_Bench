@@ -45,7 +45,7 @@ class Links extends Controller
         }
         
         $this->template('techUser');
-        $this->view('links.home', $data);
+        $this->view('links/index', $data);
         $this->render();
     }
     
@@ -53,7 +53,7 @@ class Links extends Controller
     public function create()
     {
         $this->template('techUser');
-        $this->view('links.new');
+        $this->view('links/new_link_form');
         $this->render();
     }
     
@@ -126,7 +126,7 @@ class Links extends Controller
         
         if(!$details)
         {
-            $this->view('error.badLink');
+            $this->view('error/bad_link');
         }
         else
         {
@@ -138,7 +138,7 @@ class Links extends Controller
                 'allow' => $details->allow_user_upload ? 'Yes' : 'No'
             ];
 
-            $this->view('links.details', $data);
+            $this->view('links/link_details', $data);
         }
         
         $this->template('techUser');
@@ -211,7 +211,7 @@ class Links extends Controller
     //  Load the new file form
     public function newFileForm()
     {
-        $this->view('links.newFileForm');
+        $this->view('links/new_file_form');
         $this->render();
     }
     
@@ -273,7 +273,7 @@ class Links extends Controller
             'allow' => $link->allow_user_upload ? 'checked' : ''
         ];
         
-        $this->view('links.editLinkForm', $data);
+        $this->view('links/edit_link_form', $data);
         $this->render();
     }
     
@@ -333,7 +333,7 @@ class Links extends Controller
         
         $data['optList'] = $optList;
         
-        $this->view('links.shareLinkForm', $data);
+        $this->view('links/share_link_form', $data);
         $this->render();
     }
     

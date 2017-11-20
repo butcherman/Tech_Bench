@@ -20,7 +20,7 @@ class siteAdministration extends Controller
     //  Landing page for the Site Administrator
     public function index()
     {
-        $this->view('admin.site.home');
+        $this->view('site_admin/index');
         $this->template('techUser');
         $this->render();
     }
@@ -28,7 +28,7 @@ class siteAdministration extends Controller
     //  Add a new system category
     public function createCategory()
     {
-        $this->view('admin.site.newCategory');
+        $this->view('site_admin/category_new');
         $this->template('techUser');
         $this->render();
     }
@@ -52,8 +52,8 @@ class siteAdministration extends Controller
         $this->render('success');
     }
     
-    //  Modify an existing system category
-    public function modifyCategory()
+    //  Delete an existing category
+    public function deleteCategory()
     {
         $model = $this->model('systems');
         $cats = $model->getCategories();
@@ -61,47 +61,26 @@ class siteAdministration extends Controller
         $data['categories'] = '';
         foreach($cats as $cat)
         {
-            $data['categories'] .= '<option value="'.$cat->description.'">'.$cat->description.'</option>';
+            $data['categories'] .= '<li class="list-group-item text-center"><a href="#edit-modal" class="confirm-delete" data-toggle="modal" data-value="'.$cat->description.'">'.$cat->description.'</a></li>';
         }
         
-        $this->view('admin.site.editCategory', $data);
+        $this->view('site_admin/category_delete', $data);
         $this->template('techUser');
         $this->render();
     }
     
-    //  Ajax call to submit the new category
-    public function submitUpdateCategory()
+    //  Confirm to delete a system category
+    public function confirmDeleteCategory($catName)
     {
         $model = $this->model('siteAdmin');
-        $sysModel = $this->model('systems');
+        $result = $model->deleteCategory($catName);
         
-        //  Get the folders that are in the category folder
-        $folders = [];
-        $systems = $sysModel->getSystems($_POST['selectCategory']);
-        foreach($systems as $sys)
-        {
-            $folders[] = $model->getSystemFolder($sys->name);
-        }
+        $result = $result ? 'success' : 'false';
         
-        //  Update the category name in the database
-        $catID = $sysModel->getCategoryID($_POST['selectCategory']);
-        $model->updateCategory($catID, $_POST['category']);
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' deleted category type: '.$catName;
+        Logs::writeLog('System-Change', $msg);
         
-        //  Build new folder structure with the new category name and all of the folders within it.
-        //  Note:  old folder structure will stil exist as files will remain in those folders
-        $fileModel = $this->model('files');
-        $path = Config::getFile('uploadRoot').Config::getFile('sysPath').$_POST['category'];
-        $fileModel->createFolder($path);
-        foreach($folders as $folder)
-        {
-            $fileModel->createFolder($path.Config::getFile('slash').$folder);
-        }
-        
-        //  Note the change in the log files
-        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' modified a system category '.$_POST['category'];
-        Logs::writeLog('Administration-Change', $msg);
-        
-        $this->render('success');
+        $this->render($result);
     }
     
     //  Add a new system type under an existing category
@@ -116,7 +95,7 @@ class siteAdministration extends Controller
             $data['categories'] .= '<option value="'.$cat->description.'">'.$cat->description.'</option>';
         }
         
-        $this->view('admin.site.newSystem', $data);
+        $this->view('site_admin/system_new', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -141,6 +120,52 @@ class siteAdministration extends Controller
         $this->render('success');
     }
     
+    //  Form to delete an existing system
+    public function deleteSystem()
+    {
+        $model = $this->model('systems');
+        $cats = $model->getCategories();
+        
+        $data['categories'] = '';
+        foreach($cats as $cat)
+        {
+            $data['categories'] .= '<option value="'.$cat->description.'">'.$cat->description.'</option>';
+        }
+        
+        $this->view('site_admin/system_delete', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Load the system types for a category
+    public function loadSystemTypes($cat)
+    {
+        $model = $this->model('systems');
+        $sysList = $model->getSystems($cat);
+        
+        $sys = '';
+        foreach($sysList as $item)
+        {
+            $sys .= '<li class="list-group-item text-center"><a href="#edit-modal" class="confirm-delete" data-toggle="modal" data-value="'.$item->name.'">'.$item->name.'</a></li>';
+        }
+        
+        $this->render($sys);
+    }
+    
+    //  Confirm the deletion of a system
+    public function confirmDeleteSystem($sysName)
+    {
+        $model = $this->model('siteAdmin');
+        $result = $model->deleteSystem($sysName);
+        
+        $result = $result ? 'success' : 'false';
+        
+        $msg = 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']).' deleted system type: '.$sysName;
+        Logs::writeLog('System-Change', $msg);
+        
+        $this->render($result);
+    }
+    
     //  Edit an existing system type under an existing category
     public function modifySystem()
     {
@@ -153,7 +178,7 @@ class siteAdministration extends Controller
             $data['categories'] .= '<option value="'.str_replace(' ', '_', $cat->description).'">'.$cat->description.'</option>';
         }
         
-        $this->view('admin.site.editSystem', $data);
+        $this->view('site_admin/system_edit', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -210,7 +235,7 @@ class siteAdministration extends Controller
             'files' => Config::getSetting('allow_my_files') ? ' checked' : ''
         ];
         
-        $this->view('admin.site.globalSettings', $data);
+        $this->view('site_admin/settings_global', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -276,7 +301,7 @@ class siteAdministration extends Controller
     //  Modify the email settings form
     public function emailSettings()
     {
-        $this->view('admin.site.emailSettings');
+        $this->view('site_admin/email_settings_form');
         $this->template('techUser');
         $this->render();
     }
@@ -300,7 +325,7 @@ class siteAdministration extends Controller
     //  Company logo and company information form
     public function companySettings()
     {
-        $this->view('admin.site.newLogo');
+        $this->view('site_admin/logo_new');
         $this->template('techUser');
         $this->render();
     }
@@ -402,5 +427,70 @@ class siteAdministration extends Controller
         file_put_contents($configPath, $configFile, LOCK_EX);
         
         $this->render('success');
+    }
+    
+    //  Modify the types of file that can be saved for the systems - Note: these are global for all systems
+    public function systemFileTypes()
+    {
+        $model = $this->model('systems');
+        $fileTypes = $model->getFileTypes();
+        
+        $types = '';
+        foreach($fileTypes as $file)
+        {
+            $types .= '<li class="list-group-item text-center"><a href="#edit-modal" class="edit-type-link" data-toggle="modal" data-value="'.$file->type_id.'">'.$file->description.'</a></li>';
+        }
+        
+        $data = [
+            'fileTypes' => $types
+        ];
+        
+        $this->view('site_admin/system_file_types_list', $data);
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Submit the new file type form
+    public function submitNewFileType()
+    {
+        $model = $this->model('siteAdmin');
+        $model->addSysFileType($_POST['typeName']);
+        
+        $this->render('success');
+    }
+    
+    //  Load the edit file type form
+    public function editFileTypeForm($typeID)
+    {
+        $model = $this->model('systems');
+        $desc = $model->getAFileType($typeID)->description;
+        
+        $data = [
+            'description' => $desc,
+            'typeID' => $typeID
+        ];
+        
+        $this->view('site_admin/system_file_types_edit', $data);
+        $this->render();
+    }
+    
+    //  Submit the edit file type form
+    public function submitEditFileType($typeID)
+    {
+        $model = $this->model('siteAdmin');
+        $model->editSysFileType($_POST['typeName'], $typeID);
+        
+        $this->render('success');
+    }
+    
+    //  Delete a file type 
+    public function deleteFileType($typeID)
+    {
+        $model = $this->model('siteAdmin');
+        $success = $model->delSysFileType($typeID);
+        
+        $result = $success ? 'success' : 'failed';
+        
+        $this->render($result);
     }
 }

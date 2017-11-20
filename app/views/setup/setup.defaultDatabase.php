@@ -1,8 +1,8 @@
 <?php
 /*
 |   Default database settings for the Tech Bench
-|   Updated 7-14-17
-|   Database Version 2.4
+|   Updated 10-30-17
+|   Database Version 3.0
 */
 
 $database = '
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `customer_systems` (
     FOREIGN KEY (`cust_id`) REFERENCES `customers` (`cust_id`)
 		ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (`sys_id`) REFERENCES `system_types` (`sys_id`) 
-		ON DELETE CASCADE ON UPDATE CASCADE
+		ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `customer_contacts` (

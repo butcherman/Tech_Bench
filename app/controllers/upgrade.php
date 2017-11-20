@@ -30,7 +30,7 @@ class Upgrade extends Controller
             'actual' => Database::getVersion()
         ];
 
-        $this->view('admin.site.upgrade', $data);
+        $this->view('site_admin/upgrade', $data);
         $this->template('standard');
         $this->render();
     }
@@ -143,7 +143,8 @@ class Upgrade extends Controller
         $fileModel = $this->model('files');
         //  Create the 'user' folder for the root of the file structure
         $path = Config::getFile('uploadRoot');
-        $fileModel->createFolder($path);
+        $fileModel->createFolder($path.'backup');
+        $fileModel->createFolder($path.'users');
         $path = Config::getFile('uploadRoot').'users/';
         
         //  Create folder for each specific user
@@ -155,6 +156,7 @@ class Upgrade extends Controller
         //  Recreate Config file 
         $_SESSION['setupData']['customCustID'] = "0";
         $_SESSION['setupData']['userPath'] = 'users/';
+        $_SESSION['setupData']['backupPath'] = 'backup/';
         $this->rewriteConfig();
     }
     

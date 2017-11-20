@@ -52,7 +52,7 @@ class System extends Controller
             $data['list'] .= '<a href="/system/'.str_replace(' ', '-', $cat->description).'" class="btn btn-default btn-block pad-bottom pad-top">'.strtoupper($cat->description).'</a>';
         }
 
-        $this->view('system.systemList', $data);
+        $this->view('system/system_list', $data);
     }
     
     //  Show each of the systems related to a specific category
@@ -71,7 +71,7 @@ class System extends Controller
             $data['list'] .= '<a href="/system/'.str_replace(' ', '-', $cat).'/'.str_replace(' ', '-', $sys->name).'" class="btn btn-default btn-block">'.strtoupper($sys->name).'</a>';
         }
         
-        $this->view('system.systemList', $data);
+        $this->view('system/system_list', $data);
     }
     
     //  Show the system information for the selected system
@@ -141,7 +141,7 @@ class System extends Controller
         ];
         
         $this->template('techUser');
-        $this->view('system.systemData', $data);
+        $this->view('system/system_data', $data);
     }
     
     //  Ajax call to pull all files for a specifi system

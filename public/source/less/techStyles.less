@@ -382,7 +382,11 @@ a .glyphicon {
     box-shadow: 0 1px 3px 0 rgba(2, 2, 2, 0.3);
 }
 
-#log-view {
+#backup-status-wraper {
+    display: none;
+}
+
+#log-view, #backup-status {
     height: 50vh;
     overflow: auto;
 }
@@ -411,4 +415,8 @@ a .glyphicon {
     padding: 1em;
     border-radius: 5px;
     max-width: 90%;
+}
+
+#backup-list tr td {
+    vertical-align: middle;
 }

@@ -253,8 +253,33 @@ class Files
     }
     
     //  Function to delete a file from the folder structure
-    private function eraseFile($filePath)
+    public function eraseFile($filePath)
     {
         unlink($filePath);
+    }
+    
+    //  Function to copy a folder recursively to another location
+    public function recursiveCopy($path, $destination)
+    {
+        $this->createFolder($destination);
+        $fileList = scandir($path);
+        
+        unset($fileList[array_search('.', $fileList, true)]);
+        unset($fileList[array_search('..', $fileList, true)]);
+        
+        if(count($fileList) > 0)
+        {
+            foreach($fileList as $file)
+            {
+                if(is_dir($path.'/'.$file))
+                {
+                    $this->recursiveCopy($path.'/'.$file, $destination.'/'.$file);
+                }
+                else
+                {
+                    copy($path.'/'.$file, $destination.'/'.$file);
+                }
+            }
+        }
     }
 }

@@ -1,7 +1,8 @@
 <?php
 /*
 |   Download page allows users to download files.
-|   Note:  file ID and file name must match or file will not be downloaded - this is a security measure to keep random people from accessing any file
+|   Note:  file ID and file name must match or file will not be downloaded - this is a security 
+|   measure to keep random people from accessing any file
 |   Files can also be limited to logged in users and security levels
 */
 
@@ -21,7 +22,7 @@ class Download extends Controller
     //  Function to download a file from the database
     public function index($fileID = '', $fileName = '')
     {
-        $model = $this->model('files');
+        $model  = $this->model('files');
         $userID = isset($_SESSION['id']) ? 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']) : 'Guest '.Security::getRealIpAddr();
         
         $fileData = $model->getFileData($fileID, $fileName);
@@ -32,7 +33,7 @@ class Download extends Controller
             $msg = $userID.' attempted to download a file that does not exist. File name: '.$fileName.' File ID: '.$fileID;
             Logs::writeLog('Download-Error', $msg);
             $this->template('standard');
-            $this->view('files.badFile');
+            $this->view('error/bad_file');
             $this->render();
         }
         else
@@ -44,7 +45,7 @@ class Download extends Controller
                 $msg = $userID.' attempted to download a file without the proper permissions. File name: '.$fileName.' File ID: '.$fileID;
                 Logs::writeLog('Download-Error', $msg);
                 $this->template('standard');
-                $this->view('files.badFile');
+                $this->view('error/bad_file');
                 $this->render();
             }
             else
@@ -81,11 +82,11 @@ class Download extends Controller
         //  Get the array of files to be downloaded - come in the format of xxx-xxx-xxx where - is the separater
         $fileArr = $_SESSION['download_all'];
         
-        $model = $this->model('files');
+        $model  = $this->model('files');
         $userID = isset($_SESSION['id']) ? 'User ('.$_SESSION['id'].')'.Template::getUserName($_SESSION['id']) : 'Guest '.Security::getRealIpAddr();
                 
         $zipName = Config::getFile('uploadRoot').Config::getFile('default').'files.zip';
-        $zip = new ZipArchive;
+        $zip     = new ZipArchive;
         $zip->open($zipName, ZipArchive::CREATE);
         foreach($fileArr as $file)
         {
@@ -129,7 +130,7 @@ class Download extends Controller
         $logFiles = scanDir(__DIR__.'/../../logs/');
         
         $zipName = Config::getFile('uploadRoot').Config::getFile('default').'log_files.zip';
-        $zip = new ZipArchive;
+        $zip     = new ZipArchive;
         $zip->open($zipName, ZipArchive::CREATE);
         foreach($logFiles as $file)
         {
@@ -159,5 +160,46 @@ class Download extends Controller
         }
         
         unlink($zipName);
+    }
+    
+    //  Download a backup file
+    public function backup($fileName)
+    {
+        $path = __DIR__.'/../../backups/'.$fileName;
+        
+        if(!file_exists($path))
+        {
+            $msg = $userID.' attempted to download a file that does not exist. File name: '.$fileName.' File ID: '.$fileID;
+            Logs::writeLog('Download-Error', $msg);
+            $this->template('standard');
+            $this->view('error/bad_file');
+            $this->render();
+        }
+        else
+        {
+            Security::setPageLevel('site admin');
+            if(!Security::doIBelong())
+            {
+                $_SESSION['returnURL'] = $_GET['url'];
+                header('Location: /err/restricted');
+                die();
+            }
+
+            header('Content-type: application/zip');
+            header('Content-Disposition: attachment; filename="'.basename($path).'"');
+            header("Content-length: " . filesize($path));
+            header("Pragma: no-cache");
+            header("Expires: 0");
+
+            //  Begin the file download.  File is broken into sections to better be handled by browser
+            set_time_limit(0);
+            $file = @fopen($path,"rb");
+            while(!feof($file))
+            {
+                print(@fread($file, 1024*8));
+                ob_flush();
+                flush();
+            }
+        }
     }
 }

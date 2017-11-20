@@ -19,7 +19,7 @@ class Reports extends Controller
     //  Landing page shows the reports menu
     public function index()
     {
-        $this->view('reports.home');
+        $this->view('reports/index');
         $this->template('techUser');
         $this->render();
     }
@@ -47,7 +47,7 @@ class Reports extends Controller
         }
         
         $data['loginTable'] = $table;
-        $this->view('reports.loginActivity', $data);
+        $this->view('reports/user_login_activity', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -79,7 +79,7 @@ class Reports extends Controller
 
             $data['optList'] = $optList;
 
-            $this->view('reports.userStatsList', $data);
+            $this->view('reports/user_stats_list', $data);
         }
         else
         {
@@ -109,7 +109,7 @@ class Reports extends Controller
                 'loginData'     => '"'.implode('", "', $loginsPerMonth).'"'
             ];
             
-            $this->view('reports.userStatsView', $data);
+            $this->view('reports/user_stats_view', $data);
         }
         
         $this->template('techUser');
@@ -123,7 +123,7 @@ class Reports extends Controller
     //  Landing page to determine which customers have a backup
     public function customerBackups()
     {
-        $this->view('reports.customerBackups');
+        $this->view('reports/customer_backups');
         $this->template('techUser');
         $this->render();
     }
@@ -149,7 +149,7 @@ class Reports extends Controller
     //  Landing page to see which customers have a system assigned
     public function customerSystems()
     {
-        $this->view('reports.customerSystems');
+        $this->view('reports/customer_systems');
         $this->template('techUser');
         $this->render();
     }
@@ -216,7 +216,7 @@ class Reports extends Controller
             'compUnknown' => $countComp['unknown']
         ];
         
-        $this->view('reports.systemFiles', $data);
+        $this->view('reports/system_files', $data);
         $this->template('techUser');
         $this->render();
     }

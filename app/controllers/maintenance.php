@@ -19,7 +19,7 @@ class Maintenance extends Controller
     //  Maintenance landing page
     public function index()
     {
-        $this->view('maintenance.home');
+        $this->view('maintenance/index');
         $this->template('techUser');
         $this->render();
     }
@@ -31,7 +31,7 @@ class Maintenance extends Controller
             'maintMode' => Template::inMaintenanceMode() ? 'checked' : ''
         ];
         
-        $this->view('maintenance.maintenanceMode', $data);
+        $this->view('maintenance/maintenance_mode_form', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -69,15 +69,14 @@ class Maintenance extends Controller
             if($parts['extension'] === 'log')
             {
                 $logList .= '<li class="list-group-item"><a href="/maintenance/show-log/'.$parts['filename'].'">'.$file.'</a></li>';
-            }
-            
+            } 
         }
         
         $data = [
             'logList' => $logList
         ];
         
-        $this->view('maintenance.logList', $data);
+        $this->view('maintenance/log_list', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -92,7 +91,7 @@ class Maintenance extends Controller
             'fileName' => $fileName
         ];
         
-        $this->view('maintenance.showLog', $data);
+        $this->view('maintenance/log_show', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -173,7 +172,7 @@ class Maintenance extends Controller
             'unknown'     => empty($unknown) ? '<tr><td colspan=2"><h4 class="text-center">No Unknown Files</h4></td></tr>' : $unknown
         ];
         
-        $this->view('maintenance.systemFiles', $data);
+        $this->view('maintenance/system_files', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -218,7 +217,7 @@ class Maintenance extends Controller
             'compUnknown' => $countComp['unknown']
         ];
         
-        $this->view('reports.systemFiles', $data);
+        $this->view('reports/system_files', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -231,4 +230,101 @@ class Maintenance extends Controller
         
         $this->render('success');
     }    
+    
+    //  System backup home page
+    public function systemBackup()
+    {
+        
+        
+        $this->view('maintenance/backup_index');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Run the system backup
+    public function runBackup()
+    {
+        $model = $this->model('files');
+        
+        //  Set folder locations
+        $folder   = 'manual_backup_'.date('mdY');
+        $backRoot = __DIR__.'/../../backups/';
+        $location = $backRoot.$folder.'.zip';
+        
+        //  Create a text file with version information
+        $verFile = fopen($backRoot.'version.txt', 'w');
+        $txt = "app=".VERSION."\ndb=".DBVERSION;
+        fwrite($verFile, $txt);
+        fclose($verFile);
+        
+        //  Create Database dump file
+        DbBackup::runBackup();
+        
+        //  Create a zip folder to put all backup files into
+        $zipName = $location;
+        $zip = new ZipArchive;
+        $zip->open($zipName, ZipArchive::CREATE);
+       
+        //  Place the database backup and version file into the backukp folder
+        $zip->addFile($backRoot.'backup.sql', 'db_backup.sql');
+        $zip->addFile($backRoot.'version.txt', 'version.txt');
+        
+        //  Copy all system files into the backup zip
+        $source = Config::getFile('uploadRoot');
+        $source = str_replace('\\', '/', realpath($source));
+
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($files as $file)
+        {
+            $file = str_replace('\\', '/', realpath($file));
+
+            if (is_dir($file) === true)
+            {
+                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+            }
+            else if (is_file($file) === true)
+            {
+                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+            }
+        }
+
+        //  Close the zip file and cleanup temp files
+        $zip->close();
+        $model->eraseFile($backRoot.'backup.sql');
+        $model->eraseFile($backRoot.'version.txt');
+        
+        $this->render('success');
+    }
+    
+    //  Load all existing backups
+    public function loadBackups()
+    {
+        $backupPath = __DIR__.'/../../backups/';
+        $fileList = glob($backupPath.'/*.zip', GLOB_BRACE);
+        
+        $actions = '<select class="backup-actions form-control"><option>Select Action</option><option value="download">Download</option><option value="delete">Delete</option></select>';
+        
+        $data = '';
+        foreach($fileList as $file)
+        {
+            $fileName = basename($file);
+            $modified = date('M d, Y', filemtime($file));
+            
+            
+            $data .= '<tr><td>'.$fileName.'</td><td>'.$modified.'</td><td data-value="'.$fileName.'">'.$actions.'</td></tr>';
+        }
+        
+        $this->render($data);
+    }
+    
+    //  Delete an existing backup
+    public function deleteBackup($fileName)
+    {
+        $model = $this->model('files');
+        $backupPath = __DIR__.'/../../backups/';
+        
+        $model->eraseFile($backupPath.$fileName);
+        
+        $this->render('success');
+    }
 }

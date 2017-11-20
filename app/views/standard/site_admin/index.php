@@ -11,12 +11,10 @@
 <div class="row pad-bottom">
     <div class="col-md-4 col-md-offset-4">
         <a href="/site-administration/create-category" class="btn btn-default btn-block">Create New System Category</a>
-        <a href="/site-administration/modify-category" class="btn btn-default btn-block">Modify System Category</a>
+        <a href="/site-administration/delete-category" class="btn btn-default btn-block">Delete System Category</a>
         <a href="/site-administration/create-system" class="btn btn-default btn-block">Create New System Type</a>
-<!--
-        <a href="/site-administration/modify-system" class="btn btn-default btn-block">Modify System Type</a>
+        <a href="/site-administration/delete-system" class="btn btn-default btn-block">Delete System Type</a>
         <a href="/site-administration/system-file-types" class="btn btn-default btn-block">Modify System File Types</a>
--->
     </div>
 </div>
 <div class="row pad-bottom">
@@ -32,9 +30,7 @@
         <a href="/maintenance/view-logs" class="btn btn-default btn-block">View Logs</a>
         <a href="/maintenance/file-maintenance" class="btn btn-default btn-block">System File Maintenance</a>
         <a href="/maintenance/category-file-maintenance" class="btn btn-default btn-block">File Maintenance by Category</a>
-<!--
         <a href="/maintenance/system-backup" class="btn btn-default btn-block">System Backup</a>
--->
     </div>
 </div>
 <div class="row">

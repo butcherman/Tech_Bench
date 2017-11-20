@@ -33,7 +33,7 @@ class Tips extends Controller
             $data['optList'] .= '</optgroup>';
         }
         
-        $this->view('tips.search', $data);
+        $this->view('tips/search', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -79,7 +79,7 @@ class Tips extends Controller
             $data['optList'] .= '</optgroup>';
         }
         
-        $this->view('tips.new', $data);
+        $this->view('tips/new_tip_form', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -147,7 +147,7 @@ class Tips extends Controller
         //  Determine if a valid tip has been selected
         if(!$tipData)
         {
-            $this->view('tips.badID');
+            $this->view('tips/error_bad_id');
         }
         else
         {
@@ -194,7 +194,7 @@ class Tips extends Controller
                 $data['deleteLink'] = '<a href="/tips/delete-tip/'.$tipData->tip_id.'/'.str_replace(' ', '-', $tipData->title).'" class="btn btn-default btn-block">Delete This Tech Tip</a>';
             }
 
-            $this->view('tips.tipDetails', $data);
+            $this->view('tips/tip_details', $data);
         }
         
         $this->template('techUser');
@@ -281,7 +281,7 @@ class Tips extends Controller
             'editLink' => ''
         ];
     
-        $this->view('tips.edit', $data);
+        $this->view('tips/edit_tip_form', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -350,7 +350,7 @@ class Tips extends Controller
         }
         
         $data['tipID'] = $tipID;
-        $this->view('tips.deleteTip', $data);
+        $this->view('tips/delete_tip', $data);
         $this->template('techuser');
         $this->render();
     }

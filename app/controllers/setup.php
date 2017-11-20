@@ -32,7 +32,7 @@ class Setup extends Controller
         is_writable(__DIR__.'/../../logs') ? $data['logs'] = $valid : $data['logs'] = $inval;
         is_writable(__DIR__.'/../../config') ? $data['config'] = $valid : $data['config'] = $inval;
         
-        $this->view('setup.beginSetup', $data);
+        $this->view('setup/begin_setup', $data);
         $this->template('standard');
         $this->render();
     }
@@ -40,7 +40,7 @@ class Setup extends Controller
     //  Step 1 is basic system information
     public function step1()
     {
-        $this->view('setup.form1');
+        $this->view('setup/form_1');
         $this->template('standard');
         $this->render();
     }
@@ -48,7 +48,7 @@ class Setup extends Controller
     //  Step 2 is database information
     public function step2()
     {
-        $this->view('setup.form2');
+        $this->view('setup/form_2');
         $this->template('standard');
         $this->render();
     }
@@ -56,7 +56,7 @@ class Setup extends Controller
     //  Step 3 is email information
     public function step3()
     {
-        $this->view('setup.form3');
+        $this->view('setup/form_3');
         $this->template('standard');
         $this->render();
     }
@@ -68,7 +68,7 @@ class Setup extends Controller
         $data['maxFile'] = preg_replace("/[^0-9]/", "", ini_get('upload_max_filesize'));
         $data['encryptionKey'] = substr(md5(uniqid(rand(), true)), 0, 20);
         
-        $this->view('setup.form4', $data);
+        $this->view('setup/form_4', $data);
         $this->template('standard');
         $this->render();
     }
@@ -76,7 +76,7 @@ class Setup extends Controller
     //  Bring up display that shows progress of setup process
     public function finish()
     {
-        $this->view('setup.createSite');
+        $this->view('setup/create_site');
         $this->template('standard');
         $this->render();
     }
@@ -181,6 +181,8 @@ class Setup extends Controller
         $_SESSION['setupData']['uploadRoot'] = $_SESSION['setupData']['uploadRoot'].'/';
         $_SESSION['setupData']['baseURL'] = $_SESSION['setupData']['baseURL'].'/';
         $_SESSION['setupData']['logo'] = 'TechBenchLogo.png';
+        $_SESSION['setupData']['backupPath'] = 'backup/';
+        $_SESSION['setupData']['userPath'] = 'users/';
         
         ob_start();
             require __DIR__.'/../views/setup/setup.defaultConfig.php';
@@ -269,16 +271,7 @@ class Setup extends Controller
     
     //  Finalize step 3 is to build the system defaults
     public function defaults()
-    {
-//        $mysqli = new mysqli($_SESSION['setupData']['host'], $_SESSION['setupData']['dbUser'], $_SESSION['setupData']['dbPass'], $_SESSION['setupData']['dbName']);
-//        
-//        //  If the databse connection fails, kick out error
-//        if($mysqli->connect_errno)
-//        {
-//            echo mysqli_connect_error();
-//            die();
-//        }
-        
+    {   
         //  Get information to create the database connection
         $dbHost = $_SESSION['setupData']['host'];
         $dbUser = $_SESSION['setupData']['dbUser'];
@@ -320,9 +313,7 @@ class Setup extends Controller
                     ("email_user", "'.$_SESSION['setupData']['emUser'].'"),
                     ("email_pass", AES_ENCRYPT("'.$_SESSION['setupData']['emPass'].'", "'.$_SESSION['setupData']['customerKey'].'"));
                 INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `salt`, `active`, `change_password`) VALUES ("'.$_SESSION['setupData']['siteUser'].'", "System", "Administrator", "'.$_SESSION['setupData']['siteEmail'].'", "'.$pass.'", "'.$salt.'", 1, 0);
-                INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (1, 1);';
-//        $mysqli->multi_query($qry);
-        
+                INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (1, 1);';        
         try
         {
             $db->exec($qry);
@@ -333,15 +324,7 @@ class Setup extends Controller
             die();
         }
         
-        //  Insert the user
-//        $qry = '';
-//        $mysqli->query($qry);
-        
         sleep(2);
-        
-        //  Give the user the Site Admin functionality
-//        $qry2 = ';
-//        $mysqli->query($qry2);
         
         return 'success';
     }

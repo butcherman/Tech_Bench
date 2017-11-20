@@ -5,7 +5,7 @@
 |   share information for the systems and customers they maintain.
 |
 |   Author  - Ron Butcher
-|   Version - 3.0.2
+|   Version - 3.1.3
 |
 |   Index.php file is the initial file that will begin the application
 |   All necessary static classes will be called
@@ -15,7 +15,7 @@
 session_start();
 
 //  Define version information as Global Variables
-define('VERSION', '3.0.3');
+define('VERSION', '3.1.3');
 define('RELEASE', '11-4-2017');
 define('DBVERSION', '3.0');
 
@@ -30,6 +30,7 @@ require_once __DIR__.'/../app/core/security.php';
 require_once __DIR__.'/../app/core/email.php';
 require_once __DIR__.'/../app/core/template.php';
 require_once __DIR__.'/../app/core/vcardDownloader.php';
+require_once __DIR__.'/../app/core/dbBackup.php';
 
 //  Initialize the necessary static classes
 Config::init();

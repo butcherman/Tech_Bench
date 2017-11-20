@@ -26,6 +26,27 @@ class siteAdmin
         $this->db->prepare($qry)->execute(['name' => $newName, 'catID' => $catID]);
     }
     
+    //  Delete an existing category
+    public function deleteCategory($catName)
+    {
+        $success = false;
+        
+        $qry = 'DELETE FROM `system_categories` WHERE `description` = :category';
+        try
+        {
+            $result = $this->db->prepare($qry);
+            $result->execute(['category' => $catName]);
+            
+            $success = true;
+        }
+        catch (Exception $e)
+        {
+            $success = false;
+        }
+        
+        return $success;
+    }
+    
     //  Create a new system type
     public function createSystem($category, $system, $tables)
     {
@@ -64,6 +85,35 @@ class siteAdmin
         return $data['folder'];
     }
     
+    public function deleteSystem($sysName)
+    {
+        $success = false;
+        
+        //  Get the database for the system 
+        $table = 'data_'.$this->getSystemFolder($sysName);
+        
+        $qry = 'DELETE FROM `system_types` WHERE `name` = :sysName';
+        try
+        {
+            $result = $this->db->prepare($qry);
+            $result->execute(['sysName' => $sysName]);
+            
+            $success = true;
+        }
+        catch (Exception $e)
+        {
+            $success = false;
+        }
+        
+        if($success)
+        {
+            $qry = 'DROP TABLE IF EXISTS `'.$table.'`';
+            $this->db->query($qry);
+        }
+        
+        return $success;
+    }
+    
     public function getSystemFolder($sysName)
     {
         $qry = 'SELECT `folder_location` FROM `system_types` WHERE `name` = :sysName';
@@ -99,5 +149,39 @@ class siteAdmin
             'dismiss' => $dismissable
         ];
         $this->db->prepare($qry)->execute($data);
+    }
+    
+    //  Add a new file type for systems
+    public function addSysFileType($newType)
+    {
+        $qry = 'INSERT INTO `system_file_types` (`description`) VALUES (:type)';
+        $this->db->prepare($qry)->execute(['type' => $newType]);
+    }
+    
+    //  Edit an existing file type for a system
+    public function editSysFileType($name, $typeID)
+    {
+        $qry = 'UPDATE `system_file_types` SET `description` = :desc WHERE `type_id` = :id';
+        $this->db->prepare($qry)->execute(['desc' => $name, 'id' => $typeID]);
+    }
+    
+    //  Delete an exiting file type for a system
+    public function delSysFileType($typeID)
+    {
+        $qry = 'DELETE FROM `system_file_types` WHERE `type_id` = :id';
+        
+        try
+        {
+            $result = $this->db->prepare($qry);
+            $result->execute(['id' => $typeID]);
+            
+            $success = true;
+        }
+        catch (Exception $e)
+        {
+            $success = false;
+        }
+        
+        return $success;
     }
 }

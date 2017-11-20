@@ -14,7 +14,7 @@ class Err extends Controller
     //  Generic error page 
     public function index()
     {
-        $this->view('error.generic');
+        $this->view('error/generic');
         $this->render();
     }
     
@@ -22,7 +22,7 @@ class Err extends Controller
     public function maintenance()
     {
         $this->template('errorPage');
-        $this->view('error.maintenance');
+        $this->view('error/maintenance');
         $this->render();
     }
     
@@ -30,7 +30,7 @@ class Err extends Controller
     public function restricted()
     {
         $this->template('errorPage');
-        $this->view('error.restricted');
+        $this->view('error/restricted');
         $this->render();
     }
     
@@ -38,7 +38,7 @@ class Err extends Controller
     public function _404()
     {
         $this->template('errorPage');
-        $this->view('error.404');
+        $this->view('error/404');
         $this->render();
     }
     
@@ -46,7 +46,7 @@ class Err extends Controller
     public function invalidSystem()
     {
         $this->template('errorPage');
-        $this->view('error.invalidSystem');
+        $this->view('error/invalid_system');
         $this->render();
     }
     
@@ -54,7 +54,7 @@ class Err extends Controller
     public function failedLogin()
     {
         $this->template('errorPage');
-        $this->view('error.failedLogin');
+        $this->view('error/failed_login');
         $this->render();
     }
     

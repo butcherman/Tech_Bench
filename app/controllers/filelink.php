@@ -26,7 +26,7 @@ class FileLink extends Controller
         
         if(!$linkID)
         {
-            $this->view('error.badLink');
+            $this->view('error/bad_link');
             
             //  Note in log file
             $msg = 'Visitor '.Security::getRealIpAddr().' attempted to acces a bad link hash - '.$linkHash;
@@ -34,7 +34,7 @@ class FileLink extends Controller
         }
         else if($model->isLinkExpired($linkID->link_id))
         {
-            $this->view('links.expiredLink');
+            $this->view('links.expired_link');
             
             //  Note in log file
             $msg = 'Visitor '.Security::getRealIpAddr().' attempted to acces an expired link hash - '.$linkHash;
@@ -46,10 +46,12 @@ class FileLink extends Controller
             $linkFiles = $model->getLinkFiles($linkID);
             $linkInstructions = $model->getLinkInstructions($linkID);
             
-            $data['allow'] = $model->checkLinkUpload($linkID);
-            $data['linkID'] = $linkID;
-            $data['instructions'] = $linkInstructions->instruction;
-            $data['files'] = '';
+            $data = [
+                'allow'        => $model->checkLinkUpload($linkID),
+                'linkID'       => $linkID,
+                'instructions' => $linkInstructions->instruction,
+                'files'        => ''
+            ];
 
             $fileNums = [];
             foreach($linkFiles as $file)
@@ -70,7 +72,7 @@ class FileLink extends Controller
             //  Allow a download all array
             $_SESSION['download_all'] = $fileNums;
             
-            $this->view('links.visitor.validLink', $data);
+            $this->view('links/visitor_valid_link', $data);
         }
         
         $this->template('standard');
@@ -79,13 +81,13 @@ class FileLink extends Controller
     
     public function submitNewFile($linkID)
     {
-        $user = $_POST['name'];
-        $model = $this->model('fileLinks');
+        $user      = $_POST['name'];
+        $model     = $this->model('fileLinks');
         $fileModel = $this->model('files');
 
-        $path = Config::getFile('uploadRoot').Config::getFile('uploadPath').$linkID.Config::getFile('slash');
+        $path     = Config::getFile('uploadRoot').Config::getFile('uploadPath').$linkID.Config::getFile('slash');
         $fileModel->setFileLocation($path);
-        $owner = $model->getLinkOwner($linkID);
+        $owner    = $model->getLinkOwner($linkID);
         $linkData = $model->getLinkDetails($linkID);
         
         //  Insert the files
@@ -112,9 +114,9 @@ class FileLink extends Controller
         //  Email all users about the tech tip
         $data = [
             'baseURL' => Config::getCore('baseURL'),
-            'title' => $linkData->link_name,
+            'title'   => $linkData->link_name,
             'addedBy' => $user,
-            'linkID' => $linkID
+            'linkID'  => $linkID
         ];
         
         Email::init();

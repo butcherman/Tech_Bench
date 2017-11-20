@@ -19,7 +19,7 @@ class Admin extends Controller
     //  Landing page shows the administration menu
     public function index()
     {
-        $this->view('admin.home');
+        $this->view('admin/index');
         $this->template('techUser');
         $this->render();
     }
@@ -42,7 +42,7 @@ class Admin extends Controller
         
         $data['optList'] = $optList;
         
-        $this->view('admin.resetPassword', $data);
+        $this->view('admin/user_reset_password', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -79,7 +79,7 @@ class Admin extends Controller
         
         $data['optList'] = $optList;
         
-        $this->view('admin.userSettings', $data);
+        $this->view('admin/user_settings', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -91,13 +91,13 @@ class Admin extends Controller
         $userData = $model->getUserData($userID);
         
          $data = [
-            'username' => $userData->username,
+            'username'   => $userData->username,
             'first_name' => $userData->first_name,
-            'last_name' => $userData->last_name,
-            'email' => $userData->email
+            'last_name'  => $userData->last_name,
+            'email'      => $userData->email
         ];
         
-        $this->view('admin.userSettingsForm', $data);
+        $this->view('admin/user_settings_form', $data);
         $this->render();
     }
     
@@ -107,10 +107,10 @@ class Admin extends Controller
         $model = $this->model('users');
         
         $data = [
-            'username' => $_POST['username'],
+            'username'   => $_POST['username'],
             'first_name' => $_POST['firstName'],
-            'last_name' => $_POST['lastName'],
-            'email' => $_POST['email'],
+            'last_name'  => $_POST['lastName'],
+            'email'      => $_POST['email'],
         ];
         
         $model->updateUserData($_POST['selectUser'], $data);
@@ -125,7 +125,7 @@ class Admin extends Controller
     //  Function to create a new user
     public function newUser()
     {
-        $this->view('admin.newUserForm');
+        $this->view('admin/user_new_form');
         $this->template('techUser');
         $this->render();
     }
@@ -181,7 +181,7 @@ class Admin extends Controller
         
         $data['optList'] = $optList;
         
-        $this->view('admin.deactivateUser', $data);
+        $this->view('admin/user_deactivate', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -206,7 +206,7 @@ class Admin extends Controller
     //  Create a system alert
     public function systemAlert()
     {
-        $this->view('admin.newSystemAlert');
+        $this->view('admin/system_alert');
         $this->template('techUser');
         $this->render();
     }
@@ -238,7 +238,7 @@ class Admin extends Controller
         
         $data['optList'] = $optList;
         
-        $this->view('admin.newUserAlert', $data);
+        $this->view('admin/user_alert', $data);
         $this->template('techUser');
         $this->render();
     }
@@ -285,11 +285,11 @@ class Admin extends Controller
         
         $data = [
             'linkList' => $linkList,
-            'header' => 'Expired File Links'
+            'header'   => 'Expired File Links'
         ];
         
         $this->template('techUser');
-        $this->view('admin.fileLinks', $data);
+        $this->view('admin/file_links', $data);
         $this->render();
     }
     
@@ -315,11 +315,11 @@ class Admin extends Controller
         
         $data = [
             'linkList' => $linkList,
-            'header' => 'Active File Links'
+            'header'   => 'Active File Links'
         ];
         
         $this->template('techUser');
-        $this->view('admin.fileLinks', $data);
+        $this->view('admin/file_links', $data);
         $this->render();
     }
     
@@ -333,10 +333,10 @@ class Admin extends Controller
         $model = $this->model('systems');
         
         $data['header'] = 'Delete Customer';
-        $data['link'] = 'delete-customer-confirm';
+        $data['link']   = 'delete-customer-confirm';
         
         $this->template('techUser');
-        $this->view('admin.searchCustomer', $data);
+        $this->view('admin/customer_search', $data);
         $this->render();
     }
     
@@ -378,13 +378,13 @@ class Admin extends Controller
         else
         {
             $data = [
-                'custID' => $custID,
+                'custID'   => $custID,
                 'custName' => $custData->name,
-                'dbaName' => $custData->dba_name,
-                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+                'dbaName'  => $custData->dba_name,
+                'address'  => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
             ];
             
-            $this->view('admin.confirmCustomerDelete', $data);
+            $this->view('admin/customer_confirm_delete', $data);
         }
 
         $this->template('techUser');
@@ -436,10 +436,10 @@ class Admin extends Controller
         $model = $this->model('systems');
         
         $data['header'] = 'Change Customer ID';
-        $data['link'] = 'change-id-form';
+        $data['link']   = 'change-id-form';
         
         $this->template('techUser');
-        $this->view('admin.searchCustomer', $data);
+        $this->view('admin/customer_search', $data);
         $this->render();
     }
     
@@ -450,22 +450,21 @@ class Admin extends Controller
         
         if(!$custData = $model->getCustData($custID))
         {
-            $this->view('customers.invalidID');
+            $this->view('customers/invalid_id');
         }
         else
         {
             $data = [
-                'custID' => $custID,
+                'custID'   => $custID,
                 'custName' => $custData->name,
-                'dbaName' => $custData->dba_name,
-                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+                'dbaName'  => $custData->dba_name,
+                'address'  => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
             ];
             
-            $this->view('admin.changeCustIDForm', $data);
+            $this->view('admin/customer_change_id_form', $data);
         }
 
         $this->template('techUser');
-        
         $this->render();
     }
     
@@ -496,11 +495,11 @@ class Admin extends Controller
     {
         $data = [
             'header' => 'Deactivate Customer',
-            'link' => 'deactivate-customer-form'
+            'link'   => 'deactivate-customer-form'
         ];
         
         $this->template('techUser');
-        $this->view('admin.searchCustomer', $data);
+        $this->view('admin/customer_search', $data);
         $this->render();
     }
     
@@ -511,18 +510,18 @@ class Admin extends Controller
         
         if(!$custData = $model->getCustData($custID))
         {
-            $this->view('customers.invalidID');
+            $this->view('customers/invalid_id');
         }
         else
         {
             $data = [
-                'custID' => $custID,
+                'custID'   => $custID,
                 'custName' => $custData->name,
-                'dbaName' => $custData->dba_name,
-                'address' => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
+                'dbaName'  => $custData->dba_name,
+                'address'  => $custData->address.'<br />'.$custData->city.', '.$custData->state.' '.$custData->zip,
             ];
             
-            $this->view('admin.confirmDeactivateCustomer', $data);
+            $this->view('admin/customer_deactivate_confirm', $data);
         }
 
         $this->template('techUser');
@@ -557,7 +556,7 @@ class Admin extends Controller
         }
         
         $this->template('techUser');
-        $this->view('admin.listDeactivatedCustomers', $data);
+        $this->view('admin/customer_list_deactivated', $data);
         $this->render();
     }
     

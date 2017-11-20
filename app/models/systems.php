@@ -68,10 +68,20 @@ class Systems
     //  Get the types of files that are saved for systems
     public function getFileTypes()
     {
-        $qry = 'SELECT `description` FROM `system_file_types`';
+        $qry = 'SELECT `type_id`, `description` FROM `system_file_types`';
         $result = $this->db->query($qry);
         
         return $result->fetchAll();
+    }
+    
+    //  Get a file type
+    public function getAFileType($typeID)
+    {
+        $qry = 'SELECT `description` FROM `system_file_types` WHERE `type_id` = :id';
+        $result = $this->db->prepare($qry);
+        $result->execute(['id' => $typeID]);
+        
+        return $result->fetch();
     }
     
     //  Pull the files for a specific system and file type
