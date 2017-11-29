@@ -40,7 +40,7 @@ class Systems
     //  Function to return all the systems for a specific category
     public function getSystems($category)
     {
-        $qry = 'SELECT `sys_id`, `name`, `parent_id` FROM `system_types` JOIN `system_categories` ON `system_types`.`cat_id` = `system_categories`.`cat_id` WHERE `system_categories`.`description` = :category ORDER BY `folder_location` ASC';
+        $qry = 'SELECT `sys_id`, `name`, `parent_id`, folder_location FROM `system_types` JOIN `system_categories` ON `system_types`.`cat_id` = `system_categories`.`cat_id` WHERE `system_categories`.`description` = :category ORDER BY `folder_location` ASC';
         $result = $this->db->prepare($qry);
         $result->execute(['category' => $category]);
         

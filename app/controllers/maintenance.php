@@ -234,8 +234,6 @@ class Maintenance extends Controller
     //  System backup home page
     public function systemBackup()
     {
-        
-        
         $this->view('maintenance/backup_index');
         $this->template('techUser');
         $this->render();
@@ -326,5 +324,271 @@ class Maintenance extends Controller
         $model->eraseFile($backupPath.$fileName);
         
         $this->render('success');
+    }
+    
+    //  Run system and database check to make sure all tables and files are in place
+    public function dbCheck()
+    {
+        $this->view('maintenance/db_check');
+        $this->template('techUser');
+        $this->render();
+    }
+    
+    //  Run the "Mysqlcheck command on the database
+    public function checkDatabaseTables()
+    {
+        $model = $this->model('siteAdmin');
+        
+        $model->databaseCheck();
+//        $this->render('success');
+    }
+    
+    //  Check the system tables to make sure that all system information is ok
+    public function checkSystems()
+    {
+        $model = $this->model('systems');
+        $adminModel = $this->model('siteAdmin');
+        $fileModel = $this->model('files');
+        $repModel = $this->model('reportModel');
+        $basePath = Config::getFile('uploadRoot').Config::getFile('sysPath');
+        
+        $success = '';
+        //  Check the database tables and folder structure
+        $catList = $model->getCategories();
+        foreach($catList as $cat)
+        {
+            $sysList = $model->getSystems($cat->description);
+            foreach($sysList as $sys)
+            {
+                $table = $model->getSysTable($sys->sys_id);
+                //  Make sure that the data_`sysname` table exists
+                if(!$cols = $model->getCols($table))
+                {
+                    $adminModel->basicSystemTable($table);
+                    $success .= '<div>System Table Added For '.$sys->name.'</div>';
+                }
+                //  Make sure that the system folder exists
+                if(!$fileModel->checkFolder($basePath.$cat->description.'/'.$sys->folder_location))
+                {
+                    $fileModel->createFolder($basePath.$cat->description.'/'.$sys->folder_location);
+                    $success .= '<div>System Folder Added For '.$sys->name.'</div>';
+                }
+            }
+        }
+        
+        //  Check all of the files in the database against the files in the folder
+        $fileCheck = $repModel->compareFiles(Config::getFile('sysPath'), 'system_files');
+        if($fileCheck['missing'] > 0)
+        {
+            $success .= '<div>The Following Files Cannot Be Located:';
+            foreach($fileCheck['missingList'] as $missing)
+            {
+                $success .= '<div>'.str_replace($basePath, 'File_Root/', $missing).'</div>';
+            }
+            $success .= '</div>';
+        }
+        if($fileCheck['unknown'] > 0)
+        {
+            $success .= '<div>The Following Files are Not Referenced In the Database:';
+            foreach($fileCheck['unknownList'] as $missing)
+            {
+                $success .= '<div>'.str_replace($basePath, 'File_Root/', $missing).'</div>';
+            }
+            $success .= '</div>';
+        }
+        if($fileCheck['missing'] > 0 || $fileCheck['unknown'] > 0)
+        {
+            $success .= 'Please Use File Maintenance to Correct.</div>';
+        }
+        
+        //  If no errors, send success message
+        if(empty($success))
+        {
+            $success = 'success';
+        }
+        
+        $this->render($success);
+    }
+    
+    //  Check the customers and their files
+    public function checkCustomers()
+    {
+        $model = $this->model('customers');
+        $adminModel = $this->model('siteAdmin');
+        $fileModel = $this->model('files');
+        $repModel = $this->model('reportModel');
+        $basePath = Config::getFile('uploadRoot').Config::getFile('custPath');
+        
+        $success = '';
+        
+        //  Check the folder structure
+        $custList = $model->searchCustomer();
+        foreach($custList as $cust)
+        {
+            //  Make sure that the customer folder exists
+            if(!$fileModel->checkFolder($basePath.$cust->cust_id))
+            {
+                $fileModel->createFolder($basePath.$cust->cust_id);
+                $success .= '<div>Customer Folder Added For '.$cust->name.'</div>';
+            }
+        }
+        
+        //  Check all of the files in the database against the files in the folder
+        $fileCheck = $repModel->compareFiles(Config::getFile('custPath'), 'customer_files');
+        if($fileCheck['missing'] > 0)
+        {
+            $success .= '<div>The Following Files Cannot Be Located:';
+            foreach($fileCheck['missingList'] as $missing)
+            {
+                $success .= '<div>'.str_replace($basePath, 'File_Root/', $missing).'</div>';
+            }
+            $success .= '</div>';
+        }
+        if($fileCheck['unknown'] > 0)
+        {
+            $success .= '<div>The Following Files are Not Referenced In the Database:';
+            foreach($fileCheck['unknownList'] as $missing)
+            {
+                $success .= '<div>'.str_replace($basePath, 'File_Root/', $missing).'</div>';
+            }
+            $success .= '</div>';
+        }
+        if($fileCheck['missing'] > 0 || $fileCheck['unknown'] > 0)
+        {
+            $success .= 'Please Use File Maintenance to Correct.</div>';
+        }
+        
+        //  If no errors, send success message
+        if(empty($success))
+        {
+            $success = 'success';
+        }
+        
+        $this->render($success);
+    }
+    
+    //  Check the tech tips and their files
+    public function checkTechTips()
+    {
+        $model = $this->model('techTips');
+        $adminModel = $this->model('siteAdmin');
+        $fileModel = $this->model('files');
+        $repModel = $this->model('reportModel');
+        $basePath = Config::getFile('uploadRoot').Config::getFile('tipPath');
+        
+        $success = '';
+        
+        //  Check the folder structure
+        $tipList = $model->searchTips();
+        foreach($tipList as $tip)
+        {
+            //  Make sure that the customer folder exists
+            if(!$fileModel->checkFolder($basePath.$tip->tip_id))
+            {
+                $fileModel->createFolder($basePath.$tip->tip_id);
+                $success .= '<div>Tip Folder Added For '.$tip->title.'</div>';
+            }
+        }
+        
+        //  Check all of the files in the database against the files in the folder
+        $fileCheck = $repModel->compareFiles(Config::getFile('tipPath'), 'tech_tip_files');
+        if($fileCheck['missing'] > 0)
+        {
+            $success .= '<div>The Following Files Cannot Be Located:';
+            foreach($fileCheck['missingList'] as $missing)
+            {
+                $success .= '<div>'.str_replace($basePath, 'File_Root/', $missing).'</div>';
+            }
+            $success .= '</div>';
+        }
+        if($fileCheck['unknown'] > 0)
+        {
+            $success .= '<div>The Following Files are Not Referenced In the Database:';
+            foreach($fileCheck['unknownList'] as $missing)
+            {
+                $success .= '<div>'.str_replace($basePath, 'File_Root/', $missing).'</div>';
+            }
+            $success .= '</div>';
+        }
+        if($fileCheck['missing'] > 0 || $fileCheck['unknown'] > 0)
+        {
+            $success .= 'Please Use File Maintenance to Correct.</div>';
+        }
+        
+        //  If no errors, send success message
+        if(empty($success))
+        {
+            $success = 'success';
+        }
+        
+        $this->render($success);
+    }
+    
+    //  Check all file links and their files 
+    public function checkFileLinks()
+    {
+        $model = $this->model('fileLinks');
+        $adminModel = $this->model('siteAdmin');
+        $fileModel = $this->model('files');
+        $repModel = $this->model('reportModel');
+        $basePath = Config::getFile('uploadRoot').Config::getFile('uploadPath');
+        
+        $success = '';
+        $expired = 0;
+        
+        //  Check the folder structure
+        $linkList = $model->getLinks();
+        foreach($linkList as $link)
+        {
+            //  Check if the file link is valid or expired
+            if($model->isLinkExpired($link->link_id))
+            {
+                $expired++;
+            }
+            //  Make sure that the customer folder exists
+            if(!$fileModel->checkFolder($basePath.$link->link_id))
+            {
+                $fileModel->createFolder($basePath.$link->link_id);
+                $success .= '<div>Tip Folder Added For Link ID: '.$link->link_id.'</div>';
+            }
+        }
+        
+        if($expired > 0)
+        {
+            $success = '<div>'.$expired.' Links Are Expired And Should Be Deleted</div>'.$success;
+        }
+        
+        //  Check all of the files in the database against the files in the folder
+        $fileCheck = $repModel->compareFiles(Config::getFile('tipPath'), 'upload_link_files');
+        if($fileCheck['missing'] > 0)
+        {
+            $success .= '<div>The Following Files Cannot Be Located:';
+            foreach($fileCheck['missingList'] as $missing)
+            {
+                $success .= '<div>'.str_replace($basePath, 'File_Root/', $missing).'</div>';
+            }
+            $success .= '</div>';
+        }
+        if($fileCheck['unknown'] > 0)
+        {
+            $success .= '<div>The Following Files are Not Referenced In the Database:';
+            foreach($fileCheck['unknownList'] as $missing)
+            {
+                $success .= '<div>'.str_replace($basePath, 'File_Root/', $missing).'</div>';
+            }
+            $success .= '</div>';
+        }
+        if($fileCheck['missing'] > 0 || $fileCheck['unknown'] > 0)
+        {
+            $success .= 'Please Use File Maintenance to Correct.</div>';
+        }
+        
+        //  If no errors, send success message
+        if(empty($success))
+        {
+            $success = 'success';
+        }
+        
+        $this->render($success);
     }
 }

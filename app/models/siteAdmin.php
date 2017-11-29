@@ -85,6 +85,16 @@ class siteAdmin
         return $data['folder'];
     }
     
+    public function basicSystemTable($tableName)
+    {
+        $qry = 'CREATE TABLE IF NOT EXISTS `'.$tableName.'` (
+                    `data_id` INT(11) NOT NULL AUTO_INCREMENT,
+                    `cust_id` INT(11) NOT NULL UNIQUE,
+                    PRIMARY KEY(`data_id`), FOREIGN KEY(`cust_id`) REFERENCES `customers`(`cust_id`) 
+                        ON DELETE CASCADE ON UPDATE CASCADE )';
+        $this->db->query($qry);
+    }
+    
     public function deleteSystem($sysName)
     {
         $success = false;
@@ -183,5 +193,25 @@ class siteAdmin
         }
         
         return $success;
+    }
+    
+    //  Check the databse tables for errors
+    public function databaseCheck()
+    {
+        //  Turn off the "emulate Prepares" attribute
+        $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+        
+        //  Get the list of tables in the databse
+        $qry = 'SHOW TABLES';
+        $result = $this->db->query($qry);
+        $tables = $result->fetchAll(PDO::FETCH_COLUMN, 0);
+        $result->closeCursor();
+
+        $qry = 'CHECK TABLE '.implode(', ', $tables);
+        $tbCheck = $this->db->query($qry)->fetchAll();
+        
+        
+        
+        print_r($tbCheck);
     }
 }
