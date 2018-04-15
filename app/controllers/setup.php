@@ -11,32 +11,32 @@ class Setup extends Controller
 //        {
 //            $msg = 'Someone tried to access the setup page after site already configured.';
 //            Logs::writeLog('Security-Alert', $msg);
-//            
+//
 //            header('Location: /');
 //            die();
 //        }
-        
+
 //        echo '<pre>';
 //        print_r($_SESSION);
 //        die();
     }
-    
+
     //  Bring up the welcome page and test if the necessary folders are writable.
     public function index()
     {
         //  Set the valid and invalid image files
         $valid = 'go.png';
         $inval = 'stop.png';
-        
+
         //  Determine if the necessary folders are writeable.  These are the folders to store logs, store the confi file, and upload files
         is_writable(__DIR__.'/../../logs') ? $data['logs'] = $valid : $data['logs'] = $inval;
         is_writable(__DIR__.'/../../config') ? $data['config'] = $valid : $data['config'] = $inval;
-        
+
         $this->view('setup/begin_setup', $data);
         $this->template('standard');
         $this->render();
     }
-    
+
     //  Step 1 is basic system information
     public function step1()
     {
@@ -44,7 +44,7 @@ class Setup extends Controller
         $this->template('standard');
         $this->render();
     }
-    
+
     //  Step 2 is database information
     public function step2()
     {
@@ -52,7 +52,7 @@ class Setup extends Controller
         $this->template('standard');
         $this->render();
     }
-    
+
     //  Step 3 is email information
     public function step3()
     {
@@ -60,19 +60,19 @@ class Setup extends Controller
         $this->template('standard');
         $this->render();
     }
-    
+
     //  Step 4 is file information
     public function step4()
     {
         $data['fileLocal'] = $_SERVER['DOCUMENT_ROOT'].'/_files';
         $data['maxFile'] = preg_replace("/[^0-9]/", "", ini_get('upload_max_filesize'));
         $data['encryptionKey'] = substr(md5(uniqid(rand(), true)), 0, 20);
-        
+
         $this->view('setup/form_4', $data);
         $this->template('standard');
         $this->render();
     }
-    
+
     //  Bring up display that shows progress of setup process
     public function finish()
     {
@@ -80,7 +80,7 @@ class Setup extends Controller
         $this->template('standard');
         $this->render();
     }
-    
+
     //  cycle through each step and run the designated function
     public function create($step)
     {
@@ -93,10 +93,10 @@ class Setup extends Controller
         {
             $result = 'Invalid Step';
         }
-        
+
         $this->render($result);
     }
-    
+
     //  Submit each form and place it into a SESSION variable
     public function submit()
     {
@@ -104,10 +104,10 @@ class Setup extends Controller
         {
             $_SESSION['setupData'][$key] = $value;
         }
-        
+
         $this->render('success');
     }
-    
+
     //  Test the database connection
     public function testDatabase()
     {
@@ -116,10 +116,10 @@ class Setup extends Controller
         $dbName = $_POST['database'];
         $dbUser = $_POST['user'];
         $dbPass = $_POST['password'];
-        
+
         //  Since this is a test, it is possible for infalid information to be entered.  Errors will be supressed
         @$mysqli = new mysqli($dbHost, $dbUser, $dbPass);
-        
+
         //  Determine if there was an error during setup or not
         if($mysqli->connect_errno)
         {
@@ -129,23 +129,23 @@ class Setup extends Controller
         {
             $valid = 'success';
         }
-        
+
         echo json_encode($valid);
     }
-    
+
     //  Test the email connection
     public function testEmail()
     {
         //  Email message that is sent in test email
         $msg = '<h1>Congratulations</h1><p>You have successfuly configured Tech Bench Email</p>';
-        
+
         //  Prepare email data
         $emHost = $_POST['host'];
         $emPort = $_POST['port'];
         $emUser = $_POST['user'];
         $emAddr = $_POST['addr'];
         $emPass = $_POST['pass'];
-        
+
         $mail = new PHPMailer;
         $mail->IsSMTP();
         $mail->Mailer = 'smtp';
@@ -158,21 +158,37 @@ class Setup extends Controller
         $mail->addAddress($emUser);
         $mail->Subject = 'Test Message From Tech Bench';
         $mail->msgHTML($msg);
-        
+
         //  Send test email
-        if($mail->send())
+        // if($mail->send())
+        // {
+        //     $valid = 'success';
+        // }
+        // else
+        // {
+        //     $valid = 'Connection Failed';
+        // }
+        try
         {
+            $mail->send();
+            Logs::writeLog('Email', 'Email Sent');
             $valid = 'success';
         }
-        else
+        catch(phpmailerException $e)
         {
+            Logs::writeLog('Email', 'Message Failed: '.$e);
             $valid = 'Connection Failed';
         }
-        
+        catch(Exception $e)
+        {
+            Logs::writeLog('Email', 'Message Failed: '.$e);
+            $valid = 'Connection Failed';
+        }
+
         //  Return the result in JSON format
         echo json_encode($valid);
     }
-    
+
     //  Finalize step 1 is to create the configuration file
     public function configurationFile()
     {
@@ -183,18 +199,18 @@ class Setup extends Controller
         $_SESSION['setupData']['logo'] = 'TechBenchLogo.png';
         $_SESSION['setupData']['backupPath'] = 'backup/';
         $_SESSION['setupData']['userPath'] = 'users/';
-        
+
         ob_start();
             require __DIR__.'/../views/setup/setup.defaultConfig.php';
         $configFile = ob_get_clean();
         $configPath = __DIR__.'/../../config/config.ini';
         file_put_contents($configPath, $configFile, LOCK_EX);
-        
+
         sleep(2);
-        
+
         return 'success';
     }
-    
+
     //  Finalize step 2 is to create the database
     public function newDatabase()
     {
@@ -219,13 +235,13 @@ class Setup extends Controller
             echo 'Error Connecting to Database Server';
             die();
         }
-        
+
         //  Bring in default databse files
         require __DIR__.'/../views/setup/setup.defaultDatabase.php';
         require __DIR__.'/../views/setup/setup.defaultTriggers.php';
-        require __DIR__.'/../views/setup/setup.defaultViews.php';       
-        
-        //  Run the query to create the databse   
+        require __DIR__.'/../views/setup/setup.defaultViews.php';
+
+        //  Run the query to create the databse
         try
         {
             $db->exec($database);
@@ -249,7 +265,7 @@ class Setup extends Controller
                 die();
             }
         }
-        
+
         //  Run the queries to create the views
         foreach($views as $view)
         {
@@ -263,15 +279,15 @@ class Setup extends Controller
                 die();
             }
         }
-        
-        //  Insert the email information into the 
-        
+
+        //  Insert the email information into the
+
         return 'success';
     }
-    
+
     //  Finalize step 3 is to build the system defaults
     public function defaults()
-    {   
+    {
         //  Get information to create the database connection
         $dbHost = $_SESSION['setupData']['host'];
         $dbUser = $_SESSION['setupData']['dbUser'];
@@ -293,17 +309,17 @@ class Setup extends Controller
         {
             echo 'Error Connecting to Database Server';
         }
-        
+
         //  Input all the initial settings and email settings
         $allow_company_forms = isset($_SESSION['setupData']['companyForms']) && $_SESSION['setupData']['companyForms'] === 'on' ? 1 : 0;
         $allow_my_files      = isset($_SESSION['setupData']['myFiles']) && $_SESSION['setupData']['myFiles'] === 'on' ? 1 : 0;
         $allow_upload_links  = isset($_SESSION['setupData']['fileLinks']) && $_SESSION['setupData']['fileLinks'] === 'on' ? 1 : 0;
-        
+
         //  Create password hash for site admin user
         $salt = substr(md5(uniqid(rand(), true)), 0, 5);
         $pass = hash('sha256', $salt.hash('sha256', $_SESSION['setupData']['sitePass']));
-        
-        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
+
+        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES
                     ("allow_company_forms", '.$allow_company_forms.'),
                     ("allow_my_files", '.$allow_my_files.'),
                     ("allow_upload_links", '.$allow_upload_links.'),
@@ -313,7 +329,7 @@ class Setup extends Controller
                     ("email_user", "'.$_SESSION['setupData']['emUser'].'"),
                     ("email_pass", AES_ENCRYPT("'.$_SESSION['setupData']['emPass'].'", "'.$_SESSION['setupData']['customerKey'].'"));
                 INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `salt`, `active`, `change_password`) VALUES ("'.$_SESSION['setupData']['siteUser'].'", "System", "Administrator", "'.$_SESSION['setupData']['siteEmail'].'", "'.$pass.'", "'.$salt.'", 1, 0);
-                INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (1, 1);';        
+                INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES (1, 1);';
         try
         {
             $db->exec($qry);
@@ -323,12 +339,12 @@ class Setup extends Controller
             echo $e->getMessage();
             die();
         }
-        
+
         sleep(2);
-        
+
         return 'success';
     }
-    
+
     //  Finalize step 4 is to create the directory structure that all files will be stored in
     public function directoryStructure()
     {
@@ -342,26 +358,26 @@ class Setup extends Controller
             Config::getFile('uploadPath'),
             Config::getFile('userPath')
         ];
-        
+
         //  Create the folders
         foreach($folders as $folder)
         {
             mkdir(Config::getFile('uploadRoot').$folder, 0777, true);
         }
-        
+
         sleep(2);
-        
-        //  Log user in     
+
+        //  Log user in
         session_regenerate_id();
         $_SESSION['valid'] = 1;
         $_SESSION['id'] = 1;
         $_SESSION['username'] = $_SESSION['setupData']['siteUser'];
         $_SESSION['name'] = 'Administrator User';
         $_SESSION['changePassword'] = 0;
-        
+
         return 'success';
     }
-    
+
     //  Finalize step 5 is to input the default settings into the database
     public function systemSettings()
     {
@@ -385,17 +401,17 @@ class Setup extends Controller
         {
             echo 'Error Connecting to Database Server';
         }
-        
-        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES 
-                    ("email_user", '.$_SESSION['setupData']['emUser'].'), 
-                    ("email_pass", AES_ENCRYPT('.$_SESSION['setupData']['emPass'].', "'.$_SESSION['setupData']['customerKey'].'")), 
-                    ("email_host", '.$_SESSION['setupData']['emHost'].'), 
+
+        $qry = 'INSERT INTO `_settings` (`setting`, `value`) VALUES
+                    ("email_user", '.$_SESSION['setupData']['emUser'].'),
+                    ("email_pass", AES_ENCRYPT('.$_SESSION['setupData']['emPass'].', "'.$_SESSION['setupData']['customerKey'].'")),
+                    ("email_host", '.$_SESSION['setupData']['emHost'].'),
                     ("email_port", '.$_SESSION['setupData']['emPort'].'),
-                    ("email_from", '.$_SESSION['setupData']['emAddr'].'), 
+                    ("email_from", '.$_SESSION['setupData']['emAddr'].'),
                     ("email_name", "Tech Bench"),
                     ("allow_company_forms", 1),
                     ("allow_upload_links", 1)';
-        
+
         return 'success';
     }
 }

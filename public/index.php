@@ -1,11 +1,11 @@
 <?php
 /*
 |
-|   Tech Bench is a custom Content Management System (CMS) built to aid service technicians store and 
+|   Tech Bench is a custom Content Management System (CMS) built to aid service technicians store and
 |   share information for the systems and customers they maintain.
 |
 |   Author  - Ron Butcher
-|   Version - 3.1.3
+|   Version - 3.1.4
 |
 |   Index.php file is the initial file that will begin the application
 |   All necessary static classes will be called
@@ -15,8 +15,8 @@
 session_start();
 
 //  Define version information as Global Variables
-define('VERSION', '3.1.3');
-define('RELEASE', '11-4-2017');
+define('VERSION', '3.1.4');
+define('RELEASE', '4-15-2018');
 define('DBVERSION', '3.0');
 
 //  Call necessary required files
