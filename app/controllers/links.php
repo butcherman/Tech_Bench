@@ -352,4 +352,27 @@ class Links extends Controller
         
         $this->render('success');
     }
+    
+    //  Load the email link form
+    public function emailLinkForm($linkID)
+    {
+        $model = $this->model('fileLinks');
+        $link = $model->getLinkDetails($linkID);
+        
+        $data['link'] = Config::getCore('baseURL').'file-link/'.$link->link_hash;
+        $this->view('links/email_form', $data);
+        $this->render();
+    }
+    
+    //  Submit the email link form
+    public function submitEmailLink()
+    {
+        Email::init();
+        Email::addSubject('Tech Bench Notification:  New File Link');
+        Email::addUser($_POST['email']);
+        Email::addBody($_POST['message']);
+        Email::send();
+        
+        $this->render('success');
+    }
 }

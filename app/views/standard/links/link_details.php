@@ -11,12 +11,12 @@
             <dt>Allow User Uploads:</dt>
             <dd id="link-allow"><?= $data['allow']; ?></dd>
             <dt>Link:</dt>
-            <dd><a href="<?= $data['link']; ?>" target="_blank"><?= $data['link']; ?></a></dd>
+            <dd><a href="<?= $data['link']; ?>" target="_blank" id="link-url"><?= $data['link']; ?></a> <span class="glyphicon glyphicon-copy" title="Copy Link to Clipboard" data-tooltip="tooltip" data-clipboard-target="#link-url"></span></dd>
         </dl>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-2 col-md-offset-2 col-xs-12">
+    <div class="col-md-2 col-md-offset-1 col-xs-12">
         <a href="#edit-modal" class="btn btn-default btn-block" id="add-file" data-toggle="modal" data-backdrop="static" data-keyboard="false">Add File</a>
     </div>
     <div class="col-md-2 col-xs-12">
@@ -25,14 +25,9 @@
     <div class="col-md-2 col-xs-12">
         <a href="#edit-modal" class="btn btn-default btn-block" id="share-link" data-toggle="modal">Share Link</a>
     </div>
-<!--
     <div class="col-md-2 col-xs-12">
-        <button type="button" class="btn btn-default btn-block">Copy Link to Clipboard</button>
+        <a href="#edit-modal" class="btn btn-default btn-block" id="email-link" data-toggle="modal">Email Link</a>
     </div>
-    <div class="col-md-2 col-xs-12">
-        <button type="button" class="btn btn-default btn-block">Email Link</button>
-    </div>
--->
     <div class="col-md-2 col-xs-12">
         <a href="#edit-modal" class="btn btn-default btn-block" id="delete-link" data-toggle="modal">Delete Link</a>
     </div>
@@ -106,6 +101,7 @@
 <script src="/source/js/functions.fileLinks.js"></script>
 <script src="/source/lib/tinymce/tinymce.min.js"></script>
 <script src="/source/lib/tinymce/plugins/placeholder/plugin.min.js"></script>
+<script src="/source/lib/clipboard/clipboard.min.js"></script>
 <script>
     var linkID = <?= $data['linkID']; ?>;
     $(document).ready(function()
@@ -113,6 +109,7 @@
         userUploadedFiles();
         customerUploadedFiles();
         loadInstruction();
+        new ClipboardJS('.glyphicon-copy');
     });
         
 </script>

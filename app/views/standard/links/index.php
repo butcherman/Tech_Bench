@@ -6,10 +6,10 @@
         <a href="/links/create" class="btn btn-default btn-block">Create New File Link</a>
     </div>
 </div>
-<div class="row">
+<div class="row pad-top">
     <div class="col-md-10 col-md-offset-1">
                 <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="link-table">
                 <thead>
                     <tr>
                         <th>Link Name</th>
@@ -53,3 +53,16 @@
 
 <script src="/source/lib/filesize/filesize.min.js"></script>
 <script src="/source/js/functions.fileLinks.js"></script>
+<script src="/source/lib/tablesorter/jquery.tablesorter.combined.min.js"></script>
+<script src="/source/lib/tablesorter/jquery.tablesorter.pager.min.js"></script>
+<script>
+$('#link-table').tablesorter(
+{
+    theme : "bootstrap",
+    headerTemplate : '{content} {icon}',
+    widgets : [ "uitheme", "zebra" ],
+    widgetOptions : {
+        zebra : ["even", "odd"],
+    }
+});
+</script>
