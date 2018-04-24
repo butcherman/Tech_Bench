@@ -19,6 +19,10 @@
     <title><?= Config::getCore('title'); ?></title>
 </head>
 <body role="document">
+    <noscript>
+        <meta http-equiv="refresh" content="0; URL=/err/no-script">
+        <h1 class="text-center">You Must Enable Javascript to Use This Site</h1>
+    </noscript>
     <div class="container-fluid" role="main">
         <?= $content; ?>
     </div>
