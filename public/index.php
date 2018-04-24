@@ -5,7 +5,7 @@
 |   share information for the systems and customers they maintain.
 |
 |   Author  - Ron Butcher
-|   Version - 3.1.4
+|   Version - 3.1.5
 |
 |   Index.php file is the initial file that will begin the application
 |   All necessary static classes will be called
@@ -15,7 +15,7 @@
 session_start();
 
 //  Define version information as Global Variables
-define('VERSION', '3.2.4');
+define('VERSION', '3.2.5');
 define('RELEASE', '4-23-2018');
 define('DBVERSION', '3.0');
 
