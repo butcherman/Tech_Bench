@@ -18,6 +18,14 @@ class Err extends Controller
         $this->render();
     }
     
+    //  Javascript not enabled page
+    public function noScript()
+    {
+        $this->template('errorPage');
+        $this->view('error/no_script');
+        $this->render();
+    }
+    
     //  Maintenance Mode Page
     public function maintenance()
     {

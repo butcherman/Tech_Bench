@@ -1,6 +1,6 @@
 //  Load tooltips
 $('body').tooltip({
-    selector: '[data-tooltip="tooltip"]', 
+    selector: '[data-tooltip="tooltip"]',
     trigger: 'hover'
 });
 
@@ -12,7 +12,8 @@ function loadInstruction()
     }
     $('#custom-note').load('/links/loadInstructions/'+linkID);
     tinymce.init(
-    { 
+    {
+        mode: "exact",
         selector:'textarea',
         height: '400',
         plugins: 'placeholder'
@@ -43,6 +44,7 @@ $(document).on('click', '.delete-link', function()
 {
     var linkID = $(this).data('link');
     $(this).attr('data-selected', 'selected');
+    $('#modal-header').text('Delete Link');
     $('#modal-body').load('/home/yesorno', function()
     {
         $('.select-yes').addClass('delete-link-confirm');
@@ -62,7 +64,8 @@ $(document).on('click', '.delete-link-confirm', function()
         }
         else
         {
-            alert(data);
+            $.post('/err/ajaxFail', data);
+            alert('There Was An Issue Deleting Your Link.\nPlease Contact Your System Administrator');
         }
     });
 });
@@ -75,7 +78,7 @@ $('#edit-link').on('click', function()
     {
         $('#allowUpload').bootstrapToggle();
     });
-    
+
 });
 //  Submit the edit link form
 $(document).on('click', '#updateLink', function()
@@ -108,6 +111,7 @@ $('#delete-link').on('click', function()
 {
     var linkID = $(this).data('link');
     $(this).attr('data-selected', 'selected');
+    $('#modal-header').text('Delete Link');
     $('#modal-body').load('/home/yesorno', function()
     {
         $('.select-yes').addClass('delete-link-confirm-active');
@@ -242,5 +246,44 @@ $(document).on('click', $('#submit-share-form'), function()
                 }
             });
         }
+    });
+});
+
+//  Bring up the form to email the file link to someone
+$('#email-link').on('click', function()
+{
+    $('#modal-header').text('Email Link');
+    $('#modal-body').load('/links/emailLinkForm/'+linkID, function()
+    {
+        if (typeof tinymce != 'undefined' && tinymce != null) {
+            tinymce.remove();
+        }
+        tinymce.init(
+        {
+            mode: "exact",
+            selector:'textarea',
+            height: '400',
+            plugins: 'placeholder, autolink'
+        });
+        $('#email-file-link').validate(
+        {
+            submitHandler: function()
+            {
+                tinymce.triggerSave();
+                $.post('/links/submitEmailLink/'+linkID, $('#email-file-link').serialize(), function(data)
+                {
+                    if(data === 'success')
+                    {
+                        $('#modal-header').text('Success');
+                        $('#modal-body').html('<h3 class="text-center">Email Sent</h3><a href="#" class="btn btn-block btn-default" data-dismiss="modal">ok</a>');
+                    }
+                    else
+                    {
+                        alert(data);
+                        alert('We are unable to email your link at this time.  Please try again later.');
+                    }
+                });
+            }
+        });
     });
 });

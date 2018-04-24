@@ -20,6 +20,10 @@
         <title><?= Config::getCore('title'); ?></title>
     </head>
     <body role="document">
+        <noscript>
+            <meta http-equiv="refresh" content="0; URL=/err/no-script">
+            <h1 class="text-center">You Must Enable Javascript to Use This Site</h1>
+        </noscript>
         <header class="main-header">
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <a href="/tech" class="navbar-brand">Tech Bench</a>

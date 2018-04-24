@@ -117,6 +117,7 @@
 </script>
 <script src="/source/lib/tinymce/tinymce.min.js"></script>
 <script src="/source/lib/tinymce/plugins/autolink/plugin.min.js"></script>
+<script src="/source/lib/tablesorter/jquery.tablesorter.combined.min.js"></script>
 <script src="/source/js/functions.files.js"></script>
 <script src="/source/js/functions.customers.js"></script>
 <script src="/source/lib/filesize/filesize.min.js"></script>

@@ -45,7 +45,9 @@ gulp.task('moveFiles', ['bower'], function() {
         gulp.src(['vendor/multiselect-two-sides/dist/js/*'])
             .pipe(gulp.dest('public/source/lib/multiselect-two-sides/')),
         gulp.src(['vendor/chart.js/dist/Chart.bundle.min'])
-            .pipe(gulp.dest('public/source/lib/chart.js/'))
+            .pipe(gulp.dest('public/source/lib/chart.js/')),
+        gulp.src(['node_modules/clipboard/dist/clipboard.min.js'])
+            .pipe(gulp.dest('public/source/lib/clipboard'))
 });
 
 gulp.task('default', ['bower', 'moveFiles', 'config']);
