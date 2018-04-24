@@ -40,7 +40,7 @@
                     <input type="password" name="emPass" id="emPass" class="form-control" placeholder="Email Password" required />
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-info btn-block" id="test-email">Test Connection</button>
+                    <button class="btn btn-info btn-block install-step" id="test-email">Test Connection</button>
                 </div>
                 <div class="form-group">
                     <input type="submit" id="step-3-submit" class="form-control btn btn-default" value="Continue to File Setup" />
@@ -64,12 +64,12 @@
     $('#test-email').click(function(e)
     {
         e.preventDefault();
-        
-        $('#test-email').html('<img src="/img/loader.gif" alt="loading" />');
+
+        $('#test-email').html('<img src="/source/img/loader.gif" alt="...loading" />');
         $.post('/setup/testEmail', {host: $('#emHost').val(), port: $('#emPort').val(), user: $('#emUser').val(), addr: $('#emAddr').val(), pass: $('#emPass').val()}, function(data)
         {
             var result =$.parseJSON(data);
-            
+
             if(result == 'success')
             {
                 $('#test-email').removeClass('btn-info');
@@ -88,7 +88,7 @@
             }
         });
     });
-    
+
     $('#step3').validate(
     {
         validClass: "valid-input",

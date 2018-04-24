@@ -34,7 +34,7 @@ class FileLink extends Controller
         }
         else if($model->isLinkExpired($linkID->link_id))
         {
-            $this->view('links.expired_link');
+            $this->view('links/expired_link');
             
             //  Note in log file
             $msg = 'Visitor '.Security::getRealIpAddr().' attempted to acces an expired link hash - '.$linkHash;

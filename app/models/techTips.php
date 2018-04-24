@@ -13,7 +13,7 @@ class TechTips
     }
     
     //  Search the datbase for a tip
-    public function searchTips($keyword, $system)
+    public function searchTips($keyword = '', $system = '')
     {
         if(empty($system))
         {

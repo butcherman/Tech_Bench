@@ -117,7 +117,7 @@ class Setup extends Controller
         $dbUser = $_POST['user'];
         $dbPass = $_POST['password'];
 
-        //  Since this is a test, it is possible for infalid information to be entered.  Errors will be supressed
+        //  Since this is a test, it is possible for invalid information to be entered.  Errors will be supressed
         @$mysqli = new mysqli($dbHost, $dbUser, $dbPass);
 
         //  Determine if there was an error during setup or not
@@ -155,19 +155,11 @@ class Setup extends Controller
         $mail->Username = $emUser;
         $mail->Password = $emPass;
         $mail->setFrom = $emAddr;
-        $mail->addAddress($emUser);
+        $mail->addAddress($emAddr);
         $mail->Subject = 'Test Message From Tech Bench';
         $mail->msgHTML($msg);
 
         //  Send test email
-        // if($mail->send())
-        // {
-        //     $valid = 'success';
-        // }
-        // else
-        // {
-        //     $valid = 'Connection Failed';
-        // }
         try
         {
             $mail->send();

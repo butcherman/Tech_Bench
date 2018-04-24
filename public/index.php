@@ -15,8 +15,8 @@
 session_start();
 
 //  Define version information as Global Variables
-define('VERSION', '3.1.5');
-define('RELEASE', '4-15-2018');
+define('VERSION', '3.2.5');
+define('RELEASE', '4-23-2018');
 define('DBVERSION', '3.0');
 
 //  Call necessary required files

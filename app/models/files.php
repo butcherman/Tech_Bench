@@ -137,6 +137,12 @@ class Files
         }
     }
     
+    //  Function to check fi a folder exists
+    public function checkFolder($absolutePath)
+    {
+        return is_dir($absolutePath);
+    }
+    
     //  Function to delete a file from the dabase and file structure
     public function deleteFile($fileID)
     {

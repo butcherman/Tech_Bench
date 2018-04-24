@@ -10,7 +10,19 @@ $('#contact-information').children('tbody').load('/customer/loadContacts/'+custI
 //  Load the customer notes
 $('#notes-wrapper').load('/customer/loadNotes/'+custID);
 //  Load the customer files
-$('#customer-files-table').children('tbody').load('/customer/loadFiles/'+custID);
+$('#customer-files-table').children('tbody').load('/customer/loadFiles/'+custID, function()
+{
+    //  Load tablesorter on customer files
+    $('#customer-files-table').tablesorter(
+    {
+        theme : "bootstrap",
+        headerTemplate : '{content} {icon}',
+        widgets : [ "uitheme", "zebra" ],
+        widgetOptions : {
+            zebra : ["even", "odd"],
+        }
+    });
+});
 //  Load any linked sites
 $('#linked-sites-wrapper').load('/customer/loadLinkedSites/'+custID);
 

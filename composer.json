@@ -5,7 +5,7 @@
         "ifsnop/mysqldump-php":"2.*"
     },
     "scripts": {
-        "pre-install-cmd": ["npm install", "npm install gulp"],
+        "pre-install-cmd": ["npm install", "npm install gulp", "npm install clipboard"],
         "post-install-cmd": ["gulp"]
     }
 }

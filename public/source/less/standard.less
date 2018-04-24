@@ -20,7 +20,7 @@
     .center;
 }
 
-body { 
+body {
 	background: #092756;
 	background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%),-moz-linear-gradient(top,  rgba(57,173,219,.25) 0%, rgba(42,60,87,.4) 100%), -moz-linear-gradient(-45deg,  #670d10 0%, #092756 100%);
 	background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -webkit-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -webkit-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
@@ -55,10 +55,9 @@ body {
 
 .jumbotron {
     color: @black;
-}
-
-.jumbotron#install-process {
-    min-height: 75vh;
+    #install-process {
+        min-height: 75vh;
+    }
 }
 
 .reset-container {
@@ -67,10 +66,15 @@ body {
 
 .valid-input {
     background: #DBFFDB url(/source/img/go.png) center right no-repeat;
+    background-size: contain;
 }
 
 .invalid-input {
     background: #FFE8E9 url(/source/img/stop.png) center right no-repeat;
+    background-size: contain;
+    label& {
+      background: none;
+    }
 }
 
 .install-step img {
@@ -96,12 +100,12 @@ body {
 
 .breadcrumb-inner-wrapper {
     position: relative;
-    left: 50%; 
+    left: 50%;
 }
 
 .breadcrumb-link {
     display: block;
-    float: left; 
+    float: left;
     font-weight: bold;
     background: @breadcrumb-background;
     padding-right: 10px;
