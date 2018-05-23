@@ -1,0 +1,114 @@
+// Variables
+@import "variables";
+@import "app_body";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+//  Font Awesome
+@import 'node_modules/font-awesome/scss/font-awesome.scss';
+
+.category-button {
+    font-weight: bold;
+    text-decoration: none;
+    color: #000;
+}
+
+//  Progress bar styles
+.progress {
+    width: 75%;
+    display: none;
+    @extend .center;
+}
+
+//  Bookmark Styles
+.bookmark-unchecked {
+    color: #C4C4C4;
+    @extend .pointer;
+}
+
+.bookmark-checked {
+    color: #D46E70;
+    @extend .pointer;
+}
+
+// Form override styles
+label {
+    font-weight: bold;
+}
+
+//  Drag and drop box styles
+#box-filedrag {
+    font-weight: bold;
+    text-align: center;
+    padding: 1em 0;
+    margin: 1em 0;
+    color: #555;
+    border: 2px dashed #555;
+    border-radius: 7px;
+    background-color: #c8dadf;
+    cursor: default;
+    #fileselect {
+        width: 0.1px;
+        height: 01px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+    #box-dragndrop {
+        font-size: 1.25em;
+        font-weight: 700;
+        color: #555;
+        display: inline-block;
+        cursor: pointer;
+    }
+    #box-dragndrop:focus,
+    #box-dragndrop:hover {
+        color: #000;
+    }
+    #dragndrop-notice
+    {
+        display: none;
+    }
+    
+    &.has-dragndrop {
+        #dragndrop-notice {
+            display: inline;
+        }
+    }
+    &.is-dragover {
+        background-color: #fff;
+    }
+}
+
+//  Hide the duplicate system notification
+#show-duplicates {
+    display: none;
+}
+
+//  Compact the customer system data list a little more
+.tab-pane dd {
+    margin: 0;
+}
+
+//  Customer Note
+.customer-note-card {
+    .card {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        .card-header {
+            @extend .pointer;
+        }
+        .card-body {
+            max-height: 50px;
+        }
+        .card-footer {
+            display: none;
+        }
+    }
+}
+
+.bigger-note {
+    height: 500px;
+}
