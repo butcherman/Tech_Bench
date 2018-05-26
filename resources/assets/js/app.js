@@ -1,147 +1,45 @@
-
 require('./bootstrap');
 require('jquery-easing');
-
-
-
-
-
-
-
 
 $(document).ready(function()
 {
     //  Enable any tooltips on the page
     $('[data-toggle="tooltip"]').tooltip();
     
+    Dropzone.autoDiscover = false;
+    
 /////////////////////////// Drag and Drop/File Upload Functions ////////////////////////////////////
-    
-    //  Modify the custom "file" form input with the name of the file
-    var inputs = document.querySelectorAll( '#fileselect' );
-    Array.prototype.forEach.call( inputs, function( input )
+    function fileDrop(form)
     {
-        var     label	 = input.nextElementSibling,
-                labelVal = label.innerHTML;
-
-        input.addEventListener( 'change', function(e)
+        //  Initialize Drag and Drop            
+        var drop = $('#dropzone-box').dropzone(
         {
-            var fileName = '';
-            if( this.files && this.files.length > 1 )
+            url: form.attr('action'),
+            autoProcessQueue: false,
+            init: function()
             {
-                fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-            }
-            else
-            {
-                fileName = e.target.value.split( '\\' ).pop();
-            }
-                
-            if( fileName )
-            {
-                $('#dragndrop-notice').html(fileName);
-            }
-            else
-            {
-                $('#dragndrop-notice').html(labelVal);
-                label.text(files.length > 1 ? (input.attr('data-multiple-caption') || '').replace( '{count}', files.length ) : files[ 0 ].name);
-            }  
-        });
-    });
-    
-    //  Check for drag and drop functionality
-    function fileDrag()
-    {
-        if(window.File && window.FileList && window.FileReader)
-        {
-            dragNDropInit();
-        }
-    }
-    
-    var droppedFiles = false;
-    showFiles = function(files) {
-        $('#dragndrop-notice').text(files.length > 1 ? ($('#dragndrop-notice').attr('data-multiple-caption') || '').replace( '{count}', files.length ) : files[ 0 ].name);
-    };
-
-    //  Initialize the drag and drop window
-    function dragNDropInit()
-    {
-        var dropBox = $('#box-filedrag');
-
-        $('#box-filedrag').addClass('has-dragndrop');        
-        dropBox.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) 
-        {
-            e.preventDefault();
-            e.stopPropagation();
-        })
-        .on('dragover dragenter', function() {
-            dropBox.addClass('is-dragover');
-        })
-        .on('dragleave dragend drop', function() {
-            dropBox.removeClass('is-dragover');
-        })
-        .on('drop', function(e) {
-            droppedFiles = e.originalEvent.dataTransfer.files;
-            showFiles(droppedFiles);
-        });
-    }
-
-    //  Submit a file
-    function submitFile(form)
-    {   
-        var formdata = new FormData($(form)[0]);
-        var input	 = form.find( 'input[type="file"]' );
-        var xhr;
-
-        if(droppedFiles)
-        {
-            $.each(droppedFiles, function(i, file)
-            {
-                formdata.append(input.attr('name'), file);
-            });
-        }
-
-        $.ajax({
-            url : form.attr('action'),
-            type: "POST",
-            data : formdata,
-            contentType: false,
-            cache: false,
-            processData:false,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            xhr: function()
-            {
-                //upload Progress
-                xhr = $.ajaxSettings.xhr();
-                if (xhr.upload) 
+                var myDrop = this;
+                form.on('submit', function(e, formData)
                 {
-                    xhr.upload.addEventListener('progress', function(event) 
+                    myDrop.processQueue();
+                });
+                this.on('sending',  function(file, xhr, formData)
+                {
+                    var formArray = form.serializeArray();
+                    $.each(formArray, function()
                     {
-                        var percent = 0;
-                        var position = event.loaded || event.position;
-                        var total = event.total;
-                        if (event.lengthComputable) 
-                        {
-                            percent = Math.ceil(position / total * 100);
-                        }
-                        $('#forProgressBar').css('display', 'block');
-                        //update progressbar
-                        $("#progressBar").css("width", percent+"%");
-                        $("#progressStatus").text(percent+"%");
-                    }, true);
-                }
-                return xhr;
-            }, 
-            mimeType:"multipart/form-data",
-        })
-        .done(function(res)
-        {   
-            uploadComplete(res);
-        }); 
-        
-        $('.cancel-upload').on('click', function()
-        {
-            xhr.abort();
+                        formData.append(this.name, this.value);
+                    });
+                });
+                this.on('success', function(files, response)
+                {    
+                    uploadComplete(response);
+                });
+                this.on('error', function(file, response)
+                {
+                    uploadFailed(response);
+                });
+            }
         });
     }
     
@@ -154,11 +52,19 @@ $(document).ready(function()
         $('#forProgressBar').hide();
     }
     
+    //  Reset the Edit Modal to its default state
+    function resetEditModal()
+    {
+        $('#edit-modal').modal('hide');
+        $('#edit-modal').find('.modal-title').text('');
+        $('#edit-modal').find('.modal-body').text('');
+    }
+    
 //////////////////////////////////////////////////////////////////////////////////////////
     
 
     //  Make the functions in this file globally accessable
-    window.submitFile = submitFile;
     window.resetProgressBar = resetProgressBar;
-    window.fileDrag = fileDrag;
+    window.resetEditModal = resetEditModal;
+    window.fileDrop = fileDrop;
 });

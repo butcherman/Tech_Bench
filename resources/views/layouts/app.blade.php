@@ -10,9 +10,14 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>var maxUpload = {{env('MAX_UPLOAD')}}</script>
   
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
+    <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ asset('js/dropzone/dropzone.js') }}"></script>
+    <link href="{{ asset('js/dropzone/dropzone.css') }}" rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">

@@ -26,6 +26,6 @@ class SystemFiles extends Model
     
     public function files()
     {
-        return $this->belongsTo('App\Files', 'file_id');
+        return $this->belongsTo('App\Files', 'file_id', 'file_id');
     }
 }

@@ -37,7 +37,7 @@ label {
 }
 
 //  Drag and drop box styles
-#box-filedrag {
+.filedrag {
     font-weight: bold;
     text-align: center;
     padding: 1em 0;
@@ -46,39 +46,8 @@ label {
     border: 2px dashed #555;
     border-radius: 7px;
     background-color: #c8dadf;
-    cursor: default;
-    #fileselect {
-        width: 0.1px;
-        height: 01px;
-        opacity: 0;
-        overflow: hidden;
-        position: absolute;
-        z-index: -1;
-    }
-    #box-dragndrop {
-        font-size: 1.25em;
-        font-weight: 700;
-        color: #555;
-        display: inline-block;
-        cursor: pointer;
-    }
-    #box-dragndrop:focus,
-    #box-dragndrop:hover {
-        color: #000;
-    }
-    #dragndrop-notice
-    {
-        display: none;
-    }
-    
-    &.has-dragndrop {
-        #dragndrop-notice {
-            display: inline;
-        }
-    }
-    &.is-dragover {
-        background-color: #fff;
-    }
+    height: 250px;
+    @extend .pointer;
 }
 
 //  Hide the duplicate system notification

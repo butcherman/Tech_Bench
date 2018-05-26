@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
-class File extends Model
+class Files extends Model
 {
     protected $primaryKey = 'file_id';
     protected $fillable = ['file_name', 'file_link', 'mime_type'];
@@ -45,5 +46,23 @@ class File extends Model
         }
         
         return $fileName;
+    }
+    
+    public static function deleteFile($fileID)
+    {
+        try
+        {
+            $fileData = Files::find($fileID);
+            $fileLink = $fileData->file_link.$fileData->file_name;
+            $fileData->delete();
+            
+            Storage::delete($fileLink);
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+        
+        return true;
     }
 }
