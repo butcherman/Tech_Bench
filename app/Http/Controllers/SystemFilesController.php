@@ -46,13 +46,10 @@ class SystemFilesController extends Controller
         //  Validate incoming data
         $request->validate(['name' => 'required', 'file' => 'required', 'fileType' => 'required', 'system' => 'required']);
         
-        //  Set file locationi and clean filename for duplicates
+        //  Set file location and clean filename for duplicates
         $filePath = env('SYS_FOLDER')
             .DIRECTORY_SEPARATOR.$request['category']
             .DIRECTORY_SEPARATOR.$request['system'];
-        
-//        echo $filePath;
-//        die();
         
         $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
         
