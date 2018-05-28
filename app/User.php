@@ -35,6 +35,16 @@ class User extends Authenticatable
         return $this->hasMany('App\SystemFiles', 'user_id', 'user_id');
     }
     
+    public function customerFavs()
+    {
+        return $this->belongsTo('App\CustomerFavs', 'user_id', 'user_id');
+    }
+    
+    public function customerNotes()
+    {
+        return $this->belongsTo('App\CustomerNotes', 'user_id', 'user_id');
+    }
+    
     public function roles()
     {
         return $this->belongsToMany('App\Role', 'user_role', 'user_id', 'role_id');

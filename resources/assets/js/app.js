@@ -5,7 +5,7 @@ $(document).ready(function()
 {
     //  Enable any tooltips on the page
     $('[data-toggle="tooltip"]').tooltip();
-    
+    //  Disable autodiscover for Dropzone
     Dropzone.autoDiscover = false;
     
 /////////////////////////// Drag and Drop/File Upload Functions ////////////////////////////////////

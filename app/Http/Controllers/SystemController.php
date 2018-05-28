@@ -6,10 +6,17 @@ use Illuminate\Http\Request;
 use App\SystemCategories;
 use App\SystemTypes;
 use App\SystemFileTypes;
+use App\SystemCustDataFields;
 
 class SystemController extends Controller
 {
-     //  Landing page if no category was selected
+    //  Only authorized users have access
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
+    //  Landing page if no category was selected
     public function index()
     {
         $categories = SystemCategories::all();
@@ -43,5 +50,18 @@ class SystemController extends Controller
             'fileTypes' => $fileTypes,
             'category' => $cat
         ]);  
+    }
+    
+    //  Get the fields of information to gather for customer that has this system
+    public function fields($sysID)
+    {
+        $sysFields = SystemCustDataFields::where('sys_id', $sysID)
+            ->join('System_Cust_Data_Types', 'System_Cust_Data_Types.data_type_id', '=', 'System_Cust_Data_Fields.data_type_id')
+            ->orderBy('order', 'ASC')
+            ->get();
+        
+        return view('customer.form.systemFields', [
+            'sysFields' => $sysFields
+        ]);
     }
 }

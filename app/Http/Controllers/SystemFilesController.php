@@ -137,12 +137,7 @@ class SystemFilesController extends Controller
         ]);        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Remove a file from the system files table
     public function destroy($id)
     {
         //  Remove the file from SystemFiles table

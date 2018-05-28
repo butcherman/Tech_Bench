@@ -160,10 +160,6 @@
         {
             $('.select-yes').on('click', function()
             {
-//                $.get(url, function(res)
-//                {
-//                    uploadComplete('success');
-//                });
                 $.ajax(
                 {
                     url: url,
