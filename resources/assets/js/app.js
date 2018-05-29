@@ -21,6 +21,7 @@ $(document).ready(function()
                 var myDrop = this;
                 form.on('submit', function(e, formData)
                 {
+                    e.preventDefault();
                     myDrop.processQueue();
                 });
                 this.on('sending',  function(file, xhr, formData)

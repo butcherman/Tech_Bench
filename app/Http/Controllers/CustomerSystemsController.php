@@ -11,6 +11,12 @@ use App\CustomerSystemFields;
 
 class CustomerSystemsController extends Controller
 {
+    //  Only authorized users have access
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // New system form
     public function create()
     {

@@ -12,6 +12,12 @@ use App\PhoneNumberType;
 
 class CustomerContactsController extends Controller
 {
+    //  Only authorized users have access
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     //  Open the new contact form
     public function create()
     {

@@ -75,7 +75,29 @@
             <div class="card">
                 <div class="card-header"><h5>Files:</h5></div>
                 <div class="card-body" id="customer-files">
-                    <p class="text-center"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...</p>
+                    <div class="table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>File Name:</th>
+                                    <th>File Type:</th>
+                                    <th>Uploaded By:</th>
+                                    <th>Uploaded On:</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <a href="#edit-modal" class="btn btn-info btn-block" id="add-customer-file" data-toggle="modal">Add File</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

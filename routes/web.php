@@ -16,7 +16,7 @@ Auth::routes();
 
 //  Non user Routes
 Route::get('/', 'Auth\LoginController@showLoginForm');
-Route::get('/download/{id}/{filename}', 'DownloadController@index');
+Route::get('/download/{id}/{filename}', 'DownloadController@index')->name('downloadPage');
 Route::get('/confirm', 'PagesController@confirmDialog')->name('confirm');
 
 //  Tech/Registered User Routes
@@ -46,6 +46,9 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
     {
         Route::get('fav/{action}/{id}', 'CustomerController@toggleFav')->name('toggleFav');
         
+        
+        Route::resource('files', 'CustomerFilesController');
+        Route::resource('notes', 'CustomerNotesController');
         Route::get('download-contact/{id}', 'CustomerContactsController@downloadVCard')->name('vcard');
         Route::resource('contacts', 'CustomerContactsController');
         Route::get('systems/check-system/{id}/{sys}', 'CustomerSystemsController@checkSys')->name('checkSystem');

@@ -11,7 +11,11 @@ use App\SystemFileTypes;
 
 class SystemFilesController extends Controller
 {
-
+    //  Only authorized users have access
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     public function index()
     {

@@ -10,14 +10,10 @@ use App\Customers;
 
 class CustomerDetails extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    //  Only authorized users have access
+    public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     //  Open the new customer form

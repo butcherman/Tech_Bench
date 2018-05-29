@@ -16,11 +16,13 @@ class CreateCustomerFilesTable extends Migration
         Schema::create('customer_files', function (Blueprint $table) {
             $table->increments('cust_file_id');
             $table->integer('file_id')->unsigned();
+            $table->integer('file_type_id')->unsigned();
             $table->integer('cust_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->text('name');
             $table->timestamps();
             $table->foreign('file_id')->references('file_id')->on('files')->onUpdate('cascade');
+            $table->foreign('file_type_id')->references('file_type_id')->on('customer_file_types')->onUpdate('cascade');
             $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade');
         });

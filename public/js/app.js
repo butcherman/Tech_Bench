@@ -13691,7 +13691,7 @@ __webpack_require__(36);
 $(document).ready(function () {
     //  Enable any tooltips on the page
     $('[data-toggle="tooltip"]').tooltip();
-
+    //  Disable autodiscover for Dropzone
     Dropzone.autoDiscover = false;
 
     /////////////////////////// Drag and Drop/File Upload Functions ////////////////////////////////////
@@ -13703,6 +13703,7 @@ $(document).ready(function () {
             init: function init() {
                 var myDrop = this;
                 form.on('submit', function (e, formData) {
+                    e.preventDefault();
                     myDrop.processQueue();
                 });
                 this.on('sending', function (file, xhr, formData) {

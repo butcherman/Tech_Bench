@@ -8,6 +8,12 @@ use App\Files;
 
 class DownloadController extends Controller
 {
+    //  Only authorized users have access
+    public function __construct()
+    {
+//        $this->middleware('auth');
+    }
+    
     //  Class to download the file
     public function index($fileID, $fileName)
     {
