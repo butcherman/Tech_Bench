@@ -13,26 +13,25 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <div class="table-responsive" id="customer-results-table">
+            <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>Customer Name</th>
                         <th>City, State</th>
                         <th>System Type</th>
-                        <th>Backup Loaded</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <td colspan="4">
-                        
+                        <td colspan="3" class="text-center">
+                            <a href="{{route('customer.id.create')}}" title="New Customer" class="btn btn-primary" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i> Add Customer</a>
                         </td>
                     </tr>
                 </tfoot>
                 <tbody>
                     <tr>
-                        <td colspan="4" class="text-center"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...</td>
+                        <td colspan="3" class="text-center"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...</td>
                     </tr>
                 </tbody>
             </table>
@@ -45,22 +44,37 @@
 <script>
     $(document).ready(function()
     {
+        var table;
         searchCustomer();
         
         $('#search-customer-form').on('submit', function(e)
         {
             e.preventDefault();
+            table.destroy();
             searchCustomer();
         })
+        
+        $('#reset-search-form').on('click', function()
+        {
+            $('#search-customer-form')[0].reset();
+        });
         
         //  Search customer function
         function searchCustomer()
         {
             $.post('{{Route('customer.search')}}', $('#search-customer-form').serialize())
-                .done(function(data)
-                {
-                    $('#dataTable > tbody').html(data);
-                });
+             .done(function(data)
+            {
+                $('#customer-results-table').html(data);
+                if(!$('#dataTable > tbody').find('td').hasClass('text-center'))
+                {                        
+                    table = $('#dataTable').DataTable(
+                    {
+                        'dom': '<"top"i>rt<"row"<"col-4"l><"col-4"p>>',
+                        'searching': false
+                    }); 
+                }
+            });
         }
     });
 </script>

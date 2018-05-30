@@ -23,8 +23,8 @@ Route::get('/confirm', 'PagesController@confirmDialog')->name('confirm');
 Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function()
 {
     ///////////////////////////  Basic Routes  /////////////////////////////////////////////
-    Route::get('/about', 'PagesController@about');
-    Route::get('/dashboard', 'DashboardController@index');
+    Route::get('/about', 'PagesController@about')->name('about');
+    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     
     
     //////////////////////////  System Routes  ////////////////////////////////////////////
@@ -45,8 +45,6 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
     Route::prefix('customer')->name('customer.')->group(function()
     {
         Route::get('fav/{action}/{id}', 'CustomerController@toggleFav')->name('toggleFav');
-        
-        
         Route::resource('files', 'CustomerFilesController');
         Route::resource('notes', 'CustomerNotesController');
         Route::get('download-contact/{id}', 'CustomerContactsController@downloadVCard')->name('vcard');

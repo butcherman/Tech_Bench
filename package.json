@@ -22,6 +22,7 @@
     "dependencies": {
         "font-awesome": "^4.7.0",
         "jquery-easing": "0.0.1",
+        "datatables.net-bs4": "1.10.16",
         "npm": "^6.0.0"
     }
 }

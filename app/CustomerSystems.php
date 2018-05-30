@@ -11,12 +11,12 @@ class CustomerSystems extends Model
     
     public function Customers()
     {
-        return $this->hasMany('App\customers', 'cust_id', 'cust_id');
+        return $this->belongsTo('App\customers', 'cust_id', 'cust_id');
     }
     
     public function SystemTypes()
     {
-        return $this->hasMany('App\SystemTypes', 'sys_id', 'sys_id');
+        return $this->hasOne('App\SystemTypes', 'sys_id', 'sys_id');
     }
     
     public function CustomerSystemFields()

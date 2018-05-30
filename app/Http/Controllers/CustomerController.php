@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\SystemTypes;
 use App\SystemCategories;
+use App\CustomerSystems;
 use App\CustomerFavs;
 use App\Customers;
 
@@ -29,7 +30,7 @@ class CustomerController extends Controller
         {
             foreach($sys->SystemTypes as $s)
             {
-                $sysArr[$sys->name][] = $s->name;
+                $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
         }
         
@@ -41,10 +42,27 @@ class CustomerController extends Controller
     //  Search for a customer
     public function search(Request $request)
     {
-        $customerData = Customers::where('name', 'like', '%'.$request['customer'].'%')
-            ->where('city', 'like', '%'.$request['city'].'%')
-            ->get();
-        
+        //  Run different request based on if system field is filled out or not
+        if(!empty($request->system))
+        {
+            $customerData = Customers::where('name', 'like', '%'.$request->customer.'%')
+                ->where('city', 'like', '%'.$request->city.'%')
+
+                ->with('CustomerSystems.SystemTypes')
+                ->whereHas('CustomerSystems', function($q) use($request)
+                {
+                   $q->where('sys_id', $request->system);
+                })
+                ->get();
+        }
+        else
+        {
+            $customerData = Customers::where('name', 'like', '%'.$request->customer.'%')
+                ->where('city', 'like', '%'.$request->city.'%')
+                ->with('CustomerSystems.SystemTypes')
+                ->get();
+        }
+
         return view('customer.searchResults', [
             'results' => $customerData
         ]);

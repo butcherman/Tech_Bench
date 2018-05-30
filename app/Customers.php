@@ -11,7 +11,7 @@ class Customers extends Model
     
     public function CustomerSystems()
     {
-        return $this->belongsTo('App\CustomerSystems', 'cust_id');
+        return $this->hasMany('App\CustomerSystems', 'cust_id', 'cust_id');
     }
     
     public function customerFavs()

@@ -1,5 +1,6 @@
 require('./bootstrap');
 require('jquery-easing');
+require('datatables.net-bs4');
 
 $(document).ready(function()
 {

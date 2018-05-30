@@ -8,7 +8,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Tech Bench') }}</title>
     <script src="{{ asset('js/app.js') }}"></script>
     <script>var maxUpload = {{env('MAX_UPLOAD')}}</script>
   
@@ -23,14 +23,14 @@
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-        <a class="navbar-brand" href="/dashboard">Tech Bench</a>
+        <a class="navbar-brand" href="{{route('dashboard')}}">Tech Bench</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                    <a class="nav-link" href="/dashboard">
+                    <a class="nav-link" href="{{route('dashboard')}}">
                         <i class="fa fa-fw fa-home"></i>
                         <span class="nav-link-text">Dashboard</span>
                     </a>
@@ -44,23 +44,23 @@
                         <ul class="sidenav-second-level collapse" id="collapseAdmin">
                             @if($current_user->hasAnyRole('installer'))
                                 <li>
-                                    <a href="/installer">Site Administration</a>
+                                    <a href="#">Site Administration</a>
                                 </li>
                             @endif
                             @if($current_user->hasAnyRole(['installer', 'admin']))
                                 <li>
-                                    <a href="/admin">Administration</a>
+                                    <a href="#">Administration</a>
                                 </li>
                             @endif
                             <li>
-                                <a href="/reports">Reports</a>
+                                <a href="#">Reports</a>
                             </li>
                         </ul>
                     </li>
                 @endif
                 @include('_inc.navbar')
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Customers">
-                    <a class="nav-link" href="/customer">
+                    <a class="nav-link" href="{{route('customer.index')}}">
                         <i class="fa fa-fw fa-users"></i>
                         <span class="nav-link-text">Customers</span>
                     </a>
