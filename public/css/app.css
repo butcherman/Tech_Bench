@@ -14300,6 +14300,15 @@ label {
   height: 250px;
 }
 
+.filedrag .dz-image,
+.filedrag .dz-progress,
+.filedrag .dz-error-message,
+.filedrag .dz-success-mark,
+.filedrag .dz-error-mark,
+.filedrag .dz-size {
+  display: none;
+}
+
 #show-duplicates {
   display: none;
 }
@@ -14324,5 +14333,76 @@ label {
 
 .bigger-note {
   height: 500px;
+}
+
+.tech-tip-tag-wrapper {
+  position: relative;
+  min-height: 37px;
+}
+
+.tech-tip-tag {
+  background-color: #CFECEF;
+  border: 1px solid #CFECEF;
+  border-radius: 4px;
+  display: inline-block;
+  height: 22px;
+  padding: 0 7px;
+  margin-left: 3px;
+}
+
+.tech-tip-tag .close {
+  margin-left: 3px;
+}
+
+.tech-tip-details a,
+.tech-tip-details span {
+  padding: 0 5px;
+  border-right: 1px solid #ccc;
+  color: #ccc;
+  display: inline-block;
+}
+
+.tech-tip-details a:last-child,
+.tech-tip-details span:last-child {
+  border-right: none;
+}
+
+.tech-tip-details a span,
+.tech-tip-details span span {
+  display: inline-block;
+}
+
+#tech-tip-information {
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  margin: 15px;
+  padding: 15px;
+  min-height: 60vh;
+}
+
+#tech-tip-attachements h4 {
+  color: #8F8686;
+  border-bottom: 1px solid #000;
+}
+
+#tech-tip-attachements a {
+  color: #777;
+}
+
+#tech-tip-attachements a:hover {
+  color: #0000FF;
+}
+
+#tech-tip-comments {
+  margin-top: 10px;
+}
+
+#tech-tip-comments h4 {
+  color: #8F8686;
+  border-bottom: 1px solid #000;
+}
+
+#tech-tip-comments .comment-author {
+  color: #777;
 }
 

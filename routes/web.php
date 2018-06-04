@@ -22,10 +22,9 @@ Route::get('/confirm', 'PagesController@confirmDialog')->name('confirm');
 //  Tech/Registered User Routes
 Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function()
 {
-    ///////////////////////////  Basic Routes  /////////////////////////////////////////////
+    ///////////////////////////  Basic User Routes  /////////////////////////////////////////
     Route::get('/about', 'PagesController@about')->name('about');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-    
     
     //////////////////////////  System Routes  ////////////////////////////////////////////
     Route::prefix('system')->name('system.')->group(function()
@@ -38,7 +37,6 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
         Route::get('{cat}/{sys}', 'SystemController@details')->name('details');
         Route::get('{cat}', 'SystemController@selectSystem') ->name('select');
         Route::get('/', 'SystemController@index')->name('index');
-        
     });
     
     //////////////////////////  Customer Routes  ////////////////////////////////////////////
@@ -57,7 +55,14 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
         Route::get('/', 'CustomerController@index')->name('index');
     });
     
-    
-    
-    
+    //////////////////////////  Tech Tips Routes  //////////////////////////////////////////
+    Route::prefix('tip')->name('tip.')->group(function()
+    {
+        Route::get('fav/{action}/{id}', 'TechTipsController@toggleFav')->name('toggleFav');
+        Route::resource('comments', 'TechTipsCommentsController');
+        Route::get('details/{id}/{name}', 'TechTipsController@details')->name('details');
+        Route::resource('id', 'TechTipsController');
+        Route::post('search', 'TechTipsController@search')->name('search');
+        Route::get('/', 'TechTipsController@index')->name('index');
+    });
 });

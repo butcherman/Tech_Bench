@@ -45,6 +45,17 @@ class User extends Authenticatable
         return $this->belongsTo('App\CustomerNotes', 'user_id', 'user_id');
     }
     
+    public function techTips()
+    {
+        return $this->belongsTo('App\TechTips', 'user_id', 'user_id');
+    }
+    
+    public function techTipComments()
+    {
+        return $this->belongsTo('App\TechTipComments', 'user_id', 'user_id');
+    }
+    
+    //  Functions for authentication roles
     public function roles()
     {
         return $this->belongsToMany('App\Role', 'user_role', 'user_id', 'role_id');

@@ -65,14 +65,12 @@
                         <span class="nav-link-text">Customers</span>
                     </a>
                 </li>
-<!--
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tech Tips">
-                    <a class="nav-link" href="/tips">
+                    <a class="nav-link" href="{{route('tip.id.index')}}">
                         <i class="fa fa-fw fa-wrench"></i>
                         <span class="nav-link-text">Tech Tips</span>
                     </a>
                 </li>
--->
 <!--
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Files">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseFiles" data-parent="#exampleAccordion">
@@ -134,7 +132,7 @@
     <!--  End Navigation -->
     <!--  Body  -->
     <div class="content-wrapper">
-        <div class="container-fluid">
+        <div class="container-fluid pad-bottom">
             <!-- Breadcrumbs-->
 <!--
             <ol class="breadcrumb">
@@ -147,7 +145,7 @@
             <!--  Primary Page Content  -->
             @yield('content')
         </div>
-        <footer class="sticky-footer">
+        <footer class="sticky-footer pad-top">
             <div class="container">
                 <div class="text-center">
                     <small>Copyright © Tech Bench 2016-2018</small>

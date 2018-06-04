@@ -29,4 +29,9 @@ class SystemTypes extends Model
     {
         return $this->belongsTo('App\CustomerSystems', 'sys_id');
     }
+    
+    public function techTipSystems()
+    {
+        return $this->belongsTo('App\TechTipSystems', 'sys_id', 'sys_id');
+    }
 }

@@ -49,6 +49,9 @@ label {
     background-color: #c8dadf;
     height: 250px;
     @extend .pointer;
+    .dz-image, .dz-progress, .dz-error-message, .dz-success-mark, .dz-error-mark, .dz-size {
+        display: none;
+    }
 }
 
 //  Hide the duplicate system notification
@@ -81,4 +84,71 @@ label {
 
 .bigger-note {
     height: 500px;
+}
+
+//  Tech Tip System Tags
+.tech-tip-tag-wrapper {
+    position: relative;
+    min-height: 37px;
+}
+
+.tech-tip-tag {
+    background-color: #CFECEF;
+    border: 1px solid #CFECEF;
+    border-radius: 4px;
+    display: inline-block;
+    height: 22px;
+    padding: 0 7px;
+    margin-left: 3px;
+    .close {
+        margin-left: 3px;
+    }
+}
+
+//  Tech tip details
+.tech-tip-details {
+    a, span {
+        padding: 0 5px;
+        border-right: 1px solid #ccc;
+        color: #ccc;
+        display: inline-block;
+        &:last-child {
+            border-right: none;
+        }
+        span {
+            display: inline-block;
+        }
+    }
+}
+
+#tech-tip-information {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    margin: 15px;
+    padding: 15px;
+    min-height: 60vh;
+}
+
+#tech-tip-attachements {
+    h4 {
+        color: #8F8686;
+        border-bottom: 1px solid #000;
+    }
+    a {
+        color: #777;
+        &:hover {
+            color: #0000FF;
+        }
+    }
+}
+
+#tech-tip-comments {
+    margin-top: 10px;
+    h4 {
+        color: #8F8686;
+        border-bottom: 1px solid #000;
+    }
+    .comment-author {
+        color: #777;
+    }
 }
