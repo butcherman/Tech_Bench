@@ -13688,6 +13688,7 @@ module.exports = __webpack_require__(40);
 __webpack_require__(12);
 __webpack_require__(36);
 __webpack_require__(37);
+//require('clipboard');
 
 $(document).ready(function () {
     //  Enable any tooltips on the page
@@ -13737,7 +13738,14 @@ $(document).ready(function () {
                 var myDrop = this;
                 form.on('submit', function (e, formData) {
                     e.preventDefault();
-                    myDrop.processQueue();
+                    //                    myDrop.processQueue();
+                    if (myDrop.getQueuedFiles().length > 0) {
+                        myDrop.processQueue();
+                    } else {
+                        $.post(form.attr('action'), form.serialize(), function (data) {
+                            uploadComplete(data);
+                        });
+                    }
                 });
                 this.on('sendingmultiple', function (file, xhr, formData) {
                     var formArray = form.serializeArray();

@@ -11,4 +11,9 @@ class PagesController extends Controller
     {
         return view('_inc.confirmDialog');
     }
+    
+    public function about()
+    {
+        echo 'about';
+    }
 }

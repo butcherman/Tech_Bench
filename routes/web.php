@@ -1,23 +1,19 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 //  Login/Logout and Authorization routes
 Auth::routes();
 
-//  Non user Routes
+///////////////////////////  Basic Non user Routes  /////////////////////////////////////////
 Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::get('/download/{id}/{filename}', 'DownloadController@index')->name('downloadPage');
 Route::get('/confirm', 'PagesController@confirmDialog')->name('confirm');
+
+///////////////////////////  User File Link Routes  /////////////////////////////////////////
+Route::prefix('file-links')->name('userLink.')->group(function()
+{
+    Route::get('details/{link}', 'UserLinksController@details')->name('details');
+    Route::get('/', 'UserLinksController@index')->name('index');
+});
 
 //  Tech/Registered User Routes
 Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function()
@@ -64,5 +60,13 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
         Route::resource('id', 'TechTipsController');
         Route::post('search', 'TechTipsController@search')->name('search');
         Route::get('/', 'TechTipsController@index')->name('index');
+    });
+    
+    //////////////////////////  File Links Routes  //////////////////////////////////////////
+    Route::prefix('links')->name('links.')->group(function()
+    {
+        Route::resource('details', 'FileLinksController');
+        Route::get('details/{id}/{name}', 'FileLinksController@details')->name('info');
+        Route::get('/', 'FileLinksController@index')->name('index');
     });
 });

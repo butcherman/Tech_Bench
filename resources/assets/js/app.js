@@ -1,6 +1,7 @@
 require('./bootstrap');
 require('jquery-easing');
 require('datatables.net-bs4');
+//require('clipboard');
 
 $(document).ready(function()
 {
@@ -63,7 +64,18 @@ $(document).ready(function()
                 form.on('submit', function(e, formData)
                 {
                     e.preventDefault();
-                    myDrop.processQueue();
+//                    myDrop.processQueue();
+                    if(myDrop.getQueuedFiles().length > 0)
+                    {
+                        myDrop.processQueue();
+                    }
+                    else
+                    {
+                        $.post(form.attr('action'), form.serialize(), function(data)
+                        {
+                            uploadComplete(data);
+                        });
+                    }
                 });
                 this.on('sendingmultiple',  function(file, xhr, formData)
                 {
@@ -111,3 +123,16 @@ $(document).ready(function()
     window.fileDrop = fileDrop;
     window.multiFileDrop = multiFileDrop;
 });
+
+
+
+
+
+
+
+
+
+
+
+
+

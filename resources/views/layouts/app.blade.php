@@ -35,6 +35,12 @@
                         <span class="nav-link-text">Dashboard</span>
                     </a>
                 </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="File Links">
+                    <a class="nav-link" href="{{route('links.index')}}">
+                        <i class="fa fa-fw fa-link"></i>
+                        <span class="nav-link-text">File Links</span>
+                    </a>
+                </li>
                 @if($current_user->hasAnyRole(['installer', 'admin', 'report']))
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Administration">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseAdmin" data-parent="#exampleAccordion">
@@ -89,13 +95,13 @@
                         </li>
                     </ul>
                 </li>
+-->
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Account Settings">
                     <a class="nav-link" href="/account">
                         <i class="fa fa-fw fa-user"></i>
                         <span class="nav-link-text">Account Settings</span>
                     </a>
                 </li> 
--->
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">

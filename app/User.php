@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->belongsTo('App\TechTipComments', 'user_id', 'user_id');
     }
     
+    public function fileLinks()
+    {
+        return $this->belongsTo('App\FileLinks');
+    }
+    
     //  Functions for authentication roles
     public function roles()
     {

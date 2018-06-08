@@ -15,6 +15,16 @@ class Files extends Model
         return $this->hasMany('App\SystemFiles', 'file_id', 'file_id');
     }
     
+    public function fileLinkFiles()
+    {
+        return $tihs->hasMany('App\FileLinkFiles', 'file_id', 'file_id');
+    }
+    
+    public function fileLinkNotes()
+    {
+        return $this->hasMany('App\FileLinkNotes', 'file_id', 'file_id');
+    }
+    
     public static function cleanFileName($path, $fileName)
     {
         $fileName = str_replace(' ', '_', $fileName);

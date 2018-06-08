@@ -1,12 +1,13 @@
 // Variables
 @import "variables";
 @import "app_body";
-@import "dataTable";
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 //  Font Awesome
 @import 'node_modules/font-awesome/scss/font-awesome.scss';
+@import "dataTable";
+//@import "~bootstrap-toggle/css/bootstrap-toggle.css";
 
 .category-button {
     font-weight: bold;
