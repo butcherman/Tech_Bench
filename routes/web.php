@@ -65,6 +65,8 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
     //////////////////////////  File Links Routes  //////////////////////////////////////////
     Route::prefix('links')->name('links.')->group(function()
     {
+        Route::delete('deleteFile/{id}', 'FileLinksController@deleteLinkFile')->name('deleteFile');
+        Route::get('getFiles/{type}/{id}', 'FileLinksController@getFiles')->name('getFiles');
         Route::resource('details', 'FileLinksController');
         Route::get('details/{id}/{name}', 'FileLinksController@details')->name('info');
         Route::get('/', 'FileLinksController@index')->name('index');

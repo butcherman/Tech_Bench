@@ -10,7 +10,6 @@
                 <a href="#edit-modal" title="Edit Link" data-toggle="modal" data-tooltip="tooltip" data-id="{{$link->link_id}}" class="text-muted edit-link"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
 <!--                <a href="#" title="Disable Link" data-toggle="modal" data-tooltip="tooltip" data-id="{{$link->link_id}}" class="text-muted disable-link"><i class="fa fa-ban" aria-hidden="true"></i></a>-->
                 <a href="#edit-modal" title="Remove Link" data-toggle="modal" data-tooltip="tooltip" data-id="{{$link->link_id}}" class="text-muted remove-link"><i class="fa fa-trash" aria-hidden="true"></i></a>
-
             </td>
         </tr>
     @endforeach

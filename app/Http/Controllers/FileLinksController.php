@@ -99,15 +99,19 @@ class FileLinksController extends Controller
     //  Get the files for the link
     public function getFiles($type, $linkID)
     {
-//        switch($type)
-//        {
-//            case 'down':
-//                $files = FileLInkFiles::where('link_id', $linkID)->where('added_by', is_numeric())
-//        }
-//        
-//        
-//        
-//        $files = FileLinkFiles::where('link_id', $linkID);
+        switch($type)
+        {
+            case 'down':
+                $files = FileLInkFiles::where('link_id', $linkID)->where('upload', false)->join('files', 'file_link_files.file_id', '=', 'files.file_id')->get();
+                break;
+            case 'up':
+                $files = FileLInkFiles::where('link_id', $linkID)->where('upload', true)->join('files', 'file_link_files.file_id', '=', 'files.file_id')->get();
+                break;
+        }
+        
+        return view('links.fileList', [
+            'files' => $files
+        ]);
     }
 
     //  Edit a links basic informaiton
@@ -130,6 +134,16 @@ class FileLinksController extends Controller
             'expire'       => $request->expire,
             'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
         ]);
+    }
+    
+    //  Delete a file attached to a link
+    public function deleteLinkFile($linkFileID)
+    {
+        $fileData = FileLinkFiles::find($linkFileID);
+        $fileID = $fileData->file_id;
+        $fileData->delete();
+        
+        Files::deleteFile($fileID);
     }
 
     //  Delete a file link
