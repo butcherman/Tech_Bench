@@ -33,9 +33,9 @@
 }
 
 .pointer,
+.filedrag,
 .bookmark-unchecked,
 .bookmark-checked,
-.filedrag,
 .customer-note-card .card .card-header {
   cursor: pointer;
 }
@@ -14325,6 +14325,27 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:las
   padding-right: 0;
 }
 
+.filedrag {
+  font-weight: bold;
+  text-align: center;
+  padding: 1em 0;
+  margin: 1em 0;
+  color: #555;
+  border: 2px dashed #555;
+  border-radius: 7px;
+  background-color: #c8dadf;
+  height: 250px;
+}
+
+.filedrag .dz-image,
+.filedrag .dz-progress,
+.filedrag .dz-error-message,
+.filedrag .dz-success-mark,
+.filedrag .dz-error-mark,
+.filedrag .dz-size {
+  display: none;
+}
+
 .category-button {
   font-weight: bold;
   text-decoration: none;
@@ -14346,27 +14367,6 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:las
 
 label {
   font-weight: bold;
-}
-
-.filedrag {
-  font-weight: bold;
-  text-align: center;
-  padding: 1em 0;
-  margin: 1em 0;
-  color: #555;
-  border: 2px dashed #555;
-  border-radius: 7px;
-  background-color: #c8dadf;
-  height: 250px;
-}
-
-.filedrag .dz-image,
-.filedrag .dz-progress,
-.filedrag .dz-error-message,
-.filedrag .dz-success-mark,
-.filedrag .dz-error-mark,
-.filedrag .dz-size {
-  display: none;
 }
 
 #show-duplicates {

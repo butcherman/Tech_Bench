@@ -47,6 +47,27 @@ $(document).ready(function()
             });
         });
     });
+    
+    //  Read a note attached to a file
+    $(document).on('click', '.read-file-note', function()
+    {
+        var noteID = $(this).data('noteid');
+        var url = '{{route('links.note', ['id' => ':id'])}}';
+        url = url.replace(':id', noteID);
+        $('#edit-modal').find('.modal-title').text('File Note');
+        $('#edit-modal').find('.modal-body').load(url);
+    });
+    
+    //  Add another file to the link
+    $(document).on('click', '#add-link-file', function()
+    {
+        var url = '{{route('links.addFile', ['id' => $data->link_id])}}';
+        $('#edit-modal').find('.modal-title').text('Add File');
+        $('#edit-modal').find('.modal-body').load(url, function()
+        {
+            multiFileDrop($('#add-file-form'));
+        });
+    });
 });
 
 //  Function to load all files attached to the link
@@ -103,5 +124,16 @@ function deleteLink(linkID)
             alert('Unable to Process Your Request');
         }
     });
+}
+    
+function uploadComplete(res)
+{
+    resetEditModal();
+    loadFiles();
+}
+function uploadFailed(res)
+{
+    var msg = 'There was a problem adding the Tech Tip.\nPlease contact the system administrator';
+    console.log(res);
 }
 </script>

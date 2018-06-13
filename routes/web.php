@@ -11,6 +11,7 @@ Route::get('/confirm', 'PagesController@confirmDialog')->name('confirm');
 ///////////////////////////  User File Link Routes  /////////////////////////////////////////
 Route::prefix('file-links')->name('userLink.')->group(function()
 {
+    Route::post('details/{link}', 'UserLinksController@uploadFiles')->name('upload');
     Route::get('details/{link}', 'UserLinksController@details')->name('details');
     Route::get('/', 'UserLinksController@index')->name('index');
 });
@@ -65,6 +66,9 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
     //////////////////////////  File Links Routes  //////////////////////////////////////////
     Route::prefix('links')->name('links.')->group(function()
     {
+        Route::post('addFile/{id}', 'FileLinksController@submitAddFile')->name('submitAdd');
+        Route::get('addFile/{id}', 'FileLinksController@addFileForm')->name('addFile');
+        Route::get('note/{id}', 'FileLinksController@getNote')->name('note');
         Route::delete('deleteFile/{id}', 'FileLinksController@deleteLinkFile')->name('deleteFile');
         Route::get('getFiles/{type}/{id}', 'FileLinksController@getFiles')->name('getFiles');
         Route::resource('details', 'FileLinksController');

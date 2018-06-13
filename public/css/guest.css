@@ -30,7 +30,8 @@
   display: block;
 }
 
-.pointer {
+.pointer,
+.filedrag {
   cursor: pointer;
 }
 
@@ -10447,6 +10448,27 @@ a.text-dark:focus {
   }
 }
 
+.filedrag {
+  font-weight: bold;
+  text-align: center;
+  padding: 1em 0;
+  margin: 1em 0;
+  color: #555;
+  border: 2px dashed #555;
+  border-radius: 7px;
+  background-color: #c8dadf;
+  height: 250px;
+}
+
+.filedrag .dz-image,
+.filedrag .dz-progress,
+.filedrag .dz-error-message,
+.filedrag .dz-success-mark,
+.filedrag .dz-error-mark,
+.filedrag .dz-size {
+  display: none;
+}
+
 body {
   background: #092756;
   background: -webkit-radial-gradient(0% 100%, ellipse farthest-corner, rgba(104, 128, 138, 0.4) 10%, rgba(138, 114, 76, 0) 40%), linear-gradient(to bottom, rgba(57, 173, 219, 0.25) 0%, rgba(42, 60, 87, 0.4) 100%), linear-gradient(135deg, #670d10 0%, #092756 100%);
@@ -10466,6 +10488,10 @@ body {
 }
 
 .card {
+  color: #000;
+}
+
+.jumbotron {
   color: #000;
 }
 

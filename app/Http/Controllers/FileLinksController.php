@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
+use App\FileLinkNotes;
 
 class FileLinksController extends Controller
 {
@@ -102,16 +103,67 @@ class FileLinksController extends Controller
         switch($type)
         {
             case 'down':
-                $files = FileLInkFiles::where('link_id', $linkID)->where('upload', false)->join('files', 'file_link_files.file_id', '=', 'files.file_id')->get();
+                $files = FileLInkFiles::where('link_id', $linkID)
+                    ->where('upload', false)
+                    ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
+                    ->get();
                 break;
             case 'up':
-                $files = FileLInkFiles::where('link_id', $linkID)->where('upload', true)->join('files', 'file_link_files.file_id', '=', 'files.file_id')->get();
+                $files = Files::where('file_link_files.link_id', $linkID)
+                    ->where('file_link_files.upload', true)
+                    ->join('file_link_files', 'files.file_id', '=', 'file_link_files.file_id')
+                    ->with('FileLinkNotes')
+                    ->get();
                 break;
         }
         
         return view('links.fileList', [
-            'files' => $files
+            'files' => $files,
+            'type'  => $type
         ]);
+    }
+    
+    //  Add a new file
+    public function addFileForm($id)
+    {
+        return view('links.form.addFile', [
+            'id' => $id
+        ]);
+    }
+    
+    //  Submit the additional files
+    public function submitAddFile($id, Request $request)
+    {
+        $filePath = env('LINK_FOLDER').DIRECTORY_SEPARATOR.$id;
+        foreach($request->file as $file)
+        {
+            //  Clean the file and store it
+            $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+            $file->storeAs($filePath, $fileName);
+
+            //  Place file in Files table of DB
+            $newFile = Files::create([
+                'file_name' => $fileName,
+                'file_link' => $filePath.DIRECTORY_SEPARATOR
+            ]);
+            $fileID = $newFile->file_id;
+
+            //  Place the file in the file link files table of DB
+            FileLinkFiles::create([
+                'link_id'  => $id,
+                'file_id'  => $fileID,
+                'user_id'  => Auth::user()->user_id,
+                'upload'   => 0
+            ]);
+        }
+    }
+    
+    //  Get a note that is attached to a file
+    public function getNote($id)
+    {
+        $note = FileLinkNotes::find($id);
+        
+        return $note->note;
     }
 
     //  Edit a links basic informaiton
@@ -120,7 +172,8 @@ class FileLinksController extends Controller
         $linkData = FileLinks::find($id);
         
         return view('links.form.editLink', [
-            'data' => $linkData
+            'data' => $linkData,
+            'type' => $type
         ]);
     }
 

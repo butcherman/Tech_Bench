@@ -8,22 +8,28 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Tech Bench') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" ></script>
     <script>var maxUpload = {{env('MAX_UPLOAD')}}</script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+<!--    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">-->
 
     <!-- Styles -->
     <link href="{{ asset('css/guest.css') }}" rel="stylesheet">
+    
+    <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ asset('js/dropzone/dropzone.js') }}"></script>
+    <link href="{{ asset('js/dropzone/dropzone.css') }}" rel="stylesheet">
+    
 </head>
 <body role="document">
     <div class="container-fluid" role="main">
         @yield('content')
     </div>
+    @yield('script')
 </body>
 </html>

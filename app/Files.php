@@ -22,7 +22,7 @@ class Files extends Model
     
     public function fileLinkNotes()
     {
-        return $this->hasMany('App\FileLinkNotes', 'file_id', 'file_id');
+        return $this->hasOne('App\FileLinkNotes', 'file_id', 'file_id');
     }
     
     public static function cleanFileName($path, $fileName)
