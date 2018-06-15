@@ -4,9 +4,13 @@
 // Variables
 @import "variables";
 
-// Bootstrap
+// Third Party Libraries
 @import '~bootstrap/scss/bootstrap';
+@import '~font-awesome/scss/font-awesome';
+@import '~dropzone/dist/dropzone';
+@import '~datatables.net-bs4/css/dataTables.bootstrap4';
 
+//  Shared styles between all layouts
 @import 'fileDrag';
 
 body {

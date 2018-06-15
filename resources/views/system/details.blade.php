@@ -193,6 +193,7 @@
         {
             $('#form-errors').append('<h5>'+val+'</h5>');
         });
+        console.log(data);
     }
 </script>
 @endsection

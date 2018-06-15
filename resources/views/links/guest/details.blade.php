@@ -69,7 +69,6 @@ $(document).ready(function()
         height: '200',
         plugins: 'autolink table'
     });
-    Dropzone.autoDiscover = false;
     multiFileDrop($('#new-file-form'));
 });
     
@@ -79,6 +78,7 @@ function uploadComplete(res)
     var name = $('#name').val();
     $('#new-file-form')[0].reset();
     $('#name').val(name);
+    resetProgressBar();
 }
 function uploadFailed(res)
 {

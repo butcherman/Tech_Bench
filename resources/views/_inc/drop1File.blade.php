@@ -4,3 +4,4 @@
         <input type="file" name="file">
     </div>
 </div>
+@include('_inc.progressBar')

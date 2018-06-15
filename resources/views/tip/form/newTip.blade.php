@@ -77,6 +77,8 @@ $(document).ready(function()
             uploadMultiple: true,
             parallelUploads: 10,
             maxFiles: 10,
+            maxFilesize: maxUpload,
+            addRemoveLinks: true,
             init: function()
             {
                 var myDrop = this;
@@ -92,6 +94,7 @@ $(document).ready(function()
                     {
                         if(myDrop.getQueuedFiles().length > 0)
                         {
+                            $('#forProgressBar').show();
                             myDrop.processQueue();
                         }
                         else
@@ -123,6 +126,16 @@ $(document).ready(function()
                     {
                         formData.append('sysTags[]', $(this).data('value'));
                     });
+                });
+                this.on('totaluploadprogress', function(progress)
+                {
+                    $("#progressBar").css("width", Math.round(progress)+"%");
+                    $("#progressStatus").text(Math.round(progress)+"%");
+                    console.log(progress);
+                });
+                this.on('reset', function()
+                {
+                    $('#form-errors').addClass('d-none');
                 });
                 this.on('successmultiple', function(files, response)
                 {    
