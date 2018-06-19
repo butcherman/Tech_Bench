@@ -157,6 +157,7 @@ class CustomerSystemsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $system = CustomerSystems::find($id);
+        $system->delete();
     }
 }

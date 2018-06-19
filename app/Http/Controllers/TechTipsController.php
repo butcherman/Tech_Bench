@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\SystemTypes;
 use App\SystemCategories;
-use App\Users;
+use App\User;
 use App\Files;
 use App\TechTips;
 use App\TechTipFiles;
 use App\TechTipSystems;
 use App\TechTipComments;
 use App\TechTipFavs;
+use App\Mail\NewTechtip;
 
 class TechTipsController extends Controller
 {
@@ -147,6 +149,10 @@ class TechTipsController extends Controller
             }
         }
         
+        //  Email the techs of the new tip
+        $tipData = TechTips::find($tipID);
+        Mail::to(User::all())->send(new newTechtip($tipData));
+        
         return $tipID;
     }
 
@@ -156,7 +162,7 @@ class TechTipsController extends Controller
         $tipData = TechTips::where('tip_id', $id)->with('user')->first();
         if(empty($tipData))
         {
-            return 'tip not found';
+            return view('err.tipNotFound');
         }
         
         $tipFiles = TechTipFiles::where('tip_id', $id)

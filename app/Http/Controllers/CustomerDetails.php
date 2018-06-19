@@ -49,13 +49,12 @@ class CustomerDetails extends Controller
     //  Display customer details
     public function details($id, $name)
     {
-//        $custDetails = Customers::where('name', urldecode($id))->first();
         $custDetails = Customers::find($id);
         
         //  Check for empty data set
         if(empty($custDetails))
         {
-            return 'Customer Not Found';
+            return view('err.customerNotFound');
         }
 
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();

@@ -20,8 +20,12 @@ Route::prefix('file-links')->name('userLink.')->group(function()
 Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function()
 {
     ///////////////////////////  Basic User Routes  /////////////////////////////////////////
-    Route::get('/about', 'PagesController@about')->name('about');
-    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('about', 'PagesController@about')->name('about');
+    Route::get('account', 'AccountController@index')->name('account');
+    Route::get('account/change-password', 'AccountController@changePassword')->name('changePassword');
+    Route::post('account/change-password', 'AccountController@submitPassword')->name('submitPassword');
+    Route::post('account/{id}', 'Accountcontroller@submit')->name('submitAccount');
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     
     //////////////////////////  System Routes  ////////////////////////////////////////////
     Route::prefix('system')->name('system.')->group(function()
@@ -75,4 +79,21 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
         Route::get('details/{id}/{name}', 'FileLinksController@details')->name('info');
         Route::get('/', 'FileLinksController@index')->name('index');
     });
+});
+
+
+
+
+
+/////////////////////  Testing Routes  ///////////////////////////////////
+
+Route::get('mailTest', function()
+{
+   $tipData = App\TechTips::find(7);
+
+//               echo '<pre>';
+//               print_r($tipData);
+//               die();
+
+   return new App\Mail\NewTechtip($tipData);
 });

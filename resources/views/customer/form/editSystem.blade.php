@@ -13,3 +13,8 @@
     @endforeach
     {{ Form::bsSubmit('Update System') }}
 {!! Form::close() !!}
+<div class="row justify-content-center pad-top">
+    <div class="col-4">
+        <button class="btn btn-warning btn-block" id="delete-system" data-id="{{$id}}">Delete System</button>
+    </div>
+</div>

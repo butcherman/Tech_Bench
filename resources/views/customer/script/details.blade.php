@@ -106,6 +106,32 @@
             });
         });
     });
+    //  Confirmation box to delete a system
+    $('#edit-modal').on('click', '#delete-system', function()
+    {
+        var url = '{{route('customer.systems.destroy', ['id' => ':id'])}}';
+        url = url.replace(':id', $(this).data('id'));
+        $('#edit-modal').find('.modal-title').text('Confirm Delete System');
+        $('#edit-modal').find('.modal-body').load('{{route('confirm')}}', function()
+        {
+            $('.select-yes').on('click', function()
+            {
+                $.ajax(
+                {
+                    url: url,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res)
+                    {
+                        resetEditModal();
+                        loadSystems();
+                    }
+                });
+            });
+        });
+    });
     
     /////////////////////// Contacts Events //////////////////////////
     //  Load the add contact form

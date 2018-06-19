@@ -95,7 +95,7 @@
                 </li>
 -->
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Account Settings">
-                    <a class="nav-link" href="/account">
+                    <a class="nav-link" href="{{route('account')}}">
                         <i class="fa fa-fw fa-user"></i>
                         <span class="nav-link-text">Account Settings</span>
                     </a>

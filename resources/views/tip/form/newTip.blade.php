@@ -109,7 +109,7 @@ $(document).ready(function()
                             });
                             $.post(form.attr('action'), form.serialize(), function(data)
                             {
-                                console.log(data);
+                                uploadComplete(data);
                             });
                         }
                     }

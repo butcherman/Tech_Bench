@@ -16,6 +16,7 @@ class CreateTechTipsTable extends Migration
         Schema::create('tech_tips', function (Blueprint $table) {
             $table->increments('tip_id');
             $table->integer('user_id')->unsigned();
+            $table->boolean('public')->default(0);
             $table->text('subject');
             $table->longText('description');
             $table->timestamps();

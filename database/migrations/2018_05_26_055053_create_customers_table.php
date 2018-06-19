@@ -22,6 +22,7 @@ class CreateCustomersTable extends Migration
             $table->text('state');
             $table->integer('zip');
             $table->boolean('active')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
