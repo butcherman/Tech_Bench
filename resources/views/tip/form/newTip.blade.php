@@ -35,6 +35,7 @@
         </div>
     </div>
 </div>
+@include('_inc.modal')
 @endsection
 
 @section('script')
@@ -99,6 +100,8 @@ $(document).ready(function()
                         }
                         else
                         {
+                            $('#edit-modal').modal('show');
+                            $('#edit-modal').find('.modal-dialog').html('<div class="jumbotron text-center h-50"><i class="fa fa-circle-o-notch fa-spin fa-5x" aria-hidden="true"></i></div>');
                             tinymce.triggerSave();
                             $('.tech-tip-tag').each(function()
                             {

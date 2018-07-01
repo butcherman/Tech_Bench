@@ -48,7 +48,7 @@
                         <ul class="sidenav-second-level collapse" id="collapseAdmin">
                             @if($current_user->hasAnyRole('installer'))
                                 <li>
-                                    <a href="#">Site Administration</a>
+                                    <a href="{{route('installer.index')}}">Site Administration</a>
                                 </li>
                             @endif
                             @if($current_user->hasAnyRole(['installer', 'admin']))

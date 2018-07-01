@@ -3,6 +3,7 @@ require('./bootstrap');
 require('jquery-easing');
 require('datatables.net-bs4');
 require('dropzone');
+require('select2');
 //require('clipboard');
 
 $(document).ready(function()

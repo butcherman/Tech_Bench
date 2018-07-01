@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use App\SystemTypes;
 use App\SystemCategories;
 use App\User;
+use App\UserSettings;
 use App\Files;
 use App\TechTips;
 use App\TechTipFiles;
@@ -151,7 +152,8 @@ class TechTipsController extends Controller
         
         //  Email the techs of the new tip
         $tipData = TechTips::find($tipID);
-        Mail::to(User::all())->send(new newTechtip($tipData));
+        $userList = UserSettings::where('em_tech_tip', 1)->join('users', 'user_settings.user_id', '=', 'users.user_id')->get();
+        Mail::to($userList)->send(new newTechtip($tipData));
         
         return $tipID;
     }
