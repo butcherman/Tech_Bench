@@ -56,9 +56,11 @@
                                     <a href="#">Administration</a>
                                 </li>
                             @endif
+<!--
                             <li>
                                 <a href="#">Reports</a>
                             </li>
+-->
                         </ul>
                     </li>
                 @endif

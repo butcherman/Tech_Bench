@@ -8,12 +8,26 @@
         </div>
     </div>
     <div class="row justify-content-center">
+<!--
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header"><strong>System Settings</strong></div>
-                <div class="card-body"></div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <a href="{{route('installer.customize')}}" class="category-button btn btn-link btn-block">System Customization</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="" class="category-button btn btn-link btn-block">Email Settings</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="" class="category-button btn btn-link btn-block">Features</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
+-->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header"><strong>Categories and Systems</strong></div>

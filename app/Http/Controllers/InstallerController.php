@@ -15,6 +15,7 @@ class InstallerController extends Controller
         $this->middleware('auth');
     }
     
+    //  Home page for Installer Functions
     public function index()
     {
         //  Get the list of system categories
@@ -42,11 +43,25 @@ class InstallerController extends Controller
         ]); 
     }
     
+//    //  System customization form
+//    public function customizeSystem()
+//    {
+//        return view('installer.form.customize');
+//    }
+//    
+//    
+//    public function submitCustom(Request $request)
+//    {
+//        return $request->all();
+//    }
+    
+    //  Form to create a new Category
     public function newCat()
     {
         return view('installer.form.newCat');
     }
     
+    //  Submit the new Category
     public function submitCat(Request $request)
     {
         $request->validate([
@@ -59,7 +74,8 @@ class InstallerController extends Controller
         
         return redirect()->back()->with('success', 'Category Successfully Added. <a href="'.route('installer.newSys', urlencode($cat->name)).'">Add System</a>');
     }
-                                      
+     
+    //  Form to add a new system
     public function newSystem($cat)
     {
         $dropDown = SystemCustDataTypes::orderBy('name', 'ASC')->get();
@@ -70,6 +86,7 @@ class InstallerController extends Controller
         ]);
     }
     
+    //  Submit the new system
     public function submitSys($cat, Request $request)
     {
         $catName = SystemCategories::where('name', urldecode($cat))->first()->cat_id;
@@ -113,6 +130,7 @@ class InstallerController extends Controller
         return redirect()->back()->with('success', 'System Successfully Added');//
     }
     
+    //  Form to edit an existing system
     public function editSystem($sysName)
     {        
         $sysData = SystemTypes::where('name', urldecode($sysName))->first();
@@ -129,6 +147,7 @@ class InstallerController extends Controller
         ]);
     }
     
+    //  Submit the edited system
     public function submitEditSystem($sysID, Request $request)
     {
         $sysName = SystemTypes::find($sysID)->name;
@@ -161,7 +180,10 @@ class InstallerController extends Controller
                         //  See if the order has changed
                         if($type->order != $i)
                         {
-                            SystemCustDataFileds::find($type->field_id)->update('order', $i);
+                            SystemCustDataFields::find($type->field_id)->update(
+                            [
+                                'order' => $i
+                            ]);
                         }
                     }
                 }

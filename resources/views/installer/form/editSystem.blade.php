@@ -82,7 +82,6 @@
 @section('script')
 <script>
     selectInit();
-//    $('.customer-field').on
     $('.edit-system').on('submit', function(e)
     {
         e.preventDefault();
