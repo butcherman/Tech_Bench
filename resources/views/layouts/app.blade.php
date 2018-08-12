@@ -53,7 +53,7 @@
                             @endif
                             @if($current_user->hasAnyRole(['installer', 'admin']))
                                 <li>
-                                    <a href="#">Administration</a>
+                                    <a href="{{route('admin.index')}}">Administration</a>
                                 </li>
                             @endif
 <!--

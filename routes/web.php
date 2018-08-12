@@ -81,6 +81,17 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
     });
 });
 
+//  Administration Routes
+Route::group(['middleware' => 'roles', 'roles' => ['installer', 'admin']], function()
+{
+    Route::prefix('admin')->name('admin.')->group(function()
+    {
+        Route::post('resetPass/{id}', 'UserController@resetPassword')->name('resetPass');
+        Route::resource('users', 'UserController');
+        Route::get('/', 'AdminController@index')->name('index');                                              
+    });
+});
+
 //  Installer Routes
 Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
 {

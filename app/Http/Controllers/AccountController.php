@@ -33,18 +33,18 @@ class AccountController extends Controller
     public function submit($userID, Request $request)
     {
         $request->validate = [
-            'username' => 'required',
+            'username'   => 'required',
             'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
+            'last_name'  => 'required',
+            'email'      => 'required',
         ];
 
         User::find($userID)->update(
         [
-            'username' => $request->username,
+            'username'   => $request->username,
             'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email
+            'last_name'  => $request->last_name,
+            'email'      => $request->email
         ]);
         
         UserSettings::where('user_id', $userID)->update(

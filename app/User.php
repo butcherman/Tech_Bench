@@ -30,6 +30,11 @@ class User extends Authenticatable
     //  Database primary key
     protected $primaryKey = 'user_id';
     
+    public function UserLogins()
+    {
+        return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
+    }
+    
     public function systemFiles()
     {
         return $this->hasMany('App\SystemFiles', 'user_id', 'user_id');
