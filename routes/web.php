@@ -86,9 +86,11 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer', 'admin']], funct
 {
     Route::prefix('admin')->name('admin.')->group(function()
     {
+        Route::get('links/show/{id}', 'AdminController@showLinks')->name('showLinks');
+        Route::get('links', 'AdminController@links')->name('links');
         Route::post('resetPass/{id}', 'UserController@resetPassword')->name('resetPass');
         Route::resource('users', 'UserController');
-        Route::get('/', 'AdminController@index')->name('index');                                              
+        Route::get('/', 'AdminController@index')->name('index');
     });
 });
 
@@ -107,7 +109,6 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
         Route::get('/', 'InstallerController@index')->name('index');
         
         //////////////////////////  System Customization Routes  ////////////////////////////
-        
         Route::post('system-customization', 'InstallerController@submitCustom')->name('submitCustomize');
         Route::get('system-customization', 'InstallerController@customizeSystem')->name('customize');
     });

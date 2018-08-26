@@ -14,6 +14,6 @@ class PagesController extends Controller
     
     public function about()
     {
-        echo 'about';
+        return view('about');
     }
 }

@@ -17,11 +17,13 @@
                             <a href="{{route('admin.users.index')}}" class="category-button btn btn-link btn-block">Users</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="#" class="category-button btn btn-link btn-block">File Links</a>
+                            <a href="{{route('admin.links')}}" class="category-button btn btn-link btn-block">File Links</a>
                         </li>
+<!--
                         <li class="list-group-item">
                             <a href="#" class="category-button btn btn-link btn-block">Customers</a>
                         </li>
+-->
                     </ul>
                 </div>
             </div>

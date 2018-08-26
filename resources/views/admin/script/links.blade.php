@@ -70,7 +70,7 @@ $(document).ready(function()
 //  Function to load file links
 function loadLinks()
 {
-    var url = '{{route('links.details.show', ['id' => $current_user->user_id])}}';
+    var url = '{{route('links.details.show', ['id' => $userID])}}';
     $('#file-links-table').find('tbody').load(url, function()
     {
         $('[data-tooltip="tooltip"]').tooltip();

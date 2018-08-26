@@ -62,7 +62,7 @@ class User extends Authenticatable
     
     public function fileLinks()
     {
-        return $this->belongsTo('App\FileLinks');
+        return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
     }
     
     //  Functions for authentication roles
