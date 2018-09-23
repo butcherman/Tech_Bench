@@ -121,11 +121,11 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
 
 Route::get('mailTest', function()
 {
-   $tipData = App\TechTips::find(7);
+//   $tipData = App\TechTips::find(1);
 
 //               echo '<pre>';
 //               print_r($tipData);
 //               die();
-
-   return new App\Mail\NewTechtip($tipData);
+    $linkData = App\FileLinks::find(1);
+   return new App\Mail\NewLinkFile($linkData);
 });

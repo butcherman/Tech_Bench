@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
 use App\FileLinkNotes;
+use App\User;
+use App\Mail\newLinkFile;
 
 class UserLinksController extends Controller
 {
@@ -18,10 +21,6 @@ class UserLinksController extends Controller
     public function details($id)
     {
         $details = FileLinks::where('link_hash', $id)->first();
-        
-        
-        
-        
         
         $files = FileLinkFiles::where('link_id', $details->link_id)
             ->where('upload', false)
@@ -35,7 +34,6 @@ class UserLinksController extends Controller
         ]);
     }
     
-    
     public function uploadFiles($hash, Request $request)
     {
         $request->validate = ['name' => 'required', 'file' => 'required'];
@@ -46,7 +44,6 @@ class UserLinksController extends Controller
 
         foreach($request->file as $file)
         {
-            echo 'file ';
             //  Clean the file and store it
             $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
             $file->storeAs($filePath, $fileName);
@@ -75,6 +72,10 @@ class UserLinksController extends Controller
                 ]);
             }
         }
+        
+        //  Send email to the creator of the link
+        $user = User::find($details->user_id);
+        Mail::to($user)->send(new newLinkFile($details));
         
         return $request->all();
     }

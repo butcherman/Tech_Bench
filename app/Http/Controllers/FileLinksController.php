@@ -34,10 +34,17 @@ class FileLinksController extends Controller
     {
         $request->validate = ['name' => 'required', 'expire' => 'required'];
         
+        //  Generate a random hash to use as the file link and make sure it is not already in use
+        do
+        {
+            $hash = strtolower(str_random(15));
+            $dup = FileLinks::where('link_hash', $hash)->get()->count();
+        }while($dup != 0);
+        
         //  Create the new file link
         $link = FileLinks::create([
             'user_id'      => Auth::user()->user_id,
-            'link_hash'    => strtolower(str_random(15)),
+            'link_hash'    => $hash,
             'link_name'    => $request->name,
             'expire'       => $request->expire,
             'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
@@ -172,8 +179,7 @@ class FileLinksController extends Controller
         $linkData = FileLinks::find($id);
         
         return view('links.form.editLink', [
-            'data' => $linkData,
-            'type' => $type
+            'data' => $linkData
         ]);
     }
 
