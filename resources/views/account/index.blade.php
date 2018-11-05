@@ -39,6 +39,7 @@
                         Receive Email on New Tech Tip 
                     </div>
                 </div>
+<!--
                 <div class="row justify-content-center">
                     <div class="col-8">
                         <label class="switch">
@@ -48,6 +49,7 @@
                         Receive Email on Uploaded File to File Link 
                     </div>
                 </div>
+-->
                 <div class="row justify-content-center">
                     <div class="col-8">
                         <label class="switch">

@@ -1,10 +1,10 @@
 {!! Form::open(['route' => 'customer.search', 'id' => 'search-customer-form']) !!}
     <div class="form-group row justify-content-center">
         <div class="col-md-4">
-            {{ Form::text('customer', '', ['class' => 'form-control', 'Placeholder' => 'Search Customer by Name', 'autofocus']) }}
+            {{ Form::text('customer', '', ['class' => 'form-control', 'id' => 'search-name', 'Placeholder' => 'Search Customer by Name', 'autofocus']) }}
         </div>
         <div class="col-md-3">
-            {{ Form::text('city', '', ['class' => 'form-control', 'placeholder' => 'Search Customer by City']) }}
+            {{ Form::text('city', '', ['class' => 'form-control', 'id' => 'search-city', 'placeholder' => 'Search Customer by City']) }}
         </div>
         <div class="col-md-3">
             {{ Form::select('system', $systems, null, ['class' => 'form-control', 'placeholder' => 'Search by System']) }}

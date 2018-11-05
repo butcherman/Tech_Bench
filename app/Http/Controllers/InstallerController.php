@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\SystemCustDataFields;
 use App\SystemCustDataTypes;
 use App\SystemCategories;
@@ -72,6 +74,8 @@ class InstallerController extends Controller
             'name' => $request->name
         ]);
         
+        Log::info('New System Category Created', ['cat_name' => $request->name, 'user_id' => Auth::user()->user_id]);
+        
         return redirect()->back()->with('success', 'Category Successfully Added. <a href="'.route('installer.newSys', urlencode($cat->name)).'">Add System</a>');
     }
      
@@ -126,6 +130,8 @@ class InstallerController extends Controller
                 $i++;
             }
         }
+        
+        Log::info('New System Created', ['cat_id' => $request->catName, 'sys_name' => $request->name, 'user_id' => Auth::user()->user_id]);
         
         return redirect()->back()->with('success', 'System Successfully Added');//
     }
@@ -214,6 +220,8 @@ class InstallerController extends Controller
             
             $i++;
         }
+        
+        Log::info('System Updated', ['sys_id' => $sysID, 'user_id' => Auth::user()->user_id]);
         
         return redirect(route('installer.editSystem', $request->name))->with('success', 'System Successfully Updated');
     }

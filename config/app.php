@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Tech Bench'),
 
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'America/Los_Angeles',
+    'timezone' => env('TIMEZONE', 'America/Los_Angeles'),
 
     /*
     |--------------------------------------------------------------------------

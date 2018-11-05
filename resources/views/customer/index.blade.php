@@ -76,6 +76,26 @@
                 }
             });
         }
+        
+        //  Filter the "Customer Name"
+        $("#search-name").on("keyup", function() 
+        {
+            var value = $(this).val().toLowerCase();
+            $("#dataTable tr").filter(function() 
+            {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+        
+        //  Filter the "City"
+        $("#search-city").on("keyup", function() 
+        {
+            var value = $(this).val().toLowerCase();
+            $("#dataTable tr").filter(function() 
+            {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
     });
 </script>
 @endsection

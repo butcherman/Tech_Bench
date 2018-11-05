@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use JeroenDesloovere\VCard\VCard;
 use App\Customers;
 use App\CustomerContactPhones;
@@ -62,6 +64,8 @@ class CustomerContactsController extends Controller
                 }
             }
         }
+        
+        Log::info('Customer Contact Created', ['cust_id' => $request['custID'], 'cont_id' => $contID, 'user_id' => Auth::user()->user_id]);
     }
 
     //Show all customer contacts
@@ -120,12 +124,16 @@ class CustomerContactsController extends Controller
                 ]);
             }
         }
+        
+        Log::info('Customer Contact Updated', ['cont_id' => $contID, 'user_id' => Auth::user()->user_id]);
     }
 
     //  Delete customer contact
     public function destroy($id)
     {
-        CustomerContacts::find($id)->delete();
+        $cont = CustomerContacts::find($id);
+        
+        Log::info('Customer Contat Deleted', ['cont_id' => $id, 'cust_id' => $cont->cust_id, 'user_id' => Auth::user()->user_id]);
     }
     
     //  Download the contact informaiton as a V-Card

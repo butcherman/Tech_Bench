@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class Files extends Model
 {
@@ -67,6 +69,8 @@ class Files extends Model
             $fileData->delete();
             
             Storage::delete($fileLink);
+            
+            Log::info('File Deleted', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
         }
         catch(Exception $e)
         {

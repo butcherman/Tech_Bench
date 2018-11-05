@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Files;
 use App\SystemTypes;
 use App\SystemFiles;
@@ -85,6 +87,8 @@ class SystemFilesController extends Controller
             'description' => $request['description'],
             'user_id'     => \Auth::user()->user_id
         ]);
+        
+        Log::info('File Added For System', ['sys_id' => $sysID, 'file_id' => $fileID, 'user_id' => Auth::user()->user_id]);
     }
 
     //  Form to show a file to edit
@@ -104,6 +108,8 @@ class SystemFilesController extends Controller
             'name'        => $request['name'],
             'description' => $request['description']
         ]);
+        
+        Log::info('File Information Updated For System', ['sys_file_id' => $id, 'user_id' => Auth::user()->user_id]);
     }
     
     //  Load the replace file form
@@ -141,7 +147,9 @@ class SystemFilesController extends Controller
         
         SystemFiles::find($id)->update([
             'file_id' => $fileID
-        ]);        
+        ]);   
+        
+        Log::info('File Replaced For System', ['file_id' => $fileID, 'user_id' => Auth::user()->user_id]);
     }
 
     //  Remove a file from the system files table
@@ -150,6 +158,9 @@ class SystemFilesController extends Controller
         //  Remove the file from SystemFiles table
         $data = SystemFiles::find($id);
         $fileID = $data->file_id;
+        
+        Log::info('File Deleted For System', ['sys_id' => $data->sys_id, 'file_id' => $fileID, 'user_id' => Auth::user()->user_id]);
+        
         $data->delete();
         
         //  Delete from system if no longer in use

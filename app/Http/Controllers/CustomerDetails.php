@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\CustomerFavs;
 use App\Customers;
 
@@ -39,6 +40,8 @@ class CustomerDetails extends Controller
         //  Create the customer data folder
         $path = env('CUST_FOLDER', false).DIRECTORY_SEPARATOR.$request['cust_id'];
         Storage::makeDirectory($path);
+        
+        Log::info('New Customer Created', ['cust_id' => $request->cust_id, 'user_id' => Auth::user()->user_id]);
         
         return view('customer.newCustomer', [
             'cust_id' => $request->cust_id,
@@ -85,6 +88,8 @@ class CustomerDetails extends Controller
         ]);
         
         $custData = Customers::find($id)->update($request->all());
+        
+        Log::info('Customer Info Updated', ['cust_id' => $id, 'user_id' => Auth::user()->user_id]);
         
         return redirect()->route('customer.id.show', [
             'id' => urlencode($request->name)

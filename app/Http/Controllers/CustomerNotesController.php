@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Customers;
 use App\CustomerNotes;
 
@@ -30,13 +31,15 @@ class CustomerNotesController extends Controller
             'note'        => 'required'
         ]);
         
-        CustomerNotes::create([
+        $noteID = CustomerNotes::create([
             'cust_id'     => $request->custID,
             'user_id'     => Auth::user()->user_id,
             'urgent'      => isset($request->urgent) && $request->urgent ? true : false,
             'subject'     => $request->subject,
             'description' => $request->note
         ]);
+        
+        Log::info('Customer Note Created', ['cust_id' => $request->custID, 'note_id' => $noteID->note_id, 'user_id' => Auth::user()->user_id]);
     }
 
     //  Show all customer notes
@@ -74,6 +77,8 @@ class CustomerNotesController extends Controller
             'subject'     => $request->subject,
             'description' => $request->description
         ]);
+        
+        Log::info('Customer Note Updated', ['note_id' => $id, 'user_id' => Auth::user()->user_id]);
     }
 
     /**

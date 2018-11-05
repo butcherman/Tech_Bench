@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\SystemTypes;
 use App\SystemCategories;
@@ -154,6 +155,8 @@ class TechTipsController extends Controller
         $tipData = TechTips::find($tipID);
         $userList = UserSettings::where('em_tech_tip', 1)->join('users', 'user_settings.user_id', '=', 'users.user_id')->get();
         Mail::to($userList)->send(new newTechtip($tipData));
+        
+        Log::info('Tech Tip Created', ['tip_id' => $tipID, 'user_id' => Auth::user()->user_id]);
         
         return $tipID;
     }
@@ -329,6 +332,8 @@ class TechTipsController extends Controller
                 ]);
             }
         }
+        
+        Log::info('Tech Tip Updated', ['tip_id' => $id, 'user_id' => Auth::user()->user_id]);
         
         return $id;
     }

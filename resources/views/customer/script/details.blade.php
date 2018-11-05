@@ -219,7 +219,6 @@
     //  Load the new note form
     $('#customer-notes').on('click', '#new-note-link', function()
     {
-        $('#custID').val(custID);
         if (typeof tinymce != 'undefined' && tinymce != null) {
             tinymce.remove();
         }
@@ -232,6 +231,7 @@
                 height: '400',
                 plugins: 'autolink'
             });
+            $('#custID').val(custID);
             $('#new-note-form').on('submit', function(e)
             {
                 e.preventDefault();

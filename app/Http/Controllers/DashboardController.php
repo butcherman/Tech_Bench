@@ -17,7 +17,6 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
-        //  
         $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
             ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
             ->get();

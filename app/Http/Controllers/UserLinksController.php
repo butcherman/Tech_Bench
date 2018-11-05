@@ -22,11 +22,22 @@ class UserLinksController extends Controller
     {
         $details = FileLinks::where('link_hash', $id)->first();
         
+        //  Verify that the link is valid
+        if(empty($details))
+        {
+            return view('links.guest.badLink');
+        }
+        //  Verify that the link has not expired
+        else if($details->expire <= date('Y-m-d'))
+        {
+            return view('links.guest.expiredLink');
+        }
+        
         $files = FileLinkFiles::where('link_id', $details->link_id)
             ->where('upload', false)
             ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
             ->get();
- 
+        
         return view('links.guest.details', [
             'details' => $details,
             'files' => $files,
@@ -80,3 +91,4 @@ class UserLinksController extends Controller
         return $request->all();
     }
 }
+ 

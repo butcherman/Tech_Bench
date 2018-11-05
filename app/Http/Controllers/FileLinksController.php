@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
@@ -75,8 +76,13 @@ class FileLinksController extends Controller
                     'user_id'  => Auth::user()->user_id,
                     'upload'   => 0
                 ]);
+                
+                //  Log stored file
+                Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
             }
         }
+        
+        Log::info('File Link Created', ['link_id' => $linkID, 'user_id' => Auth::user()->user_id]);
         
         return $linkID;
     }
@@ -162,6 +168,9 @@ class FileLinksController extends Controller
                 'user_id'  => Auth::user()->user_id,
                 'upload'   => 0
             ]);
+            
+            //  Log stored file
+            Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
         }
     }
     
@@ -193,6 +202,8 @@ class FileLinksController extends Controller
             'expire'       => $request->expire,
             'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
         ]);
+        
+        Log::info('File Link Updated', ['link_id' => $id]);
     }
     
     //  Delete a file attached to a link
@@ -223,5 +234,7 @@ class FileLinksController extends Controller
         }
         
         $link = FileLinks::find($id)->delete();
+        
+        Log::info('File link deleted', ['link_id' => $id, 'user_id' => Auth::user()->user_id]);
     }
 }

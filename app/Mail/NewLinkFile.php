@@ -33,6 +33,7 @@ class NewLinkFile extends Mailable
      */
     public function build()
     {
-        return $this->markdown('email.newLinkFile');
+        return $this->subject('New File Uploaded')->markdown('email.newLinkFile');
     }
 }
+ 

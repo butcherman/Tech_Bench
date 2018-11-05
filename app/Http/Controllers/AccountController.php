@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\User;
 use App\UserSettings;
@@ -55,6 +56,8 @@ class AccountController extends Controller
             'auto_del_link'   => isset($request->auto_del_link) && $request->auto_del_link === 'on' ? true : false,
         ]);
         
+        Log::info('User Info Updated', ['user_id' => Auth::user()->user_id]);
+        
         session()->flash('success', 'User Settings Updated');
         
         return redirect(route('account'));
@@ -91,6 +94,8 @@ class AccountController extends Controller
         $user = Auth::user();
         $user->password = bcrypt($request->newPass);
         $user->save();
+        
+        Log::info('User Changed Password', ['user_id' => Auth::user()->user_id]);
         
         return redirect()->back()->with('success', 'Password Changed Successfully');
     }

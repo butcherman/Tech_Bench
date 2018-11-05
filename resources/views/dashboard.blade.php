@@ -27,7 +27,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <div class="col-12"><h3 class="text-center">No Favorites</h3></div>
+                            <div class="col-12"><h3 class="text-center">No Customer Favorites</h3></div>
                         @endif
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             @foreach($tipFavs as $fav)
                                 <div class="col-xl-3 col-sm-6 mb-3">
                                     <div class="card text-white bg-info o-hidden h-100">
-                                        <a href="{{route('customer.details', [$fav->tip_id, urlencode($fav->subject)])}}" class="card-body text-white">
+                                        <a href="{{route('tip.details', [$fav->tip_id, urlencode($fav->subject)])}}" class="card-body text-white">
                                             <div class="card-body-icon">
                                                 <i class="fa fa-fw fa-user"></i>
                                             </div>
@@ -54,7 +54,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <div class="col-12"><h3 class="text-center">No Favorites</h3></div>
+                            <div class="col-12"><h3 class="text-center">No Tech Tip Favorites</h3></div>
                         @endif
                     </div>
                 </div>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\SystemTypes;
 use App\SystemCategories;
 use App\SystemCustDataFields;
@@ -60,6 +62,8 @@ class CustomerSystemsController extends Controller
                 'value' => $field
             ]);
         }
+        
+        Log::info('Customer System Added', ['cust_id' => $request->cust_id, 'sys_id' => $request->sys_id, 'user_id' => Auth::user()->user_id]);
         
         return 'success';
     }
@@ -146,6 +150,8 @@ class CustomerSystemsController extends Controller
             CustomerSystemFields::where('cust_sys_id', $id)->where('field_id', $fieldID)->update(['value' => $field]);
         }
         
+        Log::info('Customer System Updated', ['sys_id' => $id, 'user_id' => Auth::user()->user_id]);
+        
         return response('success');
     }
 
@@ -158,6 +164,9 @@ class CustomerSystemsController extends Controller
     public function destroy($id)
     {
         $system = CustomerSystems::find($id);
+        
+        Log::info('Customer System Deleted', ['cust_id' => $system->cust_id, 'sys_id' => $id, 'user_id' => Auth::user()->user_id]);
+        
         $system->delete();
     }
 }
