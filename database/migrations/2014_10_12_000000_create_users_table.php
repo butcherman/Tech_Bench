@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\User;
 
 class CreateUsersTable extends Migration
 {
@@ -24,6 +25,16 @@ class CreateUsersTable extends Migration
             $table->boolean('active');
             $table->timestamps();
         });
+        
+        User::create([
+            'user_id'    => 1,
+            'username'   => 'admin',
+            'first_name' => 'System',
+            'last_name'  => 'Administrator',
+            'email'      => 'text@em.com',
+            'password'   => bcrypt('password'),
+            'active'     => 1
+        ]);
     }
 
     /**

@@ -20,6 +20,8 @@ class CreateUserRoleTable extends Migration
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('role_id')->references('role_id')->on('roles')->onUpdate('cascade');
         });
+        
+        DB::insert('INSERT INTO `user_role` (`user_id`, `role_id`) VALUES (?, ?)', [1, 1]);
     }
 
     /**
