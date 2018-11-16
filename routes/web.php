@@ -24,7 +24,7 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
     Route::get('account', 'AccountController@index')->name('account');
     Route::get('account/change-password', 'AccountController@changePassword')->name('changePassword');
     Route::post('account/change-password', 'AccountController@submitPassword')->name('submitPassword');
-    Route::post('account/{id}', 'Accountcontroller@submit')->name('submitAccount');
+    Route::post('account/{id}', 'AccountController@submit')->name('submitAccount');
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     
     //////////////////////////  System Routes  ////////////////////////////////////////////

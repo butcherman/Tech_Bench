@@ -56,7 +56,7 @@ class SystemController extends Controller
     public function fields($sysID)
     {
         $sysFields = SystemCustDataFields::where('sys_id', $sysID)
-            ->join('System_Cust_Data_Types', 'System_Cust_Data_Types.data_type_id', '=', 'System_Cust_Data_Fields.data_type_id')
+            ->join('system_cust_data_types', 'system_cust_data_types.data_type_id', '=', 'system_cust_data_fields.data_type_id')
             ->orderBy('order', 'ASC')
             ->get();
         
