@@ -1,15 +1,32 @@
 {
-    "name": "Tech-Bench",
-    "version": "3.0.0",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/butcherman/Tech_Bench.git"
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "watch": "npm run development -- --watch",
+        "watch-poll": "npm run watch -- --watch-poll",
+        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "prod": "npm run production",
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
-    "license": "GPL-2.0",
+    "devDependencies": {
+        "axios": "^0.18",
+        "bootstrap": "^4.0.0",
+        "popper.js": "^1.12",
+        "cross-env": "^5.1",
+        "jquery": "^3.2",
+        "laravel-mix": "^2.0",
+        "lodash": "^4.17.4",
+        "vue": "^2.5.7"
+    },
     "dependencies": {
-        "clipboard": "^2.0.0",
-        "gulp": "^3.9.1",
-        "gulp-bower": "0.0.13",
-        "gulp-file": "^0.3.0"
+        "clipboard": "^2.0.1",
+        "datatables.net-bs4": "1.10.16",
+        "dropzone": "^5.4.0",
+        "font-awesome": "^4.7.0",
+        "jquery-easing": "0.0.1",
+        "npm": "^6.0.0",
+        "select2": "^4.0.6-rc.1",
+        "tinymce": "^4.7.13"
     }
 }

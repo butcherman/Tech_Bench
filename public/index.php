@@ -1,42 +1,60 @@
 <?php
+
+/**
+ * Laravel - A PHP Framework For Web Artisans
+ *
+ * @package  Laravel
+ * @author   Taylor Otwell <taylor@laravel.com>
+ */
+
+define('LARAVEL_START', microtime(true));
+
 /*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
 |
-|   Tech Bench is a custom Content Management System (CMS) built to aid service technicians store and
-|   share information for the systems and customers they maintain.
-|
-|   Author  - Ron Butcher
-|   Version - 3.1.5
-|
-|   Index.php file is the initial file that will begin the application
-|   All necessary static classes will be called
+| Composer provides a convenient, automatically generated class loader for
+| our application. We just need to utilize it! We'll simply require it
+| into the script here so that we don't have to worry about manual
+| loading any of our classes later on. It feels great to relax.
 |
 */
 
-session_start();
+require __DIR__.'/../vendor/autoload.php';
 
-//  Define version information as Global Variables
-define('VERSION', '3.2.5');
-define('RELEASE', '4-23-2018');
-define('DBVERSION', '3.0');
+/*
+|--------------------------------------------------------------------------
+| Turn On The Lights
+|--------------------------------------------------------------------------
+|
+| We need to illuminate PHP development, so let us turn on the lights.
+| This bootstraps the framework and gets it ready for use, then it
+| will load up this application so that we can run it and send
+| the responses back to the browser and delight our users.
+|
+*/
 
-//  Call necessary required files
-require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../app/core/app.php';
-require_once __DIR__.'/../app/core/logs.php';
-require_once __DIR__.'/../app/core/config.php';
-require_once __DIR__.'/../app/core/controller.php';
-require_once __DIR__.'/../app/core/database.php';
-require_once __DIR__.'/../app/core/security.php';
-require_once __DIR__.'/../app/core/email.php';
-require_once __DIR__.'/../app/core/template.php';
-require_once __DIR__.'/../app/core/vcardDownloader.php';
-require_once __DIR__.'/../app/core/dbBackup.php';
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
-//  Initialize the necessary static classes
-Config::init();
-Database::init();
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request
+| through the kernel, and send the associated response back to
+| the client's browser allowing them to enjoy the creative
+| and wonderful application we have prepared for them.
+|
+*/
 
-date_default_timezone_set('America/Los_Angeles');
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
-//  Begin the application
-$app = new App;
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
+
+$response->send();
+
+$kernel->terminate($request, $response);

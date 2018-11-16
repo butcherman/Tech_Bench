@@ -1,13 +1,13 @@
-# Ignore File
-/logs/*.zip
-/logs/*.log
-/app/controllers/tech.php
-/vendor/*
 /node_modules
-/public/source/lib/*
-/config
-/composer.lock
-/package-lock.json
-/_files
-/backups/*
-!/backups/*.MD
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+/.idea
+/.vscode
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.env
