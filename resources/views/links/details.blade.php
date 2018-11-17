@@ -17,8 +17,8 @@
                         <dd class="col-9 text-left">{{$data->link_name}}</dd>
                         <dt class="col-3 text-right">Expire Date:</dt>
                         <dd class="col-9 text-left">{{date('M j, Y', strtotime($data->expire))}}</dd>
-                        <dt class="col-3 text-right">Allow Uploads</dt>
-                        <dd class="col-9 text-left">{{$data->allow_upload}}</dd>
+                        <dt class="col-3 text-right">Allow Uploads:</dt>
+                        <dd class="col-9 text-left">{{$data->allow_upload ? 'Yes' : 'No'}}</dd>
                         <dt class="col-3 text-right">Link:</dt>
                         <dd class="col-9 text-left"><a href="{{route('userLink.details', ['link' => $data->link_hash])}}" id="link-url" target="_blank">{{route('userLink.details', ['link' => $data->link_hash])}}</a></dd>
                     </dl>

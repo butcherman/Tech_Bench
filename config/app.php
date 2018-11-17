@@ -2,16 +2,27 @@
 
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
-    'version' => '4.0.0',
-    'release' => '11-15-2018',
+    
+    'version' => '4.0.1',
+    
+    'release' => '11-16-2018',
+    
     'env' => env('APP_ENV', 'production'),
+    
     'debug' => env('APP_DEBUG', false),
+    
     'url' => env('APP_URL', 'http://localhost'),
+    
     'timezone' => env('TIMEZONE', 'America/Los_Angeles'),
+    
     'locale' => 'en',
+    
     'fallback_locale' => 'en',
+    
     'key' => env('APP_KEY'),
+    
     'cipher' => 'AES-256-CBC',
+    
     'providers' => [
         /*
          * Laravel Framework Service Providers...

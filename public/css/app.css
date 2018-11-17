@@ -15433,6 +15433,7 @@ label {
 
 .bigger-note {
   height: 500px;
+  overflow-y: scroll;
 }
 
 .tech-tip-tag-wrapper {
