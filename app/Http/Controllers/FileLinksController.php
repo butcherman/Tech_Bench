@@ -105,6 +105,11 @@ class FileLinksController extends Controller
     {
         $linkData = FileLinks::find($id);
         
+        if(empty($linkData))
+        {
+            return view('links.badLink');
+        }
+        
         return view('links.details', [
             'data' => $linkData
         ]);

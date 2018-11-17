@@ -113,19 +113,3 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
         Route::get('system-customization', 'InstallerController@customizeSystem')->name('customize');
     });
 });
-
-
-
-
-/////////////////////  Testing Routes  ///////////////////////////////////
-
-Route::get('mailTest', function()
-{
-//   $tipData = App\TechTips::find(1);
-
-//               echo '<pre>';
-//               print_r($tipData);
-//               die();
-    $linkData = App\FileLinks::find(1);
-   return new App\Mail\NewLinkFile($linkData);
-});
