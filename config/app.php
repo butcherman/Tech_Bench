@@ -3,7 +3,7 @@
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
     
-    'version' => '4.0.1',
+    'version' => '4.0.2',
     
     'release' => '11-16-2018',
     
