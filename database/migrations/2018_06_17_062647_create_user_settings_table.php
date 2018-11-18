@@ -23,6 +23,8 @@ class CreateUserSettingsTable extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });
+        
+        DB::insert('INSERT INTO `user_settings` (`user_id`) VALUES (?)', [1]);
     }
 
     /**
