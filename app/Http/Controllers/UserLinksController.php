@@ -51,7 +51,7 @@ class UserLinksController extends Controller
             
         $details = FileLinks::where('link_hash', $hash)->first();
         
-        $filePath = env('LINK_FOLDER').DIRECTORY_SEPARATOR.$details->link_id;
+        $filePath = config(filesystem.links).DIRECTORY_SEPARATOR.$details->link_id;
 
         foreach($request->file as $file)
         {

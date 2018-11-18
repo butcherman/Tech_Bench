@@ -38,7 +38,7 @@ class CustomerDetails extends Controller
         Customers::create($request->all());
         
         //  Create the customer data folder
-        $path = env('CUST_FOLDER', false).DIRECTORY_SEPARATOR.$request['cust_id'];
+        $path = config(filesystem.customers).DIRECTORY_SEPARATOR.$request['cust_id'];
         Storage::makeDirectory($path);
         
         Log::info('New Customer Created', ['cust_id' => $request->cust_id, 'user_id' => Auth::user()->user_id]);

@@ -7,6 +7,8 @@ return [
     
     'release' => '11-16-2018',
     
+    'logo' => env('APP_LOGO', 'TechBenchLogo.png'),
+    
     'env' => env('APP_ENV', 'production'),
     
     'debug' => env('APP_DEBUG', false),
