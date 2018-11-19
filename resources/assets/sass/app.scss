@@ -39,6 +39,21 @@
     margin: 0;
 }
 
+//  Hide and show any sensitive fields in the customer system information
+.password-field {
+    > .password-shown {
+        display: none;
+    }
+    &:hover {
+        .password-hidden {
+            display: none;
+        }
+        .password-shown {
+            display: inline;
+        }
+    }
+}
+
 //  Customer Note
 .customer-note-card {
     .card {

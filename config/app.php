@@ -3,9 +3,9 @@
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
     
-    'version' => '4.0.2',
+    'version' => '4.1.0b',
     
-    'release' => '11-16-2018',
+    'release' => 'TBD',
     
     'logo' => env('APP_LOGO', 'TechBenchLogo.png'),
     

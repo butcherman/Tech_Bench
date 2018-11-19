@@ -7,7 +7,7 @@
             {{ Form::text('city', '', ['class' => 'form-control', 'id' => 'search-city', 'placeholder' => 'Search Customer by City']) }}
         </div>
         <div class="col-md-3">
-            {{ Form::select('system', $systems, null, ['class' => 'form-control', 'placeholder' => 'Search by System']) }}
+            {{ Form::select('system', $systems, null, ['class' => 'form-control', 'id' => 'search-system', 'placeholder' => 'Search by System']) }}
         </div>
         <div class="col-md-2">
             <div class="row justify-content-center">
