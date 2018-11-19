@@ -81,6 +81,8 @@
             </div>
         </div>
     </div>
+    <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Latest Tech Tips</h1></div>
+    @include('tip.searchResults')
     @include('_inc.modal')
 </div>
 @endsection

@@ -7,6 +7,7 @@ use App\SystemCategories;
 use App\SystemTypes;
 use App\SystemFileTypes;
 use App\SystemCustDataFields;
+use App\TechTips;
 
 class SystemController extends Controller
 {
@@ -29,6 +30,14 @@ class SystemController extends Controller
     //  Page to select the system type for the given category
     public function selectSystem($cat)
     {
+        //  Make sure that the category is valid
+        $valid = SystemCategories::where('name', $cat)->get();
+        if($valid->isEmpty())
+        {
+            return view('err.badCategory');
+        }
+        
+        //  Get the types of systems belonging to the category
         $sysList = SystemTypes::whereHas('SystemCategories', function($q) use($cat)
         {
             $q->where('name', $cat);
@@ -43,12 +52,27 @@ class SystemController extends Controller
     //  Details page that shows the system information
     public function details($cat, $sys)
     {
+        //  Make sure that the system is valid
+        $valid = SystemTypes::where('name', $sys)->first();
+        if(empty($valid))
+        {
+            return view('err.badSystem');
+        }
+        
+        //  Get the file types and build the basic page before Ajax calls
         $fileTypes = SystemFileTypes::all();
+
+        //  Get the latest Tech Tips for this system
+        $tipData = TechTips::whereHas('TechTipSystems', function($q) use($valid)
+            {
+                $q->where('sys_id', $valid->sys_id);
+            })->get();
         
         return view('system.details', [
             'sysName' => $sys,
             'fileTypes' => $fileTypes,
-            'category' => $cat
+            'category' => $cat,
+            'results' => $tipData
         ]);  
     }
     
