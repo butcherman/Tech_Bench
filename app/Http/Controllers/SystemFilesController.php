@@ -29,10 +29,10 @@ class SystemFilesController extends Controller
     {
         $fileList = SystemFiles::whereHas('SystemTypes', function($q) use($sysName)
         {
-            $q->where('name', str_replace('-', ' ', $sysName));
+            $q->where('name', urldecode($sysName));
         })->whereHas('SystemFileTypes', function($q) use($fileType)
         {
-            $q->where('description', str_replace('-', ' ', $fileType));          
+            $q->where('description', urldecode($fileType));          
         })->with('user')->with('files')->get();
         
         return view('system.fileList', [

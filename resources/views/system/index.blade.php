@@ -10,7 +10,7 @@
                     <ul class="list-group">
                         @foreach($categories as $cat)
                             <li class="list-group-item text-center text-uppercase">
-                                <a href="{{ route('system.select', ['cat' => $cat->name]) }}">{{ $cat->name }}</a>
+                                <a href="{{ route('system.select', ['cat' => urlendoce($cat->name])) }}">{{ $cat->name }}</a>
                             </li>
                         @endforeach
                     </ul>

@@ -22,7 +22,7 @@
                 <div class="card-body tab-content">
                     @foreach($fileTypes as $type)
                             @if($loop->first)
-                                <div class="tab-pane fade show active" id="{{str_replace(' ', '-', $type->description)}}" data-type="{{str_replace(' ', '-', $type->description)}}" role="tabpanel" aria-labelledby="{{$type->description}}-tab">                 
+                                <div class="tab-pane fade show active" id="{{str_replace(' ', '-', $type->description)}}" data-type="{{urlencode($type->description)}}" role="tabpanel" aria-labelledby="{{$type->description}}-tab">                 
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                             @else
-                                <div class="tab-pane fade" id="{{str_replace(' ', '-', $type->description)}}" data-type="{{str_replace(' ', '-', $type->description)}}" role="tabpanel" aria-labelledby="{{$type->description}}-tab">
+                                <div class="tab-pane fade" id="{{str_replace(' ', '-', $type->description)}}" data-type="{{urlencode($type->description)}}" role="tabpanel" aria-labelledby="{{$type->description}}-tab">
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
@@ -81,6 +81,8 @@
             </div>
         </div>
     </div>
+    <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Latest Tech Tips</h1></div>
+    @include('tip.searchResults')
     @include('_inc.modal')
 </div>
 @endsection
@@ -95,7 +97,7 @@
     {
         $('.tab-pane').each(function()
         {
-            $(this).find('tbody').load('{{ url('system/load-file') }}/{{ $sysName }}/'+$(this).data('type'), function()
+            $(this).find('tbody').load('{{ url('system/load-file') }}/{{ urlencode($sysName) }}/'+$(this).data('type'), function()
             {
                 $('[data-tooltip="tooltip"]').tooltip();
             });
@@ -110,8 +112,8 @@
         {
             //  Populate the hidden inputs
             $('#fileType').val(dataType);
-            $('#category').val('{{ str_replace('-', ' ', $category) }}');
-            $('#system').val('{{ str_replace('-', ' ', $sysName) }}');
+            $('#category').val('{{ urldecode($category) }}');
+            $('#system').val('{{ urldecode($sysName) }}');
             
             fileDrop($('#system-file-upload-form'));
         });
