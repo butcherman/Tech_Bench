@@ -11,7 +11,7 @@ class TechTipSystems extends Model
     
     public function techTips()
     {
-        return $this->hasMany('App\TechTips');
+        return $this->balongsTo('App\TechTips');
     }
     
     public function systemTypes()

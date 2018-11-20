@@ -26,14 +26,14 @@ class Navbar extends Model
             {
                 $navBarSys[$item->sys_id]['category'] = $item->category;
                 $navBarSys[$item->sys_id]['name'] = $item->sys_name;
-                $navBarSys[$item->sys_id]['url'] = '/system/'.$item->category.'/'.str_replace(' ', '-', $item->sys_name);
+                $navBarSys[$item->sys_id]['url'] = '/system/'.$item->category.'/'.urlencode($item->sys_name);
             }
             else
             {
                 $navBarSub[$item->sys_id]['category'] = $item->category;
                 $navBarSub[$item->sys_id]['parent'] = $item->parent_id;
                 $navBarSub[$item->sys_id]['name'] = $item->sys_name;
-                $navBarSub[$item->sys_id]['url'] = '/system/'.$item->category.'/'.str_replace(' ', '-', $item->sys_name);
+                $navBarSub[$item->sys_id]['url'] = '/system/'.$item->category.'/'.urlencode($item->sys_name);
                 $navBarSys[$item->parent_id]['parent'] = true;
             }
         }

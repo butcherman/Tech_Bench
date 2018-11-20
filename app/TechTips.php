@@ -26,6 +26,6 @@ class TechTips extends Model
     
     public function techTipSystems()
     {
-        return $this->belongsTo('App\TechTipSystems', 'tip_id', 'tip_id');
+        return $this->hasMany('App\TechTipSystems', 'tip_id', 'tip_id');
     }
 }
