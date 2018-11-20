@@ -2,29 +2,29 @@
 
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
-    
+
     'version' => '4.1.0b',
-    
+
     'release' => 'TBD',
-    
+
     'logo' => env('APP_LOGO', 'TechBenchLogo.png'),
-    
+
     'env' => env('APP_ENV', 'production'),
-    
+
     'debug' => env('APP_DEBUG', false),
-    
+
     'url' => env('APP_URL', 'http://localhost'),
-    
+
     'timezone' => env('TIMEZONE', 'America/Los_Angeles'),
-    
+
     'locale' => 'en',
-    
+
     'fallback_locale' => 'en',
-    
+
     'key' => env('APP_KEY'),
-    
+
     'cipher' => 'AES-256-CBC',
-    
+
     'providers' => [
         /*
          * Laravel Framework Service Providers...

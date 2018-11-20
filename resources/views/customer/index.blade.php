@@ -46,19 +46,19 @@
     {
         var table;
         searchCustomer();
-        
+
         $('#search-customer-form').on('submit', function(e)
         {
             e.preventDefault();
             table.destroy();
             searchCustomer();
         })
-        
+
         $('#reset-search-form').on('click', function()
         {
             $('#search-customer-form')[0].reset();
         });
-        
+
         //  Search customer function
         function searchCustomer()
         {
@@ -67,28 +67,28 @@
             {
                 $('#customer-results-table').html(data);
                 if(!$('#dataTable > tbody').find('td').hasClass('text-center'))
-                {                        
+                {
                     table = $('#dataTable').DataTable(
                     {
                         'dom': '<"top"i>rt<"row"<"col-4"l><"col-4"p>>',
                         'searching': false
-                    }); 
+                    });
                 }
             });
         }
-        
+
         //  Filter the "Customer Name"
-        $("#search-name").on("keyup", function() 
+        $("#search-name").on("keyup", function()
         {
             searchCustomer();
         });
-        
+
         //  Filter the "City"
-        $("#search-city").on("keyup", function() 
+        $("#search-city").on("keyup", function()
         {
             searchCustomer();
         });
-        
+
         //  Fileter System Type
         $('#search-system').on('change', function()
         {
