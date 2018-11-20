@@ -53,6 +53,7 @@ class SystemController extends Controller
     public function details($cat, $sys)
     {
         //  Make sure that the system is valid
+        $sys = urldecode($sys);
         $valid = SystemTypes::where('name', $sys)->first();
         if(empty($valid))
         {

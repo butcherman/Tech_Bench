@@ -10,7 +10,7 @@
                     <ul class="list-group">
                         @if(!$systems->isEmpty())
                             @foreach($systems as $sys)
-                                <li class="list-group-item text-center"><a href="{{ route('system.details', ['cat' => $category, 'sys' => $sys->name]) }}">{{ $sys->name }}</a></li>
+                                <li class="list-group-item text-center"><a href="{{ route('system.details', ['cat' => urlencode($category), 'sys' => urlencode($sys->name)]) }}">{{ $sys->name }}</a></li>
                             @endforeach
                         @else
                             <li class="list-group-item text-center">No Results For This Category</li>
