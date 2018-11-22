@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('customer.index')}}">Customers</a></li>
+    <li class="breadcrumb-item active">{{$details->name}}</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container-fluid">

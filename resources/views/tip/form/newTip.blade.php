@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('tip.index')}}">Tech Tips</a></li>
+    <li class="breadcrumb-item active">New Tech Tip</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">

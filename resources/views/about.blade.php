@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">My Dashboard</a></li>
+    <li class="breadcrumb-item active">About Tech Bench</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">

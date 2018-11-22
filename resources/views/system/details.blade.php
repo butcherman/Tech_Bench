@@ -1,4 +1,11 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('system.index')}}">Systems</a></li>
+    <li class="breadcrumb-item"><a href="{{route('system.select', ['cat' => $category])}}">{{$category}}</a></li>
+    <li class="breadcrumb-item active">{{$sysName}}</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">

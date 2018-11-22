@@ -148,6 +148,7 @@
                 <li class="breadcrumb-item active">My Dashboard</li>
             </ol>
 -->
+            @yield('breadcrumbs')
             <!--  Primary Page Content  -->
             @yield('content')
         </div>
