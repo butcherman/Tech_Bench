@@ -55,7 +55,7 @@ class FileLinksController extends Controller
         //  If there are any files, process them
         if(!empty($request->file))
         {
-            $filePath = config(filesystem.links).DIRECTORY_SEPARATOR.$linkID;
+            $filePath = config('filesystem.links').DIRECTORY_SEPARATOR.$linkID;
             foreach($request->file as $file)
             {
                 //  Clean the file and store it
@@ -152,7 +152,7 @@ class FileLinksController extends Controller
     //  Submit the additional files
     public function submitAddFile($id, Request $request)
     {
-        $filePath = config(filesystem.links).DIRECTORY_SEPARATOR.$id;
+        $filePath = config('filesystem.links').DIRECTORY_SEPARATOR.$id;
         foreach($request->file as $file)
         {
             //  Clean the file and store it
