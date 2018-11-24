@@ -52,8 +52,8 @@ Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'i
         Route::resource('contacts', 'CustomerContactsController');
         Route::get('systems/check-system/{id}/{sys}', 'CustomerSystemsController@checkSys')->name('checkSystem');
         Route::resource('systems', 'CustomerSystemsController');
-        Route::get('id/{id}/{name}', 'CustomerDetails@details')->name('details');
         Route::resource('id', 'CustomerDetails');
+        Route::get('id/{id}/{name}', 'CustomerDetails@details')->name('details');
         Route::post('search', 'CustomerController@search')->name('search');
         Route::get('/', 'CustomerController@index')->name('index');
     });
