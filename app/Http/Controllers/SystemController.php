@@ -65,9 +65,9 @@ class SystemController extends Controller
 
         //  Get the latest Tech Tips for this system
         $tipData = TechTips::whereHas('TechTipSystems', function($q) use($valid)
-            {
-                $q->where('sys_id', $valid->sys_id);
-            })->get();
+        {
+            $q->where('sys_id', $valid->sys_id);
+        })->orderBy('created_at', 'DESC')->get();
         
         return view('system.details', [
             'sysName' => $sys,

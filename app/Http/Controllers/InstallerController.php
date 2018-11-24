@@ -143,6 +143,7 @@ class InstallerController extends Controller
         $dropDown = SystemCustDataTypes::orderBy('name', 'ASC')->get();
         $dataType = SystemCustDataFields::where('sys_id', $sysData->sys_id)
             ->join('system_cust_data_types', 'system_cust_data_types.data_type_id', '=', 'system_cust_data_fields.data_type_id')
+            ->orderBy('order', 'ASC')
             ->get();
         
         return view('installer.form.editSystem', [

@@ -7,6 +7,8 @@ Auth::routes();
 Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::get('/download/{id}/{filename}', 'DownloadController@index')->name('downloadPage');
 Route::get('/confirm', 'PagesController@confirmDialog')->name('confirm');
+Route::get('/finish-setup/{hash}', 'UserController@initializeUser')->name('initialize');
+Route::post('/finish-setup/{hash}', 'UserController@submitInitializeUser')->name('submitInitialize');
 
 ///////////////////////////  User File Link Routes  /////////////////////////////////////////
 Route::prefix('file-links')->name('userLink.')->group(function()

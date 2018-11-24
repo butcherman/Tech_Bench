@@ -22,16 +22,7 @@
                 {{Form::bsText('last_name', 'Last Name', null, ['required'])}}
                 {{Form::bsEmail('email', 'Email Address')}}
                 {{ Form::bsSelect('role', 'User Role', $roles, '4', ['required']) }}
-                {{Form::bsPassword('password', 'Password', null, ['required'])}}
-                {{Form::bsPassword('password_confirmation', 'Confirm Password', null, ['required'])}}
-<!--
-                <div class="row justify-content-center">
-                    <div class="col-md-4">
-                        {{Form::bsCheckbox('send_email', 'Send Welcome Email', null, true, ['class' => 'text-center'])}}
-                    </div>
-                </div>
--->
-                {{Form::bsSubmit('Create User')}}
+                {{Form::bsSubmit('Create User and Send Welcome Email')}}
             {!! Form::close() !!}
         </div>
     </div>
