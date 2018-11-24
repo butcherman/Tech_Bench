@@ -92,6 +92,7 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer', 'admin']], funct
         Route::get('links', 'AdminController@links')->name('links');
         Route::post('resetPass/{id}', 'UserController@resetPassword')->name('resetPass');
         Route::resource('users', 'UserController');
+        Route::get('customers', 'AdminController@customers')->name('customers');
         Route::get('/', 'AdminController@index')->name('index');
     });
 });

@@ -15,6 +15,4 @@
             </td>
         </tr>
     @endforeach
-@else
-<!--    <tr><td colspan="4">No Files</td></tr>-->
 @endif
