@@ -88,11 +88,18 @@ class CustomerDetails extends Controller
         ]);
         
         $custData = Customers::find($id)->update($request->all());
+
+        //  Modify to the new ID number if set
+        if(isset($request->cust_id))
+        {
+            $id = $request->cust_id;
+        }
         
         Log::info('Customer Info Updated', ['cust_id' => $id, 'user_id' => Auth::user()->user_id]);
         
-        return redirect()->route('customer.id.show', [
-            'id' => urlencode($request->name)
+        return redirect()->route('customer.details', [
+            'id'   => $id,
+            'name' => urlencode($request->name)
         ]);
     }
 
@@ -104,6 +111,9 @@ class CustomerDetails extends Controller
      */
     public function destroy($id)
     {
-        //
+        Customers::find($id)->delete();
+        
+        return 1;
+//        return redirect()->route('customer.index');
     }
 }

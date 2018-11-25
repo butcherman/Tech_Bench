@@ -7,6 +7,9 @@
 @endif
 {!! Form::model($cust, ['route' => ['customer.id.update', $cust->cust_id]]) !!}
     @method('PUT')
+    @if($current_user->hasAnyRole(['installer', 'admin']))
+        {{ Form::bsText('cust_id', 'Customer ID', null, ['required']) }}
+    @endif
     {{ Form::bsText('name', 'Customer Name', null, ['required']) }}
     {{ Form::bsText('dba_name', 'DBA Name/AKA', null) }}
     {{ Form::bsText('address', 'Address', null, ['required']) }}

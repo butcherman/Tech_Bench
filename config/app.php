@@ -3,8 +3,6 @@
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
 
-    'version' => '4.1.0b',
-
     'release' => 'TBD',
 
     'logo' => env('APP_LOGO', 'TechBenchLogo.png'),

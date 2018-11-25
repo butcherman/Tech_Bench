@@ -42,10 +42,4 @@ class AdminController extends Controller
             'name' => $userName
         ]);
     }
-    
-    //  Customers Administration Page
-    public function customers()
-    {
-        return view('admin.customers');
-    }
 }
