@@ -19,9 +19,11 @@ While working in the field, all service technicians run across tips and tricks t
 # Installing Tech Bench
 Tech Bench is designed to run on a dedicated Linux Web Server.
 ### Requirements
-* PHP 7.13 or higher
+* PHP 7.1.3 or higher
 * Apache Web Server
 * MySQL Database
+* Composer Dependency Manager
+* Node Package Manager (NPM)
 
 It is up to the system administrator to install the Linux Operating system and the LAMP stack on the server with the latest updates and security patches.  All web configuration must be done prior to installing the Tech Bench application.
 
