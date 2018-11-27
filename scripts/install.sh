@@ -242,7 +242,6 @@ echo '#MAX_UPLOAD=2147483648' >> .env
 echo '' >> .env
 
 #  Download all dependencies
-chown -R $(whoami) ~/.npm
 su -c "npm install; composer install" $SUDO_USER
 #  Copy files to web directory
 cp -R $STAGE_DIR/* $PROD_DIR
@@ -251,8 +250,8 @@ chown -R www-data:www-data $PROD_DIR
 chmod -R 755 $PROD_DIR
 #  Allow write permissions to the 'storage' and 'cache' directories
 chmod -R 775 $PROD_DIR/storage # && chmod -R 775 $PROD_DIR/cache
-#  Copy the .env file
-cp $STAGE_DIR/.env $PROD_DIR
+#  Copy the .env and .htaccess files
+cp $STAGE_DIR/.env $PROD_DIR && cp $STAGE_DIR/.htaccess $PROD_DIR
 #  Move to Production Directory and migrate database
 cd $PROD_DIR
 php artisan migrate --force
@@ -275,7 +274,6 @@ echo 'Post Install Instructions:'
 echo ''
 echo 'For security purposes it is highly recommended to change the Apache '
 echo 'conf file to point to '$PROD_DIR'/public.'
-
-
 tput setaf 0
+
 exit 1

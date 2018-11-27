@@ -17,11 +17,12 @@ While working in the field, all service technicians run across tips and tricks t
 # Installing Tech Bench
 Tech Bench is designed to run on a dedicated Linux Web Server.
 ### Requirements
-* PHP 7.1.3 or higher
 * Apache Web Server
 * MySQL Database
+* PHP 7.1.3 or higher
 * Composer Dependency Manager
 * Node Package Manager (NPM)
+* Unzip module
 
 It is up to the system administrator to install the Linux Operating system and the LAMP stack on the server with the latest updates and security patches.  All web configuration must be done prior to installing the Tech Bench application.
 
@@ -36,6 +37,8 @@ Tech Bench is built on the Laravel platform and uses NPM and Composer to maintai
 There are two recommended procedures for installing the Tech Bench
 * Loading zip file
 * Downloading directly from Github
+
+Both options will 
 
 #### Option 1 - Loading zip file
 * Load the zip file onto the Web Server via SFTP software such as Solar Winds to a staging directory such as the users $HOME directory
