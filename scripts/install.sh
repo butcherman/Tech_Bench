@@ -276,4 +276,6 @@ echo 'For security purposes it is highly recommended to change the Apache '
 echo 'conf file to point to '$PROD_DIR'/public.'
 tput setaf 0
 
+#  Add caching information.......
+
 exit 1

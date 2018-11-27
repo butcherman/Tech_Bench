@@ -1,3 +1,4 @@
+#  This file contains the default .env file for production environments
 echo "APP_KEY=" > .env
 echo "APP_URL=\"$WEB_URL\"" >> .env
 echo '' >> .env
