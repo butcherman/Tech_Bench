@@ -6,8 +6,8 @@
 #  Recommended install process:                                                #
 #  Copy all files into a staging directory - example: /home/%USER%/Tech_Bench  #
 #  Verify that the Production Directory is correct - default: /var/www/html    #
-#  Navigate to the install directory                                           #
-#  Run the following command:  sudo sh scripts/install.sh                      #
+#  Navigate to the install/scripts directory                                   #
+#  Run the following command:  sudo ./install.sh                               #
 #                                                                              #
 #  Note:  the script must be run as Sudo in order to properly set permissions  #
 #                                                                              #
@@ -29,7 +29,6 @@ fi
 #  Start installation process
 clear
 tput setaf 4
-printf '\n\n'
 echo '##################################################################'
 echo '#                                                                #'
 echo '#                 Welcome to the Tech Bench Setup                #'
@@ -146,16 +145,16 @@ printf '\nWe are good to go - lets move on...\n\n'
 
 #  Verify the webroot directory
 echo 'Tech Bench files will be copied to the Web Root directory'
-echo 'Any files that are currently in the directory will be overwritten'
+echo 'Any files that are currently in this directory will be overwritten'
 printf '\nFiles will be copied to: '
 tput setaf 2
 printf $PROD_DIR'\n\n'
 tput setaf 0
 echo 'If this directory is not correct please exit the installer and modify '
 echo 'the _config.sh file in the scripts folder'
-read -p 'Would you like to continue? [y/n]' CONT
 
-#if [ $CONT != "y" ] || [ $CONT != "Y" ]; then
+#  Give user the chance to exit out and modify the installation folder
+read -p 'Would you like to continue? [y/n]' CONT
 if [[ ! $CONT =~ ^[Yy]$ ]]; then
 	printf '\n\nExiting Installer\n\n'
 	exit 1
@@ -167,11 +166,11 @@ echo '(ex. https://techbench.domain.com)'
 read -p 'url:  ' WEB_URL
 
 #  Configure MySQL Database
-printf '\n\nConfiguring MySQL Database'
+printf '\n\nConfiguring MySQL Database\n'
 echo 'We will create a user just for the Tech Bench '
 echo 'Database, but we need admin access first.'
 printf '\n\n'
-read -p 'Enter the MySQL Admin Username: (root)' DBUSER
+read -p 'Enter the MySQL Admin Username [root]:' DBUSER
 read -p 'Enter the MySQL Admin Password:' -s DBPASS
 
 #  Default value if left empty
@@ -190,7 +189,7 @@ while true; do
 		break
 	fi
 
-	printf "\n\nThis Database already exists.  Please enter a name that is not in use.\n"
+	printf "\n\nThis Database already exists.  Please enter a database name that is not in use.\n"
 done
 
 #  New username just for the Tech Bench database
@@ -243,8 +242,7 @@ echo '#MAX_UPLOAD=2147483648' >> .env
 echo '' >> .env
 
 #  Download all dependencies
-npm install
-composer install
+su -c "npm install; composer install" $SUDO_USER
 #  Copy files to web directory
 cp -R $STAGE_DIR/* $PROD_DIR
 #  Change the owner of the files to the web user and set permissions
@@ -263,15 +261,21 @@ php artisan migrate --force
 #  Show the finished product
 clear
 tput setaf 4
-printf '\n\n'
 echo '##################################################################'
 echo '#                                                                #'
 echo '#                 The Tech Bench is ready to go!                 #'
 echo '#                                                                #'
-echo '#                  Visit url-here to get started                 #'
-echo '#                    post install instructions....               #'
 echo '##################################################################'
 echo ''
+echo 'Visit '$WEB_ROOT' and log in with the default user name and password:'
+echo ''
+echo 'Username:  admin'
+echo 'Password:  password'
+echo ''
+echo 'Post Install Instructions:'
+echo ''
+echo 'For security purposes it is highly recommended to change the Apache '
+echo 'conf file to point to '$PROD_DIR'/public.'
 
 
 tput setaf 0
