@@ -242,6 +242,7 @@ echo '#MAX_UPLOAD=2147483648' >> .env
 echo '' >> .env
 
 #  Download all dependencies
+chown -R $(whoami) ~/.npm
 su -c "npm install; composer install" $SUDO_USER
 #  Copy files to web directory
 cp -R $STAGE_DIR/* $PROD_DIR
@@ -256,8 +257,6 @@ cp $STAGE_DIR/.env $PROD_DIR
 cd $PROD_DIR
 php artisan migrate --force
 
-
-
 #  Show the finished product
 clear
 tput setaf 4
@@ -267,7 +266,7 @@ echo '#                 The Tech Bench is ready to go!                 #'
 echo '#                                                                #'
 echo '##################################################################'
 echo ''
-echo 'Visit '$WEB_ROOT' and log in with the default user name and password:'
+echo 'Visit '$WEB_URL' and log in with the default user name and password:'
 echo ''
 echo 'Username:  admin'
 echo 'Password:  password'
