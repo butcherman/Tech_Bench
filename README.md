@@ -21,6 +21,7 @@ Tech Bench is designed to run on a dedicated Linux Web Server.
 ### Requirements
 * PHP 7.1.3 or higher
 * Apache Web Server
+** Apache Rewrite Module
 * MySQL Database
 * Composer Dependency Manager
 * Node Package Manager (NPM)
@@ -29,5 +30,43 @@ It is up to the system administrator to install the Linux Operating system and t
 
 It is highly recommended to use SSL along with a valid SSL Certificate.  Not doing so will result in all web traffic be sent in clear text rather than encrypted.
 
+It is also recommended to set the root directory of the web server to the "public" folder.  This will provide better security by not allowing direct access to the application folders.
+
 ### Dependency Management
-Tech Bench is built on the Laravel platform and uses NPM and Composer to maintain dependent applications required to run the Tech Bench.
+Tech Bench is built on the Laravel platform and uses NPM and Composer to maintain dependent applications required to run the Tech Bench. 
+
+### Installation Procedure
+There are two recommended procedures for installing the Tech Bench
+* Loading zip file
+* Downloading directly from Github
+
+#### Option 1 - Loading zip file
+* Load the zip file onto the Web Server via SFTP software such as Solar Winds to a staging directory such as the users $HOME directory
+* Navigate to the directory the file is loaded in.
+* Run the command
+```
+unzip Tech_Bench-master.zip   //  Be sure to enter the correct file name
+```
+* Move to the "scripts" directory
+```
+cd scripts
+```
+* Run the installer script as sudo user
+```
+sudo ./install
+```
+
+#### Option 2 - Downloading directly from Github
+* In the Web Server navigate to the folder you wish to load the staging files such as the users $HOME directory
+* Clone the Tech Bench repository
+```
+git clone https://github.com/butcherman/Tech_Bench.git
+```
+* Navigate to the Tech_Bench/scripts directory
+```
+cd Tech_Bench/scripts
+```
+* Run the installer script as sudo user
+```
+sudo ./install
+```
