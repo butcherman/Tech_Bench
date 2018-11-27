@@ -209,7 +209,7 @@ echo 'Setting up Tech Bench files...'
 
 cd $STAGE_DIR
 #  Create the .env file
-touch .env
+su -c "touch .env" $SUDO_USER
 echo "APP_KEY=" > .env
 echo "APP_URL=\"$WEB_URL\"" >> .env
 echo '' >> .env
