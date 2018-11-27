@@ -14,14 +14,11 @@ Additional features for ustomers include the ability to create a custom link tha
 ### Tech Tips
 While working in the field, all service technicians run across tips and tricks that they use to make their jobs easier.  The Tech Tips section allows for registered users to share these tips with all other users.  This creates a custom Knowledge Base for registered users.
 
-
-
 # Installing Tech Bench
 Tech Bench is designed to run on a dedicated Linux Web Server.
 ### Requirements
 * PHP 7.1.3 or higher
 * Apache Web Server
-** Apache Rewrite Module
 * MySQL Database
 * Composer Dependency Manager
 * Node Package Manager (NPM)
@@ -70,3 +67,25 @@ cd Tech_Bench/scripts
 ```
 sudo ./install
 ```
+
+# Post Installation Instructions
+Once the Tech Bench has been installed, you can navigate your web browser to the URL of the web server and login with the default credentials:
+Username: admin
+Password: password
+
+Although there is a .htaccess file that will redirect all web traffic to the "public" folder inside the Tech Bench application, it is highly recommended to set the website web root to point at the public folder.
+
+For example, if the web files are stored in the /var/www/html, the web root should point at /var/www/html/public.
+
+# Copyright © 2016-2018 Ron Butcher
+
+This program is free software:  you can redistribute it and/or modify it under the terms of the GNU 
+General Public License as published by the Free Software Foundation, either version 3 of the License, 
+or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see
+www.gnu.org/licenses.
