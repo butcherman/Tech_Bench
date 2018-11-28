@@ -67,6 +67,7 @@ return [
         App\Providers\UserServiceProvider::class,
         App\Providers\FormServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        App\Providers\SettingsServiceProvider::class,
 
     ],
     'aliases' => [
