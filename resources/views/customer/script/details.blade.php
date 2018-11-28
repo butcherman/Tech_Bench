@@ -6,6 +6,13 @@
     loadNotes();
     loadFiles();
     
+    $('#edit-modal').on('hide.bs.modal', function()
+    {
+        $('#edit-modal').find('.modal-title').text('');
+        $('#edit-modal').find('.modal-body').text('');
+        $('#edit-modal').find('#modal-footer-extra').text('');
+    });
+    
     /////////////////////// Customer Details Events //////////////////////////
     //  Add/Remove customer bookmark
     $('.fa-bookmark').on('click', function()
@@ -31,6 +38,35 @@
     {
         $('#edit-modal').find('.modal-title').text('Edit Customer Details');
         $('#edit-modal').find('.modal-body').load('{{route('customer.id.edit', ['id' => $details->cust_id])}}');
+        @if($current_user->hasAnyRole(['installer', 'admin']))
+            $('#edit-modal').find('#modal-footer-extra').prepend('<button type="button" class="btn btn-danger mr-auto" id="deactivate-customer">Deactivate Customer</button>');
+            $('#deactivate-customer').on('click', function()
+            {
+                var url = '{{route('customer.id.destroy', ['id' => ':id'])}}';
+                url = url.replace(':id', custID);
+                
+                $('#edit-modal').find('.modal-title').text('Deactivate Customer');
+                $('#edit-modal').find('.modal-body').load('{{route('confirm')}}', function()
+                {
+                    $('.select-yes').on('click', function()
+                    {
+                        $.ajax(
+                        {
+                            url: url,
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(res)
+                            {
+                                window.location.replace('{{route('customer.index')}}');
+                            }
+                        });
+                    });
+                });
+                $('#edit-modal').find('#modal-footer-extra').text('');
+            });
+        @endif
     });
     
     /////////////////////// Systems Events //////////////////////////

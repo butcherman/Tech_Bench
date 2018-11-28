@@ -1,5 +1,6 @@
 #!/bin/bash
 ################################################################################
+#                                                                              #
 #  This bash script is for updating the Tech Bench on the web server.          #
 #  The script will copy files from the staging directory, to live directory    #
 #  followed by setting the proper file permissions to the correct folders.     #
@@ -12,13 +13,10 @@
 #                                                                              #
 #  Note:  the script must be run as Sudo in order to properly set permissions  #
 #                                                                              #
-#  Script Version:  2.0                                                        #
-#  Script Date:     11-22-2018                                                 #
 ################################################################################
 
-#  Working directories
-STAGE_DIR="$(dirname "$(dirname "$(readlink -fm "$0")")")"   # Assumes that the script is not moved from default directory
-PROD_DIR="/var/www/html"                                     # Root directory of the web page
+#  Pull in the variable file
+source _config.sh
 
 #  Verify the script is being run as root
 if [[ $EUID -ne 0 ]]; then
@@ -26,7 +24,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo 'Moving Upgrade Files......'
+echo 'Upgrade in progress.....'
 
 #  Put the application into Maintenance mode
 cd $PROD_DIR
@@ -39,6 +37,9 @@ chown -R www-data:www-data $PROD_DIR
 #  Allow write permissions to the 'storage' directory
 chmod -R 777 $PROD_DIR/storage
 
+# Make sure that all dependencies are up to date
+composer update
+
 #  Upgrade the database if necessary
 php artisan migrate
 
@@ -46,3 +47,5 @@ php artisan migrate
 php artisan up
 
 echo 'Done'
+
+#  More stuff to come.....

@@ -19,9 +19,6 @@
                         <li class="list-group-item">
                             <a href="{{route('admin.links')}}" class="category-button btn btn-link btn-block">File Links</a>
                         </li>
-                        <li class="list-group-item">
-                            <a href="{{route('admin.customers')}}" class="category-button btn btn-link btn-block">Customers</a>
-                        </li>
                     </ul>
                 </div>
             </div>

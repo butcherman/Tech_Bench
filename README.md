@@ -14,18 +14,81 @@ Additional features for ustomers include the ability to create a custom link tha
 ### Tech Tips
 While working in the field, all service technicians run across tips and tricks that they use to make their jobs easier.  The Tech Tips section allows for registered users to share these tips with all other users.  This creates a custom Knowledge Base for registered users.
 
-
-
 # Installing Tech Bench
 Tech Bench is designed to run on a dedicated Linux Web Server.
 ### Requirements
-* PHP 7.13 or higher
 * Apache Web Server
 * MySQL Database
+* PHP 7.1.3 or higher
+* Composer Dependency Manager
+* Node Package Manager (NPM)
+* Unzip module
 
 It is up to the system administrator to install the Linux Operating system and the LAMP stack on the server with the latest updates and security patches.  All web configuration must be done prior to installing the Tech Bench application.
 
 It is highly recommended to use SSL along with a valid SSL Certificate.  Not doing so will result in all web traffic be sent in clear text rather than encrypted.
 
+It is also recommended to set the root directory of the web server to the "public" folder.  This will provide better security by not allowing direct access to the application folders.
+
 ### Dependency Management
-Tech Bench is built on the Laravel platform and uses NPM and Composer to maintain dependent applications required to run the Tech Bench.
+Tech Bench is built on the Laravel platform and uses NPM and Composer to maintain dependent applications required to run the Tech Bench. 
+
+### Installation Procedure
+There are two recommended procedures for installing the Tech Bench
+* Loading zip file
+* Downloading directly from Github
+
+Both options will 
+
+#### Option 1 - Loading zip file
+* Load the zip file onto the Web Server via SFTP software such as Solar Winds to a staging directory such as the users $HOME directory
+* Navigate to the directory the file is loaded in.
+* Run the command
+```
+unzip Tech_Bench-master.zip   //  Be sure to enter the correct file name
+```
+* Move to the "scripts" directory
+```
+cd scripts
+```
+* Run the installer script as sudo user
+```
+sudo ./install
+```
+
+#### Option 2 - Downloading directly from Github
+* In the Web Server navigate to the folder you wish to load the staging files such as the users $HOME directory
+* Clone the Tech Bench repository
+```
+git clone https://github.com/butcherman/Tech_Bench.git
+```
+* Navigate to the Tech_Bench/scripts directory
+```
+cd Tech_Bench/scripts
+```
+* Run the installer script as sudo user
+```
+sudo ./install
+```
+
+# Post Installation Instructions
+Once the Tech Bench has been installed, you can navigate your web browser to the URL of the web server and login with the default credentials:
+Username: admin
+Password: password
+
+Although there is a .htaccess file that will redirect all web traffic to the "public" folder inside the Tech Bench application, it is highly recommended to set the website web root to point at the public folder.
+
+For example, if the web files are stored in the /var/www/html, the web root should point at /var/www/html/public.
+
+# Copyright © 2016-2018 Ron Butcher
+
+This program is free software:  you can redistribute it and/or modify it under the terms of the GNU 
+General Public License as published by the Free Software Foundation, either version 3 of the License, 
+or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see
+www.gnu.org/licenses.
