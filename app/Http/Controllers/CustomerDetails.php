@@ -91,8 +91,9 @@ class CustomerDetails extends Controller
         
         Log::info('Customer Info Updated', ['cust_id' => $id, 'user_id' => Auth::user()->user_id]);
         
-        return redirect()->route('customer.id.show', [
-            'id' => urlencode($request->name)
+        return redirect()->route('customer.details', [
+            'id'   => $id,
+            'name' => urlencode($request->name)
         ]);
     }
 
