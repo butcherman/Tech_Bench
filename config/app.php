@@ -7,7 +7,7 @@ return [
 
     'release' => 'TBD',
 
-    'logo' => env('APP_LOGO', 'TechBenchLogo.png'),
+    'logo' => 'TechBenchLogo.png',
 
     'env' => env('APP_ENV', 'production'),
 

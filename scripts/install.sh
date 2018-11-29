@@ -222,15 +222,6 @@ echo "DB_DATABASE=\"$DBNAME\"" >> .env
 echo "DB_USERNAME=\"$NEWUSER\"" >> .env
 echo "DB_PASSWORD=\"$NEWPASS\"" >> .env
 echo '' >> .env
-echo "MAIL_DRIVER=smtp" >> .env
-echo "MAIL_HOST=smtp.mailtrap.io" >> .env
-echo "MAIL_PORT=2525" >> .env
-echo "MAIL_USERNAME=null" >> .env
-echo "MAIL_PASSWORD=null" >> .env
-echo "MAIL_ENCRYPTION=null" >> .env
-echo "MAIL_FROM_ADDRESS=null" >> .env
-echo 'MAIL_FROM_NAME="Tech Bench"' >> .env
-echo '' >> .env
 echo '#DFLT_FOLDER="\default"' >> .env
 echo '#SYS_FOLDER="\systems"' >> .env
 echo '#CUST_FOLDER="\customers"' >> .env
@@ -241,20 +232,18 @@ echo '#COMP_FOLDER="\company"' >> .env
 echo '#MAX_UPLOAD=2147483648' >> .env
 echo '' >> .env
 
-#  Download all dependencies
-su -c "npm install; composer install" $SUDO_USER
+#  Download all dependencies, cache configuration, and populate database
+su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan config:cache; php artisan migrate --force" $SUDO_USER
+
 #  Copy files to web directory
 cp -R $STAGE_DIR/* $PROD_DIR
 #  Change the owner of the files to the web user and set permissions
 chown -R www-data:www-data $PROD_DIR
 chmod -R 755 $PROD_DIR
 #  Allow write permissions to the 'storage' and 'cache' directories
-chmod -R 775 $PROD_DIR/storage # && chmod -R 775 $PROD_DIR/cache
+#chmod -R 775 $PROD_DIR/storage # && chmod -R 775 $PROD_DIR/cache
 #  Copy the .env and .htaccess files
 cp $STAGE_DIR/.env $PROD_DIR && cp $STAGE_DIR/.htaccess $PROD_DIR
-#  Move to Production Directory and migrate database
-cd $PROD_DIR
-php artisan migrate --force
 
 #  Show the finished product
 clear
