@@ -233,7 +233,7 @@ echo '#MAX_UPLOAD=2147483648' >> .env
 echo '' >> .env
 
 #  Download all dependencies, cache configuration, and populate database
-su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan config:cache; php artisan migrate --force" $SUDO_USER
+su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan migrate --force" $SUDO_USER
 
 #  Copy files to web directory
 cp -R $STAGE_DIR/* $PROD_DIR

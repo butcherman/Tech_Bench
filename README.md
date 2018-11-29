@@ -66,6 +66,10 @@ git clone https://github.com/butcherman/Tech_Bench.git
 ```
 cd Tech_Bench/scripts
 ```
+* Modify the .sh files to allow them to be executable
+```
+chmod +x *.sh
+```
 * Run the installer script as sudo user
 ```
 sudo ./install
