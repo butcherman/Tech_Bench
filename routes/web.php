@@ -114,5 +114,14 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
         //////////////////////////  System Customization Routes  ////////////////////////////
         Route::post('system-customization', 'InstallerController@submitCustom')->name('submitCustomize');
         Route::get('system-customization', 'InstallerController@customizeSystem')->name('customize');
+        Route::post('email-settings', 'InstallerController@submitEmailSettings')->name('submitEmail');
+        Route::get('email-settings', 'InstallerController@emailSettings')->name('email');
     });
 });
+
+Route::get('test', function()
+           {
+               echo config('mail.port');
+               echo '<br>';
+               echo config('mail.host');
+           });

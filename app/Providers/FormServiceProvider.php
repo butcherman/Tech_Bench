@@ -24,12 +24,14 @@ class FormServiceProvider extends ServiceProvider
         Form::component('bsCheckbox', 'components.form.checkbox', ['name', 'label', 'value' => 'on', 'checked' => false, 'attributes' => []]);
         Form::component('bsSelect', 'components.form.select', ['name', 'label', 'list', 'selected' => null, 'attributes' => []]);
         
-        
         //  Custom Submit button
         Form::component('bsSubmit', 'components.form.submit', ['name']);
         
         //  List of all states in a dropdown box
         Form::component('allStates', 'components.form.allStates', ['default' => null]);
+        
+        //  List of all timezones in a dropdown box
+        Form::component('bsTimeZone', 'components.form.timezone', ['default' => config('app.timezone')]);
     }
 
     /**

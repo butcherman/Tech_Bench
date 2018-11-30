@@ -3,10 +3,6 @@
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
 
-    'version' => '4.1.0b',
-
-    'release' => 'TBD',
-
     'logo' => 'TechBenchLogo.png',
 
     'env' => env('APP_ENV', 'production'),
@@ -68,6 +64,7 @@ return [
         App\Providers\FormServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
+        Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
 
     ],
     'aliases' => [

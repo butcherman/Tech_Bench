@@ -210,27 +210,56 @@ echo 'Setting up Tech Bench files...'
 cd $STAGE_DIR
 #  Create the .env file
 su -c "touch .env" $SUDO_USER
-echo "APP_KEY=" > .env
-echo "APP_URL=\"$WEB_URL\"" >> .env
-echo '' >> .env
-echo 'TIMEZONE="America/Los_Angeles"' >> .env
-echo '' >> .env
-echo "DB_CONNECTION=mysql" >> .env
-echo "DB_HOST=127.0.0.1" >> .env
-echo "DB_PORT=3306" >> .env
-echo "DB_DATABASE=\"$DBNAME\"" >> .env
-echo "DB_USERNAME=\"$NEWUSER\"" >> .env
-echo "DB_PASSWORD=\"$NEWPASS\"" >> .env
-echo '' >> .env
-echo '#DFLT_FOLDER="\default"' >> .env
-echo '#SYS_FOLDER="\systems"' >> .env
-echo '#CUST_FOLDER="\customers"' >> .env
-echo '#USER_FOLDER="\users"' >> .env
-echo '#TIP_FOLDER="\tips"' >> .env
-echo '#LINK_FOLDER="\links"' >> .env
-echo '#COMP_FOLDER="\company"' >> .env
-echo '#MAX_UPLOAD=2147483648' >> .env
-echo '' >> .env
+echo '#  The .env file contains configuration data specific to your environment.' 				 >  .env
+echo '#  The settings can be changed as needed to match your environment' 						 >> .env
+echo '#  Settings that have been commented out are settings that are not necessary, ' 			 >> .env
+echo '#  but can be adjusted if necessary' 														 >> .env
+echo '' 																						 >> .env
+echo '#  VERY IMPORTANT:  In order for these settings to be applied, after saving the file, ' 	 >> .env
+echo '#  from the Web Root directory, run the command:  'php artisan config:cache' ' 			 >> .env
+echo '' 																						 >> .env
+echo '#  USE CAUTION WHEN CHANGING SETTINGS ON A LIVE SYSTEM' 									 >> .env
+echo '#  INCORRECT SETTINGS COULD CAUSE THE APPLICATION TO CRASH' 								 >> .env
+echo '' 																						 >> .env
+echo '#  Primary Application Settings' 															 >> .env
+echo '#  Changing the APP_Key modifies how the user session data is encrypted.' 				 >> .env
+echo '#  Modifying this setting could negitavely impact the user experience' 					 >> .env
+echo 'APP_KEY=' 																				 >> .env
+echo '#  For advanced troubleshooting, uncomment the APP_DEBUG line and set to true' 			 >> .env
+echo '#  Setting this variable to true will cause error information to be printed to ' 			 >> .env
+echo '#  the user on the web browser.' 															 >> .env
+echo '#  For security purposes, only turn this option on if absolutly necessary.' 				 >> .env
+echo '#  Be sure to turn it back off when troubleshooting is completed' 						 >> .env
+echo '# APP_DEBUG=false' 																		 >> .env
+echo '#  The APP_URL is the url that is used for all hyperlinks both in the application ' 		 >> .env
+echo '#  and in emails. ' 																		 >> .env
+echo 'APP_URL=http://localhost' 																 >> .env
+echo '' 																						 >> .env
+echo '#  Database Connection Settings' 															 >> .env
+echo '#  The Tech Bench uses these settings for all database queries' 							 >> .env
+echo '#  Do not modify unless you are sure that the settings are correct and need to be changed' >> .env
+echo '' 																						 >> .env
+echo 'DB_CONNECTION=mysql' 																		 >> .env
+echo 'DB_HOST=127.0.0.1' 																		 >> .env
+echo 'DB_PORT=3306' 																			 >> .env
+echo "DB_DATABASE=\"$DBNAME\"" 																	 >> .env
+echo "DB_USERNAME=\"$NEWUSER\"" 																 >> .env
+echo "DB_PASSWORD=\"$NEWPASS\"" 																 >> .env
+echo '' 																						 >> .env
+echo '#  By default application files are stored int he WebRoot/storage/app directory' 			 >> .env
+echo '#  To change this location, uncomment the lines below and modify as needed' 				 >> .env
+echo '#  Be sure to make the assigned folders writable by the web_root user' 					 >> .env
+echo '' 																						 >> .env
+echo '# ROOT_FOLDER="\path\to\doc\root"' 														 >> .env
+echo '# DFLT_FOLDER="\default"' 																 >> .env
+echo '# SYS_FOLDER="\systems"' 																	 >> .env
+echo '# CUST_FOLDER="\customers"' 																 >> .env
+echo '# USER_FOLDER="\users"' 																	 >> .env
+echo '# TIP_FOLDER="\tips"' 																	 >> .env
+echo '# LINK_FOLDER="\links"' 																	 >> .env
+echo '# COMP_FOLDER="\company"' 																 >> .env
+echo '# MAX_UPLOAD=2147483648' 																	 >> .env
+echo ''                                                                                          >> .env
 
 #  Download all dependencies, cache and populate database
 su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan migrate --force" $SUDO_USER

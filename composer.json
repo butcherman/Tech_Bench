@@ -14,7 +14,8 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.6",
         "pragmarx/version": "^0.2.8",
-        "tinymce/tinymce": "^4.7"
+        "tinymce/tinymce": "^4.7",
+        "jackiedo/timezonelist": "5.*"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
