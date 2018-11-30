@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -154,7 +155,14 @@ class TechTipsController extends Controller
         //  Email the techs of the new tip
         $tipData = TechTips::find($tipID);
         $userList = UserSettings::where('em_tech_tip', 1)->join('users', 'user_settings.user_id', '=', 'users.user_id')->where('active', 1)->get();
-        Mail::to($userList)->send(new newTechtip($tipData));
+        try
+        {
+            Mail::to($userList)->send(new newTechtip($tipData));
+        }
+        catch(Exception $e)
+        {
+            Log::error('Unable to email new Tech Tip.  Failed because of: '.$e);
+        }
         
         Log::info('Tech Tip Created', ['tip_id' => $tipID, 'user_id' => Auth::user()->user_id]);
         

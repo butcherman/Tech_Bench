@@ -118,10 +118,3 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
         Route::get('email-settings', 'InstallerController@emailSettings')->name('email');
     });
 });
-
-Route::get('test', function()
-           {
-               echo config('mail.port');
-               echo '<br>';
-               echo config('mail.host');
-           });

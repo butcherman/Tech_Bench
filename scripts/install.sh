@@ -233,7 +233,7 @@ echo '#  Be sure to turn it back off when troubleshooting is completed' 						 >
 echo '# APP_DEBUG=false' 																		 >> .env
 echo '#  The APP_URL is the url that is used for all hyperlinks both in the application ' 		 >> .env
 echo '#  and in emails. ' 																		 >> .env
-echo 'APP_URL=http://localhost' 																 >> .env
+echo "APP_URL=\"$WEB_URL\"" 																     >> .env
 echo '' 																						 >> .env
 echo '#  Database Connection Settings' 															 >> .env
 echo '#  The Tech Bench uses these settings for all database queries' 							 >> .env
@@ -268,7 +268,7 @@ su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev;
 cp -R $STAGE_DIR/* $PROD_DIR
 #  Change the owner of the files to the web user and set permissions
 chown -R www-data:www-data $PROD_DIR
-chmod -R 755 $PROD_DIR
+chmod -R 777 $PROD_DIR
 #  Copy the .env and .htaccess files
 cp $STAGE_DIR/.env $PROD_DIR && cp $STAGE_DIR/.htaccess $PROD_DIR
 

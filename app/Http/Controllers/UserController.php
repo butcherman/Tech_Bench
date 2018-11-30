@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -59,7 +60,7 @@ class UserController extends Controller
     {
         //  Validate the new user form
         $request->validate([
-            'username'   => 'required|unique:users',
+            'username'   => 'required|unique:users|regex:/^[a-zA-Z0-9_]*$/',
             'first_name' => 'required',
             'last_name'  => 'required',
             'email'      => 'required|unique:users',
@@ -89,7 +90,15 @@ class UserController extends Controller
         ]);
         
         //  Email the new user
-        Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
+        
+        try
+        {
+            Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
+        }
+        catch(Exception $e)
+        {
+            Log::error('Email not sent to new user'.$request->email.'.  Failed because of: '.$e);
+        }
         
         Log::info('New User Created', ['created_by' => Auth::user()->user_id, 'new_id' => $userID]);
         

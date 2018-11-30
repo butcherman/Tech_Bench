@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
@@ -86,7 +88,14 @@ class UserLinksController extends Controller
         
         //  Send email to the creator of the link
         $user = User::find($details->user_id);
-        Mail::to($user)->send(new newLinkFile($details));
+        try
+        {
+            Mail::to($user)->send(new newLinkFile($details));
+        }
+        catch(Exception $e)
+        {
+            Log::error('Email not sent to user id'.$details->user_id.'.  Failed because of: '.$e);
+        }
         
         return $request->all();
     }
