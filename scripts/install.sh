@@ -35,7 +35,7 @@ echo '#                 Welcome to the Tech Bench Setup                #'
 echo '#                                                                #'
 echo '##################################################################'
 echo ''
-tput setaf 0
+tput sgr0
 printf 'Checking Dependencies...\n\n'
 
 #  Check Apache is installed and running
@@ -48,7 +48,7 @@ else
 	echo '[FAIL]'
 	PREREQ=false
 fi
-tput setaf 0
+tput sgr0
 
 #  Check if MySQL is installed and running
 printf 'MySQL                                                       '
@@ -60,7 +60,7 @@ else
 	echo '[FAIL]'
 	PREREQ=false
 fi
-tput setaf 0
+tput sgr0
 
 #  Check if PHP is installed and running the proper version
 printf 'PHP 7                                                       '
@@ -80,7 +80,7 @@ else
 	echo '[FAIL]'
 	PREREQ=false
 fi
-tput setaf 0
+tput sgr0
 
 #  Check if the Apache Rewrite Module is installed
 printf 'Rewrite Module                                              '
@@ -92,7 +92,7 @@ else
 	echo '[FAIL]'
 	PREREQ=false
 fi
-tput setaf 0
+tput sgr0
 
 # Check if Composer is installed
 printf 'Composer                                                    '
@@ -106,7 +106,7 @@ else
     tput setaf 2
 	echo '[PASS]'
 fi
-tput setaf 0
+tput sgr0
 
 # Check if NodeJS is installed
 printf 'NodeJS                                                      '
@@ -120,7 +120,7 @@ else
     tput setaf 2
 	echo '[PASS]'
 fi
-tput setaf 0
+tput sgr0
 
 # Check if Unzip is installed
 printf 'Unzip                                                       '
@@ -134,7 +134,7 @@ else
     tput setaf 2
 	echo '[PASS]'
 fi
-tput setaf 0
+tput sgr0
 
 #  Check if all prerequesits have passed or not.  If a prereq fails, exit script
 if test $PREREQ = false; then
@@ -149,7 +149,7 @@ echo 'Any files that are currently in this directory will be overwritten'
 printf '\nFiles will be copied to: '
 tput setaf 2
 printf $PROD_DIR'\n\n'
-tput setaf 0
+tput sgr0
 echo 'If this directory is not correct please exit the installer and modify '
 echo 'the _config.sh file in the scripts folder'
 
@@ -244,7 +244,9 @@ chmod -R 755 $PROD_DIR
 cp $STAGE_DIR/.env $PROD_DIR && cp $STAGE_DIR/.htaccess $PROD_DIR
 
 #  Change to the production directory and cache the settings
-source $STAGE_DIR/scripts/optimize.sh
+cd $PROD_DIR
+php artisan config:cache
+php artisan route:cache
 
 #  Show the finished product
 clear
@@ -254,6 +256,7 @@ echo '#                                                                #'
 echo '#                 The Tech Bench is ready to go!                 #'
 echo '#                                                                #'
 echo '##################################################################'
+tput sgr0
 echo ''
 echo 'Visit '$WEB_URL' and log in with the default user name and password:'
 echo ''
@@ -264,6 +267,5 @@ echo 'Post Install Instructions:'
 echo ''
 echo 'For security purposes it is highly recommended to change the Apache '
 echo 'conf file to point to '$PROD_DIR'/public.'
-tput setaf 0
 
 exit 1
