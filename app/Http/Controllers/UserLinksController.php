@@ -11,7 +11,7 @@ use App\FileLinks;
 use App\FileLinkFiles;
 use App\FileLinkNotes;
 use App\User;
-use App\Mail\newLinkFile;
+use App\Mail\NewLinkFile;
 
 class UserLinksController extends Controller
 {
