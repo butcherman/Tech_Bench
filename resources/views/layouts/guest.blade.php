@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'Tech Bench') }}</title>
 
     <!-- Scripts -->
-    <script>var maxUpload = {{config('max_size')}}</script>
+    <script>var maxUpload = {{config('filesystems.paths.max_size')}}</script>
     <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->

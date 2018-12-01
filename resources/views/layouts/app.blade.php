@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Tech Bench') }}</title>
-    <script>var maxUpload = {{config('max_size')}}</script>
+    <script>var maxUpload = {{config('filesystems.paths.max_size')}}</script>
     <script src="{{ asset('js/app.js') }}"></script>
     
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">

@@ -130,7 +130,7 @@ class TechTipsController extends Controller
         //  If there are any files, process them
         if(!empty($request->file))
         {
-            $filePath = config('filesystem.tips').DIRECTORY_SEPARATOR.$tipID;
+            $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
             foreach($request->file as $file)
             {
                 //  Clean the file and store it
@@ -319,7 +319,7 @@ class TechTipsController extends Controller
         //  Process any new files
         if(!empty($request->file))
         {
-            $filePath = config('filesystem.tips').DIRECTORY_SEPARATOR.$id;
+            $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$id;
             foreach($request->file as $file)
             {
                 //  Clean the file and store it
