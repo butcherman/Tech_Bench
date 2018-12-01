@@ -90,7 +90,7 @@ class UserLinksController extends Controller
         $user = User::find($details->user_id);
         try
         {
-            Mail::to($user)->send(new newLinkFile($details));
+            Mail::to($user)->send(new NewLinkFile($details));
         }
         catch(Exception $e)
         {
