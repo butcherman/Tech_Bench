@@ -11,6 +11,7 @@
                 @yield('modal-body')
             </div>
             <div class="modal-footer">
+                <span id="modal-footer-extra" class="mr-auto"></span>
                 <button class="btn btn-secondary cancel-upload" type="button" data-dismiss="modal">Cancel</button>
             </div>
         </div>

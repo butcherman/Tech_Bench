@@ -21,44 +21,13 @@
             @endif
         </div>
     </div>
-    
-    
-    
-    
-    
-    
-    
     <div class="row justify-content-center">
         <div class="col-md-8">
             {!!Form::open(['route' => 'installer.submitCustomize'])!!}
-                {{Form::bsText('name', 'Application Name', null, ['required'])}}
-                {{Form::bsText('url', 'Website URL', null, ['required'])}}
-                {{Form::bsSubmit('Submit Category')}}
+                {{Form::bsText('url', 'Website URL', config('app.url'), ['required readonly'])}}
+                {{Form::bsTimeZone()}}
+                {{Form::bsSubmit('Update Tech Bench')}}
             {!!Form::close()!!}
-        </div>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <div class="row justify-content-center pad-top">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center"><strong>Instructions</strong></div>
-                <div class="card-body">
-                    <p>
-                        A new System Category will allow for individual systems to be created under it.  The category will display in the navigation menu to the left.
-                    </p>
-                    <p>
-                        The Category name must be a standard string, no special characters are allowed.
-                    </p>
-                </div>
-            </div>
         </div>
     </div>
 </div>

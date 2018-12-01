@@ -1,4 +1,9 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">My Dashboard</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">
@@ -19,7 +24,7 @@
                                     <div class="card text-white bg-info o-hidden h-100">
                                         <a href="{{route('customer.details', [$fav->cust_id, urlencode($fav->name)])}}" class="card-body text-white">
                                             <div class="card-body-icon">
-                                                <i class="fa fa-fw fa-user"></i>
+                                                <i class="fa fa-fw fa-users"></i>
                                             </div>
                                             <div class="mr-5">{{$fav->name}}</div>
                                         </a>
@@ -46,7 +51,7 @@
                                     <div class="card text-white bg-info o-hidden h-100">
                                         <a href="{{route('tip.details', [$fav->tip_id, urlencode($fav->subject)])}}" class="card-body text-white">
                                             <div class="card-body-icon">
-                                                <i class="fa fa-fw fa-user"></i>
+                                                <i class="fa fa-fw fa-lightbulb-o"></i>
                                             </div>
                                             <div class="mr-5">{{$fav->subject}}</div>
                                         </a>

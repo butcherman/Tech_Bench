@@ -56,7 +56,7 @@ class SystemFilesController extends Controller
         $folder = SystemTypes::where('name', $request['system'])->first()->folder_location;
         
         //  Set file location and clean filename for duplicates
-        $filePath = env('SYS_FOLDER')
+        $filePath = config('filesystem.systems')
             .DIRECTORY_SEPARATOR.strtolower($request['category'])
             .DIRECTORY_SEPARATOR.$folder;
         

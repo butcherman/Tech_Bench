@@ -1,4 +1,11 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('system.index')}}">Systems</a></li>
+    <li class="breadcrumb-item"><a href="{{route('system.select', ['cat' => $category])}}">{{$category}}</a></li>
+    <li class="breadcrumb-item active">{{$sysName}}</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">
@@ -97,9 +104,16 @@
     {
         $('.tab-pane').each(function()
         {
+            var myTable = $(this).find('table');
             $(this).find('tbody').load('{{ url('system/load-file') }}/{{ urlencode($sysName) }}/'+$(this).data('type'), function()
             {
                 $('[data-tooltip="tooltip"]').tooltip();
+                myTable.DataTable({
+                    'paging':false,
+                    'language':{
+                        'emptyTable':'No Files'
+                    }
+                });
             });
         });
     }

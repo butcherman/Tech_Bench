@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">My Dashboard</a></li>
+    <li class="breadcrumb-item active">About Tech Bench</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">
@@ -9,9 +15,11 @@
                 <div class="card-body">
                     <dl class="row justify-content-center">
                         <dt class="col-sm-6 text-right">Version:</dt>
-                        <dd class="col-sm-6">{{config('app.version')}}</dd>
+                        <dd class="col-sm-6">@version('version')</dd>
+<!--
                         <dt class="col-sm-6 text-right">Release Date:</dt>
-                        <dd class="col-sm-6">{{config('app.release')}}</dd>
+                        <dd class="col-sm-6"></dd>
+-->
                     </dl>
                 </div>
             </div>

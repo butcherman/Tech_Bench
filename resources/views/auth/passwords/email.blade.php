@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <img src="/img/TechBenchLogo.png" alt="Company Logo" class="text-center" id="header-logo" />
+            <img src="/img/{{config('app.logo')}}" alt="Company Logo" class="text-center" id="header-logo" />
             <h1 class="text-center">Tech Bench</h1>
         </div>
     </div>

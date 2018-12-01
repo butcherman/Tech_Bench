@@ -9,6 +9,7 @@ use App\SystemCustDataFields;
 use App\SystemCustDataTypes;
 use App\SystemCategories;
 use App\SystemTypes;
+use App\Settings;
 
 class InstallerController extends Controller
 {
@@ -45,17 +46,56 @@ class InstallerController extends Controller
         ]); 
     }
     
-//    //  System customization form
-//    public function customizeSystem()
-//    {
-//        return view('installer.form.customize');
-//    }
-//    
-//    
-//    public function submitCustom(Request $request)
-//    {
-//        return $request->all();
-//    }
+    //  Server customization form
+    public function customizeSystem()
+    {
+        return view('installer.form.customize');
+    }
+    
+    //  Submit the server customization form
+    public function submitCustom(Request $request)
+    {
+        $request->validate([
+            'timezone' => 'required'
+        ]);
+        
+        Settings::where('key', 'app.timezone')->update([
+            'value' => $request->timezone
+        ]);
+        
+        Log::info('Tech Bench Settings Updated', ['user_id' => Auth::user()->user_id]);
+        
+        return redirect()->back()->with('success', 'Tech Bench Successfully Updated');//
+    }
+    
+    //  Email settings form
+    public function emailSettings()
+    {
+        return view('installer.form.email');
+    }
+    
+    //  Submit the email settings form
+    public function submitEmailSettings(Request $request)
+    {
+        $request->validate([
+            'host'       => 'required',
+            'port'       => 'required|numeric',
+            'encryption' => 'required',
+            'username'   => 'required'
+        ]);
+        
+        //  Update each setting
+        Settings::where('key', 'mail.host')->update(['value' => $request->host]);
+        Settings::where('key', 'mail.port')->update(['value' => $request->port]);
+        Settings::where('key', 'mail.encryption')->update(['value' => $request->encryption]);
+        Settings::where('key', 'mail.username')->update(['value' => $request->username]);
+        if(!empty($request->password))
+        {
+            Settings::where('key', 'mail.password')->update(['value' => $request->password]);
+        }
+            
+        return redirect()->back()->with('success', 'Tech Bench Successfully Updated');//
+    }
     
     //  Form to create a new Category
     public function newCat()
@@ -143,6 +183,7 @@ class InstallerController extends Controller
         $dropDown = SystemCustDataTypes::orderBy('name', 'ASC')->get();
         $dataType = SystemCustDataFields::where('sys_id', $sysData->sys_id)
             ->join('system_cust_data_types', 'system_cust_data_types.data_type_id', '=', 'system_cust_data_fields.data_type_id')
+            ->orderBy('order', 'ASC')
             ->get();
         
         return view('installer.form.editSystem', [

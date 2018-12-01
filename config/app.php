@@ -2,27 +2,25 @@
 
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
-    
-    'version' => '4.0.7',
-    
-    'release' => '11-25-2018',
-    
+
+    'logo' => 'TechBenchLogo.png',
+
     'env' => env('APP_ENV', 'production'),
-    
+
     'debug' => env('APP_DEBUG', false),
-    
+
     'url' => env('APP_URL', 'http://localhost'),
-    
+
     'timezone' => env('TIMEZONE', 'America/Los_Angeles'),
-    
+
     'locale' => 'en',
-    
+
     'fallback_locale' => 'en',
-    
+
     'key' => env('APP_KEY'),
-    
+
     'cipher' => 'AES-256-CBC',
-    
+
     'providers' => [
         /*
          * Laravel Framework Service Providers...
@@ -65,6 +63,8 @@ return [
         App\Providers\UserServiceProvider::class,
         App\Providers\FormServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        App\Providers\SettingsServiceProvider::class,
+        Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
 
     ],
     'aliases' => [

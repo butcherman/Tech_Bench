@@ -1,4 +1,11 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">My Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{{route('account')}}">Account Settings</a></li>
+    <li class="breadcrumb-item active">Change Password</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">

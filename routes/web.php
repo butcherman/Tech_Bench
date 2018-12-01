@@ -7,6 +7,8 @@ Auth::routes();
 Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::get('/download/{id}/{filename}', 'DownloadController@index')->name('downloadPage');
 Route::get('/confirm', 'PagesController@confirmDialog')->name('confirm');
+Route::get('/finish-setup/{hash}', 'UserController@initializeUser')->name('initialize');
+Route::post('/finish-setup/{hash}', 'UserController@submitInitializeUser')->name('submitInitialize');
 
 ///////////////////////////  User File Link Routes  /////////////////////////////////////////
 Route::prefix('file-links')->name('userLink.')->group(function()
@@ -90,6 +92,7 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer', 'admin']], funct
         Route::get('links', 'AdminController@links')->name('links');
         Route::post('resetPass/{id}', 'UserController@resetPassword')->name('resetPass');
         Route::resource('users', 'UserController');
+        Route::get('customers', 'AdminController@customers')->name('customers');
         Route::get('/', 'AdminController@index')->name('index');
     });
 });
@@ -111,5 +114,7 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
         //////////////////////////  System Customization Routes  ////////////////////////////
         Route::post('system-customization', 'InstallerController@submitCustom')->name('submitCustomize');
         Route::get('system-customization', 'InstallerController@customizeSystem')->name('customize');
+        Route::post('email-settings', 'InstallerController@submitEmailSettings')->name('submitEmail');
+        Route::get('email-settings', 'InstallerController@emailSettings')->name('email');
     });
 });

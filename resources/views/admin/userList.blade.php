@@ -38,7 +38,7 @@
                                 <td>{{$user->email}}</td>
                                 <td>
                                     @if(!empty($user->UserLogins->last()))
-                                        {{date('M j, Y - g:i A - e', strtotime($user->UserLogins->last()->created_at))}}
+                                        {{date('M j, Y - g:i A', strtotime($user->UserLogins->last()->created_at))}}
                                     @else
                                         Never
                                     @endif

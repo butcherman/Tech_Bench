@@ -433,6 +433,7 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
 @media (min-width: 992px) {
   #mainNav.navbar-dark .navbar-collapse .navbar-sidenav {
     background: #343a40;
+    overflow-x: auto;
   }
 
   #mainNav.navbar-dark .navbar-collapse .navbar-sidenav li.active a {
@@ -15415,6 +15416,18 @@ label {
 
 .tab-pane dd {
   margin: 0;
+}
+
+.password-field > .password-shown {
+  display: none;
+}
+
+.password-field:hover .password-hidden {
+  display: none;
+}
+
+.password-field:hover .password-shown {
+  display: inline;
 }
 
 .customer-note-card .card {

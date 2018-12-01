@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use DB;
 use App\Role;
 use App\User;
 use App\UserLogins;
+use App\UserInitialize;
+use App\Mail\InitializeUser;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('initializeUser', 'submitInitializeUser');
     }
+    
     //  Show the list of current users
     public function index()
     {
@@ -52,12 +58,13 @@ class UserController extends Controller
     //  Create the new user
     public function store(Request $request)
     {
+        //  Validate the new user form
         $request->validate([
-            'username'   => 'required|unique:users',
+            'username'   => 'required|unique:users|regex:/^[a-zA-Z0-9_]*$/',
             'first_name' => 'required',
             'last_name'  => 'required',
             'email'      => 'required|unique:users',
-            'password'   => 'required|string|min:6|confirmed'
+//            'password'   => 'required|string|min:6|confirmed'
         ]);
         
         //  Create the user
@@ -66,7 +73,7 @@ class UserController extends Controller
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
             'email'      => $request->email,
-            'password'   => bcrypt($request->password),
+            'password'   => bcrypt(strtolower(str_random(15))),
             'active'     => 1
         ]);
         
@@ -75,7 +82,84 @@ class UserController extends Controller
         //  Assign the users role
         DB::insert('INSERT INTO `user_role` (`user_id`, `role_id`) VALUES (?, ?)', [$userID, $request->role]);
         
+        //  Create the setup user link
+        $hash = strtolower(str_random(30));
+        UserInitialize::create([
+            'username' => $request->username,
+            'token'    => $hash
+        ]);
+        
+        //  Email the new user
+        
+        try
+        {
+            Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
+        }
+        catch(Exception $e)
+        {
+            Log::error('Email not sent to new user'.$request->email.'.  Failed because of: '.$e);
+        }
+        
+        Log::info('New User Created', ['created_by' => Auth::user()->user_id, 'new_id' => $userID]);
+        
         return redirect(route('admin.users.index'))->with('success', 'User Created Successfully');
+    }
+    
+    //  Finish setting up the user account by making them assign their password
+    public function initializeUser($hash)
+    {
+        $this->middleware('guest');
+        
+        //  Validate the hash token
+        $user = UserInitialize::where('token', $hash)->get();
+        
+        if($user->isEmpty())
+        {
+            return abort(404);
+        }
+        
+        return view('account.form.initializePassword', ['hash' => $hash]);
+    }
+    
+    //  Submit the password change and log in the user
+    public function submitInitializeUser($hash, Request $request)
+    {
+        //  Verify that the link matches the assigned email address
+        $valid = UserInitialize::where('token', $hash)->first();
+        if(empty($valid))
+        {
+            return abort(404);
+        }
+        
+        //  Validate the form
+        $request->validate([
+            'username' => [
+                'required',
+                Rule::in([$valid->username]),
+            ],
+            'newPass'  => 'required|string|min:6|confirmed'
+        ]);
+        
+        //  Get the users information
+        $userData = User::where('username', $valid->username)->first();
+        
+         //  Update the password
+        User::find($userData->user_id)->update(
+        [
+            'password'   => bcrypt($request->newPass)
+        ]);
+        
+        //  Remove the initialize instance
+        UserInitialize::find($valid->id)->delete();
+        
+        //  Log the change
+        Log::info('User has setup account', ['user_id' => $userData->user_id]);
+        
+        //  Log in the user
+        Auth::loginUsingID($userData->user_id);
+        
+        //  Redirect the user to the dashboard
+        return redirect(route('dashboard'));
     }
 
     //  Show the for to edit a users password

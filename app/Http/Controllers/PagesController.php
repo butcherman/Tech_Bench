@@ -12,6 +12,7 @@ class PagesController extends Controller
         return view('_inc.confirmDialog');
     }
     
+    //  About page to show application information
     public function about()
     {
         return view('about');

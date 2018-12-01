@@ -38,7 +38,7 @@ class CustomerDetails extends Controller
         Customers::create($request->all());
         
         //  Create the customer data folder
-        $path = env('CUST_FOLDER', false).DIRECTORY_SEPARATOR.$request['cust_id'];
+        $path = config('filesystem.customers').DIRECTORY_SEPARATOR.$request['cust_id'];
         Storage::makeDirectory($path);
         
         Log::info('New Customer Created', ['cust_id' => $request->cust_id, 'user_id' => Auth::user()->user_id]);
@@ -88,6 +88,12 @@ class CustomerDetails extends Controller
         ]);
         
         $custData = Customers::find($id)->update($request->all());
+
+        //  Modify to the new ID number if set
+        if(isset($request->cust_id))
+        {
+            $id = $request->cust_id;
+        }
         
         Log::info('Customer Info Updated', ['cust_id' => $id, 'user_id' => Auth::user()->user_id]);
         
@@ -105,6 +111,9 @@ class CustomerDetails extends Controller
      */
     public function destroy($id)
     {
-        //
+        Customers::find($id)->delete();
+        
+        return 1;
+//        return redirect()->route('customer.index');
     }
 }
