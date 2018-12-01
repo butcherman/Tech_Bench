@@ -41,8 +41,8 @@ cd $STAGE_DIR
 su -c "npm update --only=prod; composer update --optimize-autoloader --no-dev; php artisan migrate --force" $SUDO_USER
 
 #  Copy files to web directory
-# cp -R $STAGE_DIR/* $PROD_DIR
-rsync -ar --progress $STAGE_DIR $PROD_DIR --exclude scripts --exclude storage/app --exclude storage/logs --exclude tests
+cp -R $STAGE_DIR/* $PROD_DIR
+# rsync -ar --progress $STAGE_DIR $PROD_DIR --exclude scripts --exclude storage/app --exclude storage/logs --exclude tests
 
 #  Change the owner of the files to the web user
 chown -R www-data:www-data $PROD_DIR
