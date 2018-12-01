@@ -44,7 +44,7 @@ class CustomerFilesController extends Controller
         ]);
         
         //  Set file locationi and clean filename for duplicates
-        $filePath = config('filesystem.customers').DIRECTORY_SEPARATOR.$request->custID;
+        $filePath = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$request->custID;
         $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
         
         //  Store the file
