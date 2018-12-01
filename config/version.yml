@@ -13,7 +13,7 @@ cache:
 build:
     mode: number
     number: c46c74
-    length: 6
+    length: 7
     increment_by: 1
     git_absorb: git-local
 git:

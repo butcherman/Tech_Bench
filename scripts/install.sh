@@ -19,6 +19,8 @@ source $STAGE_DIR/scripts/_config.sh
 
 ########################  Variables for this script  ###########################
 PREREQ=true
+IPADDR=$(ifconfig  | grep -E 'inet.[0-9]' | grep -v '127.0.0.1' | awk '{ print $2}')
+COUNT=1
 
 #  Verify the script is being run as root
 if [[ $EUID -ne 0 ]]; then
@@ -163,7 +165,7 @@ fi
 #  Get the full URL of the Tech Bench site
 printf '\n\nPlease enter the full url that will be used for the Tech Bench: '
 echo '(ex. https://techbench.domain.com)' 
-read -p 'url:  ' WEB_URL
+read -p 'Enter URL [http://'$IPADDR']:  ' WEB_URL
 
 #  Configure MySQL Database
 printf '\n\nConfiguring MySQL Database\n'
@@ -175,6 +177,23 @@ read -p 'Enter the MySQL Admin Password:' -s DBPASS
 
 #  Default value if left empty
 DBUSER=${DBUSER:-root}
+WEBURL=${WEBURL:-http://$IPADDR}
+
+#  New username just for the Tech Bench database
+NEWUSER='tb_db_user'
+NEWPASS=$(date | sha256sum | base64 | head -c 12)
+
+#  Check if the Tech Bench database user already exists
+while true; do
+    USER_EXISTS=$(mysql -uroot -p -s -N -e "SELECT COUNT(*) FROM mysql.user WHERE user = '$NEWUSER';")
+
+    if [ $USER_EXISTS = 0 ]; then
+        break
+    fi
+
+    NEWUSER=$NEWUSER$COUNT
+    COUNT=$[COUNT + 1]
+done
 
 #  Get the name of the database and make sure it is not an existing database
 while true; do
@@ -192,9 +211,6 @@ while true; do
 	printf "\n\nThis Database already exists.  Please enter a database name that is not in use.\n"
 done
 
-#  New username just for the Tech Bench database
-NEWUSER='tb_db_user'
-NEWPASS=$(date | sha256sum | base64 | head -c 12)
 #  Create the database and user
 mysql -u$DBUSER -p$DBPASS > /dev/null 2>&1 <<MYSQL_SCRIPT
 	CREATE DATABASE IF NOT EXISTS \`${DBNAME}\`;

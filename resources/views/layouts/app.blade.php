@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Tech Bench') }}</title>
-    <script>var maxUpload = {{env('MAX_UPLOAD')/1024/1024}}</script>
+    <script>var maxUpload = {{config('max_size')}}</script>
     <script src="{{ asset('js/app.js') }}"></script>
     
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -77,25 +77,6 @@
                         <span class="nav-link-text">Tech Tips</span>
                     </a>
                 </li>
-<!--
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Files">
-                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseFiles" data-parent="#exampleAccordion">
-                        <i class="fa fa-fw fa-file"></i>
-                        <span class="nav-link-text">Files</span>
-                    </a>
-                    <ul class="sidenav-second-level collapse" id="collapseFiles">
-                        <li>
-                            <a href="/links">File Links</a>
-                        </li>
-                        <li>
-                            <a href="/company-files">Company Files</a>
-                        </li>
-                        <li>
-                            <a href="/my-files">My Files</a>
-                        </li>
-                    </ul>
-                </li>
--->
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Account Settings">
                     <a class="nav-link" href="{{route('account')}}">
                         <i class="fa fa-fw fa-user"></i>
@@ -105,18 +86,6 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-<!--                        Search Feature to be added later
-                    <form class="form-inline my-2 my-lg-0 mr-lg-2">
-                        <div class="input-group">
-                            <input class="form-control" type="text" placeholder="Search for...">
-                            <span class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </form>
--->
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"
@@ -129,9 +98,11 @@
                         @csrf
                     </form>
                 </li>
+<!--
                 <li class="nav-item">
                     <a class="nav-link" href="/about" title="help"><i class="fa fa-fw fa-question-circle-o" aria-hidden="true"></i></a>
                 </li>
+-->
             </ul>
         </div>
     </nav>
@@ -139,15 +110,6 @@
     <!--  Body  -->
     <div class="content-wrapper">
         <div class="container-fluid pad-bottom">
-            <!-- Breadcrumbs-->
-<!--
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="#">Dashboard</a>
-                </li>
-                <li class="breadcrumb-item active">My Dashboard</li>
-            </ol>
--->
             @yield('breadcrumbs')
             <!--  Primary Page Content  -->
             @yield('content')
@@ -155,7 +117,10 @@
         <footer class="sticky-footer pad-top">
             <div class="container">
                 <div class="text-center">
-                    <small>Copyright © Tech Bench 2016-2018</small>
+                    <small>
+                        Copyright © Tech Bench 2016-2018 - 
+                        Version - @version('version')
+                    </small>
                 </div>
             </div>
         </footer>

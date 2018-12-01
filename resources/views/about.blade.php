@@ -15,10 +15,10 @@
                 <div class="card-body">
                     <dl class="row justify-content-center">
                         <dt class="col-sm-6 text-right">Version:</dt>
-                        <dd class="col-sm-6">@version('compact')</dd>
+                        <dd class="col-sm-6">@version('version')</dd>
 <!--
                         <dt class="col-sm-6 text-right">Release Date:</dt>
-                        <dd class="col-sm-6">{{config('app.release')}}</dd>
+                        <dd class="col-sm-6"></dd>
 -->
                     </dl>
                 </div>
