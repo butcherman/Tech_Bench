@@ -51,7 +51,8 @@ class CustomerContactsController extends Controller
         
         if(!empty(array_filter($request['phoneNumber'])))
         {
-            for($i=0; $i<count($request['phoneNumber']); $i++)
+            $num = count($request['phoneNumber']);
+            for($i=0; $i < $num; $i++)
             {
                 if(!empty($request['phoneNumber'][$i]))
                 {
@@ -105,7 +106,7 @@ class CustomerContactsController extends Controller
     {
         $request->validate(['name' => 'required']);
         
-        $cont = CustomerContacts::where('cont_id', $id)->update([
+        CustomerContacts::where('cont_id', $id)->update([
             'name'  => $request['name'],
             'email' => $request['email']
         ]);
@@ -114,7 +115,8 @@ class CustomerContactsController extends Controller
         CustomerContactPhones::where('cont_id', $id)->delete();
         if(!empty(array_filter($request['phoneNumber'])))
         {
-            for($i=0; $i<count($request['phoneNumber']); $i++)
+            $num = count($request['phoneNumber']);
+            for($i=0; $i < $num; $i++)
             {
                 CustomerContactPhones::create([
                     'cont_id'       => $id,
@@ -125,7 +127,7 @@ class CustomerContactsController extends Controller
             }
         }
         
-        Log::info('Customer Contact Updated', ['cont_id' => $contID, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer Contact Updated', ['cont_id' => $id, 'user_id' => Auth::user()->user_id]);
     }
 
     //  Delete customer contact

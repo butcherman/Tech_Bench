@@ -18,7 +18,7 @@ class TechTipsCommentsController extends Controller
     //  Submit the Tech Tip comment
     public function store(Request $request)
     {
-        $request->validate = ['tipID' => 'required', 'comment' => 'required'];
+        $request->validate(['tipID' => 'required', 'comment' => 'required']);
         
         TechTipComments::create([
             'tip_id' => $request->tipID,
@@ -55,7 +55,7 @@ class TechTipsCommentsController extends Controller
     //  Submit an edited comment
     public function update(Request $request, $id)
     {
-        $request->validate = ['comment' => 'required'];
+        $request->validate(['comment' => 'required']);
         
         TechTipComments::find($id)->update([
             'comment' => $request->comment

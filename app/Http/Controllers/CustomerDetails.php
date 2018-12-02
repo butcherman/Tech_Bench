@@ -26,7 +26,7 @@ class CustomerDetails extends Controller
     //  Store the new customer form
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'cust_id'  => 'required|numeric|unique:customers',
             'name'     => 'required|unique:customers',
             'dba_name' => 'nullable',
@@ -79,7 +79,7 @@ class CustomerDetails extends Controller
     //  Update the customer details
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'name'     => 'required',
             'dba_name' => 'nullable',
             'address'  => 'required',
@@ -87,7 +87,7 @@ class CustomerDetails extends Controller
             'zip'      => 'required|numeric'
         ]);
         
-        $custData = Customers::find($id)->update($request->all());
+        Customers::find($id)->update($request->all());
 
         //  Modify to the new ID number if set
         if(isset($request->cust_id))
@@ -113,7 +113,6 @@ class CustomerDetails extends Controller
     {
         Customers::find($id)->delete();
         
-        return 1;
-//        return redirect()->route('customer.index');
+        return 'done';
     }
 }

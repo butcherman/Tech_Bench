@@ -49,7 +49,7 @@ class UserLinksController extends Controller
     
     public function uploadFiles($hash, Request $request)
     {
-        $request->validate = ['name' => 'required', 'file' => 'required'];
+        $request->validate(['name' => 'required', 'file' => 'required']);
             
         $details = FileLinks::where('link_hash', $hash)->first();
         

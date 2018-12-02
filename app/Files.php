@@ -19,7 +19,7 @@ class Files extends Model
     
     public function fileLinkFiles()
     {
-        return $tihs->hasMany('App\FileLinkFiles', 'file_id', 'file_id');
+        return $this->hasMany('App\FileLinkFiles', 'file_id', 'file_id');
     }
     
     public function fileLinkNotes()

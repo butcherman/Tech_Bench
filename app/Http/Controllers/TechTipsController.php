@@ -97,7 +97,7 @@ class TechTipsController extends Controller
     //  Submit the new tech tip
     public function store(Request $request)
     {
-        $request->validate = ['subject' => 'required', 'details' => 'required', 'sysTags' => 'required'];
+        $request->validate(['subject' => 'required', 'details' => 'required', 'sysTags' => 'required']);
         
         //  Enter the tip details and get the tip ID
         $tip = TechTips::create([
@@ -265,7 +265,7 @@ class TechTipsController extends Controller
     //  Update the tech tip
     public function update(Request $request, $id)
     {
-        $request->validate = ['subject' => 'required', 'details' => 'required', 'sysTags' => 'required'];
+        $request->validate(['subject' => 'required', 'details' => 'required', 'sysTags' => 'required']);
         
         //  update tip details
         TechTips::find($id)->update([
