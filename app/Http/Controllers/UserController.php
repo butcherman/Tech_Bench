@@ -97,7 +97,7 @@ class UserController extends Controller
         }
         catch(Exception $e)
         {
-            Log::error('Email not sent to new user'.$request->email.'.  Failed because of: '.$e);
+            report($e);
         }
         
         Log::info('New User Created', ['created_by' => Auth::user()->user_id, 'new_id' => $userID]);

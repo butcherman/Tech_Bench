@@ -3,7 +3,7 @@ blade_directive: version
 current:
     major: 4
     minor: 1
-    patch: 3
+    patch: 4
     format: '{$major}.{$minor}.{$patch}'
     git_absorb: false
 cache:
@@ -11,11 +11,8 @@ cache:
     key: pragmarx-version
     time: 525600
 build:
-    mode: number
-    number: c46c74
-    length: 6
-    increment_by: 1
     git_absorb: git-remote
+    number: 170f07
 git:
     git-local: 'git rev-parse --verify HEAD'
     git-remote: 'git ls-remote {$repository}'

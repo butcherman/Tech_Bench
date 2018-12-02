@@ -94,7 +94,7 @@ class UserLinksController extends Controller
         }
         catch(Exception $e)
         {
-            Log::error('Email not sent to user id'.$details->user_id.'.  Failed because of: '.$e);
+            report($e);
         }
         
         return $request->all();

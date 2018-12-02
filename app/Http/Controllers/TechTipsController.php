@@ -161,7 +161,7 @@ class TechTipsController extends Controller
         }
         catch(Exception $e)
         {
-            Log::error('Unable to email new Tech Tip.  Failed because of: '.$e);
+            report($e);
         }
         
         Log::info('Tech Tip Created', ['tip_id' => $tipID, 'user_id' => Auth::user()->user_id]);
