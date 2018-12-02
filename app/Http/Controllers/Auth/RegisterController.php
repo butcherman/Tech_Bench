@@ -72,7 +72,8 @@ class RegisterController extends Controller
     
     public function showRegistrationForm()
     {
-        return redirect('login');
+//        return redirect('login');
+        abort(404);
     }
 
     public function register()

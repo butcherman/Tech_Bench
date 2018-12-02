@@ -29,7 +29,7 @@ class CreateSettingsTable extends Migration
             ['created_at' => \Carbon\Carbon::now(), 'key' => 'mail.encryption', 'value' => config('mail.encryption')],
             ['created_at' => \Carbon\Carbon::now(), 'key' => 'mail.username',   'value' => config('mail.username')],
             ['created_at' => \Carbon\Carbon::now(), 'key' => 'mail.password',   'value' => config('mail.password')],
-            ['created_at' => \Carbon\Carbon::now(), 'key' => 'mail.from.address',   'value' => config('mail.fom.address')],
+            ['created_at' => \Carbon\Carbon::now(), 'key' => 'mail.from.address',   'value' => config('mail.from.address')],
             ['created_at' => \Carbon\Carbon::now(), 'key' => 'mail.from.name',   'value' => config('mail.from.name')],
         ]);
     }

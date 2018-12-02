@@ -128,7 +128,6 @@ class SystemFilesController extends Controller
         //  Get the original file information
         $origData = SystemFiles::find($id)->with('files')->first();
         $filePath = $origData->files->file_link;
-        $orgID    = $origData->file_id;
         //  Clean the filename
         $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
         

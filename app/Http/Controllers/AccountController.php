@@ -33,12 +33,12 @@ class AccountController extends Controller
     //  Submit the new user settings
     public function submit($userID, Request $request)
     {
-        $request->validate = [
+        $request->validate([
             'username'   => 'required',
             'first_name' => 'required',
             'last_name'  => 'required',
             'email'      => 'required',
-        ];
+        ]);
 
         User::find($userID)->update(
         [

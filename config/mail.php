@@ -6,7 +6,7 @@ return [
     'port' => 587,
     'from' => [
         'address' => 'hello@example.com',
-        'name' => 'Example',
+        'name' => 'Tech Bench',
     ],
 
     'encryption' => 'tls',

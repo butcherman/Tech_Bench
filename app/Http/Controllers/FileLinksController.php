@@ -33,7 +33,7 @@ class FileLinksController extends Controller
     //  Store the new file link
     public function store(Request $request)
     {
-        $request->validate = ['name' => 'required', 'expire' => 'required'];
+        $request->validate(['name' => 'required', 'expire' => 'required']);
         
         //  Generate a random hash to use as the file link and make sure it is not already in use
         do
@@ -238,7 +238,7 @@ class FileLinksController extends Controller
             }
         }
         
-        $link = FileLinks::find($id)->delete();
+        FileLinks::find($id)->delete();
         
         Log::info('File link deleted', ['link_id' => $id, 'user_id' => Auth::user()->user_id]);
     }

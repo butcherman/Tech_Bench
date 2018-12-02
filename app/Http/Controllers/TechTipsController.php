@@ -97,7 +97,7 @@ class TechTipsController extends Controller
     //  Submit the new tech tip
     public function store(Request $request)
     {
-        $request->validate = ['subject' => 'required', 'details' => 'required', 'sysTags' => 'required'];
+        $request->validate(['subject' => 'required', 'details' => 'required', 'sysTags' => 'required']);
         
         //  Enter the tip details and get the tip ID
         $tip = TechTips::create([
@@ -161,7 +161,7 @@ class TechTipsController extends Controller
         }
         catch(Exception $e)
         {
-            Log::error('Unable to email new Tech Tip.  Failed because of: '.$e);
+            report($e);
         }
         
         Log::info('Tech Tip Created', ['tip_id' => $tipID, 'user_id' => Auth::user()->user_id]);
@@ -265,7 +265,7 @@ class TechTipsController extends Controller
     //  Update the tech tip
     public function update(Request $request, $id)
     {
-        $request->validate = ['subject' => 'required', 'details' => 'required', 'sysTags' => 'required'];
+        $request->validate(['subject' => 'required', 'details' => 'required', 'sysTags' => 'required']);
         
         //  update tip details
         TechTips::find($id)->update([
