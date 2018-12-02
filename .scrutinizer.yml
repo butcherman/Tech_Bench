@@ -1,0 +1,14 @@
+build:
+    environment:
+        php: 7.2
+        mysql: 5.7
+     services:
+        mysql: 5.7
+    
+    dependencies:
+        before:
+            - cp tests/.env.scrutinizer .env
+            - mysql -e 'create database scrutinizer;'
+            - mysql -e 'create user forge@localhost; grant all privileges on *.* to forge@localhost with grant option;'
+        after:
+            - php artisan migrate
