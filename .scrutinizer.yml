@@ -2,7 +2,8 @@ build:
     environment:
         php: 7.2
         mysql: 5.7
-     services:
+
+    services:
         mysql: 5.7
     
     dependencies:
@@ -12,3 +13,4 @@ build:
             - mysql -e 'create user forge@localhost; grant all privileges on *.* to forge@localhost with grant option;'
         after:
             - php artisan migrate
+            

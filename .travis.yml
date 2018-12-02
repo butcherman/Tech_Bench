@@ -1,23 +1,29 @@
 language: php
- env:
+
+env:
   global:
     - setup=stable
- matrix:
+
+matrix:
   fast_finish: true
   include:
     - php: 7.1
       env: setup=lowest
     - php: 7.2
       env: setup=lowest
- sudo: false
- cache:
+
+sudo: false
+
+cache:
   directories:
     - $HOME/.composer/cache
- services:
+
+services:
     - memcached
     - redis-server
     - mysql
- before_install:
+
+before_install:
     - mysql -e 'create database forge;'
     - mysql -e 'create user forge@localhost; grant all privileges on *.* to forge@localhost with grant option;'
     
@@ -27,9 +33,10 @@ before_script:
     - composer install --no-interaction
     - php artisan key:generate
     - php artisan migrate
- install:
+
+install:
     - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-suggest; fi
     - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
- script: 
+
+script: 
     - vendor/bin/phpunit
-    
