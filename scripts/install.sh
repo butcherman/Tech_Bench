@@ -280,7 +280,7 @@ echo 'VERSION_GIT_REMOTE_REPOSITORY=https://github.com/butcherman/Tech_Bench.git
 echo ''                                                                                          >> .env
 
 #  Download all dependencies, cache and populate database
-su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan migrate --force" $SUDO_USER
+su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan key:generate; php artisan migrate --force; php artisan version:refresh; php artisan version:absorb" $SUDO_USER
 
 #  Copy files to web directory
 cp -R $STAGE_DIR/* $PROD_DIR
