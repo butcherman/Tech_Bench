@@ -51,13 +51,13 @@ Both options will
 ```
 unzip Tech_Bench-master.zip   //  Be sure to enter the correct file name
 ```
-* Move to the "scripts" directory
+* Move to the "Tech Bench" directory
 ```
-cd scripts
+cd Tech_Bench-master   //  Again, be sure to enter the correct folder name
 ```
 * Run the installer script as sudo user
 ```
-sudo ./install
+sudo ./scripts/install
 ```
 
 #### Option 2 - Downloading directly from Github
@@ -66,18 +66,16 @@ sudo ./install
 ```
 git clone https://github.com/butcherman/Tech_Bench.git
 ```
-* Navigate to the Tech_Bench/scripts directory
+* Navigate to the Tech_Bench directory
 ```
-cd Tech_Bench/scripts
-```
-* Modify the .sh files to allow them to be executable
-```
-chmod +x *.sh
+cd Tech_Bench
 ```
 * Run the installer script as sudo user
 ```
-sudo ./install
+sudo ./scripts/install
 ```
+
+The install script will download all necessary dependencies, create the Tech Bench Database, and load the files to the Web Root directory.
 
 # Post Installation Instructions
 Once the Tech Bench has been installed, you can navigate your web browser to the URL of the web server and login with the default credentials:

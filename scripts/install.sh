@@ -247,7 +247,7 @@ echo '#  Setting this variable to true will cause error information to be printe
 echo '#  the user on the web browser.' 															 >> .env
 echo '#  For security purposes, only turn this option on if absolutly necessary.' 				 >> .env
 echo '#  Be sure to turn it back off when troubleshooting is completed' 						 >> .env
-echo '# APP_DEBUG=false' 																		 >> .env
+echo '#  APP_DEBUG=true' 																		 >> .env
 echo '#  The APP_URL is the url that is used for all hyperlinks both in the application ' 		 >> .env
 echo '#  and in emails. ' 																		 >> .env
 echo "APP_URL=\"$WEBURL\"" 											      					     >> .env

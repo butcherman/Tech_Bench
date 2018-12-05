@@ -112,7 +112,8 @@
                     'paging':false,
                     'language':{
                         'emptyTable':'No Files'
-                    }
+                    },
+                    searching: false
                 });
             });
         });

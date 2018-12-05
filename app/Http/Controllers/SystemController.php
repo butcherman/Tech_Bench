@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\SystemCategories;
 use App\SystemTypes;
 use App\SystemFileTypes;
@@ -34,6 +36,7 @@ class SystemController extends Controller
         $valid = SystemCategories::where('name', $cat)->get();
         if($valid->isEmpty())
         {
+            Log::warning('User '.Auth::user()->user_id.' tried to visit invalid category '.$cat);
             return view('err.badCategory');
         }
         
@@ -44,7 +47,7 @@ class SystemController extends Controller
         })->get();
         
         return view('system.selectSystem', [
-            'systems' => $sysList,
+            'systems'  => $sysList,
             'category' => $cat
         ]);
     }
@@ -57,6 +60,7 @@ class SystemController extends Controller
         $valid = SystemTypes::where('name', $sys)->first();
         if(empty($valid))
         {
+            Log::warning('User '.Auth::user()->user_id.' tried to visit invalid system - '.$sys.' for category '.$cat);
             return view('err.badSystem');
         }
         
@@ -70,10 +74,10 @@ class SystemController extends Controller
         })->orderBy('created_at', 'DESC')->get();
         
         return view('system.details', [
-            'sysName' => $sys,
+            'sysName'   => $sys,
             'fileTypes' => $fileTypes,
-            'category' => $cat,
-            'results' => $tipData
+            'category'  => $cat,
+            'results'   => $tipData
         ]);  
     }
     
