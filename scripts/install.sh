@@ -85,8 +85,9 @@ fi
 tput sgr0
 
 #  Check if the Apache Rewrite Module is installed
+REWRITE=$(apachectl -M | grep 'rewrite_module' > /dev/null 2>&1)
 printf 'Rewrite Module                                              '
-if apachectl -M | grep 'rewrite_module' > /dev/null 2>&1; then
+if $REWRITE; then
 	tput setaf 2
 	echo '[PASS]'
 else	
@@ -249,7 +250,7 @@ echo '#  Be sure to turn it back off when troubleshooting is completed' 						 >
 echo '# APP_DEBUG=false' 																		 >> .env
 echo '#  The APP_URL is the url that is used for all hyperlinks both in the application ' 		 >> .env
 echo '#  and in emails. ' 																		 >> .env
-echo "APP_URL=\"$WEB_URL\"" 																     >> .env
+echo "APP_URL=\"$WEBURL\"" 											      					     >> .env
 echo '' 																						 >> .env
 echo '#  Database Connection Settings' 															 >> .env
 echo '#  The Tech Bench uses these settings for all database queries' 							 >> .env
@@ -283,17 +284,16 @@ echo ''                                                                         
 su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan key:generate; php artisan migrate --force; php artisan version:refresh; php artisan version:absorb" $SUDO_USER
 
 #  Copy files to web directory
-cp -R $STAGE_DIR/* $PROD_DIR
+rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' $STAGE_DIR/ $PROD_DIR
+
 #  Change the owner of the files to the web user and set permissions
-chown -R www-data:www-data $PROD_DIR
-chmod -R 777 $PROD_DIR
-#  Copy the .env and .htaccess files
-cp $STAGE_DIR/.env $PROD_DIR && cp $STAGE_DIR/.htaccess $PROD_DIR
+chown -R $APUSR:$APUSR $PROD_DIR
+chmod -R 755 $PROD_DIR
 
 #  Change to the production directory and cache the settings
-cd $PROD_DIR
-php artisan config:cache
-php artisan route:cache
+#cd $PROD_DIR
+#php artisan config:cache
+#php artisan route:cache
 
 #  Show the finished product
 clear
@@ -305,7 +305,7 @@ echo '#                                                                #'
 echo '##################################################################'
 tput sgr0
 echo ''
-echo 'Visit '$WEB_URL' and log in with the default user name and password:'
+echo 'Visit '$WEBURL' and log in with the default user name and password:'
 echo ''
 echo 'Username:  admin'
 echo 'Password:  password'
