@@ -284,7 +284,7 @@ echo ''                                                                         
 su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan key:generate; php artisan migrate --force; php artisan version:refresh; php artisan version:absorb" $SUDO_USER
 
 #  Copy files to web directory
-sudo rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' $STAGE_DIR $PROD_DIR
+sudo rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' $STAGE_DIR/ $PROD_DIR
 
 #  Change the owner of the files to the web user and set permissions
 chown -R $APUSR:$APUSR $PROD_DIR
