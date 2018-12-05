@@ -17,7 +17,8 @@
 ################################################################################
 
 #  Pull in the variable file
-source _config.sh
+STAGE_DIR="$(dirname "$(dirname "$(readlink -fm "$0")")")" 
+source $STAGE_DIR/scripts/_config.sh
 
 #  Verify the script is being run as root
 if [[ $EUID -ne 0 ]]; then
@@ -38,21 +39,19 @@ cp $PROD_DIR/.env $STAGE_DIR
 cd $STAGE_DIR
 
 #  Download all dependencies, cache and populate database
-su -c "npm update --only=prod; composer update --optimize-autoloader --no-dev; php artisan migrate --force" $SUDO_USER
+su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev --no-script; php artisan migrate --force; php artisan version:refresh; php artisan version:absorb" $SUDO_USER
 
 #  Copy files to web directory
-cp -R $STAGE_DIR/* $PROD_DIR
-# rsync -ar --progress $STAGE_DIR $PROD_DIR --exclude scripts --exclude storage/app --exclude storage/logs --exclude tests
+rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' --exclude="storage" $STAGE_DIR/ $PROD_DIR
 
-#  Change the owner of the files to the web user
-chown -R www-data:www-data $PROD_DIR
-#  Allow write permissions to the 'storage' directory
-chmod -R 777 $PROD_DIR/storage
+#  Change the owner of the files to the web user and set permissions
+chown -R $APUSR:$APUSR $PROD_DIR
+chmod -R 755 $PROD_DIR
 
 #  Change to the production directory and cache the settings
 cd $PROD_DIR
-php artisan config:cache
-php artisan route:cache
+#php artisan config:cache
+#php artisan route:cache
 
 #  Bring the application back online
 php artisan up
