@@ -284,20 +284,10 @@ echo ''                                                                         
 su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan key:generate; php artisan migrate --force; php artisan version:refresh; php artisan version:absorb" $SUDO_USER
 
 #  Copy files to web directory
-#  cp -R $STAGE_DIR/* $PROD_DIR
-
-
-
-
-rsync -av --exclude='tests' --exclude='scripts' --exclude='composer.*' --exclude='.*' --exclude='webpack.mix.js' $STAGE_DIR/ $PROD_DIR
-
-
-
-#  Copy the .env and .htaccess files
-cp $STAGE_DIR/.env $PROD_DIR && cp $STAGE_DIR/.htaccess $PROD_DIR
+sudo rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' $STAGE_DIR $PROD_DIR
 
 #  Change the owner of the files to the web user and set permissions
-chown -R www-data:www-data $PROD_DIR
+chown -R $APUSR:$APUSR $PROD_DIR
 chmod -R 755 $PROD_DIR
 
 #  Change to the production directory and cache the settings
