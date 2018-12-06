@@ -32,7 +32,7 @@
         
     </fieldset>
     <div class="row justify-content-center">
-        <div class="col-4">
+        <div class="col-6 col-sm-4">
             <button class="btn btn-block btn-info pad-bottom" id="add-number">Add Number</button>
         </div>
     </div>

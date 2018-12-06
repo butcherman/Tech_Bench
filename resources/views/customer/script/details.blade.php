@@ -141,6 +141,7 @@
                 });
             });
         });
+        $('#edit-modal').find('#modal-footer-extra').prepend('<button class="btn btn-danger mr-auto" id="delete-system" data-id="'+$(this).data('sysid')+'">Delete System</button>');
     });
     //  Confirmation box to delete a system
     $('#edit-modal').on('click', '#delete-system', function()
@@ -167,6 +168,7 @@
                 });
             });
         });
+        $('#edit-modal').find('#modal-footer-extra').text('');
     });
     
     /////////////////////// Contacts Events //////////////////////////

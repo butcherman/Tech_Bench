@@ -49,8 +49,6 @@ class SystemFilesController extends Controller
     //  Store the new system file
     public function store(Request $request)
     {
-        Log::debug('touched');
-        
         //  Validate incoming data
         $request->validate([
             'name'     => 'required',

@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-7 mt-2 mt-sm-0">
             <div class="card">
                 <div class="card-header text-center"><h5>Contacts:</h5></div>
                 <div class="card-body" id="contact-information">
@@ -81,15 +81,15 @@
             <div class="card">
                 <div class="card-header"><h5>Files:</h5></div>
                 <div class="card-body" id="customer-files">
-                    <div class="table">
+                    <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>File Name:</th>
                                     <th>File Type:</th>
-                                    <th>Uploaded By:</th>
+                                    <th class="d-none d-sm-table-cell">Uploaded By:</th>
                                     <th>Uploaded On:</th>
-                                    <th>Actions</th>
+                                    <th class="d-none d-sm-table-cell">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,18 +108,6 @@
             </div>
         </div>
     </div>
-<!--        Linked Sites to be Added Later
-    <div class="row justify-content-center pad-bottom">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header"><h5>Linked Sites:</h5></div>
-                <div class="card-body" id="customer-linked-sites">
-                    <p class="text-center"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...</p>
-                </div>
-            </div>
-        </div>
-    </div>
--->
 </div>
 @include('_inc.modal')
 @endsection
