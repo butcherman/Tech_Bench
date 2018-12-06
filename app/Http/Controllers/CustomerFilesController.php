@@ -69,7 +69,7 @@ class CustomerFilesController extends Controller
             'name'         => $request->name
         ]);
         
-        Log::info('File Added For Customer', ['cust_id' => $request->custID, 'file_id' => $fileID, 'user_id' => Auth::user()->user_id]);
+        Log::info('File Added For Customer ID-'.$request->custID.' by User ID-'.Auth::user()->user_id.'.  New File ID-'.$fileID);
     }
 
     //  Show customer files
@@ -118,7 +118,7 @@ class CustomerFilesController extends Controller
             'file_type_id' => $request->file_type_id
         ]);
         
-        Log::info('File Updated For Customer', ['file_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('File ID-'.$id.' Updated For Customer by User ID-'.Auth::user()->user_id);
     }
 
     //  Remove a customer file
@@ -129,7 +129,7 @@ class CustomerFilesController extends Controller
         $fileID = $data->file_id;
         $data->delete();
         
-        Log::info('File Deleted For Customer', ['cust_id' => $data->custID, 'file_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('File Deleted For Customer ID-'.$data->custID.' by User ID-'.Auth::user()->user_id.'.  File ID-'.$id);
         
         //  Delete from system if no longer in use
         Files::deleteFile($fileID);

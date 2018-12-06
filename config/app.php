@@ -65,7 +65,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
-
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     ],
     'aliases' => [
 

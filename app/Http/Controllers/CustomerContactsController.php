@@ -66,7 +66,7 @@ class CustomerContactsController extends Controller
             }
         }
         
-        Log::info('Customer Contact Created', ['cust_id' => $request['custID'], 'cont_id' => $contID, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer Contact created for Customer ID-'.$request['custID'].' by User ID-'.Auth::user()->user_id.'.  New Contact ID-'.$contID);
     }
 
     //Show all customer contacts
@@ -127,7 +127,7 @@ class CustomerContactsController extends Controller
             }
         }
         
-        Log::info('Customer Contact Updated', ['cont_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer Contact ID-'.$id.' updated by User ID-'.Auth::user()->user_id);
     }
 
     //  Delete customer contact
@@ -135,7 +135,7 @@ class CustomerContactsController extends Controller
     {
         $cont = CustomerContacts::find($id);
         
-        Log::info('Customer Contat Deleted', ['cont_id' => $id, 'cust_id' => $cont->cust_id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer Contact Deleted for Customer ID'.$cont->cust_id.' by User ID-'.Auth::user()->user_id.'.  Contact ID-'.$id);
     }
     
     //  Download the contact informaiton as a V-Card
