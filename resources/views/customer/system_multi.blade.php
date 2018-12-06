@@ -17,10 +17,10 @@
             @if($loop->first)
                 <div class="tab-pane fade show active" id="{{str_replace(' ', '-', $key)}}" data-type="{{str_replace(' ', '-', $key)}}" role="tabpanel" aria-labelledby="{{$key}}-tab">
                     <dl class="row justify-content-center">
-                        <dt class="col-sm-6 text-right">System Type:</dt>
+                        <dt class="col-sm-6 text-left text-sm-right">System Type:</dt>
                         <dd class="col-sm-6">{{$key}}</dd>
                         @foreach($sys as $s)
-                            <dt class="col-sm-6 text-right">{{$s->name}}:</dt>
+                            <dt class="col-sm-6 text-left text-sm-right">{{$s->name}}:</dt>
                             <dd class="col-sm-6">{{$s->value}}</dd>
                         @endforeach
                     </dl>
@@ -28,10 +28,10 @@
             @else
                 <div class="tab-pane fade show" id="{{str_replace(' ', '-', $key)}}" data-type="{{str_replace(' ', '-', $key)}}" role="tabpanel" aria-labelledby="{{$key}}-tab">
                     <dl class="row justify-content-center">
-                        <dt class="col-sm-6 text-right">System Type:</dt>
+                        <dt class="col-sm-6 text-left text-sm-right">System Type:</dt>
                         <dd class="col-sm-6">{{$key}}</dd>
                         @foreach($sys as $s)
-                            <dt class="col-sm-6 text-right">{{$s->name}}:</dt>
+                            <dt class="col-sm-6 text-left text-sm-right">{{$s->name}}:</dt>
                             <dd class="col-sm-6">{{$s->value}}</dd>
                         @endforeach
                     </dl>
@@ -41,10 +41,10 @@
     </div>
 </div>
 <div class="row justify-content-center pad-top">
-    <div class="col-4">
+    <div class="col-sm-4">
         <a href="#edit-modal" class="add-system btn btn-info btn-block" title="Add New System" data-toggle="modal" data-tooltip="tooltip">Add System</a>
     </div>
-    <div class="col-4">
+    <div class="col-sm-4 mt-2 mt-sm-0">
         <a href="#edit-modal" class="edit-system btn btn-info btn-block" title="Edit System" data-toggle="modal" data-tooltip="tooltip" data-sysid="0" id="edit-system">Edit System</a>
     </div>
 </div>

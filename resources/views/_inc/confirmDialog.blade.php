@@ -6,11 +6,11 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-sm-2">
-            <button class="btn btn-primary select-yes">Yes</button>
+        <div class="col-4 col-sm-2">
+            <button class="btn btn-primary btn-block select-yes">Yes</button>
         </div>
-        <div class="col-sm-2">
-            <button class="btn btn-primary select-no" data-dismiss="modal">No</button>
+        <div class="col-4 col-sm-2">
+            <button class="btn btn-primary btn-block select-no" data-dismiss="modal">No</button>
         </div>
     </div>
 </div>

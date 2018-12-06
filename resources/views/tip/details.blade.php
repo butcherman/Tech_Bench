@@ -15,15 +15,15 @@
         </h2>
         <div class="col-12 tech-tip-details">
             @if($current_user->hasAnyRole(['installer', 'admin']) || $data->user_id == $current_user->user_id)
-                <a href="{{route('tip.id.edit', ['id' => $data->tip_id])}}" title="Edit This Tip" data-tooltip="tooltip"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="{{route('tip.id.edit', ['id' => $data->tip_id])}}" title="Edit This Tip" data-tooltip="tooltip" class="d-block d-sm-inline"><i class="fa fa-pencil" aria-hidden="true"></i></a>
             @endif
-            <span><strong>ID#: </strong>{{$data->tip_id}}</span>
-            <span><strong>Author: </strong>{{$data->user->first_name}} {{$data->user->last_name}}</span>
-            <span><strong>Date: </strong>{{date('M j, Y', strtotime($data->created_at))}}</span>
+            <span class="d-block d-sm-inline"><strong>ID#: </strong>{{$data->tip_id}}</span>
+            <span class="d-block d-sm-inline"><strong>Author: </strong>{{$data->user->first_name}} {{$data->user->last_name}}</span>
+            <span class="d-block d-sm-inline"><strong>Date: </strong>{{date('M j, Y', strtotime($data->created_at))}}</span>
             @if($data->created_at != $data->updated_at)
-                <span><strong>Updated: </strong>{{date('M j, Y', strtotime($data->updated_at))}}</span>
+                <span class="d-block d-sm-inline"><strong>Updated: </strong>{{date('M j, Y', strtotime($data->updated_at))}}</span>
             @endif
-            <span>
+            <span class="d-block d-sm-inline">
                 <strong>Tags: </strong> <span></span>
                 @foreach($systems as $sys)
                     <div class="tech-tip-tag">{{$sys->name}}</div>
@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-8" id="tech-tip-attachements">
+        <div class="col-12 col-sm-8" id="tech-tip-attachements">
             <h4>Attachements:</h4>
             @if(!$files->isEmpty())
                 <ul class="list-group">
@@ -51,7 +51,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-8" id="tech-tip-comments">
+        <div class="col-12 col-sm-8" id="tech-tip-comments">
             <h4>Comments</h4>
             <div>
                 <p class="text-center"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...</p>

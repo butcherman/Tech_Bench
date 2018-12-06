@@ -50,7 +50,12 @@ class SystemFilesController extends Controller
     public function store(Request $request)
     {
         //  Validate incoming data
-        $request->validate(['name' => 'required', 'file' => 'required', 'fileType' => 'required', 'system' => 'required']);
+        $request->validate([
+            'name'     => 'required',
+            'file'     => 'required', 
+            'fileType' => 'required', 
+            'system'   => 'required'
+        ]);
         
         //  Get the folder location for the system
         $folder = SystemTypes::where('name', $request['system'])->first()->folder_location;
@@ -88,7 +93,7 @@ class SystemFilesController extends Controller
             'user_id'     => \Auth::user()->user_id
         ]);
         
-        Log::info('File Added For System', ['sys_id' => $sysID, 'file_id' => $fileID, 'user_id' => Auth::user()->user_id]);
+        Log::info('File ID-'.$fileID.' Added For System ID-'.$sysID.' By User ID-'.Auth::user()->user_id);
     }
 
     //  Form to show a file to edit
@@ -109,7 +114,7 @@ class SystemFilesController extends Controller
             'description' => $request['description']
         ]);
         
-        Log::info('File Information Updated For System', ['sys_file_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('File Information on System File ID-'.$id.' Updated by User ID-'.Auth::user()->user_id);
     }
     
     //  Load the replace file form
@@ -148,7 +153,7 @@ class SystemFilesController extends Controller
             'file_id' => $fileID
         ]);   
         
-        Log::info('File Replaced For System', ['file_id' => $fileID, 'user_id' => Auth::user()->user_id]);
+        Log::info('System File ID-'.$fileID.' Replaced by User ID-'.Auth::user()->user_id);
     }
 
     //  Remove a file from the system files table
@@ -158,7 +163,7 @@ class SystemFilesController extends Controller
         $data = SystemFiles::find($id);
         $fileID = $data->file_id;
         
-        Log::info('File Deleted For System', ['sys_id' => $data->sys_id, 'file_id' => $fileID, 'user_id' => Auth::user()->user_id]);
+        Log::info('System File ID-'.$fileID.' Deleted For System ID-'.$data->sys_id.' by User ID-'.Auth::user()->user_id);
         
         $data->delete();
         

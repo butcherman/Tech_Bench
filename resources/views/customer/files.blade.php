@@ -7,13 +7,13 @@
             <td>
                 {{$file->description}}
             </td>
-            <td>
+            <td class="d-none d-sm-table-cell">
                 {{$file->first_name}} {{$file->last_name}}
             </td>
             <td>
                 {{date('M d, Y', strtotime($file->created_at))}}
             </td>
-            <td>
+            <td class="d-none d-sm-table-cell">
                 <a href="#edit-modal" title="Edit File Data" class="edit-file" data-toggle="modal" data-tooltip="tooltip" data-file="{{$file->cust_file_id}}"><i class="fa fa-pencil text-muted" aria-hidden="true"></i>
                 </a>
                 <a href="#edit-modal" title="Delete File" class="delete-file" data-toggle="modal" data-tooltip="tooltip" data-file="{{$file->cust_file_id}}"><i class="fa fa-trash text-muted" aria-hidden="true"></i>
@@ -23,6 +23,6 @@
     @endforeach
 @else
     <tr>
-        <td colspan="5" class="text-center">No Files</td>
+        <td colspan="5" class="text-center"><h6>No Files</h6></td>
     </tr>
 @endif
