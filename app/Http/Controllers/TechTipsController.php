@@ -97,7 +97,11 @@ class TechTipsController extends Controller
     //  Submit the new tech tip
     public function store(Request $request)
     {
-        $request->validate(['subject' => 'required', 'details' => 'required', 'sysTags' => 'required']);
+        $request->validate([
+            'subject' => 'required', 
+            'details' => 'required', 
+            'sysTags' => 'required'
+        ]);
         
         //  Enter the tip details and get the tip ID
         $tip = TechTips::create([
@@ -164,7 +168,7 @@ class TechTipsController extends Controller
             report($e);
         }
         
-        Log::info('Tech Tip Created', ['tip_id' => $tipID, 'user_id' => Auth::user()->user_id]);
+        Log::info('Tech Tip ID-'.$tipID.' Created by Customer ID-'.Auth::user()->user_id);
         
         return $tipID;
     }
@@ -175,6 +179,7 @@ class TechTipsController extends Controller
         $tipData = TechTips::where('tip_id', $id)->with('user')->first();
         if(empty($tipData))
         {
+            Log::warning('User ID-'.Auth::user()->user_id.' tried to access invlaid Tech Tip ID-'.$id.' Name-'.$name);
             return view('err.tipNotFound');
         }
         
@@ -207,7 +212,7 @@ class TechTipsController extends Controller
             case 'add':
                 TechTipFavs::create([
                     'user_id' => Auth::user()->user_id,
-                    'tip_id' => $tipID
+                    'tip_id'  => $tipID
                 ]);
                 break;
             case 'remove':
@@ -265,11 +270,15 @@ class TechTipsController extends Controller
     //  Update the tech tip
     public function update(Request $request, $id)
     {
-        $request->validate(['subject' => 'required', 'details' => 'required', 'sysTags' => 'required']);
+        $request->validate([
+            'subject' => 'required', 
+            'details' => 'required', 
+            'sysTags' => 'required'
+        ]);
         
         //  update tip details
         TechTips::find($id)->update([
-            'subject' => $request->subject,
+            'subject'     => $request->subject,
             'description' => $request->description
         ]);
         
@@ -277,7 +286,6 @@ class TechTipsController extends Controller
         TechTipSystems::where('tip_id', $id)->delete();
         if(is_array($request->sysTags))
         {
-            
             foreach($request->sysTags as $tag)
             {
                 TechTipSystems::create([
@@ -313,7 +321,6 @@ class TechTipsController extends Controller
             {
                 TechTipFiles::where('tip_id', $id)->delete();
             }
-                
         }
         
         //  Process any new files
@@ -341,7 +348,7 @@ class TechTipsController extends Controller
             }
         }
         
-        Log::info('Tech Tip Updated', ['tip_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Tech Tip ID-'.$id.' Updated by User ID-'.Auth::user()->user_id);
         
         return $id;
     }

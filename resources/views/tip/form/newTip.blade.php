@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+<link href="{{ asset('js/fastselect/fastselect.min.css') }}" rel="stylesheet">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -26,7 +27,7 @@
                 {{ Form::bsText('subject', 'Subject', null, ['placeholder' => 'Enter A Descriptive Subject', 'required', 'autofocus']) }}
                 <div class="row">
                     <div class="col-6">
-                        {{ Form::bsSelect('sysType', 'Tag A System', $systems, null, ['placeholder' => 'Select A System To Tag']) }}
+                        {{ Form::bsSelect('sysType', 'Tag A System', $systems, null, ['placeholder' => 'Select A System To Tag', 'class' => 'system-tag-select', 'multiple']) }}
                     </div>
                     <div class="col-6">
                         <label for="tags">System Tags:</label>
@@ -34,6 +35,17 @@
                         <span id="tag-error" class="text-danger d-none">Select At Least One System to Tag</span>
                     </div>
                 </div>
+            
+            
+            <select class="system-tag-select" multiple name="language">
+                <option value="Bangladesh">Bangladesh</option>
+                <option selected value="Barbados">Barbados</option>
+                <option selected value="Belarus">Belarus</option>
+                <option value="Belgium">Belgium</option>
+            </select>   
+            
+            
+            
                 {{ Form::bsTextarea('details', 'Tech Tip', null, ['rows' => '15']) }}
                 @include('_inc.dropMultiFile')
                 {{ Form::bsSubmit('Create Tech Tip') }}
@@ -45,7 +57,9 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('js/fastselect/fastselect.js') }}"></script>
 <script>
+
 $(document).ready(function()
 {
     //  Initialize Tinymce
@@ -55,6 +69,8 @@ $(document).ready(function()
         height: '400',
         plugins: 'autolink table'
     });
+    //  Initialize Fastselect
+    $('.system-tag-select').fastselect();
     //  Initialize Drag and Drop
     techTipDrop($('#new-tech-tip-form'));
     //  Add a system tag
