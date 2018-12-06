@@ -35,9 +35,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>File</th>
-                                                    <th>Added By</th>
+                                                    <th class="d-none d-sm-table-cell">Added By</th>
                                                     <th>Date Added</th>
-                                                    <th>Actions</th>
+                                                    <th class="d-none d-sm-table-cell">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
@@ -62,9 +62,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>File</th>
-                                                    <th>Added By</th>
+                                                    <th class="d-none d-sm-table-cell">Added By</th>
                                                     <th>Date Added</th>
-                                                    <th>Actions</th>
+                                                    <th class="d-none d-sm-table-cell">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
@@ -205,12 +205,10 @@
         $('#form-errors').removeClass('d-none');
         $('form').find('input[type=submit]').prop('disabled', false);
         resetProgressBar();
-        var err = $.parseJSON(data.responseText);
-        $.each(err.errors, function(key, val)
+        $.each(data.errors, function(key, val)
         {
             $('#form-errors').append('<h5>'+val+'</h5>');
         });
-        console.log(data);
     }
 </script>
 @endsection
