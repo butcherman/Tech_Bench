@@ -41,7 +41,7 @@ class CustomerDetails extends Controller
         $path = config('filesystem.customers').DIRECTORY_SEPARATOR.$request['cust_id'];
         Storage::makeDirectory($path);
         
-        Log::info('New Customer Created', ['cust_id' => $request->cust_id, 'user_id' => Auth::user()->user_id]);
+        Log::info('New Customer ID-'.$request->cust_id.' created by User ID-'.Auth::user()->user_id);
         
         return view('customer.newCustomer', [
             'cust_id' => $request->cust_id,
@@ -95,7 +95,7 @@ class CustomerDetails extends Controller
             $id = $request->cust_id;
         }
         
-        Log::info('Customer Info Updated', ['cust_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer Info Updated for Cust ID-'.$id.' by User ID-'.Auth::user()->user_id);
         
         return redirect()->route('customer.details', [
             'id'   => $id,
@@ -111,8 +111,7 @@ class CustomerDetails extends Controller
      */
     public function destroy($id)
     {
+        Log::info('Customer ID-'.$id.' has been deactivated by User ID-'.Auth::user()->user_id);
         Customers::find($id)->delete();
-        
-        return 'done';
     }
 }

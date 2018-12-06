@@ -63,7 +63,7 @@ class CustomerSystemsController extends Controller
             ]);
         }
         
-        Log::info('Customer System Added', ['cust_id' => $request->cust_id, 'sys_id' => $request->sys_id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer System Added for Customer ID-'.$request->cust_id.' by User ID-'.Auth::user()->user_id.'.  System ID-'.$request->sys_id);
         
         return 'success';
     }
@@ -150,7 +150,7 @@ class CustomerSystemsController extends Controller
             CustomerSystemFields::where('cust_sys_id', $id)->where('field_id', $fieldID)->update(['value' => $field]);
         }
         
-        Log::info('Customer System Updated', ['sys_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer System Updated for customer system ID-'.$id.' by User ID-'.Auth::user()->user_id);
         
         return response('success');
     }
@@ -165,7 +165,7 @@ class CustomerSystemsController extends Controller
     {
         $system = CustomerSystems::find($id);
         
-        Log::info('Customer System Deleted', ['cust_id' => $system->cust_id, 'sys_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer System Deleted for Customer ID-'.$system->cust_id.' by User ID-'.Auth::user()->user_id.'.  System ID-'.$id);
         
         $system->delete();
     }

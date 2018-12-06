@@ -116,5 +116,6 @@ Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
         Route::get('system-customization', 'InstallerController@customizeSystem')->name('customize');
         Route::post('email-settings', 'InstallerController@submitEmailSettings')->name('submitEmail');
         Route::get('email-settings', 'InstallerController@emailSettings')->name('email');
+        Route::get('view-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');
     });
 });

@@ -39,7 +39,7 @@ class CustomerNotesController extends Controller
             'description' => $request->note
         ]);
         
-        Log::info('Customer Note Created', ['cust_id' => $request->custID, 'note_id' => $noteID->note_id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer Note Created for Customer ID-'.$request->custID.' by User ID-'.Auth::user()->user_id.'.  New Note ID-'.$noteID->note_id);
     }
 
     //  Show all customer notes
@@ -78,7 +78,7 @@ class CustomerNotesController extends Controller
             'description' => $request->description
         ]);
         
-        Log::info('Customer Note Updated', ['note_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('Customer Note ID-'.$id.' updated by User ID-'.Auth::user()->user_id);
     }
 
     /**
