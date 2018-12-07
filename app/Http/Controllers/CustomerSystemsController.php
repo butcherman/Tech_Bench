@@ -155,12 +155,7 @@ class CustomerSystemsController extends Controller
         return response('success');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Soft delete a customer
     public function destroy($id)
     {
         $system = CustomerSystems::find($id);

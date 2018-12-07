@@ -20,6 +20,9 @@
                             <a href="{{route('installer.email')}}" class="category-button btn btn-link btn-block">Email Settings</a>
                         </li>
                         <li class="list-group-item">
+                            <a href="{{route('installer.userSettings')}}" class="category-button btn btn-link btn-block">User Settings</a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="{{route('installer.logs')}}" class="category-button btn btn-link btn-block">View Logs</a>
                         </li>
 <!--

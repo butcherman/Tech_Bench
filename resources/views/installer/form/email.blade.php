@@ -21,17 +21,50 @@
             @endif
         </div>
     </div>
+    <div class="row justify-content-center pad-top">
+        <div class="col-md-8">
+            <div class="alert alert-danger d-none" id="failed-test"><h5></h5></div>
+            <div class="alert alert-success d-none" id="successful-test"><h5 class="text-center">Email Sent Successfully</h5></div>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {!!Form::open(['route' => 'installer.submitEmail'])!!}
+            {!!Form::open(['route' => 'installer.submitEmail', 'id' => 'email-settings-form'])!!}
                 {{Form::bsText('host', 'Email Host', config('mail.host'), ['required'])}}
                 {{Form::bsText('port', 'Email Port', config('mail.port'), ['required'])}}
                 {{Form::bsSelect('encryption', 'Email Encryption Type', ['tls' => 'TLS', 'ssl' => 'SSL', 'none' => 'None'], config('mail.encryption'))}}
                 {{Form::bsText('username', 'Email Username', config('mail.username'), ['required'])}}
                 {{Form::bsPassword('password', 'Email Password', config('mail.password'))}}
+                <button type="button" id="send-test-email" class="btn btn-block btn-warning">Send Test Email</button>
                 {{Form::bsSubmit('Update Tech Bench')}}
             {!!Form::close()!!}
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('#send-test-email').on('click', function()
+    {
+        $('#successful-test').addClass('d-none');
+        $('#failed-test').addClass('d-none');
+        $.post('{{route('installer.testEmail')}}', $('#email-settings-form').serialize(), function(res)
+        {
+            if(res === 'success')
+            {
+                $('#successful-test').removeClass('d-none');
+            }
+            else
+            {
+                $('#failed-test').removeClass('d-none');
+                $('#failed-test').find('h5').html('There was an error sending the message<br />Check the logs for more specific information');
+            }
+        }).fail(function()
+        {
+            $('#failed-test').removeClass('d-none');
+            $('#failed-test').find('h5').html('There was an error sending the message<br />Check the logs for more specific information');
+        });
+    });
+</script>
 @endsection

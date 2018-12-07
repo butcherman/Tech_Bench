@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('admin.index')}}">System Administration</a></li>
+    <li class="breadcrumb-item active">File Links</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">
@@ -34,7 +40,7 @@
                         @foreach($links as $link)
                             <tr>
                                 <td>
-                                    <a href="{{route('admin.showLinks', $link->user_id)}}">{{$link->first_name}} {{$link->last_nae}}</a>
+                                    <a href="{{route('admin.showLinks', $link->user_id)}}">{{$link->first_name}} {{$link->last_name}}</a>
                                 </td>
                                 <td>{{$link->FileLinks->count()}}</td>
                                 <td>

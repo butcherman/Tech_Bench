@@ -1,4 +1,11 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('admin.index')}}">System Administration</a></li>
+    <li class="breadcrumb-item"><a href="{{route('admin.links')}}">File Links</a></li>
+    <li class="breadcrumb-item active">{{$name}}</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">

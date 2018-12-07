@@ -14,7 +14,16 @@
             <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>User Settings</h1></div>
         </div>
     </div>
-     @if(session()->has('success'))
+    @if(session()->has('change_password'))
+    
+        <div class="row justify-content-center pt-5 pb-5">
+            <div class="col-md-8 alert-info pt-3 pb-3">
+                <h2 class="text-center">Your Password Has Expired<br />Please Enter a New Password</h2>
+            </div>
+        </div>
+    
+    @endif
+    @if(session()->has('success'))
         <div class="row justify-content-center">
             <div class="col-md-8 alert-success">
                 <h2 class="text-center">{{ session('success') }}</h2>

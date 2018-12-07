@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -90,7 +91,6 @@ class UserController extends Controller
         ]);
         
         //  Email the new user
-        
         try
         {
             Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
@@ -100,7 +100,7 @@ class UserController extends Controller
             report($e);
         }
         
-        Log::info('New User Created', ['created_by' => Auth::user()->user_id, 'new_id' => $userID]);
+        Log::info('New User ID-'.$userID.' Created by ID-'.Auth::user()->user_id);
         
         return redirect(route('admin.users.index'))->with('success', 'User Created Successfully');
     }
@@ -128,6 +128,7 @@ class UserController extends Controller
         $valid = UserInitialize::where('token', $hash)->first();
         if(empty($valid))
         {
+            Log::notice('Someone tried to access an invalid User Initialization link - '.$hash);
             return abort(404);
         }
         
@@ -143,10 +144,13 @@ class UserController extends Controller
         //  Get the users information
         $userData = User::where('username', $valid->username)->first();
         
+        $nextChange = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
+        
          //  Update the password
         User::find($userData->user_id)->update(
         [
-            'password'   => bcrypt($request->newPass)
+            'password'         => bcrypt($request->newPass),
+            'password_expires' => $nextChange
         ]);
         
         //  Remove the initialize instance
@@ -159,6 +163,7 @@ class UserController extends Controller
         Auth::loginUsingID($userData->user_id);
         
         //  Redirect the user to the dashboard
+        Log::info('New User ID-'.$userData->user_id.' has updated their password.');
         return redirect(route('dashboard'));
     }
 
@@ -180,13 +185,16 @@ class UserController extends Controller
             'password'   => 'required|string|min:6|confirmed'
         ]);
         
+        $nextChange = isset($request->force_change) && $request->force_change == 'on' ? Carbon::now()->subDay() : null;
+        
          //  Update the user data
         User::find($id)->update(
         [
-            'password'   => bcrypt($request->password)
+            'password'         => bcrypt($request->password),
+            'password_expires' => $nextChange
         ]);
 
-        
+        Log::info('User ID-'.$id.' has changed their password.');
         return redirect(route('admin.users.index'))->with('success', 'User Password Updated Successfully');
     }
 
@@ -245,7 +253,7 @@ class UserController extends Controller
         
         //  Update the user's role
         DB::update('UPDATE `user_role` SET `role_id` = ? WHERE `user_id` = ?', [$request->role, $id]);
-        
+        Log::info('User ID-'.$id.' has updated their information.');
         return redirect(route('admin.users.index'))->with('success', 'User Updated Successfully');
     }
 
@@ -257,5 +265,6 @@ class UserController extends Controller
         [
             'active'   => 0
         ]);
+        Log::notice('User ID-'.$id.' has been deactivated by User -'.Auth::user()->user_id);
     }
 }
