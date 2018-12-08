@@ -126,6 +126,7 @@ Route::middleware(['password_expired'])->group(function ()
             Route::get('user-settings', 'InstallerController@userSettings')->name('userSettings');
             Route::post('user-settings', 'InstallerController@submitUserSettings')->name('submitUserSettings');
             Route::get('view-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');
+            Route::post('submit-logo', 'InstallerController@submitLogo')->name('submitLogo');
         });
     });
 });

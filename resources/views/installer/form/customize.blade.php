@@ -30,5 +30,50 @@
             {!!Form::close()!!}
         </div>
     </div>
+    <div class="row justify-content-center pad-top">
+        <div class="col-8">
+            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h3>Company Logo</h3></div>
+        </div>
+    </div>
+    <div class="row justify-content-center pad-top">
+        <div class="col-md-4">
+            <img src="{{config('app.logo')}}" alt="Company Logo" class="img-thumbnail" id="header-logo" />
+        </div>
+        <div class="col-md-4">
+
+            @include('_inc.drop1File')
+            <p class="text-center">Drag new logo in the box above to change</p>
+        </div>
+    </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('#dropzone-box').dropzone(
+    {
+        url: '{{route('installer.submitLogo')}}',
+        uploadMultiple: false,
+        maxFiles: 1,
+        acceptedFiles: 'image/*',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        init: function()
+        {
+            var myDrop = this;
+            this.on('success', function(files, response)
+            {
+                if(response === 'success')
+                {
+                    window.location.replace('{{route('installer.customize')}}');
+                }
+                else
+                {
+                    alert('There was an issue processing your request');
+                }
+            });
+        }
+    });
+</script>
 @endsection

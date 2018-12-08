@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\SystemCustDataFields;
 use App\SystemCustDataTypes;
 use App\SystemCategories;
@@ -71,6 +72,20 @@ class InstallerController extends Controller
         Log::info('Tech Bench Settings Updated', ['user_id' => Auth::user()->user_id]);
         
         return redirect()->back()->with('success', 'Tech Bench Successfully Updated');//
+    }
+    
+    //  Upload and submit a new site logo
+    public function submitLogo(Request $request)
+    {
+        $file = $request->file;
+        $fileName = $file->getClientOriginalName();
+        $filePath = $file->storeAs('img', $fileName, 'public');
+        
+        Settings::where('key', 'app.logo')->update([
+            'value' => '/storage/img/'.$fileName
+        ]);
+        
+        return 'success';
     }
     
     //  Email settings form
