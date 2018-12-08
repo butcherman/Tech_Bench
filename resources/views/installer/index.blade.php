@@ -1,4 +1,9 @@
 @extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">System Administration</li>
+</ol>
+@endsection
 
 @section('content')
 <div class="container">

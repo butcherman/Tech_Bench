@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('breadcrumbs')
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">Tech Tips</li>
+    <li class="breadcrumb-item active">Tech Tips</li>
 </ol>
 @endsection
 
