@@ -85,6 +85,8 @@ class InstallerController extends Controller
             'value' => '/storage/img/'.$fileName
         ]);
         
+        Log::info('A new company logo has been uploaded by User ID-'.Auth::user()->user_id);
+        
         return 'success';
     }
     
@@ -152,7 +154,8 @@ class InstallerController extends Controller
         {
             Settings::where('key', 'mail.password')->update(['value' => $request->password]);
         }
-            
+         
+        Log::info('Email Settings have been changed by User ID-'.Auth::user()->user_id);
         return redirect()->back()->with('success', 'Tech Bench Successfully Updated');//
     }
     
@@ -197,6 +200,7 @@ class InstallerController extends Controller
             }
         }
         
+        Log::info('User Settings have been changed by User ID-'.Auth::user()->user_id);
         return redirect()->back()->with('success', 'User Settings Updated');
     }
     
