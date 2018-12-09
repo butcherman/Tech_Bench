@@ -7,7 +7,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => env('ROOT_FOLDER', storage_path('app')),
+            'root' => env('ROOT_FOLDER', storage_path('app/files')),
         ],
 
         'public' => [

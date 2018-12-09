@@ -17,7 +17,7 @@
             @foreach($results as $res)
                 <tr>
                     <td><a href="{{route('tip.details', ['id' => $res->tip_id, 'sub' => urlencode($res->subject)])}}">{{$res->subject}}</a></td>
-                    <td>{{date('M j, Y', strtotime($res->created_at))}}</td>
+                    <td data-sort="{{$res->created_at}}">{{date('M j, Y', strtotime($res->created_at))}}</td>
                 </tr>
             @endforeach
         @else

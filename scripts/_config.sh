@@ -14,3 +14,6 @@ STAGE_DIR="$(dirname "$(dirname "$(readlink -fm "$0")")")"
 
 #  Web root directory
 PROD_DIR="/var/www/html"      
+
+#  Apache Web User
+APUSR="www-data"

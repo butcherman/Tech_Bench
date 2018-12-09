@@ -3,7 +3,7 @@
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
 
-    'logo' => 'TechBenchLogo.png',
+    'logo' => '/img/TechBenchLogo.png',
 
     'env' => env('APP_ENV', 'production'),
 
@@ -65,7 +65,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
-
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     ],
     'aliases' => [
 

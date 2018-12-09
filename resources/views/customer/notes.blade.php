@@ -17,12 +17,12 @@
     </div>
 @else
     <div class="row pad-bottom justify-content-center">
-        <div class="col-2"><h5 class="text-center">No Notes</h5></div>
+        <div class="col-10 col-sm-4"><h6 class="text-center">No Notes</h6></div>
     </div>
 @endif
 
 <div class="row justify-content-center">
-    <div class="col-4">
+    <div class="col-6 col-sm-4">
         <a href="#edit-modal" id="new-note-link" class="btn btn-block btn-info" data-toggle="modal">Add Note</a>
     </div>
 </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('breadcrumbs')
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">Tech Tips</li>
+    <li class="breadcrumb-item active">Tech Tips</li>
 </ol>
 @endsection
 
@@ -74,7 +74,7 @@
                 {                        
                     table = $('#dataTable').DataTable(
                     {
-                        'dom': '<"top"i>rt<"row"<"col-4"l><"col-4"p>>',
+                        'dom': '<"top"i>rt<"row"<"col-sm-4"l><"col-sm-4"p>>',
                         'searching': false
                     }); 
                 }

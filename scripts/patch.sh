@@ -19,7 +19,8 @@
 ################################################################################
 
 #  Pull in the variable file
-source _config.sh
+STAGE_DIR="$(dirname "$(dirname "$(readlink -fm "$0")")")" 
+source $STAGE_DIR/scripts/_config.sh
 
 #  Verify the script is being run as root
 if [[ $EUID -ne 0 ]]; then
@@ -37,14 +38,14 @@ php artisan down --message="Cool Things Are Happening Behind the Scenes - Check 
 cd $STAGE_DIR
 
 #  Download all dependencies, cache and populate database
-su -c "php artisan version:absorb" $SUDO_USER
+su -c "php artisan version:refresh; php artisan version:absorb" $SUDO_USER
 
 #  Copy files to web directory
-cp -R $STAGE_DIR/* $PROD_DIR
-#  Change the owner of the files to the web user
-chown -R www-data:www-data $PROD_DIR
-#  Allow write permissions to the 'storage' directory
-chmod -R 777 $PROD_DIR/storage
+rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' --exclude="storage" $STAGE_DIR/ $PROD_DIR
+
+#  Change the owner of the files to the web user and set permissions
+chown -R $APUSR:$APUSR $PROD_DIR
+chmod -R 755 $PROD_DIR
 
 #  Change to the production directory and bring the application back online
 cd $PROD_DIR

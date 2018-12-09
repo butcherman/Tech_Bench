@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -90,9 +91,12 @@ class AccountController extends Controller
             'newPass' => 'required|string|min:6|confirmed'
         ]);
         
+        $newExpire = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
+        
         //  Change the password
-        $user = Auth::user();
+        $user = Auth::user(); 
         $user->password = bcrypt($request->newPass);
+        $user->password_expires = $newExpire;
         $user->save();
         
         Log::info('User Changed Password', ['user_id' => Auth::user()->user_id]);

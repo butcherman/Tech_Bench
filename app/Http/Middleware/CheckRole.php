@@ -17,6 +17,7 @@ class CheckRole
     {
         if($request->user() === null)
         {
+            Log::alert($request->route().' denied for Guest');
             return response('Insufficient Permissions', 401);
         }
         $actions = $request->route()->getAction();
@@ -26,6 +27,7 @@ class CheckRole
         {
             return $next($request);
         }
+        Log::alert($request->route().' denied for user '.$request->user());
         return response('Insufficient Permissions', 401);
     }
 }
