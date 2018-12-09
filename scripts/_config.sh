@@ -17,6 +17,9 @@ PROD_DIR="/var/www/html"
 #  Apache Web User
 APUSR="www-data"
 
+# Log file location
+LOGFILE=$STAGE_DIR/storage/logs
+
 #  Function to show a spinner while a process executes
 spin()
 {

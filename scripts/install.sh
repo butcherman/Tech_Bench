@@ -16,9 +16,9 @@
 #  Pull in the variable file
 STAGE_DIR="$(dirname "$(dirname "$(readlink -fm "$0")")")" 
 source $STAGE_DIR/scripts/_config.sh
-LOGFILE=$STAGE_DIR/storage/logs/install.log
 
 ########################  Variables for this script  ###########################
+LOGFILE=$LOGFILE/install.log
 PREREQ=true
 IPADDR=$(ifconfig  | grep -E 'inet.[0-9]' | grep -v '127.0.0.1' | awk '{ print $2}')
 COUNT=1
@@ -301,8 +301,6 @@ echo 'Running Command - php artisan migrate --force' >> $LOGFILE
 su -c 'php artisan migrate --force' $SUDO_USER &>> $LOGFILE
 echo 'Updating version' >> $LOGFILE
 su -c 'php artisan version:refresh; php artisan version:absorb' $SUDO_USER &>> $LOGFILE
-echo 'Version Set at - ' >> $LOGFILE
-su -c 'php artisan version' $SUDO_USER &>> $LOGFILE
 
 #  Copy files to web directory
 echo 'Setting up Tech Bench Files'
