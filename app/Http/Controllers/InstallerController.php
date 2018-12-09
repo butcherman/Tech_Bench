@@ -79,7 +79,7 @@ class InstallerController extends Controller
     {
         $file = $request->file;
         $fileName = $file->getClientOriginalName();
-        $filePath = $file->storeAs('img', $fileName, 'public');
+        $file->storeAs('img', $fileName, 'public');
         
         Settings::where('key', 'app.logo')->update([
             'value' => '/storage/img/'.$fileName
