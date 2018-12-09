@@ -3,7 +3,7 @@
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
 
-    'logo' => 'TechBenchLogo.png',
+    'logo' => '/img/TechBenchLogo.png',
 
     'env' => env('APP_ENV', 'production'),
 

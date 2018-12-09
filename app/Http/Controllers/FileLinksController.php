@@ -55,7 +55,7 @@ class FileLinksController extends Controller
         //  If there are any files, process them
         if(!empty($request->file))
         {
-            $filePath = config('filesystem.paths.links').DIRECTORY_SEPARATOR.$linkID;
+            $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
             foreach($request->file as $file)
             {
                 //  Clean the file and store it
