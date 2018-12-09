@@ -12,7 +12,7 @@ build:
             - mysql -e 'create database scrutinizer;'
             - mysql -e 'create user forge@localhost; grant all privileges on *.* to forge@localhost with grant option;'
         after:
-            - php key:generate
+            - php artisan key:generate
             - php artisan migrate
             - php artisan migrate:fresh --seed
             
