@@ -12,7 +12,7 @@ cache:
     time: 525600
 build:
     git_absorb: git-remote
-    number: b59d74
+    number: 3ad3f0
 git:
     git-local: 'git rev-parse --verify HEAD'
     git-remote: 'git ls-remote {$repository}'

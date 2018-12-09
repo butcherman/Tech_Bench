@@ -332,6 +332,8 @@ echo 'Default Password - password' >> $LOGFILE
 echo 'MySQL Database   - '$DBNAME >> $LOGFILE
 echo 'MySQL Username   - '$NEWUSER >> $LOGFILE
 echo 'MySQL Password   - '$NEWPASS >> $LOGFILE
+echo 'The .env file contains the configuration information for this application.' >> $LOGFILE
+echo 'Please make a backup of this file' >> $LOGFILE
 echo '' >> $LOGFILE
 
 #  Show the finished product
@@ -353,5 +355,10 @@ echo 'Post Install Instructions:'
 echo ''
 echo 'For security purposes it is highly recommended to change the Apache ' | tee -a $LOGFILE
 echo 'conf file to point to '$PROD_DIR'/public.' | tee -a $LOGFILE
+echo ''
+echo 'More information can be found in the log file'
+
+#  Copyt the log file so it can be viewed by the website
+cp $LOGFILE $PROD_DIR/storage/logs/
 
 exit 1
