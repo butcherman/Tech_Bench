@@ -272,7 +272,6 @@ class UserController extends Controller
         foreach($links as $link)
         {
             $linkController->destroy($link->link_id);
-//            Log::notice($link);
         }
         
          //  Update the user data

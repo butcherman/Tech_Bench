@@ -180,7 +180,7 @@ class TechTipsController extends Controller
         if(empty($tipData))
         {
             Log::warning('User ID-'.Auth::user()->user_id.' tried to access invlaid Tech Tip ID-'.$id.' Name-'.$name);
-            return view('err.tipNotFound');
+            return view('errors.tipNotFound');
         }
         
         $tipFiles = TechTipFiles::where('tip_id', $id)

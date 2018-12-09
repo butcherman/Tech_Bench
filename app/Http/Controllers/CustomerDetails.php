@@ -57,7 +57,7 @@ class CustomerDetails extends Controller
         //  Check for empty data set
         if(empty($custDetails))
         {
-            return view('err.customerNotFound');
+            return view('errors.customerNotFound');
         }
 
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
