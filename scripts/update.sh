@@ -28,6 +28,12 @@ fi
 
 echo 'Upgrade in progress.....'
 
+# Copy the .env file into the staging directory to make sure all settings stay the same
+cp $PROD_DIR/.env $STAGE_DIR
+
+#  Update dependencies
+su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev" $SUDO_USER
+
 #  Put the application into Maintenance mode
 cd $PROD_DIR
 php artisan down --message="Cool Things Are Happening Behind the Scenes - Check Back Soon"
@@ -39,7 +45,7 @@ cp $PROD_DIR/.env $STAGE_DIR
 cd $STAGE_DIR
 
 #  Download all dependencies, cache and populate database
-su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev --no-script; php artisan migrate --force; php artisan version:refresh; php artisan version:absorb" $SUDO_USER
+su -c "php artisan migrate --force; php artisan version:refresh; php artisan version:absorb" $SUDO_USER
 
 #  Copy files to web directory
 rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' --exclude="storage" $STAGE_DIR/ $PROD_DIR
