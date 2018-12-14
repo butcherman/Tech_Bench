@@ -34,6 +34,7 @@ Route::middleware(['password_expired'])->group(function ()
         
         Route::post('account/{id}', 'AccountController@submit')->name('submitAccount');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+        Route::get('mark-notification/{id}', 'DashboardController@markNotification')->name('mark-notification');
 
         //////////////////////////  System Routes  ////////////////////////////////////////////
         Route::prefix('system')->name('system.')->group(function()

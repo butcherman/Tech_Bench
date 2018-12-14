@@ -6,12 +6,13 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
 use App\FileLinkNotes;
 use App\User;
-use App\Mail\NewLinkFile;
+use App\Notifications\NewFileUploaded;
 
 class UserLinksController extends Controller
 {
@@ -86,16 +87,9 @@ class UserLinksController extends Controller
             }
         }
         
-        //  Send email to the creator of the link
+        //  Send email and notification to the creator of the link
         $user = User::find($details->user_id);
-        try
-        {
-            Mail::to($user)->send(new NewLinkFile($details));
-        }
-        catch(Exception $e)
-        {
-            report($e);
-        }
+        Notification::send($user, new NewFileUploaded($details));
         
         return $request->all();
     }
