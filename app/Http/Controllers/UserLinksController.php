@@ -43,7 +43,7 @@ class UserLinksController extends Controller
         
         return view('links.guest.details', [
             'details' => $details,
-            'files' => $files,
+            'files'   => $files,
             'allowUp' => $details->allow_upload
         ]);
     }
@@ -71,10 +71,10 @@ class UserLinksController extends Controller
 
             //  Place the file in the file link files table of DB
             FileLinkFiles::create([
-                'link_id' => $details->link_id,
-                'file_id' => $fileID,
+                'link_id'  => $details->link_id,
+                'file_id'  => $fileID,
                 'added_by' => $request->name,
-                'upload' => 1
+                'upload'   => 1
             ]);
             
             if(!empty($request->note))
@@ -82,7 +82,7 @@ class UserLinksController extends Controller
                 FileLinkNotes::create([
                     'link_id' => $details->link_id,
                     'file_id' => $fileID,
-                    'note' => $request->note
+                    'note'    => $request->note
                 ]);
             }
         }

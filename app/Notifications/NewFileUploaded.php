@@ -41,10 +41,9 @@ class NewFileUploaded extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
-            'type' => 'warning',
+            'type'    => 'warning',
             'message' => 'New File Uploaded to link - '.$this->details->link_name,
-            'link' => url(route('links.info', [
+            'link'    => url(route('links.info', [
                                  'id' => $this->details->link_id, 
                                  'name' => urlencode($this->details->link_name)
                             ]))
