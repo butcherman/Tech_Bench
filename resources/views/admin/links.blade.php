@@ -2,7 +2,7 @@
 @section('breadcrumbs')
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{route('admin.index')}}">System Administration</a></li>
-    <li class="breadcrumb-item active">File Links</li>
+    <li class="breadcrumb-item active">User File Links</li>
 </ol>
 @endsection
 
@@ -10,7 +10,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>File Links Administration</h1></div>
+            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>User File Links Administration</h1></div>
         </div>
     </div>
     @if(session()->has('success'))
