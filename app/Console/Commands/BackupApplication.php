@@ -43,7 +43,7 @@ class BackupApplication extends Command
             config('database.connections.mysql.username'),
             config('database.connections.mysql.password'),
             config('database.connections.mysql.database'),
-            $backupTmp
+            $backupTmp.DIRECTORY_SEPARATOR.'db_dump.sql'
         ));
         $process->mustRun();
         
