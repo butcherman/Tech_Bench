@@ -45,7 +45,7 @@ cd $STAGE_DIR
 #  Update all dependencies, cache and database
 echo 'Downloading Dependencies' | tee -a $LOGFILE
 echo 'Running Command - npm install --only=prod' >> $LOGFILE
-su -c "npm install --only=prod" $SUDO_USER >> $LOGFILE
+su -c "npm install --only=prod --no-progress" $SUDO_USER >> $LOGFILE
 echo 'Running Command composer install --optimize-autoloader --no-dev' >> $LOGFILE
 su -c "composer install --optimize-autoloader --no-dev" $SUDO_USER &>> $LOGFILE
 echo 'Updating Database'
