@@ -50,6 +50,7 @@ class BackupApplication extends Command
         //  Create a zip archive of the tmp folder
         $zip = Zip::create($backupDir.DIRECTORY_SEPARATOR.'backup-'.Carbon::now()->toDateString().'.zip');        
         $zip->add($backupTmp.DIRECTORY_SEPARATOR.'version.txt');
+        $qip->add($backupTmp.DIRECTORY_SEPARATOR.'db_dump.sql');
         $zip->add(base_path('.env'));
         $zip->add(storage_path('app/files'));
         $zip->add(storage_path('app/public'));
