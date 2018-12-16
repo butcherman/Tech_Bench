@@ -51,6 +51,11 @@ return [
         /*
          * Package Service Providers...
          */
+        ZanySoft\Zip\ZipServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+        App\Providers\SettingsServiceProvider::class,
+        Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -62,10 +67,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\UserServiceProvider::class,
         App\Providers\FormServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
-        App\Providers\SettingsServiceProvider::class,
-        Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
-        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     ],
     'aliases' => [
 
@@ -104,5 +105,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Zip' => ZanySoft\Zip\ZipFacade::class,
     ],
 ];
