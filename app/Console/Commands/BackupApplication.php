@@ -56,19 +56,19 @@ class BackupApplication extends Command
         Storage::disk('backup')->put('tmp/version.txt', $version->compact());
         
         //  Create a dump file of the MySQL database
-//        $process = new Process(sprintf(
-//            'mysqldump -u%s -p%s %s > %s',
-//            config('database.connections.mysql.username'),
-//            config('database.connections.mysql.password'),
-//            config('database.connections.mysql.database'),
-//            $backupTmp.DIRECTORY_SEPARATOR.'db_dump.sql'
-//        ));
-//        $process->mustRun();
+        $process = new Process(sprintf(
+            'mysqldump -u%s -p%s %s > %s',
+            config('database.connections.mysql.username'),
+            config('database.connections.mysql.password'),
+            config('database.connections.mysql.database'),
+            $backupTmp.DIRECTORY_SEPARATOR.'db_dump.sql'
+        ));
+        $process->mustRun();
         
         //  Create a zip archive of the tmp folder
         $zip = Zip::create($backupDir.DIRECTORY_SEPARATOR.$backupName.'.zip');        
         $zip->add($backupTmp.DIRECTORY_SEPARATOR.'version.txt');
-//        $zip->add($backupTmp.DIRECTORY_SEPARATOR.'db_dump.sql');
+        $zip->add($backupTmp.DIRECTORY_SEPARATOR.'db_dump.sql');
         $zip->add(base_path('.env'));
         $zip->add(storage_path('app/files'));
         $zip->add(storage_path('app/public'));
