@@ -123,16 +123,6 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="card text-white bg-warning 0-hidden h-100">
-                                    <a href="{{route('installer.logs')}}" class="card-body text-white">
-                                        <div class="card-body-icon">
-                                            <i class="fa fa-fw fa-list"></i>
-                                        </div>
-                                        System Logs
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -183,6 +173,39 @@
                                             <i class="fa fa-fw fa-cog"></i>
                                         </div>
                                         Edit a System
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        System Maintenance
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <div class="col-md-3">
+                                <div class="card text-white bg-warning 0-hidden h-100">
+                                    <a href="{{route('installer.logs')}}" class="card-body text-white">
+                                        <div class="card-body-icon">
+                                            <i class="fa fa-fw fa-list"></i>
+                                        </div>
+                                        System Logs
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-warning 0-hidden h-100">
+                                    <a href="{{route('installer.backup')}}" class="card-body text-white">
+                                        <div class="card-body-icon">
+                                            <i class="fa fa-fw fa-list"></i>
+                                        </div>
+                                        Backups
                                     </a>
                                 </div>
                             </div>

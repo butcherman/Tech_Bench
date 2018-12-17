@@ -132,6 +132,13 @@ Route::middleware(['password_expired'])->group(function ()
             Route::post('user-settings', 'InstallerController@submitUserSettings')->name('submitUserSettings');
             Route::get('view-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');
             Route::post('submit-logo', 'InstallerController@submitLogo')->name('submitLogo');
+            
+            /////////////////////////////  System Backups Routes  //////////////////////////////
+            Route::get('backup', 'BackupController@index')->name('backup');
+            Route::get('load-backups', 'BackupController@loadBackups')->name('loadBackups');
+            Route::get('manual-backup', 'BackupController@backupNow')->name('backupNow');
+            Route::get('download-backup/{name}', 'BackupController@downloadBackup')->name('downloadBackup');
+            Route::delete('delete-backup/{name}', 'BackupController@deleteBackup')->name('destroyBackup');
         });
     });
 });
