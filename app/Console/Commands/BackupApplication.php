@@ -32,8 +32,13 @@ class BackupApplication extends Command
         $backupDir = config('filesystems.disks.backup.root');
         $backupTmp = config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.'tmp';
         $localDir  = config('filesystems.disks.local.root');
-        $publicDir = config('filesystems.disks.local.root');
+        $publicDir = config('filesystems.disks.public.root');
         $backupBase = $backupType.'_backup-'.Carbon::now()->toDateString().'_'.Carbon::now()->hour.Carbon::now()->minute;
+        
+        
+        
+//        echo $localDir;
+//        die();
         
                 
         //  Determine if the backup file already exists
@@ -70,8 +75,8 @@ class BackupApplication extends Command
         $zip->add($backupTmp.DIRECTORY_SEPARATOR.'version.txt');
         $zip->add($backupTmp.DIRECTORY_SEPARATOR.'db_dump.sql');
         $zip->add(base_path('.env'));
-        $zip->add(storage_path('app/files'));
-        $zip->add(storage_path('app/public'));
+        $zip->add($localDir);
+        $zip->add($publicDir);
         $zip->add(storage_path('logs'));
         $zip->close();
         

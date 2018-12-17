@@ -110,16 +110,10 @@ Route::middleware(['password_expired'])->group(function ()
         Route::prefix('installer')->name('installer.')->group(function()
         {
             ///////////////////////  Systems and Categories Routes  //////////////////////////////
-//            Route::post('edit-system/{name}', 'InstallerController@submitEditSystem')->name('submitEditSystem');
-//            Route::get('edit-system/{name}', 'InstallerController@editSystem')->name('editSystem');
-//            Route::post('new-category', 'InstallerController@submitCat')->name('submitCat');
-//            Route::get('new-category', 'InstallerController@newCat')->name('newCat');
             Route::resource('system-categories', 'SystemCategoriesController');
             Route::get('systems/new/{cat}', 'SystemTypesController@newSys')->name('newSys');
             Route::post('systems/new/{cat}', 'SystemTypesController@submitSys')->name('submitSys');
             Route::resource('systems', 'SystemTypesController');
-//            Route::post('{cat}/new-system', 'InstallerController@submitSys')->name('submitSys');
-//            Route::get('{cat}/new-system', 'InstallerController@newSystem')->name('newSys');
             Route::get('/', 'InstallerController@index')->name('index');
 
             //////////////////////////  System Customization Routes  ////////////////////////////
