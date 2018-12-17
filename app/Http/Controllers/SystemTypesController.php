@@ -39,9 +39,9 @@ class SystemTypesController extends Controller
     {
         $catID = SystemCategories::where('name', urldecode($cat))->first()->cat_id;
         $sysData = SystemTypes::create([
-            'cat_id' => $catID,
-            'name' => $request->name,
-            'parent_id' => null,
+            'cat_id'          => $catID,
+            'name'            => $request->name,
+            'parent_id'       => null,
             'folder_location' => str_replace(' ', '_', $request->name)
         ]);
         $sysID = $sysData->sys_id;
@@ -181,9 +181,9 @@ class SystemTypesController extends Controller
                     }
 
                     SystemCustDataFields::create([
-                        'sys_id' => $sysID,
+                        'sys_id'       => $sysID,
                         'data_type_id' => $id,
-                        'order' => $i
+                        'order'        => $i
                     ]);
                 }
             }

@@ -46,17 +46,6 @@ class SystemCategoriesController extends Controller
     }
 
     //  Bring up the Edit Category form
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $cat = SystemCategories::find($id);

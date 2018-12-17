@@ -34,12 +34,6 @@ class BackupApplication extends Command
         $localDir  = config('filesystems.disks.local.root');
         $publicDir = config('filesystems.disks.public.root');
         $backupBase = $backupType.'_backup-'.Carbon::now()->toDateString().'_'.Carbon::now()->hour.Carbon::now()->minute;
-        
-        
-        
-//        echo $localDir;
-//        die();
-        
                 
         //  Determine if the backup file already exists
         $i = 0;

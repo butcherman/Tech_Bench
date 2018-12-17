@@ -73,7 +73,7 @@ class InstallerController extends Controller
     //  Upload and submit a new site logo
     public function submitLogo(Request $request)
     {
-        $file = $request->file;
+        $file     = $request->file;
         $fileName = $file->getClientOriginalName();
         $file->storeAs('img', $fileName, 'public');
         

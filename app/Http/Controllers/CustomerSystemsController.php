@@ -48,7 +48,7 @@ class CustomerSystemsController extends Controller
         
         $newSys = CustomerSystems::create([
             'cust_id' => $request->cust_id,
-            'sys_id' => $request->sysType
+            'sys_id'  => $request->sysType
         ]);
         $newSysID = $newSys->cust_sys_id;
         
@@ -58,8 +58,8 @@ class CustomerSystemsController extends Controller
             
             CustomerSystemFields::create([
                 'cust_sys_id' => $newSysID,
-                'field_id' => $fieldID,
-                'value' => $field
+                'field_id'    => $fieldID,
+                'value'       => $field
             ]);
         }
         

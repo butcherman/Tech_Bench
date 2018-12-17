@@ -285,8 +285,6 @@ echo '# LINK_FOLDER="\links"' 																	 >> .env
 echo '# COMP_FOLDER="\company"' 																 >> .env
 echo '# MAX_UPLOAD=2147483648' 																	 >> .env
 echo ''                                                                                          >> .env
-echo 'VERSION_GIT_REMOTE_REPOSITORY=https://github.com/butcherman/Tech_Bench.git'                >> .env
-echo ''                                                                                          >> .env
 
 #  Download all dependencies, cache and populate database
 echo 'Downloading Dependencies' | tee -a $LOGFILE

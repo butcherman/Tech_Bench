@@ -105,9 +105,9 @@ class TechTipsController extends Controller
         
         //  Enter the tip details and get the tip ID
         $tip = TechTips::create([
-            'subject' => $request->subject,
+            'subject'     => $request->subject,
             'description' => $request->details,
-            'user_id' => Auth::user()->user_id
+            'user_id'     => Auth::user()->user_id
         ]);
         $tipID = $tip->tip_id;
 

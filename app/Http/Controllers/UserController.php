@@ -67,7 +67,6 @@ class UserController extends Controller
             'first_name' => 'required',
             'last_name'  => 'required',
             'email'      => 'required|unique:users',
-//            'password'   => 'required|string|min:6|confirmed'
         ]);
         
         //  Create the user

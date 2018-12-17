@@ -44,7 +44,7 @@ class CustomerDetails extends Controller
         Log::info('New Customer ID-'.$request->cust_id.' created by User ID-'.Auth::user()->user_id);
         
         return view('customer.newCustomer', [
-            'cust_id' => $request->cust_id,
+            'cust_id'   => $request->cust_id,
             'cust_name' => urlencode($request->name)
         ]);
     }
@@ -64,7 +64,7 @@ class CustomerDetails extends Controller
         
         return view('customer.details', [
             'details' => $custDetails,
-            'isFav' => $custFav
+            'isFav'   => $custFav
         ]);
     }
 
