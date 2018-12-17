@@ -26,4 +26,4 @@ format:
     build: '{$build}'
     version: '{$major}.{$minor}.{$patch} (build {$build})'
     full: 'version {$major}.{$minor}.{$patch} (build {$build})'
-    compact: 'v{$major}.{$minor}.{$patch}-{$build}'
+    compact: '{$major}.{$minor}.{$patch}'
