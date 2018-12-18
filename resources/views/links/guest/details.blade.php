@@ -78,6 +78,7 @@ function uploadComplete(res)
     var name = $('#name').val();
     $('#new-file-form')[0].reset();
     $('#name').val(name);
+    $('.submit-button').attr('disabled', false);
     resetProgressBar();
 }
 function uploadFailed(res)

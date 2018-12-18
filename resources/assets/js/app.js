@@ -40,6 +40,7 @@ function fileDrop(form)
                 e.preventDefault();
                 myDrop.processQueue();
                 $('#forProgressBar').show();
+                $('.submit-button').attr('disabled', true);
             });
             this.on('sending',  function(file, xhr, formData)
             {
@@ -94,6 +95,7 @@ function multiFileDrop(form)
                 {
                     myDrop.processQueue();
                     $('#forProgressBar').show();
+                    $('.submit-button').attr('disabled', true);
                 }
                 else
                 {
