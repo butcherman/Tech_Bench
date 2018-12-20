@@ -124,7 +124,7 @@ class SystemTypesController extends Controller
         //  Verify the system we are trying to edit is valid
         if(!$sysName)
         {
-            Log::warning('User '.Auth::user()->user_id.' tried to edit invalid system '.$id);
+            Log::warning('User '.Auth::user()->user_id.' tried to edit invalid system '.$sysID);
             return view('errors.badSystem');
         }
         

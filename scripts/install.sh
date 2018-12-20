@@ -309,6 +309,9 @@ rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude
 chown -R $APUSR:$APUSR $PROD_DIR >> $LOGFILE
 chmod -R 755 $PROD_DIR >> $LOGFILE
 
+#  Create the symbolic link for public storage
+php artisan storage:link >> $LOGFILE
+
 #  Change to the production directory and cache the settings
 #cd $PROD_DIR
 #php artisan config:cache >> $LOGFILE
