@@ -3,22 +3,18 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CheckRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
+    //  Check and verify that the user has permission to visit the request page
     public function handle($request, Closure $next)
     {
         if($request->user() === null)
         {
             Log::alert($request->route().' denied for Guest');
-            return response('Insufficient Permissions', 401);
+            return response()->view('errors.401', [], 401);
         }
         $actions = $request->route()->getAction();
         $roles = isset($actions['roles']) ? $actions['roles'] : null;
@@ -27,7 +23,8 @@ class CheckRole
         {
             return $next($request);
         }
-        Log::alert($request->route().' denied for user '.$request->user());
-        return response('Insufficient Permissions', 401);
+
+        Log::alert($request->url().' denied for user '.$request->user());
+        return response()->view('errors.401', [], 401);
     }
 }

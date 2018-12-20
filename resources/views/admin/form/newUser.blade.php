@@ -33,5 +33,16 @@
             {!! Form::close() !!}
         </div>
     </div>
+    @include('_inc.spinnerModal')
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('#new-user-form').on('submit', function()
+    {
+        $('.submit-button').attr('disabled', true);
+        $('#spinner-modal').modal('show');
+    });
+</script>
 @endsection

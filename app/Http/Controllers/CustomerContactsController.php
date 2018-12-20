@@ -141,16 +141,16 @@ class CustomerContactsController extends Controller
     //  Download the contact informaiton as a V-Card
     public function downloadVCard($id)
     {
-        $contact = CustomerContacts::find($id);
-        $numbers = CustomerContactsView::where('cont_id', $id)->get();
+        $contact  = CustomerContacts::find($id);
+        $numbers  = CustomerContactsView::where('cont_id', $id)->get();
         $custData = Customers::find($contact->cust_id);
         
         $contactName = explode(' ', $contact->name);
-        $firstName = $contactName[0];
-        $lastName = isset($contactName[1]) ? $contactName[1] : '';
-        $additional = '';
-        $prefix = '';
-        $suffix = '';
+        $firstName   = $contactName[0];
+        $lastName    = isset($contactName[1]) ? $contactName[1] : '';
+        $additional  = '';
+        $prefix      = '';
+        $suffix      = '';
         
         $vcard = new VCard();
         $vcard->addName($lastName, $firstName, $additional, $prefix, $suffix);

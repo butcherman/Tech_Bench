@@ -2,8 +2,8 @@ version_source: config
 blade_directive: version
 current:
     major: 4
-    minor: 2
-    patch: 3
+    minor: 3
+    patch: 0
     format: '{$major}.{$minor}.{$patch}'
     git_absorb: false
 cache:
@@ -11,13 +11,16 @@ cache:
     key: pragmarx-version
     time: 525600
 build:
+    mode: git-remote
+    number: 
+    length: 6
+    increment_by: 1
     git_absorb: git-remote
-    number: b59d74
 git:
     git-local: 'git rev-parse --verify HEAD'
     git-remote: 'git ls-remote {$repository}'
     branch: refs/heads/master
-    repository: ''
+    repository: 'https://github.com/butcherman/Tech_Bench.git'
     version: { git-local: 'git describe', git-remote: 'git ls-remote {$repository} | grep tags/ | grep -v {} | cut -d / -f 3 | sort --version-sort | tail -1', matcher: '/[V|v]*[ersion]*\s*\.*(\d+)\.(\d+)\.(\d+)\.*(\w*)/' }
 format:
     major: '{$major}'
@@ -26,4 +29,4 @@ format:
     build: '{$build}'
     version: '{$major}.{$minor}.{$patch} (build {$build})'
     full: 'version {$major}.{$minor}.{$patch} (build {$build})'
-    compact: 'v{$major}.{$minor}.{$patch}-{$build}'
+    compact: '{$major}.{$minor}.{$patch}'

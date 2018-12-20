@@ -37,7 +37,7 @@ class SystemController extends Controller
         if($valid->isEmpty())
         {
             Log::warning('User '.Auth::user()->user_id.' tried to visit invalid category '.$cat);
-            return view('err.badCategory');
+            return view('errors.badCategory');
         }
         
         //  Get the types of systems belonging to the category
@@ -61,7 +61,7 @@ class SystemController extends Controller
         if(empty($valid))
         {
             Log::warning('User '.Auth::user()->user_id.' tried to visit invalid system - '.$sys.' for category '.$cat);
-            return view('err.badSystem');
+            return view('errors.badSystem');
         }
         
         //  Get the file types and build the basic page before Ajax calls

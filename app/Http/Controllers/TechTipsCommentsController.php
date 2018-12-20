@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
+use App\User;
+use App\TechTips;
 use App\TechTipComments;
+use App\Notifications\TechTipComment;
 
 class TechTipsCommentsController extends Controller
 {
@@ -21,12 +25,23 @@ class TechTipsCommentsController extends Controller
         $request->validate(['tipID' => 'required', 'comment' => 'required']);
         
         TechTipComments::create([
-            'tip_id' => $request->tipID,
+            'tip_id'  => $request->tipID,
             'user_id' => Auth::user()->user_id,
             'comment' => $request->comment
         ]);
         
+        $tipData = TechTips::find($request->tipID);
+        $creator = User::find($tipData->user_id);
+        
+        $noteData = [
+            'user'   => Auth::user()->first_name.' '.Auth::user()->last_name,
+            'title'  => $tipData->subject,
+            'tip_id' => $tipData->tip_id
+        ];
+        
         Log::info('New Tech Tip Comment Added', ['tip_id' => $request->tipID, 'user_id' => Auth::user()->user_id]);
+        
+        Notification::send($creator, new TechTipComment($noteData));
     }
 
     //  Show comments for a tech tip
@@ -47,7 +62,7 @@ class TechTipsCommentsController extends Controller
         $comment = TechTipComments::find($id);
         
         return view('tip.form.editComment', [
-            'comment' => $comment,
+            'comment'   => $comment,
             'commentID' => $id
         ]);
     }

@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @section('breadcrumbs')
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{route('installer.index')}}">System Administration</a></li>
-    <li class="breadcrumb-item active">Edit System</li>
+    <li class="breadcrumb-item"><a href="{{route('admin.index')}}">System Administration</a></li>
+    <li class="breadcrumb-item"><a href="{{route('installer.systems.edit', ['id' => 'select'])}}">Edit System</a></li>
+    <li class="breadcrumb-item active">{{$name}}</li>
 </ol>
 @endsection
 
@@ -39,7 +40,8 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {!!Form::open(['route' => ['installer.submitEditSystem', $sysID], 'id' => 'edit-system'])!!}
+            {!!Form::open(['route' => ['installer.systems.update', $sysID], 'id' => 'edit-system'])!!}
+                @method('PUT')
                 <fieldset>
                     {{Form::bsText('name', 'System Name', $name, ['placeholder' => 'Enter Descriptive Name', 'required'])}}
                 </fieldset>

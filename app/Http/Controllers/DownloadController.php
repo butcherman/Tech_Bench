@@ -27,6 +27,6 @@ class DownloadController extends Controller
         }
         
         Log::info('File Not Found', ['file_id' => $fileID, 'file_name' => $fileName]);
-        return view('err.badFile');
+        return view('errors.badFile');
     }
 }

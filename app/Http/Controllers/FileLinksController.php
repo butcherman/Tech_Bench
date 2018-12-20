@@ -118,6 +118,7 @@ class FileLinksController extends Controller
     //  Get the files for the link
     public function getFiles($type, $linkID)
     {
+        $files = null;
         switch($type)
         {
             case 'down':
@@ -200,7 +201,10 @@ class FileLinksController extends Controller
     //  Submit the edit link form
     public function update(Request $request, $id)
     {
-        $request->validate = ['link_name' => 'required', 'expire' => 'required'];
+        $request->validate([
+            'link_name' => 'required', 
+            'expire'    => 'required'
+        ]);
         
         FileLinks::find($id)->update([
             'link_name'    => $request->link_name,

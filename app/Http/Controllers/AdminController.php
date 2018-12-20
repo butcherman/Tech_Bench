@@ -33,13 +33,13 @@ class AdminController extends Controller
     //  Show the links for a specific user
     public function showLinks($userID)
     {
-        $user = User::find($userID);
+        $user     = User::find($userID);
         $userName = $user->first_name.' '.$user->last_name;
         
         
         return view('admin.fileLinks', [
             'userID' => $userID,
-            'name' => $userName
+            'name'   => $userName
         ]);
     }
 }

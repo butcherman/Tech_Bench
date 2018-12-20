@@ -18,133 +18,135 @@ STAGE_DIR="$(dirname "$(dirname "$(readlink -fm "$0")")")"
 source $STAGE_DIR/scripts/_config.sh
 
 ########################  Variables for this script  ###########################
+LOGFILE=$LOGFILE/install.log
 PREREQ=true
 IPADDR=$(ifconfig  | grep -E 'inet.[0-9]' | grep -v '127.0.0.1' | awk '{ print $2}')
 COUNT=1
 
 #  Verify the script is being run as root
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 
+   echo "This script must be run as root"  | tee $LOGFILE
    exit 1
 fi
 
 #  Start installation process
 clear
 tput setaf 4
-echo '##################################################################'
-echo '#                                                                #'
-echo '#                 Welcome to the Tech Bench Setup                #'
-echo '#                                                                #'
-echo '##################################################################'
-echo ''
+echo '##################################################################' | tee $LOGFILE
+echo '#                                                                #' | tee -a $LOGFILE
+echo '#                 Welcome to the Tech Bench Setup                #' 
+echo '#                   Tech Bench Installation Log                  #' >> $LOGFILE
+echo '#                                                                #' | tee -a $LOGFILE
+echo '##################################################################' | tee -a $LOGFILE
+echo '' | tee -a $LOGFILE
 tput sgr0
-printf 'Checking Dependencies...\n\n'
+printf 'Checking Dependencies...\n\n' | tee -a $LOGFILE
 
 #  Check Apache is installed and running
-printf 'Apache                                                      '
+printf 'Apache                                                      ' | tee -a $LOGFILE
 if systemctl is-active --quiet apache2; then
 	tput setaf 2
-	echo '[PASS]'
+	echo '[PASS]' | tee -a $LOGFILE
 else	
 	tput setaf 1
-	echo '[FAIL]'
+	echo '[FAIL]' | tee -a $LOGFILE
 	PREREQ=false
 fi
 tput sgr0
 
 #  Check if MySQL is installed and running
-printf 'MySQL                                                       '
+printf 'MySQL                                                       ' | tee -a $LOGFILE
 if systemctl is-active --quiet mysql; then
 	tput setaf 2
-	echo '[PASS]'
+	echo '[PASS]' | tee -a $LOGFILE
 else	
 	tput setaf 1
-	echo '[FAIL]'
+	echo '[FAIL]' | tee -a $LOGFILE
 	PREREQ=false
 fi
 tput sgr0
 
 #  Check if PHP is installed and running the proper version
-printf 'PHP 7                                                       '
+printf 'PHP 7                                                       ' | tee -a $LOGFILE
 if hash php 2>/dev/null; then
 	PHPVersion=$(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,3)
 	minimumRequiredVersion=71;
 	if (($PHPVersion >= $minimumRequiredVersion)); then
 		tput setaf 2
-		echo '[PASS]'
+		echo '[PASS]' | tee -a $LOGFILE
 	else
 		tput setaf 1
-		echo '[FAIL]'
+		echo '[FAIL]' | tee -a $LOGFILE
 		PREREQ=false
 	fi
 else
 	tput setaf 1
-	echo '[FAIL]'
+	echo '[FAIL]' | tee -a $LOGFILE
 	PREREQ=false
 fi
 tput sgr0
 
 #  Check if the Apache Rewrite Module is installed
 REWRITE=$(apachectl -M | grep 'rewrite_module' > /dev/null 2>&1)
-printf 'Rewrite Module                                              '
+printf 'Rewrite Module                                              ' | tee -a $LOGFILE
 if $REWRITE; then
 	tput setaf 2
-	echo '[PASS]'
+	echo '[PASS]' | tee -a $LOGFILE
 else	
 	tput setaf 1
-	echo '[FAIL]'
+	echo '[FAIL]' | tee -a $LOGFILE
 	PREREQ=false
 fi
 tput sgr0
 
 # Check if Composer is installed
-printf 'Composer                                                    '
+printf 'Composer                                                    ' | tee -a $LOGFILE
 composer -v > /dev/null 2>&1
 COMPOSER=$?
 if [[ $COMPOSER -ne 0 ]]; then
     tput setaf 1
-	echo '[FAIL]'
+	echo '[FAIL]' | tee -a $LOGFILE
 	PREREQ=false
 else
     tput setaf 2
-	echo '[PASS]'
+	echo '[PASS]' | tee -a $LOGFILE
 fi
 tput sgr0
 
 # Check if NodeJS is installed
-printf 'NodeJS                                                      '
+printf 'NodeJS                                                      ' | tee -a $LOGFILE
 npm -v > /dev/null 2>&1
 NODE=$?
 if [[ $NODE -ne 0 ]]; then
     tput setaf 1
-	echo '[FAIL]'
+	echo '[FAIL]' | tee -a $LOGFILE
 	PREREQ=false
 else
     tput setaf 2
-	echo '[PASS]'
+	echo '[PASS]' | tee -a $LOGFILE
 fi
 tput sgr0
 
 # Check if Unzip is installed
-printf 'Unzip                                                       '
+printf 'Unzip                                                       ' | tee -a $LOGFILE
 unzip -v > /dev/null 2>&1
 NODE=$?
 if [[ $NODE -ne 0 ]]; then
     tput setaf 1
-	echo '[FAIL]'
+	echo '[FAIL]' | tee -a $LOGFILE
 	PREREQ=false
 else
     tput setaf 2
-	echo '[PASS]'
+	echo '[PASS]' | tee -a $LOGFILE
 fi
 tput sgr0
 
 #  Check if all prerequesits have passed or not.  If a prereq fails, exit script
 if test $PREREQ = false; then
-	printf '\n\nOne or more prerequesits has failed.\nPlease install the missing prerequesits and run this installer again.\n\n'
+	printf '\n\nOne or more prerequesits has failed.\nPlease install the missing prerequesits and run this installer again.\n\n' | tee -a $LOGFILE
 	exit 1
 fi
-printf '\nWe are good to go - lets move on...\n\n'
+printf '\nWe are good to go - lets move on...\n\n' | tee -a $LOGFILE
 
 #  Verify the webroot directory
 echo 'Tech Bench files will be copied to the Web Root directory'
@@ -212,8 +214,14 @@ while true; do
 	printf "\n\nThis Database already exists.  Please enter a database name that is not in use.\n"
 done
 
+#  Start the Spinner
+echo 'Setting up Tech Bench files...'
+spin & 
+SPIN_PID=$!
+trap "kill -9 $SPIN_PID" `seq 0 15`
+
 #  Create the database and user
-mysql -u$DBUSER -p$DBPASS > /dev/null 2>&1 <<MYSQL_SCRIPT
+mysql -u$DBUSER -p$DBPASS > $LOGFILE 2>&1 <<MYSQL_SCRIPT
 	CREATE DATABASE IF NOT EXISTS \`${DBNAME}\`;
 	CREATE USER IF NOT EXISTS ${NEWUSER}@localhost IDENTIFIED BY '${NEWPASS}';
 	GRANT ALL PRIVILEGES ON \`${DBNAME}\`.* TO '${NEWUSER}'@'localhost' WITH GRANT OPTION;
@@ -222,8 +230,8 @@ mysql -u$DBUSER -p$DBPASS > /dev/null 2>&1 <<MYSQL_SCRIPT
 MYSQL_SCRIPT
 
 #  Create the Tech Bench and move to Web Root
-echo 'Setting up Tech Bench files...'
 
+echo 'Setting up .env file' >> $LOGFILE
 cd $STAGE_DIR
 #  Create the .env file
 su -c "touch .env" $SUDO_USER
@@ -277,23 +285,55 @@ echo '# LINK_FOLDER="\links"' 																	 >> .env
 echo '# COMP_FOLDER="\company"' 																 >> .env
 echo '# MAX_UPLOAD=2147483648' 																	 >> .env
 echo ''                                                                                          >> .env
-echo 'VERSION_GIT_REMOTE_REPOSITORY=https://github.com/butcherman/Tech_Bench.git'                >> .env
-echo ''                                                                                          >> .env
 
 #  Download all dependencies, cache and populate database
-su -c "npm install --only=prod; composer install --optimize-autoloader --no-dev; php artisan key:generate; php artisan migrate --force; php artisan version:refresh; php artisan version:absorb" $SUDO_USER
+echo 'Downloading Dependencies' | tee -a $LOGFILE
+echo 'Running Command - npm install --only=prod' >> $LOGFILE
+su -c "npm install --only=prod --no-progress" $SUDO_USER >> $LOGFILE
+echo 'Running Command composer install --optimize-autoloader --no-dev' >> $LOGFILE
+su -c "composer install --optimize-autoloader --no-dev" $SUDO_USER &>> $LOGFILE
+echo 'Running Command - php artisan key:generate' >> $LOGFILE
+su -c 'php artisan key:generate' $SUDO_USER &>> $LOGFILE
+echo 'Setting up Database'
+echo 'Running Command - php artisan migrate --force' >> $LOGFILE
+su -c 'php artisan migrate --force' $SUDO_USER &>> $LOGFILE
+echo 'Updating version' >> $LOGFILE
+su -c 'php artisan version:refresh; php artisan version:absorb' $SUDO_USER &>> $LOGFILE
 
 #  Copy files to web directory
-rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' $STAGE_DIR/ $PROD_DIR
+echo 'Setting up Tech Bench Files'
+echo 'Copying files to '$PROD_DIR >> $LOGFILE
+rsync -av --delete-after --force --exclude='tests' --exclude='scripts' --exclude='webpack.mix.js' --exclude='composer.*' --exclude='.editorconfig' --exclude='.env.example' --exclude='.gi*' --exclude='.*.yml' $STAGE_DIR/ $PROD_DIR >> $LOGFILE
 
 #  Change the owner of the files to the web user and set permissions
-chown -R $APUSR:$APUSR $PROD_DIR
-chmod -R 755 $PROD_DIR
+chown -R $APUSR:$APUSR $PROD_DIR >> $LOGFILE
+chmod -R 755 $PROD_DIR >> $LOGFILE
+
+#  Create the symbolic link for public storage
+php artisan storage:link >> $LOGFILE
 
 #  Change to the production directory and cache the settings
 #cd $PROD_DIR
-#php artisan config:cache
-#php artisan route:cache
+#php artisan config:cache >> $LOGFILE
+#php artisan route:cache >> $LOGFILE
+
+#  Log the final results
+echo '##################################################################' >> $LOGFILE
+echo '#                                                                #' >> $LOGFILE
+echo '#                The Tech Bench Setup is Complete                #' >> $LOGFILE
+echo '#                                                                #' >> $LOGFILE
+echo '##################################################################' >> $LOGFILE
+echo '' >> $LOGFILE
+echo 'Please save the following information:' >> $LOGFILE
+echo 'Website URL      - '$WEBURL >> $LOGFILE
+echo 'Default Username - admin' >> $LOGFILE
+echo 'Default Password - password' >> $LOGFILE
+echo 'MySQL Database   - '$DBNAME >> $LOGFILE
+echo 'MySQL Username   - '$NEWUSER >> $LOGFILE
+echo 'MySQL Password   - '$NEWPASS >> $LOGFILE
+echo 'The .env file contains the configuration information for this application.' >> $LOGFILE
+echo 'Please make a backup of this file' >> $LOGFILE
+echo '' >> $LOGFILE
 
 #  Show the finished product
 clear
@@ -312,7 +352,12 @@ echo 'Password:  password'
 echo ''
 echo 'Post Install Instructions:'
 echo ''
-echo 'For security purposes it is highly recommended to change the Apache '
-echo 'conf file to point to '$PROD_DIR'/public.'
+echo 'For security purposes it is highly recommended to change the Apache ' | tee -a $LOGFILE
+echo 'conf file to point to '$PROD_DIR'/public.' | tee -a $LOGFILE
+echo ''
+echo 'More information can be found in the log file'
+
+#  Copyt the log file so it can be viewed by the website
+cp $LOGFILE $PROD_DIR/storage/logs/
 
 exit 1

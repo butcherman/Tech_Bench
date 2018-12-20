@@ -39,29 +39,12 @@
                         <span class="nav-link-text">File Links</span>
                     </a>
                 </li>
-                @if($current_user->hasAnyRole(['installer', 'admin', 'report']))
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Administration">
-                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseAdmin" data-parent="#exampleAccordion">
-                            <i class="fa fa-fw fa-wrench"></i>
+                @if($current_user->hasAnyRole(['installer', 'admin']))
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Customers">
+                        <a class="nav-link" href="{{route('admin.index')}}">
+                            <i class="fa fa-fw fa-users"></i>
                             <span class="nav-link-text">Administration</span>
                         </a>
-                        <ul class="sidenav-second-level collapse" id="collapseAdmin">
-                            @if($current_user->hasAnyRole('installer'))
-                                <li>
-                                    <a href="{{route('installer.index')}}">Site Administration</a>
-                                </li>
-                            @endif
-                            @if($current_user->hasAnyRole(['installer', 'admin']))
-                                <li>
-                                    <a href="{{route('admin.index')}}">Administration</a>
-                                </li>
-                            @endif
-<!--
-                            <li>
-                                <a href="#">Reports</a>
-                            </li>
--->
-                        </ul>
                     </li>
                 @endif
                 @include('_inc.navbar')

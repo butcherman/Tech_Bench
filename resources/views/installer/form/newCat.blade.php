@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('breadcrumbs')
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{route('installer.index')}}">System Administration</a></li>
+    <li class="breadcrumb-item"><a href="{{route('admin.index')}}">System Administration</a></li>
     <li class="breadcrumb-item active">New Category</li>
 </ol>
 @endsection
@@ -29,7 +29,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {!!Form::open(['route' => 'installer.submitCat'])!!}
+            {!!Form::open(['route' => 'installer.system-categories.store'])!!}
                 {{Form::bsText('name', 'Enter Category Name', null, ['required'])}}
                 {{Form::bsSubmit('Submit Category')}}
             {!!Form::close()!!}

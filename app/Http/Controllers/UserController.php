@@ -15,6 +15,8 @@ use App\User;
 use App\UserLogins;
 use App\UserInitialize;
 use App\Mail\InitializeUser;
+use App\Http\Controllers\FileLinksController;
+use App\FileLinks;
 
 class UserController extends Controller
 {
@@ -65,7 +67,6 @@ class UserController extends Controller
             'first_name' => 'required',
             'last_name'  => 'required',
             'email'      => 'required|unique:users',
-//            'password'   => 'required|string|min:6|confirmed'
         ]);
         
         //  Create the user
@@ -260,6 +261,18 @@ class UserController extends Controller
     //  Deactivae an active user
     public function destroy($id)
     {
+        //  Delete any file links that the user may have
+        $linkController = new FileLinksController();
+        $links = $linkController->show($id);
+        
+        $links = FileLinks::where('user_id', $id)->get();
+        
+        
+        foreach($links as $link)
+        {
+            $linkController->destroy($link->link_id);
+        }
+        
          //  Update the user data
         User::find($id)->update(
         [

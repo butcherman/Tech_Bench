@@ -90,9 +90,9 @@ class CustomerFilesController extends Controller
     //  Edit a customer file
     public function edit($id)
     {
-        $custFile = CustomerFiles::find($id);
+        $custFile  = CustomerFiles::find($id);
         $fileTypes = CustomerFileTypes::all();
-        $fTypes = [];
+        $fTypes    = [];
         foreach($fileTypes as $type)
         {
             $fTypes[$type->file_type_id] = $type->description;

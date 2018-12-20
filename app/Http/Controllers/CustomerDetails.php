@@ -35,11 +35,14 @@ class CustomerDetails extends Controller
             'zip'      => 'required|numeric'
         ]);
         
+        //  Remove any forward slash (/) from the Customer name field
+        $request->merge(['name' => str_replace('/', '-', $request->name)]);
+        
         Customers::create($request->all());
         
         Log::info('New Customer ID-'.$request->cust_id.' created by User ID-'.Auth::user()->user_id);
         return view('customer.newCustomer', [
-            'cust_id' => $request->cust_id,
+            'cust_id'   => $request->cust_id,
             'cust_name' => urlencode($request->name)
         ]);
     }
@@ -52,14 +55,14 @@ class CustomerDetails extends Controller
         //  Check for empty data set
         if(empty($custDetails))
         {
-            return view('err.customerNotFound');
+            return view('errors.customerNotFound');
         }
 
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
         
         return view('customer.details', [
             'details' => $custDetails,
-            'isFav' => $custFav
+            'isFav'   => $custFav
         ]);
     }
 
@@ -82,6 +85,9 @@ class CustomerDetails extends Controller
             'zip'      => 'required|numeric'
         ]);
         
+        //  Remove any forward slash (/) from the Customer name field
+        $request->merge(['name' => str_replace('/', '-', $request->name)]);
+        
         Customers::find($id)->update($request->all());
 
         //  Modify to the new ID number if set
@@ -98,12 +104,7 @@ class CustomerDetails extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Deactive a customer
     public function destroy($id)
     {
         Log::info('Customer ID-'.$id.' has been deactivated by User ID-'.Auth::user()->user_id);

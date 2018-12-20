@@ -12,6 +12,22 @@
             <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Welcome {{ $current_user->first_name.' '.$current_user->last_name }}</h1></div>
         </div>
     </div>
+    <div class="row justify-content-center pad-top">
+        <div class="col-12">
+            @foreach($notifications as $notification)
+                <div class="alert alert-{{$notification->data['type']}} text-center alert-dismissible fade show notification" data-id="{{$notification->id}}">
+                    @if(!empty($notification->data['link']))
+                        <a href="{{$notification->data['link']}}" class="alert-link">{{$notification->data['message']}}</a>
+                    @else
+                        {{$notification->data['message']}}
+                    @endif
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span>&times;</span>
+                    </button>
+                </div>
+            @endforeach
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="card">
@@ -67,4 +83,16 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.notification').on('closed.bs.alert', function()
+    {
+        var id = $(this).data('id');
+        var url = '{{route('mark-notification', ['id' => ':id'])}}';
+        url = url.replace(':id', id);
+        $.get(url);
+    });
+</script>
 @endsection

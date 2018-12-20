@@ -103,11 +103,14 @@ class TechTipsController extends Controller
             'sysTags' => 'required'
         ]);
         
+        //  Remove any forward slash (/) from the Subject field
+        $request->merge(['subject' => str_replace('/', '-', $request->subject)]);
+        
         //  Enter the tip details and get the tip ID
         $tip = TechTips::create([
-            'subject' => $request->subject,
+            'subject'     => $request->subject,
             'description' => $request->details,
-            'user_id' => Auth::user()->user_id
+            'user_id'     => Auth::user()->user_id
         ]);
         $tipID = $tip->tip_id;
 
@@ -180,7 +183,7 @@ class TechTipsController extends Controller
         if(empty($tipData))
         {
             Log::warning('User ID-'.Auth::user()->user_id.' tried to access invlaid Tech Tip ID-'.$id.' Name-'.$name);
-            return view('err.tipNotFound');
+            return view('errors.tipNotFound');
         }
         
         $tipFiles = TechTipFiles::where('tip_id', $id)
@@ -275,6 +278,9 @@ class TechTipsController extends Controller
             'details' => 'required', 
             'sysTags' => 'required'
         ]);
+        
+        //  Remove any forward slash (/) from the Subject field
+        $request->merge(['subject' => str_replace('/', '-', $request->subject)]);
         
         //  update tip details
         TechTips::find($id)->update([

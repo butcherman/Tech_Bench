@@ -6,12 +6,13 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
 use App\FileLinkNotes;
 use App\User;
-use App\Mail\NewLinkFile;
+use App\Notifications\NewFileUploaded;
 
 class UserLinksController extends Controller
 {
@@ -42,7 +43,7 @@ class UserLinksController extends Controller
         
         return view('links.guest.details', [
             'details' => $details,
-            'files' => $files,
+            'files'   => $files,
             'allowUp' => $details->allow_upload
         ]);
     }
@@ -70,10 +71,10 @@ class UserLinksController extends Controller
 
             //  Place the file in the file link files table of DB
             FileLinkFiles::create([
-                'link_id' => $details->link_id,
-                'file_id' => $fileID,
+                'link_id'  => $details->link_id,
+                'file_id'  => $fileID,
                 'added_by' => $request->name,
-                'upload' => 1
+                'upload'   => 1
             ]);
             
             if(!empty($request->note))
@@ -81,21 +82,14 @@ class UserLinksController extends Controller
                 FileLinkNotes::create([
                     'link_id' => $details->link_id,
                     'file_id' => $fileID,
-                    'note' => $request->note
+                    'note'    => $request->note
                 ]);
             }
         }
         
-        //  Send email to the creator of the link
+        //  Send email and notification to the creator of the link
         $user = User::find($details->user_id);
-        try
-        {
-            Mail::to($user)->send(new NewLinkFile($details));
-        }
-        catch(Exception $e)
-        {
-            report($e);
-        }
+        Notification::send($user, new NewFileUploaded($details));
         
         return $request->all();
     }
