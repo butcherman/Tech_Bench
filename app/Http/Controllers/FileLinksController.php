@@ -118,6 +118,7 @@ class FileLinksController extends Controller
     //  Get the files for the link
     public function getFiles($type, $linkID)
     {
+        $files = null;
         switch($type)
         {
             case 'down':

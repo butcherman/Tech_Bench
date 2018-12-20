@@ -35,6 +35,9 @@ class CustomerDetails extends Controller
             'zip'      => 'required|numeric'
         ]);
         
+        //  Remove any forward slash (/) from the Customer name field
+        $request->merge(['name' => str_replace('/', '-', $request->name)]);
+        
         Customers::create($request->all());
         
         Log::info('New Customer ID-'.$request->cust_id.' created by User ID-'.Auth::user()->user_id);
@@ -82,6 +85,9 @@ class CustomerDetails extends Controller
             'zip'      => 'required|numeric'
         ]);
         
+        //  Remove any forward slash (/) from the Customer name field
+        $request->merge(['name' => str_replace('/', '-', $request->name)]);
+        
         Customers::find($id)->update($request->all());
 
         //  Modify to the new ID number if set
@@ -98,12 +104,7 @@ class CustomerDetails extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Deactive a customer
     public function destroy($id)
     {
         Log::info('Customer ID-'.$id.' has been deactivated by User ID-'.Auth::user()->user_id);

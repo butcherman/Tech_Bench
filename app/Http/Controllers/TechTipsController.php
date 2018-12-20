@@ -103,6 +103,9 @@ class TechTipsController extends Controller
             'sysTags' => 'required'
         ]);
         
+        //  Remove any forward slash (/) from the Subject field
+        $request->merge(['subject' => str_replace('/', '-', $request->subject)]);
+        
         //  Enter the tip details and get the tip ID
         $tip = TechTips::create([
             'subject'     => $request->subject,
@@ -275,6 +278,9 @@ class TechTipsController extends Controller
             'details' => 'required', 
             'sysTags' => 'required'
         ]);
+        
+        //  Remove any forward slash (/) from the Subject field
+        $request->merge(['subject' => str_replace('/', '-', $request->subject)]);
         
         //  update tip details
         TechTips::find($id)->update([
