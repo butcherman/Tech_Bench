@@ -27,9 +27,9 @@ class CustomerController extends Controller
             ->get();
         
         $sysArr = [];
-        foreach($systems as $sys)
+        foreach ($systems as $sys)
         {
-            foreach($sys->SystemTypes as $s)
+            foreach ($sys->SystemTypes as $s)
             {
                 $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
@@ -44,7 +44,7 @@ class CustomerController extends Controller
     public function search(Request $request)
     {
         //  Run different request based on if system field is filled out or not
-        if(!empty($request->system))
+        if (!empty($request->system))
         {
             $customerData = Customers::where('name', 'like', '%'.$request->customer.'%')
                 ->where('city', 'like', '%'.$request->city.'%')
@@ -52,11 +52,10 @@ class CustomerController extends Controller
                 ->with('CustomerSystems.SystemTypes')
                 ->whereHas('CustomerSystems', function($q) use($request)
                 {
-                   $q->where('sys_id', $request->system);
+                    $q->where('sys_id', $request->system);
                 })
                 ->get();
-        }
-        else
+        } else
         {
             $customerData = Customers::where('name', 'like', '%'.$request->customer.'%')
                 ->where('city', 'like', '%'.$request->city.'%')

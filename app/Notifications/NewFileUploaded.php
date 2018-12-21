@@ -31,9 +31,9 @@ class NewFileUploaded extends Notification
         return (new MailMessage)
                     ->line('A new file has been uploaded to the file link - '.$this->details->link_name)
                     ->action('Click to View Link', 
-                             url(route('links.info', [
-                                 'id' => $this->details->link_id, 
-                                 'name' => urlencode($this->details->link_name)
+                                url(route('links.info', [
+                                    'id' => $this->details->link_id, 
+                                    'name' => urlencode($this->details->link_name)
                             ])));
     }
 
@@ -44,8 +44,8 @@ class NewFileUploaded extends Notification
             'type'    => 'warning',
             'message' => 'New File Uploaded to link - '.$this->details->link_name,
             'link'    => url(route('links.info', [
-                                 'id' => $this->details->link_id, 
-                                 'name' => urlencode($this->details->link_name)
+                                    'id' => $this->details->link_id, 
+                                    'name' => urlencode($this->details->link_name)
                             ]))
         ];
     }

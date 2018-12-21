@@ -13,7 +13,7 @@ class CreateCustomerContactsTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_contacts', function (Blueprint $table) {
+        Schema::create('customer_contacts', function(Blueprint $table) {
             $table->increments('cont_id');
             $table->integer('cust_id')->unsigned();
             $table->text('name');

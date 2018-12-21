@@ -27,17 +27,16 @@ class InstallerController extends Controller
         $cats = SystemCategories::all();
         $sysArr = [];
         //  Populate that list with the matching systems
-        foreach($cats as $cat)
+        foreach ($cats as $cat)
         {
             $systems = SystemTypes::where('cat_id', $cat->cat_id)->get();
-            if(!$systems->isEmpty())
+            if (!$systems->isEmpty())
             {
-                foreach($systems as $sys)
+                foreach ($systems as $sys)
                 {
                     $sysArr[$cat->name][] = $sys->name;
                 }
-            }
-            else
+            } else
             {
                 $sysArr[$cat->name] = null;
             }
@@ -67,7 +66,7 @@ class InstallerController extends Controller
         
         Log::info('Tech Bench Settings Updated', ['user_id' => Auth::user()->user_id]);
         
-        return redirect()->back()->with('success', 'Tech Bench Successfully Updated');//
+        return redirect()->back()->with('success', 'Tech Bench Successfully Updated'); //
     }
     
     //  Upload and submit a new site logo
@@ -111,7 +110,7 @@ class InstallerController extends Controller
             'mail.username'   => $request->username,
         ]);
         
-        if(!empty($request->password))
+        if (!empty($request->password))
         {
             config(['mail.password' => $request->password]);
         }
@@ -123,7 +122,7 @@ class InstallerController extends Controller
             Mail::to(Auth::user()->email)->send(new TestEmail());
             return 'success';
         }
-        catch(Exception $e)
+        catch (Exception $e)
         {
             Log::notice('Test Email Failed.  Message: '.$e);
             $msg = '['.$e->getCode().'] "'.$e->getMessage().'" on line '.$e->getTrace()[0]['line'].' of file '.$e->getTrace()[0]['file'];
@@ -146,13 +145,13 @@ class InstallerController extends Controller
         Settings::where('key', 'mail.port')->update(['value' => $request->port]);
         Settings::where('key', 'mail.encryption')->update(['value' => $request->encryption]);
         Settings::where('key', 'mail.username')->update(['value' => $request->username]);
-        if(!empty($request->password))
+        if (!empty($request->password))
         {
             Settings::where('key', 'mail.password')->update(['value' => $request->password]);
         }
          
         Log::info('Email Settings have been changed by User ID-'.Auth::user()->user_id);
-        return redirect()->back()->with('success', 'Tech Bench Successfully Updated');//
+        return redirect()->back()->with('success', 'Tech Bench Successfully Updated'); //
     }
     
     //  User settings form
@@ -174,20 +173,19 @@ class InstallerController extends Controller
         
         //  Determine if the password expires field is updated
         $oldExpire = config('users.passExpires');
-        if($request->passExpire != $oldExpire)
+        if ($request->passExpire != $oldExpire)
         {
             //  Update the setting in the database
             Settings::where('key', 'users.passExpires')->update([
                 'value' => $request->passExpire
             ]);
             //  If the setting is changing from never to xx days, update all users
-            if($request->passExpire == 0)
+            if ($request->passExpire == 0)
             {
                 User::whereNotNull('password_expires')->update([
                     'password_expires' => null
                 ]);
-            }
-            else
+            } else
             {
                 $newExpire = Carbon::now()->addDays($request->passExpire);
                 User::whereNull('password_expires')->update([

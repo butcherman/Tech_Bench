@@ -40,7 +40,7 @@ class FileLinksController extends Controller
         {
             $hash = strtolower(str_random(15));
             $dup = FileLinks::where('link_hash', $hash)->get()->count();
-        }while($dup != 0);
+        } while ($dup != 0);
         
         //  Create the new file link
         $link = FileLinks::create([
@@ -53,10 +53,10 @@ class FileLinksController extends Controller
         $linkID = $link->link_id;
         
         //  If there are any files, process them
-        if(!empty($request->file))
+        if (!empty($request->file))
         {
             $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
-            foreach($request->file as $file)
+            foreach ($request->file as $file)
             {
                 //  Clean the file and store it
                 $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
@@ -105,7 +105,7 @@ class FileLinksController extends Controller
     {
         $linkData = FileLinks::find($id);
         
-        if(empty($linkData))
+        if (empty($linkData))
         {
             return view('links.badLink');
         }
@@ -119,7 +119,7 @@ class FileLinksController extends Controller
     public function getFiles($type, $linkID)
     {
         $files = null;
-        switch($type)
+        switch ($type)
         {
             case 'down':
                 $files = FileLInkFiles::where('link_id', $linkID)
@@ -154,7 +154,7 @@ class FileLinksController extends Controller
     public function submitAddFile($id, Request $request)
     {
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$id;
-        foreach($request->file as $file)
+        foreach ($request->file as $file)
         {
             //  Clean the file and store it
             $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
@@ -230,9 +230,9 @@ class FileLinksController extends Controller
     {
         //  Remove the file from database
         $data = FileLinkFiles::where('link_id', $id)->get();
-        if(!$data->isEmpty())
+        if (!$data->isEmpty())
         {
-            foreach($data as $file)
+            foreach ($data as $file)
             {
                 $fileID = $file->file_id;
                 $file->delete();

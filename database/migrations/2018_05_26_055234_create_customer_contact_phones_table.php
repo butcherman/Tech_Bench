@@ -13,7 +13,7 @@ class CreateCustomerContactPhonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_contact_phones', function (Blueprint $table) {
+        Schema::create('customer_contact_phones', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('cont_id')->unsigned();
             $table->integer('phone_type_id')->unsigned();

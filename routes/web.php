@@ -22,7 +22,7 @@ Route::prefix('file-links')->name('userLink.')->group(function()
 Route::get('account/change-password', 'AccountController@changePassword')->name('changePassword');
 Route::post('account/change-password', 'AccountController@submitPassword')->name('submitPassword');
 
-Route::middleware(['password_expired'])->group(function () 
+Route::middleware(['password_expired'])->group(function() 
 { 
     //  Tech/Registered User Routes
     Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function()

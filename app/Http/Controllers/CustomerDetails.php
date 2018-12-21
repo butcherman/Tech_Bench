@@ -53,7 +53,7 @@ class CustomerDetails extends Controller
         $custDetails = Customers::find($id);
         
         //  Check for empty data set
-        if(empty($custDetails))
+        if (empty($custDetails))
         {
             return view('errors.customerNotFound');
         }
@@ -91,7 +91,7 @@ class CustomerDetails extends Controller
         Customers::find($id)->update($request->all());
 
         //  Modify to the new ID number if set
-        if(isset($request->cust_id))
+        if (isset($request->cust_id))
         {
             $id = $request->cust_id;
         }

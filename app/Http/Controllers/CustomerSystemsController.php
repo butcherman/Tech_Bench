@@ -27,9 +27,9 @@ class CustomerSystemsController extends Controller
             ->get();
         
         $sysArr = [];
-        foreach($systems as $sys)
+        foreach ($systems as $sys)
         {
-            foreach($sys->SystemTypes as $s)
+            foreach ($sys->SystemTypes as $s)
             {
                 $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
@@ -52,7 +52,7 @@ class CustomerSystemsController extends Controller
         ]);
         $newSysID = $newSys->cust_sys_id;
         
-        foreach($request->field as $key => $field)
+        foreach ($request->field as $key => $field)
         {
             $fieldID = SystemCustDataFields::where('data_type_id', $key)->where('sys_id', $request->sysType)->first()->field_id;
             
@@ -81,7 +81,7 @@ class CustomerSystemsController extends Controller
     {
         $custSystems = CustomerSystems::where('cust_id', $id)->get();
 
-        switch($custSystems->count())
+        switch ($custSystems->count())
         {
             case 0:
                 return view('customer.system_none');
@@ -103,7 +103,7 @@ class CustomerSystemsController extends Controller
             default:
                 $systemData = [];
 
-                foreach($custSystems as $sys)
+                foreach ($custSystems as $sys)
                 {
                     $custSysID = $sys->cust_sys_id;
                     $sysName   = SystemTypes::find($sys->sys_id)->name;
@@ -143,7 +143,7 @@ class CustomerSystemsController extends Controller
         $custSys = CustomerSystems::find($id);
         $sysID   = $custSys->sys_id;
         
-        foreach($request->field as $key => $field)
+        foreach ($request->field as $key => $field)
         {
             $fieldID = SystemCustDataFields::where('data_type_id', $key)->where('sys_id', $sysID)->first()->field_id;
             

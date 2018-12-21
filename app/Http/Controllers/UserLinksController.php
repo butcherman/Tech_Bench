@@ -26,12 +26,12 @@ class UserLinksController extends Controller
         $details = FileLinks::where('link_hash', $id)->first();
         
         //  Verify that the link is valid
-        if(empty($details))
+        if (empty($details))
         {
             return view('links.guest.badLink');
         }
         //  Verify that the link has not expired
-        else if($details->expire <= date('Y-m-d'))
+        else if ($details->expire<=date('Y-m-d'))
         {
             return view('links.guest.expiredLink');
         }
@@ -56,7 +56,7 @@ class UserLinksController extends Controller
         
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$details->link_id;
 
-        foreach($request->file as $file)
+        foreach ($request->file as $file)
         {
             //  Clean the file and store it
             $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
@@ -77,7 +77,7 @@ class UserLinksController extends Controller
                 'upload'   => 1
             ]);
             
-            if(!empty($request->note))
+            if (!empty($request->note))
             {
                 FileLinkNotes::create([
                     'link_id' => $details->link_id,
@@ -94,4 +94,4 @@ class UserLinksController extends Controller
         return $request->all();
     }
 }
- 
+    

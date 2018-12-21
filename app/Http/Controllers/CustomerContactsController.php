@@ -26,7 +26,7 @@ class CustomerContactsController extends Controller
         $numberTypes = PhoneNumberType::all();
         
         $numTypes = [];
-        foreach($numberTypes as $type)
+        foreach ($numberTypes as $type)
         {
             $numTypes[$type->phone_type_id] = $type->description;
         }
@@ -49,12 +49,12 @@ class CustomerContactsController extends Controller
         
         $contID = $cont->cont_id;
         
-        if(!empty(array_filter($request['phoneNumber'])))
+        if (!empty(array_filter($request['phoneNumber'])))
         {
             $num = count($request['phoneNumber']);
-            for($i=0; $i < $num; $i++)
+            for ($i = 0; $i<$num; $i++)
             {
-                if(!empty($request['phoneNumber'][$i]))
+                if (!empty($request['phoneNumber'][$i]))
                 {
                     CustomerContactPhones::create([
                         'cont_id' => $contID,
@@ -87,7 +87,7 @@ class CustomerContactsController extends Controller
         $numberTypes = PhoneNumberType::all();
         
         $numTypes = [];
-        foreach($numberTypes as $type)
+        foreach ($numberTypes as $type)
         {
             $numTypes[$type->phone_type_id] = $type->description;
         }
@@ -113,10 +113,10 @@ class CustomerContactsController extends Controller
         
         //  Clear all contact phone numbers and re-enter them
         CustomerContactPhones::where('cont_id', $id)->delete();
-        if(!empty(array_filter($request['phoneNumber'])))
+        if (!empty(array_filter($request['phoneNumber'])))
         {
             $num = count($request['phoneNumber']);
-            for($i=0; $i < $num; $i++)
+            for ($i = 0; $i<$num; $i++)
             {
                 CustomerContactPhones::create([
                     'cont_id'       => $id,
@@ -158,9 +158,9 @@ class CustomerContactsController extends Controller
         $vcard->addEmail($contact->email);
         $vcard->addAddress(null, null, $custData->address, $custData->city, $custData->state, $custData->zip, null);
         
-        if(!empty($numbers))
+        if (!empty($numbers))
         {
-            foreach($numbers as $phone)
+            foreach ($numbers as $phone)
             {
                 $vcard->addPhoneNumber($phone->phone_number, $phone->description);
             }

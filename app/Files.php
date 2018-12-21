@@ -31,7 +31,7 @@ class Files extends Model
     {
         $fileName = str_replace(' ', '_', $fileName);
         
-        if(Storage::exists($path.DIRECTORY_SEPARATOR.$fileName))
+        if (Storage::exists($path.DIRECTORY_SEPARATOR.$fileName))
         {
             
             $fileParts = pathinfo($fileName);
@@ -43,8 +43,7 @@ class Files extends Model
                 // Have a number; increment it
                 $base = $match[1];
                 $number = intVal($match[2]);
-            } 
-            else 
+            } else 
             {
                 // No number; add one
                 $base = $fileParts['filename'];
@@ -72,7 +71,7 @@ class Files extends Model
             
             Log::info('File Deleted', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
         }
-        catch(Exception $e)
+        catch (Exception $e)
         {
             return false;
         }

@@ -13,7 +13,7 @@ class CreateTechTipSystemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tech_tip_systems', function (Blueprint $table) {
+        Schema::create('tech_tip_systems', function(Blueprint $table) {
             $table->increments('tip_tag_id');
             $table->integer('tip_id')->unsigned();
             $table->integer('sys_id')->unsigned();

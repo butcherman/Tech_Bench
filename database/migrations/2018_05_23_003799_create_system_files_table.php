@@ -13,7 +13,7 @@ class CreateSystemFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('system_files', function (Blueprint $table) {
+        Schema::create('system_files', function(Blueprint $table) {
             $table->increments('sys_file_id');
             $table->integer('sys_id')->unsigned();
             $table->integer('type_id')->unsigned();

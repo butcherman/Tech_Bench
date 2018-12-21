@@ -34,7 +34,7 @@ class SystemController extends Controller
     {
         //  Make sure that the category is valid
         $valid = SystemCategories::where('name', $cat)->get();
-        if($valid->isEmpty())
+        if ($valid->isEmpty())
         {
             Log::warning('User '.Auth::user()->user_id.' tried to visit invalid category '.$cat);
             return view('errors.badCategory');
@@ -58,7 +58,7 @@ class SystemController extends Controller
         //  Make sure that the system is valid
         $sys = urldecode($sys);
         $valid = SystemTypes::where('name', $sys)->first();
-        if(empty($valid))
+        if (empty($valid))
         {
             Log::warning('User '.Auth::user()->user_id.' tried to visit invalid system - '.$sys.' for category '.$cat);
             return view('errors.badSystem');

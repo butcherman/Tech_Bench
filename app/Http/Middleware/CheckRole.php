@@ -11,7 +11,7 @@ class CheckRole
     //  Check and verify that the user has permission to visit the request page
     public function handle($request, Closure $next)
     {
-        if($request->user() === null)
+        if ($request->user() === null)
         {
             Log::alert($request->route().' denied for Guest');
             return response()->view('errors.401', [], 401);
@@ -19,7 +19,7 @@ class CheckRole
         $actions = $request->route()->getAction();
         $roles = isset($actions['roles']) ? $actions['roles'] : null;
         
-        if($request->user()->hasAnyRole($roles)  || !$roles)
+        if ($request->user()->hasAnyRole($roles) || !$roles)
         {
             return $next($request);
         }

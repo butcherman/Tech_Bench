@@ -13,7 +13,7 @@ class CreateTechTipsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tech_tips', function (Blueprint $table) {
+        Schema::create('tech_tips', function(Blueprint $table) {
             $table->increments('tip_id');
             $table->integer('user_id')->unsigned();
             $table->boolean('public')->default(0);

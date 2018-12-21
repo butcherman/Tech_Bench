@@ -47,20 +47,19 @@ class SystemTypesController extends Controller
         $sysID = $sysData->sys_id;
         $i = 0;
         
-        foreach($request->custField as $field)
+        foreach ($request->custField as $field)
         {
-            if(!empty($field))
+            if (!empty($field))
             {
                 $id = SystemCustDataTypes::where('name', $field)->first();
 
-                if(is_null($id))
+                if (is_null($id))
                 {
                     $newField = SystemCustDataTypes::create([
                         'name' => $field
                     ]);
                     $id = $newField->data_type_id;
-                }
-                else
+                } else
                 {
                     $id = $id->data_type_id;
                 }
@@ -77,7 +76,7 @@ class SystemTypesController extends Controller
         
         Log::info('New System Created', ['cat_id' => $request->catName, 'sys_name' => $request->name, 'user_id' => Auth::user()->user_id]);
         
-        return redirect()->back()->with('success', 'System Successfully Added');//
+        return redirect()->back()->with('success', 'System Successfully Added'); //
     }
 
     //  Pick a system to edit
@@ -96,7 +95,7 @@ class SystemTypesController extends Controller
         $sysData = SystemTypes::where('name', urldecode($id))->first();
         
         //  Verify the system we are trying to edit is valid
-        if(!$sysData)
+        if (!$sysData)
         {
             Log::warning('User '.Auth::user()->user_id.' tried to edit invalid system '.$id);
             return view('errors.badSystem');
@@ -122,14 +121,14 @@ class SystemTypesController extends Controller
         $sysName = SystemTypes::find($sysID)->name;
         
         //  Verify the system we are trying to edit is valid
-        if(!$sysName)
+        if (!$sysName)
         {
             Log::warning('User '.Auth::user()->user_id.' tried to edit invalid system '.$sysID);
             return view('errors.badSystem');
         }
         
         //  Change the name of the system if it has been modified
-        if($sysName !== $request->name)
+        if ($sysName !== $request->name)
         {
             SystemTypes::find($sysID)->update([
                 'name' => $request->name
@@ -142,19 +141,19 @@ class SystemTypesController extends Controller
             ->get();
         
         $i = 0;
-        foreach($request->custField as $field)
+        foreach ($request->custField as $field)
         {
             $found = false;
-            if(!empty($field))
+            if (!empty($field))
             {
                 //  Check if the field already exists
-                foreach($dataType as $type)
+                foreach ($dataType as $type)
                 {
-                    if($type->name === $field)
+                    if ($type->name === $field)
                     {
                         $found = true;
                         //  See if the order has changed
-                        if($type->order != $i)
+                        if ($type->order != $i)
                         {
                             SystemCustDataFields::find($type->field_id)->update(
                             [
@@ -164,18 +163,17 @@ class SystemTypesController extends Controller
                     }
                 }
                 //  If the field does not exist, create it
-                if(!$found)
+                if (!$found)
                 {
                     $id = SystemCustDataTypes::where('name', $field)->first();
 
-                    if(is_null($id))
+                    if (is_null($id))
                     {
                         $newField = SystemCustDataTypes::create([
                             'name' => $field
                         ]);
                         $id = $newField->data_type_id;
-                    }
-                    else
+                    } else
                     {
                         $id = $id->data_type_id;
                     }

@@ -36,4 +36,4 @@ class NewLinkFile extends Mailable
         return $this->subject('New File Uploaded')->markdown('email.newLinkFile');
     }
 }
- 
+    

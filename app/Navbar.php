@@ -16,19 +16,18 @@ class Navbar extends Model
         $navBarSys = [];
         $navBarSub = [];
         
-        foreach($navItems as $item)
+        foreach ($navItems as $item)
         {
-            if(!in_array($item->category, $navBarCat))
+            if (!in_array($item->category, $navBarCat))
             {
                 $navBarCat[] = $item->category;
             }
-            if(empty($item->parent_id))
+            if (empty($item->parent_id))
             {
                 $navBarSys[$item->sys_id]['category'] = $item->category;
                 $navBarSys[$item->sys_id]['name'] = $item->sys_name;
                 $navBarSys[$item->sys_id]['url'] = '/system/'.$item->category.'/'.urlencode($item->sys_name);
-            }
-            else
+            } else
             {
                 $navBarSub[$item->sys_id]['category'] = $item->category;
                 $navBarSub[$item->sys_id]['parent'] = $item->parent_id;

@@ -35,11 +35,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        if(config('app.debug'))
+        if (config('app.debug'))
         {
             parent::report($exception);
-        }
-        else
+        } else
         {
             Log::error('['.$exception->getCode().'] "'.$exception->getMessage().'" on line '.$exception->getTrace()[0]['line'].' of file '.$exception->getTrace()[0]['file']);
         }

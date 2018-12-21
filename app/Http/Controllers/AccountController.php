@@ -74,13 +74,13 @@ class AccountController extends Controller
     public function submitPassword(Request $request)
     {
         //  Make sure that the old password is valid
-        if(!(Hash::check($request->oldPass, Auth::user()->password)))
+        if (!(Hash::check($request->oldPass, Auth::user()->password)))
         {
             return redirect()->back()->with('error', 'Your Current Password is not valid.  Please try again.');
         }
         
         //  Make sure that the new password is not the same as the old password
-        if(strcmp($request->newPass, $request->oldPass) == 0)
+        if (strcmp($request->newPass, $request->oldPass) == 0)
         {
             return redirect()->back()->with('error', 'New Password cannot be the same as the old password');
         }

@@ -39,16 +39,15 @@ class BackupApplication extends Command
         $i = 0;
         do
         {
-            if($i)
+            if ($i)
             {
                 $backupName = $backupBase.'('.$i.')';
-            }
-            else
+            } else
             {
                 $backupName = $backupBase;
             }
             $i++;
-        } while(Storage::disk('backup')->exists($backupName.'.zip'));
+        } while (Storage::disk('backup')->exists($backupName.'.zip'));
         
         //  Write a file that shows the system version    
         $version = new \PragmaRX\Version\Package\Version();

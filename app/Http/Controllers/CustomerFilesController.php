@@ -23,7 +23,7 @@ class CustomerFilesController extends Controller
     {
         $fileTypes = CustomerFileTypes::all();
         $fTypes = [];
-        foreach($fileTypes as $type)
+        foreach ($fileTypes as $type)
         {
             $fTypes[$type->file_type_id] = $type->description;
         }
@@ -93,7 +93,7 @@ class CustomerFilesController extends Controller
         $custFile  = CustomerFiles::find($id);
         $fileTypes = CustomerFileTypes::all();
         $fTypes    = [];
-        foreach($fileTypes as $type)
+        foreach ($fileTypes as $type)
         {
             $fTypes[$type->file_type_id] = $type->description;
         }

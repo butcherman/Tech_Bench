@@ -13,7 +13,7 @@ class CreateSystemTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('system_types', function (Blueprint $table) {
+        Schema::create('system_types', function(Blueprint $table) {
             $table->increments('sys_id');
             $table->integer('cat_id')->unsigned();
             $table->string('name');

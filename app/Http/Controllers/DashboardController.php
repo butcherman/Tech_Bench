@@ -40,12 +40,11 @@ class DashboardController extends Controller
     public function markNotification($id)
     {
         $notification = Auth::user()->notifications()->where('id', $id)->first();
-        if($notification)
+        if ($notification)
         {
             $notification->delete();
             Log::info('Notification ID-'.$id.' deleted for User ID-'.Auth::user()->user_id);
-        }
-        else
+        } else
         {
             Log::notice('Notification ID-'.$id.' not found for user ID-'.Auth::user()->user_id);
         }

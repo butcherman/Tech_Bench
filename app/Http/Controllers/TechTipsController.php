@@ -35,9 +35,9 @@ class TechTipsController extends Controller
             ->get();
         
         $sysArr = [];
-        foreach($systems as $sys)
+        foreach ($systems as $sys)
         {
-            foreach($sys->SystemTypes as $s)
+            foreach ($sys->SystemTypes as $s)
             {
                 $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
@@ -52,16 +52,15 @@ class TechTipsController extends Controller
     public function search(Request $request)
     {
         //  Run different request based on if system field is filled out or not
-        if(!empty($request->system))
+        if (!empty($request->system))
         {
             $tipData = TechTips::where('subject', 'like', '%'.$request->tipSearch.'%')
                 ->whereHas('TechTipSystems', function($q) use($request)
                 {
-                   $q->where('sys_id', $request->system);
+                    $q->where('sys_id', $request->system);
                 })
                 ->get();
-        }
-        else
+        } else
         {
             $tipData = TechTips::where('subject', 'like', '%'.$request->tipSearch.'%')
                 ->get();
@@ -81,9 +80,9 @@ class TechTipsController extends Controller
             ->get();
         
         $sysArr = [];
-        foreach($systems as $sys)
+        foreach ($systems as $sys)
         {
-            foreach($sys->SystemTypes as $s)
+            foreach ($sys->SystemTypes as $s)
             {
                 $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
@@ -115,18 +114,17 @@ class TechTipsController extends Controller
         $tipID = $tip->tip_id;
 
         //  Enter all system tags associated with the tip
-        if(is_array($request->sysTags))
+        if (is_array($request->sysTags))
         {
             
-            foreach($request->sysTags as $tag)
+            foreach ($request->sysTags as $tag)
             {
                 TechTipSystems::create([
                     'tip_id' => $tipID,
                     'sys_id' => $tag
                 ]);
             }
-        }
-        else
+        } else
         {
             TechTipSystems::create([
                 'tip_id' => $tipID,
@@ -135,10 +133,10 @@ class TechTipsController extends Controller
         }
         
         //  If there are any files, process them
-        if(!empty($request->file))
+        if (!empty($request->file))
         {
             $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
-            foreach($request->file as $file)
+            foreach ($request->file as $file)
             {
                 //  Clean the file and store it
                 $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
@@ -165,8 +163,7 @@ class TechTipsController extends Controller
         try
         {
             Mail::to($userList)->send(new newTechtip($tipData));
-        }
-        catch(Exception $e)
+        } catch(Exception $e)
         {
             report($e);
         }
@@ -180,7 +177,7 @@ class TechTipsController extends Controller
     public function details($id, $name)
     {
         $tipData = TechTips::where('tip_id', $id)->with('user')->first();
-        if(empty($tipData))
+        if (empty($tipData))
         {
             Log::warning('User ID-'.Auth::user()->user_id.' tried to access invlaid Tech Tip ID-'.$id.' Name-'.$name);
             return view('errors.tipNotFound');
@@ -229,7 +226,7 @@ class TechTipsController extends Controller
     public function edit($id)
     {
         $tipData = TechTips::find($id);
-        if(empty($tipData))
+        if (empty($tipData))
         {
             return 'tip not found';
         }
@@ -252,9 +249,9 @@ class TechTipsController extends Controller
             ->get();
         
         $sysArr = [];
-        foreach($systems as $sys)
+        foreach ($systems as $sys)
         {
-            foreach($sys->SystemTypes as $s)
+            foreach ($sys->SystemTypes as $s)
             {
                 $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
@@ -290,17 +287,16 @@ class TechTipsController extends Controller
         
         //  Enter all system tags associated with the tip after destroying the existing systems
         TechTipSystems::where('tip_id', $id)->delete();
-        if(is_array($request->sysTags))
+        if (is_array($request->sysTags))
         {
-            foreach($request->sysTags as $tag)
+            foreach ($request->sysTags as $tag)
             {
                 TechTipSystems::create([
                     'tip_id' => $id,
                     'sys_id' => $tag
                 ]);
             }
-        }
-        else
+        } else
         {
             TechTipSystems::create([
                 'tip_id' => $id,
@@ -310,30 +306,29 @@ class TechTipsController extends Controller
         
         //  Determine if any files were removed
         $tipFiles = TechTipFiles::where('tip_id', $id)->get();
-        if(!$tipFiles->isEmpty())
+        if (!$tipFiles->isEmpty())
         {
-            if(!empty($request->existingFile))
+            if (!empty($request->existingFile))
             {
-                foreach($tipFiles as $file)
+                foreach ($tipFiles as $file)
                 {
-                    if(!in_array($file->file_id, $request->existingFile))
+                    if (!in_array($file->file_id, $request->existingFile))
                     {
                         TechTipFiles::where('file_id', $file->file_id)->delete();
                         Files::deleteFile($file->file_id);
                     }
                 }
-            }
-            else
+            } else
             {
                 TechTipFiles::where('tip_id', $id)->delete();
             }
         }
         
         //  Process any new files
-        if(!empty($request->file))
+        if (!empty($request->file))
         {
             $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$id;
-            foreach($request->file as $file)
+            foreach ($request->file as $file)
             {
                 //  Clean the file and store it
                 $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());

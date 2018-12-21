@@ -41,13 +41,12 @@ class UserController extends Controller
         $roles = Role::all();
         
         $roleArr = [];
-        foreach($roles as $role)
+        foreach ($roles as $role)
         {
-            if($role->role_id == 1 && Auth::user()->role_id != 1)
+            if ($role->role_id == 1 && Auth::user()->role_id != 1)
             {
                 continue;
-            }
-            else
+            } else
             {
                 $roleArr[$role->role_id] = $role->name;
             }
@@ -95,8 +94,7 @@ class UserController extends Controller
         try
         {
             Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
-        }
-        catch(Exception $e)
+        } catch(Exception $e)
         {
             report($e);
         }
@@ -114,7 +112,7 @@ class UserController extends Controller
         //  Validate the hash token
         $user = UserInitialize::where('token', $hash)->get();
         
-        if($user->isEmpty())
+        if ($user->isEmpty())
         {
             return abort(404);
         }
@@ -127,7 +125,7 @@ class UserController extends Controller
     {
         //  Verify that the link matches the assigned email address
         $valid = UserInitialize::where('token', $hash)->first();
-        if(empty($valid))
+        if (empty($valid))
         {
             Log::notice('Someone tried to access an invalid User Initialization link - '.$hash);
             return abort(404);
@@ -147,7 +145,7 @@ class UserController extends Controller
         
         $nextChange = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
         
-         //  Update the password
+            //  Update the password
         User::find($userData->user_id)->update(
         [
             'password'         => bcrypt($request->newPass),
@@ -188,7 +186,7 @@ class UserController extends Controller
         
         $nextChange = isset($request->force_change) && $request->force_change == 'on' ? Carbon::now()->subDay() : null;
         
-         //  Update the user data
+            //  Update the user data
         User::find($id)->update(
         [
             'password'         => bcrypt($request->password),
@@ -207,13 +205,12 @@ class UserController extends Controller
         $userRole = DB::select('SELECT `role_id` FROM `user_role` WHERE `user_id` = ?', [$id])[0]->role_id;
         
         $roleArr = [];
-        foreach($roles as $role)
+        foreach ($roles as $role)
         {
-            if($role->role_id == 1 && Auth::user()->role_id != 1)
+            if ($role->role_id == 1 && Auth::user()->role_id != 1)
             {
                 continue;
-            }
-            else
+            } else
             {
                 $roleArr[$role->role_id] = $role->name;
             }
@@ -268,12 +265,12 @@ class UserController extends Controller
         $links = FileLinks::where('user_id', $id)->get();
         
         
-        foreach($links as $link)
+        foreach ($links as $link)
         {
             $linkController->destroy($link->link_id);
         }
         
-         //  Update the user data
+            //  Update the user data
         User::find($id)->update(
         [
             'active'   => 0
