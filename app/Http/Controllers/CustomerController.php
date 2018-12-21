@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Log;
 use App\SystemTypes;
 use App\SystemCategories;
 use App\CustomerSystems;
+use App\CustomerNotes;
 use App\CustomerFavs;
 use App\Customers;
+use PDF;
 
 class CustomerController extends Controller
 {
@@ -85,5 +87,20 @@ class CustomerController extends Controller
                 $custFav->delete();
                 break;
         }        
+    }
+    
+    //  Download a note as a PDF file
+    public function generatePDF($noteID)
+    {
+        $note = CustomerNotes::find($noteID);
+        $cust = Customers::find($note->cust_id);
+        
+        $pdf = PDF::loadView('pdf.customerNote', [
+            'cust_name'   => $cust->name,
+            'note_subj'   => $note->subject,
+            'description' => $note->description,
+        ]);
+        
+        return $pdf->download($cust->name.' - Note: '.$note->subject.'.pdf');
     }
 }
