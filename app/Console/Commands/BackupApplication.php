@@ -55,7 +55,7 @@ class BackupApplication extends Command
         Storage::disk('backup')->put('tmp/version.txt', $version->compact());
         
         //  Create a dump file of the MySQL database
-        $process = new Process(sprintf(
+        $process = new Process(/** @scrutinizer ignore-type */ sprintf(
             'mysqldump -u%s -p%s %s > %s',
             config('database.connections.mysql.username'),
             config('database.connections.mysql.password'),

@@ -1,3 +1,4 @@
+/** global: maxUpload */
 //  Third Party Libraries
 require('./bootstrap');
 require('jquery-easing');
@@ -54,7 +55,6 @@ function fileDrop(form)
             {
                 $("#progressBar").css("width", Math.round(progress)+"%");
                 $("#progressStatus").text(Math.round(progress)+"%");
-                console.log(progress);
             });
             this.on('reset', function()
             {
