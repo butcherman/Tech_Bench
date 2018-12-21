@@ -262,11 +262,8 @@ class UserController extends Controller
     public function destroy($id)
     {
         //  Delete any file links that the user may have
-        $linkController = new FileLinksController();
-        $links = $linkController->show($id);
-        
+        $linkController = new FileLinksController();        
         $links = FileLinks::where('user_id', $id)->get();
-        
         
         foreach($links as $link)
         {

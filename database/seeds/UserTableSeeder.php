@@ -16,7 +16,7 @@ class UserTableSeeder extends Seeder
         //  Fetch user roles
         $role_installer = Role::where('name', 'installer')->first();
         $role_admin     = Role::where('name', 'admin')->first();
-        $role_admin     = Role::where('name', 'report')->first();
+        $role_report    = Role::where('name', 'report')->first();
         $role_tech      = Role::where('name', 'tech')->first();
         
         //  Create the test users

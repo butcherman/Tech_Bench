@@ -15,7 +15,7 @@ class UserServiceProvider extends ServiceProvider
     public function boot()
     {
         view::composer(
-            '*',
+            /** @scrutinizer ignore-type */ '*',
             'App\Http\ViewComposers\UserComposer'
         );
         
