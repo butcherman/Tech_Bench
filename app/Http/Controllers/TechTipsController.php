@@ -175,6 +175,20 @@ class TechTipsController extends Controller
         
         return $tipID;
     }
+    
+    //  Process an uploaded image to the Tech Tip body
+    public function processImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'mimes:jpeg,bmp,png'
+        ]);
+        
+        $file = $request->file;
+        $fileName = $file->getClientOriginalName();
+        $file->storeAs('img/tip_img', $fileName, 'public');
+        
+        return json_encode(['location' => '/storage/img/tip_img/'.$fileName]);
+    }
 
     //  Show the Tech Tip details
     public function details($id, $name)
@@ -274,9 +288,9 @@ class TechTipsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'subject' => 'required', 
-            'details' => 'required', 
-            'sysTags' => 'required'
+            'subject'     => 'required',
+            'description' => 'required',
+            'sysTags'     => 'required'
         ]);
         
         //  Remove any forward slash (/) from the Subject field

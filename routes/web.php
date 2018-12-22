@@ -67,6 +67,7 @@ Route::middleware(['password_expired'])->group(function ()
         //////////////////////////  Tech Tips Routes  //////////////////////////////////////////
         Route::prefix('tip')->name('tip.')->group(function()
         {
+            Route::post('upload-image', 'TechTipsController@processImage')->name('processImage');
             Route::get('fav/{action}/{id}', 'TechTipsController@toggleFav')->name('toggleFav');
             Route::resource('comments', 'TechTipsCommentsController');
             Route::get('details/{id}/{name}', 'TechTipsController@details')->name('details');
