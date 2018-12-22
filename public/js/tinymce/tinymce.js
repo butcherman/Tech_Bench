@@ -1,4 +1,4 @@
-// 4.9.2 (2018-12-17)
+// 4.9.0 (2018-11-27)
 (function () {
 (function () {
     'use strict';
@@ -4119,9 +4119,6 @@
       var map = function (f) {
         return value$1(f(o));
       };
-      var mapError = function (f) {
-        return value$1(o);
-      };
       var each = function (f) {
         f(o);
       };
@@ -4151,7 +4148,6 @@
         orThunk: orThunk,
         fold: fold,
         map: map,
-        mapError: mapError,
         each: each,
         bind: bind,
         exists: exists,
@@ -4175,9 +4171,6 @@
       var map = function (f) {
         return error(message);
       };
-      var mapError = function (f) {
-        return error(f(message));
-      };
       var bind = function (f) {
         return error(message);
       };
@@ -4195,7 +4188,6 @@
         orThunk: orThunk,
         fold: fold,
         map: map,
-        mapError: mapError,
         each: noop,
         bind: bind,
         exists: never,
@@ -6901,14 +6893,6 @@
         before(v, element);
       });
     };
-    var prepend = function (parent$$1, element) {
-      var firstChild$$1 = firstChild(parent$$1);
-      firstChild$$1.fold(function () {
-        append(parent$$1, element);
-      }, function (v) {
-        parent$$1.dom().insertBefore(element.dom(), v.dom());
-      });
-    };
     var append = function (parent$$1, element) {
       parent$$1.dom().appendChild(element.dom());
     };
@@ -7071,17 +7055,6 @@
     };
     var has$2 = function (element, clazz) {
       return supports(element) && element.dom().classList.contains(clazz);
-    };
-
-    var descendants = function (scope, predicate) {
-      var result = [];
-      each(children(scope), function (x) {
-        if (predicate(x)) {
-          result = result.concat([x]);
-        }
-        result = result.concat(descendants(x, predicate));
-      });
-      return result;
     };
 
     var descendants$1 = function (scope, selector) {
@@ -8818,17 +8791,19 @@
       }
       return CaretPosition$1.before(node);
     };
-    var moveForwardFromBr = function (root, nextNode) {
-      var nextSibling = nextNode.nextSibling;
-      if (nextSibling && isCaretCandidate$3(nextSibling)) {
-        if (isText$7(nextSibling)) {
-          return CaretPosition$1(nextSibling, 0);
-        } else {
-          return CaretPosition$1.before(nextSibling);
-        }
-      } else {
-        return findCaretPosition(HDirection.Forwards, CaretPosition$1.after(nextNode), root);
+    var isBrBeforeBlock = function (node, root) {
+      var next;
+      if (!NodeType.isBr(node)) {
+        return false;
       }
+      if (isAtomic(node.nextSibling)) {
+        return false;
+      }
+      next = findCaretPosition(HDirection.Forwards, CaretPosition$1.after(node), root);
+      if (!next) {
+        return false;
+      }
+      return !isInSameBlock(CaretPosition$1.before(node), CaretPosition$1.before(next), root);
     };
     var findCaretPosition = function (direction, startPos, root) {
       var node, nextNode, innerNode;
@@ -8876,8 +8851,11 @@
         if (isForwards(direction) && offset < container.childNodes.length) {
           nextNode = nodeAtIndex(container, offset);
           if (isCaretCandidate$3(nextNode)) {
-            if (isBr$4(nextNode)) {
-              return moveForwardFromBr(root, nextNode);
+            if (isBr$4(nextNode) && root.lastChild === nextNode) {
+              return null;
+            }
+            if (isBrBeforeBlock(nextNode, root)) {
+              return findCaretPosition(direction, CaretPosition$1.after(nextNode), root);
             }
             if (!isAtomic$1(nextNode)) {
               innerNode = findNode(nextNode, direction, isEditableCaretCandidate$1, nextNode);
@@ -12938,9 +12916,6 @@
       }
     ]);
     var range$1 = Immutable('start', 'soffset', 'finish', 'foffset');
-    var domRange = type$1.domRange;
-    var relative = type$1.relative;
-    var exact = type$1.exact;
 
     var browser$3 = PlatformDetection$1.detect().browser;
     var clamp = function (offset, element) {
@@ -17611,9 +17586,6 @@
     var isTableCell$4 = function (node) {
       return /^(TH|TD)$/.test(node.nodeName);
     };
-    var isChildOfInlineParent = function (dom, node, parent$$1) {
-      return dom.isChildOf(node, parent$$1) && node !== parent$$1 && !dom.isBlock(parent$$1);
-    };
     var getContainer = function (ed, rng, start) {
       var container, offset, lastIdx;
       container = rng[start ? 'startContainer' : 'endContainer'];
@@ -17639,19 +17611,19 @@
       wrapper.appendChild(node);
       return wrapper;
     };
-    var wrapWithSiblings = function (dom, node, next, name, attrs) {
-      var start = Element$$1.fromDom(node);
-      var wrapper = Element$$1.fromDom(dom.create(name, attrs));
-      var siblings$$1 = next ? nextSiblings(start) : prevSiblings(start);
-      append$1(wrapper, siblings$$1);
-      if (next) {
-        before(start, wrapper);
-        prepend(wrapper, start);
-      } else {
-        after(start, wrapper);
-        append(wrapper, start);
+    var wrapWithSiblings = function (dom, startNode, name, next, attrs) {
+      var direction = (next ? 'next' : 'previous') + 'Sibling';
+      var wrapper = dom.create(name, attrs);
+      startNode.parentNode.insertBefore(wrapper, startNode);
+      var nodesToWrap = [startNode];
+      var currNode = startNode;
+      while (currNode = currNode[direction]) {
+        nodesToWrap.push(currNode);
       }
-      return wrapper.dom();
+      nodesToWrap.forEach(function (node) {
+        return wrapper.appendChild(node);
+      });
+      return wrapper;
     };
     var matchName$1 = function (dom, node, format) {
       if (isEq$5(node, format.inline)) {
@@ -17784,24 +17756,24 @@
     };
     var findFormatRoot = function (editor, container, name, vars, similar) {
       var formatRoot;
-      each$d(FormatUtils.getParents(editor.dom, container.parentNode).reverse(), function (parent$$1) {
+      each$d(FormatUtils.getParents(editor.dom, container.parentNode).reverse(), function (parent) {
         var format;
-        if (!formatRoot && parent$$1.id !== '_start' && parent$$1.id !== '_end') {
-          format = MatchFormat.matchNode(editor, parent$$1, name, vars, similar);
+        if (!formatRoot && parent.id !== '_start' && parent.id !== '_end') {
+          format = MatchFormat.matchNode(editor, parent, name, vars, similar);
           if (format && format.split !== false) {
-            formatRoot = parent$$1;
+            formatRoot = parent;
           }
         }
       });
       return formatRoot;
     };
     var wrapAndSplit = function (editor, formatList, formatRoot, container, target, split, format, vars) {
-      var parent$$1, clone, lastClone, firstClone, i, formatRootParent;
+      var parent, clone, lastClone, firstClone, i, formatRootParent;
       var dom = editor.dom;
       if (formatRoot) {
         formatRootParent = formatRoot.parentNode;
-        for (parent$$1 = container.parentNode; parent$$1 && parent$$1 !== formatRootParent; parent$$1 = parent$$1.parentNode) {
-          clone = dom.clone(parent$$1, false);
+        for (parent = container.parentNode; parent && parent !== formatRootParent; parent = parent.parentNode) {
+          clone = dom.clone(parent, false);
           for (i = 0; i < formatList.length; i++) {
             if (removeFormat(editor, formatList[i], vars, clone, clone)) {
               clone = 0;
@@ -17841,13 +17813,13 @@
         return Bookmarks.isBookmarkNode(node) && NodeType.isElement(node) && (node.id === '_start' || node.id === '_end');
       };
       var process = function (node) {
-        var children$$1, i, l, lastContentEditable, hasContentEditableState;
+        var children, i, l, lastContentEditable, hasContentEditableState;
         if (NodeType.isElement(node) && dom.getContentEditable(node)) {
           lastContentEditable = contentEditable;
           contentEditable = dom.getContentEditable(node) === 'true';
           hasContentEditableState = true;
         }
-        children$$1 = Tools.grep(node.childNodes);
+        children = Tools.grep(node.childNodes);
         if (contentEditable && !hasContentEditableState) {
           for (i = 0, l = formatList.length; i < l; i++) {
             if (removeFormat(ed, formatList[i], vars, node, node)) {
@@ -17856,9 +17828,9 @@
           }
         }
         if (format.deep) {
-          if (children$$1.length) {
-            for (i = 0, l = children$$1.length; i < l; i++) {
-              process(children$$1[i]);
+          if (children.length) {
+            for (i = 0, l = children.length; i < l; i++) {
+              process(children[i]);
             }
             if (hasContentEditableState) {
               contentEditable = lastContentEditable;
@@ -17897,22 +17869,13 @@
             if (commonAncestorContainer && /^T(HEAD|BODY|FOOT|R)$/.test(commonAncestorContainer.nodeName) && isTableCell$4(endContainer) && endContainer.firstChild) {
               endContainer = endContainer.firstChild || endContainer;
             }
-            if (isChildOfInlineParent(dom, startContainer, endContainer)) {
-              var marker = Option.from(startContainer.firstChild).getOr(startContainer);
-              splitToFormatRoot(wrapWithSiblings(dom, marker, true, 'span', {
+            if (dom.isChildOf(startContainer, endContainer) && startContainer !== endContainer && !dom.isBlock(endContainer) && !isTableCell$4(startContainer) && !isTableCell$4(endContainer)) {
+              var wrappedContent = wrapWithSiblings(dom, startContainer, 'span', true, {
                 'id': '_start',
                 'data-mce-type': 'bookmark'
-              }));
-              unwrap(true);
-              return;
-            }
-            if (isChildOfInlineParent(dom, endContainer, startContainer)) {
-              var marker = Option.from(endContainer.lastChild).getOr(endContainer);
-              splitToFormatRoot(wrapWithSiblings(dom, marker, false, 'span', {
-                'id': '_end',
-                'data-mce-type': 'bookmark'
-              }));
-              unwrap(false);
+              });
+              splitToFormatRoot(wrappedContent);
+              startContainer = unwrap(true);
               return;
             }
             startContainer = wrap$2(dom, startContainer, 'span', {
@@ -19830,7 +19793,6 @@
       };
       var filterNode = function (node) {
         var i, name, list;
-        name = node.name;
         if (name in nodeFilters) {
           list = matchedNodes[name];
           if (list) {
@@ -21019,30 +20981,12 @@
     };
     var FragmentReader = { read: read$4 };
 
-    var getTextContent = function (editor) {
-      return Option.from(editor.selection.getRng()).map(function (r) {
-        return Zwsp.trim(r.toString());
-      }).getOr('');
-    };
-    var getHtmlContent = function (editor, args) {
+    var getContent = function (editor, args) {
       var rng = editor.selection.getRng(), tmpElm = editor.dom.create('body');
       var sel = editor.selection.getSel();
       var fragment;
       var ranges = EventProcessRanges.processRanges(editor, MultiRange.getRanges(sel));
-      if (rng.cloneContents) {
-        fragment = args.contextual ? FragmentReader.read(Element$$1.fromDom(editor.getBody()), ranges).dom() : rng.cloneContents();
-        if (fragment) {
-          tmpElm.appendChild(fragment);
-        }
-      } else {
-        tmpElm.innerHTML = rng.toString();
-      }
-      return editor.selection.serializer.serialize(tmpElm, args);
-    };
-    var getContent = function (editor, args) {
-      if (args === void 0) {
-        args = {};
-      }
+      args = args || {};
       args.get = true;
       args.format = args.format || 'html';
       args.selection = true;
@@ -21052,18 +20996,27 @@
         return args.content;
       }
       if (args.format === 'text') {
-        return getTextContent(editor);
-      } else {
-        args.getInner = true;
-        var content = getHtmlContent(editor, args);
-        if (args.format === 'tree') {
-          return content;
-        } else {
-          args.content = editor.selection.isCollapsed() ? '' : content;
-          editor.fire('GetContent', args);
-          return args.content;
-        }
+        return editor.selection.isCollapsed() ? '' : Zwsp.trim(rng.text || (sel.toString ? sel.toString() : ''));
       }
+      if (rng.cloneContents) {
+        fragment = args.contextual ? FragmentReader.read(Element$$1.fromDom(editor.getBody()), ranges).dom() : rng.cloneContents();
+        if (fragment) {
+          tmpElm.appendChild(fragment);
+        }
+      } else if (rng.item !== undefined || rng.htmlText !== undefined) {
+        tmpElm.innerHTML = '<br>' + (rng.item ? rng.item(0).outerHTML : rng.htmlText);
+        tmpElm.removeChild(tmpElm.firstChild);
+      } else {
+        tmpElm.innerHTML = rng.toString();
+      }
+      args.getInner = true;
+      var content = editor.selection.serializer.serialize(tmpElm, args);
+      if (args.format === 'tree') {
+        return content;
+      }
+      args.content = editor.selection.isCollapsed() ? '' : content;
+      editor.fire('GetContent', args);
+      return args.content;
     };
     var GetSelectionContent = { getContent: getContent };
 
@@ -21836,12 +21789,6 @@
     };
     var getPositionsUntilPreviousLine = curry(getPositionsUntil, CaretPosition.isAbove, -1);
     var getPositionsUntilNextLine = curry(getPositionsUntil, CaretPosition.isBelow, 1);
-    var isAtFirstLine = function (scope, pos) {
-      return getPositionsUntilPreviousLine(scope, pos).breakAt.isNone();
-    };
-    var isAtLastLine = function (scope, pos) {
-      return getPositionsUntilNextLine(scope, pos).breakAt.isNone();
-    };
     var getPositionsAbove = curry(getAdjacentLinePositions, -1, getPositionsUntilPreviousLine);
     var getPositionsBelow = curry(getAdjacentLinePositions, 1, getPositionsUntilNextLine);
     var getFirstLinePositions = function (scope) {
@@ -22063,74 +22010,6 @@
       };
     };
 
-    var isTarget = function (node) {
-      return contains(['figcaption'], name(node));
-    };
-    var rangeBefore = function (target) {
-      var rng = document.createRange();
-      rng.setStartBefore(target.dom());
-      rng.setEndBefore(target.dom());
-      return rng;
-    };
-    var insertElement = function (root, elm, forward) {
-      if (forward) {
-        append(root, elm);
-      } else {
-        prepend(root, elm);
-      }
-    };
-    var insertBr = function (root, forward) {
-      var br = Element$$1.fromTag('br');
-      insertElement(root, br, forward);
-      return rangeBefore(br);
-    };
-    var insertBlock$1 = function (root, forward, blockName, attrs) {
-      var block = Element$$1.fromTag(blockName);
-      var br = Element$$1.fromTag('br');
-      setAll(block, attrs);
-      append(block, br);
-      insertElement(root, block, forward);
-      return rangeBefore(br);
-    };
-    var insertEmptyLine = function (root, rootBlockName, attrs, forward) {
-      if (rootBlockName === '') {
-        return insertBr(root, forward);
-      } else {
-        return insertBlock$1(root, forward, rootBlockName, attrs);
-      }
-    };
-    var getClosestTargetBlock = function (pos, root) {
-      var isRoot = curry(eq, root);
-      return closest(Element$$1.fromDom(pos.container()), isBlock, isRoot).filter(isTarget);
-    };
-    var isAtFirstOrLastLine = function (root, forward, pos) {
-      return forward ? isAtLastLine(root.dom(), pos) : isAtFirstLine(root.dom(), pos);
-    };
-    var moveCaretToNewEmptyLine = function (editor, forward) {
-      var root = Element$$1.fromDom(editor.getBody());
-      var pos = CaretPosition$1.fromRangeStart(editor.selection.getRng());
-      var rootBlock = Settings.getForcedRootBlock(editor);
-      var rootBlockAttrs = Settings.getForcedRootBlockAttrs(editor);
-      return getClosestTargetBlock(pos, root).exists(function () {
-        if (isAtFirstOrLastLine(root, forward, pos)) {
-          var rng = insertEmptyLine(root, rootBlock, rootBlockAttrs, forward);
-          editor.selection.setRng(rng);
-          return true;
-        } else {
-          return false;
-        }
-      });
-    };
-    var moveV$2 = function (editor, forward) {
-      return function () {
-        if (editor.selection.isCollapsed()) {
-          return moveCaretToNewEmptyLine(editor, forward);
-        } else {
-          return false;
-        }
-      };
-    };
-
     var defaultPatterns = function (patterns) {
       return map(patterns, function (pattern) {
         return merge({
@@ -22226,14 +22105,6 @@
           ctrlKey: !os.isOSX(),
           altKey: os.isOSX(),
           action: BoundarySelection.movePrevWord(editor, caret)
-        },
-        {
-          keyCode: VK.UP,
-          action: moveV$2(editor, false)
-        },
-        {
-          keyCode: VK.DOWN,
-          action: moveV$2(editor, true)
         }
       ], evt).each(function (_) {
         evt.preventDefault();
@@ -22536,14 +22407,8 @@
     };
     var InsertLi = { insert: insert$1 };
 
-    var trimZwsp = function (fragment) {
-      each(descendants(Element$$1.fromDom(fragment), isText), function (text) {
-        var rawNode = text.dom();
-        rawNode.nodeValue = Zwsp.trim(rawNode.nodeValue);
-      });
-    };
-    var isEmptyAnchor = function (dom, elm) {
-      return elm && elm.nodeName === 'A' && dom.isEmpty(elm);
+    var isEmptyAnchor = function (elm) {
+      return elm && elm.nodeName === 'A' && Tools.trim(Zwsp.trim(elm.innerText || elm.textContent)).length === 0;
     };
     var isTableCell$5 = function (node) {
       return node && /^(TD|TH|CAPTION)$/.test(node.nodeName);
@@ -22578,7 +22443,7 @@
         if (!node.hasChildNodes() || node.firstChild === node.lastChild && node.firstChild.nodeValue === '') {
           dom.remove(node);
         } else {
-          if (isEmptyAnchor(dom, node)) {
+          if (isEmptyAnchor(node)) {
             dom.remove(node);
           }
         }
@@ -22683,11 +22548,11 @@
       var dom = editor.dom;
       var schema = editor.schema, nonEmptyElementsMap = schema.getNonEmptyElements();
       var rng = editor.selection.getRng();
-      var createNewBlock = function (name$$1) {
+      var createNewBlock = function (name) {
         var node = container, block, clonedNode, caretNode;
         var textInlineElements = schema.getTextInlineElements();
-        if (name$$1 || parentBlockName === 'TABLE' || parentBlockName === 'HR') {
-          block = dom.create(name$$1 || newBlockName);
+        if (name || parentBlockName === 'TABLE' || parentBlockName === 'HR') {
+          block = dom.create(name || newBlockName);
           setForcedBlockAttrs(editor, block);
         } else {
           block = parentBlock.cloneNode(false);
@@ -22718,7 +22583,7 @@
         return block;
       };
       var isCaretAtStartOrEndOfBlock = function (start) {
-        var walker, node, name$$1, normalizedOffset;
+        var walker, node, name, normalizedOffset;
         normalizedOffset = normalizeZwspOffset(start, container, offset);
         if (NodeType.isText(container) && (start ? normalizedOffset > 0 : normalizedOffset < container.nodeValue.length)) {
           return false;
@@ -22743,8 +22608,8 @@
         while (node = walker.current()) {
           if (NodeType.isElement(node)) {
             if (!node.getAttribute('data-mce-bogus')) {
-              name$$1 = node.nodeName.toLowerCase();
-              if (nonEmptyElementsMap[name$$1] && name$$1 !== 'br') {
+              name = node.nodeName.toLowerCase();
+              if (nonEmptyElementsMap[name] && name !== 'br') {
                 return false;
               }
             }
@@ -22830,7 +22695,6 @@
         tmpRng = includeZwspInRange(rng).cloneRange();
         tmpRng.setEndAfter(parentBlock);
         fragment = tmpRng.extractContents();
-        trimZwsp(fragment);
         trimLeadingLineBreaks(fragment);
         newBlock = fragment.firstChild;
         dom.insertAfter(fragment, parentBlock);
@@ -23029,11 +22893,7 @@
 
     var isAtBlockBoundary = function (forward, root, pos) {
       var parentBlocks = filter(Parents.parentsAndSelf(Element$$1.fromDom(pos.container()), root), isBlock);
-      return head(parentBlocks).fold(function () {
-        return CaretFinder.navigate(forward, root.dom(), pos).forall(function (newPos) {
-          return isInSameBlock(newPos, pos, root.dom()) === false;
-        });
-      }, function (parent) {
+      return head(parentBlocks).exists(function (parent) {
         return CaretFinder.navigate(forward, parent.dom(), pos).isNone();
       });
     };
@@ -23076,14 +22936,8 @@
         return isPreValue(get$2(elm, 'white-space'));
       });
     };
-    var isAtBeginningOfBody = function (root, pos) {
-      return CaretFinder.prevPosition(root.dom(), pos).isNone();
-    };
-    var isAtEndOfBody = function (root, pos) {
-      return CaretFinder.nextPosition(root.dom(), pos).isNone();
-    };
     var isAtLineBoundary = function (root, pos) {
-      return isAtBeginningOfBody(root, pos) || isAtEndOfBody(root, pos) || isAtStartOfBlock(root, pos) || isAtEndOfBlock(root, pos) || isAfterBr(root, pos) || isBeforeBr(root, pos);
+      return isAtStartOfBlock(root, pos) || isAtEndOfBlock(root, pos) || isAfterBr(root, pos) || isBeforeBr(root, pos);
     };
     var needsToHaveNbsp = function (root, pos) {
       if (isInPre(pos)) {
@@ -23160,6 +23014,9 @@
       }
     };
 
+    var insertSpaceOrNbspAtPosition = function (root, pos) {
+      return needsToHaveNbsp(root, pos) ? insertNbspAtPosition(pos) : insertSpaceAtPosition(pos);
+    };
     var locationToCaretPosition = function (root) {
       return function (location) {
         return location.fold(function (element) {
@@ -23191,7 +23048,9 @@
       if (editor.selection.isCollapsed()) {
         var isInlineTarget = curry(InlineUtils.isInlineTarget, editor);
         var caretPosition = CaretPosition$1.fromRangeStart(editor.selection.getRng());
-        return BoundaryLocation.readLocation(isInlineTarget, editor.getBody(), caretPosition).bind(locationToCaretPosition(root)).bind(insertInlineBoundarySpaceOrNbsp(root, pos)).exists(setSelection$1(editor));
+        return BoundaryLocation.readLocation(isInlineTarget, editor.getBody(), caretPosition).bind(locationToCaretPosition(root)).bind(insertInlineBoundarySpaceOrNbsp(root, pos)).fold(function () {
+          return insertSpaceOrNbspAtPosition(root, pos).map(setSelection$1(editor)).getOr(false);
+        }, setSelection$1(editor));
       } else {
         return false;
       }
@@ -23250,24 +23109,7 @@
     };
     var CaretContainerInput = { setup: setup$b };
 
-    var browser$4 = PlatformDetection$1.detect().browser;
-    var setupIeInput = function (editor) {
-      var keypressThrotter = first$1(function () {
-        if (!editor.composing) {
-          normalizeNbspsInEditor(editor);
-        }
-      }, 0);
-      if (browser$4.isIE()) {
-        editor.on('keypress', function (e) {
-          keypressThrotter.throttle();
-        });
-        editor.on('remove', function (e) {
-          keypressThrotter.cancel();
-        });
-      }
-    };
     var setup$c = function (editor) {
-      setupIeInput(editor);
       editor.on('input', function (e) {
         if (e.isComposing === false) {
           normalizeNbspsInEditor(editor);
@@ -25520,8 +25362,8 @@
       defaultSettings: {},
       $: DomQuery,
       majorVersion: '4',
-      minorVersion: '9.2',
-      releaseDate: '2018-12-17',
+      minorVersion: '9.0',
+      releaseDate: '2018-11-27',
       editors: legacyEditors,
       i18n: I18n,
       activeEditor: null,

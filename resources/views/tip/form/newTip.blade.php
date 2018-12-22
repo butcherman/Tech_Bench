@@ -24,16 +24,7 @@
             @endif
             {!! Form::open(['route' => 'tip.id.store', 'id' => 'new-tech-tip-form', 'enctype' => 'multipart/form-data', 'files' => true]) !!}
                 {{ Form::bsText('subject', 'Subject', null, ['placeholder' => 'Enter A Descriptive Subject', 'required', 'autofocus']) }}
-                <div class="row">
-                    <div class="col-6">
-                        {{ Form::bsSelect('sysType', 'Tag A System', $systems, null, ['placeholder' => 'Select A System To Tag']) }}
-                    </div>
-                    <div class="col-6">
-                        <label for="tags">System Tags:</label>
-                        <div id="tags" class="form-control tech-tip-tag-wrapper" required></div>
-                        <span id="tag-error" class="text-danger d-none">Select At Least One System to Tag</span>
-                    </div>
-                </div>
+                {{ Form::bsSelect('sysTags[]', 'Tag A System', $systems, null, ['multiple' => 'multiple', 'class' => 'multipleSelect']) }}
                 {{ Form::bsTextarea('details', 'Tech Tip', null, ['rows' => '15']) }}
                 @include('_inc.dropMultiFile')
                 {{ Form::bsSubmit('Create Tech Tip') }}
@@ -85,19 +76,7 @@ $(document).ready(function()
     //  Initialize Drag and Drop
     techTipDrop($('#new-tech-tip-form'));
     //  Add a system tag
-    $('#sysType').on('change', function()
-    {
-        var value = $(this).val();
-        var name  = $(this).find('option:selected').text();
-        var divVal = '<div class="tech-tip-tag" name="tipTag[]" data-value="'+value+'">'+name+' <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
-        $('#tags').append(divVal);
-        $('#tag-error').addClass('d-none');
-    });
-    //  Remove a system tag
-    $(document).on('click', '.close', function()
-    {
-        $(this).parent().remove();
-    });
+    $('.multipleSelect').fastselect();
 });
     
     //  Special drag and drop function for tech tips - includes additional validation
@@ -120,34 +99,27 @@ $(document).ready(function()
                 {
                     e.preventDefault();
                     e.stopPropagation();
-                    if($('.tech-tip-tag-wrapper').children().length == 0)
+                    if(myDrop.getQueuedFiles().length > 0)
                     {
-                        $('#tag-error').removeClass('d-none');
+                        $('#forProgressBar').show();
+                        myDrop.processQueue();
                     }
                     else
                     {
-                        if(myDrop.getQueuedFiles().length > 0)
+                        $('#edit-modal').modal('show');
+                        $('#edit-modal').find('.modal-dialog').html('<div class="jumbotron text-center h-50"><i class="fa fa-circle-o-notch fa-spin fa-5x" aria-hidden="true"></i></div>');
+                        tinymce.triggerSave();
+                        $('.tech-tip-tag').each(function()
                         {
-                            $('#forProgressBar').show();
-                            myDrop.processQueue();
-                        }
-                        else
+                            $('<input />').attr('type', 'hidden')
+                                .attr('name', 'sysTags[]')
+                                .attr('value', $(this).data('value'))
+                                .appendTo(form);
+                        });
+                        $.post(form.attr('action'), form.serialize(), function(data)
                         {
-                            $('#edit-modal').modal('show');
-                            $('#edit-modal').find('.modal-dialog').html('<div class="jumbotron text-center h-50"><i class="fa fa-circle-o-notch fa-spin fa-5x" aria-hidden="true"></i></div>');
-                            tinymce.triggerSave();
-                            $('.tech-tip-tag').each(function()
-                            {
-                                $('<input />').attr('type', 'hidden')
-                                    .attr('name', 'sysTags[]')
-                                    .attr('value', $(this).data('value'))
-                                    .appendTo(form);
-                            });
-                            $.post(form.attr('action'), form.serialize(), function(data)
-                            {
-                                uploadComplete(data);
-                            });
-                        }
+                            uploadComplete(data);
+                        });
                     }
                 });
                 this.on('sendingmultiple',  function(file, xhr, formData)

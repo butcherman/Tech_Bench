@@ -8142,7 +8142,7 @@ var inlite = (function () {
       }
     };
     var setupHideFloatPanels = function (editor) {
-      editor.on('mousedown progressstate', function () {
+      editor.on('mousedown', function () {
         FloatPanel.hideAll();
       });
     };

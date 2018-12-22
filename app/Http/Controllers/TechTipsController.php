@@ -118,7 +118,6 @@ class TechTipsController extends Controller
         //  Enter all system tags associated with the tip
         if(is_array($request->sysTags))
         {
-
             foreach($request->sysTags as $tag)
             {
                 TechTipSystems::create([
@@ -280,6 +279,12 @@ class TechTipsController extends Controller
         $tipFav   = TechTipFavs::where('user_id', Auth::user()->user_id)
             ->where('tip_id', $id)
             ->first();
+        
+        $tipS = [];
+        foreach($tipSys as $s)
+        {
+            $tipS[] = $s->sys_id;
+        }
 
         //  Get system types for tip tagging
         $systems = SystemCategories::with('SystemTypes')
@@ -298,7 +303,7 @@ class TechTipsController extends Controller
         return view('tip.form.editTip', [
             'data'     => $tipData,
             'files'    => $tipFiles,
-            'systems'  => $tipSys,
+            'systems'  => $tipS,
             'comments' => $tipCmts,
             'isFav'    => $tipFav,
             'sysToTag' => $sysArr
