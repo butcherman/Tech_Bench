@@ -9,10 +9,17 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <h2>
-            <i class="fa fa-bookmark {{is_null($isFav) ? 'bookmark-unchecked' : 'bookmark-checked'}}" aria-hidden="true" title="Bookmark Tech Tip" data-tooltip="tooltip"></i> 
-            {{$data->subject}}            
-        </h2>
+        <div class="col-11">
+            <h2>
+                <i class="fa fa-bookmark {{is_null($isFav) ? 'bookmark-unchecked' : 'bookmark-checked'}}" aria-hidden="true" title="Bookmark Tech Tip" data-tooltip="tooltip"></i> 
+                {{$data->subject}}   
+            </h2>
+        </div>
+        <div class="col-1">
+            <a href="{{route('tip.downloadTip', ['id' => $data->tip_id])}}" class="btn btn-info float-right"><i class="fa fa-download"></i> Download As PDF</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-12 tech-tip-details">
             @if($current_user->hasAnyRole(['installer', 'admin']) || $data->user_id == $current_user->user_id)
                 <a href="{{route('tip.id.edit', ['id' => $data->tip_id])}}" title="Edit This Tip" data-tooltip="tooltip" class="d-block d-sm-inline"><i class="fa fa-pencil" aria-hidden="true"></i></a>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -219,6 +220,26 @@ class TechTipsController extends Controller
             'comments' => $tipCmts,
             'isFav'    => $tipFav
         ]);
+    }
+    
+    //  Download a note as a PDF file
+    public function generatePDF($id)
+    {
+        $tipData  = TechTips::where('tip_id', $id)->with('user')->first();
+        $tipCmts  = TechTipComments::where('tip_id', $id)
+            ->join('users', 'tech_tip_comments.user_id', '=', 'users.user_id')
+            ->get();
+        $tipSys   = TechTipSystems::where('tip_id', $id)
+            ->join('system_types', 'tech_tip_systems.sys_id', '=', 'system_types.sys_id')
+            ->get();
+
+        $pdf = PDF::loadView('pdf.techTip', [
+            'data'     => $tipData,
+            'systems'  => $tipSys,
+            'comments' => $tipCmts,
+        ]);
+        
+        return $pdf->download('Tech Tip - '.$tipData->subject.'.pdf');
     }
     
     //  Toggle whether or not the customer is listed as a user favorite
