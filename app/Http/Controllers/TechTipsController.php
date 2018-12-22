@@ -274,9 +274,9 @@ class TechTipsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'subject' => 'required', 
-            'details' => 'required', 
-            'sysTags' => 'required'
+            'subject'     => 'required', 
+            'description' => 'required', 
+            'sysTags'     => 'required'
         ]);
         
         //  Remove any forward slash (/) from the Subject field
