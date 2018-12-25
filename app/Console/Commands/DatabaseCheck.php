@@ -782,8 +782,11 @@ class DatabaseCheck extends Command
     {
         $res = [];
         
-        $allFiles = Storage::allFiles();
+ //       $allFiles = Storage::disk('local')->allFiles('app/files');
+		$allFiles = File::allFiles(config('filesystems.disks.local.root'));
         $dbFiles  = Files::all();
+		
+
         
         foreach($dbFiles as $key => $file)
         {
@@ -797,10 +800,10 @@ class DatabaseCheck extends Command
         
         
         
-//        print_r($allFiles);
+        print_r($allFiles);
 //        print_r($dbFiles);
 //        
-//        $this->line(count($allFiles));
-//        $this->line(count($dbFiles));
+        $this->line(count($allFiles));
+        $this->line(count($dbFiles));
     }
 }
