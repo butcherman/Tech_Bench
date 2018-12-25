@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -37,11 +36,7 @@ class DatabaseCheck extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
+    //  Run the DB Check
     public function handle()
     {
         //  Shortcut for options being on or off
@@ -49,13 +44,19 @@ class DatabaseCheck extends Command
         $this->rep = $this->option('report');
         $brk = '<br />';
         
+        $today = Carbon::now();
+        
         //  Extend the Max Execution time for the script
         ini_set('max_execution_time', 600); //600 seconds = 10 minutes
         
         $this->line('Running DB Check...');
         $this->line('');
         
-        $this->repData = '<h3>Running DB Check...</h3>';
+        $this->repData  = "***********************************************************\n";
+        $this->repData .= "*                                                         *\n";
+        $this->repData .= "*               Database Report $today->year-$today->month-$today->day                *\n";
+        $this->repData .= "*                                                         *\n";
+        $this->repData .= "***********************************************************\n\n";
         
         /*****************************
         *                            *
@@ -110,58 +111,45 @@ class DatabaseCheck extends Command
         $rogueFiles = $this->rogueFiles();
         $this->output($rogueFiles);
 
+        /*****************************
+        *                            *
+        *  Wrap up                   *
+        *                            *
+        ******************************/
+        $output = [];
+        $output[] = [
+            'type' => 'info',
+            'value' => 'Database Report Completed'
+        ];
         
-        
-        
-        
-        
+        $this->output($output);
         
         //  Generate a PDF report if the option is selected
         if($this->rep)
         {
-            $pdf = PDF::loadView('pdf.dbReport', [
-                'data' => $this->repData
-            ]);   
-            
-            $pdf->save(config('filesystems.disks.public.root').DIRECTORY_SEPARATOR.'dbReport.pdf');
+            Storage::disk('logs')->append('dbCheck-'.$today->year.'-'.$today->month.'-'.$today->day.'.log', $this->repData);
         }
     }
     
     //  Print the output to the screen and write for PDF report
     private function output($data)
-    {
-        if(!empty($data))
+    {   
+        foreach($data as $d)
         {
-            foreach($data as $d)
-            {
-                //  Console Output
-                if(!isset($d['repOnly']))
-                {
-                    $type = $d['type'];
-                    $this->$type($d['value']);
-                }
-
-                //  Report Output
-                switch($d['type'])
-                {
-                    case 'info':
-                        $class = 'text-primary';
-                        break;
-                    case 'error':
-                        $class = 'text-danger';
-                        break;
-                    default:
-                        $class = 'text-dark';
-                }
-                $this->repData .= '<p class="'.$class.'">'.str_replace(' ', '&nbsp;', $d['value']).'</p>';
-            }
-
+            //  Console Output
             if(!isset($d['repOnly']))
             {
-                $this->line('');
-                $this->repData .= '<br />';
+                $type = $d['type'];
+                $this->$type($d['value']);
             }
+            
+            //  Report Output
+            $this->repData .= $d['value']."\n";
         }
+        
+        //  Line Break
+        $this->line('');
+        $this->repData .= "\n";
     }
     
     //  List all system administrators
@@ -782,28 +770,53 @@ class DatabaseCheck extends Command
     {
         $res = [];
         
- //       $allFiles = Storage::disk('local')->allFiles('app/files');
-		$allFiles = File::allFiles(config('filesystems.disks.local.root'));
-        $dbFiles  = Files::all();
-		
-
+        $allFiles = Storage::disk('local')->allFiles();
         
-        foreach($dbFiles as $key => $file)
+        foreach($allFiles as $pos => $file)
         {
-            if(in_array($file->file_link.$file->file_name, $allFiles))
+            $dbFile = Files::where('file_name', basename($file))->get();
+                        
+            if(!$dbFile->isEmpty())
             {
-                $pos = array_search($file->file_link.$file->file_name, $allFiles);
                 unset($allFiles[$pos]);
-                unset($dbFiles[$key]);
             }
         }
         
+        $res[] = [
+            'type'  => count($allFiles) > 0 ? 'error' : 'line',
+            'value' => 'Rogue Files.......................'.count($allFiles)
+        ];
         
+        if($this->fix && count($allFiles) > 0)
+        {
+            $res[] = [
+                'type' => 'info',
+                'value' => '          Corrected'
+            ];
+        }
         
-        print_r($allFiles);
-//        print_r($dbFiles);
-//        
-        $this->line(count($allFiles));
-        $this->line(count($dbFiles));
+        if(count($allFiles) > 0)
+        {
+            foreach($allFiles as $file)
+            {
+                $res[] = [
+                    'type'    => 'info',
+                    'value'   => '     '.$file,
+                    'repOnly' => true
+                ];
+                
+                if($this->fix)
+                {
+                    Storage::delete($file);
+                    $res[] = [
+                        'type'    => 'info',
+                        'value'   => '          Corrected',
+                        'repOnly' => true
+                    ];
+                }
+            }
+        }
+        
+        return $res;
     }
 }

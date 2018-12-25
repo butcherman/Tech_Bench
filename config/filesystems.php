@@ -21,6 +21,11 @@ return [
             'driver' => 'local',
             'root'   => env('BACKUP_FOLDER', storage_path('app/backups')),
         ],
+        
+        'logs' => [
+            'driver' => 'local',
+            'root'   => storage_path('logs'),
+        ],
     ],
     
     'paths' => [
