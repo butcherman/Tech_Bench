@@ -330,7 +330,8 @@ class DatabaseCheck extends Command
     private function systemFiles()
     {
         $res = [];
-        
+        $res2 = [];
+		
         $badPointer  = 0;
         $missingFile = 0;
         
@@ -348,18 +349,18 @@ class DatabaseCheck extends Command
             if(!in_array($file->file_id, $this->fileArr))
             {
                 $badPointer++;
-                $res[] = [
+                $res2[] = [
                     'type'    => 'error',
-                    'value'   => '     File ID '.$file->file_id.' missing in files table',
+                    'value'   => '          File ID '.$file->file_id.' missing in files table',
                     'repOnly' => true
                 ];
                 
                 if($this->fix)
                 {
                     SystemFiles::find($file->sys_file_id)->delete();
-                    $res[] = [
+                    $res2[] = [
                         'type'    => 'info',
-                        'value'   => '          Corrected',
+                        'value'   => '               Corrected',
                         'repOnly' => true
                     ];
                 }
@@ -371,9 +372,9 @@ class DatabaseCheck extends Command
                 if(!Storage::exists($fileData->file_link.$fileData->file_name))
                 {
                     $missingFile++;
-                    $res[] = [
+                    $res2[] = [
                         'type'    => 'error',
-                        'value'   => '     Missing File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
+                        'value'   => '          Missing File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
                         'repOnly' => true
                     ];
 
@@ -381,9 +382,9 @@ class DatabaseCheck extends Command
                     {
                         $file->delete();
                         $fileData->delete();
-                        $res[] = [
+                        $res2[] = [
                             'type'    => 'info',
-                            'value'   => '          Corrected',
+                            'value'   => '               Corrected',
                             'repOnly' => true
                         ];
                     }
@@ -423,6 +424,8 @@ class DatabaseCheck extends Command
                 ];
             }
         }
+		
+		$res = array_merge($res, $res2);
         
         return $res;
     }
@@ -431,6 +434,7 @@ class DatabaseCheck extends Command
     private function customerFiles()
     {
         $res = [];
+		$res2 = [];
         
         $badPointer  = 0;
         $missingFile = 0;
@@ -449,18 +453,18 @@ class DatabaseCheck extends Command
             if(!in_array($file->file_id, $this->fileArr))
             {
                 $badPointer++;
-                $res[] = [
+                $res2[] = [
                     'type'    => 'error',
-                    'value'   => '     File ID '.$file->file_id.' missing in files table',
+                    'value'   => '          File ID '.$file->file_id.' missing in files table',
                     'repOnly' => true
                 ];
                 
                 if($this->fix)
                 {
                     CustomerFiles::find($file->cust_file_id)->delete();
-                    $res[] = [
+                    $res2[] = [
                         'type'    => 'info',
-                        'value'   => '          Corrected',
+                        'value'   => '               Corrected',
                         'repOnly' => true
                     ];
                 }
@@ -472,9 +476,9 @@ class DatabaseCheck extends Command
                 if(!Storage::exists($fileData->file_link.$fileData->file_name))
                 {
                     $missingFile++;
-                    $res[] = [
+                    $res2[] = [
                         'type'    => 'error',
-                        'value'   => '     Missing File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
+                        'value'   => '          Missing File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
                         'repOnly' => true
                     ];
 
@@ -482,9 +486,9 @@ class DatabaseCheck extends Command
                     {
                         $file->delete();
                         $fileData->delete();
-                        $res[] = [
+                        $res2[] = [
                             'type'    => 'info',
-                            'value'   => '          Corrected',
+                            'value'   => '               Corrected',
                             'repOnly' => true
                         ];
                     }
@@ -523,6 +527,8 @@ class DatabaseCheck extends Command
                 ];
             }
         }
+		
+		$res = array_merge($res, $res2);
         
         return $res;
     }
@@ -531,6 +537,7 @@ class DatabaseCheck extends Command
     private function linkFiles()
     {
         $res = [];
+		$res2 = [];
         
         $badPointer  = 0;
         $missingFile = 0;
@@ -549,18 +556,18 @@ class DatabaseCheck extends Command
             if(!in_array($file->file_id, $this->fileArr))
             {
                 $badPointer++;
-                $res[] = [
+                $res2[] = [
                     'type'    => 'error',
-                    'value'   => '     File ID '.$file->file_id.' missing in files table',
+                    'value'   => '          File ID '.$file->file_id.' missing in files table',
                     'repOnly' => true
                 ];
                 
                 if($this->fix)
                 {
                     FileLinkFiles::find($file->cust_file_id)->delete();
-                    $res[] = [
+                    $res2[] = [
                         'type'    => 'info',
-                        'value'   => '          Corrected',
+                        'value'   => '               Corrected',
                         'repOnly' => true
                     ];
                 }
@@ -572,9 +579,9 @@ class DatabaseCheck extends Command
                 if(!Storage::exists($fileData->file_link.$fileData->file_name))
                 {
                     $missingFile++;
-                    $res[] = [
+                    $res2[] = [
                         'type'    => 'error',
-                        'value'   => '     Missing File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
+                        'value'   => '          Missing File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
                         'repOnly' => true
                     ];
 
@@ -582,9 +589,9 @@ class DatabaseCheck extends Command
                     {
                         $file->delete();
                         $fileData->delete();
-                        $res[] = [
+                        $res2[] = [
                             'type'    => 'info',
-                            'value'   => '          Corrected',
+                            'value'   => '               Corrected',
                             'repOnly' => true
                         ];
                     }
@@ -623,6 +630,8 @@ class DatabaseCheck extends Command
                 ];
             }
         }
+		
+		$res = array_merge($res, $res2);
         
         return $res;
     }
@@ -631,6 +640,7 @@ class DatabaseCheck extends Command
     private function tipFiles()
     {
         $res = [];
+		$res2 = [];
         
         $badPointer  = 0;
         $missingFile = 0;
@@ -649,18 +659,18 @@ class DatabaseCheck extends Command
             if(!in_array($file->file_id, $this->fileArr))
             {
                 $badPointer++;
-                $res[] = [
+                $res2[] = [
                     'type'    => 'error',
-                    'value'   => '     File ID '.$file->file_id.' missing in files table',
+                    'value'   => '          File ID '.$file->file_id.' missing in files table',
                     'repOnly' => true
                 ];
                 
                 if($this->fix)
                 {
                     TechTipFiles::find($file->cust_file_id)->delete();
-                    $res[] = [
+                    $res2[] = [
                         'type'    => 'info',
-                        'value'   => '          Corrected',
+                        'value'   => '               Corrected',
                         'repOnly' => true
                     ];
                 }
@@ -672,9 +682,9 @@ class DatabaseCheck extends Command
                 if(!Storage::exists($fileData->file_link.$fileData->file_name))
                 {
                     $missingFile++;
-                    $res[] = [
+                    $res2[] = [
                         'type'    => 'error',
-                        'value'   => '     Missing File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
+                        'value'   => '          Missing File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
                         'repOnly' => true
                     ];
 
@@ -682,9 +692,9 @@ class DatabaseCheck extends Command
                     {
                         $file->delete();
                         $fileData->delete();
-                        $res[] = [
+                        $res2[] = [
                             'type'    => 'info',
-                            'value'   => '          Corrected',
+                            'value'   => '               Corrected',
                             'repOnly' => true
                         ];
                     }
@@ -723,6 +733,8 @@ class DatabaseCheck extends Command
                 ];
             }
         }
+		
+		$res = array_merge($res, $res2);
         
         return $res;
     }
@@ -736,6 +748,39 @@ class DatabaseCheck extends Command
             'type' => count($this->fileArr) > 0 ? 'error' : 'line',
             'value' => 'Unknown Files.....................'.count($this->fileArr)
         ];
+		
+		if(count($this->fileArr) > 0)
+		{
+			foreach($this->fileArr as $file)
+			{
+				$fileData = Files::find($file);
+				
+				$res[] = [
+					'type' => 'line',
+					'value' => '     Unknown File ID - '.$fileData->file_id.' - '.$fileData->file_link.$fileData->file_name,
+					'repOnly' => true
+				];
+				
+				if($this->fix)
+				{
+					$res[] = [
+						'type' => 'info',
+						'value' => '          Corrected'
+					];
+
+					if(!Storage::exists($fileData->file_link.$fileData->file_name))
+					{
+						Storage::delete($fileData->file_link.$fileData->file_name);
+					}
+					
+					$fileData->delete();
+					
+				}
+			}
+		}
+		
+		
+/*		
         
         if($this->fix  && count($this->fileArr) > 0)
         {
@@ -761,6 +806,7 @@ class DatabaseCheck extends Command
                 $fileData->delete();
             }
         }
+*/
         
         return $res;
     }
@@ -770,7 +816,7 @@ class DatabaseCheck extends Command
     {
         $res = [];
         
-        $allFiles = Storage::disk('local')->allFiles();
+		$allFiles = File::allFiles(config('filesystems.disks.local.root'));
         
         foreach($allFiles as $pos => $file)
         {
