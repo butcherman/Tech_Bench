@@ -765,7 +765,8 @@ class DatabaseCheck extends Command
 				{
 					$res[] = [
 						'type' => 'info',
-						'value' => '          Corrected'
+						'value' => '          Corrected',
+                        'repOnly' => true
 					];
 
 					if(!Storage::exists($fileData->file_link.$fileData->file_name))
