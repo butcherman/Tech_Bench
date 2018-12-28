@@ -30,8 +30,6 @@ Route::middleware(['password_expired'])->group(function ()
         ///////////////////////////  Basic User Routes  /////////////////////////////////////////
         Route::get('about', 'PagesController@about')->name('about');
         Route::get('account', 'AccountController@index')->name('account');
-
-        
         Route::post('account/{id}', 'AccountController@submit')->name('submitAccount');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         Route::get('mark-notification/{id}', 'DashboardController@markNotification')->name('mark-notification');
@@ -52,6 +50,7 @@ Route::middleware(['password_expired'])->group(function ()
         //////////////////////////  Customer Routes  ////////////////////////////////////////////
         Route::prefix('customer')->name('customer.')->group(function()
         {
+            Route::get('download-note/{id}', 'CustomerController@generatePDF')->name('downloadNote');
             Route::get('fav/{action}/{id}', 'CustomerController@toggleFav')->name('toggleFav');
             Route::resource('files', 'CustomerFilesController');
             Route::resource('notes', 'CustomerNotesController');
@@ -68,6 +67,8 @@ Route::middleware(['password_expired'])->group(function ()
         //////////////////////////  Tech Tips Routes  //////////////////////////////////////////
         Route::prefix('tip')->name('tip.')->group(function()
         {
+            Route::get('download-note/{id}', 'TechTipsController@generatePDF')->name('downloadTip');
+            Route::post('upload-image', 'TechTipsController@processImage')->name('processImage');
             Route::get('fav/{action}/{id}', 'TechTipsController@toggleFav')->name('toggleFav');
             Route::resource('comments', 'TechTipsCommentsController');
             Route::get('details/{id}/{name}', 'TechTipsController@details')->name('details');

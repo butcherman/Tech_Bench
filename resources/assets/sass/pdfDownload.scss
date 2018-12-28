@@ -1,0 +1,46 @@
+//  Bootstrap basics
+@import '~bootstrap/scss/bootstrap';
+
+//  Tech tip details
+.tech-tip-details {
+    a, span {
+        padding: 0 5px;
+        color: #ccc;
+        display: inline-block;
+        span {
+            display: inline-block;
+        }
+    }
+}
+
+#tech-tip-information {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    margin: 15px;
+    padding: 15px;
+    min-height: 60vh;
+}
+
+#tech-tip-attachements {
+    h4 {
+        color: #8F8686;
+        border-bottom: 1px solid #000;
+    }
+    a {
+        color: #777;
+        &:hover {
+            color: #0000FF;
+        }
+    }
+}
+
+#tech-tip-comments {
+    margin-top: 10px;
+    h4 {
+        color: #8F8686;
+        border-bottom: 1px solid #000;
+    }
+    .comment-author {
+        color: #777;
+    }
+}

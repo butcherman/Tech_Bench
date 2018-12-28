@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        //  The Ajax call to upload an image to a Tech Tip
+        'tip/upload-image'
     ];
 }

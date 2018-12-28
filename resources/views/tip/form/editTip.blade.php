@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>New Tech Tip</h1></div>
+            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Edit Tech Tip</h1></div>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -19,20 +19,8 @@
             {!! Form::model($data, ['route' => ['tip.id.update', $data->tip_id], 'id' => 'edit-tech-tip-form', 'enctype' => 'multipart/form-data', 'files' => true]) !!}
                 @method('PUT')
                 {{ Form::bsText('subject', 'Subject', null, ['placeholder' => 'Enter A Descriptive Subject', 'required', 'autofocus']) }}
-                <div class="row">
-                    <div class="col-6">
-                        {{ Form::bsSelect('sysType', 'Tag A System', $sysToTag, null, ['placeholder' => 'Select A System To Tag']) }}
-                    </div>
-                    <div class="col-6">
-                        <label for="tags">System Tags:</label>
-                        <div id="tags" class="form-control tech-tip-tag-wrapper" required>
-                            @foreach($systems as $sys)
-                                <div class="tech-tip-tag" name="tipTag[]" data-value="{{$sys->sys_id}}">{{$sys->name}} <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
-                            @endforeach
-                        </div>
-                        <span id="tag-error" class="text-danger d-none">Select At Least One System to Tag</span>
-                    </div>
-                </div>
+                {{ Form::bsSelect('sysTags[]', 'Tag A System', $sysToTag, $systems, ['multiple' => 'multiple', 'class' => 'multipleSelect']) }}
+
                 {{ Form::bsTextarea('description', 'Tech Tip', null, ['rows' => '15']) }}
                 <h4>Attachements:</h4>
                 @if(!$files->isEmpty())
@@ -69,19 +57,7 @@ $(document).ready(function()
     //  Initialize Drag and Drop
     techTipDrop($('#edit-tech-tip-form'));
     //  Add a system tag
-    $('#sysType').on('change', function()
-    {
-        var value = $(this).val();
-        var name  = $(this).find('option:selected').text();
-        var divVal = '<div class="tech-tip-tag" name="tipTag[]" data-value="'+value+'">'+name+' <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
-        $('#tags').append(divVal);
-        $('#tag-error').addClass('d-none');
-    });
-    //  Remove a system tag
-    $(document).on('click', '.close', function()
-    {
-        $(this).parent().remove();
-    });
+    $('.multipleSelect').fastselect();
 });
     
     //  Special drag and drop function for tech tips - includes additional validation
@@ -102,31 +78,24 @@ $(document).ready(function()
                 {
                     e.preventDefault();
                     e.stopPropagation();
-                    if($('.tech-tip-tag-wrapper').children().length == 0)
+                    if(myDrop.getQueuedFiles().length > 0)
                     {
-                        $('#tag-error').removeClass('d-none');
+                        myDrop.processQueue();
                     }
                     else
                     {
-                        if(myDrop.getQueuedFiles().length > 0)
+                        tinymce.triggerSave();
+                        $('.tech-tip-tag').each(function()
                         {
-                            myDrop.processQueue();
-                        }
-                        else
+                            $('<input />').attr('type', 'hidden')
+                                .attr('name', 'sysTags[]')
+                                .attr('value', $(this).data('value'))
+                                .appendTo(form);
+                        });
+                        $.post(form.attr('action'), form.serialize(), function(data)
                         {
-                            tinymce.triggerSave();
-                            $('.tech-tip-tag').each(function()
-                            {
-                                $('<input />').attr('type', 'hidden')
-                                    .attr('name', 'sysTags[]')
-                                    .attr('value', $(this).data('value'))
-                                    .appendTo(form);
-                            });
-                            $.post(form.attr('action'), form.serialize(), function(data)
-                            {
-                                uploadComplete(data);
-                            });
-                        }
+                            uploadComplete(data);
+                        });
                     }
                 });
                 this.on('sendingmultiple',  function(file, xhr, formData)

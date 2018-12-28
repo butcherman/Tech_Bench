@@ -56,9 +56,11 @@
     {
         e.preventDefault();
         $(this).append('&nbsp; &nbsp; <i class="fa fa-cog fa-spin"></i>');
+        $(this).addClass('disabled');
         $.get($(this).attr('href'), function(res)
         {
             $('#backup-now').html('Backup Now');
+            $('#backup-now').removeClass('disabled');
             loadBackups();
             if(res != 'success')
             {

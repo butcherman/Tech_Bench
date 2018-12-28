@@ -28,11 +28,14 @@ class BackupApplication extends Command
     //  Create backup of system
     public function handle()
     {
+        //  Extend the Max Execution time for the script
+        ini_set('max_execution_time', 600); //600 seconds = 10 minutes
+        
         $backupType = $this->argument('type');
-        $backupDir = config('filesystems.disks.backup.root');
-        $backupTmp = config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.'tmp';
-        $localDir  = config('filesystems.disks.local.root');
-        $publicDir = config('filesystems.disks.public.root');
+        $backupDir  = config('filesystems.disks.backup.root');
+        $backupTmp  = config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.'tmp';
+        $localDir   = config('filesystems.disks.local.root');
+        $publicDir  = config('filesystems.disks.public.root');
         $backupBase = $backupType.'_backup-'.Carbon::now()->toDateString().'_'.Carbon::now()->hour.Carbon::now()->minute;
                 
         //  Determine if the backup file already exists

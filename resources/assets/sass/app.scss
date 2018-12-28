@@ -8,6 +8,7 @@
 @import '~dropzone/dist/dropzone';
 @import '~datatables.net-bs4/css/dataTables.bootstrap4';
 @import '~select2/dist/css/select2';
+@import '~fastselect/dist/fastselect';
 
 //  Shared styles between all layouts
 @import 'fileDrag';
@@ -141,5 +142,18 @@
     }
     .comment-author {
         color: #777;
+    }
+}
+
+//  Modified Fast Select Classes
+.fstElement {
+    width: 100%;
+    font-size: 0.75em;
+    overflow: visible;
+    border-radius: 5px;
+    .fstControls {
+        width: 100%;
+        min-height: 4em;
+        overflow: visible;
     }
 }

@@ -3,7 +3,10 @@
         @foreach($notes as $note)
             <div class="col-md-3 pad-bottom customer-note-card">
                 <div class="card">
-                    <div class="card-header{{ $note->urgent ? ' bg-danger' : ' bg-info' }}">{{$note->subject}}</div>
+                    <div class="card-header{{ $note->urgent ? ' bg-danger' : ' bg-info' }}">
+                        {{$note->subject}}
+                        <a href="{{route('customer.downloadNote', ['id' => $note->note_id])}}" class="float-right text-white" title="Download as PDF" data-tooltip="tooltip"><i class="fa fa-download"></i></a>
+                    </div>
                     <div class="card-body">
                         {!! $note->description !!}
                     </div>

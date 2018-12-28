@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,14 +27,14 @@ class TechTipsController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     //  Landing page brings up the tech tip search form
     public function index()
     {
         $systems = SystemCategories::with('SystemTypes')
             ->orderBy('cat_id', 'asc')
             ->get();
-        
+
         $sysArr = [];
         foreach($systems as $sys)
         {
@@ -42,12 +43,12 @@ class TechTipsController extends Controller
                 $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
         }
-        
+
         return view('tip.index', [
             'systems' => $sysArr
         ]);
     }
-    
+
     //  Search for a tech tip
     public function search(Request $request)
     {
@@ -79,7 +80,7 @@ class TechTipsController extends Controller
         $systems = SystemCategories::with('SystemTypes')
             ->orderBy('cat_id', 'asc')
             ->get();
-        
+
         $sysArr = [];
         foreach($systems as $sys)
         {
@@ -88,7 +89,7 @@ class TechTipsController extends Controller
                 $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
         }
-        
+
         return view('tip.form.newTip', [
             'systems' => $sysArr
         ]);
@@ -98,14 +99,14 @@ class TechTipsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'subject' => 'required', 
-            'details' => 'required', 
+            'subject' => 'required',
+            'details' => 'required',
             'sysTags' => 'required'
         ]);
-        
+
         //  Remove any forward slash (/) from the Subject field
         $request->merge(['subject' => str_replace('/', '-', $request->subject)]);
-        
+
         //  Enter the tip details and get the tip ID
         $tip = TechTips::create([
             'subject'     => $request->subject,
@@ -117,7 +118,6 @@ class TechTipsController extends Controller
         //  Enter all system tags associated with the tip
         if(is_array($request->sysTags))
         {
-            
             foreach($request->sysTags as $tag)
             {
                 TechTipSystems::create([
@@ -133,7 +133,7 @@ class TechTipsController extends Controller
                 'sys_id' => $request->sysTags
             ]);
         }
-        
+
         //  If there are any files, process them
         if(!empty($request->file))
         {
@@ -143,14 +143,14 @@ class TechTipsController extends Controller
                 //  Clean the file and store it
                 $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
                 $file->storeAs($filePath, $fileName);
-                
+
                 //  Place file in Files table of DB
                 $newFile = Files::create([
                     'file_name' => $fileName,
                     'file_link' => $filePath.DIRECTORY_SEPARATOR
                 ]);
                 $fileID = $newFile->file_id;
-                
+
                 //  Place the file in the tech tip files table of DB
                 TechTipFiles::create([
                     'tip_id'  => $tipID,
@@ -158,7 +158,7 @@ class TechTipsController extends Controller
                 ]);
             }
         }
-        
+
         //  Email the techs of the new tip
         $tipData = TechTips::find($tipID);
         $userList = UserSettings::where('em_tech_tip', 1)->join('users', 'user_settings.user_id', '=', 'users.user_id')->where('active', 1)->get();
@@ -170,10 +170,24 @@ class TechTipsController extends Controller
         {
             report($e);
         }
-        
+
         Log::info('Tech Tip ID-'.$tipID.' Created by Customer ID-'.Auth::user()->user_id);
-        
+
         return $tipID;
+    }
+
+    //  Process an uploaded image to the Tech Tip body
+    public function processImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'mimes:jpeg,bmp,png'
+        ]);
+
+        $file = $request->file;
+        $fileName = $file->getClientOriginalName();
+        $file->storeAs('img/tip_img', $fileName, 'public');
+
+        return json_encode(['location' => '/storage/img/tip_img/'.$fileName]);
     }
 
     //  Show the Tech Tip details
@@ -185,7 +199,7 @@ class TechTipsController extends Controller
             Log::warning('User ID-'.Auth::user()->user_id.' tried to access invlaid Tech Tip ID-'.$id.' Name-'.$name);
             return view('errors.tipNotFound');
         }
-        
+
         $tipFiles = TechTipFiles::where('tip_id', $id)
             ->join('files', 'tech_tip_files.file_id', '=', 'files.file_id')
             ->get();
@@ -197,7 +211,7 @@ class TechTipsController extends Controller
         $tipFav   = TechTipFavs::where('user_id', Auth::user()->user_id)
             ->where('tip_id', $id)
             ->first();
-        
+
         return view('tip.details', [
             'data'     => $tipData,
             'files'    => $tipFiles,
@@ -206,7 +220,27 @@ class TechTipsController extends Controller
             'isFav'    => $tipFav
         ]);
     }
-    
+
+    //  Download a note as a PDF file
+    public function generatePDF($id)
+    {
+        $tipData  = TechTips::where('tip_id', $id)->with('user')->first();
+        $tipCmts  = TechTipComments::where('tip_id', $id)
+            ->join('users', 'tech_tip_comments.user_id', '=', 'users.user_id')
+            ->get();
+        $tipSys   = TechTipSystems::where('tip_id', $id)
+            ->join('system_types', 'tech_tip_systems.sys_id', '=', 'system_types.sys_id')
+            ->get();
+
+        $pdf = PDF::loadView('pdf.techTip', [
+            'data'     => $tipData,
+            'systems'  => $tipSys,
+            'comments' => $tipCmts,
+        ]);
+
+        return $pdf->download('Tech Tip - '.$tipData->subject.'.pdf');
+    }
+
     //  Toggle whether or not the customer is listed as a user favorite
     public function toggleFav($action, $tipID)
     {
@@ -222,7 +256,7 @@ class TechTipsController extends Controller
                 $tipFav = TechTipFavs::where('user_id', Auth::user()->user_id)->where('tip_id', $tipID)->first();
                 $tipFav->delete();
                 break;
-        }        
+        }
     }
 
     //  Edit a Tech Tip
@@ -233,7 +267,7 @@ class TechTipsController extends Controller
         {
             return 'tip not found';
         }
-        
+
         $tipFiles = TechTipFiles::where('tip_id', $id)
             ->join('files', 'tech_tip_files.file_id', '=', 'files.file_id')
             ->get();
@@ -246,11 +280,17 @@ class TechTipsController extends Controller
             ->where('tip_id', $id)
             ->first();
         
+        $tipS = [];
+        foreach($tipSys as $s)
+        {
+            $tipS[] = $s->sys_id;
+        }
+
         //  Get system types for tip tagging
         $systems = SystemCategories::with('SystemTypes')
             ->orderBy('cat_id', 'asc')
             ->get();
-        
+
         $sysArr = [];
         foreach($systems as $sys)
         {
@@ -259,11 +299,11 @@ class TechTipsController extends Controller
                 $sysArr[$sys->name][$s->sys_id] = $s->name;
             }
         }
-        
+
         return view('tip.form.editTip', [
             'data'     => $tipData,
             'files'    => $tipFiles,
-            'systems'  => $tipSys,
+            'systems'  => $tipS,
             'comments' => $tipCmts,
             'isFav'    => $tipFav,
             'sysToTag' => $sysArr
@@ -274,20 +314,20 @@ class TechTipsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'subject'     => 'required', 
-            'description' => 'required', 
+            'subject'     => 'required',
+            'description' => 'required',
             'sysTags'     => 'required'
         ]);
-        
+
         //  Remove any forward slash (/) from the Subject field
         $request->merge(['subject' => str_replace('/', '-', $request->subject)]);
-        
+
         //  update tip details
         TechTips::find($id)->update([
             'subject'     => $request->subject,
             'description' => $request->description
         ]);
-        
+
         //  Enter all system tags associated with the tip after destroying the existing systems
         TechTipSystems::where('tip_id', $id)->delete();
         if(is_array($request->sysTags))
@@ -307,7 +347,7 @@ class TechTipsController extends Controller
                 'sys_id' => $request->sysTags
             ]);
         }
-        
+
         //  Determine if any files were removed
         $tipFiles = TechTipFiles::where('tip_id', $id)->get();
         if(!$tipFiles->isEmpty())
@@ -328,7 +368,7 @@ class TechTipsController extends Controller
                 TechTipFiles::where('tip_id', $id)->delete();
             }
         }
-        
+
         //  Process any new files
         if(!empty($request->file))
         {
@@ -338,14 +378,14 @@ class TechTipsController extends Controller
                 //  Clean the file and store it
                 $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
                 $file->storeAs($filePath, $fileName);
-                
+
                 //  Place file in Files table of DB
                 $newFile = Files::create([
                     'file_name' => $fileName,
                     'file_link' => $filePath.DIRECTORY_SEPARATOR
                 ]);
                 $fileID = $newFile->file_id;
-                
+
                 //  Place the file in the tech tip files table of DB
                 TechTipFiles::create([
                     'tip_id'  => $id,
@@ -353,9 +393,9 @@ class TechTipsController extends Controller
                 ]);
             }
         }
-        
+
         Log::info('Tech Tip ID-'.$id.' Updated by User ID-'.Auth::user()->user_id);
-        
+
         return $id;
     }
 

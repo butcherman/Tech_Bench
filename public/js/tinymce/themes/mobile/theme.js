@@ -1203,9 +1203,6 @@ var mobile = (function () {
       var map = function (f) {
         return value$1(f(o));
       };
-      var mapError = function (f) {
-        return value$1(o);
-      };
       var each = function (f) {
         f(o);
       };
@@ -1235,7 +1232,6 @@ var mobile = (function () {
         orThunk: orThunk,
         fold: fold,
         map: map,
-        mapError: mapError,
         each: each,
         bind: bind,
         exists: exists,
@@ -1259,9 +1255,6 @@ var mobile = (function () {
       var map = function (f) {
         return error(message);
       };
-      var mapError = function (f) {
-        return error(f(message));
-      };
       var bind = function (f) {
         return error(message);
       };
@@ -1279,7 +1272,6 @@ var mobile = (function () {
         orThunk: orThunk,
         fold: fold,
         map: map,
-        mapError: mapError,
         each: noop,
         bind: bind,
         exists: never,
@@ -1375,7 +1367,6 @@ var mobile = (function () {
     var strict = adt.strict;
     var asOption = adt.asOption;
     var defaultedThunk = adt.defaultedThunk;
-    var asDefaultedOptionThunk = adt.asDefaultedOptionThunk;
     var mergeWithThunk = adt.mergeWithThunk;
 
     var comparison = Adt.generate([
@@ -4310,13 +4301,6 @@ var mobile = (function () {
       fDefaults,
       fOverrides
     ]);
-    var externalSpec = objOf([
-      fFactory,
-      fSchema,
-      fName,
-      fDefaults,
-      fOverrides
-    ]);
     var optionalSpec = objOf([
       fFactory,
       fSchema,
@@ -4350,7 +4334,6 @@ var mobile = (function () {
       };
     };
     var required = convert(adt$3.required, requiredSpec);
-    var external = convert(adt$3.external, externalSpec);
     var optional = convert(adt$3.optional, optionalSpec);
     var group = convert(adt$3.group, groupSpec);
     var original = constant('entirety');
@@ -12613,10 +12596,7 @@ var mobile = (function () {
       return {
         getNotificationManagerImpl: function () {
           return {
-            open: constant({
-              progressBar: { value: noop },
-              close: noop
-            }),
+            open: identity,
             close: noop,
             reposition: noop,
             getArgs: identity
