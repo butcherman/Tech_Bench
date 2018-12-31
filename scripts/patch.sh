@@ -53,6 +53,8 @@ chmod -R 755 $PROD_DIR
 
 #  Change to the production directory and bring the application back online
 cd $PROD_DIR
+#  Create the symbolic link for public storage
+php artisan storage:link >> $LOGFILE
 php artisan up | tee -a $LOGFILE
 
 tput setaf 4

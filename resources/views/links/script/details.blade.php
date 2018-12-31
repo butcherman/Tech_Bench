@@ -3,6 +3,13 @@ $(document).ready(function()
 {
     loadFiles();
     
+    //  Copy link details to clipboard
+    var clip = new ClipboardJS('.copy-btn');
+    clip.on('success', function()
+    {
+        $('.copy-btn').removeClass('btn-info').addClass('btn-success');
+    });
+    
     //  Edit a link's details
     $('#edit-link-details').on('click', function()
     {

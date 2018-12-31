@@ -110,8 +110,11 @@ class FileLinksController extends Controller
             return view('links.badLink');
         }
         
+        $emailMsg = "mailto:?subject=A File Link Has Been Created For You&body=View the link details here:  ".route('userLink.details', ['link' => $linkData->link_hash]);
+        
         return view('links.details', [
-            'data' => $linkData
+            'data' => $linkData,
+            'emMsg' => $emailMsg
         ]);
     }
     

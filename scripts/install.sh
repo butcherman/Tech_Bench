@@ -275,14 +275,14 @@ echo '#  By default application files are stored int he WebRoot/storage/app dire
 echo '#  To change this location, uncomment the lines below and modify as needed' 				 >> .env
 echo '#  Be sure to make the assigned folders writable by the web_root user' 					 >> .env
 echo '' 																						 >> .env
-echo '# ROOT_FOLDER="\path\to\doc\root"' 														 >> .env
-echo '# DFLT_FOLDER="\default"' 																 >> .env
-echo '# SYS_FOLDER="\systems"' 																	 >> .env
-echo '# CUST_FOLDER="\customers"' 																 >> .env
-echo '# USER_FOLDER="\users"' 																	 >> .env
-echo '# TIP_FOLDER="\tips"' 																	 >> .env
-echo '# LINK_FOLDER="\links"' 																	 >> .env
-echo '# COMP_FOLDER="\company"' 																 >> .env
+echo '# ROOT_FOLDER="/path/to/doc/root"' 														 >> .env
+echo '# DFLT_FOLDER="/default"' 																 >> .env
+echo '# SYS_FOLDER="/systems"' 																	 >> .env
+echo '# CUST_FOLDER="/customers"' 																 >> .env
+echo '# USER_FOLDER="/users"' 																	 >> .env
+echo '# TIP_FOLDER="/tips"' 																	 >> .env
+echo '# LINK_FOLDER="/links"' 																	 >> .env
+echo '# COMP_FOLDER="/company"' 																 >> .env
 echo '# MAX_UPLOAD=2147483648' 																	 >> .env
 echo ''                                                                                          >> .env
 
