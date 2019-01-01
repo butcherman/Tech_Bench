@@ -136,6 +136,8 @@ class CustomerContactsController extends Controller
         $cont = CustomerContacts::find($id);
         
         Log::info('Customer Contact Deleted for Customer ID'.$cont->cust_id.' by User ID-'.Auth::user()->user_id.'.  Contact ID-'.$id);
+        
+        $cont->delete();
     }
     
     //  Download the contact informaiton as a V-Card
