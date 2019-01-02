@@ -55,6 +55,44 @@ $(document).ready(function()
         });
     });
     
+    //  Delete multiple download files attached to the link
+    $(document).on('click', '#delete-multiple-down', function()
+    {
+        $('#edit-modal').find('.modal-title').text('Delete File');
+        $('#edit-modal').find('.modal-body').load('{{route('confirm')}}', function()
+        {
+            $('.select-yes').on('click', function()
+            {
+                $('.checkbox-file-down').each(function()
+                {
+                    if($(this).is(':checked'))
+                    {
+                        deleteFile($(this).val());
+                    }
+                });
+            });
+        });
+    });
+    
+    //  Delete multiple upload files attached to the link
+    $(document).on('click', '#delete-multiple-up', function()
+    {
+        $('#edit-modal').find('.modal-title').text('Delete File');
+        $('#edit-modal').find('.modal-body').load('{{route('confirm')}}', function()
+        {
+            $('.select-yes').on('click', function()
+            {
+                $('.checkbox-file-up').each(function()
+                {
+                    if($(this).is(':checked'))
+                    {
+                        deleteFile($(this).val());
+                    }
+                });
+            });
+        });
+    });
+    
     //  Read a note attached to a file
     $(document).on('click', '.read-file-note', function()
     {
