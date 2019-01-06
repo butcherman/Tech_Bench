@@ -47,7 +47,7 @@
                 <tr>
                     <td colspan="4" class="text-center">
                         <a href="#edit-modal" data-toggle="modal" class="btn btn-info" id="delete-multiple-up">Delete Checked</a>
-<!--                        <a href="#" id="download-all-files" class="btn btn-info">Download All</a>-->
+                        <a href="{{route('links.downloadAll', ['id' => $linkID])}}" id="download-all-files" class="btn btn-info">Download All</a>
                     </td>
                 </tr>
             </tfoot>

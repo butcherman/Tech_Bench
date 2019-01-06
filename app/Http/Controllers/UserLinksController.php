@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Zip;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -42,10 +43,40 @@ class UserLinksController extends Controller
             ->get();
         
         return view('links.guest.details', [
+            'hash'    => $id,
             'details' => $details,
             'files'   => $files,
             'allowUp' => $details->allow_upload
         ]);
+    }
+    
+    //  Downalod all files available to user
+    public function downloadAllFiles($hash)
+    {
+        $details = FileLinks::where('link_hash', $hash)->first();
+        
+        //  Verify that the link is valid
+        if(empty($details))
+        {
+            return abort(404);
+        }
+        
+        $files = FileLinkFiles::where('link_id', $details->link_id)
+            ->where('upload', false)
+            ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
+            ->get();
+        
+        $path = config('filesystems.disks.local.root').DIRECTORY_SEPARATOR;
+        
+        $zip = Zip::create($path.'download.zip');
+        foreach($files as $file)
+        {
+            $zip->add($path.$file->file_link.$file->file_name);
+        }
+        
+        $zip->close();
+        
+        return response()->download($path.'download.zip')->deleteFileAfterSend(true); 
     }
     
     public function uploadFiles($hash, Request $request)

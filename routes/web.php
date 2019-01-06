@@ -13,6 +13,7 @@ Route::post('/finish-setup/{hash}', 'UserController@submitInitializeUser')->name
 ///////////////////////////  User File Link Routes  /////////////////////////////////////////
 Route::prefix('file-links')->name('userLink.')->group(function()
 {
+    Route::get('download-all/{link}', 'UserLinksController@downloadAllFiles')->name('downloadAll');
     Route::post('details/{link}', 'UserLinksController@uploadFiles')->name('upload');
     Route::get('details/{link}', 'UserLinksController@details')->name('details');
     Route::get('/', 'UserLinksController@index')->name('index');
@@ -80,6 +81,7 @@ Route::middleware(['password_expired'])->group(function ()
         //////////////////////////  File Links Routes  //////////////////////////////////////////
         Route::prefix('links')->name('links.')->group(function()
         {
+            Route::get('download-all/{id}', 'FileLinksController@downloadAllFiles')->name('downloadAll');
             Route::post('addFile/{id}', 'FileLinksController@submitAddFile')->name('submitAdd');
             Route::get('addFile/{id}', 'FileLinksController@addFileForm')->name('addFile');
             Route::get('note/{id}', 'FileLinksController@getNote')->name('note');
