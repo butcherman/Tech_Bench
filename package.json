@@ -20,7 +20,7 @@
         "vue": "^2.5.17"
     },
     "dependencies": {
-        "clipboard": "^2.0.1",
+        "clipboard": "^2.0.4",
         "datatables.net-bs4": "1.10.16",
         "dropzone": "^5.4.0",
         "fastselect": "^0.7.3",

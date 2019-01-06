@@ -69,6 +69,8 @@ cd $PROD_DIR
 #php artisan route:cache
 
 #  Bring the application back online
+#  Create the symbolic link for public storage
+php artisan storage:link >> $LOGFILE
 php artisan up | tee -a $LOGFILE
 
 tput setaf 4

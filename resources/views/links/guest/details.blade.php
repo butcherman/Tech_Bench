@@ -32,6 +32,13 @@
                                     </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <a href="{{route('userLink.downloadAll', ['id' => $hash])}}" class="btn btn-info">Download All</a>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

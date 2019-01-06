@@ -3,6 +3,13 @@ $(document).ready(function()
 {
     loadFiles();
     
+    //  Copy link details to clipboard
+    var clip = new ClipboardJS('.copy-btn');
+    clip.on('success', function()
+    {
+        $('.copy-btn').removeClass('btn-info').addClass('btn-success');
+    });
+    
     //  Edit a link's details
     $('#edit-link-details').on('click', function()
     {
@@ -44,6 +51,44 @@ $(document).ready(function()
             $('.select-yes').on('click', function()
             {
                 deleteFile(fileID);
+            });
+        });
+    });
+    
+    //  Delete multiple download files attached to the link
+    $(document).on('click', '#delete-multiple-down', function()
+    {
+        $('#edit-modal').find('.modal-title').text('Delete File');
+        $('#edit-modal').find('.modal-body').load('{{route('confirm')}}', function()
+        {
+            $('.select-yes').on('click', function()
+            {
+                $('.checkbox-file-down').each(function()
+                {
+                    if($(this).is(':checked'))
+                    {
+                        deleteFile($(this).val());
+                    }
+                });
+            });
+        });
+    });
+    
+    //  Delete multiple upload files attached to the link
+    $(document).on('click', '#delete-multiple-up', function()
+    {
+        $('#edit-modal').find('.modal-title').text('Delete File');
+        $('#edit-modal').find('.modal-body').load('{{route('confirm')}}', function()
+        {
+            $('.select-yes').on('click', function()
+            {
+                $('.checkbox-file-up').each(function()
+                {
+                    if($(this).is(':checked'))
+                    {
+                        deleteFile($(this).val());
+                    }
+                });
             });
         });
     });

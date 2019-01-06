@@ -9,6 +9,7 @@
     border-radius: 7px;
     background-color: #c8dadf;
     height: 250px;
+    overflow: auto;
     @extend .pointer;
     .dz-image, .dz-success-mark, .dz-error-mark, .dz-size {
         display: none;

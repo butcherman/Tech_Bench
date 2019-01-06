@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Zip;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
@@ -110,8 +112,11 @@ class FileLinksController extends Controller
             return view('links.badLink');
         }
         
+        $emailMsg = "mailto:?subject=A File Link Has Been Created For You&body=View the link details here:  ".route('userLink.details', ['link' => $linkData->link_hash]);
+        
         return view('links.details', [
-            'data' => $linkData
+            'data' => $linkData,
+            'emMsg' => $emailMsg
         ]);
     }
     
@@ -137,8 +142,9 @@ class FileLinksController extends Controller
         }
         
         return view('links.fileList', [
-            'files' => $files,
-            'type'  => $type
+            'files'  => $files,
+            'type'   => $type,
+            'linkID' => $linkID
         ]);
     }
     
@@ -196,6 +202,27 @@ class FileLinksController extends Controller
         return view('links.form.editLink', [
             'data' => $linkData
         ]);
+    }
+    
+    //  Download all files uploaded to a link
+    public function downloadAllFiles($linkID)
+    {
+        $files = Files::where('file_link_files.link_id', $linkID)
+            ->where('file_link_files.upload', true)
+            ->join('file_link_files', 'files.file_id', '=', 'file_link_files.file_id')
+            ->with('FileLinkNotes')
+            ->get();
+        $path = config('filesystems.disks.local.root').DIRECTORY_SEPARATOR;
+        
+        $zip = Zip::create($path.'download.zip');
+        foreach($files as $file)
+        {
+            $zip->add($path.$file->file_link.$file->file_name);
+        }
+        
+        $zip->close();
+        
+        return response()->download($path.'download.zip')->deleteFileAfterSend(true);        
     }
 
     //  Submit the edit link form

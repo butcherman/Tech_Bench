@@ -2,6 +2,7 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
+                <th></th>
                 <th>File Name:</th>
                 <th>Date Added:</th>
                 <th>Actions:</th>
@@ -11,6 +12,11 @@
             @if(!$files->isEmpty())
                 @foreach($files as $file)
                     <tr>
+                        @if($type === 'down')
+                            <td class="text-center"><input type="checkbox" class="checkbox-file-down" value="{{$file->link_file_id}}" /></td>
+                        @elseif($type === 'up')
+                            <td class="text-center"><input type="checkbox" class="checkbox-file-up" value="{{$file->link_file_id}}" /></td>
+                        @endif
                         <td>
                             <a href="{{route('downloadPage', ['id' => $file->file_id, 'name' => $file->file_name])}}">{{$file->file_name}}</a>
                             @if(!empty($file->FileLinkNotes))
@@ -23,14 +29,26 @@
                 @endforeach
             @else
                 <tr>
-                    <td colspan="3" class="text-center">No Files</td>
+                    <td colspan="4" class="text-center">No Files</td>
                 </tr>
             @endif
         </tbody>
         @if($type === 'down')
             <tfoot>
                 <tr>
-                    <td colspan="3" class="text-center"><a href="#edit-modal" data-toggle="modal" class="btn btn-info" id="add-link-file">Add File</a></td>
+                    <td colspan="4" class="text-center">
+                        <a href="#edit-modal" data-toggle="modal" class="btn btn-info" id="add-link-file">Add File</a>
+                        <a href="#edit-modal" data-toggle="modal" class="btn btn-info" id="delete-multiple-down">Delete Checked</a>
+                    </td>
+                </tr>
+            </tfoot>
+        @elseif($type === 'up')
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-center">
+                        <a href="#edit-modal" data-toggle="modal" class="btn btn-info" id="delete-multiple-up">Delete Checked</a>
+                        <a href="{{route('links.downloadAll', ['id' => $linkID])}}" id="download-all-files" class="btn btn-info">Download All</a>
+                    </td>
                 </tr>
             </tfoot>
         @endif

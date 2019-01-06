@@ -7,19 +7,19 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root'   => env('ROOT_FOLDER', storage_path('app/files')),
+            'root'   => env('ROOT_FOLDER', storage_path('app'.DIRECTORY_SEPARATOR.'files')),
         ],
 
         'public' => [
             'driver'     => 'local',
-            'root'       => storage_path('app/public'),
-            'url'        => env('APP_URL').'/storage',
+            'root'       => storage_path('app'.DIRECTORY_SEPARATOR.'public'),
+            'url'        => env('APP_URL').DIRECTORY_SEPARATOR.'/storage',
             'visibility' => 'public',
         ],
         
         'backup' => [
             'driver' => 'local',
-            'root'   => env('BACKUP_FOLDER', storage_path('app/backups')),
+            'root'   => env('BACKUP_FOLDER', storage_path('app'.DIRECTORY_SEPARATOR.'backups')),
         ],
         
         'logs' => [

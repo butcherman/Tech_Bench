@@ -37,8 +37,8 @@
                 <div class="card-header"><h5 class="card-title">Actions:</h5></div>
                 <div class="card-body">
                     <a href="#edit-modal" id="edit-link-details" class="btn btn-block btn-info" data-toggle="modal">Edit Link Details</a>
-<!--                    <button class="btn btn-block btn-info copy-btn" data-clipboard-text="{{route('userLink.details', ['link' => $data->link_hash])}}">Copy Link URL To Clipboard</button>-->
-<!--                    <a href="" class="btn btn-block btn-info">Email Link</a>-->
+                    <button class="btn btn-block btn-info copy-btn" data-clipboard-text="{{route('userLink.details', ['link' => $data->link_hash])}}">Copy Link URL To Clipboard</button>
+                    <a href="{{$emMsg}}" class="btn btn-block btn-info">Email Link</a>
                     <a href="#edit-modal" id="delete-link-btn" class="btn btn-block btn-info" data-toggle="modal">Delete Link</a>
                 </div>
             </div>   
@@ -67,5 +67,6 @@
 @endsection
 
 @section('script')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" async></script>
     @include('links.script.details')
 @endsection
