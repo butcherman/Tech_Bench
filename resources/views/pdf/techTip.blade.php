@@ -31,7 +31,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-10" id="tech-tip-information">
-            {!!$data->description!!}
+            {!! str_replace('/storage/img/', public_path().'/storage/img/', $data->description) !!}
         </div>
     </div>
     <div class="row justify-content-center">
