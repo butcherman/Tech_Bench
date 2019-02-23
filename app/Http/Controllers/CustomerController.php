@@ -71,6 +71,19 @@ class CustomerController extends Controller
         ]);
     }
     
+    //  Check to see if a customer ID already exists
+    public function checkId($id)
+    {
+        $cust = Customers::find($id);
+        
+        if($cust === null)
+        {
+            return 'false';
+        }
+        
+        return urlencode($cust->name);
+    }
+    
     //  Toggle whether or not the customer is listed as a user favorite
     public function toggleFav($action, $custID)
     {

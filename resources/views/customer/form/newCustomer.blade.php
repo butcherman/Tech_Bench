@@ -26,6 +26,7 @@
                 <div class="row">
                     <div class="col-6">
                         {{ Form::bsText('cust_id', 'Customer Site ID', '', ['required', 'autofocus']) }}
+                        <span class="invalid-feedback" id="duplicate-customer"></span>
                     </div>
                 </div>
                 {{ Form::bsText('name', 'Customer Name', '', ['required']) }}
@@ -45,4 +46,27 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('#cust_id').on('blur', function()
+    {
+        if(!$(this).val() == '')
+        {
+            var check = $(this).val();
+            var url = '{{route('customer.checkId', ['id' => ':id'])}}';
+            url = url.replace(':id', check);
+            $.get(url, function(res)
+            {
+                if(res != 'false')
+                {
+                    var url2 = '{{route('customer.details', ['id' => ':id', 'name' => ':name'])}}';
+                    url2 = url2.replace(':id', check).replace(':name', res);
+                    $('#duplicate-customer').html('<strong>This customer ID Already exists.  Click <a href="'+url2+'">here</a> to visit their profile.').show();
+                }
+            });
+        }
+    });
+</script>
 @endsection
