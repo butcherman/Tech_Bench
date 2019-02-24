@@ -1138,7 +1138,7 @@ var modern = (function () {
         };
       }
       if (hasStatusbar(editor)) {
-        var linkHtml = '<a href="https://www.tinymce.com/?utm_campaign=editor_referral&amp;utm_medium=poweredby&amp;utm_source=tinymce" rel="noopener" target="_blank" role="presentation" tabindex="-1">tinymce</a>';
+        var linkHtml = '<a href="https://www.tiny.cloud/?utm_campaign=editor_referral&amp;utm_medium=poweredby&amp;utm_source=tinymce" rel="noopener" target="_blank" role="presentation" tabindex="-1">Tiny</a>';
         var html = global$5.translate([
           'Powered by {0}',
           linkHtml
@@ -6030,7 +6030,7 @@ var modern = (function () {
       div.innerHTML = html;
       if (!div.hasChildNodes() || div.childNodes.length > 1) {
         console.error('HTML does not have a single root node', html);
-        throw 'HTML must have a single root node';
+        throw new Error('HTML must have a single root node');
       }
       return fromDom(div.childNodes[0]);
     };
@@ -6045,8 +6045,9 @@ var modern = (function () {
       return fromDom(node);
     };
     var fromDom = function (node) {
-      if (node === null || node === undefined)
+      if (node === null || node === undefined) {
         throw new Error('Node cannot be null or undefined');
+      }
       return { dom: constant(node) };
     };
     var fromPoint = function (docElm, x, y) {
@@ -6477,7 +6478,8 @@ var modern = (function () {
     };
 
     var regularContains = function (e1, e2) {
-      var d1 = e1.dom(), d2 = e2.dom();
+      var d1 = e1.dom();
+      var d2 = e2.dom();
       return d1 === d2 ? false : d1.contains(d2);
     };
     var ieContains = function (e1, e2) {
@@ -7984,7 +7986,7 @@ var modern = (function () {
       }
     };
     var setupHideFloatPanels = function (editor) {
-      editor.on('mousedown', function () {
+      editor.on('mousedown progressstate', function () {
         FloatPanel.hideAll();
       });
     };

@@ -62,6 +62,7 @@ Route::middleware(['password_expired'])->group(function ()
             Route::resource('id', 'CustomerDetails');
             Route::get('id/{id}/{name}', 'CustomerDetails@details')->name('details');
             Route::post('search', 'CustomerController@search')->name('search');
+            Route::get('check-id/{id}', 'CustomerController@checkId')->name('checkId');
             Route::get('/', 'CustomerController@index')->name('index');
         });
 
