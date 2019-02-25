@@ -113,5 +113,5 @@
 @endsection
 
 @section('script')
-@include('customer.script.details')
+    @include('customer.script.details')
 @endsection

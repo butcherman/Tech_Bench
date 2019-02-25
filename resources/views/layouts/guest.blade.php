@@ -18,9 +18,7 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
 
     <!-- Styles -->
-    <link href="{{ asset('css/guest.css') }}" rel="stylesheet">
-    <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
-    
+    <link href="{{ asset('css/guest.css') }}" rel="stylesheet">    
 </head>
 <body role="document">
     <div class="container-fluid" role="main">

@@ -15740,6 +15740,15 @@ label {
   color: #000;
 }
 
+.bookmark-card {
+  background: #e2e2e2;
+  background: -webkit-gradient(linear, left top, left bottom, from(#17a2b8), color-stop(#49d3e9), to(#8ee4f1));
+  background: linear-gradient(#17a2b8, #49d3e9, #8ee4f1);
+  border: none;
+  -webkit-box-shadow: 5px 5px #bceef6;
+  box-shadow: 5px 5px #bceef6;
+}
+
 .bookmark-unchecked {
   color: #C4C4C4;
 }

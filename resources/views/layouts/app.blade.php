@@ -14,8 +14,6 @@
     
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    
-    <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -75,17 +73,15 @@
                        onclick="event.preventDefault();
                                      document.getElementById('logout-form').submit();">
                         <i class="fa fa-fw fa-sign-out"></i>
-                        {{ __('Logout') }}
+                        Logout
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
                 </li>
-<!--
                 <li class="nav-item">
-                    <a class="nav-link" href="/about" title="help"><i class="fa fa-fw fa-question-circle-o" aria-hidden="true"></i></a>
+                    <a class="nav-link" href="/about" title="Help" data-tooltip="tooltip"><i class="fa fa-fw fa-question-circle-o" aria-hidden="true"></i></a>
                 </li>
--->
             </ul>
         </div>
     </nav>
@@ -101,7 +97,7 @@
             <div class="container">
                 <div class="text-center">
                     <small>
-                        Copyright © Tech Bench 2016-2018 - 
+                        Copyright © Tech Bench 2016-2019 - 
                         Version - @version('version')
                     </small>
                 </div>

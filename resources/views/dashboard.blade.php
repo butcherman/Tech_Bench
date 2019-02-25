@@ -21,7 +21,7 @@
                     @else
                         {{$notification->data['message']}}
                     @endif
-                    <button type="button" class="close" data-dismiss="alert">
+                    <button type="button" class="close" data-dismiss="alert" title="Dismiss" data-tooltip="tooltip">
                         <span>&times;</span>
                     </button>
                 </div>
@@ -37,7 +37,7 @@
                         @if(!$custFavs->isEmpty())
                             @foreach($custFavs as $fav)
                                 <div class="col-xl-3 col-sm-6 mb-3">
-                                    <div class="card text-white bg-info o-hidden h-100">
+                                    <div class="card text-white o-hidden h-100 bookmark-card">
                                         <a href="{{route('customer.details', [$fav->cust_id, urlencode($fav->name)])}}" class="card-body text-white">
                                             <div class="card-body-icon">
                                                 <i class="fa fa-fw fa-users"></i>
@@ -64,7 +64,7 @@
                         @if(!$tipFavs->isEmpty())
                             @foreach($tipFavs as $fav)
                                 <div class="col-xl-3 col-sm-6 mb-3">
-                                    <div class="card text-white bg-info o-hidden h-100">
+                                    <div class="card text-white o-hidden h-100 bookmark-card">
                                         <a href="{{route('tip.details', [$fav->tip_id, urlencode($fav->subject)])}}" class="card-body text-white">
                                             <div class="card-body-icon">
                                                 <i class="fa fa-fw fa-lightbulb-o"></i>
@@ -86,13 +86,5 @@
 @endsection
 
 @section('script')
-<script>
-    $('.notification').on('closed.bs.alert', function()
-    {
-        var id = $(this).data('id');
-        var url = '{{route('mark-notification', ['id' => ':id'])}}';
-        url = url.replace(':id', id);
-        $.get(url);
-    });
-</script>
+   @include('_js.dashboard');
 @endsection
