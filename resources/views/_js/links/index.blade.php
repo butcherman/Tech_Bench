@@ -2,7 +2,8 @@
 $(document).ready(function()
 {
     loadLinks();
-    
+
+    //  Check or uncheck all file links
     $('.check-all-links').on('change', function()
     {
         if($(this).is(':checked'))
@@ -15,23 +16,37 @@ $(document).ready(function()
         }
     });
     
-    $('#delete-checked').on('click', function()
+    //  Delete all links that are checked
+    $('#delete-checked').on('click', function(e)
     {
-        $('#edit-modal').find('.modal-title').text('Delete Checked Links');
-        $('#edit-modal').find('.modal-body').load('{{route('confirm')}}', function()
+        e.preventDefault();
+        var checked = false;
+        $('.check-link').each(function()
         {
-            $('.select-yes').on('click', function()
+            if($(this).is(':checked'))
             {
-                $('.check-link').each(function()
+                checked = true;
+            }
+        });
+        
+        if(checked)
+        {
+            $('#edit-modal').modal('show');
+            $('#edit-modal').find('.modal-title').text('Delete Checked Links');
+            $('#edit-modal').find('.modal-body').load('{{route('confirm')}}', function()
+            {
+                $('.select-yes').on('click', function()
                 {
-                    
-                    if($(this).is(':checked'))
+                    $('.check-link').each(function()
                     {
-                        deleteLink($(this).val());
-                    }
+                        if($(this).is(':checked'))
+                        {
+                            deleteLink($(this).val());
+                        }
+                    });
                 });
             });
-        });
+        }
     });
     
     $('#file-links-table').on('click', '.edit-link', function()
@@ -43,6 +58,7 @@ $(document).ready(function()
         {
             $('#edit-file-link-form').on('submit', function(e)
             {
+                $(this).find(':submit').val('Please Wait...').attr('disabled', 'disabled');
                 e.preventDefault();
                 $.post($(this).attr('action'), $(this).serialize(), function(res)
                 {

@@ -10,9 +10,19 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             {!! Form::open(['route' => 'links.details.store', 'id' => 'new-file-link-form', 'enctype' => 'multipart/form-data', 'files' => true]) !!}
-                {{ Form::bsText('name', 'Link Name', null, ['required']) }}
+                {{ Form::bsText('name', 'Link Name', null, ['placeholder' => 'Enter A Descriptive Name', 'required', 'autofocus']) }}
                 {{ Form::bsDate('expire', 'Expires On', date('Y-m-d', strtotime('+30 days')), ['required']) }}
-                @include('_inc.dropMultiFile')
+                <div class="form-group">
+                    <label for="customer-tag">Link to Customer:</label>
+                    <div class="input-group">
+                        <input class="form-control border-right-0 border" type="search" id="customer-tag" name="customer_tag" placeholder="Enter Customer Number or Click Search Icon (Optional)" autocomplete="off" />
+                        <span class="input-group-append" id="search-for-customer">
+                            <button class="btn btn-outline-secondary border-left-0 border" id="search-for-customer-button" type="button" tabindex="-1">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        </span>
+                    </div>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-5">
                         <label class="switch">
@@ -22,39 +32,15 @@
                         Allow User to Upload Files 
                     </div>
                 </div>
+                @include('_inc.dropMultiFile')
                 {{ Form::bsSubmit('Create File Link') }}
             {!! Form::close() !!}
         </div>
     </div>
 </div>
+@include('_inc.modal')
 @endsection
 
 @section('script')
-<script>
-$(document).ready(function()
-{
-    //  Initialize Drag and Drop
-    multiFileDrop($('#new-file-link-form'));
-});
-    
-function uploadComplete(res)
-{
-    if($.isNumeric(res))
-    {
-        url = '{{ route('links.info', ['id' => ':id', 'subj' => ':sub']) }}';
-        url = url.replace(':id', res);
-        url = url.replace(':sub', $('#name').val());
-        window.location.replace(url);
-    }
-    else
-    {
-        uploadFailed(res);
-    }
-}
-function uploadFailed(res)
-{
-    var msg = 'There was a problem adding the Tech Tip.\nPlease contact the system administrator';
-    alert(msg+res);
-}
-</script>
+@include('_js.links.newLink')
 @endsection

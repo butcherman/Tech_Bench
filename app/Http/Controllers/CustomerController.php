@@ -71,6 +71,29 @@ class CustomerController extends Controller
         ]);
     }
     
+    //  Search for the customer based on their ID - For new file link form
+    public function searchID(Request $request)
+    {
+        //  Determine if a customer number/name has already been entered
+        if(!empty($request->name))
+        {
+            $split = explode(' ', $request->name);
+            if($split[1] === '-')
+            {
+                $request->name = $split[0];
+            }
+        }
+        
+        $res = Customers::where('cust_id', 'like', '%'.$request->name.'%')
+            ->orWhere('name', 'like', '%'.$request->name.'%')
+            ->orderBy('name')
+            ->get();
+        
+        return view('customer.link_list', [
+            'list' => $res
+        ]);
+    }
+    
     //  Check to see if a customer ID already exists
     public function checkId($id)
     {

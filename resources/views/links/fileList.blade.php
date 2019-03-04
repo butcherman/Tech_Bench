@@ -24,7 +24,10 @@
                             @endif
                         </td>
                         <td>{{date('M j, Y', strtotime($file->created_at))}}</td>
-                        <td><a href="#edit-modal" title="Remove File" data-toggle="modal" data-tooltip="tooltip" data-id="{{$file->link_file_id}}" class="text-muted remove-file"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                        <td>
+                            <a href="#edit-modal" title="Move to Customer Files" data-toggle="modal" data-tooltip="tooltip" data-id="{{$file->link_file_id}}" class="text-muted move-file"><i class="fa fa-share"></i></a>
+                            <a href="#edit-modal" title="Remove File" data-toggle="modal" data-tooltip="tooltip" data-id="{{$file->link_file_id}}" class="text-muted remove-file"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </td>
                     </tr>
                 @endforeach
             @else
@@ -38,7 +41,7 @@
                 <tr>
                     <td colspan="4" class="text-center">
                         <a href="#edit-modal" data-toggle="modal" class="btn btn-info" id="add-link-file">Add File</a>
-                        <a href="#edit-modal" data-toggle="modal" class="btn btn-info" id="delete-multiple-down">Delete Checked</a>
+                        <button class="btn btn-info" id="delete-multiple-down">Delete Checked</button>
                     </td>
                 </tr>
             </tfoot>
@@ -46,7 +49,7 @@
             <tfoot>
                 <tr>
                     <td colspan="4" class="text-center">
-                        <a href="#edit-modal" data-toggle="modal" class="btn btn-info" id="delete-multiple-up">Delete Checked</a>
+                        <button class="btn btn-info" id="delete-multiple-up">Delete Checked</button>
                         <a href="{{route('links.downloadAll', ['id' => $linkID])}}" id="download-all-files" class="btn btn-info">Download All</a>
                     </td>
                 </tr>

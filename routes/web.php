@@ -53,6 +53,7 @@ Route::middleware(['password_expired'])->group(function ()
         {
             Route::get('download-note/{id}', 'CustomerController@generatePDF')->name('downloadNote');
             Route::get('fav/{action}/{id}', 'CustomerController@toggleFav')->name('toggleFav');
+            Route::get('file-types', 'CustomerFilesController@getFileTypes')->name('getFileTypes');
             Route::resource('files', 'CustomerFilesController');
             Route::resource('notes', 'CustomerNotesController');
             Route::get('download-contact/{id}', 'CustomerContactsController@downloadVCard')->name('vcard');
@@ -61,6 +62,7 @@ Route::middleware(['password_expired'])->group(function ()
             Route::resource('systems', 'CustomerSystemsController');
             Route::resource('id', 'CustomerDetails');
             Route::get('id/{id}/{name}', 'CustomerDetails@details')->name('details');
+            Route::post('search-id', 'CustomerController@searchID')->name('searchID');
             Route::post('search', 'CustomerController@search')->name('search');
             Route::get('check-id/{id}', 'CustomerController@checkId')->name('checkId');
             Route::get('/', 'CustomerController@index')->name('index');
@@ -82,7 +84,12 @@ Route::middleware(['password_expired'])->group(function ()
         //////////////////////////  File Links Routes  //////////////////////////////////////////
         Route::prefix('links')->name('links.')->group(function()
         {
+            Route::post('instructions/{id}', 'FileLinksController@submitInstructions')->name('submitInstructions');
+            Route::get('instructions/{id}', 'FileLinksController@instructionsForm')->name('instructionForm');
+            Route::post('move-file', 'FileLinksController@moveFile')->name('moveFile');
             Route::get('download-all/{id}', 'FileLinksController@downloadAllFiles')->name('downloadAll');
+            Route::put('link-customer/{id}', 'FileLinksController@submitCustForm')->name('updateCustomer');
+            Route::get('link-customer/{id}', 'FileLinksController@attachCustForm')->name('link-cust');
             Route::post('addFile/{id}', 'FileLinksController@submitAddFile')->name('submitAdd');
             Route::get('addFile/{id}', 'FileLinksController@addFileForm')->name('addFile');
             Route::get('note/{id}', 'FileLinksController@getNote')->name('note');

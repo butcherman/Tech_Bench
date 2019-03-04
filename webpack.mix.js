@@ -14,5 +14,6 @@ let mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/guest.scss', 'public/css')
-    .sass('resources/sass/pdfDownload.scss', 'public/css');
+    .sass('resources/sass/pdfDownload.scss', 'public/css')
+    .copy('node_modules/tinymce/skins', 'public/js/skins');
 //    .copyDirectory('node_modules/tinymce', 'public/js/tinymce');

@@ -14249,3 +14249,9 @@ body {
   display: inline;
 }
 
+#guest-link-instructions {
+  background-color: #ffdf80;
+  padding: 10px;
+  border-radius: 10px;
+}
+

@@ -86,6 +86,21 @@ class CustomerFilesController extends Controller
             'files' => $files
         ]);
     }
+    
+    //  Get the types of files that can be attached to a customer
+    public function getFileTypes()
+    {
+        $fileTypes = CustomerFileTypes::all();
+        $fTypes    = [];
+        foreach($fileTypes as $type)
+        {
+            $fTypes[$type->file_type_id] = $type->description;
+        }
+        
+        return view('customer.form.fileTypes', [
+            'fileTypes' => $fTypes
+        ]);
+    }
 
     //  Edit a customer file
     public function edit($id)

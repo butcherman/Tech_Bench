@@ -42,7 +42,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-4">
-            <a href="#edit-modal" class="btn btn-info btn-block" id="delete-checked" data-toggle="modal">Delete Checked Links</a>
+            <button class="btn btn-info btn-block" id="delete-checked">Delete Checked Links</button>
         </div>
     </div>
 </div>
@@ -50,5 +50,5 @@
 @endsection
 
 @section('script')
-    @include('links.script.links')
+@include('_js.links.index')
 @endsection

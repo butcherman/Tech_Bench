@@ -18,7 +18,7 @@
                     {!! Form::open(['route' => 'login', 'id' => 'user-login-form']) !!}
                         <div class="row justify-content-center">
                             <div class="col-8">
-                                {{ Form::bsText('username', 'Username', null, ['placeholder' => 'Enter Username', 'required', 'autofucus']) }}
+                                {{ Form::bsText('username', 'Username', null, ['placeholder' => 'Enter Username', 'required', 'autofocus']) }}
                                 {{ Form::bsPassword('password', 'Password', null, ['placeholder' => 'Enter Password', 'required']) }}
                             </div>
                         </div>

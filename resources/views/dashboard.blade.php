@@ -86,5 +86,5 @@
 @endsection
 
 @section('script')
-   @include('_js.dashboard');
+@include('_js.dashboard')
 @endsection

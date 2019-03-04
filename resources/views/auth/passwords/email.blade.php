@@ -23,7 +23,7 @@
                     {!! Form::open(['route' => 'password.email', 'id' => 'password-reset-form']) !!}
                         <div class="row justify-content-center">
                             <div class="col-8">
-                                {{Form::bsEmail('email', 'Email', null, ['placeholder' => 'Enter Your Email Address'])}}
+                                {{Form::bsEmail('email', 'Email', null, ['placeholder' => 'Enter Your Email Address', 'autofocus'])}}
                             </div>
                         </div>
                         <div class="row justify-content-center">

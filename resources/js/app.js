@@ -6,7 +6,14 @@ require('datatables.net-bs4');
 require('dropzone');
 require('select2');
 require('fastselect');
-//require('clipboard');
+var ClipboardJS = require('clipboard');
+
+//  TinyMCE library
+require('tinymce');
+require('tinymce/themes/modern');
+require('tinymce/themes/mobile');
+require('tinymce/plugins/autolink');
+require('tinymce/plugins/table');
 
 $(document).ready(function()
 {
@@ -30,17 +37,26 @@ $(document).ready(function()
     {
         $(this).find(':submit').val('Logging In...').attr('disabled', 'disabled');
     });
+    
+    //  Reset the Edit Modal any time it is closed
+    $('#edit-modal').on('hidden.bs.modal', function()
+    {
+        resetEditModal();
+    });
 });
 
-//  Initialize any tooltips on the page
+//  Destroy and re=initialize any tooltips on the page
 function initTooltip()
 {
-    $('[data-tooltip="tooltip"]').tooltip();
+    $('[data-tooltip="tooltip"]').tooltip('dispose');
+    $('[data-tooltip="tooltip"]').tooltip({
+        trigger: 'hover'
+    });
 }
 
 /////////////////////////// Drag and Drop/File Upload Functions ////////////////////////////////////
 //  Initialize drag and drop for only one file
-function fileDrop(form)
+export function fileDrop(form)
 {
     //  Initialize Drag and Drop            
     var drop = $('#dropzone-box').dropzone(
@@ -58,6 +74,8 @@ function fileDrop(form)
             form.on('submit', function(e, formData)
             {
                 e.preventDefault();
+                //  Disable submit button
+                form.find(':submit').val('Loading...').attr('disabled', 'disabled');
                 myDrop.processQueue();
                 $('#forProgressBar').show();
                 $('.submit-button').attr('disabled', true);
@@ -92,7 +110,7 @@ function fileDrop(form)
 }
 
 //  Initialize drag and drop for multiple file uploads
-function multiFileDrop(form)
+export function multiFileDrop(form)
 {
     //  Initialize Drag and Drop            
     var drop = $('#dropzone-box').dropzone(
@@ -110,6 +128,9 @@ function multiFileDrop(form)
             form.on('submit', function(e, formData)
             {
                 e.preventDefault();
+                //  Disable submit button
+                form.find(':submit').val('Loading...').attr('disabled', 'disabled');
+                //  Determine if there is one or more files to add
                 if(myDrop.getQueuedFiles().length > 0)
                 {
                     myDrop.processQueue();
@@ -118,6 +139,7 @@ function multiFileDrop(form)
                 }
                 else
                 {
+                    //  If there are no files, just submit the form
                     $.post(form.attr('action'), form.serialize(), function(data)
                     {
                         uploadComplete(data);
@@ -156,7 +178,7 @@ function multiFileDrop(form)
 }
 
 //  Reset the progress bar and drag and drop box
-function resetProgressBar()
+export function resetProgressBar()
 {
     $('#dragndrop-notice').text('Or Drag Files Here');
     $('#progressBar').css('width', '0%').attr('aria-valuenow', 0);
@@ -167,7 +189,9 @@ function resetProgressBar()
 //  Reset the Edit Modal to its default state
 function resetEditModal()
 {
+    initTooltip();
     $('#edit-modal').modal('hide');
+    $('#edit-modal').find('.modal-dialog').removeClass('modal-lg');
     $('#edit-modal').find('.modal-title').text('');
     $('#edit-modal').find('.modal-body').text('');
 }
@@ -175,7 +199,9 @@ function resetEditModal()
 //////////////////////////////////////////////////////////////////////////////////////////
 
 //  Make the functions in this file globally accessable
-//window.resetProgressBar = resetProgressBar;
-//window.resetEditModal   = resetEditModal;
-//window.fileDrop         = fileDrop;
-//window.multiFileDrop    = multiFileDrop;
+window.initTooltip      = initTooltip;
+window.resetProgressBar = resetProgressBar;
+window.resetEditModal   = resetEditModal;
+window.fileDrop         = fileDrop;
+window.multiFileDrop    = multiFileDrop;
+window.ClipboardJS      = ClipboardJS;

@@ -4,10 +4,22 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>{{env('APP_NAME')}}</h1></div>
+            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>{{config('app.name')}}</h1></div>
         </div>
     </div>
     <div class="jumbotron">
+        @if($details->note != '')
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <h3>Instructions:</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-10" id="guest-link-instructions">
+                    {!! $details->note !!}
+                </div>
+            </div>
+        @endif
         @if(!$files->isEmpty())
             <div class="row justify-content-center">
                 <div class="col-12">

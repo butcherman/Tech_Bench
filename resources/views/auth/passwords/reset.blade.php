@@ -19,7 +19,7 @@
                         <input type="hidden" name="token" value="{{ $token }}">
                         <div class="row justify-content-center">
                             <div class="col-8">
-                                {{Form::bsEmail('email', 'Email', null, ['placeholder' => 'Enter Your Email Address'])}}
+                                {{Form::bsEmail('email', 'Email', null, ['placeholder' => 'Enter Your Email Address', 'autofocus'])}}
                                 {{Form::bsPassword('password', 'Password')}}
                                 {{Form::bsPassword('password_confirmation', 'Confirm Password')}}
                             </div>

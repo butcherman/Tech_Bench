@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FileLinks extends Model
 {
     protected $primaryKey = 'link_id';
-    protected $fillable = ['user_id', 'link_hash', 'link_name', 'expire', 'allow_upload'];
+    protected $fillable = ['user_id', 'cust_id', 'link_hash', 'link_name', 'note', 'expire', 'allow_upload'];
     
     public function users()
     {
