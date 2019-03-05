@@ -1,207 +1,33 @@
-/** global: maxUpload */
-//  Third Party Libraries
+
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
+
 require('./bootstrap');
-require('jquery-easing');
-require('datatables.net-bs4');
-require('dropzone');
-require('select2');
-require('fastselect');
-var ClipboardJS = require('clipboard');
 
-//  TinyMCE library
-require('tinymce');
-require('tinymce/themes/modern');
-require('tinymce/themes/mobile');
-require('tinymce/plugins/autolink');
-require('tinymce/plugins/table');
+window.Vue = require('vue');
 
-$(document).ready(function()
-{
-    //  Enable any tooltips on the page
-    initTooltip();
-    
-    //  Send email to reset password form
-    $('#password-reset-form').on('submit', function()
-    {
-        $(this).find(':submit').val('Please Wait...').attr('disabled', 'disabled');
-    });
+/**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ *
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
 
-    //  Reset password form
-    $('#password-reset-confirm').on('submit', function()
-    {
-        $(this).find(':submit').val('Please Wait...').attr('disabled', 'disabled');
-    });
+// const files = require.context('./', true, /\.vue$/i);
+// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-    //  User Login form
-    $('#user-login-form').on('submit', function()
-    {
-        $(this).find(':submit').val('Logging In...').attr('disabled', 'disabled');
-    });
-    
-    //  Reset the Edit Modal any time it is closed
-    $('#edit-modal').on('hidden.bs.modal', function()
-    {
-        resetEditModal();
-    });
+Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
+/**
+ * Next, we will create a fresh Vue application instance and attach it to
+ * the page. Then, you may begin adding components to this application
+ * or customize the JavaScript scaffolding to fit your unique needs.
+ */
+
+const app = new Vue({
+    el: '#app'
 });
-
-//  Destroy and re=initialize any tooltips on the page
-function initTooltip()
-{
-    $('[data-tooltip="tooltip"]').tooltip('dispose');
-    $('[data-tooltip="tooltip"]').tooltip({
-        trigger: 'hover'
-    });
-}
-
-/////////////////////////// Drag and Drop/File Upload Functions ////////////////////////////////////
-//  Initialize drag and drop for only one file
-export function fileDrop(form)
-{
-    //  Initialize Drag and Drop            
-    var drop = $('#dropzone-box').dropzone(
-    {
-        url: form.attr('action'),
-        autoProcessQueue: false,
-        maxFilesize: maxUpload,
-        uploadMultiple: false,
-        parallelUploads: 1,
-        maxFiles: 1,
-        addRemoveLinks: true,
-        init: function()
-        {
-            var myDrop = this;
-            form.on('submit', function(e, formData)
-            {
-                e.preventDefault();
-                //  Disable submit button
-                form.find(':submit').val('Loading...').attr('disabled', 'disabled');
-                myDrop.processQueue();
-                $('#forProgressBar').show();
-                $('.submit-button').attr('disabled', true);
-            });
-            this.on('sending',  function(file, xhr, formData)
-            {
-                var formArray = form.serializeArray();
-                $.each(formArray, function()
-                {
-                    formData.append(this.name, this.value);
-                });
-            });
-            this.on('totaluploadprogress', function(progress)
-            {
-                $("#progressBar").css("width", Math.round(progress)+"%");
-                $("#progressStatus").text(Math.round(progress)+"%");
-            });
-            this.on('reset', function()
-            {
-                $('#form-errors').addClass('d-none');
-            });
-            this.on('success', function(files, response)
-            {    
-                uploadComplete(response);
-            });
-            this.on('error', function(file, response)
-            {
-                uploadFailed(response);
-            });
-        }
-    });  
-}
-
-//  Initialize drag and drop for multiple file uploads
-export function multiFileDrop(form)
-{
-    //  Initialize Drag and Drop            
-    var drop = $('#dropzone-box').dropzone(
-    {
-        url: form.attr('action'),
-        autoProcessQueue: false,
-        uploadMultiple: true,
-        parallelUploads: 10,
-        maxFiles: 10,
-        maxFilesize: maxUpload,
-        addRemoveLinks: true,
-        init: function()
-        {
-            var myDrop = this;
-            form.on('submit', function(e, formData)
-            {
-                e.preventDefault();
-                //  Disable submit button
-                form.find(':submit').val('Loading...').attr('disabled', 'disabled');
-                //  Determine if there is one or more files to add
-                if(myDrop.getQueuedFiles().length > 0)
-                {
-                    myDrop.processQueue();
-                    $('#forProgressBar').show();
-                    $('.submit-button').attr('disabled', true);
-                }
-                else
-                {
-                    //  If there are no files, just submit the form
-                    $.post(form.attr('action'), form.serialize(), function(data)
-                    {
-                        uploadComplete(data);
-                    });
-                }
-            });
-            this.on('sendingmultiple',  function(file, xhr, formData)
-            {
-                var formArray = form.serializeArray();
-                $.each(formArray, function()
-                {
-                    formData.append(this.name, this.value);
-                });
-            });
-            this.on('totaluploadprogress', function(progress)
-            {
-                $("#progressBar").css("width", Math.round(progress)+"%");
-                $("#progressStatus").text(Math.round(progress)+"%");
-                console.log(progress);
-            });
-            this.on('reset', function()
-            {
-                $('#form-errors').addClass('d-none');
-            });
-            this.on('successmultiple', function(files, response)
-            {    
-                this.removeAllFiles(true);
-                uploadComplete(response);
-            });
-            this.on('errormultiple', function(file, response)
-            {
-                uploadFailed(response);
-            });
-        }
-    });
-}
-
-//  Reset the progress bar and drag and drop box
-export function resetProgressBar()
-{
-    $('#dragndrop-notice').text('Or Drag Files Here');
-    $('#progressBar').css('width', '0%').attr('aria-valuenow', 0);
-    $('#progressStatus').text('');
-    $('#forProgressBar').hide();
-}
-
-//  Reset the Edit Modal to its default state
-function resetEditModal()
-{
-    initTooltip();
-    $('#edit-modal').modal('hide');
-    $('#edit-modal').find('.modal-dialog').removeClass('modal-lg');
-    $('#edit-modal').find('.modal-title').text('');
-    $('#edit-modal').find('.modal-body').text('');
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-//  Make the functions in this file globally accessable
-window.initTooltip      = initTooltip;
-window.resetProgressBar = resetProgressBar;
-window.resetEditModal   = resetEditModal;
-window.fileDrop         = fileDrop;
-window.multiFileDrop    = multiFileDrop;
-window.ClipboardJS      = ClipboardJS;
