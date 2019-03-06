@@ -1,14 +1,172 @@
+// Variables and app body styles
+@import "variables";
+@import "app_body";
 
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
-// Variables
-@import 'variables';
-
-// Bootstrap
+// Third Party Libraries
 @import '~bootstrap/scss/bootstrap';
+@import '~font-awesome/scss/font-awesome';
+//@import '~dropzone/dist/dropzone';
+//@import '~datatables.net-bs4/css/dataTables.bootstrap4';
+//@import '~select2/dist/css/select2';
+//@import '~fastselect/dist/fastselect';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+//  Shared styles between all layouts
+//@import 'fileDrag';
+
+.category-button {
+    font-weight: bold;
+    text-decoration: none;
+    color: #000;
+}
+
+//  Dashboard Bookmarks
+.bookmark-card {
+    background: #e2e2e2;
+    background: -moz-linear-gradient(#17a2b8, #49d3e9, #8ee4f1); 
+    background: -webkit-linear-gradient(#17a2b8, #49d3e9, #8ee4f1); 
+    background: linear-gradient(#17a2b8, #49d3e9, #8ee4f1); 
+    border: none;
+
+    -webkit-box-shadow: 5px 5px #bceef6;
+       -moz-box-shadow: 5px 5px #bceef6;
+            box-shadow: 5px 5px #bceef6;          
+}
+
+//  Bookmark Styles
+.bookmark-unchecked {
+    color: #C4C4C4;
+    @extend .pointer;
+}
+
+.bookmark-checked {
+    color: #D46E70;
+    @extend .pointer;
+}
+
+//  Hide the duplicate system notification
+#show-duplicates {
+    display: none;
+}
+
+//  Compact the customer system data list a little more
+.tab-pane dd {
+    margin: 0;
+}
+
+//  Hide and show any sensitive fields in the customer system information
+.password-field {
+    > .password-shown {
+        display: none;
+    }
+    &:hover {
+        .password-hidden {
+            display: none;
+        }
+        .password-shown {
+            display: inline;
+        }
+    }
+}
+
+//  Customer Note
+.customer-note-card {
+    .card {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        .card-header {
+            @extend .pointer;
+        }
+        .card-body {
+            max-height: 50px;
+        }
+        .card-footer {
+            display: none;
+        }
+    }
+}
+
+.bigger-note {
+    height: 500px;
+    overflow-y: scroll;
+}
+
+//  Tech Tip System Tags
+.tech-tip-tag-wrapper {
+    position: relative;
+    min-height: 37px;
+}
+
+.tech-tip-tag {
+    background-color: #CFECEF;
+    border: 1px solid #CFECEF;
+    border-radius: 4px;
+    display: inline-block;
+    height: 22px;
+    padding: 0 7px;
+    margin-left: 3px;
+    .close {
+        margin-left: 3px;
+    }
+}
+
+//  Tech tip details
+.tech-tip-details {
+    a, span {
+        padding: 0 5px;
+        border-right: 1px solid #ccc;
+        color: #ccc;
+        display: inline-block;
+        &:last-child {
+            border-right: none;
+        }
+        span {
+            display: inline-block;
+        }
+    }
+}
+
+#tech-tip-information {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    margin: 15px;
+    padding: 15px;
+    min-height: 60vh;
+}
+
+#tech-tip-attachements {
+    h4 {
+        color: #8F8686;
+        border-bottom: 1px solid #000;
+    }
+    a {
+        color: #777;
+        &:hover {
+            color: #0000FF;
+        }
+    }
+}
+
+#tech-tip-comments {
+    margin-top: 10px;
+    h4 {
+        color: #8F8686;
+        border-bottom: 1px solid #000;
+    }
+    .comment-author {
+        color: #777;
+    }
+}
+
+//  Modified Fast Select Classes
+.fstElement {
+    width: 100%;
+    font-size: 0.75em;
+    overflow: visible;
+    border-radius: 5px;
+    .fstControls {
+        width: 100%;
+        min-height: 4em;
+        overflow: visible;
+    }
 }
