@@ -12,98 +12,58 @@
     <script>var maxUpload = {{config('filesystems.paths.max_size')}}</script>
     <script src="{{ asset('js/app.js') }}"></script>
     
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
-    <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-        <a class="navbar-brand" href="{{route('dashboard')}}">Tech Bench</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="{{route('dashboard')}}">{{config('app.name', 'Tech Bench')}}</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                    <a class="nav-link" href="{{route('dashboard')}}">
+            <ul class="navbar-nav navbar-sidenav">
+                <li class="nav-item" data-tooltip="tooltip" data-placement="right" title="dashboard">
+                    <a href="{{route('dashboard')}}" class="nav-link">
                         <i class="fa fa-fw fa-home"></i>
                         <span class="nav-link-text">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="File Links">
-                    <a class="nav-link" href="{{route('links.index')}}">
+                    <a class="nav-link" href="#">
                         <i class="fa fa-fw fa-link"></i>
                         <span class="nav-link-text">File Links</span>
                     </a>
                 </li>
-                @if($current_user->hasAnyRole(['installer', 'admin']))
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Customers">
-                        <a class="nav-link" href="{{route('admin.index')}}">
-                            <i class="fa fa-fw fa-users"></i>
-                            <span class="nav-link-text">Administration</span>
-                        </a>
-                    </li>
-                @endif
-                @include('_inc.navbar')
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Customers">
-                    <a class="nav-link" href="{{route('customer.index')}}">
-                        <i class="fa fa-fw fa-users"></i>
-                        <span class="nav-link-text">Customers</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tech Tips">
-                    <a class="nav-link" href="{{route('tip.id.index')}}">
-                        <i class="fa fa-fw fa-wrench"></i>
-                        <span class="nav-link-text">Tech Tips</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Account Settings">
-                    <a class="nav-link" href="{{route('account')}}">
-                        <i class="fa fa-fw fa-user"></i>
-                        <span class="nav-link-text">Account Settings</span>
-                    </a>
-                </li> 
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                     document.getElementById('logout-form').submit();">
+                    <a href="{{route('logout')}}" class="nav-link" data-tooltip="tooltip" title="Logout">
                         <i class="fa fa-fw fa-sign-out"></i>
-                        Logout
+                        <span class="nav-link-text">Logout</span>
                     </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/about" title="Help" data-tooltip="tooltip"><i class="fa fa-fw fa-question-circle-o" aria-hidden="true"></i></a>
+                    <a class="nav-link" href="{{route('about')}}" title="Help" data-tooltip="tooltip">
+                        <i class="fa fa-fw fa-question-circle-o"></i>
+                        <span class="nav-link-text d-lg-none">Help</span>
+                    </a>
                 </li>
             </ul>
         </div>
     </nav>
-    <!--  End Navigation -->
-    <!--  Body  -->
     <div class="content-wrapper">
-        <div class="container-fluid pad-bottom">
+        <div class="container-fluid" id="app">
             @yield('breadcrumbs')
-            <!--  Primary Page Content  -->
             @yield('content')
         </div>
-        <footer class="sticky-footer pad-top">
+        <footer class="sticky-footer">
             <div class="container">
                 <div class="text-center">
-                    <small>
-                        Copyright © Tech Bench 2016-2019 - 
-                        Version - @version('version')
-                    </small>
+                    <small>Copyright &copy; Tech Bench 2016-2019 - Version - @version('version')</small>
                 </div>
             </div>
         </footer>
     </div>
-    @yield('script')
 </body>
 </html>
