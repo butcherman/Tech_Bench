@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-10 col-lg-8 col-sm-12 col-xl-6">
             <div class="card">
                 <div class="card-header text-center">
                     <strong>Login</strong>
@@ -17,13 +17,13 @@
                 <div class="card-body">
                     {!! Form::open(['route' => 'login', 'id' => 'user-login-form']) !!}
                         <div class="row justify-content-center">
-                            <div class="col-8">
+                            <div class="col-md-8">
                                 {{ Form::bsText('username', 'Username', null, ['placeholder' => 'Enter Username', 'required', 'autofocus']) }}
                                 {{ Form::bsPassword('password', 'Password', null, ['placeholder' => 'Enter Password', 'required']) }}
                             </div>
                         </div>
                         <div class="form-group row justify-content-center">
-                            <div class="col-md-4">
+                            <div class="col-md-10 col-lg-8 col-sm-12 col-xl-6 text-center">
                                 {{ Form::bsCheckbox('remember', 'Remember Me') }}
                             </div>
                         </div> 

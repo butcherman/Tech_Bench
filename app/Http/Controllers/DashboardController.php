@@ -38,6 +38,12 @@ class DashboardController extends Controller
         ]);
     }
     
+    //  About page
+    public function about()
+    {
+        return response('About Page');
+    }
+    
 //    public function markNotification($id)
 //    {
 //        $notification = Auth::user()->notifications()->where('id', $id)->first();

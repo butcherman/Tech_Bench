@@ -23,14 +23,22 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav navbar-sidenav">
-                <li class="nav-item" data-tooltip="tooltip" data-placement="right" title="dashboard">
+                <li class="nav-item">
                     <a href="{{route('dashboard')}}" class="nav-link">
                         <i class="fa fa-fw fa-home"></i>
                         <span class="nav-link-text">Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="File Links">
-                    <a class="nav-link" href="#">
+                @if(Auth::user()->hasAnyRole(['installer', 'admin']))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin.index')}}">
+                            <i class="fa fa-fw fa-users"></i>
+                            <span class="nav-link-text">Administration</span>
+                        </a>
+                    </li>
+                @endif
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('links.index')}}">
                         <i class="fa fa-fw fa-link"></i>
                         <span class="nav-link-text">File Links</span>
                     </a>
@@ -38,7 +46,7 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="{{route('logout')}}" class="nav-link" data-tooltip="tooltip" title="Logout">
+                    <a href="{{route('logout')}}" class="nav-link">
                         <i class="fa fa-fw fa-sign-out"></i>
                         <span class="nav-link-text">Logout</span>
                     </a>

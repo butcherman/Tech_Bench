@@ -6,8 +6,10 @@
  */
 
 require('./bootstrap');
+require('vue-axios'); 
 
 window.Vue = require('vue');
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -21,6 +23,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('list-file-links', require('./components/ListFileLinks.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
