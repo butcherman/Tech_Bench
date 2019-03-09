@@ -9,7 +9,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {!! Form::open(['route' => 'links.details.store', 'id' => 'new-file-link-form', 'enctype' => 'multipart/form-data', 'files' => true]) !!}
+            {!! Form::open(['route' => 'links.data.store', 'id' => 'new-file-link-form', 'enctype' => 'multipart/form-data', 'files' => true]) !!}
                 {{ Form::bsText('name', 'Link Name', null, ['placeholder' => 'Enter A Descriptive Name', 'required', 'autofocus']) }}
                 {{ Form::bsDate('expire', 'Expires On', date('Y-m-d', strtotime('+30 days')), ['required']) }}
 {{--

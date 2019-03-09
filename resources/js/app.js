@@ -5,11 +5,14 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-require('vue-axios'); 
+//require('./bootstrap');
+
+//require('axios'); 
 
 window.Vue = require('vue');
-
+window.axios = require('axios');
+window.BootstrapVue = require('bootstrap-vue');
+//require('bootstrap-vue');
 
 /**
  * The following block of code may be used to automatically register your

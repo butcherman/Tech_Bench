@@ -24,7 +24,7 @@
         "vue-template-compiler": "^2.6.8"
     },
     "dependencies": {
-        "font-awesome": "^4.7.0",
-        "vue-axios": "^2.1.4"
+        "bootstrap-vue": "^2.0.0-rc.14",
+        "font-awesome": "^4.7.0"
     }
 }

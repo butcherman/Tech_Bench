@@ -37,12 +37,12 @@ Route::middleware(['password_expired'])->group(function()
             
             
             
-            Route::resource('details', 'FileLinksController');
+            Route::resource('data', 'FileLinksController');
             
             
             
             
-            
+            Route::get('/details/{id}/{name}', 'FileLinksController@details')->name('details');
             Route::get('/', 'FileLinksController@index')->name('index');                                            
         });
         

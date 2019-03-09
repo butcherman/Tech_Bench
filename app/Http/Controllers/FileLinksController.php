@@ -122,15 +122,20 @@ class FileLinksController extends Controller
         
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Ajax call to show the links for a specific user
     public function show($id)
     {
-        //
+        $links = FileLinks::where('user_id', $id)
+            ->withCount('FileLinkFiles')
+            ->orderBy('expire', 'desc')
+            ->get();
+        
+        return response()->json($links);
+    }
+    
+    public function details($id, $name)
+    {
+        return $id.' and '.$name;
     }
 
     /**
@@ -156,14 +161,29 @@ class FileLinksController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Delete a file link
     public function destroy($id)
     {
-        //
+        //  Remove the file from database
+//        $data = FileLinkFiles::where('link_id', $id)->get();
+//        if(!$data->isEmpty())
+//        {
+//            foreach($data as $file)
+//            {
+//                $fileID = $file->file_id;
+//                $file->delete();
+//
+//                //  Delete the file if it is no longer in use
+//                Files::deleteFile($fileID);
+//            }
+//        }
+        
+        FileLinks::find($id)->delete();
+        
+        Log::info('File link deleted', ['link_id' => $id, 'user_id' => Auth::user()->user_id]);
+        
+        return response()->json([
+            'success' => true
+        ]);
     }
 }
