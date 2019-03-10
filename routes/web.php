@@ -14,6 +14,21 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 
 
+///////////////////////////  User File Link Routes to be adjusted  //////////////////////////////////////
+Route::prefix('file-links')->name('userLink.')->group(function()
+{
+    Route::get('download-all/{link}', 'UserLinksController@downloadAllFiles')->name('downloadAll');
+    Route::post('details/{link}', 'UserLinksController@uploadFiles')->name('upload');
+    Route::get('details/{link}', 'UserLinksController@details')->name('details');
+    Route::get('/', 'UserLinksController@index')->name('index');
+});
+
+
+
+
+
+
+
 /*
 *
 *   Logged in user routes

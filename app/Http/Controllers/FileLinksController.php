@@ -129,6 +129,13 @@ class FileLinksController extends Controller
             ->withCount('FileLinkFiles')
             ->orderBy('expire', 'desc')
             ->get();
+                
+        //  Reformat the expire field to be a readable date
+        foreach($links as $link)
+        {
+            $link->showClass  = $link->expire < date('Y-m-d') ? 'table-danger' : '';
+            $link->expire = date('M d, Y', strtotime($link->expire));
+        }
         
         return response()->json($links);
     }

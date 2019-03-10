@@ -12,32 +12,42 @@
         <tfoot>
             <tr>
                 <td colspan="5" class="text-center">
-                    <button class="btn btn-info" id="delete-checked" @click="deleteChecked" :disabled="button.dis">{{button.text}}</button>
+                    <click-confirm>
+                        <button class="btn btn-info" id="delete-checked" @click="deleteChecked" :disabled="button.dis">{{button.text}}</button>
+                    </click-confirm>
                 </td>
             </tr>
         </tfoot>
         <tbody>
-            <tr v-for="link in links">
+            <tr v-for="link in links" >
                 <td class="text-center"><input type="checkbox" class="check-link" :value="link.link_id" v-model="selected" /></td>
-                <td>
-                    <a :href="'/links/details/'+link.link_id+'/'+encodeURIComponent(link.link_name)">{{link.link_name}}</a>
+                <td :class=link.showClass>
+                    <a :href="routes.lnkDetails.replace(':id', link.link_id).replace(':name', link.link_name)">{{link.link_name}}</a>
                 </td>
-                <td>{{link.file_link_files_count}}</td>
-                <td>{{link.expire}}</td>
-                <td>
-                    <a href="#edit-modal" title="Edit Link" data-toggle="modal" data-tooltip="tooltip" :data-id=link.link_id class="text-muted edit-link"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
-                    <a href="#edit-modal" title="Remove Link" data-toggle="modal" data-tooltip="tooltip" :data-id=link.link_id class="text-muted remove-link"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <td :class=link.showClass>{{link.file_link_files_count}}</td>
+                <td :class=link.showClass>{{link.expire}}</td>
+                <td :class=link.showClass>
+                    <a :href="routes.emLink.replace(':hash', link.link_hash)" title="Email Link" :data-id=link.link_id class="text-muted remove-link"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                    <click-confirm class="d-inline">
+                        <span class="pointer" :data-id="link.link_id" @click="deleteLink" ><i class="fa fa-trash"></i></span>
+                    </click-confirm>
                 </td>
             </tr>
             <tr v-if="links.length === 0">
                 <td colspan="5" class="text-center">No File Links</td>
             </tr>
         </tbody> 
-    </table>
+    </table>  
 </template>
 
 <script>
     export default {
+        props: [
+            'link_details_route',
+            'get_links_route',
+            'del_link_route',
+            'em_link_route'
+        ],
         data() {
             return {
                 links:     [],
@@ -49,6 +59,13 @@
                 {
                     text: 'Delete Checked',
                     dis:   false
+                },
+                routes:
+                {
+                    lnkDetails: this.link_details_route,
+                    getLinks: this.get_links_route,
+                    delLink: this.del_link_route,
+                    emLink: this.em_link_route
                 }
             }
         },
@@ -56,16 +73,18 @@
             this.fetchLinks();
         },
         methods: {
+            //  List the links the user owns
             fetchLinks() 
             {
-                axios.get('/links/data/1')
+                axios.get(this.routes.getLinks)
                     .then(res => {
-                    this.links       = res.data;
-                    this.button.text = 'Delete Checked';
-                    this.button.dis  = false;
-                })
-                .catch(error => alert('There was an issue processing your request\nPlease try again later.'))
+                        this.links       = res.data;
+                        this.button.text = 'Delete Checked';
+                        this.button.dis  = false;
+                    })
+                    .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
             },
+            //  Activate the check all box
             select()
             {
                 this.selected = [];
@@ -77,6 +96,18 @@
                     }
                 }
             },
+            //  Delete a single link
+            deleteLink: function(e)
+            {
+                var obj = this;
+                
+                var url = obj.routes.delLink.replace(':linkID', e.currentTarget.dataset.id)
+                axios.delete(url)
+                    .then(res => {
+                        obj.fetchLinks();
+                    });
+            },
+            //  Delete multiple links
             deleteChecked()
             {
                 var obj = this;
@@ -87,11 +118,12 @@
                     obj.button.dis  = true;
                     this.selected.forEach(function(item)
                     {
-                        axios.delete('/links/data/'+item)
+                        var url = obj.routes.delLink.replace(':linkID', item)
+                        axios.delete(url)
                             .then(res => {
                                 obj.fetchLinks();
                         })
-                        .catch(error => alert('There was an issue processing your request\nPlease try again later.'))
+                        .catch(error => alert('There was an issue processing your request\nPlease try again later.  \n\nError Info: '+error))
                     });
                 }
             }

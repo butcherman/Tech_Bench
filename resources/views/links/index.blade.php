@@ -22,23 +22,11 @@
     <div class="row justify-content-center pad-top">
         <div class="col-md-10">
             <div class="table-responsive" id="file-links-table">
-                <list-file-links>
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center"><input type="checkbox" class="check-all-links" /></th>
-                                <th>Link Name</th>
-                                <th># of Files</th>
-                                <th>Expire Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="5" class="text-center"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <list-file-links 
+                    link_details_route="{{route('links.details', [':id', ':name'])}}"
+                    get_links_route="{{route('links.data.show', Auth::user()->user_id)}}" 
+                    del_link_route="{{route('links.data.destroy', ':linkID')}}"             
+                    em_link_route="mailto:?subject=A File Link Has Been Created For You&body=View the link details here: {{route('userLink.details', ':hash')}}">
                 </list-file-links>
             </div>
         </div>

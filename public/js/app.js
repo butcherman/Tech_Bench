@@ -1866,7 +1866,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['link_details_route', 'get_links_route', 'del_link_route', 'em_link_route'],
   data: function data() {
     return {
       links: [],
@@ -1877,6 +1882,12 @@ __webpack_require__.r(__webpack_exports__);
       button: {
         text: 'Delete Checked',
         dis: false
+      },
+      routes: {
+        lnkDetails: this.link_details_route,
+        getLinks: this.get_links_route,
+        delLink: this.del_link_route,
+        emLink: this.em_link_route
       }
     };
   },
@@ -1884,17 +1895,19 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchLinks();
   },
   methods: {
+    //  List the links the user owns
     fetchLinks: function fetchLinks() {
       var _this = this;
 
-      axios.get('/links/data/1').then(function (res) {
+      axios.get(this.routes.getLinks).then(function (res) {
         _this.links = res.data;
         _this.button.text = 'Delete Checked';
         _this.button.dis = false;
       }).catch(function (error) {
-        return alert('There was an issue processing your request\nPlease try again later.');
+        return alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error);
       });
     },
+    //  Activate the check all box
     select: function select() {
       this.selected = [];
 
@@ -1904,6 +1917,15 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
+    //  Delete a single link
+    deleteLink: function deleteLink(e) {
+      var obj = this;
+      var url = obj.routes.delLink.replace(':linkID', e.currentTarget.dataset.id);
+      axios.delete(url).then(function (res) {
+        obj.fetchLinks();
+      });
+    },
+    //  Delete multiple links
     deleteChecked: function deleteChecked() {
       var obj = this;
 
@@ -1911,10 +1933,11 @@ __webpack_require__.r(__webpack_exports__);
         obj.button.text = 'Loading...';
         obj.button.dis = true;
         this.selected.forEach(function (item) {
-          axios.delete('/links/data/' + item).then(function (res) {
+          var url = obj.routes.delLink.replace(':linkID', item);
+          axios.delete(url).then(function (res) {
             obj.fetchLinks();
           }).catch(function (error) {
-            return alert('There was an issue processing your request\nPlease try again later.');
+            return alert('There was an issue processing your request\nPlease try again later.  \n\nError Info: ' + error);
           });
         });
       }
@@ -22630,6 +22653,182 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./node_modules/click-confirm/dist/click-confirm.common.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/click-confirm/dist/click-confirm.common.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var bPopover = _interopDefault(__webpack_require__(/*! bootstrap-vue/es/components/popover/popover */ "./node_modules/bootstrap-vue/es/components/popover/popover.js"));
+
+var messagesDefault = {
+    title: 'Are you sure?',
+    yes: 'Yes',
+    no: 'No'
+};
+
+var component$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('span',{ref:"trigger",attrs:{"id":_vm.randomId,"tabindex":"-1"},on:{"!click":function($event){return _vm.interceptEvent($event)}}},[_vm._t("default")],2),_vm._v(" "),_c('b-popover',{ref:"popover",staticClass:"click-confirm",attrs:{"target":_vm.randomId,"show":_vm.isOpen,"placement":_vm.placement,"title":_vm.messages.title,"triggers":"blur"},on:{"update:show":function($event){_vm.isOpen=$event;},"hidden":_vm.onHidden}},[_c('div',{staticClass:"text-center"},[_c('button',{ref:"buttonYes",class:[_vm.yesClass, _vm.buttonSizeClass],on:{"click":function($event){$event.preventDefault();return _vm.onOk($event)}}},[_vm._t("confirm-yes-icon",[(_vm.yesIcon)?_c('span',{class:_vm.yesIcon,attrs:{"aria-hidden":"true"}}):_vm._e()]),_vm._v(" "+_vm._s(_vm.messages.yes)+" ")],2),_vm._v(" "),_c('button',{ref:"buttonNo",class:[_vm.noClass, _vm.buttonSizeClass],on:{"click":function($event){$event.preventDefault();return _vm.onCancel($event)}}},[_vm._t("confirm-no-icon",[(_vm.noIcon)?_c('span',{class:_vm.noIcon,attrs:{"aria-hidden":"true"}}):_vm._e()]),_vm._v(" "+_vm._s(_vm.messages.no)+" ")],2)])])],1)},staticRenderFns: [],
+    components: { bPopover: bPopover },
+
+    data: function data() {
+        return {
+            isOpen: false,
+            randomId: 'clickConfirm' + this._uid,
+            target: null,
+            allow: false
+        }
+    },
+
+    props: {
+        buttonSize: {
+            type: String,
+            default: "",
+            validator: function validator(value) {
+                return ['lg', '', 'sm'].includes(value);
+            }
+        },
+
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+
+        messages: {
+            type: Object,
+            default: function default$1() {
+                return messagesDefault;
+            }
+        },
+
+        noClass: {
+            type: [String, Array, Object],
+            default: "btn btn-secondary"
+        },
+
+        noIcon: {
+            type: [String, Array, Object],
+            default: "fa fa-times"
+        },
+
+        placement: {
+            type: String,
+            default: 'top',
+        },
+
+        yesClass: {
+            type: [String, Array, Object],
+            default: "btn btn-primary"
+        },
+
+        yesIcon: {
+            type: [String, Array, Object],
+            default: "fa fa-check"
+        }
+    },
+
+    computed: {
+        buttonSizeClass: function buttonSizeClass() {
+            return this.buttonSize ? 'btn-' + this.buttonSize : '';
+        },
+
+        messagesMerged: function messagesMerged() {
+            return Object.assign({}, messagesDefault, this.messages);
+        }
+    },
+
+    watch: {
+        disabled: function disabled(newValue) {
+            if (newValue && this.isOpen) {
+                this.onCancel();
+            }
+        }
+    },
+
+    methods: {
+        onHidden: function onHidden() {
+            this.target = null;
+        },
+
+        onOk: function onOk() {
+            if (this.target !== null) {
+                this.allow = true;
+                var mouseClick = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    composed: true
+                });
+                if (!this.target.dispatchEvent(mouseClick)) {
+                    console.error('Confirmed event failed to dispatch');
+                }
+                this.allow = false;
+            }
+            this.onCancel();
+        },
+
+        onCancel: function onCancel() {
+            this.isOpen = false;
+        },
+
+        interceptEvent: function interceptEvent(e) {
+            if (this.disabled) {
+                return;
+            }
+
+            this.target = e.target;
+
+            if (!this.allow) {
+                this.isOpen = true;
+                this.setFocusOnButtonYes();
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+            }
+        },
+
+        setFocusOnButtonYes: function setFocusOnButtonYes() {
+            var this$1 = this;
+
+            this.$nextTick(function () {
+                this$1.$nextTick(function () {
+                    if (this$1.isOpen) {
+                        this$1.$refs.buttonYes.focus();
+                    }
+                });
+            });
+        }
+    },
+
+    beforeDestroy: function beforeDestroy() {
+        if (this.isOpen) {
+            this.onCancel();
+        }
+    }
+};
+
+var clickConfirmPlugin = function (Vue, params) {
+    var name = 'click-confirm';
+    if (typeof params === 'string') { name = params; }
+
+    Vue.component(name, component$1);
+};
+
+component$1.install = clickConfirmPlugin;
+
+exports['default'] = component$1;
+exports.component = component$1;
+exports.clickConfirmPlugin = clickConfirmPlugin;
+
+
+/***/ }),
+
 /***/ "./node_modules/is-buffer/index.js":
 /*!*****************************************!*\
   !*** ./node_modules/is-buffer/index.js ***!
@@ -25868,17 +26067,24 @@ var render = function() {
     _vm._v(" "),
     _c("tfoot", [
       _c("tr", [
-        _c("td", { staticClass: "text-center", attrs: { colspan: "5" } }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-info",
-              attrs: { id: "delete-checked", disabled: _vm.button.dis },
-              on: { click: _vm.deleteChecked }
-            },
-            [_vm._v(_vm._s(_vm.button.text))]
-          )
-        ])
+        _c(
+          "td",
+          { staticClass: "text-center", attrs: { colspan: "5" } },
+          [
+            _c("click-confirm", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-info",
+                  attrs: { id: "delete-checked", disabled: _vm.button.dis },
+                  on: { click: _vm.deleteChecked }
+                },
+                [_vm._v(_vm._s(_vm.button.text))]
+              )
+            ])
+          ],
+          1
+        )
       ])
     ]),
     _vm._v(" "),
@@ -25929,67 +26135,62 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("td", [
+            _c("td", { class: link.showClass }, [
               _c(
                 "a",
                 {
                   attrs: {
-                    href:
-                      "/links/details/" +
-                      link.link_id +
-                      "/" +
-                      encodeURIComponent(link.link_name)
+                    href: _vm.routes.lnkDetails
+                      .replace(":id", link.link_id)
+                      .replace(":name", link.link_name)
                   }
                 },
                 [_vm._v(_vm._s(link.link_name))]
               )
             ]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(link.file_link_files_count))]),
+            _c("td", { class: link.showClass }, [
+              _vm._v(_vm._s(link.file_link_files_count))
+            ]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(link.expire))]),
+            _c("td", { class: link.showClass }, [_vm._v(_vm._s(link.expire))]),
             _vm._v(" "),
-            _c("td", [
-              _c(
-                "a",
-                {
-                  staticClass: "text-muted edit-link",
-                  attrs: {
-                    href: "#edit-modal",
-                    title: "Edit Link",
-                    "data-toggle": "modal",
-                    "data-tooltip": "tooltip",
-                    "data-id": link.link_id
-                  }
-                },
-                [
-                  _c("i", {
-                    staticClass: "fa fa-pencil",
-                    attrs: { "aria-hidden": "true" }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "text-muted remove-link",
-                  attrs: {
-                    href: "#edit-modal",
-                    title: "Remove Link",
-                    "data-toggle": "modal",
-                    "data-tooltip": "tooltip",
-                    "data-id": link.link_id
-                  }
-                },
-                [
-                  _c("i", {
-                    staticClass: "fa fa-trash",
-                    attrs: { "aria-hidden": "true" }
-                  })
-                ]
-              )
-            ])
+            _c(
+              "td",
+              { class: link.showClass },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "text-muted remove-link",
+                    attrs: {
+                      href: _vm.routes.emLink.replace(":hash", link.link_hash),
+                      title: "Email Link",
+                      "data-id": link.link_id
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "fa fa-envelope",
+                      attrs: { "aria-hidden": "true" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("click-confirm", { staticClass: "d-inline" }, [
+                  _c(
+                    "span",
+                    {
+                      staticClass: "pointer",
+                      attrs: { "data-id": link.link_id },
+                      on: { click: _vm.deleteLink }
+                    },
+                    [_c("i", { staticClass: "fa fa-trash" })]
+                  )
+                ])
+              ],
+              1
+            )
           ])
         }),
         _vm._v(" "),
@@ -38089,37 +38290,34 @@ module.exports = g;
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-//require('./bootstrap');
-//require('axios'); 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var click_confirm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! click-confirm */ "./node_modules/click-confirm/dist/click-confirm.common.js");
+/* harmony import */ var click_confirm__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(click_confirm__WEBPACK_IMPORTED_MODULE_0__);
+/*
+*   Vue, Bootstrap and third party libraries
+*/
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.BootstrapVue = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/es/index.js"); //require('bootstrap-vue');
+window.BootstrapVue = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/es/index.js");
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+/*
+*   Third party components
+*/
+
+Vue.component('clickConfirm', click_confirm__WEBPACK_IMPORTED_MODULE_0___default.a);
+/*
+*   File Link Components
+*/
 
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
 Vue.component('list-file-links', __webpack_require__(/*! ./components/ListFileLinks.vue */ "./resources/js/components/ListFileLinks.vue").default);
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+/*
+*   Initialize app
+*/
 
 window.onload = function () {
   var app = new Vue({
