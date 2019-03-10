@@ -6,13 +6,14 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index.scss';
 @import '~font-awesome/scss/font-awesome';
+@import '~vue2-dropzone/dist/vue2Dropzone.min.css';
 //@import '~dropzone/dist/dropzone';
 //@import '~datatables.net-bs4/css/dataTables.bootstrap4';
 //@import '~select2/dist/css/select2';
 //@import '~fastselect/dist/fastselect';
 
 //  Shared styles between all layouts
-//@import 'fileDrag';
+@import 'fileDrag';
 
 .category-button {
     font-weight: bold;

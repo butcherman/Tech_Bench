@@ -1,0 +1,33 @@
+//  Drag and drop box styles
+.filedrag {
+    font-weight: bold;
+    text-align: center;
+    padding: 1em 0;
+    margin: 1em 0;
+    color: #555;
+    border: 2px dashed #555;
+    border-radius: 7px;
+    background-color: #c8dadf;
+    height: 250px;
+    overflow: auto;
+    @extend .pointer;
+    .dz-image, .dz-success-mark, .dz-error-mark, .dz-size {
+        display: none;
+    }
+    .dz-error-message {
+        background-color: #f8d7da;
+        border-radius: 0.25rem;
+    }
+}
+
+//  Progress bar styles
+.progress {
+    width: 75%;
+    display: none;
+    @extend .center;
+}
+
+// Form override styles
+label {
+    font-weight: bold;
+}

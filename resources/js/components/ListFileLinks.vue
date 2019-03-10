@@ -22,7 +22,7 @@
             <tr v-for="link in links" >
                 <td class="text-center"><input type="checkbox" class="check-link" :value="link.link_id" v-model="selected" /></td>
                 <td :class=link.showClass>
-                    <a :href="routes.lnkDetails.replace(':id', link.link_id).replace(':name', link.link_name)">{{link.link_name}}</a>
+                    <a :href=link.url>{{link.link_name}}</a>
                 </td>
                 <td :class=link.showClass>{{link.file_link_files_count}}</td>
                 <td :class=link.showClass>{{link.expire}}</td>
@@ -43,7 +43,6 @@
 <script>
     export default {
         props: [
-            'link_details_route',
             'get_links_route',
             'del_link_route',
             'em_link_route'
@@ -62,7 +61,6 @@
                 },
                 routes:
                 {
-                    lnkDetails: this.link_details_route,
                     getLinks: this.get_links_route,
                     delLink: this.del_link_route,
                     emLink: this.em_link_route

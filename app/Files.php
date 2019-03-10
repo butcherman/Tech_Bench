@@ -67,15 +67,15 @@ class Files extends Model
             $fileData = Files::find($fileID);
             $fileLink = $fileData->file_link.$fileData->file_name;
             $fileData->delete();
-            
-            Storage::delete($fileLink);
-            
-            Log::info('File Deleted', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
         }
         catch(Exception $e)
         {
             return false;
         }
+        
+        Storage::delete($fileLink);
+            
+        Log::info('File Deleted', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
         
         return true;
     }

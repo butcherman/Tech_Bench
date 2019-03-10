@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 //use Zip;
-//use App\Files;
+use App\Files;
 use App\FileLinks;
 //use App\Customers;
 //use App\CustomerFiles;
-//use App\FileLinkFiles;
+use App\FileLinkFiles;
 //use App\FileLinkNotes;
 use Illuminate\Http\Request;
 //use Illuminate\Http\Response;
@@ -43,7 +43,7 @@ class FileLinksController extends Controller
             'name'   => 'required', 
             'expire' => 'required'
         ]);
-        
+                
         //  Generate a random hash to use as the file link and make sure it is not already in use
         do
         {
@@ -74,52 +74,38 @@ class FileLinksController extends Controller
         $linkID = $link->link_id;
         
         //  If there are any files, process them
-//        if(!empty($request->file))
-//        {
-//            $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
-//            foreach($request->file as $file)
-//            {
-//                //  Clean the file and store it
-//                $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
-//                $file->storeAs($filePath, $fileName);
-//                
-//                //  Place file in Files table of DB
-//                $newFile = Files::create([
-//                    'file_name' => $fileName,
-//                    'file_link' => $filePath.DIRECTORY_SEPARATOR
-//                ]);
-//                $fileID = $newFile->file_id;
-//                
-//                //  Place the file in the file link files table of DB
-//                FileLinkFiles::create([
-//                    'link_id'  => $linkID,
-//                    'file_id'  => $fileID,
-//                    'user_id'  => Auth::user()->user_id,
-//                    'upload'   => 0
-//                ]);
-//                
-//                //  Log stored file
-//                Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
-//            }
-//        }
+        if(!empty($request->file))
+        {
+            $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
+            foreach($request->file as $file)
+            {
+                //  Clean the file and store it
+                $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+                $file->storeAs($filePath, $fileName);
+                
+                //  Place file in Files table of DB
+                $newFile = Files::create([
+                    'file_name' => $fileName,
+                    'file_link' => $filePath.DIRECTORY_SEPARATOR
+                ]);
+                $fileID = $newFile->file_id;
+                
+                //  Place the file in the file link files table of DB
+                FileLinkFiles::create([
+                    'link_id'  => $linkID,
+                    'file_id'  => $fileID,
+                    'user_id'  => Auth::user()->user_id,
+                    'upload'   => 0
+                ]);
+                
+                //  Log stored file
+                Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+            }
+        }
         
         Log::info('File Link Created', ['link_id' => $linkID, 'user_id' => Auth::user()->user_id]);
-        
-        return urlencode($linkID);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+                
+        return response()->json(['link' => $linkID, 'name' => urlencode($request->name)]);
     }
 
     //  Ajax call to show the links for a specific user
@@ -133,6 +119,7 @@ class FileLinksController extends Controller
         //  Reformat the expire field to be a readable date
         foreach($links as $link)
         {
+            $link->url = route('links.details', [$link->link_id, urlencode($link->link_name)]);
             $link->showClass  = $link->expire < date('Y-m-d') ? 'table-danger' : '';
             $link->expire = date('M d, Y', strtotime($link->expire));
         }
@@ -172,18 +159,18 @@ class FileLinksController extends Controller
     public function destroy($id)
     {
         //  Remove the file from database
-//        $data = FileLinkFiles::where('link_id', $id)->get();
-//        if(!$data->isEmpty())
-//        {
-//            foreach($data as $file)
-//            {
-//                $fileID = $file->file_id;
-//                $file->delete();
-//
-//                //  Delete the file if it is no longer in use
-//                Files::deleteFile($fileID);
-//            }
-//        }
+        $data = FileLinkFiles::where('link_id', $id)->get();
+        if(!$data->isEmpty())
+        {
+            foreach($data as $file)
+            {
+                $fileID = $file->file_id;
+                $file->delete();
+
+                //  Delete the file if it is no longer in use
+                Files::deleteFile($fileID);
+            }
+        }
         
         FileLinks::find($id)->delete();
         

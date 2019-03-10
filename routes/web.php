@@ -64,7 +64,17 @@ Route::middleware(['password_expired'])->group(function()
         
         
         
-        
+        /*
+        *
+        *   Customer Routes
+        *
+        */        
+        Route::prefix('customer')->name('customer.')->group(function()
+        {
+
+            Route::get('search-id/{id}', 'CustomerController@searchID')->name('searchID');
+
+        });
         
         
         
@@ -72,6 +82,9 @@ Route::middleware(['password_expired'])->group(function()
         
         
     });
+    
+    
+    
     
     
     /*
