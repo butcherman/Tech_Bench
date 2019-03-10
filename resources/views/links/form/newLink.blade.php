@@ -9,9 +9,10 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {!! Form::open(['route' => 'links.details.store', 'id' => 'new-file-link-form', 'enctype' => 'multipart/form-data', 'files' => true]) !!}
+            {!! Form::open(['route' => 'links.data.store', 'id' => 'new-file-link-form', 'enctype' => 'multipart/form-data', 'files' => true]) !!}
                 {{ Form::bsText('name', 'Link Name', null, ['placeholder' => 'Enter A Descriptive Name', 'required', 'autofocus']) }}
                 {{ Form::bsDate('expire', 'Expires On', date('Y-m-d', strtotime('+30 days')), ['required']) }}
+{{--
                 <div class="form-group">
                     <label for="customer-tag">Link to Customer:</label>
                     <div class="input-group">
@@ -23,6 +24,7 @@
                         </span>
                     </div>
                 </div>
+--}}
                 <div class="row justify-content-center">
                     <div class="col-5">
                         <label class="switch">
@@ -32,15 +34,10 @@
                         Allow User to Upload Files 
                     </div>
                 </div>
-                @include('_inc.dropMultiFile')
+{{--                @include('_inc.dropMultiFile')--}}
                 {{ Form::bsSubmit('Create File Link') }}
             {!! Form::close() !!}
         </div>
     </div>
 </div>
-@include('_inc.modal')
-@endsection
-
-@section('script')
-@include('_js.links.newLink')
 @endsection

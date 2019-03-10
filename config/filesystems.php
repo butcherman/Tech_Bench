@@ -4,30 +4,25 @@ return [
     'default' => env('FILESYSTEM_DRIVER', 'local'),
     'cloud'   => env('FILESYSTEM_CLOUD', 's3'),
     'disks'   => [
-
         'local' => [
             'driver' => 'local',
             'root'   => env('ROOT_FOLDER', storage_path('app'.DIRECTORY_SEPARATOR.'files')),
         ],
-
         'public' => [
             'driver'     => 'local',
             'root'       => storage_path('app'.DIRECTORY_SEPARATOR.'public'),
             'url'        => env('APP_URL').DIRECTORY_SEPARATOR.'/storage',
             'visibility' => 'public',
         ],
-        
         'backup' => [
             'driver' => 'local',
             'root'   => env('BACKUP_FOLDER', storage_path('app'.DIRECTORY_SEPARATOR.'backups')),
         ],
-        
         'logs' => [
             'driver' => 'local',
             'root'   => storage_path('logs'),
         ],
     ],
-    
     'paths' => [
         'default'   => env('DFLT_FOLDER', DIRECTORY_SEPARATOR.'default'),
         'systems'   => env('SYS_FOLDER', DIRECTORY_SEPARATOR.'systems'),

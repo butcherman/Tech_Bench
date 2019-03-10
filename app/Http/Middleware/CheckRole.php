@@ -8,16 +8,17 @@ use Illuminate\Support\Facades\Log;
 
 class CheckRole
 {
-    //  Check and verify that the user has permission to visit the request page
+    //  Check and verify tha tthe user has permission to visit the requested page
     public function handle($request, Closure $next)
     {
         if($request->user() === null)
         {
             Log::alert($request->route().' denied for Guest');
-            return response()->view('errors.401', [], 401);
+//            return response()->view('errors.401', [], 401);
+            abort(401);
         }
         $actions = $request->route()->getAction();
-        $roles = isset($actions['roles']) ? $actions['roles'] : null;
+        $roles   = isset($actions['roles']) ? $actions['roles'] : null;
         
         if($request->user()->hasAnyRole($roles)  || !$roles)
         {
@@ -25,6 +26,7 @@ class CheckRole
         }
 
         Log::alert($request->url().' denied for user '.$request->user());
-        return response()->view('errors.401', [], 401);
+//        return response()->view('errors.401', [], 401);
+        abort(401);
     }
 }

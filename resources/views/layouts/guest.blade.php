@@ -21,7 +21,7 @@
     <link href="{{ asset('css/guest.css') }}" rel="stylesheet">    
 </head>
 <body role="document">
-    <div class="container-fluid" role="main">
+    <div class="container-fluid" role="main" id="app">
         @yield('content')
     </div>
     @yield('script')

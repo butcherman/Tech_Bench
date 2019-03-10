@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('breadcrumbs')
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">My Dashboard</a></li>
@@ -15,40 +16,20 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <a href="{{route('links.details.create')}}" class="btn btn-block btn-info">Create File Link</a>
+            <a href="{{route('links.data.create')}}" class="btn btn-block btn-info">Create File Link</a>
         </div>
     </div>
     <div class="row justify-content-center pad-top">
         <div class="col-md-10">
             <div class="table-responsive" id="file-links-table">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center"><input type="checkbox" class="check-all-links" /></th>
-                            <th>Link Name</th>
-                            <th># of Files</th>
-                            <th>Expire Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="5" class="text-center"><i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <list-file-links 
+                    link_details_route="{{route('links.details', [':id', ':name'])}}"
+                    get_links_route="{{route('links.data.show', Auth::user()->user_id)}}" 
+                    del_link_route="{{route('links.data.destroy', ':linkID')}}"             
+                    em_link_route="mailto:?subject=A File Link Has Been Created For You&body=View the link details here: {{route('userLink.details', ':hash')}}">
+                </list-file-links>
             </div>
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div class="col-4">
-            <button class="btn btn-info btn-block" id="delete-checked">Delete Checked Links</button>
-        </div>
-    </div>
 </div>
-@include('_inc.modal')
-@endsection
-
-@section('script')
-@include('_js.links.index')
 @endsection
