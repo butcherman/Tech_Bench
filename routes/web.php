@@ -1,7 +1,12 @@
 <?php
 
-//  Login/Logout and Authorization routes
+/*
+*
+*   Login/Logout Authorization Routes
+*
+*/
 Auth::routes();
+
 
 /*
 *
@@ -12,16 +17,24 @@ Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 
+/*
+*
+*   Download File Routes
+*
+*/
+Route::get('/download/{id}/{filename}', 'DownloadController@index')->name('download');
+Route::post('download-all', 'DownloadController@downloadAll')->name('downloadAll');
+
+/*
+*
+*   User File Link Routes
+*
+*/
+Route::resource('file-links', 'FileLinks\UserLinksController');
 
 
-///////////////////////////  User File Link Routes to be adjusted  //////////////////////////////////////
-Route::prefix('file-links')->name('userLink.')->group(function()
-{
-    Route::get('download-all/{link}', 'UserLinksController@downloadAllFiles')->name('downloadAll');
-    Route::post('details/{link}', 'UserLinksController@uploadFiles')->name('upload');
-    Route::get('details/{link}', 'UserLinksController@details')->name('details');
-    Route::get('/', 'UserLinksController@index')->name('index');
-});
+
+
 
 
 
@@ -43,23 +56,48 @@ Route::middleware(['password_expired'])->group(function()
     */
     Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function()
     {
+        //  Dashboard and About page routes
         Route::get('about', 'DashboardController@about')->name('about');         
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         
-        //  File Link Routes
+        /*
+        *
+        *   File Link Routes
+        *
+        */
         Route::prefix('links')->name('links.')->group(function()
         {
+            //  Resource controllers for base access
+            Route::resource('data', 'FileLinks\FileLinksController');
+            Route::get('find/{id}', 'FileLinks\FileLinksController@find')->name('user');
+            Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')->name('details');
             
+            //  File Link Files
+            Route::get('files/{id}/{dir}', 'FileLinks\LinkFilesController@getIndex')->name('files');
+            Route::post('files/{id}/{dir}', 'FileLinks\LinkFilesController@postIndex')->name('files');
+            Route::put('files/{id}/{dir}', 'FileLinks\LinkFilesController@moveFile')->name('files');
+            Route::delete('files/{id}', 'FileLinks\LinkFilesController@delFile')->name('delFile');
             
+            //  File Link Instructions
+            Route::get('instructions/{id}', 'FileLinks\InstructionsController@getIndex')->name('instructions');
+            Route::post('instructions/{id}', 'FileLinks\InstructionsController@postIndex')->name('instructions');
             
-            Route::resource('data', 'FileLinksController');
+            //  Link customer information
+            Route::post('updateCustomer/{id}', 'FileLinks\FileLinksController@updateCustomer')->name('updateCustomer');
             
-            
-            
-            
-            Route::get('/details/{id}/{name}', 'FileLinksController@details')->name('details');
-            Route::get('/', 'FileLinksController@index')->name('index');                                            
+            //  Index landing page
+            Route::get('/', 'FileLinksController@index')->name('index'); 
         });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+  ///////////////////////////////////////////////////////////////////////////////////      
         
         
         
@@ -73,6 +111,7 @@ Route::middleware(['password_expired'])->group(function()
         {
 
             Route::get('search-id/{id}', 'CustomerController@searchID')->name('searchID');
+            Route::get('file-types', 'CustomerFilesController@getFileTypes')->name('getFileTypes');
 
         });
         

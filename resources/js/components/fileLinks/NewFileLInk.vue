@@ -141,6 +141,10 @@
             },
             searchCustomer()
             {
+                if(this.customerTag == '')
+                {
+                    this.customerTag = 'NULL';
+                }
                 var url = this.search_route.replace(':id', this.customerTag);
                 axios.get(url)
                     .then(res => {

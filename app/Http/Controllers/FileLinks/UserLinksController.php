@@ -1,19 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\FileLinks;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-//use App\SystemTypes;
-//use App\SystemCategories;
-//use App\CustomerSystems;
-//use App\CustomerNotes;
-//use App\CustomerFavs;
-use App\Customers;
-//use PDF;
+use App\Http\Controllers\Controller;
 
-class CustomerController extends Controller
+//use Zip;
+use App\Files;
+use App\FileLinks;
+//use App\Customers;
+//use App\CustomerFiles;
+use App\FileLinkFiles;
+//use App\FileLinkNotes;
+//use Illuminate\Http\Request;
+//use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\Storage;
+
+class UserLinksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,34 +28,8 @@ class CustomerController extends Controller
     public function index()
     {
         //
-    }
-    
-    //  Search for the customer based on their ID - For new file link form
-    public function searchID($id)
-    {
-        $id = urldecode($id);
-        if($id === 'NULL')
-        {
-            $id = '';
-        }
         
-        //  Determine if a customer number/name has already been entered
-        if(!empty($id))
-        {
-            $split = explode(' ', $id);
-            if(isset($split[1]) && $split[1] === '-')
-            {
-                $id = $split[0];
-            }
-        }
-        
-        $res = Customers::where('cust_id', 'like', '%'.$id.'%')
-            ->orWhere('name', 'like', '%'.$id.'%')
-            ->where('active', 1)
-            ->orderBy('name')
-            ->get();
-        
-        return response()->json($res);
+        echo 'index';
     }
 
     /**
@@ -74,15 +53,23 @@ class CustomerController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Ajax call to show the links for a specific user
     public function show($id)
     {
-        //
+        $links = FileLinks::where('user_id', $id)
+            ->withCount('FileLinkFiles')
+            ->orderBy('expire', 'desc')
+            ->get();
+                
+        //  Reformat the expire field to be a readable date
+        foreach($links as $link)
+        {
+            $link->url = route('links.details', [$link->link_id, urlencode($link->link_name)]);
+            $link->showClass  = $link->expire < date('Y-m-d') ? 'table-danger' : '';
+            $link->expire = date('M d, Y', strtotime($link->expire));
+        }
+        
+        return response()->json($links);
     }
 
     /**

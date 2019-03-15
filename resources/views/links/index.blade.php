@@ -23,9 +23,10 @@
         <div class="col-md-10">
             <div class="table-responsive" id="file-links-table">
                 <list-file-links 
-                    get_links_route="{{route('links.data.show', Auth::user()->user_id)}}" 
+                    get_links_route="{{route('links.user', Auth::user()->user_id)}}" 
                     del_link_route="{{route('links.data.destroy', ':linkID')}}"             
-                    em_link_route="mailto:?subject=A File Link Has Been Created For You&body=View the link details here: {{route('userLink.details', ':hash')}}">
+                    em_link_route="mailto:?subject=A File Link Has Been Created For You&body=View the link details here: {{route('file-links.show', ':hash')}}"
+                >
                 </list-file-links>
             </div>
         </div>

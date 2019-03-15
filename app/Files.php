@@ -68,7 +68,7 @@ class Files extends Model
             $fileLink = $fileData->file_link.$fileData->file_name;
             $fileData->delete();
         }
-        catch(Exception $e)
+        catch(\Illuminate\Database\QueryException $e)
         {
             return false;
         }

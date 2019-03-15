@@ -3,17 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-//use App\SystemTypes;
-//use App\SystemCategories;
-//use App\CustomerSystems;
-//use App\CustomerNotes;
-//use App\CustomerFavs;
-use App\Customers;
-//use PDF;
+use App\CustomerFileTypes;
 
-class CustomerController extends Controller
+
+
+class CustomerFilesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,32 +19,25 @@ class CustomerController extends Controller
         //
     }
     
-    //  Search for the customer based on their ID - For new file link form
-    public function searchID($id)
+    
+    
+    
+    
+    //  Get the types of files that can be attached to a customer
+    public function getFileTypes()
     {
-        $id = urldecode($id);
-        if($id === 'NULL')
+        $fileTypes = CustomerFileTypes::all();
+        $fTypes    = [];
+        foreach($fileTypes as $type)
         {
-            $id = '';
+            $fTypes[$type->file_type_id] = $type->description;
         }
         
-        //  Determine if a customer number/name has already been entered
-        if(!empty($id))
-        {
-            $split = explode(' ', $id);
-            if(isset($split[1]) && $split[1] === '-')
-            {
-                $id = $split[0];
-            }
-        }
+//        return view('customer.form.fileTypes', [
+//            'fileTypes' => $fTypes
+//        ]);
         
-        $res = Customers::where('cust_id', 'like', '%'.$id.'%')
-            ->orWhere('name', 'like', '%'.$id.'%')
-            ->where('active', 1)
-            ->orderBy('name')
-            ->get();
-        
-        return response()->json($res);
+        return response()->json($fileTypes);
     }
 
     /**

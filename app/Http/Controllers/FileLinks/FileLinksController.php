@@ -1,27 +1,40 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\FileLinks;
 
-//use Zip;
 use App\Files;
 use App\FileLinks;
-//use App\Customers;
-//use App\CustomerFiles;
 use App\FileLinkFiles;
-//use App\FileLinkNotes;
 use Illuminate\Http\Request;
-//use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-//use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
 class FileLinksController extends Controller
 {
-    
     //  Only authorized users have access
     public function __construct()
     {
         $this->middleware('auth');
+    }
+    
+    //  Ajax call to show the links for a specific user
+    public function find($id)
+    {
+        $links = FileLinks::where('user_id', $id)
+            ->withCount('FileLinkFiles')
+            ->orderBy('expire', 'desc')
+            ->get();
+                
+        //  Reformat the expire field to be a readable date
+        foreach($links as $link)
+        {
+            $link->url = route('links.details', [$link->link_id, urlencode($link->link_name)]);
+            $link->showClass  = $link->expire < date('Y-m-d') ? 'table-danger' : '';
+            $link->expire = date('M d, Y', strtotime($link->expire));
+        }
+        
+        return response()->json($links);
     }
     
     //  Landing page shows all links that the user owns
@@ -108,25 +121,6 @@ class FileLinksController extends Controller
         return response()->json(['link' => $linkID, 'name' => urlencode($request->name)]);
     }
 
-    //  Ajax call to show the links for a specific user
-    public function show($id)
-    {
-        $links = FileLinks::where('user_id', $id)
-            ->withCount('FileLinkFiles')
-            ->orderBy('expire', 'desc')
-            ->get();
-                
-        //  Reformat the expire field to be a readable date
-        foreach($links as $link)
-        {
-            $link->url = route('links.details', [$link->link_id, urlencode($link->link_name)]);
-            $link->showClass  = $link->expire < date('Y-m-d') ? 'table-danger' : '';
-            $link->expire = date('M d, Y', strtotime($link->expire));
-        }
-        
-        return response()->json($links);
-    }
-    
     //  Show details about a file link
     public function details($id, $name)
     {
@@ -140,35 +134,64 @@ class FileLinksController extends Controller
             return view('links.badLink');
         }
         
-        
-        
+        $hasCust = $linkData->cust_id != null ? true : false;
         
         return view('links.details', [
-            'link_id' => $id
+            'link_id' => $id,
+            'has_cust' => $hasCust
         ]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    
+    //  Ajax call te get JSON details of the link
+    public function show($id)
     {
-        //
+        $linkData = FileLinks::where('link_id', $id)->leftJoin('customers', 'file_links.cust_id', '=', 'customers.cust_id')->first();
+        
+        //  Format the expiration date to be readable
+        $linkData->timeStamp = $linkData->expire;
+        $linkData->expire = date('M d, Y', strtotime($linkData->expire));
+        
+        return response()->json($linkData);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Update the link's details
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'   => 'required',
+            'expire' => 'required'
+        ]);
+        
+        FileLinks::find($id)->update([
+            'link_name'    => $request->name,
+            'expire'       => $request->expire,
+            'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
+        ]);
+        
+        Log::info('File Link Updated', ['link_id' => $id]);
+        
+        return response()->json(['success' => true]);
+    }
+    
+    //  Update the customer that is attached to the customer
+    public function updateCustomer(Request $request, $id)
+    {
+        //  If the "customer id" field is populated, separate the ID from the name and prepare for insertion.
+        if($request->customer_tag != null && $request->customer_tag != 'NULL')
+        {
+            $custID = explode(' ', $request->customer_tag);
+            $custID = $custID[0];
+        }
+        else
+        {
+            $custID = null;
+        }
+        
+        FileLinks::find($id)->update([
+            'cust_id' => $custID
+        ]);
+        
+        return response()->json(['success' => true]);
     }
 
     //  Delete a file link

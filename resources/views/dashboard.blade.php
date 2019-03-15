@@ -8,6 +8,8 @@
 
 @section('content')
     <div class="row justify-content-center pad-top">
-        <div class="col-12">Hello World</div>
+        <div class="col-12">
+            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Welcome {{ Auth::user()->first_name.' '.Auth::user()->last_name }}</h1></div>
+        </div>
     </div>
 @endsection
