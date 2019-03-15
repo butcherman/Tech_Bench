@@ -11,7 +11,12 @@
     <title>{{ config('app.name', 'Tech Bench') }}</title>
 
     <!-- Scripts -->
-    <script>var maxUpload = {{config('filesystems.paths.max_size')}}</script>
+    <script>
+        window.techBench = {
+            'maxUpload': '{{config('filesystems.paths.max_size')}}',
+            'csrfToken': '{{csrf_token()}}'
+        };
+    </script>
     <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->

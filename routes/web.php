@@ -23,7 +23,8 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 *
 */
 Route::get('/download/{id}/{filename}', 'DownloadController@index')->name('download');
-Route::post('download-all', 'DownloadController@downloadAll')->name('downloadAll');
+Route::get('download-all', 'DownloadController@downloadAll')->name('downloadAll');
+Route::put('download-all', 'DownloadController@flashDownload')->name('downloadAll');
 
 /*
 *

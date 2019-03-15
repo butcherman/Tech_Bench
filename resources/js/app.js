@@ -35,6 +35,11 @@ Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('editor', require('@tinymce/tinymce-vue').default);
 
 /*
+*   General Components
+*/
+Vue.component('go-back', require('./components/GoBack.vue').default);
+
+/*
 *   File Link Components
 */
 Vue.component('list-file-links',   require('./components/fileLinks/ListFileLinks.vue').default);

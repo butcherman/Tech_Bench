@@ -224,9 +224,7 @@
             },
             downloadChecked()
             {
-//                var obj = this;
                 var dFiles = [];
-                console.log(this.dl_all_route);
                 
                 if(this.selected.length != 0)
                 {
@@ -234,16 +232,14 @@
                     {
                         dFiles.push(item);
                     });
-                    console.log(dFiles);
-                    
-                    axios.post(this.dl_all_route, {
-//                        fileArr: this.dFiles
+
+                    axios.put(this.dl_all_route, {
+                        fileArr: dFiles
                     })
                     .then(res => {
-                        console.log(res);
+                        window.location.href = this.dl_all_route;
                     })
-//                    .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
-                    .catch(error => console.log(error));
+                    .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
                 }
             }
         }

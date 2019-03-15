@@ -41,6 +41,7 @@ return [
 
         //  Package Service Providers...
         Collective\Html\HtmlServiceProvider::class,
+        ZanySoft\Zip\ZipServiceProvider::class,
 
         //  Application Service Providers...
         App\Providers\AppServiceProvider::class,
@@ -89,5 +90,6 @@ return [
         //  Package aliases
         'Form'          => Collective\Html\FormFacade::class,
         'Html'          => Collective\Html\HtmlFacade::class,
+        'Zip'           => ZanySoft\Zip\ZipFacade::class,
     ],
 ];
