@@ -4,6 +4,7 @@
 /public/js/skins
 /storage/*.key
 /vendor
+/.vs
 .env
 .phpunit.result.cache
 Homestead.json
