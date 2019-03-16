@@ -7,7 +7,6 @@
 */
 Auth::routes();
 
-
 /*
 *
 *   Non user Routes
@@ -15,7 +14,6 @@ Auth::routes();
 */
 Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-
 
 /*
 *
@@ -36,12 +34,6 @@ Route::post('file-links/{id}', 'FileLinks\UserLinksController@update')->name('fi
 Route::get('file-links/{id}', 'FileLinks\UserLinksController@show')->name('file-links.show');
 Route::get('file-links', 'FileLinks\UserLinksController@index');
 
-
-
-
-
-
-
 /*
 *
 *   Logged in user routes
@@ -56,7 +48,11 @@ Route::middleware(['password_expired'])->group(function()
     */
     Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function()
     {
-        //  Dashboard and About page routes
+        /*
+        *
+        *   Dashboard and About page routes
+        *
+        */
         Route::get('about', 'DashboardController@about')->name('about');         
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         
@@ -124,7 +120,7 @@ Route::middleware(['password_expired'])->group(function()
     
     
     
-    
+    /////////////////////////////////////////////////////////////////////////////
     
     /*
     *

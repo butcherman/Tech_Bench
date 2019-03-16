@@ -2,25 +2,16 @@
 
 namespace App\Http\Controllers\FileLinks;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
-//use Zip;
 use App\User;
 use App\Files;
 use App\FileLinks;
-//use App\Customers;
-//use App\CustomerFiles;
 use App\FileLinkFiles;
-//use App\FileLinkNotes;
-//use Illuminate\Http\Request;
-//use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewFileUpload;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Notification;
-
-//use Illuminate\Support\Facades\Storage;
 
 class UserLinksController extends Controller
 {
@@ -73,7 +64,6 @@ class UserLinksController extends Controller
         $request->validate(['name' => 'required', 'file' => 'required']);
             
         $details = FileLinks::where('link_hash', $id)->first();
-        
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$details->link_id;
 
         foreach($request->file as $file)

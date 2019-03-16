@@ -19,14 +19,6 @@ require('tinymce/plugins/autolink');
 require('tinymce/plugins/table');
 
 /*
-*   Include CSRF toden in all axios headers
-*/
-window.axios.defaults.headers.common = {
-    'X-Requested-With': 'XMLHttpRequest',
-    'X-CSRF-TOKEN' : window.techBench.csrfToken
-}
-
-/*
 *   Third party components
 */
 Vue.use(VueClipboard);
@@ -48,7 +40,15 @@ Vue.component('new-file-link',     require('./components/fileLinks/NewFileLink.v
 Vue.component('link-details',      require('./components/fileLinks/LinkDetails.vue').default);
 Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
 Vue.component('link-files',        require('./components/fileLinks/LinkFiles.vue').default);
-Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);
+Vue.component('user-upload', require('./components/fileLinks/UserFileUpload.vue').default);
+
+/*
+*   Include CSRF toden in all axios headers
+*/
+window.axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN': window.techBench.csrfToken
+}
 
 /*
 *   Initialize app

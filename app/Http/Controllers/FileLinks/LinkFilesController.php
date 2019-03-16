@@ -45,7 +45,7 @@ class LinkFilesController extends Controller
         //  Add the download link to the collection
         foreach($files as $file)
         {
-            $file->url = route('download', [$file->file_id, $file->file_name]);
+            $file->url       = route('download', [$file->file_id, $file->file_name]);
             $file->timestamp = date('M d, Y', strtotime($file->created_at));
         }
         
@@ -93,7 +93,7 @@ class LinkFilesController extends Controller
     {
         $request->validate([
             'selected' => 'required',
-            'file_id' => 'required'
+            'file_id'  => 'required'
         ]);
         
         $linkData = FileLinks::find($id);

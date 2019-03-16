@@ -2349,9 +2349,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       cust: '',
       allowUp: '',
       url: '',
-      token: window.techBench.csrfToken,
       customerTag: ''
-    }, _defineProperty(_ref, "cust", ''), _defineProperty(_ref, "em_link", this.em_link_route), _defineProperty(_ref, "availableCustomers", []), _defineProperty(_ref, "button", {
+    }, _defineProperty(_ref, "cust", ''), _defineProperty(_ref, "em_link", this.em_link_route), _defineProperty(_ref, "token", window.techBench.csrfToken), _defineProperty(_ref, "availableCustomers", []), _defineProperty(_ref, "button", {
       custText: 'Link to Customer',
       text: 'Update Link Details',
       dis: false
@@ -119271,18 +119270,10 @@ __webpack_require__(/*! tinymce/plugins/autolink */ "./node_modules/tinymce/plug
 
 __webpack_require__(/*! tinymce/plugins/table */ "./node_modules/tinymce/plugins/table/index.js");
 /*
-*   Include CSRF toden in all axios headers
+*   Third party components
 */
 
 
-window.axios.defaults.headers.common = {
-  'X-Requested-With': 'XMLHttpRequest',
-  'X-CSRF-TOKEN': window.techBench.csrfToken
-  /*
-  *   Third party components
-  */
-
-};
 Vue.use(vue_clipboard2__WEBPACK_IMPORTED_MODULE_2___default.a);
 Vue.component('clickConfirm', click_confirm__WEBPACK_IMPORTED_MODULE_0___default.a);
 Vue.component('vue-dropzone', vue2_dropzone__WEBPACK_IMPORTED_MODULE_1___default.a);
@@ -119304,8 +119295,17 @@ Vue.component('link-instructions', __webpack_require__(/*! ./components/fileLink
 Vue.component('link-files', __webpack_require__(/*! ./components/fileLinks/LinkFiles.vue */ "./resources/js/components/fileLinks/LinkFiles.vue").default);
 Vue.component('user-upload', __webpack_require__(/*! ./components/fileLinks/UserFileUpload.vue */ "./resources/js/components/fileLinks/UserFileUpload.vue").default);
 /*
-*   Initialize app
+*   Include CSRF toden in all axios headers
 */
+
+window.axios.defaults.headers.common = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'X-CSRF-TOKEN': window.techBench.csrfToken
+  /*
+  *   Initialize app
+  */
+
+};
 
 window.onload = function () {
   var app = new Vue({

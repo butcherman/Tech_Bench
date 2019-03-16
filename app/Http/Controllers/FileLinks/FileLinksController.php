@@ -29,9 +29,9 @@ class FileLinksController extends Controller
         //  Reformat the expire field to be a readable date
         foreach($links as $link)
         {
-            $link->url = route('links.details', [$link->link_id, urlencode($link->link_name)]);
+            $link->url        = route('links.details', [$link->link_id, urlencode($link->link_name)]);
             $link->showClass  = $link->expire < date('Y-m-d') ? 'table-danger' : '';
-            $link->expire = date('M d, Y', strtotime($link->expire));
+            $link->expire     = date('M d, Y', strtotime($link->expire));
         }
         
         return response()->json($links);
@@ -149,7 +149,7 @@ class FileLinksController extends Controller
         
         //  Format the expiration date to be readable
         $linkData->timeStamp = $linkData->expire;
-        $linkData->expire = date('M d, Y', strtotime($linkData->expire));
+        $linkData->expire    = date('M d, Y', strtotime($linkData->expire));
         
         return response()->json($linkData);
     }

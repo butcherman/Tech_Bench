@@ -135,10 +135,10 @@
                 cust:        '',
                 allowUp:     '',
                 url:         '',
-                token:       window.techBench.csrfToken,
                 customerTag: '',
                 cust:        '',
-                em_link:     this.em_link_route,
+                em_link: this.em_link_route,
+                token: window.techBench.csrfToken,
                 availableCustomers: [],
                 button: {
                     custText: 'Link to Customer',
