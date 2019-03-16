@@ -44,6 +44,7 @@ return [
         ZanySoft\Zip\ZipServiceProvider::class,
 
         //  Application Service Providers...
+        App\Providers\SettingsServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,

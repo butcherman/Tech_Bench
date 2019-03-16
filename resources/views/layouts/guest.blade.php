@@ -29,6 +29,5 @@
     <div class="container-fluid" role="main" id="app">
         @yield('content')
     </div>
-    @yield('script')
 </body>
 </html>

@@ -31,11 +31,10 @@ Route::put('download-all', 'DownloadController@flashDownload')->name('downloadAl
 *   User File Link Routes
 *
 */
-Route::resource('file-links', 'FileLinks\UserLinksController');
-
-
-
-
+//Route::resource('file-links', 'FileLinks\UserLinksController');
+Route::post('file-links/{id}', 'FileLinks\UserLinksController@update')->name('file-links.show');
+Route::get('file-links/{id}', 'FileLinks\UserLinksController@show')->name('file-links.show');
+Route::get('file-links', 'FileLinks\UserLinksController@index');
 
 
 
@@ -87,7 +86,7 @@ Route::middleware(['password_expired'])->group(function()
             Route::post('updateCustomer/{id}', 'FileLinks\FileLinksController@updateCustomer')->name('updateCustomer');
             
             //  Index landing page
-            Route::get('/', 'FileLinksController@index')->name('index'); 
+            Route::get('/', 'FileLinks\FileLinksController@index')->name('index'); 
         });
         
         

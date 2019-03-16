@@ -12,7 +12,7 @@
             <tfoot>
                 <tr>
                     <td colspan="4" class="text-center">
-                        <b-button variant="info" v-if="file_direction === 'down'" v-b-modal.addFileModal>Add File</b-button>
+                        <b-button variant="info" v-if="file_direction === 'down'" @click="$refs.addFileModal.show()" >Add File</b-button>
                         <b-button variant="info" v-if="file_direction === 'up'" @click=downloadChecked>Download Checked</b-button>
                         <click-confirm class="d-inline">
                             <b-button variant="info" @click="deleteChecked">{{button.text}}</b-button>
@@ -204,7 +204,7 @@
             submitFile(e)
             {
                 e.preventDefault();
-                var myDrop = this.$refs.myVueDropzone; //.processQueue();
+                var myDrop = this.$refs.myVueDropzone; 
                 var myForm = new FormData(document.querySelector("form"));
                 
                 this.button.addText = 'Loading...';

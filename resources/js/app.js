@@ -38,6 +38,7 @@ Vue.component('editor', require('@tinymce/tinymce-vue').default);
 *   General Components
 */
 Vue.component('go-back', require('./components/GoBack.vue').default);
+Vue.component('download-all', require('./components/DownloadAll.vue').default);
 
 /*
 *   File Link Components
@@ -47,6 +48,7 @@ Vue.component('new-file-link',     require('./components/fileLinks/NewFileLink.v
 Vue.component('link-details',      require('./components/fileLinks/LinkDetails.vue').default);
 Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
 Vue.component('link-files',        require('./components/fileLinks/LinkFiles.vue').default);
+Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);
 
 /*
 *   Initialize app

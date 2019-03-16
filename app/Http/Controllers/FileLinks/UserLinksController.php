@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 //use Zip;
+use App\User;
 use App\Files;
 use App\FileLinks;
 //use App\Customers;
@@ -16,93 +17,100 @@ use App\FileLinkFiles;
 //use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewFileUpload;
+use Illuminate\Support\Facades\Notification;
+
 //use Illuminate\Support\Facades\Storage;
 
 class UserLinksController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //  Landing page if no link is sent
     public function index()
     {
-        //
-        
-        echo 'index';
+        return view('links.userIndex');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    //  Ajax call to show the links for a specific user
+    //  Show the link details for the user
     public function show($id)
     {
-        $links = FileLinks::where('user_id', $id)
-            ->withCount('FileLinkFiles')
-            ->orderBy('expire', 'desc')
-            ->get();
-                
-        //  Reformat the expire field to be a readable date
-        foreach($links as $link)
+        $details = FileLinks::where('link_hash', $id)->first();
+        
+        //  Verify that the link is valid
+        if(empty($details))
         {
-            $link->url = route('links.details', [$link->link_id, urlencode($link->link_name)]);
-            $link->showClass  = $link->expire < date('Y-m-d') ? 'table-danger' : '';
-            $link->expire = date('M d, Y', strtotime($link->expire));
+            return view('links.userBadLink');
+        }
+        //  Verify that the link has not expired
+        else if($details->expire <= date('Y-m-d'))
+        {
+            return view('links.userExpiredLink');
         }
         
-        return response()->json($links);
+        $files = FileLinkFiles::where('link_id', $details->link_id)
+            ->where('upload', false)
+            ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
+            ->get();
+        
+        //  Gather the array for the "download all link"
+        $fileArr = [];
+        foreach($files as $file)
+        {
+            $fileArr[] = $file->file_id;
+        }
+        
+        return view('links.userDetails', [
+            'hash'    => $id,
+            'details' => $details,
+            'files'   => $files,
+            'allowUp' => $details->allow_upload,
+            'fileArr' => $fileArr
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Upload new file
     public function update(Request $request, $id)
-    {
-        //
-    }
+    {        
+        $request->validate(['name' => 'required', 'file' => 'required']);
+            
+        $details = FileLinks::where('link_hash', $id)->first();
+        
+        $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$details->link_id;
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        foreach($request->file as $file)
+        {
+            //  Clean the file and store it
+            $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+            $file->storeAs($filePath, $fileName);
+
+            //  Place file in Files table of DB
+            $newFile = Files::create([
+                'file_name' => $fileName,
+                'file_link' => $filePath.DIRECTORY_SEPARATOR
+            ]);
+            $fileID = $newFile->file_id;
+
+            //  Place the file in the file link files table of DB
+            FileLinkFiles::create([
+                'link_id'  => $details->link_id,
+                'file_id'  => $fileID,
+                'added_by' => $request->name,
+                'upload'   => 1
+            ]);
+            
+            if(!empty($request->note))
+            {
+                FileLinkNotes::create([
+                    'link_id' => $details->link_id,
+                    'file_id' => $fileID,
+                    'note'    => $request->note
+                ]);
+            }
+        }
+        
+        //  Send email and notification to the creator of the link
+        $user = User::find($details->user_id);
+        Notification::send($user, new NewFileUpload($details));
+        
+        return response()->json(['success' => true]);
     }
 }
