@@ -7,8 +7,6 @@
            </b-alert>
        </div>
    </div>
-   
-    
 </template>
 
 <script>
@@ -28,7 +26,6 @@
             {
                 axios.get(this.notification_route)
                     .then(res => {
-                        console.log(res.data);
                         this.notifications = res.data
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))

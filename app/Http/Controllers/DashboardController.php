@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 
+use Module;
+//use Nwidart\Modules;
+
+
 class DashboardController extends Controller
 {
     public function __construct()
@@ -21,6 +25,9 @@ class DashboardController extends Controller
     {
         //  Get the users notifications
         $notifications = Auth::user()->unreadNotifications;
+        
+        //  Get the Add-On Modules to list routes for
+        $modules = Module::all();
 //        
 //        //  Get the users Customer bookmarks
 //        $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
@@ -34,7 +41,8 @@ class DashboardController extends Controller
         return view('dashboard', [
 //            'custFavs' => $custFavs,
 //            'tipFavs'  => $tipFavs,
-            'notifications' => $notifications->toArray()
+            'notifications' => $notifications->toArray(),
+            'modules' => $modules
         ]);
     }
     

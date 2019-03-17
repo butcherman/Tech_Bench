@@ -12,7 +12,7 @@ Auth::routes();
 *   Non user Routes
 *
 */
-Route::get('/', 'Auth\LoginController@showLoginForm');
+Route::get('/', 'Auth\LoginController@showLoginForm')->name('index');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 /*
@@ -139,6 +139,8 @@ Route::middleware(['password_expired'])->group(function()
             print_r(Auth::user());
         })->name('admin.index');
         
+        
+    
         
         
     });

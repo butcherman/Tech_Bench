@@ -1,8 +1,8 @@
 /*
 *   Vue, Bootstrap and third party libraries
 */
-window.Vue = require('vue');
-window.axios = require('axios');
+window.Vue          = require('vue');
+window.axios        = require('axios');
 window.BootstrapVue = require('bootstrap-vue');
 import ClickConfirm from 'click-confirm';
 import vue2Dropzone from 'vue2-dropzone';
@@ -24,7 +24,7 @@ require('tinymce/plugins/table');
 Vue.use(VueClipboard);
 Vue.component('clickConfirm', ClickConfirm);
 Vue.component('vue-dropzone', vue2Dropzone);
-Vue.component('editor', require('@tinymce/tinymce-vue').default);
+Vue.component('editor',       require('@tinymce/tinymce-vue').default);
 
 /*
 *   General Components
