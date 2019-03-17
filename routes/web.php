@@ -55,6 +55,8 @@ Route::middleware(['password_expired'])->group(function()
         */
         Route::get('about', 'DashboardController@about')->name('about');         
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+        Route::get('get-notifications', 'DashboardController@getNotifications')->name('get-notifications');
+        Route::get('del-notification/{id}', 'DashboardController@delNotification')->name('del-notification');
         
         /*
         *

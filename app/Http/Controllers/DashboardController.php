@@ -19,8 +19,8 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
-//        //  Get the users notifications
-//        $notifications = Auth::user()->unreadNotifications;
+        //  Get the users notifications
+        $notifications = Auth::user()->unreadNotifications;
 //        
 //        //  Get the users Customer bookmarks
 //        $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
@@ -34,7 +34,7 @@ class DashboardController extends Controller
         return view('dashboard', [
 //            'custFavs' => $custFavs,
 //            'tipFavs'  => $tipFavs,
-//            'notifications' => $notifications
+            'notifications' => $notifications->toArray()
         ]);
     }
     
@@ -44,17 +44,25 @@ class DashboardController extends Controller
         return response('About Page');
     }
     
-//    public function markNotification($id)
-//    {
-//        $notification = Auth::user()->notifications()->where('id', $id)->first();
-//        if($notification)
-//        {
-//            $notification->delete();
-//            Log::info('Notification ID-'.$id.' deleted for User ID-'.Auth::user()->user_id);
-//        }
-//        else
-//        {
-//            Log::notice('Notification ID-'.$id.' not found for user ID-'.Auth::user()->user_id);
-//        }
-//    }
+    //  Get the users notifications
+    public function getNotifications()
+    {
+        return Auth::user()->unreadNotifications->toJson();
+    }
+    
+    public function delNotification($id)
+    {
+        $notification = Auth::user()->notifications()->where('id', $id)->first();
+        if($notification)
+        {
+            $notification->delete();
+            Log::info('Notification ID-'.$id.' deleted for User ID-'.Auth::user()->user_id);
+        }
+        else
+        {
+            Log::notice('Notification ID-'.$id.' not found for user ID-'.Auth::user()->user_id);
+        }
+        
+        return response()->json(['success' => true]);
+    }
 }
