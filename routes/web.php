@@ -15,6 +15,9 @@ Auth::routes();
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('index');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
+Route::get('/finish-setup/{hash}', 'Admin\UserController@initializeUser')->name('initialize');
+Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')->name('initialize');
+
 /*
 *
 *   Download File Routes
@@ -95,7 +98,7 @@ Route::middleware(['password_expired'])->group(function()
         
         
         
-  ///////////////////////////////////////////////////////////////////////////////////      
+  /////////////////////////////////////////////////////////////////////////////////////////////////      
         
         
         
@@ -121,8 +124,7 @@ Route::middleware(['password_expired'])->group(function()
     });
     
     
-    
-    /////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /*
     *
@@ -133,12 +135,16 @@ Route::middleware(['password_expired'])->group(function()
     {
         
         
-        
-        Route::get('admin', function(){
-            echo '<pre>';
-            print_r(Auth::user());
-        })->name('admin.index');
-        
+        Route::prefix('admin')->name('admin.')->group(function()
+        {
+            
+            
+            Route::resource('user', 'Admin\UserController');
+            
+            
+            
+            Route::get('/', 'Admin\AdminController@index')->name('index');
+        });
         
     
         
@@ -151,7 +157,6 @@ Route::middleware(['password_expired'])->group(function()
     
     
 });
-
 
 
 

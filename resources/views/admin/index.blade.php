@@ -1,0 +1,74 @@
+@extends('layouts.app')
+@section('breadcrumbs')
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">System Administration</li>
+</ol>
+@endsection
+
+@section('content')
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>System Administration</h1></div>
+        </div>
+    </div>
+    @if(Auth::user()->hasAnyRole(['installer', 'admin']))
+        <div class="row pad-top">
+            <div class="col-md-4">
+                <h4 class="pl-5">Users:</h4>
+                <ul class="admin-list">
+                    <li><a href="{{route('admin.user.create')}}">Create New User</a></li>
+                    <li><a href="{{route('admin.user.index')}}">Update Existing User</a></li>
+                    <li><a href="">Disable User</a></li>
+                    <li><a href="">View Disabled Users</a></li>
+                    <li><a href="">User File Links</a></li>
+                    <li><a href="">User Security Settings</a></li>
+                </ul>
+            </div>
+{{--
+            <div class="col-md-4">
+                <h4 class="pl-5">Customers:</h4>
+                <ul class="admin-list">
+                    <li><a href="">Modify Customer ID</a></li>
+                    <li><a href="">Disable Customer</a></li>
+                    <li><a href="">View Disabled Customers</a></li>
+                </ul>
+            </div>
+--}}
+    @endif
+    @if(Auth::user()->hasAnyRole(['installer']))
+{{--
+            <div class="col-md-4">
+                <h4 class="pl-5">System Settings:</h4>
+                <ul class="admin-list">
+                    <li><a href="">Timezone and Logo</a></li>
+                    <li><a href="">Email Settings</a></li>
+                </ul>
+            </div>
+--}}
+        </div>
+        <div class="row pad-top">
+{{--
+            <div class="col-md-4">
+                <h4 class="pl-5">Categories and Systems</h4>
+                <ul class="admin-list">
+                    <li><a href="">Create New Category</a></li>
+                    <li><a href="">Edit Existing Category</a></li>
+                    <li><a href="">Create New System</a></li>
+                    <li><a href="">Modify Existing System</a></li>
+                </ul>
+            </div>
+--}}
+{{--
+            <div class="col-md-4">
+                <h4 class="pl-5">System Maintenance</h4>
+                <ul class="admin-list">
+                    <li><a href="">System Logs</a></li>
+                    <li><a href="">System Backup</a></li>
+                    <li><a href="">Update System</a></li>
+                    <li><a href="">Tools and Extras</a></li>
+                </ul>
+            </div>
+--}}
+    @endif
+        </div>
+@endsection

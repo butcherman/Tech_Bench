@@ -2,7 +2,7 @@
     {{ Form::label($name, $label.':', ['class' => 'control-label']) }}
     {{ Form::select($name, $list, $selected, array_merge(['class' => 'form-control'], $attributes)) }}
     @if($errors->has($name))
-        <span class="invalid-feedback">
+        <span class="invalid-feedback d-inline">
             <strong>{{ $errors->first($name) }}</strong>
         </span>
     @endif

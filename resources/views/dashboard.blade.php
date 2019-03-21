@@ -29,9 +29,9 @@
                             <div class="card text-white o-hidden h-100 bookmark-card">
                                 <a href="{{route('index').'/'.$mod->getLowerName()}}" class="card-body text-white">
                                     <div class="card-body-icon">
-                                        <i class="fa fa-fw fa-users"></i>
+                                        <i class="fa fa-fw fa-link"></i>
                                     </div>
-                                    <div class="mr-5">{{$mod->getName()}}</div>
+                                    <div class="mr-5">{{preg_replace('/(.*?[a-z]{1})([A-Z]{1}.*?)/', '${1} ${2}', $mod->getName())}}</div>
                                 </a>
                             </div>
                         </div>

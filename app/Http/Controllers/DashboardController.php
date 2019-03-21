@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Module;
 use App\TechTipFavs;
 use App\CustomerFavs;
 use Illuminate\Http\Request;
@@ -9,8 +10,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 
-use Module;
+
 //use Nwidart\Modules;
+use Mail;
+use App\Mail\InitializeUser;
 
 
 class DashboardController extends Controller
@@ -42,7 +45,7 @@ class DashboardController extends Controller
 //            'custFavs' => $custFavs,
 //            'tipFavs'  => $tipFavs,
             'notifications' => $notifications->toArray(),
-            'modules' => $modules
+            'modules'       => $modules
         ]);
     }
     
