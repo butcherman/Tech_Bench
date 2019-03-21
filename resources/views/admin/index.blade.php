@@ -18,10 +18,12 @@
                 <ul class="admin-list">
                     <li><a href="{{route('admin.user.create')}}">Create New User</a></li>
                     <li><a href="{{route('admin.user.index')}}">Update Existing User</a></li>
-                    <li><a href="">Disable User</a></li>
-                    <li><a href="">View Disabled Users</a></li>
+                    <li><a href="{{route('admin.password')}}">Reset Users Password</a></li>
+                    <li><a href="{{route('admin.disable')}}">Disable User</a></li>
+{{--
                     <li><a href="">User File Links</a></li>
                     <li><a href="">User Security Settings</a></li>
+--}}
                 </ul>
             </div>
 {{--

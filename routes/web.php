@@ -63,6 +63,19 @@ Route::middleware(['password_expired'])->group(function()
         
         /*
         *
+        *   User Account Settings
+        *
+        */
+        
+        
+        
+        
+        
+        
+        
+        
+        /*
+        *
         *   File Link Routes
         *
         */
@@ -137,8 +150,11 @@ Route::middleware(['password_expired'])->group(function()
         
         Route::prefix('admin')->name('admin.')->group(function()
         {
-            
-            
+            Route::get('user/confirm/{id}', 'Admin\UserController@confirm')->name('confirmDisable');
+            Route::get('user/disable', 'Admin\UserController@disable')->name('disable');
+            Route::get('user/change-password/{id}', 'Admin\UserController@changePassword')->name('changePassword');
+            Route::post('user/change-password/{id}', 'Admin\UserController@submitPassword')->name('changePassword');
+            Route::get('user/password', 'Admin\UserController@passwordList')->name('password');
             Route::resource('user', 'Admin\UserController');
             
             

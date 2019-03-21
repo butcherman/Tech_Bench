@@ -1,13 +1,14 @@
 /*
 *   Vue, Bootstrap and third party libraries
 */
-window.Vue          = require('vue');
-window.axios        = require('axios');
-window.BootstrapVue = require('bootstrap-vue');
-import ClickConfirm from 'click-confirm';
-import vue2Dropzone from 'vue2-dropzone';
-import VueClipboard from 'vue-clipboard2';
-import Editor from '@tinymce/tinymce-vue';
+window.Vue              = require('vue');
+window.axios            = require('axios');
+window.BootstrapVue     = require('bootstrap-vue');
+import ClickConfirm       from 'click-confirm';
+import vue2Dropzone       from 'vue2-dropzone';
+import VueClipboard       from 'vue-clipboard2';
+import Editor             from '@tinymce/tinymce-vue';
+import VueGoodTablePlugin from 'vue-good-table';
 
 /*
 *   The TinyMCE library
@@ -24,7 +25,9 @@ require('tinymce/plugins/table');
 Vue.use(VueClipboard);
 Vue.component('clickConfirm', ClickConfirm);
 Vue.component('vue-dropzone', vue2Dropzone);
+//Vue.component('good-table',   require('vue-good-table').default);
 Vue.component('editor',       require('@tinymce/tinymce-vue').default);
+Vue.use(VueGoodTablePlugin);
 
 /*
 *   General Components
@@ -42,6 +45,11 @@ Vue.component('link-details',      require('./components/fileLinks/LinkDetails.v
 Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
 Vue.component('link-files',        require('./components/fileLinks/LinkFiles.vue').default);
 Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);
+
+/*
+*   Admin Components
+*/
+Vue.component('user-list', require('./components/admin/userList.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

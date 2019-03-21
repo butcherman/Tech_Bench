@@ -26,7 +26,9 @@ class UserController extends Controller
     //  Show the list of current users to edit
     public function index()
     {
-        return view('admin.userIndex');
+        return view('admin.userIndex', [
+            'link' => 'admin.user.edit'
+        ]);
     }
 
     //  Show the Add User form
@@ -156,48 +158,155 @@ class UserController extends Controller
         return redirect(route('dashboard'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    //  List all active or inactive users
+    public function show($type)
     {
-        //
+        $res = '';
+        if($type == 'active')
+        {
+            $res = User::where('active', true)->with('UserLogins')->get();
+        }
+        
+        $userList = [];
+        foreach($res as $r)
+        {
+            $userList[] = [
+                'user_id' => $r->user_id,
+                'user'    => $r->first_name.' '.$r->last_name,
+                'email'   => $r->email,
+                'last'    => $r->UserLogins->last() ? date('M j, Y - g:i A', strtotime($r->UserLogins->last()->created_at)) : 'Never'
+            ];
+        }
+        
+        return response()->json($userList);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Open the edit user form
     public function edit($id)
     {
-        //
+        $roles    = Role::all();
+        $userData = User::find($id);
+        $userRole = DB::select('SELECT `role_id` FROM `user_role` WHERE `user_id` = ?', [$id])[0]->role_id;
+        
+        $roleArr = [];
+        foreach($roles as $role)
+        {
+            if($role->role_id == 1 && !Auth::user()->hasAnyRole(['installer'])) 
+            {
+                continue;
+            }
+            else
+            {
+                $roleArr[$role->role_id] = $role->name;
+            }
+        }
+        
+        return view('admin.editUser', [
+            'userID' => $id,
+            'roles'  => $roleArr,
+            'role'   => $userRole,
+            'user'   => $userData
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Submit the update user form
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'username'   => [
+                                'required',
+                                Rule::unique('users')->ignore($id, 'user_id')
+                            ],
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'email'      => [
+                                'required',
+                                Rule::unique('users')->ignore($id, 'user_id')
+                            ],
+        ]);
+        
+        //  Update the user data
+        User::find($id)->update(
+        [
+            'username'   => $request->username,
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'email'      => $request->email
+        ]);
+        
+        //  Update the user's role
+        DB::update('UPDATE `user_role` SET `role_id` = ? WHERE `user_id` = ?', [$request->role, $id]);
+        Log::info('User ID-'.$id.' has updated their information.');
+        return redirect(route('admin.user.index'))->with('success', 'User Updated Successfully');
+    }
+    
+    //  List the active users to change the password for
+    public function passwordList()
+    {
+        return view('admin.userIndex', [
+            'link' => 'admin.changePassword'
+        ]);
+    }
+    
+    //  Change password form
+    public function changePassword($id)
+    {
+        $name = User::find($id);
+        $name = $name->first_name.' '.$name->last_name;
+        
+        return view('admin.changePassword', [
+            'id'   => $id,
+            'user' => $name
+        ]);
+    }
+    
+    //  Submit the change password form
+    public function submitPassword(Request $request, $id)
+    {
+        $request->validate([
+            'password'   => 'required|string|min:6|confirmed'
+        ]);
+        
+        $nextChange = isset($request->force_change) && $request->force_change == 'on' ? Carbon::now()->subDay() : null;
+        
+         //  Update the user data
+        User::find($id)->update(
+        [
+            'password'         => bcrypt($request->password),
+            'password_expires' => $nextChange
+        ]);
+
+        Log::info('User ID-'.$id.' has changed their password.');
+        return redirect(route('admin.user.index'))->with('success', 'User Password Updated Successfully');
+    }
+    
+    //  Bring up the users that are available to deactivate
+    public function disable()
+    {
+        return view('admin.userIndex', [
+            'link' => 'admin.confirmDisable'
+        ]);
+    }
+    
+    //  Confirm to disable the user
+    public function confirm($id)
+    {
+        $name = User::find($id);
+        $name = $name->first_name.' '.$name->last_name;
+        
+        return view('admin.disableUser', [
+            'id'   => $id,
+            'name' => $name
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Disable the user
     public function destroy($id)
     {
-        //
+        User::find($id)->update([
+            'active' => 0
+        ]);
+        
+        return redirect(route('admin.user.index'))->with('success', 'User Deactivated Successfully');
     }
 }
