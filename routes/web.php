@@ -37,6 +37,18 @@ Route::post('file-links/{id}', 'FileLinks\UserLinksController@update')->name('fi
 Route::get('file-links/{id}', 'FileLinks\UserLinksController@show')->name('file-links.show');
 Route::get('file-links', 'FileLinks\UserLinksController@index');
 
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+///  password change routes
+
+Route::get('/something', 'DashboardController@index')->name('index');
+Route::get('/somepage', 'DashboardController@index')->name('changePassword');
+
+//////////////////////////////////////////////////////////////////////////
+
+
 /*
 *
 *   Logged in user routes

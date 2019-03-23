@@ -21,6 +21,7 @@ class UserTableSeeder extends Seeder
         
         //  Create the test users
         $emp1               = new User();
+        $emp1->user_id      = 2;
         $emp1->username     = 'admin';
         $emp1->first_name   = 'Administrator';
         $emp1->last_name    = 'User';
@@ -31,6 +32,7 @@ class UserTableSeeder extends Seeder
         $emp1->roles()->attach($role_installer);
         
         $emp2               = new User();
+        $emp1->user_id      = 3;
         $emp2->username     = 'jeverett';
         $emp2->first_name   = 'Joshua';
         $emp2->last_name    = 'Everett';
@@ -38,10 +40,11 @@ class UserTableSeeder extends Seeder
         $emp2->password     = bcrypt('password');
         $emp2->active       = 1;
         $emp2->save();
-        $emp2->roles()->attach($role_admin);
+        $emp2->roles()->attach($role_report);
         
         $emp3               = new User();
-        $emp3->username     = 'elinkday';
+        $emp1->user_id      = 4;
+        $emp3->username     = 'elindsay';
         $emp3->first_name   = 'Everett';
         $emp3->last_name    = 'Lindsay';
         $emp3->email        = 'mre@em.com';

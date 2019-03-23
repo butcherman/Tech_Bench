@@ -19,13 +19,17 @@ class CheckPasswordExpire
     public function handle($request, Closure $next)
     {
         $user = $request->user();
-        $passExp = new Carbon(($user->password_expires));
         
-        if(!empty($passExp) && Carbon::now() > $passExp && !empty(config('users.passExpires')))
+        if($user->password_expires != NULL)
         {
-            Log::notice('User ID-'.Auth::user()->user_id.' is being forced to change their password.');
-            $request->session()->flash('change_password', 'change_password');
-            return redirect()->route('changePassword');
+            $passExp = new Carbon(($user->password_expires));
+
+            if(!empty($passExp) && Carbon::now() > $passExp && !empty(config('users.passExpires')))
+            {
+                Log::notice('User ID-'.Auth::user()->user_id.' is being forced to change their password.');
+                $request->session()->flash('change_password', 'change_password');
+                return redirect()->route('changePassword');
+            }
         }
         
         return $next($request);
