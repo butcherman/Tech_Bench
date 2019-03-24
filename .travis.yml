@@ -44,4 +44,4 @@ before_script:
 script: 
     - vendor/bin/phpunit
     - npm run production
-    - jshint resources/assets/js/modules/*
+#    - jshint resources/assets/js/modules/*
