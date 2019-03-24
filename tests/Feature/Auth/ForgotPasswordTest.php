@@ -13,6 +13,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ForgotPasswordTest extends TestCase
 {
+    use RefreshDatabase;
+    
     //  Verify user can view the email reset password form
     public function testResetEmailForm()
     {
@@ -25,7 +27,7 @@ class ForgotPasswordTest extends TestCase
     //  Verify user cannot view the reset email form when logged in
     public function testResetEmailFormWhenLoggedIn()
     {
-        $user = User::find(2);
+        $user = factory(User::class)->create();
         
         $response = $this->actingAs($user)->get('/password/reset');
         $response->assertRedirect(route('dashboard'));
@@ -36,16 +38,15 @@ class ForgotPasswordTest extends TestCase
     public function testSubmitForgotPasswordForm()
     {
         Notification::fake();
-        
-        $user = User::find(2);
-        
-        $response = $this->post('/password/email', [
-            'email' => $user->email
+        $user = factory(User::class)->create([
+            'email' => 'random@example.com',
         ]);
         
-        $token = DB::table('password_resets')->first();
-        $this->assertNotNull($token);
+        $response = $this->post('/password/email', [
+            'email' => 'random@example.com',
+        ]);
         
+        $this->assertNotNull($token = DB::table('password_resets')->first());
         Notification::assertSentTo($user, ResetPassword::class, function ($notification, $channels) use ($token) {
             return Hash::check($notification->token, $token->token) === true;
         });

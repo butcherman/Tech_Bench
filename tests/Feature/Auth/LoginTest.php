@@ -10,6 +10,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LoginTest extends TestCase
 {
+    use RefreshDatabase; 
+    
     //  Verify login page shows
     public function testViewLoginForm()
     {
@@ -29,28 +31,48 @@ class LoginTest extends TestCase
     }
     
     //  Verify the user can login with admin rights
-    public function testLoginAsAdmin()
+    public function testValidLogin()
     {
-        $user = [
-            'username' => 'admin',
-            'password' => 'password'
-        ];
-        
-        $response = $this->json('POST', route('login'), $user);
+        $user = factory(User::class)->create([
+            'password' => bcrypt($password = 'randomPassword')
+        ]);
+
+        $response = $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => $password
+        ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));   
-        
+//        $response->assertAuthenticatedAs($user);
     }
     
     //  Verify user cannot login with incorrect password
     public function testIncorrectLogin()
     {
-        $user = [
-            'username' => 'admin',
-            'password' => 'something_random'
-        ];
+        $user = factory(User::class)->create([
+            'password' => bcrypt($password = 'randomPassword')
+        ]);
         
-        $response = $this->from(route('login'))->json('POST', route('login'), $user);
+        $response = $this->from(route('login'))->json('POST', route('login'), [
+            'username' => $user->username,
+            'password' => 'somethingElse'
+        ]);
+        $response->assertStatus(422);
+        $this->assertGuest();
+    }
+    
+    //  Verify a user that has been deactivated is not able to login
+    public function testDisabledUserLogin()
+    {
+        $user = factory(User::class)->create([
+            'password' => bcrypt($password = 'randomPassword'),
+            'active'   => 0
+        ]);
+        
+        $response = $this->from(route('login'))->json('POST', route('login'), [
+            'username' => $user->username,
+            'password' => $password
+        ]);
         $response->assertStatus(422);
         $this->assertGuest();
     }
@@ -58,9 +80,9 @@ class LoginTest extends TestCase
     //  Verify that the user is redirected if trying to veiw the login form again
     public function testPostLoginRedirect()
     {
-        $this->actAsTech();
+        $user = factory(User::class)->make();
         
-        $response = $this->get('/');
+        $response = $this->actingAs($user)->get('/');
         
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));
@@ -68,23 +90,25 @@ class LoginTest extends TestCase
     
     //  Test the "Remember Me" token
     public function testRememberMe()
-    {
-        $user = [
-            'username' => 'admin',
-            'password' => 'password',
-            'remember' => 'on'
-        ];
+    {   
+        $user = factory(User::class)->create([
+            'user_id'  => random_int(1, 100),
+            'password' => bcrypt($password = 'myPassword'),
+        ]);
         
-        $adminUser = User::find(1);
-        $response = $this->post(route('login'), $user);
+        $response = $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => $password,
+            'remember' => 'on',
+        ]);
         
         $response->assertRedirect(route('dashboard'));
         $response->assertCookie(Auth::guard()->getRecallerName(), vsprintf('%s|%s|%s', [
-                $adminUser->user_id,
-                $adminUser->getRememberToken(),
-                $adminUser->password,
-            ]));
-        $this->assertAuthenticatedAs($adminUser);
+            $user->user_id,
+            $user->getRememberToken(),
+            $user->password,
+        ]));
+        $this->assertAuthenticatedAs($user);
     }
     
     //  Test user is able to logout
