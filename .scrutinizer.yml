@@ -2,6 +2,7 @@ build:
     environment:
         php: 7.2
         mysql: 5.7
+        node: 10.15.3
 
     services:
         mysql: 5.7
