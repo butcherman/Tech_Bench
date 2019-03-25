@@ -9,18 +9,17 @@ build:
     dependencies:
         before:
             - cp tests/.env.scrutinizer .env
-            - mysql -e 'create database scrutinizer;'
+            - mysql -e 'create database `scrutinizer`;'
             - mysql -e 'create database `tb-dev-testing`;'
             
             - composer self-update
             - composer install --no-interaction
             - pear install pear/PHP_CodeSniffer
             - phpenv rehash
-            - npm install npm@latest -g
+#            - npm install npm@latest -g
+            - npm update npm -g
             - npm install -g jshint
-            - npm install yarn
             - npm install
-            - yarn import
         after:
             - php artisan key:generate
             - php artisan migrate

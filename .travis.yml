@@ -26,8 +26,8 @@ services:
     - mysql
 
 before_install:
-    - mysql -e 'create database tech_bench;'
-    - mysql -e 'create database tb-dev-testing;'
+    - mysql -e 'create database `tech_bench`;'
+    - mysql -e 'create database `tb-dev-testing`;'
     
 before_script:
     - cp tests/.env.travis .env
