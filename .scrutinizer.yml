@@ -10,7 +10,15 @@ build:
         before:
             - cp tests/.env.scrutinizer .env
             - mysql -e 'create database scrutinizer;'
-            - mysql -e 'create user forge@localhost; grant all privileges on *.* to forge@localhost with grant option;'
+            - mysql -e 'create database tb-dev-testing;'
+            
+            - composer self-update
+            - composer install --no-interaction
+            - pear install pear/PHP_CodeSniffer
+            - phpenv rehash
+            - npm install npm@latest -g
+            - npm install -g jshint
+            - npm install
         after:
             - php artisan key:generate
             - php artisan migrate
