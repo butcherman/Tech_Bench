@@ -15,6 +15,11 @@ Auth::routes();
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('index');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
+/*
+*
+*   Finish setting up user account Routes
+*
+*/
 Route::get('/finish-setup/{hash}', 'Admin\UserController@initializeUser')->name('initialize');
 Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')->name('initialize');
 

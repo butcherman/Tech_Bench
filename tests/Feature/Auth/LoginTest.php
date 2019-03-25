@@ -91,7 +91,7 @@ class LoginTest extends TestCase
     public function testRememberMe()
     {   
         $user = factory(User::class)->create([
-            'user_id'  => random_int(1, 100),
+            'user_id'  => random_int(10, 100),
             'password' => bcrypt($password = 'myPassword'),
         ]);
         

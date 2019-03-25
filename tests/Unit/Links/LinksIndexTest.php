@@ -37,7 +37,6 @@ class LinksIndexTest extends TestCase
             'user_id' => $user->user_id
         ]);
         
-        
         //  Modify the expire format to match what we are expecting
         foreach($data as $d)
         {
