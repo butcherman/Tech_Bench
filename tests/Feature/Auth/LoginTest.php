@@ -43,7 +43,6 @@ class LoginTest extends TestCase
         ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));   
-//        $response->assertAuthenticatedAs($user);
     }
     
     //  Verify user cannot login with incorrect password

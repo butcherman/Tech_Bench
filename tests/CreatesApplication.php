@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\User;
+use App\Role;
 use Illuminate\Contracts\Console\Kernel;
 
 trait CreatesApplication
@@ -22,30 +23,38 @@ trait CreatesApplication
     }
     
     //  Act as a registered Installer user
-    public function actAsInstaller()
+    public function getInstaller()
     {
-        $user = User::find(1);
-        $this->be($user);
+        $user = factory(User::class)->create();
+        $user->roles()->attach(Role::where('name', 'installer')->first());
+        
+        return $user;
     }
     
     //  Act as a registered Admin user
-    public function actAsAdmin()
+    public function getAdmin()
     {
-        $user = User::find(2);
-        $this->be($user);
+        $user = factory(User::class)->create();
+        $user->roles()->attach(Role::where('name', 'admin')->first());
+        
+        return $user;
     }
     
     //  Act as a registered Reports user
-    public function actAsReport()
+    public function getReport()
     {
-        $user = User::find(3);
-        $this->be($user);
+        $user = factory(User::class)->create();
+        $user->roles()->attach(Role::where('name', 'report')->first());
+        
+        return $user;
     }
     
     //  Act as a registered Tech user
-    public function actAsTech()
+    public function getTech()
     {
-        $user = User::find(4);
-        $this->be($user);
+        $user = factory(User::class)->create();
+        $user->roles()->attach(Role::where('name', 'tech')->first());
+        
+        return $user;
     }
 }
