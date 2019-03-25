@@ -16,8 +16,9 @@ build:
             - composer install --no-interaction
             - pear install pear/PHP_CodeSniffer
             - phpenv rehash
+            - npm install n -g
 #            - npm install npm@latest -g
-            - npm update npm -g
+#            - npm update npm -g
             - npm install -g jshint
             - npm install
         after:
