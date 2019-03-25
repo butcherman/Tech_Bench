@@ -19,6 +19,7 @@ build:
             - npm install npm@latest -g
             - npm install -g jshint
             - npm install
+            - yarn import
         after:
             - php artisan key:generate
             - php artisan migrate
