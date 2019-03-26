@@ -25,7 +25,7 @@ class LinkFilesController extends Controller
     {
         switch($dir)
         {
-                //  For files that are available for a gues tot download
+            //  For files that are available for a guest to download
             case 'down':
                 $files = FileLinkFiles::where('link_id', $id)
                     ->where('upload', false)
@@ -125,7 +125,7 @@ class LinkFilesController extends Controller
             'name'         => $request->file_name
         ]);
         
-        return response()->json(['success' => 'ok']);
+        return response()->json(['success' => true]);
     }
     
     //  Delete a file attached to a link
@@ -137,6 +137,6 @@ class LinkFilesController extends Controller
         
         Files::deleteFile($fileID);
         
-        return response()->json(['success' => 'success']);
+        return response()->json(['success' => true]);
     }
 }

@@ -5,6 +5,8 @@ namespace Tests\Feature\Links;
 use App\Customers;
 use Tests\TestCase;
 use Faker\Generator as Faker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -70,15 +72,39 @@ class NewLinkTest extends TestCase
         $user = $this->getTech();
         $customer = factory(Customers::class)->create();
         $data = [
-            'cust_id'   => $customer->cust_id,
-            'name' => 'This is a name',
-            'expire'    => date('Y-m-d', strtotime('+30 days'))
+            'cust_id' => $customer->cust_id,
+            'name'    => 'This is a name',
+            'expire'  => date('Y-m-d', strtotime('+30 days'))
         ];
         
         $response = $this->actingAs($user)->from(route('links.data.create'))->post(route('links.data.store'), $data);
         
         $response->assertSuccessful();
         $response->assertJsonStructure(['link', 'name']);
+    }
+    
+    //  Verify form submitted with a file works
+    public function testSubmitWithFile()
+    {
+        Storage::fake(config('filesystems.paths.links'));
+        
+        $user = $this->getTech();
+        $customer = factory(Customers::class)->create();
+        $data = [
+            'cust_id' => $customer->cust_id,
+            'name'    => 'This is a name',
+            'expire'  => date('Y-m-d', strtotime('+30 days')),
+            'file'    => [$file = UploadedFile::fake()->image('random.jpg')]
+        ];
+        
+        $response = $this->actingAs($user)->from(route('links.data.create'))->post(route('links.data.store'), $data);
+        
+        $linkID = json_decode($response->getContent())->link;
+        
+        $response->assertSuccessful();
+        $response->assertJsonStructure(['link', 'name']);
+        
+        Storage::disk()->assertExists(config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID.DIRECTORY_SEPARATOR.'random.jpg');
     }
     
     //  Verify form submitted with no customer link 
