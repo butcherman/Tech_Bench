@@ -86,7 +86,7 @@ Although there is a .htaccess file that will redirect all web traffic to the "pu
 
 For example, if the web files are stored in the /var/www/html, the web root should point at /var/www/html/public.
 
-# Copyright © 2016-2018 Ron Butcher
+# Copyright © 2016-2019 Ron Butcher
 
 This program is free software:  you can redistribute it and/or modify it under the terms of the GNU 
 General Public License as published by the Free Software Foundation, either version 3 of the License, 

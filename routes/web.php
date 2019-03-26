@@ -37,22 +37,17 @@ Route::put('download-all', 'DownloadController@flashDownload')->name('downloadAl
 *   User File Link Routes
 *
 */
-//Route::resource('file-links', 'FileLinks\UserLinksController');
 Route::post('file-links/{id}', 'FileLinks\UserLinksController@update')->name('file-links.show');
 Route::get('file-links/{id}', 'FileLinks\UserLinksController@show')->name('file-links.show');
 Route::get('file-links', 'FileLinks\UserLinksController@index');
 
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-///  password change routes
-
-Route::get('/something', 'DashboardController@index')->name('index');
-Route::get('/somepage', 'DashboardController@index')->name('changePassword');
-
-//////////////////////////////////////////////////////////////////////////
-
+/*
+*
+*   User Change Password Routes
+*
+*/
+Route::get('/account/change-password', 'AccountController@changePassword')->name('changePassword');
+Route::post('/account/change-password', 'AccountController@submitPassword')->name('changePassword');
 
 /*
 *
@@ -83,7 +78,8 @@ Route::middleware(['password_expired'])->group(function()
         *   User Account Settings
         *
         */
-        
+        Route::get('account', 'AccountController@index')->name('account');
+        Route::post('account', 'AccountController@submit')->name('account');
         
         
         

@@ -48,6 +48,12 @@
                         <span class="nav-link-text">File Links</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('account')}}">
+                        <i class="fa fa-fw fa-user"></i>
+                        <span class="nav-link-text">Account Settings</span>
+                    </a>
+                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
