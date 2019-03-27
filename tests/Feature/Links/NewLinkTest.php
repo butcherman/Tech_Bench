@@ -4,6 +4,7 @@ namespace Tests\Feature\Links;
 
 use App\Customers;
 use Tests\TestCase;
+use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class NewLinkTest extends TestCase
 {
+    use RefreshDatabase;
+    
     //  Verify unauthorized user cannot visit the page
     public function testGuest()
     {

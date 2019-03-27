@@ -29,7 +29,7 @@ class SettingsServiceProvider extends ServiceProvider
 		}
 		catch(\Illuminate\Database\QueryException $e)
 		{
-
+            //  
 		}
     }
 

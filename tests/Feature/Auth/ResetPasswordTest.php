@@ -46,9 +46,9 @@ class ResetPasswordTest extends TestCase
         $user = factory(User::class)->create();
         
         $response = $this->post('/password/reset', [
-            'token' => Password::broker()->createToken($user),
-            'email' => $user->email,
-            'password' => 'new-awesome-password',
+            'token'                 => Password::broker()->createToken($user),
+            'email'                 => $user->email,
+            'password'              => 'new-awesome-password',
             'password_confirmation' => 'new-awesome-password',
         ]);
         
@@ -90,9 +90,9 @@ class ResetPasswordTest extends TestCase
         $token = Password::broker()->createToken($user);
         
         $response = $this->from(route('password.reset', $token))->post('/password/reset', [
-            'token' => $token,
-            'email' => $user->email,
-            'password' => '',
+            'token'                 => $token,
+            'email'                 => $user->email,
+            'password'              => '',
             'password_confirmation' => '',
         ]);
         $response->assertRedirect(route('password.reset', $token));
@@ -113,9 +113,9 @@ class ResetPasswordTest extends TestCase
         $token = Password::broker()->createToken($user);
         
         $response = $this->from(route('password.reset', $token))->post('/password/reset', [
-            'token' => $token,
-            'email' => '',
-            'password' => 'new-awesome-password',
+            'token'                 => $token,
+            'email'                 => '',
+            'password'              => 'new-awesome-password',
             'password_confirmation' => 'new-awesome-password',
         ]);
         $response->assertRedirect(route('password.reset', $token));

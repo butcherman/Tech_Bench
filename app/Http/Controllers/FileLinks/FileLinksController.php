@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FileLinks;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -60,7 +61,7 @@ class FileLinksController extends Controller
         //  Generate a random hash to use as the file link and make sure it is not already in use
         do
         {
-            $hash = strtolower(str_random(15));
+            $hash = strtolower(Str::random(15));
             $dup  = FileLinks::where('link_hash', $hash)->get()->count();
         }while($dup != 0);
         

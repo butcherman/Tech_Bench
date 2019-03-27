@@ -8,6 +8,7 @@ use App\Role;
 use App\User;
 use Carbon\Carbon;
 use App\UserInitialize;
+use Illuminate\Support\Str;
 use App\Mail\InitializeUser;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -72,7 +73,7 @@ class UserController extends Controller
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
             'email'      => $request->email,
-            'password'   => bcrypt(strtolower(str_random(15))),
+            'password'   => bcrypt(strtolower(Str::random(15))),
             'active'     => 1
         ]);
         
@@ -82,7 +83,7 @@ class UserController extends Controller
         DB::insert('INSERT INTO `user_role` (`user_id`, `role_id`) VALUES (?, ?)', [$userID, $request->role]);
         
         //  Create the setup user link
-        $hash = strtolower(str_random(30));
+        $hash = strtolower(Str::random(30));
         UserInitialize::create([
             'username' => $request->username,
             'token'    => $hash

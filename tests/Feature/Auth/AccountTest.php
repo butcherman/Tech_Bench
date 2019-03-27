@@ -103,7 +103,7 @@ class AccountTest extends TestCase
         $response = $this->from(route('changePassword'))->post(route('changePassword'), $data);
         
         $response->assertStatus(302);
-        $response->assertREdirect(route('login'));
+        $response->assertRedirect(route('login'));
         $this->assertGuest();
     }
     
@@ -151,7 +151,6 @@ class AccountTest extends TestCase
         
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['newPass']);
-//        $response->assertSessionHas('error', 'Your Current Password is not valid.  Please try again.');
     }
     
     //  Verify that a use cannot submit password if the new password is the same as the old one

@@ -34,7 +34,7 @@
     instructions_route="{{route('links.instructions', $link_id)}}"     
     >
 </link-instructions>
-<div class="row pad-top">
+<div class="row pad-top pad-bottom">
     <div class="col-md-6 d-flex">
         <div class="card w-100">
             <div class="card-header"><h5 class="card-title">Files Available to Download:</h5></div>

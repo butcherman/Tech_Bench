@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class LogSuccessfulLogin
 {
     //  Update the datbase to note the successful login
-    public function handle($event)
+    public function handle()
     {
         UserLogins::create(
         [

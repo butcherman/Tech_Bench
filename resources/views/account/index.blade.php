@@ -29,7 +29,7 @@
             </div>
         </div>
     @endif
-    <div class="row justify-content-center">
+    <div class="row justify-content-center pb-4">
         <div class="col-md-8">
             {!! Form::model($userData, ['route' => ['account', $userID]]) !!}
                 {{ Form::bsText('username', 'Username', null, ['readonly']) }}

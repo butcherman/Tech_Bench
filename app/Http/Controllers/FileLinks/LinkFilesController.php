@@ -23,6 +23,8 @@ class LinkFilesController extends Controller
     //  Get the files for the link    
     public function getIndex($id, $dir)
     {
+        $files = [];
+        
         switch($dir)
         {
             //  For files that are available for a guest to download

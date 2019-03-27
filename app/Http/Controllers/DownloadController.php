@@ -43,7 +43,7 @@ class DownloadController extends Controller
         //  Verify that the file array is not empty
         if(empty($fileData))
         {
-            Log::info('Files Not Found', session('fileArr'));
+            Log::info('Files Not Found', [session('fileArr')]);
             return view('err.badFile');
         }
         
