@@ -25,7 +25,7 @@ class SystemTypesSeeder extends Seeder
         $sys2->sys_id           = 2;
         $sys2->cat_id           = 1;
         $sys2->name             = 'IPK II';
-        $sys2->parent_id        = 1;
+        $sys2->parent_id        = NULL;
         $sys2->folder_location  = 'nec_ipkii';
         $sys2->save();
         
@@ -33,7 +33,7 @@ class SystemTypesSeeder extends Seeder
         $sys3->sys_id           = 3;
         $sys3->cat_id           = 1;
         $sys3->name             = 'SV8100';
-        $sys3->parent_id        = 1;
+        $sys3->parent_id        = NULL;
         $sys3->folder_location  = 'nec_sv8100';
         $sys3->save();
         
@@ -41,7 +41,7 @@ class SystemTypesSeeder extends Seeder
         $sys4->sys_id           = 4;
         $sys4->cat_id           = 1;
         $sys4->name             = 'SV9100';
-        $sys4->parent_id        = 1;
+        $sys4->parent_id        = NULL;
         $sys4->folder_location  = 'nec_sv9100';
         $sys4->save();
         
@@ -49,7 +49,7 @@ class SystemTypesSeeder extends Seeder
         $sys5->sys_id           = 5;
         $sys5->cat_id           = 1;
         $sys5->name             = 'IPK';
-        $sys5->parent_id        = 1;
+        $sys5->parent_id        = NULL;
         $sys5->folder_location  = 'nec_ipk';
         $sys5->save();
         
@@ -57,7 +57,7 @@ class SystemTypesSeeder extends Seeder
         $sys6->sys_id           = 6;
         $sys6->cat_id           = 1;
         $sys6->name             = 'Older NEC';
-        $sys6->parent_id        = 1;
+        $sys6->parent_id        = NULL;
         $sys6->folder_location  = 'nec_oldernec';
         $sys6->save();
         
@@ -98,7 +98,7 @@ class SystemTypesSeeder extends Seeder
         $sys11->sys_id          = 11;
         $sys11->cat_id          = 2;
         $sys11->name            = 'Digital Sentry';
-        $sys11->parent_id       = 10;
+        $sys11->parent_id       = NULL;
         $sys11->folder_location = 'pelco_digitalsentry';
         $sys11->save();
         
@@ -106,7 +106,7 @@ class SystemTypesSeeder extends Seeder
         $sys12->sys_id          = 12;
         $sys12->cat_id          = 2;
         $sys12->name            = 'DX8100';
-        $sys12->parent_id       = 10;
+        $sys12->parent_id       = NULL;
         $sys12->folder_location = 'pelco_dx8100';
         $sys12->save();
         
@@ -114,7 +114,7 @@ class SystemTypesSeeder extends Seeder
         $sys13->sys_id          = 13;
         $sys13->cat_id          = 2;
         $sys13->name            = 'IC Realtime';
-        $sys13->parent_id       = null;
+        $sys13->parent_id       = NULL;
         $sys13->folder_location = 'icrealtime';
         $sys13->save();
         
@@ -122,7 +122,7 @@ class SystemTypesSeeder extends Seeder
         $sys14->sys_id          = 14;
         $sys14->cat_id          = 2;
         $sys14->name            = 'Paxton';
-        $sys14->parent_id       = null;
+        $sys14->parent_id       = NULL;
         $sys14->folder_location = 'paxton';
         $sys14->save();
         

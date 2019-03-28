@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SystemTypesSeeder::class);
         $this->call(SystemCustDataFieldsSeeder::class);
         $this->call(CustomersSeeder::class);
+        $this->call(FileLinksSeeder::class);
     }
 }

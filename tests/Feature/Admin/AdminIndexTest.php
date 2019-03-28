@@ -30,7 +30,7 @@ class AdminIndexTest extends TestCase
         $response->assertStatus(401);
     }
     
-    //  Verify that a Report user can visit the page
+    //  Verify that a Report user cannot visit the page
     public function testReport()
     {
         $user = $this->getReport();

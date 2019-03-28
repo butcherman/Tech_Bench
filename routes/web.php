@@ -157,6 +157,12 @@ Route::middleware(['password_expired'])->group(function()
         
         Route::prefix('admin')->name('admin.')->group(function()
         {
+            //  Admin User File Links routes
+//            Route::get('links/show/{id}', 'AdminController@showLinks')->name('userLinks');
+            Route::get('count-links', 'Admin\AdminController@countLinks')->name('countLinks');
+            Route::get('links', 'Admin\AdminController@userLinks')->name('links');
+            
+            //  Admin User routes
             Route::get('user/confirm/{id}', 'Admin\UserController@confirm')->name('confirmDisable');
             Route::get('user/disable', 'Admin\UserController@disable')->name('disable');
             Route::get('user/change-password/{id}', 'Admin\UserController@changePassword')->name('changePassword');
@@ -164,14 +170,29 @@ Route::middleware(['password_expired'])->group(function()
             Route::get('user/password', 'Admin\UserController@passwordList')->name('password');
             Route::resource('user', 'Admin\UserController');
             
-            
-            
+            //  Admin index route
             Route::get('/', 'Admin\AdminController@index')->name('index');
         });
         
     
         
         
+    });
+    
+    
+    
+    /*
+    *
+    *   Installer Routes
+    *
+    */
+    Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
+    {
+        Route::prefix('installer')->name('installer.')->group(function()
+        {
+            Route::get('user-security-settings', 'Installer\SettingsController@userSecurity')->name('userSecurity');
+            Route::post('user-security-settings', 'Installer\SettingsController@submitUserSecurity')->name('userSecurity');
+        });
     });
     
     

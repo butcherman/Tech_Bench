@@ -20,10 +20,10 @@
                     <li><a href="{{route('admin.user.index')}}">Update Existing User</a></li>
                     <li><a href="{{route('admin.password')}}">Reset Users Password</a></li>
                     <li><a href="{{route('admin.disable')}}">Disable User</a></li>
-{{--
-                    <li><a href="">User File Links</a></li>
-                    <li><a href="">User Security Settings</a></li>
---}}
+                    <li><a href="{{route('admin.links')}}">User File Links</a></li>
+        @if(Auth::user()->hasAnyRole(['installer']))
+                    <li><a href="{{route('installer.userSecurity')}}">User Security Settings</a></li>
+        @endif
                 </ul>
             </div>
 {{--

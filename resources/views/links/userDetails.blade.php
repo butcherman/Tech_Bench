@@ -40,7 +40,7 @@
                                 @foreach($files as $file)
                                     <tr>
                                         <td><a href="{{route('download', ['id' => $file->file_id, 'name' => $file->file_name])}}">{{$file->file_name}}</a></td>
-                                        <td>{{$file->created_at}}</td>
+                                        <td>{{$file->timestamp}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -42,11 +42,12 @@ class UserLinksController extends Controller
             ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
             ->get();
         
-        //  Gather the array for the "download all link"
+        //  Gather the array for the "download all link" and update the time stamp for a more readable format
         $fileArr = [];
         foreach($files as $file)
         {
-            $fileArr[] = $file->file_id;
+            $fileArr[]       = $file->file_id;
+            $file->timestamp = date('M d, Y', strtotime($file->created_at));
         }
         
         return view('links.userDetails', [

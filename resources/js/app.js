@@ -50,6 +50,7 @@ Vue.component('user-upload',       require('./components/fileLinks/UserFileUploa
 *   Admin Components
 */
 Vue.component('user-list', require('./components/admin/userList.vue').default);
+Vue.component('admin-file-links', require('./components/admin/fileLinks.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers
