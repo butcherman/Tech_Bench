@@ -18,6 +18,7 @@
             <div class="table-responsive">
                 <admin-file-links 
                     links_route="{{route('admin.countLinks')}}"
+                    action_url="{{route('admin.userLinks', ':id')}}"
                 ></admin-file-links>
             </div>
         </div>

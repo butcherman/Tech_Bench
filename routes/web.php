@@ -158,7 +158,7 @@ Route::middleware(['password_expired'])->group(function()
         Route::prefix('admin')->name('admin.')->group(function()
         {
             //  Admin User File Links routes
-//            Route::get('links/show/{id}', 'AdminController@showLinks')->name('userLinks');
+            Route::get('links/show/{id}', 'Admin\AdminController@showLinks')->name('userLinks');
             Route::get('count-links', 'Admin\AdminController@countLinks')->name('countLinks');
             Route::get('links', 'Admin\AdminController@userLinks')->name('links');
             

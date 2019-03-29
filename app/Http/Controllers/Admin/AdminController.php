@@ -41,8 +41,8 @@ class AdminController extends Controller
                            }
                        })->count();
 
-            
             $linkCount[] = [
+                'user_id' => $user->user_id,
                 'name'    => $user->first_name.' '.$user->last_name,
                 'total'   => $user->FileLinks->count(),
                 'expired' => $expired
@@ -50,5 +50,17 @@ class AdminController extends Controller
         }
         
         return response()->json($linkCount);
+    }
+    
+    //  Show the links for the selected user
+    public function showLinks($id)
+    {
+        $user     = User::find($id);
+        $userName = $user->first_name.' '.$user->last_name;
+        
+        return view('admin.linkDetails', [
+            'userID' => $id,
+            'name'   => $userName
+        ]);
     }
 }

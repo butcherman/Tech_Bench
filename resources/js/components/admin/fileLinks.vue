@@ -4,8 +4,7 @@
             :columns="columns"
             :rows="rows"
             styleClass="vgt-table striped bordered"
-            
-            
+            @on-row-click="clickName"
         ></vue-good-table>
     </div>
 </template>
@@ -14,6 +13,7 @@
 export default {
     props: [
         'links_route',
+        'action_url',
     ],
     data() {
         return {
@@ -47,9 +47,13 @@ export default {
             axios.get(this.links_route)
                 .then(res => {
                     this.rows = res.data;
-                    console.log(this.rows);
                 })
                 .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+        },
+        clickName(par)
+        {
+            var url = this.action_url.replace(':id', par.row.user_id);
+            location.href = url;
         }
     }
 }
