@@ -112,13 +112,12 @@ class SettingsController extends Controller
     //  Send a test email
     public function sendTestEmail(Request $request)
     {
-        
-//        echo $request->host;
-//        echo ' ';
-//        die();
-        Log::info(config('mail.host'));
-        
-        //  Make sure that all of the information properly validates
+        //  to be added
+    }
+    
+    //  Submit the test email form
+    public function submitEmailSettings(Request $request)
+    {
         $request->validate([
             'host'       => 'required',
             'port'       => 'required|numeric',
@@ -126,50 +125,17 @@ class SettingsController extends Controller
             'username'   => 'required'
         ]);
         
-        //  Temporarily set the email settings
-//        config([
-//            'mail.host'       => $request->host,
-//            'mail.port'       => $request->port,
-//            'mail.encryption' => $request->encryption,
-//            'mail.username'   => $request->username,
-//        ]);
-        
-        Config::set('mail.host', $request->host);
-        
-        
-//        
-//        echo config('mail.host');
-//        die();
-        
+        //  Update each setting
+        Settings::where('key', 'mail.host')->update(['value' => $request->host]);
+        Settings::where('key', 'mail.port')->update(['value' => $request->port]);
+        Settings::where('key', 'mail.encryption')->update(['value' => $request->encryption]);
+        Settings::where('key', 'mail.username')->update(['value' => $request->username]);
         if(!empty($request->password))
         {
-            config(['mail.password' => $request->password]);
+            Settings::where('key', 'mail.password')->update(['value' => $request->password]);
         }
-        
-        //  Try and send the test email
-        try
-        {
-//            Log::info('Test Email Successfully Sent to '.Auth::user()->email);
-            Log::info(config('mail.host'));
-            Mail::to(Auth::user()->email)->send(new TestEmail());
-//            return 'success';
-            return response()->json([
-                'success' => true,
-                'sentTo'  => Auth::user()->email
-            ]);
-        }
-        catch(Exception $e)
-        {
-            Log::notice('Test Email Failed.  Message: '.$e);
-            $msg = '['.$e->getCode().'] "'.$e->getMessage().'" on line '.$e->getTrace()[0]['line'].' of file '.$e->getTrace()[0]['file'];
-//            return $msg;
-            return response()->json(['message' => $msg]);
-        }
-    }
-    
-    //  Submit the test email form
-    public function submitEmailSettings(Request $request)
-    {
-        return response('submitted');
+         
+        Log::info('Email Settings have been changed by User ID-'.Auth::user()->user_id);
+        return redirect()->back()->with('success', 'Tech Bench Successfully Updated');
     }
 }
