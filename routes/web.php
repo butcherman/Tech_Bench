@@ -190,8 +190,17 @@ Route::middleware(['password_expired'])->group(function()
     {
         Route::prefix('installer')->name('installer.')->group(function()
         {
+            //  User Settings
             Route::get('user-security-settings', 'Installer\SettingsController@userSecurity')->name('userSecurity');
             Route::post('user-security-settings', 'Installer\SettingsController@submitUserSecurity')->name('userSecurity');
+            
+            //  System custionization settings
+            Route::get('system-customization', 'Installer\SettingsController@customizeSystem')->name('customize');
+            Route::post('system-customization', 'Installer\SettingsController@submitCustomizeSystem')->name('customize');
+            Route::post('new-logo', 'Installer\SettingsController@submitLogo')->name('submitLogo');
+            Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
+            Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
+            Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
         });
     });
     

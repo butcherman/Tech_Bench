@@ -42,6 +42,7 @@ return [
         //  Package Service Providers...
         Collective\Html\HtmlServiceProvider::class,
         ZanySoft\Zip\ZipServiceProvider::class,
+        Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
 
         //  Application Service Providers...
         App\Providers\SettingsServiceProvider::class,

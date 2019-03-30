@@ -38,15 +38,13 @@
 --}}
     @endif
     @if(Auth::user()->hasAnyRole(['installer']))
-{{--
             <div class="col-md-4">
                 <h4 class="pl-5">System Settings:</h4>
                 <ul class="admin-list">
-                    <li><a href="">Timezone and Logo</a></li>
-                    <li><a href="">Email Settings</a></li>
+                    <li><a href="{{route('installer.customize')}}">Timezone and Logo</a></li>
+                    <li><a href="{{route('installer.emailSettings')}}">Email Settings</a></li>
                 </ul>
             </div>
---}}
         </div>
         <div class="row pad-top">
 {{--

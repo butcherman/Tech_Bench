@@ -53,6 +53,12 @@ Vue.component('user-list', require('./components/admin/userList.vue').default);
 Vue.component('admin-file-links', require('./components/admin/fileLinks.vue').default);
 
 /*
+*   Installer Components
+*/
+Vue.component('logo-replace', require('./components/installer/logoReplace.vue').default);
+Vue.component('test-email', require('./components/installer/testEmail.vue').default);
+
+/*
 *   Include CSRF toden in all axios headers
 */
 window.axios.defaults.headers.common = {
