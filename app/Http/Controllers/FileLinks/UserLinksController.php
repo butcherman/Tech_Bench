@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FileLinks;
 use App\User;
 use App\Files;
 use App\FileLinks;
+use App\FileLinkNotes;
 use App\FileLinkFiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

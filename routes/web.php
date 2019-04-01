@@ -28,7 +28,7 @@ Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')
 *   Download File Routes
 *
 */
-Route::get('/download/{id}/{filename}', 'DownloadController@index')->name('download');
+Route::get('download/{id}/{filename}', 'DownloadController@index')->name('download');
 Route::get('download-all', 'DownloadController@downloadAll')->name('downloadAll');
 Route::put('download-all', 'DownloadController@flashDownload')->name('downloadAll');
 
@@ -201,6 +201,11 @@ Route::middleware(['password_expired'])->group(function()
             Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
             Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
             Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
+            
+            //  Categories and Systems settings
+//            Route::get('categories', 'Installer\CategoriesController@index')
+            Route::resource('categories', 'Installer\CategoriesController');
+            Route::resource('systems', 'Installer\SystemsController');
         });
     });
     

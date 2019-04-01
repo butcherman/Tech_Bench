@@ -52,5 +52,16 @@ class UserTableSeeder extends Seeder
         $emp3->active       = 1;
         $emp3->save();
         $emp3->roles()->attach($role_tech);
+        
+        $emp4               = new User();
+        $emp4->user_id      = 5;
+        $emp4->username     = 'bbob';
+        $emp4->first_name   = 'Billy';
+        $emp4->last_name    = 'Bob';
+        $emp4->email        = 'bbob@em.com';
+        $emp4->password     = bcrypt('password');
+        $emp4->active       = 1;
+        $emp4->save();
+        $emp4->roles()->attach($role_admin);
     }
 }

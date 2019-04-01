@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
+    
+    protected $maxAttempts, $decayMinutes;
 
     //  Where to redirect users after login
     protected $redirectTo = '/dashboard';

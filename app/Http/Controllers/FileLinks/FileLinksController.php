@@ -149,7 +149,7 @@ class FileLinksController extends Controller
         $linkData = FileLinks::where('link_id', $id)->leftJoin('customers', 'file_links.cust_id', '=', 'customers.cust_id')->first();
         
         //  Format the expiration date to be readable
-        $linkData->timeStamp = $linkData->expire;
+        $linkData->timestamp = $linkData->expire;
         $linkData->expire    = date('M d, Y', strtotime($linkData->expire));
         
         return response()->json($linkData);

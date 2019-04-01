@@ -12,7 +12,7 @@
         </div>
     </div>
     @if(Auth::user()->hasAnyRole(['installer', 'admin']))
-        <div class="row pad-top">
+        <div class="row pad-top justify-content-center">
             <div class="col-md-4">
                 <h4 class="pl-5">Users:</h4>
                 <ul class="admin-list">
@@ -46,18 +46,16 @@
                 </ul>
             </div>
         </div>
-        <div class="row pad-top">
-{{--
+        <div class="row pad-top justify-content-center">
             <div class="col-md-4">
                 <h4 class="pl-5">Categories and Systems</h4>
                 <ul class="admin-list">
-                    <li><a href="">Create New Category</a></li>
-                    <li><a href="">Edit Existing Category</a></li>
+                    <li><a href="{{route('installer.categories.create')}}">Create New Category</a></li>
+                    <li><a href="{{route('installer.categories.index')}}">Edit Existing Category</a></li>
                     <li><a href="">Create New System</a></li>
                     <li><a href="">Modify Existing System</a></li>
                 </ul>
             </div>
---}}
 {{--
             <div class="col-md-4">
                 <h4 class="pl-5">System Maintenance</h4>
