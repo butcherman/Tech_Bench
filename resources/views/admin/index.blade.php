@@ -11,6 +11,13 @@
             <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>System Administration</h1></div>
         </div>
     </div>
+    @if(session()->has('success'))
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <b-alert variant="success" class="text-center" show dismissible><h3>{{session()->get('success')}}</h3></b-alert>
+            </div>
+        </div>
+    @endif
     @if(Auth::user()->hasAnyRole(['installer', 'admin']))
         <div class="row pad-top justify-content-center">
             <div class="col-md-4">
@@ -51,9 +58,9 @@
                 <h4 class="pl-5">Categories and Systems</h4>
                 <ul class="admin-list">
                     <li><a href="{{route('installer.categories.create')}}">Create New Category</a></li>
-                    <li><a href="{{route('installer.categories.index')}}">Edit Existing Category</a></li>
-                    <li><a href="">Create New System</a></li>
-                    <li><a href="">Modify Existing System</a></li>
+                    <li><a href="{{route('installer.categories.index')}}">Modify Existing Category</a></li>
+                    <li><a href="{{route('installer.systems.create')}}">Create New System</a></li>
+                    <li><a href="{{route('installer.systems.index')}}">Modify Existing System</a></li>
                 </ul>
             </div>
 {{--

@@ -49,11 +49,12 @@ class CategoriesController extends Controller
         return redirect()->back()->with('success', 'Category Successfully Added. <a href="'.route('installer.systems.create').'">Add System</a>');
     }
 
-    //  Brind up the Edit System F
+    //  Get a JSON list of the categories
     public function show($id)
     {
-        //
-        echo 'show';
+        $categories = SystemCategories::all();
+        
+        return response()->json($categories);
     }
 
     //  Brind up the Edit Category Form

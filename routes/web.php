@@ -203,7 +203,6 @@ Route::middleware(['password_expired'])->group(function()
             Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
             
             //  Categories and Systems settings
-//            Route::get('categories', 'Installer\CategoriesController@index')
             Route::resource('categories', 'Installer\CategoriesController');
             Route::resource('systems', 'Installer\SystemsController');
         });

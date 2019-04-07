@@ -9,6 +9,9 @@ import vue2Dropzone       from 'vue2-dropzone';
 import VueClipboard       from 'vue-clipboard2';
 import Editor             from '@tinymce/tinymce-vue';
 import VueGoodTablePlugin from 'vue-good-table';
+import vSelect            from 'vue-select';
+import draggable          from 'vuedraggable';
+import VeeValidate        from 'vee-validate';
 
 /*
 *   The TinyMCE library
@@ -22,12 +25,14 @@ require('tinymce/plugins/table');
 /*
 *   Third party components
 */
+Vue.use(VeeValidate);
 Vue.use(VueClipboard);
+Vue.use(VueGoodTablePlugin);
 Vue.component('clickConfirm', ClickConfirm);
 Vue.component('vue-dropzone', vue2Dropzone);
-//Vue.component('good-table',   require('vue-good-table').default);
 Vue.component('editor',       require('@tinymce/tinymce-vue').default);
-Vue.use(VueGoodTablePlugin);
+Vue.component('v-select',     vSelect)
+Vue.component('draggable',    draggable);
 
 /*
 *   General Components
@@ -49,14 +54,16 @@ Vue.component('user-upload',       require('./components/fileLinks/UserFileUploa
 /*
 *   Admin Components
 */
-Vue.component('user-list', require('./components/admin/userList.vue').default);
+Vue.component('user-list',        require('./components/admin/userList.vue').default);
 Vue.component('admin-file-links', require('./components/admin/fileLinks.vue').default);
 
 /*
 *   Installer Components
 */
-Vue.component('logo-replace', require('./components/installer/logoReplace.vue').default);
-Vue.component('test-email', require('./components/installer/testEmail.vue').default);
+Vue.component('logo-replace',     require('./components/installer/logoReplace.vue').default);
+Vue.component('test-email',       require('./components/installer/testEmail.vue').default);
+Vue.component('new-system-form',  require('./components/installer/newSystem.vue').default);
+Vue.component('edit-system-form', require('./components/installer/editSystem.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers
