@@ -110,8 +110,17 @@ Route::middleware(['password_expired'])->group(function()
             Route::get('/', 'FileLinks\FileLinksController@index')->name('index'); 
         });
         
-        
-        
+        /*
+        *
+        *   System Routes
+        *
+        */
+        Route::prefix('system')->name('system.')->group(function()
+        {
+            Route::get('{cat}/{sys}', 'Systems\SystemsController@details')->name('details');
+            Route::get('{cat}', 'Systems\SystemsController@selectSys')->name('select');
+            Route::get('/', 'Systems\SystemsController@index')->name('index');
+        });
         
         
         

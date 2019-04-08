@@ -1,12 +1,29 @@
-// Body
-$body-bg: #f5f8fa;
+
 
 // Typography
 $font-family-sans-serif: "Raleway", sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
-$headerBackground: linear-gradient(#736D6D, #222);
+// Body Colors
+$body-bg: #f5f8fa;
+$header-height: 56px;
+$header-background: linear-gradient(#736D6D, #222);
+$side-nav-background: #343A40;
+$nav-link-color: #adb5bd;
+
+
+
+
+
+
+
+$side-nav-width: 235px;
+
+
+
+
+
 
 //  Standard classes
 .center {

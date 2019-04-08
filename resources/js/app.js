@@ -37,6 +37,7 @@ Vue.component('draggable',    draggable);
 /*
 *   General Components
 */
+Vue.component('navbar',        require('./components/navBar.vue').default);
 Vue.component('go-back',       require('./components/GoBack.vue').default);
 Vue.component('download-all',  require('./components/DownloadAll.vue').default);
 Vue.component('notifications', require('./components/Notifications.vue').default);
@@ -81,3 +82,7 @@ window.onload = function() {
         el: '#app'
     });
 }
+
+/*
+*   Initialize the navbar portion of the app
+*/

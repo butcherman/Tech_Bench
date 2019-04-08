@@ -10,34 +10,19 @@ class Navbar extends Model
     
     public static function getNavLinks()
     {
-        $navItems = Self::all();
-        
-        $navBarCat = [];
-        $navBarSys = [];
-        $navBarSub = [];
+        $navItems = Self::orderBy('category', 'ASC')->orderBy('sys_name', 'ASC')->get();
+
+        $navArray = [];
         
         foreach($navItems as $item)
         {
-            if(!in_array($item->category, $navBarCat))
-            {
-                $navBarCat[] = $item->category;
-            }
-            if(empty($item->parent_id))
-            {
-                $navBarSys[$item->sys_id]['category'] = $item->category;
-                $navBarSys[$item->sys_id]['name'] = $item->sys_name;
-                $navBarSys[$item->sys_id]['url'] = '/system/'.$item->category.'/'.urlencode($item->sys_name);
-            }
-            else
-            {
-                $navBarSub[$item->sys_id]['category'] = $item->category;
-                $navBarSub[$item->sys_id]['parent'] = $item->parent_id;
-                $navBarSub[$item->sys_id]['name'] = $item->sys_name;
-                $navBarSub[$item->sys_id]['url'] = '/system/'.$item->category.'/'.urlencode($item->sys_name);
-                $navBarSys[$item->parent_id]['parent'] = true;
-            }
+            $navArray[$item->category][] = [
+                'name'   => $item->sys_name,
+                'sys_id' => $item->sys_id,
+                'link'   => route('system.details', [urlencode($item->category), urlencode($item->sys_name)])
+            ];            
         }
-        
-        return ['navbarCategories' => $navBarCat, 'navbarParents' => $navBarSys, 'navbarChildren' => $navBarSub];
+
+        return $navArray;
     }
 }
