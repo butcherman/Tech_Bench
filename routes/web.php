@@ -117,6 +117,8 @@ Route::middleware(['password_expired'])->group(function()
         */
         Route::prefix('system')->name('system.')->group(function()
         {
+            Route::post('system-files/replace', 'Systems\SystemFilesController@replace')->name('replaceFile');
+            Route::resource('system-files', 'Systems\SystemFilesController');
             Route::get('{cat}/{sys}', 'Systems\SystemsController@details')->name('details');
             Route::get('{cat}', 'Systems\SystemsController@selectSys')->name('select');
             Route::get('/', 'Systems\SystemsController@index')->name('index');

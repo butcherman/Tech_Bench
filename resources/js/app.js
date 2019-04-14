@@ -37,7 +37,7 @@ Vue.component('draggable',    draggable);
 /*
 *   General Components
 */
-Vue.component('navbar',        require('./components/navBar.vue').default);
+Vue.component('navbar',        require('./components/NavBar.vue').default);
 Vue.component('go-back',       require('./components/GoBack.vue').default);
 Vue.component('download-all',  require('./components/DownloadAll.vue').default);
 Vue.component('notifications', require('./components/Notifications.vue').default);
@@ -51,6 +51,11 @@ Vue.component('link-details',      require('./components/fileLinks/LinkDetails.v
 Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
 Vue.component('link-files',        require('./components/fileLinks/LinkFiles.vue').default);
 Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);
+
+/*
+*   Systems components
+*/
+Vue.component('system-files', require('./components/system/SystemFiles.vue').default);
 
 /*
 *   Admin Components
@@ -82,7 +87,3 @@ window.onload = function() {
         el: '#app'
     });
 }
-
-/*
-*   Initialize the navbar portion of the app
-*/
