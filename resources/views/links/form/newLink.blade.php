@@ -39,17 +39,19 @@ $(document).ready(function()
     
 function uploadComplete(res)
 {
-    if($.isNumeric(res))
-    {
-        url = '{{ route('links.info', ['id' => ':id', 'subj' => ':sub']) }}';
-        url = url.replace(':id', res);
-        url = url.replace(':sub', $('#name').val());
-        window.location.replace(url);
-    }
-    else
-    {
-        uploadFailed(res);
-    }
+//    if($.isNumeric(res))
+//    {
+//        url = '{{ route('links.info', ['id' => ':id', 'subj' => ':sub']) }}';
+//        url = url.replace(':id', res);
+//        url = url.replace(':sub', $('#name').val());
+//        window.location.replace(url);
+//    }
+//    else
+//    {
+//        uploadFailed(res);
+//    }
+    
+    window.location.href = '/links';
 }
 function uploadFailed(res)
 {

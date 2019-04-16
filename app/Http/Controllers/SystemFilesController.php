@@ -11,6 +11,12 @@ use App\SystemTypes;
 use App\SystemFiles;
 use App\SystemFileTypes;
 
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Illuminate\Http\UploadedFile;
+
 class SystemFilesController extends Controller
 {
     //  Only authorized users have access
@@ -57,19 +63,61 @@ class SystemFilesController extends Controller
             'system'   => 'required'
         ]);
         
-        //  Get the folder location for the system
-        $folder = SystemTypes::where('name', $request['system'])->first()->folder_location;
+        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
+
+        // check if the upload is success, throw exception or return response you need
+        if ($receiver->isUploaded() === false) {
+            throw new UploadMissingFileException();
+        }
+
+        // receive the file
+        $save = $receiver->receive();
+        // check if the upload has finished (in chunk mode it will send smaller files)
+        if ($save->isFinished()) 
+        {
+            //  Get the folder location for the system
+            $folder = SystemTypes::where('name', $request['system'])->first()->folder_location;
+
+            //  Set file location and clean filename for duplicates
+            $filePath = config('filesystems.paths.systems')
+                .DIRECTORY_SEPARATOR.strtolower($request['category'])
+                .DIRECTORY_SEPARATOR.$folder;
+
+            $fileID = $this->saveFile($save->getFile(), $filePath);
+            
+            $typeID = SystemFileTypes::where('description', $request['fileType'])->first()->type_id;
+            $sysID  = SystemTypes::where('name', $request['system'])->first()->sys_id;
+
+            //  Attach file to system type
+            SystemFiles::create(
+            [
+                'sys_id'      => $sysID,
+                'type_id'     => $typeID,
+                'file_id'     => $fileID,
+                'name'        => $request['name'],
+                'description' => $request['description'],
+                'user_id'     => \Auth::user()->user_id
+            ]);
+
+            Log::info('File ID-'.$fileID.' Added For System ID-'.$sysID.' By User ID-'.Auth::user()->user_id);
+
+        }
         
-        //  Set file location and clean filename for duplicates
-        $filePath = config('filesystems.paths.systems')
-            .DIRECTORY_SEPARATOR.strtolower($request['category'])
-            .DIRECTORY_SEPARATOR.$folder;
-        
-        $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
-        
+        $handler = $save->handler();
+
+        return response()->json([
+            "done" => $handler->getPercentageDone(),
+            'status' => true
+        ]);
+    }
+    
+    public function saveFile(UploadedFile $file, $filePath)
+    {
+        $fileName = Files::cleanFileName($filePath, $file->getClientOriginalName());
+
         //  Store the file
-        $request->file->storeAs($filePath, $fileName);
-        
+        $file->storeAs($filePath, $fileName);
+
         //  Put the file in the database
         $file = Files::create(
         [
@@ -77,23 +125,7 @@ class SystemFilesController extends Controller
             'file_link' => $filePath.DIRECTORY_SEPARATOR
         ]);
         
-        //  Get information for system files table
-        $fileID = $file->file_id;
-        $typeID = SystemFileTypes::where('description', $request['fileType'])->first()->type_id;
-        $sysID  = SystemTypes::where('name', $request['system'])->first()->sys_id;
-        
-        //  Attach file to system type
-        SystemFiles::create(
-        [
-            'sys_id'      => $sysID,
-            'type_id'     => $typeID,
-            'file_id'     => $fileID,
-            'name'        => $request['name'],
-            'description' => $request['description'],
-            'user_id'     => \Auth::user()->user_id
-        ]);
-        
-        Log::info('File ID-'.$fileID.' Added For System ID-'.$sysID.' By User ID-'.Auth::user()->user_id);
+        return $file->file_id;
     }
 
     //  Form to show a file to edit

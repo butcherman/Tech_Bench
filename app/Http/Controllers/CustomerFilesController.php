@@ -10,6 +10,12 @@ use App\CustomerFiles;
 use App\CustomerFileTypes;
 use App\Files;
 
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Illuminate\Http\UploadedFile;
+
 class CustomerFilesController extends Controller
 {
     //  Only authorized users have access
@@ -45,10 +51,49 @@ class CustomerFilesController extends Controller
         
         //  Set file locationi and clean filename for duplicates
         $filePath = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$request->custID;
-        $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
+
+        // create the file receiver
+        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
+        
+        // check if the upload is success, throw exception or return response you need
+        if ($receiver->isUploaded() === false) {
+            throw new UploadMissingFileException();
+        }
+        
+        // receive the file
+        $save = $receiver->receive();
+        // check if the upload has finished (in chunk mode it will send smaller files)
+        if ($save->isFinished()) {
+        
+        
+            $fileID = $this->saveFile($save->getFile(), $filePath);
+
+            //  Input the file into the customer files table
+            CustomerFiles::create([
+                'file_id'      => $fileID,
+                'file_type_id' => $request->type,
+                'cust_id'      => $request->custID,
+                'user_id'      => Auth::user()->user_id,
+                'name'         => $request->name
+            ]);
+
+            Log::info('File Added For Customer ID-'.$request->custID.' by User ID-'.Auth::user()->user_id.'.  New File ID-'.$fileID);
+        }
+        
+        $handler = $save->handler();
+        
+        return response()->json([
+            "done" => $handler->getPercentageDone(),
+            'status' => true
+        ]);
+    }
+    
+    public function saveFile(UploadedFile $file, $filePath)
+    {
+        $fileName = Files::cleanFileName($filePath, $file->getClientOriginalName());
         
         //  Store the file
-        $request->file->storeAs($filePath, $fileName);
+        $file->storeAs($filePath, $fileName);
         
         //  Put the file in the database
         $file = Files::create(
@@ -57,19 +102,7 @@ class CustomerFilesController extends Controller
             'file_link' => $filePath.DIRECTORY_SEPARATOR
         ]);
         
-        //  Get information for system files table
-        $fileID = $file->file_id;
-        
-        //  Input the file into the customer files table
-        CustomerFiles::create([
-            'file_id'      => $fileID,
-            'file_type_id' => $request->type,
-            'cust_id'      => $request->custID,
-            'user_id'      => Auth::user()->user_id,
-            'name'         => $request->name
-        ]);
-        
-        Log::info('File Added For Customer ID-'.$request->custID.' by User ID-'.Auth::user()->user_id.'.  New File ID-'.$fileID);
+        return $file->file_id;
     }
 
     //  Show customer files

@@ -12,6 +12,12 @@ use App\FileLinks;
 use App\FileLinkFiles;
 use App\FileLinkNotes;
 
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Illuminate\Http\UploadedFile;
+
 class FileLinksController extends Controller
 {
     //  Only authorized users have access
@@ -37,40 +43,38 @@ class FileLinksController extends Controller
     {
         $request->validate(['name' => 'required', 'expire' => 'required']);
         
-        //  Generate a random hash to use as the file link and make sure it is not already in use
-        do
-        {
-            $hash = strtolower(str_random(15));
-            $dup = FileLinks::where('link_hash', $hash)->get()->count();
-        }while($dup != 0);
-        
-        //  Create the new file link
-        $link = FileLinks::create([
-            'user_id'      => Auth::user()->user_id,
-            'link_hash'    => $hash,
-            'link_name'    => $request->name,
-            'expire'       => $request->expire,
-            'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
-        ]);
-        $linkID = $link->link_id;
-        
-        //  If there are any files, process them
         if(!empty($request->file))
         {
-            $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
-            foreach($request->file as $file)
-            {
-                //  Clean the file and store it
-                $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
-                $file->storeAs($filePath, $fileName);
-                
-                //  Place file in Files table of DB
-                $newFile = Files::create([
-                    'file_name' => $fileName,
-                    'file_link' => $filePath.DIRECTORY_SEPARATOR
+            // create the file receiver
+            $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
+
+            // check if the upload is success, throw exception or return response you need
+            if ($receiver->isUploaded() === false) {
+                throw new UploadMissingFileException();
+            }
+
+            // receive the file
+            $save = $receiver->receive();
+            // check if the upload has finished (in chunk mode it will send smaller files)
+            if ($save->isFinished()) {
+                do
+                {
+                    $hash = strtolower(str_random(15));
+                    $dup = FileLinks::where('link_hash', $hash)->get()->count();
+                }while($dup != 0);
+
+                //  Create the new file link
+                $link = FileLinks::create([
+                    'user_id'      => Auth::user()->user_id,
+                    'link_hash'    => $hash,
+                    'link_name'    => $request->name,
+                    'expire'       => $request->expire,
+                    'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
                 ]);
-                $fileID = $newFile->file_id;
-                
+                $linkID = $link->link_id;
+
+                $fileID =  $this->newLinkFile($save->getFile(), $linkID);
+
                 //  Place the file in the file link files table of DB
                 FileLinkFiles::create([
                     'link_id'  => $linkID,
@@ -78,15 +82,59 @@ class FileLinksController extends Controller
                     'user_id'  => Auth::user()->user_id,
                     'upload'   => 0
                 ]);
-                
-                //  Log stored file
-                Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+
+                return 'this is the link id'.$linkID;
             }
+            // we are in chunk mode, lets send the current progress
+            /** @var AbstractHandler $handler */
+            $handler = $save->handler();
+
+            return response()->json([
+                "done" => $handler->getPercentageDone(),
+                'status' => true
+            ]);
         }
+        else
+        {
+            do
+            {
+                $hash = strtolower(str_random(15));
+                $dup = FileLinks::where('link_hash', $hash)->get()->count();
+            }while($dup != 0);
+
+            //  Create the new file link
+            $link = FileLinks::create([
+                'user_id'      => Auth::user()->user_id,
+                'link_hash'    => $hash,
+                'link_name'    => $request->name,
+                'expire'       => $request->expire,
+                'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
+            ]);
+            $linkID = $link->link_id;
+            
+            return $linkID;
+        }
+    }
+    
+    public function newLinkFile(UploadedFile $file, $linkID)
+    {
+        $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
         
-        Log::info('File Link Created', ['link_id' => $linkID, 'user_id' => Auth::user()->user_id]);
+        //  Clean the file and store it
+        $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+        $file->storeAs($filePath, $fileName);
+
+        //  Place file in Files table of DB
+        $newFile = Files::create([
+            'file_name' => $fileName,
+            'file_link' => $filePath.DIRECTORY_SEPARATOR
+        ]);
+        $fileID = $newFile->file_id;
+
+        //  Log stored file
+        Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
         
-        return $linkID;
+        return $fileID;
     }
 
     //  Show file links for a specific user
@@ -103,9 +151,13 @@ class FileLinksController extends Controller
     }
     
     //  Show a links information
-    public function details($id, $name)
+    public function details($id, $name, Request $request)
     {
         $linkData = FileLinks::find($id);
+        if(!$request->session()->has('newLinkId'))
+        {
+            $request->session()->forget('newLinkId');
+        }
         
         if(empty($linkData))
         {
@@ -159,31 +211,67 @@ class FileLinksController extends Controller
     //  Submit the additional files
     public function submitAddFile($id, Request $request)
     {
-        $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$id;
-        foreach($request->file as $file)
-        {
-            //  Clean the file and store it
-            $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
-            $file->storeAs($filePath, $fileName);
-
-            //  Place file in Files table of DB
-            $newFile = Files::create([
-                'file_name' => $fileName,
-                'file_link' => $filePath.DIRECTORY_SEPARATOR
-            ]);
-            $fileID = $newFile->file_id;
-
-            //  Place the file in the file link files table of DB
-            FileLinkFiles::create([
-                'link_id'  => $id,
-                'file_id'  => $fileID,
-                'user_id'  => Auth::user()->user_id,
-                'upload'   => 0
-            ]);
-            
-            //  Log stored file
-            Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+        // create the file receiver
+        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
+        
+        // check if the upload is success, throw exception or return response you need
+        if ($receiver->isUploaded() === false) {
+            throw new UploadMissingFileException();
         }
+        
+        // receive the file
+        $save = $receiver->receive();
+        // check if the upload has finished (in chunk mode it will send smaller files)
+        if ($save->isFinished()) {
+            return $this->saveFile($save->getFile(), $id);
+        }
+        // we are in chunk mode, lets send the current progress
+        /** @var AbstractHandler $handler */
+        $handler = $save->handler();
+        
+        return response()->json([
+            "done" => $handler->getPercentageDone(),
+            'status' => true
+        ]);
+    }
+    
+    public function saveFile(UploadedFile $file, $id)
+    {
+        $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$id;
+        
+        //  Clean the file and store it
+        $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+        $file->storeAs($filePath, $fileName);
+
+        //  Place file in Files table of DB
+        $newFile = Files::create([
+            'file_name' => $fileName,
+            'file_link' => $filePath.DIRECTORY_SEPARATOR
+        ]);
+        $fileID = $newFile->file_id;
+        
+        //  Place the file in the file link files table of DB
+        FileLinkFiles::create([
+            'link_id'  => $id,
+            'file_id'  => $fileID,
+            'user_id'  => Auth::user()->user_id,
+            'upload'   => 0
+        ]);
+
+        //  Log stored file
+        Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+        
+        return $fileID;
+    }
+    
+    protected function createFilename(UploadedFile $file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $filename = str_replace('.'.$extension, '', $file->getClientOriginalName());
+        
+        $filename .= '_'.md5(time()).'.'.$extension;
+        
+        return $filename;
     }
     
     //  Get a note that is attached to a file

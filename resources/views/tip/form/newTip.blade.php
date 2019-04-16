@@ -26,7 +26,7 @@
                 {{ Form::bsText('subject', 'Subject', null, ['placeholder' => 'Enter A Descriptive Subject', 'required', 'autofocus']) }}
                 {{ Form::bsSelect('sysTags[]', 'Tag A System', $systems, null, ['multiple' => 'multiple', 'class' => 'multipleSelect']) }}
                 {{ Form::bsTextarea('details', 'Tech Tip', null, ['rows' => '15']) }}
-                @include('_inc.dropMultiFile')
+                @include('_inc.drop1File')
                 {{ Form::bsSubmit('Create Tech Tip') }}
             {!! Form::close() !!}
         </div>
@@ -87,11 +87,15 @@ $(document).ready(function()
         {
             url: form.attr('action'),
             autoProcessQueue: false,
-            uploadMultiple: true,
-            parallelUploads: 10,
-            maxFiles: 10,
+//            uploadMultiple: true,
+            parallelUploads: 1,
+            maxFiles: 1,
             maxFilesize: maxUpload,
             addRemoveLinks: true,
+            chunking: true,
+            chunkSize: 1000000,
+            parallelChunkUploads: false,
+            method: "POST",
             init: function()
             {
                 var myDrop = this;
@@ -122,7 +126,7 @@ $(document).ready(function()
                         });
                     }
                 });
-                this.on('sendingmultiple',  function(file, xhr, formData)
+                this.on('sending',  function(file, xhr, formData)
                 {
                     var formArray = form.serializeArray();
                     tinymce.triggerSave();
@@ -135,17 +139,25 @@ $(document).ready(function()
                         formData.append('sysTags[]', $(this).data('value'));
                     });
                 });
-                this.on('totaluploadprogress', function(progress)
+                this.on('uploadprogress', function(progress)
                 {
-                    $("#progressBar").css("width", Math.round(progress)+"%");
-                    $("#progressStatus").text(Math.round(progress)+"%");
-                    console.log(progress);
+                    var prog = Math.round(progress.upload.progress);
+                    
+                    if(prog != 100)
+                    {
+                        $("#progressBar").css("width", prog+"%");
+                        $("#progressStatus").text(prog+"%");
+                    }
+                    
+//                    $("#progressBar").css("width", Math.round(progress.upload.progress)+"%");
+//                    $("#progressStatus").text(Math.round(progress.upload.progress)+"%");
+//                    console.log(progress.upload.progress);
                 });
                 this.on('reset', function()
                 {
                     $('#form-errors').addClass('d-none');
                 });
-                this.on('successmultiple', function(files, response)
+                this.on('success', function(files, response)
                 {    
                     uploadComplete(response);
                 });
@@ -159,17 +171,19 @@ $(document).ready(function()
     
     function uploadComplete(res)
     {
-        if($.isNumeric(res))
-        {
-            url = '{{ route('tip.details', ['id' => ':id', 'subj' => ':sub']) }}';
-            url = url.replace(':id', res);
-            url = url.replace(':sub', $('#subject').val());
-            window.location.replace(url);
-        }
-        else
-        {
-            uploadFailed(res);
-        }
+//        if($.isNumeric(res))
+//        {
+//            url = '{{ route('tip.details', ['id' => ':id', 'subj' => ':sub']) }}';
+//            url = url.replace(':id', res);
+//            url = url.replace(':sub', $('#subject').val());
+//            window.location.replace(url);
+//        }
+//        else
+//        {
+//            uploadFailed(res);
+//        }
+        
+        window.location.href = '/tip';
     }
     function uploadFailed(res)
     {

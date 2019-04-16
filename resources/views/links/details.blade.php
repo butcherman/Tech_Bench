@@ -67,6 +67,6 @@
 @endsection
 
 @section('script')
-    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
     @include('links.script.details')
 @endsection
