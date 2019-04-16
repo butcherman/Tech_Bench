@@ -29,63 +29,14 @@ function fileDrop(form)
     {
         url: form.attr('action'),
         autoProcessQueue: false,
-        maxFilesize: maxUpload,
-        uploadMultiple: false,
         parallelUploads: 1,
         maxFiles: 1,
-        addRemoveLinks: true,
-        init: function()
-        {
-            var myDrop = this;
-            form.on('submit', function(e, formData)
-            {
-                e.preventDefault();
-                myDrop.processQueue();
-                $('#forProgressBar').show();
-                $('.submit-button').attr('disabled', true);
-            });
-            this.on('sending',  function(file, xhr, formData)
-            {
-                var formArray = form.serializeArray();
-                $.each(formArray, function()
-                {
-                    formData.append(this.name, this.value);
-                });
-            });
-            this.on('totaluploadprogress', function(progress)
-            {
-                $("#progressBar").css("width", Math.round(progress)+"%");
-                $("#progressStatus").text(Math.round(progress)+"%");
-            });
-            this.on('reset', function()
-            {
-                $('#form-errors').addClass('d-none');
-            });
-            this.on('success', function(files, response)
-            {    
-                uploadComplete(response);
-            });
-            this.on('error', function(file, response)
-            {
-                uploadFailed(response);
-            });
-        }
-    });  
-}
-
-//  Initialize drag and drop for multiple file uploads
-function multiFileDrop(form)
-{
-    //  Initialize Drag and Drop            
-    var drop = $('#dropzone-box').dropzone(
-    {
-        url: form.attr('action'),
-        autoProcessQueue: false,
-        uploadMultiple: true,
-        parallelUploads: 10,
-        maxFiles: 10,
         maxFilesize: maxUpload,
         addRemoveLinks: true,
+        chunking: true,
+        chunkSize: 1000000,
+        parallelChunkUploads: false,
+        method: "POST",
         init: function()
         {
             var myDrop = this;
@@ -106,27 +57,106 @@ function multiFileDrop(form)
                     });
                 }
             });
-            this.on('sendingmultiple',  function(file, xhr, formData)
+            this.on('sending', function(file, xhr, formData)
             {
                 var formArray = form.serializeArray();
                 $.each(formArray, function()
                 {
                     formData.append(this.name, this.value);
-                });
+                }); 
             });
-            this.on('totaluploadprogress', function(progress)
+            this.on('uploadprogress', function(progress)
             {
-                $("#progressBar").css("width", Math.round(progress)+"%");
-                $("#progressStatus").text(Math.round(progress)+"%");
-                console.log(progress);
+                var prog = Math.round(progress.upload.progress);
+                    
+                if(prog != 100)
+                {
+                    $("#progressBar").css("width", prog+"%");
+                    $("#progressStatus").text(prog+"%");
+                }
+//                $("#progressBar").css("width", Math.round(progress.upload.progress)+"%");
+//                $("#progressStatus").text(Math.round(progress.upload.progress)+"%");
             });
             this.on('reset', function()
             {
                 $('#form-errors').addClass('d-none');
             });
-            this.on('successmultiple', function(files, response)
-            {    
-                this.removeAllFiles(true);
+            this.on('success', function(files, response)
+            {
+                console.log(response);
+                uploadComplete(response);
+            });
+            this.on('errormultiple', function(file, response)
+            {
+                uploadFailed(response);
+            });
+        }
+    });
+}
+
+//  Initialize drag and drop for multiple file uploads
+function multiFileDrop(form)
+{
+    //  Initialize Drag and Drop            
+    var drop = $('#dropzone-box').dropzone(
+    {
+        url: form.attr('action'),
+        autoProcessQueue: false,
+        parallelUploads: 1,
+        maxFiles: 1,
+        maxFilesize: maxUpload,
+        addRemoveLinks: true,
+        chunking: true,
+        chunkSize: 1000000,
+        parallelChunkUploads: false,
+        method: "POST",
+        init: function()
+        {
+            var myDrop = this;
+            form.on('submit', function(e, formData)
+            {
+                e.preventDefault();
+                if(myDrop.getQueuedFiles().length > 0)
+                {
+                    myDrop.processQueue();
+                    $('#forProgressBar').show();
+                    $('.submit-button').attr('disabled', true);
+                }
+                else
+                {
+                    $.post(form.attr('action'), form.serialize(), function(data)
+                    {
+                        uploadComplete(data);
+                    });
+                }
+            });
+            this.on('sending', function(file, xhr, formData)
+            {
+                var formArray = form.serializeArray();
+                $.each(formArray, function()
+                {
+                    formData.append(this.name, this.value);
+                }); 
+            });
+            this.on('uploadprogress', function(progress)
+            {
+                var prog = Math.round(progress.upload.progress);
+                    
+                if(prog != 100)
+                {
+                    $("#progressBar").css("width", prog+"%");
+                    $("#progressStatus").text(prog+"%");
+                }
+//                $("#progressBar").css("width", Math.round(progress.upload.progress)+"%");
+//                $("#progressStatus").text(Math.round(progress.upload.progress)+"%");
+            });
+            this.on('reset', function()
+            {
+                $('#form-errors').addClass('d-none');
+            });
+            this.on('success', function(files, response)
+            {
+                console.log(response);
                 uploadComplete(response);
             });
             this.on('errormultiple', function(file, response)

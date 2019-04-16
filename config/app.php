@@ -57,6 +57,7 @@ return [
         Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+//        Pion\Laravel\ChunkUpload\Providers\ChunkUploadServiceProvider::class,
 
         /*
          * Application Service Providers...

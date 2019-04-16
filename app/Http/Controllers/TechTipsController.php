@@ -20,6 +20,13 @@ use App\TechTipComments;
 use App\TechTipFavs;
 use App\Mail\NewTechtip;
 
+
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Illuminate\Http\UploadedFile;
+
 class TechTipsController extends Controller
 {
     //  Only authorized users have access
@@ -104,21 +111,154 @@ class TechTipsController extends Controller
             'sysTags' => 'required'
         ]);
 
+        
+        if(!empty($request->file))
+        {
+            // create the file receiver
+            $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
+
+            // check if the upload is success, throw exception or return response you need
+            if ($receiver->isUploaded() === false) {
+                throw new UploadMissingFileException();
+            }
+
+            // receive the file
+            $save = $receiver->receive();
+            
+            if ($save->isFinished()) 
+            {
+                $tipID = $this->createNewTechTip($request);
+                $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
+                $fileID = $this->saveNewTipFile($save->getFile(), $filePath);
+                
+                //  Place the file in the tech tip files table of DB
+                TechTipFiles::create([
+                    'tip_id'  => $tipID,
+                    'file_id' => $fileID
+                ]);
+                
+                //  Email the techs of the new tip
+                $tipData = TechTips::find($tipID);
+                $userList = UserSettings::where('em_tech_tip', 1)->join('users', 'user_settings.user_id', '=', 'users.user_id')->where('active', 1)->get();
+                try
+                {
+                    Mail::to($userList)->send(new newTechtip($tipData));
+                }
+                catch(Exception $e)
+                {
+                    report($e);
+                }
+
+                Log::info('Tech Tip ID-'.$tipID.' Created by Customer ID-'.Auth::user()->user_id);
+                
+                return $tipID;
+            }
+            
+            
+            $handler = $save->handler();
+
+            return response()->json([
+                "done" => $handler->getPercentageDone(),
+                'status' => true
+            ]);
+        }
+        else
+        {
+            $tipID = $this->createNewTechTip($request);
+            
+            //  Email the techs of the new tip
+            $tipData = TechTips::find($tipID);
+            $userList = UserSettings::where('em_tech_tip', 1)->join('users', 'user_settings.user_id', '=', 'users.user_id')->where('active', 1)->get();
+            try
+            {
+                Mail::to($userList)->send(new newTechtip($tipData));
+            }
+            catch(Exception $e)
+            {
+                report($e);
+            }
+
+            Log::info('Tech Tip ID-'.$tipID.' Created by Customer ID-'.Auth::user()->user_id);
+            
+            return $tipID;
+        }
+        
+
+//        //  If there are any files, process them
+//        if(!empty($request->file))
+//        {
+//            $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
+//            foreach($request->file as $file)
+//            {
+//                //  Clean the file and store it
+//                $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+//                $file->storeAs($filePath, $fileName);
+//
+//                //  Place file in Files table of DB
+//                $newFile = Files::create([
+//                    'file_name' => $fileName,
+//                    'file_link' => $filePath.DIRECTORY_SEPARATOR
+//                ]);
+//                $fileID = $newFile->file_id;
+//
+//                //  Place the file in the tech tip files table of DB
+//                TechTipFiles::create([
+//                    'tip_id'  => $tipID,
+//                    'file_id' => $fileID
+//                ]);
+//            }
+//        }
+//
+//        //  Email the techs of the new tip
+//        $tipData = TechTips::find($tipID);
+//        $userList = UserSettings::where('em_tech_tip', 1)->join('users', 'user_settings.user_id', '=', 'users.user_id')->where('active', 1)->get();
+//        try
+//        {
+//            Mail::to($userList)->send(new newTechtip($tipData));
+//        }
+//        catch(Exception $e)
+//        {
+//            report($e);
+//        }
+//
+//        Log::info('Tech Tip ID-'.$tipID.' Created by Customer ID-'.Auth::user()->user_id);
+//
+//        return $tipID;
+    }
+    
+    private function saveNewTipFile(UploadedFile $file, $filePath)
+    {
+        //  Clean the file and store it
+        $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+        $file->storeAs($filePath, $fileName);
+
+        //  Place file in Files table of DB
+        $newFile = Files::create([
+            'file_name' => $fileName,
+            'file_link' => $filePath.DIRECTORY_SEPARATOR
+        ]);
+        $fileID = $newFile->file_id;
+        
+        return $fileID;
+    }
+    
+    private function createNewTechTip($tipData)
+    {
         //  Remove any forward slash (/) from the Subject field
-        $request->merge(['subject' => str_replace('/', '-', $request->subject)]);
+        $tipData->merge(['subject' => str_replace('/', '-', $tipData->subject)]);
 
         //  Enter the tip details and get the tip ID
         $tip = TechTips::create([
-            'subject'     => $request->subject,
-            'description' => $request->details,
+            'subject'     => $tipData->subject,
+            'description' => $tipData->details,
             'user_id'     => Auth::user()->user_id
         ]);
         $tipID = $tip->tip_id;
 
         //  Enter all system tags associated with the tip
-        if(is_array($request->sysTags))
+        if(is_array($tipData->sysTags))
         {
-            foreach($request->sysTags as $tag)
+            foreach($tipData->sysTags as $tag)
             {
                 TechTipSystems::create([
                     'tip_id' => $tipID,
@@ -130,49 +270,10 @@ class TechTipsController extends Controller
         {
             TechTipSystems::create([
                 'tip_id' => $tipID,
-                'sys_id' => $request->sysTags
+                'sys_id' => $tipData->sysTags
             ]);
         }
-
-        //  If there are any files, process them
-        if(!empty($request->file))
-        {
-            $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
-            foreach($request->file as $file)
-            {
-                //  Clean the file and store it
-                $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
-                $file->storeAs($filePath, $fileName);
-
-                //  Place file in Files table of DB
-                $newFile = Files::create([
-                    'file_name' => $fileName,
-                    'file_link' => $filePath.DIRECTORY_SEPARATOR
-                ]);
-                $fileID = $newFile->file_id;
-
-                //  Place the file in the tech tip files table of DB
-                TechTipFiles::create([
-                    'tip_id'  => $tipID,
-                    'file_id' => $fileID
-                ]);
-            }
-        }
-
-        //  Email the techs of the new tip
-        $tipData = TechTips::find($tipID);
-        $userList = UserSettings::where('em_tech_tip', 1)->join('users', 'user_settings.user_id', '=', 'users.user_id')->where('active', 1)->get();
-        try
-        {
-            Mail::to($userList)->send(new newTechtip($tipData));
-        }
-        catch(Exception $e)
-        {
-            report($e);
-        }
-
-        Log::info('Tech Tip ID-'.$tipID.' Created by Customer ID-'.Auth::user()->user_id);
-
+        
         return $tipID;
     }
 
