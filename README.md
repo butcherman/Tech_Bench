@@ -23,7 +23,7 @@ Tech Bench is designed to run on a dedicated Linux Web Server.
 ### Requirements
 * Apache Web Server
 * MySQL Database
-* PHP 7.1.3 or higher
+* PHP 7.2 or higher
 * Composer Dependency Manager
 * Node Package Manager (NPM)
 * Unzip module
