@@ -6,13 +6,6 @@ build:
 
     services:
         mysql: 5.7
-        
-    filter:
-        excluded_paths:
-            - 'tests/'
-            - 'docs/'
-            - 'vendor/'
-            - 'node_modules'
     
     dependencies:
         before:
@@ -31,3 +24,9 @@ build:
             - php artisan key:generate
             - php artisan migrate
             
+filter:
+    excluded_paths:
+        - 'tests/'
+        - 'docs/'
+        - 'vendor/'
+        - 'node_modules'
