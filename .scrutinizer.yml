@@ -1,11 +1,18 @@
 build:
     environment:
-        php: 7.2
+        php: 7.3
         mysql: 5.7
         node: 10.15.3
 
     services:
         mysql: 5.7
+        
+    filter:
+        excluded_paths:
+            - 'tests/'
+            - 'docs/'
+            - 'vendor/'
+            - 'node_modules'
     
     dependencies:
         before:
@@ -18,8 +25,6 @@ build:
             - pear install pear/PHP_CodeSniffer
             - phpenv rehash
             - npm install n -g
-#            - npm install npm@latest -g
-#            - npm update npm -g
             - npm install -g jshint
             - npm install
         after:
