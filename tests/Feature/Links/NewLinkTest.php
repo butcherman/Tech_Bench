@@ -75,9 +75,10 @@ class NewLinkTest extends TestCase
         $user = $this->getTech();
         $customer = factory(Customers::class)->create();
         $data = [
-            'cust_id' => $customer->cust_id,
-            'name'    => 'This is a name',
-            'expire'  => date('Y-m-d', strtotime('+30 days'))
+            'cust_id'    => $customer->cust_id,
+            'name'       => 'This is a name',
+            'expire'     => date('Y-m-d', strtotime('+30 days')),
+            '_completed' => true
         ];
         
         $response = $this->actingAs($user)->from(route('links.data.create'))->post(route('links.data.store'), $data);
@@ -97,17 +98,23 @@ class NewLinkTest extends TestCase
             'cust_id' => $customer->cust_id,
             'name'    => 'This is a name',
             'expire'  => date('Y-m-d', strtotime('+30 days')),
-            'file'    => [$file = UploadedFile::fake()->image('random.jpg')]
+            'file'    => $file = UploadedFile::fake()->image('random.jpg')
         ];
         
-        $response = $this->actingAs($user)->from(route('links.data.create'))->post(route('links.data.store'), $data);
+        $response1 = $this->actingAs($user)->from(route('links.data.create'))->post(route('links.data.store'), $data);
+        $response1->assertSuccessful();
         
-        $linkID = json_decode($response->getContent())->link;
+        $data2 = [
+            'cust_id' => $customer->cust_id,
+            'name'    => 'This is a name',
+            'expire'  => date('Y-m-d', strtotime('+30 days')),
+            '_completed' => true
+        ];
         
-        $response->assertSuccessful();
-        $response->assertJsonStructure(['link', 'name']);
+        $response2 = $this->actingAs($user)->from(route('links.data.create'))->post(route('links.data.store'), $data2);
         
-        Storage::disk()->assertExists(config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID.DIRECTORY_SEPARATOR.'random.jpg');
+        $response2->assertSuccessful();
+        $response2->assertJsonStructure(['link', 'name']);
     }
     
     //  Verify form submitted with no customer link 
@@ -115,8 +122,9 @@ class NewLinkTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'name' => 'This is a name',
-            'expire'    => date('Y-m-d', strtotime('+30 days'))
+            'name'       => 'This is a name',
+            'expire'     => date('Y-m-d', strtotime('+30 days')),
+            '_completed' => true
         ];
         
         $response = $this->actingAs($user)->from(route('links.data.create'))->post(route('links.data.store'), $data);

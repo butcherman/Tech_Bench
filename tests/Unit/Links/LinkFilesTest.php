@@ -47,9 +47,9 @@ class LinkFilesTest extends TestCase
         $file = UploadedFile::fake()->image('anImage.jpg');
         
         $data = [
-            'file' => [$file]
+            'file' => $file
         ];
-        
+         
         $response = $this->actingAs($this->owner)->post(route('links.files', [$this->fileLink->link_id, 'down']), $data);
         
         $response->assertSuccessful();
