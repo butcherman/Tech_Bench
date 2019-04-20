@@ -22,13 +22,16 @@
             </tfoot>
             <tbody>
                 <tr v-for="file in fileList">
-                    <td><input type="checkbox" class="check-link" :value="file.file_id" v-model="selected" /></td>
-                    <td><b-link :href=file.url>{{file.file_name}}</b-link></td>
+                    <td><input type="checkbox" class="check-link" :value="file.link_file_id" v-model="selected" /></td>
+                    <td>
+                        <b-badge v-if="file_direction === 'up'" pill variant="info" class="pointer" @click="fileDetails(file)">Info</b-badge>
+                        <b-link :href=file.url>{{file.file_name}}</b-link>
+                    </td>
                     <td>{{file.timestamp}}</td>
                     <td>
                         <i class="fa fa-share pointer" v-b-tooltip.hover title="Move File To Customer Files" @click="moveFile"  v-if="has_customer" :data-id="file.file_id"></i>
                         <click-confirm class="d-inline">
-                            <i class="fa fa-trash pointer" v-b-tooltip.hover title="Delete File"  :data-id="file.file_id" @click="deleteFile"></i>
+                            <i class="fa fa-trash pointer" v-b-tooltip.hover title="Delete File"  :data-id="file.link_file_id" @click="deleteFile"></i>
                         </click-confirm>
                     </td>
                 </tr>
@@ -60,12 +63,20 @@
                     id="dropzone"
                     class="filedrag"
                     ref="myVueDropzone" 
-                    v-on:vdropzone-sending-multiple="sendingFiles"
-                    v-on:vdropzone-success-multiple="completedUpload"
+                    v-on:vdropzone-total-upload-progress="updateProgressBar"
+                    v-on:vdropzone-sending="sendingFiles"
+                    v-on:vdropzone-queue-complete="completedUpload"
                     :options="dropzoneOptions">
                 </vue-dropzone>
+                <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
                 <b-button type="submit" block variant="primary" :disabled="button.dis">{{button.addText}}</b-button>
             </b-form>
+        </b-modal>
+        <b-modal id="fileDetailsModal" title="File Details" ref="fileDetailsModal" centered>
+            <b-list-group>
+                <b-list-group-item><strong>Added By:</strong> {{fileData.addedBy}}</b-list-group-item>
+                <b-list-group-item><pre>{{fileData.comment}}</pre></b-list-group-item>
+            </b-list-group>
         </b-modal>
     </div>
 </template>
@@ -85,11 +96,13 @@
                 dropzoneOptions: {
                     url: this.files_route,
                     autoProcessQueue: false,
-                    uploadMultiple: true,
-                    parallelUploads: 10,
-                    maxFiles: 10,
+                    parallelUploads: 1,
+                    maxFiles: 5,
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
+                    chunking: true,
+                    chunkSize: 5000000,
+                    parallelChunkUploads: false,
                 },
                 withSelected: [
                     { value: 'download', text: 'Download'},
@@ -103,10 +116,16 @@
                 typeSelect: null,
                 selected: [],
                 selectAll: false,
+                progress: 0,
+                showProgress: false,
                 button: {
                     text: 'Delete Checked',
                     addText: 'Add File',
                     dis: false
+                },
+                fileData: {
+                    addedBy: 'yer mom',
+                    comment: 'this is a comment',
                 },
                 token: window.techBench.csrfToken,
             }
@@ -121,6 +140,7 @@
                 axios.get(this.files_route)
                     .then(res => {
                         this.fileList = res.data;
+                        console.log(res.data);
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
             },
@@ -140,7 +160,7 @@
                 {
                     for(let i in this.fileList)
                     {
-                        this.selected.push(this.fileList[i].file_id);
+                        this.selected.push(this.fileList[i].link_file_id);
                     }
                 }
             },
@@ -216,8 +236,14 @@
             {
                 formData.append('_token', this.token);
             },
+            updateProgressBar(progress)
+            {
+                this.progress = progress;
+            },
             completedUpload(file, res)
             {
+                console.log(res);
+                
                 this.getFiles();
                 this.$refs.addFileModal.hide();
                 this.$refs.myVueDropzone.removeAllFiles();
@@ -241,6 +267,20 @@
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
                 }
+            },
+            fileDetails(file)
+            {
+                this.$refs.fileDetailsModal.show();
+                this.fileData.addedBy = file.added_by;
+                if(file.file_link_notes != null)
+                {
+                    this.fileData.comment = file.file_link_notes.note;
+                }
+                else
+                {
+                    this.fileData.comment = 'No notes';
+                }
+                console.log(file);
             }
         }
     }

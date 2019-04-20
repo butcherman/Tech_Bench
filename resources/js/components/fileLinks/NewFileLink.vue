@@ -52,10 +52,12 @@
         <vue-dropzone id="dropzone"
                       class="filedrag"
                       ref="myVueDropzone"
-                      v-on:vdropzone-sending-multiple="sendingFiles"
-                      v-on:vdropzone-success-multiple="completedUpload"
+                      v-on:vdropzone-total-upload-progress="updateProgressBar"
+                      v-on:vdropzone-sending="sendingFiles"
+                      v-on:vdropzone-queue-complete="queueComplete"
                       :options="dropzoneOptions">
         </vue-dropzone>
+        <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
         <b-button type="submit" block variant="primary" :disabled="button.dis">{{button.text}}</b-button>
         <b-modal id="customer-selector-modal" title="Select A Customer" ref="customerSelectorModal">
             <ul class="list-group" v-for="cust in availableCustomers">
@@ -78,11 +80,13 @@
                 dropzoneOptions: {
                     url: this.submit_route,
                     autoProcessQueue: false,
-                    uploadMultiple: true,
-                    parallelUploads: 10,
-                    maxFiles: 10,
+                    parallelUploads: 1,
+                    maxFiles: 5,
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
+                    chunking: true,
+                    chunkSize: 5000000,
+                    parallelChunkUploads: false,
                 },
                 customerTag: '',
                 token: window.techBench.csrfToken,
@@ -90,6 +94,8 @@
                 cust: '',
                 name: '',
                 expire: this.expire_date,
+                progress: 0,
+                showProgress: false,
                 button: {
                     text: 'Create File Link',
                     dis: false
@@ -97,18 +103,22 @@
             }
         },
         methods: {
-            submitFile(e) {
+            submitFile(e) 
+            {
                 e.preventDefault();
                 var myDrop = this.$refs.myVueDropzone; //.processQueue();
                 var myForm = new FormData(document.querySelector("form"));
-
                 this.button.text = 'Loading...';
                 this.button.dis = true;
 
-                if (myDrop.getQueuedFiles().length > 0) {
+                if (myDrop.getQueuedFiles().length > 0) 
+                {
+                    this.showProgress = true;
                     myDrop.processQueue();
                 }
-                else {
+                else 
+                {
+                    myForm.append('_completed', true);
                     axios.post(this.submit_route, myForm)
                         .then(res => {
                             var url = this.detail_route.replace(':id', res.data.link).replace(':name', res.data.name);
@@ -117,18 +127,33 @@
                         .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error))
                 }
             },
-            sendingFiles(file, xhr, formData) {
+            sendingFiles(file, xhr, formData) 
+            {
                 formData.append('_token', this.token);
                 formData.append('name', this.name);
                 formData.append('expire', this.expire);
                 formData.append('customer_tag', this.customerTag);
             },
-            completedUpload(file, res) {
-                var url = this.detail_route.replace(':id', res.link).replace(':name', res.name);
-                window.location.href = url;
+            updateProgressBar(progress)
+            {
+                this.progress = progress;
+            },
+            queueComplete(file)
+            {
+                var myForm = new FormData(document.querySelector("form"));
+                myForm.append('_completed', true);
+                
+                this.button.text = 'Processing, please wait....';
+                axios.post(this.submit_route, myForm)
+                        .then(res => {
+                            var url = this.detail_route.replace(':id', res.data.link).replace(':name', res.data.name);
+                            window.location.href = url;
+                        })
+                        .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error))
             },
             searchCustomer() {
-                if (this.customerTag == '') {
+                if (this.customerTag == '') 
+                {
                     this.customerTag = 'NULL';
                 }
                 var url = this.search_route.replace(':id', this.customerTag);

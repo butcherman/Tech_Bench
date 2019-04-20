@@ -8,11 +8,17 @@ use App\FileLinks;
 use App\FileLinkNotes;
 use App\FileLinkFiles;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewFileUpload;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class UserLinksController extends Controller
 {
@@ -64,45 +70,72 @@ class UserLinksController extends Controller
     public function update(Request $request, $id)
     {        
         $request->validate(['name' => 'required', 'file' => 'required']);
+        
+        $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
             
+        //  Verify that the upload is valid and being processed
+        if($receiver->isUploaded() === false)
+        {
+            throw new UploadMissingFileException();
+        }
+
+        //  Recieve and process the file
+        $save = $receiver->receive();
+
+        //  See if the uploade has finished
+        if($save->isFinished())
+        {
+            $fileID = $this->saveFile($save->getFile(), $id, $request);
+
+            return 'uploaded successfully';
+        }
+
+        //  Get the current progress
+        $handler = $save->handler();
+
+        return response()->json([
+            'done'   => $handler->getPercentageDone(),
+            'status' => true
+        ]);
+    }
+    
+    //  Save the file in the database
+    private function saveFile(UploadedFile $file, $id, $request)
+    {        
         $details = FileLinks::where('link_hash', $id)->first();
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$details->link_id;
-
-        foreach($request->file as $file)
-        {
-            //  Clean the file and store it
-            $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
-            $file->storeAs($filePath, $fileName);
-
-            //  Place file in Files table of DB
-            $newFile = Files::create([
-                'file_name' => $fileName,
-                'file_link' => $filePath.DIRECTORY_SEPARATOR
-            ]);
-            $fileID = $newFile->file_id;
-
-            //  Place the file in the file link files table of DB
-            FileLinkFiles::create([
-                'link_id'  => $details->link_id,
-                'file_id'  => $fileID,
-                'added_by' => $request->name,
-                'upload'   => 1
-            ]);
-            
-            if(!empty($request->note))
-            {
-                FileLinkNotes::create([
-                    'link_id' => $details->link_id,
-                    'file_id' => $fileID,
-                    'note'    => $request->note
-                ]);
-            }
-        }
         
+        $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+        $file->storeAs($filePath, $fileName);
+
+        //  Place file in Files table of DB
+        $newFile = Files::create([
+            'file_name' => $fileName,
+            'file_link' => $filePath.DIRECTORY_SEPARATOR
+        ]);
+        $fileID = $newFile->file_id;
+
+        //  Place the file in the file link files table of DB
+        FileLinkFiles::create([
+            'link_id'  => $details->link_id,
+            'file_id'  => $fileID,
+            'added_by' => $request->name,
+            'upload'   => 1
+        ]);
+
+        if(!empty($request->note))
+        {
+            FileLinkNotes::create([
+                'link_id' => $details->link_id,
+                'file_id' => $fileID,
+                'note'    => $request->note
+            ]);
+        }
+
         //  Send email and notification to the creator of the link
         $user = User::find($details->user_id);
         Notification::send($user, new NewFileUpload($details));
-        
+
         return response()->json(['success' => true]);
     }
 }

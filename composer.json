@@ -17,6 +17,7 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.8",
         "nwidart/laravel-modules": "^4.1",
+        "pion/laravel-chunk-upload": "^1.2",
         "pragmarx/version": "^0.2.8",
         "zanysoft/laravel-zip": "^1.0"
     },

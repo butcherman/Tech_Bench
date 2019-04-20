@@ -54,8 +54,12 @@ footer.sticky-footer {
         padding: 0.5rem 1rem;
         height: $header-height;
         .navbar-brand {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: $header-background !IMPORTANT;
             border-right: 1px ridge #706C6C;
-            width: $side-nav-width;
+            width: calc(#{$side-nav-width} + 1rem);
             text-align: center;
         }
     }
@@ -65,7 +69,7 @@ footer.sticky-footer {
     }
     
     #side-nav {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         -webkit-flex-direction: column;

@@ -7,10 +7,15 @@ use App\FileLinks;
 use App\FileLinkFiles;
 use App\CustomerFiles;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class LinkFilesController extends Controller
 {
@@ -57,37 +62,69 @@ class LinkFilesController extends Controller
     //  Add a file to the link
     public function postIndex(Request $request, $linkID, $dir)
     {
-        //  If there are any files, process them
+        //  If the file exists, process it
         if(!empty($request->file))
         {
-            $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
-            foreach($request->file as $file)
+            $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
+            
+            //  Verify that the upload is valid and being processed
+            if($receiver->isUploaded() === false)
             {
-                //  Clean the file and store it
-                $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
-                $file->storeAs($filePath, $fileName);
-                
-                //  Place file in Files table of DB
-                $newFile = Files::create([
-                    'file_name' => $fileName,
-                    'file_link' => $filePath.DIRECTORY_SEPARATOR
-                ]);
-                $fileID = $newFile->file_id;
-                
-                //  Place the file in the file link files table of DB
-                FileLinkFiles::create([
-                    'link_id'  => $linkID,
-                    'file_id'  => $fileID,
-                    'user_id'  => Auth::user()->user_id,
-                    'upload'   => 0
-                ]);
-                
-                //  Log stored file
-                Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+                throw new UploadMissingFileException();
             }
-        }
+            
+            //  Recieve and process the file
+            $save = $receiver->receive();
+            
+            //  See if the uploade has finished
+            if($save->isFinished())
+            {
+                $fileID = $this->saveFile($save->getFile(), $linkID);
+                
+                return response()->json(['success' => true]);;
+            }
+        
+            //  Get the current progress
+            $handler = $save->handler();
 
-        return response()->json(['success' => true]);
+            return response()->json([
+                'done'   => $handler->getPercentageDone(),
+                'status' => true
+            ]);
+        
+        }
+        
+        return response()->json(['success' => false]);
+    }
+    
+    //  Save the file and add it to the database
+    private function saveFile(UploadedFile $file, $linkID)
+    {
+        $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
+        
+        //  Clean the file and store it
+        $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+        $file->storeAs($filePath, $fileName);
+
+        //  Place file in Files table of DB
+        $newFile = Files::create([
+            'file_name' => $fileName,
+            'file_link' => $filePath.DIRECTORY_SEPARATOR
+        ]);
+        $fileID = $newFile->file_id;
+
+        //  Place the file in the file link files table of DB
+        FileLinkFiles::create([
+            'link_id'  => $linkID,
+            'file_id'  => $fileID,
+            'user_id'  => Auth::user()->user_id,
+            'upload'   => 0
+        ]);
+
+        //  Log stored file
+        Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+        
+        return $fileID;
     }
     
     //  Move a file to the customer attached to the link

@@ -5,7 +5,7 @@ return [
     'name'            => env('APP_NAME', 'Tech Bench'),
     'logo'            => '/img/TechBenchLogo.png',
     'env'             => env('APP_ENV', 'production'),
-    'debug'           => env('APP_DEBUG', false),
+    'stack_trace'     => env('APP_STACK_TRACE', false),
     'url'             => env('APP_URL', 'http://localhost'),
     'asset_url'       => env('ASSET_URL', null),
     'timezone'        => env('TIMEZONE', 'America/Los_Angeles'),

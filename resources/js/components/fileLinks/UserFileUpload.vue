@@ -18,17 +18,19 @@
             id="dropzone"
             class="filedrag"
             ref="myVueDropzone" 
-            v-on:vdropzone-sending-multiple="sendingFiles"
-            v-on:vdropzone-success-multiple="completedUpload"
+            v-on:vdropzone-total-upload-progress="updateProgressBar"
+            v-on:vdropzone-sending="sendingFiles"
+            v-on:vdropzone-queue-complete="completedUpload"
             :options="dropzoneOptions">
         </vue-dropzone>
         <b-form-textarea
             id="comments"
-            :model=comments
+            v-model=comments
             placeholder="Tell Me Something About This File..."
             rows=10
             class="mb-2"
         ></b-form-textarea>
+        <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
         <b-button type="submit" block variant="primary" :disabled="button.dis">{{button.text}}</b-button>
     </b-form>
 </template>
@@ -50,13 +52,17 @@
                 dropzoneOptions: {
                     url: this.submit_route,
                     autoProcessQueue: false,
-                    uploadMultiple: true,
-                    parallelUploads: 10,
-                    maxFiles: 10,
+                    parallelUploads: 1,
+                    maxFiles: 5,
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
+                    chunking: true,
+                    chunkSize: 5000000,
+                    parallelChunkUploads: false,
                 },
                 successAlert: false,
+                progress: 0,
+                showProgress: false,
             }
         },
         methods:
@@ -67,6 +73,7 @@
                 this.button.text  = 'Loading...';
                 this.button.dis   = true;
                 this.successAlert = false;
+                this.showProgress = true;
                 
                 var myDrop = this.$refs.myVueDropzone;                 
                 var myForm = new FormData();
@@ -79,12 +86,18 @@
                 formData.append('name', this.name);
                 formData.append('note', this.comments);
             },
+            updateProgressBar(progress)
+            {
+                this.progress = progress;
+            },
             completedUpload(file, res)
             {
+                console.log(res);
                 this.$refs.myVueDropzone.removeAllFiles();
                 this.successAlert = true;
                 this.button.dis   = false;
                 this.button.text  = 'Upload Files'
+                this.showProgress = false;
             },
         }
     }
