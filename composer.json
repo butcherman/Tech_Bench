@@ -2,7 +2,7 @@
     "name": "butcherman/tech_bench",
     "description": "A custom CMS built on the Laravel Framework",
     "keywords": ["CMS"],
-    "license": "GNU",
+    "license": "LGPL-2.0-or-later",
     "type": "project",
     "require": {
         "php": "^7.1.3",
