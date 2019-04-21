@@ -1,12 +1,19 @@
 {
     "name": "butcherman/tech_bench",
     "type": "project",
-    "description": "A custom CMS built on the Laravel Framework",
+    "description": "Tech Bench is a custom Content Management System (CMS) built to aid service technicians by allowing them to store and share information for the systems and customers they maintain.",
     "keywords": [
         "framework",
         "laravel",
         "cms",
-        "service tech"
+        "service tech",
+        "tech bench",
+        "service",
+        "technician",
+        "knowledge base",
+        "kb",
+        "customer",
+        "maintenance"
     ],
     "license": "LGPL-2.0-or-later",
     "require": {
