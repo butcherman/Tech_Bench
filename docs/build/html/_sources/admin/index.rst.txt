@@ -1,2 +1,2 @@
-Admin Guide
-===========
+Administration Guide
+====================

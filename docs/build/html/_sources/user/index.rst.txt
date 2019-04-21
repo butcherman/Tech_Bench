@@ -2,7 +2,8 @@ User Guide
 ==========
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 5 
    
    fileLinks
    systems
+   account
