@@ -7,9 +7,14 @@ use App\SystemTypes;
 use App\SystemFiles;
 use App\SystemFileTypes;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class SystemFilesController extends Controller
 {
@@ -29,43 +34,67 @@ class SystemFilesController extends Controller
             'file'  => 'required'
         ]);
         
-        //  Get the system information
-        $sys = SystemTypes::where('sys_id', $request->sysID)
-            ->join('system_categories', 'system_types.cat_id', '=', 'system_categories.cat_id')
-            ->select('system_types.*', 'system_categories.name AS cat_name')
-            ->first();
-                
-        //  Set the file location and clean the file name for storage
-        $filePath = config('filesystems.paths.systems')
-            .DIRECTORY_SEPARATOR.strtolower($sys->cat_name)
-            .DIRECTORY_SEPARATOR.$sys->folder_location;
+        $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
         
-        $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
+        //  Verify that the upload is valid and being processed
+        if($receiver->isUploaded() === false)
+        {
+            throw new UploadMissingFileException();
+        }
         
-        //  Store the file and place it in the database
-        $request->file->storeAs($filePath, $fileName);
-        $file = Files::create([
-            'file_name' => $fileName,
-            'file_link' => $filePath.DIRECTORY_SEPARATOR
+         //  Recieve and process the file
+        $save = $receiver->receive();
+
+        //  See if the uploade has finished
+        if($save->isFinished())
+        {
+            
+            //  Get the system information
+            $sys = SystemTypes::where('sys_id', $request->sysID)
+                ->join('system_categories', 'system_types.cat_id', '=', 'system_categories.cat_id')
+                ->select('system_types.*', 'system_categories.name AS cat_name')
+                ->first();
+
+            //  Set the file location and clean the file name for storage
+            $filePath = config('filesystems.paths.systems')
+                .DIRECTORY_SEPARATOR.strtolower($sys->cat_name)
+                .DIRECTORY_SEPARATOR.$sys->folder_location;
+
+            $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
+
+            //  Store the file and place it in the database
+            $request->file->storeAs($filePath, $fileName);
+            $file = Files::create([
+                'file_name' => $fileName,
+                'file_link' => $filePath.DIRECTORY_SEPARATOR
+            ]);
+
+            //  Get the information for the system files table
+            $fileID = $file->file_id;
+            $typeID = SystemFileTypes::where('description', $request->type)->first()->type_id;
+
+            //  Attach file to system type
+            SystemFiles::create([
+                'sys_id'      => $request->sysID,
+                'type_id'     => $typeID,
+                'file_id'     => $fileID,
+                'name'        => $request->name,
+                'description' => $request->description,
+                'user_id'     => Auth::user()->user_id
+            ]);
+
+            Log::info('File ID-'.$fileID.' Added For System ID-'.$request->sysID.' By User ID-'.Auth::user()->user_id);
+
+            return response()->json(['success' => true]);
+        }
+
+        //  Get the current progress
+        $handler = $save->handler();
+
+        return response()->json([
+            'done'   => $handler->getPercentageDone(),
+            'status' => true
         ]);
-        
-        //  Get the information for the system files table
-        $fileID = $file->file_id;
-        $typeID = SystemFileTypes::where('description', $request->type)->first()->type_id;
-        
-        //  Attach file to system type
-        SystemFiles::create([
-            'sys_id'      => $request->sysID,
-            'type_id'     => $typeID,
-            'file_id'     => $fileID,
-            'name'        => $request->name,
-            'description' => $request->description,
-            'user_id'     => Auth::user()->user_id
-        ]);
-        
-        Log::info('File ID-'.$fileID.' Added For System ID-'.$request->sysID.' By User ID-'.Auth::user()->user_id);
-        
-        return response()->json(['success' => true]);
     }
 
     //  Return JSON array of the system files
@@ -126,32 +155,67 @@ class SystemFilesController extends Controller
         //  Validate the form
         $request->validate(['file' => 'required']);
         
-        //  Get the original file information
-        $origData = SystemFiles::find($request->fileID)->with('files')->first();
-        $filePath = $origData->files->file_link;
-        //  Clean the filename
-        $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
-        
-        //  Store the file
-        $request->file->storeAs($filePath, $fileName);
-        
-        //  Put the file in the database
-        $file = Files::create(
-        [
-            'file_name' => $fileName,
-            'file_link' => $filePath.DIRECTORY_SEPARATOR
+        $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
+            
+        //  Verify that the upload is valid and being processed
+        if($receiver->isUploaded() === false)
+        {
+            throw new UploadMissingFileException();
+        }
+
+        //  Recieve and process the file
+        $save = $receiver->receive();
+
+        //  See if the uploade has finished
+        if($save->isFinished())
+        {
+            
+            //  Get the original file information
+            $origData = SystemFiles::find($request->fileID)->with('files')->first();
+            $filePath = $origData->files->file_link;
+            //  Clean the filename
+            $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
+
+            //  Store the file
+            $request->file->storeAs($filePath, $fileName);
+
+            //  Put the file in the database
+            $file = Files::create(
+            [
+                'file_name' => $fileName,
+                'file_link' => $filePath.DIRECTORY_SEPARATOR
+            ]);
+
+            //  Get information for system files table
+            $fileID = $file->file_id;
+
+            SystemFiles::find($request->fileID)->update([
+                'file_id' => $fileID
+            ]);   
+
+            Log::info('System File ID-'.$fileID.' Replaced by User ID-'.Auth::user()->user_id);
+
+            return response()->json(['success' => true]);
+        }
+
+        //  Get the current progress
+        $handler = $save->handler();
+
+        return response()->json([
+            'done'   => $handler->getPercentageDone(),
+            'status' => true
         ]);
         
-        //  Get information for system files table
-        $fileID = $file->file_id;
         
-        SystemFiles::find($request->fileID)->update([
-            'file_id' => $fileID
-        ]);   
         
-        Log::info('System File ID-'.$fileID.' Replaced by User ID-'.Auth::user()->user_id);
         
-        return response()->json(['success' => true]);
+        
+        
+        
+        
+        
+        
+            
     }
 
     //  Delete the system file

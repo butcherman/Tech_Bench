@@ -112,18 +112,25 @@ export default {
         return {
             token: window.techBench.csrfToken,
             dropzoneOptions: {
-                url:              this.new_file_route,
-                autoProcessQueue: false,
-                uploadMultiple:   false,
-                maxFilesize:      window.techBench.maxUpload,
-                addRemoveLinks:   true,
+                url:                  this.new_file_route,
+                autoProcessQueue:     false,
+                maxFilesize:          window.techBench.maxUpload,
+                addRemoveLinks:       true,
+                maxFiles:             1,
+                chunking:             true,
+                chunkSize:            5000000,
+                parallelChunkUploads: false,
             },
             dropzoneReplaceOptions: {
-                url:              this.replace_file_route,
-                autoProcessQueue: false,
-                uploadMultiple:   false,
-                maxFilesize:      window.techBench.maxUpload,
-                addRemoveLinks:   true,
+                url:                  this.replace_file_route,
+                autoProcessQueue:     false,
+                uploadMultiple:       false,
+                maxFilesize:          window.techBench.maxUpload,
+                addRemoveLinks:       true,
+                maxFiles:             1,
+                chunking:             true,
+                chunkSize:            5000000,
+                parallelChunkUploads: false,
             },
             fileList: [],
             newForm: {
@@ -200,7 +207,7 @@ export default {
             this.newForm.type      = '';
             this.newForm.name      = '';
             this.newForm.desc      = '';
-            this.newForm.butonDis  = false;
+            this.newForm.buttonDis = false;
             this.newForm.buttonTxt = 'Submit New File';
             this.$refs.newFileDropzone.removeAllFiles();
         },
