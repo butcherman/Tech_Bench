@@ -8,7 +8,7 @@
         "cms",
         "service tech"
     ],
-    "license": "GNU",
+    "license": "LGPL-2.0-or-later",
     "require": {
         "php": "^7.2",
         "fideloper/proxy": "^4.0",

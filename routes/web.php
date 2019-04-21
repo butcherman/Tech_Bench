@@ -142,8 +142,24 @@ Route::middleware(['password_expired'])->group(function()
         Route::prefix('customer')->name('customer.')->group(function()
         {
 
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             Route::get('search-id/{id}', 'CustomerController@searchID')->name('searchID');
             Route::get('file-types', 'CustomerFilesController@getFileTypes')->name('getFileTypes');
+            
+            
+            
+            
+            Route::get('list', 'Customers\CustomerController@list')->name('list');
+            Route::get('/', 'Customers\CustomerController@index')->name('index');
 
         });
         

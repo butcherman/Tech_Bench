@@ -29,6 +29,7 @@
             help_route="{{route('about')}}"
             links_route="{{route('links.index')}}"
             account_route="{{route('account')}}"
+            cust_route="{{route('customer.index')}}"
         @if(Auth::user()->hasAnyRole(['installer', 'admin']))    
             admin_route="{{route('admin.index')}}"  
         @endif

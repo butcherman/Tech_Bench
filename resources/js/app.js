@@ -58,6 +58,11 @@ Vue.component('user-upload',       require('./components/fileLinks/UserFileUploa
 Vue.component('system-files', require('./components/system/SystemFiles.vue').default);
 
 /*
+*   Customer Components
+*/
+Vue.component('customer-list', require('./components/customer/customerList.vue').default);
+
+/*
 *   Admin Components
 */
 Vue.component('user-list',        require('./components/admin/userList.vue').default);

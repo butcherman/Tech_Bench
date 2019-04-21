@@ -22,6 +22,10 @@
                         {{sys.name}}
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
+                <b-nav-item :href="cust_route">
+                    <i class="fa fa-fw fa-user"></i>
+                    <span class="nav-link-text">Customers</span>
+                </b-nav-item>
                 <b-nav-item :href="account_route">
                     <i class="fa fa-fw fa-user"></i>
                     <span class="nav-link-text">Account Settings</span>
@@ -52,6 +56,7 @@ export default {
         'account_route',
         'admin_route',
         'sys_list',
+        'cust_route',
     ],
     data() {
         return {
