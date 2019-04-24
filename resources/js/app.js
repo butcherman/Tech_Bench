@@ -61,6 +61,7 @@ Vue.component('system-files', require('./components/system/SystemFiles.vue').def
 *   Customer Components
 */
 Vue.component('customer-list', require('./components/customer/customerList.vue').default);
+Vue.component('new-customer-form', require('./components/customer/newCustomer.vue').default);
 
 /*
 *   Admin Components

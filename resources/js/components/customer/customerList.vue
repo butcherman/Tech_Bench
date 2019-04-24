@@ -5,14 +5,21 @@
             :rows="table.rows"
             styleClass="vgt-table striped bordered"
             @on-row-click="goToCustomer"
-        ></vue-good-table>
+            :pagination-options="table.pagination"
+        >
+            <div slot="table-actions">
+                <b-button variant="info" :href="new_cust_route"><i class="fa fa-plus" aria-hidden="true"></i> Add New Customer</b-button>
+            </div>
+        </vue-good-table>
     </div>
 </template>
 
 <script>
 export default {
     props: [
+        'sys_types',
         'get_cust_route',
+        'new_cust_route',
     ],
     data() {
         return {
@@ -34,10 +41,24 @@ export default {
                 },
                 {
                     label: 'System Type',
-                    field: 'sys'
+                    field: 'sys',
+                    html: true,
+                    filterOptions: {
+                        
+                        enabled: true,
+                        filterDropdownItems: JSON.parse(this.sys_types),
+                    }
                 },
                 ],
                 rows: [],
+                pagination: {
+                    enabled:          true,
+                    mode:             'records',
+                    perPage:          10,
+                    position:         'bottom',
+                    perPageDropdown:  [10, 25, 100],
+                    dropdownAllowAll: true,
+                }
             }
         }
     },
@@ -50,13 +71,19 @@ export default {
             axios.get(this.get_cust_route)
                 .then(res => {
                 this.table.rows = res.data;
-                console.log(res.data);
             })
         },
-        goToCustomer()
+        goToCustomer(row)
         {
-            console.log('clicked');
+            location.href = row.row.url;
         }
     }
 }
 </script>
+
+
+<style>
+    .vgt-global-search__actions>div {
+        margin-right: 10px;
+    }
+</style>

@@ -6,4 +6,5 @@ User Guide
    
    fileLinks
    systems
+   customer
    account

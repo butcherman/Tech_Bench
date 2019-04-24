@@ -15,7 +15,10 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <customer-list
-                get_cust_route="{{route('customer.list')}}"
+                sys_types="{{json_encode($sysTypes)}}"
+                get_cust_route="{{route('customer.search')}}"
+                new_cust_route="{{route('customer.id.create')}}"
+                
             ></customer-list>
         </div>
     </div>
