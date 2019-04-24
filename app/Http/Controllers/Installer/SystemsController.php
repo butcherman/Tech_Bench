@@ -126,7 +126,7 @@ class SystemsController extends Controller
     public function edit($id)
     {
         $system = SystemTypes::find($id);
-        $dataTypes  = SystemCustDataTypes::orderBy('name', 'ASC')->get();
+        $dataTypes = SystemCustDataTypes::orderBy('name', 'ASC')->get();
         
         $dropDown = [];
         foreach($dataTypes as $type)

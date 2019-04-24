@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
-$factory->define(App\FileLinks::class, function (Faker $faker) {
+$factory->define(App\FileLinks::class, function(Faker $faker) {
     return [
         'user_id'      => 1,
         'cust_id'      => null,

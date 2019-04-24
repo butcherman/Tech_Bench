@@ -20,7 +20,7 @@ class CheckPasswordExpire
     {
         $user = $request->user();
         
-        if($user->password_expires != NULL)
+        if($user->password_expires != null)
         {
             $passExp = new Carbon(($user->password_expires));
 

@@ -13,8 +13,7 @@ class UpdateFileLinksTable extends Migration
      */
     public function up()
     {
-        Schema::table('file_links', function(Blueprint $table)
-        {
+        Schema::table('file_links', function(Blueprint $table) {
             $table->integer('cust_id')
                 ->unsigned()
                 ->nullable()
@@ -33,8 +32,7 @@ class UpdateFileLinksTable extends Migration
      */
     public function down()
     {
-        Schema::table('file_links', function(Blueprint $table)
-        {
+        Schema::table('file_links', function(Blueprint $table) {
             $table->dropForeign(['cust_id']);
             $table->dropColumn('cust_id');
             $table->dropColumn('note');

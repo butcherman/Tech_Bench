@@ -13,7 +13,7 @@ class CreateFileLinksTable extends Migration
      */
     public function up()
     {
-        Schema::create('file_links', function (Blueprint $table) {
+        Schema::create('file_links', function(Blueprint $table) {
             $table->increments('link_id');
             $table->integer('user_id')->unsigned();
             $table->text('link_hash');

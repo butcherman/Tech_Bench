@@ -39,8 +39,7 @@ class SystemsController extends Controller
         }
         
         //  Get the types of systems belonging to the category
-        $sysList = SystemTypes::whereHas('SystemCategories', function($q) use($cat)
-        {
+        $sysList = SystemTypes::whereHas('SystemCategories', function($q) use($cat) {
             $q->where('name', $cat);
         })->get();
         

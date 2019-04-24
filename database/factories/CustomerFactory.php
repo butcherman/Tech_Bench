@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Customers::class, function (Faker $faker) {
+$factory->define(App\Customers::class, function(Faker $faker) {
     return [
         //
         'cust_id'  => rand(50, 5000),

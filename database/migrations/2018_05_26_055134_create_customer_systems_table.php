@@ -13,7 +13,7 @@ class CreateCustomerSystemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_systems', function (Blueprint $table) {
+        Schema::create('customer_systems', function(Blueprint $table) {
             $table->increments('cust_sys_id');
             $table->integer('cust_id')->unsigned();
             $table->integer('sys_id')->unsigned();

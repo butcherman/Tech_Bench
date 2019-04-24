@@ -65,7 +65,7 @@ class FileLinksController extends Controller
         ]);
         
         if(!empty($request->file))
-        {            
+        {
             $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
             
             //  Verify that the upload is valid and being processed
@@ -96,7 +96,7 @@ class FileLinksController extends Controller
 
         //  If there are no files being uploaded or the file uploade process is done
         if(isset($request->_completed) && $request->_completed)
-        {            
+        {
             $linkID = $this->createLink($request);
             if($request->session()->has('newLinkFile'))
             {
@@ -139,7 +139,7 @@ class FileLinksController extends Controller
         {
             $hash = strtolower(Str::random(15));
             $dup  = FileLinks::where('link_hash', $hash)->get()->count();
-        }while($dup != 0);
+        } while($dup != 0);
         
         //  If the "customer id" field is populated, separate the ID from the name and prepare for insertion.
         if($data->customer_tag != null)

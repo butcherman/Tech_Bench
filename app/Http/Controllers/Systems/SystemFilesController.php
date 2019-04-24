@@ -42,7 +42,7 @@ class SystemFilesController extends Controller
             throw new UploadMissingFileException();
         }
         
-         //  Recieve and process the file
+            //  Recieve and process the file
         $save = $receiver->receive();
 
         //  See if the uploade has finished

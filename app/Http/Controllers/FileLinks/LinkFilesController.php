@@ -81,7 +81,7 @@ class LinkFilesController extends Controller
             {
                 $fileID = $this->saveFile($save->getFile(), $linkID);
                 
-                return response()->json(['success' => true]);;
+                return response()->json(['success' => true]); ;
             }
         
             //  Get the current progress

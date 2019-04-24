@@ -68,7 +68,7 @@ class UserLinksController extends Controller
 
     //  Upload new file
     public function update(Request $request, $id)
-    {        
+    {
         $request->validate(['name' => 'required', 'file' => 'required']);
         
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
@@ -101,7 +101,7 @@ class UserLinksController extends Controller
     
     //  Save the file in the database
     private function saveFile(UploadedFile $file, $id, $request)
-    {        
+    {
         $details = FileLinks::where('link_hash', $id)->first();
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$details->link_id;
         

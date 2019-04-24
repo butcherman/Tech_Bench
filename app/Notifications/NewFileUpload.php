@@ -32,8 +32,8 @@ class NewFileUpload extends Notification
             ->action('Click to View Link', 
                 url(route('links.details', 
                 [
-                     'id' => $this->details->link_id, 
-                     'name' => urlencode($this->details->link_name)
+                        'id' => $this->details->link_id, 
+                        'name' => urlencode($this->details->link_name)
                 ])));
     }
 
@@ -44,10 +44,10 @@ class NewFileUpload extends Notification
             'type'    => 'warning',
             'message' => 'New File Uploaded to link - '.$this->details->link_name,
             'link'    => url(route('links.details', 
-                         [
+                            [
                             'id' => $this->details->link_id, 
-                             'name' => urlencode($this->details->link_name)
-                         ]))
+                                'name' => urlencode($this->details->link_name)
+                            ]))
         ];
     }
 }
