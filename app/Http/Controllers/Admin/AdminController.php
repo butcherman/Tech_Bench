@@ -33,8 +33,7 @@ class AdminController extends Controller
         
         foreach($userLinks as $user)
         {
-            $expired = $user->FileLinks->filter(function($lnk)
-                       {
+            $expired = $user->FileLinks->filter(function($lnk) {
                            if($lnk->expire < date('Y-m-d'))
                            {
                                return $lnk;

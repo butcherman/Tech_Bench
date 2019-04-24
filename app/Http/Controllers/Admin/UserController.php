@@ -40,7 +40,7 @@ class UserController extends Controller
         $roleArr = [];
         foreach($roles as $role)
         {
-            if($role->role_id == 1 && !Auth::user()->hasAnyRole(['installer'])) 
+            if($role->role_id == 1 && !Auth::user()->hasAnyRole(['installer']))
             {
             
                 continue;
@@ -115,7 +115,7 @@ class UserController extends Controller
     
     //  Submit the initialize user form
     public function submitInitializeUser(Request $request, $hash)
-    {   
+    {
         //  Verify that the link matches the assigned email address
         $valid = UserInitialize::where('token', $hash)->first();
         if(empty($valid))
@@ -138,7 +138,7 @@ class UserController extends Controller
         
         $nextChange = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
         
-         //  Update the password
+            //  Update the password
         User::find($userData->user_id)->update(
         [
             'password'         => bcrypt($request->newPass),
@@ -192,7 +192,7 @@ class UserController extends Controller
         $roleArr = [];
         foreach($roles as $role)
         {
-            if($role->role_id == 1 && !Auth::user()->hasAnyRole(['installer'])) 
+            if($role->role_id == 1 && !Auth::user()->hasAnyRole(['installer']))
             {
                 continue;
             }
@@ -270,7 +270,7 @@ class UserController extends Controller
         
         $nextChange = isset($request->force_change) && $request->force_change == 'on' ? Carbon::now()->subDay() : null;
         
-         //  Update the user data
+            //  Update the user data
         User::find($id)->update(
         [
             'password'         => bcrypt($request->password),

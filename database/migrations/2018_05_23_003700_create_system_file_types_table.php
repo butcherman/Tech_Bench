@@ -14,7 +14,7 @@ class CreateSystemFileTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('system_file_types', function (Blueprint $table) {
+        Schema::create('system_file_types', function(Blueprint $table) {
             $table->increments('type_id');
             $table->string('description');
             $table->timestamps();

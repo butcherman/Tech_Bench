@@ -13,7 +13,7 @@ class CreateFileLinkNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('file_link_notes', function (Blueprint $table) {
+        Schema::create('file_link_notes', function(Blueprint $table) {
             $table->increments('link_note_id');
             $table->integer('link_id')->unsigned();
             $table->integer('file_id')->unsigned();

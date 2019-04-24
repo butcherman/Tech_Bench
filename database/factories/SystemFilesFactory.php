@@ -3,14 +3,14 @@
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
-$factory->define(App\Files::class, function (Faker $faker) {
+$factory->define(App\Files::class, function(Faker $faker) {
     return [
         'file_name' => Str::random(5).$faker->fileExtension,
         'file_link' => 'random/path'
     ];
 });
 
-$factory->define(App\SystemFiles::class, function (Faker $faker) use ($factory) {
+$factory->define(App\SystemFiles::class, function(Faker $faker) use ($factory) {
     return [
         'sys_id'      => 1,
         'type_id'     => 1,

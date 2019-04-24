@@ -13,7 +13,7 @@ class CreateCustomerFavsTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_favs', function (Blueprint $table) {
+        Schema::create('customer_favs', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('cust_id')->unsigned();

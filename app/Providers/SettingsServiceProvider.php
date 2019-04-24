@@ -16,21 +16,21 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-		try
-		{
-			if(Schema::hasTable('settings'))
-			{
-				$settings = DB::table('settings')->get();
-				foreach($settings as $setting)
-				{
-					Config([$setting->key => $setting->value]);
-				}
-			}
-		}
-		catch(\Illuminate\Database\QueryException $e)
-		{
+        try
+        {
+            if(Schema::hasTable('settings'))
+            {
+                $settings = DB::table('settings')->get();
+                foreach($settings as $setting)
+                {
+                    Config([$setting->key => $setting->value]);
+                }
+            }
+        }
+        catch(\Illuminate\Database\QueryException $e)
+        {
             //  
-		}
+        }
     }
 
     /**

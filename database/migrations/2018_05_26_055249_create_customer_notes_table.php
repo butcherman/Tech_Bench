@@ -13,7 +13,7 @@ class CreateCustomerNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_notes', function (Blueprint $table) {
+        Schema::create('customer_notes', function(Blueprint $table) {
             $table->increments('note_id');
             $table->integer('cust_id')->unsigned();
             $table->integer('user_id')->unsigned();

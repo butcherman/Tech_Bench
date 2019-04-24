@@ -54,15 +54,13 @@ Route::post('/account/change-password', 'AccountController@submitPassword')->nam
 *   Logged in user routes
 *
 */
-Route::middleware(['password_expired'])->group(function()
-{
+Route::middleware(['password_expired'])->group(function() {
     /*
     *
     *   Routes for users with "tech" permissions
     *
     */
-    Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function()
-    {
+    Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function() {
         /*
         *
         *   Dashboard and About page routes
@@ -86,8 +84,7 @@ Route::middleware(['password_expired'])->group(function()
         *   File Link Routes
         *
         */
-        Route::prefix('links')->name('links.')->group(function()
-        {
+        Route::prefix('links')->name('links.')->group(function() {
             //  Resource controllers for base access
             Route::resource('data', 'FileLinks\FileLinksController');
             Route::get('find/{id}', 'FileLinks\FileLinksController@find')->name('user');
@@ -115,8 +112,7 @@ Route::middleware(['password_expired'])->group(function()
         *   System Routes
         *
         */
-        Route::prefix('system')->name('system.')->group(function()
-        {
+        Route::prefix('system')->name('system.')->group(function() {
             Route::post('system-files/replace', 'Systems\SystemFilesController@replace')->name('replaceFile');
             Route::resource('system-files', 'Systems\SystemFilesController');
             Route::get('{cat}/{sys}', 'Systems\SystemsController@details')->name('details');
@@ -129,7 +125,7 @@ Route::middleware(['password_expired'])->group(function()
         
         
         
-  /////////////////////////////////////////////////////////////////////////////////////////////////      
+    /////////////////////////////////////////////////////////////////////////////////////////////////      
         
         
         
@@ -139,8 +135,7 @@ Route::middleware(['password_expired'])->group(function()
         *   Customer Routes
         *
         */        
-        Route::prefix('customer')->name('customer.')->group(function()
-        {
+        Route::prefix('customer')->name('customer.')->group(function() {
 
             
 
@@ -184,12 +179,10 @@ Route::middleware(['password_expired'])->group(function()
     *   Administration Routes
     *
     */
-    Route::group(['middleware' => 'roles', 'roles' => ['installer', 'admin']], function()
-    {
+    Route::group(['middleware' => 'roles', 'roles' => ['installer', 'admin']], function() {
         
         
-        Route::prefix('admin')->name('admin.')->group(function()
-        {
+        Route::prefix('admin')->name('admin.')->group(function() {
             //  Admin User File Links routes
             Route::get('links/show/{id}', 'Admin\AdminController@showLinks')->name('userLinks');
             Route::get('count-links', 'Admin\AdminController@countLinks')->name('countLinks');
@@ -219,10 +212,8 @@ Route::middleware(['password_expired'])->group(function()
     *   Installer Routes
     *
     */
-    Route::group(['middleware' => 'roles', 'roles' => ['installer']], function()
-    {
-        Route::prefix('installer')->name('installer.')->group(function()
-        {
+    Route::group(['middleware' => 'roles', 'roles' => ['installer']], function() {
+        Route::prefix('installer')->name('installer.')->group(function() {
             //  User Settings
             Route::get('user-security-settings', 'Installer\SettingsController@userSecurity')->name('userSecurity');
             Route::post('user-security-settings', 'Installer\SettingsController@submitUserSecurity')->name('userSecurity');

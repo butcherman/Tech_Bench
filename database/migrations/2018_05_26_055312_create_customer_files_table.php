@@ -13,7 +13,7 @@ class CreateCustomerFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_files', function (Blueprint $table) {
+        Schema::create('customer_files', function(Blueprint $table) {
             $table->increments('cust_file_id');
             $table->integer('file_id')->unsigned();
             $table->integer('file_type_id')->unsigned();

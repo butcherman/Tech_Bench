@@ -13,7 +13,7 @@ class CreateSystemCustDataFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('system_cust_data_fields', function (Blueprint $table) {
+        Schema::create('system_cust_data_fields', function(Blueprint $table) {
             $table->increments('field_id');
             $table->integer('sys_id')->unsigned();
             $table->integer('data_type_id')->unsigned();

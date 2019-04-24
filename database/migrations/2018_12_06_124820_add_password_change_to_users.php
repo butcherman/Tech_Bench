@@ -15,8 +15,7 @@ class AddPasswordChangeToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function(Blueprint $table)
-        {
+        Schema::table('users', function(Blueprint $table) {
             $table->timestamp('password_expires')
                 ->nullable()
                 ->after('active');
@@ -41,8 +40,7 @@ class AddPasswordChangeToUsers extends Migration
      */
     public function down()
     {
-        Schema::table('users', function(Blueprint $table)
-        {
+        Schema::table('users', function(Blueprint $table) {
             $table->dropColumn('password_expires');
         });
         

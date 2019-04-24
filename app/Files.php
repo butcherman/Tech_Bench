@@ -38,7 +38,7 @@ class Files extends Model
             $extension = isset($fileParts['extension']) ? ('.'.$fileParts['extension']) : '';
             
             //  check for matching file names
-            if (preg_match('/(.*?)(\d+)$/', $fileParts['filename'], $match)) 
+            if(preg_match('/(.*?)(\d+)$/', $fileParts['filename'], $match)) 
             {
                 // Have a number; increment it
                 $base = $match[1];
@@ -54,7 +54,7 @@ class Files extends Model
             do 
             {
                 $fileName = $base.'('.++$number.')'.$extension;
-            } while (Storage::exists($path.DIRECTORY_SEPARATOR.$fileName));
+            } while(Storage::exists($path.DIRECTORY_SEPARATOR.$fileName));
         }
         
         return $fileName;

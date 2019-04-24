@@ -13,7 +13,7 @@ class CreateFileLinkInstructionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('file_link_instructions', function (Blueprint $table) {
+        Schema::create('file_link_instructions', function(Blueprint $table) {
             $table->increments('link_instructions_id');
             $table->integer('link_id')->unsigned();
             $table->longText('instruction')->nullable();

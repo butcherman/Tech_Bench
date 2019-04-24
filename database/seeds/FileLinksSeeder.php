@@ -46,7 +46,7 @@ class FileLinksSeeder extends Seeder
             'link_id'  => 1,
             'file_id'  => $fileID->file_id,
             'user_id'  => 1,
-            'added_by' => NULL,
+            'added_by' => null,
             'upload'   => 0
         ]);
         
@@ -58,7 +58,7 @@ class FileLinksSeeder extends Seeder
             'link_id'  => 1,
             'file_id'  => $fileID->file_id,
             'user_id'  => 1,
-            'added_by' => NULL,
+            'added_by' => null,
             'upload'   => 0
         ]);
         
@@ -70,7 +70,7 @@ class FileLinksSeeder extends Seeder
             'link_id'  => 1,
             'file_id'  => $fileID->file_id,
             'user_id'  => 1,
-            'added_by' => NULL,
+            'added_by' => null,
             'upload'   => 0
         ]);
         
@@ -81,7 +81,7 @@ class FileLinksSeeder extends Seeder
         FileLinkFiles::create([
             'link_id'  => 1,
             'file_id'  => $fileID->file_id,
-            'user_id'  => NULL,
+            'user_id'  => null,
             'added_by' => $faker->name(),
             'upload'   => 1
         ]);
@@ -93,7 +93,7 @@ class FileLinksSeeder extends Seeder
         FileLinkFiles::create([
             'link_id'  => 1,
             'file_id'  => $fileID->file_id,
-            'user_id'  => NULL,
+            'user_id'  => null,
             'added_by' => $faker->name(),
             'upload'   => 1
         ]);

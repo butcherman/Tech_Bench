@@ -13,8 +13,7 @@ class AlterSystemCustDataTypesTable extends Migration
      */
     public function up()
     {
-        Schema::table('system_cust_data_types', function(Blueprint $table) 
-        {
+        Schema::table('system_cust_data_types', function(Blueprint $table) {
             $table->boolean('hidden')
                 ->default(0)
                 ->after('name');
@@ -28,8 +27,7 @@ class AlterSystemCustDataTypesTable extends Migration
      */
     public function down()
     {
-        Schema::table('system_cust_data_types', function(Blueprint $table)
-        {
+        Schema::table('system_cust_data_types', function(Blueprint $table) {
             $table->dropColumn('hidden');
         });
     }
