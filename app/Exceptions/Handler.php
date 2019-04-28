@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Log;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -33,8 +34,15 @@ class Handler extends ExceptionHandler
      * @return void
      */
     public function report(Exception $exception)
-    {
-        parent::report($exception);
+    {        
+        if(config('app.stack_trace'))
+        {
+            parent::report($exception);
+        }
+        else
+        {
+            Log::error('['.$exception->getCode().'] "'.$exception->getMessage().'" on line '.$exception->getTrace()[0]['line'].' of file '.$exception->getTrace()[0]['file']);
+        }
     }
 
     /**
