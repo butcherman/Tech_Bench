@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Customers;
 
 use App\Customers;
 use App\SystemTypes;
+use App\CustomerFavs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 class CustomerController extends Controller
@@ -76,7 +78,9 @@ class CustomerController extends Controller
             }
             
             $custList[] = [
+                'cust_id' => $cust->cust_id,
                 'name' => $cust->name,
+                'dba'  => $cust->dba_name,
                 'city' => $cust->city.', '.$cust->state,
                 'url'  => route('customer.details', [$cust->cust_id, urlencode($cust->name)]),
                 'sys'  => $sysArr
@@ -97,5 +101,25 @@ class CustomerController extends Controller
         }
         
         return response()->json(['dup' => true, 'url' => route('customer.details', [$cust->cust_id, urlencode($cust->name)])]);
+    }
+    
+    //  Toggle whether or not the customer is listed as a user favorite
+    public function toggleFav($action, $id)
+    {
+        switch ($action)
+        {
+            case 'add':
+                CustomerFavs::create([
+                    'user_id' => Auth::user()->user_id,
+                    'cust_id' => $id
+                ]);
+                break;
+            case 'remove':
+                $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $id)->first();
+                $custFav->delete();
+                break;
+        }
+        
+        return response()->json(['success' => true]);
     }
 }

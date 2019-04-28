@@ -30,6 +30,12 @@ export default {
                     field: 'name',
                     filterOptions: {
                         enabled: true,
+//                        filterFn: function(data, filterString)
+//                        {
+//                            console.log(data);
+//                            
+//                            return this.table.rows.filter((rows) => rows.cust_id.includes(filterString));
+//                        }
                     }
                 },
                 {
@@ -44,7 +50,6 @@ export default {
                     field: 'sys',
                     html: true,
                     filterOptions: {
-                        
                         enabled: true,
                         filterDropdownItems: JSON.parse(this.sys_types),
                     }

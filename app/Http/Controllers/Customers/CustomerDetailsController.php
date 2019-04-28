@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Customers;
+use App\CustomerFavs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -31,12 +32,7 @@ class CustomerDetailsController extends Controller
         return view('customer.newCustomer');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //  Submit the new customer form
     public function store(Request $request)
     {
         $request->validate([
@@ -72,18 +68,34 @@ class CustomerDetailsController extends Controller
     //  Show the customer details
     public function details($id, $name)
     {
-        return view('customer.details');
+        $custDetails = Customers::find($id);
+        
+        if(empty($custDetails))
+        {
+            return view('err.customerNotFound');
+        }
+        
+        $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
+        
+        Log::debug($custFav);
+        
+        return view('customer.details', [
+            'details' => $custDetails,
+            'isFav'   => empty($custFav) ? false : true
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Get the basic details of the customer
     public function show($id)
     {
-        //
+        $details = Customers::find($id);
+        
+        if(empty($details))
+        {
+            return response()->json(['error' => 'Customer Not Found']);
+        }
+        
+        return response()->json($details);
     }
 
     /**
@@ -97,16 +109,30 @@ class CustomerDetailsController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Update the customer details
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'     => 'required',
+            'dba_name' => 'nullable',
+            'address'  => 'required',
+            'city'     => 'required',
+            'state'    => 'required',
+            'zip'      => 'required|numeric'
+        ]);
+        
+        Customers::find($id)->update([
+            'name'     => $request->name,
+            'dba_name' => $request->dba_name,
+            'address'  => $request->address,
+            'city'     => $request->city,
+            'state'    => $request->state,
+            'zip'      => $request->zip
+        ]);
+        
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     /**
