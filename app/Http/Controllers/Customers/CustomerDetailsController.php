@@ -69,16 +69,14 @@ class CustomerDetailsController extends Controller
     public function details($id, $name)
     {
         $custDetails = Customers::find($id);
-        poop
+        
         if(empty($custDetails))
         {
             return view('err.customerNotFound');
         }
         
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
-        
-        Log::debug($custFav);
-        
+                
         return view('customer.details', [
             'details' => $custDetails,
             'isFav'   => empty($custFav) ? false : true
