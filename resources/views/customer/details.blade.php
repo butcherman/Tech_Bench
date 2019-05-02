@@ -18,20 +18,23 @@
         ></customer-details>
     </div>
 </div>
-
-
-
-
-<div class="row justify-content-center pad-bottom">
+<div class="row pad-bottom">
     <div class="col-md-5">
         <div class="card">
             <div class="card-header text-center"><h5>Systems:</h5></div>
             <div class="card-body" id="system-information">
-                <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...
+                <customer-systems
+                    cust_id="{{$details->cust_id}}"
+                    get_sys_route="{{route('customer.systems.show', $details->cust_id)}}"
+                    sys_data_route="{{route('customer.getDataFields', ':id')}}"
+                    new_sys_route="{{route('customer.systems.store')}}"
+                    edit_sys_route="{{route('customer.systems.update', ':id')}}"
+                    sys_list="{{json_encode($sysList)}}"
+                ></customer-systems>
             </div>
         </div>
     </div>
-    <div class="col-md-7 mt-2 mt-sm-0">
+    <div class="col-md-7">
         <div class="card">
             <div class="card-header text-center"><h5>Contacts:</h5></div>
             <div class="card-body" id="contact-information">

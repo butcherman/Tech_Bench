@@ -5,25 +5,18 @@ namespace App\Http\Controllers\Customers;
 use App\Customers;
 use App\CustomerFavs;
 use Illuminate\Http\Request;
+use App\Http\Traits\SystemsTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 class CustomerDetailsController extends Controller
 {
+    use SystemsTrait;
+    
     public function __construct()
     {
         $this->middleware('auth');
-    }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
     }
 
     //  New Customer Form
@@ -69,6 +62,7 @@ class CustomerDetailsController extends Controller
     public function details($id, $name)
     {
         $custDetails = Customers::find($id);
+        $allSystems  = $this->getAllSystems();
         
         if(empty($custDetails))
         {
@@ -79,7 +73,8 @@ class CustomerDetailsController extends Controller
                 
         return view('customer.details', [
             'details' => $custDetails,
-            'isFav'   => empty($custFav) ? false : true
+            'isFav'   => empty($custFav) ? false : true,
+            'sysList' => $allSystems
         ]);
     }
 
@@ -94,17 +89,6 @@ class CustomerDetailsController extends Controller
         }
         
         return response()->json($details);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     //  Update the customer details
