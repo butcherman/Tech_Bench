@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 
 class SettingsController extends Controller
@@ -25,6 +26,7 @@ class SettingsController extends Controller
     {
         $passExpire = config('users.passExpires') != null ? config('users.passExpires') : 0;
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.userSecurity', [
             'passExpire' => $passExpire
         ]);
@@ -61,13 +63,16 @@ class SettingsController extends Controller
             }
         }
         
-        Log::info('User Settings have been changed by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('User Settings have been changed by User ID-'.Auth::user()->user_id);
         return redirect()->back()->with('success', 'User Security Updated');
     }
     
     //  Timezone and Logo forms
     public function customizeSystem()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.customize');
     }
     
@@ -82,7 +87,9 @@ class SettingsController extends Controller
             'value' => $request->timezone
         ]);
         
-        Log::info('Tech Bench Settings Updated', ['user_id' => Auth::user()->user_id]);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('Tech Bench Settings Updated', ['user_id' => Auth::user()->user_id]);
         
         return redirect()->back()->with('success', 'Timezone Successfully Updated');
     }
@@ -98,7 +105,9 @@ class SettingsController extends Controller
             'value' => '/storage/img/'.$fileName
         ]);
         
-        Log::info('A new company logo has been uploaded by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('A new company logo has been uploaded by User ID-'.Auth::user()->user_id);
         
         return response()->json(['url' => '/storage/img/'.$fileName]);
     }
@@ -106,6 +115,7 @@ class SettingsController extends Controller
     //  Email Settings form
     public function emailSettings()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.emailSettings');
     }
     
@@ -135,7 +145,9 @@ class SettingsController extends Controller
             Settings::where('key', 'mail.password')->update(['value' => $request->password]);
         }
          
-        Log::info('Email Settings have been changed by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('Email Settings have been changed by User ID-'.Auth::user()->user_id);
         return redirect()->back()->with('success', 'Tech Bench Successfully Updated');
     }
 }

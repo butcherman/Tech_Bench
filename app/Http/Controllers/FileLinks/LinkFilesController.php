@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
@@ -56,6 +57,8 @@ class LinkFilesController extends Controller
             $file->timestamp = date('M d, Y', strtotime($file->created_at));
         }
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('File data for Link ID-'.$id, $files->toArray());
         return response()->json($files);
     }
     
@@ -70,6 +73,7 @@ class LinkFilesController extends Controller
             //  Verify that the upload is valid and being processed
             if($receiver->isUploaded() === false)
             {
+                Log::error('Upload File Missing - '.$request->toArray());
                 throw new UploadMissingFileException();
             }
             
@@ -86,7 +90,9 @@ class LinkFilesController extends Controller
         
             //  Get the current progress
             $handler = $save->handler();
-
+            
+            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+            Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
             return response()->json([
                 'done'   => $handler->getPercentageDone(),
                 'status' => true
@@ -164,6 +170,9 @@ class LinkFilesController extends Controller
             'name'         => $request->file_name
         ]);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('File Data - '.$request->toArray());
+        Log::info('File ID-'.$request->file_id.' moved to customer ID-'.$linkData->cust_id.' for link ID-'.$id);
         return response()->json(['success' => true]);
     }
     
@@ -176,6 +185,8 @@ class LinkFilesController extends Controller
         
         Files::deleteFile($fileID);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::info('File ID-'.$fileData->file_id.' deleted for Link ID-'.$fileData->link_id);
         return response()->json(['success' => true]);
     }
 }

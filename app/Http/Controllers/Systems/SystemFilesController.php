@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
@@ -39,6 +40,7 @@ class SystemFilesController extends Controller
         //  Verify that the upload is valid and being processed
         if($receiver->isUploaded() === false)
         {
+            Log::error('Upload File Missing - '.$request->toArray());
             throw new UploadMissingFileException();
         }
         
@@ -83,6 +85,8 @@ class SystemFilesController extends Controller
                 'user_id'     => Auth::user()->user_id
             ]);
 
+            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+            Log::debug('Submitted Data - ', $request->toArray());
             Log::info('File ID-'.$fileID.' Added For System ID-'.$request->sysID.' By User ID-'.Auth::user()->user_id);
 
             return response()->json(['success' => true]);
@@ -91,6 +95,8 @@ class SystemFilesController extends Controller
         //  Get the current progress
         $handler = $save->handler();
 
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
             'status' => true
@@ -129,10 +135,11 @@ class SystemFilesController extends Controller
                     ];
                 }
             }
-            
             $i++;
         }
 
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Fetched Data - ', $fileArr);
         return response()->json($fileArr);
     }
 
@@ -144,6 +151,8 @@ class SystemFilesController extends Controller
             'description' => $request->desc
         ]);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
         Log::info('File Information on System File ID-'.$id.' Updated by User ID-'.Auth::user()->user_id);
         
         return response()->json(['success' => true]);
@@ -160,6 +169,7 @@ class SystemFilesController extends Controller
         //  Verify that the upload is valid and being processed
         if($receiver->isUploaded() === false)
         {
+            Log::error('Upload File Missing - '.$request->toArray());
             throw new UploadMissingFileException();
         }
 
@@ -169,7 +179,6 @@ class SystemFilesController extends Controller
         //  See if the uploade has finished
         if($save->isFinished())
         {
-            
             //  Get the original file information
             $origData = SystemFiles::find($request->fileID)->with('files')->first();
             $filePath = $origData->files->file_link;
@@ -193,6 +202,8 @@ class SystemFilesController extends Controller
                 'file_id' => $fileID
             ]);   
 
+            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+            Log::debug('Submitted Data - ', $request->toArray());
             Log::info('System File ID-'.$fileID.' Replaced by User ID-'.Auth::user()->user_id);
 
             return response()->json(['success' => true]);
@@ -201,21 +212,12 @@ class SystemFilesController extends Controller
         //  Get the current progress
         $handler = $save->handler();
 
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
             'status' => true
         ]);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-            
     }
 
     //  Delete the system file
@@ -232,6 +234,9 @@ class SystemFilesController extends Controller
         //  Delete from system if no longer in use
         Files::deleteFile($fileID);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('File Data - ', $data->toArray());
+        Log::notice('File ID-'.$data->file_id.' deleted by user ID-'.Auth::user()->user_id);
         return response()->json(['success' => true]);
     }
 }

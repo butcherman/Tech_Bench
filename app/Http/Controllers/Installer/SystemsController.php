@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 
 class SystemsController extends Controller
 {
@@ -24,6 +25,8 @@ class SystemsController extends Controller
     {
         $systems = SystemCategories::with('SystemTypes')->get();
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Fetched Data - ', $systems->toArray());
         return view('installer.systemsList', [
             'systems' => $systems
         ]);
@@ -44,6 +47,7 @@ class SystemsController extends Controller
             ];
         }
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.newSystem', [
             'categories' => $categories,
             'dropDown'   => $dropDown
@@ -99,7 +103,9 @@ class SystemsController extends Controller
             }
         }
         
-        Log::info('New System Created', ['cat_id' => $request->catName, 'sys_name' => $request->name, 'user_id' => Auth::user()->user_id]);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('New System Created', ['cat_id' => $request->catName, 'sys_name' => $request->name, 'user_id' => Auth::user()->user_id]);
         $request->session()->flash('success', 'New System Created');
         
         return response()->json(['success' => true]);
@@ -119,6 +125,8 @@ class SystemsController extends Controller
             'data' => $data
         ];
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Fetched Data - ', $sysData);
         return response()->json($sysData);
     }
 
@@ -137,6 +145,7 @@ class SystemsController extends Controller
             ];
         }
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.editSystem', [
             'sys_id'   => $id,
             'name'     => $system->name,
@@ -203,7 +212,9 @@ class SystemsController extends Controller
             }
         }
         
-        Log::info('System Updated', ['sys_name' => $request->name, 'user_id' => Auth::user()->user_id]);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('System Updated', ['sys_name' => $request->name, 'user_id' => Auth::user()->user_id]);
         $request->session()->flash('success', 'System Updated');
         
         return response()->json(['success' => true]);

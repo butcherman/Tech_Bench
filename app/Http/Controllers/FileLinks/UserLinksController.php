@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewFileUpload;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
@@ -25,6 +26,7 @@ class UserLinksController extends Controller
     //  Landing page if no link is sent
     public function index()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.\Request::ip());
         return view('links.userIndex');
     }
 
@@ -36,11 +38,13 @@ class UserLinksController extends Controller
         //  Verify that the link is valid
         if(empty($details))
         {
+            Log::warning('Visitor '.\Request::ip().' visited bad link Hash - '.$id);
             return view('links.userBadLink');
         }
         //  Verify that the link has not expired
         else if($details->expire <= date('Y-m-d'))
         {
+            Log::warning('Visitor '.\Request::ip().' visited expired link Hash - '.$id);
             return view('links.userExpiredLink');
         }
         
@@ -57,6 +61,8 @@ class UserLinksController extends Controller
             $file->timestamp = date('M d, Y', strtotime($file->created_at));
         }
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.\Request::ip());
+        Log::debug('Link Hash-'.$id);
         return view('links.userDetails', [
             'hash'    => $id,
             'details' => $details,
@@ -76,6 +82,7 @@ class UserLinksController extends Controller
         //  Verify that the upload is valid and being processed
         if($receiver->isUploaded() === false)
         {
+            Log::error('Upload File Missing - '.$request->toArray());
             throw new UploadMissingFileException();
         }
 
@@ -93,6 +100,8 @@ class UserLinksController extends Controller
         //  Get the current progress
         $handler = $save->handler();
 
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.\Request::ip());
+        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
             'status' => true
@@ -135,6 +144,9 @@ class UserLinksController extends Controller
         //  Send email and notification to the creator of the link
         $user = User::find($details->user_id);
         Notification::send($user, new NewFileUpload($details));
+        
+        Log::info('File uploaded by guest '.\Request::ip().' for file link -'.$details->link_id);
+        Log::debug('File Data -', $request->toArray());
 
         return response()->json(['success' => true]);
     }

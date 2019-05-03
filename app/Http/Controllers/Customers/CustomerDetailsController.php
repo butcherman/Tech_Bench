@@ -9,6 +9,7 @@ use App\Http\Traits\SystemsTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 
 class CustomerDetailsController extends Controller
 {
@@ -22,6 +23,7 @@ class CustomerDetailsController extends Controller
     //  New Customer Form
     public function create()
     {
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.newCustomer');
     }
 
@@ -51,7 +53,8 @@ class CustomerDetailsController extends Controller
             'active'   => 1
         ]);
         
-        Log::info('New Customer ID-'.$request->custID.' created by User ID-'.Auth::user()->user_id);
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::notice('New Customer ID-'.$request->custID.' created by User ID-'.Auth::user()->user_id);
         
         return response()->json([
             'success' => true, 
@@ -64,13 +67,16 @@ class CustomerDetailsController extends Controller
         $custDetails = Customers::find($id);
         $allSystems  = $this->getAllSystems();
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if(empty($custDetails))
         {
+            Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id.'-'.$name);
             return view('err.customerNotFound');
         }
         
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
-                
+        
+//        Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
             'details' => $custDetails,
             'isFav'   => empty($custFav) ? false : true,
@@ -83,11 +89,14 @@ class CustomerDetailsController extends Controller
     {
         $details = Customers::find($id);
         
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if(empty($details))
         {
+            Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id.'-'.$name);
             return response()->json(['error' => 'Customer Not Found']);
         }
         
+//        Log::debug('Customer Details', $details->toArray());
         return response()->json($details);
     }
 
@@ -112,6 +121,9 @@ class CustomerDetailsController extends Controller
             'zip'      => $request->zip
         ]);
         
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::notice('Customer Details Updated for Customer ID-'.$id.' by User ID-'.Auth::user()->user_id);
+//        Log::debug('Customer Details Submitted - ', $request->toArray());
         return response()->json([
             'success' => true
         ]);

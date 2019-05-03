@@ -12,6 +12,7 @@ use App\Http\Traits\SystemsTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 
 class CustomerSystemsController extends Controller
 {    
@@ -42,13 +43,17 @@ class CustomerSystemsController extends Controller
         //  Enter each of the data fields into the DB
         foreach($fields as $field)
         {
-            CustomerSystemFields::create([
+            $sysFields = CustomerSystemFields::create([
                 'cust_sys_id' => $sys->cust_sys_id,
                 'field_id'    => $field->field_id,
                 'value'       => isset($request->fieldData[$field->field_id]) ? $request->fieldData[$field->field_id] : null
             ]);
         }
         
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::notice('New Customer System Added - Customer ID-'.$request->custID.' System ID-'.$request->system);
+//        Log::debug('Submitted System Data', $request->toArray());
+//        Log::debug('Submitted System Fields', $sysFields);
         return response()->json(['success' => true]);
     }
 
@@ -92,13 +97,15 @@ class CustomerSystemsController extends Controller
                 'data'        => $dataArr
             ];
         }
-        
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+//        Log::debug('Show Data', $sysArr);
         return response()->json($sysArr);
     }
     
     //  Get the data fields attached to a system
     public function getDataFields($id)
     {
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return response()->json($this->getFields($id));
     }
 
@@ -121,20 +128,20 @@ class CustomerSystemsController extends Controller
             }
         }
         
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::notice('Customer System Updated.  Cust ID-'.$request->custID.' System ID-'.$request->sysstem.' User ID-'.Auth::user()->user_id);
+//        Log::debug('Submitted Data', $request->toArray());
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Delete a system attached to a customer
     public function destroy($id)
     {
         $system = CustomerSystems::find($id);
         
-        Log::info('Customer System Deleted for Customer ID-'.$system->cust_id.' by User ID-'.Auth::user()->user_id.'. System ID-'.$id);
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::notice('Customer System Deleted for Customer ID-'.$system->cust_id.' by User ID-'.Auth::user()->user_id.'. System ID-'.$id);
+//        Log::debug('System Data', $system->toArray());
         
         $system->delete();
         

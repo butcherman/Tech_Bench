@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
@@ -41,18 +42,22 @@ class FileLinksController extends Controller
             $link->expire     = date('M d, Y', strtotime($link->expire));
         }
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Links found for User ID-'.$id, $links->toArray());
         return response()->json($links);
     }
     
     //  Landing page shows all links that the user owns
     public function index()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('links.index');
     }
 
     //  Create a new file link form
     public function create()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('links.form.newLink');
     }
 
@@ -71,6 +76,7 @@ class FileLinksController extends Controller
             //  Verify that the upload is valid and being processed
             if($receiver->isUploaded() === false)
             {
+                Log::error('Upload File Missing - '.$request->toArray());
                 throw new UploadMissingFileException();
             }
             
@@ -88,6 +94,8 @@ class FileLinksController extends Controller
             //  Get the current progress
             $handler = $save->handler();
             
+            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+            Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
             return response()->json([
                 'done'   => $handler->getPercentageDone(),
                 'status' => true
@@ -97,6 +105,8 @@ class FileLinksController extends Controller
         //  If there are no files being uploaded or the file uploade process is done
         if(isset($request->_completed) && $request->_completed)
         {
+            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+            Log::debug('Link data submitted.  Data - ', $request->toArray());
             $linkID = $this->createLink($request);
             if($request->session()->has('newLinkFile'))
             {
@@ -120,11 +130,13 @@ class FileLinksController extends Controller
                         'user_id' => Auth::user()->user_id,
                         'upload' => 0
                     ]);
+                    
+                    Log::debug('File Added for link ID-'.$linkID.'.  File ID-'.$data->file_id);
                 }
 
                 $request->session()->forget('newLinkFile');
             }
-
+            
             return response()->json(['link' => $linkID, 'name' => urlencode($request->name)]);
         }
         
@@ -162,7 +174,7 @@ class FileLinksController extends Controller
             'allow_upload' => isset($data->allowUp) && $data->allowUp ? true : false
         ]);
         
-        Log::info('File Link Created', ['link_id' => $link->link_id, 'user_id' => Auth::user()->user_id]);
+        Log::info('File Link Created for User ID-'.Auth::user()->user_id.'.  Link ID-'.$link->link_id);
         
         return $link->link_id;
     }
@@ -203,12 +215,14 @@ class FileLinksController extends Controller
         //  If the link is invalid, return an error page
         if(empty($linkData))
         {
-            Log::notice('User tried to view bad file link', ['user_id' => Auth::user()->user_id, 'link_id' => $id]);
+            Log::warning('User tried to view bad file link', ['user_id' => Auth::user()->user_id, 'link_id' => $id]);
             return view('links.badLink');
         }
         
         $hasCust = $linkData->cust_id != null ? true : false;
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Link Detials - ', $linkData->toArray());
         return view('links.details', [
             'link_id' => $id,
             'has_cust' => $hasCust
@@ -224,6 +238,8 @@ class FileLinksController extends Controller
         $linkData->timestamp = $linkData->expire;
         $linkData->expire    = date('M d, Y', strtotime($linkData->expire));
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Link Details - ', $linkData->toArray());
         return response()->json($linkData);
     }
 
@@ -241,6 +257,8 @@ class FileLinksController extends Controller
             'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
         ]);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Updated Link Data for link ID-'.$id, $request->toArray());
         Log::info('File Link Updated', ['link_id' => $id]);
         
         return response()->json(['success' => true]);
@@ -264,6 +282,8 @@ class FileLinksController extends Controller
             'cust_id' => $custID
         ]);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data -', $request->toArray());
         return response()->json(['success' => true]);
     }
 
@@ -286,6 +306,7 @@ class FileLinksController extends Controller
         
         FileLinks::find($id)->delete();
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::info('File link deleted', ['link_id' => $id, 'user_id' => Auth::user()->user_id]);
         
         return response()->json([

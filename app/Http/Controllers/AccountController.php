@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 
 class AccountController extends Controller
 {
@@ -23,6 +24,7 @@ class AccountController extends Controller
         $userData = User::find(Auth::user()->user_id);
         $userSett = UserSettings::where('user_id', Auth::user()->user_id)->first();
 
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('account.index', [
             'userData'     => $userData,
             'userSettings' => $userSett,
@@ -61,12 +63,15 @@ class AccountController extends Controller
         
         session()->flash('success', 'User Settings Updated');
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
         return redirect(route('account'));
     }
     
     //  Bring up the change password form
     public function changePassword()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('account.changePassword');
     }
     
@@ -99,6 +104,7 @@ class AccountController extends Controller
         $user->password_expires = $newExpire;
         $user->save();
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::info('User Changed Password', ['user_id' => Auth::user()->user_id]);
         
         return redirect()->back()->with('success', 'Password Changed Successfully');

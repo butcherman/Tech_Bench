@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 
 class CategoriesController extends Controller
 {
@@ -20,6 +21,7 @@ class CategoriesController extends Controller
     {
         $categories = SystemCategories::all();
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.categoryList', [
             'cats' => $categories
         ]);
@@ -28,6 +30,7 @@ class CategoriesController extends Controller
     //  New category form
     public function create()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.newCategory');
     }
 
@@ -42,9 +45,9 @@ class CategoriesController extends Controller
             'name' => $request->name
         ]);
         
-        Log::info('New System Category Created', ['cat_name' => $request->name, 'user_id' => Auth::user()->user_id]);
-        
-        Log::info('New System Category - '.$request->name.' created by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('New System Category - '.$request->name.' created by User ID-'.Auth::user()->user_id);
         
         return redirect()->back()->with('success', 'Category Successfully Added. <a href="'.route('installer.systems.create').'">Add System</a>');
     }
@@ -54,6 +57,7 @@ class CategoriesController extends Controller
     {
         $categories = SystemCategories::all();
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return response()->json($categories);
     }
 
@@ -64,9 +68,13 @@ class CategoriesController extends Controller
         
         if(!$cat)
         {
+            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+            Log::debug('Invalid Category ID Selected - '.$id);
             return response(404);
         }
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Edit Data - ', $cat->toArray());
         return view('installer.editCategory', [
             'details' => $cat
         ]);
@@ -88,6 +96,9 @@ class CategoriesController extends Controller
             'name' => $request->name
         ]);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('Category ID-'.$id.' updated by User ID-'.Auth::user()->user_id);
         return redirect()->back()->with('success', 'Category Successfully Modified. <a href="'.route('installer.systems.create').'">Add System</a>');
     }
 

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\FileLinks;
 
 use App\FileLinks;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 
 class InstructionsController extends Controller
 {
@@ -19,6 +22,7 @@ class InstructionsController extends Controller
     {
         $linkNote = FileLinks::where('link_id', $id)->pluck('note');
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return response()->json(['note' => $linkNote[0]]);
     }
     
@@ -29,6 +33,8 @@ class InstructionsController extends Controller
             'note' => $request->note
         ]);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data -', $request->toArray());
         return response()->json(['success' => true]);
     }
 }

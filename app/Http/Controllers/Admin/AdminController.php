@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 
 class AdminController extends Controller
 {
@@ -16,12 +19,14 @@ class AdminController extends Controller
     //  Admin landing page
     public function index()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('admin.index');
     }
     
     //  Display all file links
     public function userLinks()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('admin.userLinks');
     }
     
@@ -48,6 +53,8 @@ class AdminController extends Controller
             ];
         }
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Link Count', $linkCount);
         return response()->json($linkCount);
     }
     
@@ -57,6 +64,7 @@ class AdminController extends Controller
         $user     = User::find($id);
         $userName = $user->first_name.' '.$user->last_name;
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('admin.linkDetails', [
             'userID' => $id,
             'name'   => $userName

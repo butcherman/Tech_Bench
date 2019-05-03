@@ -6,6 +6,8 @@ use Zip;
 use App\Files;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 class DownloadController extends Controller
@@ -21,7 +23,8 @@ class DownloadController extends Controller
             return Storage::download($fileData->file_link.$fileData->file_name);
         }
         
-        Log::info('File Not Found', ['file_id' => $fileID, 'file_name' => $fileName]);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::notice('File Not Found', ['file_id' => $fileID, 'file_name' => $fileName]);
         return view('err.badFile');
     }
     
@@ -30,6 +33,7 @@ class DownloadController extends Controller
     {
         session()->flash('fileArr', $request->fileArr);
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return response()->json($request);
     }
     
@@ -54,6 +58,8 @@ class DownloadController extends Controller
             $zip->add($path.$file->file_link.$file->file_name);
         }
         $zip->close();
+        
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         
         //  Download zip file and remove it from the server
         return response()->download($path.'download.zip')->deleteFileAfterSend(true);
