@@ -41,7 +41,7 @@ class CategoriesController extends Controller
             'name' => 'required|string|unique:system_categories|regex:/^[a-zA-Z0-9_ ]*$/'
         ]);
         
-        $cat = SystemCategories::create([
+        SystemCategories::create([
             'name' => $request->name
         ]);
         

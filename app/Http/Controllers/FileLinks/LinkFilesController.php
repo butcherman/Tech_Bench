@@ -83,7 +83,7 @@ class LinkFilesController extends Controller
             //  See if the uploade has finished
             if($save->isFinished())
             {
-                $fileID = $this->saveFile($save->getFile(), $linkID);
+                $this->saveFile($save->getFile(), $linkID);
                 
                 return response()->json(['success' => true]); ;
             }

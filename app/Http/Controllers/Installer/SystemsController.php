@@ -166,7 +166,7 @@ class SystemsController extends Controller
         ]);
         
         //  Update the system name
-        $sys = SystemTypes::find($id)->update([
+        SystemTypes::find($id)->update([
             'name' => $request->name
         ]);
         
@@ -176,7 +176,7 @@ class SystemsController extends Controller
         {
             $dataID = SystemCustDataTypes::where('name', $data)->first();
             
-            $dataType = SystemCustDataFields::where('sys_id', $id)->where('data_type_id', $dataID->data_type_id)->update([
+            SystemCustDataFields::where('sys_id', $id)->where('data_type_id', $dataID->data_type_id)->update([
                 'order' => $i
             ]);
             

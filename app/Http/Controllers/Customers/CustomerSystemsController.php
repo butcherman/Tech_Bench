@@ -130,7 +130,7 @@ class CustomerSystemsController extends Controller
         
 //        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('Customer System Updated.  Cust ID-'.$request->custID.' System ID-'.$request->sysstem.' User ID-'.Auth::user()->user_id);
-//        Log::debug('Submitted Data', $request->toArray());
+//        Log::debug('Submitted Data - ID:'.$id.' - ', $request->toArray());
         return response()->json(['success' => true]);
     }
 

@@ -35,7 +35,6 @@
                     <optgroup v-for="(sysData, key) in JSON.parse(sys_list)" :label="key">
                         <option v-for="sys in sysData" :value="sys.sys_id">{{sys.name}}</option>
                     </optgroup>
-                    
                 </b-form-select>
                 <span class="invalid-feedback d-inline" v-if="dupSys">
                     <strong>Customer Already Has This System</strong>
@@ -112,7 +111,6 @@ export default {
             axios.get(this.get_sys_route)
                 .then(res => {
                     this.custSystems = res.data;
-                    console.log(this.custSystems);
                 }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
         },
         //  Get the data that should be gathered for the selected system
@@ -127,11 +125,7 @@ export default {
                 {
                     dup = true;
                 }
-//                console.log(el.sys_id);
             });
-                
-//                console.log(dup);
-            
             if(dup)
             {
                 this.sysFields = [];

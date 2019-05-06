@@ -157,6 +157,7 @@ Route::middleware(['password_expired'])->group(function() {
             Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggleFav');
             Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('checkID');
             Route::get('id/{id}/{name}', 'Customers\CustomerDetailsController@details')->name('details');
+            Route::resource('contacts', 'Customers\CustomerContactsController');
             Route::resource('systems', 'Customers\CustomerSystemsController');
             Route::resource('id', 'Customers\CustomerDetailsController');
             Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');

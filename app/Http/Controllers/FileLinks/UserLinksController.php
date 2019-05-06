@@ -92,7 +92,7 @@ class UserLinksController extends Controller
         //  See if the uploade has finished
         if($save->isFinished())
         {
-            $fileID = $this->saveFile($save->getFile(), $id, $request);
+            $this->saveFile($save->getFile(), $id, $request);
 
             return 'uploaded successfully';
         }

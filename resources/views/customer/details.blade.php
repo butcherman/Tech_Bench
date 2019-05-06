@@ -38,35 +38,15 @@
         <div class="card">
             <div class="card-header text-center"><h5>Contacts:</h5></div>
             <div class="card-body" id="contact-information">
-                <div class="table-responsive">
-                    <table class="table" id="contact-information">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Phone Number</th>
-                                <th>Email</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4" class="text-center">
-                                    <a href="#edit-modal" id="add-contact-btn" class="btn btn-info" data-toggle="modal">Add Contact</a>
-                                </td>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                            <tr>
-                                <td colspan="4" class="text-center">
-                                    <i class="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> Loading...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <customer-contacts
+                    cust_id="{{$details->cust_id}}"
+                    phone_types="{{json_encode($phoneTypes)}}"
+                    get_contacts_route="{{route('customer.contacts.show', $details->cust_id)}}"
+                    new_contact_route="{{route('customer.contacts.store')}}"
+                    edit_contact_route="{{route('customer.contacts.update', ':id')}}"
+                ></customer-contacts>
             </div>
         </div>
     </div>
 </div>
-
 @endsection

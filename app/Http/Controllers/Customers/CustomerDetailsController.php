@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customers;
 
 use App\Customers;
 use App\CustomerFavs;
+use App\PhoneNumberType;
 use Illuminate\Http\Request;
 use App\Http\Traits\SystemsTrait;
 use Illuminate\Support\Facades\Log;
@@ -74,13 +75,26 @@ class CustomerDetailsController extends Controller
             return view('err.customerNotFound');
         }
         
+        //  Determine if the customer is one of the users bookmarks
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
+        //  Get the types of phone numbers that can be assigned to a customer contact
+        $pTypes = PhoneNumberType::all();
+        $phoneTypes = [];
+        foreach($pTypes as $type)
+        {
+            $phoneTypes[] = [
+                'value' => $type->phone_type_id,
+                'text'  => $type->description,
+                'icon'  => $type->icon_class
+            ];
+        }
         
 //        Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
-            'details' => $custDetails,
-            'isFav'   => empty($custFav) ? false : true,
-            'sysList' => $allSystems
+            'details'    => $custDetails,
+            'isFav'      => empty($custFav) ? false : true,
+            'sysList'    => $allSystems,
+            'phoneTypes' => $phoneTypes
         ]);
     }
 
@@ -92,7 +106,7 @@ class CustomerDetailsController extends Controller
 //        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if(empty($details))
         {
-            Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id.'-'.$name);
+            Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id);
             return response()->json(['error' => 'Customer Not Found']);
         }
         

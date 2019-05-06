@@ -25,7 +25,7 @@ require('tinymce/plugins/table');
 /*
 *   Third party components
 */
-Vue.use(VeeValidate);
+Vue.use(VeeValidate, {fieldsBagName: 'formFields'});
 Vue.use(VueClipboard);
 Vue.use(VueGoodTablePlugin);
 Vue.component('clickConfirm', ClickConfirm);
@@ -64,6 +64,7 @@ Vue.component('customer-list', require('./components/customer/customerList.vue')
 Vue.component('new-customer-form', require('./components/customer/newCustomer.vue').default);
 Vue.component('customer-details', require('./components/customer/customerDetails.vue').default);
 Vue.component('customer-systems', require('./components/customer/customerSystems.vue').default);
+Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
 
 /*
 *   Admin Components

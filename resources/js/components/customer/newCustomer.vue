@@ -21,9 +21,6 @@
                 <b-form-valid-feedback :state="dupID">
                     This Customer ID Is Available
                 </b-form-valid-feedback>
-                    
-                    
-                    
             </b-form-group>
             <b-form-group
                 label="Customer Name:"

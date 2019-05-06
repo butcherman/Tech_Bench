@@ -86,7 +86,7 @@ class FileLinksController extends Controller
             //  See if the uploade has finished
             if($save->isFinished())
             {
-                $fileID = $this->saveFile($save->getFile());
+                $this->saveFile($save->getFile());
                 
                 return 'uploaded successfully';
             }
