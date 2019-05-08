@@ -65,6 +65,7 @@ Vue.component('new-customer-form', require('./components/customer/newCustomer.vu
 Vue.component('customer-details', require('./components/customer/customerDetails.vue').default);
 Vue.component('customer-systems', require('./components/customer/customerSystems.vue').default);
 Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
+Vue.component('customer-notes', require('./components/customer/customerNotes.vue').default);
 
 /*
 *   Admin Components

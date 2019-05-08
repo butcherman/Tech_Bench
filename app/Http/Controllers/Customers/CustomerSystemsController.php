@@ -50,10 +50,10 @@ class CustomerSystemsController extends Controller
             ]);
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('New Customer System Added - Customer ID-'.$request->custID.' System ID-'.$request->system);
-//        Log::debug('Submitted System Data', $request->toArray());
-//        Log::debug('Submitted System Fields', $sysFields);
+        Log::debug('Submitted System Data', $request->toArray());
+        Log::debug('Submitted System Fields', $sysFields);
         return response()->json(['success' => true]);
     }
 
@@ -97,15 +97,15 @@ class CustomerSystemsController extends Controller
                 'data'        => $dataArr
             ];
         }
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-//        Log::debug('Show Data', $sysArr);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Show Data', $sysArr);
         return response()->json($sysArr);
     }
     
     //  Get the data fields attached to a system
     public function getDataFields($id)
     {
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return response()->json($this->getFields($id));
     }
 
@@ -128,9 +128,9 @@ class CustomerSystemsController extends Controller
             }
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('Customer System Updated.  Cust ID-'.$request->custID.' System ID-'.$request->sysstem.' User ID-'.Auth::user()->user_id);
-//        Log::debug('Submitted Data - ID:'.$id.' - ', $request->toArray());
+        Log::debug('Submitted Data - ID:'.$id.' - ', $request->toArray());
         return response()->json(['success' => true]);
     }
 
@@ -139,9 +139,9 @@ class CustomerSystemsController extends Controller
     {
         $system = CustomerSystems::find($id);
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('Customer System Deleted for Customer ID-'.$system->cust_id.' by User ID-'.Auth::user()->user_id.'. System ID-'.$id);
-//        Log::debug('System Data', $system->toArray());
+        Log::debug('System Data', $system->toArray());
         
         $system->delete();
         

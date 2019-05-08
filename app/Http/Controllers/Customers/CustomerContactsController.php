@@ -50,8 +50,8 @@ class CustomerContactsController extends Controller
             }
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-//        Log::debug('Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
         Log::info('New Customer Contact Created for Cust ID - '.$request->custID.'.  Contact ID-'.$contID);
         return response()->json(['success' => true]);
     }
@@ -85,8 +85,8 @@ class CustomerContactsController extends Controller
             ];
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-//        Log::debug('Fetched Data - ', $contacts->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Fetched Data - ', $contacts->toArray());
         return response()->json($contArr);
     }
 
@@ -118,7 +118,7 @@ class CustomerContactsController extends Controller
             }
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::info('Customer Contact Downloaded - Contact ID-'.$id);
         
         return $vcard->download();
@@ -154,8 +154,8 @@ class CustomerContactsController extends Controller
             }
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-//        Log::debug('Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
         Log::info('Customer Contact Updated for Cust ID - '.$request->custID.'.  Contact ID-'.$contID);
         return response()->json(['success' => true]);
     }
@@ -165,7 +165,7 @@ class CustomerContactsController extends Controller
     {
         $cont = CustomerContacts::find($id);
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::info('Customer Contact deleted for Customer ID-'.$cont->cust_id.' by User ID-'.Auth::user()->user_id.'. Deleted Contact ID-'.$id);
         
         $cont->delete();

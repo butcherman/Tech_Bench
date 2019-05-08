@@ -68,7 +68,7 @@ class CustomerDetailsController extends Controller
         $custDetails = Customers::find($id);
         $allSystems  = $this->getAllSystems();
         
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if(empty($custDetails))
         {
             Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id.'-'.$name);
