@@ -29,7 +29,7 @@ class CustomerController extends Controller
             $sysArr[] = $sys->name;
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.index', [
             'sysTypes' => $sysArr
         ]);
@@ -60,8 +60,8 @@ class CustomerController extends Controller
             ->orderBy('name')
             ->get();
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-//        Log::debug('ID Entered - '.$id.' Resolution - '.$res);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('ID Entered - '.$id.' Resolution - '.$res);
         return response()->json($res);
     }
     
@@ -91,8 +91,8 @@ class CustomerController extends Controller
             ];            
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-//        Log::debug('Customer Data - ', $custList);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Customer Data - ', $custList);
         return response()->json($custList);
     }
     
@@ -109,7 +109,7 @@ class CustomerController extends Controller
         }
         
        
-//        Log::debug('Customer ID is in use by - '.$cust->name);
+        Log::debug('Customer ID is in use by - '.$cust->name);
         return response()->json(['dup' => true, 'url' => route('customer.details', [$cust->cust_id, urlencode($cust->name)])]);
     }
     
@@ -130,12 +130,12 @@ class CustomerController extends Controller
                 break;
         }
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-//        Log::debug('Customer Bookmark Updated.', [
-//            'user_id' => Auth::user()->user_id,
-//            'cust_id' => $id,
-//            'action'  => $action
-//        ]);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Customer Bookmark Updated.', [
+            'user_id' => Auth::user()->user_id,
+            'cust_id' => $id,
+            'action'  => $action
+        ]);
         return response()->json(['success' => true]);
     }
 }

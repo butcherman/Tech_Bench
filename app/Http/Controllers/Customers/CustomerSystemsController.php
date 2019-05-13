@@ -53,7 +53,6 @@ class CustomerSystemsController extends Controller
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('New Customer System Added - Customer ID-'.$request->custID.' System ID-'.$request->system);
         Log::debug('Submitted System Data', $request->toArray());
-        Log::debug('Submitted System Fields', $sysFields);
         return response()->json(['success' => true]);
     }
 

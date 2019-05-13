@@ -4,7 +4,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\CustomerContacts::class, function (Faker $faker) use ($factory) {
+$factory->define(App\CustomerContacts::class, function (Faker $faker) {
     return [
         'cust_id' => factory(App\Customers::class)->create()->cust_id,
         'name'    => $faker->name,

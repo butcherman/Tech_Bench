@@ -4,6 +4,7 @@
 window.Vue              = require('vue');
 window.axios            = require('axios');
 window.BootstrapVue     = require('bootstrap-vue');
+window.moment           = require('moment');
 import ClickConfirm       from 'click-confirm';
 import vue2Dropzone       from 'vue2-dropzone';
 import VueClipboard       from 'vue-clipboard2';
@@ -60,12 +61,13 @@ Vue.component('system-files', require('./components/system/SystemFiles.vue').def
 /*
 *   Customer Components
 */
-Vue.component('customer-list', require('./components/customer/customerList.vue').default);
+Vue.component('customer-list',     require('./components/customer/customerList.vue').default);
 Vue.component('new-customer-form', require('./components/customer/newCustomer.vue').default);
-Vue.component('customer-details', require('./components/customer/customerDetails.vue').default);
-Vue.component('customer-systems', require('./components/customer/customerSystems.vue').default);
+Vue.component('customer-details',  require('./components/customer/customerDetails.vue').default);
+Vue.component('customer-systems',  require('./components/customer/customerSystems.vue').default);
 Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
-Vue.component('customer-notes', require('./components/customer/customerNotes.vue').default);
+Vue.component('customer-notes',    require('./components/customer/CustomerNotes.vue').default);
+Vue.component('customer-files',    require('./components/customer/customerFiles.vue').default);
 
 /*
 *   Admin Components

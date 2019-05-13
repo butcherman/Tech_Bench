@@ -10,7 +10,7 @@ $factory->define(App\Files::class, function(Faker $faker) {
     ];
 });
 
-$factory->define(App\SystemFiles::class, function(Faker $faker) use ($factory) {
+$factory->define(App\SystemFiles::class, function(Faker $faker) {
     return [
         'sys_id'      => 1,
         'type_id'     => 1,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customers;
 use App\Customers;
 use App\CustomerFavs;
 use App\PhoneNumberType;
+use App\CustomerFileTypes;
 use Illuminate\Http\Request;
 use App\Http\Traits\SystemsTrait;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +25,7 @@ class CustomerDetailsController extends Controller
     //  New Customer Form
     public function create()
     {
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.newCustomer');
     }
 
@@ -54,7 +55,7 @@ class CustomerDetailsController extends Controller
             'active'   => 1
         ]);
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('New Customer ID-'.$request->custID.' created by User ID-'.Auth::user()->user_id);
         
         return response()->json([
@@ -68,7 +69,7 @@ class CustomerDetailsController extends Controller
         $custDetails = Customers::find($id);
         $allSystems  = $this->getAllSystems();
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if(empty($custDetails))
         {
             Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id.'-'.$name);
@@ -89,12 +90,16 @@ class CustomerDetailsController extends Controller
             ];
         }
         
-//        Log::debug('Customer Details', $custDetails->toArray());
+        //  Get the types of files that can be attached to a file
+        $fileTypes = CustomerFileTypes::select('file_type_id as value', 'description as text')->get();
+        
+        Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
             'details'    => $custDetails,
             'isFav'      => empty($custFav) ? false : true,
             'sysList'    => $allSystems,
-            'phoneTypes' => $phoneTypes
+            'phoneTypes' => $phoneTypes,
+            'fileTypes'  => $fileTypes
         ]);
     }
 
@@ -103,14 +108,14 @@ class CustomerDetailsController extends Controller
     {
         $details = Customers::find($id);
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if(empty($details))
         {
             Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id);
             return response()->json(['error' => 'Customer Not Found']);
         }
         
-//        Log::debug('Customer Details', $details->toArray());
+        Log::debug('Customer Details', $details->toArray());
         return response()->json($details);
     }
 
@@ -135,9 +140,9 @@ class CustomerDetailsController extends Controller
             'zip'      => $request->zip
         ]);
         
-//        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('Customer Details Updated for Customer ID-'.$id.' by User ID-'.Auth::user()->user_id);
-//        Log::debug('Customer Details Submitted - ', $request->toArray());
+        Log::debug('Customer Details Submitted - ', $request->toArray());
         return response()->json([
             'success' => true
         ]);

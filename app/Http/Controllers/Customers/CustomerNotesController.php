@@ -76,7 +76,7 @@ class CustomerNotesController extends Controller
     //  Delete a customer note
     public function destroy($id)
     {
-        $note = CustomerNotes::find($id)->delete();
+        CustomerNotes::find($id)->delete();
         
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('Customer Note ID-'.$id.' deleted by User ID-'.Auth::user()->user_id);
