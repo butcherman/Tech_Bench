@@ -26,6 +26,10 @@
                     <i class="fa fa-fw fa-user"></i>
                     <span class="nav-link-text">Customers</span>
                 </b-nav-item>
+                <b-nav-item :href="tech_tip_route">
+                    <i class="fa fa-fw fa-wrench"></i>
+                    <span class="nav-link-text">Tech Tips</span>
+                </b-nav-item>
                 <b-nav-item :href="account_route">
                     <i class="fa fa-fw fa-user"></i>
                     <span class="nav-link-text">Account Settings</span>
@@ -57,6 +61,7 @@ export default {
         'admin_route',
         'sys_list',
         'cust_route',
+        'tech_tip_route',
     ],
     data() {
         return {

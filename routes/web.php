@@ -55,12 +55,14 @@ Route::post('/account/change-password', 'AccountController@submitPassword')->nam
 *
 */
 Route::middleware(['password_expired'])->group(function() {
+    
     /*
     *
     *   Routes for users with "tech" permissions
     *
     */
     Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function() {
+        
         /*
         *
         *   Dashboard and About page routes
@@ -120,63 +122,49 @@ Route::middleware(['password_expired'])->group(function() {
             Route::get('/', 'Systems\SystemsController@index')->name('index');
         });
         
-        
-        
-        
-        
-        
-    /////////////////////////////////////////////////////////////////////////////////////////////////      
-        
-        
-        
-        
         /*
         *
         *   Customer Routes
         *
         */        
         Route::prefix('customer')->name('customer.')->group(function() {
-
-            
-
-            
-            
-            
-            Route::get('file-types', 'CustomerFilesController@getFileTypes')->name('getFileTypes');
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            Route::get('download-note/{id}', 'DownloadController@downloadCustNote')->name('download-note');
+            Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
             Route::get('sys-fields/{id}', 'Customers\CustomerSystemsController@getDataFields')->name('getDataFields');
             Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggleFav');
             Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('checkID');
             Route::get('id/{id}/{name}', 'Customers\CustomerDetailsController@details')->name('details');
+            Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
+            Route::get('search', 'Customers\CustomerController@search')->name('search');
+            Route::get('/', 'Customers\CustomerController@index')->name('index');
+            
             Route::resource('files', 'Customers\CustomerFilesController');
             Route::resource('notes', 'Customers\CustomerNotesController');
             Route::resource('contacts', 'Customers\CustomerContactsController');
             Route::resource('systems', 'Customers\CustomerSystemsController');
             Route::resource('id', 'Customers\CustomerDetailsController');
-            Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
-            Route::get('search', 'Customers\CustomerController@search')->name('search');
-            Route::get('/', 'Customers\CustomerController@index')->name('index');
-
+        });
+        
+        
+        /*
+        *
+        *   Tech Tip Routes
+        *
+        */
+        Route::prefix('tip')->name('tip.')->group(function(){
+            
+            
+            
+            Route::get('/', 'TechTips\TechTipsController@index')->name('index');
+            
+            
+            
+            Route::resource('id', 'TechTips\TechTipsController');
         });
         
         
         
-        
-        
-        
     });
-    
-    
-////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /*
     *
@@ -184,8 +172,6 @@ Route::middleware(['password_expired'])->group(function() {
     *
     */
     Route::group(['middleware' => 'roles', 'roles' => ['installer', 'admin']], function() {
-        
-        
         Route::prefix('admin')->name('admin.')->group(function() {
             //  Admin User File Links routes
             Route::get('links/show/{id}', 'Admin\AdminController@showLinks')->name('userLinks');
@@ -203,14 +189,8 @@ Route::middleware(['password_expired'])->group(function() {
             //  Admin index route
             Route::get('/', 'Admin\AdminController@index')->name('index');
         });
-        
-    
-        
-        
     });
-    
-    
-    
+
     /*
     *
     *   Installer Routes
@@ -235,16 +215,4 @@ Route::middleware(['password_expired'])->group(function() {
             Route::resource('systems', 'Installer\SystemsController');
         });
     });
-    
-    
-    
-    
-    
-    
 });
-
-
-
-
-
-

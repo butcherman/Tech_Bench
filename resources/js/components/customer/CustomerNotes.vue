@@ -5,7 +5,6 @@
                <div class="card">
                     <div :class="note.urgent == true ? 'card-header bg-danger' : 'card-header bg-info'" @click="openNote(note)">
                         {{note.subject}}
-                        <a href="#" class="float-right text-white" title="Download as PDF" v-b-tooltip.hover><i class="fa fa-download"></i></a>
                     </div>
                     <div class="card-body" v-html="note.description"></div>
                 </div>
@@ -68,9 +67,9 @@
         </b-modal>
         <b-modal title="Note Details" ref="noteDetailsModal" size="lg">
             <div class="card">
-                <div :class="show.urgent == true ? 'card-header bg-danger' : 'card-header bg-info'" @click="openNote(note)">
+                <div :class="show.urgent == true ? 'card-header bg-danger' : 'card-header bg-info'">
                     {{show.subject}}
-                    <a href="#" class="float-right text-white" title="Download as PDF" v-b-tooltip.hover><i class="fa fa-download"></i></a>
+                    <a :href="download_note_route.replace(':id', show.note_id)" class="float-right text-white" title="Download as PDF" v-b-tooltip.hover><i class="fa fa-download"></i></a>
                 </div>
                 <div class="card-body bigger-note" v-html="show.description"></div>
                 <div class="card-footer">
@@ -92,6 +91,7 @@
         props: [
             'cust_id',
             'add_note_route',
+            'download_note_route',
         ],
         data () {
             return {
@@ -164,6 +164,8 @@
             {
                 this.$refs.noteDetailsModal.show();
                 this.show = note;
+                
+                console.log(note);
             },
             deleteNote(note)
             {

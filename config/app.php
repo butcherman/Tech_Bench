@@ -44,6 +44,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         ZanySoft\Zip\ZipServiceProvider::class,
         Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         //  Application Service Providers...
         App\Providers\SettingsServiceProvider::class,
@@ -96,5 +97,6 @@ return [
         'Html'          => Collective\Html\HtmlFacade::class,
         'Zip'           => ZanySoft\Zip\ZipFacade::class,
         'Module'        => Nwidart\Modules::class,
+        'PDF'           => Barryvdh\DomPDF\Facade::class,
     ],
 ];

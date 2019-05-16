@@ -57,6 +57,7 @@
                 <customer-notes
                     cust_id="{{$details->cust_id}}"
                     add_note_route="{{route('customer.notes.store')}}"
+                    download_note_route="{{route('customer.download-note', ':id')}}"
                 ></customer-notes>
             </div>
         </div>

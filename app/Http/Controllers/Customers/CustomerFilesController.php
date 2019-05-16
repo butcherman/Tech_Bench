@@ -22,6 +22,19 @@ class CustomerFilesController extends Controller
     {
         $this->middleware('auth');
     }
+    
+    //  Get the types of files that can be attached to a customer
+    public function getFileTypes()
+    {
+        $fileTypes = CustomerFileTypes::all();
+        $fTypes    = [];
+        foreach($fileTypes as $type)
+        {
+            $fTypes[$type->file_type_id] = $type->description;
+        }
+        
+        return response()->json($fileTypes);
+    }
 
     //  Store a new customer file
     public function store(Request $request)

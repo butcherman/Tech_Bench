@@ -18,6 +18,7 @@
     "license": "LGPL-2.0-or-later",
     "require": {
         "php": "^7.2",
+        "barryvdh/laravel-dompdf": "^0.8.4",
         "fideloper/proxy": "^4.0",
         "jackiedo/timezonelist": "^5.0",
         "jeroendesloovere/vcard": "^1.7",

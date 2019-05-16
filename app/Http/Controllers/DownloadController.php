@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Zip;
 use App\Files;
+use App\Customers;
+use App\CustomerNotes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -63,5 +66,20 @@ class DownloadController extends Controller
         
         //  Download zip file and remove it from the server
         return response()->download($path.'download.zip')->deleteFileAfterSend(true);
+    }
+    
+    //  Download Customer Note as PDF
+    public function downloadCustNote($id)
+    {
+        $note = CustomerNotes::find($id);
+        $cust = Customers::find($note->cust_id);
+        
+        $pdf = PDF::loadView('pdf.customerNote', [
+            'cust_name'   => $cust->name,
+            'note_subj'   => $note->subject,
+            'description' => $note->description
+        ]);
+        
+        return $pdf->download($cust->name.' - Note: '.$note->subject.'.pdf');
     }
 }
