@@ -43,7 +43,7 @@ class CustomerSystemsController extends Controller
         //  Enter each of the data fields into the DB
         foreach($fields as $field)
         {
-            $sysFields = CustomerSystemFields::create([
+            CustomerSystemFields::create([
                 'cust_sys_id' => $sys->cust_sys_id,
                 'field_id'    => $field->field_id,
                 'value'       => isset($request->fieldData[$field->field_id]) ? $request->fieldData[$field->field_id] : null

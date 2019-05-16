@@ -35,3 +35,37 @@ To create a new customer, the following information should be entered in the New
     * Zip Code
 
 When the customer form is submitted, you will be re-directed to the Customer Details page which will allow you to input customer information.
+
+Customer Details Page
+=====================
+
+Once a customer is selected, the Customer Details page will appear.
+
+.. image:: img/customer_details.PNG
+    :alt: Customer Details Page
+    
+The Customer Details Page is broken down into sections:
+
+Systems
+-------
+
+Any system created by the System Administrator can be assigned him to the customer.  When a system is assigned, customer specific information about that system will be requested.  This information can include but is not limited to:
+
+    * IP Address
+    * Login Information
+    * Version
+
+Contacts
+--------
+
+Customer contacts including their phone numbers, and email address can be entered in this section.  Clicking on the phone number will activate the default dialer to call the number.  Clicking on the email address will open the default Email client with the contact's email address entered in the "to" field.
+
+Notes
+-----
+
+Text notes with additional information that cannot be included with the system can be placed in the Notes section.  If a note is marked as Urgent, it will be shown with a red header and be brought to the front of the Notes list.
+
+Files
+-----
+
+Customer files can be uploaded to the Files section.  This is helpful for storing backups of the customers systems, or maps of the building layout.
