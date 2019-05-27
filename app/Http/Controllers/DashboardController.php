@@ -31,18 +31,18 @@ class DashboardController extends Controller
         
         //  Get the Add-On Modules to list routes for
         $modules = Module::all();
-//        
-//        //  Get the users Customer bookmarks
-//        $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
-//            ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
-//            ->get();
+        
+        //  Get the users Customer bookmarks
+        $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
+            ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
+            ->get();
 //        //  Get the users Tech Tip bookmarks
 //        $tipFavs = TechTipFavs::where('tech_tip_favs.user_id', Auth::user()->user_id)
 //            ->LeftJoin('tech_tips', 'tech_tips.tip_id', '=', 'tech_tip_favs.tip_id')
 //            ->get();
         
         return view('dashboard', [
-//            'custFavs' => $custFavs,
+            'custFavs' => $custFavs,
 //            'tipFavs'  => $tipFavs,
             'notifications' => $notifications->toArray(),
             'modules'       => $modules

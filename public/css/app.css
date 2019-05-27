@@ -15230,6 +15230,16 @@ label {
   box-shadow: 5px 5px #bceef6;
 }
 
+.bookmark-card .card-body .card-body-icon {
+  position: absolute;
+  z-index: 0;
+  top: -25px;
+  right: -25px;
+  font-size: 5rem;
+  -webkit-transform: rotate(15deg);
+  transform: rotate(15deg);
+}
+
 .bookmark-unchecked {
   color: #C4C4C4;
 }

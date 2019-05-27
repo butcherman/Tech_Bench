@@ -14,6 +14,7 @@ Auth::routes();
 */
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('index');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('no-script', 'Controller@noScript')->name('noscript');
 
 /*
 *
@@ -93,10 +94,7 @@ Route::middleware(['password_expired'])->group(function() {
             Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')->name('details');
             
             //  File Link Files
-            Route::get('files/{id}/{dir}', 'FileLinks\LinkFilesController@getIndex')->name('files');
-            Route::post('files/{id}/{dir}', 'FileLinks\LinkFilesController@postIndex')->name('files');
-            Route::put('files/{id}/{dir}', 'FileLinks\LinkFilesController@moveFile')->name('files');
-            Route::delete('files/{id}', 'FileLinks\LinkFilesController@delFile')->name('delFile');
+            Route::resource('files', 'FileLinks\LinkFilesController');
             
             //  File Link Instructions
             Route::get('instructions/{id}', 'FileLinks\InstructionsController@getIndex')->name('instructions');

@@ -42,4 +42,31 @@
         </div>
     </div>
     @endif
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header"><h4>Customer Favorites</h4></div>
+                <div class="card-body">
+                    <div class="row">
+                        @if(!$custFavs->isEmpty())
+                            @foreach($custFavs as $fav)
+                                <div class="col-xl-3 col-sm-6 mb-3">
+                                    <div class="card text-white o-hidden h-100 bookmark-card">
+                                        <a href="{{route('customer.details', [$fav->cust_id, urlencode($fav->name)])}}" class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fa fa-fw fa-users"></i>
+                                            </div>
+                                            <div class="mr-5">{{$fav->name}}</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="col-12"><h3 class="text-center">No Customer Favorites</h3></div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

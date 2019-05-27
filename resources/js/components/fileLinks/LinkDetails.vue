@@ -143,7 +143,7 @@
                 button: {
                     custText: 'Link to Customer',
                     text:     'Update Link Details',
-                    dis:      false
+                    dis:      false,
                 }
             }
         },
@@ -160,7 +160,7 @@
                     .then(res => {
                         this.name      = res.data.link_name;
                         this.expire    = res.data.expire;
-                        this.timeStamp = res.data.timeStamp;
+                        this.timeStamp = res.data.timestamp;
                         this.allowUp   = res.data.allow_upload;
                         this.cust      = res.data.name;
                         this.url       = this.guest_route.replace(':hash', res.data.link_hash);
@@ -178,13 +178,18 @@
             {
                 e.preventDefault();
                 
+                this.button.text = 'Loading...';
+                this.button.dis  = true,
                 axios.put(this.update_route, {
                         name:    this.name,
                         expire:  this.timeStamp,
-                        allowUp: this.allowUp 
+                        allowUp: this.allowUp,
                     })
                     .then(res => {
                         this.$refs.editLinkModal.hide();
+                        this.getDetails();
+                        this.button.text = 'Update Link Details';
+                        this.button.dis  = false;
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
             },

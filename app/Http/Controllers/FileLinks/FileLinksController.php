@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FileLinks;
 use App\Files;
 use App\FileLinks;
 use App\FileLinkFiles;
+use App\CustomerFileTypes;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -30,6 +31,7 @@ class FileLinksController extends Controller
     public function find($id)
     {
         $links = FileLinks::where('user_id', $id)
+            ->select('expire', 'link_id', 'link_name', 'link_hash')
             ->withCount('FileLinkFiles')
             ->orderBy('expire', 'desc')
             ->get();
@@ -219,13 +221,18 @@ class FileLinksController extends Controller
             return view('links.badLink');
         }
         
+        //  Determine if the link has a customer attached or not
         $hasCust = $linkData->cust_id != null ? true : false;
+        
+        //  Get the possible file types for attaching a file to a customer
+        $fileTypes = CustomerFileTypes::all();
         
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Link Detials - ', $linkData->toArray());
         return view('links.details', [
-            'link_id' => $id,
-            'has_cust' => $hasCust
+            'link_id'    => $id,
+            'has_cust'   => $hasCust,
+            'file_types' => $fileTypes
         ]);
     }
     

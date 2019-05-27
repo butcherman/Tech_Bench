@@ -39,53 +39,11 @@ It is also recommended to set the root directory of the web server to the "publi
 Tech Bench is built on the Laravel platform and uses NPM and Composer to maintain dependent applications required to run the Tech Bench. 
 
 ### Installation Procedure
-There are two recommended procedures for installing the Tech Bench
-* Loading zip file
-* Downloading directly from Github
 
-Both options will 
 
-#### Option 1 - Loading zip file
-* Load the zip file onto the Web Server via SFTP software such as Solar Winds to a staging directory such as the users $HOME directory
-* Navigate to the directory the file is loaded in.
-* Run the command
-```
-unzip Tech_Bench-master.zip   //  Be sure to enter the correct file name
-```
-* Move to the "Tech Bench" directory
-```
-cd Tech_Bench-master   //  Again, be sure to enter the correct folder name
-```
-* Run the installer script as sudo user
-```
-sudo ./scripts/install
-```
 
-#### Option 2 - Downloading directly from Github
-* In the Web Server navigate to the folder you wish to load the staging files such as the users $HOME directory
-* Clone the Tech Bench repository
-```
-git clone https://github.com/butcherman/Tech_Bench.git
-```
-* Navigate to the Tech_Bench directory
-```
-cd Tech_Bench
-```
-* Run the installer script as sudo user
-```
-sudo ./scripts/install
-```
 
-The install script will download all necessary dependencies, create the Tech Bench Database, and load the files to the Web Root directory.
 
-# Post Installation Instructions
-Once the Tech Bench has been installed, you can navigate your web browser to the URL of the web server and login with the default credentials:
-Username: admin
-Password: password
-
-Although there is a .htaccess file that will redirect all web traffic to the "public" folder inside the Tech Bench application, it is highly recommended to set the website web root to point at the public folder.
-
-For example, if the web files are stored in the /var/www/html, the web root should point at /var/www/html/public.
 
 # Copyright © 2016-2019 Ron Butcher
 

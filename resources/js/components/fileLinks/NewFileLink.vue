@@ -106,7 +106,7 @@
             submitFile(e) 
             {
                 e.preventDefault();
-                var myDrop = this.$refs.myVueDropzone; //.processQueue();
+                var myDrop = this.$refs.myVueDropzone; 
                 var myForm = new FormData(document.querySelector("form"));
                 this.button.text = 'Loading...';
                 this.button.dis = true;

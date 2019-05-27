@@ -30,12 +30,12 @@
         ],
         data() {
             return {
-                link_id: '',
+                link_id:      '',
                 instructions: '',
-                token:       window.techBench.csrfToken,
+                token:        window.techBench.csrfToken,
                 button: {
                     text: 'Update Instructions',
-                    dis: false
+                    dis:   false
                 }
             }
         },
@@ -59,16 +59,18 @@
             updateInstructions(e)
             {
                 e.preventDefault();
+                this.button.text = 'Loading...';
+                this.button.dis  = true;
                 
                 axios.post(this.instructions_route, {
                     note: this.instructions
                 })
                 .then(res => {
                     this.$refs.instructionsModal.hide();
-                    console.log(res);
+                    this.button.text = 'Update Instructions';
+                    this.button.dis  = false;
                 })
                 .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
-                console.log('submitted');
             }
         }
     }

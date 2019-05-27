@@ -7,15 +7,10 @@ use App\Http\Controllers\Controller;
 
 class TechTipsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //  Tech Tips landing page
     public function index()
     {
-        //
-        echo 'tech tips';
+        return view('tips.index');
     }
 
     /**

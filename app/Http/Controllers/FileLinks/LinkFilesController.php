@@ -20,164 +20,133 @@ use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class LinkFilesController extends Controller
 {
-    //  Only authorized users have access
     public function __construct()
     {
         $this->middleware('auth');
     }
     
-    //  Get the files for the link    
-    public function getIndex($id, $dir)
+    //  Add a file to the file link
+    public function store(Request $request)
     {
-        $files = [];
-        
-        switch($dir)
+        $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
+            
+        //  Verify that the upload is valid and being processed
+        if($receiver->isUploaded() === false)
         {
-            //  For files that are available for a guest to download
-            case 'down':
-                $files = FileLinkFiles::where('link_id', $id)
-                    ->where('upload', false)
-                    ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
-                    ->get();
-                break;
-            //  For files that are uploaded by a guest
-            case 'up':
-                $files = Files::where('file_link_files.link_id', $id)
-                    ->where('file_link_files.upload', true)
-                    ->join('file_link_files', 'files.file_id', '=', 'file_link_files.file_id')
-                    ->with('FileLinkNotes')
-                    ->get();
-                break;
+            Log::error('Upload File Missing - '.$request->toArray());
+            throw new UploadMissingFileException();
         }
+
+        //  Recieve and process the file
+        $save = $receiver->receive();
+
+        //  See if the uploade has finished
+        if($save->isFinished())
+        {
+            $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$request->linkID;
+            $file = $save->getFile();
         
-        //  Add the download link to the collection
+            //  Clean the file and store it
+            $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+            $file->storeAs($filePath, $fileName);
+
+            //  Place file in Files table of DB
+            $newFile = Files::create([
+                'file_name' => $fileName,
+                'file_link' => $filePath.DIRECTORY_SEPARATOR
+            ]);
+            $fileID = $newFile->file_id;
+
+            //  Place the file in the file link files table of DB
+            FileLinkFiles::create([
+                'link_id'  => $request->linkID,
+                'file_id'  => $fileID,
+                'user_id'  => Auth::user()->user_id,
+                'upload'   => 0
+            ]);
+
+            //  Log stored file
+            Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+
+            return response()->json(['success' => true]); ;
+        }
+
+        //  Get the current progress
+        $handler = $save->handler();
+
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
+        return response()->json([
+            'done'   => $handler->getPercentageDone(),
+            'status' => true
+        ]);
+    }
+
+    //  Show the files attached to a link
+    public function show($id)
+    {
+        $files = FileLinkFiles::where('file_link_files.link_id', $id)
+            ->select('added_by', 'file_link_files.created_at', 'files.file_id', 'files.file_name', 'file_link_files.link_file_id', 'note', 'upload')
+            ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
+            ->leftJoin('file_link_notes', 'file_link_files.file_id', '=', 'file_link_notes.file_id')
+            ->orderBy('user_id', 'ASC')
+            ->orderBy('file_link_files.created_at', 'ASC')
+            ->get();
+        
         foreach($files as $file)
         {
-            $file->url       = route('download', [$file->file_id, $file->file_name]);
             $file->timestamp = date('M d, Y', strtotime($file->created_at));
         }
         
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('File data for Link ID-'.$id, $files->toArray());
         return response()->json($files);
     }
-    
-    //  Add a file to the link
-    public function postIndex(Request $request, $linkID, $dir)
-    {
-        //  If the file exists, process it
-        if(!empty($request->file))
-        {
-            $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
-            
-            //  Verify that the upload is valid and being processed
-            if($receiver->isUploaded() === false)
-            {
-                Log::error('Upload File Missing - '.$request->toArray());
-                throw new UploadMissingFileException();
-            }
-            
-            //  Recieve and process the file
-            $save = $receiver->receive();
-            
-            //  See if the uploade has finished
-            if($save->isFinished())
-            {
-                $this->saveFile($save->getFile(), $linkID);
-                
-                return response()->json(['success' => true]); ;
-            }
-        
-            //  Get the current progress
-            $handler = $save->handler();
-            
-            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-            Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
-            return response()->json([
-                'done'   => $handler->getPercentageDone(),
-                'status' => true
-            ]);
-        
-        }
-        
-        return response()->json(['success' => false]);
-    }
-    
-    //  Save the file and add it to the database
-    private function saveFile(UploadedFile $file, $linkID)
-    {
-        $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
-        
-        //  Clean the file and store it
-        $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
-        $file->storeAs($filePath, $fileName);
 
-        //  Place file in Files table of DB
-        $newFile = Files::create([
-            'file_name' => $fileName,
-            'file_link' => $filePath.DIRECTORY_SEPARATOR
-        ]);
-        $fileID = $newFile->file_id;
-
-        //  Place the file in the file link files table of DB
-        FileLinkFiles::create([
-            'link_id'  => $linkID,
-            'file_id'  => $fileID,
-            'user_id'  => Auth::user()->user_id,
-            'upload'   => 0
-        ]);
-
-        //  Log stored file
-        Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
-        
-        return $fileID;
-    }
-    
-    //  Move a file to the customer attached to the link
-    public function moveFile(Request $request, $id)
+    //  Move a file to a customer file
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'selected' => 'required',
-            'file_id'  => 'required'
+            'fileID'   => 'required',
+            'fileName' => 'required',
+            'fileType' => 'required'
         ]);
         
         $linkData = FileLinks::find($id);
         
-        $newPath = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$linkData->cust_id.DIRECTORY_SEPARATOR;
-        $fileData = Files::find($request->file_id);
+        $newPath = config('filesystems.paths.customer').DIRECTORY_SEPARATOR.$linkData->cust_id.DIRECTORY_SEPARATOR;
+        $fileData = Files::find($request->fileID);
         
-        //  Verify the file does not already exist in the customer data or file
-        $dup = CustomerFiles::where('file_id', $request->file_id)->where('cust_id', $linkData->cust_id)->count();
+        //  Verify that the file does not already exist in the customerdata or file
+        $dup = CustomerFiles::where('file_id', $request->fileID)->where('cust_id', $linkData->cust_id)->count();
         if($dup || Storage::exists($newPath.$fileData->file_name))
         {
             return response()->json(['success' => 'duplicate']);
         }
         
-        //  Move the file to the customers file folder
+        //  Move the file to the customrs file folder
         Storage::move($fileData->file_link.$fileData->file_name, $newPath.$fileData->file_name);
         
-        //  Update file database
+        //  Update the file path in the database
         $fileData->update([
             'file_link' => $newPath
         ]);
         
-        //  Place file in customer database
+        //  Place the file in the customer database
         CustomerFiles::create([
-            'file_id'      => $request->file_id,
-            'file_type_id' => $request->selected,
+            'file_id'      => $request->fileID,
+            'file_type_id' => $request->fileType,
             'cust_id'      => $linkData->cust_id,
             'user_id'      => Auth::user()->user_id,
-            'name'         => $request->file_name
+            'name'         => $request->fileName
         ]);
         
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('File Data - '.$request->toArray());
-        Log::info('File ID-'.$request->file_id.' moved to customer ID-'.$linkData->cust_id.' for link ID-'.$id);
+        Log::debug('File Data - ', $request->toArray());
+        Log::info('File ID-'.$request->fileId.' moved to customer ID-'.$linkData->cust_id.' for link ID-'.$id);
         return response()->json(['success' => true]);
     }
-    
+
     //  Delete a file attached to a link
-    public function delFile($id)
+    public function destroy($id)
     {
         $fileData = FileLinkFiles::find($id);
         $fileID   = $fileData->file_id;
