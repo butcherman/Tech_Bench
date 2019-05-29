@@ -82,8 +82,12 @@ The Link Details page will show all information about the currently selected lin
 +-----------------------+-------------------+-------------------------------------------------------------------------------------------------------+
 | Files Available       | File Name         | Clicking on the name of the file will download it to your device.                                     |
 | to Download           |                   | The "Info" icon will show who uploaded the file and any notes they included with the file.            |
-| and                   +-------------------+-------------------------------------------------------------------------------------------------------+                  
-| Files Uploaded        | Date Added        | Date the file was loaded to the file link.                                                            |
+| and                   +-------------------+-------------------------------------------------------------------------------------------------------+    
+| Files Uploaded        | Added By          | If the file was added by a guest, their name will show in this field.                                 |
+|                       +-------------------+-------------------------------------------------------------------------------------------------------+
+|                       | File Notes        | If the file was added by a gues, any notes they provided with the file will show in this field.       |
+|                       +-------------------+-------------------------------------------------------------------------------------------------------+
+|                       | Date Added        | Date the file was loaded to the file link.                                                            |
 |                       +-------------------+-------------------------------------------------------------------------------------------------------+
 |                       | Actions           | | Move File Icon - will move file to customer profile (only available if customer assigned)           |
 |                       |                   | | Delete File Icon - will delete just this file from the file link                                    |

@@ -98,6 +98,8 @@ class LinkFilesController extends Controller
             $file->timestamp = date('M d, Y', strtotime($file->created_at));
         }
         
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('File Data - ', $files->toArray());
         return response()->json($files);
     }
 
