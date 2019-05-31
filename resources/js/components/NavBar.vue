@@ -42,7 +42,7 @@
                 </b-nav-item>
                 <b-nav-item :href="help_route">
                     <i class="fa fa-fw fa-question-circle-o"></i> 
-                    <span class="nav-link-text">About</span>
+                    <span class="nav-link-text">Help</span>
                 </b-nav-item>
             </b-navbar-nav>
         </b-collapse>
