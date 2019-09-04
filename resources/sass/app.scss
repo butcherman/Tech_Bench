@@ -8,20 +8,20 @@
 @import '~font-awesome/scss/font-awesome';
 @import '~vue2-dropzone/dist/vue2Dropzone.min.css';
 @import '~vue-good-table/dist/vue-good-table.css';
-//@import '~dropzone/dist/dropzone';
-//@import '~datatables.net-bs4/css/dataTables.bootstrap4';
-//@import '~select2/dist/css/select2';
-//@import '~fastselect/dist/fastselect';
+@import '~vue-multiselect/dist/vue-multiselect.min.css';
 
 //  Shared styles between all layouts
 @import 'fileDrag';
 
-.category-button {
-    font-weight: bold;
-    text-decoration: none;
-    color: #000;
-}
+//.category-button {
+//    font-weight: bold;
+//    text-decoration: none;
+//    color: #000;
+//}
 
+/*
+*    Dashboard Styles
+*/
 //  Dashboard Bookmarks
 .bookmark-card {
     background: #e2e2e2;
@@ -58,15 +58,18 @@
     @extend .pointer;
 }
 
+/*
+*    Customer Styles
+*/
 //  Hide the duplicate system notification
-#show-duplicates {
-    display: none;
-}
+//#show-duplicates {
+//    display: none;
+//}
 
 //  Compact the customer system data list a little more
-.tab-pane dd {
-    margin: 0;
-}
+//.tab-pane dd {
+//    margin: 0;
+//}
 
 //  Hide and show any sensitive fields in the customer system information
 .password-field {
@@ -106,85 +109,72 @@
     overflow-y: scroll;
 }
 
-//  Tech Tip System Tags
-.tech-tip-tag-wrapper {
-    position: relative;
-    min-height: 37px;
-}
-
-.tech-tip-tag {
-    background-color: #CFECEF;
-    border: 1px solid #CFECEF;
-    border-radius: 4px;
-    display: inline-block;
-    height: 22px;
-    padding: 0 7px;
-    margin-left: 3px;
-    .close {
-        margin-left: 3px;
-    }
-}
-
-//  Tech tip details
-.tech-tip-details {
-    a, span {
-        padding: 0 5px;
-        border-right: 1px solid #ccc;
-        color: #ccc;
-        display: inline-block;
-        &:last-child {
-            border-right: none;
-        }
-        span {
-            display: inline-block;
-        }
-    }
-}
-
-#tech-tip-information {
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
-    margin: 15px;
-    padding: 15px;
-    min-height: 60vh;
-}
-
-#tech-tip-attachements {
-    h4 {
-        color: #8F8686;
-        border-bottom: 1px solid #000;
-    }
-    a {
-        color: #777;
-        &:hover {
-            color: #0000FF;
-        }
-    }
-}
-
-#tech-tip-comments {
-    margin-top: 10px;
-    h4 {
-        color: #8F8686;
-        border-bottom: 1px solid #000;
-    }
-    .comment-author {
-        color: #777;
-    }
-}
-
 //  Modified Fast Select Classes
-.fstElement {
-    width: 100%;
-    font-size: 0.75em;
-    overflow: visible;
-    border-radius: 5px;
-    .fstControls {
-        width: 100%;
-        min-height: 4em;
-        overflow: visible;
+//.fstElement {
+//    width: 100%;
+//    font-size: 0.75em;
+//    overflow: visible;
+//    border-radius: 5px;
+//    .fstControls {
+//        width: 100%;
+//        min-height: 4em;
+//        overflow: visible;
+//    }
+//}
+
+/*
+*    Tech Tip Styles
+*/
+
+.tip-results-wrapper {
+    border-bottom: 1px solid #dee2e6;
+//    height: 100px;
+//    overflow: hidden;
+    padding-bottom: 2em;
+    padding-top: 1em;
+    h6 {
+        margin-left: 1em;
+    }
+    .tip-details-wrapper {
+        height: 100px;
+        overflow: hidden;
+        margin-left: 2em;
     }
 }
+
+@media(min-width: 992px) {
+    #tech-tip-search-form {
+        #tech-tip-sidebar {
+            float: left;
+            -webkit-flsex-direction: column;
+                -ms-flex-direction: column;
+                    flex-direction: column;
+            padding-top: 15px;
+            margin-top: 15px;
+            width: 20%;
+            border-right: 1px solid #dee2e6;
+            text-align: left;
+            #filter-collapse {
+                -webkit-flex-direction: column;
+                    -ms-flex-direction: column;
+                        flex-direction: column;
+                align-items: baseline;
+            }
+        }
+    }
+    #tech-tip-content {
+        margin-left: 20%;
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+}
+
+
+
+
+/*
+*    Administration and Installer Styles
+*/
 
 .admin-list {
     li {

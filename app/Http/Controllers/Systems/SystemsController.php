@@ -52,6 +52,11 @@ class SystemsController extends Controller
     //  Show the details of the selected system
     public function details($cat, $sys)
     {
+        if(session()->has('newTechTip'))
+        {
+            session()->forget('newTechTip');
+        }
+        
         //  Make sure that the system is valid
         $sys = urldecode($sys);
         $valid = SystemTypes::where('name', $sys)->first();

@@ -108,6 +108,7 @@ class SystemFilesController extends Controller
     {
         $fileTypes = SystemFileTypes::all();        
         $files = SystemFiles::where('sys_id', $id)
+            ->select('system_files.sys_id', 'system_files.type_id', 'system_files.name', 'system_files.description', 'users.first_name', 'users.last_name', 'system_files.created_at')
             ->join('files', 'system_files.file_id', '=', 'files.file_id')
             ->join('users', 'system_files.user_id', '=', 'users.user_id')
             ->get();

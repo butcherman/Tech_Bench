@@ -165,6 +165,7 @@ export default {
             axios.get(this.file_route)
                 .then(res => {
                     this.fileList = res.data;
+                    console.log(res.data);
                 })
                 .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
         },

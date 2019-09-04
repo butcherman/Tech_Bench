@@ -10,9 +10,10 @@ import vue2Dropzone       from 'vue2-dropzone';
 import VueClipboard       from 'vue-clipboard2';
 import Editor             from '@tinymce/tinymce-vue';
 import VueGoodTablePlugin from 'vue-good-table';
-import vSelect            from 'vue-select';
+//import vSelect            from 'vue-select';   -> Get rid of this
 import draggable          from 'vuedraggable';
 import VeeValidate        from 'vee-validate';
+import Multiselect        from 'vue-multiselect';
 
 /*
 *   The TinyMCE library
@@ -20,7 +21,11 @@ import VeeValidate        from 'vee-validate';
 require('tinymce');
 require('tinymce/themes/silver');
 require('tinymce/themes/mobile');
+require('tinymce/plugins/advlist');
 require('tinymce/plugins/autolink');
+require('tinymce/plugins/lists');
+require('tinymce/plugins/link');
+require('tinymce/plugins/image');
 require('tinymce/plugins/table');
 
 /*
@@ -32,8 +37,9 @@ Vue.use(VueGoodTablePlugin);
 Vue.component('clickConfirm', ClickConfirm);
 Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('editor',       require('@tinymce/tinymce-vue').default);
-Vue.component('v-select',     vSelect)
+//Vue.component('v-select',     vSelect)
 Vue.component('draggable',    draggable);
+Vue.component('multiselect',  Multiselect);
 
 /*
 *   General Components
@@ -68,6 +74,12 @@ Vue.component('customer-systems',  require('./components/customer/customerSystem
 Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
 Vue.component('customer-notes',    require('./components/customer/CustomerNotes.vue').default);
 Vue.component('customer-files',    require('./components/customer/customerFiles.vue').default);
+
+/*
+*   Tech Tip Components
+*/
+Vue.component('search-tech-tips', require('./components/tips/searchTips.vue').default);
+Vue.component('new-tip-form',     require('./components/tips/newTipForm.vue').default);
 
 /*
 *   Admin Components

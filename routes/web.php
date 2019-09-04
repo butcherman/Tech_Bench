@@ -149,16 +149,14 @@ Route::middleware(['password_expired'])->group(function() {
         *   Tech Tip Routes
         *
         */
-        Route::prefix('tip')->name('tip.')->group(function(){
-            
-            
-            
-            Route::get('/', 'TechTips\TechTipsController@index')->name('index');
-            
-            
-            
-            Route::resource('id', 'TechTips\TechTipsController');
-        });
+//        Route::prefix('tip')->name('tip.')->group(function(){
+//            Route::get('/', 'TechTips\TechTipsController@index')->name('index');
+//            Route::resource('id', 'TechTips\TechTipsController');
+//        });
+        Route::get('tips/{id}/{subject}', 'TechTips\TechTipsController@details')->name('tips.details');
+        Route::post('tips/search', 'TechTips\TechTipsController@search')->name('tips.search');
+        Route::post('tips/process-image', 'TechTips\TechTipsController@processImage')->name('tips.processImage');
+        Route::resource('tips', 'TechTips\TechTipsController');
         
         
         
