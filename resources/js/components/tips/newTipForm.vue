@@ -175,10 +175,12 @@
             successUpload(file, res)
             {
                 this.url = res.url;
+                console.log(res);
             },
             redirectToTip()
             {
-                window.location.replace(this.url);
+                console.log('done');
+//                window.location.replace(this.url);
             }
         }
     }

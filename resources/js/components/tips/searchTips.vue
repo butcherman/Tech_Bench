@@ -83,7 +83,7 @@ export default {
         searchTips(e)
         {
             e.preventDefault();
-//            console.log(this.form.searchText);
+            console.log(this.form);
             this.getTips();
             
         },

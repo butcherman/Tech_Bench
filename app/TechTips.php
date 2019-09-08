@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TechTips extends Model
 {
     protected $primaryKey = 'tip_id';
-    protected $fillable = ['user_id', 'subject', 'description'];
+    protected $fillable = ['user_id', 'subject', 'documentation', 'description', 'created_at'];  // ToDo:  Remove Created_at - future build
     
     public function user()
     {

@@ -32,18 +32,22 @@ class TechTipsController extends Controller
     public function index()
     {
         //  Get the types of documents that can be filtered
-        $filterTypes = SystemFileTypes::all();
+//        $filterTypes = SystemFileTypes::all();
         $typeArr[] = [
-            'text' => 'Tech Tip',
+            'text'  => 'Tech Tip',
             'value' => 'tech-tip'
         ];
-        foreach($filterTypes as $type)
-        {
-            $typeArr[] = [
-                'text' => $type->description,
-                'value' => str_replace(' ', '-', $type->description)
-            ];
-        }
+        $typeArr[] = [
+            'text'  => 'Documentation',
+            'value' => 'documentation'
+        ];
+//        foreach($filterTypes as $type)
+//        {
+//            $typeArr[] = [
+//                'text' => $type->description,
+//                'value' => str_replace(' ', '-', $type->description)
+//            ];
+//        }
         
         //  Get the types of systems that can be filtered
         $sysTypes = SystemTypes::orderBy('cat_id', 'ASC')->orderBy('name', 'ASC')->get();
@@ -105,12 +109,12 @@ class TechTipsController extends Controller
         }
         
         //  Get the types of documents that can be filtered
-        $fileTypes = SystemFileTypes::all();
-        $typesArr  = ['Tech Tip'];
-        foreach($fileTypes as $type)
-        {
-            $typesArr[] = $type->description;
-        }
+//        $fileTypes = SystemFileTypes::all();
+        $typesArr  = ['Tech Tip', 'Documentation'];
+//        foreach($fileTypes as $type)
+//        {
+//            $typesArr[] = $type->description;
+//        }
         
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('tips.create', [
@@ -149,8 +153,8 @@ class TechTipsController extends Controller
         
         if($save->isFinished())
         {
-            if($request->tipType === 'Tech Tip')
-            {
+//            if($request->tipType === 'Tech Tip')
+//            {
                 if(!$request->session()->has('newTechTip'))
                 {
                     $tipID = $this->createTip($request);
@@ -158,6 +162,8 @@ class TechTipsController extends Controller
                 }
                 
                 $tipID = session('newTechTip');
+            
+//                Log::debug('Tip ID - '.$tipID);
 
                 $file     = $save->getFile();
                 $path     = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
@@ -176,43 +182,43 @@ class TechTipsController extends Controller
                 
                 Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
                 return response()->json(['url' => route('tips.details', [$tipID, urlencode($request->subject)])]);
-            } 
-            else
-            {
-                $file = $save->getFile();
+//            } 
+//            else
+//            {
+//                $file = $save->getFile();
+//                
+//                $sysArr = is_array($request->systems) ? $request->systems : json_decode($request->systems, true);
+//                foreach($sysArr as $sys)
+//                {
+//                    $sysData = SystemTypes::where('sys_id', $sys['value'])->first();
+//                    $catName = SystemCategories::where('cat_id', $sysData->cat_id)->first()->name;
+//                    $path = config('filesystems.paths.systems').DIRECTORY_SEPARATOR.strtolower($catName).DIRECTORY_SEPARATOR.$sysData->folder_location;
+//                    $fileName = Files::cleanFilename($path, $file->getClientOriginalName());
+//                    
+//                    Log::debug($fileName);
+//                    Log::debug($path);
+//                    
+//                    $file->storeAs($path, $fileName);
+//                    $file = Files::create([
+//                        'file_name' => $fileName,
+//                        'file_link' => $path.DIRECTORY_SEPARATOR
+//                    ]);
+//                    
+//                    $fileType = SystemFileTypes::where('description', $request->tipType)->first()->type_id;
+//                    
+//                    SystemFiles::create([
+//                        'sys_id'      => $sysData->sys_id,
+//                        'type_id'     => $fileType,
+//                        'file_id'     => $file->file_id,
+//                        'name'        => $request->subject,
+//                        'description' => $request->tip,
+//                        'user_id'     => Auth::user()->user_id
+//                    ]);
+//                }
                 
-                $sysArr = is_array($request->systems) ? $request->systems : json_decode($request->systems, true);
-                foreach($sysArr as $sys)
-                {
-                    $sysData = SystemTypes::where('sys_id', $sys['value'])->first();
-                    $catName = SystemCategories::where('cat_id', $sysData->cat_id)->first()->name;
-                    $path = config('filesystems.paths.systems').DIRECTORY_SEPARATOR.strtolower($catName).DIRECTORY_SEPARATOR.$sysData->folder_location;
-                    $fileName = Files::cleanFilename($path, $file->getClientOriginalName());
-                    
-                    Log::debug($fileName);
-                    Log::debug($path);
-                    
-                    $file->storeAs($path, $fileName);
-                    $file = Files::create([
-                        'file_name' => $fileName,
-                        'file_link' => $path.DIRECTORY_SEPARATOR
-                    ]);
-                    
-                    $fileType = SystemFileTypes::where('description', $request->tipType)->first()->type_id;
-                    
-                    SystemFiles::create([
-                        'sys_id'      => $sysData->sys_id,
-                        'type_id'     => $fileType,
-                        'file_id'     => $file->file_id,
-                        'name'        => $request->subject,
-                        'description' => $request->tip,
-                        'user_id'     => Auth::user()->user_id
-                    ]);
-                }
-                
-                Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-                return response()->json(['url' => route('tips.details', [urlencode($sysData->name), urlencode($request->subject)])]);
-            }
+//                Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+//                return response()->json(['url' => route('tips.details', [urlencode($sysData->name), urlencode($request->subject)])]);
+//            }
         }
         
         //  Get the current progress
@@ -234,9 +240,10 @@ class TechTipsController extends Controller
         
         //  Enter the tip details and return the tip ID
         $tip = TechTips::create([
-            'subject' => $tipData->subject,
-            'description' => $tipData->tip,
-            'user_id' => Auth::user()->user_id
+            'documentation' => $tipData->tipType === 'documentation' ? true : false,
+            'subject'       => $tipData->subject,
+            'description'   => $tipData->tip,
+            'user_id'       => Auth::user()->user_id
         ]);
         $tipID = $tip->tip_id;
         
@@ -268,36 +275,21 @@ class TechTipsController extends Controller
     public function search(Request $request)
     {
         Log::debug('request Data -> '. $request->getContent());
-        
-
         $tips = [];
-        $docs = [];
             
         //  Determine if the search form is empty or has data in it
         if($request->searchText === null && empty($request->articleType) && empty($request->sysstemType))
         {
-            $tips = TechTips::all();
-            $docs = SystemFiles::all();
+            $tips = TechTips::orderBy('updated_at')->get();
         }
         else
         {
-//            if(in_array('tech-tip', $request->articleType))
-            if(false !== $key = array_search('tech-tip', $request->articleType))
-            {
-                Log::debug('has tech tip');
-                
-                
-                
-                
-                Log::debug($key);
-//                unset($request->articleType[$key]);
-            }
+
+//            $tips = TechTips::
             
             
             
             
-            
-            Log::debug('request Data -> '. $request->getContent());
             
             
         }
@@ -319,21 +311,21 @@ class TechTipsController extends Controller
                 'updated'     => date('M d, Y', strtotime($tip->updated_at))
             ];
         }
-        foreach($docs as $doc)
-        {
-            $kbArray[] = [
-                'url'         => route('tips.details', [urlencode($doc->type_id), urlencode($doc->name)]),
-                'title'       => $doc->name,
-                'description' => !$doc->description ? 'No Description Given' : $doc->description,
-                'created'     => $doc->created_at,
-                'updated'     => date('M d, Y', strtotime($doc->updated_at))
-            ];
-        }
+//        foreach($docs as $doc)
+//        {
+//            $kbArray[] = [
+//                'url'         => route('tips.details', [urlencode($doc->type_id), urlencode($doc->name)]),
+//                'title'       => $doc->name,
+//                'description' => !$doc->description ? 'No Description Given' : $doc->description,
+//                'created'     => $doc->created_at,
+//                'updated'     => date('M d, Y', strtotime($doc->updated_at))
+//            ];
+//        }
         
-        usort($kbArray, function($a, $b)
-        {
-          return $b['created'] <=> $a['created'];
-        });
+//        usort($kbArray, function($a, $b)
+//        {
+//          return $b['created'] <=> $a['created'];
+//        });
         
         return response()->json($kbArray);
     }
