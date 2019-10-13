@@ -1,38 +1,27 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <img src="{{config('app.logo')}}" alt="Company Logo" class="text-center" id="header-logo" />
-            <h1 class="text-center">Tech Bench</h1>
+<div class="row justify-content-center align-items-center login-form-container">
+    <div class="col-lg-8 col-xl-6">
+        <div class="row" id="header-title">
+            <div class="col-12"><h1>Password Request</h1></div>
         </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <strong>Reset Password</strong>
-                </div>
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+        <div class="row row-eq-height justify-content-center align-items-center login-form-sub-container">
+            <div class="col-md-6">
+                <img src="{{config('app.logo')}}" alt="Company Logo" id="header-logo" />
+            </div>
+            <div class="col-md-6">
+               @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @else
+                    <p>Enter your email address for instructions for accessing your account.</p>
                     {!! Form::open(['route' => 'password.email', 'id' => 'password-reset-form']) !!}
-                        <div class="row justify-content-center">
-                            <div class="col-8">
-                                {{Form::bsEmail('email', 'Email', null, ['placeholder' => 'Enter Your Email Address', 'autofocus'])}}
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-6">
-                                {{Form::bsSubmit('Send Password Reset Link')}}
-                            </div>
-                        </div>
+                        {{Form::bsEmail('email', null, null, ['placeholder' => 'Enter Your Email Address', 'autofocus'])}}
+                        {{Form::bsSubmit('Send Password Reset Instructions')}}
                     {!! Form::close() !!}
-                </div>
+                @endif
             </div>
         </div>
     </div>

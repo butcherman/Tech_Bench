@@ -57,7 +57,7 @@ footer.sticky-footer {
             position: fixed;
             top: 0;
             left: 0;
-            background: $header-background !IMPORTANT;
+            background: $header-background; // !IMPORTANT;
             border-right: 1px ridge #706C6C;
             width: calc(#{$side-nav-width} + 1rem);
             text-align: center;
@@ -65,7 +65,7 @@ footer.sticky-footer {
     }
     
     #top-nav {
-        background: $header-background !IMPORTANT;
+        background: $header-background; // !IMPORTANT;
     }
     
     #side-nav {

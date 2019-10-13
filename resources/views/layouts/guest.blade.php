@@ -17,7 +17,7 @@
             'csrfToken': '{{csrf_token()}}'
         };
     </script>
-    <script src="{{ asset('js/app.js') }}"></script>
+<!--    <script src="{{ asset('js/app.js') }}"></script>-->
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -26,7 +26,7 @@
     <link href="{{ asset('css/guest.css') }}" rel="stylesheet">    
 </head>
 <body role="document">
-    <div class="container-fluid" role="main" id="app">
+    <div class="container-fluid v-100" role="main" id="app">
         @yield('content')
     </div>
 </body>
