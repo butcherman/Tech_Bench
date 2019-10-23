@@ -8,6 +8,7 @@ use App\CustomerFavs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 
 
@@ -20,6 +21,7 @@ class DashboardController extends Controller
 {
     public function __construct()
     {
+        //  Only authorized users have access to these pages
         $this->middleware('auth');
     }
 
@@ -27,25 +29,25 @@ class DashboardController extends Controller
     public function index()
     {
         //  Get the users notifications
-        $notifications = Auth::user()->unreadNotifications;
+//        $notifications = Auth::user()->unreadNotifications;
         
         //  Get the Add-On Modules to list routes for
-        $modules = Module::all();
+//        $modules = Module::all();
         
         //  Get the users Customer bookmarks
-        $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
-            ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
-            ->get();
+//        $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
+//            ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
+//            ->get();
 //        //  Get the users Tech Tip bookmarks
 //        $tipFavs = TechTipFavs::where('tech_tip_favs.user_id', Auth::user()->user_id)
 //            ->LeftJoin('tech_tips', 'tech_tips.tip_id', '=', 'tech_tip_favs.tip_id')
 //            ->get();
         
         return view('dashboard', [
-            'custFavs' => $custFavs,
+//            'custFavs' => $custFavs,
 //            'tipFavs'  => $tipFavs,
-            'notifications' => $notifications->toArray(),
-            'modules'       => $modules
+//            'notifications' => $notifications->toArray(),
+//            'modules'       => $modules
         ]);
     }
     

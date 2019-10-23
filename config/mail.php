@@ -2,16 +2,16 @@
 
 return [
     'driver'        => 'smtp',
-    'host'          => 'smtp.example.com',
-    'port'          => 587,
+    'host'          => env('MAIL_HOST', 'smtp.example.com'),
+    'port'          => env('MAIL_PORT', 587),
 
     'from'          => [
-        'address'       => 'no-reply@example.com',
-        'name'          => 'Tech Bench',
+        'address'       => env('MAIL_FROM_ADDRESS', 'no-reply@example.com'),
+        'name'          => config('app.name', 'Tech Bench'),
     ],
     'encryption'    => 'tls',
-    'username'      => 'MAIL_USERNAME',
-    'password'      => 'MAIL_PASSWORD',
+    'username'      => env('MAIL_USERNAME', 'login_username'),
+    'password'      => env('MAIL_PASSWORD', 'login_password'),
     'sendmail'      => '/usr/sbin/sendmail -bs',
     'markdown'      => [
         'theme'         => 'default',

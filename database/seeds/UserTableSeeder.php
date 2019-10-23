@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use App\Role;
 use App\User;
+use App\UserPermissions;
+use Illuminate\Database\Seeder;
 
 class UserTableSeeder extends Seeder
 {
@@ -13,12 +13,6 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        //  Fetch user roles
-        $role_installer = Role::where('name', 'installer')->first();
-        $role_admin     = Role::where('name', 'admin')->first();
-        $role_report    = Role::where('name', 'report')->first();
-        $role_tech      = Role::where('name', 'tech')->first();
-        
         //  Create the test users
         $emp1               = new User();
         $emp1->user_id      = 2;
@@ -29,7 +23,20 @@ class UserTableSeeder extends Seeder
         $emp1->password     = bcrypt('password');
         $emp1->active       = 1;
         $emp1->save();
-        $emp1->roles()->attach($role_installer);
+        UserPermissions::create(
+        [
+            'user_id'             => 2,
+            'manage_users'        => 0,
+            'run_reports'         => 1,
+            'add_customer'        => 1,
+            'deactivate_customer' => 0,
+            'use_file_links'      => 1,
+            'create_tech_tip'     => 1,
+            'edit_tech_tip'       => 0,
+            'delete_tech_tip'     => 0,
+            'create_category'     => 0,
+            'modify_category'     => 0
+        ]);
         
         $emp2               = new User();
         $emp1->user_id      = 3;
@@ -40,8 +47,20 @@ class UserTableSeeder extends Seeder
         $emp2->password     = bcrypt('password');
         $emp2->active       = 1;
         $emp2->save();
-        $emp2->roles()->attach($role_report);
-        
+        UserPermissions::create(
+        [
+            'user_id'             => 3,
+            'manage_users'        => 0,
+            'run_reports'         => 1,
+            'add_customer'        => 1,
+            'deactivate_customer' => 0,
+            'use_file_links'      => 1,
+            'create_tech_tip'     => 1,
+            'edit_tech_tip'       => 0,
+            'delete_tech_tip'     => 0,
+            'create_category'     => 0,
+            'modify_category'     => 0
+        ]);
         $emp3               = new User();
         $emp1->user_id      = 4;
         $emp3->username     = 'elindsay';
@@ -51,7 +70,20 @@ class UserTableSeeder extends Seeder
         $emp3->password     = bcrypt('password');
         $emp3->active       = 1;
         $emp3->save();
-        $emp3->roles()->attach($role_tech);
+        UserPermissions::create(
+        [
+            'user_id'             => 4,
+            'manage_users'        => 0,
+            'run_reports'         => 1,
+            'add_customer'        => 1,
+            'deactivate_customer' => 0,
+            'use_file_links'      => 1,
+            'create_tech_tip'     => 1,
+            'edit_tech_tip'       => 0,
+            'delete_tech_tip'     => 0,
+            'create_category'     => 0,
+            'modify_category'     => 0
+        ]);
         
         $emp4               = new User();
         $emp4->user_id      = 5;
@@ -62,6 +94,19 @@ class UserTableSeeder extends Seeder
         $emp4->password     = bcrypt('password');
         $emp4->active       = 1;
         $emp4->save();
-        $emp4->roles()->attach($role_admin);
+        UserPermissions::create(
+        [
+            'user_id'             => 5,
+            'manage_users'        => 0,
+            'run_reports'         => 1,
+            'add_customer'        => 1,
+            'deactivate_customer' => 0,
+            'use_file_links'      => 1,
+            'create_tech_tip'     => 1,
+            'edit_tech_tip'       => 0,
+            'delete_tech_tip'     => 0,
+            'create_category'     => 0,
+            'modify_category'     => 0
+        ]);
     }
 }

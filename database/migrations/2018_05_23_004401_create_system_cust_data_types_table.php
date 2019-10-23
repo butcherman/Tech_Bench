@@ -17,6 +17,7 @@ class CreateSystemCustDataTypesTable extends Migration
         Schema::create('system_cust_data_types', function(Blueprint $table) {
             $table->increments('data_type_id');
             $table->string('name');
+            $table->boolean('hidden')->default(0);
             $table->timestamps();
         });
         

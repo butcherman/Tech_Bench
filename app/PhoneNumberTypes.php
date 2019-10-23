@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PhoneNumberType extends Model
+class PhoneNumberTypes extends Model
 {
     protected $primaryKey = 'phone_type_id';
     protected $fillable = ['phone_type_id', 'description', 'icon_class'];

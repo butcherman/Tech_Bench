@@ -1,9 +1,9 @@
 <?php
 
+use App\PhoneNumberTypes;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\PhoneNumberType;
 
 class CreatePhoneNumberTypesTable extends Migration
 {
@@ -22,20 +22,20 @@ class CreatePhoneNumberTypesTable extends Migration
         });
         
         //  Create Default Data
-        PhoneNumberType::create([
+        PhoneNumberTypes::create([
             'phone_type_id' => 1,
             'description'   => 'Home',
-            'icon_class'    => 'fa fa-home'
+            'icon_class'    => 'ti-home'
         ]);
-        PhoneNumberType::create([
+        PhoneNumberTypes::create([
             'phone_type_id' => 2,
             'description'   => 'Work',
-            'icon_class'    => 'fa fa-building'
+            'icon_class'    => 'ti-briefcase'
         ]);
-        PhoneNumberType::create([
+        PhoneNumberTypes::create([
             'phone_type_id' => 3,
             'description'   => 'Mobile',
-            'icon_class'    => 'fa fa-mobile'
+            'icon_class'    => 'ti-mobile'
         ]);
     }
 

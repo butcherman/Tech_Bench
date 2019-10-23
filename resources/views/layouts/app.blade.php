@@ -58,9 +58,7 @@
                 </button>
             </div>
         </nav>
-    <!-- partial -->
         <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_sidebar.html -->
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item">
@@ -69,18 +67,30 @@
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
+                   @can('allow_admin')
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.index')}}">
                             <i class="ti-pencil-alt menu-icon"></i>
                             <span class="menu-title">Administration</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('hasAccess', 'run_reports')
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="ti-pencil-alt menu-icon"></i>
+                            <span class="menu-title">Reports</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('hasAccess', 'use_file_links')
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('links.index')}}">
                             <i class="ti-link menu-icon"></i>
                             <span class="menu-title">File Links</span>
                         </a>
                     </li>
+                    @endcan
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('customer.index')}}">
                             <i class="ti-user menu-icon"></i>
@@ -110,4 +120,3 @@
   </div>
 </body>
 </html>
-

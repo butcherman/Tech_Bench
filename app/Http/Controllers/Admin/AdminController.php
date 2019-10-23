@@ -13,7 +13,8 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //  Only Authorized users with specific admin permissions are allowed
+        $this->middleware(['auth', 'can:allow_admin']);
     }
     
     //  Admin landing page

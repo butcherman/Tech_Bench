@@ -5,24 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Tech Bench') }}</title>
 
-    <!-- Scripts -->
-    <script>
-        window.techBench = {
-            'maxUpload': '{{config('filesystems.paths.max_size')}}',
-            'csrfToken': '{{csrf_token()}}'
-        };
-    </script>
-    <script src="{{ asset('js/app.js') }}"></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-
-    <!-- Styles -->
     <link href="{{ asset('css/guest.css') }}" rel="stylesheet">    
 </head>
 <body role="document">
@@ -32,7 +16,7 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="jumbotron text-center">
+                <div class="jumbotron text-center text-danger">
                     <img src="/img/err_img/sry_error.png" alt="Error Image" class="float-left" />
                     <h3 class="text-center">Javascript is Disabled</h3>
                     <br />

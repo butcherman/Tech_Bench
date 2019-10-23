@@ -21,8 +21,8 @@ Route::get('no-script', 'Controller@noScript')->name('noscript');
 *   Finish setting up user account Routes
 *
 */
-Route::get('/finish-setup/{hash}', 'Admin\UserController@initializeUser')->name('initialize');
-Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')->name('initialize');
+//Route::get('/finish-setup/{hash}', 'Admin\UserController@initializeUser')->name('initialize');
+//Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')->name('initialize');
 
 /*
 *
@@ -62,7 +62,7 @@ Route::middleware(['password_expired'])->group(function() {
     *   Routes for users with "tech" permissions
     *
     */
-    Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function() {
+//    Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function() {
         
         /*
         *
@@ -160,14 +160,14 @@ Route::middleware(['password_expired'])->group(function() {
         
         
         
-    });
+//    });
     
     /*
     *
     *   Administration Routes
     *
     */
-    Route::group(['middleware' => 'roles', 'roles' => ['installer', 'admin']], function() {
+//    Route::group(['middleware' => 'can:allow_admin'], function() {
         Route::prefix('admin')->name('admin.')->group(function() {
             //  Admin User File Links routes
             Route::get('links/show/{id}', 'Admin\AdminController@showLinks')->name('userLinks');
@@ -185,14 +185,14 @@ Route::middleware(['password_expired'])->group(function() {
             //  Admin index route
             Route::get('/', 'Admin\AdminController@index')->name('index');
         });
-    });
+//    });
 
     /*
     *
     *   Installer Routes
     *
     */
-    Route::group(['middleware' => 'roles', 'roles' => ['installer']], function() {
+//    Route::group(['middleware' => 'can:isInstaller'], function() {
         Route::prefix('installer')->name('installer.')->group(function() {
             //  User Settings
             Route::get('user-security-settings', 'Installer\SettingsController@userSecurity')->name('userSecurity');
@@ -210,5 +210,5 @@ Route::middleware(['password_expired'])->group(function() {
             Route::resource('categories', 'Installer\CategoriesController');
             Route::resource('systems', 'Installer\SystemsController');
         });
-    });
+//    });
 });

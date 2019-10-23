@@ -18,7 +18,6 @@
             </div>
         </div>
     @endif
-    @if(Auth::user()->hasAnyRole(['installer', 'admin']))
         <div class="row pad-top justify-content-center">
             <div class="col-md-4">
                 <h4 class="pl-5">Users:</h4>
@@ -28,9 +27,7 @@
                     <li><a href="{{route('admin.password')}}">Reset Users Password</a></li>
                     <li><a href="{{route('admin.disable')}}">Disable User</a></li>
                     <li><a href="{{route('admin.links')}}">User File Links</a></li>
-        @if(Auth::user()->hasAnyRole(['installer']))
                     <li><a href="{{route('installer.userSecurity')}}">User Security Settings</a></li>
-        @endif
                 </ul>
             </div>
 {{--
@@ -43,8 +40,6 @@
                 </ul>
             </div>
 --}}
-    @endif
-    @if(Auth::user()->hasAnyRole(['installer']))
             <div class="col-md-4">
                 <h4 class="pl-5">System Settings:</h4>
                 <ul class="admin-list">
@@ -74,6 +69,5 @@
                 </ul>
             </div>
 --}}
-    @endif
         </div>
 @endsection

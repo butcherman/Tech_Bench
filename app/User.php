@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active'
+        'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active', 'is_installer'
     ];
 
     /**
@@ -24,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token'
+        'password', 'remember_token', 'is_installer'
     ];
     
     //  Database primary key
@@ -63,43 +63,5 @@ class User extends Authenticatable
     public function fileLinks()
     {
         return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
-    }
-    
-    //  Functions for authentication roles
-    public function roles()
-    {
-        return $this->belongsToMany('App\Role', 'user_role', 'user_id', 'role_id');
-    }
-    
-    public function hasAnyRole($roles)
-    {
-        if(is_array($roles))
-        {
-            foreach($roles as $role)
-            {
-                if($this->hasRole($role))
-                {
-                    return true;
-                }
-            }
-        }
-        else
-        {
-            if($this->hasRole($roles))
-            {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    public function hasRole($role)
-    {
-        if($this->roles()->where('name', $role)->first())
-        {
-            return true;
-        }
-        return false;
     }
 }

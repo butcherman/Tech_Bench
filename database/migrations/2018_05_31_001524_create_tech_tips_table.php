@@ -17,6 +17,7 @@ class CreateTechTipsTable extends Migration
             $table->increments('tip_id');
             $table->integer('user_id')->unsigned();
             $table->boolean('public')->default(0);
+            $table->boolean('documentation')->default(0)->nullable();
             $table->text('subject');
             $table->longText('description');
             $table->timestamps();
