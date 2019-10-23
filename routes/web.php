@@ -16,13 +16,6 @@ Route::get('/', 'Auth\LoginController@showLoginForm')->name('index');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('no-script', 'Controller@noScript')->name('noscript');
 
-/*
-*
-*   Finish setting up user account Routes
-*
-*/
-//Route::get('/finish-setup/{hash}', 'Admin\UserController@initializeUser')->name('initialize');
-//Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')->name('initialize');
 
 /*
 *
@@ -32,6 +25,24 @@ Route::get('no-script', 'Controller@noScript')->name('noscript');
 Route::get('download/{id}/{filename}', 'DownloadController@index')->name('download');
 Route::get('download-all', 'DownloadController@downloadAll')->name('downloadAll');
 Route::put('download-all', 'DownloadController@flashDownload')->name('downloadAll');
+
+
+
+
+
+
+
+
+
+
+
+/*
+*
+*   Finish setting up user account Routes
+*
+*/
+//Route::get('/finish-setup/{hash}', 'Admin\UserController@initializeUser')->name('initialize');
+//Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')->name('initialize');
 
 /*
 *
@@ -55,7 +66,7 @@ Route::post('/account/change-password', 'AccountController@submitPassword')->nam
 *   Logged in user routes
 *
 */
-Route::middleware(['password_expired'])->group(function() {
+//Route::middleware(['password_expired'])->group(function() {
     
     /*
     *
@@ -211,4 +222,4 @@ Route::middleware(['password_expired'])->group(function() {
             Route::resource('systems', 'Installer\SystemsController');
         });
 //    });
-});
+//});

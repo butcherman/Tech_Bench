@@ -28,6 +28,11 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
+        
+        
+//        dd(Auth::user());
+        \Debugbar::addMessage(Auth::user());
+        
         //  Get the users notifications
 //        $notifications = Auth::user()->unreadNotifications;
         
