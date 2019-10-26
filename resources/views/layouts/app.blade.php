@@ -15,7 +15,7 @@
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo mr-5" href="{{route('dashboard')}}"><img src="{{config('app.logo')}}" class="mr-2" alt="Tech Bench"/></a>
                 <a class="navbar-brand brand-logo-mini" href="{{route('dashboard')}}"><img src="{{config('app.logo')}}" alt="Tech Bench"/></a>
-            </div>    
+            </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
 
                 <ul class="navbar-nav mr-lg-2">
@@ -39,7 +39,7 @@
                     </li>
                     <li class="nav-item nav-profile dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="profileDropdown" onclick="return expandProfile();">
-                            <img src="img/profile_pic.png" alt="profile"/>
+                            <img src="{{asset('img/profile_pic.png')}}" alt="profile"/>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" id="profileDropdownDiv">
                             <a href="{{route('account')}}" class="dropdown-item">
