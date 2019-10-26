@@ -30,7 +30,11 @@ Route::put('account', 'AccountController@notifications')                   ->nam
 Route::get('/account/change-password', 'AccountController@changePassword') ->name('changePassword');
 Route::post('/account/change-password', 'AccountController@submitPassword')->name('changePassword');
 
-
+/*
+*   Basic Logged In Routes
+*/
+Route::get('about', 'DashboardController@about')    ->name('about');
+Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
 
 
@@ -86,8 +90,7 @@ Route::get('file-links', 'FileLinks\UserLinksController@index');
         *   Dashboard and About page routes
         *
         */
-        Route::get('about', 'DashboardController@about')->name('about');
-        Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+
         Route::get('get-notifications', 'DashboardController@getNotifications')->name('get-notifications');
         Route::get('del-notification/{id}', 'DashboardController@delNotification')->name('del-notification');
 

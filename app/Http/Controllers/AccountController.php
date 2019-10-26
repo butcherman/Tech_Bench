@@ -92,19 +92,7 @@ class AccountController extends Controller
     //  Submit the change password form
     public function submitPassword(Request $request)
     {
-        // //  Make sure that the old password is valid
-        // if(!(Hash::check($request->oldPass, Auth::user()->password)))
-        // {
-        //     return redirect()->back()->with('error', 'Your Current Password is not valid.  Please try again.');
-        // }
-
-        // //  Make sure that the new password is not the same as the old password
-        // if(strcmp($request->newPass, $request->oldPass) == 0)
-        // {
-        //     return redirect()->back()->with('error', 'New Password cannot be the same as the old password');
-        // }
-
-        //  Validate remaining data
+        //  Validate form data
         $request->validate([
             'oldPass' => ['required', new ValidatePassword],
             'newPass' => 'required|string|min:6|confirmed|different:oldPass'

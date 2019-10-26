@@ -28,17 +28,13 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
-        
-        
-//        dd(Auth::user());
-        \Debugbar::addMessage(Auth::user());
-        
+
         //  Get the users notifications
 //        $notifications = Auth::user()->unreadNotifications;
-        
+
         //  Get the Add-On Modules to list routes for
 //        $modules = Module::all();
-        
+
         //  Get the users Customer bookmarks
 //        $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
 //            ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
@@ -47,7 +43,7 @@ class DashboardController extends Controller
 //        $tipFavs = TechTipFavs::where('tech_tip_favs.user_id', Auth::user()->user_id)
 //            ->LeftJoin('tech_tips', 'tech_tips.tip_id', '=', 'tech_tip_favs.tip_id')
 //            ->get();
-        
+
         return view('dashboard', [
 //            'custFavs' => $custFavs,
 //            'tipFavs'  => $tipFavs,
@@ -55,26 +51,25 @@ class DashboardController extends Controller
 //            'modules'       => $modules
         ]);
     }
-    
+
     //  About page
     public function about()
     {
         exec('git symbolic-ref HEAD', $output);
         $t = explode('/', $output[0]);
         $branch = end($t) === 'master' ? 'latest' : end($t);
-                
+
         return view('about', [
             'branch' => $branch
         ]);
-
     }
-    
+
     //  Get the users notifications
     public function getNotifications()
     {
         return Auth::user()->unreadNotifications->toJson();
     }
-    
+
     public function delNotification($id)
     {
         $notification = Auth::user()->notifications()->where('id', $id)->first();
@@ -87,7 +82,7 @@ class DashboardController extends Controller
         {
             Log::notice('Notification ID-'.$id.' not found for user ID-'.Auth::user()->user_id);
         }
-        
+
         return response()->json(['success' => true]);
     }
 }

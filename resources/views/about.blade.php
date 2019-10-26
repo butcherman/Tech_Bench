@@ -1,44 +1,57 @@
 @extends('layouts.app')
 
-@section('breadcrumbs')
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">My Dashboard</a></li>
-    <li class="breadcrumb-item active">About</li>
-</ol>
-@endsection
-
 @section('content')
-<div class="row justify-content-center pad-top">
-    <div class="col-12">
-        <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>About Tech Bench</h1></div>
+<div class="row">
+    <div class="col-12 grid-margin">
+        <h4>About Tech Bench</h4>
     </div>
 </div>
-<div class="row justify-content-center pad-top">
-    <div class="col-md-8">
-        <p class="text-center">Tech Bench &copy;2016-2019</p>
-        <p class="text-center">Version - @version('version')</p>
-    </div>
-</div>
-<div class="row justify-content-center pad-top">
-    <div class="col-md-8">
-        <p class="text-center">
-            Looking for help?  <a href="https://tech-bench.readthedocs.io/en/{{$branch}}/user/index.html" target="_blank">Click here for the Tech Bench User Guide.</a>
-        </p>
-    </div>
-</div>
-@if(Auth::user()->hasAnyRole(['admin', 'installer']))
-    <div class="row justify-content-center pad-top">
-        <div class="col-md-8">
-            <p class="text-center">
-                Check out the Tech Bench project online - visit us at <a href="https://github.com/butcherman/Tech_Bench">GitHub.com</a>
-            </p>
-            <p class="text-center">
-                Installer and Administration guides can be found at <a href="https://tech-bench.readthedocs.io/en/{{$branch}}">readthedocs.org</a>.
-            </p>
-            <p class="text-center">
-                To report an issue, contact us through <a href="https://github.com/butcherman/Tech_Bench/issues">this link</a>.
-            </p>
+<div class="row justify-content-center">
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <img src="{{asset('/img/TechBenchLogo.png')}}" class="mx-auto d-block img-fluid" alt="Tech Bench"/>
+                <p class="text-center">
+                    Tech Bench &copy;2016-2019
+                    <span class="d-inline-block">- All Rights Reserved</span>
+                </p>
+                <p class="text-center">Version - @version('full')</p>
+                <p class="text-center">Build Date - @version('timestamp-simple')</p>
+                <p class="text-center">
+                    Looking for guidance?
+                    <span class="d-inline-block">
+                        <a href="https://tech-bench.readthedocs.io/en/{{$branch}}/user/index.html" target="_blank">Click here for the Tech Bench User Guide.</a>
+                    </span>
+                </p>
+            </div>
         </div>
     </div>
-@endif
+</div>
+@can('is_installer')
+<div class="row justify-content-center">
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body"><h4 class="text-center">Looking For More?</h4>
+                <p class="text-center">
+                    Check out the Tech Bench project online -
+                    <span class="d-inline-block">
+                        visit us at
+                        <a href="https://github.com/butcherman/Tech_Bench">GitHub.com</a>
+                    </span>
+                </p>
+                <p class="text-center">
+                    Installer and Administration guides can be
+                    <span class="d-inline-block">
+                        found at <a href="https://tech-bench.readthedocs.io/en/{{$branch}}">readthedocs.org</a>.
+                    </span>
+                </p>
+                <p class="text-center">
+                    To report an issue, contact us through <a href="https://github.com/butcherman/Tech_Bench/issues">this link</a>.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+@endcan
 @endsection

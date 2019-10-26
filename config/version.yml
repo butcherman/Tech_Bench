@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: dev
   buildmetadata: null
-  commit: '369'
+  commit: 36a
   timestamp:
     year: 2019
     month: 10
     day: 25
-    hour: 18
-    minute: 54
-    second: 36
+    hour: 21
+    minute: 17
+    second: 40
     timezone: America/Los_Angeles
 commit:
   length: 6
@@ -47,6 +47,7 @@ format:
   version-only: 'Version {$major}.{$minor}.{$patch}'
   full: '{$version-only}[.?={$prerelease}][+?={$buildmetadata}] (commit {$commit})'
   compact: 'v{$major}.{$minor}.{$patch}-{$commit}'
+  timestamp-simple: '{$timestamp.month}-{$timestamp.day}-{$timestamp.year}'
   timestamp-year: '{$timestamp.year}'
   timestamp-month: '{$timestamp.month}'
   timestamp-day: '{$timestamp.day}'
