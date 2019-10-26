@@ -6,6 +6,7 @@
 /storage/*.key
 /vendor
 /.vs
+/.vscode
 .env
 .phpunit.result.cache
 Homestead.json
