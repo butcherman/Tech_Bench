@@ -1,96 +1,153 @@
 <template>
-    <div>
-        <vue-good-table
+    <div class="table">
+        <vue-good-table v-if="loadDone"
+            mode="remote"
             ref="file-links-table"
-            styleClass="vgt-table striped bordered"
-            :columns="cols"
-            :rows="links"
-            :select-options="{enabled: true, selectOnCheckboxOnly: true}"
-            :sort-options="{enabled: true}"
+            styleClass="vgt-table bordered w-100"
+            :columns="table.columns"
+            :rows="table.rows"
+            :select-options="{enabled:true, selectOnCheckboxOnly: true}"
+            :sort-options="{enabled:true}"
+            :isLoading.sync="isLoading"
+
+            :row-style-class="linkRowClass"
         >
             <div slot="emptystate">
-                <h3 class="text-center">No File Links</h3>
+                <h4 class="text-center">No File Links Available</h4>
+            </div>
+            <div slot="selected-row-actions">
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <button id="delete-selected" class="btn btn-warning btn-block">Delete Selected</button>
+                        <b-popover :target="'delete-selected'" triggers="focus" placement="bottom">
+                            <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>
+                            <div class="text-center">
+                                <button class="btn btn-danger" @click="deleteChecked">Yes</button>
+                                <button class="btn btn-primary" @click="$root.$emit('bv::hide::popover')">No</button>
+                            </div>
+                        </b-popover>
+                    </div>
+                </div>
             </div>
             <template slot="table-row" slot-scope="data">
                 <span v-if="data.column.field == 'name'">
-                    <a :href="data.row.url">{{data.row.link_name}}</a>
+                    <a :href="route('links.details', [data.row.link_id, dashify(data.row.link_name)])">{{data.row.link_name}}</a>
                 </span>
                 <span v-else-if="data.column.field == 'actions'">
-                    <a :href="em_link_route.replace(':hash', data.row.link_hash)" title="Email Link" class="text-muted remove-link" v-b-tooltip.hover><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                    <click-confirm class="d-inline">
-                        <span class="pointer" @click="deleteLink(data.row.link_id)" title="Delete Link" v-b-tooltip.hover><i class="fa fa-trash"></i></span>
-                    </click-confirm>
-                </span>
-                <span v-else>
-                    {{data.formattedRow[data.column.field]}}
+                    <div class="d-flex justify-content-between flex-nowrap">
+                        <a v-if="!data.row.expired" :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+route('file-links.show', [data.row.link_hash])" title="Email Link" class="btn btn-rounded px-0 text-muted"v-b-tooltip.hover><span class="ti-email"></span></a>
+                        <button v-if="!data.row.expired" @click="disableLink(data.row.link_id)" class="btn btn-rounded px-0 text-muted" title="Disable Link" v-b-tooltip.hover>
+                            <span class="ti-unlink"></span>
+                        </button>
+                        <button :id="'confirm-delete'+data.row.link_id" class="btn btn-rounded px-0 text-muted" title="Delete Link" v-b-tooltip.hover>
+                            <span class="ti-trash"></span>
+                        </button>
+                        <b-popover :target="'confirm-delete'+data.row.link_id" triggers="focus" placement="left">
+                            <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>
+                            <div class="text-center">
+                                <button class="btn btn-danger" @click="deleteLink(data.row.link_id)">Yes</button>
+                                <button class="btn btn-primary" @click="$root.$emit('bv::hide::popover')">No</button>
+                            </div>
+                        </b-popover>
+                    </div>
                 </span>
             </template>
-            <div slot="selected-row-actions">
-                <button class="btn btn-info" @click="deleteChecked">Delete Selected</button>
-            </div>
         </vue-good-table>
-    </div> 
+        <div v-else>
+            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+        </div>
+    </div>
 </template>
 
 <script>
     export default {
         props: [
-            'get_links_route',
-            'del_link_route',
-            'em_link_route',
+
         ],
         data() {
             return {
-                cols: [
+                loadDone: false,
+                isLoading: true,
+                table: {
+                    columns: [
                     {
                         label: 'Link Name',
                         field: 'name',
+                        filterable: true,
                     },
                     {
                         label: '# of Files',
                         field: 'file_link_files_count',
+                        filterable: true,
                     },
                     {
                         label: 'Expire Date',
                         field: 'expire',
+                        filterable: true,
                     },
                     {
                         label: 'Actions',
-                        field: 'actions',
-                    }
-                ],
-                links:     [],
+                        field: 'actions'
+                    }],
+                    rows: []
+                }
             }
         },
         created() {
             this.fetchLinks();
         },
         methods: {
-            //  List the links the user owns
-            fetchLinks() 
+            fetchLinks()
             {
-                axios.get(this.get_links_route)
+                axios.get(this.route('links.user', [0]))
                     .then(res => {
-                        this.links       = res.data;
-                    })
-                    .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
+                        this.table.rows = res.data;
+                        this.loadDone = true;
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
-            //  Delete a single link
-            deleteLink(linkID)
+            linkRowClass(row)
             {
-                axios.delete(this.del_link_route.replace(':linkID', linkID))
+                return row.expired ? 'table-danger': '';
+            },
+            disableLink(link)
+            {
+                axios.get(this.route('links.disable', [link]))
                     .then(res => {
-                        this.fetchLinks();
-                    });
+                        if(res.data.success)
+                        {
+                            this.fetchLinks();
+                        }
+                        else
+                        {
+                            alert('We are having difficulties processing your request\nPlease try again later.');
+                        }
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
-            deleteChecked(data)
+            deleteLink(link)
             {
-                var obj = this;
+                console.log(link);
+                axios.delete(this.route('links.data.destroy', [link]))
+                    .then(res => {
+                        if(res.data.success)
+                        {
+                            this.$root.$emit('bv::hide::popover')
+                            this.fetchLinks();
+                            console.log('link deleted');
+                        }
+                        else
+                        {
+                            alert('We are having difficulties processing your request\nPlease try again later.');
+                        }
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+            },
+            deleteChecked()
+            {
+                var list = this;
                 this.$refs['file-links-table'].selectedRows.forEach(function(link)
                 {
-                    obj.deleteLink(link.link_id);
+                    list.deleteLink(link.link_id);
                 });
-            }
+            },
         }
     }
 </script>

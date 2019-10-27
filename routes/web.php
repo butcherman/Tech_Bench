@@ -36,8 +36,33 @@ Route::post('/account/change-password', 'AccountController@submitPassword')->nam
 Route::get('about', 'DashboardController@about')    ->name('about');
 Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
+/*
+*   File Link Routes
+*/
+Route::prefix('links')->name('links.')->group(function () {
+    //  Resource controllers for base access
+    Route::resource('data', 'FileLinks\FileLinksController');
+    Route::get('new', 'FileLinks\FileLinksController@create')->name('new');
+    Route::get('find/{id}', 'FileLinks\FileLinksController@find')->name('user');
+    Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')->name('details');
+    Route::get('disable/{id}', 'FileLinks\FileLinksController@disableLink')->name('disable');
 
 
+
+
+    //  File Link Files
+    Route::resource('files', 'FileLinks\LinkFilesController');
+
+    //  File Link Instructions
+    Route::get('instructions/{id}', 'FileLinks\InstructionsController@getIndex')->name('instructions');
+    Route::post('instructions/{id}', 'FileLinks\InstructionsController@postIndex')->name('instructions');
+
+    //  Link customer information
+    Route::post('updateCustomer/{id}', 'FileLinks\FileLinksController@updateCustomer')->name('updateCustomer');
+
+    //  Index landing page
+    Route::get('/', 'FileLinks\FileLinksController@index')->name('index');
+});
 
 
 
@@ -96,30 +121,7 @@ Route::get('file-links', 'FileLinks\UserLinksController@index');
 
 
 
-        /*
-        *
-        *   File Link Routes
-        *
-        */
-        Route::prefix('links')->name('links.')->group(function() {
-            //  Resource controllers for base access
-            Route::resource('data', 'FileLinks\FileLinksController');
-            Route::get('find/{id}', 'FileLinks\FileLinksController@find')->name('user');
-            Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')->name('details');
 
-            //  File Link Files
-            Route::resource('files', 'FileLinks\LinkFilesController');
-
-            //  File Link Instructions
-            Route::get('instructions/{id}', 'FileLinks\InstructionsController@getIndex')->name('instructions');
-            Route::post('instructions/{id}', 'FileLinks\InstructionsController@postIndex')->name('instructions');
-
-            //  Link customer information
-            Route::post('updateCustomer/{id}', 'FileLinks\FileLinksController@updateCustomer')->name('updateCustomer');
-
-            //  Index landing page
-            Route::get('/', 'FileLinks\FileLinksController@index')->name('index');
-        });
 
         /*
         *

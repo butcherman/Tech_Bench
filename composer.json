@@ -39,6 +39,7 @@
         "nwidart/laravel-modules": "^6.0",
         "pion/laravel-chunk-upload": "dev-master",
         "pragmarx/version": "^1.0.2",
+        "tightenco/ziggy": "^0.8.1",
         "zanysoft/laravel-zip": "^1.0"
     },
     "require-dev": {

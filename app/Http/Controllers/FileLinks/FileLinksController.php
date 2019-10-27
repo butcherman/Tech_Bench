@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FileLinks;
 
 use App\Files;
+use Carbon\Carbon;
 use App\FileLinks;
 use App\FileLinkFiles;
 use App\CustomerFileTypes;
@@ -18,43 +19,53 @@ use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use App\Http\Resources\FileLinksCollection;
 
 class FileLinksController extends Controller
 {
     //  Only authorized users have access
-    public function __construct()
+    public function __construct(\Gate $gate)
     {
+        //  Verify the user is logged in and has permissions for this page
         $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = auth()->user();
+            $this->authorize('hasAccess', 'use_file_links');
+            return $next($request);
+        });
     }
-    
-    //  Ajax call to show the links for a specific user
-    public function find($id)
-    {
-        $links = FileLinks::where('user_id', $id)
-            ->select('expire', 'link_id', 'link_name', 'link_hash')
-            ->withCount('FileLinkFiles')
-            ->orderBy('expire', 'desc')
-            ->get();
-                
-        //  Reformat the expire field to be a readable date
-        foreach($links as $link)
-        {
-            $link->url        = route('links.details', [$link->link_id, urlencode($link->link_name)]);
-            $link->showClass  = $link->expire < date('Y-m-d') ? 'table-danger' : '';
-            $link->expire     = date('M d, Y', strtotime($link->expire));
-        }
-        
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Links found for User ID-'.$id, $links->toArray());
-        return response()->json($links);
-    }
-    
+
     //  Landing page shows all links that the user owns
     public function index()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
         return view('links.index');
     }
+
+    //  Ajax call to show the links for a specific user
+    public function find($id)
+    {
+        if($id == 0)
+        {
+            $id = Auth::user()->user_id;
+        }
+
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        return $links = new FileLinksCollection(
+            FileLinks::where('user_id', $id)
+                ->withCount('FileLinkFiles')
+                ->orderBy('expire', 'desc')->get()
+        );
+    }
+
+
+
+
+
+
+
+
+
 
     //  Create a new file link form
     public function create()
@@ -67,35 +78,35 @@ class FileLinksController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'   => 'required', 
+            'name'   => 'required',
             'expire' => 'required'
         ]);
-        
+
         if(!empty($request->file))
         {
             $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
-            
+
             //  Verify that the upload is valid and being processed
             if($receiver->isUploaded() === false)
             {
                 Log::error('Upload File Missing - '.$request->toArray());
                 throw new UploadMissingFileException();
             }
-            
+
             //  Recieve and process the file
             $save = $receiver->receive();
-            
+
             //  See if the uploade has finished
             if($save->isFinished())
             {
                 $this->saveFile($save->getFile());
-                
+
                 return 'uploaded successfully';
             }
-            
+
             //  Get the current progress
             $handler = $save->handler();
-            
+
             Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
             Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
             return response()->json([
@@ -132,19 +143,19 @@ class FileLinksController extends Controller
                         'user_id' => Auth::user()->user_id,
                         'upload' => 0
                     ]);
-                    
+
                     Log::debug('File Added for link ID-'.$linkID.'.  File ID-'.$data->file_id);
                 }
 
                 $request->session()->forget('newLinkFile');
             }
-            
+
             return response()->json(['link' => $linkID, 'name' => urlencode($request->name)]);
         }
-        
+
         return response()->json(['complete' => false]);
     }
-    
+
     //  Create the new file link
     private function createLink($data)
     {
@@ -154,7 +165,7 @@ class FileLinksController extends Controller
             $hash = strtolower(Str::random(15));
             $dup  = FileLinks::where('link_hash', $hash)->get()->count();
         } while($dup != 0);
-        
+
         //  If the "customer id" field is populated, separate the ID from the name and prepare for insertion.
         if($data->customer_tag != null)
         {
@@ -165,7 +176,7 @@ class FileLinksController extends Controller
         {
             $custID = null;
         }
-                
+
         //  Create the new file link
         $link = FileLinks::create([
             'user_id'      => Auth::user()->user_id,
@@ -175,36 +186,36 @@ class FileLinksController extends Controller
             'expire'       => $data->expire,
             'allow_upload' => isset($data->allowUp) && $data->allowUp ? true : false
         ]);
-        
+
         Log::info('File Link Created for User ID-'.Auth::user()->user_id.'.  Link ID-'.$link->link_id);
-        
+
         return $link->link_id;
     }
-    
+
     //  Save a file attached to the link
     private function saveFile(UploadedFile $file)
     {
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.'_tmp';
-        
+
         //  Clean the file and store it
         $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
         $file->storeAs($filePath, $fileName);
-        
+
         //  Place file in Files table of DB
         $newFile = Files::create([
             'file_name' => $fileName,
             'file_link' => $filePath.DIRECTORY_SEPARATOR
         ]);
         $fileID = $newFile->file_id;
-        
+
         //  Save the file ID in the session array
         $fileArr = session('newLinkFile') != null ? session('newLinkFile') : [];
         $fileArr[] = $fileID;
         session(['newLinkFile' => $fileArr]);
-        
+
         //  Log stored file
         Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
-        
+
         return $fileID;
     }
 
@@ -213,20 +224,20 @@ class FileLinksController extends Controller
     {
         //  Verify that the link is a valid link
         $linkData = FileLinks::find($id);
-        
+
         //  If the link is invalid, return an error page
         if(empty($linkData))
         {
             Log::warning('User tried to view bad file link', ['user_id' => Auth::user()->user_id, 'link_id' => $id]);
             return view('links.badLink');
         }
-        
+
         //  Determine if the link has a customer attached or not
         $hasCust = $linkData->cust_id != null ? true : false;
-        
+
         //  Get the possible file types for attaching a file to a customer
         $fileTypes = CustomerFileTypes::all();
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Link Detials - ', $linkData->toArray());
         return view('links.details', [
@@ -235,16 +246,16 @@ class FileLinksController extends Controller
             'file_types' => $fileTypes
         ]);
     }
-    
+
     //  Ajax call te get JSON details of the link
     public function show($id)
     {
         $linkData = FileLinks::where('link_id', $id)->leftJoin('customers', 'file_links.cust_id', '=', 'customers.cust_id')->first();
-        
+
         //  Format the expiration date to be readable
         $linkData->timestamp = $linkData->expire;
         $linkData->expire    = date('M d, Y', strtotime($linkData->expire));
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Link Details - ', $linkData->toArray());
         return response()->json($linkData);
@@ -257,20 +268,20 @@ class FileLinksController extends Controller
             'name'   => 'required',
             'expire' => 'required'
         ]);
-        
+
         FileLinks::find($id)->update([
             'link_name'    => $request->name,
             'expire'       => $request->expire,
             'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
         ]);
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Updated Link Data for link ID-'.$id, $request->toArray());
         Log::info('File Link Updated', ['link_id' => $id]);
-        
+
         return response()->json(['success' => true]);
     }
-    
+
     //  Update the customer that is attached to the customer
     public function updateCustomer(Request $request, $id)
     {
@@ -284,13 +295,45 @@ class FileLinksController extends Controller
         {
             $custID = null;
         }
-        
+
         FileLinks::find($id)->update([
             'cust_id' => $custID
         ]);
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Submitted Data -', $request->toArray());
+        return response()->json(['success' => true]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //  Disable a file linke, but do not remove it (set the expire date to a previous date)
+    public function disableLink($id)
+    {
+        //  update the expire date for the link
+        FileLinks::find($id)->update([
+            'expire' => Carbon::yesterday()
+        ]);
+
+        Log::info('User ID '.Auth::user()->user_id.' disabled link ID - '.$id);
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
         return response()->json(['success' => true]);
     }
 
@@ -310,12 +353,12 @@ class FileLinksController extends Controller
                 Files::deleteFile($fileID);
             }
         }
-        
+
         FileLinks::find($id)->delete();
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::info('File link deleted', ['link_id' => $id, 'user_id' => Auth::user()->user_id]);
-        
+
         return response()->json([
             'success' => true
         ]);
