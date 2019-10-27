@@ -58,21 +58,28 @@ class FileLinksController extends Controller
         );
     }
 
-
-
-
-
-
-
-
-
-
     //  Create a new file link form
     public function create()
     {
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return view('links.form.newLink');
+        return view('links.newLink');
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //  Submit the new file link form
     public function store(Request $request)

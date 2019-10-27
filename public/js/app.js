@@ -1985,6 +1985,205 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/NewFileLink.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/fileLinks/NewFileLink.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['expire_date'],
+  data: function data() {
+    return {
+      token: window.techBench.csrfToken,
+      validated: false,
+      form: {
+        name: '',
+        expire: this.expire_date,
+        selectedCustomer: false,
+        customerTag: ''
+      },
+      button: {
+        disable: false,
+        text: 'Submit',
+        customerLink: 'Link To Customer'
+      },
+      searchField: '',
+      searchResults: []
+    };
+  },
+  methods: {
+    submitForm: function submitForm(e) {
+      e.preventDefault();
+      console.log('submitted');
+
+      if (this.$refs.newLinkForm.checkValidity() === false) {
+        this.validated = true;
+        console.log('not valid');
+      } else {
+        console.log('ready to go');
+      }
+    },
+    attachCustomer: function attachCustomer() {
+      if (this.form.selectedCustomer) {
+        this.$refs.selectCustomerModal.show();
+      } else {
+        this.form.customerTag = '';
+        this.button.customerLink = 'Link To Customer';
+      }
+
+      console.log(this.form.selectedCustomer);
+    },
+    searchCustomer: function searchCustomer(e) {
+      var _this = this;
+
+      e.preventDefault();
+      axios.post(this.route('customer.search'), {
+        search: this.searchField
+      }).then(function (res) {
+        _this.searchResults = res.data;
+      })["catch"](function (error) {
+        return alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error);
+      });
+    },
+    selectCustomer: function selectCustomer(custData) {
+      this.searchField = custData.name;
+      this.form.customerTag = custData.custID;
+      this.button.customerLink = 'Linked to ' + custData.name;
+      this.searchResults = [];
+    },
+    cancelSelectCustomer: function cancelSelectCustomer() {
+      this.searchField = '';
+      this.form.customerTag = '';
+      this.button.customerLink = 'Link to Customer';
+      this.searchResults = [];
+      this.form.selectedCustomer = false;
+    }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    // this.$refs.selectCustomerModal.show();
+    this.$root.$on('bv::modal::hide', function (bvEvent, modalID) {
+      console.log('modal closed');
+
+      if (_this2.searchField == '') {
+        _this2.form.selectedCustomer = false;
+      } else {
+        _this2.searchField = '';
+      }
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap-vue/esm/bv-config.js":
 /*!*****************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/bv-config.js ***!
@@ -49173,6 +49372,388 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/NewFileLink.vue?vue&type=template&id=4a0582ee&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/fileLinks/NewFileLink.vue?vue&type=template&id=4a0582ee& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "b-form",
+        {
+          ref: "newLinkForm",
+          attrs: {
+            action: _vm.route("links.data.store"),
+            method: "post",
+            enctype: "multipart/form-data",
+            novalidate: "",
+            validated: _vm.validated
+          },
+          on: { submit: _vm.submitForm }
+        },
+        [
+          _c("input", {
+            attrs: { type: "hidden", name: "_token" },
+            domProps: { value: _vm.token }
+          }),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "name",
+                label: "Link Name:",
+                "label-for": "link_name"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "link_name",
+                  type: "text",
+                  name: "name",
+                  placeholder: "Enter A User Friendly Name For This Link",
+                  required: ""
+                },
+                model: {
+                  value: _vm.form.name,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "name", $$v)
+                  },
+                  expression: "form.name"
+                }
+              }),
+              _vm._v(" "),
+              _c("b-form-invalid-feedback", [
+                _vm._v("Please Enter A Name For This Link")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "expire",
+                label: "Expires On:",
+                "label-for": "link_expire"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "link_expire",
+                  type: "date",
+                  name: "expire",
+                  required: ""
+                },
+                model: {
+                  value: _vm.form.expire,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "expire", $$v)
+                  },
+                  expression: "form.expire"
+                }
+              }),
+              _vm._v(" "),
+              _c("b-form-invalid-feedback", [
+                _vm._v("Please Enter An Expiration Date For This Link")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row justify-content-center mt-4" }, [
+            _c("div", { staticClass: "col-6 col-md-2 order-2 order-md-1" }, [
+              _c("div", { staticClass: "onoffswitch" }, [
+                _c("input", {
+                  staticClass: "onoffswitch-checkbox",
+                  attrs: {
+                    type: "checkbox",
+                    name: "allowUp",
+                    id: "allowUp",
+                    checked: ""
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "onoffswitch-label",
+                    attrs: { for: "allowUp" }
+                  },
+                  [
+                    _c("span", { staticClass: "onoffswitch-inner" }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "onoffswitch-switch" })
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-4 align-self-center order-1 order-md-2" },
+              [
+                _c("h5", { staticClass: "text-center" }, [
+                  _vm._v("Allow User to Upload Files")
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row justify-content-center mt-4" }, [
+            _c("div", { staticClass: "col-6 col-md-2 order-2 order-md-1" }, [
+              _c("div", { staticClass: "onoffswitch" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.selectedCustomer,
+                      expression: "form.selectedCustomer"
+                    }
+                  ],
+                  staticClass: "onoffswitch-checkbox",
+                  attrs: {
+                    type: "checkbox",
+                    name: "linkCustomer",
+                    id: "linkCustomer"
+                  },
+                  domProps: {
+                    checked: Array.isArray(_vm.form.selectedCustomer)
+                      ? _vm._i(_vm.form.selectedCustomer, null) > -1
+                      : _vm.form.selectedCustomer
+                  },
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$a = _vm.form.selectedCustomer,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(
+                                _vm.form,
+                                "selectedCustomer",
+                                $$a.concat([$$v])
+                              )
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.form,
+                                "selectedCustomer",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.form, "selectedCustomer", $$c)
+                        }
+                      },
+                      _vm.attachCustomer
+                    ]
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "onoffswitch-label",
+                    attrs: { for: "linkCustomer" }
+                  },
+                  [
+                    _c("span", { staticClass: "onoffswitch-inner" }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "onoffswitch-switch" })
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-4 align-self-center order-1 order-md-2" },
+              [
+                _c("h5", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(_vm.button.customerLink) + " "),
+                  _c("span", {
+                    staticClass: "ti-help-alt",
+                    attrs: { id: "explain-allow" }
+                  })
+                ]),
+                _vm._v(" "),
+                _c(
+                  "b-popover",
+                  {
+                    attrs: {
+                      target: "explain-allow",
+                      trigger: "hover",
+                      placement: "right"
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "text-center" }, [
+                      _vm._v(
+                        "By allowing this option, you will be able to quickly move an uploaded file to the customer's saved files."
+                      )
+                    ])
+                  ]
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.customerTag,
+                expression: "form.customerTag"
+              }
+            ],
+            attrs: { type: "hidden", name: "customer-id" },
+            domProps: { value: _vm.form.customerTag },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "customerTag", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "b-button",
+            {
+              attrs: {
+                type: "submit",
+                block: "",
+                variant: "primary",
+                disabled: _vm.button.disaable
+              }
+            },
+            [_vm._v(_vm._s(_vm.button.text))]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "selectCustomerModal",
+          attrs: {
+            id: "select-customer",
+            title: "Search For Customer",
+            scrollable: ""
+          },
+          on: { cancel: _vm.cancelSelectCustomer }
+        },
+        [
+          _c(
+            "b-form",
+            { on: { submit: _vm.searchCustomer } },
+            [
+              _c(
+                "b-input-group",
+                [
+                  _c("b-form-input", {
+                    attrs: { type: "text" },
+                    model: {
+                      value: _vm.searchField,
+                      callback: function($$v) {
+                        _vm.searchField = $$v
+                      },
+                      expression: "searchField"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "b-input-group-append",
+                    [
+                      _c(
+                        "b-button",
+                        {
+                          attrs: { varient: "outline-secondary" },
+                          on: { click: _vm.searchCustomer }
+                        },
+                        [_c("span", { staticClass: "ti-search" })]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm.searchResults.length > 0
+            ? _c(
+                "div",
+                { staticClass: "mt-4", attrs: { id: "search-results" } },
+                [
+                  _c("h4", { staticClass: "text-center" }, [
+                    _vm._v("Select A Customer")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-list-group",
+                    _vm._l(_vm.searchResults, function(res) {
+                      return _c(
+                        "b-list-group-item",
+                        {
+                          key: res.cust_id,
+                          staticClass: "pointer",
+                          on: {
+                            click: function($event) {
+                              return _vm.selectCustomer(res)
+                            }
+                          }
+                        },
+                        [_vm._v(_vm._s(res.name))]
+                      )
+                    }),
+                    1
+                  )
+                ],
+                1
+              )
+            : _vm._e()
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js":
 /*!********************************************************************!*\
   !*** ./node_modules/vue-loader/lib/runtime/componentNormalizer.js ***!
@@ -61486,54 +62067,14 @@ var Ziggy = {
       "methods": ["GET", "HEAD"],
       "domain": null
     },
-    "links.files.index": {
-      "uri": "links\/files",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "links.files.create": {
-      "uri": "links\/files\/create",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "links.files.store": {
-      "uri": "links\/files",
-      "methods": ["POST"],
-      "domain": null
-    },
-    "links.files.show": {
-      "uri": "links\/files\/{file}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "links.files.edit": {
-      "uri": "links\/files\/{file}\/edit",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "links.files.update": {
-      "uri": "links\/files\/{file}",
-      "methods": ["PUT", "PATCH"],
-      "domain": null
-    },
-    "links.files.destroy": {
-      "uri": "links\/files\/{file}",
-      "methods": ["DELETE"],
-      "domain": null
-    },
-    "links.instructions": {
-      "uri": "links\/instructions\/{id}",
-      "methods": ["POST"],
-      "domain": null
-    },
-    "links.updateCustomer": {
-      "uri": "links\/updateCustomer\/{id}",
-      "methods": ["POST"],
-      "domain": null
-    },
     "links.index": {
       "uri": "links",
       "methods": ["GET", "HEAD"],
+      "domain": null
+    },
+    "customer.search": {
+      "uri": "customer\/search",
+      "methods": ["POST"],
       "domain": null
     },
     "file-links.show": {
@@ -61604,226 +62145,6 @@ var Ziggy = {
     "system.index": {
       "uri": "system",
       "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.download-note": {
-      "uri": "customer\/download-note\/{id}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.getFileTypes": {
-      "uri": "customer\/file-types",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.getDataFields": {
-      "uri": "customer\/sys-fields\/{id}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.toggleFav": {
-      "uri": "customer\/toggle-fav\/{action}\/{custID}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.checkID": {
-      "uri": "customer\/check-id\/{id}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.details": {
-      "uri": "customer\/id\/{id}\/{name}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.searchID": {
-      "uri": "customer\/search-id\/{id}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.search": {
-      "uri": "customer\/search",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.index": {
-      "uri": "customer",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.files.index": {
-      "uri": "customer\/files",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.files.create": {
-      "uri": "customer\/files\/create",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.files.store": {
-      "uri": "customer\/files",
-      "methods": ["POST"],
-      "domain": null
-    },
-    "customer.files.show": {
-      "uri": "customer\/files\/{file}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.files.edit": {
-      "uri": "customer\/files\/{file}\/edit",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.files.update": {
-      "uri": "customer\/files\/{file}",
-      "methods": ["PUT", "PATCH"],
-      "domain": null
-    },
-    "customer.files.destroy": {
-      "uri": "customer\/files\/{file}",
-      "methods": ["DELETE"],
-      "domain": null
-    },
-    "customer.notes.index": {
-      "uri": "customer\/notes",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.notes.create": {
-      "uri": "customer\/notes\/create",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.notes.store": {
-      "uri": "customer\/notes",
-      "methods": ["POST"],
-      "domain": null
-    },
-    "customer.notes.show": {
-      "uri": "customer\/notes\/{note}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.notes.edit": {
-      "uri": "customer\/notes\/{note}\/edit",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.notes.update": {
-      "uri": "customer\/notes\/{note}",
-      "methods": ["PUT", "PATCH"],
-      "domain": null
-    },
-    "customer.notes.destroy": {
-      "uri": "customer\/notes\/{note}",
-      "methods": ["DELETE"],
-      "domain": null
-    },
-    "customer.contacts.index": {
-      "uri": "customer\/contacts",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.contacts.create": {
-      "uri": "customer\/contacts\/create",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.contacts.store": {
-      "uri": "customer\/contacts",
-      "methods": ["POST"],
-      "domain": null
-    },
-    "customer.contacts.show": {
-      "uri": "customer\/contacts\/{contact}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.contacts.edit": {
-      "uri": "customer\/contacts\/{contact}\/edit",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.contacts.update": {
-      "uri": "customer\/contacts\/{contact}",
-      "methods": ["PUT", "PATCH"],
-      "domain": null
-    },
-    "customer.contacts.destroy": {
-      "uri": "customer\/contacts\/{contact}",
-      "methods": ["DELETE"],
-      "domain": null
-    },
-    "customer.systems.index": {
-      "uri": "customer\/systems",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.systems.create": {
-      "uri": "customer\/systems\/create",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.systems.store": {
-      "uri": "customer\/systems",
-      "methods": ["POST"],
-      "domain": null
-    },
-    "customer.systems.show": {
-      "uri": "customer\/systems\/{system}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.systems.edit": {
-      "uri": "customer\/systems\/{system}\/edit",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.systems.update": {
-      "uri": "customer\/systems\/{system}",
-      "methods": ["PUT", "PATCH"],
-      "domain": null
-    },
-    "customer.systems.destroy": {
-      "uri": "customer\/systems\/{system}",
-      "methods": ["DELETE"],
-      "domain": null
-    },
-    "customer.id.index": {
-      "uri": "customer\/id",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.id.create": {
-      "uri": "customer\/id\/create",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.id.store": {
-      "uri": "customer\/id",
-      "methods": ["POST"],
-      "domain": null
-    },
-    "customer.id.show": {
-      "uri": "customer\/id\/{id}",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.id.edit": {
-      "uri": "customer\/id\/{id}\/edit",
-      "methods": ["GET", "HEAD"],
-      "domain": null
-    },
-    "customer.id.update": {
-      "uri": "customer\/id\/{id}",
-      "methods": ["PUT", "PATCH"],
-      "domain": null
-    },
-    "customer.id.destroy": {
-      "uri": "customer\/id\/{id}",
-      "methods": ["DELETE"],
       "domain": null
     },
     "tips.details": {
@@ -62121,8 +62442,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
 *   Vue File Link Components
 */
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('list-file-links', __webpack_require__(/*! ./components/fileLinks/ListFileLinks.vue */ "./resources/js/components/fileLinks/ListFileLinks.vue")["default"]); //Vue.component('new-file-link',     require('./components/fileLinks/NewFileLink.vue').default);
-//Vue.component('link-details',      require('./components/fileLinks/LinkDetails.vue').default);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('list-file-links', __webpack_require__(/*! ./components/fileLinks/ListFileLinks.vue */ "./resources/js/components/fileLinks/ListFileLinks.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('new-file-link-form', __webpack_require__(/*! ./components/fileLinks/NewFileLink.vue */ "./resources/js/components/fileLinks/NewFileLink.vue")["default"]); //Vue.component('link-details',      require('./components/fileLinks/LinkDetails.vue').default);
 //Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
 //Vue.component('link-files',        require('./components/fileLinks/LinkFiles.vue').default);
 //Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);
@@ -62211,6 +62532,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ListFileLinks_vue_vue_type_template_id_dc6072dc___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ListFileLinks_vue_vue_type_template_id_dc6072dc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/fileLinks/NewFileLink.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/fileLinks/NewFileLink.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _NewFileLink_vue_vue_type_template_id_4a0582ee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewFileLink.vue?vue&type=template&id=4a0582ee& */ "./resources/js/components/fileLinks/NewFileLink.vue?vue&type=template&id=4a0582ee&");
+/* harmony import */ var _NewFileLink_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewFileLink.vue?vue&type=script&lang=js& */ "./resources/js/components/fileLinks/NewFileLink.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _NewFileLink_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _NewFileLink_vue_vue_type_template_id_4a0582ee___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _NewFileLink_vue_vue_type_template_id_4a0582ee___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/fileLinks/NewFileLink.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/fileLinks/NewFileLink.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/fileLinks/NewFileLink.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewFileLink_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./NewFileLink.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/NewFileLink.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewFileLink_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/fileLinks/NewFileLink.vue?vue&type=template&id=4a0582ee&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/fileLinks/NewFileLink.vue?vue&type=template&id=4a0582ee& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewFileLink_vue_vue_type_template_id_4a0582ee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./NewFileLink.vue?vue&type=template&id=4a0582ee& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/NewFileLink.vue?vue&type=template&id=4a0582ee&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewFileLink_vue_vue_type_template_id_4a0582ee___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewFileLink_vue_vue_type_template_id_4a0582ee___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

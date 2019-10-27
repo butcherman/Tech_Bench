@@ -47,18 +47,15 @@ Route::prefix('links')->name('links.')->group(function () {
     Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')->name('details');
     Route::get('disable/{id}', 'FileLinks\FileLinksController@disableLink')->name('disable');
 
-
-
-
     //  File Link Files
-    Route::resource('files', 'FileLinks\LinkFilesController');
+    // Route::resource('files', 'FileLinks\LinkFilesController');
 
-    //  File Link Instructions
-    Route::get('instructions/{id}', 'FileLinks\InstructionsController@getIndex')->name('instructions');
-    Route::post('instructions/{id}', 'FileLinks\InstructionsController@postIndex')->name('instructions');
+    // //  File Link Instructions
+    // Route::get('instructions/{id}', 'FileLinks\InstructionsController@getIndex')->name('instructions');
+    // Route::post('instructions/{id}', 'FileLinks\InstructionsController@postIndex')->name('instructions');
 
-    //  Link customer information
-    Route::post('updateCustomer/{id}', 'FileLinks\FileLinksController@updateCustomer')->name('updateCustomer');
+    // //  Link customer information
+    // Route::post('updateCustomer/{id}', 'FileLinks\FileLinksController@updateCustomer')->name('updateCustomer');
 
     //  Index landing page
     Route::get('/', 'FileLinks\FileLinksController@index')->name('index');
@@ -66,9 +63,13 @@ Route::prefix('links')->name('links.')->group(function () {
 
 
 
-
-
-
+/*
+*   Customer Routes
+*/
+Route::prefix('customer')->name('customer.')->group(function() {
+    Route::post('search', 'Customers\CustomerController@search')->name('search');
+    Route::get('/', 'Customers\CustomerController@index')->name('index');
+});
 
 
 
@@ -141,23 +142,20 @@ Route::get('file-links', 'FileLinks\UserLinksController@index');
         *   Customer Routes
         *
         */
-        Route::prefix('customer')->name('customer.')->group(function() {
-            Route::get('download-note/{id}', 'DownloadController@downloadCustNote')->name('download-note');
-            Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
-            Route::get('sys-fields/{id}', 'Customers\CustomerSystemsController@getDataFields')->name('getDataFields');
-            Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggleFav');
-            Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('checkID');
-            Route::get('id/{id}/{name}', 'Customers\CustomerDetailsController@details')->name('details');
-            Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
-            Route::get('search', 'Customers\CustomerController@search')->name('search');
-            Route::get('/', 'Customers\CustomerController@index')->name('index');
+            // Route::get('download-note/{id}', 'DownloadController@downloadCustNote')->name('download-note');
+            // Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
+            // Route::get('sys-fields/{id}', 'Customers\CustomerSystemsController@getDataFields')->name('getDataFields');
+            // Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggleFav');
+            // Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('checkID');
+            // Route::get('id/{id}/{name}', 'Customers\CustomerDetailsController@details')->name('details');
+            // Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
 
-            Route::resource('files', 'Customers\CustomerFilesController');
-            Route::resource('notes', 'Customers\CustomerNotesController');
-            Route::resource('contacts', 'Customers\CustomerContactsController');
-            Route::resource('systems', 'Customers\CustomerSystemsController');
-            Route::resource('id', 'Customers\CustomerDetailsController');
-        });
+            // Route::resource('files', 'Customers\CustomerFilesController');
+            // Route::resource('notes', 'Customers\CustomerNotesController');
+            // Route::resource('contacts', 'Customers\CustomerContactsController');
+            // Route::resource('systems', 'Customers\CustomerSystemsController');
+            // Route::resource('id', 'Customers\CustomerDetailsController');
+
 
 
         /*
