@@ -62,7 +62,12 @@
 
 
 
+            <vue-dropzone id="dropzone"
+                        class="filedrag"
+                        ref="myVueDropzone"
 
+                        :options="dropzoneOptions">
+            </vue-dropzone>
 
 
 
@@ -120,6 +125,17 @@
                     disable: false,
                     text: 'Submit',
                     customerLink: 'Link To Customer'
+                },
+                dropzoneOptions: {
+                    url: this.route('links.data.store'),
+                    autoProcessQueue: false,
+                    parallelUploads: 1,
+                    maxFiles: 5,
+                    maxFilesize: window.techBench.maxUpload,
+                    addRemoveLinks: true,
+                    chunking: true,
+                    chunkSize: 5000000,
+                    parallelChunkUploads: false,
                 },
                 searchField: '',
                 searchResults: [],

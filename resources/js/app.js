@@ -20,6 +20,7 @@ import BootstrapVue from 'bootstrap-vue';
 import VueGoodTablePlugin from 'vue-good-table';
 import route from 'ziggy';
 import { Ziggy } from '../assets/js/ziggy';
+import vue2Dropzone from 'vue2-dropzone';
 
 /*
 *   Vue, Bootstrap and third party libraries
@@ -27,6 +28,8 @@ import { Ziggy } from '../assets/js/ziggy';
 window.axios = require('axios');
 Vue.use(VueGoodTablePlugin);
 Vue.use(BootstrapVue);
+
+Vue.component('vue-dropzone', vue2Dropzone);
 
 Vue.mixin({
     methods: {

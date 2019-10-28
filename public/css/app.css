@@ -18332,7 +18332,41 @@ dl li {
   right: 0px;
 }
 
-.pointer {
+.filedrag {
+  font-weight: bold;
+  text-align: center;
+  padding: 1em 0;
+  margin: 1em 0;
+  color: #555;
+  border: 2px dashed #555;
+  border-radius: 7px;
+  background-color: #c8dadf;
+  height: 250px;
+  overflow: auto;
+}
+
+.filedrag .dz-image,
+.filedrag .dz-success-mark,
+.filedrag .dz-error-mark,
+.filedrag .dz-size {
+  display: none;
+}
+
+.filedrag .dz-error-message {
+  background-color: #f8d7da;
+  border-radius: 0.25rem;
+}
+
+.progress {
+  margin: 10px 0;
+}
+
+label {
+  font-weight: bold;
+}
+
+.pointer,
+.filedrag {
   cursor: pointer;
 }
 
