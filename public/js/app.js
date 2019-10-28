@@ -2102,12 +2102,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['expire_date'],
   data: function data() {
     return {
       token: window.techBench.csrfToken,
       validated: false,
+      showProgress: false,
+      progress: 0,
       form: {
         name: '',
         expire: this.expire_date,
@@ -2135,16 +2139,60 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    submitForm: function submitForm(e) {
+    validateForm: function validateForm(e) {
       e.preventDefault();
-      console.log('submitted');
 
       if (this.$refs.newLinkForm.checkValidity() === false) {
         this.validated = true;
-        console.log('not valid');
       } else {
         console.log('ready to go');
+        console.log(this.form);
+        this.submitForm();
       }
+    },
+    submitForm: function submitForm() {
+      console.log('working');
+      var myDrop = this.$refs.fileDropzone;
+      this.button.text = 'Loading...';
+      this.button.disable = true;
+
+      if (myDrop.getQueuedFiles().length > 0) {
+        console.log('has files');
+        this.showProgress = true;
+        myDrop.processQueue();
+      } else {
+        console.log('no files');
+        this.createLink();
+      }
+    },
+    createLink: function createLink() {
+      var _this = this;
+
+      var linkForm = new FormData(document.querySelector('form'));
+      linkForm.append('_completed', true);
+      axios.post(this.route('links.data.store'), linkForm).then(function (res) {
+        console.log(res);
+
+        var url = _this.route('links.details', [res.data.link, res.data.name]);
+
+        window.location.href = url;
+      })["catch"](function (error) {
+        return alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error);
+      });
+    },
+    updateProgressBar: function updateProgressBar(progress) {
+      this.progress = progress;
+    },
+    sendingFiles: function sendingFiles(file, xhr, formData) {
+      formData.append('_token', this.token);
+      formData.append('name', this.name);
+      formData.append('expire', this.expire);
+      formData.append('customer_tag', this.customerTag);
+    },
+    queueComplete: function queueComplete() {
+      console.log('all done');
+      this.button.text = 'Processing, please wait...';
+      this.createLink();
     },
     attachCustomer: function attachCustomer() {
       if (this.form.selectedCustomer) {
@@ -2157,20 +2205,20 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.form.selectedCustomer);
     },
     searchCustomer: function searchCustomer(e) {
-      var _this = this;
+      var _this2 = this;
 
       e.preventDefault();
       axios.post(this.route('customer.search'), {
         search: this.searchField
       }).then(function (res) {
-        _this.searchResults = res.data;
+        _this2.searchResults = res.data;
       })["catch"](function (error) {
         return alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error);
       });
     },
     selectCustomer: function selectCustomer(custData) {
       this.searchField = custData.name;
-      this.form.customerTag = custData.custID;
+      this.form.customerTag = custData.cust_id;
       this.button.customerLink = 'Linked to ' + custData.name;
       this.searchResults = [];
     },
@@ -2183,16 +2231,16 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    var _this2 = this;
+    var _this3 = this;
 
     // this.$refs.selectCustomerModal.show();
     this.$root.$on('bv::modal::hide', function (bvEvent, modalID) {
       console.log('modal closed');
 
-      if (_this2.searchField == '') {
-        _this2.form.selectedCustomer = false;
+      if (_this3.searchField == '') {
+        _this3.form.selectedCustomer = false;
       } else {
-        _this2.searchField = '';
+        _this3.searchField = '';
       }
     });
   }
@@ -49417,7 +49465,7 @@ var render = function() {
             novalidate: "",
             validated: _vm.validated
           },
-          on: { submit: _vm.submitForm }
+          on: { submit: _vm.validateForm }
         },
         [
           _c("input", {
@@ -49645,7 +49693,7 @@ var render = function() {
                 expression: "form.customerTag"
               }
             ],
-            attrs: { type: "hidden", name: "customer-id" },
+            attrs: { type: "hidden", name: "customerID" },
             domProps: { value: _vm.form.customerTag },
             on: {
               input: function($event) {
@@ -49658,9 +49706,32 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("vue-dropzone", {
-            ref: "myVueDropzone",
+            ref: "fileDropzone",
             staticClass: "filedrag",
-            attrs: { id: "dropzone", options: _vm.dropzoneOptions }
+            attrs: { id: "dropzone", options: _vm.dropzoneOptions },
+            on: {
+              "vdropzone-total-upload-progress": _vm.updateProgressBar,
+              "vdropzone-sending": _vm.sendingFiles,
+              "vdropzone-queue-complete": _vm.queueComplete
+            }
+          }),
+          _vm._v(" "),
+          _c("b-progress", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.showProgress,
+                expression: "showProgress"
+              }
+            ],
+            attrs: {
+              value: _vm.progress,
+              variant: "success",
+              striped: "",
+              animate: "",
+              "show-progress": ""
+            }
           }),
           _vm._v(" "),
           _c(
@@ -49670,7 +49741,7 @@ var render = function() {
                 type: "submit",
                 block: "",
                 variant: "primary",
-                disabled: _vm.button.disaable
+                disabled: _vm.button.disable
               }
             },
             [_vm._v(_vm._s(_vm.button.text))]
@@ -62110,6 +62181,11 @@ var Ziggy = {
     "customer.search": {
       "uri": "customer\/search",
       "methods": ["POST"],
+      "domain": null
+    },
+    "customer.index": {
+      "uri": "customer",
+      "methods": ["GET", "HEAD"],
       "domain": null
     },
     "file-links.show": {

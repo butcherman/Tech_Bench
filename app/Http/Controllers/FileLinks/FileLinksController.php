@@ -65,28 +65,13 @@ class FileLinksController extends Controller
         return view('links.newLink');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //  Submit the new file link form
     public function store(Request $request)
     {
         $request->validate([
             'name'   => 'required',
-            'expire' => 'required'
+            'expire' => 'required',
+            'customerID' => 'exists:customers,cust_id|nullable'
         ]);
 
         if(!empty($request->file))
@@ -173,21 +158,10 @@ class FileLinksController extends Controller
             $dup  = FileLinks::where('link_hash', $hash)->get()->count();
         } while($dup != 0);
 
-        //  If the "customer id" field is populated, separate the ID from the name and prepare for insertion.
-        if($data->customer_tag != null)
-        {
-            $custID = explode(' ', $data->customer_tag);
-            $custID = $custID[0];
-        }
-        else
-        {
-            $custID = null;
-        }
-
         //  Create the new file link
         $link = FileLinks::create([
             'user_id'      => Auth::user()->user_id,
-            'cust_id'      => $custID,
+            'cust_id'      => $data->customerID,
             'link_hash'    => $hash,
             'link_name'    => $data->name,
             'expire'       => $data->expire,
@@ -222,13 +196,35 @@ class FileLinksController extends Controller
 
         //  Log stored file
         Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
-
         return $fileID;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //  Show details about a file link
     public function details($id, $name)
     {
+
+        dd('blah');
+
+        die();
+
+
         //  Verify that the link is a valid link
         $linkData = FileLinks::find($id);
 

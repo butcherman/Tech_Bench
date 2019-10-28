@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-form @submit="submitForm" :action="route('links.data.store')" method="post" enctype="multipart/form-data" ref="newLinkForm" novalidate :validated="validated">
+        <b-form @submit="validateForm" :action="route('links.data.store')" method="post" enctype="multipart/form-data" ref="newLinkForm" novalidate :validated="validated">
             <input type="hidden" name="_token" :value=token />
             <b-form-group id="name"
                         label="Link Name:"
@@ -56,7 +56,7 @@
                     </b-popover>
                 </div>
             </div>
-            <input type="hidden" name="customer-id" v-model="form.customerTag">
+            <input type="hidden" name="customerID" v-model="form.customerTag">
 
 
 
@@ -64,10 +64,13 @@
 
             <vue-dropzone id="dropzone"
                         class="filedrag"
-                        ref="myVueDropzone"
-
+                        ref="fileDropzone"
+                        @vdropzone-total-upload-progress="updateProgressBar"
+                        @vdropzone-sending="sendingFiles"
+                        @vdropzone-queue-complete="queueComplete"
                         :options="dropzoneOptions">
             </vue-dropzone>
+            <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
 
 
 
@@ -84,8 +87,7 @@
 
 
 
-
-            <b-button type="submit" block variant="primary" :disabled="button.disaable">{{button.text}}</b-button>
+            <b-button type="submit" block variant="primary" :disabled="button.disable">{{button.text}}</b-button>
         </b-form>
         <b-modal id="select-customer" title="Search For Customer" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer">
             <b-form @submit="searchCustomer">
@@ -115,6 +117,8 @@
             return {
                 token: window.techBench.csrfToken,
                 validated: false,
+                showProgress: false,
+                progress: 0,
                 form: {
                     name: '',
                     expire: this.expire_date,
@@ -142,19 +146,68 @@
             }
         },
         methods: {
-            submitForm(e)
+            validateForm(e)
             {
                 e.preventDefault();
-                console.log('submitted');
                 if(this.$refs.newLinkForm.checkValidity() === false)
                 {
                     this.validated = true;
-                    console.log('not valid');
                 }
                 else
                 {
                     console.log('ready to go');
+                    console.log(this.form);
+                    this.submitForm();
                 }
+            },
+            submitForm()
+            {
+                console.log('working');
+                var myDrop = this.$refs.fileDropzone;
+
+                this.button.text = 'Loading...';
+                this.button.disable = true;
+
+                if(myDrop.getQueuedFiles().length > 0)
+                {
+                    console.log('has files');
+                    this.showProgress = true;
+                    myDrop.processQueue();
+                }
+                else
+                {
+                    console.log('no files');
+                    this.createLink();
+                }
+            },
+            createLink()
+            {
+                    var linkForm = new FormData(document.querySelector('form'));
+                    linkForm.append('_completed', true);
+                    axios.post(this.route('links.data.store'), linkForm)
+                        .then(res => {
+                            console.log(res);
+                            var url = this.route('links.details', [res.data.link, res.data.name]);
+                            window.location.href = url;
+                        }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+
+            },
+            updateProgressBar(progress)
+            {
+                this.progress = progress;
+            },
+            sendingFiles(file, xhr, formData)
+            {
+                formData.append('_token', this.token);
+                formData.append('name', this.name);
+                formData.append('expire', this.expire);
+                formData.append('customer_tag', this.customerTag);
+            },
+            queueComplete()
+            {
+                console.log('all done');
+                this.button.text = 'Processing, please wait...';
+                this.createLink();
             },
             attachCustomer()
             {
@@ -180,7 +233,7 @@
             selectCustomer(custData)
             {
                 this.searchField = custData.name;
-                this.form.customerTag = custData.custID;
+                this.form.customerTag = custData.cust_id;
                 this.button.customerLink = 'Linked to '+custData.name;
                 this.searchResults = [];
             },

@@ -14,13 +14,5 @@
             </div>
         </div>
     </div>
-    {{-- <div class="col-md-8"> --}}
-        {{-- <new-file-link class="pad-bottom"
-            submit_route="{{route('links.data.store')}}"
-            search_route="{{route('customer.searchID', ':id')}}"
-            detail_route="{{route('links.details', [':id', ':name'])}}"
-            expire_date="{{date('Y-m-d', strtotime('+30 days'))}}"
-        ></new-file-link> --}}
-    {{-- </div> --}}
 </div>
 @endsection
