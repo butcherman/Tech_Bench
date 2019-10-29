@@ -61,6 +61,13 @@ Route::prefix('links')->name('links.')->group(function () {
     Route::get('/', 'FileLinks\FileLinksController@index')->name('index');
 });
 
+/*
+*   Guest File Link Routes
+*/
+Route::post('file-links/{id}', 'FileLinks\UserLinksController@update')->name('file-links.show');
+Route::get('file-links/{id}', 'FileLinks\UserLinksController@show')->name('file-links.show');
+Route::get('file-links', 'FileLinks\UserLinksController@index');
+
 
 
 /*
@@ -81,14 +88,7 @@ Route::prefix('customer')->name('customer.')->group(function() {
 //Route::get('/finish-setup/{hash}', 'Admin\UserController@initializeUser')->name('initialize');
 //Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')->name('initialize');
 
-/*
-*
-*   User File Link Routes
-*
-*/
-Route::post('file-links/{id}', 'FileLinks\UserLinksController@update')->name('file-links.show');
-Route::get('file-links/{id}', 'FileLinks\UserLinksController@show')->name('file-links.show');
-Route::get('file-links', 'FileLinks\UserLinksController@index');
+
 
 /*
 *

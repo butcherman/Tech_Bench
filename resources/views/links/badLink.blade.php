@@ -1,29 +1,24 @@
 @extends('layouts.app')
-@section('breadcrumbs')
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">My Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="/links">File Links</a></li>
-    <li class="breadcrumb-item active">Link Details</li>
-</ol>
-@endsection
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Error</h1></div>
-        </div>
+<div class="row">
+    <div class="col-12 grid-margin">
+        <h4>Error</h4>
     </div>
-    <div class="jumbotron">
-        <div class="row justify-content-center">
-            <div class="col-10">
-                <img src="/img/err_img/sry_error.png" alt="Error Image" class="pull-left" />
-                <p>
-                    We are sorry but the link you are looking for does not exist or cannot be found.
-                </p>
-                <p>
-                    A log has been generated and our minions are busy at work to determine what went wrong.
-                </p>
+</div>
+<div class="row justify-content-center">
+    <div class="col-10 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body d-flex flex-row">
+                <img src="/img/err_img/sry_error.png" alt="Error Image" />
+                <div class="my-auto ml-4">
+                    <p>
+                        We are sorry but the link you are looking for does not exist or cannot be found.
+                    </p>
+                    <p>
+                        A log has been generated and our minions are busy at work to determine what went wrong.
+                    </p>
+                </div>
             </div>
         </div>
     </div>

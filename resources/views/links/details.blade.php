@@ -1,37 +1,11 @@
 @extends('layouts.app')
-@section('breadcrumbs')
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">My Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="/links">File Links</a></li>
-    <li class="breadcrumb-item active">Link Details</li>
-</ol>
-@endsection
 
-@section('content')
-<div class="row justify-content-center">
-    <div class="col-12">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Link Details</h1></div>
-            </div>
-        </div>
-    </div>
-</div>
-<link-details 
-    link_id="{{$link_id}}"
-    index_route="{{route('links.index')}}"
-    details_route="{{route('links.data.show', $link_id)}}"
-    update_route="{{route('links.data.update', $link_id)}}"        
-    guest_route="{{route('file-links.show', ':hash')}}"         
-    search_route="{{route('customer.searchID', ':id')}}"
-    update_cust_route="{{route('links.updateCustomer', ':id')}}"
-    em_link_route="mailto:?subject=A File Link Has Been Created For You&body=View the link details here: {{route('file-links.show', ':hash')}}"
-    del_link_route="{{route('links.data.destroy', ':linkID')}}"
-    >
-</link-details>
+@section('old_content')
+{{-- 
+
 <link-instructions
     link_id="{{$link_id}}"
-    instructions_route="{{route('links.instructions', $link_id)}}"     
+    instructions_route="{{route('links.instructions', $link_id)}}"
     >
 </link-instructions>
 <div class="row pad-top pad-bottom">
@@ -51,5 +25,18 @@
             </div>
         </div>
     </div>
+</div> 
+
+--}}
+@endsection
+
+@section('content')
+<div class="row">
+    <div class="col-12 grid-margin">
+        <h4>File Links</h4>
+    </div>
 </div>
+<link-details
+    link_id="{{$link_id}}"
+></link-details>
 @endsection

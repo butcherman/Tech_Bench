@@ -1829,6 +1829,267 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/LinkDetails.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/fileLinks/LinkDetails.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['link_id'],
+  data: function data() {
+    return {
+      token: window.techBench.csrfToken,
+      loadDone: false,
+      validated: false,
+      details: [],
+      hash: '',
+      form: {
+        name: '',
+        expire: '',
+        selectedCustomer: '',
+        customerTag: '',
+        allowUpload: ''
+      },
+      button: {
+        disable: false,
+        text: 'Update Link',
+        customerLink: 'Link To Customer'
+      },
+      searchField: '',
+      searchResults: []
+    };
+  },
+  created: function created() {
+    this.getDetails();
+  },
+  methods: {
+    getDetails: function getDetails() {
+      var _this = this;
+
+      axios.get(this.route('links.data.show', this.link_id)).then(function (res) {
+        _this.details = res.data;
+        _this.hash = res.data.link_hash;
+        _this.form.name = res.data.link_name;
+        _this.form.expire = res.data.exp_stamp;
+        _this.form.allowUpload = res.data.allow_upload === 'Yes' ? true : false;
+        _this.searchField = res.data.cust_id > 0 ? res.data.cust_name : '';
+        _this.form.selectedCustomer = res.data.cust_id > 0 ? true : false;
+        _this.button.customerLink = res.data.cust_id > 0 ? res.data.cust_name : 'Link To Customer';
+        _this.loadDone = true;
+      })["catch"](function (error) {
+        return alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error);
+      });
+    },
+    validateForm: function validateForm(e) {
+      e.preventDefault();
+
+      if (this.$refs.editLinkForm.checkValidity() === false) {
+        this.validated = true;
+      } else {
+        this.submitForm();
+      }
+    },
+    submitForm: function submitForm() {
+      var _this2 = this;
+
+      this.button.text = 'Loading...';
+      this.button.disable = true;
+      axios.put(this.route('links.data.update', this.link_id), this.form).then(function (res) {
+        _this2.getDetails();
+
+        _this2.$refs['editLinkModal'].hide();
+
+        _this2.button.text = 'Update Link';
+        _this2.button.disable = false;
+      })["catch"](function (error) {
+        return alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error);
+      });
+    },
+    attachCustomer: function attachCustomer() {
+      if (this.form.selectedCustomer) {
+        this.$refs.selectCustomerModal.show();
+      } else {
+        this.form.customerTag = '';
+        this.button.customerLink = 'Link To Customer';
+        this.searchField = '';
+      }
+
+      console.log(this.form.selectedCustomer);
+    },
+    searchCustomer: function searchCustomer(e) {
+      var _this3 = this;
+
+      e.preventDefault();
+      axios.post(this.route('customer.search'), {
+        search: this.searchField
+      }).then(function (res) {
+        _this3.searchResults = res.data;
+      })["catch"](function (error) {
+        return alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error);
+      });
+    },
+    selectCustomer: function selectCustomer(custData) {
+      this.searchField = custData.name;
+      this.form.customerTag = custData.cust_id;
+      this.button.customerLink = 'Linked to ' + custData.name;
+      this.searchResults = [];
+      console.log(this.form.customerTag);
+    },
+    cancelSelectCustomer: function cancelSelectCustomer() {
+      this.searchField = '';
+      this.form.customerTag = '';
+      this.button.customerLink = 'Link to Customer';
+      this.searchResults = [];
+      this.form.selectedCustomer = false;
+    },
+    confirmDelete: function confirmDelete() {
+      var _this4 = this;
+
+      this.$bvModal.msgBoxConfirm('Are you sure?  This cannot be undone.', {
+        title: 'Please Confirm',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      }).then(function (value) {
+        axios["delete"](_this4.route('links.data.destroy', [_this4.link_id])).then(function (res) {
+          if (res.data.success) {
+            window.location.href = _this4.route('links.index');
+          } else {
+            alert('We are having difficulties processing your request\nPlease try again later.');
+          }
+        })["catch"](function (error) {
+          return alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error);
+        });
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/ListFileLinks.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/fileLinks/ListFileLinks.vue?vue&type=script&lang=js& ***!
@@ -1912,11 +2173,11 @@ __webpack_require__.r(__webpack_exports__);
           filterable: true
         }, {
           label: '# of Files',
-          field: 'file_link_files_count',
+          field: 'file_count',
           filterable: true
         }, {
           label: 'Expire Date',
-          field: 'expire',
+          field: 'exp_format',
           filterable: true
         }, {
           label: 'Actions',
@@ -1959,14 +2220,11 @@ __webpack_require__.r(__webpack_exports__);
     deleteLink: function deleteLink(link) {
       var _this3 = this;
 
-      console.log(link);
       axios["delete"](this.route('links.data.destroy', [link])).then(function (res) {
         if (res.data.success) {
           _this3.$root.$emit('bv::hide::popover');
 
           _this3.fetchLinks();
-
-          console.log('link deleted');
         } else {
           alert('We are having difficulties processing your request\nPlease try again later.');
         }
@@ -1994,27 +2252,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2145,23 +2382,18 @@ __webpack_require__.r(__webpack_exports__);
       if (this.$refs.newLinkForm.checkValidity() === false) {
         this.validated = true;
       } else {
-        console.log('ready to go');
-        console.log(this.form);
         this.submitForm();
       }
     },
     submitForm: function submitForm() {
-      console.log('working');
       var myDrop = this.$refs.fileDropzone;
       this.button.text = 'Loading...';
       this.button.disable = true;
 
       if (myDrop.getQueuedFiles().length > 0) {
-        console.log('has files');
         this.showProgress = true;
         myDrop.processQueue();
       } else {
-        console.log('no files');
         this.createLink();
       }
     },
@@ -2190,7 +2422,6 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('customer_tag', this.customerTag);
     },
     queueComplete: function queueComplete() {
-      console.log('all done');
       this.button.text = 'Processing, please wait...';
       this.createLink();
     },
@@ -2201,8 +2432,6 @@ __webpack_require__.r(__webpack_exports__);
         this.form.customerTag = '';
         this.button.customerLink = 'Link To Customer';
       }
-
-      console.log(this.form.selectedCustomer);
     },
     searchCustomer: function searchCustomer(e) {
       var _this2 = this;
@@ -2233,10 +2462,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this3 = this;
 
-    // this.$refs.selectCustomerModal.show();
     this.$root.$on('bv::modal::hide', function (bvEvent, modalID) {
-      console.log('modal closed');
-
       if (_this3.searchField == '') {
         _this3.form.selectedCustomer = false;
       } else {
@@ -49086,6 +49312,569 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/LinkDetails.vue?vue&type=template&id=6841891b&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/fileLinks/LinkDetails.vue?vue&type=template&id=6841891b& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-8 grid-margin stretch-card" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Link Details")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _vm.loadDone
+                ? _c("dl", { staticClass: "row h-100" }, [
+                    _c("dt", { staticClass: "col-3 text-right" }, [
+                      _vm._v("Link Name:")
+                    ]),
+                    _vm._v(" "),
+                    _c("dd", { staticClass: "col-9 text-left" }, [
+                      _vm._v(_vm._s(_vm.details.link_name))
+                    ]),
+                    _vm._v(" "),
+                    _c("dt", { staticClass: "col-3 text-right" }, [
+                      _vm._v("Customer:")
+                    ]),
+                    _vm._v(" "),
+                    _c("dd", { staticClass: "col-9 text-left" }, [
+                      _vm._v(_vm._s(_vm.details.cust_name))
+                    ]),
+                    _vm._v(" "),
+                    _c("dt", { staticClass: "col-3 text-right" }, [
+                      _vm._v("Expire Date:")
+                    ]),
+                    _vm._v(" "),
+                    _c("dd", { staticClass: "col-9 text-left" }, [
+                      _vm._v(_vm._s(_vm.details.exp_format))
+                    ]),
+                    _vm._v(" "),
+                    _c("dt", { staticClass: "col-3 text-right" }, [
+                      _vm._v("Allow Upload:")
+                    ]),
+                    _vm._v(" "),
+                    _c("dd", { staticClass: "col-9 text-left" }, [
+                      _vm._v(_vm._s(_vm.details.allow_upload))
+                    ]),
+                    _vm._v(" "),
+                    _c("dt", { staticClass: "col-3 text-right" }, [
+                      _vm._v("Link:")
+                    ]),
+                    _vm._v(" "),
+                    _c("dd", { staticClass: "col-9 text-left" }, [
+                      _c(
+                        "a",
+                        {
+                          attrs: {
+                            href: _vm.route("file-links.show", _vm.hash),
+                            target: "_blank"
+                          }
+                        },
+                        [_vm._v(_vm._s(_vm.route("file-links.show", _vm.hash)))]
+                      )
+                    ])
+                  ])
+                : _c("img", {
+                    staticClass: "d-block mx-auto",
+                    attrs: { src: "/img/loading.svg", alt: "Loading..." }
+                  })
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-4 grid-margin stretch-card" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Actions")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c(
+                  "b-button",
+                  {
+                    directives: [
+                      {
+                        name: "b-modal",
+                        rawName: "v-b-modal.link-edit-modal",
+                        modifiers: { "link-edit-modal": true }
+                      }
+                    ],
+                    attrs: { block: "", variant: "primary" }
+                  },
+                  [_vm._v("Edit Link")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-block btn-primary",
+                    attrs: {
+                      href:
+                        "mailto:?subject=A File Link Has Been Created For You&body=View the link details here: " +
+                        _vm.route("file-links.show", _vm.hash)
+                    }
+                  },
+                  [_vm._v("Email Link")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-button",
+                  {
+                    attrs: { block: "", variant: "primary" },
+                    on: { click: _vm.confirmDelete }
+                  },
+                  [_vm._v("Delete Link")]
+                )
+              ],
+              1
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "editLinkModal",
+          attrs: {
+            id: "link-edit-modal",
+            title: "Edit Link Details",
+            "hide-footer": "",
+            centered: "",
+            size: "lg"
+          }
+        },
+        [
+          _c(
+            "b-form",
+            {
+              ref: "editLinkForm",
+              attrs: { novalidate: "", validated: _vm.validated },
+              on: { submit: _vm.validateForm }
+            },
+            [
+              _c("input", {
+                attrs: { type: "hidden", name: "_token" },
+                domProps: { value: _vm.token }
+              }),
+              _vm._v(" "),
+              _c(
+                "b-form-group",
+                {
+                  attrs: {
+                    id: "name",
+                    label: "Link Name:",
+                    "label-for": "link_name"
+                  }
+                },
+                [
+                  _c("b-form-input", {
+                    attrs: {
+                      id: "link_name",
+                      type: "text",
+                      name: "name",
+                      placeholder: "Enter A User Friendly Name For This Link",
+                      required: ""
+                    },
+                    model: {
+                      value: _vm.form.name,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "name", $$v)
+                      },
+                      expression: "form.name"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("b-form-invalid-feedback", [
+                    _vm._v("Please Enter A Name For This Link")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-form-group",
+                {
+                  attrs: {
+                    id: "expire",
+                    label: "Expires On:",
+                    "label-for": "link_expire"
+                  }
+                },
+                [
+                  _c("b-form-input", {
+                    attrs: {
+                      id: "link_expire",
+                      type: "date",
+                      name: "expire",
+                      required: ""
+                    },
+                    model: {
+                      value: _vm.form.expire,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "expire", $$v)
+                      },
+                      expression: "form.expire"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("b-form-invalid-feedback", [
+                    _vm._v("Please Enter An Expiration Date For This Link")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "row justify-content-center mt-4" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-6 col-md-2 order-2 order-md-1" },
+                  [
+                    _c("div", { staticClass: "onoffswitch" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.allowUpload,
+                            expression: "form.allowUpload"
+                          }
+                        ],
+                        staticClass: "onoffswitch-checkbox",
+                        attrs: {
+                          type: "checkbox",
+                          name: "allowUp",
+                          id: "allowUp"
+                        },
+                        domProps: {
+                          checked: Array.isArray(_vm.form.allowUpload)
+                            ? _vm._i(_vm.form.allowUpload, null) > -1
+                            : _vm.form.allowUpload
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.form.allowUpload,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(
+                                    _vm.form,
+                                    "allowUpload",
+                                    $$a.concat([$$v])
+                                  )
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    _vm.form,
+                                    "allowUpload",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
+                            } else {
+                              _vm.$set(_vm.form, "allowUpload", $$c)
+                            }
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "onoffswitch-label",
+                          attrs: { for: "allowUp" }
+                        },
+                        [
+                          _c("span", { staticClass: "onoffswitch-inner" }),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "onoffswitch-switch" })
+                        ]
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-md-4 align-self-center order-1 order-md-2"
+                  },
+                  [
+                    _c("h5", { staticClass: "text-center" }, [
+                      _vm._v("Allow User to Upload Files")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row justify-content-center mt-4" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-6 col-md-2 order-2 order-md-1" },
+                  [
+                    _c("div", { staticClass: "onoffswitch" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.selectedCustomer,
+                            expression: "form.selectedCustomer"
+                          }
+                        ],
+                        staticClass: "onoffswitch-checkbox",
+                        attrs: {
+                          type: "checkbox",
+                          name: "linkCustomer",
+                          id: "linkCustomer"
+                        },
+                        domProps: {
+                          checked: Array.isArray(_vm.form.selectedCustomer)
+                            ? _vm._i(_vm.form.selectedCustomer, null) > -1
+                            : _vm.form.selectedCustomer
+                        },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$a = _vm.form.selectedCustomer,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.form,
+                                      "selectedCustomer",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.form,
+                                      "selectedCustomer",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.form, "selectedCustomer", $$c)
+                              }
+                            },
+                            _vm.attachCustomer
+                          ]
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "onoffswitch-label",
+                          attrs: { for: "linkCustomer" }
+                        },
+                        [
+                          _c("span", { staticClass: "onoffswitch-inner" }),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "onoffswitch-switch" })
+                        ]
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-md-4 align-self-center order-1 order-md-2"
+                  },
+                  [
+                    _c("h5", { staticClass: "text-center" }, [
+                      _vm._v(_vm._s(_vm.button.customerLink) + " "),
+                      _c("span", {
+                        staticClass: "ti-help-alt",
+                        attrs: { id: "explain-allow" }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "b-popover",
+                      {
+                        attrs: {
+                          target: "explain-allow",
+                          trigger: "hover",
+                          placement: "right"
+                        }
+                      },
+                      [
+                        _c("div", { staticClass: "text-center" }, [
+                          _vm._v(
+                            "By allowing this option, you will be able to quickly move an uploaded file to the customer's saved files."
+                          )
+                        ])
+                      ]
+                    )
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.customerTag,
+                    expression: "form.customerTag"
+                  }
+                ],
+                attrs: { type: "hidden", name: "customerID" },
+                domProps: { value: _vm.form.customerTag },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "customerTag", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  staticClass: "mt-4",
+                  attrs: {
+                    type: "submit",
+                    block: "",
+                    variant: "primary",
+                    disabled: _vm.button.disable
+                  }
+                },
+                [_vm._v(_vm._s(_vm.button.text))]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-modal",
+            {
+              ref: "selectCustomerModal",
+              attrs: {
+                id: "select-customer",
+                title: "Search For Customer",
+                scrollable: ""
+              },
+              on: { cancel: _vm.cancelSelectCustomer }
+            },
+            [
+              _c(
+                "b-form",
+                { on: { submit: _vm.searchCustomer } },
+                [
+                  _c(
+                    "b-input-group",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "text" },
+                        model: {
+                          value: _vm.searchField,
+                          callback: function($$v) {
+                            _vm.searchField = $$v
+                          },
+                          expression: "searchField"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "b-input-group-append",
+                        [
+                          _c(
+                            "b-button",
+                            {
+                              attrs: { varient: "outline-secondary" },
+                              on: { click: _vm.searchCustomer }
+                            },
+                            [_c("span", { staticClass: "ti-search" })]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm.searchResults.length > 0
+                ? _c(
+                    "div",
+                    { staticClass: "mt-4", attrs: { id: "search-results" } },
+                    [
+                      _c("h4", { staticClass: "text-center" }, [
+                        _vm._v("Select A Customer")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "b-list-group",
+                        _vm._l(_vm.searchResults, function(res) {
+                          return _c(
+                            "b-list-group-item",
+                            {
+                              key: res.cust_id,
+                              staticClass: "pointer",
+                              on: {
+                                click: function($event) {
+                                  return _vm.selectCustomer(res)
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(res.name))]
+                          )
+                        }),
+                        1
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/ListFileLinks.vue?vue&type=template&id=dc6072dc&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/fileLinks/ListFileLinks.vue?vue&type=template&id=dc6072dc& ***!
@@ -62558,8 +63347,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
 */
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('list-file-links', __webpack_require__(/*! ./components/fileLinks/ListFileLinks.vue */ "./resources/js/components/fileLinks/ListFileLinks.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('new-file-link-form', __webpack_require__(/*! ./components/fileLinks/NewFileLink.vue */ "./resources/js/components/fileLinks/NewFileLink.vue")["default"]); //Vue.component('link-details',      require('./components/fileLinks/LinkDetails.vue').default);
-//Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('new-file-link-form', __webpack_require__(/*! ./components/fileLinks/NewFileLink.vue */ "./resources/js/components/fileLinks/NewFileLink.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('link-details', __webpack_require__(/*! ./components/fileLinks/LinkDetails.vue */ "./resources/js/components/fileLinks/LinkDetails.vue")["default"]); //Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
 //Vue.component('link-files',        require('./components/fileLinks/LinkFiles.vue').default);
 //Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);
 
@@ -62580,6 +63369,75 @@ window.onload = function () {
     el: '#app'
   });
 };
+
+/***/ }),
+
+/***/ "./resources/js/components/fileLinks/LinkDetails.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/fileLinks/LinkDetails.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LinkDetails_vue_vue_type_template_id_6841891b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LinkDetails.vue?vue&type=template&id=6841891b& */ "./resources/js/components/fileLinks/LinkDetails.vue?vue&type=template&id=6841891b&");
+/* harmony import */ var _LinkDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LinkDetails.vue?vue&type=script&lang=js& */ "./resources/js/components/fileLinks/LinkDetails.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _LinkDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _LinkDetails_vue_vue_type_template_id_6841891b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _LinkDetails_vue_vue_type_template_id_6841891b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/fileLinks/LinkDetails.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/fileLinks/LinkDetails.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/fileLinks/LinkDetails.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./LinkDetails.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/LinkDetails.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/fileLinks/LinkDetails.vue?vue&type=template&id=6841891b&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/fileLinks/LinkDetails.vue?vue&type=template&id=6841891b& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkDetails_vue_vue_type_template_id_6841891b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./LinkDetails.vue?vue&type=template&id=6841891b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/fileLinks/LinkDetails.vue?vue&type=template&id=6841891b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkDetails_vue_vue_type_template_id_6841891b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkDetails_vue_vue_type_template_id_6841891b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 

@@ -57,11 +57,6 @@
                 </div>
             </div>
             <input type="hidden" name="customerID" v-model="form.customerTag">
-
-
-
-
-
             <vue-dropzone id="dropzone"
                         class="filedrag"
                         ref="fileDropzone"
@@ -71,22 +66,6 @@
                         :options="dropzoneOptions">
             </vue-dropzone>
             <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <b-button type="submit" block variant="primary" :disabled="button.disable">{{button.text}}</b-button>
         </b-form>
         <b-modal id="select-customer" title="Search For Customer" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer">
@@ -155,14 +134,11 @@
                 }
                 else
                 {
-                    console.log('ready to go');
-                    console.log(this.form);
                     this.submitForm();
                 }
             },
             submitForm()
             {
-                console.log('working');
                 var myDrop = this.$refs.fileDropzone;
 
                 this.button.text = 'Loading...';
@@ -170,13 +146,11 @@
 
                 if(myDrop.getQueuedFiles().length > 0)
                 {
-                    console.log('has files');
                     this.showProgress = true;
                     myDrop.processQueue();
                 }
                 else
                 {
-                    console.log('no files');
                     this.createLink();
                 }
             },
@@ -190,7 +164,6 @@
                             var url = this.route('links.details', [res.data.link, res.data.name]);
                             window.location.href = url;
                         }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-
             },
             updateProgressBar(progress)
             {
@@ -205,7 +178,6 @@
             },
             queueComplete()
             {
-                console.log('all done');
                 this.button.text = 'Processing, please wait...';
                 this.createLink();
             },
@@ -220,7 +192,6 @@
                     this.form.customerTag = '';
                     this.button.customerLink = 'Link To Customer';
                 }
-                console.log(this.form.selectedCustomer);
             },
             searchCustomer(e)
             {
@@ -247,9 +218,7 @@
         },
         mounted()
         {
-            // this.$refs.selectCustomerModal.show();
             this.$root.$on('bv::modal::hide', (bvEvent, modalID) => {
-                console.log('modal closed');
                 if(this.searchField == '')
                 {
                     this.form.selectedCustomer = false;

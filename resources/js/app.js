@@ -47,7 +47,7 @@ Vue.mixin({
 */
 Vue.component('list-file-links',  require('./components/fileLinks/ListFileLinks.vue').default);
 Vue.component('new-file-link-form', require('./components/fileLinks/NewFileLink.vue').default);
-//Vue.component('link-details',      require('./components/fileLinks/LinkDetails.vue').default);
+Vue.component('link-details',      require('./components/fileLinks/LinkDetails.vue').default);
 //Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
 //Vue.component('link-files',        require('./components/fileLinks/LinkFiles.vue').default);
 //Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);

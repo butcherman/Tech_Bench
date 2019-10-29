@@ -14,6 +14,11 @@ class FileLinks extends Model
         'expire'     => 'datetime:M d, Y'
     ];
 
+    public function getAllowUploadAttribute()
+    {
+        return $this->attributes['allow_upload'] ? 'Yes' : 'No';
+    }
+
     public function users()
     {
         return $this->belongsTo('App\Users', 'user_id', 'user_id');
@@ -32,5 +37,10 @@ class FileLinks extends Model
     public function fileLinkNotes()
     {
         return $this->hasMany('App\FileLinkNotes', 'link_id', 'link_id');
+    }
+
+    public function customers()
+    {
+        return $this->belongsTo('App\Customers', 'cust_id', 'cust_id');
     }
 }

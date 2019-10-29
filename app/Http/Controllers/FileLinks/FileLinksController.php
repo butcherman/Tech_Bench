@@ -15,11 +15,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\FileLinksCollection;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+use App\Http\Resources\FileLinks as FileLinksResource;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
-use App\Http\Resources\FileLinksCollection;
 
 class FileLinksController extends Controller
 {
@@ -51,11 +52,15 @@ class FileLinksController extends Controller
         }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return $links = new FileLinksCollection(
+        $links = new FileLinksCollection(
             FileLinks::where('user_id', $id)
                 ->withCount('FileLinkFiles')
                 ->orderBy('expire', 'desc')->get()
         );
+
+        // Log::debug('blah', $links->toArray($links));
+
+        return $links;
     }
 
     //  Create a new file link form
@@ -69,8 +74,8 @@ class FileLinksController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'   => 'required',
-            'expire' => 'required',
+            'name'       => 'required',
+            'expire'     => 'required',
             'customerID' => 'exists:customers,cust_id|nullable'
         ]);
 
@@ -142,7 +147,7 @@ class FileLinksController extends Controller
                 $request->session()->forget('newLinkFile');
             }
 
-            return response()->json(['link' => $linkID, 'name' => urlencode($request->name)]);
+            return response()->json(['link' => $linkID, 'name' => Str::slug($request->name)]);
         }
 
         return response()->json(['complete' => false]);
@@ -219,12 +224,6 @@ class FileLinksController extends Controller
     //  Show details about a file link
     public function details($id, $name)
     {
-
-        dd('blah');
-
-        die();
-
-
         //  Verify that the link is a valid link
         $linkData = FileLinks::find($id);
 
@@ -236,46 +235,61 @@ class FileLinksController extends Controller
         }
 
         //  Determine if the link has a customer attached or not
-        $hasCust = $linkData->cust_id != null ? true : false;
+        // $hasCust = $linkData->cust_id != null ? true : false;
 
         //  Get the possible file types for attaching a file to a customer
-        $fileTypes = CustomerFileTypes::all();
+        // $fileTypes = CustomerFileTypes::all();
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Link Detials - ', $linkData->toArray());
         return view('links.details', [
-            'link_id'    => $id,
-            'has_cust'   => $hasCust,
-            'file_types' => $fileTypes
+            'link_id'    => $linkData->link_id,
+            // 'has_cust'   => $hasCust,
+            // 'file_types' => $fileTypes
         ]);
     }
 
     //  Ajax call te get JSON details of the link
     public function show($id)
     {
-        $linkData = FileLinks::where('link_id', $id)->leftJoin('customers', 'file_links.cust_id', '=', 'customers.cust_id')->first();
-
-        //  Format the expiration date to be readable
-        $linkData->timestamp = $linkData->expire;
-        $linkData->expire    = date('M d, Y', strtotime($linkData->expire));
+        $linkData = new FileLinksResource(FileLinks::find($id));
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Link Details - ', $linkData->toArray());
-        return response()->json($linkData);
+        // Log::debug('Link Details - ', $linkData->toArray());
+        return $linkData;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //  Update the link's details
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'   => 'required',
-            'expire' => 'required'
+            'name'       => 'required',
+            'expire'     => 'required',
+            'customerTag' => 'exists:customers,cust_id|nullable'
         ]);
 
         FileLinks::find($id)->update([
             'link_name'    => $request->name,
             'expire'       => $request->expire,
-            'allow_upload' => isset($request->allowUp) && $request->allowUp ? true : false
+            'allow_upload' => isset($request->allowUpload) && $request->allowUpload ? true : false,
+            'cust_id'      => $request->customerTag
         ]);
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
@@ -286,27 +300,27 @@ class FileLinksController extends Controller
     }
 
     //  Update the customer that is attached to the customer
-    public function updateCustomer(Request $request, $id)
-    {
-        //  If the "customer id" field is populated, separate the ID from the name and prepare for insertion.
-        if($request->customer_tag != null && $request->customer_tag != 'NULL')
-        {
-            $custID = explode(' ', $request->customer_tag);
-            $custID = $custID[0];
-        }
-        else
-        {
-            $custID = null;
-        }
+    // public function updateCustomer(Request $request, $id)
+    // {
+    //     //  If the "customer id" field is populated, separate the ID from the name and prepare for insertion.
+    //     if($request->customer_tag != null && $request->customer_tag != 'NULL')
+    //     {
+    //         $custID = explode(' ', $request->customer_tag);
+    //         $custID = $custID[0];
+    //     }
+    //     else
+    //     {
+    //         $custID = null;
+    //     }
 
-        FileLinks::find($id)->update([
-            'cust_id' => $custID
-        ]);
+    //     FileLinks::find($id)->update([
+    //         'cust_id' => $custID
+    //     ]);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data -', $request->toArray());
-        return response()->json(['success' => true]);
-    }
+    //     Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+    //     Log::debug('Submitted Data -', $request->toArray());
+    //     return response()->json(['success' => true]);
+    // }
 
 
 

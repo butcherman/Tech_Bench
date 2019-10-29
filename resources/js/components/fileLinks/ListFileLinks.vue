@@ -77,12 +77,12 @@
                     },
                     {
                         label: '# of Files',
-                        field: 'file_link_files_count',
+                        field: 'file_count',
                         filterable: true,
                     },
                     {
                         label: 'Expire Date',
-                        field: 'expire',
+                        field: 'exp_format',
                         filterable: true,
                     },
                     {
@@ -125,14 +125,12 @@
             },
             deleteLink(link)
             {
-                console.log(link);
                 axios.delete(this.route('links.data.destroy', [link]))
                     .then(res => {
                         if(res.data.success)
                         {
                             this.$root.$emit('bv::hide::popover')
                             this.fetchLinks();
-                            console.log('link deleted');
                         }
                         else
                         {
