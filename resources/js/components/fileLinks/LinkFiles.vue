@@ -1,74 +1,68 @@
 <template>
     <div>
-        <vue-good-table
-            ref="files-table"
-            :columns="table.cols"
-            :rows="table.rows"
-            :select-options="{enabled: true, selectOnCheckboxOnly: true}"
-            :sort-options="{enabled: true}"
-        >
-            <div slot="emptystate">
-                <h3 class="text-center">No Files</h3>
-            </div>
-            <template slot="table-row" slot-scope="data">
-                <span v-if="data.column.field == 'name'">
-                    <a :href="download_route.replace(':fileID', data.row.file_id).replace(':filename', data.row.file_name)">{{data.row.file_name}}</a>
-                </span>
-                <span v-else-if="data.column.field == 'user'">
-                    <span v-if="data.row.upload == true">{{data.row.added_by}}</span>
-                    <span v-else>Downloadable File</span>
-                </span>
-                <span v-else-if="data.column.field == 'actions'">
-                    <i class="fa fa-share pointer" v-if="has_customer" v-b-tooltip.hover title="Move File To Customer Files" @click="moveFile(data.row)"></i>
-                    <click-confirm class="d-inline">
-                        <i class="fa fa-trash pointer" v-b-tooltip.hover title="Delete File" @click="deleteFile(data.row.file_id)"></i>
-                    </click-confirm>
-                </span>
-            </template>
-            <div slot="selected-row-actions">
-                <click-confirm class="d-inline">
-                    <button class="btn btn-info" @click="deleteChecked">Delete Selected</button>
-                </click-confirm>
-                <button class="btn btn-info" @click="downloadChecked">Download Selected</button>
-            </div>
-            <div slot="table-actions-bottom">
-                <div class="col text-center m-2">
-                    <button class="btn btn-info text-center" v-b-modal.addFileModal>Add File</button>
+        <img v-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+        <div v-else-if="error">
+            <h5 class="text-center">Problem Loading Data...</h5>
+        </div>
+        <div v-else class="table">
+            <vue-good-table
+                mode="remote"
+                ref="files-table"
+                styleClass="vgt-table bordered w-100"
+                :columns="table.columns"
+                :rows="table.rows"
+                :select-options="{enabled:true, selectOnCheckboxOnly: true}"
+                :sort-options="{enabled:true}"
+                isLoading.sync="loadDone"
+            >
+                <div slot="emptystate">
+                    <h4 class="text-center">No Files</h4>
                 </div>
-            </div>
-        </vue-good-table>
-        <b-modal id="move-file-modal" title="Select Type This File Should Be Stored As" ref="moveFileModal" hide-footer centered>
-            <b-form @submit="moveCustomerFile">
-                <b-form-group label="Name For File:" label-for="file_name">
-                    <b-form-input
-                        id="file_name"
-                        type="text"
-                        v-model="moveForm.fileName"
-                        required
-                    />
-                </b-form-group>
-                <b-form-select v-model="moveForm.fileType" required name="selected">
-                    <option :value="null" disabled>-- Please Select A File Type --</option>
-                    <option v-for="type in JSON.parse(customer_file_types)" :value="type.file_type_id">{{type.description}}</option>
-                </b-form-select>
-                <b-button type="submit" block variant="info" class="mt-2">Submit</b-button>
-            </b-form>
-        </b-modal>
-        <b-modal id="addFileModal" title="Add File" ref="addFileModal" hide-footer centered>
-            <b-form @submit="submitNewFile">
-                <vue-dropzone  
-                    id="dropzone"
-                    class="filedrag"
-                    ref="myVueDropzone" 
-                    v-on:vdropzone-total-upload-progress="updateProgressBar"
-                    v-on:vdropzone-sending="sendingFiles"
-                    v-on:vdropzone-queue-complete="completedUpload"
-                    :options="dropzoneOptions">
-                </vue-dropzone>
-                <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
-                <b-button type="submit" block variant="primary" :disabled="addButton.dis">{{addButton.text}}</b-button>
-            </b-form>
-        </b-modal>
+                <div slot="selected-row-actions">
+                    <div class="row justify-content-center">
+                        <div class="col-md-3">
+                            <button id="delete-selected" class="btn btn-warning btn-block">Delete Selected Files</button>
+                            <b-popover :target="'delete-selected'" triggers="focus" placement="bottom">
+                                <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>
+                                <div class="text-center">
+                                    <button class="btn btn-danger" @click="deleteChecked">Yes</button>
+                                    <button class="btn btn-primary" @click="$root.$emit('bv::hide::popover')">No</button>
+                                </div>
+                            </b-popover>
+                        </div>
+                        <div class="col-md-3">
+                            <button id="download-selected" class="btn btn-primary btn-block" @click="downloadChecked">Download Selected Files</button>
+                        </div>
+                    </div>
+                </div>
+                <template slot="table-row" slot-scope="data">
+                    <span v-if="data.column.field == 'name'">
+                        <a :href="route('download', [data.row.files.file_id, data.row.files.file_name])">{{data.row.files.file_name}}</a>
+                    </span>
+                    <span v-else-if="data.column.field == 'user'">
+                        <span v-if="data.row.added_by">{{data.row.added_by}}</span>
+                        <span v-else>{{data.row.user.full_name}}</span>
+                    </span>
+                    <span v-else-if="data.column.field == 'actions'">
+                        <div class="d-flex flex-nowrap">
+                            <button v-if="cust_id" class="btn btn-rounded px-0 text-muted mr-2" title="Link File To Customer Files" v-b-tooltip.hover>
+                                <span class="ti-export"></span>
+                            </button>
+                            <button :id="'confirm-delete'+data.row.link_id" class="btn btn-rounded px-0 text-muted" title="Delete File" v-b-tooltip.hover>
+                                <span class="ti-trash"></span>
+                            </button>
+                            <b-popover :target="'confirm-delete'+data.row.link_id" triggers="focus" placement="left">
+                                <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>
+                                <div class="text-center">
+                                    <button class="btn btn-danger" @click="deleteFile(data.row.link_file_id)">Yes</button>
+                                    <button class="btn btn-primary" @click="$root.$emit('bv::hide::popover')">No</button>
+                                </div>
+                            </b-popover>
+                        </div>
+                    </span>
+                </template>
+            </vue-good-table>
+        </div>
     </div>
 </template>
 
@@ -76,157 +70,74 @@
     export default {
         props: [
             'link_id',
-            'files_route',
-            'has_customer',
-            'download_route',
-            'customer_file_types',
-            'download_all_route',
+            'cust_id',
+            'file_types'
         ],
         data() {
             return {
                 token: window.techBench.csrfToken,
+                loadDone: false,
+                error: false,
                 table: {
-                    cols: [
+                    columns: [
                         {
                             label: 'File Name',
                             field: 'name',
+                            filterable: true,
                         },
                         {
                             label: 'Date Added',
-                            field: 'timestamp',
+                            field: 'created_at',
+                            filterable: true,
                         },
                         {
                             label: 'Added By',
                             field: 'user',
+                            filterable: true,
                         },
-                        {
-                            label: 'File Notes',
-                            field: 'note',
-                        },
+                        // {
+                        //     label: 'File Notes',
+                        //     field: 'note',
+                        //     filterable: false,
+                        // },
                         {
                             label: 'Actions',
                             field: 'actions',
+                            filterable: false,
                         }
                     ],
-                    rows: [],
-                },
-                moveForm: {
-                    fileID:   '',
-                    fileName: '',
-                    fileType: 'null',
-                },
-                fileTypes: [],
-                addButton: {
-                    dis: false,
-                    text: 'Add File',
-                },
-                dropzoneOptions: {
-                    url: this.files_route,
-                    autoProcessQueue: false,
-                    parallelUploads: 1,
-                    maxFiles: 5,
-                    maxFilesize: window.techBench.maxUpload,
-                    addRemoveLinks: true,
-                    chunking: true,
-                    chunkSize: 5000000,
-                    parallelChunkUploads: false,
-                },
-                progress: 0,
-                showProgress: false,
+                    rows: []
+                }
             }
         },
         created() {
             this.getFiles();
+            console.log(this.cust_id);
+            console.log(this.file_types);
         },
         methods: {
             getFiles()
             {
-                axios.get(this.files_route+'/'+this.link_id)
+                console.log(this.route('links.files.show'));
+                axios.get(this.route('links.files.show', this.link_id))
                     .then(res => {
+                        this.loadDone = true;
+                        console.log(res);
                         this.table.rows = res.data;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
-            },
-            moveFile(data)
-            {
-                this.moveForm.fileID   = data.file_id;
-                this.moveForm.fileName = data.file_name;
-                this.$refs.moveFileModal.show();
-            },
-            moveCustomerFile(e)
-            {
-                e.preventDefault();
-                console.log(this.moveForm);
-                
-                axios.put(this.files_route+'/'+this.link_id, this.moveForm)
-                    .then(res => {
-                        if(res.data.success === 'duplicate')
-                        {
-                            alert('The Customer Already Has This File');
-                        }
-                        
-                        this.$refs.moveFileModal.hide();
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
-            },
-            //  Delete a single file
-            deleteFile(id)
-            {
-                axios.delete(this.files_route+'/'+id)
-                    .then(res => {
-                        this.getFiles();
-                    })
-                    .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
-            },
-            deleteChecked()
-            {
-                var obj = this;
-                this.$refs['files-table'].selectedRows.forEach(function(file)
-                {
-                    obj.deleteFile(file.file_id);
-                });
+                    }).catch(error => { this.error = true; });
             },
             downloadChecked()
             {
-                var dFiles = [];
-                
-                this.$refs['files-table'].selectedRows.forEach(function(file)
-                {
-                    dFiles.push(file.file_id);
-                });
-                
-                axios.put(this.download_all_route, {fileArr: dFiles})
-                    .then(res => {
-                        window.location.href = this.download_all_route;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+                console.log('download selected files');
             },
-            submitNewFile(e)
+            deleteChecked()
             {
-                e.preventDefault();
-                
-                var myDrop = this.$refs.myVueDropzone;
-                var MyForm = new FormData();
-                
-                this.addButton.text = 'Loading...';
-                this.addButton.dis = true;
-                
-                myDrop.processQueue();
+                console.log('delete selected files');
             },
-            sendingFiles(file, xhr, formData)
+            deleteFile()
             {
-                formData.append('_token', this.token);
-                formData.append('linkID', this.link_id);
-            },
-            updateProgressBar(progress)
-            {
-                this.progress = progress;
-            },
-            completedUpload(file, res)
-            {
-                console.log(res);
-                
-                this.getFiles();
-                this.$refs.addFileModal.hide();
-                this.$refs.myVueDropzone.removeAllFiles();
-            },
+                console.log('delete file');
+            }
         }
     }
 </script>

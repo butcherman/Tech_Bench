@@ -48,7 +48,7 @@ Route::prefix('links')->name('links.')->group(function () {
     Route::get('disable/{id}', 'FileLinks\FileLinksController@disableLink')->name('disable');
 
     //  File Link Files
-    // Route::resource('files', 'FileLinks\LinkFilesController');
+    Route::resource('files', 'FileLinks\LinkFilesController');
 
     // //  File Link Instructions
     // Route::get('instructions/{id}', 'FileLinks\InstructionsController@getIndex')->name('instructions');

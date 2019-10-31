@@ -9,7 +9,6 @@
             :select-options="{enabled:true, selectOnCheckboxOnly: true}"
             :sort-options="{enabled:true}"
             :isLoading.sync="isLoading"
-
             :row-style-class="linkRowClass"
         >
             <div slot="emptystate">

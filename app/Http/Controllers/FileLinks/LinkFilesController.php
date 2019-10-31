@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FileLinksCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -17,19 +18,26 @@ use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use App\http\Resources\FileLinkFilesCollection;
 
 class LinkFilesController extends Controller
 {
     public function __construct()
     {
+        //  Verify the user is logged in and has permissions for this page
         $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = auth()->user();
+            $this->authorize('hasAccess', 'use_file_links');
+            return $next($request);
+        });
     }
-    
+
     //  Add a file to the file link
     public function store(Request $request)
     {
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
-            
+
         //  Verify that the upload is valid and being processed
         if($receiver->isUploaded() === false)
         {
@@ -45,7 +53,7 @@ class LinkFilesController extends Controller
         {
             $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$request->linkID;
             $file = $save->getFile();
-        
+
             //  Clean the file and store it
             $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
             $file->storeAs($filePath, $fileName);
@@ -85,22 +93,35 @@ class LinkFilesController extends Controller
     //  Show the files attached to a link
     public function show($id)
     {
-        $files = FileLinkFiles::where('file_link_files.link_id', $id)
-            ->select('added_by', 'file_link_files.created_at', 'files.file_id', 'files.file_name', 'file_link_files.link_file_id', 'note', 'upload')
-            ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
-            ->leftJoin('file_link_notes', 'file_link_files.file_id', '=', 'file_link_notes.file_id')
+        // $files = FileLinkFiles::where('file_link_files.link_id', $id)
+        //     ->select('added_by', 'file_link_files.created_at', 'files.file_id', 'files.file_name', 'file_link_files.link_file_id', 'note', 'upload')
+        //     ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
+        //     ->leftJoin('file_link_notes', 'file_link_files.file_id', '=', 'file_link_notes.file_id')
+        //     ->orderBy('user_id', 'ASC')
+        //     ->orderBy('file_link_files.created_at', 'ASC')
+        //     ->get();
+
+        // foreach($files as $file)
+        // {
+        //     $file->timestamp = date('M d, Y', strtotime($file->created_at));
+        // }
+
+        // Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        // Log::debug('File Data - ', $files->toArray());
+        // return response()->json($files);
+
+        // return 'files';
+
+        $files = new FileLinkFilesCollection(
+            FileLinkFiles::where('link_id', $id)
             ->orderBy('user_id', 'ASC')
-            ->orderBy('file_link_files.created_at', 'ASC')
-            ->get();
-        
-        foreach($files as $file)
-        {
-            $file->timestamp = date('M d, Y', strtotime($file->created_at));
-        }
-        
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('File Data - ', $files->toArray());
-        return response()->json($files);
+            ->orderBy('created_at', 'ASC')
+            ->with('Files')
+            ->with('User')
+            ->get()
+        );
+
+        return $files;
     }
 
     //  Move a file to a customer file
@@ -111,27 +132,27 @@ class LinkFilesController extends Controller
             'fileName' => 'required',
             'fileType' => 'required'
         ]);
-        
+
         $linkData = FileLinks::find($id);
-        
+
         $newPath = config('filesystems.paths.customer').DIRECTORY_SEPARATOR.$linkData->cust_id.DIRECTORY_SEPARATOR;
         $fileData = Files::find($request->fileID);
-        
+
         //  Verify that the file does not already exist in the customerdata or file
         $dup = CustomerFiles::where('file_id', $request->fileID)->where('cust_id', $linkData->cust_id)->count();
         if($dup || Storage::exists($newPath.$fileData->file_name))
         {
             return response()->json(['success' => 'duplicate']);
         }
-        
+
         //  Move the file to the customrs file folder
         Storage::move($fileData->file_link.$fileData->file_name, $newPath.$fileData->file_name);
-        
+
         //  Update the file path in the database
         $fileData->update([
             'file_link' => $newPath
         ]);
-        
+
         //  Place the file in the customer database
         CustomerFiles::create([
             'file_id'      => $request->fileID,
@@ -140,7 +161,7 @@ class LinkFilesController extends Controller
             'user_id'      => Auth::user()->user_id,
             'name'         => $request->fileName
         ]);
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('File Data - ', $request->toArray());
         Log::info('File ID-'.$request->fileId.' moved to customer ID-'.$linkData->cust_id.' for link ID-'.$id);
@@ -153,9 +174,9 @@ class LinkFilesController extends Controller
         $fileData = FileLinkFiles::find($id);
         $fileID   = $fileData->file_id;
         $fileData->delete();
-        
+
         Files::deleteFile($fileID);
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::info('File ID-'.$fileData->file_id.' deleted for Link ID-'.$fileData->link_id);
         return response()->json(['success' => true]);

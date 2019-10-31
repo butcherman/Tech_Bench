@@ -28,7 +28,8 @@ class FileLinks extends JsonResource
             'expired'      => $this->expire < Carbon::now() ? 1 : 0,
             'exp_stamp'    => Carbon::parse($this->expire)->format('Y-m-d'),
             'allow_upload' => $this->allow_upload,
-            'file_count'   => isset($this->file_link_files_count) ? $this->file_link_files_count : 0
+            'file_count'   => isset($this->file_link_files_count) ? $this->file_link_files_count : 0,
+            'note'         => $this->note
         ];
     }
 }

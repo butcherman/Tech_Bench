@@ -56,6 +56,25 @@
                     </b-popover>
                 </div>
             </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-6 col-md-2 order-2 order-md-1">
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="addInstructions" class="onoffswitch-checkbox" id="addInstructions" v-model="form.hasInstructions">
+                        <label class="onoffswitch-label" for="addInstructions">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4 align-self-center order-1 order-md-2">
+                    <h5 class="text-center">Add Instructions</h5>
+                </div>
+            </div>
+            <transition name="fade">
+                <div id="instructionsBlock" v-if="form.hasInstructions">
+                    <editor v-if="form.hasInstructions" :init="{plugins: 'autolink', height:500}" v-model=form.instructions></editor>
+                </div>
+            </transition>
             <input type="hidden" name="customerID" v-model="form.customerTag">
             <vue-dropzone id="dropzone"
                         class="filedrag"
@@ -103,6 +122,8 @@
                     expire: this.expire_date,
                     selectedCustomer: false,
                     customerTag: '',
+                    hasInstructions: false,
+                    instructions: '',
                 },
                 button: {
                     disable: false,
@@ -158,6 +179,7 @@
             {
                     var linkForm = new FormData(document.querySelector('form'));
                     linkForm.append('_completed', true);
+                    linkForm.append('note', this.form.hasInstructions ? this.form.instructions : '');
                     axios.post(this.route('links.data.store'), linkForm)
                         .then(res => {
                             console.log(res);

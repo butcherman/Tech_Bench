@@ -17,6 +17,9 @@
                             <dt class="col-3 text-right">Link:</dt>
                             <dd class="col-9 text-left"><a :href="route('file-links.show', hash)" target="_blank">{{route('file-links.show', hash)}}</a></dd>
                         </dl>
+                        <div v-else-if="error">
+                            <h5 class="text-center">Problem Loading Data...</h5>
+                        </div>
                         <img v-else src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
                     </div>
                 </div>
@@ -32,7 +35,7 @@
                 </div>
             </div>
         </div>
-        <b-modal id="link-edit-modal" title="Edit Link Details" ref="editLinkModal" hide-footer centered size="lg">
+        <b-modal id="link-edit-modal" title="Edit Link Details" ref="editLinkModal" hide-footer centered size="lg" @shown="openEditForm">
             <b-form @submit="validateForm" ref="editLinkForm" novalidate :validated="validated">
                 <input type="hidden" name="_token" :value=token />
                 <b-form-group id="name"
@@ -89,6 +92,25 @@
                         </b-popover>
                     </div>
                 </div>
+                <div class="row justify-content-center mt-4">
+                    <div class="col-6 col-md-2 order-2 order-md-1">
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="addInstructions" class="onoffswitch-checkbox" id="addInstructions" v-model="form.hasInstructions">
+                            <label class="onoffswitch-label" for="addInstructions">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 align-self-center order-1 order-md-2">
+                        <h5 class="text-center">Add Instructions</h5>
+                    </div>
+                </div>
+                <transition name="fade">
+                    <div id="instructionsBlock" v-if="form.hasInstructions">
+                        <editor v-if="form.hasInstructions" :init="{plugins: 'autolink', height:500}" v-model=form.instructions></editor>
+                    </div>
+                </transition>
                 <input type="hidden" name="customerID" v-model="form.customerTag">
                 <b-button type="submit" block variant="primary" class="mt-4" :disabled="button.disable">{{button.text}}</b-button>
             </b-form>
@@ -109,6 +131,18 @@
                 </div>
             </b-modal>
         </b-modal>
+        <div class="row grid-margin">
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-header">Link Instructions</div>
+                    <div class="card-body">
+                        <span v-if="details.note === null && loadDone"><h5 class="text-center">No Instructions</h5></span>
+                        <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                        <div v-else v-html="details.note"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -121,6 +155,7 @@
             return {
                 token: window.techBench.csrfToken,
                 loadDone: false,
+                error: false,
                 validated: false,
                 details: [],
                 hash: '',
@@ -130,6 +165,8 @@
                     selectedCustomer: '',
                     customerTag: '',
                     allowUpload: '',
+                    hasInstructions: false,
+                    instructions: '',
                 },
                 button: {
                     disable: false,
@@ -157,9 +194,14 @@
                         this.form.allowUpload = res.data.allow_upload === 'Yes' ? true : false;
                         this.searchField = res.data.cust_id > 0 ? res.data.cust_name : '';
                         this.form.selectedCustomer = res.data.cust_id > 0 ? true : false;
+                        this.form.instructions = res.data.note;
                         this.button.customerLink = res.data.cust_id > 0 ? res.data.cust_name : 'Link To Customer';
                         this.loadDone = true;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }).catch(error => { this.error = true; });
+            },
+            openEditForm()
+            {
+                this.form.hasInstructions = this.form.instructions != null ? true : false;
             },
             validateForm(e)
             {

@@ -1,13 +1,9 @@
 @extends('layouts.app')
 
 @section('old_content')
-{{-- 
+{{--
 
-<link-instructions
-    link_id="{{$link_id}}"
-    instructions_route="{{route('links.instructions', $link_id)}}"
-    >
-</link-instructions>
+
 <div class="row pad-top pad-bottom">
     <div class="col-md-12 d-flex">
         <div class="card w-100">
@@ -25,7 +21,7 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
 
 --}}
 @endsection
@@ -39,4 +35,18 @@
 <link-details
     link_id="{{$link_id}}"
 ></link-details>
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-header">Link Files</div>
+            <div class="card-body">
+                <link-files
+                    link_id="{{$link_id}}"
+                    cust_id="{{$cust_id}}"
+                    file_types="{{json_encode($file_types)}}"
+                ></link-files>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

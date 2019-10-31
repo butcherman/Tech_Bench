@@ -21,6 +21,20 @@ import VueGoodTablePlugin from 'vue-good-table';
 import route from 'ziggy';
 import { Ziggy } from '../assets/js/ziggy';
 import vue2Dropzone from 'vue2-dropzone';
+import Editor from '@tinymce/tinymce-vue';
+
+/*
+*   The TinyMCE library
+*/
+require('tinymce');
+require('tinymce/themes/silver');
+require('tinymce/themes/mobile');
+require('tinymce/plugins/advlist');
+require('tinymce/plugins/autolink');
+require('tinymce/plugins/lists');
+require('tinymce/plugins/link');
+require('tinymce/plugins/image');
+require('tinymce/plugins/table');
 
 /*
 *   Vue, Bootstrap and third party libraries
@@ -30,6 +44,7 @@ Vue.use(VueGoodTablePlugin);
 Vue.use(BootstrapVue);
 
 Vue.component('vue-dropzone', vue2Dropzone);
+Vue.component('editor', require('@tinymce/tinymce-vue').default);
 
 Vue.mixin({
     methods: {
@@ -45,11 +60,10 @@ Vue.mixin({
 /*
 *   Vue File Link Components
 */
-Vue.component('list-file-links',  require('./components/fileLinks/ListFileLinks.vue').default);
+Vue.component('list-file-links',    require('./components/fileLinks/ListFileLinks.vue').default);
 Vue.component('new-file-link-form', require('./components/fileLinks/NewFileLink.vue').default);
-Vue.component('link-details',      require('./components/fileLinks/LinkDetails.vue').default);
-//Vue.component('link-instructions', require('./components/fileLinks/LinkInstructions.vue').default);
-//Vue.component('link-files',        require('./components/fileLinks/LinkFiles.vue').default);
+Vue.component('link-details',       require('./components/fileLinks/LinkDetails.vue').default);
+Vue.component('link-files',         require('./components/fileLinks/LinkFiles.vue').default);
 //Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);
 
 
