@@ -29,9 +29,10 @@ filter:
         - 'docs/'
         - 'vendor/'
         - 'node_modules'
-nodes:
-    coverage:
-        override:
-          coverage:
-              file: report/clover/clover.xml
-              format: clover
+
+tests:
+    Override:
+      command: 'vendor/bin/phpunit --coverage-clover=coverage.xml'
+      coverage:
+          file: 'coverage.xml'
+          format: 'clover'
