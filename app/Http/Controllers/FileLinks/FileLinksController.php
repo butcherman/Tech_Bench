@@ -26,7 +26,7 @@ use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 class FileLinksController extends Controller
 {
     //  Only authorized users have access
-    public function __construct(\Gate $gate)
+    public function __construct()
     {
         //  Verify the user is logged in and has permissions for this page
         $this->middleware('auth');
@@ -205,7 +205,7 @@ class FileLinksController extends Controller
     }
 
     //  Show details about a file link
-    public function details($id, $name)
+    public function details($id, /** @scrutinizer ignore-unused */ $name)
     {
         //  Verify that the link is a valid link
         $linkData = FileLinks::find($id);

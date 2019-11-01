@@ -66,6 +66,7 @@ class Files extends Model
     //  Delete a file from both the database and file system
     public static function deleteFile($fileID)
     {
+        $fileLink = '';
         try
         {
             //  Try to delete file from database - will throw error if foreign key is in use
