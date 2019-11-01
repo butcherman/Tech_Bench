@@ -43,7 +43,7 @@
                 <link-files
                     link_id="{{$link_id}}"
                     cust_id="{{$cust_id}}"
-                    file_types="{{json_encode($file_types)}}"
+                    :file_types="{{json_encode($file_types)}}"
                 ></link-files>
             </div>
         </div>

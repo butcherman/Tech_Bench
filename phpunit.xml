@@ -23,7 +23,8 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-html" target="./report" />
+        <log type="coverage-html" target="./report/html" />
+        <log type="coverage-clover" target="./report/clover/clover.xml" />
     </logging>
     <php>
         <server name="APP_ENV" value="testing"/>

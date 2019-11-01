@@ -6,7 +6,7 @@ build:
 
     services:
         mysql: 5.7
-    
+
     dependencies:
         before:
             - cp tests/.env.scrutinizer .env
@@ -22,10 +22,16 @@ build:
         after:
             - php artisan key:generate
             - php artisan migrate
-            
+
 filter:
     excluded_paths:
         - 'tests/'
         - 'docs/'
         - 'vendor/'
         - 'node_modules'
+    nodes:
+        coverage:
+            override:
+              coverage:
+                  file: report/clover/clover.xml
+                  format: clover
