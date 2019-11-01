@@ -26,7 +26,7 @@ services:
 before_install:
     - mysql -e 'create database `tech_bench`;'
     - mysql -e 'create database `tb-dev-testing`;'
-    
+
 before_script:
     - cp tests/.env.travis .env
     - composer self-update
@@ -39,6 +39,10 @@ before_script:
     - php artisan key:generate
     - php artisan migrate --seed
 
-script: 
+script:
     - npm run production
-    - vendor/bin/phpunit
+    - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
