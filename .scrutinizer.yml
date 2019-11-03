@@ -14,7 +14,7 @@ build:
             - mysql -e 'create database `tb-dev-testing`;'
             # - php composer-setup
             # - php composer self-update
-            - php composer install --no-interaction
+            - composer install --no-interaction
             # - pear install pear/PHP_CodeSniffer
             # - phpenv rehash
             # - npm install n -g
