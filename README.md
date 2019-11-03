@@ -5,13 +5,13 @@
 [![GitHub issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
 
 ### Scrutinizer
-[![Stable Brandh](https://img.shields.io/badge/Stable%20Branch-Master-green
+[![Stable Brandh](https://img.shields.io/badge/Stable%20Branch-master-green
 )](https://github.com/butcherman/Tech_Bench)
 [![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/test5)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
 
-[![Development Branch](https://img.shields.io/badge/Development%20%20-dev5-yellow
+[![Development Branch](https://img.shields.io/badge/Development%20-dev5-yellow
 )](https://github.com/butcherman/Tech_Bench/tree/dev5)
 [![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=dev5)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/dev5)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=dev5)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev5)
