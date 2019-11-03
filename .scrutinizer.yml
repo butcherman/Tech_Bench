@@ -21,7 +21,7 @@ build:
             # - npm install -g jshint
             - npm install
             - php artisan key:generate
-            - php artisan migrate --seed
+            # - php artisan migrate --seed
             - npm run production
         after:
 
@@ -50,5 +50,5 @@ checks:
         fix_doc_comments: true
 tools:
     external_code_coverage:
-        timeout: 600
+        timeout: 900
         runs: 2
