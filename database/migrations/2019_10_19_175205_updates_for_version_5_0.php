@@ -79,8 +79,7 @@ class UpdatesForVersion50 extends Migration
         //  Add the 'documentation' column in the tech_tips table
         if(!Schema::hasColumn('tech_tips', 'documentation'))
         {
-            Schema::table('tech_tips', function(Blueprint $table) 
-            {
+            Schema::table('tech_tips', function(Blueprint $table) {
                 $table->boolean('documentation')->default(0)->nullable()->after('public');
             });
             
@@ -113,8 +112,7 @@ class UpdatesForVersion50 extends Migration
         //  Add the 'is_installer' column in the users table
         if(!Schema::hasColumn('users', 'is_installer'))
         {
-            Schema::table('users', function(Blueprint $table)
-            {
+            Schema::table('users', function(Blueprint $table) {
                 $table->boolean('is_installer')->default(0)->after('active');
             });
             
@@ -198,8 +196,7 @@ class UpdatesForVersion50 extends Migration
                         ]);
                     }
                 }
-                Schema::table('user_role', function(Blueprint $table)
-                {
+                Schema::table('user_role', function(Blueprint $table) {
                     $table->dropForeign(['user_id']);
                     $table->dropForeign(['role_id']);
                 });
@@ -211,8 +208,7 @@ class UpdatesForVersion50 extends Migration
         //  Remove the system_files and system_file_types table
         if(Schema::hasTable('system_files'))
         {
-            Schema::table('system_files', function(Blueprint $table)
-            {
+            Schema::table('system_files', function(Blueprint $table) {
                 $table->dropForeign(['sys_id']);
                 $table->dropForeign(['type_id']);
                 $table->dropForeign(['file_id']);
@@ -230,7 +226,7 @@ class UpdatesForVersion50 extends Migration
      * @return void
      */
     public function down()
-    {   
+    {
         if(Schema::hasColumn('file_links', 'cust_id'))
         {
             Schema::table('file_links', function(Blueprint $table) {
@@ -248,8 +244,7 @@ class UpdatesForVersion50 extends Migration
         
         if(Schema::hasColumn('tech_tips', 'documentation'))
         {
-            Schema::table('tech_tips', function(Blueprint $table) 
-            {
+            Schema::table('tech_tips', function(Blueprint $table) {
                 $table->dropColumn('documentation');
             });
         }
