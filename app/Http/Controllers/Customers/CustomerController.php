@@ -111,7 +111,7 @@ class CustomerController extends Controller
             $searchResults = new CustomerCollection(
             Customers::where('cust_id', 'like', '%'.$request->search.'%')
                 ->orWhere('name', 'like', '%'.$request->search.'%')
-                ->orWhere('dba_name', 'like', '%' . $request->search . '%')
+                ->orWhere('dba_name', 'like', '%'.$request->search.'%')
                 ->get()
             );
         }
@@ -143,7 +143,7 @@ class CustomerController extends Controller
     //  Toggle whether or not the customer is listed as a user favorite
     public function toggleFav($action, $id)
     {
-        switch ($action)
+        switch($action)
         {
             case 'add':
                 CustomerFavs::create([

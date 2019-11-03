@@ -27,7 +27,7 @@ class LinkFilesController extends Controller
     {
         //  Verify the user is logged in and has permissions for this page
         $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
+        $this->middleware(function($request, $next) {
             $this->user = auth()->user();
             $this->authorize('hasAccess', 'use_file_links');
             return $next($request);
@@ -136,7 +136,7 @@ class LinkFilesController extends Controller
         {
             Storage::move($fileData->file_link.$fileData->file_name, $newPath.$fileData->file_name);
         }
-        catch (\Exception $e)
+        catch(\Exception $e)
         {
             report($e);
             return response()->json(['success' => false, 'reason' => 'Cannot Find File']);

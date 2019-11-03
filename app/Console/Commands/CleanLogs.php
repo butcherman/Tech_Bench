@@ -42,7 +42,7 @@ class CleanLogs extends Command
         $this->line('');
 
         //  Determine if the daily or single log channel is being used
-        switch ($channel) {
+        switch($channel) {
             case 'daily':
                 $this->dailyLog();
                 break;
@@ -68,7 +68,7 @@ class CleanLogs extends Command
         $logPath = config('logging.channels.daily.path');
         $fileParts = pathinfo($logPath);
         $timeStamp = Carbon::now()->format('Y-m-d');
-        $logFile = $fileParts['dirname'] . DIRECTORY_SEPARATOR . $fileParts['filename'] . '-' . $timeStamp . '.' . $fileParts['extension'];
+        $logFile = $fileParts['dirname'].DIRECTORY_SEPARATOR.$fileParts['filename'].'-'.$timeStamp.'.'.$fileParts['extension'];
 
         return $logFile;
     }
@@ -84,14 +84,14 @@ class CleanLogs extends Command
     private function cleanLogFile($logFile)
     {
         //  Verify the file exists before trying to clear it
-        if (file_exists($logFile)) {
+        if(file_exists($logFile)) {
             file_put_contents($logFile, '');
             $this->line('Log File Emptied');
         } else {
             $this->line('Well, this is embarrassing...');
             $this->line('It seems I cannot find your log file');
             $this->line('');
-            $this->line('I was looking for ' . $logFile);
+            $this->line('I was looking for '.$logFile);
             $this->line('It either has not been created yet, or there was a problem with my algorithm');
         }
 

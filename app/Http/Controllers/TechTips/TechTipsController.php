@@ -110,7 +110,7 @@ class TechTipsController extends Controller
         
         //  Get the types of documents that can be filtered
 //        $fileTypes = SystemFileTypes::all();
-        $typesArr  = ['Tech Tip', 'Documentation'];
+        $typesArr = ['Tech Tip', 'Documentation'];
 //        foreach($fileTypes as $type)
 //        {
 //            $typesArr[] = $type->description;
@@ -274,7 +274,7 @@ class TechTipsController extends Controller
     
     public function search(Request $request)
     {
-        Log::debug('request Data -> '. $request->getContent());
+        Log::debug('request Data -> '.$request->getContent());
         $tips = [];
             
         //  Determine if the search form is empty or has data in it

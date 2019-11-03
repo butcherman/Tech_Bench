@@ -39,17 +39,17 @@ class Handler extends ExceptionHandler
     //    {
     //        parent::report($exception);
     //    }
-       if(!config('app.stack_trace') && $exception->getMessage() != null)
-       {
+        if(!config('app.stack_trace') && $exception->getMessage() != null)
+        {
             // dd($excption);
 
         parent::report($exception);
             // Log::error('[' . $exception->getCode() . '] "' . $exception->getMessage() . '" on line ' . $exception->getTrace()[0]['line'] . ' of file ' . $exception->getTrace()[0]['file']);
-       }
-       else
-       {
+        }
+        else
+        {
             parent::report($exception);
-       }
+        }
     }
 
     /**

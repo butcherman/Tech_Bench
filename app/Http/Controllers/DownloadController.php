@@ -25,7 +25,7 @@ class DownloadController extends Controller
 
     public function __construct()
     {
-        $this->root = config('filesystems.disks.local.root') . DIRECTORY_SEPARATOR;
+        $this->root = config('filesystems.disks.local.root').DIRECTORY_SEPARATOR;
         $this->path = $this->root.$this->tmpFolder;
     }
 
@@ -54,7 +54,7 @@ class DownloadController extends Controller
         ]);
 
         //  Filename of zip archive
-        $name       = 'zip_archive_'.Carbon::now()->timestamp.'.zip';
+        $name = 'zip_archive_'.Carbon::now()->timestamp.'.zip';
 
         //  The archive_downloads directory does not exist by default.  Touching a file in it ensures the directory is created and usable
         Storage::put($this->tmpFolder.'.ignore', '');

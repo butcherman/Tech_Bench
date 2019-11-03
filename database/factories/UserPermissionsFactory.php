@@ -5,7 +5,7 @@
 use App\UserPermissions;
 use Faker\Generator as Faker;
 
-$factory->define(App\UserPermissions::class, function (Faker $faker) {
+$factory->define(App\UserPermissions::class, function(Faker $faker) {
     return [
         'user_id'             => 0,
         'manage_users'        => 0,

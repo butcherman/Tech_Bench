@@ -68,16 +68,16 @@ class AccountController extends Controller
     {
         UserSettings::where('user_id', Auth::user()->user_id)->update(
         [
-            'em_tech_tip'     => $request->em_tech_tip     === 'on' ? true : false,
-            'em_file_link'    => $request->em_file_link    === 'on' ? true : false,
+            'em_tech_tip'     => $request->em_tech_tip === 'on' ? true : false,
+            'em_file_link'    => $request->em_file_link === 'on' ? true : false,
             'em_notification' => $request->em_notification === 'on' ? true : false,
-            'auto_del_link'   => $request->auto_del_link   === 'on' ? true : false,
+            'auto_del_link'   => $request->auto_del_link === 'on' ? true : false,
         ]);
 
         session()->flash('success', 'User Notifications Updated');
 
         Log::notice('User Notifications Updated', ['user_id' => Auth::user()->user_id]);
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Submitted Data - ', $request->toArray());
         return redirect(route('account'));
     }
