@@ -1,49 +1,63 @@
 # Tech Bench
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![Documentation Status](https://readthedocs.org/projects/tech-bench/badge/?version=latest)](https://tech-bench.readthedocs.io/en/latest/?badge=latest)
-[![Build Status](https://travis-ci.org/butcherman/Tech_Bench.svg?branch=master)](https://travis-ci.org/butcherman/Tech_Bench)
+[![GitHub release](https://img.shields.io/github/release/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/releases/)
+[![GitHub issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
+
+### Scrutinizer
+[![Stable Brandh](https://img.shields.io/badge/Stable%20Branch-Master-green
+)](https://github.com/butcherman/Tech_Bench)
+[![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/test5)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
 
-Tech Bench is a custom Content Management System (CMS) built to aid service technicians by allowing them to store and share information for the systems and customers they maintain.
+[![Development Branch](https://img.shields.io/badge/Development%20%20-dev5-yellow
+)](https://github.com/butcherman/Tech_Bench/tree/dev5)
+[![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=dev5)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/dev5)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=dev5)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev5)
+[![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=dev5)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev5)
 
-## The Tech Bench consists of three major sections:
+### Travis CI
+[![Stable Brandh](https://img.shields.io/badge/Stable%20Branch-Master-green
+)](https://github.com/butcherman/Tech_Bench)
+[![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=master)](https://travis-ci.com/butcherman/Tech_Bench)
 
-### System Information
-Users can store files for individual system types such as:  documentation, firmware, and helpful notes.  This information can be accessed by any registered user.  This gives your company a central location to store this information rather than relying on needing access to several different manufacturers web sites.
+[![Development Branch](https://img.shields.io/badge/Development%20%20-dev5-yellow
+)](https://github.com/butcherman/Tech_Bench/tree/dev5)
+[![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=dev5)](https://travis-ci.com/butcherman/Tech_Bench)
+
+### About Tech Bench
+Tech Bench is a custom Content Management System (CMS) built to aid service technicians by allowing them to store and share information about their customers and equipment they install and maintain.
+
+## The Tech Bench consists of two major sections:
 
 ### Customer Information
-Users can create customer accounts and store customer specific information for each of these customers such as: the type of system they have, login information for that system, notes, and files speific to that customer.  This central storage location ensures that all registered users have access to the same information.
+Users can create customer accounts and store customer specific information for each of these customers such as: 
+* The type of equipment they have installed
+* Login papsswords and other information for the equipment
+* Notes and files speific to that customer and their equipment.  
 
-Additional features for ustomers include the ability to create a custom link that will allow files to be accessed by visitors or allow visitors to upload their own files.
+This central storage location ensures that all field staff have access to the same information.
 
-### Tech Tips
+Additional features for ustomers include the ability to create a custom link that will allow files to be accessed by guests or allow guests to upload their own files.  These links are temporary links that are only available for a configurable amount of time
+
+### Tech Tips and Documentation
 While working in the field, all service technicians run across tips and tricks that they use to make their jobs easier.  The Tech Tips section allows for registered users to share these tips with all other users.  This creates a custom Knowledge Base for registered users.
 
+The Knowledge Base can also include official documentation for the different equiopment that your company installs and maintains.
+
+Whenever a new Tech Tip is created, an email is sent to all registered users notifying them of the tip.
+
 # Installing Tech Bench
-Tech Bench is designed to run on a dedicated Linux Web Server.
-### Requirements
-* Apache Web Server
-* MySQL Database
-* PHP 7.2 or higher
-* Composer Dependency Manager
-* Node Package Manager (NPM)
-* Unzip module
 
-It is up to the system administrator to install the Linux Operating system and the LAMP stack on the server with the latest updates and security patches.  All web configuration must be done prior to installing the Tech Bench application.
 
-It is highly recommended to use SSL along with a valid SSL Certificate.  Not doing so will result in all web traffic be sent in clear text rather than encrypted.
+```
+TODO:  THIS NEEDS TO BE UPDATED
+```
 
-It is also recommended to set the root directory of the web server to the "public" folder.  This will provide better security by not allowing direct access to the application folders.
 
 ### Dependency Management
-Tech Bench is built on the Laravel platform and uses NPM and Composer to maintain dependent applications required to run the Tech Bench. 
-
-### Installation Procedure
-
-
-
-
-
+Tech Bench is built on the Laravel platform and uses NPM and Composer to maintain the dependent applications required to run the Tech Bench. 
 
 # Copyright © 2016-2019 Ron Butcher
 
