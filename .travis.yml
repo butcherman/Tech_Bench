@@ -24,24 +24,23 @@ services:
     - mysql
 
 before_install:
-    - mysql -e 'create database `tech_bench`;'
     - mysql -e 'create database `tb-dev-testing`;'
 
 before_script:
     - cp tests/.env.travis .env
-    - composer self-update
-    - composer install --no-interaction
-    - pear install pear/PHP_CodeSniffer
-    - phpenv rehash
-    - npm install npm@latest -g
-    - npm install -g jshint
+    - travis_retry composer self-update
+    - travis_retry composer install --no-interaction
+    # - pear install pear/PHP_CodeSniffer
+    # - phpenv rehash
+    # - npm install npm@latest -g
+    # - npm install -g jshint
     - npm install
     - php artisan key:generate
     - php artisan migrate --seed
+    - npm run production
 
 script:
-    - npm run production
-    - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+    - php vendor/bin/phpunit --coverage-clover=coverage.clover
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
