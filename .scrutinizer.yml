@@ -12,8 +12,8 @@ build:
             - cp tests/.env.scrutinizer .env
             # - mysql -e 'create database `scrutinizer`;'
             - mysql -e 'create database `tb-dev-testing`;'
-            # - composer self-update
-            # - composer install --no-interaction
+            - composer self-update
+            - composer install --no-interaction
             # - pear install pear/PHP_CodeSniffer
             # - phpenv rehash
             # - npm install n -g
