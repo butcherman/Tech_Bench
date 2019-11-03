@@ -1,16 +1,19 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Error:</h1></div>
+<div class="row justify-content-center align-items-center login-form-container">
+    <div class="col-lg-8 col-xl-6">
+        <div class="row" id="header-title">
+            <div class="col-12">
+                <h1>{{config('app.name', 'Tech Bench')}}</h1>
+            </div>
         </div>
-    </div>
-    <div class="jumbotron">
-        <div class="row justify-content-center">
-            <div class="col-10">
-                <img src="/img/err_img/sry_error.png" alt="Error Image" class="pull-left" />
+        <div class="row row-eq-height justify-content-center align-items-center login-form-sub-container">
+            <div class="col-md-6">
+                <img src="{{asset('img/err_img/sry_error.png')}}" alt="Error" id="header-logo" />
+            </div>
+            <div class="col-md-6">
+                <h3 class="text-danger">Error:</h3>
                 <p>
                     We are sorry but the link you are looking for does not exist or cannot be found.
                 </p>

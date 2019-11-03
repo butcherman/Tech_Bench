@@ -8,32 +8,32 @@ Auth::routes();
 /*
 *   Non user Routes
 */
-Route::get('/', 'Auth\LoginController@showLoginForm')->name('index');
-Route::get('logout', 'Auth\LoginController@logout')  ->name('logout');
-Route::get('no-script', 'Controller@noScript')       ->name('noscript');
+Route::get('/',         'Auth\LoginController@showLoginForm')->name('index');
+Route::get('logout',    'Auth\LoginController@logout')       ->name('logout');
+Route::get('no-script', 'Controller@noScript')               ->name('noscript');
 
 
 /*
 *   Download File Routes
 */
-Route::get('download/{id}/{filename}', 'DownloadController@index')->name('download');
-Route::get('download-all', 'DownloadController@downloadAll')      ->name('downloadAll');
-Route::put('download-all', 'DownloadController@flashDownload')    ->name('downloadAll');
+Route::get('download/{id}/{filename}',    'DownloadController@index')         ->name('download');
+Route::get('download-archive/{filename}', 'DownloadController@downloadArchive')->name('downloadArchive');
+Route::put('download-archive',            'DownloadController@archiveFiles')   ->name('archiveFiles');
 
 
 /*
 *   User Settings Routes
 */
-Route::get('account', 'AccountController@index')                           ->name('account');
-Route::post('account', 'AccountController@submit')                         ->name('account');
-Route::put('account', 'AccountController@notifications')                   ->name('account');
-Route::get('/account/change-password', 'AccountController@changePassword') ->name('changePassword');
+Route::get('account',                   'AccountController@index')         ->name('account');
+Route::post('account',                  'AccountController@submit')        ->name('account');
+Route::put('account',                   'AccountController@notifications') ->name('account');
+Route::get('/account/change-password',  'AccountController@changePassword')->name('changePassword');
 Route::post('/account/change-password', 'AccountController@submitPassword')->name('changePassword');
 
 /*
 *   Basic Logged In Routes
 */
-Route::get('about', 'DashboardController@about')    ->name('about');
+Route::get('about',     'DashboardController@about')->name('about');
 Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
 /*
@@ -41,32 +41,29 @@ Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 */
 Route::prefix('links')->name('links.')->group(function () {
     //  Resource controllers for base access
-    Route::resource('data', 'FileLinks\FileLinksController');
-    Route::get('new', 'FileLinks\FileLinksController@create')->name('new');
-    Route::get('find/{id}', 'FileLinks\FileLinksController@find')->name('user');
-    Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')->name('details');
-    Route::get('disable/{id}', 'FileLinks\FileLinksController@disableLink')->name('disable');
-
+    Route::resource('data',           'FileLinks\FileLinksController');
+    Route::get('new',                 'FileLinks\FileLinksController@create')     ->name('new');
+    Route::get('find/{id}',           'FileLinks\FileLinksController@find')       ->name('user');
+    Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')    ->name('details');
+    Route::get('disable/{id}',        'FileLinks\FileLinksController@disableLink')->name('disable');
     //  File Link Files
-    Route::resource('files', 'FileLinks\LinkFilesController');
-
-    // //  File Link Instructions
-    // Route::get('instructions/{id}', 'FileLinks\InstructionsController@getIndex')->name('instructions');
-    // Route::post('instructions/{id}', 'FileLinks\InstructionsController@postIndex')->name('instructions');
-
-    // //  Link customer information
-    // Route::post('updateCustomer/{id}', 'FileLinks\FileLinksController@updateCustomer')->name('updateCustomer');
-
+    Route::resource('files',          'FileLinks\LinkFilesController');
     //  Index landing page
-    Route::get('/', 'FileLinks\FileLinksController@index')->name('index');
+    Route::get('/',                   'FileLinks\FileLinksController@index')      ->name('index');
 });
 
 /*
 *   Guest File Link Routes
 */
-Route::post('file-links/{id}', 'FileLinks\UserLinksController@update')->name('file-links.show');
-Route::get('file-links/{id}', 'FileLinks\UserLinksController@show')->name('file-links.show');
-Route::get('file-links', 'FileLinks\UserLinksController@index');
+Route::get('file-links/{id}/get-files', 'FileLinks\UserLinksController@getFiles')->name('file-links.getFiles');
+Route::post('file-links/{id}',          'FileLinks\UserLinksController@update')  ->name('file-links.show');
+Route::get('file-links/{id}',           'FileLinks\UserLinksController@show')    ->name('file-links.show');
+Route::get('file-links',                'FileLinks\UserLinksController@index')   ->name('file-links.index');
+
+
+
+
+
 
 
 

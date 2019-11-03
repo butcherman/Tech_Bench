@@ -6,10 +6,10 @@
 </div>
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="jumbotron text-center">
+        <div class="jumbotron text-center text-danger">
             <img src="/img/err_img/sry_error.png" alt="sorry" class="float-left" />
             <p>
-                We are sorry but the file you are looking for does not exist or cannot be found.
+                We are sorry, but the file you are looking for does not exist or cannot be found.
             </p>
             <p>
                 A log has been generated and our minions are busy at work to determine what went wrong.

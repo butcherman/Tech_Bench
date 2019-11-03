@@ -1,149 +1,149 @@
 <template>
-    <div>
-        <div class="row">
-            <div class="col-md-8 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-header">Link Details</div>
-                    <div class="card-body">
-                        <dl class="row h-100"  v-if="loadDone">
-                            <dt class="col-3 text-right">Link Name:</dt>
-                            <dd class="col-9 text-left">{{details.link_name}}</dd>
-                            <dt class="col-3 text-right">Customer:</dt>
-                            <dd class="col-9 text-left">{{details.cust_name}}</dd>
-                            <dt class="col-3 text-right">Expire Date:</dt>
-                            <dd class="col-9 text-left">{{details.exp_format}}</dd>
-                            <dt class="col-3 text-right">Allow Upload:</dt>
-                            <dd class="col-9 text-left">{{details.allow_upload}}</dd>
-                            <dt class="col-3 text-right">Link:</dt>
-                            <dd class="col-9 text-left"><a :href="route('file-links.show', hash)" target="_blank">{{route('file-links.show', hash)}}</a></dd>
-                        </dl>
-                        <div v-else-if="error">
-                            <h5 class="text-center">Problem Loading Data...</h5>
-                        </div>
-                        <img v-else src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+<div>
+    <div class="row">
+        <div class="col-md-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-header">Link Details</div>
+                <div class="card-body">
+                    <dl class="row h-100"  v-if="loadDone">
+                        <dt class="col-3 text-right">Link Name:</dt>
+                        <dd class="col-9 text-left">{{details.link_name}}</dd>
+                        <dt class="col-3 text-right">Customer:</dt>
+                        <dd class="col-9 text-left">{{details.cust_name}}</dd>
+                        <dt class="col-3 text-right">Expire Date:</dt>
+                        <dd class="col-9 text-left">{{details.exp_format}}</dd>
+                        <dt class="col-3 text-right">Allow Upload:</dt>
+                        <dd class="col-9 text-left">{{details.allow_upload}}</dd>
+                        <dt class="col-3 text-right">Link:</dt>
+                        <dd class="col-9 text-left"><a :href="route('file-links.show', hash)" target="_blank">{{route('file-links.show', hash)}}</a></dd>
+                    </dl>
+                    <div v-else-if="error">
+                        <h5 class="text-center">Problem Loading Data...</h5>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-header">Actions</div>
-                    <div class="card-body">
-                        <b-button block variant="primary" v-b-modal.link-edit-modal>Edit Link</b-button>
-                        <a :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+route('file-links.show', hash)"  class="btn btn-block btn-primary">Email Link</a>
-                        <b-button block variant="primary" @click="confirmDelete">Delete Link</b-button>
-                    </div>
+                    <img v-else src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
                 </div>
             </div>
         </div>
-        <b-modal id="link-edit-modal" title="Edit Link Details" ref="editLinkModal" hide-footer centered size="lg" @shown="openEditForm">
-            <b-form @submit="validateForm" ref="editLinkForm" novalidate :validated="validated">
-                <input type="hidden" name="_token" :value=token />
-                <b-form-group id="name"
-                            label="Link Name:"
-                            label-for="link_name">
-                    <b-form-input id="link_name"
-                                type="text"
-                                name="name"
-                                placeholder="Enter A User Friendly Name For This Link"
-                                required
-                                v-model="form.name">
-                    </b-form-input>
-                    <b-form-invalid-feedback>Please Enter A Name For This Link</b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group id="expire"
-                            label="Expires On:"
-                            label-for="link_expire">
-                    <b-form-input id="link_expire"
-                                type="date"
-                                name="expire"
-                                required
-                                v-model="form.expire">
-                    </b-form-input>
-                    <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
-                </b-form-group>
-                <div class="row justify-content-center mt-4">
-                    <div class="col-6 col-md-2 order-2 order-md-1">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="allowUp" class="onoffswitch-checkbox" id="allowUp" v-model="form.allowUpload">
-                            <label class="onoffswitch-label" for="allowUp">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 align-self-center order-1 order-md-2">
-                        <h5 class="text-center">Allow User to Upload Files</h5>
-                    </div>
-                </div>
-                <div class="row justify-content-center mt-4">
-                    <div class="col-6 col-md-2 order-2 order-md-1">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="linkCustomer" class="onoffswitch-checkbox" id="linkCustomer" @change="attachCustomer" v-model="form.selectedCustomer">
-                            <label class="onoffswitch-label" for="linkCustomer">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 align-self-center order-1 order-md-2">
-                        <h5 class="text-center">{{button.customerLink}} <span id="explain-allow" class="ti-help-alt"></span></h5>
-                        <b-popover :target="'explain-allow'" trigger="hover" placement="right">
-                            <div class="text-center">By allowing this option, you will be able to quickly move an uploaded file to the customer's saved files.</div>
-                        </b-popover>
-                    </div>
-                </div>
-                <div class="row justify-content-center mt-4">
-                    <div class="col-6 col-md-2 order-2 order-md-1">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="addInstructions" class="onoffswitch-checkbox" id="addInstructions" v-model="form.hasInstructions">
-                            <label class="onoffswitch-label" for="addInstructions">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 align-self-center order-1 order-md-2">
-                        <h5 class="text-center">Add Instructions</h5>
-                    </div>
-                </div>
-                <transition name="fade">
-                    <div id="instructionsBlock" v-if="form.hasInstructions">
-                        <editor v-if="form.hasInstructions" :init="{plugins: 'autolink', height:500}" v-model=form.instructions></editor>
-                    </div>
-                </transition>
-                <input type="hidden" name="customerID" v-model="form.customerTag">
-                <b-button type="submit" block variant="primary" class="mt-4" :disabled="button.disable">{{button.text}}</b-button>
-            </b-form>
-            <b-modal id="select-customer" title="Search For Customer" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer">
-                <b-form @submit="searchCustomer">
-                    <b-input-group>
-                        <b-form-input type="text" v-model="searchField"></b-form-input>
-                        <b-input-group-append>
-                            <b-button varient="outline-secondary" @click="searchCustomer"><span class="ti-search"></span></b-button>
-                        </b-input-group-append>
-                    </b-input-group>
-                </b-form>
-                <div id="search-results" class="mt-4" v-if="searchResults.length > 0">
-                    <h4 class="text-center">Select A Customer</h4>
-                    <b-list-group>
-                        <b-list-group-item v-for="res in searchResults" v-bind:key="res.cust_id" class="pointer" @click="selectCustomer(res)">{{res.name}}</b-list-group-item>
-                    </b-list-group>
-                </div>
-            </b-modal>
-        </b-modal>
-        <div class="row grid-margin">
-            <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-header">Link Instructions</div>
-                    <div class="card-body">
-                        <span v-if="details.note === null && loadDone"><h5 class="text-center">No Instructions</h5></span>
-                        <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-                        <div v-else v-html="details.note"></div>
-                    </div>
+        <div class="col-md-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-header">Actions</div>
+                <div class="card-body">
+                    <b-button block variant="primary" v-b-modal.link-edit-modal>Edit Link</b-button>
+                    <a :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+route('file-links.show', hash)"  class="btn btn-block btn-primary">Email Link</a>
+                    <b-button block variant="primary" @click="confirmDelete">Delete Link</b-button>
                 </div>
             </div>
         </div>
     </div>
+    <b-modal id="link-edit-modal" title="Edit Link Details" ref="editLinkModal" hide-footer centered size="lg" @shown="openEditForm">
+        <b-form @submit="validateForm" ref="editLinkForm" novalidate :validated="validated">
+            <input type="hidden" name="_token" :value=token />
+            <b-form-group id="name"
+                        label="Link Name:"
+                        label-for="link_name">
+                <b-form-input id="link_name"
+                            type="text"
+                            name="name"
+                            placeholder="Enter A User Friendly Name For This Link"
+                            required
+                            v-model="form.name">
+                </b-form-input>
+                <b-form-invalid-feedback>Please Enter A Name For This Link</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group id="expire"
+                        label="Expires On:"
+                        label-for="link_expire">
+                <b-form-input id="link_expire"
+                            type="date"
+                            name="expire"
+                            required
+                            v-model="form.expire">
+                </b-form-input>
+                <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
+            </b-form-group>
+            <div class="row justify-content-center mt-4">
+                <div class="col-6 col-md-2 order-2 order-md-1">
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="allowUp" class="onoffswitch-checkbox" id="allowUp" v-model="form.allowUpload">
+                        <label class="onoffswitch-label" for="allowUp">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4 align-self-center order-1 order-md-2">
+                    <h5 class="text-center">Allow User to Upload Files</h5>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-6 col-md-2 order-2 order-md-1">
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="linkCustomer" class="onoffswitch-checkbox" id="linkCustomer" @change="attachCustomer" v-model="form.selectedCustomer">
+                        <label class="onoffswitch-label" for="linkCustomer">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4 align-self-center order-1 order-md-2">
+                    <h5 class="text-center">{{button.customerLink}} <span id="explain-allow" class="ti-help-alt"></span></h5>
+                    <b-popover :target="'explain-allow'" trigger="hover" placement="right">
+                        <div class="text-center">By allowing this option, you will be able to quickly move an uploaded file to the customer's saved files.</div>
+                    </b-popover>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-6 col-md-2 order-2 order-md-1">
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="addInstructions" class="onoffswitch-checkbox" id="addInstructions" v-model="form.hasInstructions">
+                        <label class="onoffswitch-label" for="addInstructions">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4 align-self-center order-1 order-md-2">
+                    <h5 class="text-center">Add Instructions</h5>
+                </div>
+            </div>
+            <transition name="fade">
+                <div id="instructionsBlock" v-if="form.hasInstructions">
+                    <editor v-if="form.hasInstructions" :init="{plugins: 'autolink', height:500}" v-model=form.instructions></editor>
+                </div>
+            </transition>
+            <input type="hidden" name="customerID" v-model="form.customerTag">
+            <b-button type="submit" block variant="primary" class="mt-4" :disabled="button.disable">{{button.text}}</b-button>
+        </b-form>
+        <b-modal id="select-customer" title="Search For Customer" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer">
+            <b-form @submit="searchCustomer">
+                <b-input-group>
+                    <b-form-input type="text" v-model="searchField"></b-form-input>
+                    <b-input-group-append>
+                        <b-button varient="outline-secondary" @click="searchCustomer"><span class="ti-search"></span></b-button>
+                    </b-input-group-append>
+                </b-input-group>
+            </b-form>
+            <div id="search-results" class="mt-4" v-if="searchResults.length > 0">
+                <h4 class="text-center">Select A Customer</h4>
+                <b-list-group>
+                    <b-list-group-item v-for="res in searchResults" v-bind:key="res.cust_id" class="pointer" @click="selectCustomer(res)">{{res.name}}</b-list-group-item>
+                </b-list-group>
+            </div>
+        </b-modal>
+    </b-modal>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-header">Link Instructions</div>
+                <div class="card-body">
+                    <span v-if="details.note === null && loadDone"><h5 class="text-center">No Instructions</h5></span>
+                    <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                    <div v-else v-html="details.note"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </template>
 
 <script>

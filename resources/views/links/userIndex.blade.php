@@ -1,22 +1,20 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Error:</h1></div>
+<div class="row justify-content-center align-items-center login-form-container">
+    <div class="col-lg-8 col-xl-6">
+        <div class="row" id="header-title">
+            <div class="col-12">
+                <h1>{{config('app.name', 'Tech Bench')}}</h1>
+            </div>
         </div>
-    </div>
-    <div class="jumbotron">
-        <div class="row justify-content-center">
-            <div class="col-10">
-                <img src="/img/err_img/sry_error.png" alt="Error Image" class="pull-left" />
-                <p>
-                    We are sorry but the link you are looking for does not exist or cannot be found.
-                </p>
-                <p>
-                    A log has been generated and our minions are busy at work to determine what went wrong.
-                </p>
+        <div class="row row-eq-height justify-content-center align-items-center login-form-sub-container">
+            <div class="col-md-6">
+                <img src="{{config('app.logo')}}" alt="Company Logo" id="header-logo" />
+            </div>
+            <div class="col-md-6">
+                <h3>Looking for something?</h3>
+                <p>In order to use this function of the {{config('app.name', 'Tech Bench')}}, a valid link ID must be sent to you by one of its registered members.</p>
             </div>
         </div>
     </div>

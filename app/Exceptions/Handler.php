@@ -34,19 +34,22 @@ class Handler extends ExceptionHandler
      * @return void
      */
     public function report(Exception $exception)
-    {        
-//        if(config('app.stack_trace'))
-//        {
-//            parent::report($exception);
-//        }
-//        if(!config('app.stack_trace') && $exception->getMessage() != null)
-//        {
-//            Log::error('['.$exception->getCode().'] "'.$exception->getMessage().'" on line '.$exception->getTrace()[0]['line'].' of file '.$exception->getTrace()[0]['file']);
-//        }
-//        else
-//        {
+    {
+    //    if(config('app.stack_trace'))
+    //    {
+    //        parent::report($exception);
+    //    }
+       if(!config('app.stack_trace') && $exception->getMessage() != null)
+       {
+            // dd($excption);
+
+        parent::report($exception);
+            // Log::error('[' . $exception->getCode() . '] "' . $exception->getMessage() . '" on line ' . $exception->getTrace()[0]['line'] . ' of file ' . $exception->getTrace()[0]['file']);
+       }
+       else
+       {
             parent::report($exception);
-//        }
+       }
     }
 
     /**

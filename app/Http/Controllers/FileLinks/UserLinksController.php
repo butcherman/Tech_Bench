@@ -10,16 +10,19 @@ use App\FileLinkFiles;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewFileUpload;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+// use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+
+use App\http\Resources\FileLinkFilesCollection;
+
 
 class UserLinksController extends Controller
 {
@@ -34,7 +37,7 @@ class UserLinksController extends Controller
     public function show($id)
     {
         $details = FileLinks::where('link_hash', $id)->first();
-        
+
         //  Verify that the link is valid
         if(empty($details))
         {
@@ -47,38 +50,53 @@ class UserLinksController extends Controller
             Log::warning('Visitor '.\Request::ip().' visited expired link Hash - '.$id);
             return view('links.userExpiredLink');
         }
-        
+
+        //  Link is valid - determine if the link has files that can be downloaded
         $files = FileLinkFiles::where('link_id', $details->link_id)
             ->where('upload', false)
-            ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
-            ->get();
-        
-        //  Gather the array for the "download all link" and update the time stamp for a more readable format
-        $fileArr = [];
-        foreach($files as $file)
-        {
-            $fileArr[]       = $file->file_id;
-            $file->timestamp = date('M d, Y', strtotime($file->created_at));
-        }
-        
+            ->count();
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.\Request::ip());
         Log::debug('Link Hash-'.$id);
         return view('links.userDetails', [
             'hash'    => $id,
             'details' => $details,
-            'files'   => $files,
-            'allowUp' => $details->allow_upload,
-            'fileArr' => $fileArr
+            'hasFiles' => $files > 0 ? true : false,
+            'allowUp' => $details->allow_upload === 'Yes' ? true : false,
         ]);
     }
+
+    //  Get the guest available files for the link
+    public function getFiles($id)
+    {
+        $linkID = FileLinks::where('link_hash', $id)->first()->link_id;
+
+        $files = new FileLinkFilesCollection(
+            FileLinkFiles::where('link_id', $linkID)
+                ->where('upload', 0)
+                ->orderBy('created_at', 'ASC')
+                ->with('Files')
+                ->get()
+        );
+
+        return $files;
+    }
+
+
+
+
+
+
+
+
 
     //  Upload new file
     public function update(Request $request, $id)
     {
         $request->validate(['name' => 'required', 'file' => 'required']);
-        
+
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
-            
+
         //  Verify that the upload is valid and being processed
         if($receiver->isUploaded() === false)
         {
@@ -107,13 +125,13 @@ class UserLinksController extends Controller
             'status' => true
         ]);
     }
-    
+
     //  Save the file in the database
     private function saveFile(UploadedFile $file, $id, $request)
     {
         $details = FileLinks::where('link_hash', $id)->first();
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$details->link_id;
-        
+
         $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
         $file->storeAs($filePath, $fileName);
 
@@ -144,7 +162,7 @@ class UserLinksController extends Controller
         //  Send email and notification to the creator of the link
         $user = User::find($details->user_id);
         Notification::send($user, new NewFileUpload($details));
-        
+
         Log::info('File uploaded by guest '.\Request::ip().' for file link -'.$details->link_id);
         Log::debug('File Data -', $request->toArray());
 

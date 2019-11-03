@@ -7,14 +7,15 @@ use App\FileLinks;
 use App\FileLinkFiles;
 use App\CustomerFiles;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
+// use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Resources\FileLinksCollection;
+// use App\Http\Resources\FileLinksCollection;
 use App\http\Resources\FileLinkFilesCollection;
+// use PhpParser\Node\Stmt\TryCatch;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 // use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
@@ -36,6 +37,10 @@ class LinkFilesController extends Controller
     //  Add a file to the file link
     public function store(Request $request)
     {
+        $request->validate([
+            'linkID' => 'required|exists:file_links,link_id'
+        ]);
+
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
         //  Verify that the upload is valid and being processed
@@ -93,25 +98,6 @@ class LinkFilesController extends Controller
     //  Show the files attached to a link
     public function show($id)
     {
-        // $files = FileLinkFiles::where('file_link_files.link_id', $id)
-        //     ->select('added_by', 'file_link_files.created_at', 'files.file_id', 'files.file_name', 'file_link_files.link_file_id', 'note', 'upload')
-        //     ->join('files', 'file_link_files.file_id', '=', 'files.file_id')
-        //     ->leftJoin('file_link_notes', 'file_link_files.file_id', '=', 'file_link_notes.file_id')
-        //     ->orderBy('user_id', 'ASC')
-        //     ->orderBy('file_link_files.created_at', 'ASC')
-        //     ->get();
-
-        // foreach($files as $file)
-        // {
-        //     $file->timestamp = date('M d, Y', strtotime($file->created_at));
-        // }
-
-        // Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        // Log::debug('File Data - ', $files->toArray());
-        // return response()->json($files);
-
-        // return 'files';
-
         $files = new FileLinkFilesCollection(
             FileLinkFiles::where('link_id', $id)
             ->orderBy('user_id', 'ASC')
@@ -135,18 +121,26 @@ class LinkFilesController extends Controller
 
         $linkData = FileLinks::find($id);
 
-        $newPath = config('filesystems.paths.customer').DIRECTORY_SEPARATOR.$linkData->cust_id.DIRECTORY_SEPARATOR;
+        $newPath = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$linkData->cust_id.DIRECTORY_SEPARATOR;
         $fileData = Files::find($request->fileID);
 
         //  Verify that the file does not already exist in the customerdata or file
         $dup = CustomerFiles::where('file_id', $request->fileID)->where('cust_id', $linkData->cust_id)->count();
         if($dup || Storage::exists($newPath.$fileData->file_name))
         {
-            return response()->json(['success' => 'duplicate']);
+            return response()->json(['success' => 'false', 'reason' => 'This File Already Exists in Customer Files']);
         }
 
         //  Move the file to the customrs file folder
-        Storage::move($fileData->file_link.$fileData->file_name, $newPath.$fileData->file_name);
+        try
+        {
+            Storage::move($fileData->file_link.$fileData->file_name, $newPath.$fileData->file_name);
+        }
+        catch (\Exception $e)
+        {
+            report($e);
+            return response()->json(['success' => false, 'reason' => 'Cannot Find File']);
+        }
 
         //  Update the file path in the database
         $fileData->update([
@@ -171,10 +165,12 @@ class LinkFilesController extends Controller
     //  Delete a file attached to a link
     public function destroy($id)
     {
+        //  Get the necessary file information and delete it from the database
         $fileData = FileLinkFiles::find($id);
         $fileID   = $fileData->file_id;
         $fileData->delete();
 
+        //  Delete the file from the folder (not, will not delete if in use elsewhere)
         Files::deleteFile($fileID);
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use PDF;
 use Zip;
 use App\Files;
+use Carbon\Carbon;
 use App\Customers;
 use App\CustomerNotes;
 use Illuminate\Http\Request;
@@ -13,8 +14,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+// use ZanySoft\Zip;
+
 class DownloadController extends Controller
 {
+    //  File locations for stored files
+    private $tmpFolder = 'archive_downloads'.DIRECTORY_SEPARATOR;
+    private $root; //      = config('filesystems.disks.local.root').DIRECTORY_SEPARATOR;
+    private $path; //      = $root.$tmpFolder;
+
+    public function __construct()
+    {
+        $this->root = config('filesystems.disks.local.root') . DIRECTORY_SEPARATOR;
+        $this->path = $this->root.$this->tmpFolder;
+    }
+
     //  Download one file
     public function index($fileID, $fileName)
     {
@@ -25,61 +39,87 @@ class DownloadController extends Controller
             Log::info('File Downloaded', ['file_id' => $fileID]);
             return Storage::download($fileData->file_link.$fileData->file_name);
         }
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('File Not Found', ['file_id' => $fileID, 'file_name' => $fileName]);
         return view('err.badFile');
     }
-    
-    //  Put the download files into the flash data
-    public function flashDownload(Request $request)
+
+    //  Package multiple files and prepare them for download
+    public function archiveFiles(Request $request)
     {
-        session()->flash('fileArr', $request->fileArr);
-        
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return response()->json($request);
-    }
-    
-    //  Download an array of files
-    public function downloadAll()
-    {
-        //  Get files and base path
-        $fileData = Files::findMany(session('fileArr'));
-        $path = config('filesystems.disks.local.root').DIRECTORY_SEPARATOR;
-        
-        //  Verify that the file array is not empty
-        if(empty($fileData))
+        //  Validate the array
+        $request->validate([
+            'fileList' => 'required'
+        ]);
+
+        //  Filename of zip archive
+        $name       = 'zip_archive_'.Carbon::now()->timestamp.'.zip';
+
+        //  The archive_downloads directory does not exist by default.  Touching a file in it ensures the directory is created and usable
+        Storage::put($this->tmpFolder.'.ignore', '');
+
+        //  Create the zip file
+        $zip = Zip::create($this->path.$name);
+        foreach($request->fileList as $file)
         {
-            Log::info('Files Not Found', [session('fileArr')]);
-            return view('err.badFile');
+            //  Place each file inside of the zip
+            $data = Files::find($file);
+            if($data->count() > 0)
+            {
+                // Log::debug('file exists', $data->toArray());
+                $zip->add($this->root.$data->file_link.$data->file_name);
+                Log::debug('File Added - '.$this->root.$data->file_link.$data->file_name);
+            }
+            else
+            {
+                Log::notice('User tried to download an empty zip archive.');
+            }
         }
-        
-        //  Package the files in a zip file 
-        $zip = Zip::create($path.'download.zip');
-        foreach($fileData as $file)
-        {
-            $zip->add($path.$file->file_link.$file->file_name);
-        }
+        //  Close zip file to be processed
         $zip->close();
-        
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        
-        //  Download zip file and remove it from the server
-        return response()->download($path.'download.zip')->deleteFileAfterSend(true);
+
+        //  Return the name of the zip file
+        return response()->json(['archive' => $name]);
     }
-    
+
+    //  Download multiple files as part of a zip archive that was put together
+    public function downloadArchive($fileName)
+    {
+        //  Check if the requested archive exists
+        if(Storage::exists($this->tmpFolder.$fileName))
+        {
+            Log::info('Archive Downloaded - '.$fileName);
+            // return Storage::download($this->tmpFolder.$fileName);
+            return response()->download($this->path.$fileName, 'download.zip')->deleteFileAfterSend(true);
+        }
+
+        Log::notice('Archive Not Found - '.$fileName);
+        return view('err.badFile');
+    }
+
+
+
+
+
+
+
+
+
+
+
     //  Download Customer Note as PDF
     public function downloadCustNote($id)
     {
         $note = CustomerNotes::find($id);
         $cust = Customers::find($note->cust_id);
-        
+
         $pdf = PDF::loadView('pdf.customerNote', [
             'cust_name'   => $cust->name,
             'note_subj'   => $note->subject,
             'description' => $note->description
         ]);
-        
+
         return $pdf->download($cust->name.' - Note: '.$note->subject.'.pdf');
     }
 }

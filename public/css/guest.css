@@ -11147,3 +11147,8 @@ body {
   display: inline;
 }
 
+.card {
+  color: #000000;
+  margin: 0.5em;
+}
+

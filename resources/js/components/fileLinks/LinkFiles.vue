@@ -1,5 +1,6 @@
 <template>
     <div>
+        <b-alert :show="alert.display" dismissible :variant="alert.variant"><h4 class="text-center">{{alert.message}}</h4></b-alert>
         <img v-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
         <div v-else-if="error">
             <h5 class="text-center">Problem Loading Data...</h5>
@@ -17,6 +18,13 @@
             >
                 <div slot="emptystate">
                     <h4 class="text-center">No Files</h4>
+                </div>
+                <div slot="table-actions-bottom">
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <button class="btn btn-block btn-primary" v-b-modal.new-file-modal>Add File</button>
+                        </div>
+                    </div>
                 </div>
                 <div slot="selected-row-actions">
                     <div class="row justify-content-center">
@@ -45,13 +53,13 @@
                     </span>
                     <span v-else-if="data.column.field == 'actions'">
                         <div class="d-flex flex-nowrap">
-                            <button v-if="cust_id" class="btn btn-rounded px-0 text-muted mr-2" title="Link File To Customer Files" v-b-tooltip.hover>
+                            <button v-if="cust_id" class="btn btn-rounded px-0 text-muted mr-2" title="Place File In Customer Files" @click="moveFile = data.row.files" v-b-tooltip.hover v-b-modal.file-type>
                                 <span class="ti-export"></span>
                             </button>
-                            <button :id="'confirm-delete'+data.row.link_id" class="btn btn-rounded px-0 text-muted" title="Delete File" v-b-tooltip.hover>
+                            <button :id="'confirm-delete-'+data.row.files.file_id" class="btn btn-rounded px-0 text-muted" title="Delete File" v-b-tooltip.hover>
                                 <span class="ti-trash"></span>
                             </button>
-                            <b-popover :target="'confirm-delete'+data.row.link_id" triggers="focus" placement="left">
+                            <b-popover :target="'confirm-delete-'+data.row.files.file_id" triggers="focus" placement="left">
                                 <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>
                                 <div class="text-center">
                                     <button class="btn btn-danger" @click="deleteFile(data.row.link_file_id)">Yes</button>
@@ -63,6 +71,27 @@
                 </template>
             </vue-good-table>
         </div>
+        <b-modal id="file-type" title="Select File Type" ref="fileTypeModal" hide-footer>
+            <b-list-group>
+                <b-list-group-item v-for="type in file_types" v-bind:key="type.file_type_id" @click="setFileType(type)" button>
+                    {{type.description}}
+                </b-list-group-item>
+            </b-list-group>
+        </b-modal>
+        <b-modal id="new-file-modal" title="Add File" ref="newFileModal" hide-footer>
+            <b-form @submit="addFile" method="post" enctype="multipart/form-data" novalidate>
+                <vue-dropzone id="dropzone"
+                    class="filedrag"
+                    ref="fileDropzone"
+                    @vdropzone-total-upload-progress="updateProgressBar"
+                    @vdropzone-sending="sendingFiles"
+                    @vdropzone-queue-complete="queueComplete"
+                    :options="dropzoneOptions">
+                </vue-dropzone>
+                <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
+                <b-button type="submit" block variant="primary" :disabled="button.disable">{{button.text}}</b-button>
+            </b-form>
+        </b-modal>
     </div>
 </template>
 
@@ -78,6 +107,12 @@
                 token: window.techBench.csrfToken,
                 loadDone: false,
                 error: false,
+                alert: {
+                    variant: 'danger',
+                    display: false,
+                    message: 'Something Bad Happened',
+                },
+                moveFile: [],
                 table: {
                     columns: [
                         {
@@ -107,37 +142,145 @@
                         }
                     ],
                     rows: []
-                }
+                },
+                dropzoneOptions: {
+                    url: this.route('links.files.store'),
+                    autoProcessQueue: false,
+                    parallelUploads: 1,
+                    maxFiles: 5,
+                    maxFilesize: window.techBench.maxUpload,
+                    addRemoveLinks: true,
+                    chunking: true,
+                    chunkSize: 5000000,
+                    parallelChunkUploads: false,
+                },
+                button: {
+                    disable: false,
+                    text: 'Submit File',
+                },
+                progress: 0,
+                showProgress: false,
             }
         },
         created() {
             this.getFiles();
-            console.log(this.cust_id);
-            console.log(this.file_types);
         },
         methods: {
+            //  Get the files attached to the link
             getFiles()
             {
-                console.log(this.route('links.files.show'));
                 axios.get(this.route('links.files.show', this.link_id))
                     .then(res => {
+                        //  remove the loading screen and populate the table
                         this.loadDone = true;
-                        console.log(res);
                         this.table.rows = res.data;
                     }).catch(error => { this.error = true; });
             },
+            //  When moving a file to a customer file list, select the appropriate file type tag and move the file
+            setFileType(type)
+            {
+                //  Get the basic file information prepared to move
+                var moveData = {
+                    fileID: this.moveFile.file_id,
+                    fileName: this.moveFile.file_name,
+                    fileType: type.file_type_id,
+                };
+                //  Move the file
+                axios.put(this.route('links.files.update', this.link_id), moveData)
+                    .then(res => {
+                        //  Close the Modal and dispaly alert with reason for success or failure
+                        this.$refs.fileTypeModal.hide();
+                        if(res.data.success == true)
+                        {
+                            this.alert.display = true;
+                            this.alert.variant = 'success';
+                            this.alert.message = 'File has been moved to customer files and can be safely deleted from this link.';
+                        }
+                        else
+                        {
+                            this.alert.display = true;
+                            this.alert.variant = 'danger';
+                            this.alert.message = res.data.reason;
+                        }
+                        console.log(res);
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+            },
             downloadChecked()
             {
-                console.log('download selected files');
+                //  place all of the files in an array to be sent for zipping
+                var fileList = [];
+                this.$refs['files-table'].selectedRows.forEach(function(file)
+                {
+                    fileList.push(file.file_id);
+                });
+
+                //  prepare the zip file for download
+                axios.put(this.route('downloadAll'), {'fileList': fileList})
+                    .then(res => {
+                        console.log(res);
+                        // window.location.href = this.route('downloadAll');
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
+            //  Add a new file to the link
+            addFile(e)
+            {
+                e.preventDefault();
+
+                //  Make sure there is a file in place, and process it
+                var myDrop = this.$refs.fileDropzone;
+                if(myDrop.getQueuedFiles().length > 0)
+                {
+                    // console.log('ready to go');
+                    this.button.text = 'Loading...';
+                    this.button.disable = true;
+                    this.showProgress = true;
+                    myDrop.processQueue();
+                }
+                else
+                {
+                    this.$refs['newFileModal'].hide();
+                }
+            },
+            //  Delete a group o ffiles
             deleteChecked()
             {
-                console.log('delete selected files');
+                var obj = this;
+                this.$refs['files-table'].selectedRows.forEach(function(file)
+                {
+                    obj.deleteFile(file.link_file_id);
+                });
             },
-            deleteFile()
+            //  Delete a single file (Note - this will only delete the file from this link.  If it is attached to a customer, the file itself will not be deleted)
+            deleteFile(fileid)
             {
-                console.log('delete file');
-            }
+                axios.delete(this.route('links.files.destroy', fileid))
+                    .then(res => {
+                        //  Reload the file list
+                        this.getFiles();
+                        this.$root.$emit('bv::hide::popover')
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+            },
+            //  Update the progress bar as a file is being uploaded
+            updateProgressBar(progress)
+            {
+                this.progress = progress;
+            },
+            //  As each chunk is sent, include the token to validate request
+            sendingFiles(file, xhr, formData)
+            {
+                formData.append('_token', this.token);
+                formData.append('linkID', this.link_id);
+            },
+            //  Finalize the action, and reload the files
+            queueComplete()
+            {
+                this.getFiles();
+                this.button.disable = false;
+                this.button.text = 'Submit File';
+                this.progress = 0;
+                this.showProgress = false;
+                this.$refs['newFileModal'].hide();
+            },
         }
     }
 </script>

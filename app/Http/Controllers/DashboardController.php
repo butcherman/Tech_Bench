@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
-
+use Zip;
+use Carbon\Carbon;
 
 //use Nwidart\Modules;
 use Mail;
@@ -28,6 +29,19 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
+
+
+        // $path = config('filesystems.disks.public.root') . DIRECTORY_SEPARATOR;
+
+        // $zip = Zip::create($path.'test_zip_'.Carbon::now()->timestamp.'.zip');
+        // $zip->add('C:\Users\RonButcher\Documents\GitHub\Tech_Bench\storage\app\files\99\31576-11-0--SV9100-FeatSpecs.pdf');
+        // $zip->close();
+
+        // dd($zip);
+
+
+
+
 
         //  Get the users notifications
 //        $notifications = Auth::user()->unreadNotifications;
