@@ -10,8 +10,8 @@ build:
     dependencies:
         before:
             - cp tests/.env.scrutinizer .env
-            # - mysql -e 'create database `scrutinizer`;'
-            - mysql -e 'create database `tb-dev-testing`;'
+            - mysql -e 'create database `scrutinizer`;'
+            # - mysql -e 'create database `tb-dev-testing`;'
             # - php composer-setup
             # - php composer self-update
             - composer install --no-interaction
