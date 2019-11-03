@@ -13,7 +13,7 @@ class CreateUserPermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_permissions', function (Blueprint $table) {
+        Schema::create('user_permissions', function(Blueprint $table) {
             $table->increments('user_id')->unsigned();
             $table->boolean('manage_users')->default(0);
             $table->boolean('run_reports')->default(0);

@@ -11,17 +11,19 @@ build:
         before:
             - cp tests/.env.scrutinizer .env
             - mysql -e 'create database `scrutinizer`;'
-            - mysql -e 'create database `tb-dev-testing`;'
-            - composer self-update
+            # - mysql -e 'create database `tb-dev-testing`;'
+            # - php composer-setup
+            # - php composer self-update
             - composer install --no-interaction
-            - pear install pear/PHP_CodeSniffer
-            - phpenv rehash
-            - npm install n -g
-            - npm install -g jshint
+            # - pear install pear/PHP_CodeSniffer
+            # - phpenv rehash
+            # - npm install n -g
+            # - npm install -g jshint
             - npm install
-        after:
             - php artisan key:generate
-            - php artisan migrate
+            # - php artisan migrate --seed
+            - npm run production
+        after:
 
 filter:
     excluded_paths:
@@ -48,5 +50,5 @@ checks:
         fix_doc_comments: true
 tools:
     external_code_coverage:
-        timeout: 600
-        runs: 3
+        timeout: 900
+        runs: 2
