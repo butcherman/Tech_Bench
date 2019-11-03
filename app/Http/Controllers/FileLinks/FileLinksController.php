@@ -30,7 +30,7 @@ class FileLinksController extends Controller
     {
         //  Verify the user is logged in and has permissions for this page
         $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
+        $this->middleware(function($request, $next) {
             $this->user = auth()->user();
             $this->authorize('hasAccess', 'use_file_links');
             return $next($request);
@@ -40,7 +40,7 @@ class FileLinksController extends Controller
     //  Landing page shows all links that the user owns
     public function index()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('links.index');
     }
 
@@ -269,7 +269,7 @@ class FileLinksController extends Controller
         ]);
 
         Log::info('User ID '.Auth::user()->user_id.' disabled link ID - '.$id);
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return response()->json(['success' => true]);
     }
 

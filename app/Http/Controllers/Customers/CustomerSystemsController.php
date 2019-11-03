@@ -15,7 +15,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 class CustomerSystemsController extends Controller
-{    
+{
     use SystemsTrait;
     
     public function __construct()

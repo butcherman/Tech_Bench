@@ -12,7 +12,7 @@ $factory->define(App\Files::class, function(Faker $faker) {
     ];
 });
 
-$factory->define(App\CustomerFiles::class, function (Faker $faker) {
+$factory->define(App\CustomerFiles::class, function(Faker $faker) {
     return [
         'file_id' => factory(App\Files::class)->create()->file_id,
         'file_type_id' => 1,

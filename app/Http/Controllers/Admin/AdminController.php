@@ -40,11 +40,11 @@ class AdminController extends Controller
         foreach($userLinks as $user)
         {
             $expired = $user->FileLinks->filter(function($lnk) {
-                           if($lnk->expire < date('Y-m-d'))
-                           {
-                               return $lnk;
-                           }
-                       })->count();
+                            if($lnk->expire < date('Y-m-d'))
+                            {
+                                return $lnk;
+                            }
+                        })->count();
 
             $linkCount[] = [
                 'user_id' => $user->user_id,
