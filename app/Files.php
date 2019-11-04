@@ -2,10 +2,10 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Files extends Model
 {
@@ -17,15 +17,15 @@ class Files extends Model
         return $this->hasMany('App\SystemFiles', 'file_id', 'file_id');
     }
 
-    // public function fileLinkFiles()
-    // {
-    //     return $this->hasOne('App\FileLinkFiles', 'file_id', 'file_id');
-    // }
-
-    public function fileLinkNotes()
+    public function fileLinkFiles()
     {
-        return $this->hasOne('App\FileLinkNotes', 'file_id', 'file_id');
+        return $this->belongsTo('App\FileLinkFiles', 'file_id', 'file_id');
     }
+
+    // public function fileLinkNotes()
+    // {
+    //     return $this->belongsTo()('App\FileLinkNotes', 'file_id', 'file_id');
+    // }
 
     //  Remove any illegal characters from filename and make sure it is unique
     public static function cleanFileName($path, $fileName)

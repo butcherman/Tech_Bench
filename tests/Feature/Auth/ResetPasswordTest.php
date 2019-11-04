@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+// use Illuminate\Foundation\Testing\WithFaker;
+// use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ResetPasswordTest extends TestCase
 {
     //  Verify the user can view the reset form
-    public function testUserCanViewAPasswordResetForm()
+    public function test_view_password_reset_form()
     {
         $user = factory(User::class)->create();
         $token = Password::broker()->createToken($user);
@@ -27,7 +27,7 @@ class ResetPasswordTest extends TestCase
     }
 
     //  Verify the user cannot view the reset form if already logged in
-    public function testUserCannotViewAPasswordResetFormWhenAuthenticated()
+    public function test_view_password_form_while_logged_in()
     {
         $user = factory(User::class)->create();
         $token = Password::broker()->createToken($user);
@@ -38,7 +38,7 @@ class ResetPasswordTest extends TestCase
     }
 
     //  Verify the user can reset their password if the token is valid
-    public function testUserCanResetPasswordWithValidToken()
+    public function test_submit_reset_password_form_valid()
     {
         Event::fake();
         $user = factory(User::class)->create();
@@ -60,7 +60,7 @@ class ResetPasswordTest extends TestCase
     }
 
     //  Verify user cannot reset a password with an Invalid Reset token
-    public function testUserCannotResetPasswordWithInvalidToken()
+    public function test_submit_reset_password_form_invalid_token()
     {
         $user = factory(User::class)->create([
             'password' => bcrypt('old-password'),
@@ -80,7 +80,7 @@ class ResetPasswordTest extends TestCase
     }
 
     //  Verify user cannot reset to blank password
-    public function testUserCannotResetPasswordWithoutProvidingANewPassword()
+    public function test_submit_reset_password_form_blank_new_pass()
     {
         $user = factory(User::class)->create([
             'password' => bcrypt('old-password'),
@@ -103,7 +103,7 @@ class ResetPasswordTest extends TestCase
     }
 
     //  Verify user cannot reset password without providing valid email address
-    public function testUserCannotResetPasswordWithoutProvidingAnEmail()
+    public function test_submit_reset_password_form_no_email()
     {
         $user = factory(User::class)->create([
             'password' => bcrypt('old-password'),

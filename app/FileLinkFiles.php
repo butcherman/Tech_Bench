@@ -15,7 +15,7 @@ class FileLinkFiles extends Model
 
     public function fileLinks()
     {
-        return $this->hasMany('App\FileLinks', 'link_id', 'link_id');
+        return $this->belongsTo('App\FileLinks', 'link_id', 'link_id');
     }
 
     public function files()
@@ -25,6 +25,6 @@ class FileLinkFiles extends Model
 
     public function User()
     {
-        return $this->hasOne('App\User', 'user_id', 'user_id');
+        return $this->hasMany('App\User', 'user_id', 'user_id');
     }
 }

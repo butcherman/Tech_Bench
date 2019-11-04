@@ -37,38 +37,43 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
-    public function UserLogins()
+    // public function UserLogins()
+    // {
+    //     return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
+    // }
+
+    public function UserPermissions()
     {
-        return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
+        return $this->hasOne('App\UserPermissions', 'user_id', 'user_id');
     }
 
-    public function systemFiles()
-    {
-        return $this->hasMany('App\SystemFiles', 'user_id', 'user_id');
-    }
+    // public function fileLinks()
+    // {
+    //     return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
+    // }
 
-    public function customerFavs()
-    {
-        return $this->belongsTo('App\CustomerFavs', 'user_id', 'user_id');
-    }
+    // public function fileLinkFiles()
+    // {
+    //     return $this->belongsTo('App\FileLinkFiles', 'user_id', 'user_id');
+    // }
 
-    public function customerNotes()
-    {
-        return $this->belongsTo('App\CustomerNotes', 'user_id', 'user_id');
-    }
+    // public function customerFavs()
+    // {
+    //     return $this->belongsTo('App\CustomerFavs', 'user_id', 'user_id');
+    // }
 
-    public function techTips()
-    {
-        return $this->belongsTo('App\TechTips', 'user_id', 'user_id');
-    }
+    // public function customerNotes()
+    // {
+    //     return $this->belongsTo('App\CustomerNotes', 'user_id', 'user_id');
+    // }
 
-    public function techTipComments()
-    {
-        return $this->belongsTo('App\TechTipComments', 'user_id', 'user_id');
-    }
+    // public function techTips()
+    // {
+    //     return $this->belongsTo('App\TechTips', 'user_id', 'user_id');
+    // }
 
-    public function fileLinks()
-    {
-        return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
-    }
+    // public function techTipComments()
+    // {
+    //     return $this->belongsTo('App\TechTipComments', 'user_id', 'user_id');
+    // }
 }

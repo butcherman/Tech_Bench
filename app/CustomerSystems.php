@@ -8,19 +8,19 @@ class CustomerSystems extends Model
 {
     protected $primaryKey = 'cust_sys_id';
     protected $fillable = ['cust_id', 'sys_id'];
-    
-    public function Customers()
-    {
-        return $this->belongsTo('App\customers', 'cust_id', 'cust_id');
-    }
-    
-    public function SystemTypes()
-    {
-        return $this->hasOne('App\SystemTypes', 'sys_id', 'sys_id');
-    }
-    
-    public function CustomerSystemFields()
-    {
-        return $this->belongsTo('App\CustomerSystemFields', 'cust_sys_id');
-    }
+
+    // public function Customers()
+    // {
+    //     return $this->belongsTo('App\customers', 'cust_id', 'cust_id');
+    // }
+
+    // public function SystemTypes()
+    // {
+    //     return $this->hasOne('App\SystemTypes', 'sys_id', 'sys_id');
+    // }
+
+    // public function CustomerSystemFields()
+    // {
+    //     return $this->belongsTo('App\CustomerSystemFields', 'cust_sys_id');
+    // }
 }

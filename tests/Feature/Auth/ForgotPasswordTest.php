@@ -7,14 +7,14 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Foundation\Testing\WithFaker;
+// use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+// use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ForgotPasswordTest extends TestCase
 {
     //  Verify user can view the email reset password form
-    public function testResetEmailForm()
+    public function test_reset_password_form()
     {
         $response = $this->get('/password/reset');
 
@@ -23,7 +23,7 @@ class ForgotPasswordTest extends TestCase
     }
 
     //  Verify user cannot view the reset email form when logged in
-    public function testResetEmailFormWhenLoggedIn()
+    public function test_reset_password_form_while_logged_in()
     {
         $user = factory(User::class)->create();
 
@@ -33,7 +33,7 @@ class ForgotPasswordTest extends TestCase
     }
 
     //  Verify that the "Forgot Password" form creates an email with link
-    public function testSubmitForgotPasswordForm()
+    public function test_submit_reset_password_form()
     {
         Notification::fake();
         $user = factory(User::class)->create([
@@ -51,7 +51,7 @@ class ForgotPasswordTest extends TestCase
     }
 
     //  Verify that the "Forgot Password" form will not email if invalid email is entered
-    public function testSubmitForgotPasswordFormInvalidEmail()
+    public function test_submit_reset_password_form_invalid_email()
     {
         Notification::fake();
 
@@ -64,7 +64,7 @@ class ForgotPasswordTest extends TestCase
     }
 
     //  Test user submitting form without putting in an email address
-    public function testEmailIsRequired()
+    public function test_submit_reset_password_form_no_email()
     {
         $response = $this->from('/password/reset')->post('/password/email', []);
         $response->assertRedirect('/password/reset');

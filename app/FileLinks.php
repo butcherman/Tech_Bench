@@ -26,21 +26,21 @@ class FileLinks extends Model
 
     public function fileLinkFiles()
     {
-        return $this->belongsTo('App\FileLinkFiles', 'link_id', 'link_id');
+        return $this->hasMany('App\FileLinkFiles', 'link_id', 'link_id');
     }
 
-    public function fileLinkInstructions()
-    {
-        return $this->hasMany('App\FileLinkInstructions', 'link_id', 'link_id');
-    }
+    // public function fileLinkInstructions()
+    // {
+    //     return $this->hasMany('App\FileLinkInstructions', 'link_id', 'link_id');
+    // }
 
-    public function fileLinkNotes()
-    {
-        return $this->hasMany('App\FileLinkNotes', 'link_id', 'link_id');
-    }
+    // public function fileLinkNotes()
+    // {
+    //     return $this->hasMany('App\FileLinkNotes', 'link_id', 'link_id');
+    // }
 
-    public function customers()
-    {
-        return $this->belongsTo('App\Customers', 'cust_id', 'cust_id');
-    }
+    // public function customers()
+    // {
+    //     return $this->belongsTo('App\Customers', 'cust_id', 'cust_id');
+    // }
 }

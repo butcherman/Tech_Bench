@@ -18,7 +18,7 @@ class AccountTest extends TestCase
     }
 
     //  Verify a guest cannot view the account page
-    public function testViewPageGuest()
+    public function test_view_page_as_guest()
     {
         $response = $this->get(route('account'));
 
@@ -28,7 +28,7 @@ class AccountTest extends TestCase
     }
 
     //  Verify a logged in user can view the account page
-    public function testViewPage()
+    public function test_view_page()
     {
         $response = $this->actingAs($this->user)->get(route('account'));
 
@@ -37,7 +37,7 @@ class AccountTest extends TestCase
     }
 
     //  Verify that a guest cannot submit the change settings form
-    public function testSubmitFormGuest()
+    public function test_submit_form_as_guest()
     {
         $data = [
             'username'   => $this->user->username,
@@ -54,7 +54,7 @@ class AccountTest extends TestCase
     }
 
     //  Verify that a user can submit the change settings form
-    public function testSubmitForm()
+    public function test_submit_form()
     {
         $data = [
             'username'   => $this->user->username,
@@ -71,7 +71,7 @@ class AccountTest extends TestCase
     }
 
     //  Verify a guest cannot view the change password page
-    public function testChangePasswordGuest()
+    public function test_change_password_as_guest()
     {
         $response = $this->get(route('changePassword'));
 
@@ -81,7 +81,7 @@ class AccountTest extends TestCase
     }
 
     //  Verify a logged in user can view the change password page
-    public function testChangePassword()
+    public function test_change_password()
     {
         $response = $this->actingAs($this->user)->get(route('changePassword'));
 
@@ -90,10 +90,10 @@ class AccountTest extends TestCase
     }
 
     //  Verify that a guest cannot submit the change password form
-    public function testSubmitPasswordGuest()
+    public function test_submit_password_change_as_guest()
     {
         $data = [
-            'oldPass'               => 'ThisIsAPassword',
+            'oldPass'               => 'password',
             'newPass'               => 'Bobby',
             'newPass_confirmation'  => 'Bobby'
         ];
@@ -106,10 +106,10 @@ class AccountTest extends TestCase
     }
 
     //  Verify that a user can submit the change password form
-    public function testSubmitPassword()
+    public function test_submit_password_change()
     {
         $data = [
-            'oldPass'               => 'ThisIsAPassword',
+            'oldPass'               => 'password',
             'newPass'               => 'BobbyNewPass',
             'newPass_confirmation'  => 'BobbyNewPass'
         ];
@@ -122,7 +122,7 @@ class AccountTest extends TestCase
     }
 
     //  Verify that a use cannot submit password if the old password is invalid
-    public function testSubmitPasswordBadOld()
+    public function test_submit_password_bad_old_password()
     {
         $data = [
             'oldPass'               => 'secretlyBadPassword',
@@ -137,10 +137,10 @@ class AccountTest extends TestCase
     }
 
     //  Verify that a use cannot submit password if the confirmation password does not match
-    public function testSubmitPasswordBadConfirm()
+    public function test_submit_password_wrong_confirmed()
     {
         $data = [
-            'oldPass'               => 'ThisIsAPassword',
+            'oldPass'               => 'password',
             'newPass'               => 'BobbyNewPass',
             'newPass_confirmation'  => 'BobbyUnconfirmed'
         ];
@@ -152,17 +152,51 @@ class AccountTest extends TestCase
     }
 
     //  Verify that a use cannot submit password if the new password is the same as the old one
-    public function testSubmitPasswordSame()
+    public function test_submit_password_new_and_old_same()
     {
         $data = [
-            'oldPass'               => 'ThisIsAPassword',
-            'newPass'               => 'ThisIsAPassword',
-            'newPass_confirmation'  => 'ThisIsAPassword'
+            'oldPass'               => 'password',
+            'newPass'               => 'password',
+            'newPass_confirmation'  => 'password'
         ];
 
         $response = $this->actingAs($this->user)->post(route('changePassword'), $data);
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['newPass']);
+    }
+
+    //  Verfiy that a user can update their notification settings
+    public function test_update_notifications()
+    {
+        $data = [
+            'em_tech_tip'     => 'on',
+            'em_file_link'    => 'on',
+            'em_notification' => 'on',
+            'auto_del_link'   => 'on',
+        ];
+
+        $response = $this->actingAs($this->user)->put(route('account'), $data);
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('account'));
+        $response->assertSessionHas('success', 'User Notifications Updated');
+    }
+
+    //  Verify that a guest cannot update a user's notification settings
+    public function test_update_notifications_as_guest()
+    {
+        $data = [
+            'em_tech_tip'     => 'on',
+            'em_file_link'    => 'on',
+            'em_notification' => 'on',
+            'auto_del_link'   => 'on',
+        ];
+
+        $response = $this->put(route('account'), $data);
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
     }
 }

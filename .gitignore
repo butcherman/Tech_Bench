@@ -16,3 +16,4 @@ yarn-error.log
 /patches
 /packages
 /report
+/tests/_Report/

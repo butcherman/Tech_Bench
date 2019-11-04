@@ -3,15 +3,17 @@
 namespace Tests\Feature\Auth;
 
 use App\User;
+use App\UserPermissions;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+// use Illuminate\Foundation\Testing\WithFaker;
+// use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LoginTest extends TestCase
 {
     //  Verify login page shows
-    public function testViewLoginForm()
+    public function test_view_login_form()
     {
         $response = $this->get('/');
 
@@ -19,8 +21,17 @@ class LoginTest extends TestCase
         $response->assertViewIs('auth.login');
     }
 
+    //  Verify the No Script page shows
+    public function test_no_script_page()
+    {
+        $response = $this->get(route('noscript'));
+
+        $response->assertSuccessful();
+        $response->assertViewIs('err.noscript');
+    }
+
     //  Verify the guest cannot visit default Laravel Register page
-    public function testRegisterPage()
+    public function test_register_page()
     {
         $response = $this->get(route('register'));
 
@@ -29,7 +40,7 @@ class LoginTest extends TestCase
     }
 
     //  Verify the a valid user can log in
-    public function testValidLogin()
+    public function test_valid_login()
     {
         $user = factory(User::class)->create([
             'password' => bcrypt($password = 'randomPassword')
@@ -44,7 +55,7 @@ class LoginTest extends TestCase
     }
 
     //  Verify user cannot login with incorrect password
-    public function testIncorrectLogin()
+    public function test_incorrect_login()
     {
         $user = factory(User::class)->create([
             'password' => bcrypt($password = 'randomPassword')
@@ -59,7 +70,7 @@ class LoginTest extends TestCase
     }
 
     //  Verify a user that has been deactivated is not able to login
-    public function testDisabledUserLogin()
+    public function test_login_as_disabled_user()
     {
         $user = factory(User::class)->create([
             'password' => bcrypt($password = 'randomPassword'),
@@ -75,7 +86,7 @@ class LoginTest extends TestCase
     }
 
     //  Verify that the user is redirected if trying to veiw the login form again
-    public function testPostLoginRedirect()
+    public function test_valid_login_redirect()
     {
         $user = factory(User::class)->make();
 
@@ -86,16 +97,13 @@ class LoginTest extends TestCase
     }
 
     //  Test the "Remember Me" token
-    public function testRememberMe()
+    public function test_remember_me()
     {
-        $user = factory(User::class)->create([
-            'user_id'  => random_int(10, 100),
-            'password' => bcrypt($password = 'myPassword'),
-        ]);
+        $user = factory(User::class)->create();
 
         $response = $this->post(route('login'), [
             'username' => $user->username,
-            'password' => $password,
+            'password' => 'password',
             'remember' => 'on',
         ]);
 
@@ -109,7 +117,7 @@ class LoginTest extends TestCase
     }
 
     //  Test user is able to logout
-    public function testLogout()
+    public function test_logout()
     {
         $user = User::find(2);
 

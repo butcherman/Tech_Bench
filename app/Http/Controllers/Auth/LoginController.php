@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
-    
+
     protected $maxAttempts, $decayMinutes;
 
     //  Where to redirect users after login
@@ -22,13 +22,13 @@ class LoginController extends Controller
         $this->maxAttempts  = 5;
         $this->decayMinutes = 10;
     }
-    
+
     //  Override username function to use the username instead of email
     public function username()
     {
         return 'username';
     }
-    
+
     //  Override the Credentials function to include the "Active" field
     protected function credentials(Request $request)
     {
