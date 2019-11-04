@@ -1,53 +1,41 @@
 build:
-    environment:
-        php: 7.3
-        mysql: 5.7
-        node: 10.15.3
-
-    services:
-        mysql: 5.7
-
-    dependencies:
-        before:
-            - cp tests/.env.scrutinizer .env
-            - mysql -e 'create database `scrutinizer`;'
-            # - mysql -e 'create database `tb-dev-testing`;'
-            # - php composer-setup
-            # - php composer self-update
-            - composer install --no-interaction
-            # - pear install pear/PHP_CodeSniffer
-            # - phpenv rehash
-            # - npm install n -g
-            # - npm install -g jshint
-            - npm install
-            - php artisan key:generate
-            # - php artisan migrate --seed
-            - npm run production
-        after:
-
+    nodes:
+        analysis:
+            environment:
+                php: 7.3
+                mysql: 5.7
+                node: 10.15.3
+                apache2:
+                    modules: ['rewrite']
+                    sites:
+                        symfony_app:
+                            web_root: 'web/'
+                            host: 'local.dev'
+                            # rules:
+                            #     - 'RewriteCond %{HTTP_REFERER} !^$'
+                            #     - 'RewriteCond %{HTTP_REFERER} !^http://(www.)?example.com/ [NC]'
+                            #     - 'RewriteRule .(gif|jpg|png)$ - [F]'
+            services:
+                mysql: 5.7
+            tests:
+                override:
+                    - php-scrutinizer-run  #  --enable-security-analysis
+            dependencies:
+                before:
+                    - cp tests/.env.scrutinizer .env
+                    - mysql -e 'create database `scrutinizer`;'
+                    - composer install --no-interaction
+                    - npm install
+                    - php artisan key:generate
+                    - npm run production
 filter:
     excluded_paths:
         - 'tests/'
         - 'docs/'
+        - 'storage/'
+    dependency_paths:
         - 'vendor/'
-        - 'node_modules'
-
-checks:
-    php:
-        code_rating: true
-        remove_extra_empty_lines: true
-        remove_php_closing_tag: true
-        remove_trailing_whitespace: true
-        fix_use_statements:
-            remove_unused: true
-            preserve_multiple: false
-            preserve_blanklines: true
-            order_alphabetically: true
-        fix_php_opening_tag: true
-        fix_linefeed: true
-        fix_line_ending: true
-        fix_identation_4spaces: true
-        fix_doc_comments: true
+        - 'node_modules/'
 tools:
     external_code_coverage:
         timeout: 900

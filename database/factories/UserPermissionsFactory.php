@@ -2,10 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\UserPermissions;
-use Faker\Generator as Faker;
-
-$factory->define(App\UserPermissions::class, function(Faker $faker) {
+$factory->define(App\UserPermissions::class, function() {
     return [
         'manage_users'        => rand(0, 1),
         'run_reports'         => rand(0, 1),

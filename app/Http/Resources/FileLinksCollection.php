@@ -28,6 +28,8 @@ class FileLinksCollection extends ResourceCollection
             }
         }
 
-        return parent::toArray($collection);
+        return parent::toArray(
+        /** @scrutinizer ignore-type */
+        $collection);
     }
 }

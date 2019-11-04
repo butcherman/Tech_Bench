@@ -23,6 +23,8 @@ use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class LinkFilesController extends Controller
 {
+    private $user;
+
     public function __construct()
     {
         //  Verify the user is logged in and has permissions for this page
@@ -46,7 +48,9 @@ class LinkFilesController extends Controller
         //  Verify that the upload is valid and being processed
         if($receiver->isUploaded() === false)
         {
-            Log::error('Upload File Missing - '.$request->toArray());
+            Log::error('Upload File Missing - ' .
+            /** @scrutinizer ignore-type */
+            $request->toArray());
             throw new UploadMissingFileException();
         }
 

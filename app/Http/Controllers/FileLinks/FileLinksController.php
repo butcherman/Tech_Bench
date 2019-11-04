@@ -19,12 +19,14 @@ use App\Http\Resources\FileLinksCollection;
 use App\Http\Resources\CustomerFileTypesCollection;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
+// use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use App\Http\Resources\FileLinks as FileLinksResource;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class FileLinksController extends Controller
 {
+    private $user;
+
     //  Only authorized users have access
     public function __construct()
     {
@@ -85,7 +87,9 @@ class FileLinksController extends Controller
             //  Verify that the upload is valid and being processed
             if($receiver->isUploaded() === false)
             {
-                Log::error('Upload File Missing - '.$request->toArray());
+                Log::error('Upload File Missing - ' .
+                /** @scrutinizer ignore-type */
+                $request->toArray());
                 throw new UploadMissingFileException();
             }
 
@@ -115,7 +119,9 @@ class FileLinksController extends Controller
         if(isset($request->_completed) && $request->_completed)
         {
             Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-            Log::debug('Link data submitted.  Data - ', $request->toArray());
+            Log::debug('Link data submitted.  Data - ',
+            /** @scrutinizer ignore-type */
+            $request->toArray());
             $linkID = $this->createLink($request);
             if($request->session()->has('newLinkFile'))
             {
@@ -219,7 +225,9 @@ class FileLinksController extends Controller
         }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Link Detials - ', $linkData->toArray());
+        Log::debug('Link Detials - ',
+        /** @scrutinizer ignore-type */
+        $linkData->toArray());
         return view('links.details', [
             'link_id'    => $linkData->link_id,
             'cust_id'    => $linkData->cust_id,
@@ -254,7 +262,9 @@ class FileLinksController extends Controller
         ]);
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Updated Link Data for link ID-'.$id, $request->toArray());
+        Log::debug('Updated Link Data for link ID-'.$id,
+        /** @scrutinizer ignore-type */
+        $request->toArray());
         Log::info('File Link Updated', ['link_id' => $id]);
 
         return response()->json(['success' => true]);
