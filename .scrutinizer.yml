@@ -5,12 +5,12 @@ build:
                 php: 7.3
                 mysql: 5.7
                 node: 10.15.3
-                apache2:
-                    modules: ['rewrite']
-                    sites:
-                        symfony_app:
-                            web_root: 'web/'
-                            host: 'local.dev'
+                # apache2:
+                #     modules: ['rewrite']
+                #     sites:
+                #         symfony_app:
+                #             web_root: 'web/'
+                #             host: 'local.dev'
                             # rules:
                             #     - 'RewriteCond %{HTTP_REFERER} !^$'
                             #     - 'RewriteCond %{HTTP_REFERER} !^http://(www.)?example.com/ [NC]'
