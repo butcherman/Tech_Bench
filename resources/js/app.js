@@ -64,8 +64,8 @@ Vue.component('list-file-links',    require('./components/fileLinks/ListFileLink
 Vue.component('new-file-link-form', require('./components/fileLinks/NewFileLink.vue').default);
 Vue.component('link-details',       require('./components/fileLinks/LinkDetails.vue').default);
 Vue.component('link-files',         require('./components/fileLinks/LinkFiles.vue').default);
-Vue.component('user-download',      require('./components/fileLinks/UserFileDownloads.vue').default);
-//Vue.component('user-upload',       require('./components/fileLinks/UserFileUpload.vue').default);
+Vue.component('guest-download',     require('./components/fileLinks/GuestFileDownloads.vue').default);
+Vue.component('guest-upload',       require('./components/fileLinks/GuestFileUpload.vue').default);
 
 
 /*

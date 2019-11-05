@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FileLinkFiles extends Model
 {
     protected $primaryKey = 'link_file_id';
-    protected $fillable = ['link_id', 'file_id', 'user_id', 'added_by', 'upload'];
+    protected $fillable = ['link_id', 'file_id', 'user_id', 'added_by', 'upload', 'note'];
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y'

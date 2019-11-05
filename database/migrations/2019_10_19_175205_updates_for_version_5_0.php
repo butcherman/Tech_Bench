@@ -9,6 +9,8 @@ use App\PhoneNumberTypes;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\FileLinks;
+use App\FileLinkFiles;
 
 class UpdatesForVersion50 extends Migration
 {
@@ -21,7 +23,7 @@ class UpdatesForVersion50 extends Migration
     {
         //  Remove the Navbar view
         DB::statement('DROP VIEW IF EXISTS `navbar_view`');
-        
+
         //  Update the icons in the phone number types table
         PhoneNumberTypes::find(1)->update(
         [
@@ -35,7 +37,7 @@ class UpdatesForVersion50 extends Migration
         [
             'icon_class' => 'ti-mobile'
         ]);
-        
+
         //  Add the 'password expires' column to the users table
         if(!Schema::hasColumn('users', 'password_expires'))
         {
@@ -45,7 +47,7 @@ class UpdatesForVersion50 extends Migration
                     ->after('active');
             });
         }
-        
+
         //  Add the 'hidden' column to the system_cust_data_types table
         if(!Schema::hasColumn('system_cust_data_types', 'hidden'))
         {
@@ -55,7 +57,7 @@ class UpdatesForVersion50 extends Migration
                     ->after('name');
             });
         }
-        
+
         //  Add the cust id and note colunns to the file_links table
         if(!Schema::hasColumn('file_links', 'cust_id'))
         {
@@ -74,15 +76,46 @@ class UpdatesForVersion50 extends Migration
                     ->nullable()
                     ->after('link_name');
             });
+            $instructions = DB::select('SELECT * FROM `file_link_instructions`');
+            foreach($instructions as $ins)
+            {
+                FileLinksDB::find($ins->link_id)->update([
+                    'note' => $ins->instruction
+                ]);
+            }
+            Schema::table('file_link_instructions', function (Blueprint $table) {
+                $table->dropForeign(['link_id']);
+            });
+            Schema::dropIfExists('file_link_instructions');
         }
-        
+        //  Add "notes" column to the file link files table
+        if (!Schema::hasColumn('file_link_files', 'note')) {
+            Schema::table('file_link_files', function (Blueprint $table) {
+                $table->longText('note')
+                    ->nullable()
+                    ->after('upload');
+            });
+            $notes = DB::select('SELECT * FROM `file_link_notes`');
+            foreach($notes as $note)
+            {
+                FileLinkFiles::where('file_id', $note->file_id)->update([
+                    'note' => $note->note
+                ]);
+            }
+            Schema::table('file_link_notes', function (Blueprint $table) {
+                $table->dropForeign(['link_id']);
+                $table->dropForeign(['file_id']);
+            });
+            Schema::dropIfExists('file_link_notes');
+        }
+
         //  Add the 'documentation' column in the tech_tips table
         if(!Schema::hasColumn('tech_tips', 'documentation'))
         {
             Schema::table('tech_tips', function(Blueprint $table) {
                 $table->boolean('documentation')->default(0)->nullable()->after('public');
             });
-            
+
             //  Move all of the system files over to the tech tips table
             $sysFiles = DB::select('SELECT * FROM `system_files`');
             foreach($sysFiles as $sysFile)
@@ -108,19 +141,19 @@ class UpdatesForVersion50 extends Migration
                 ]);
             }
         }
-        
+
         //  Add the 'is_installer' column in the users table
         if(!Schema::hasColumn('users', 'is_installer'))
         {
             Schema::table('users', function(Blueprint $table) {
                 $table->boolean('is_installer')->default(0)->after('active');
             });
-            
+
             //  Migrate user roles from the 'user roles' table to the new 'user permissions' table
             if(Schema::hasTable('user_permissions') && (UserPermissions::all()->isEmpty()))
             {
                 $userRoles = DB::select('SELECT * FROM `user_role` LEFT JOIN `roles` ON `user_role`.`role_id` = `roles`.`role_id`');
-                
+
                 foreach($userRoles as $user)
                 {
                     if($user->name === 'Installer')
@@ -204,7 +237,7 @@ class UpdatesForVersion50 extends Migration
                 Schema::dropIfExists('roles');
             }
         }
-        
+
         //  Remove the system_files and system_file_types table
         if(Schema::hasTable('system_files'))
         {
@@ -217,7 +250,9 @@ class UpdatesForVersion50 extends Migration
             Schema::dropIfExists('system_files');
             Schema::dropIfExists('system_file_types');
         }
-        
+
+
+
     }
 
     /**
@@ -234,14 +269,14 @@ class UpdatesForVersion50 extends Migration
                 $table->dropColumn('cust_id');
             });
         }
-        
+
         if(!Schema::hasColumn('file_links', 'note'))
         {
             Schema::table('file_links', function(Blueprint $table) {
                 $table->dropColumn('note');
             });
         }
-        
+
         if(Schema::hasColumn('tech_tips', 'documentation'))
         {
             Schema::table('tech_tips', function(Blueprint $table) {

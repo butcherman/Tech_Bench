@@ -51,6 +51,14 @@
                         <span v-if="data.row.added_by">{{data.row.added_by}}</span>
                         <span v-else>{{data.row.user.full_name}}</span>
                     </span>
+                    <span v-else-if="data.column.field === 'details'">
+                        <div v-if="data.row.note">
+                            <span :id="'details-'+data.row.files.file_id" class="ti-comment pointer text-danger"></span>
+                            <b-popover :target="'details-'+data.row.files.file_id" triggers="click" placement="left" title="File Details">
+                                <pre>{{data.row.note}}</pre>
+                            </b-popover>"
+                        </div>
+                    </span>
                     <span v-else-if="data.column.field == 'actions'">
                         <div class="d-flex flex-nowrap">
                             <button v-if="cust_id" class="btn btn-rounded px-0 text-muted mr-2" title="Place File In Customer Files" @click="moveFile = data.row.files" v-b-tooltip.hover v-b-modal.file-type>
@@ -130,11 +138,11 @@
                             field: 'user',
                             filterable: true,
                         },
-                        // {
-                        //     label: 'File Notes',
-                        //     field: 'note',
-                        //     filterable: false,
-                        // },
+                        {
+                            label: 'File Notes',
+                            field: 'details',
+                            filterable: false,
+                        },
                         {
                             label: 'Actions',
                             field: 'actions',
@@ -174,6 +182,7 @@
                         //  remove the loading screen and populate the table
                         this.loadDone = true;
                         this.table.rows = res.data;
+                        console.log(res.data);
                     }).catch(error => { this.error = true; });
             },
             //  When moving a file to a customer file list, select the appropriate file type tag and move the file

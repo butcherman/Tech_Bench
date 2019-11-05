@@ -51,7 +51,17 @@ abstract class TestCase extends BaseTestCase
         $user = factory(User::class)->create();
         factory(UserPermissions::class)->create(
             [
-                'user_id' => $user->user_id
+                'user_id'             => $user->user_id,
+                'manage_users'        => 0,
+                'run_reports'         => 0,
+                'add_customer'        => 1,
+                'deactivate_customer' => 1,
+                'use_file_links'      => 1,
+                'create_tech_tip'     => 1,
+                'edit_tech_tip'       => 1,
+                'delete_tech_tip'     => 0,
+                'create_category'     => 0,
+                'modify_category'     => 0
             ]
         );
         return $user;

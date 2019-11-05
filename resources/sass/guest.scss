@@ -1,17 +1,9 @@
-// Fonts
-//@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
-// Variables
-//@import "variables";
-
-// Third Party Libraries
 @import '~bootstrap/scss/bootstrap';
 //@import '~bootstrap-vue/src/index.scss';
 //@import '~font-awesome/scss/font-awesome';
 //@import '~vue2-dropzone/dist/vue2Dropzone.min.css';
 
-//  Shared styles between all layouts
-//@import 'fileDrag';
+@import 'fileDrag';
 
 .center {
     margin-left: auto;
@@ -23,6 +15,7 @@ body {
     background: -moz-linear-gradient(-45deg, #090321 0%, #424242 50%, #5E5453 100%);
     background: -webkit-linear-gradient(-45deg, #090321 0%, #424242 50%, #5E5453 100%);
     background: linear-gradient(135deg, #090321 0%, #424242 50%, #5E5453 100%);
+    background-attachment: fixed;
     height: 100vh;
     color: #FFFFFF;
 }
@@ -66,6 +59,10 @@ body {
 .card {
     color: #000000;
     margin: 0.5em;
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 //#guest-link-instructions {

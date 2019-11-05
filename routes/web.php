@@ -55,10 +55,11 @@ Route::prefix('links')->name('links.')->group(function () {
 /*
 *   Guest File Link Routes
 */
-Route::get('file-links/{id}/get-files', 'FileLinks\UserLinksController@getFiles')->name('file-links.getFiles');
-Route::post('file-links/{id}',          'FileLinks\UserLinksController@update')  ->name('file-links.show');
-Route::get('file-links/{id}',           'FileLinks\UserLinksController@show')    ->name('file-links.show');
-Route::get('file-links',                'FileLinks\UserLinksController@index')   ->name('file-links.index');
+Route::get('file-links/{id}/get-files', 'FileLinks\GuestLinksController@getFiles')->name('file-links.getFiles');
+Route::put('file-links/{id}',            'FileLinks\GuestLinksController@notify') ->name('file-links.show');
+Route::post('file-links/{id}',          'FileLinks\GuestLinksController@update')  ->name('file-links.show');
+Route::get('file-links/{id}',           'FileLinks\GuestLinksController@show')    ->name('file-links.show');
+Route::get('file-links',                'FileLinks\GuestLinksController@index')   ->name('file-links.index');
 
 
 

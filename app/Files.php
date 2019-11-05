@@ -22,11 +22,6 @@ class Files extends Model
         return $this->belongsTo('App\FileLinkFiles', 'file_id', 'file_id');
     }
 
-    // public function fileLinkNotes()
-    // {
-    //     return $this->belongsTo()('App\FileLinkNotes', 'file_id', 'file_id');
-    // }
-
     //  Remove any illegal characters from filename and make sure it is unique
     public static function cleanFileName($path, $fileName)
     {

@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class NewFileUpload extends Notification
+class NewFileUpload extends Notification implements ShouldQueue
 {
     use Queueable;
     protected $details;
@@ -29,10 +29,10 @@ class NewFileUpload extends Notification
     {
         return (new MailMessage)
             ->line('A new file has been uploaded to the file link - '.$this->details->link_name)
-            ->action('Click to View Link', 
-                url(route('links.details', 
+            ->action('Click to View Link',
+                url(route('links.details',
                 [
-                        'id' => $this->details->link_id, 
+                        'id' => $this->details->link_id,
                         'name' => urlencode($this->details->link_name)
                 ])));
     }
@@ -42,10 +42,10 @@ class NewFileUpload extends Notification
     {
         return [
             'type'    => 'warning',
-            'message' => 'New File Uploaded to link - '.$this->details->link_name,
-            'link'    => url(route('links.details', 
+            'message' => 'New File(s) Uploaded to link - '.$this->details->link_name,
+            'link'    => url(route('links.details',
                             [
-                            'id' => $this->details->link_id, 
+                            'id' => $this->details->link_id,
                                 'name' => urlencode($this->details->link_name)
                             ]))
         ];
