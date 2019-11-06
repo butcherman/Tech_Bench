@@ -1,8 +1,10 @@
 <?php
 
+use App\FileLinkFiles;
+
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
-$factory->define(App\FileLinkFiles::class, function() {
+$factory->define(FileLinkFiles::class, function() {
     return [
         'link_id'  => factory(App\FileLinks::class)->create()->link_id,
         'file_id'  => factory(App\Files::class)->create()->file_id,

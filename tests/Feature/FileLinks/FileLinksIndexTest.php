@@ -193,4 +193,47 @@ class FileLinksIndexTest extends TestCase
             'note'
         ]]);
     }
+
+    //  Test trying to disable a link while logged in as a guest
+    public function test_disable_link_as_guest()
+    {
+        $response = $this->get(route('links.disable', $this->links[1]->link_id));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    //  Test trying to disable a link without permissions
+    public function test_disable_link_no_permissions()
+    {
+        $user = factory(User::class)->create();
+        factory(UserPermissions::class)->create(
+            [
+                'user_id'             => $user->user_id,
+                'manage_users'        => 1,
+                'run_reports'         => 0,
+                'add_customer'        => 1,
+                'deactivate_customer' => 1,
+                'use_file_links'      => 0,
+                'create_tech_tip'     => 1,
+                'edit_tech_tip'       => 1,
+                'delete_tech_tip'     => 0,
+                'create_category'     => 0,
+                'modify_category'     => 0
+            ]
+        );
+
+        $response = $this->actingAs($user)->get(route('links.disable', $this->links[1]->link_id));
+
+        $response->assertStatus(403);
+    }
+
+    //  Test trying to disable a link
+    public function test_disable_link()
+    {
+        $response = $this->actingAs($this->tech)->get(route('links.disable', $this->links[1]->link_id));
+
+        $response->assertSuccessful();
+    }
 }

@@ -49,15 +49,16 @@ class FileLinksController extends Controller
     //  Ajax call to show the links for a specific user
     public function find($id)
     {
+        Log::debug(Auth::user()->user_id.' - '.$id);
         //  Verify if the user is trying to pull their own links
         if($id == 0)
         {
             $id = Auth::user()->user_id;
         }
         //  If the user is trying to pull someone elses links, they must be able to manage users
-        else if ($id != Auth::user()->user_id && !$this->authorize('hasAccess', 'manage_users'))
+        else if ($id != Auth::user()->user_id)
         {
-            return abort(403);
+            $this->authorize('hasAccess', 'manage_users');
         }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);

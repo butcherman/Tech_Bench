@@ -27,7 +27,7 @@ class GuestLinksController extends Controller
     public function index()
     {
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.\Request::ip());
-        return view('links.userIndex');
+        return view('links.guestIndex');
     }
 
     //  Show the link details for the user
