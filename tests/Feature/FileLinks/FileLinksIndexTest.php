@@ -3,11 +3,9 @@
 namespace Tests\Feature\FileLinks;
 
 use App\User;
-use App\UserPermissions;
 use App\FileLinks;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\UserPermissions;
 
 class FileLinksIndexTest extends TestCase
 {

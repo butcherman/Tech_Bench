@@ -2,15 +2,18 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Illuminate\Support\Str;
+use App\User;
 use Carbon\Carbon;
 use App\FileLinks;
+use Tests\TestCase;
 use App\FileLinkFiles;
-use App\User;
 use App\UserPermissions;
+use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use App\Notifications\NewFileUpload;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
+
 
 class GuestFileLinksTest extends TestCase
 {
@@ -115,5 +118,134 @@ class GuestFileLinksTest extends TestCase
 
         $result->assertSuccessful();
         $result->assertViewIs('links.guestDeadLink');
+    }
+
+    /*
+    *   Test Getting the files for the link
+    */
+    //  Verify a guest can get the files for the link
+    public function test_files_page_access()
+    {
+        $result = $this->get(route('file-links.getFiles', $this->link->link_hash));
+
+        $result->assertSuccessful();
+        $result->assertJsonStructure([['link_file_id', 'link_id', 'file_id']]);
+        $this->assertGuest();
+    }
+
+    //  Verify that a logged in user can get the files
+    public function test_files_page_access_as_tech()
+    {
+        $result = $this->actingAs($this->user)->get(route('file-links.getFiles', $this->link->link_hash));
+
+        $result->assertSuccessful();
+        $result->assertJsonStructure([['link_file_id', 'link_id', 'file_id']]);
+    }
+
+    //  Even a user that does not have permissions should be able to get files
+    public function test_files_page_access_no_permissions()
+    {
+        $user = factory(User::class)->create();
+        factory(UserPermissions::class)->create(
+            [
+                'user_id'             => $user->user_id,
+                'manage_users'        => 1,
+                'run_reports'         => 0,
+                'add_customer'        => 1,
+                'deactivate_customer' => 1,
+                'use_file_links'      => 0,
+                'create_tech_tip'     => 1,
+                'edit_tech_tip'       => 1,
+                'delete_tech_tip'     => 0,
+                'create_category'     => 0,
+                'modify_category'     => 0
+            ]
+        );
+        $result = $this->actingAs($user)->get(route('file-links.getFiles', $this->link->link_hash));
+
+        $result->assertSuccessful();
+        $result->assertJsonStructure([['link_file_id', 'link_id', 'file_id']]);
+    }
+
+    //  Test adding a new file as a guest
+    public function test_adding_file_as_guest()
+    {
+        Storage::fake(config('filesystems.paths.links'));
+        $imgName = Str::random(5).'.jpg';
+        $data = [
+            'name' => 'Billy Bob',
+            'file' => $file = UploadedFile::fake()->image($imgName),
+            'note' => Str::random(20)
+        ];
+
+        $response = $this->post(route('file-links.show', $this->link->link_hash), $data);
+
+        $response->assertSuccessful();
+        Storage::disk('local')->assertExists(config('filesystems.paths.links').DIRECTORY_SEPARATOR.$this->link->link_id . DIRECTORY_SEPARATOR .$imgName);
+        $this->assertGuest();
+    }
+
+    //  Test adding a new file as a user
+    public function test_adding_file_as_user()
+    {
+        Storage::fake(config('filesystems.paths.links'));
+        $imgName = Str::random(5) . '.jpg';
+        $data = [
+            'name' => 'Billy Bob',
+            'file' => $file = UploadedFile::fake()->image($imgName),
+            'note' => Str::random(20)
+        ];
+
+        $response = $this->actingAs($this->user)->post(route('file-links.show', $this->link->link_hash), $data);
+
+        $response->assertSuccessful();
+        Storage::disk('local')->assertExists(config('filesystems.paths.links') . DIRECTORY_SEPARATOR . $this->link->link_id . DIRECTORY_SEPARATOR . $imgName);
+    }
+
+    //  Test adding a new file as a user that does not have permissions
+    public function test_adding_file_as_user_no_permissions()
+    {
+        Storage::fake(config('filesystems.paths.links'));
+        $user = factory(User::class)->create();
+        factory(UserPermissions::class)->create(
+            [
+                'user_id'             => $user->user_id,
+                'manage_users'        => 1,
+                'run_reports'         => 0,
+                'add_customer'        => 1,
+                'deactivate_customer' => 1,
+                'use_file_links'      => 0,
+                'create_tech_tip'     => 1,
+                'edit_tech_tip'       => 1,
+                'delete_tech_tip'     => 0,
+                'create_category'     => 0,
+                'modify_category'     => 0
+            ]
+        );
+        $imgName = Str::random(5) . '.jpg';
+        $data = [
+            'name' => 'Billy Bob',
+            'file' => $file = UploadedFile::fake()->image($imgName),
+            'note' => Str::random(20)
+        ];
+
+        $response = $this->actingAs($user)->post(route('file-links.show', $this->link->link_hash), $data);
+
+        $response->assertSuccessful();
+        Storage::disk('local')->assertExists(config('filesystems.paths.links') . DIRECTORY_SEPARATOR . $this->link->link_id . DIRECTORY_SEPARATOR . $imgName);
+    }
+
+    //  Test that after a file is uploaded, and the 'notify' route is triggered, it works
+    public function test_notification_route()
+    {
+        Notification::fake();
+        $data = [
+            '_complete' => true,
+            'count'     => 1
+        ];
+        $response = $this->put(route('file-links.show', $this->link->link_hash), $data);
+
+        $response->assertSuccessful();
+        // Notification::assertSentTo($this->user, NewFileUpload::class);
     }
 }

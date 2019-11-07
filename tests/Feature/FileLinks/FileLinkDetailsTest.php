@@ -3,17 +3,17 @@
 namespace Tests\Feature\FileLinks;
 
 use App\User;
-use App\UserPermissions;
 use App\Customers;
 use App\FileLinks;
 use Tests\TestCase;
 use App\FileLinkFiles;
+use App\UserPermissions;
+use App\CustomerFileTypes;
 use Faker\Generator as Faker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\CustomerFileTypes;
 
 class FileLinkDetailsTest extends TestCase
 {

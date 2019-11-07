@@ -3,15 +3,12 @@
 namespace Tests\Feature\FileLinks;
 
 use App\User;
-use App\UserPermissions;
 use App\Customers;
 use Tests\TestCase;
+use App\UserPermissions;
 use Illuminate\Support\Str;
-use Faker\Generator as Faker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class NewFileLinkTest extends TestCase
 {
@@ -121,7 +118,6 @@ class NewFileLinkTest extends TestCase
     /*
     *   Submit New File Link
     */
-
     // //  Test submitting a new file link as a guest
     public function test_submit_link_as_guest()
     {

@@ -3,12 +3,8 @@
 namespace Tests\Feature\Auth;
 
 use App\User;
-use App\UserPermissions;
-use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Foundation\Testing\WithFaker;
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LoginTest extends TestCase
 {

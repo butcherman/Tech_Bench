@@ -14,12 +14,10 @@ use App\Notifications\NewFileUpload;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Notification;
+use App\http\Resources\FileLinkFilesCollection;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
-
-use App\http\Resources\FileLinkFilesCollection;
-
 
 class GuestLinksController extends Controller
 {
@@ -164,5 +162,7 @@ class GuestLinksController extends Controller
 
         $user = User::find($details->user_id);
         Notification::send($user, new NewFileUpload($details));
+
+        Log::debug('Notification of file upload sent to User ID - '.$user->user_id);
     }
 }

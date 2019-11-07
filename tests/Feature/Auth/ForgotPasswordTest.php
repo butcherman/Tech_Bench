@@ -7,9 +7,7 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-// use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Auth\Notifications\ResetPassword;
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ForgotPasswordTest extends TestCase
 {
