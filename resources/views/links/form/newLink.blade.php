@@ -19,7 +19,7 @@
                             <input type="checkbox" name="allowUp" checked>
                             <span class="slider round"></span>
                         </label>
-                        Allow User to Upload Files 
+                        Allow User to Upload Files
                     </div>
                 </div>
                 {{ Form::bsSubmit('Create File Link') }}
@@ -36,7 +36,7 @@ $(document).ready(function()
     //  Initialize Drag and Drop
     multiFileDrop($('#new-file-link-form'));
 });
-    
+
 function uploadComplete(res)
 {
 //    if($.isNumeric(res))
@@ -50,7 +50,7 @@ function uploadComplete(res)
 //    {
 //        uploadFailed(res);
 //    }
-    
+
     window.location.href = '/links';
 }
 function uploadFailed(res)

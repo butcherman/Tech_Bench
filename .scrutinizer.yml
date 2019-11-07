@@ -5,7 +5,7 @@ build:
 
     services:
         mysql: 5.7
-    
+
     dependencies:
         before:
             - cp tests/.env.scrutinizer .env
@@ -20,5 +20,5 @@ filter:
         - 'tests/'
         - 'docs/'
         - 'vendor/'
-        - 'node_modules'
-        
+        - 'node_modules/'
+        - 'public/js/tinymce/'
