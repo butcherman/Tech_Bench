@@ -24,7 +24,7 @@ class UserLinksController extends Controller
 {
     public function index()
     {
-        echo 'file link home';
+        return view('links.guest.deadLink');
     }
 
     public function details($id)
