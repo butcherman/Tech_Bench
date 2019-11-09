@@ -7,13 +7,13 @@ current:
   patch: 0
   prerelease: dev
   buildmetadata: null
-  commit: 38c
+  commit: 38d
   timestamp:
     year: 2019
     month: 11
     day: 8
     hour: 20
-    minute: 1
+    minute: 11
     second: 57
     timezone: America/Los_Angeles
 commit:
