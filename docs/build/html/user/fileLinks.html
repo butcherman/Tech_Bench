@@ -166,14 +166,18 @@
             
   <div class="section" id="file-links">
 <h1>File Links<a class="headerlink" href="#file-links" title="Permalink to this headline">¶</a></h1>
-<p>The File Links section allows you to pass files to non Tech Bench users.  An example would be if a customer needs access to a file that is too large to email, or has a file extension (example - .exe) that is commonly blocked by email Spam Filters.  Files can be uploaded by you for the customer, or allow the customer to upload files for you to access.</p>
-<p>Each file link has a custom URL and expiration date.  When the file link expires, the files within it can no longer be accessed by a non registered user.</p>
+<p>The File Links section allows you to pass files to non Tech Bench users.  An example would be if a customer needed access to a
+file that is too large to email, or has a file extension that is commonly blocked by email Spam Filters (.exe for example).
+Files can be uploaded by you for the customer, or you can allow the customer to upload files for you to access.</p>
+<p>Each file link has a custom URL and expiration date.  When the file link expires, the files within it can no longer be accessed by
+a non registered user.</p>
 <div class="section" id="primary-file-links-page">
 <h2>Primary File Links Page<a class="headerlink" href="#primary-file-links-page" title="Permalink to this headline">¶</a></h2>
 <img alt="File Links Landing Page" src="../_images/file_links_index.PNG" />
-<p>The primary page gives basic information by showing how many file links you have created, and how many files are attached to the link.</p>
+<p>The primary page gives basic information about each of the file links you have created, such as the name you assigned to the link, the
+date it will expire, and how many total files are attached to the link.</p>
 <p>The following options are available in the Primary File Links Page</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -187,11 +191,11 @@
 <tr class="row-even"><td><p>Link Name</p></td>
 <td><p>The assigned name of the file link.  By clicking on the name, you can access the details of the link itself.</p></td>
 </tr>
-<tr class="row-odd"><td><p>of Files</p></td>
+<tr class="row-odd"><td><p># of Files</p></td>
 <td><p>The number of files that are attached to the link.  This is the number of files uploaded both by the owner of the link, and any guests that have accessed the link.</p></td>
 </tr>
 <tr class="row-even"><td><p>Expire Date</p></td>
-<td><p>Shows the date that the link will no longer be accessable by a guest.</p></td>
+<td><p>Shows the date that the link will no longer be accessable by a guest.  Note:  if the link is highlighted in red, it has already expired.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Actions</p></td>
 <td><p>Options that can be applied to the selected link.</p></td>
@@ -199,10 +203,10 @@
 </tbody>
 </table>
 <p>The Actions column has the following options:</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
-<col style="width: 6%" />
-<col style="width: 94%" />
+<col style="width: 7%" />
+<col style="width: 93%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Action</p></th>
@@ -211,10 +215,16 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Email</p></td>
-<td><p>Will open your default email client with basic information about the file link already filled in.</p></td>
+<td><p>Will open your default email client with basic information about the file link already filled in.*</p></td>
 </tr>
-<tr class="row-odd"><td><p>Delete</p></td>
+<tr class="row-odd"><td><p>Disable</p></td>
+<td><p>Will set the expiration date to yesterday, so the link is immediately no longer accessable.*</p></td>
+</tr>
+<tr class="row-even"><td><p>Delete</p></td>
 <td><p>Will delete the file link and any files that are attached to it.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Note:*</p></td>
+<td><p>These options are only available for links that have not yet expired.</p></td>
 </tr>
 </tbody>
 </table>
@@ -223,7 +233,7 @@
 <h2>Create File Link Page<a class="headerlink" href="#create-file-link-page" title="Permalink to this headline">¶</a></h2>
 <img alt="New File Link Form" src="../_images/create_file_link.PNG" />
 <p>To create a new file link, you will need the following information:</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 15%" />
 <col style="width: 85%" />
@@ -240,16 +250,19 @@
 <tr class="row-odd"><td><p>Expires On</p></td>
 <td><p>Select the date that the link will expire.  The default is 30 days from the current date.</p></td>
 </tr>
-<tr class="row-even"><td><p>Link to Customer</p></td>
-<td><p>If a customer is selected, files loaded by a guest can be moved to that customers profile.</p></td>
-</tr>
-<tr class="row-odd"><td><p>Allow User to Upload Files</p></td>
+<tr class="row-even"><td><p>Allow User to Upload Files</p></td>
 <td><p>If selected, the guest can upload files.  If unchecked, the guest will not have the option to upload files.</p></td>
 </tr>
-<tr class="row-even"><td><p>File Upload</p></td>
+<tr class="row-odd"><td><p>Link to Customer</p></td>
+<td><p>If a customer is selected, files loaded by a guest can be moved to that customers profile.</p></td>
+</tr>
+<tr class="row-even"><td><p>Add Instructions</p></td>
+<td><p>With this option selected, an additional field will open up to allow you to place a custom message that will be displayed when visiting the link.</p></td>
+</tr>
+<tr class="row-odd"><td><p>File Upload</p></td>
 <td><p>Files can be added to the link right away, or later via the details page.  Up to five files can be loaded at a time.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Create Link</p></td>
+<tr class="row-even"><td><p>Create Link</p></td>
 <td><p>This will upload attached files (if available) and create the link.  Once the link is created, you will be redirected to the Link Details page.</p></td>
 </tr>
 </tbody>
@@ -257,13 +270,14 @@
 </div>
 <div class="section" id="link-details-page">
 <h2>Link Details Page<a class="headerlink" href="#link-details-page" title="Permalink to this headline">¶</a></h2>
-<img alt="Link Details Image" src="../_images/link_details.PNG" />
+<img alt="Link Details Image" src="../_images/link_details_1.PNG" />
+<img alt="Link Details Image" src="../_images/link_details_2.PNG" />
 <p>The Link Details page will show all information about the currently selected link.</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
-<col style="width: 16%" />
-<col style="width: 13%" />
-<col style="width: 71%" />
+<col style="width: 15%" />
+<col style="width: 12%" />
+<col style="width: 73%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Section</p></th>
@@ -272,13 +286,9 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td rowspan="5"><p>Details</p>
-<p>You can edit the
-details by clicking
-the pencil icon</p>
-</td>
+<tr class="row-even"><td rowspan="5"><p>Link Details</p></td>
 <td><p>Link Name</p></td>
-<td><p>The name assigned to the link.</p></td>
+<td><p>The name assigned to the link. Note:  This will not show up on this link, it is for internal reference only.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Customer</p></td>
 <td><p>Name of attached customer (if assigned).</p></td>
@@ -293,16 +303,19 @@ the pencil icon</p>
 <td><p>The URL the guest will use to access the link.
 Click the “copy” icon next to the link to copy it to the clipboard.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Actions</p></td>
-<td><p>Link to Customer
-Email Link
-Delete Link</p></td>
-<td><p>Set or update the customer that the link is attached to.
-Will open your default email client with basic information about the file link already filled in.
-Will delete the link and all attached files.</p></td>
+<tr class="row-odd"><td rowspan="3"><p>Actions</p></td>
+<td><p>Edit Link</p></td>
+<td><p>Modify the link details or the link instructions</p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p>Instructions</p></td>
-<td><p>Instructions will be shown to the guest when they visit the link.</p></td>
+<tr class="row-even"><td><p>Email Link</p></td>
+<td><p>Will open your default email client with basic information about the file link already filled in.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Delete Link</p></td>
+<td><p>Will delete the link and all attached files.</p></td>
+</tr>
+<tr class="row-even"><td><p>Instructions</p></td>
+<td></td>
+<td><p>Instructions will be shown to the guest when they visit the link.  These can be edited by clicking “Edit Link”</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="5"><p>Files Available
 to Download
@@ -312,20 +325,20 @@ Files Uploaded</p></td>
 <td><p>Clicking on the name of the file will download it to your device.
 The “Info” icon will show who uploaded the file and any notes they included with the file.</p></td>
 </tr>
-<tr class="row-even"><td><p>Added By</p></td>
-<td><p>If the file was added by a guest, their name will show in this field.</p></td>
-</tr>
-<tr class="row-odd"><td><p>File Notes</p></td>
-<td><p>If the file was added by a gues, any notes they provided with the file will show in this field.</p></td>
-</tr>
 <tr class="row-even"><td><p>Date Added</p></td>
 <td><p>Date the file was loaded to the file link.</p></td>
 </tr>
+<tr class="row-odd"><td><p>Added By</p></td>
+<td><p>If the file was added by a guest, their name will show in this field.</p></td>
+</tr>
+<tr class="row-even"><td><p>File Notes</p></td>
+<td><p>If the file was added by a gues, any notes they provided with the file will show in this field.</p></td>
+</tr>
 <tr class="row-odd"><td><p>Actions</p></td>
-<td><div class="line-block">
-<div class="line">Move File Icon - will move file to customer profile (only available if customer assigned)</div>
-<div class="line">Delete File Icon - will delete just this file from the file link</div>
-</div>
+<td><ul class="simple">
+<li><p>Move File - will move file to customer profile (only available if customer assigned)</p></li>
+<li><p>Delete File - will delete just this file from the file link</p></li>
+</ul>
 </td>
 </tr>
 </tbody>
