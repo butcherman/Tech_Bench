@@ -10,7 +10,6 @@ use App\FileLinkFiles;
 use App\UserPermissions;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
-use App\Notifications\NewFileUpload;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 
@@ -107,7 +106,7 @@ class GuestFileLinksTest extends TestCase
         $result->assertViewIs('links.guestExpiredLink');
     }
 
-    //  Test visiting a page that does nnot have anything for the guest to do
+    //  Test visiting a page that does not have anything for the guest to do
     public function test_link_with_nothing_to_do()
     {
         $link = factory(FileLinks::class)->create([
@@ -168,6 +167,7 @@ class GuestFileLinksTest extends TestCase
     }
 
     //  Test adding a new file as a guest
+    //  TODO - test chunk file uploads
     public function test_adding_file_as_guest()
     {
         Storage::fake(config('filesystems.paths.links'));
@@ -246,6 +246,7 @@ class GuestFileLinksTest extends TestCase
         $response = $this->put(route('file-links.show', $this->link->link_hash), $data);
 
         $response->assertSuccessful();
+        //  TODO - test the notification is actually sent out
         // Notification::assertSentTo($this->user, NewFileUpload::class);
     }
 }

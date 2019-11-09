@@ -2,18 +2,17 @@
 
 namespace Tests\Feature\FileLinks;
 
+use App\Files;
 use App\User;
 use App\Customers;
 use App\FileLinks;
 use Tests\TestCase;
 use App\FileLinkFiles;
 use App\UserPermissions;
+use Illuminate\Http\File;
 use App\CustomerFileTypes;
-use Faker\Generator as Faker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FileLinkDetailsTest extends TestCase
 {
@@ -388,6 +387,7 @@ class FileLinkDetailsTest extends TestCase
     }
 
     //  Try to add a file to the link as a tech
+    //  TODO - Test chunk file uploads
     public function test_add_file()
     {
         Storage::fake(config('filesystems.paths.links'));
@@ -445,5 +445,99 @@ class FileLinkDetailsTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertJson(['success' => true]);
+    }
+
+    //  Test moving a file to a customer
+    public function test_move_file_to_customer()
+    {
+        Storage::fake(config('filesystems.paths.links'));
+        Storage::fake(config('filesystems.paths.customers'));
+
+        //  Create a new link and assign a customer to it
+        $link = factory(FileLinks::class)->create([
+            'cust_id' => $cust = factory(Customers::class)->create()
+        ]);
+        //  Place a test file for linking
+        $testFile = new File(base_path().DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'testFiles'.DIRECTORY_SEPARATOR.'hi.png');
+        $testFileName = 'testImg.png';
+        $testFilePath = config('filesystems.paths.links') . DIRECTORY_SEPARATOR . $link->link_id.DIRECTORY_SEPARATOR;
+        $newFilePath  = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$cust->cust_id.DIRECTORY_SEPARATOR;
+        Storage::putFileAs($testFilePath, $testFile, $testFileName);
+        //  Put the file in the database
+        $fileData = factory(Files::class)->create([
+            'file_name' => $testFileName,
+            'file_link' => $testFilePath
+        ]);
+        factory(FileLinkFiles::class)->create([
+            'link_id'  => $link->link_id,
+            'file_id'  => $fileData->file_id,
+            'user_id'  => null,
+            'added_by' => 'Billy Bob',
+            'upload'   => 1
+        ]);
+
+        //  Verify that the file is in the correct place
+        Storage::disk('local')->assertExists($testFilePath.$testFileName);
+
+        //  Prep data for moving the file
+        $data = [
+            'fileID' => $fileData->file_id,
+            'fileName' => $fileData->file_name,
+            'fileType' => CustomerFileTypes::all()->first()->file_type_id
+        ];
+
+        $response = $this->actingAs($this->tech)->put(route('links.files.update', $link->link_id), $data);
+
+        $response->assertSuccessful();
+        //  Verify the file is in the new location and no longer in the link
+        Storage::disk('local')->assertExists($newFilePath . $testFileName);
+        Storage::disk('local')->assertMissing($testFilePath . $testFileName);
+
+        //  Try to move the file again
+        $moveAgain = $this->actingAs($this->tech)->put(route('links.files.update', $link->link_id), $data);
+
+        $moveAgain->assertExactJson(['success' => 'false', 'reason' => 'This File Already Exists in Customer Files']);
+    }
+
+    //  Try to move a file that is for some reason missing from the file link
+    public function test_move_missing_file()
+    {
+        Storage::fake(config('filesystems.paths.links'));
+        Storage::fake(config('filesystems.paths.customers'));
+
+        //  Create a new link and assign a customer to it
+        $link = factory(FileLinks::class)->create([
+            'cust_id' => $cust = factory(Customers::class)->create()
+        ]);
+        //  Place a test file for linking
+        $testFile = new File(base_path() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'testFiles' . DIRECTORY_SEPARATOR . 'hi.png');
+        $testFileName = 'testImg.png';
+        $testFilePath = config('filesystems.paths.links') . DIRECTORY_SEPARATOR . $link->link_id . DIRECTORY_SEPARATOR;
+        $newFilePath  = config('filesystems.paths.customers') . DIRECTORY_SEPARATOR . $cust->cust_id . DIRECTORY_SEPARATOR;
+
+        //  Put the file in the database
+        $fileData = factory(Files::class)->create([
+            'file_name' => $testFileName,
+            'file_link' => $testFilePath
+        ]);
+        factory(FileLinkFiles::class)->create([
+            'link_id'  => $link->link_id,
+            'file_id'  => $fileData->file_id,
+            'user_id'  => null,
+            'added_by' => 'Billy Bob',
+            'upload'   => 1
+        ]);
+
+        $data = [
+            'fileID' => $fileData->file_id,
+            'fileName' => $fileData->file_name,
+            'fileType' => CustomerFileTypes::all()->first()->file_type_id
+        ];
+
+        $response = $this->actingAs($this->tech)->put(route('links.files.update', $link->link_id), $data);
+
+        //  This should not crash app, but it should trigger exception
+        $response->assertSuccessful();
+        $response->assertExactJson(['success' => false, 'reason' => 'Cannot Find File']);
     }
 }

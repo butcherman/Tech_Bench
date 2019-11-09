@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\User;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
 
@@ -111,6 +112,13 @@ class LoginTest extends TestCase
         ]));
         $this->assertAuthenticatedAs($user);
     }
+
+    // //  Login as a user with an expired password
+    // public function test_change_password_middleware()
+    // {
+    //     //  TODO - create test for expired passwords
+
+    // }
 
     //  Test user is able to logout
     public function test_logout()

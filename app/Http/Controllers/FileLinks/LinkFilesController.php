@@ -7,18 +7,14 @@ use App\FileLinks;
 use App\FileLinkFiles;
 use App\CustomerFiles;
 use Illuminate\Http\Request;
-// use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-// use App\Http\Resources\FileLinksCollection;
 use App\http\Resources\FileLinkFilesCollection;
-// use PhpParser\Node\Stmt\TryCatch;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-// use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class LinkFilesController extends Controller
