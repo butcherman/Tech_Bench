@@ -1,11 +1,6 @@
 @extends('layouts.app')
-@section('breadcrumbs')
-<ol class="breadcrumb">
-    <li class="breadcrumb-item active">Customers</li>
-</ol>
-@endsection
 
-@section('content')
+@section('content.old')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -15,11 +10,28 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <customer-list
-                sys_types="{{json_encode($sysTypes)}}"
+
                 get_cust_route="{{route('customer.search')}}"
                 new_cust_route="{{route('customer.id.create')}}"
-                
+
             ></customer-list>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('content')
+<div class="row justify-content-center">
+    <div class="col-12 grid-margin">
+        <h4>Customers</h4>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-12" class="grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <customer-list></customer-list>
+            </div>
         </div>
     </div>
 </div>

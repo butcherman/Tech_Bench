@@ -72,8 +72,35 @@ Route::get('file-links',                'FileLinks\GuestLinksController@index') 
 *   Customer Routes
 */
 Route::prefix('customer')->name('customer.')->group(function() {
-    Route::post('search', 'Customers\CustomerController@search')->name('search');
+
+
+
+    Route::get('id/{id}/{name}', 'Customers\CustomerDetailsController@details')->name('details');
+
+    Route::resource('id', 'Customers\CustomerDetailsController');
+    // Route::post('search', 'Customers\CustomerController@search')->name('search');
     Route::get('/', 'Customers\CustomerController@index')->name('index');
+
+
+
+    Route::get('search', 'Customers\CustomerController@search')->name('search');
+
+
+    // Route::get('download-note/{id}', 'DownloadController@downloadCustNote')->name('download-note');
+    // Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
+    // Route::get('sys-fields/{id}', 'Customers\CustomerSystemsController@getDataFields')->name('getDataFields');
+    // Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggleFav');
+    // Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('checkID');
+    // Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
+
+    // Route::resource('files', 'Customers\CustomerFilesController');
+    // Route::resource('notes', 'Customers\CustomerNotesController');
+    // Route::resource('contacts', 'Customers\CustomerContactsController');
+    // Route::resource('systems', 'Customers\CustomerSystemsController');
+
+
+
+
 });
 
 
@@ -135,24 +162,7 @@ Route::prefix('customer')->name('customer.')->group(function() {
             Route::get('/', 'Systems\SystemsController@index')->name('index');
         });
 
-        /*
-        *
-        *   Customer Routes
-        *
-        */
-            // Route::get('download-note/{id}', 'DownloadController@downloadCustNote')->name('download-note');
-            // Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
-            // Route::get('sys-fields/{id}', 'Customers\CustomerSystemsController@getDataFields')->name('getDataFields');
-            // Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggleFav');
-            // Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('checkID');
-            // Route::get('id/{id}/{name}', 'Customers\CustomerDetailsController@details')->name('details');
-            // Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
 
-            // Route::resource('files', 'Customers\CustomerFilesController');
-            // Route::resource('notes', 'Customers\CustomerNotesController');
-            // Route::resource('contacts', 'Customers\CustomerContactsController');
-            // Route::resource('systems', 'Customers\CustomerSystemsController');
-            // Route::resource('id', 'Customers\CustomerDetailsController');
 
 
 

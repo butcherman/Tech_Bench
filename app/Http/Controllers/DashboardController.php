@@ -18,6 +18,11 @@ use Mail;
 use App\Mail\InitializeUser;
 
 
+use App\SystemTypes;
+use App\Customers;
+use App\CustomerSystems;
+
+
 class DashboardController extends Controller
 {
     public function __construct()
@@ -39,7 +44,15 @@ class DashboardController extends Controller
 
         // dd($zip);
 
+// $systems = CustomerSystems::where('cust_id', 8)->with('SystemTypes')->get();
 
+// $systems = SystemTypes::with('CustomerSystems')->get();
+
+
+// $systems = Customers::where('cust_id', 8)->with('CustomerSystems.SystemTypes')->get();
+
+
+// dd($systems->toArray());
 
 
 

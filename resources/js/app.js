@@ -67,6 +67,11 @@ Vue.component('link-files',         require('./components/fileLinks/LinkFiles.vu
 Vue.component('guest-download',     require('./components/fileLinks/GuestFileDownloads.vue').default);
 Vue.component('guest-upload',       require('./components/fileLinks/GuestFileUpload.vue').default);
 
+/*
+*   Vue Customer Components
+*/
+Vue.component('customer-list', require('./components/customer/customerList.vue').default);
+
 
 /*
 *   Include CSRF toden in all axios headers

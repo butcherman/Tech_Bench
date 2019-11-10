@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 class CustomerDetailsController extends Controller
 {
     use SystemsTrait;
-    
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -25,6 +25,9 @@ class CustomerDetailsController extends Controller
     //  New Customer Form
     public function create()
     {
+        echo 'new customer form';
+        die();
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.newCustomer');
     }
@@ -40,10 +43,10 @@ class CustomerDetailsController extends Controller
             'custCity' => 'required',
             'custZip'  => 'required|numeric'
         ]);
-        
+
         //  Remove any forward slash (/) from the Customer name field
         $request->merge(['custName' => str_replace('/', '-', $request->custName)]);
-        
+
         Customers::create([
             'cust_id'  => $request->custID,
             'name'     => $request->custName,
@@ -54,28 +57,32 @@ class CustomerDetailsController extends Controller
             'zip'      => $request->custZip,
             'active'   => 1
         ]);
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('New Customer ID-'.$request->custID.' created by User ID-'.Auth::user()->user_id);
-        
+
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'url' => route('customer.details', [$request->custID, urlencode($request->custName)])]);
     }
-    
+
     //  Show the customer details
     public function details($id, $name)
     {
+        echo 'customer details';
+        die();
+
+
         $custDetails = Customers::find($id);
         $allSystems  = $this->getAllSystems();
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if(empty($custDetails))
         {
             Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id.'-'.$name);
             return view('err.customerNotFound');
         }
-        
+
         //  Determine if the customer is one of the users bookmarks
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
         //  Get the types of phone numbers that can be assigned to a customer contact
@@ -89,10 +96,10 @@ class CustomerDetailsController extends Controller
                 'icon'  => $type->icon_class
             ];
         }
-        
+
         //  Get the types of files that can be attached to a file
         $fileTypes = CustomerFileTypes::select('file_type_id as value', 'description as text')->get();
-        
+
         Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
             'details'    => $custDetails,
@@ -107,14 +114,14 @@ class CustomerDetailsController extends Controller
     public function show($id)
     {
         $details = Customers::find($id);
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if(empty($details))
         {
             Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id);
             return response()->json(['error' => 'Customer Not Found']);
         }
-        
+
         Log::debug('Customer Details', $details->toArray());
         return response()->json($details);
     }
@@ -130,7 +137,7 @@ class CustomerDetailsController extends Controller
             'state'    => 'required',
             'zip'      => 'required|numeric'
         ]);
-        
+
         Customers::find($id)->update([
             'name'     => $request->name,
             'dba_name' => $request->dba_name,
@@ -139,7 +146,7 @@ class CustomerDetailsController extends Controller
             'state'    => $request->state,
             'zip'      => $request->zip
         ]);
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('Customer Details Updated for Customer ID-'.$id.' by User ID-'.Auth::user()->user_id);
         Log::debug('Customer Details Submitted - ', $request->toArray());
