@@ -78,41 +78,73 @@ class NewFileLinkTest extends TestCase
     public function test_list_customers_valid_send_id()
     {
         $data = [
-            'search' => $this->customer[0]->cust_id
+            'sortField' => 'name',
+            'sortType'  => 'asc',
+            'perPage'   => 25,
+            'name' => $this->customer[0]->cust_id
         ];
 
-        $response = $this->actingAs($this->user)->post(route('customer.search'), $data);
+        $response = $this->actingAs($this->user)->get(route('customer.search', $data));
 
         $response->assertSuccessful();
-        $response->assertJsonCount(1);
-        $response->assertJsonStructure([['cust_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip']]);
+        $response->assertJsonStructure(
+            [
+                'data' => [[
+                    'cust_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip'
+                ]],
+                'meta' => [
+                    'current_page', 'from', 'last_page', 'path', 'per_page', 'to', 'total'
+                ]
+            ]);
     }
 
     //  Test trying to search customer to attach to link by sending customer name
     public function test_list_customers_send_name()
     {
         $data = [
-            'search' => $this->customer[0]->name
+            'sortField' => 'name',
+            'sortType'  => 'asc',
+            'perPage'   => 25,
+            'name' => $this->customer[0]->name
         ];
 
-        $response = $this->actingAs($this->user)->post(route('customer.search'), $data);
+        $response = $this->actingAs($this->user)->get(route('customer.search', $data));
 
         $response->assertSuccessful();
-        $response->assertJsonCount(1);
-        $response->assertJsonStructure([['cust_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip']]);
+        $response->assertJsonStructure(
+            [
+                'data' => [[
+                    'cust_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip'
+                ]],
+                'meta' => [
+                    'current_page', 'from', 'last_page', 'path', 'per_page', 'to', 'total'
+                ]
+            ]
+        );
     }
 
     //  Test trying to search cusomter to attach to link without any data
     public function test_list_customers_no_data()
     {
         $data = [
-            'search' => null
+            'sortField' => 'name',
+            'sortType'  => 'asc',
+            'perPage'   => 25,
+            'name' => null
         ];
-        $response = $this->actingAs($this->user)->post(route('customer.search'), $data);
+        $response = $this->actingAs($this->user)->get(route('customer.search', $data));
 
         $response->assertSuccessful();
-        $response->assertJsonCount(5);
-        $response->assertJsonStructure([['cust_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip']]);
+        $response->assertJsonStructure(
+            [
+                'data' => [[
+                    'cust_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip'
+                ]],
+                'meta' => [
+                    'current_page', 'from', 'last_page', 'path', 'per_page', 'to', 'total'
+                ]
+            ]
+        );
     }
 
     /*

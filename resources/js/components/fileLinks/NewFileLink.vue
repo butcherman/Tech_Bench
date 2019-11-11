@@ -90,7 +90,7 @@
         <b-modal id="select-customer" title="Search For Customer" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer">
             <b-form @submit="searchCustomer">
                 <b-input-group>
-                    <b-form-input type="text" v-model="searchField"></b-form-input>
+                    <b-form-input type="text" v-model="searchParam.name" placeholder="Enter Customer Name or ID Number"></b-form-input>
                     <b-input-group-append>
                         <b-button varient="outline-secondary" @click="searchCustomer"><span class="ti-search"></span></b-button>
                     </b-input-group-append>
@@ -100,8 +100,23 @@
                 <h4 class="text-center">Select A Customer</h4>
                 <b-list-group>
                     <b-list-group-item v-for="res in searchResults" v-bind:key="res.cust_id" class="pointer" @click="selectCustomer(res)">{{res.name}}</b-list-group-item>
+                    <b-list-group-item>
+                        <div class="text-muted float-left w-auto">Showing items {{searchMeta.from}} to {{searchMeta.to}} of {{searchMeta.total}}</div>
+                        <div class="text-muted float-right w-auto">
+                            <span class="pointer" v-if="searchMeta.current_page != 1" @click="updatePage(searchMeta.current_page - 1)">
+                                <span class="ti-angle-double-left"></span> Previous
+                            </span>
+                            -
+                            <span class="pointer" v-if="searchMeta.current_page != searchMeta.last_page" @click="updatePage(searchMeta.current_page + 1)">
+                                Next <span class="ti-angle-double-right"></span>
+                            </span>
+                        </div>
+                    </b-list-group-item>
                 </b-list-group>
             </div>
+        </b-modal>
+        <b-modal id="loading-modal" size="sm" ref="loading-modal" hide-footer hide-header hide-backdrop centered>
+            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
         </b-modal>
     </div>
 </template>
@@ -141,8 +156,15 @@
                     chunkSize: 5000000,
                     parallelChunkUploads: false,
                 },
-                searchField: '',
+                searchParam: {
+                    page: '',
+                    perPage: 25,
+                    sortField: 'name',
+                    sortType: 'asc',
+                    name: '',
+                },
                 searchResults: [],
+                searchMeta: [],
             }
         },
         methods: {
@@ -177,15 +199,15 @@
             },
             createLink()
             {
-                    var linkForm = new FormData(document.querySelector('form'));
-                    linkForm.append('_completed', true);
-                    linkForm.append('note', this.form.hasInstructions ? this.form.instructions : '');
-                    axios.post(this.route('links.data.store'), linkForm)
-                        .then(res => {
-                            console.log(res);
-                            var url = this.route('links.details', [res.data.link, res.data.name]);
-                            window.location.href = url;
-                        }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                var linkForm = new FormData(document.querySelector('form'));
+                linkForm.append('_completed', true);
+                linkForm.append('note', this.form.hasInstructions ? this.form.instructions : '');
+                axios.post(this.route('links.data.store'), linkForm)
+                    .then(res => {
+                        console.log(res);
+                        var url = this.route('links.details', [res.data.link, res.data.name]);
+                        window.location.href = url;
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
             updateProgressBar(progress)
             {
@@ -213,25 +235,41 @@
                 {
                     this.form.customerTag = '';
                     this.button.customerLink = 'Link To Customer';
+                    this.searchParam.name = '';
                 }
             },
             searchCustomer(e)
             {
-                e.preventDefault();
-                axios.post(this.route('customer.search'), {search:this.searchField})
+                if(e)
+                {
+                    e.preventDefault();
+                    this.searchParam.page = '';
+                }
+                console.log(this.searchParam);
+                this.$refs['loading-modal'].show();
+                axios.get(this.route('customer.search', this.searchParam))
                     .then(res => {
-                        this.searchResults = res.data;
+                        console.log(res.data);
+                        this.searchResults = res.data.data;
+                        this.searchMeta = res.data.meta;
+                        this.$refs['loading-modal'].hide();
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+            },
+            updatePage(newPage)
+            {
+                this.searchParam.page = newPage;
+                this.searchCustomer();
             },
             selectCustomer(custData)
             {
-                this.searchField = custData.name;
+                this.searchParam.name = custData.name;
                 this.form.customerTag = custData.cust_id;
                 this.button.customerLink = 'Linked to '+custData.name;
                 this.searchResults = [];
+                this.form.selectedCustomer = true;
             },
             cancelSelectCustomer() {
-                this.searchField = '';
+                this.searchParam.name = '';
                 this.form.customerTag = '';
                 this.button.customerLink = 'Link to Customer';
                 this.searchResults = [];
@@ -241,13 +279,13 @@
         mounted()
         {
             this.$root.$on('bv::modal::hide', (bvEvent, modalID) => {
-                if(this.searchField == '')
+                if(this.searchParam.name == '')
                 {
                     this.form.selectedCustomer = false;
                 }
                 else
                 {
-                    this.searchField = '';
+                    this.searchParam.name = '';
                 }
             });
         }

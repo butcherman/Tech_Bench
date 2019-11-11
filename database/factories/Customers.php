@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(Customers::class, function (Faker $faker) {
     return [
         //
-        'cust_id'  => rand(50, 5000),
+        'cust_id'  => $faker->unique()->numberBetween(50, 10000),
         'name'     => $faker->company(),
         'dba_name' => null,
         'address'  => $faker->streetAddress(),

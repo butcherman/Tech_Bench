@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\CustomersCollection;
+use App\Http\Resources\SystemTypesCollection;
 
 class CustomerController extends Controller
 {
@@ -22,120 +23,70 @@ class CustomerController extends Controller
     //  Landing page to search for customer
     public function index()
     {
-        $sysTypes = SystemTypes::all();
-
-        $sysArr = [];
-        foreach($sysTypes as $sys)
-        {
-            $sysArr[] = $sys->name;
-        }
+        $systems = new SystemTypesCollection(SystemTypes::orderBy('cat_id', 'ASC')->orderBy('name', 'ASC')->get());
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.index', [
-            // 'sysTypes' => $sysArr
+            'sysTypes' => $systems
         ]);
     }
 
     //  Search for a customer
     public function search(Request $request)
     {
-        // $customers = Customers::
-        //         with('CustomerSystems.SystemTypes')
-        //         ->get();
+        $request->validate([
+            'sortField' => 'required',
+            'sortType'  => 'required',
+            'perPage'   => 'required'
+        ]);
 
-        // $custList = [];
-        // foreach($customers as $cust)
-        // {
-        //     $sysArr = '';
-        //     foreach($cust->CustomerSystems as $sys)
-        //     {
-        //         $sysArr .= $sys->SystemTypes->name.'<br />';
-        //     }
+        Log::debug('Request Data - ', $request->toArray());
 
-        //     $custList[] = [
-        //         'cust_id' => $cust->cust_id,
-        //         'name' => $cust->name,
-        //         'dba'  => $cust->dba_name,
-        //         'city' => $cust->city.', '.$cust->state,
-        //         'url'  => route('customer.details', [$cust->cust_id, urlencode($cust->name)]),
-        //         'sys'  => $sysArr
-        //     ];
-
-
-        // }
-
-        // Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        // Log::debug('Customer Data - ', $custList);
-        // return response()->json($custList);
-
-
-        // $searchResults = new CustomerCollection(
-        //     Customers::where('cust_id', $request->search)
-        //         ->orWhere('name', $request->search)
-        //         ->orWhere('dba_name', $request->search)
-        //         ->get()
-        //     );
-
-        // dd($request->search);
-        $orderBy = $request->sortField ? $request->sortField : 'name';
-        $orderUp = $request->sortType ? $request->sortType : 'ASC';
-        $paginate = $request->perPage ? $request->perPage : 25;
-
-        $name = $request->name ? $request->name : null;
-        $city = $request->city ? $request->city : null;
-
-        // $searchSys = $request->searchSys ? $request->searchSys : false;
-
-        Log::debug('paramaters', $request->toArray());
-
-        // if($request->search)
-        // {
-        //     $searchResults = new CustomerCollection(
-        //     Customers::where('cust_id', 'like', '%'.$request->search.'%')
-        //         ->orWhere('name', 'like', '%'.$request->search.'%')
-        //         ->orWhere('dba_name', 'like', '%'.$request->search.'%')
-        //         ->get()
-        //     );
-        // }
-        // else
-        // {
-            // }
-
-
-
-
-
-            // $searchResults = new CustomersCollection(Customers::orderBy($orderBy, $orderUp)->with('CustomerSystems')->paginate($paginate));
-
-
-            if(isset($request->name) || isset($request->city))
-            {
-                // $name = $request->name ? $request->name : '';
-                // $city = $request->city ? $request->city : '';
-
-                $searchResults = new CustomersCollection(
-                    Customers::orderBy($orderBy, $orderUp)
-                        ->where('cust_id', 'like', '%'.$request->name.'%')
-                        ->orWhere('name', 'like', '%'. $request->name.'%')
-                        ->orWhere('dba_name', 'like', '%'. $request->name.'%')
-                        // ->orWhere('city', 'like', '%'.$city.'%')
-                        ->with('CustomerSystems.SystemTypes')
-                        ->paginate($paginate));
-                Log::debug('triggered');
-            }
-            else
-            {
-                $searchResults = new CustomersCollection(Customers::orderBy($orderBy, $orderUp)->with('CustomerSystems.SystemTypes')->paginate($paginate));
-            }
-
-
-
-
-
-
-
-            return $searchResults;
+        if(isset($request->name) || isset($request->city) || isset($request->system))
+        {
+            $searchResults = new CustomersCollection(
+                Customers::orderBy($request->sortField, $request->sortType)
+                    //  Search the name, dba name, and cust id columns
+                    ->where(function($query) use ($request)
+                    {
+                        $query->where('name', 'like', '%' . $request->name . '%')
+                            ->orWhere('cust_id', 'like', '%' . $request->name . '%')
+                            ->orWhere('dba_name', 'like', '%' . $request->name . '%');
+                    })
+                    //  Search the city column
+                    ->where('city', 'like', '%' . $request->city . '%')
+                    //  Include the customers systems
+                    ->with('CustomerSystems.SystemTypes')
+                    //  If the system field is present - search for system type
+                    ->when($request->system, function($query) use ($request)
+                    {
+                        $query->whereHas('CustomerSystems.SystemTypes', function($query) use ($request)
+                        {
+                            $query->where('sys_id', $request->system);
+                        });
+                    })
+                    ->paginate($request->perPage)
+            );
         }
+        else
+        {
+            $searchResults = new CustomersCollection(Customers::orderBy($request->sortField, $request->sortType)->with('CustomerSystems.SystemTypes')->paginate($request->perPage));
+        }
+
+        return $searchResults;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
         //  Check to see if a customer ID already exists
     public function checkID($id)

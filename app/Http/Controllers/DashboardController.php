@@ -18,9 +18,6 @@ use Mail;
 use App\Mail\InitializeUser;
 
 
-use App\SystemTypes;
-use App\Customers;
-use App\CustomerSystems;
 
 
 class DashboardController extends Controller
@@ -34,25 +31,6 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
-
-
-        // $path = config('filesystems.disks.public.root') . DIRECTORY_SEPARATOR;
-
-        // $zip = Zip::create($path.'test_zip_'.Carbon::now()->timestamp.'.zip');
-        // $zip->add('C:\Users\RonButcher\Documents\GitHub\Tech_Bench\storage\app\files\99\31576-11-0--SV9100-FeatSpecs.pdf');
-        // $zip->close();
-
-        // dd($zip);
-
-// $systems = CustomerSystems::where('cust_id', 8)->with('SystemTypes')->get();
-
-// $systems = SystemTypes::with('CustomerSystems')->get();
-
-
-// $systems = Customers::where('cust_id', 8)->with('CustomerSystems.SystemTypes')->get();
-
-
-// dd($systems->toArray());
 
 
 

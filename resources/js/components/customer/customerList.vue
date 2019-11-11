@@ -64,7 +64,7 @@
 <script>
 export default {
     props: [
-
+        'system_types'
     ],
     data() {
         return {
@@ -77,12 +77,12 @@ export default {
             },
             searchParam: {
                 page: '',
-                perPage: 50,
+                perPage: 25,
                 sortField: 'name',
                 sortType: 'asc',
-                searchSys: true,
-                name: null,
+                name: '',
                 city: '',
+                system: '',
             },
             table: {
                 columns: [
@@ -97,19 +97,30 @@ export default {
                     {
                         label: 'City',
                         field: 'city',
+                        filterOptions: {
+                            enabled: true,
+                            placeholder: 'Search For City',
+                        }
                     },
                     {
                         label: 'System',
                         field: 'system_list',
                         sortable: false,
+                        filterOptions: {
+                            enabled: true,
+                            placeholder: 'Search For System',
+                            filterDropdownItems: this.system_types,
+                        }
                     },
                 ],
                 rows: [],
+                sysFilter: [],
             },
         }
     },
     created() {
         this.updateSearch();
+        console.log(this.system_types);
     },
     methods: {
         //  Fetch new search results from the server
@@ -155,6 +166,8 @@ export default {
             console.log('working');
             console.log(data);
             this.searchParam.name = data.columnFilters.name;
+            this.searchParam.city = data.columnFilters.city;
+            this.searchParam.system = data.columnFilters.system_list;
             this.updateSearch();
         }
     }
