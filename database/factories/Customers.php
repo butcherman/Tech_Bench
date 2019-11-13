@@ -15,6 +15,5 @@ $factory->define(Customers::class, function (Faker $faker) {
         'city'     => $faker->city(),
         'state'    => $faker->stateAbbr(),
         'zip'      => rand(20000, 99999),
-        'active'   => 1
     ];
 });

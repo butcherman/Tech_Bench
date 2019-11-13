@@ -22,6 +22,10 @@ return [
             'driver' => 'local',
             'root'   => storage_path('logs'),
         ],
+        'snapshots' => [
+            'driver' => 'local',
+            'root'   => database_path('snapshots'),
+        ],
     ],
     'paths' => [
         'default'   => env('DFLT_FOLDER', DIRECTORY_SEPARATOR.'default'),

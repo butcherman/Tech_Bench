@@ -204,4 +204,6 @@ class CustomerIndexTest extends TestCase
             ]
         );
     }
+
+    //  TODO:  search for a custome that has been deactivated
 }

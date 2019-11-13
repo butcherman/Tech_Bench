@@ -14,19 +14,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active', 'is_installer'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token', 'is_installer', 'active', 'created_at', 'password_expires', 'updated_at', 'user_id', 'username'
-    ];
-
+    protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active', 'is_installer'];
+    protected $hidden = ['password', 'remember_token', 'is_installer', 'active', 'created_at', 'password_expires', 'updated_at', 'user_id', 'username'];
     //  Database primary key
     protected $primaryKey = 'user_id';
 

@@ -52,6 +52,7 @@
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
         "phpunit/phpunit": "^8.0",
+        "spatie/laravel-db-snapshots": "^1.4",
         "sven/artisan-view": "^3.2"
     },
     "config": {

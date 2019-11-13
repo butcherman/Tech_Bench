@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\CustomerSystems;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Customers extends JsonResource
