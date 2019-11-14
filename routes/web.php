@@ -82,6 +82,7 @@ Route::prefix('customer')->name('customer.')->group(function() {
     Route::get('/', 'Customers\CustomerController@index')->name('index');
 
 
+    Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('check-id');
 
     Route::get('search', 'Customers\CustomerController@search')->name('search');
 
@@ -90,7 +91,6 @@ Route::prefix('customer')->name('customer.')->group(function() {
     // Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
     // Route::get('sys-fields/{id}', 'Customers\CustomerSystemsController@getDataFields')->name('getDataFields');
     // Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggleFav');
-    // Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('checkID');
     // Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
 
     // Route::resource('files', 'Customers\CustomerFilesController');

@@ -27,7 +27,8 @@ class CustomerController extends Controller
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.index', [
-            'sysTypes' => $systems
+            'sysTypes' => $systems,
+            'allowCreate' => $this->authorize('hasAccess', 'add_customer')
         ]);
     }
 
@@ -93,7 +94,6 @@ class CustomerController extends Controller
     {
         $cust = Customers::find($id);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         if($cust === null)
         {
             Log::debug('Customer ID - '.$id.' is available to use');
@@ -101,8 +101,9 @@ class CustomerController extends Controller
         }
 
 
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Customer ID is in use by - '.$cust->name);
-        return response()->json(['dup' => true, 'url' => route('customer.details', [$cust->cust_id, urlencode($cust->name)])]);
+        return response()->json(['dup' => true, 'name' => $cust->name]);
     }
 
     //  Toggle whether or not the customer is listed as a user favorite

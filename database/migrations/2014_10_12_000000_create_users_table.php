@@ -27,7 +27,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('password_expires')->nullable();
             $table->timestamps();
         });
-        
+
+        //  Create the initial default user
         User::create([
             'user_id'      => 1,
             'username'     => 'admin',
@@ -35,8 +36,8 @@ class CreateUsersTable extends Migration
             'last_name'    => 'Administrator',
             'email'        => 'admin@em.com',
             'password'     => bcrypt('password'),
-            'active'       => 1 // ,
-//            'is_installer' => 1
+            'active'       => 1,
+           'is_installer' => 1
         ]);
     }
 

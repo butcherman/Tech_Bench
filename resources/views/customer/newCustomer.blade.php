@@ -8,16 +8,17 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>New Customer</h1></div>
+    <div class="col-12 grid-margin">
+        <h4>New Customer</h4>
     </div>
 </div>
 <div class="row justify-content-center">
-    <div class="col-md-8">
-        <new-customer-form
-            check_id_route="{{route('customer.checkID', ':id')}}"
-            submit_route="{{route('customer.id.store')}}"
-        ></new-customer-form>
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <new-customer-form><img src="{{asset('img/loading.svg')}}" alt="Loading..." class="d-block mx-auto"></new-customer-form>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

@@ -10,7 +10,7 @@
     <div class="col-md-12" class="grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <customer-list :system_types="{{json_encode($sysTypes)}}"></customer-list>
+                <customer-list :system_types="{{json_encode($sysTypes)}}" allow_create="{{$allowCreate}}"></customer-list>
             </div>
         </div>
     </div>

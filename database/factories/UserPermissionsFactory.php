@@ -4,6 +4,7 @@
 
 $factory->define(App\UserPermissions::class, function() {
     return [
+        'user_id'             => null,
         'manage_users'        => rand(0, 1),
         'run_reports'         => rand(0, 1),
         'add_customer'        => rand(0, 1),

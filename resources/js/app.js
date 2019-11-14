@@ -71,7 +71,7 @@ Vue.component('guest-upload',       require('./components/fileLinks/GuestFileUpl
 *   Vue Customer Components
 */
 Vue.component('customer-list', require('./components/customer/customerList.vue').default);
-
+Vue.component('new-customer-form', require('./components/customer/newCustomer.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

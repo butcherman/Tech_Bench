@@ -1,5 +1,6 @@
 <?php
 
+use App\UserPermissions;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -28,6 +29,21 @@ class CreateUserPermissionsTable extends Migration
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
+
+        //  Enter the permissions data for the default user
+        UserPermissions::create([
+            'user_id'             => 1,
+            'manage_users'        => 1,
+            'run_reports'         => 1,
+            'add_customer'        => 1,
+            'deactivate_customer' => 1,
+            'use_file_links'      => 1,
+            'create_tech_tip'     => 1,
+            'edit_tech_tip'       => 1,
+            'delete_tech_tip'     => 1,
+            'create_category'     => 1,
+            'modify_category'     => 1
+        ]);
     }
 
     /**

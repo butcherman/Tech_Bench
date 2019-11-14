@@ -30,7 +30,7 @@
                     <div v-for="sys in data.row.customer_systems" :key="sys.cust_sys_id">{{sys.system_types.name}}</div>
                 </span>
             </template>
-            <div slot="table-actions">
+            <div slot="table-actions" v-if="allow_create">
                 <b-button variant="info block" :href="route('customer.id.create')"><i class="ti-plus" aria-hidden="true"></i> Add New Customer</b-button>
             </div>
             <template slot="loadingContent">
@@ -64,7 +64,8 @@
 <script>
 export default {
     props: [
-        'system_types'
+        'system_types',
+        'allow_create',
     ],
     data() {
         return {
@@ -120,7 +121,6 @@ export default {
     },
     created() {
         this.updateSearch();
-        console.log(this.system_types);
     },
     methods: {
         //  Fetch new search results from the server
@@ -128,7 +128,6 @@ export default {
         {
             axios.get(this.route('customer.search', this.searchParam))
                 .then(res => {
-                    console.log(res.data);
                     this.pagination.links = res.data.links;
                     this.pagination.meta  = res.data.meta;
                     this.table.rows = res.data.data;
@@ -163,8 +162,6 @@ export default {
         //  Filter the search paramaters
         searchFilter(data)
         {
-            console.log('working');
-            console.log(data);
             this.searchParam.name = data.columnFilters.name;
             this.searchParam.city = data.columnFilters.city;
             this.searchParam.system = data.columnFilters.system_list;

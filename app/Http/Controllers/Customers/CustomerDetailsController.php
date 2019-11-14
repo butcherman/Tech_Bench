@@ -25,8 +25,10 @@ class CustomerDetailsController extends Controller
     //  New Customer Form
     public function create()
     {
-        echo 'new customer form';
-        die();
+        if(!$this->authorize('hasAccess', 'add_customer'))
+        {
+            return abort(403);
+        }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.newCustomer');
@@ -35,36 +37,43 @@ class CustomerDetailsController extends Controller
     //  Submit the new customer form
     public function store(Request $request)
     {
+        if (!$this->authorize('hasAccess', 'add_customer')) {
+            return abort(403);
+        }
+
         $request->validate([
-            'custID'   => 'required|numeric|unique:customers,cust_id',
-            'custName' => 'required', // |unique:customers,name',
-            'custDBA'  => 'nullable',
-            'custAddr' => 'required',
-            'custCity' => 'required',
-            'custZip'  => 'required|numeric'
+            'cust_id'  => 'required|numeric|unique:customers,cust_id',
+            'name'     => 'required', // |unique:customers,name',
+            'dba_name' => 'nullable',
+            'address'  => 'required',
+            'city'     => 'required',
+            'zip'      => 'required|numeric'
         ]);
 
         //  Remove any forward slash (/) from the Customer name field
-        $request->merge(['custName' => str_replace('/', '-', $request->custName)]);
+        $request->merge(['name' => str_replace('/', '-', $request->name)]);
 
         Customers::create([
-            'cust_id'  => $request->custID,
-            'name'     => $request->custName,
-            'dba_name' => $request->custDBA,
-            'address'  => $request->custAddr,
-            'city'     => $request->custCity,
+            'cust_id'  => $request->cust_id,
+            'name'     => $request->name,
+            'dba_name' => $request->dba_name,
+            'address'  => $request->address,
+            'city'     => $request->city,
             'state'    => $request->selectedState,
-            'zip'      => $request->custZip,
-            'active'   => 1
+            'zip'      => $request->zip,
         ]);
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('New Customer ID-'.$request->custID.' created by User ID-'.Auth::user()->user_id);
 
-        return response()->json([
-            'success' => true,
-            'url' => route('customer.details', [$request->custID, urlencode($request->custName)])]);
+        return response()->json(['success' => true ]);
     }
+
+
+
+
+
+
 
     //  Show the customer details
     public function details($id, $name)
