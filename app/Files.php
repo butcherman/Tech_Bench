@@ -12,15 +12,15 @@ class Files extends Model
     protected $primaryKey = 'file_id';
     protected $fillable = ['file_name', 'file_link', 'mime_type'];
 
-    public function systemFiles()
-    {
-        return $this->hasMany('App\SystemFiles', 'file_id', 'file_id');
-    }
+    // public function systemFiles()
+    // {
+    //     return $this->hasMany('App\SystemFiles', 'file_id', 'file_id');
+    // }
 
-    public function fileLinkFiles()
-    {
-        return $this->belongsTo('App\FileLinkFiles', 'file_id', 'file_id');
-    }
+    // public function fileLinkFiles()
+    // {
+    //     return $this->belongsTo('App\FileLinkFiles', 'file_id', 'file_id');
+    // }
 
     //  Remove any illegal characters from filename and make sure it is unique
     public static function cleanFileName($path, $fileName)

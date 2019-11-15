@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         //  TODO:  add seeders for demo setup
         $this->call(UserTableSeeder::class);
+        $this->call(CustomerSeeder::class);
     }
 }

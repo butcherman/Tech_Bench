@@ -77,19 +77,7 @@ class CustomerController extends Controller
         return $searchResults;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-        //  Check to see if a customer ID already exists
+    //  Check to see if a customer ID already exists
     public function checkID($id)
     {
         $cust = Customers::find($id);

@@ -19,10 +19,10 @@ class FileLinks extends Model
         return $this->attributes['allow_upload'] ? 'Yes' : 'No';
     }
 
-    public function users()
-    {
-        return $this->belongsTo('App\Users', 'user_id', 'user_id');
-    }
+    // public function users()
+    // {
+    //     return $this->belongsTo('App\Users', 'user_id', 'user_id');
+    // }
 
     public function fileLinkFiles()
     {

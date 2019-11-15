@@ -187,7 +187,7 @@ class CustomerIndexTest extends TestCase
             'perPage'     => 25,
             'name'        => null,
             'city'        => null,
-            'system_type' => $sys->sys_id
+            'system' => $sys->sys_id
         ];
 
         $response = $this->actingAs($user)->get(route('customer.search', $data));

@@ -15,21 +15,8 @@ class FileLinksCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $collection = $this->collection;
-        foreach($collection as $item)
-        {
-            if($item['expire'] < Carbon::now())
-            {
-                $item['expired'] = 1;
-            }
-            else
-            {
-                $item['expired'] = 0;
-            }
-        }
-
         return parent::toArray(
         /** @scrutinizer ignore-type */
-        $collection);
+        $this->collection);
     }
 }

@@ -25,10 +25,7 @@ class CustomerDetailsController extends Controller
     //  New Customer Form
     public function create()
     {
-        if(!$this->authorize('hasAccess', 'add_customer'))
-        {
-            return abort(403);
-        }
+        $this->authorize('hasAccess', 'add_customer');
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.newCustomer');
@@ -37,9 +34,7 @@ class CustomerDetailsController extends Controller
     //  Submit the new customer form
     public function store(Request $request)
     {
-        if (!$this->authorize('hasAccess', 'add_customer')) {
-            return abort(403);
-        }
+        $this->authorize('hasAccess', 'add_customer');
 
         $request->validate([
             'cust_id'  => 'required|numeric|unique:customers,cust_id',
