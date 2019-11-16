@@ -75,9 +75,6 @@
 
 <script>
 export default {
-    props: [
-
-    ],
     data() {
         return {
             token: window.techBench.csrfToken,

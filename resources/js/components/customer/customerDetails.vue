@@ -1,18 +1,31 @@
 <template>
     <div>
-        <h2>
-            <span :class="isFav" @click="toggleFav"><i class="fa fa-bookmark"></i></span>
-            {{form.name}}</h2>
-        <h5>{{form.dba_name}}</h5>
-        <address>
-            <a :href="url" target="_blank" id="addr-span">
-                {{form.address}}<br />
-                {{form.city}}, {{form.state}} &nbsp;{{form.zip}}
-            </a>
-            <span class="text-muted pointer" id="edit-customer" @click="openEditModal"><i class="fa fa-pencil" aria-hidden="true"></i></span>
-        </address>
-        <b-modal id="details-edit-moadl" title="Edit Customer" ref="detailsEditModal" @close="getDetails" hide-footer centered>
-            <b-form @submit="updateCustomer" @reset="resetForm">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>
+                    <span :class="classFav" :title="markFav" v-b-tooltip.hover @click="toggleFav"></span>
+                    {{details.name}}
+                </h3>
+                <h5>{{details.dba_name}}</h5>
+                <address>
+                    <div class="float-left">
+                        <span class="ti-location-pin"></span>
+                    </div>
+                    <a :href="url" target="_blank" id="addr-span" class="float-left">
+                        {{details.address}}<br />
+                        {{details.city}}, {{details.state}} &nbsp;{{details.zip}}
+                    </a>
+                </address>
+            </div>
+            <div class="col-md-4">
+                <div class="float-right">
+                    <button class="btn btn-light btn-block" v-b-modal.details-edit-modal>Edit Customer</button>
+                    <button class="btn btn-danger btn-block" @click="confirmDestroy">Deactivate Customer</button>
+                </div>
+            </div>
+        </div>
+        <b-modal id="details-edit-modal" title="Edit Customer" ref="details-edit-modal" hide-footer centered>
+            <b-form @submit="updateCustomer" novalidate :validated="validated" ref="editCustomerForm">
                 <b-form-group
                     label="Customer Name:"
                     label-for="cust-name"
@@ -23,6 +36,7 @@
                         type="text"
                         required
                         placeholder="Enter Customer Name"></b-form-input>
+                        <b-form-invalid-feedback>You must enter a customer name</b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group
                     label="DBA Name:"
@@ -44,6 +58,7 @@
                         type="text"
                         required
                         placeholder="Enter Customer Address"></b-form-input>
+                        <b-form-invalid-feedback>You must enter a customer address</b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group
                     label="City:"
@@ -55,6 +70,7 @@
                         type="text"
                         required
                         placeholder="Enter City"></b-form-input>
+                        <b-form-invalid-feedback>You must enter a city</b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-row>
                     <b-form-group
@@ -77,15 +93,17 @@
                             type="number"
                             required
                             placeholder="Enter Zip Code"></b-form-input>
+                            <b-form-invalid-feedback>You must enter a zip code</b-form-invalid-feedback>
                     </b-form-group>
                 </b-form-row>
-                <b-button type="submit" variant="info" block>Update Customer Data</b-button>
-                <div class="row justify-content-center pad-top">
-                    <div class="col-md-6">
-                        <b-button type="reset" variant="warning" block>Reset</b-button>
-                    </div>
-                </div>
+                <b-button type="submit" variant="primary" :disabled="button.dis" block>
+                    <span class="spinner-border spinner-border-sm text-danger" v-show="button.dis"></span>
+                    {{button.text}}
+                </b-button>
             </b-form>
+        </b-modal>
+        <b-modal id="loading-modal" size="sm" ref="loading-modal" hide-footer hide-header hide-backdrop centered>
+            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
         </b-modal>
     </div>
 </template>
@@ -93,23 +111,29 @@
 <script>
 export default {
     props: [
-        'cust_id',
+        'cust_details',
         'is_fav',
-        'fav_route',
-        'show_route',
-        'edit_route',
+        'can_del',
     ],
     data() {
         return {
-            url: 'https://maps.google.com/?q='+encodeURI(this.address+','+this.city+','+this.state),
-            isFav: this.is_fav ? 'bookmark-checked' : 'bookmark-unchecked',
+            validated: false,
+            details: this.cust_details,
+            url: '',
+            isFav: this.is_fav,
+            classFav: this.is_fav ? 'ti-bookmark-alt bookmark-checked' : 'ti-bookmark bookmark-unchecked',
+            markFav: this.is_fav ? 'Remove From Favorites' : 'Add to Favorites',
+            button: {
+                dis: false,
+                text: 'Update Customer Data'
+            },
             form: {
-                name: '',
-                dba_name: '',
-                address: '',
-                city: '',
-                state: '',
-                zip: '',
+                name: this.cust_details.name,
+                dba_name: this.cust_details.dba_name,
+                address: this.cust_details.address,
+                city: this.cust_details.city,
+                state: this.cust_details.state,
+                zip: this.cust_details.zip,
                 states: [
                     {value: 'AL', text: 'Alabama'},
                     {value: 'AK', text: 'Alaska'},
@@ -168,66 +192,94 @@ export default {
     },
     created()
     {
-        this.getDetails();
+        this.setAddressURL();
     },
     methods: {
+        setAddressURL()
+        {
+            this.url = 'https://maps.google.com/?q='+encodeURI(this.details.address+','+this.details.city+','+this.details.state);
+        },
         toggleFav()
         {
-            if(this.isFav === 'bookmark-unchecked')
+            this.classFav = 'spinner-grow text-light';
+            if(this.isFav)
             {
-                axios.get(this.fav_route.replace(':action', 'add'))
+                axios.get(this.route('customer.toggle-fav', ['remove', this.cust_details.cust_id]))
                     .then(res => {
-                        this.favChk = true;
-                        this.isFav  = 'bookmark-checked';
+                        this.isFav = false;
+                        this.classFav  = 'ti-bookmark bookmark-unchecked';
+                        this.markFav = 'Add To Favorites'; //  : 'Add to Favorites',
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
             }
             else
             {
-                axios.get(this.fav_route.replace(':action', 'remove'))
+                axios.get(this.route('customer.toggle-fav', ['add', this.cust_details.cust_id]))
                     .then(res => {
-                        this.favChk = false;
-                        this.isFav  = 'bookmark-unchecked';
+                        this.isFav = true;
+                        this.classFav  = 'ti-bookmark-alt bookmark-checked';
+                        this.markFav = 'Remove From Favorites';
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
             }
         },
-        getDetails()
-        {
-            axios.get(this.show_route)
-                .then(res => {
-                    this.form.name     = res.data.name;
-                    this.form.dba_name = res.data.dba_name;
-                    this.form.address  = res.data.address;
-                    this.form.city     = res.data.city;
-                    this.form.state    = res.data.state;
-                    this.form.zip      = res.data.zip;
-                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
-        },
-        openEditModal()
-        {
-            this.$refs.detailsEditModal.show();
-        },
         updateCustomer(e)
         {
             e.preventDefault();
-            axios.put(this.show_route, this.form)
-                .then(res => {
-                    console.log(res);
-                    if(res.data.success === true)
-                    {       
-                        this.$refs.detailsEditModal.hide();
-                    }
-                    else
-                    {
-                        alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error);
-                    }
-                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+            if(this.$refs.editCustomerForm.checkValidity() === false)
+            {
+                this.validated = true;
+            }
+            else
+            {
+                this.button.dis = true;
+                this.button.text = 'Updating Customer';
+                axios.put(this.route('customer.id.update', this.cust_details.cust_id), this.form)
+                    .then(res => {
+                        console.log(res);
+                        if(res.data.success === true)
+                        {
+                            this.validated = false;
+                            this.details = this.form;
+                            this.button.dis = false;
+                            this.button.text = 'Update Customer';
+                            this.$refs['details-edit-modal'].hide();
+                        }
+                        else
+                        {
+                            alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error);
+                        }
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+            }
         },
-        resetForm(e)
+        confirmDestroy()
         {
-            e.preventDefault();
-            this.getDetails();
+            this.$bvModal.msgBoxConfirm('Please confirm that you want to deactivate this customer.', {
+            title: 'Please Confirm',
+            size: 'sm',
+            buttonSize: 'sm',
+            okVariant: 'danger',
+            okTitle: 'YES',
+            cancelTitle: 'NO',
+            footerClass: 'p-2',
+            hideHeaderClose: false,
+            centered: true
+            })
+            .then(value => {
+                // console.log(value);
+                if(value)
+                {
+                    this.$refs['loading-modal'].show();
+                    axios.delete(this.route('customer.id.destroy', this.cust_details.cust_id))
+                    .then(res => {
+                        console.log(res);
+                        window.location.href = this.route('customer.index');
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                }
+            })
+            .catch(error => {
+                alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error);
+            })
         }
     }
 }

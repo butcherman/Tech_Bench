@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customers extends Model
 {
+    use SoftDeletes;
+
     protected $primaryKey = 'cust_id';
     protected $fillable = ['cust_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip', 'active'];
     protected $hidden = ['created_at', 'deleted_at', 'updated_at'];

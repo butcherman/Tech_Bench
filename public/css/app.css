@@ -18372,7 +18372,17 @@ label {
 }
 
 .pointer,
-.filedrag {
+.filedrag,
+.bookmark-unchecked,
+.bookmark-checked {
   cursor: pointer;
+}
+
+.bookmark-unchecked {
+  color: #C4C4C4;
+}
+
+.bookmark-checked {
+  color: #D46E70;
 }
 

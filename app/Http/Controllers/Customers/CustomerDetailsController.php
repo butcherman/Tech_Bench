@@ -9,9 +9,13 @@ use App\CustomerFileTypes;
 use Illuminate\Http\Request;
 use App\Http\Traits\SystemsTrait;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Resources\Customers as CustomersResource;
+use App\Http\Resources\CustomersCollection;
 
 class CustomerDetailsController extends Controller
 {
@@ -64,70 +68,25 @@ class CustomerDetailsController extends Controller
         return response()->json(['success' => true ]);
     }
 
-
-
-
-
-
-
     //  Show the customer details
     public function details($id, $name)
     {
-        echo 'customer details';
-        die();
-
-
         $custDetails = Customers::find($id);
-        $allSystems  = $this->getAllSystems();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        if(empty($custDetails))
+        if($custDetails === null)
         {
-            Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id.'-'.$name);
+            Log::info('User - '.Auth::user()->user_id.' visited invalid customer ID - '.$id.' - '.$name);
             return view('err.customerNotFound');
         }
 
-        //  Determine if the customer is one of the users bookmarks
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
-        //  Get the types of phone numbers that can be assigned to a customer contact
-        $pTypes = PhoneNumberType::all();
-        $phoneTypes = [];
-        foreach($pTypes as $type)
-        {
-            $phoneTypes[] = [
-                'value' => $type->phone_type_id,
-                'text'  => $type->description,
-                'icon'  => $type->icon_class
-            ];
-        }
 
-        //  Get the types of files that can be attached to a file
-        $fileTypes = CustomerFileTypes::select('file_type_id as value', 'description as text')->get();
-
-        Log::debug('Customer Details', $custDetails->toArray());
+        // Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
-            'details'    => $custDetails,
-            'isFav'      => empty($custFav) ? false : true,
-            'sysList'    => $allSystems,
-            'phoneTypes' => $phoneTypes,
-            'fileTypes'  => $fileTypes
+            'details' => $custDetails->toJson(),
+            'isFav'   => empty($custFav) ? 'false' : 'true',
+            'canDel'  => Gate::allows('hasAccess', 'deactivate_customer'),
         ]);
-    }
-
-    //  Get the basic details of the customer
-    public function show($id)
-    {
-        $details = Customers::find($id);
-
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        if(empty($details))
-        {
-            Log::info('User ID-'.Auth::user()->user_id.' visited invalid customer ID-'.$id);
-            return response()->json(['error' => 'Customer Not Found']);
-        }
-
-        Log::debug('Customer Details', $details->toArray());
-        return response()->json($details);
     }
 
     //  Update the customer details
@@ -159,14 +118,12 @@ class CustomerDetailsController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Deactivate a customer - note this will not remove it from the database, but make it inaccessable
     public function destroy($id)
     {
-        //
+        $this->authorize('hasAccess', 'deactivate_customer');
+        Customers::destroy($id);
+
+        Log::notice('User - '.Auth::user()->user_id.' has deactivated Customer ID '.$id);
     }
 }
