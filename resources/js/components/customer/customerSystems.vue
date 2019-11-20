@@ -1,79 +1,78 @@
 <template>
     <div>
-        <div class="row justify-content-center">
-            <div v-if="!custSystems.length" class="col-12">
-                <h5 class="text-center">No Systems.  Please Add One.</h5>
-                <div class="row justify-content-center">
-                    <div class="col-8 col-sm-4 mb-2">
-                        <b-button v-b-modal.new-sys-modal variant="info" block>Add System</b-button>
-                    </div>
-                </div>
+        <div v-if="loading">
+            <h5 class="text-center">Loading Systems</h5>
+            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+        </div>
+        <div v-else-if="error">
+            <h5 class="text-center">Problem Loading Data...</h5>
+        </div>
+        <div v-else>
+            <div v-if="!systems.length" class="text-center">
+                <h5>No Systems</h5>
+                <b-button variant="primary" @click="addSystem">Add System</b-button>
             </div>
-            <div v-else class="col-12">
+            <div v-else>
                 <b-tabs>
-                    <b-tab v-for="sys in custSystems" :key="sys.cust_sys_id" :title="sys.name">
-                        <dl class="row justify-content-center pad-top" v-for="data in sys.data">
-                            <dt class="col-sm-6 text-left text-sm-right">{{data.name}}:</dt>
-                            <dd class="col-sm-6">{{data.value}}</dd>
+                    <b-tab v-for="sys in systems" :key="sys.cust_sys_id" :title="sys.system_types.name" class="pt-2">
+                        <dl class="row" v-for="data in sys.system_data_fields" :key="data.field_id">
+                            <dt class="col-sm-6 text-right mb-0">{{data.system_data_field_types.name}}:</dt>
+                            <dd class="col-sm-6 text-left mb-0">{{data.pivot.value}}</dd>
                         </dl>
                         <div class="row justify-content-center">
-                            <div class="col-8 col-sm-4 mb-2">
-                                <b-button v-b-modal.new-sys-modal variant="info" block>Add System</b-button>
+                            <div class="col-8 col-sm-6 mb-2">
+                                <b-button variant="primary" block @click="addSystem">Add System</b-button>
                             </div>
-                            <div class="col-8 col-sm-4">
-                                <b-button variant="warning" @click="editSystem(sys)" block>Edit System</b-button>
+                            <div class="col-8 col-sm-6">
+                                <b-button variant="warning" block @click="editSystem(sys)">Edit System</b-button>
                             </div>
                         </div>
                     </b-tab>
                 </b-tabs>
             </div>
         </div>
-        <b-modal id="new-sys-modal" title="Add New System" ref="newSysModal" hide-footer>
-            <b-form @submit="addSystem">
-                <b-form-select v-model="form.system" @change="populateData">
-                    <option :value="null">Please Select A System Type</option>
-                    <optgroup v-for="(sysData, key) in JSON.parse(sys_list)" :label="key">
-                        <option v-for="sys in sysData" :value="sys.sys_id">{{sys.name}}</option>
-                    </optgroup>
-                </b-form-select>
-                <span class="invalid-feedback d-inline" v-if="dupSys">
-                    <strong>Customer Already Has This System</strong>
-                </span>
-                <b-form-group
-                    v-for="field in sysFields"
-                    :key="field.order"
-                    :label="field.name"
-                    :label-for="'field-id-'+field.field_id"
-                >
-                    <b-form-input
-                        :id="'field-id-'+field.field_id"
-                        type="text"
-                        v-model="form.fieldData[field.field_id]"
-                    ></b-form-input>
+        <b-modal id="new-system-modal" title="Add New System" ref="newSystemModal" hide-footer>
+            <div v-if="systemsLoading">
+                <h5 class="text-center">Loading Systems</h5>
+                <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+            </div>
+            <b-form v-else @submit="submitSystem" ref="newSystemForm">
+                <b-form-group label="System Type" label-size="lg">
+                    <b-form-select v-model="selectedSystem" @change="populateDataFields">
+                        <option :value="null">Please Select A System</option>
+                        <optgroup v-for="cat in systemTypes" :key="cat.cat_id" :label="cat.name">
+                            <option v-for="sys in cat.system_types" :key="sys.sys_id" :value="sys">{{sys.name}}</option>
+                        </optgroup>
+                    </b-form-select>
                 </b-form-group>
-                <b-button type="submit" variant="info" class="pad-top" block>Submit New System</b-button>
+                <b-form-group label="System Information" label-size="lg">
+                    <b-form-group v-for="data in systemFields" :key="data.field_id" :label="data.system_data_field_types.name" :label-for="'sys-data-'+data.field_id">
+                        <b-form-input :id="'sys-data-'+data.field_id" v-model="form['field_'+data.field_id]"></b-form-input>
+                    </b-form-group>
+                </b-form-group>
+                <b-button type="submit" block variant="primary" class="mt-4" :disabled="button.disable">
+                    <span class="spinner-border spinner-border-sm text-danger" v-show="button.disable"></span>
+                    {{button.text}}
+                </b-button>
             </b-form>
         </b-modal>
-        <b-modal id="edit-sys-modal" title="Edit System" ref="editSysModal" hide-footer>
-            <b-form @submit="updateSystem">
-                <b-form-group
-                    v-for="(field, key) in form.fieldData"
-                    :key="field.order"
-                    :label="field.name"
-                    :label-for="'field-id-'+key"
-                >
-                    <b-form-input
-                        :id="'field-id-'+key"
-                        type="text"
-                        v-model="form.fieldData[key].value"
-                        :disabled="key === 0"
-                    ></b-form-input>
+        <b-modal id="edit-system-modal" title="Add New System" ref="editSystemModal" hide-footer>
+            <b-form @submit="submitEditSystem" ref="editSystemForm">
+                <h3 class="text-center">{{form.systemName}}</h3>
+                <b-form-group label="System Information" label-size="lg">
+                    <b-form-group v-for="data in systemFields" :key="data.field_id" :label="data.system_data_field_types.name" :label-for="'sys-data-'+data.field_id">
+                        <b-form-input :id="'sys-data-'+data.field_id" v-model="form['field_'+data.field_id]"></b-form-input>
+                    </b-form-group>
                 </b-form-group>
-                <b-button type="submit" variant="info" class="pad-top" block>Update System</b-button>
+                <b-button type="submit" block variant="primary" class="mt-4" :disabled="button.disable">
+                    <span class="spinner-border spinner-border-sm text-danger" v-show="button.disable"></span>
+                    {{button.text}}
+                </b-button>
+                <b-button block variant="danger" class="mt-4" @click="deleteSystem">
+                    <span class="spinner-border spinner-border-sm text-danger" v-show="button.delete.disable"></span>
+                    {{button.delete.text}}
+                </b-button>
             </b-form>
-            <click-confirm>
-                <b-button variant="danger" class="pad-top" @click="deleteSystem">Delete System</b-button>
-            </click-confirm>
         </b-modal>
     </div>
 </template>
@@ -82,122 +81,177 @@
 export default {
     props: [
         'cust_id',
-        'get_sys_route',
-        'sys_data_route',
-        'new_sys_route',
-        'edit_sys_route',
-        'sys_list',
     ],
     data () {
         return {
+            loading: true,
+            systemsLoading: true,
+            error: false,
+            systems: [],
+            systemTypes: [],
+            systemFields: [],
+            selectedSystem: '',
             form: {
-                custID: this.cust_id,
+                cust_id: this.cust_id,
                 system: null,
-                fieldData: [],
             },
-            custSystems: [],
-            sysFields: [],
-            editName: '',
-            dupSys: false,
+            button: {
+                disable: false,
+                text: 'Add System',
+                delete: {
+                    disable: false,
+                    text: 'Delete System',
+                }
+            }
         }
     },
     created() {
         this.getSystems();
     },
     methods: {
-        //  Get all of the sysstems currently attached to the customer
+        //  Get all of the systems currently attached to the customer
         getSystems()
         {
-            axios.get(this.get_sys_route)
+            axios.get(this.route('customer.systems.show', this.cust_id))
                 .then(res => {
-                    this.custSystems = res.data;
-                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+                    this.systems = res.data;
+                    this.loading = false;
+                }).catch(error => this.error = true);
         },
-        //  Get the data that should be gathered for the selected system
-        populateData()
-        {            
-            //  verify that the customer does not already have the system
-            var dup = false;
-            var sys = this.form.system
-            this.custSystems.forEach(function(el)
+        //  Bring up the form to add a system
+        addSystem()
+        {
+            this.button.disable = false;
+            this.button.text = 'Add System';
+            this.$refs.newSystemModal.show();
+            if(!this.systemTypes.length)
             {
-                if(el.sys_id == sys)
-                {
-                    dup = true;
-                }
-            });
-            if(dup)
+                axios.get(this.route('customer.systems.index'))
+                .then(res => {
+                    this.systemTypes = res.data;
+                    this.systemsLoading = false;
+                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+            }
+        },
+        submitSystem(e)
+        {
+            e.preventDefault();
+            this.button.disable = true;
+            this.button.text = 'Loading...';
+            axios.post(this.route('customer.systems.store'), this.form)
+                    .then(res => {
+                        // console.log(res);
+                        this.$refs.newSystemModal.hide();
+                        this.getSystems();
+                        this.selectedSystem = '';
+                        this.form.system = null;
+                        this.systemFields = [];
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+        },
+        editSystem(sys)
+        {
+            this.form.systemName = sys.system_types.name;
+            this.form.system = sys.sys_id;
+            this.systemFields = sys.system_data_fields;
+            this.selectedSystem = sys.cust_sys_id;
+            this.button.disable = false;
+            this.button.text = 'Update System';
+            for(var i=0; i < sys.system_data_fields.length; i++)
             {
-                this.sysFields = [];
-                this.dupSys = true;
+                this.$set(this.form, 'field_'+sys.system_data_fields[i].field_id, sys.system_data_fields[i].pivot.value);
+            }
+            this.$refs.editSystemModal.show();
+        },
+        submitEditSystem(e)
+        {
+            e.preventDefault();
+            this.button.disable = true;
+            this.button.text = 'Loading...';
+            axios.put(this.route('customer.systems.update', this.selectedSystem), this.form)
+                    .then(res => {
+                        this.loading = true;
+                        this.getSystems();
+                        this.$refs.newSystemModal.hide();
+                        this.$refs.editSystemModal.hide();
+                        this.selectedSystem = '';
+                        this.form.system = null;
+                        this.systemFields = [];
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+
+        },
+        //  In the new system form, populate the fields for the customer information
+        populateDataFields()
+        {
+            //  Clear the form if no system is selected
+            if(this.selectedSystem == null)
+            {
+                this.form.system = null;
+                this.systemFields = [];
             }
             else
             {
-                this.dupSys = false;
-                axios.get(this.sys_data_route.replace(':id', this.form.system))
-                    .then(res => {
-                        this.sysFields = res.data;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+                //  Check if the customer already has the selected system assigned
+                if(this.checkForDuplicate(this.selectedSystem.sys_id))
+                {
+                    this.$bvModal.msgBoxOk('Customer already has this system.', {
+                        title: 'Error',
+                        size: 'md',
+                        centered: true,
+                    })
+                        .then(res => {this.selectedSystem = null; this.systemFields = [];});
+                }
+                else
+                {
+                    this.form.system = this.selectedSystem.sys_id;
+                    this.systemFields = this.selectedSystem.system_data_fields;
+                }
+
             }
         },
-        //  Submit the new system for the customer to the DB
-        addSystem(e)
+        //  Check to see if the customer already has the system assigned
+        checkForDuplicate(sysID)
         {
-            e.preventDefault();
-                        
-            axios.post(this.new_sys_route, this.form)
-                .then(res => {
-                    if(res.data.success == true)
-                    {
-                        this.$refs.newSysModal.hide();
-                        this.getSystems();
-                        this.form.system = null;
-                        this.form.fieldData = [];
-                        this.sysFields = [];
-                    }
-                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+            for(var i=0; i < this.systems.length; i++)
+            {
+                if(this.systems[i].sys_id == sysID)
+                {
+                    return true;
+                }
+            }
+            return false;
         },
-        //  Edit the selected customers system
-        editSystem(sys)
-        {
-            this.editName = sys.name;
-            this.form.system = sys.cust_sys_id;
-            this.form.fieldData = sys.data;
-            this.$refs.editSysModal.show();
-        },
-        //  Submit the edit system form
-        updateSystem(e)
-        {
-            e.preventDefault();
-                    
-            axios.put(this.edit_sys_route.replace(':id', this.form.custID), this.form)
-                .then(res => {
-                    console.log(res);
-                    if(res.data.success)
-                    {
-                        this.$refs.editSysModal.hide();
-                        this.getSystems();
-                        this.form.system = null;
-                        this.form.fieldData = [];
-                        this.sysFields = [];
-                    }
-                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
-        },
-        //  Delete the system attached to the customer
+        //  Delete a system
         deleteSystem()
         {
+            console.log('delete system');
+            console.log(this.form.systemName);
             console.log(this.form.system);
-            axios.delete(this.edit_sys_route.replace(':id', this.form.system))
-                .then(res => {
-                    if(res.data.success)
-                    {
-                        this.$refs.editSysModal.hide();
-                        this.getSystems();
-                        this.form.system = null;
-                        this.form.fieldData = [];
-                        this.sysFields = [];
-                    }
-                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+            console.log(this.selectedSystem);
+
+            this.$bvModal.msgBoxConfirm('Please confirm you want to delete '+this.form.systemName+' from this customer.', {
+                title: 'Are You Sure?',
+                size: 'md',
+                okVariant: 'danger',
+                okTitle: 'Yes',
+                cancelTitle: 'No',
+                centered: true,
+            }).then(res => {
+                console.log(res);
+                if(res)
+                {
+                    console.log('delete system');
+                    this.loading = true;
+                    this.$refs.editSystemModal.hide();
+                    axios.delete(this.route('customer.systems.destroy', this.selectedSystem))
+                        .then(res => {
+                            console.log(res);
+                            this.getSystems();
+                            this.selectedSystem = '';
+                            this.form.system = null;
+                            this.systemFields = [];
+                        }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                }
+            });
         }
     }
 }

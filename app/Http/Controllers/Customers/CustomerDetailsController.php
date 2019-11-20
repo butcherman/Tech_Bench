@@ -76,13 +76,14 @@ class CustomerDetailsController extends Controller
         if($custDetails === null)
         {
             Log::info('User - '.Auth::user()->user_id.' visited invalid customer ID - '.$id.' - '.$name);
-            return view('err.customerNotFound');
+            return view('customer.customerNotFound');
         }
 
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
 
         // Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
+            'cust_id' => $custDetails->cust_id,
             'details' => $custDetails->toJson(),
             'isFav'   => empty($custFav) ? 'false' : 'true',
             'canDel'  => Gate::allows('hasAccess', 'deactivate_customer'),

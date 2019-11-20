@@ -10,6 +10,11 @@ class SystemTypes extends Model
     protected $fillable = ['cat_id', 'name', 'parent_id', 'folder_location'];
     protected $hidden = ['cat_id', 'created_at', 'folder_location', 'updated_at'];
 
+    public function SystemDataFields()
+    {
+        return $this->hasMany('App\SystemDataFields', 'sys_id', 'sys_id');
+    }
+
     // public function systemCategories()
     // {
     //     return $this->belongsTo('App\SystemCategories', 'cat_id');

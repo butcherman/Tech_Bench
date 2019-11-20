@@ -61,32 +61,26 @@ Route::post('file-links/{id}',          'FileLinks\GuestLinksController@update')
 Route::get('file-links/{id}',           'FileLinks\GuestLinksController@show')    ->name('file-links.show');
 Route::get('file-links',                'FileLinks\GuestLinksController@index')   ->name('file-links.index');
 
-
-
-
-
-
-
-
 /*
 *   Customer Routes
 */
 Route::prefix('customer')->name('customer.')->group(function() {
 
-
-
+    //  Customer Systems
+    Route::resource('systems', 'Customers\CustomerSystemsController');
+    //  Customer Details
     Route::get('id/{id}/{name}', 'Customers\CustomerDetailsController@details')->name('details');
-
     Route::resource('id', 'Customers\CustomerDetailsController');
-    // Route::post('search', 'Customers\CustomerController@search')->name('search');
+    //  check Id and bookmark customer
+    Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggle-fav');
+    Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('check-id');
+    //  Index landing/search page
+    Route::get('search', 'Customers\CustomerController@search')->name('search');
     Route::get('/', 'Customers\CustomerController@index')->name('index');
 
 
-    Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('check-id');
 
-    Route::get('search', 'Customers\CustomerController@search')->name('search');
 
-    Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggle-fav');
 
     // Route::get('download-note/{id}', 'DownloadController@downloadCustNote')->name('download-note');
     // Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
@@ -96,7 +90,6 @@ Route::prefix('customer')->name('customer.')->group(function() {
     // Route::resource('files', 'Customers\CustomerFilesController');
     // Route::resource('notes', 'Customers\CustomerNotesController');
     // Route::resource('contacts', 'Customers\CustomerContactsController');
-    // Route::resource('systems', 'Customers\CustomerSystemsController');
 
 
 
@@ -154,13 +147,13 @@ Route::prefix('customer')->name('customer.')->group(function() {
         *   System Routes
         *
         */
-        Route::prefix('system')->name('system.')->group(function() {
-            Route::post('system-files/replace', 'Systems\SystemFilesController@replace')->name('replaceFile');
-            Route::resource('system-files', 'Systems\SystemFilesController');
-            Route::get('{cat}/{sys}', 'Systems\SystemsController@details')->name('details');
-            Route::get('{cat}', 'Systems\SystemsController@selectSys')->name('select');
-            Route::get('/', 'Systems\SystemsController@index')->name('index');
-        });
+        // Route::prefix('system')->name('system.')->group(function() {
+        //     Route::post('system-files/replace', 'Systems\SystemFilesController@replace')->name('replaceFile');
+        //     Route::resource('system-files', 'Systems\SystemFilesController');
+        //     Route::get('{cat}/{sys}', 'Systems\SystemsController@details')->name('details');
+        //     Route::get('{cat}', 'Systems\SystemsController@selectSys')->name('select');
+        //     Route::get('/', 'Systems\SystemsController@index')->name('index');
+        // });
 
 
 

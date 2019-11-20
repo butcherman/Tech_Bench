@@ -25,6 +25,8 @@ class UpdatesForVersion50 extends Migration
         //  See the function itself for a description of the database changes
         //  DB Modifications
         $this->updatePhoneIcons();
+        $this->modifySystemDataTableNames();
+        $this->addSoftDeleteToCustomerSystems();
 
         //  DB Adds
         $this->addPasswordExpiresColumn();
@@ -100,6 +102,7 @@ class UpdatesForVersion50 extends Migration
                 $table->boolean('is_installer')->default(0)->after('active');
             });
 
+            //  TODO - Clean this up, it does not work
             //  Migrate user roles from the 'user roles' table to the new 'user permissions' table
             if (Schema::hasTable('user_permissions') && (UserPermissions::all()->isEmpty())) {
                 $userRoles = DB::select('SELECT * FROM `user_role` LEFT JOIN `roles` ON `user_role`.`role_id` = `roles`.`role_id`');
@@ -183,7 +186,7 @@ class UpdatesForVersion50 extends Migration
     //  Added a 'hidden' attribute to system customer data types to allow passwords to not be viewed unless clicked or focus
     private function addHiddenColumn()
     {
-        if (!Schema::hasColumn('system_cust_data_types', 'hidden')) {
+        if (!Schema::hasColumn('system_data_field_types', 'hidden')) {
             Schema::table('system_cust_data_types', function (Blueprint $table) {
                 $table->boolean('hidden')
                     ->default(0)
@@ -353,6 +356,38 @@ class UpdatesForVersion50 extends Migration
             });
             Schema::dropIfExists('system_files');
             Schema::dropIfExists('system_file_types');
+        }
+    }
+
+    //  Rename the tables that hold customer system information to make more sense
+    private function modifySystemDataTableNames()
+    {
+        if(Schema::hasTable('customer_system_fields'))
+        {
+            Schema::dropIfExists('customer_system_data');
+            Schema::rename('customer_system_fields', 'customer_system_data');
+        }
+        if(Schema::hasTable('system_cust_data_fields'))
+        {
+            Schema::dropIfExists('system_data_fields');
+            Schema::rename('system_cust_data_fields', 'system_data_fields');
+        }
+        if(Schema::hasTable('system_cust_data_types'))
+        {
+            Schema::dropIfExists('system_data_field_types');
+            Schema::rename('system_cust_data_types', 'system_data_field_types');
+        }
+    }
+
+    //  Add soft deletes to customer systems table to prevent accidental deletes
+    private function addSoftDeleteToCustomerSystems()
+    {
+        if(!Schema::hasColumn('customer_systems', 'deleted_at'))
+        {
+            Schema::table('customer_systems', function(Blueprint $table)
+            {
+                $table->softDeletes()->after('sys_id');
+            });
         }
     }
 }

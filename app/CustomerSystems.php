@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerSystems extends Model
 {
+    use SoftDeletes;
+
     protected $primaryKey = 'cust_sys_id';
     protected $fillable = ['cust_id', 'sys_id'];
     protected $hidden = ['created_at', 'updated_at'];
@@ -20,8 +23,18 @@ class CustomerSystems extends Model
         return $this->hasOne('App\SystemTypes', 'sys_id', 'sys_id');
     }
 
-    // public function CustomerSystemFields()
+    public function CustomerSystemData()
+    {
+        return $this->hasMany('App\CustomerSystemData', 'cust_sys_id');
+    }
+
+    // public function SystemDataFields()
     // {
-    //     return $this->belongsTo('App\CustomerSystemFields', 'cust_sys_id');
+    //     return $this->hasManyThrough('App\SystemDataFields', 'App\CustomerSystemData', 'cust_sys_id', 'field_id', 'cust_sys_id', 'field_id');
     // }
+
+    public function SystemDataFields()
+    {
+        return $this->belongsToMany('App\SystemDataFields', 'customer_system_data', 'cust_sys_id', 'field_id')->withPivot('value')->orderBy('order', 'ASC');
+    }
 }

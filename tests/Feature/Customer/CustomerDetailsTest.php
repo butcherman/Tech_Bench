@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Customer;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Customers;
 use App\User;
+use App\Customers;
+use Tests\TestCase;
 use App\UserPermissions;
 
 class CustomerDetailsTest extends TestCase
@@ -48,7 +46,7 @@ class CustomerDetailsTest extends TestCase
         $response = $this->actingAs($user)->get(route('customer.details', [958745487452, $this->cust->name]));
 
         $response->assertSuccessful();
-        $response->assertViewIs('err.customerNotFound');
+        $response->assertViewIs('customer.customerNotFound');
     }
 
     //  Test marking the customer as a user fav as guest
@@ -66,6 +64,20 @@ class CustomerDetailsTest extends TestCase
     {
         $user = $this->getTech();
         $response = $this->actingAs($user)->get(route('customer.toggle-fav', ['add', $this->cust->cust_id]));
+
+        $response->assertSuccessful();
+        $response->assertJson([
+            'success' => true
+        ]);
+    }
+
+    //  Test remving the customer as a user fav
+    public function test_remove_customer_bookmark()
+    {
+        $user = $this->getTech();
+        $this->actingAs($user)->get(route('customer.toggle-fav', ['add', $this->cust->cust_id]));
+
+        $response = $this->actingAs($user)->get(route('customer.toggle-fav', ['remove', $this->cust->cust_id]));
 
         $response->assertSuccessful();
         $response->assertJson([
