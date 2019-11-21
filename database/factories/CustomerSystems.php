@@ -4,7 +4,7 @@
 
 use App\CustomerSystems;
 
-$factory->define(CustomerSystems::class, function () {
+$factory->define(CustomerSystems::class, function() {
     return [
         //
         'cust_id' => factory(App\Customers::class)->create()->cust_id,
