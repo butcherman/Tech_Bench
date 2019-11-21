@@ -4,7 +4,7 @@
 
 use App\SystemDataFields;
 
-$factory->define(SystemDataFields::class, function () {
+$factory->define(SystemDataFields::class, function() {
     return [
         //
         'sys_id' => factory(App\SystemTypes::class)->create()->sys_id,

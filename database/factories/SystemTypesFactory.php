@@ -5,7 +5,7 @@
 use App\SystemTypes;
 use Faker\Generator as Faker;
 
-$factory->define(SystemTypes::class, function (Faker $faker) {
+$factory->define(SystemTypes::class, function(Faker $faker) {
     return [
         //
         'cat_id'          => factory(App\SystemCategories::class)->create()->cat_id,
