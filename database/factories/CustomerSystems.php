@@ -3,9 +3,8 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\CustomerSystems;
-use Faker\Generator as Faker;
 
-$factory->define(CustomerSystems::class, function (Faker $faker) {
+$factory->define(CustomerSystems::class, function () {
     return [
         //
         'cust_id' => factory(App\Customers::class)->create()->cust_id,

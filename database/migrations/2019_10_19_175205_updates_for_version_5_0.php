@@ -26,9 +26,9 @@ class UpdatesForVersion50 extends Migration
         //  DB Modifications
         $this->updatePhoneIcons();
         $this->modifySystemDataTableNames();
-        $this->addSoftDeleteToCustomerSystems();
 
         //  DB Adds
+        $this->addSoftDeleteToCustomerSystems();
         $this->addPasswordExpiresColumn();
         $this->addIsInstallerToUsers();
         $this->addHiddenColumn();
@@ -62,21 +62,16 @@ class UpdatesForVersion50 extends Migration
     //  Update the icon class to change from font awesome, to theymify icons
     private function updatePhoneIcons()
     {
-        PhoneNumberTypes::find(1)->update(
-            [
-                'icon_class' => 'ti-home'
-            ]
-        );
-        PhoneNumberTypes::find(2)->update(
-            [
-                'icon_class' => 'ti-briefcase'
-            ]
-        );
-        PhoneNumberTypes::find(3)->update(
-            [
-                'icon_class' => 'ti-mobile'
-            ]
-        );
+        $newIcons = [
+            ['description' => 'Home', 'icon_class' => 'ti-home'],
+            ['description' => 'Work', 'icon_class' => 'ti-briefcase'],
+            ['description' => 'Mobile', 'icon_class' => 'ti-mobile'],
+        ];
+
+        foreach($newIcons as $new)
+        {
+            PhoneNumberTypes::where('description', $new['description'])->update(['icon_class' => $new['icon_class']]);
+        }
     }
 
     /*
@@ -97,87 +92,56 @@ class UpdatesForVersion50 extends Migration
     //  Add the is installer column to the users table
     private function addIsInstallerToUsers()
     {
-        if (!Schema::hasColumn('users', 'is_installer')) {
+        if (!Schema::hasColumn('users', 'is_installer'))
+        {
+            //  Add the is installer column
             Schema::table('users', function (Blueprint $table) {
                 $table->boolean('is_installer')->default(0)->after('active');
             });
+            //  Make user id 1 the installer user
+            User::find(1)->update(['is_installer' => 1]);
+            //  default permissions to be used for remaining users
+            $defaultPermissions =
+            [
+                'user_id'             => null,
+                'manage_users'        => 0,
+                'run_reports'         => 0,
+                'add_customer'        => 1,
+                'deactivate_customer' => 0,
+                'use_file_links'      => 1,
+                'create_tech_tip'     => 1,
+                'edit_tech_tip'       => 0,
+                'delete_tech_tip'     => 0,
+                'create_category'     => 0,
+                'modify_category'     => 0
+            ];
 
-            //  TODO - Clean this up, it does not work
-            //  Migrate user roles from the 'user roles' table to the new 'user permissions' table
-            if (Schema::hasTable('user_permissions') && (UserPermissions::all()->isEmpty())) {
-                $userRoles = DB::select('SELECT * FROM `user_role` LEFT JOIN `roles` ON `user_role`.`role_id` = `roles`.`role_id`');
+            $userRoles = DB::select('SELECT * FROM `user_role` LEFT JOIN `roles` ON `user_role`.`role_id` = `roles`.`role_id`');
+            $permissions = UserPermissions::all();
 
-                foreach ($userRoles as $user) {
-                    if ($user->name === 'Installer') {
-                        User::find($user->user_id)->update(
-                            [
-                                'is_installer' => 1
-                            ]
-                        );
-                        UserPermissions::create(
-                            [
-                                'user_id'             => $user->user_id,
-                                'manage_users'        => 1,
-                                'run_reports'         => 1,
-                                'add_customer'        => 1,
-                                'deactivate_customer' => 1,
-                                'use_file_links'      => 1,
-                                'create_tech_tip'     => 1,
-                                'edit_tech_tip'       => 1,
-                                'delete_tech_tip'     => 1,
-                                'create_category'     => 1,
-                                'modify_category'     => 1
-                            ]
-                        );
-                    } else if ($user->name === 'Admin') {
-                        UserPermissions::create(
-                            [
-                                'user_id'             => $user->user_id,
-                                'manage_users'        => 1,
-                                'run_reports'         => 1,
-                                'add_customer'        => 1,
-                                'deactivate_customer' => 1,
-                                'use_file_links'      => 1,
-                                'create_tech_tip'     => 1,
-                                'edit_tech_tip'       => 1,
-                                'delete_tech_tip'     => 1,
-                                'create_category'     => 1,
-                                'modify_category'     => 1
-                            ]
-                        );
-                    } else if ($user->name === 'Report') {
-                        UserPermissions::create(
-                            [
-                                'user_id'             => $user->user_id,
-                                'manage_users'        => 0,
-                                'run_reports'         => 1,
-                                'add_customer'        => 1,
-                                'deactivate_customer' => 0,
-                                'use_file_links'      => 1,
-                                'create_tech_tip'     => 1,
-                                'edit_tech_tip'       => 0,
-                                'delete_tech_tip'     => 0,
-                                'create_category'     => 0,
-                                'modify_category'     => 0
-                            ]
-                        );
-                    } else {
-                        UserPermissions::create(
-                            [
-                                'user_id'             => $user->user_id,
-                                'manage_users'        => 0,
-                                'run_reports'         => 0,
-                                'add_customer'        => 1,
-                                'deactivate_customer' => 0,
-                                'use_file_links'      => 1,
-                                'create_tech_tip'     => 1,
-                                'edit_tech_tip'       => 0,
-                                'delete_tech_tip'     => 0,
-                                'create_category'     => 0,
-                                'modify_category'     => 0
-                            ]
-                        );
+            //  Cycle thorugh all users and assign proper permissions
+            foreach ($userRoles as $user)
+            {
+                $userPerm = $defaultPermissions;
+                if(!$permissions->contains($user->user_id))
+                {
+                    switch($user->name)
+                    {
+                        case 'Installer':
+                            User::find($user->user_id)->update(['is_installer' => 1]);
+                        case 'Admin':
+                            $userPerm['manage_users']        = 1;
+                            $userPerm['deactivate_customer'] = 1;
+                            $userPerm['edit_tech_tip']       = 1;
+                            $userPerm['delete_tech_tip']     = 1;
+                            $userPerm['create_category']     = 1;
+                            $userPerm['modify_category']     = 1;
+                        case 'Report':
+                            $userPerm['run_reports']         = 1;
+                        default:
+                            $userPerm['user_id']             = $user->user_id;
                     }
+                    UserPermissions::create($userPerm);
                 }
             }
         }
@@ -291,10 +255,9 @@ class UpdatesForVersion50 extends Migration
         if (Schema::hasColumn('customers', 'active'))
         {
             //  Migrate the existing disabled customers first
-            $deactiveatedCustomers = Customers::where('active', 0);
-            foreach($deactiveatedCustomers as $cust)
+            $deactivatedCustomers = Customers::where('active', 0)->get();
+            foreach($deactivatedCustomers as $cust)
             {
-                //  TODO:  why is this not firing????
                 Customers::find($cust->cust_id)->delete();
             }
 

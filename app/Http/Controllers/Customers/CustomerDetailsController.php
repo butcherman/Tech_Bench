@@ -4,23 +4,15 @@ namespace App\Http\Controllers\Customers;
 
 use App\Customers;
 use App\CustomerFavs;
-use App\PhoneNumberType;
-use App\CustomerFileTypes;
 use Illuminate\Http\Request;
-use App\Http\Traits\SystemsTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Resources\Customers as CustomersResource;
-use App\Http\Resources\CustomersCollection;
-
 class CustomerDetailsController extends Controller
 {
-    use SystemsTrait;
-
     public function __construct()
     {
         $this->middleware('auth');

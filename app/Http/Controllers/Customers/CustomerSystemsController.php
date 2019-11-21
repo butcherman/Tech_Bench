@@ -2,31 +2,19 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Customers;
-use App\SystemTypes;
 use App\CustomerSystems;
-use Illuminate\Http\Request;
+use App\SystemDataFields;
+use App\SystemCategories;
 use App\CustomerSystemData;
-use App\SystemCustDataFields;
-use App\Http\Traits\SystemsTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-
-
-
-// use App\SystemTypes;
-use App\SystemDataFields;
-use App\SystemCategories;
 use App\Http\Resources\SystemCategoriesCollection as CategoriesCollection;
-
-// use App\Http\Resources\CustomerSystemsCollection;
 
 class CustomerSystemsController extends Controller
 {
-    // use SystemsTrait;
-
     public function __construct()
     {
         $this->middleware('auth');
