@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div v-if="loading">
+        <div v-if="error">
+            <h5 class="text-center">Problem Loading Data...</h5>
+        </div>
+        <div v-else-if="loading">
             <h5 class="text-center">Loading Systems</h5>
             <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-        </div>
-        <div v-else-if="error">
-            <h5 class="text-center">Problem Loading Data...</h5>
         </div>
         <div v-else>
             <div v-if="!systems.length" class="text-center">
@@ -223,11 +223,6 @@ export default {
         //  Delete a system
         deleteSystem()
         {
-            console.log('delete system');
-            console.log(this.form.systemName);
-            console.log(this.form.system);
-            console.log(this.selectedSystem);
-
             this.$bvModal.msgBoxConfirm('Please confirm you want to delete '+this.form.systemName+' from this customer.', {
                 title: 'Are You Sure?',
                 size: 'md',
@@ -236,15 +231,12 @@ export default {
                 cancelTitle: 'No',
                 centered: true,
             }).then(res => {
-                console.log(res);
                 if(res)
                 {
-                    console.log('delete system');
                     this.loading = true;
                     this.$refs.editSystemModal.hide();
                     axios.delete(this.route('customer.systems.destroy', this.selectedSystem))
                         .then(res => {
-                            console.log(res);
                             this.getSystems();
                             this.selectedSystem = '';
                             this.form.system = null;

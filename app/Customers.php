@@ -17,24 +17,4 @@ class Customers extends Model
     {
         return $this->hasMany('App\CustomerSystems', 'cust_id', 'cust_id');
     }
-
-
-
-
-
-
-    // public function customerFavs()
-    // {
-    //     return $this->belongsTo('App\CustomerFavs', 'cust_id', 'cust_id');
-    // }
-
-    // public function customerNotes()
-    // {
-    //     return $this->belongsTo('App\CustomerNotes', 'cust_id', 'cust_id');
-    // }
-
-    // public function fileLinks()
-    // {
-    //     return $this->belongsTo('App\FileLinks', 'cust_id', 'cust_id');
-    // }
 }

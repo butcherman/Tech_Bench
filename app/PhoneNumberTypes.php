@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class PhoneNumberTypes extends Model
 {
     protected $primaryKey = 'phone_type_id';
-    protected $fillable = ['phone_type_id', 'description', 'icon_class'];
+    protected $fillable   = ['phone_type_id', 'description', 'icon_class'];
+    protected $hidden     = ['phone_type_id', 'created_at', 'updated_at'];
 
     // public function CustomerContactPhones()
     // {

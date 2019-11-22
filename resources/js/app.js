@@ -22,6 +22,7 @@ import route from 'ziggy';
 import { Ziggy } from '../assets/js/ziggy';
 import vue2Dropzone from 'vue2-dropzone';
 import Editor from '@tinymce/tinymce-vue';
+import VuePhoneNumberInput from 'vue-phone-number-input'
 
 /*
 *   The TinyMCE library
@@ -45,6 +46,7 @@ Vue.use(BootstrapVue);
 
 Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('editor', require('@tinymce/tinymce-vue').default);
+Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 
 Vue.mixin({
     methods: {
@@ -73,7 +75,8 @@ Vue.component('guest-upload',       require('./components/fileLinks/GuestFileUpl
 Vue.component('customer-list',     require('./components/customer/customerList.vue').default);
 Vue.component('new-customer-form', require('./components/customer/newCustomer.vue').default);
 Vue.component('customer-details',  require('./components/customer/customerDetails.vue').default);
-Vue.component('customer-systems', require('./components/customer/customerSystems.vue').default);
+Vue.component('customer-systems',  require('./components/customer/customerSystems.vue').default);
+Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

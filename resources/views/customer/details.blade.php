@@ -19,7 +19,7 @@
         <div class="card">
             <div class="card-header">Customer Contacts:</div>
             <div class="card-body">
-                <p>customer details</p>
+                <customer-contacts cust_id="{{$cust_id}}" :phone_types="{{json_encode($numberTypes)}}"></customer-contacts>
             </div>
         </div>
     </div>

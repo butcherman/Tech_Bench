@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\PhoneNumberTypes;
 use Illuminate\Support\Facades\Route;
+use App\Http\Resources\PhoneNumberTypesCollection;
 
 class CustomerDetailsController extends Controller
 {
@@ -72,6 +74,7 @@ class CustomerDetailsController extends Controller
         }
 
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
+        $numTypes = new PhoneNumberTypesCollection(PhoneNumberTypes::all());
 
         // Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
@@ -79,6 +82,7 @@ class CustomerDetailsController extends Controller
             'details' => $custDetails->toJson(),
             'isFav'   => empty($custFav) ? 'false' : 'true',
             'canDel'  => Gate::allows('hasAccess', 'deactivate_customer'),
+            'numberTypes' => $numTypes,
         ]);
     }
 

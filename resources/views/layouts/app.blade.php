@@ -76,6 +76,7 @@
                    @can('allow_admin')
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.index')}}">
+                            <!--  TODO:  Better icon -->
                             <i class="ti-pencil-alt menu-icon"></i>
                             <span class="menu-title">Administration</span>
                         </a>
