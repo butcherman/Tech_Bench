@@ -18,14 +18,14 @@
     border-radius: 20px;
 }
 
-.onoffswitch-inner {
+.onoffswitch-inner, .yesnoswitch-inner {
     display: block;
     width: 200%;
     margin-left: -100%;
     transition: margin 0.3s ease-in 0s;
 }
 
-.onoffswitch-inner:before, .onoffswitch-inner:after {
+.onoffswitch-inner:before, .onoffswitch-inner:after, .yesnoswitch-inner:before, .yesnoswitch-inner:after {
     display: block;
     float: left;
     width: 50%;
@@ -54,6 +54,21 @@
     text-align: right;
 }
 
+.yesnoswitch-inner:before {
+    content: "YES";
+    padding-left: 10px;
+    background-color: #53C9E6;
+    color: #FFFFFF;
+}
+
+.yesnoswitch-inner:after {
+    content: "NO";
+    padding-right: 10px;
+    background-color: #EEEEEE;
+    color: #999999;
+    text-align: right;
+}
+
 .onoffswitch-switch {
     display: block;
     width: 18px;
@@ -68,7 +83,7 @@
     transition: all 0.3s ease-in 0s;
 }
 
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner, .onoffswitch-checkbox:checked + .onoffswitch-label .yesnoswitch-inner {
     margin-left: 0;
 }
 

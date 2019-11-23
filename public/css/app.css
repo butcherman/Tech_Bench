@@ -18277,7 +18277,8 @@ dl li {
   border-radius: 20px;
 }
 
-.onoffswitch-inner {
+.onoffswitch-inner,
+.yesnoswitch-inner {
   display: block;
   width: 200%;
   margin-left: -100%;
@@ -18286,7 +18287,9 @@ dl li {
 }
 
 .onoffswitch-inner:before,
-.onoffswitch-inner:after {
+.onoffswitch-inner:after,
+.yesnoswitch-inner:before,
+.yesnoswitch-inner:after {
   display: block;
   float: left;
   width: 50%;
@@ -18315,6 +18318,21 @@ dl li {
   text-align: right;
 }
 
+.yesnoswitch-inner:before {
+  content: "YES";
+  padding-left: 10px;
+  background-color: #53C9E6;
+  color: #FFFFFF;
+}
+
+.yesnoswitch-inner:after {
+  content: "NO";
+  padding-right: 10px;
+  background-color: #EEEEEE;
+  color: #999999;
+  text-align: right;
+}
+
 .onoffswitch-switch {
   display: block;
   width: 18px;
@@ -18330,7 +18348,8 @@ dl li {
   transition: all 0.3s ease-in 0s;
 }
 
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner,
+.onoffswitch-checkbox:checked + .onoffswitch-label .yesnoswitch-inner {
   margin-left: 0;
 }
 
@@ -18374,7 +18393,8 @@ label {
 .pointer,
 .filedrag,
 .bookmark-unchecked,
-.bookmark-checked {
+.bookmark-checked,
+.customer-note-card .card .card-header {
   cursor: pointer;
 }
 
@@ -18384,5 +18404,24 @@ label {
 
 .bookmark-checked {
   color: #D46E70;
+}
+
+.customer-note-card .card {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.customer-note-card .card .card-body {
+  max-height: 50px;
+}
+
+.customer-note-card .card .card-footer {
+  display: none;
+}
+
+.bigger-note {
+  height: 60vh;
+  overflow-y: scroll;
 }
 

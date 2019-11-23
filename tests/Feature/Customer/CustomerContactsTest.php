@@ -137,4 +137,23 @@ class CustomerContactsTest extends TestCase
         $response->assertSuccessful();
         $response->assertJson(['success' => true]);
     }
+
+    //  Try to download a contact as VCard as a guest
+    public function test_download_contact_as_guest()
+    {
+        $response = $this->get(route('customer.contacts.edit', $this->cont[1]->cont_id));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    //  Try to downlaod a contact as VCard
+    // public function test_download_contact()
+    // {
+    //     $user = $this->getTech();
+    //     $response = $this->actingAs($user)->get(route('customer.contacts.edit', $this->cont[1]->cont_id));
+        //  TODO - test vcard download
+    //     $response->assertSuccessful();
+    // }
 }

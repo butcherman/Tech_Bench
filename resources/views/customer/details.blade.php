@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-5" class="grid-margin stretch-card">
+    <div class="col-md-5 grid-margin stretch-card">
         <div class="card">
             <div class="card-header">Customer Systems:</div>
             <div class="card-body">
@@ -15,11 +15,21 @@
             </div>
         </div>
     </div>
-    <div class="col-md-7" class="grid-margin stretch-card">
+    <div class="col-md-7 grid-margin stretch-card">
         <div class="card">
             <div class="card-header">Customer Contacts:</div>
             <div class="card-body">
                 <customer-contacts cust_id="{{$cust_id}}" :phone_types="{{json_encode($numberTypes)}}"></customer-contacts>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-header">Customer Notes:</div>
+            <div class="card-body">
+                <customer-notes cust_id="{{$cust_id}}"></customer-notes>
             </div>
         </div>
     </div>

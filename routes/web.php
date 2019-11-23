@@ -66,6 +66,8 @@ Route::get('file-links',                'FileLinks\GuestLinksController@index') 
 */
 Route::prefix('customer')->name('customer.')->group(function() {
 
+    //  Custome Notes
+    Route::resource('notes', 'Customers\CustomerNotesController');
     //  Customer Contacts
     Route::resource('contacts', 'Customers\CustomerContactsController');
     //  Customer Systems
@@ -90,7 +92,6 @@ Route::prefix('customer')->name('customer.')->group(function() {
     // Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
 
     // Route::resource('files', 'Customers\CustomerFilesController');
-    // Route::resource('notes', 'Customers\CustomerNotesController');
 
 
 
