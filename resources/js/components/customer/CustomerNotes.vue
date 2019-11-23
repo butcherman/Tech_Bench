@@ -10,10 +10,10 @@
         <div v-else>
             <div class="row">
                 <div class="col-12">
+                    <h4 v-if="notes.length == 0" class="text-center">No Notes</h4>
                     <button class="btn btn-info float-right" v-b-modal.note-form-modal><i class="ti-plus"></i> Add Note</button>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-3 grid-margin stretch-card customer-note-card" v-for="note in notes" :key="note.note_id">
                     <div class="card">
@@ -28,7 +28,7 @@
                 <div class="card">
                     <div :class="details.urgent == true ? 'card-header bg-danger' : 'card-header bg-info'">
                         {{details.subject}}
-                        <a href="#" class="float-right text-white" title="Download as PDF" v-b-tooltip.hover><i class="ti-download"></i></a>
+                        <a :href="route('customer.download-note', details.note_id)" class="float-right text-white" title="Download as PDF" v-b-tooltip.hover><i class="ti-download"></i></a>
                     </div>
                     <div class="card-body bigger-note" v-html="details.description"></div>
                 </div>
@@ -152,24 +152,24 @@
             deleteNote()
             {
                 this.$bvModal.msgBoxConfirm('Please confirm you want to delete note.', {
-                title: 'Are You Sure?',
-                size: 'md',
-                okVariant: 'danger',
-                okTitle: 'Yes',
-                cancelTitle: 'No',
-                centered: true,
-            }).then(res => {
-                if(res)
-                {
-                    this.$refs.noteDetailsModal.hide();
-                    this.loading = true;
-                    axios.delete(this.route('customer.notes.destroy', this.details.note_id))
-                        .then(res => {
-                            this.getNotes();
-                            this.resetForm();
-                        }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-                }
-            });
+                    title: 'Are You Sure?',
+                    size: 'md',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No',
+                    centered: true,
+                }).then(res => {
+                    if(res)
+                    {
+                        this.$refs.noteDetailsModal.hide();
+                        this.loading = true;
+                        axios.delete(this.route('customer.notes.destroy', this.details.note_id))
+                            .then(res => {
+                                this.getNotes();
+                                this.resetForm();
+                            }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }
+                });
             },
             submitNote(e)
             {

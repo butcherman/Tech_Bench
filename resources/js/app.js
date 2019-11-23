@@ -60,6 +60,11 @@ Vue.mixin({
 });
 
 /*
+*   Global Components
+*/
+Vue.component('go-back', require('./components/GoBack.vue').default);
+
+/*
 *   Vue File Link Components
 */
 Vue.component('list-file-links',    require('./components/fileLinks/ListFileLinks.vue').default);
@@ -78,6 +83,7 @@ Vue.component('customer-details',  require('./components/customer/customerDetail
 Vue.component('customer-systems',  require('./components/customer/customerSystems.vue').default);
 Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
 Vue.component('customer-notes',    require('./components/customer/CustomerNotes.vue').default);
+Vue.component('customer-files',    require('./components/customer/customerFiles.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

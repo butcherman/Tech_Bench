@@ -23,51 +23,52 @@ class CustomerFilesController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     //  Get the types of files that can be attached to a customer
-    public function getFileTypes()
-    {
-        $fileTypes = CustomerFileTypes::all();
-        $fTypes    = [];
-        foreach($fileTypes as $type)
-        {
-            $fTypes[$type->file_type_id] = $type->description;
-        }
-        
-        return response()->json($fileTypes);
-    }
+    // public function getFileTypes()
+    // {
+    //     $fileTypes = CustomerFileTypes::all();
+    //     $fTypes    = [];
+    //     foreach($fileTypes as $type)
+    //     {
+    //         $fTypes[$type->file_type_id] = $type->description;
+    //     }
+
+    //     return response()->json($fileTypes);
+    // }
 
     //  Store a new customer file
     public function store(Request $request)
     {
         //  Validate the form
         $request->validate([
-            'custID' => 'required',
-            'name'   => 'required',
-            'type'   => 'required'
+            'cust_id' => 'required',
+            'name'    => 'required',
+            'type'    => 'required'
         ]);
-        
+
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
-        
+
         //  Verify that the upload is valid and being processed
         if($receiver->isUploaded() === false)
         {
             Log::error('Upload File Missing - '.$request->toArray());
             throw new UploadMissingFileException();
         }
-        
+
         //  Receive and process the file
         $save = $receiver->receive();
-        
+
         //  See if the upload has finished
         if($save->isFinished())
         {
+            $file = $save->getFile();
             //  Set file locationi and clean filename for duplicates
-            $filePath = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$request->custID;
-            $fileName = Files::cleanFileName($filePath, $request->file->getClientOriginalName());
+            $filePath = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$request->cust_id;
+            $fileName = Files::cleanFileName($filePath, $file->getClientOriginalName());
 
             //  Store the file
-            $request->file->storeAs($filePath, $fileName);
+            $file->storeAs($filePath, $fileName);
 
             //  Put the file in the database
             $file = Files::create(
@@ -83,16 +84,16 @@ class CustomerFilesController extends Controller
             CustomerFiles::create([
                 'file_id'      => $fileID,
                 'file_type_id' => $request->type,
-                'cust_id'      => $request->custID,
+                'cust_id'      => $request->cust_id,
                 'user_id'      => Auth::user()->user_id,
                 'name'         => $request->name
             ]);
-            
+
             Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
             Log::debug('Submitted Data - ', $request->toArray());
             Log::info('File added for Customer ID-'.$request->custID.' by User ID-'.Auth::user()->user_id.'.  New File ID-'.$fileID);
         }
-        
+
         //  Get the current progress
         $handler = $save->handler();
 
@@ -108,16 +109,30 @@ class CustomerFilesController extends Controller
     public function show($id)
     {
         $files = CustomerFiles::where('cust_id', $id)
-            ->select('name', 'customer_file_types.description as type', 
-            'first_name', 'last_name', 'customer_files.updated_at as added_on',
-            'files.file_id', 'files.file_name', 'cust_file_id')
-            ->LeftJoin('customer_file_types', 'customer_files.file_type_id', '=', 'customer_file_types.file_type_id')
-            ->LeftJoin('users', 'customer_files.user_id', '=', 'users.user_id')
-            ->Join('files', 'customer_files.file_id', '=', 'files.file_id')
-            ->orderBy('customer_files.file_type_id', 'asc')
+            ->with('Files')
+            ->with('CustomerFileTypes')
+            ->with('User')
             ->get();
-        
-        return response()->json($files);
+
+        return $files;
+    }
+
+    //  Update the test information of the file, but not the file itself
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'cust_id' => 'required',
+            'name' => 'required',
+            'type' => 'required'
+        ]);
+
+        CustomerFiles::find($id)->update([
+            'name' => $request->name,
+            'file_type_id' => $request->type
+        ]);
+
+
+        return response()->json(['success' => true]);
     }
 
     //  Remove a customer file
@@ -127,13 +142,13 @@ class CustomerFilesController extends Controller
         $data = CustomerFiles::find($id);
         $fileID = $data->file_id;
         $data->delete();
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::info('File Deleted For Customer ID-'.$data->custID.' by User ID-'.Auth::user()->user_id.'.  File ID-'.$id);
-        
+
         //  Delete from system if no longer in use
         Files::deleteFile($fileID);
-        
+
         return response()->json(['success' => true]);
     }
 }

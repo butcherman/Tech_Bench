@@ -16,7 +16,7 @@ Route::get('no-script', 'Controller@noScript')               ->name('noscript');
 /*
 *   Download File Routes
 */
-Route::get('download/{id}/{filename}',    'DownloadController@index')         ->name('download');
+Route::get('download/{id}/{filename}',    'DownloadController@index')          ->name('download');
 Route::get('download-archive/{filename}', 'DownloadController@downloadArchive')->name('downloadArchive');
 Route::put('download-archive',            'DownloadController@archiveFiles')   ->name('archiveFiles');
 
@@ -56,7 +56,7 @@ Route::prefix('links')->name('links.')->group(function () {
 *   Guest File Link Routes
 */
 Route::get('file-links/{id}/get-files', 'FileLinks\GuestLinksController@getFiles')->name('file-links.getFiles');
-Route::put('file-links/{id}',            'FileLinks\GuestLinksController@notify') ->name('file-links.show');
+Route::put('file-links/{id}',           'FileLinks\GuestLinksController@notify')  ->name('file-links.show');
 Route::post('file-links/{id}',          'FileLinks\GuestLinksController@update')  ->name('file-links.show');
 Route::get('file-links/{id}',           'FileLinks\GuestLinksController@show')    ->name('file-links.show');
 Route::get('file-links',                'FileLinks\GuestLinksController@index')   ->name('file-links.index');
@@ -66,32 +66,33 @@ Route::get('file-links',                'FileLinks\GuestLinksController@index') 
 */
 Route::prefix('customer')->name('customer.')->group(function() {
 
+    //  Customer Files
+    Route::resource('files',                   'Customers\CustomerFilesController');
     //  Custome Notes
-    Route::resource('notes', 'Customers\CustomerNotesController');
+    Route::get('download-note/{id}',           'DownloadController@downloadCustNote')        ->name('download-note');
+    Route::resource('notes',                   'Customers\CustomerNotesController');
     //  Customer Contacts
-    Route::resource('contacts', 'Customers\CustomerContactsController');
+    Route::resource('contacts',                'Customers\CustomerContactsController');
     //  Customer Systems
-    Route::resource('systems', 'Customers\CustomerSystemsController');
+    Route::resource('systems',                 'Customers\CustomerSystemsController');
     //  Customer Details
-    Route::get('id/{id}/{name}', 'Customers\CustomerDetailsController@details')->name('details');
-    Route::resource('id', 'Customers\CustomerDetailsController');
+    Route::get('id/{id}/{name}',               'Customers\CustomerDetailsController@details')->name('details');
+    Route::resource('id',                      'Customers\CustomerDetailsController');
     //  check Id and bookmark customer
-    Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')->name('toggle-fav');
-    Route::get('check-id/{id}', 'Customers\CustomerController@checkID')->name('check-id');
+    Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')     ->name('toggle-fav');
+    Route::get('check-id/{id}',                'Customers\CustomerController@checkID')       ->name('check-id');
     //  Index landing/search page
-    Route::get('search', 'Customers\CustomerController@search')->name('search');
-    Route::get('/', 'Customers\CustomerController@index')->name('index');
+    Route::get('search',                       'Customers\CustomerController@search')        ->name('search');
+    Route::get('/',                            'Customers\CustomerController@index')         ->name('index');
 
 
 
 
 
-    // Route::get('download-note/{id}', 'DownloadController@downloadCustNote')->name('download-note');
     // Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
     // Route::get('sys-fields/{id}', 'Customers\CustomerSystemsController@getDataFields')->name('getDataFields');
     // Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
 
-    // Route::resource('files', 'Customers\CustomerFilesController');
 
 
 

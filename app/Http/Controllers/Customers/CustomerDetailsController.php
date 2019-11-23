@@ -12,6 +12,9 @@ use App\Http\Controllers\Controller;
 use App\PhoneNumberTypes;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\PhoneNumberTypesCollection;
+use App\Http\Resources\CustomerFileTypesCollection;
+use App\Http\Resources\CustomersCollection;
+use App\CustomerFileTypes;
 
 class CustomerDetailsController extends Controller
 {
@@ -75,14 +78,16 @@ class CustomerDetailsController extends Controller
 
         $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
         $numTypes = new PhoneNumberTypesCollection(PhoneNumberTypes::all());
+        $fileTypes = new CustomerFileTypesCollection(CustomerFileTypes::all());
 
         // Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
-            'cust_id' => $custDetails->cust_id,
-            'details' => $custDetails->toJson(),
-            'isFav'   => empty($custFav) ? 'false' : 'true',
-            'canDel'  => Gate::allows('hasAccess', 'deactivate_customer'),
+            'cust_id'     => $custDetails->cust_id,
+            'details'     => $custDetails->toJson(),
+            'isFav'       => empty($custFav) ? 'false' : 'true',
+            'canDel'      => Gate::allows('hasAccess', 'deactivate_customer'),
             'numberTypes' => $numTypes,
+            'fileTypes'   => $fileTypes,
         ]);
     }
 

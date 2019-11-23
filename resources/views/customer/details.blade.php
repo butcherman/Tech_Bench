@@ -34,4 +34,14 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-header">Customer Files:</div>
+            <div class="card-body">
+                <customer-files cust_id="{{$cust_id}}" :file_types="{{json_encode($fileTypes)}}"></customer-files>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

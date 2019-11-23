@@ -98,16 +98,6 @@ class DownloadController extends Controller
         return view('err.badFile');
     }
 
-
-
-
-
-
-
-
-
-
-
     //  Download Customer Note as PDF
     public function downloadCustNote($id)
     {
