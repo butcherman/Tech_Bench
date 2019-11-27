@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-5 grid-margin stretch-card">
         <div class="card">
-            <div class="card-header">Customer Systems:</div>
+            <div class="card-header">Customer Equipiment:</div>
             <div class="card-body">
                 <customer-systems cust_id="{{$cust_id}}"></customer-systems>
             </div>

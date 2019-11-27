@@ -4,13 +4,13 @@
             <h5 class="text-center">Problem Loading Data...</h5>
         </div>
         <div v-else-if="loading">
-            <h5 class="text-center">Loading Systems</h5>
+            <h5 class="text-center">Loading Equipment</h5>
             <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
         </div>
         <div v-else>
             <div v-if="!systems.length" class="text-center">
                 <h5>No Systems</h5>
-                <b-button variant="primary" @click="addSystem">Add System</b-button>
+                <b-button variant="primary" @click="addSystem">Add Equipment</b-button>
             </div>
             <div v-else>
                 <b-tabs>
@@ -21,31 +21,31 @@
                         </dl>
                         <div class="row justify-content-center">
                             <div class="col-8 col-sm-6 mb-2">
-                                <b-button variant="primary" block @click="addSystem">Add System</b-button>
+                                <b-button variant="primary" block @click="addSystem">Add Equipment</b-button>
                             </div>
                             <div class="col-8 col-sm-6">
-                                <b-button variant="warning" block @click="editSystem(sys)">Edit System</b-button>
+                                <b-button variant="warning" block @click="editSystem(sys)">Edit Equipment</b-button>
                             </div>
                         </div>
                     </b-tab>
                 </b-tabs>
             </div>
         </div>
-        <b-modal id="new-system-modal" title="Add New System" ref="newSystemModal" hide-footer>
+        <b-modal id="new-system-modal" title="Add New Equipment" ref="newSystemModal" hide-footer>
             <div v-if="systemsLoading">
-                <h5 class="text-center">Loading Systems</h5>
+                <h5 class="text-center">Loading Equipment</h5>
                 <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
             </div>
             <b-form v-else @submit="submitSystem" ref="newSystemForm">
-                <b-form-group label="System Type" label-size="lg">
+                <b-form-group label="Equipment Type" label-size="lg">
                     <b-form-select v-model="selectedSystem" @change="populateDataFields">
-                        <option :value="null">Please Select A System</option>
+                        <option :value="null">Please Select An Equipment Type</option>
                         <optgroup v-for="cat in systemTypes" :key="cat.cat_id" :label="cat.name">
                             <option v-for="sys in cat.system_types" :key="sys.sys_id" :value="sys">{{sys.name}}</option>
                         </optgroup>
                     </b-form-select>
                 </b-form-group>
-                <b-form-group label="System Information" label-size="lg">
+                <b-form-group label="Equipment Information" label-size="lg">
                     <b-form-group v-for="data in systemFields" :key="data.field_id" :label="data.system_data_field_types.name" :label-for="'sys-data-'+data.field_id">
                         <b-form-input :id="'sys-data-'+data.field_id" v-model="form['field_'+data.field_id]"></b-form-input>
                     </b-form-group>
@@ -56,10 +56,10 @@
                 </b-button>
             </b-form>
         </b-modal>
-        <b-modal id="edit-system-modal" title="Add New System" ref="editSystemModal" hide-footer>
+        <b-modal id="edit-system-modal" title="Add New Equipment" ref="editSystemModal" hide-footer>
             <b-form @submit="submitEditSystem" ref="editSystemForm">
                 <h3 class="text-center">{{form.systemName}}</h3>
-                <b-form-group label="System Information" label-size="lg">
+                <b-form-group label="Equipment Information" label-size="lg">
                     <b-form-group v-for="data in systemFields" :key="data.field_id" :label="data.system_data_field_types.name" :label-for="'sys-data-'+data.field_id">
                         <b-form-input :id="'sys-data-'+data.field_id" v-model="form['field_'+data.field_id]"></b-form-input>
                     </b-form-group>
@@ -97,10 +97,10 @@ export default {
             },
             button: {
                 disable: false,
-                text: 'Add System',
+                text: 'Add Equipment',
                 delete: {
                     disable: false,
-                    text: 'Delete System',
+                    text: 'Delete Equipment',
                 }
             }
         }
@@ -122,7 +122,7 @@ export default {
         addSystem()
         {
             this.button.disable = false;
-            this.button.text = 'Add System';
+            this.button.text = 'Add Equipment';
             this.$refs.newSystemModal.show();
             if(!this.systemTypes.length)
             {
@@ -155,7 +155,7 @@ export default {
             this.systemFields = sys.system_data_fields;
             this.selectedSystem = sys.cust_sys_id;
             this.button.disable = false;
-            this.button.text = 'Update System';
+            this.button.text = 'Update Equipment';
             for(var i=0; i < sys.system_data_fields.length; i++)
             {
                 this.$set(this.form, 'field_'+sys.system_data_fields[i].field_id, sys.system_data_fields[i].pivot.value);

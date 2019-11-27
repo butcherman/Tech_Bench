@@ -64,8 +64,8 @@ Route::get('file-links',                'FileLinks\GuestLinksController@index') 
 /*
 *   Customer Routes
 */
-Route::prefix('customer')->name('customer.')->group(function() {
-
+Route::prefix('customer')->name('customer.')->group(function()
+{
     //  Customer Files
     Route::resource('files',                   'Customers\CustomerFilesController');
     //  Custome Notes
@@ -84,21 +84,33 @@ Route::prefix('customer')->name('customer.')->group(function() {
     //  Index landing/search page
     Route::get('search',                       'Customers\CustomerController@search')        ->name('search');
     Route::get('/',                            'Customers\CustomerController@index')         ->name('index');
-
-
-
-
-
-    // Route::get('file-types', 'Customers\CustomerFilesController@getFileTypes')->name('getFileTypes');
-    // Route::get('sys-fields/{id}', 'Customers\CustomerSystemsController@getDataFields')->name('getDataFields');
-    // Route::get('search-id/{id}', 'Customers\CustomerController@searchID')->name('searchID');
-
-
-
-
-
 });
 
+
+/*
+*   Tech Tip Routes
+*/
+Route::resource('tips', 'TechTips\TechTipsController');
+Route::prefix('tip')->name('tip.')->group(function()
+{
+    Route::get('search', 'TechTips\TechTipsController@search')->name('search');
+    Route::get('details/{id}/{name}', 'TechTips\TechTipsController@details')->name('details');
+});
+
+
+
+
+//        Route::prefix('tip')->name('tip.')->group(function(){
+//            Route::get('/', 'TechTips\TechTipsController@index')->name('index');
+//            Route::resource('id', 'TechTips\TechTipsController');
+//        });
+
+// Route::prefix('tips')->name('tips.')->group(function ()
+// {
+    // Route::get('tips/{id}/{subject}', 'TechTips\TechTipsController@details')->name('tips.details');
+    // Route::post('tips/process-image', 'TechTips\TechTipsController@processImage')->name('tips.processImage');
+//     Route::get('/', 'TechTips\TechTipsController@index');
+// });
 
 
 /*
@@ -162,19 +174,7 @@ Route::prefix('customer')->name('customer.')->group(function() {
 
 
 
-        /*
-        *
-        *   Tech Tip Routes
-        *
-        */
-//        Route::prefix('tip')->name('tip.')->group(function(){
-//            Route::get('/', 'TechTips\TechTipsController@index')->name('index');
-//            Route::resource('id', 'TechTips\TechTipsController');
-//        });
-        Route::get('tips/{id}/{subject}', 'TechTips\TechTipsController@details')->name('tips.details');
-        Route::post('tips/search', 'TechTips\TechTipsController@search')->name('tips.search');
-        Route::post('tips/process-image', 'TechTips\TechTipsController@processImage')->name('tips.processImage');
-        Route::resource('tips', 'TechTips\TechTipsController');
+
 
 
 

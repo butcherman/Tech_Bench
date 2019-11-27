@@ -1,57 +1,101 @@
 <template>
-    <div class="clearfix">
+    <div>
         <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Tech Tips</h1></div>
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <b-form @submit="searchTips" id="tech-tip-search-form">
+                            <b-input-group>
+                                <b-form-input type="text" placeholder="Search Tips..." autofocus v-model="form.search.searchText"></b-form-input>
+                                <b-input-group-append>
+                                    <b-button type="submit" variant="primary" ><span class="ti-search"></span> Search</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                        </b-form>
+                    </div>
+                </div>
             </div>
         </div>
-        <b-form @submit="searchTips" id="tech-tip-search-form">
-            <b-input-group size="lg">
-                <b-form-input placeholder="Search Tech Tips..." autofocus v-model="form.searchText"></b-form-input>
-                <b-input-group-append>
-                    <b-button type="submit" variant="info"><i class="fa fa-search" aria-hidden="true"></i> Search</b-button>
-                </b-input-group-append>
-            </b-input-group>
-            <b-navbar toggleable="lg" id="tech-tip-sidebar">
-                <div class="border-bottom w-100">
-                    <b-navbar-brand>Filter Options</b-navbar-brand>
-                    <b-navbar-toggle target="filter-collapse" class="float-right"></b-navbar-toggle>
-                </div>
-                <b-collapse id="filter-collapse" class="mt-3" is-nav>
-                    <b-form-group label="Article Type:">
-                        <b-form-checkbox-group
-                        id="article-type-checkbox"
-                        v-model="form.articleType"
-                        :options="JSON.parse(filter_types)"
-                        name="articleType"
-                        stacked
-                        ></b-form-checkbox-group>
-                    </b-form-group>
-                    <b-form-group label="System Type:">
-                        <b-form-checkbox-group
-                        id="system-type-checkbox"
-                        v-model="form.systemType"
-                        :options="JSON.parse(system_types)"
-                        name="systemType"
-                        stacked
-                        ></b-form-checkbox-group>
-                    </b-form-group>
-                </b-collapse>
-            </b-navbar>
-        </b-form>
-        <div id="tech-tip-content">
-            <div class="text-center border-bottom pb-3 mb-3">
-               <a :href="tips_route+'/create'" class="text-center btn btn-info">Create New Tech Tip</a>
+        <div class="row">
+            <div class="col-lg-2 col-md-12 grid-margin stretch-card">
+                <b-card>
+                    <template v-slot:header>
+                        <h5 class="mb-0">
+                            Filter Options
+                            <b-button size="sm" class="float-right d-block d-lg-none" v-b-toggle="'collapse-me'"><i class="ti-menu"></i></b-button>
+                        </h5>
+                    </template>
+                    <b-card-text>
+                        <b-collapse id="collapse-me" is-nav visible class="w-100">
+                            <div class="w-100">
+                                <h6 class="mt-4 mb-2">Article Type</h6>
+                                <b-form-group>
+                                    <b-form-checkbox-group
+                                        v-model="form.search.articleType"
+                                        :options="tip_types"
+                                        stacked
+                                        @change="updateSearch"
+                                    ></b-form-checkbox-group>
+                                </b-form-group>
+                                <h6 class="mt-4 mb-2">Equipment Type</h6>
+                                <b-form-group v-for="cat in sys_types" :key="cat.cat_id" :label="cat.name">
+                                    <b-form-checkbox
+                                        v-for="sys in cat.system_types"
+                                        v-model="form.search.systemType"
+                                        :key="sys.sys_id"
+                                        :value="sys.sys_id"
+                                        name="equipment_type"
+                                        stacked
+                                        @change="updateSearch"
+                                    >{{sys.name}}</b-form-checkbox>
+                                </b-form-group>
+                                <!-- <b-button variant="info" block @click="resetFilters">Reset Filters</b-button> TODO:  Fix reset button -->
+                            </div>
+                        </b-collapse>
+                    </b-card-text>
+                </b-card>
             </div>
-            <div v-for="tip in tips" class="tip-results-wrapper">
-                <h3><a :href="tip.url">{{tip.title}}</a></h3>
-                <h6><small>{{tip.updated}}</small></h6>
-                <div class="tip-details-wrapper">
-                    <div class="tip-results-details" v-html="tip.description"></div>
+            <div class="col-md-10">
+                <div v-if="loading" class="loading">
+                    <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                </div>
+                <div v-else>
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card" v-for="tip in tips" :key="tip.tip_id">
+                            <div class="card">
+                                <a :href="route('tip.details', [tip.tip_id, dashify(tip.subject)])" class="text-dark">
+                                    <div class="card-header">
+                                    {{tip.subject}}
+                                    <span class="float-right">{{tip.created_at}}</span>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <div v-html="tip.description"></div>
+                                    <b-badge pill variant="primary" v-for="sys in tip.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                            <span class="float-right">Showing {{form.pagination.low}} through {{form.pagination.high}} of {{form.pagination.rows}}</span>
+                            <b-pagination
+                                v-model="form.page"
+                                :total-rows="form.pagination.rows"
+                                :per-page="form.pagination.perPage"
+                                next-text="Next >"
+                                prev-text="< Previous"
+                                class="mx-auto"
+                                @change="updatePage"
+                            ></b-pagination>
+                            <span class="float-left">
+                                Results Per Page
+                                <b-badge pill variant="primary" class="ml-1 mb-1 pointer" v-for="num in resPerPage" :key="num" @click="updatePerPage(num)">{{num}}</b-badge>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            
         </div>
     </div>
 </template>
@@ -59,41 +103,73 @@
 <script>
 export default {
     props: [
-        'tips_route',
-        'search_route',
-        'filter_types',
-        'system_types',
+        'tip_types',
+        'sys_types',
     ],
     data () {
         return {
+            loading: true,
             form: {
-                searchText: '',
-                articleType: [],
-                systemType: [],
+                search: {
+                    searchText:  '',
+                    articleType: [],
+                    systemType:  [],
+                },
+                pagination: {
+                    rows:    '',
+                    low:     '',
+                    high:    '',
+                    perPage: 10
+                },
+                page: 1,
             },
-            tips: [],
+            filter_types: [],
+            system_types: [],
+            tips:         [],
+            resPerPage:   [10, 25, 50, 100],
+
         }
     },
     created()
     {
-        console.log('loaded');
-        this.getTips();
+        this.updateSearch();
     },
     methods: {
         searchTips(e)
         {
             e.preventDefault();
-            console.log(this.form);
-            this.getTips();
-            
+            this.updateSearch();
         },
-        getTips()
+        updateSearch()
         {
-            axios.post(this.search_route, this.form)
+            this.loading = true;
+            window.scrollTo(0, 0);
+            axios.get(this.route('tip.search', this.form))
                 .then(res => {
-                    this.tips = res.data;
                     console.log(res);
+                    this.form.page            = res.data.meta.current_page;
+                    this.form.pagination.rows = res.data.meta.total;
+                    this.form.pagination.low  = res.data.meta.from;
+                    this.form.pagination.high = res.data.meta.to;
+                    this.tips                 = res.data.data;
+                    this.loading              = false;
                 }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+        },
+        resetFilters()
+        {
+            this.form.articleType = [];
+            this.form.systemType  = [];
+            this.form.searchText  = '';
+        },
+        updatePage(newPage)
+        {
+            this.form.page = newPage;
+            this.updateSearch();
+        },
+        updatePerPage(num)
+        {
+            this.form.pagination.perPage = num;
+            this.updateSearch();
         }
     }
 }

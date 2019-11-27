@@ -104,7 +104,7 @@ export default {
                         }
                     },
                     {
-                        label: 'System',
+                        label: 'Equipment',
                         field: 'system_list',
                         sortable: false,
                         filterOptions: {

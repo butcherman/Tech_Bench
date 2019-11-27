@@ -86,6 +86,11 @@ Vue.component('customer-notes',    require('./components/customer/CustomerNotes.
 Vue.component('customer-files',    require('./components/customer/customerFiles.vue').default);
 
 /*
+*   Vue Tech Tip Components
+*/
+Vue.component('search-tips', require('./components/tips/searchTips.vue').default);
+
+/*
 *   Include CSRF toden in all axios headers
 */
 window.axios.defaults.headers.common = {

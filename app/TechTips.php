@@ -7,7 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class TechTips extends Model
 {
     protected $primaryKey = 'tip_id';
-    protected $fillable = ['user_id', 'subject', 'documentation', 'description', 'created_at'];  // ToDo:  Remove Created_at - future build
+    protected $fillable = ['user_id', 'subject', 'tip_type_id', 'description', 'created_at'];  // ToDo:  Remove Created_at - future build
+    protected $casts = [
+        'created_at' => 'datetime:M d, Y',
+        'updated_at' => 'datetime:M d, Y',
+    ];
+
+    public function systemTypes()
+    {
+        return $this->hasManyThrough('App\SystemTypes', 'App\TechTipSystems',  'tip_id', 'sys_id', 'tip_id', 'sys_id');
+    }
 
 //     public function user()
 //     {
@@ -24,8 +33,8 @@ class TechTips extends Model
 //         return $this->belongsTo('App\TechTipFiles', 'tip_id', 'tip_id');
 //     }
 
-//     public function techTipSystems()
-//     {
-//         return $this->hasMany('App\TechTipSystems', 'tip_id', 'tip_id');
-//     }
+    public function techTipSystems()
+    {
+        return $this->hasMany('App\TechTipSystems', 'tip_id', 'tip_id');
+    }
 }
