@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-form id="new-tip-form" @submit="submitNewTip">
+        <b-form @submit="validateForm" :action="route('tips.store')" method="post" enctype="multipart/form-data" ref="newTipForm" novalidate :validated="validated">
             <b-form-group label="Subject:" label-for="subject">
                 <b-form-input
                     id="subject"
@@ -9,48 +9,72 @@
                     required
                     placeholder="Enter A Descriptive Subject"
                 ></b-form-input>
+                <b-form-invalid-feedback>Please Enter A Descriptive Subject</b-form-invalid-feedback>
             </b-form-group>
-            <b-form-group label="System Types:" label-for="systems">
+            <b-form-group label="Tip Type:" label-for="tip-type">
+                <b-form-select
+                    v-model="form.tipType"
+                    :options="tip_types"
+                    required
+                >
+                    <template v-slot:first>
+                        <option :value="null" disabled>Please Select An Option</option>
+                    </template>
+                </b-form-select>
+                <b-form-invalid-feedback>Please Select A Tip Type</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group label="Equipment Types:" label-for="equipment">
                 <multiselect
-                    v-model="form.systems"
-                    :options="JSON.parse(system_types)"
+                    v-model="form.equipment"
+                    :options="sys_types"
                     :multiple="true"
-                    group-values="data"
-                    group-label="group"
+                    group-values="system_types"
+                    group-label="name"
                     label="name"
-                    track-by="value"
+                    track-by="sys_id"
+                    :allow-empty="false"
                     :group-select="true"
                     placeholder="Select A System Type"
                 ></multiselect>
-            </b-form-group>
-            <b-form-group label="Tip Type:" label-for="tip-type">
-                <multiselect
-                    v-model="form.tipType"
-                    :options="JSON.parse(tip_types)"
-                    :clear-on-select="false"
-                    placeholder="Select A Tip Type"
-                ></multiselect>
+                <b-form-invalid-feedback class="d-block" v-if="validEquip">You Must Select At Least One Equipment Type</b-form-invalid-feedback>
             </b-form-group>
             <b-form-group label="Tip Details:" label-for="tip">
                 <editor :init="tinymce" v-model="form.tip"></editor>
+                <b-form-invalid-feedback class="d-block" v-if="validTip">What is a Tech Tip without an actual Tip?</b-form-invalid-feedback>
             </b-form-group>
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <h4 class="text-center pad-top">Attach File</h4>
-                    <vue-dropzone  
+                    <vue-dropzone
                         id="dropzone"
                         class="filedrag"
-                        ref="myVueDropzone" 
+                        ref="fileDropzone"
                         v-on:vdropzone-total-upload-progress="updateProgressBar"
                         v-on:vdropzone-sending="sendingFiles"
-                        v-on:vdropzone-success="successUpload"
-                        v-on:vdropzone-queue-complete="redirectToTip"
+                        v-on:vdropzone-queue-complete="queueComplete"
                         :options="dropzoneOptions">
                     </vue-dropzone>
                 </div>
             </div>
             <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
-            <b-button type="submit" block variant="info" :disabled="button.dis">{{button.text}}</b-button>
+            <div class="row justify-content-center mt-4">
+                <div class="col-6 col-md-2 order-2 order-md-1">
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="supressEmail" class="onoffswitch-checkbox" id="supressEmail" v-model="form.supressEmail">
+                        <label class="onoffswitch-label" for="supressEmail">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4 align-self-center order-1 order-md-2">
+                    <h5 class="text-left">Supress Email Notification</h5>
+                </div>
+            </div>
+            <b-button type="submit" block variant="primary" :disabled="button.dis">
+                <span class="spinner-border spinner-border-sm text-danger" v-show="button.dis"></span>
+                {{button.text}}
+            </b-button>
         </b-form>
     </div>
 </template>
@@ -58,23 +82,26 @@
 <script>
     export default {
         props: [
-            'tips_route',
-            'image_route',
-            'system_types',
             'tip_types',
+            'sys_types',
         ],
         data () {
             return {
+                validated: false,
+                validEquip: false,
+                validTip: false,
+                attachFile: false,
                 form: {
                     token: window.techBench.csrfToken,
                     subject: '',
-                    systems: [],
-                    tipType: '',
-                    tip:     '',
+                    tip: '',
+                    tipType: null,
+                    equipment: null,
+                    supressEmail: false,
                 },
                 button: {
-                    dis:   false,
                     text: 'Create Tech Tip',
+                    dis: false,
                 },
                 tinymce: {
                     plugins: 'autolink advlist lists link image table',
@@ -83,19 +110,18 @@
                     toolbar: 'formatselect | bold italic strikethrough forecolor | link image | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | table',
                     relative_urls: false,
                     automatic_uploads: true,
-                    images_upload_url: this.image_route,
+                    images_upload_url: this.route('tip.processImage'),
                     file_picker_types: 'image',
-                    file_picker_callback: function(cb, value, meta) 
+                    file_picker_callback: function(cb, value, meta)
                     {
                         var input = document.createElement('input');
                         input.setAttribute('type', 'file');
                         input.setAttribute('accept', 'image/*');
                         input.onchange = function() {
                             var file = this.files[0];
-
                             var reader = new FileReader();
                             reader.readAsDataURL(file);
-                            reader.onload = function () 
+                            reader.onload = function ()
                             {
                                 var id = 'blobid' + (new Date()).getTime();
                                 var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
@@ -109,7 +135,7 @@
                     }
                 },
                 dropzoneOptions: {
-                    url: this.tips_route,
+                    url: this.route('tips.store'),
                     autoProcessQueue: false,
                     parallelUploads: 1,
                     maxFiles: 5,
@@ -121,66 +147,71 @@
                 },
                 progress: 0,
                 showProgress: false,
-                newUrl: ''
             }
         },
-        created()
-        {
-            //
-        },
         methods: {
-            submitNewTip(e)
+            validateForm(e)
             {
                 e.preventDefault();
-                
-                this.button.text = 'Loading....';
-                this.button.dis = true;
-                
-                var myDrop = this.$refs.myVueDropzone;
-                
+                console.log('form submitted');
+                if(this.$refs.newTipForm.checkValidity() === false || !this.form.equipment || this.form.tip == '')
+                {
+                    this.validated  = true;
+                    this.validEquip = !this.form.equipment ? true : false;
+                    this.validTip   = this.form.tip == '' ? true : false;
+                }
+                else
+                {
+                    console.log(this.form);
+                    this.validated  = false;
+                    this.validEquip = false;
+                    this.validTip   = false;
+                    this.button.dis = true;
+                    this.button.text = 'Loading...';
+                    this.submitForm();
+                }
+            },
+            submitForm()
+            {
+                var myDrop = this.$refs.fileDropzone;
                 if(myDrop.getQueuedFiles().length > 0)
                 {
+                    console.log('has files - process them');
                     this.showProgress = true;
                     myDrop.processQueue();
                 }
                 else
                 {
-                    this.form.file = null;
-                    axios.post(this.tips_route, this.form)
-                        .then(res => {
-                            if('url' in res.data)
-                            {
-                                this.url = res.data.url;
-                                this.redirectToTip();
-                            }
-                            else
-                            {
-                                alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+res.data);
-                            }
-                        }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error))
+                    this.createTip();
                 }
             },
-            sendingFiles(file, xhr, formData)
+            createTip()
             {
-                formData.append('_token', this.form.token);
-                formData.append('subject', this.form.subject);
-                formData.append('systems', JSON.stringify(this.form.systems));
-                formData.append('tipType', this.form.tipType);
-                formData.append('tip', this.form.tip);
+                this.form._completed = true;
+                axios.post(this.route('tips.store'), this.form)
+                    .then(res => {
+                        console.log(res);
+                        window.location.href = this.route('tip.details', [res.data.tip_id, this.dashify(this.form.subject)]);
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
             updateProgressBar(progress)
             {
                 this.progress = progress;
             },
-            successUpload(file, res)
+            sendingFiles(file, xhr, formData)
             {
-                this.url = res.url;
-                console.log(res);
+                formData.append('_token', this.form.token);
+                formData.append('subject', this.form.subject);
+                formData.append('supressEmail', this.form.supressEmail);
+                formData.append('tip', this.form.tip);
+                formData.append('tipType', this.form.tipType);
+                formData.append('equipment', this.form.equipiment);
             },
-            redirectToTip()
+            queueComplete()
             {
-                console.log('done');
-//                window.location.replace(this.url);
+                //
+                this.button.text = 'Processing, please wait';
+                this.createTip();
             }
         }
     }

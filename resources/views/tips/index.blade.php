@@ -6,5 +6,5 @@
         <h4>Tech Tips</h4>
     </div>
 </div>
-<search-tips :tip_types="{{json_encode($tipTypes)}}" :sys_types="{{json_encode($sysTypes)}}"></search-tips>
+<search-tips :tip_types="{{json_encode($tipTypes)}}" :sys_types="{{json_encode($sysTypes)}}" :can_create="{{$canCreate}}"></search-tips>
 @endsection

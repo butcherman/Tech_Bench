@@ -95,6 +95,7 @@ Route::prefix('tip')->name('tip.')->group(function()
 {
     Route::get('search', 'TechTips\TechTipsController@search')->name('search');
     Route::get('details/{id}/{name}', 'TechTips\TechTipsController@details')->name('details');
+    Route::post('process-image', 'TechTips\TechTipsController@processImage')->name('processImage');
 });
 
 
@@ -108,7 +109,6 @@ Route::prefix('tip')->name('tip.')->group(function()
 // Route::prefix('tips')->name('tips.')->group(function ()
 // {
     // Route::get('tips/{id}/{subject}', 'TechTips\TechTipsController@details')->name('tips.details');
-    // Route::post('tips/process-image', 'TechTips\TechTipsController@processImage')->name('tips.processImage');
 //     Route::get('/', 'TechTips\TechTipsController@index');
 // });
 

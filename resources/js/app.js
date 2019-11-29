@@ -21,8 +21,9 @@ import VueGoodTablePlugin from 'vue-good-table';
 import route from 'ziggy';
 import { Ziggy } from '../assets/js/ziggy';
 import vue2Dropzone from 'vue2-dropzone';
-import Editor from '@tinymce/tinymce-vue';
-import VuePhoneNumberInput from 'vue-phone-number-input'
+// import Editor from '@tinymce/tinymce-vue';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import Multiselect from 'vue-multiselect';
 
 /*
 *   The TinyMCE library
@@ -47,6 +48,7 @@ Vue.use(BootstrapVue);
 Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('editor', require('@tinymce/tinymce-vue').default);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
+Vue.component('multiselect', Multiselect);
 
 Vue.mixin({
     methods: {
@@ -88,7 +90,8 @@ Vue.component('customer-files',    require('./components/customer/customerFiles.
 /*
 *   Vue Tech Tip Components
 */
-Vue.component('search-tips', require('./components/tips/searchTips.vue').default);
+Vue.component('search-tips',  require('./components/tips/searchTips.vue').default);
+Vue.component('new-tip-form', require('./components/tips/newTipForm.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

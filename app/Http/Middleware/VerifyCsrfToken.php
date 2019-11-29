@@ -20,6 +20,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //  The Ajax call to upload an image to a Tech Tip will bypass the CSRF Token
-        'tips/process-image'
+        //  TODO - modify this so it is not needed
+        'tip/process-image'
     ];
 }

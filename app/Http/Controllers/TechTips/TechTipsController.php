@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\TechTips;
 
+use App\User;
 use App\Files;
 use App\TechTips;
 use App\SystemTypes;
@@ -20,16 +21,22 @@ use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
+use Illuminate\Http\File;
 
 // use App\Http\Resources\TechTipTypes;
 use App\Http\Resources\TechTipTypesCollection;
 use App\TechTipTypes;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NewTechTip;
 
 use App\Http\Resources\SystemCategoriesCollection as CategoriesCollection;
+use App\Http\Resources\SystemCategoriesCollection;
+use App\Http\Resources\SystemTypesCollection;
 // use App\SystemCategories;
 // use App\SystemTypes;
 
 use App\Http\Resources\TechTipsCollection;
+use Illuminate\Support\Facades\Storage;
 
 class TechTipsController extends Controller
 {
@@ -42,176 +49,156 @@ class TechTipsController extends Controller
     public function index()
     {
         $tipTypes = new TechTipTypesCollection(TechTipTypes::all());
-        $sysList = new CategoriesCollection(SystemCategories::with('SystemTypes')->with('SystemTypes.SystemDataFields.SystemDataFieldTypes')->get());
+        $sysList  = new CategoriesCollection(SystemCategories::with('SystemTypes')->with('SystemTypes.SystemDataFields.SystemDataFieldTypes')->get());
         return view('tips.index', [
             'tipTypes' => $tipTypes,
             'sysTypes' => $sysList,
+            'canCreate' => $this->authorize('hasAccess', 'create_tech_tip') ? true : false
         ]);
+    }
+
+    //  Search for an existing tip - If no paramaters, return all tips
+    public function search(Request $request)
+    {
+        Log::debug('request Data -> ', $request->toArray());
+
+        //  See if there are any search paramaters entered
+        if (!$request->search['searchText'] && !isset($request->search['articleType']) && !isset($request->search['systemType'])) {
+            //  No search paramaters, send all tech tips
+            $tips = new TechTipsCollection(
+                TechTips::orderBy('created_at', 'DESC')
+                    ->with('SystemTypes')
+                    ->paginate($request->pagination['perPage'])
+            );
+        } else {
+            $article = isset($request->search['articleType']) ? true : false;
+            $system  = isset($request->search['systemType'])  ? true : false;
+            //  Search paramaters, filter results
+            $tips = new TechTipsCollection(
+                TechTips::orderBy('created_at', 'DESC')
+                    //  Search by id or a phrase in the title or description
+                    ->where(function ($query) use ($request) {
+                        $query->where('subject', 'like', '%' . $request->search['searchText'] . '%')
+                            ->orWhere('tip_id', 'like', '%' . $request->search['searchText'] . '%')
+                            ->orWhere('description', 'like', '%' . $request->search['searchText'] . '%');
+                    })
+                    ->when($article, function ($query) use ($request) {
+                        $query->whereIn('tip_type_id', $request->search['articleType']);
+                    })
+                    ->when($system, function ($query) use ($request) {
+                        $query->whereHas('SystemTypes', function ($query) use ($request) {
+                            $query->whereIn('system_types.sys_id', $request->search['systemType']);
+                        });
+                    })
+                    ->with('SystemTypes')
+                    ->paginate($request->pagination['perPage'])
+            );
+        }
+
+        return $tips;
     }
 
     //  Process an image that is attached to a tech tip
     public function processImage(Request $request)
     {
+        $this->authorize('hasAccess', 'create_tech_tip');
+
         $request->validate([
-            'image' => 'mimes:jpeg,bmp,png'
+            'file' => 'mimes:jpeg,bmp,png,jpg,gif'
         ]);
 
-        $file     = $request->file;
-        $fileName = $file->getClientOriginalName();
-        $file->storeAs('img/tip_img', $fileName, 'public');
+        //  Generate a unique hash as the file name and store it in a publicly accessable folder
+        $path = 'img/tip_img';
+        $location = Storage::disk('public')->putFile($path, new File($request->file));
 
+        //  Return the full url path to the image
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return json_encode(['location' => '/storage/img/tip_img/'.$fileName]);
+        return response()->json(['location' => Storage::url($location)]);
     }
 
     //  Create a new Tech Tip form
     public function create()
     {
-        //  Get the types of systems that can be filtered
-        $categories = SystemCategories::all();
-        $systems    = SystemTypes::orderBy('cat_id', 'ASC')->orderBy('name', 'ASC')->get();
-        $sysArr = [];
-        $i = 0;
-        foreach($categories as $cat)
-        {
-            $sysArr[$i] = [
-                'group' => $cat->name,
-            ];
-            foreach($systems as $sys)
-            {
-                if($sys->cat_id === $cat->cat_id)
-                {
-                    $sysArr[$i]['data'][] = [
-                        'name'  => $sys->name,
-                        'value' => $sys->sys_id
-                    ];
-                }
-            }
-            $i++;
-        }
+        $this->authorize('hasAccess', 'create_tech_tip');
 
-        //  Get the types of documents that can be filtered
-//        $fileTypes = SystemFileTypes::all();
-        $typesArr = ['Tech Tip', 'Documentation'];
-//        foreach($fileTypes as $type)
-//        {
-//            $typesArr[] = $type->description;
-//        }
+        $typesArr   = new TechTipTypesCollection(TechTipTypes::all());
+        $systemsArr = new SystemCategoriesCollection(SystemCategories::with('SystemTypes')->get());
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('tips.create', [
-            'sysTypes' => $sysArr,
-            'tipTypes' => $typesArr
+            'tipTypes' => $typesArr,
+            'sysTypes' => $systemsArr,
         ]);
     }
 
     //  Submit the form to create a new tech tip
     public function store(Request $request)
     {
+        $this->authorize('hasAccess', 'create_tech_tip');
+
         $request->validate([
-            'subject' => 'required',
-            'systems' => 'required',
-            'tipType' => 'required',
-            'tip'     => 'required',
+            'subject'   => 'required',
+            'equipment' => 'required',
+            'tipType'   => 'required',
+            'tip'       => 'required',
         ]);
 
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
-        //  Verify if there is a file to be processed or not (only Tech Tips can be processed without file)
-        if($receiver->isUploaded() === false && $request->tipType === 'Tech Tip')
+        //  Verify if there is a file to be processed or not
+        if($receiver->isUploaded() === false || $request->_completed)
         {
+            Log::debug('about to create a tip');
             $tipID = $this->createTip($request);
             Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-            return response()->json(['url' => route('tips.details', [$tipID, urlencode($request->subject)])]);
-        }
-        else if($receiver->isUploaded() === false)
-        {
-            Log::error('Upload File Missing - '.$request->toArray());
-            throw new UploadMissingFileException();
+            return response()->json(['tip_id' => $tipID]);
         }
 
-        //  Receive and process the file
+        //  Recieve and process the file
         $save = $receiver->receive();
 
-        if($save->isFinished())
-        {
-//            if($request->tipType === 'Tech Tip')
-//            {
-                if(!$request->session()->has('newTechTip'))
-                {
-                    $tipID = $this->createTip($request);
-                    $request->session()->put('newTechTip', $tipID);
-                }
+        //  See if the uploade has finished
+        if ($save->isFinished()) {
+            $this->saveFile($save->getFile());
 
-                $tipID = session('newTechTip');
-
-//                Log::debug('Tip ID - '.$tipID);
-
-                $file     = $save->getFile();
-                $path     = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
-                $fileName = Files::cleanFilename($path, $file->getClientOriginalName());
-                $file->storeAs($path, $fileName);
-
-                $newFile = Files::create([
-                    'file_name' => $fileName,
-                    'file_link' => $path.DIRECTORY_SEPARATOR
-                ]);
-
-                TechTipFiles::create([
-                    'tip_id'  => $tipID,
-                    'file_id' => $newFile->file_id
-                ]);
-
-                Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-                return response()->json(['url' => route('tips.details', [$tipID, urlencode($request->subject)])]);
-//            }
-//            else
-//            {
-//                $file = $save->getFile();
-//
-//                $sysArr = is_array($request->systems) ? $request->systems : json_decode($request->systems, true);
-//                foreach($sysArr as $sys)
-//                {
-//                    $sysData = SystemTypes::where('sys_id', $sys['value'])->first();
-//                    $catName = SystemCategories::where('cat_id', $sysData->cat_id)->first()->name;
-//                    $path = config('filesystems.paths.systems').DIRECTORY_SEPARATOR.strtolower($catName).DIRECTORY_SEPARATOR.$sysData->folder_location;
-//                    $fileName = Files::cleanFilename($path, $file->getClientOriginalName());
-//
-//                    Log::debug($fileName);
-//                    Log::debug($path);
-//
-//                    $file->storeAs($path, $fileName);
-//                    $file = Files::create([
-//                        'file_name' => $fileName,
-//                        'file_link' => $path.DIRECTORY_SEPARATOR
-//                    ]);
-//
-//                    $fileType = SystemFileTypes::where('description', $request->tipType)->first()->type_id;
-//
-//                    SystemFiles::create([
-//                        'sys_id'      => $sysData->sys_id,
-//                        'type_id'     => $fileType,
-//                        'file_id'     => $file->file_id,
-//                        'name'        => $request->subject,
-//                        'description' => $request->tip,
-//                        'user_id'     => Auth::user()->user_id
-//                    ]);
-//                }
-
-//                Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-//                return response()->json(['url' => route('tips.details', [urlencode($sysData->name), urlencode($request->subject)])]);
-//            }
+            return 'uploaded successfully';
         }
 
         //  Get the current progress
         $handler = $save->handler();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('File being uploaded.  Percentage done - ' . $handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
             'status' => true
         ]);
+    }
+
+    //  Save a file attached to the link
+    private function saveFile(UploadedFile $file)
+    {
+        $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.'_tmp';
+
+        //  Clean the file and store it
+        $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
+        $file->storeAs($filePath, $fileName);
+
+        //  Place file in Files table of DB
+        $newFile = Files::create([
+            'file_name' => $fileName,
+            'file_link' => $filePath.DIRECTORY_SEPARATOR
+        ]);
+        $fileID = $newFile->file_id;
+
+        //  Save the file ID in the session array
+        $fileArr = session('newTipFile') != null ? session('newTipFile') : [];
+        $fileArr[] = $fileID;
+        session(['newTipFile' => $fileArr]);
+
+        //  Log stored file
+        Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath . DIRECTORY_SEPARATOR . $fileName]);
+        return $fileID;
     }
 
     //  Create the tech tip
@@ -222,26 +209,75 @@ class TechTipsController extends Controller
 
         //  Enter the tip details and return the tip ID
         $tip = TechTips::create([
-            'documentation' => $tipData->tipType === 'documentation' ? true : false,
-            'subject'       => $tipData->subject,
-            'description'   => $tipData->tip,
-            'user_id'       => Auth::user()->user_id
+            'tip_type_id' => $tipData->tipType,
+            'subject'     => $tipData->subject,
+            'description' => $tipData->tip,
+            'user_id'     => Auth::user()->user_id
         ]);
         $tipID = $tip->tip_id;
 
-        $sysArr = is_array($tipData->systems) ? $tipData->systems : json_decode($tipData->systems, true);
-
-        foreach($sysArr as $sys)
+        foreach($tipData->equipment as $sys)
         {
             TechTipSystems::create([
                 'tip_id' => $tipID,
-                'sys_id' => $sys['value']
+                'sys_id' => $sys['sys_id']
             ]);
+        }
+
+        //  If there were any files uploaded, move them to the proper folder
+        if(session('newTipFile') != null)
+        {
+            $files = session('newTipFile');
+            $path = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
+            foreach($files as $file)
+            {
+                $data = Files::find($file);
+                //  Move the file to the proper folder
+                Storage::move($data->file_link.$data->file_name, $path.DIRECTORY_SEPARATOR.$data->file_name);
+                // Update the database
+                $data->update([
+                    'file_link' => $path.DIRECTORY_SEPARATOR
+                ]);
+
+                TechTipFiles::create([
+                    'tip_id' => $tipID,
+                    'file_id' => $data->file_id
+                ]);
+            }
+        }
+
+        Log::debug('data - ', $tipData->toArray());
+
+        //  Send out the notifications
+        if(!$tipData->supressEmail)
+        {
+            $details = TechTips::find($tipID);
+            $users = User::where('active', 1)->whereHas('UserSettings', function($query)
+            {
+                $query->where('em_tech_tip', 1);
+            })->get();
+
+            Notification::send($users, new NewTechTip($details));
         }
 
         Log::info('New Tech Tip created.  Tip Data - ', $tip->toArray());
         return $tipID;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Display the specified resource.
@@ -254,50 +290,7 @@ class TechTipsController extends Controller
         //
     }
 
-    public function search(Request $request)
-    {
-        Log::debug('request Data -> ', $request->toArray());
 
-        //  See if there are any search paramaters entered
-        if(!$request->search['searchText'] && !isset($request->search['articleType']) && !isset($request->search['systemType']))
-        {
-            //  No search paramaters, send all tech tips
-            $tips = new TechTipsCollection(TechTips::orderBy('created_at', 'DESC')
-                            ->with('SystemTypes')
-                            ->paginate($request->pagination['perPage'])
-                        );
-        }
-        else
-        {
-            $article = isset($request->search['articleType']) ? true : false;
-            $system  = isset($request->search['systemType'])  ? true : false;
-            //  Search paramaters, filter results
-            $tips = new TechTipsCollection(
-                TechTips::orderBy('created_at', 'DESC')
-                    //  Search by id or a phrase in the title or description
-                    ->where(function($query) use ($request)
-                    {
-                        $query->where('subject', 'like', '%'.$request->search['searchText'].'%')
-                            ->orWhere('tip_id', 'like', '%' . $request->search['searchText'].'%')
-                            ->orWhere('description', 'like', '%' . $request->search['searchText'].'%');
-                    })
-                    ->when($article, function($query) use ($request)
-                    {
-                        $query->whereIn('tip_type_id', $request->search['articleType']);
-                    })
-                    ->when($system, function ($query) use ($request) {
-                        $query->whereHas('SystemTypes', function($query) use ($request)
-                        {
-                            $query->whereIn('system_types.sys_id', $request->search['systemType']);
-                        });
-                    })
-                    ->with('SystemTypes')
-                    ->paginate($request->pagination['perPage'])
-            );
-        }
-
-        return $tips;
-    }
 
     public function details($id, $subject)
     {

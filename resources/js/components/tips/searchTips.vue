@@ -10,6 +10,9 @@
                                 <b-input-group-append>
                                     <b-button type="submit" variant="primary" ><span class="ti-search"></span> Search</b-button>
                                 </b-input-group-append>
+                                <b-input-group-append v-if="can_create">
+                                    <a :href="route('tips.create')" class="btn btn-warning"><span class="ti-plus"> Create New</span></a>
+                                </b-input-group-append>
                             </b-input-group>
                         </b-form>
                     </div>
@@ -70,7 +73,7 @@
                                     </div>
                                 </a>
                                 <div class="card-body">
-                                    <div v-html="tip.description"></div>
+                                    <div v-html="tip.description" class="mb-3"></div>
                                     <b-badge pill variant="primary" v-for="sys in tip.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
                                 </div>
                             </div>
@@ -105,6 +108,7 @@ export default {
     props: [
         'tip_types',
         'sys_types',
+        'can_create',
     ],
     data () {
         return {
