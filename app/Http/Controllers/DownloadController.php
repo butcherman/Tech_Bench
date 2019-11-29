@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\TechTips;
 
 // use ZanySoft\Zip;
 
@@ -111,5 +112,19 @@ class DownloadController extends Controller
         ]);
 
         return $pdf->download($cust->name.' - Note: '.$note->subject.'.pdf');
+    }
+
+    //  Download Tech Tip as PDF
+    public function downloadTechTip($id)
+    {
+        //  TODO - Makt this a better looking pdf
+        $tip = TechTips::where('tip_id', $id)->with('User')->with('SystemTypes')->first();
+
+        $pdf = PDF::loadView('pdf.techTip', [
+            'data' => $tip,
+            'comments' => collect([])
+        ]);
+
+        return $pdf->download('Tech Tip - '.$tip->subject.'.pdf');
     }
 }

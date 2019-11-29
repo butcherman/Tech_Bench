@@ -7,14 +7,12 @@ use App\Customers;
 use App\CustomerFiles;
 use App\CustomerFileTypes;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class CustomerFilesController extends Controller
@@ -23,19 +21,6 @@ class CustomerFilesController extends Controller
     {
         $this->middleware('auth');
     }
-
-    //  Get the types of files that can be attached to a customer
-    // public function getFileTypes()
-    // {
-    //     $fileTypes = CustomerFileTypes::all();
-    //     $fTypes    = [];
-    //     foreach($fileTypes as $type)
-    //     {
-    //         $fTypes[$type->file_type_id] = $type->description;
-    //     }
-
-    //     return response()->json($fileTypes);
-    // }
 
     //  Store a new customer file
     public function store(Request $request)
@@ -52,7 +37,9 @@ class CustomerFilesController extends Controller
         //  Verify that the upload is valid and being processed
         if($receiver->isUploaded() === false)
         {
-            Log::error('Upload File Missing - '.$request->toArray());
+            Log::error('Upload File Missing - ' .
+            /** @scrutinizer ignore-type */
+            $request->toArray());
             throw new UploadMissingFileException();
         }
 
@@ -130,7 +117,6 @@ class CustomerFilesController extends Controller
             'name' => $request->name,
             'file_type_id' => $request->type
         ]);
-
 
         return response()->json(['success' => true]);
     }

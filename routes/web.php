@@ -90,12 +90,15 @@ Route::prefix('customer')->name('customer.')->group(function()
 /*
 *   Tech Tip Routes
 */
-Route::resource('tips', 'TechTips\TechTipsController');
+Route::resource('tips',                       'TechTips\TechTipsController');
 Route::prefix('tip')->name('tip.')->group(function()
 {
-    Route::get('search', 'TechTips\TechTipsController@search')->name('search');
-    Route::get('details/{id}/{name}', 'TechTips\TechTipsController@details')->name('details');
-    Route::post('process-image', 'TechTips\TechTipsController@processImage')->name('processImage');
+    Route::resource('comments',               'TechTips\TechTipCommentsController');
+    Route::get('search',                      'TechTips\TechTipsController@search')      ->name('search');
+    Route::get('details/{id}/{name}',         'TechTips\TechTipsController@details')     ->name('details');
+    Route::post('process-image',              'TechTips\TechTipsController@processImage')->name('processImage');
+    Route::get('toggle-fav/{action}/{tipID}', 'TechTips\TechTipsController@toggleFav')   ->name('toggle-fav');
+    Route::get('download-tip/{id}',           'DownloadController@downloadTechTip')      ->name('downloadTip');
 });
 
 

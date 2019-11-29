@@ -43,3 +43,23 @@
     height: 60vh;
     overflow-y: scroll;
 }
+
+//  Tech Tips
+.tip-details {
+    a, span:not(.badge) {
+        padding: 0 5px;
+        border-right: 1px solid #999999;
+        color: #999999;
+        display: inline-block;
+        &:last-child {
+            border-right: none;
+        }
+        span {
+            display: inline-block;
+        }
+    }
+}
+
+.tip-description {
+    min-height: 25vh;
+}

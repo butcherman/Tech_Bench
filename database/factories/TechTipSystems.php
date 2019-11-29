@@ -5,7 +5,7 @@
 use App\TechTipSystems;
 use Faker\Generator as Faker;
 
-$factory->define(TechTipSystems::class, function (Faker $faker) {
+$factory->define(TechTipSystems::class, function () {
     return [
         //
         'tip_id' => factory(App\TechTips::class)->create()->tip_id,

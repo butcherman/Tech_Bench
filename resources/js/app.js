@@ -90,8 +90,11 @@ Vue.component('customer-files',    require('./components/customer/customerFiles.
 /*
 *   Vue Tech Tip Components
 */
-Vue.component('search-tips',  require('./components/tips/searchTips.vue').default);
-Vue.component('new-tip-form', require('./components/tips/newTipForm.vue').default);
+Vue.component('search-tips',       require('./components/tips/searchTips.vue').default);
+Vue.component('new-tip-form',      require('./components/tips/newTipForm.vue').default);
+Vue.component('tech-tip-details',  require('./components/tips/tipDetails.vue').default);
+Vue.component('tech-tip-files',    require('./components/tips/tipFiles.vue').default);
+Vue.component('tech-tip-comments', require('./components/tips/tipComments.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

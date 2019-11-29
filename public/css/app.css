@@ -18425,3 +18425,25 @@ label {
   overflow-y: scroll;
 }
 
+.tip-details a,
+.tip-details span:not(.badge) {
+  padding: 0 5px;
+  border-right: 1px solid #999999;
+  color: #999999;
+  display: inline-block;
+}
+
+.tip-details a:last-child,
+.tip-details span:not(.badge):last-child {
+  border-right: none;
+}
+
+.tip-details a span,
+.tip-details span:not(.badge) span {
+  display: inline-block;
+}
+
+.tip-description {
+  min-height: 25vh;
+}
+

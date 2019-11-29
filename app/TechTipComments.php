@@ -8,14 +8,18 @@ class TechTipComments extends Model
 {
     protected $primaryKey = 'comment_id';
     protected $fillable = ['tip_id', 'user_id', 'comment'];
+    protected $casts = [
+        'created_at' => 'datetime:M d, Y',
+        'updated_at' => 'datetime:M d, Y',
+    ];
 
     // public function techTips()
     // {
     //     return $this->belongsTo('App\TechTips');
     // }
 
-    // public function users()
-    // {
-    //     return $this->hasMany('App\Users');
-    // }
+    public function user()
+    {
+        return $this->hasOne('App\User', 'user_id', 'user_id');
+    }
 }

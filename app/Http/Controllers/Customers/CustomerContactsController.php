@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Customers;
-// use App\PhoneNumberType;
+use App\PhoneNumberTypes;
 use App\CustomerContacts;
 use Illuminate\Http\Request;
-use App\CustomerContactsView;
 use App\CustomerContactPhones;
 use JeroenDesloovere\VCard\VCard;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\PhoneNumberTypes;
 use Illuminate\Support\Facades\Route;
 
 class CustomerContactsController extends Controller

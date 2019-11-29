@@ -6,10 +6,8 @@ use App\User;
 use App\Files;
 use App\TechTips;
 use App\SystemTypes;
-use App\SystemFiles;
 use App\TechTipFiles;
 use App\TechTipSystems;
-use App\SystemFileTypes;
 use App\SystemCategories;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -37,6 +35,7 @@ use App\Http\Resources\SystemTypesCollection;
 
 use App\Http\Resources\TechTipsCollection;
 use Illuminate\Support\Facades\Storage;
+use App\TechTipFavs;
 
 class TechTipsController extends Controller
 {
@@ -264,45 +263,76 @@ class TechTipsController extends Controller
         return $tipID;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-
-
+    //  Details controller - will move to the show controller with just the tech tip id
     public function details($id, $subject)
     {
-        if(session()->has('newTechTip'))
-        {
-            session()->forget('newTechTip');
+        if (session()->has('newTipFile')) {
+            session()->forget('newTipFile');
         }
 
-
-
-        return response('tip details');
+        return $this->show($id);
     }
+
+    //  Show the details about the tech tip
+    public function show($id)
+    {
+        $tipData = TechTips::where('tip_id', $id)->with('User')->with('SystemTypes')->first();
+
+        if(!$tipData)
+        {
+            return view('tips.tipNotFound');
+        }
+
+        $isFav = TechTipFavs::where('user_id', Auth::user()->user_id)->where('tip_id', $id)->first();
+        $files = TechTipFiles::where('tip_id', $id)->with('Files')->get();
+
+        return view('tips.details', [
+            'details' => $tipData,
+            'isFav'   => empty($isFav) ? 'false' : 'true',
+            //  TODO - fix this!!!!!!!
+            'canEdit' => false, // $this->authorize('hasAccess', 'edit_tech_tip') ? 'true' : 'false',
+            'canDel'  => false, // $this->authorize('hasAccess', 'delete_tech_tip') ? 'true' : 'false',
+            'files'   => $files,
+        ]);
+    }
+
+    //
+    public function toggleFav($action, $id)
+    {
+        //
+        switch ($action) {
+            case 'add':
+                TechTipFavs::create([
+                    'user_id' => Auth::user()->user_id,
+                    'tip_id' => $id
+                ]);
+                break;
+            case 'remove':
+                $tipFav = TechTipFavs::where('user_id', Auth::user()->user_id)->where('tip_id', $id)->first();
+                $tipFav->delete();
+                break;
+        }
+
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('Tech Tip Bookmark Updated.', [
+            'user_id' => Auth::user()->user_id,
+            'tip_id' => $id,
+            'action'  => $action
+        ]);
+        return response()->json(['success' => true]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -313,6 +343,7 @@ class TechTipsController extends Controller
     public function edit($id)
     {
         //
+        return 'edit tip';
     }
 
     /**
@@ -335,6 +366,10 @@ class TechTipsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('hasAccess', 'delete_tech_tip');
+
+        TechTips::find($id)->delete();
+        Log::warning('User - '.Auth::user()->user_id.' deleted Tech Tip ID - '.$id);
+        return response()->json(['success' => true]);
     }
 }

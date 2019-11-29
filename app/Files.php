@@ -11,6 +11,7 @@ class Files extends Model
 {
     protected $primaryKey = 'file_id';
     protected $fillable = ['file_name', 'file_link', 'mime_type'];
+    protected $hidden = ['created_at', 'updated_at', 'file_link'];
 
     // public function systemFiles()
     // {
