@@ -36,6 +36,7 @@ use App\Http\Resources\SystemTypesCollection;
 use App\Http\Resources\TechTipsCollection;
 use Illuminate\Support\Facades\Storage;
 use App\TechTipFavs;
+use Illuminate\Support\Arr;
 
 class TechTipsController extends Controller
 {
@@ -175,9 +176,10 @@ class TechTipsController extends Controller
     }
 
     //  Save a file attached to the link
-    private function saveFile(UploadedFile $file)
+    private function saveFile(UploadedFile $file, $id = '_tmp')
     {
-        $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.'_tmp';
+        // $folder = $id ? $id ? '_tmp';
+        $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$id;
 
         //  Clean the file and store it
         $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
@@ -191,9 +193,20 @@ class TechTipsController extends Controller
         $fileID = $newFile->file_id;
 
         //  Save the file ID in the session array
-        $fileArr = session('newTipFile') != null ? session('newTipFile') : [];
-        $fileArr[] = $fileID;
-        session(['newTipFile' => $fileArr]);
+        if($id === '_tmp')
+        {
+
+            $fileArr = session('newTipFile') != null ? session('newTipFile') : [];
+            $fileArr[] = $fileID;
+            session(['newTipFile' => $fileArr]);
+        }
+        else
+        {
+            TechTipFiles::create([
+                'tip_id' => $id,
+                'file_id' => $fileID,
+            ]);
+        }
 
         //  Log stored file
         Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath . DIRECTORY_SEPARATOR . $fileName]);
@@ -289,17 +302,13 @@ class TechTipsController extends Controller
         return view('tips.details', [
             'details' => $tipData,
             'isFav'   => empty($isFav) ? 'false' : 'true',
-            //  TODO - fix this!!!!!!!
-            'canEdit' => false, // $this->authorize('hasAccess', 'edit_tech_tip') ? 'true' : 'false',
-            'canDel'  => false, // $this->authorize('hasAccess', 'delete_tech_tip') ? 'true' : 'false',
             'files'   => $files,
         ]);
     }
 
-    //
+    //  Add or remove this tip as a favorite of the user
     public function toggleFav($action, $id)
     {
-        //
         switch ($action) {
             case 'add':
                 TechTipFavs::create([
@@ -322,48 +331,131 @@ class TechTipsController extends Controller
         return response()->json(['success' => true]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Edit an existing tech tip
     public function edit($id)
     {
-        //
-        return 'edit tip';
+        $this->authorize('hasAccess', 'edit_tech_tip');
+        $tipData = TechTips::where('tip_id', $id)->with('User')->with('SystemTypes')->with('TechTipTypes')->first();
+
+        if (!$tipData) {
+            return view('tips.tipNotFound');
+        }
+
+        $typesArr   = new TechTipTypesCollection(TechTipTypes::all());
+        $systemsArr = new SystemCategoriesCollection(SystemCategories::with('SystemTypes')->get());
+        $files = TechTipFiles::where('tip_id', $id)->with('Files')->get();
+
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        return view('tips.editTip', [
+            'tipTypes' => $typesArr,
+            'sysTypes' => $systemsArr,
+            'details' => $tipData,
+            'files'   => $files,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Store the edited Tech Tip
     public function update(Request $request, $id)
     {
         //
+        $this->authorize('hasAccess', 'edit_tech_tip');
+
+        $request->validate([
+            'subject'   => 'required',
+            'equipment' => 'required',
+            'tipType'   => 'required',
+            'tip'       => 'required',
+        ]);
+
+        $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
+
+        //  Verify if there is a file to be processed or not
+        if ($receiver->isUploaded() === false || $request->_completed) {
+            $this->storeUpdatedTip($request, $id);
+            Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+            return response()->json(['tip_id' => $id]);
+        }
+
+        //  Recieve and process the file
+        $save = $receiver->receive();
+
+        //  See if the uploade has finished
+        if ($save->isFinished()) {
+            $this->saveFile($save->getFile(), $id);
+
+            return 'uploaded successfully';
+        }
+
+        //  Get the current progress
+        $handler = $save->handler();
+
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('File being uploaded.  Percentage done - ' . $handler->getPercentageDone());
+        return response()->json([
+            'done'   => $handler->getPercentageDone(),
+            'status' => true
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Store the updated tip
+    public function storeUpdatedTip($tipData, $id)
+    {
+        $this->authorize('hasAccess', 'edit_tech_tip');
+
+        //  Remove any forward slash (/) from the Subject Field
+        $tipData->merge(['subject' => str_replace('/', '-', $tipData->subject)]);
+
+        //  Enter the tip details and return the tip ID
+        TechTips::find($id)->update([
+            'tip_type_id' => $tipData->tipType,
+            'subject'     => $tipData->subject,
+            'description' => $tipData->tip,
+            // 'user_id'     => Auth::user()->user_id TODO - updated user identify
+        ]);
+
+        //  Add any additional equipment types to the tip
+        $tipEquip = TechTipSystems::where('tip_id', $id)->get();
+        foreach($tipData->equipment as $equip)
+        {
+            $found = false;
+            foreach($tipEquip as $key => $value)
+            {
+                if($equip['sys_id'] == $value->sys_id)
+                {
+                    $tipEquip->forget($key);
+                    $found = true;
+                    break;
+                }
+            }
+            if(!$found)
+            {
+                TechTipSystems::create([
+                    'tip_id' => $id,
+                    'sys_id' => $equip['sys_id'],
+                ]);
+            }
+        }
+
+        //  Remove the remainaing equipment types that have been removed
+        foreach($tipEquip as $remaining)
+        {
+            TechTipSystems::find($remaining->tip_tag_id)->delete();
+        }
+
+        //  Remove any files that no longer apply
+        foreach($tipData->deletedFileList as $file)
+        {
+            $file = TechTipFiles::find($file);
+            $fileID = $file->file_id;
+            $file->delete();
+            //  Try to delete the file itself
+            Files::deleteFile($fileID);
+        }
+
+        return true;
+    }
+
+    //  Soft delet the Tech Tip
     public function destroy($id)
     {
         $this->authorize('hasAccess', 'delete_tech_tip');

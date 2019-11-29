@@ -55,7 +55,7 @@ export default {
     },
     created()
     {
-        console.log(this.tip_details);
+        // console.log(this.tip_details);
     },
     methods: {
         toggleFav()
@@ -85,7 +85,7 @@ export default {
         },
         deleteTip()
         {
-            this.$bvModal.msgBoxConfirm('Please confirm that you want to deactivate this customer.', {
+            this.$bvModal.msgBoxConfirm('Please confirm that you want to delete this Tech Tip.', {
                 title: 'Please Confirm',
                 size: 'sm',
                 buttonSize: 'sm',

@@ -91,6 +91,7 @@ Route::prefix('customer')->name('customer.')->group(function()
 *   Tech Tip Routes
 */
 Route::resource('tips',                       'TechTips\TechTipsController');
+Route::post('submit-edit/{id}', 'TechTips\TechTipsController@update')->name('tips.submit-edit');
 Route::prefix('tip')->name('tip.')->group(function()
 {
     Route::resource('comments',               'TechTips\TechTipCommentsController');

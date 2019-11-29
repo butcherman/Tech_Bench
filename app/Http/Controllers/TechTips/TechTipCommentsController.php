@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\TechTipComments;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class TechTipCommentsController extends Controller
 {
@@ -13,15 +14,10 @@ class TechTipCommentsController extends Controller
     {
         $this->middleware('auth');
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+    //  Add a new Tech Tip Comment
     public function store(Request $request)
     {
-        //
         $request->validate([
             'comment' => 'required',
             'tipID' => 'required',
@@ -36,48 +32,18 @@ class TechTipCommentsController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Retrieve the comments for a tech tip
     public function show($id)
     {
         return TechTipComments::where('tip_id', $id)->with('User')->get();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Delete a comment
     public function destroy($id)
     {
-        //
+        TechTipComments::find($id)->delete();
+
+        Log::warning('A Tech Tip Comment (id# '.$id.') was deleted by User ID - '.Auth::user()->user_id);
+        return response()->json(['success' => true]);
     }
 }

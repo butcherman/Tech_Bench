@@ -28,7 +28,6 @@ class CustomerController extends Controller
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.index', [
             'sysTypes' => $systems,
-            'allowCreate' => $this->authorize('hasAccess', 'add_customer')
         ]);
     }
 

@@ -27,6 +27,11 @@ class TechTips extends Model
         return $this->hasOne('App\User', 'user_id', 'user_id');
     }
 
+    public function techTipTypes()
+    {
+        return $this->hasOne('App\TechTipTypes', 'tip_type_id', 'tip_type_id');
+    }
+
 //     public function techTipComments()
 //     {
 //         return $this->belongsTo('App\TechTipComments', 'tip_id', 'tip_id');

@@ -71,7 +71,7 @@ class CustomerContactsController extends Controller
     public function edit($id)
     {
         $contact  = CustomerContacts::find($id);
-        $numbers  = CustomerContactsView::where('cont_id', $id)->get();
+        $numbers  = CustomerContactPhones::where('cont_id', $id)->get();
         $custData = Customers::find($contact->cust_id);
 
         $contactName = explode(' ', $contact->name);

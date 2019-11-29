@@ -85,7 +85,6 @@ class CustomerDetailsController extends Controller
             'cust_id'     => $custDetails->cust_id,
             'details'     => $custDetails->toJson(),
             'isFav'       => empty($custFav) ? 'false' : 'true',
-            'canDel'      => Gate::allows('hasAccess', 'deactivate_customer'),
             'numberTypes' => $numTypes,
             'fileTypes'   => $fileTypes,
         ]);

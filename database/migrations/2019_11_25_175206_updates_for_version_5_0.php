@@ -132,6 +132,7 @@ class UpdatesForVersion50 extends Migration
                         //  Fallthrough is intended, modifications will be picked up top-down
                         case 'Installer':
                             User::find($user->user_id)->update(['is_installer' => 1]);
+                            /* FALLTHROUGH */
                         case 'Admin':
                             $userPerm['manage_users']        = 1;
                             $userPerm['deactivate_customer'] = 1;
@@ -139,8 +140,10 @@ class UpdatesForVersion50 extends Migration
                             $userPerm['delete_tech_tip']     = 1;
                             $userPerm['create_category']     = 1;
                             $userPerm['modify_category']     = 1;
+                            /* FALLTHROUGH */
                         case 'Report':
                             $userPerm['run_reports']         = 1;
+                            /* FALLTHROUGH */
                         default:
                             $userPerm['user_id']             = $user->user_id;
                     }

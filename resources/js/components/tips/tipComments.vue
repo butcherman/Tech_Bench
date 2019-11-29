@@ -12,13 +12,14 @@
                         <h5 class="text-center">Loading Comments</h5>
                         <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
                     </div>
-                    <div v-for="comment in comments" :key="comment.comment_id" class="row">
+                    <div v-show="comments" v-for="comment in comments" :key="comment.comment_id" class="row">
                         <div class="col-12 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
                                     {{comment.comment}}
                                 </div>
                                 <div class="card-footer">
+                                    <span v-if="user_id == comment.user_id" class="ti-trash text-danger pointer" title="Delete Comment" v-b-tooltip:hover @click="deleteComment(comment.comment_id)"></span>
                                     By: {{comment.user.full_name}}
                                     <span class="float-right">Created: {{comment.created_at}}</span>
                                 </div>
@@ -53,6 +54,7 @@
 export default {
     props: [
         'tip_id',
+        'user_id',
     ],
     data() {
         return {
@@ -78,7 +80,6 @@ export default {
         {
             axios.get(this.route('tip.comments.show', this.tip_id))
                 .then(res => {
-                    console.log(res);
                     this.comments = res.data;
                     this.loading = false;
                 }).catch(error => this.error = true);
@@ -86,17 +87,41 @@ export default {
         addComment(e)
         {
             e.preventDefault();
-            console.log('add comment');
             this.button.disable = true;
             this.button.text = 'Processing...';
             axios.post(this.route('tip.comments.store'), this.form)
                 .then(res => {
-                    console.log(res);
                     this.button.disable = false;
                     this.button.text = 'Add Comment';
                     this.form.comment = '';
                     this.getComments();
                 }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+        },
+        deleteComment(id)
+        {
+            this.$bvModal.msgBoxConfirm('Please confirm that you want to delete this Comment.', {
+                title: 'Please Confirm',
+                size: 'sm',
+                buttonSize: 'sm',
+                okVariant: 'danger',
+                okTitle: 'YES',
+                cancelTitle: 'NO',
+                footerClass: 'p-2',
+                hideHeaderClose: false,
+                centered: true
+            })
+            .then(value => {
+                if(value)
+                {
+                    axios.delete(this.route('tip.comments.destroy', id))
+                    .then(res => {
+                        this.getComments();
+                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                }
+            })
+            .catch(error => {
+                alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error);
+            });
         }
     }
 }
