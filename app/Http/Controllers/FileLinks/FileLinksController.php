@@ -19,7 +19,6 @@ use App\Http\Resources\FileLinksCollection;
 use App\Http\Resources\CustomerFileTypesCollection;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-// use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
 use App\Http\Resources\FileLinks as FileLinksResource;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 

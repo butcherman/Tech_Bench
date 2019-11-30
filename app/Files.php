@@ -13,16 +13,6 @@ class Files extends Model
     protected $fillable = ['file_name', 'file_link', 'mime_type'];
     protected $hidden = ['created_at', 'updated_at', 'file_link'];
 
-    // public function systemFiles()
-    // {
-    //     return $this->hasMany('App\SystemFiles', 'file_id', 'file_id');
-    // }
-
-    // public function fileLinkFiles()
-    // {
-    //     return $this->belongsTo('App\FileLinkFiles', 'file_id', 'file_id');
-    // }
-
     //  Remove any illegal characters from filename and make sure it is unique
     public static function cleanFileName($path, $fileName)
     {

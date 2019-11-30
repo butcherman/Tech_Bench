@@ -13,11 +13,6 @@ class TechTipComments extends Model
         'updated_at' => 'datetime:M d, Y',
     ];
 
-    // public function techTips()
-    // {
-    //     return $this->belongsTo('App\TechTips');
-    // }
-
     public function user()
     {
         return $this->hasOne('App\User', 'user_id', 'user_id');

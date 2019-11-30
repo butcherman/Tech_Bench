@@ -5,15 +5,15 @@ namespace App\Http\Controllers;
 use PDF;
 use Zip;
 use App\Files;
-use Carbon\Carbon;
+use App\TechTips;
 use App\Customers;
+use Carbon\Carbon;
 use App\CustomerNotes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use App\TechTips;
 
 // use ZanySoft\Zip;
 
@@ -21,8 +21,8 @@ class DownloadController extends Controller
 {
     //  File locations for stored files
     private $tmpFolder = 'archive_downloads'.DIRECTORY_SEPARATOR;
-    private $root; //      = config('filesystems.disks.local.root').DIRECTORY_SEPARATOR;
-    private $path; //      = $root.$tmpFolder;
+    private $root;
+    private $path;
 
     public function __construct()
     {

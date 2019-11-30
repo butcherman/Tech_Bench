@@ -12,14 +12,12 @@ Route::get('/',         'Auth\LoginController@showLoginForm')->name('index');
 Route::get('logout',    'Auth\LoginController@logout')       ->name('logout');
 Route::get('no-script', 'Controller@noScript')               ->name('noscript');
 
-
 /*
 *   Download File Routes
 */
 Route::get('download/{id}/{filename}',    'DownloadController@index')          ->name('download');
 Route::get('download-archive/{filename}', 'DownloadController@downloadArchive')->name('downloadArchive');
 Route::put('download-archive',            'DownloadController@archiveFiles')   ->name('archiveFiles');
-
 
 /*
 *   User Settings Routes
@@ -86,12 +84,11 @@ Route::prefix('customer')->name('customer.')->group(function()
     Route::get('/',                            'Customers\CustomerController@index')         ->name('index');
 });
 
-
 /*
 *   Tech Tip Routes
 */
 Route::resource('tips',                       'TechTips\TechTipsController');
-Route::post('submit-edit/{id}', 'TechTips\TechTipsController@update')->name('tips.submit-edit');
+Route::post('submit-edit/{id}',               'TechTips\TechTipsController@update')      ->name('tips.submit-edit');
 Route::prefix('tip')->name('tip.')->group(function()
 {
     Route::resource('comments',               'TechTips\TechTipCommentsController');
@@ -101,6 +98,23 @@ Route::prefix('tip')->name('tip.')->group(function()
     Route::get('toggle-fav/{action}/{tipID}', 'TechTips\TechTipsController@toggleFav')   ->name('toggle-fav');
     Route::get('download-tip/{id}',           'DownloadController@downloadTechTip')      ->name('downloadTip');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -10,11 +10,6 @@ class PhoneNumberTypes extends Model
     protected $fillable   = ['phone_type_id', 'description', 'icon_class'];
     protected $hidden     = ['phone_type_id', 'created_at', 'updated_at'];
 
-    // public function CustomerContactPhones()
-    // {
-    //     return $this->belongsTo('App\CustomerContactPhones', 'phone_type_id');
-    // }
-
     //  Format a 10 digit phone number into a readable format
     public static function readablePhoneNumber($number)
     {

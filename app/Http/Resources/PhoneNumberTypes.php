@@ -14,7 +14,6 @@ class PhoneNumberTypes extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
             'value' => $this->phone_type_id,
             'text'  => $this->description,

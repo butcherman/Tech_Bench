@@ -12,25 +12,10 @@ class FileLinks extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @property integer $link_id
-     * @property integer $user_id
-     * @property integer $cust_id
-     * @property string $cust_name
-     * @property string $link_hash
-     * @property string $link_name
-     * @property string $exp_format
-     * @property string $expired
-     * @property string $exp_stamp
-     * @property string $allow_upload
-     * @property integer $file_count
-     * @property string $note
-     * @property string $expire
-     * @property integer $file_link_files_count
      * @return array
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
             'link_id'      => $this->link_id,
             'user_id'      => $this->user_id,

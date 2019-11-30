@@ -37,7 +37,6 @@ class CustomerNotesController extends Controller
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Submitted Data - ', $request->toArray());
         Log::info('New Customer Note Created for Customer ID-'.$request->custID.' by User ID-'.Auth::user()->user_id.'.  New Note ID-'.$noteID->note_id);
-
         return response()->json(['success' => true]);
     }
 
@@ -80,7 +79,6 @@ class CustomerNotesController extends Controller
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('Customer Note ID-'.$id.' deleted by User ID-'.Auth::user()->user_id);
-
         return response()->json(['success' => true]);
     }
 }

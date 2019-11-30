@@ -10,11 +10,6 @@ class TechTipFiles extends Model
     protected $fillable = ['tip_id', 'file_id'];
     protected $hidden = ['created_at', 'updated_at'];
 
-    // public function techTips()
-    // {
-    //     return $this->hasMany('App\TechTips', 'tip_id', 'tip_id');
-    // }
-
     public function files()
     {
         return $this->hasOne('App\Files', 'file_id', 'file_id');

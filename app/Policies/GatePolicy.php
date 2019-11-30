@@ -19,7 +19,7 @@ class GatePolicy
     {
         //
     }
-    
+
     //  Determine if the user is a Installer/Super Admin
     public function isInstaller(User $user)
     {
@@ -27,15 +27,15 @@ class GatePolicy
         {
             return true;
         }
-        
+
         return false;
     }
-    
+
     //  Determine if a user can see the Administration Nav Link
     public function seeAdminLink(User $user)
     {
         $permissions = UserPermissions::find($user->user_id);
-            
+
         if($this->isInstaller($user))
         {
             return true;
@@ -47,7 +47,7 @@ class GatePolicy
 
         return false;
     }
-    
+
     //  Determine if a user has permissions for a task
     public function hasAccess(User $user, $task)
     {
@@ -56,9 +56,9 @@ class GatePolicy
         {
             return true;
         }
-        
-        $permissions = UserPermissions::select($task)->where('user_id', $user->user_id)->first();  
-        
+
+        $permissions = UserPermissions::select($task)->where('user_id', $user->user_id)->first();
+
         return $permissions->$task;
     }
 }

@@ -40,34 +40,4 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\UserSettings', 'user_id', 'user_id');
     }
-
-    // public function fileLinks()
-    // {
-    //     return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
-    // }
-
-    // public function fileLinkFiles()
-    // {
-    //     return $this->belongsTo('App\FileLinkFiles', 'user_id', 'user_id');
-    // }
-
-    // public function customerFavs()
-    // {
-    //     return $this->belongsTo('App\CustomerFavs', 'user_id', 'user_id');
-    // }
-
-    // public function customerNotes()
-    // {
-    //     return $this->belongsTo('App\CustomerNotes', 'user_id', 'user_id');
-    // }
-
-    // public function techTips()
-    // {
-    //     return $this->belongsTo('App\TechTips', 'user_id', 'user_id');
-    // }
-
-    // public function techTipComments()
-    // {
-    //     return $this->belongsTo('App\TechTipComments', 'user_id', 'user_id');
-    // }
 }

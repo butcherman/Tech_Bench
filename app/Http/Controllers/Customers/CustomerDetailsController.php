@@ -4,17 +4,15 @@ namespace App\Http\Controllers\Customers;
 
 use App\Customers;
 use App\CustomerFavs;
+use App\PhoneNumberTypes;
+use App\CustomerFileTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\PhoneNumberTypes;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\PhoneNumberTypesCollection;
 use App\Http\Resources\CustomerFileTypesCollection;
-use App\Http\Resources\CustomersCollection;
-use App\CustomerFileTypes;
 
 class CustomerDetailsController extends Controller
 {
@@ -39,7 +37,7 @@ class CustomerDetailsController extends Controller
 
         $request->validate([
             'cust_id'  => 'required|numeric|unique:customers,cust_id',
-            'name'     => 'required', // |unique:customers,name',
+            'name'     => 'required',
             'dba_name' => 'nullable',
             'address'  => 'required',
             'city'     => 'required',
@@ -80,7 +78,6 @@ class CustomerDetailsController extends Controller
         $numTypes = new PhoneNumberTypesCollection(PhoneNumberTypes::all());
         $fileTypes = new CustomerFileTypesCollection(CustomerFileTypes::all());
 
-        // Log::debug('Customer Details', $custDetails->toArray());
         return view('customer.details', [
             'cust_id'     => $custDetails->cust_id,
             'details'     => $custDetails->toJson(),

@@ -13,11 +13,6 @@ class FileLinkFiles extends Model
         'updated_at' => 'datetime:M d, Y'
     ];
 
-    // public function fileLinks()
-    // {
-    //     return $this->belongsTo('App\FileLinks', 'link_id', 'link_id');
-    // }
-
     public function files()
     {
         return $this->hasOne('App\Files', 'file_id', 'file_id');

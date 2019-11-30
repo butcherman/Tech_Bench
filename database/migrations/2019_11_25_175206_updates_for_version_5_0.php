@@ -65,8 +65,8 @@ class UpdatesForVersion50 extends Migration
     private function updatePhoneIcons()
     {
         $newIcons = [
-            ['description' => 'Home', 'icon_class' => 'ti-home'],
-            ['description' => 'Work', 'icon_class' => 'ti-briefcase'],
+            ['description' => 'Home',   'icon_class' => 'ti-home'],
+            ['description' => 'Work',   'icon_class' => 'ti-briefcase'],
             ['description' => 'Mobile', 'icon_class' => 'ti-mobile'],
         ];
 

@@ -34,8 +34,6 @@ class CustomerContactsController extends Controller
             'email'   => !empty($request->email) ? $request->email : null,
         ])->cont_id;
 
-        // $contID = $cont->cont_id;
-
         foreach($request->numbers['type'] as $key => $num)
         {
             if(!empty($request->numbers['number'][$key]))
@@ -62,8 +60,8 @@ class CustomerContactsController extends Controller
             ->with('CustomerContactPhones')
             ->get();
 
-        // Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        // Log::debug('Fetched Data - ', $contacts->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Fetched Data - ', $contacts->toArray());
         return $contacts;
     }
 
@@ -97,7 +95,6 @@ class CustomerContactsController extends Controller
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::info('Customer Contact Downloaded - Contact ID-'.$id);
-
         return $vcard->download();
     }
 

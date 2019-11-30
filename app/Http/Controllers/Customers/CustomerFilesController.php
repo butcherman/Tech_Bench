@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Files;
-use App\Customers;
 use App\CustomerFiles;
-use App\CustomerFileTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;

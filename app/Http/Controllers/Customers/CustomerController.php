@@ -87,7 +87,6 @@ class CustomerController extends Controller
             return response()->json(['dup' => false]);
         }
 
-
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Customer ID is in use by - '.$cust->name);
         return response()->json(['dup' => true, 'name' => $cust->name]);

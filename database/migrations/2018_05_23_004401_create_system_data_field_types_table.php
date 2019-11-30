@@ -21,6 +21,7 @@ class CreateSystemDataFieldTypesTable extends Migration
             $table->timestamps();
         });
 
+        //  TODO - simplify this
         //  Enter default data
         SystemDataFieldTypes::create([
             'data_type_id' => 1,

@@ -13,11 +13,6 @@ class CustomerSystems extends Model
     protected $fillable = ['cust_id', 'sys_id'];
     protected $hidden = ['created_at', 'updated_at'];
 
-    // public function Customers()
-    // {
-    //     return $this->belongsTo('App\customers', 'cust_id', 'cust_id');
-    // }
-
     public function SystemTypes()
     {
         return $this->hasOne('App\SystemTypes', 'sys_id', 'sys_id');
@@ -27,11 +22,6 @@ class CustomerSystems extends Model
     {
         return $this->hasMany('App\CustomerSystemData', 'cust_sys_id');
     }
-
-    // public function SystemDataFields()
-    // {
-    //     return $this->hasManyThrough('App\SystemDataFields', 'App\CustomerSystemData', 'cust_sys_id', 'field_id', 'cust_sys_id', 'field_id');
-    // }
 
     public function SystemDataFields()
     {

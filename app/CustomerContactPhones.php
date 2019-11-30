@@ -9,11 +9,6 @@ class CustomerContactPhones extends Model
     protected $fillable = ['cont_id', 'phone_type_id', 'phone_number', 'extension'];
     protected $appends = ['type_icon', 'type_name', 'readable'];
 
-    // public function CustomerContacts()
-    // {
-    //     return $this->hasMany('App\CustomerContacts', 'cont_id', 'cont_id');
-    // }
-
     public function getTypeIconAttribute()
     {
         return PhoneNumberTypes::find($this->phone_type_id)->icon_class;

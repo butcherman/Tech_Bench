@@ -16,7 +16,6 @@ class TechTips extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
             'tip_id'       => $this->tip_id,
             'subject'      => $this->subject,

@@ -32,7 +32,7 @@ class ForgotPasswordController extends Controller
     {
         $this->middleware('guest');
     }
-    
+
     //  Override the sendResetLinkEmail function to provide logging when a reset request is made
     public function sendResetLinkEmail(Request $request)
     {
@@ -41,7 +41,7 @@ class ForgotPasswordController extends Controller
         $response = $this->broker()->sendResetLink(
             $this->credentials($request)
         );
-        
+
         $passOrFail = $response === 'passwords.sent' ? 'successful' : 'failed';
         Log::info('A password reset request was made for '.$request->email.'.  Response - '.$passOrFail);
         return $response == Password::RESET_LINK_SENT

@@ -20,6 +20,7 @@ class CreateTechTipTypesTable extends Migration
             $table->timestamps();
         });
 
+        //  TODO - Simplify this
         TechTipTypes::create(['description' => 'Tech Tip']);
         TechTipTypes::create(['description' => 'Documentation']);
         TechTipTypes::create(['description' => 'Software']);

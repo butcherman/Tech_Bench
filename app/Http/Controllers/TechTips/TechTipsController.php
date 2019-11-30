@@ -5,38 +5,27 @@ namespace App\Http\Controllers\TechTips;
 use App\User;
 use App\Files;
 use App\TechTips;
-use App\SystemTypes;
+use App\TechTipFavs;
 use App\TechTipFiles;
+use App\TechTipTypes;
 use App\TechTipSystems;
+use Illuminate\Http\File;
 use App\SystemCategories;
 use Illuminate\Http\Request;
+use App\Notifications\NewTechTip;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\TechTipsCollection;
+use Illuminate\Support\Facades\Notification;
+use App\Http\Resources\TechTipTypesCollection;
+use App\Http\Resources\SystemCategoriesCollection;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-use Pion\Laravel\ChunkUpload\Handler\AbstractHandler;
-use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
-use Illuminate\Http\File;
-
-// use App\Http\Resources\TechTipTypes;
-use App\Http\Resources\TechTipTypesCollection;
-use App\TechTipTypes;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\NewTechTip;
-
 use App\Http\Resources\SystemCategoriesCollection as CategoriesCollection;
-use App\Http\Resources\SystemCategoriesCollection;
-use App\Http\Resources\SystemTypesCollection;
-// use App\SystemCategories;
-// use App\SystemTypes;
-
-use App\Http\Resources\TechTipsCollection;
-use Illuminate\Support\Facades\Storage;
-use App\TechTipFavs;
-use Illuminate\Support\Arr;
 
 class TechTipsController extends Controller
 {
@@ -258,8 +247,6 @@ class TechTipsController extends Controller
             }
         }
 
-        Log::debug('data - ', $tipData->toArray());
-
         //  Send out the notifications
         if(!$tipData->supressEmail)
         {
@@ -357,7 +344,6 @@ class TechTipsController extends Controller
     //  Store the edited Tech Tip
     public function update(Request $request, $id)
     {
-        //
         $this->authorize('hasAccess', 'edit_tech_tip');
 
         $request->validate([
@@ -410,7 +396,7 @@ class TechTipsController extends Controller
             'tip_type_id' => $tipData->tipType,
             'subject'     => $tipData->subject,
             'description' => $tipData->tip,
-            // 'user_id'     => Auth::user()->user_id TODO - updated user identify
+            // 'user_id'     => Auth::user()->user_id TODO - updated user who modified tip
         ]);
 
         //  Add any additional equipment types to the tip

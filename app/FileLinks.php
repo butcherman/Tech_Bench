@@ -19,28 +19,8 @@ class FileLinks extends Model
         return $this->attributes['allow_upload'] ? 'Yes' : 'No';
     }
 
-    // public function users()
-    // {
-    //     return $this->belongsTo('App\Users', 'user_id', 'user_id');
-    // }
-
     public function fileLinkFiles()
     {
         return $this->hasMany('App\FileLinkFiles', 'link_id', 'link_id');
     }
-
-    // public function fileLinkInstructions()
-    // {
-    //     return $this->hasMany('App\FileLinkInstructions', 'link_id', 'link_id');
-    // }
-
-    // public function fileLinkNotes()
-    // {
-    //     return $this->hasMany('App\FileLinkNotes', 'link_id', 'link_id');
-    // }
-
-    // public function customers()
-    // {
-    //     return $this->belongsTo('App\Customers', 'cust_id', 'cust_id');
-    // }
 }

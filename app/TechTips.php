@@ -32,16 +32,6 @@ class TechTips extends Model
         return $this->hasOne('App\TechTipTypes', 'tip_type_id', 'tip_type_id');
     }
 
-//     public function techTipComments()
-//     {
-//         return $this->belongsTo('App\TechTipComments', 'tip_id', 'tip_id');
-//     }
-
-//     public function techTipFiles()
-//     {
-//         return $this->belongsTo('App\TechTipFiles', 'tip_id', 'tip_id');
-//     }
-
     public function techTipSystems()
     {
         return $this->hasMany('App\TechTipSystems', 'tip_id', 'tip_id');

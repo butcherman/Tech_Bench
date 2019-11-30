@@ -13,9 +13,4 @@ class CustomerContacts extends Model
     {
         return $this->hasMany('App\CustomerContactPhones', 'cont_id');
     }
-
-    // public function CustomerContactsView()
-    // {
-    //     return $this->hasMany('App\CustomerContactsView', 'cont_id', 'cont_id');
-    // }
 }

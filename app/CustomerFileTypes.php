@@ -9,9 +9,4 @@ class CustomerFileTypes extends Model
     protected $primaryKey = 'file_type_id';
     protected $fillable = ['description'];
     protected $hidden = ['created_at', 'updated_at'];
-
-    // public function CustomerFiles()
-    // {
-    //     return $this->belongsTo('App\CustomerFiles', 'file_type_id', 'file_type_id');
-    // }
 }

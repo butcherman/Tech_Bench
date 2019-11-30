@@ -88,8 +88,7 @@ class CustomerSystemsController extends Controller
 
         if(!$valid)
         {
-            //  TODO:  Make this a proper error code
-            return response('Customer System Not Found');
+            return abort(400);
         }
 
         $fields = SystemDataFields::where('sys_id', $request->system)->get();
