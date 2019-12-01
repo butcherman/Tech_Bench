@@ -1,14 +1,11 @@
 <template>
     <div class="table">
         <vue-good-table v-if="loadDone"
-            mode="remote"
             ref="file-links-table"
             styleClass="vgt-table bordered w-100"
             :columns="table.columns"
             :rows="table.rows"
             :select-options="{enabled:true, selectOnCheckboxOnly: true}"
-            :sort-options="{enabled:true}"
-            :isLoading.sync="isLoading"
             :row-style-class="linkRowClass"
         >
             <div slot="emptystate">
@@ -72,21 +69,22 @@
                     {
                         label: 'Link Name',
                         field: 'name',
-                        filterable: true,
+                        sortable: false,
                     },
                     {
                         label: '# of Files',
                         field: 'file_count',
-                        filterable: true,
+                        sortable: false,
                     },
                     {
                         label: 'Expire Date',
                         field: 'exp_format',
-                        filterable: true,
+                        sortable: false,
                     },
                     {
                         label: 'Actions',
-                        field: 'actions'
+                        field: 'actions',
+                        sortable: false,
                     }],
                     rows: []
                 }

@@ -17,6 +17,10 @@ use Carbon\Carbon;
 use Mail;
 use App\Mail\InitializeUser;
 
+use App\TechTips;
+use App\FileLinks;
+// use Carbon\Carbon;
+
 
 
 
@@ -31,27 +35,32 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
-
-
-
-        //  Get the users notifications
-//        $notifications = Auth::user()->unreadNotifications;
-
-        //  Get the Add-On Modules to list routes for
-//        $modules = Module::all();
-
         //  Get the users Customer bookmarks
-//        $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
-//            ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
-//            ->get();
+    //    $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
+    //        ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
+    //        ->get();
 //        //  Get the users Tech Tip bookmarks
 //        $tipFavs = TechTipFavs::where('tech_tip_favs.user_id', Auth::user()->user_id)
 //            ->LeftJoin('tech_tips', 'tech_tips.tip_id', '=', 'tech_tip_favs.tip_id')
 //            ->get();
 
+        $custFavs    = CustomerFavs::where('user_id', Auth::user()->user_id)->with('Customers')->get();
+        $tipFavs     = TechTipFavs::where('user_id', Auth::user()->user_id)->with('TechTips')->get();
+        $tips30Days  = TechTips::where('created_at', '>', Carbon::now()->subDays(30))->count();
+        $tipsTotal   = TechTips::all()->count();
+        $activeLinks = FileLinks::where('user_id', Auth::user()->user_id)->where('expire', '>', Carbon::now())->count();
+        $totalLinks  = FileLinks::where('user_id', Auth::user()->user_id)->count();
+
+
+        // return $tipFavs;
+
         return view('dashboard', [
-//            'custFavs' => $custFavs,
-//            'tipFavs'  => $tipFavs,
+           'custFavs'    => $custFavs,
+           'tipFavs'     => $tipFavs,
+           'tips30'      => $tips30Days,
+           'tipsAll'     => $tipsTotal,
+           'activeLinks' => $activeLinks,
+           'totalLinks'  => $totalLinks,
 //            'notifications' => $notifications->toArray(),
 //            'modules'       => $modules
         ]);
@@ -72,12 +81,26 @@ class DashboardController extends Controller
     //  Get the users notifications
     public function getNotifications()
     {
-        return Auth::user()->unreadNotifications->toJson();
+        return Auth::user()->notifications;
     }
 
+    //  Mark a notification as read
+    public function markNotification($id)
+    {
+        $notification = Auth::user()->notifications()->where('id', $id)->where('notifiable_id', Auth::user()->user_id)->first();
+        if(!$notification)
+        {
+            return abort(404);
+        }
+        $notification->markAsRead();
+
+        return response()->json(['success' => true]);
+    }
+
+    //  Deelte a user notification
     public function delNotification($id)
     {
-        $notification = Auth::user()->notifications()->where('id', $id)->first();
+        $notification = Auth::user()->notifications()->where('id', $id)->where('notifiable_id', Auth::user()->user_id)->first();
         if($notification)
         {
             $notification->delete();
@@ -85,6 +108,7 @@ class DashboardController extends Controller
         }
         else
         {
+            return abort(404);
             Log::notice('Notification ID-'.$id.' not found for user ID-'.Auth::user()->user_id);
         }
 

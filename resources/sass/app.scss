@@ -1,7 +1,7 @@
 @import 'template_files/style';
 @import 'toggle';
 @import 'fileDrag';
-// @import '~/vue-good-table/dist/vue-good-table.css';
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
 @import '~vue-good-table/dist/vue-good-table.css';
 @import '~vue-phone-number-input/dist/vue-phone-number-input.css';
 @import '~vue-multiselect/dist/vue-multiselect.min.css';
@@ -41,7 +41,7 @@
 
 .bigger-note {
     height: 60vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 //  Tech Tips
@@ -62,4 +62,38 @@
 
 .tip-description {
     min-height: 25vh;
+}
+
+.notification-wrapper {
+    height: 40vh;
+    overflow-y: scroll;
+    .notification-message {
+        &.unread {
+            font-weight: bold !important;
+        }
+    }
+}
+
+.bookmark-card {
+    background: #668cff;
+    // background: -moz-linear-gradient(#17a2b8, #49d3e9, #8ee4f1);
+    // background: -webkit-linear-gradient(#17a2b8, #49d3e9, #8ee4f1);
+    // background: linear-gradient(#17a2b8, #49d3e9, #8ee4f1);
+    border: none;
+
+    -webkit-box-shadow: 5px 5px #bceef6;
+       -moz-box-shadow: 5px 5px #bceef6;
+            box-shadow: 5px 5px #bceef6;
+    .card-body {
+        .card-body-icon {
+            position: absolute;
+            z-index: 0;
+            top: -25px;
+            right: -25px;
+            font-size: 5rem;
+            -webkit-transform: rotate(15deg);
+                -ms-transform: rotate(15deg);
+                    transform: rotate(15deg);
+        }
+    }
 }

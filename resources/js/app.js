@@ -67,6 +67,11 @@ Vue.mixin({
 Vue.component('go-back', require('./components/GoBack.vue').default);
 
 /*
+*   Dashboard and Template Components
+*/
+Vue.component('notification-dashboard', require('./components/NotificationDashboard.vue').default);
+
+/*
 *   Vue File Link Components
 */
 Vue.component('list-file-links',    require('./components/fileLinks/ListFileLinks.vue').default);

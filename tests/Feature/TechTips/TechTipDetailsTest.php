@@ -10,6 +10,7 @@ use App\TechTipSystems;
 use App\TechTipComments;
 use App\User;
 use App\UserPermissions;
+use Illuminate\Support\Facades\Notification;
 
 class TechTipDetailsTest extends TestCase
 {
@@ -66,6 +67,8 @@ class TechTipDetailsTest extends TestCase
     //  Try to comment on a tip
     public function test_comment_on_tip()
     {
+        Notification::fake();
+
         $data = [
             'tipID'   => $this->tip->tip_id,
             'comment' => 'This is a comment',
