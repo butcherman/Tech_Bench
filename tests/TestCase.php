@@ -7,7 +7,10 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 use App\User;
 // use App\UserLogins;
-use App\UserPermissions;
+use App\UserRoleType;
+// use App\UserPermissions;
+use App\UserRolePermissions;
+use App\UserRolePermissionTypes;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -19,24 +22,10 @@ abstract class TestCase extends BaseTestCase
     {
         $user = factory(User::class)->create(
             [
-                'is_installer' => 1
+                'role_id' => 1
             ]
         );
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 1,
-                'run_reports'         => 1,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 1,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 1,
-                'create_category'     => 1,
-                'modify_category'     => 1
-            ]
-        );
+
         return $user;
     }
 
@@ -44,21 +33,26 @@ abstract class TestCase extends BaseTestCase
     public function getTech()
     {
         $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 1,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
+
         return $user;
+    }
+
+    public function userWithoutPermission($permission)
+    {
+        $role = factory(UserRoleType::class)->create();
+        $permTypes = UserRolePermissionTypes::all();
+
+        foreach($permTypes as $perm)
+        {
+            UserRolePermissions::create([
+                'role_id'      => $role->role_id,
+                'perm_type_id' => $perm->perm_type_id,
+                'allow'        => $perm->description === $permission ? 0 : 1,
+            ]);
+        }
+
+        return factory(User::class)->create([
+            'role_id' => $role->role_id,
+        ]);
     }
 }

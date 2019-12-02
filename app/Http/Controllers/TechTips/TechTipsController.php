@@ -42,7 +42,6 @@ class TechTipsController extends Controller
         return view('tips.index', [
             'tipTypes' => $tipTypes,
             'sysTypes' => $sysList,
-            'canCreate' => $this->authorize('hasAccess', 'create_tech_tip') ? true : false
         ]);
     }
 
@@ -90,7 +89,7 @@ class TechTipsController extends Controller
     //  Process an image that is attached to a tech tip
     public function processImage(Request $request)
     {
-        $this->authorize('hasAccess', 'create_tech_tip');
+        $this->authorize('hasAccess', 'Create Tech Tip');
 
         $request->validate([
             'file' => 'mimes:jpeg,bmp,png,jpg,gif'
@@ -108,7 +107,7 @@ class TechTipsController extends Controller
     //  Create a new Tech Tip form
     public function create()
     {
-        $this->authorize('hasAccess', 'create_tech_tip');
+        $this->authorize('hasAccess', 'Create Tech Tip');
 
         $typesArr   = new TechTipTypesCollection(TechTipTypes::all());
         $systemsArr = new SystemCategoriesCollection(SystemCategories::with('SystemTypes')->get());
@@ -123,7 +122,7 @@ class TechTipsController extends Controller
     //  Submit the form to create a new tech tip
     public function store(Request $request)
     {
-        $this->authorize('hasAccess', 'create_tech_tip');
+        $this->authorize('hasAccess', 'Create Tech Tip');
 
         $request->validate([
             'subject'   => 'required',
@@ -167,7 +166,6 @@ class TechTipsController extends Controller
     //  Save a file attached to the link
     private function saveFile(UploadedFile $file, $id = '_tmp')
     {
-        // $folder = $id ? $id ? '_tmp';
         $filePath = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$id;
 
         //  Clean the file and store it
@@ -184,7 +182,6 @@ class TechTipsController extends Controller
         //  Save the file ID in the session array
         if($id === '_tmp')
         {
-
             $fileArr = session('newTipFile') != null ? session('newTipFile') : [];
             $fileArr[] = $fileID;
             session(['newTipFile' => $fileArr]);
@@ -321,7 +318,7 @@ class TechTipsController extends Controller
     //  Edit an existing tech tip
     public function edit($id)
     {
-        $this->authorize('hasAccess', 'edit_tech_tip');
+        $this->authorize('hasAccess', 'Edit Tech Tip');
         $tipData = TechTips::where('tip_id', $id)->with('User')->with('SystemTypes')->with('TechTipTypes')->first();
 
         if (!$tipData) {
@@ -344,7 +341,7 @@ class TechTipsController extends Controller
     //  Store the edited Tech Tip
     public function update(Request $request, $id)
     {
-        $this->authorize('hasAccess', 'edit_tech_tip');
+        $this->authorize('hasAccess', 'Edit Tech Tip');
 
         $request->validate([
             'subject'   => 'required',
@@ -386,7 +383,7 @@ class TechTipsController extends Controller
     //  Store the updated tip
     public function storeUpdatedTip($tipData, $id)
     {
-        $this->authorize('hasAccess', 'edit_tech_tip');
+        $this->authorize('hasAccess', 'Edit Tech Tip');
 
         //  Remove any forward slash (/) from the Subject Field
         $tipData->merge(['subject' => str_replace('/', '-', $tipData->subject)]);
@@ -444,7 +441,7 @@ class TechTipsController extends Controller
     //  Soft delet the Tech Tip
     public function destroy($id)
     {
-        $this->authorize('hasAccess', 'delete_tech_tip');
+        $this->authorize('hasAccess', 'Delete Tech Tip');
 
         TechTips::find($id)->delete();
         Log::warning('User - '.Auth::user()->user_id.' deleted Tech Tip ID - '.$id);

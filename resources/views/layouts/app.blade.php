@@ -82,7 +82,7 @@
                         </a>
                     </li>
                     @endcan
-                    @can('hasAccess', 'run_reports')
+                    @can('hasAccess', 'Run Reports')
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <i class="ti-pencil-alt menu-icon"></i>
@@ -90,7 +90,7 @@
                         </a>
                     </li>
                     @endcan
-                    @can('hasAccess', 'use_file_links')
+                    @can('hasAccess', 'Use File Links')
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('links.index')}}">
                             <i class="ti-link menu-icon"></i>

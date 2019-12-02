@@ -30,23 +30,7 @@ class NewTechTipTest extends TestCase
     //  Try to access the new tech tip page as user without permissions
     public function test_new_tip_page_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 0,
-                'edit_tech_tip'       => 0,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Create Tech Tip');
         $response = $this->actingAs($user)->get(route('tips.create'));
 
         $response->assertStatus(403);
@@ -87,28 +71,12 @@ class NewTechTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject' => $tipData->subject,
+            'subject'  => $tipData->subject,
             'eqipment' => [$systems->sys_id],
-            'tipType' => 1,
-            'tip' => $tipData->description
+            'tipType'  => 1,
+            'tip'      => $tipData->description
         ];
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 0,
-                'edit_tech_tip'       => 0,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Create Tech Tip');
         $response = $this->actingAs($user)->post(route('tips.store'), $data);
 
         $response->assertStatus(403);
@@ -278,22 +246,7 @@ class NewTechTipTest extends TestCase
         $data = [
             'file' => $file = UploadedFile::fake()->image($fileName)
         ];
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 0,
-                'edit_tech_tip'       => 0,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]);
-
+        $user     = $this->userWithoutPermission('Create Tech Tip');
         $response = $this->actingAs($user)->post(route('tip.processImage'), $data);
 
         $response->assertStatus(403);

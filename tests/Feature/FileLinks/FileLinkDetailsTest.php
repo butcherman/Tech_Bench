@@ -47,23 +47,7 @@ class FileLinkDetailsTest extends TestCase
     //  Visit details page as a tech that does not have access
     public function test_details_page_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->get(route('links.details', [$this->link->link_id, $this->link->link_name]));
 
         $response->assertStatus(403);
@@ -100,23 +84,7 @@ class FileLinkDetailsTest extends TestCase
     //  Try to pull JSON details of link without permissions
     public function test_get_link_details_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->get(route('links.data.show', $this->link->link_id));
 
         $response->assertStatus(403);
@@ -165,22 +133,7 @@ class FileLinkDetailsTest extends TestCase
     //  Try to update the link details as user wihtout permissions
     public function test_update_link_details_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
+        $user     = $this->userWithoutPermission('Use File Links');
         $data = [
             'name'            => 'Updated Link Name',
             'expire'          => date('Y-m-d', strtotime('+90 days')),
@@ -259,23 +212,7 @@ class FileLinkDetailsTest extends TestCase
     //  Try to delete a link as a user without permissions
     public function test_delete_link_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->delete(route('links.data.destroy', $this->link->link_id));
 
         $response->assertStatus(403);
@@ -306,30 +243,14 @@ class FileLinkDetailsTest extends TestCase
     //  Tst trying to get file link files wihtout permissions
     public function test_get_files_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->get(route('links.files.show', $this->link->link_id));
 
         $response->assertStatus(403);
     }
 
     //  Test trying to get the file link files as a valid user
-    public function test_get_files()
+    public function test_get_file_link_files()
     {
         $response = $this->actingAs($this->tech)->get(route('links.files.show', $this->link->link_id));
 
@@ -357,23 +278,7 @@ class FileLinkDetailsTest extends TestCase
     //  Try to add a file to the link without permissions
     public function test_add_file_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         Storage::fake(config('filesystems.paths.links'));
         $data = [
             'linkID' => $this->link->link_id,
@@ -416,23 +321,7 @@ class FileLinkDetailsTest extends TestCase
     //  Try to delete a file without permissions
     public function test_delete_file_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->delete(route('links.files.destroy', $this->file[0]->link_file_id));
 
         $response->assertStatus(403);

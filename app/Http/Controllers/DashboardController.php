@@ -21,7 +21,12 @@ use App\TechTips;
 use App\FileLinks;
 // use Carbon\Carbon;
 
-
+use App\User;
+use App\UserRolePermissions;
+use App\UserRoles;
+use App\UserRolePermissionTypes;
+// use App\TechTips;
+use App\SystemTypes;
 
 
 class DashboardController extends Controller
@@ -35,24 +40,12 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
-        //  Get the users Customer bookmarks
-    //    $custFavs = CustomerFavs::where('user_id', Auth::user()->user_id)
-    //        ->LeftJoin('customers', 'customer_favs.cust_id', '=', 'customers.cust_id')
-    //        ->get();
-//        //  Get the users Tech Tip bookmarks
-//        $tipFavs = TechTipFavs::where('tech_tip_favs.user_id', Auth::user()->user_id)
-//            ->LeftJoin('tech_tips', 'tech_tips.tip_id', '=', 'tech_tip_favs.tip_id')
-//            ->get();
-
         $custFavs    = CustomerFavs::where('user_id', Auth::user()->user_id)->with('Customers')->get();
         $tipFavs     = TechTipFavs::where('user_id', Auth::user()->user_id)->with('TechTips')->get();
         $tips30Days  = TechTips::where('created_at', '>', Carbon::now()->subDays(30))->count();
         $tipsTotal   = TechTips::all()->count();
         $activeLinks = FileLinks::where('user_id', Auth::user()->user_id)->where('expire', '>', Carbon::now())->count();
         $totalLinks  = FileLinks::where('user_id', Auth::user()->user_id)->count();
-
-
-        // return $tipFavs;
 
         return view('dashboard', [
            'custFavs'    => $custFavs,
@@ -61,7 +54,6 @@ class DashboardController extends Controller
            'tipsAll'     => $tipsTotal,
            'activeLinks' => $activeLinks,
            'totalLinks'  => $totalLinks,
-//            'notifications' => $notifications->toArray(),
 //            'modules'       => $modules
         ]);
     }

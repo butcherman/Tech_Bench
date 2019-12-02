@@ -14,7 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active', 'is_installer'];
+    protected $fillable = ['role_id', 'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active'];
     protected $hidden = ['password', 'remember_token', 'is_installer', 'active', 'created_at', 'password_expires', 'updated_at', 'user_id', 'username'];
     //  Database primary key
     protected $primaryKey = 'user_id';
@@ -31,13 +31,18 @@ class User extends Authenticatable
     //     return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
     // }
 
-    public function UserPermissions()
-    {
-        return $this->hasOne('App\UserPermissions', 'user_id', 'user_id');
-    }
+    // public function UserPermissions()
+    // {
+    //     return $this->hasOne('App\UserPermissions', 'user_id', 'user_id');
+    // }
 
     public function UserSettings()
     {
         return $this->hasOne('App\UserSettings', 'user_id', 'user_id');
     }
+
+    // public function UserRolePermissions()
+    // {
+    //     return $this->hasManyThrough('App\UserRolePermissions', 'App\UserRoles', 'user_id', 'role_id', 'user_id', 'role_id');
+    // }
 }

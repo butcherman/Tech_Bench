@@ -24,29 +24,14 @@ class NewCustomerTest extends TestCase
     //  Verify that a user that does not have permissions cannot see page
     public function test_user_access_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 0,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
+        $user     = $this->userWithoutPermission('Add Customer');
         $response = $this->actingAs($user)->get(route('customer.id.create'));
 
         $response->assertStatus(403);
     }
 
     //  Verify that a logged in tech can visit the page
-    public function test_user_access()
+    public function test_add_customer_user_access()
     {
         $user = $this->getTech();
 
@@ -81,22 +66,7 @@ class NewCustomerTest extends TestCase
     //  Verify that a user without permissions cannot submit a new customer
     public function test_submit_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 0,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
+        $user     = $this->userWithoutPermission('Add Customer');
         $custData = factory(Customers::class)->make();
 
         $data = [

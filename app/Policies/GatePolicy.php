@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\User;
-use App\UserPermissions;
+use App\UserRolePermissions;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class GatePolicy
@@ -23,7 +23,9 @@ class GatePolicy
     //  Determine if the user is a Installer/Super Admin
     public function isInstaller(User $user)
     {
-        if($user->is_installer)
+        $role = User::find($user->user_id);
+
+        if($role->role_id == 1)
         {
             return true;
         }
@@ -34,18 +36,22 @@ class GatePolicy
     //  Determine if a user can see the Administration Nav Link
     public function seeAdminLink(User $user)
     {
-        $permissions = UserPermissions::find($user->user_id);
-
-        if($this->isInstaller($user))
-        {
-            return true;
-        }
-        else if($permissions->manage_users || $permissions->create_category || $permissions->modify_category)
+        if ($this->isInstaller($user))
         {
             return true;
         }
 
-        return false;
+        $data = UserRolePermissions::with('UserRolePermissionTypes')
+            ->whereHas('UserRolePermissionTypes', function ($query) {
+                $query->where('description', 'Manage Users')
+                    ->orWhere('description', 'Modify Category')
+                    ->orWhere('description', 'Create Category');
+            })
+            ->where('role_id', $user->user_id)
+            ->where('allow', 1)
+            ->get();
+
+        return  $data->isEmpty() ? false : true;
     }
 
     //  Determine if a user has permissions for a task
@@ -57,8 +63,17 @@ class GatePolicy
             return true;
         }
 
-        $permissions = UserPermissions::select($task)->where('user_id', $user->user_id)->first();
+        $data = UserRolePermissions::with('UserRolePermissionTypes')
+            ->whereHas('UserRolePermissionTypes', function ($query) use ($task) {
+                $query->where('description', $task);
+            })
+            ->where('role_id', $user->role_id)
+            ->where('allow', 1)
+            ->get();
 
-        return $permissions->$task;
+        $allow = $data->isEmpty() ? 'false' : 'true';
+        \Log::debug('User '.$user->full_name.' is trying to access '.$task.'.  Result - ' . $allow);
+
+        return  $data->isEmpty() ? false : true;
     }
 }

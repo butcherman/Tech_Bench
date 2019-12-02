@@ -12,6 +12,7 @@ use App\PhoneNumberTypes;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\UserRoles;
 
 class UpdatesForVersion50 extends Migration
 {
@@ -27,16 +28,15 @@ class UpdatesForVersion50 extends Migration
         $this->updatePhoneIcons();
         $this->modifySystemDataTableNames();
         $this->migrateSystemDocumentation();
+        $this->migrateUserRoles();
 
         //  DB Adds
         $this->addSoftDeleteToCustomerSystems();
         $this->addSoftDeleteToTechTips();
         $this->addPasswordExpiresColumn();
-        $this->addIsInstallerToUsers();
         $this->addHiddenColumn();
         $this->addColumnsToFileLinksTable();
         $this->addNotesColumnToFileLinkFiles();
-        // $this->addDocumentationColumnToTechTips();
 
         //  Remove Unneeded Tables
         $this->removeNavBarView();
@@ -92,63 +92,25 @@ class UpdatesForVersion50 extends Migration
     }
 
     //  Add the is installer column to the users table
-    private function addIsInstallerToUsers()
+    private function migrateUserRoles()
     {
-        if(!Schema::hasColumn('users', 'is_installer'))
+        if(Schema::hasTable('user_role'))
         {
-            //  Add the is installer column
-            Schema::table('users', function(Blueprint $table) {
-                $table->boolean('is_installer')->default(0)->after('active');
-            });
-            //  Make user id 1 the installer user
-            User::find(1)->update(['is_installer' => 1]);
-            //  default permissions to be used for remaining users
-            $defaultPermissions =
-            [
-                'user_id'             => null,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 0,
-                'use_file_links'      => 1,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 0,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ];
-
-            $userRoles = DB::select('SELECT * FROM `user_role` LEFT JOIN `roles` ON `user_role`.`role_id` = `roles`.`role_id`');
-            $permissions = UserPermissions::all();
-
-            //  Cycle thorugh all users and assign proper permissions
-            foreach($userRoles as $user)
+            if(!Schema::hasColumn('users', 'role_id'))
             {
-                $userPerm = $defaultPermissions;
-                if(!$permissions->contains($user->user_id))
-                {
-                    switch($user->name)
-                    {
-                        //  Fallthrough is intended, modifications will be picked up top-down
-                        case 'Installer':
-                            User::find($user->user_id)->update(['is_installer' => 1]);
-                            /* FALLTHROUGH */
-                        case 'Admin':
-                            $userPerm['manage_users']        = 1;
-                            $userPerm['deactivate_customer'] = 1;
-                            $userPerm['edit_tech_tip']       = 1;
-                            $userPerm['delete_tech_tip']     = 1;
-                            $userPerm['create_category']     = 1;
-                            $userPerm['modify_category']     = 1;
-                            /* FALLTHROUGH */
-                        case 'Report':
-                            $userPerm['run_reports']         = 1;
-                            /* FALLTHROUGH */
-                        default:
-                            $userPerm['user_id']             = $user->user_id;
-                    }
-                    UserPermissions::create($userPerm);
-                }
+                Schema::table('users', function (Blueprint $table) {
+                    $table->integer('role_id')->after('user_id')->unsigned()->default(4);
+                    $table->foreign('role_id')->references('role_id')->on('user_role_descriptions')->onUpdate('cascade');
+                });
+            }
+
+            $roleData = DB::select('SELECT * FROM `user_role`');
+
+            foreach($roleData as $data)
+            {
+                User::where('user_id', $data->user_id)->update([
+                    'role_id' => $data->role_id,
+                ]);
             }
         }
     }

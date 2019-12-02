@@ -54,23 +54,7 @@ class FileLinksIndexTest extends TestCase
     //  Test visit index page as user without permissions
     public function test_index_page_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->get(route('links.index'));
 
         $response->assertStatus(403);
@@ -79,23 +63,7 @@ class FileLinksIndexTest extends TestCase
     //  Test JSON call to get the file links as registered user without permissions
     public function test_get_links_of_another_user_as_manager()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->get(route('links.user', [0]));
 
         $response->assertStatus(403);
@@ -154,25 +122,9 @@ class FileLinksIndexTest extends TestCase
     }
 
     //  Test JSON call to get the file links of another user as a manager
-    public function test_get_links_no_permissions()
+    public function test_get_links_of_user_as_manager()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 1,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 1,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->getInstaller();
         $response = $this->actingAs($user)->get(route('links.user', $this->tech));
 
         $response->assertSuccessful();
@@ -205,23 +157,7 @@ class FileLinksIndexTest extends TestCase
     //  Test trying to disable a link without permissions
     public function test_disable_link_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 1,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->get(route('links.disable', $this->links[1]->link_id));
 
         $response->assertStatus(403);

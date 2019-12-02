@@ -12,7 +12,7 @@
             <div class="card-body">
                 <customer-list
                     :system_types="{{json_encode($sysTypes)}}"
-                @can('hasAccess', 'add_customer')
+                @can('hasAccess', 'Add Customer')
                     allow_create="true"
                 @endcan
                 ></customer-list>

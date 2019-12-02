@@ -62,22 +62,7 @@ class GuestFileLinksTest extends TestCase
     //  Even a user that does not have permissions should be able to access this page
     public function test_guest_page_access_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 1,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
+        $user     = $this->userWithoutPermission('Use File Links');
         $result = $this->actingAs($user)->get(route('file-links.show', $this->link->link_hash));
 
         $result->assertSuccessful();
@@ -144,22 +129,7 @@ class GuestFileLinksTest extends TestCase
     //  Even a user that does not have permissions should be able to get files
     public function test_files_page_access_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 1,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
+        $user     = $this->userWithoutPermission('Use File Links');
         $result = $this->actingAs($user)->get(route('file-links.getFiles', $this->link->link_hash));
 
         $result->assertSuccessful();
@@ -205,23 +175,7 @@ class GuestFileLinksTest extends TestCase
     //  Test adding a new file as a user that does not have permissions
     public function test_adding_file_as_user_no_permissions()
     {
-        Storage::fake(config('filesystems.paths.links'));
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 1,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
+        $user     = $this->userWithoutPermission('Use File Links');
         $imgName = Str::random(5) . '.jpg';
         $data = [
             'name' => 'Billy Bob',

@@ -24,7 +24,7 @@ class CustomerDetailsController extends Controller
     //  New Customer Form
     public function create()
     {
-        $this->authorize('hasAccess', 'add_customer');
+        $this->authorize('hasAccess', 'Add Customer');
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('customer.newCustomer');
@@ -33,7 +33,7 @@ class CustomerDetailsController extends Controller
     //  Submit the new customer form
     public function store(Request $request)
     {
-        $this->authorize('hasAccess', 'add_customer');
+        $this->authorize('hasAccess', 'Add Customer');
 
         $request->validate([
             'cust_id'  => 'required|numeric|unique:customers,cust_id',
@@ -119,7 +119,7 @@ class CustomerDetailsController extends Controller
     //  Deactivate a customer - note this will not remove it from the database, but make it inaccessable
     public function destroy($id)
     {
-        $this->authorize('hasAccess', 'deactivate_customer');
+        $this->authorize('hasAccess', 'Deactivate Customer');
         Customers::destroy($id);
 
         Log::notice('User - '.Auth::user()->user_id.' has deactivated Customer ID '.$id);

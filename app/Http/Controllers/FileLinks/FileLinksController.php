@@ -33,7 +33,7 @@ class FileLinksController extends Controller
         $this->middleware('auth');
         $this->middleware(function($request, $next) {
             $this->user = auth()->user();
-            $this->authorize('hasAccess', 'use_file_links');
+            $this->authorize('hasAccess', 'Use File Links');
             return $next($request);
         });
     }

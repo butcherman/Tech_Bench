@@ -49,23 +49,7 @@ class NewFileLinkTest extends TestCase
     //  Test visit New Link page as user without permissions
     public function test_visit_page_no_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
-
+        $user     = $this->userWithoutPermission('Use File Links');
         $response = $this->actingAs($user)->get(route('links.data.create'));
 
         $response->assertStatus(403);
@@ -168,22 +152,7 @@ class NewFileLinkTest extends TestCase
     //  Test submitting link without permissions
     public function test_submit_link_without_permissions()
     {
-        $user = factory(User::class)->create();
-        factory(UserPermissions::class)->create(
-            [
-                'user_id'             => $user->user_id,
-                'manage_users'        => 0,
-                'run_reports'         => 0,
-                'add_customer'        => 1,
-                'deactivate_customer' => 1,
-                'use_file_links'      => 0,
-                'create_tech_tip'     => 1,
-                'edit_tech_tip'       => 1,
-                'delete_tech_tip'     => 0,
-                'create_category'     => 0,
-                'modify_category'     => 0
-            ]
-        );
+        $user     = $this->userWithoutPermission('Use File Links');
         $data = [
             'name'   => 'Test File Link',
             'expire' => date('Y-m-d', strtotime('+30 days')),

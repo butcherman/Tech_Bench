@@ -23,7 +23,6 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->boolean('active');
-            $table->boolean('is_installer')->default(0);
             $table->timestamp('password_expires')->nullable();
             $table->timestamps();
         });
@@ -37,7 +36,6 @@ class CreateUsersTable extends Migration
             'email'        => 'admin@em.com',
             'password'     => bcrypt('password'),
             'active'       => 1,
-           'is_installer' => 1
         ]);
     }
 
