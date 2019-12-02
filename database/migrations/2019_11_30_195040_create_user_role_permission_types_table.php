@@ -24,16 +24,16 @@ class CreateUserRolePermissionTypesTable extends Migration
         //  Insert default data
         DB::table('user_role_permission_types')->insert([
             ['perm_type_id' => 1,  'description' => 'Manage Users',        'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 2,  'description' => 'Run Reports',         'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 3,  'description' => 'Add Customer',        'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 4,  'description' => 'Deactivate Customer', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 5,  'description' => 'Use File Links',      'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 6,  'description' => 'Create Tech Tip',     'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 7,  'description' => 'Edit Tech Tip',       'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 8,  'description' => 'Delete Tech Tip',     'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 9,  'description' => 'Create Category',     'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 10, 'description' => 'Modify Category',     'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['perm_type_id' => 11, 'description' => 'Modify User Roles',   'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 2,  'description' => 'Manage User Roles',   'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 3,  'description' => 'Run Reports',         'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 4,  'description' => 'Add Customer',        'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 5,  'description' => 'Manage Customers',    'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 6,  'description' => 'Deactivate Customer', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 7,  'description' => 'Use File Links',      'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 8,  'description' => 'Create Tech Tip',     'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 9,  'description' => 'Edit Tech Tip',       'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 10, 'description' => 'Delete Tech Tip',     'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['perm_type_id' => 11, 'description' => 'Manage Equipment',    'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ]);
     }
 

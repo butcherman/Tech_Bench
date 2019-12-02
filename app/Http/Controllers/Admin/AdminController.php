@@ -16,27 +16,38 @@ class AdminController extends Controller
         //  Only Authorized users with specific admin permissions are allowed
         $this->middleware(['auth', 'can:allow_admin']);
     }
-    
+
     //  Admin landing page
     public function index()
     {
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('admin.index');
     }
-    
+
+
+
+
+
+
+
+
+
+
+
+
     //  Display all file links
     public function userLinks()
     {
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('admin.userLinks');
     }
-    
+
     //  Get the number of links for each user
     public function countLinks()
     {
         $userLinks = User::with('FileLinks')->get();
         $linkCount = [];
-        
+
         foreach($userLinks as $user)
         {
             $expired = $user->FileLinks->filter(function($lnk) {
@@ -53,18 +64,18 @@ class AdminController extends Controller
                 'expired' => $expired
             ];
         }
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Link Count', $linkCount);
         return response()->json($linkCount);
     }
-    
+
     //  Show the links for the selected user
     public function showLinks($id)
     {
         $user     = User::find($id);
         $userName = $user->first_name.' '.$user->last_name;
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('admin.linkDetails', [
             'userID' => $id,

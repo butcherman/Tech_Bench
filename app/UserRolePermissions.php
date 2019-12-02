@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserRolePermissions extends Model
 {
     //
-    protected $fillable = ['perm_type_id', 'role_id'];
+    protected $fillable = ['perm_type_id', 'role_id', 'allow'];
 
     public function UserRolePermissionTypes()
     {

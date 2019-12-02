@@ -44,12 +44,16 @@ class GatePolicy
         $data = UserRolePermissions::with('UserRolePermissionTypes')
             ->whereHas('UserRolePermissionTypes', function ($query) {
                 $query->where('description', 'Manage Users')
-                    ->orWhere('description', 'Modify Category')
-                    ->orWhere('description', 'Create Category');
+                    ->orWhere('description', 'Manage User Roles')
+                    ->orWhere('description', 'Manage Customers')
+                    ->orWhere('description', 'Manage Equipment');
             })
-            ->where('role_id', $user->user_id)
+            ->where('role_id', $user->role_id)
             ->where('allow', 1)
             ->get();
+
+        $allow = $data->isEmpty() ? 'false' : 'true';
+        \Log::debug('User ' . $user->full_name . ' is trying to access admin link.  Result - ' . $allow);
 
         return  $data->isEmpty() ? false : true;
     }

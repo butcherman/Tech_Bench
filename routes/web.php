@@ -102,6 +102,38 @@ Route::prefix('tip')->name('tip.')->group(function()
     Route::get('download-tip/{id}',           'DownloadController@downloadTechTip')      ->name('downloadTip');
 });
 
+/*
+    *   Administration Routes
+*/
+Route::prefix('admin')->name('admin.')->group(function () {
+
+
+
+
+
+    //  Admin index route
+    Route::get('/', 'Admin\AdminController@index')->name('index');
+
+
+
+
+
+
+    //  Admin User File Links routes
+    // Route::get('links/show/{id}', 'Admin\AdminController@showLinks')->name('userLinks');
+    // Route::get('count-links', 'Admin\AdminController@countLinks')->name('countLinks');
+    // Route::get('links', 'Admin\AdminController@userLinks')->name('links');
+
+    // //  Admin User routes
+    // Route::get('user/confirm/{id}', 'Admin\UserController@confirm')->name('confirmDisable');
+    // Route::get('user/disable', 'Admin\UserController@disable')->name('disable');
+    // Route::get('user/change-password/{id}', 'Admin\UserController@changePassword')->name('changePassword');
+    // Route::post('user/change-password/{id}', 'Admin\UserController@submitPassword')->name('changePassword');
+    // Route::get('user/password', 'Admin\UserController@passwordList')->name('password');
+    // Route::resource('user', 'Admin\UserController');
+
+});
+//    });
 
 
 
@@ -115,23 +147,6 @@ Route::prefix('tip')->name('tip.')->group(function()
 
 
 
-
-
-
-
-
-
-
-//        Route::prefix('tip')->name('tip.')->group(function(){
-//            Route::get('/', 'TechTips\TechTipsController@index')->name('index');
-//            Route::resource('id', 'TechTips\TechTipsController');
-//        });
-
-// Route::prefix('tips')->name('tips.')->group(function ()
-// {
-    // Route::get('tips/{id}/{subject}', 'TechTips\TechTipsController@details')->name('tips.details');
-//     Route::get('/', 'TechTips\TechTipsController@index');
-// });
 
 
 /*
@@ -144,35 +159,8 @@ Route::prefix('tip')->name('tip.')->group(function()
 
 
 
-/*
-*
-*   User Change Password Routes
-*
-*/
 
 
-/*
-*
-*   Logged in user routes
-*
-*/
-//Route::middleware(['password_expired'])->group(function() {
-
-    /*
-    *
-    *   Routes for users with "tech" permissions
-    *
-    */
-//    Route::group(['middleware' => 'roles', 'roles' => ['tech', 'report', 'admin', 'installer']], function() {
-
-        /*
-        *
-        *   Dashboard and About page routes
-        *
-        */
-
-        Route::get('get-notifications', 'DashboardController@getNotifications')->name('get-notifications');
-        Route::get('del-notification/{id}', 'DashboardController@delNotification')->name('del-notification');
 
 
 
@@ -201,30 +189,6 @@ Route::prefix('tip')->name('tip.')->group(function()
 
 //    });
 
-    /*
-    *
-    *   Administration Routes
-    *
-    */
-//    Route::group(['middleware' => 'can:allow_admin'], function() {
-        Route::prefix('admin')->name('admin.')->group(function() {
-            //  Admin User File Links routes
-            Route::get('links/show/{id}', 'Admin\AdminController@showLinks')->name('userLinks');
-            Route::get('count-links', 'Admin\AdminController@countLinks')->name('countLinks');
-            Route::get('links', 'Admin\AdminController@userLinks')->name('links');
-
-            //  Admin User routes
-            Route::get('user/confirm/{id}', 'Admin\UserController@confirm')->name('confirmDisable');
-            Route::get('user/disable', 'Admin\UserController@disable')->name('disable');
-            Route::get('user/change-password/{id}', 'Admin\UserController@changePassword')->name('changePassword');
-            Route::post('user/change-password/{id}', 'Admin\UserController@submitPassword')->name('changePassword');
-            Route::get('user/password', 'Admin\UserController@passwordList')->name('password');
-            Route::resource('user', 'Admin\UserController');
-
-            //  Admin index route
-            Route::get('/', 'Admin\AdminController@index')->name('index');
-        });
-//    });
 
     /*
     *
@@ -232,22 +196,22 @@ Route::prefix('tip')->name('tip.')->group(function()
     *
     */
 //    Route::group(['middleware' => 'can:isInstaller'], function() {
-        Route::prefix('installer')->name('installer.')->group(function() {
-            //  User Settings
-            Route::get('user-security-settings', 'Installer\SettingsController@userSecurity')->name('userSecurity');
-            Route::post('user-security-settings', 'Installer\SettingsController@submitUserSecurity')->name('userSecurity');
+        // Route::prefix('installer')->name('installer.')->group(function() {
+        //     //  User Settings
+        //     Route::get('user-security-settings', 'Installer\SettingsController@userSecurity')->name('userSecurity');
+        //     Route::post('user-security-settings', 'Installer\SettingsController@submitUserSecurity')->name('userSecurity');
 
-            //  System custionization settings
-            Route::get('system-customization', 'Installer\SettingsController@customizeSystem')->name('customize');
-            Route::post('system-customization', 'Installer\SettingsController@submitCustomizeSystem')->name('customize');
-            Route::post('new-logo', 'Installer\SettingsController@submitLogo')->name('submitLogo');
-            Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
-            Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
-            Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
+        //     //  System custionization settings
+        //     Route::get('system-customization', 'Installer\SettingsController@customizeSystem')->name('customize');
+        //     Route::post('system-customization', 'Installer\SettingsController@submitCustomizeSystem')->name('customize');
+        //     Route::post('new-logo', 'Installer\SettingsController@submitLogo')->name('submitLogo');
+        //     Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
+        //     Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
+        //     Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
 
-            //  Categories and Systems settings
-            Route::resource('categories', 'Installer\CategoriesController');
-            Route::resource('systems', 'Installer\SystemsController');
-        });
+        //     //  Categories and Systems settings
+        //     Route::resource('categories', 'Installer\CategoriesController');
+        //     Route::resource('systems', 'Installer\SystemsController');
+        // });
 //    });
 //});

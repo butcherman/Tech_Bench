@@ -83,12 +83,12 @@
                     </li>
                     @endcan
                     @can('hasAccess', 'Run Reports')
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="#">
                             <i class="ti-pencil-alt menu-icon"></i>
                             <span class="menu-title">Reports</span>
                         </a>
-                    </li>
+                    </li> --}}
                     @endcan
                     @can('hasAccess', 'Use File Links')
                     <li class="nav-item">
