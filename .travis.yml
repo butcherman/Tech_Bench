@@ -43,5 +43,8 @@ script:
     - php vendor/bin/phpunit --coverage-clover=coverage.clover
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+after_failure:
+  - cat /home/travis/build/butcherman/Tech_Bench/storage/logs/TechBench.log
