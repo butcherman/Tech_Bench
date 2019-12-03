@@ -12,6 +12,12 @@ Route::get('/',         'Auth\LoginController@showLoginForm')->name('index');
 Route::get('logout',    'Auth\LoginController@logout')       ->name('logout');
 Route::get('no-script', 'Controller@noScript')               ->name('noscript');
 
+
+
+//  TODO - finishe setting these up
+Route::get('/finish-setup/{hash}', 'AccountController@initializeUser')->name('initialize');
+Route::post('/finish-setup/{hash}', 'AccountController@submitInitializeUser')->name('initialize');
+
 /*
 *   Download File Routes
 */
@@ -110,7 +116,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-    Route::get('check-username/{name}/{type}', 'Admin\UserController@checkUser')->name('checkUser');
+    Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')->name('checkUser');
     Route::resource('user', 'Admin\UserController');
 
     //  Admin index route

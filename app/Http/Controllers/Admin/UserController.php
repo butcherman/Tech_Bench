@@ -16,15 +16,23 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NewUserEmail;
 
 use App\UserRoleType;
 
 class UserController extends Controller
 {
+    private $user;
     //  Constructor sets up middleware
     public function __construct()
     {
         $this->middleware('auth')->except('initializeUser', 'submitInitializeUser');
+        $this->middleware(function ($request, $next) {
+            $this->user = auth()->user();  //  TODO - is this correct????
+            $this->authorize('hasAccess', 'Manage Users');
+            return $next($request);
+        });
     }
 
     //  Show the list of current users to edit
@@ -90,6 +98,7 @@ class UserController extends Controller
     {
         //  Validate the new user form
         $request->validate([
+            'role'       => 'required|numeric',  //  TODO - add validation rule - is in user roles table
             'username'   => 'required|unique:users|regex:/^[a-zA-Z0-9_]*$/',
             'first_name' => 'required',
             'last_name'  => 'required',
@@ -98,6 +107,7 @@ class UserController extends Controller
 
         //  Create the user
         $newUser = User::create([
+            'role_id'    => $request->role,
             'username'   => $request->username,
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
@@ -108,9 +118,6 @@ class UserController extends Controller
 
         $userID = $newUser->user_id;
 
-        //  Assign the users role
-        DB::insert('INSERT INTO `user_role` (`user_id`, `role_id`) VALUES (?, ?)', [$userID, $request->role]);
-
         //  Create the setup user link
         $hash = strtolower(Str::random(30));
         UserInitialize::create([
@@ -119,80 +126,38 @@ class UserController extends Controller
         ]);
 
         //  Email the new user
-        Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
+        // Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
+        Notification::send($newUser, new NewUserEmail($newUser, $hash));
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('User Data - ', $newUser->toArray());
         Log::notice('New User ID-'.$userID.' Created by ID-'.Auth::user()->user_id);
 
-        return redirect()->back()->with('success', 'New User Created');
+        // return redirect()->back()->with('success', 'New User Created');
+        return response()->json(['success' => true]);
     }
 
-    //  Bring up the "Finish User Setup" form
-    public function initializeUser($hash)
-    {
-        $this->middleware('guest');
 
-        //  Validate the hash token
-        $user = UserInitialize::where('token', $hash)->get();
 
-        if($user->isEmpty())
-        {
-            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-            Log::warning('Visitor at IP Address '.\Request::ip().' tried to access invalid initialize hash - '.$hash);
-            return abort(404);
-        }
 
-        Log::debug('Route '.Route::currentRouteName().' visited.');
-        Log::debug('Link Hash -'.$hash);
-        return view('account.initializeUser', ['hash' => $hash]);
-    }
 
-    //  Submit the initialize user form
-    public function submitInitializeUser(Request $request, $hash)
-    {
-        //  Verify that the link matches the assigned email address
-        $valid = UserInitialize::where('token', $hash)->first();
-        if(empty($valid))
-        {
-            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-            Log::warning('Visitor at IP Address '.\Request::ip().' tried to submit an invalid User Initialization link - '.$hash);
-            return abort(404);
-        }
 
-        //  Validate the form
-        $request->validate([
-            'username' => [
-                'required',
-                Rule::in([$valid->username]),
-            ],
-            'newPass'  => 'required|string|min:6|confirmed'
-        ]);
 
-        //  Get the users information
-        $userData = User::where('username', $valid->username)->first();
 
-        $nextChange = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
 
-            //  Update the password
-        User::find($userData->user_id)->update(
-        [
-            'password'         => bcrypt($request->newPass),
-            'password_expires' => $nextChange
-        ]);
 
-        //  Remove the initialize instance
-        UserInitialize::find($valid->id)->delete();
 
-        //  Log in the user
-        Auth::loginUsingID($userData->user_id);
 
-        //  Redirect the user to the dashboard
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Initialize Data - '.$request->toArray());
-        Log::notice('User has setup account', ['user_id' => $userData->user_id]);
-        return redirect(route('dashboard'));
-    }
+
+
+
+
+
+
+
+
+
+
 
     //  List all active or inactive users
     public function show($type)

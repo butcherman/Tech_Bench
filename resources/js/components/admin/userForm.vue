@@ -1,5 +1,10 @@
 <template>
     <b-form @submit="validateForm" novalidate :validated="validated" ref="userForm">
+        <div class="row justify-content-center" v-show="success">
+            <div class="col-md-8">
+                <b-alert variant="success" class="text-center" show><h3>User Created Successfully</h3></b-alert>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <b-form-group label="Username:" label-for="username">
@@ -86,12 +91,12 @@
 <script>
 export default {
     props: [
-        'edit_user',
         'role_list',
     ],
     data() {
         return {
             validated: false,
+            success: false,
             form: {
                 username:   '',
                 email:      '',
@@ -117,7 +122,7 @@ export default {
         }
     },
     created() {
-        console.log(this.role_list);
+        // console.log(this.role_list);
     },
     methods: {
         validateForm(e)
@@ -131,51 +136,65 @@ export default {
             else
             {
                 console.log('good to go');
-            }
-        },
-        checkUsername()
-        {
-            if(this.form.username)
-            {
-                console.log(this.form.username);
-                this.loading.username = true;
-                axios.get(this.route('admin.checkUser', [this.form.username, 'username']))
+                this.button.disable = true;
+                this.button.text    = 'Processing...';
+                axios.post(this.route('admin.user.store'), this.form)
                     .then(res => {
                         console.log(res);
-                        this.loading.username = false;
-                        if(res.data.duplicate)
+                        if(res.data.success)
                         {
-                            this.error.username = 'This username is taken by '+res.data.user;
-                            // if(res.data.active)
-                            // {
-                                // this.error.username.appendChild(' Note - this user has been deactivated');
-                            // }
-                            this.error.bool.username = false;
-                        }
-                        else
-                        {
-                            this.error.bool.username = true;
+                            //
+                            this.resetForm();
+                            this.success = true;
                         }
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             }
         },
+        checkUsername()
+        {
+            this.success = false;
+            if(this.form.username)
+            {
+                if(!/^[0-9A-Z]*$/i.test(this.form.username))
+                {
+                    this.error.bool.username = false;
+                    this.error.username = 'Username can only contain letters and numbers';
+                }
+                else
+                {
+                    this.loading.username = true;
+                    axios.get(this.route('admin.checkUser', [this.form.username, 'username']))
+                        .then(res => {
+                            this.loading.username = false;
+                            if(res.data.duplicate)
+                            {
+                                this.error.username = 'This username is taken by '+res.data.user+'.';
+                                if(res.data.active == 0)
+                                {
+                                    this.error.username = this.error.username+'  Note - this user has been deactivated';
+                                }
+                                this.error.bool.username = false;
+                            }
+                            else
+                            {
+                                this.error.bool.username = true;
+                            }
+                        }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                }
+            }
+        },
         checkEmail()
         {
+            this.success = false;
             if(this.form.email)
             {
-                console.log(this.form.email);
                 this.loading.email = true;
                 axios.get(this.route('admin.checkUser', [this.form.email, 'email']))
                     .then(res => {
-                        console.log(res);
                         this.loading.email = false;
                         if(res.data.duplicate)
                         {
-                            this.error.email = 'This email address is taken by '+res.data.user;
-                            // if(res.data.active)
-                            // {
-                                // this.error.username.appendChild(' Note - this user has been deactivated');
-                            // }
+                            this.error.email      = 'This email address is taken by '+res.data.user;
                             this.error.bool.email = false;
                         }
                         else
@@ -187,13 +206,17 @@ export default {
         },
         resetForm()
         {
-            this.validated       = false;
-            this.button.disable  = false;
-            this.button.text     = 'Create New User and Send Welcome Email';
-            this.form.username   = '';
-            this.form.email      = '';
-            this.form.first_name = '';
-            this.form.last_name  = '';
+            this.validated           = false;
+            this.error.username      = 'Enter A Valid Username',
+            this.error.email         = 'Enter A Valid Email Address',
+            this.error.bool.username = null,
+            this.error.bool.email    = null,
+            this.button.disable      = false;
+            this.button.text         = 'Create New User and Send Welcome Email';
+            this.form.username       = '';
+            this.form.email          = '';
+            this.form.first_name     = '';
+            this.form.last_name      = '';
         }
     }
 }

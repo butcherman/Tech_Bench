@@ -20,6 +20,7 @@ class CreateTechTipCommentsTable extends Migration
             $table->longText('comment');
             $table->timestamps();
             $table->foreign('tip_id')->references('tip_id')->on('tech_tips')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade');  //  TODO - add this key in v5 updates if it does not exist
         });
     }
 

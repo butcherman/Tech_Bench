@@ -42,6 +42,7 @@ class NewTechTip extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        //  TODO - make this a proper email
         return (new MailMessage)
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))

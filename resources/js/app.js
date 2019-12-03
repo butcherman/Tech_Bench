@@ -21,7 +21,6 @@ import VueGoodTablePlugin from 'vue-good-table';
 import route from 'ziggy';
 import { Ziggy } from '../assets/js/ziggy';
 import vue2Dropzone from 'vue2-dropzone';
-// import Editor from '@tinymce/tinymce-vue';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import Multiselect from 'vue-multiselect';
 
