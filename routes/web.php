@@ -110,6 +110,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
+    Route::get('check-username/{name}/{type}', 'Admin\UserController@checkUser')->name('checkUser');
+    Route::resource('user', 'Admin\UserController');
 
     //  Admin index route
     Route::get('/', 'Admin\AdminController@index')->name('index');
@@ -130,7 +132,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Route::get('user/change-password/{id}', 'Admin\UserController@changePassword')->name('changePassword');
     // Route::post('user/change-password/{id}', 'Admin\UserController@submitPassword')->name('changePassword');
     // Route::get('user/password', 'Admin\UserController@passwordList')->name('password');
-    // Route::resource('user', 'Admin\UserController');
 
 });
 //    });

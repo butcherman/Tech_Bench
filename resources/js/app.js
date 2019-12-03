@@ -103,6 +103,11 @@ Vue.component('tech-tip-files',    require('./components/tips/tipFiles.vue').def
 Vue.component('tech-tip-comments', require('./components/tips/tipComments.vue').default);
 
 /*
+*   Administration Components
+*/
+Vue.component('user-form', require('./components/admin/userForm.vue').default);
+
+/*
 *   Include CSRF toden in all axios headers
 */
 window.axios.defaults.headers.common = {

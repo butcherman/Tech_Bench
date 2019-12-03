@@ -20449,3 +20449,11 @@ label {
   transform: rotate(15deg);
 }
 
+.form-control.loading {
+  background-color: #ffffff;
+  background-image: url("/img/spinning_loading.gif");
+  background-size: 25px 25px;
+  background-position: right center;
+  background-repeat: no-repeat;
+}
+

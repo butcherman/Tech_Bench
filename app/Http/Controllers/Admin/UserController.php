@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
+use App\UserRoleType;
+
 class UserController extends Controller
 {
     //  Constructor sets up middleware
@@ -24,7 +26,7 @@ class UserController extends Controller
     {
         $this->middleware('auth')->except('initializeUser', 'submitInitializeUser');
     }
-    
+
     //  Show the list of current users to edit
     public function index()
     {
@@ -34,25 +36,49 @@ class UserController extends Controller
         ]);
     }
 
+    //  Check if a username is in use
+    public function checkUser($username, $type)
+    {
+        $user = User::where($type, $username)->first();
+
+        if(!$user)
+        {
+            return response()->json(['duplicate' => false]);
+        }
+
+        return response()->json([
+            'duplicate' => true,
+            'user'      => $user->full_name,
+            'active'    => $user->active,
+        ]);
+    }
+
     //  Show the Add User form
     public function create()
     {
-        $roles = Role::all();
+        $roles = UserRoleType::all(); // Role::all();
 
         $roleArr = [];
         foreach($roles as $role)
         {
-            if($role->role_id == 1 && !Auth::user()->hasAnyRole(['installer']))
+            if($role->role_id == 1 && Auth::user()->role_id != 1)
             {
-            
+                continue;
+            }
+            else if($role->role_id == 2 && Auth::user()->role_id > 1)
+            {
                 continue;
             }
             else
             {
-                $roleArr[$role->role_id] = $role->name;
+                // $roleArr[$role->role_id] = $role->name;
+                $roleArr[] = [
+                    'value' => $role->role_id,
+                    'text'  => $role->name,
+                ];
             }
         }
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('admin.newUser', [
             'roles' => $roleArr
@@ -69,7 +95,7 @@ class UserController extends Controller
             'last_name'  => 'required',
             'email'      => 'required|unique:users',
         ]);
-        
+
         //  Create the user
         $newUser = User::create([
             'username'   => $request->username,
@@ -79,49 +105,49 @@ class UserController extends Controller
             'password'   => bcrypt(strtolower(Str::random(15))),
             'active'     => 1
         ]);
-        
+
         $userID = $newUser->user_id;
-        
+
         //  Assign the users role
         DB::insert('INSERT INTO `user_role` (`user_id`, `role_id`) VALUES (?, ?)', [$userID, $request->role]);
-        
+
         //  Create the setup user link
         $hash = strtolower(Str::random(30));
         UserInitialize::create([
             'username' => $request->username,
             'token'    => $hash
         ]);
-        
+
         //  Email the new user
         Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('User Data - ', $newUser->toArray());
         Log::notice('New User ID-'.$userID.' Created by ID-'.Auth::user()->user_id);
-        
+
         return redirect()->back()->with('success', 'New User Created');
     }
-    
+
     //  Bring up the "Finish User Setup" form
     public function initializeUser($hash)
     {
         $this->middleware('guest');
-        
+
         //  Validate the hash token
         $user = UserInitialize::where('token', $hash)->get();
-        
+
         if($user->isEmpty())
         {
             Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
             Log::warning('Visitor at IP Address '.\Request::ip().' tried to access invalid initialize hash - '.$hash);
             return abort(404);
         }
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited.');
         Log::debug('Link Hash -'.$hash);
         return view('account.initializeUser', ['hash' => $hash]);
     }
-    
+
     //  Submit the initialize user form
     public function submitInitializeUser(Request $request, $hash)
     {
@@ -133,7 +159,7 @@ class UserController extends Controller
             Log::warning('Visitor at IP Address '.\Request::ip().' tried to submit an invalid User Initialization link - '.$hash);
             return abort(404);
         }
-        
+
         //  Validate the form
         $request->validate([
             'username' => [
@@ -142,25 +168,25 @@ class UserController extends Controller
             ],
             'newPass'  => 'required|string|min:6|confirmed'
         ]);
-        
+
         //  Get the users information
         $userData = User::where('username', $valid->username)->first();
-        
+
         $nextChange = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
-        
+
             //  Update the password
         User::find($userData->user_id)->update(
         [
             'password'         => bcrypt($request->newPass),
             'password_expires' => $nextChange
         ]);
-        
+
         //  Remove the initialize instance
         UserInitialize::find($valid->id)->delete();
-        
+
         //  Log in the user
         Auth::loginUsingID($userData->user_id);
-        
+
         //  Redirect the user to the dashboard
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Initialize Data - '.$request->toArray());
@@ -176,7 +202,7 @@ class UserController extends Controller
         {
             $res = User::where('active', true)->with('UserLogins')->get();
         }
-        
+
         $userList = [];
         foreach($res as $r)
         {
@@ -187,7 +213,7 @@ class UserController extends Controller
                 'last'    => $r->UserLogins->last() ? date('M j, Y - g:i A', strtotime($r->UserLogins->last()->created_at)) : 'Never'
             ];
         }
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('User List - ', $userList);
         return response()->json($userList);
@@ -199,7 +225,7 @@ class UserController extends Controller
         $roles    = Role::all();
         $userData = User::find($id);
         $userRole = DB::select('SELECT `role_id` FROM `user_role` WHERE `user_id` = ?', [$id])[0]->role_id;
-        
+
         $roleArr = [];
         foreach($roles as $role)
         {
@@ -212,7 +238,7 @@ class UserController extends Controller
                 $roleArr[$role->role_id] = $role->name;
             }
         }
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Edit user form opened for user ID-'.$id);
         return view('admin.editUser', [
@@ -238,7 +264,7 @@ class UserController extends Controller
                                 Rule::unique('users')->ignore($id, 'user_id')
                             ],
         ]);
-        
+
         //  Update the user data
         User::find($id)->update(
         [
@@ -247,7 +273,7 @@ class UserController extends Controller
             'last_name'  => $request->last_name,
             'email'      => $request->email
         ]);
-        
+
         //  Update the user's role
         DB::update('UPDATE `user_role` SET `role_id` = ? WHERE `user_id` = ?', [$request->role, $id]);
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
@@ -255,7 +281,7 @@ class UserController extends Controller
         Log::notice('User ID-'.$id.' has updated their information.');
         return redirect(route('admin.user.index'))->with('success', 'User Updated Successfully');
     }
-    
+
     //  List the active users to change the password for
     public function passwordList()
     {
@@ -264,13 +290,13 @@ class UserController extends Controller
             'link' => 'admin.changePassword'
         ]);
     }
-    
+
     //  Change password form
     public function changePassword($id)
     {
         $name = User::find($id);
         $name = $name->first_name.' '.$name->last_name;
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Change change password form opened for User ID-'.$id);
         return view('admin.changePassword', [
@@ -278,16 +304,16 @@ class UserController extends Controller
             'user' => $name
         ]);
     }
-    
+
     //  Submit the change password form
     public function submitPassword(Request $request, $id)
     {
         $request->validate([
             'password'   => 'required|string|min:6|confirmed'
         ]);
-        
+
         $nextChange = isset($request->force_change) && $request->force_change == 'on' ? Carbon::now()->subDay() : null;
-        
+
             //  Update the user data
         User::find($id)->update(
         [
@@ -300,7 +326,7 @@ class UserController extends Controller
         Log::info('User ID-'.$id.' has changed their password.');
         return redirect(route('admin.user.index'))->with('success', 'User Password Updated Successfully');
     }
-    
+
     //  Bring up the users that are available to deactivate
     public function disable()
     {
@@ -309,13 +335,13 @@ class UserController extends Controller
             'link' => 'admin.confirmDisable'
         ]);
     }
-    
+
     //  Confirm to disable the user
     public function confirm($id)
     {
         $name = User::find($id);
         $name = $name->first_name.' '.$name->last_name;
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('admin.disableUser', [
             'id'   => $id,
@@ -329,10 +355,10 @@ class UserController extends Controller
         User::find($id)->update([
             'active' => 0
         ]);
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('User ID-'.$id.' disabled by '.Auth::user()->user_id);
-        
+
         return redirect(route('admin.user.index'))->with('success', 'User Deactivated Successfully');
     }
 }
