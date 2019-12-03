@@ -2,7 +2,7 @@
     <b-form @submit="validateForm" novalidate :validated="validated" ref="userForm">
         <div class="row justify-content-center" v-show="success">
             <div class="col-md-8">
-                <b-alert variant="success" class="text-center" show><h3>User Created Successfully</h3></b-alert>
+                <b-alert variant="success" class="text-center" show><h3>{{success}}</h3></b-alert>
             </div>
         </div>
         <div class="row">
@@ -92,6 +92,7 @@
 export default {
     props: [
         'role_list',
+        'edit',
     ],
     data() {
         return {
@@ -123,8 +124,21 @@ export default {
     },
     created() {
         // console.log(this.role_list);
+        this.checkForEdit();
     },
     methods: {
+        checkForEdit()
+        {
+            if(this.edit)
+            {
+                this.form.username   = this.edit.username;
+                this.form.email      = this.edit.email;
+                this.form.first_name = this.edit.first_name;
+                this.form.last_name  = this.edit.last_name;
+                this.form.role       = this.edit.role_id;
+                this.button.text     = 'Update User';
+            }
+        },
         validateForm(e)
         {
             e.preventDefault();
@@ -135,19 +149,17 @@ export default {
             }
             else
             {
-                console.log('good to go');
                 this.button.disable = true;
                 this.button.text    = 'Processing...';
-                axios.post(this.route('admin.user.store'), this.form)
-                    .then(res => {
-                        console.log(res);
-                        if(res.data.success)
-                        {
-                            //
-                            this.resetForm();
-                            this.success = true;
-                        }
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                if(this.edit)
+                {
+                    console.log('ready to ed');
+                    this.editUser();
+                }
+                else
+                {
+                    this.createUser();
+                }
             }
         },
         checkUsername()
@@ -166,7 +178,7 @@ export default {
                     axios.get(this.route('admin.checkUser', [this.form.username, 'username']))
                         .then(res => {
                             this.loading.username = false;
-                            if(res.data.duplicate)
+                            if(res.data.duplicate && res.data.user != this.edit.full_name)
                             {
                                 this.error.username = 'This username is taken by '+res.data.user+'.';
                                 if(res.data.active == 0)
@@ -192,7 +204,7 @@ export default {
                 axios.get(this.route('admin.checkUser', [this.form.email, 'email']))
                     .then(res => {
                         this.loading.email = false;
-                        if(res.data.duplicate)
+                        if(res.data.duplicate && res.data.user != this.edit.full_name)
                         {
                             this.error.email      = 'This email address is taken by '+res.data.user;
                             this.error.bool.email = false;
@@ -203,6 +215,31 @@ export default {
                         }
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             }
+        },
+        createUser()
+        {
+            axios.post(this.route('admin.user.store'), this.form)
+                .then(res => {
+                    console.log(res);
+                    if(res.data.success)
+                    {
+                        this.resetForm();
+                        this.success = 'User Created Successfully';
+                    }
+                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+        },
+        editUser()
+        {
+            axios.put(this.route('admin.user.update', this.edit.user_id), this.form)
+                .then(res => {
+                    console.log(res);
+                    if(res.data.success)
+                    {
+                        this.success        = 'User Updated Successfully';
+                        this.button.disable = false;
+                        this.button.text    = 'Update User';
+                    }
+                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
         },
         resetForm()
         {

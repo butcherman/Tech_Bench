@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use DB;
 use Mail;
-use App\Role;
+// use App\Role;
 use App\User;
 use Carbon\Carbon;
 use App\UserInitialize;
@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewUserEmail;
 
 use App\UserRoleType;
+use App\UserLogins;
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\User as UserResource;
 
 class UserController extends Controller
 {
@@ -162,55 +165,57 @@ class UserController extends Controller
     //  List all active or inactive users
     public function show($type)
     {
-        $res = '';
-        if($type == 'active')
+        switch($type)
         {
-            $res = User::where('active', true)->with('UserLogins')->get();
+            case 'active':
+                $userList = new UserCollection(User::where('active', 1)->with(['UserLogins' => function($query)
+                {
+                    $query->latest()->limit(1);
+                }])->get()->makeVisible('user_id'));
+                $route    = 'admin.user.edit';
+                break;
+            default:
+                abort(404);
         }
 
-        $userList = [];
-        foreach($res as $r)
-        {
-            $userList[] = [
-                'user_id' => $r->user_id,
-                'user'    => $r->first_name.' '.$r->last_name,
-                'email'   => $r->email,
-                'last'    => $r->UserLogins->last() ? date('M j, Y - g:i A', strtotime($r->UserLogins->last()->created_at)) : 'Never'
-            ];
-        }
+        // return $userList;
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('User List - ', $userList);
-        return response()->json($userList);
+
+        return view('admin.userIndex', [
+            'userList' => $userList,
+            'route'    => $route,
+            // 'method'   => 'edit',
+        ]);
+
     }
 
     //  Open the edit user form
     public function edit($id)
     {
-        $roles    = Role::all();
-        $userData = User::find($id);
-        $userRole = DB::select('SELECT `role_id` FROM `user_role` WHERE `user_id` = ?', [$id])[0]->role_id;
+        //  TODO - cannot edit a user with better permissions than current user
+
+        $roles = UserRoleType::all(); // Role::all();
+        $user  = new UserResource(User::find($id));
 
         $roleArr = [];
-        foreach($roles as $role)
-        {
-            if($role->role_id == 1 && !Auth::user()->hasAnyRole(['installer']))
-            {
+        foreach ($roles as $role) {
+            if ($role->role_id == 1 && Auth::user()->role_id != 1) {
                 continue;
-            }
-            else
-            {
-                $roleArr[$role->role_id] = $role->name;
+            } else if ($role->role_id == 2 && Auth::user()->role_id > 1) {
+                continue;
+            } else {
+                // $roleArr[$role->role_id] = $role->name;
+                $roleArr[] = [
+                    'value' => $role->role_id,
+                    'text'  => $role->name,
+                ];
             }
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Edit user form opened for user ID-'.$id);
-        return view('admin.editUser', [
-            'userID' => $id,
-            'roles'  => $roleArr,
-            'role'   => $userRole,
-            'user'   => $userData
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        return view('admin.userEdit', [
+            'roles' => $roleArr,
+            'user'  => $user->makeVisible(['user_id', 'username']),
         ]);
     }
 
@@ -228,6 +233,7 @@ class UserController extends Controller
                                 'required',
                                 Rule::unique('users')->ignore($id, 'user_id')
                             ],
+            'role'       => 'required',
         ]);
 
         //  Update the user data
@@ -236,16 +242,30 @@ class UserController extends Controller
             'username'   => $request->username,
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
-            'email'      => $request->email
+            'email'      => $request->email,
+            'role_id'    => $request->role,
         ]);
 
         //  Update the user's role
-        DB::update('UPDATE `user_role` SET `role_id` = ? WHERE `user_id` = ?', [$request->role, $id]);
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Edit user form submitted for User ID-'.$id.'  Data - ', $request->toArray());
         Log::notice('User ID-'.$id.' has updated their information.');
-        return redirect(route('admin.user.index'))->with('success', 'User Updated Successfully');
+        return response()->json(['success' => true]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //  List the active users to change the password for
     public function passwordList()

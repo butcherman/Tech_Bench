@@ -26,10 +26,10 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
-    // public function UserLogins()
-    // {
-    //     return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
-    // }
+    public function UserLogins()
+    {
+        return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
+    }
 
     // public function UserPermissions()
     // {
