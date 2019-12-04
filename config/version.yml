@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: dev
   buildmetadata: null
-  commit: 3a5
+  commit: 3a6
   timestamp:
     year: 2019
     month: 12
     day: 3
-    hour: 11
-    minute: 58
-    second: 23
+    hour: 16
+    minute: 38
+    second: 37
     timezone: America/Los_Angeles
 commit:
   length: 6

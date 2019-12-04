@@ -21,9 +21,7 @@
                 <h4 class="card-title">Users:</h4>
                 <ul class="list-group">
                     <li class="list-group-item"><a href="{{route('admin.user.create')}}"><i class="ti-user"></i> Create New User</a></li>
-                    <li class="list-group-item"><a href="{{route('admin.user.show', 'active')}}"><i class="ti-wand"></i> Update User</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-key"></i> Reset Users Password</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-na"></i> Disable User</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.user.index')}}"><i class="ti-wand"></i> Modify User</a></li>
                     <li class="list-group-item"><a href="#"><i class="ti-link"></i> User File Links</a></li>
                 </ul>
             </div>

@@ -41,9 +41,21 @@ class UserController extends Controller
     //  Show the list of current users to edit
     public function index()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        $userList = [];
+        $route    = '';
+
+
+        $userList = new UserCollection(User::where('active', 1)->with(['UserLogins' => function ($query) {
+            $query->latest()->limit(1);
+        }])->get()
+            /** @scrutinizer ignore-call */
+            ->makeVisible('user_id'));
+        $route    = 'admin.user.edit';
+
         return view('admin.userIndex', [
-            'link' => 'admin.user.edit'
+            'userList' => $userList,
+            'route'    => $route,
+            // 'method'   => 'edit',
         ]);
     }
 
@@ -140,63 +152,51 @@ class UserController extends Controller
         return response()->json(['success' => true]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //  List all active or inactive users
-    public function show($type)
-    {
-        switch($type)
-        {
-            case 'active':
-                $userList = new UserCollection(User::where('active', 1)->with(['UserLogins' => function($query)
-                {
-                    $query->latest()->limit(1);
-                }])->get()->makeVisible('user_id'));
-                $route    = 'admin.user.edit';
-                break;
-            default:
-                abort(404);
-        }
+    // public function show($type)
+    // {
+    //     $userList = [];
+    //     $route    = '';
 
-        // return $userList;
+    //     switch($type)
+    //     {
+    //         case 'active':
+    //             $userList = new UserCollection(User::where('active', 1)->with(['UserLogins' => function($query)
+    //             {
+    //                 $query->latest()->limit(1);
+    //             }])->get()
+    //             /** @scrutinizer ignore-call */
+    //             ->makeVisible('user_id'));
+    //             $route    = 'admin.user.edit';
+    //             break;
+    //         default:
+    //             abort(404);
+    //     }
+
+    //     // return $userList;
 
 
-        return view('admin.userIndex', [
-            'userList' => $userList,
-            'route'    => $route,
-            // 'method'   => 'edit',
-        ]);
+    //     return view('admin.userIndex', [
+    //         'userList' => $userList,
+    //         'route'    => $route,
+    //         // 'method'   => 'edit',
+    //     ]);
 
-    }
+    // }
 
     //  Open the edit user form
     public function edit($id)
     {
-        //  TODO - cannot edit a user with better permissions than current user
-
         $roles = UserRoleType::all(); // Role::all();
-        $user  = new UserResource(User::find($id));
+        $user  = new UserResource(User::findOrFail($id));
 
+        //  Make sure that the user is not trying to deactivate someone with more permissions
+        if ($user->role_id < Auth::user()->role_id) 
+        {
+            return abort(403);
+        }
+
+        //  Good to go - update user password
         $roleArr = [];
         foreach ($roles as $role) {
             if ($role->role_id == 1 && Auth::user()->role_id != 1) {
@@ -237,7 +237,14 @@ class UserController extends Controller
         ]);
 
         //  Update the user data
-        User::find($id)->update(
+        $user = User::findOrFail($id);
+
+        if ($user->role_id < Auth::user()->role_id) 
+        {
+            return abort(403);
+        }
+
+        $user->update(
         [
             'username'   => $request->username,
             'first_name' => $request->first_name,
@@ -253,97 +260,101 @@ class UserController extends Controller
         return response()->json(['success' => true]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //  List the active users to change the password for
-    public function passwordList()
-    {
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return view('admin.userIndex', [
-            'link' => 'admin.changePassword'
-        ]);
-    }
-
-    //  Change password form
-    public function changePassword($id)
-    {
-        $name = User::find($id);
-        $name = $name->first_name.' '.$name->last_name;
-
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Change change password form opened for User ID-'.$id);
-        return view('admin.changePassword', [
-            'id'   => $id,
-            'user' => $name
-        ]);
-    }
-
     //  Submit the change password form
-    public function submitPassword(Request $request, $id)
+    public function submitPassword(Request $request)
     {
         $request->validate([
-            'password'   => 'required|string|min:6|confirmed'
+            'password' => 'required|string|min:6|confirmed',
+            'user_id'  => 'required',
         ]);
 
-        $nextChange = isset($request->force_change) && $request->force_change == 'on' ? Carbon::now()->subDay() : null;
+        // $nextChange = isset($request->force_change) && $request->force_change == 'on' ? Carbon::now()->subDay() : null;
 
+        if($request->force_change)
+        {
+            $nextChange = Carbon::now()->subDay();
+        }
+        else
+        {
+            $nextChange = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
+        }
+
+        $user = User::find($request->user_id);
+
+        //  Verify this is a valid user ID
+        if (!$user) {
+            $success = false;
+            $reason  = 'Cannot find user with this ID';
+        }
+        //  Make sure that the user is not trying to deactivate someone with more permissions
+        else if ($user->role_id < Auth::user()->role_id) {
+            $success = false;
+            $reason  = 'You cannot change password for a user with higher permissions that you.  If this user has locked themselves out, have then use the reset link on the login page.';
+        }
+        //  Good to go - update user password
+        else {
             //  Update the user data
-        User::find($id)->update(
-        [
-            'password'         => bcrypt($request->password),
-            'password_expires' => $nextChange
+            $user->update(
+            [
+                'password'         => bcrypt($request->password),
+                'password_expires' => $nextChange
+            ]);
+            $success = true;
+            $reason  = 'Password for ' . $user->full_name . ' successfully reset.';
+        }
+
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::notice('User ID-' . $request->user_id . ' password chagned by ' . Auth::user()->user_id, [
+            'success' => $success,
+            'reason'  => $reason,
         ]);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Password Change form submitted for user ID-'.$id.' Data - ', $request->toArray());
-        Log::info('User ID-'.$id.' has changed their password.');
-        return redirect(route('admin.user.index'))->with('success', 'User Password Updated Successfully');
-    }
-
-    //  Bring up the users that are available to deactivate
-    public function disable()
-    {
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return view('admin.userIndex', [
-            'link' => 'admin.confirmDisable'
-        ]);
-    }
-
-    //  Confirm to disable the user
-    public function confirm($id)
-    {
-        $name = User::find($id);
-        $name = $name->first_name.' '.$name->last_name;
-
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return view('admin.disableUser', [
-            'id'   => $id,
-            'name' => $name
+        return response()->json([
+            'success' => $success,
+            'reason'  => $reason,
         ]);
     }
 
     //  Disable the user
     public function destroy($id)
     {
-        User::find($id)->update([
-            'active' => 0
-        ]);
+        $user = User::find($id);
+
+        //  Verify this is a valid user ID
+        if(!$user)
+        {
+            $success = false;
+            $reason  = 'Cannot find user with this ID';
+        }
+        //  Make suer that the user is not trying to deactivate themselves
+        else if(Auth::user()->user_id == $id)
+        {
+            $success = false;
+            $reason  = 'You cannot deactivate yourself';
+        }
+        //  Make sure that the user is not trying to deactivate someone with more permissions
+        else if($user->role_id < Auth::user()->role_id)
+        {
+            $success = false;
+            $reason  = 'You cannot deactivate a user with higher permissions that you.';
+        }
+        //  Good to go - deactivate user
+        else
+        {
+            $user->update(['active' => 0]);
+            $success = true;
+            $reason  = 'User '.$user->full_name.' successfully deactivated.';
+        }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::notice('User ID-'.$id.' disabled by '.Auth::user()->user_id);
+        Log::notice('User ID-'.$id.' disabled by '.Auth::user()->user_id, [
+            'success' => $success,
+            'reason'  => $reason,
+        ]);
 
-        return redirect(route('admin.user.index'))->with('success', 'User Deactivated Successfully');
+        return response()->json([
+            'success' => $success,
+            'reason'  => $reason,
+        ]);
     }
 }

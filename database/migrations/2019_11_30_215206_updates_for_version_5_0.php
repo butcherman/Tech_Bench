@@ -7,12 +7,10 @@ use App\FileLinks;
 use App\TechTipFiles;
 use App\FileLinkFiles;
 use App\TechTipSystems;
-use App\UserPermissions;
 use App\PhoneNumberTypes;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\UserRoles;
 
 class UpdatesForVersion50 extends Migration
 {
