@@ -2,7 +2,7 @@
     <div class="table-responsive">
         <vue-good-table
             :columns="columns"
-            :rows="rows"
+            :rows="this.user_links"
             styleClass="vgt-table striped bordered"
             @on-row-click="clickName"
         ></vue-good-table>
@@ -12,8 +12,7 @@
 <script>
 export default {
     props: [
-        'links_route',
-        'action_url',
+        'user_links'
     ],
     data() {
         return {
@@ -21,38 +20,31 @@ export default {
             columns: [
             {
                 label: 'User',
-                field: 'name',
-                filterOptions: 
+                field: 'full_name',
+                filterOptions:
                 {
                     enabled: true,
                 }
             },
             {
                 label: 'Total Links',
-                field: 'total',
+                field: 'file_links_count',
             },
             {
                 label: 'Expired Links',
-                field: 'expired',
+                field: 'expired_file_links_count',
             }],
         }
     },
     created()
     {
-        this.getLinks();
+        // this.getLinks();
     },
     methods: {
-        getLinks()
-        {
-            axios.get(this.links_route)
-                .then(res => {
-                    this.rows = res.data;
-                })
-                .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
-        },
         clickName(par)
         {
-            var url = this.action_url.replace(':id', par.row.user_id);
+            var url = this.route('admin.user.showLinks', par.row.user_id);
+            console.log(par.row);
             location.href = url;
         }
     }

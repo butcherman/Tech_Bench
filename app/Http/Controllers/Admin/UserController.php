@@ -41,10 +41,6 @@ class UserController extends Controller
     //  Show the list of current users to edit
     public function index()
     {
-        $userList = [];
-        $route    = '';
-
-
         $userList = new UserCollection(User::where('active', 1)->with(['UserLogins' => function ($query) {
             $query->latest()->limit(1);
         }])->get()

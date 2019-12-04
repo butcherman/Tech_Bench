@@ -58,7 +58,7 @@
 <script>
     export default {
         props: [
-
+            'user_id',
         ],
         data() {
             return {
@@ -96,7 +96,8 @@
         methods: {
             fetchLinks()
             {
-                axios.get(this.route('links.user', [0]))
+                var user = this.user_id ? this.user_id : 0
+                axios.get(this.route('links.user', user))
                     .then(res => {
                         this.table.rows = res.data;
                         this.loadDone = true;

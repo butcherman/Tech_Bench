@@ -115,10 +115,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
+    //  Administrative routes for users
+    Route::resource('user',                'Admin\UserController');
+    Route::post('user/change-password',     'Admin\UserController@submitPassword')->name('user.changePassword');
+    Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')      ->name('checkUser');
+    Route::get('links/show/{id}',          'Admin\AdminController@showLinks')     ->name('user.showLinks');
+    Route::get('links',                    'Admin\AdminController@userLinks')     ->name('user.links');
 
-    Route::post('user/change-password', 'Admin\UserController@submitPassword')->name('user.changePassword');
-    Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')->name('checkUser');
-    Route::resource('user', 'Admin\UserController');
+
+
+
 
     //  Admin index route
     Route::get('/', 'Admin\AdminController@index')->name('index');
@@ -129,9 +135,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
     //  Admin User File Links routes
-    // Route::get('links/show/{id}', 'Admin\AdminController@showLinks')->name('userLinks');
     // Route::get('count-links', 'Admin\AdminController@countLinks')->name('countLinks');
-    // Route::get('links', 'Admin\AdminController@userLinks')->name('links');
 
     // //  Admin User routes
     // Route::get('user/confirm/{id}', 'Admin\UserController@confirm')->name('confirmDisable');

@@ -22,7 +22,7 @@
                 <ul class="list-group">
                     <li class="list-group-item"><a href="{{route('admin.user.create')}}"><i class="ti-user"></i> Create New User</a></li>
                     <li class="list-group-item"><a href="{{route('admin.user.index')}}"><i class="ti-wand"></i> Modify User</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-link"></i> User File Links</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.user.links')}}"><i class="ti-link"></i> User File Links</a></li>
                 </ul>
             </div>
         </div>

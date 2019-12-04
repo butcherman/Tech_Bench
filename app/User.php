@@ -31,6 +31,11 @@ class User extends Authenticatable
         return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
     }
 
+    public function FileLinks()
+    {
+        return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
+    }
+
     // public function UserPermissions()
     // {
     //     return $this->hasOne('App\UserPermissions', 'user_id', 'user_id');
