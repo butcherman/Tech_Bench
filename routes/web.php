@@ -117,6 +117,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //  Administrative routes for users
     Route::resource('user',                'Admin\UserController');
+    // Route::get('/user/reactivate/{$id}',   'Admin\UserController@reactivateUser')     ->name('user.reactivate');
+    Route::get('user/enable/{id}',         'Admin\UserController@reactivateUser')     ->name('user.reactivate');
     Route::post('user/change-password',    'Admin\UserController@submitPassword')     ->name('user.changePassword');
     Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')          ->name('checkUser');
     Route::get('links/show/{id}',          'Admin\AdminController@showLinks')         ->name('user.showLinks');

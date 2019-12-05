@@ -110,6 +110,14 @@
                             <span class="menu-title">Tech Tips</span>
                         </a>
                     </li>
+                    @foreach($tb_modules as $mod)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('index').'/'.$mod->getLowerName()}}">
+                            <i class="ti-line-dashed menu-icon"></i>
+                            <span class="menu-title">{{preg_replace('/(.*?[a-z]{1})([A-Z]{1}.*?)/', '${1} ${2}', $mod->getName())}}</span>
+                        </a>
+                    </li>
+                    @endforeach
                 </ul>
             </nav>
             <div class="main-panel" id="app">

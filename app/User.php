@@ -3,11 +3,13 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +22,11 @@ class User extends Authenticatable
     protected $primaryKey = 'user_id';
 
     protected $appends = [ 'full_name' ];
+    protected $casts = [
+        'created_at' => 'datetime:M d, Y',
+        'updated_at' => 'datetime:M d, Y',
+        'deleted_at' => 'datetime:M d, Y'
+    ];
 
     public function getFullNameAttribute()
     {

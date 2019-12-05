@@ -54,6 +54,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\FormGroupServiceProvider::class,
+
+        App\Providers\ModuleServiceProvider::class,
     ],
     'aliases' => [
         'App'           => Illuminate\Support\Facades\App::class,

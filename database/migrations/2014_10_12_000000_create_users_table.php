@@ -22,8 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
-            $table->boolean('active');
             $table->timestamp('password_expires')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -35,7 +35,6 @@ class CreateUsersTable extends Migration
             'last_name'    => 'Administrator',
             'email'        => 'admin@em.com',
             'password'     => bcrypt('password'),
-            'active'       => 1,
         ]);
     }
 

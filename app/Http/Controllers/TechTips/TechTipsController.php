@@ -248,7 +248,7 @@ class TechTipsController extends Controller
         if(!$tipData->supressEmail)
         {
             $details = TechTips::find($tipID);
-            $users = User::where('active', 1)->whereHas('UserSettings', function($query)
+            $users = User::whereHas('UserSettings', function($query)
             {
                 $query->where('em_tech_tip', 1);
             })->get();

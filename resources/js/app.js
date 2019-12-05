@@ -107,6 +107,7 @@ Vue.component('tech-tip-comments', require('./components/tips/tipComments.vue').
 Vue.component('user-form',        require('./components/admin/userForm.vue').default);
 Vue.component('user-list',        require('./components/admin/userList.vue').default);
 Vue.component('user-roles',       require('./components/admin/userRoles.vue').default);
+Vue.component('user-deleted',     require('./components/admin/userDeleted.vue').default);
 Vue.component('admin-file-links', require('./components/admin/fileLinks.vue').default);
 
 /*

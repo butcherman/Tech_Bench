@@ -35,8 +35,7 @@ class AdminController extends Controller
     public function userLinks()
     {
         $userLinks = new UserCollection(
-                        User::where('active', 1)
-                            ->withCount([
+                        User::withCount([
                                 'FileLinks',
                                 'FileLinks as expired_file_links_count' => function($query)
                                 {
@@ -92,14 +91,14 @@ class AdminController extends Controller
             ]);
             //  If the setting is changing from never to xx days, update all users
             if ($request->passExpire == 0) {
-                User::whereNotNull('password_expires')->where('active', 1)->update([
+                User::whereNotNull('password_expires')->update([
                     'password_expires' => null
                 ]);
             }
             else
             {
                 $newExpire = Carbon::now()->addDays($request->passExpire);
-                User::whereNull('password_expires')->where('active', 1)->update([
+                User::whereNull('password_expires')->update([
                     'password_expires' => $newExpire
                 ]);
             }
@@ -157,7 +156,7 @@ class AdminController extends Controller
 
                 return response()->json(['success' => true]);
             }
-            
+
             return response()->json(['success' => false, 'reason' => 'Unable to Edit this Role']);
         }
 
@@ -166,7 +165,7 @@ class AdminController extends Controller
             'name'        => $request->name,
             'description' => $request->description,
         ]);
-        foreach ($request->permissions as $perm) 
+        foreach ($request->permissions as $perm)
         {
             UserRolePermissions::create([
                 'role_id'      => $role->role_id,

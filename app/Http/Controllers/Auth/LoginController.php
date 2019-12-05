@@ -30,12 +30,12 @@ class LoginController extends Controller
     }
 
     //  Override the Credentials function to include the "Active" field
-    protected function credentials(Request $request)
-    {
-        return [
-            'username' => $request->{$this->username()},
-            'password' => $request->password,
-            'active'   => '1',
-        ];
-    }
+    // protected function credentials(Request $request)
+    // {
+    //     return [
+    //         'username'   => $request->{$this->username()},
+    //         'password'   => $request->password,
+    //         'deleted_at' => null,
+    //     ];
+    // }
 }

@@ -4,6 +4,7 @@ use App\User;
 use App\TechTips;
 use App\Customers;
 use App\FileLinks;
+use Carbon\Carbon;
 use App\TechTipFiles;
 use App\FileLinkFiles;
 use App\TechTipSystems;
@@ -31,6 +32,7 @@ class UpdatesForVersion50 extends Migration
         //  DB Adds
         $this->addSoftDeleteToCustomerSystems();
         $this->addSoftDeleteToTechTips();
+        $this->addSoftDeleteToUsers();
         $this->addPasswordExpiresColumn();
         $this->addHiddenColumn();
         $this->addColumnsToFileLinksTable();
@@ -326,6 +328,24 @@ class UpdatesForVersion50 extends Migration
         if (!Schema::hasColumn('tech_tips', 'deleted_at')) {
             Schema::table('tech_tips', function (Blueprint $table) {
                 $table->softDeletes()->after('description');
+            });
+        }
+    }
+
+    //  Swap out the active column for deleted at column on users table
+    public function addSoftDeleteToUsers()
+    {
+        if(!Schema::hasColumn('users', 'deleted_at'))
+        {
+            Schema::table('users', function(Blueprint $table)
+            {
+                $table->softDeletes()->after('password_expires');
+            });
+            //  Migrate over all deactivated users
+            DB::update('UPDATE `users` SET `deleted_at` = "'.Carbon::now().'" WHERE `active` = 0');
+            //  Remove the Active column
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('active');
             });
         }
     }

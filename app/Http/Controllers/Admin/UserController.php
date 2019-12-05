@@ -41,7 +41,7 @@ class UserController extends Controller
     //  Show the list of current users to edit
     public function index()
     {
-        $userList = new UserCollection(User::where('active', 1)->with(['UserLogins' => function ($query) {
+        $userList = new UserCollection(User::with(['UserLogins' => function ($query) {
             $query->latest()->limit(1);
         }])->get()
             /** @scrutinizer ignore-call */
@@ -51,7 +51,6 @@ class UserController extends Controller
         return view('admin.userIndex', [
             'userList' => $userList,
             'route'    => $route,
-            // 'method'   => 'edit',
         ]);
     }
 
@@ -68,7 +67,7 @@ class UserController extends Controller
         return response()->json([
             'duplicate' => true,
             'user'      => $user->full_name,
-            'active'    => $user->active,
+            'active'    => $user->deleted_at == null ? 1 : 0,
         ]);
     }
 
@@ -124,7 +123,6 @@ class UserController extends Controller
             'last_name'  => $request->last_name,
             'email'      => $request->email,
             'password'   => bcrypt(strtolower(Str::random(15))),
-            'active'     => 1
         ]);
 
         $userID = $newUser->user_id;
@@ -148,37 +146,26 @@ class UserController extends Controller
         return response()->json(['success' => true]);
     }
 
-    //  List all active or inactive users
-    // public function show($type)
-    // {
-    //     $userList = [];
-    //     $route    = '';
+    //  List all inactive users
+    public function show($type)
+    {
+        $userList = [];
+        $route    = '';
 
-    //     switch($type)
-    //     {
-    //         case 'active':
-    //             $userList = new UserCollection(User::where('active', 1)->with(['UserLogins' => function($query)
-    //             {
-    //                 $query->latest()->limit(1);
-    //             }])->get()
-    //             /** @scrutinizer ignore-call */
-    //             ->makeVisible('user_id'));
-    //             $route    = 'admin.user.edit';
-    //             break;
-    //         default:
-    //             abort(404);
-    //     }
+        if($type !== 'inactive')
+        {
+            return abort(404);
+        }
+        $userList = new UserCollection(User::onlyTrashed()->get()
+                /** @scrutinizer ignore-call */
+                ->makeVisible('user_id'));
 
-    //     // return $userList;
+        return view('admin.userDeleted', [
+            'userList' => $userList,
+            'route'    => $route,
+        ]);
 
-
-    //     return view('admin.userIndex', [
-    //         'userList' => $userList,
-    //         'route'    => $route,
-    //         // 'method'   => 'edit',
-    //     ]);
-
-    // }
+    }
 
     //  Open the edit user form
     public function edit($id)
@@ -187,7 +174,7 @@ class UserController extends Controller
         $user  = new UserResource(User::findOrFail($id));
 
         //  Make sure that the user is not trying to deactivate someone with more permissions
-        if ($user->role_id < Auth::user()->role_id) 
+        if ($user->role_id < Auth::user()->role_id)
         {
             return abort(403);
         }
@@ -215,6 +202,16 @@ class UserController extends Controller
         ]);
     }
 
+    //  Reactivate a disabled user
+    public function reactivateUser($id)
+    {
+        User::withTrashed()->where('user_id', $id)->restore();
+
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
     //  Submit the update user form
     public function update(Request $request, $id)
     {
@@ -235,7 +232,7 @@ class UserController extends Controller
         //  Update the user data
         $user = User::findOrFail($id);
 
-        if ($user->role_id < Auth::user()->role_id) 
+        if ($user->role_id < Auth::user()->role_id)
         {
             return abort(403);
         }
@@ -337,7 +334,8 @@ class UserController extends Controller
         //  Good to go - deactivate user
         else
         {
-            $user->update(['active' => 0]);
+            // $user->update(['active' => 0]);
+            $user->delete();
             $success = true;
             $reason  = 'User '.$user->full_name.' successfully deactivated.';
         }

@@ -3,31 +3,13 @@
 namespace App\Http\Controllers;
 
 use Module;
-use App\TechTipFavs;
-use App\CustomerFavs;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-
-use Zip;
-use Carbon\Carbon;
-
-//use Nwidart\Modules;
-use Mail;
-use App\Mail\InitializeUser;
-
 use App\TechTips;
 use App\FileLinks;
-// use Carbon\Carbon;
-
-use App\User;
-use App\UserRolePermissions;
-use App\UserRoles;
-use App\UserRolePermissionTypes;
-// use App\TechTips;
-use App\SystemTypes;
-
+use Carbon\Carbon;
+use App\TechTipFavs;
+use App\CustomerFavs;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {

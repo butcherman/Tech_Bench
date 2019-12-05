@@ -68,9 +68,6 @@ class EditUserTest extends TestCase
         $response->assertViewIs('admin.userEdit');
     }
 
-
-
-
     public function test_visit_edit_user_page_user_that_does_not_exist()
     {
         $response = $this->actingAs($this->installer)->get(route('admin.user.edit', 5150));

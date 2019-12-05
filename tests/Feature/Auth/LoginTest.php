@@ -70,8 +70,8 @@ class LoginTest extends TestCase
     public function test_login_as_disabled_user()
     {
         $user = factory(User::class)->create([
-            'password' => bcrypt($password = 'randomPassword'),
-            'active'   => 0
+            'password'   => bcrypt($password = 'randomPassword'),
+            'deleted_at' => Carbon::now(),
         ]);
 
         $response = $this->from(route('login'))->json('POST', route('login'), [
