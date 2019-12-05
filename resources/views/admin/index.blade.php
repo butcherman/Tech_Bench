@@ -32,10 +32,9 @@
             <div class="card-body">
                 <h4 class="card-title">User Settings:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="#"><i class="ti-settings"></i> User Password Policy</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-direction-alt"></i> User Permissions</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.passwordPolicy')}}"><i class="ti-settings"></i> User Password Policy</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.roleSettings')}}"><i class="ti-direction-alt"></i> User Permissions and Roles</a></li>
                     <li class="list-group-item"><a href="#"><i class="ti-na"></i> View Disabled Users</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-eraser"></i> Re-enable Disabled User</a></li>
                 </ul>
             </div>
         </div>

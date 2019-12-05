@@ -117,12 +117,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //  Administrative routes for users
     Route::resource('user',                'Admin\UserController');
-    Route::post('user/change-password',     'Admin\UserController@submitPassword')->name('user.changePassword');
-    Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')      ->name('checkUser');
-    Route::get('links/show/{id}',          'Admin\AdminController@showLinks')     ->name('user.showLinks');
-    Route::get('links',                    'Admin\AdminController@userLinks')     ->name('user.links');
+    Route::post('user/change-password',    'Admin\UserController@submitPassword')     ->name('user.changePassword');
+    Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')          ->name('checkUser');
+    Route::get('links/show/{id}',          'Admin\AdminController@showLinks')         ->name('user.showLinks');
+    Route::get('links',                    'Admin\AdminController@userLinks')         ->name('user.links');
+    Route::post('password-policy',         'Admin\AdminController@submitPolicy')      ->name('passwordPolicy');
+    Route::get('password-policy',          'Admin\AdminController@passwordPolicy')    ->name('passwordPolicy');
+    Route::post('role-policy',             'Admin\AdminController@submitRoleSettings')->name('roleSettings');
+    Route::get('role-policy',              'Admin\AdminController@roleSettings')      ->name('roleSettings');
 
-
+//
 
 
 
@@ -134,14 +138,34 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-    //  Admin User File Links routes
-    // Route::get('count-links', 'Admin\AdminController@countLinks')->name('countLinks');
 
-    // //  Admin User routes
-    // Route::get('user/confirm/{id}', 'Admin\UserController@confirm')->name('confirmDisable');
-    // Route::get('user/disable', 'Admin\UserController@disable')->name('disable');
-    // Route::get('user/change-password/{id}', 'Admin\UserController@changePassword')->name('changePassword');
-    // Route::get('user/password', 'Admin\UserController@passwordList')->name('password');
+
+        /*
+    *
+    *   Installer Routes
+    *
+    */
+//    Route::group(['middleware' => 'can:isInstaller'], function() {
+        // Route::prefix('installer')->name('installer.')->group(function() {
+        //
+
+        //     //  System custionization settings
+        //     Route::get('system-customization', 'Installer\SettingsController@customizeSystem')->name('customize');
+        //     Route::post('system-customization', 'Installer\SettingsController@submitCustomizeSystem')->name('customize');
+        //     Route::post('new-logo', 'Installer\SettingsController@submitLogo')->name('submitLogo');
+        //     Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
+        //     Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
+        //     Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
+
+        //     //  Categories and Systems settings
+        //     Route::resource('categories', 'Installer\CategoriesController');
+        //     Route::resource('systems', 'Installer\SystemsController');
+        // });
+//    });
+//});
+
+
+
 
 });
 //    });
@@ -201,28 +225,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
 //    });
 
 
-    /*
-    *
-    *   Installer Routes
-    *
-    */
-//    Route::group(['middleware' => 'can:isInstaller'], function() {
-        // Route::prefix('installer')->name('installer.')->group(function() {
-        //     //  User Settings
-        //     Route::get('user-security-settings', 'Installer\SettingsController@userSecurity')->name('userSecurity');
-        //     Route::post('user-security-settings', 'Installer\SettingsController@submitUserSecurity')->name('userSecurity');
 
-        //     //  System custionization settings
-        //     Route::get('system-customization', 'Installer\SettingsController@customizeSystem')->name('customize');
-        //     Route::post('system-customization', 'Installer\SettingsController@submitCustomizeSystem')->name('customize');
-        //     Route::post('new-logo', 'Installer\SettingsController@submitLogo')->name('submitLogo');
-        //     Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
-        //     Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
-        //     Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
-
-        //     //  Categories and Systems settings
-        //     Route::resource('categories', 'Installer\CategoriesController');
-        //     Route::resource('systems', 'Installer\SystemsController');
-        // });
-//    });
-//});
