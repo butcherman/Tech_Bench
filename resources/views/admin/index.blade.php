@@ -41,7 +41,7 @@
     </div>
     @endcan
     @can('hasAccess', 'Manage Customers')
-    <div class="col-md-4 grid-margin stretch-card">
+    {{-- <div class="col-md-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Customers:</h4>
@@ -51,7 +51,7 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </div> --}}
     @endcan
 </div>
 <div class="row justify-content-center">
@@ -61,7 +61,7 @@
             <div class="card-body">
                 <h4 class="card-title">Equipment:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="#"><i class="ti-layers"></i> Equipment Categories</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.categories.index')}}"><i class="ti-layers"></i> Equipment Categories</a></li>
                     <li class="list-group-item"><a href="#"><i class="ti-layers-alt"></i> Equipment Types</a></li>
                     <li class="list-group-item"><a href="#"><i class="ti-desktop"></i> Equipment Information for Customers</a></li>
                 </ul>

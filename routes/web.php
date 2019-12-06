@@ -115,9 +115,30 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
+
+ //     //  System custionization settings
+        //     Route::get('system-customization', 'Installer\SettingsController@customizeSystem')->name('customize');
+        //     Route::post('system-customization', 'Installer\SettingsController@submitCustomizeSystem')->name('customize');
+        //     Route::post('new-logo', 'Installer\SettingsController@submitLogo')->name('submitLogo');
+        //     Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
+        //     Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
+        //     Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
+
+        //     //  Categories and Systems settings
+        //     Route::resource('systems', 'Installer\SystemsController');
+
+
+
+
+        //  Administrative routes for equipment and equipment categories
+
+    Route::resource('categories', 'Installer\CategoriesController');
+
+
+
+
     //  Administrative routes for users
     Route::resource('user',                'Admin\UserController');
-    // Route::get('/user/reactivate/{$id}',   'Admin\UserController@reactivateUser')     ->name('user.reactivate');
     Route::get('user/enable/{id}',         'Admin\UserController@reactivateUser')     ->name('user.reactivate');
     Route::post('user/change-password',    'Admin\UserController@submitPassword')     ->name('user.changePassword');
     Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')          ->name('checkUser');

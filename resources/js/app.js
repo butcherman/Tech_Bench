@@ -111,6 +111,11 @@ Vue.component('user-deleted',     require('./components/admin/userDeleted.vue').
 Vue.component('admin-file-links', require('./components/admin/fileLinks.vue').default);
 
 /*
+*   Installer Components
+*/
+Vue.component('equipment-categories', require('./components/installer/categories.vue').default);
+
+/*
 *   Include CSRF toden in all axios headers
 */
 window.axios.defaults.headers.common = {
