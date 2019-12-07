@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Installer;
 
 use App\SystemTypes;
+use App\SystemDataFields;
 use App\SystemCategories;
-use App\SystemCustDataTypes;
 use Illuminate\Http\Request;
-use App\SystemCustDataFields;
+use App\SystemDataFieldTypes;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -18,13 +18,17 @@ class SystemsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->authorize('hasAccess', 'Manage Equipment');
+            return $next($request);
+        });
     }
-    
+
     //  List the systems that can be modified
     public function index()
     {
         $systems = SystemCategories::with('SystemTypes')->get();
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Fetched Data - ', $systems->toArray());
         return view('installer.systemsList', [
@@ -33,26 +37,26 @@ class SystemsController extends Controller
     }
 
     //  Open the form to create a new system
-    public function create()
-    {
-        $categories = SystemCategories::all();
-        $dataTypes  = SystemCustDataTypes::orderBy('name', 'ASC')->get();
-        
-        $dropDown = [];
-        foreach($dataTypes as $type)
-        {
-            $dropDown[] = [
-                'value' => $type->data_type_id,
-                'label' => $type->name
-            ];
-        }
-        
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return view('installer.newSystem', [
-            'categories' => $categories,
-            'dropDown'   => $dropDown
-        ]);
-    }
+    // public function create()
+    // {
+    //     $categories = SystemCategories::all();
+    //     $dataTypes  = SystemCustDataTypes::orderBy('name', 'ASC')->get();
+
+    //     $dropDown = [];
+    //     foreach($dataTypes as $type)
+    //     {
+    //         $dropDown[] = [
+    //             'value' => $type->data_type_id,
+    //             'label' => $type->name
+    //         ];
+    //     }
+
+    //     Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+    //     return view('installer.newSystem', [
+    //         'categories' => $categories,
+    //         'dropDown'   => $dropDown
+    //     ]);
+    // }
 
     //  Store the new system type
     public function store(Request $request)
@@ -66,35 +70,34 @@ class SystemsController extends Controller
                     'regex:/^[a-zA-Z0-9_ ]*$/'
                 ],
             'dataOptions' => 'required'
-            
+
         ]);
-        
+
         $sysData = SystemTypes::create([
             'cat_id'          => $request->category,
             'name'            => $request->name,
-            'parent_id'       => null,
             'folder_location' => str_replace(' ', '_', $request->name)
         ]);
         $sysID = $sysData->sys_id;
         $i = 0;
-        
+
         foreach($request->dataOptions as $field)
         {
             if(!empty($field))
             {
-                if(isset($field['value']))
+                if(isset($field['data_type_id']))
                 {
-                    $id = $field['value'];
+                    $id = $field['data_type_id'];
                 }
                 else
                 {
-                    $newField = SystemCustDataTypes::create([
-                        'name' => $field['label']
+                    $newField = SystemDataFieldTypes::create([
+                        'name' => $field['name']
                     ]);
                     $id = $newField->data_type_id;
                 }
 
-                SystemCustDataFields::create([
+                SystemDataFields::create([
                     'sys_id' => $sysID,
                     'data_type_id' => $id,
                     'order' => $i
@@ -102,54 +105,41 @@ class SystemsController extends Controller
                 $i++;
             }
         }
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Submitted Data - ', $request->toArray());
         Log::notice('New System Created', ['cat_id' => $request->catName, 'sys_name' => $request->name, 'user_id' => Auth::user()->user_id]);
         $request->session()->flash('success', 'New System Created');
-        
+
         return response()->json(['success' => true]);
     }
 
-    //  Get a JSON array of the system to be edited
-    public function show($id)
+    //  Open the form to add equipment for the sepcified category
+    public function show($cat)
     {
-        $system = SystemTypes::find($id);
-        $data   = SystemCustDataFields::where('sys_id', $id)
-            ->join('system_cust_data_types', 'system_cust_data_fields.data_type_id', '=', 'system_cust_data_types.data_type_id')
-            ->orderBy('order', 'ASC')
-            ->pluck('name');
-        
-        $sysData = [
-            'name' => $system->name,
-            'data' => $data
-        ];
-        
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Fetched Data - ', $sysData);
-        return response()->json($sysData);
+        $fields = SystemDataFieldTypes::all();
+        $cat = SystemCategories::where('name', str_replace('-', ' ', $cat))->first();
+
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        return view('installer.newSystem', [
+            'cat'      => $cat,
+            'dataList' => $fields,
+        ]);
     }
 
     //  Edit an existing system
     public function edit($id)
     {
-        $system = SystemTypes::find($id);
-        $dataTypes = SystemCustDataTypes::orderBy('name', 'ASC')->get();
-        
-        $dropDown = [];
-        foreach($dataTypes as $type)
+        $fields = SystemDataFieldTypes::all();
+        $system = SystemTypes::where('sys_id', $id)->with(['SystemDataFields' => function($query)
         {
-            $dropDown[] = [
-                'value' => $type->data_type_id,
-                'label' => $type->name
-            ];
-        }
-        
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+            $query->join('system_data_field_types', 'system_data_fields.data_type_id', '=', 'system_data_field_types.data_type_id');
+        }])->withCount('SystemDataFields')->first();
+
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
         return view('installer.editSystem', [
-            'sys_id'   => $id,
-            'name'     => $system->name,
-            'dropDown' => $dropDown
+            'system'   => $system,
+            'dataList' => $fields,
         ]);
     }
 
@@ -161,48 +151,46 @@ class SystemsController extends Controller
                     'required',
                     'string',
                     Rule::unique('system_types')->ignore($id, 'sys_id'),
-                    'regex:/^[a-zA-Z0-9_ ]*$/'
-                ]
+                    'regex:/^[-a-zA-Z0-9_ ]*$/'
+            ],
+            'dataOptions' => 'required',
         ]);
-        
+
         //  Update the system name
         SystemTypes::find($id)->update([
             'name' => $request->name
         ]);
-        
+
         //  Update the order of the existing data fields
         $i = 0;
         foreach($request->dataOptions as $data)
         {
-            $dataID = SystemCustDataTypes::where('name', $data)->first();
-            
-            SystemCustDataFields::where('sys_id', $id)->where('data_type_id', $dataID->data_type_id)->update([
+            SystemDataFields::where('sys_id', $id)->where('data_type_id', $data['data_type_id'])->update([
                 'order' => $i
             ]);
-            
+
             $i++;
         }
-        
         //  Process any new data fields
-        if(!empty($request->newDataOptions))
+        if(!empty($request->newOptions))
         {
-            foreach($request->newDataOptions as $field)
+            foreach($request->newOptions as $field)
             {
                 if(!empty($field))
                 {
-                    if(isset($field['value']))
+                    if(isset($field['data_type_id']))
                     {
-                        $dataID = $field['value'];
+                        $dataID = $field['data_type_id'];
                     }
                     else
                     {
-                        $newField = SystemCustDataTypes::create([
-                            'name' => $field['label']
+                        $newField = SystemDataFieldTypes::create([
+                            'name' => $field['name']
                         ]);
                         $dataID = $newField->data_type_id;
                     }
 
-                    SystemCustDataFields::create([
+                    SystemDataFields::create([
                         'sys_id' => $id,
                         'data_type_id' => $dataID,
                         'order' => $i
@@ -211,23 +199,26 @@ class SystemsController extends Controller
                 }
             }
         }
-        
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Submitted Data - ', $request->toArray());
         Log::notice('System Updated', ['sys_name' => $request->name, 'user_id' => Auth::user()->user_id]);
         $request->session()->flash('success', 'System Updated');
-        
+
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-//    public function destroy($id)
-//    {
-//        //
-//    }
+    //  Delete an existing system - note this will fail if the system has any customers or tech tips assigned to it
+   public function destroy($id)
+   {
+       //
+       try {
+            SystemTypes::find($id)->delete();
+            return response()->json(['success' => true, 'reason' => 'Equipment Successfully Deleted']);
+        }
+        catch (\Illuminate\Database\QueryException $e)
+        {
+            return response()->json(['success' => false, 'reason' => 'Cannot delete this equipment.  It has Customers or Tech Tips assigned to it.  Please delete those first.']);
+        }
+   }
 }

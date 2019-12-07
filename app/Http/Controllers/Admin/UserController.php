@@ -26,13 +26,11 @@ use App\Http\Resources\User as UserResource;
 
 class UserController extends Controller
 {
-    private $user;
     //  Constructor sets up middleware
     public function __construct()
     {
         $this->middleware('auth')->except('initializeUser', 'submitInitializeUser');
         $this->middleware(function ($request, $next) {
-            $this->user = auth()->user();  //  TODO - is this correct????
             $this->authorize('hasAccess', 'Manage Users');
             return $next($request);
         });
@@ -149,7 +147,6 @@ class UserController extends Controller
     //  List all inactive users
     public function show($type)
     {
-        $userList = [];
         $route    = '';
 
         if($type !== 'inactive')
@@ -198,7 +195,9 @@ class UserController extends Controller
         Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
         return view('admin.userEdit', [
             'roles' => $roleArr,
-            'user'  => $user->makeVisible(['user_id', 'username']),
+            'user'  => $user->
+            /** @scrutinizer ignore-call */
+            makeVisible(['user_id', 'username']),
         ]);
     }
 

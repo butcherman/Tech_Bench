@@ -130,10 +130,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-        //  Administrative routes for equipment and equipment categories
-
+    //  Administrative routes for equipment and equipment categories
     Route::resource('categories', 'Installer\CategoriesController');
-
+    Route::resource('systems',    'Installer\SystemsController');
 
 
 
@@ -180,9 +179,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         //     Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
         //     Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
 
-        //     //  Categories and Systems settings
-        //     Route::resource('categories', 'Installer\CategoriesController');
-        //     Route::resource('systems', 'Installer\SystemsController');
         // });
 //    });
 //});
@@ -191,18 +187,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 });
-//    });
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -217,35 +201,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-
-
-
-
-
-
-
-        /*
-        *
-        *   System Routes
-        *
-        */
-        // Route::prefix('system')->name('system.')->group(function() {
-        //     Route::post('system-files/replace', 'Systems\SystemFilesController@replace')->name('replaceFile');
-        //     Route::resource('system-files', 'Systems\SystemFilesController');
-        //     Route::get('{cat}/{sys}', 'Systems\SystemsController@details')->name('details');
-        //     Route::get('{cat}', 'Systems\SystemsController@selectSys')->name('select');
-        //     Route::get('/', 'Systems\SystemsController@index')->name('index');
-        // });
-
-
-
-
-
-
-
-
-
-//    });
 
 
 

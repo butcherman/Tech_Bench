@@ -1,30 +1,26 @@
 @extends('layouts.app')
-@section('breadcrumbs')
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{route('admin.index')}}">System Administration</a></li>
-    <li class="breadcrumb-item"><a href="{{route('installer.systems.index')}}">Edit System</a></li>
-    <li class="breadcrumb-item">{{$name}}</li>
-</ol>
-@endsection
 
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-12">
-        <div class="pb-2 mt-4 mb-2 border-bottom text-center"><h1>Edit {{$name}}</h1></div>
+<div class="row">
+    <div class="col grid-margin">
+        <h4>Edit {{$system->name}}</h4>
     </div>
 </div>
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <edit-system-form
-            dropdown="{{json_encode($dropDown)}}"
-            get_route="{{route('installer.systems.show', $sys_id)}}"
-            submit_route="{{route('installer.systems.update', $sys_id)}}"
-            finish_route="{{route('admin.index')}}"
-        ></edit-system-form>
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <edit-equipment-form
+                    :sys_data="{{json_encode($system)}}"
+                    :data_list="{{json_encode($dataList)}}"
+                ></edit-equipment-form>
+            </div>
+        </div>
     </div>
 </div>
-<div class="row justify-content-center pad-top">
-    <div class="col-md-6">
+
+<div class="row justify-content-center">
+    <div class="col-md-10 grid-margin stretch-card">
         <div class="card">
             <div class="card-header text-center"><strong>Instructions</strong></div>
             <div class="card-body">
@@ -32,10 +28,13 @@
                     The System name must be a standard string, no special characters are allowed.
                 </p>
                 <p>
-                    For the Customer Information, selet the information that should be gathered for each customer that the system is assigned to.  If the information is not in the pull down list, you can type it in the search bar and click on it to add the information as an option.
+                    For the Customer Information, selet the information that should be gathered for each customer that
+                    the system is assigned to.  If the information is not in the pull down list, you can type it in the
+                    search bar and click on it to add the information as an option.
                 </p>
                 <p>
-                    To re-order the information, drag the existing options up or down.
+                    You can adjust the existing information order by dragging each item up and down.  If you would like 
+                    to re-order the new information, submit it first, and then come back to re-order it.
                 </p>
             </div>
         </div>

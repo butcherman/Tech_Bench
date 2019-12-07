@@ -8,7 +8,7 @@ class SystemDataFields extends Model
 {
     protected $primaryKey = 'field_id';
     protected $fillable = ['sys_id', 'data_type_id', 'order'];
-    protected $hidden = ['data_type_id', 'order', 'created_at', 'updated_at'];
+    protected $hidden = ['order', 'created_at', 'updated_at'];
 
     public function SystemDataFieldTypes()
     {

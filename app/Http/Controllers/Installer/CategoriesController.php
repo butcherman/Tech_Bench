@@ -32,13 +32,6 @@ class CategoriesController extends Controller
         ]);
     }
 
-    //  New category form
-    // public function create()
-    // {
-    //     Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-    //     return view('installer.newCategory');
-    // }
-
     //  Store the new category form
     public function store(Request $request)
     {
@@ -57,34 +50,6 @@ class CategoriesController extends Controller
         return response()->json(['success' => true]);
         // return redirect()->back()->with('success', 'Category Successfully Added. <a href="'.route('installer.systems.create').'">Add System</a>');
     }
-
-    //  Get a JSON list of the categories
-    // public function show($id)
-    // {
-    //     $categories = SystemCategories::all();
-
-    //     Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-    //     return response()->json($categories);
-    // }
-
-    //  Brind up the Edit Category Form
-    // public function edit($id)
-    // {
-    //     $cat = SystemCategories::find($id);
-
-    //     if(!$cat)
-    //     {
-    //         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-    //         Log::debug('Invalid Category ID Selected - '.$id);
-    //         return response(404);
-    //     }
-
-    //     Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-    //     Log::debug('Edit Data - ', $cat->toArray());
-    //     return view('installer.editCategory', [
-    //         'details' => $cat
-    //     ]);
-    // }
 
     //  Submit teh Edit Category form
     public function update(Request $request, $id)
@@ -109,12 +74,7 @@ class CategoriesController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Delete an existing category - note this will fail if the category has systems assigned to it
     public function destroy($id)
     {
         try {

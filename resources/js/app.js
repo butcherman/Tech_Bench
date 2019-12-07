@@ -23,6 +23,8 @@ import { Ziggy } from '../assets/js/ziggy';
 import vue2Dropzone from 'vue2-dropzone';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import Multiselect from 'vue-multiselect';
+import vSelect from 'vue-select';
+import draggable          from 'vuedraggable';
 
 /*
 *   The TinyMCE library
@@ -48,6 +50,8 @@ Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('editor', require('@tinymce/tinymce-vue').default);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 Vue.component('multiselect', Multiselect);
+Vue.component('v-select', vSelect);
+Vue.component('draggable',    draggable);
 
 Vue.mixin({
     methods: {
@@ -114,6 +118,9 @@ Vue.component('admin-file-links', require('./components/admin/fileLinks.vue').de
 *   Installer Components
 */
 Vue.component('equipment-categories', require('./components/installer/categories.vue').default);
+Vue.component('equipment-list',       require('./components/installer/equipmentList.vue').default);
+Vue.component('new-equipment-form',   require('./components/installer/newEquipment.vue').default);
+Vue.component('edit-equipment-form',  require('./components/installer/editEquipment.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

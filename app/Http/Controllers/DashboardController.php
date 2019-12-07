@@ -82,8 +82,8 @@ class DashboardController extends Controller
         }
         else
         {
-            return abort(404);
             Log::notice('Notification ID-'.$id.' not found for user ID-'.Auth::user()->user_id);
+            return abort(404);
         }
 
         return response()->json(['success' => true]);

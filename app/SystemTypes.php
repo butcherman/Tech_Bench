@@ -12,6 +12,6 @@ class SystemTypes extends Model
 
     public function SystemDataFields()
     {
-        return $this->hasMany('App\SystemDataFields', 'sys_id', 'sys_id');
+        return $this->hasMany('App\SystemDataFields', 'sys_id', 'sys_id')->orderBy('order', 'ASC');
     }
 }

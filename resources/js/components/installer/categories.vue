@@ -70,14 +70,13 @@ export default {
         submitForm(e)
         {
             e.preventDefault();
-            console.log(this.form);
             if(this.$refs.categoryForm.checkValidity() === false)
             {
+                //  TODO - validate category name is valid and does not have any illegal characters
                 this.validated = true;
             }
             else
             {
-                console.log('good to go');
                 this.button.text = 'Processing...';
                 this.button.disable = true;
                 if(this.form.edit)
@@ -101,13 +100,11 @@ export default {
         },
         editCategory(data)
         {
-                console.log(data);
-                this.button.text = 'Update Category';
+               this.button.text = 'Update Category';
                 this.form.name = data.name;
                 this.form.edit = data.cat_id;
                 this.modalTitle = 'Edit '+data.name;
                 this.$refs['categoriesModal'].show();
-
         },
         newCategory()
         {
@@ -130,7 +127,6 @@ export default {
                 // console.log(value);
                 if(value)
                 {
-                    console.log('delete '+this.form.edit);
                     this.$refs['loading-modal'].show();
                     axios.delete(this.route('admin.categories.destroy', this.form.edit))
                         .then(res => {

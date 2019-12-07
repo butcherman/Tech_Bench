@@ -5,10 +5,10 @@
 use App\UserRolePermissions;
 use Faker\Generator as Faker;
 
-$factory->define(UserRolePermissionsFactory::class, function (Faker $faker) {
+$factory->define(UserRolePermissions::class, function () {
     return [
         //
-        'role_id'      => factory(App\UserRoleTypes::class)->create()->role_id,
+        'role_id'      => factory(App\UserRoleType::class)->create()->role_id,
         'perm_type_id' => factory(App\UserRolePermissionTypes::class)->create()->perm_type_id,
     ];
 });

@@ -47,6 +47,7 @@
                 <h4 class="card-title">Customers:</h4>
                 <ul class="list-group">
                     <li class="list-group-item"><a href="#"><i class="ti-server"></i> Modify Customer ID</a></li>
+                    <li class="list-group-item"><a href="#">Modify customer file types</a></li>
                     <li class="list-group-item"><a href="#"><i class="ti-eraser"></i> View Disabled Customers</a></li>
                 </ul>
             </div>
@@ -62,8 +63,7 @@
                 <h4 class="card-title">Equipment:</h4>
                 <ul class="list-group">
                     <li class="list-group-item"><a href="{{route('admin.categories.index')}}"><i class="ti-layers"></i> Equipment Categories</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-layers-alt"></i> Equipment Types</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-desktop"></i> Equipment Information for Customers</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.systems.index')}}"><i class="ti-layers-alt"></i> Equipment Types</a></li>
                 </ul>
             </div>
         </div>
