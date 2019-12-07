@@ -121,6 +121,7 @@ Vue.component('equipment-categories', require('./components/installer/categories
 Vue.component('equipment-list',       require('./components/installer/equipmentList.vue').default);
 Vue.component('new-equipment-form',   require('./components/installer/newEquipment.vue').default);
 Vue.component('edit-equipment-form',  require('./components/installer/editEquipment.vue').default);
+Vue.component('logo-form',            require('./components/installer/logoForm.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers
