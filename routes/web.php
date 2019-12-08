@@ -138,18 +138,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //  Administrative routes for users
     Route::resource('user',                'Admin\UserController');
-    Route::get('user/enable/{id}',         'Admin\UserController@reactivateUser')      ->name('user.reactivate');
-    Route::post('user/change-password',    'Admin\UserController@submitPassword')      ->name('user.changePassword');
-    Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')           ->name('checkUser');
-    Route::get('links/show/{id}',          'Admin\AdminController@showLinks')          ->name('user.showLinks');
-    Route::get('links',                    'Admin\AdminController@userLinks')          ->name('user.links');
-    Route::post('password-policy',         'Admin\AdminController@submitPolicy')       ->name('passwordPolicy');
-    Route::get('password-policy',          'Admin\AdminController@passwordPolicy')     ->name('passwordPolicy');
-    Route::post('role-policy',             'Admin\AdminController@submitRoleSettings') ->name('roleSettings');
-    Route::get('role-policy',              'Admin\AdminController@roleSettings')       ->name('roleSettings');
+    Route::get('user/enable/{id}',         'Admin\UserController@reactivateUser')             ->name('user.reactivate');
+    Route::post('user/change-password',    'Admin\UserController@submitPassword')             ->name('user.changePassword');
+    Route::get('check-user/{name}/{type}', 'Admin\UserController@checkUser')                  ->name('checkUser');
+    Route::get('links/show/{id}',          'Admin\AdminController@showLinks')                 ->name('user.showLinks');
+    Route::get('links',                    'Admin\AdminController@userLinks')                 ->name('user.links');
+    Route::post('password-policy',         'Admin\AdminController@submitPolicy')              ->name('passwordPolicy');
+    Route::get('password-policy',          'Admin\AdminController@passwordPolicy')            ->name('passwordPolicy');
+    Route::post('role-policy',             'Admin\AdminController@submitRoleSettings')        ->name('roleSettings');
+    Route::get('role-policy',              'Admin\AdminController@roleSettings')              ->name('roleSettings');
     //  Tech Benc Settings Routes
-    Route::post('logo',                    'Installer\SettingsController@submitLogo')  ->name('submitLogo');
-    Route::get('logo',                     'Installer\SettingsController@logoSettings')->name('logoSettings');
+    Route::post('logo',                    'Installer\SettingsController@submitLogo')         ->name('submitLogo');
+    Route::get('logo',                     'Installer\SettingsController@logoSettings')       ->name('logoSettings');
+    Route::post('configuratin',            'Installer\SettingsController@submitConfiguration')->name('submitConfig');
+    Route::get('configuration',            'Installer\Settingscontroller@configuration')      ->name('config');
 
 
     //  Admin index route

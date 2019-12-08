@@ -37,9 +37,10 @@ class SettingsController extends Controller
         $fileName = $file->getClientOriginalName();
         $file->storeAs('img', $fileName, 'public');
 
-        Settings::where('key', 'app.logo')->update([
-            'value' => '/storage/img/' . $fileName
-        ]);
+        Settings::firstOrCreate(
+            ['key'   => 'app.logo'],
+            ['key'   => 'app.logo', 'value' => '/storage/img/' . $fileName]
+        )->update(['value' => '/storage/img/' . $fileName]);
 
         Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
         Log::debug('Submitted Data - ', $request->toArray());
@@ -48,42 +49,62 @@ class SettingsController extends Controller
         return response()->json(['url' => '/storage/img/' . $fileName]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    //  Timezone and Logo forms
-    public function customizeSystem()
+    public function configuration()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return view('installer.customize');
+        $settings = collect([
+            'url'      => config('app.url'),
+            'timezone' => config('app.timezone'),
+            'filesize' => config('filesystems.paths.max_size'),
+        ]);
+
+        return view('installer.configuration', [
+            'timzone_list' => \Timezonelist::toArray(),
+            'settings'     => $settings,
+        ]);
     }
 
-    //  Submit the timezone  form
-    public function submitCustomizeSystem(Request $request)
+    public function submitConfiguration(Request $request)
     {
         $request->validate([
-            'timezone' => 'required'
+            'url'      => 'required',
+            'timezone' => 'required',
+            'filesize' => 'required',
+            //  TODO - add additinal validation to make sure proper information is passed in
         ]);
 
-        Settings::where('key', 'app.timezone')->update([
-            'value' => $request->timezone
-        ]);
+        //  Update the site URL
+        if(config('app.url') !== $request->url)
+        {
+            Settings::firstOrCreate(
+                ['key'   => 'app.url'],
+                ['key'   => 'app.url', 'value' => $request->url]
+            )->update(['value' => $request->url]);
+        }
+        //  Update the site timezone
+        if (config('app.timezone') !== $request->timezone) {
+            Settings::firstOrCreate(
+                ['key'   => 'app.timezone'],
+                ['key'   => 'app.timezone', 'value' => $request->timezone]
+            )->update(['value' => $request->timezone]);
+        }
+        //  Update the maximum file upload size
+        if (config('filesystems.paths.max_size') !== $request->filesize) {
+            Settings::firstOrCreate(
+                ['key'   => 'filesystems.paths.max_size'],
+                ['key'   => 'filesystems.paths.max_size', 'value' => $request->filesize]
+            )->update(['value' => $request->filesize]);
+        }
+        $request->session()->flash('success', 'Configuration Updated');
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data - ', $request->toArray());
-        Log::notice('Tech Bench Settings Updated', ['user_id' => Auth::user()->user_id]);
-
-        return redirect()->back()->with('success', 'Timezone Successfully Updated');
+        return response()->json(['success' => true]);
     }
+
+
+
+
+
+
+
 
 
 

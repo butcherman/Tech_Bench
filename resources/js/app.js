@@ -15,16 +15,17 @@ window.expandProfile = function () {
 /*
 *   File Imports
 */
-import Vue from 'vue';
-import BootstrapVue from 'bootstrap-vue';
-import VueGoodTablePlugin from 'vue-good-table';
-import route from 'ziggy';
-import { Ziggy } from '../assets/js/ziggy';
-import vue2Dropzone from 'vue2-dropzone';
-import VuePhoneNumberInput from 'vue-phone-number-input';
-import Multiselect from 'vue-multiselect';
-import vSelect from 'vue-select';
-import draggable          from 'vuedraggable';
+import Vue                  from 'vue';
+import BootstrapVue         from 'bootstrap-vue';
+import VueGoodTablePlugin   from 'vue-good-table';
+import route                from 'ziggy';
+import { Ziggy }            from '../assets/js/ziggy';
+import vue2Dropzone         from 'vue2-dropzone';
+import VuePhoneNumberInput  from 'vue-phone-number-input';
+import Multiselect          from 'vue-multiselect';
+import vSelect              from 'vue-select';
+import draggable            from 'vuedraggable';
+import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 
 /*
 *   The TinyMCE library
@@ -45,6 +46,7 @@ require('tinymce/plugins/table');
 window.axios = require('axios');
 Vue.use(VueGoodTablePlugin);
 Vue.use(BootstrapVue);
+Vue.use(vueFilterPrettyBytes);
 
 Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('editor', require('@tinymce/tinymce-vue').default);
@@ -122,6 +124,7 @@ Vue.component('equipment-list',       require('./components/installer/equipmentL
 Vue.component('new-equipment-form',   require('./components/installer/newEquipment.vue').default);
 Vue.component('edit-equipment-form',  require('./components/installer/editEquipment.vue').default);
 Vue.component('logo-form',            require('./components/installer/logoForm.vue').default);
+Vue.component('tb-configuration',     require('./components/installer/configuration.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers
