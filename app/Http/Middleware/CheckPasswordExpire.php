@@ -22,18 +22,16 @@ class CheckPasswordExpire
         if(Auth::check() && !(Route::current()->getName() === 'changePassword' || Route::current()->getName() === 'logout'))
         {
             //  Verify that the users password has not expired
-            $user = $request->user();
-
-                $passExp = new Carbon(($user->password_expires));
-
-                if(!empty($passExp) && Carbon::now() > $passExp && !empty(config('users.passExpires')))
+            if(Auth::user()->password_expires !== null)
+            {
+                $passExp = new Carbon((Auth::user()->password_expires));
+                if(Carbon::now() > $passExp )
                 {
                     Log::notice('User ID-'.Auth::user()->user_id.' is being forced to change their password.');
                     $request->session()->flash('change_password', 'change_password');
                     return redirect()->route('changePassword');
+                }
             }
-
-            return $next($request);
         }
 
         return $next($request);

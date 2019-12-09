@@ -69,7 +69,7 @@ class AdminController extends Controller
     {
         $this->authorize('hasAccess', 'Manage Users');
         return view('admin.userSecurity', [
-            'passExpire' => config('users.passExpires'),
+            'passExpire' => config('auth.passwords.settings.expire'),
         ]);
     }
 
@@ -82,32 +82,29 @@ class AdminController extends Controller
             'passExpire' => 'required|numeric'
         ]);
 
-        //  Determine if the password expires field is updated
-        $oldExpire = config('users.passExpires');
-        if ($request->passExpire != $oldExpire) {
-            //  Update the setting in the database
-            Settings::where('key', 'users.passExpires')->update([
-                'value' => $request->passExpire
-            ]);
-            //  If the setting is changing from never to xx days, update all users
-            if ($request->passExpire == 0) {
-                User::whereNotNull('password_expires')->update([
-                    'password_expires' => null
-                ]);
-            }
-            else
-            {
-                $newExpire = Carbon::now()->addDays($request->passExpire);
-                User::whereNull('password_expires')->update([
-                    'password_expires' => $newExpire
-                ]);
-            }
+        Settings::firstOrCreate(
+            ['key'   => 'auth.passwords.settings.expire'],
+            ['key'   => 'auth.passwords.settings.expire', 'value' => $request->passExpire]
+        )->update(['value' => $request->passExpire]);
 
-            Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
-            Log::debug('Submitted Data - ', $request->toArray());
-            Log::notice('User Settings have been changed by User ID-' . Auth::user()->user_id);
-            return redirect()->back()->with('success', 'User Security Updated');
+        //  If the setting is changing from never to xx days, update all users
+        if ($request->passExpire == 0) {
+            User::whereNotNull('password_expires')->update([
+                'password_expires' => null
+            ]);
         }
+        else
+        {
+            $newExpire = Carbon::now()->addDays($request->passExpire);
+            User::whereNull('password_expires')->update([
+                'password_expires' => $newExpire
+            ]);
+        }
+
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('User Settings have been changed by User ID-' . Auth::user()->user_id);
+        return redirect()->back()->with('success', 'User Security Updated');
     }
 
     public function roleSettings()

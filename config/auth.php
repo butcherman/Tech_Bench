@@ -32,5 +32,8 @@ return [
             'table'    => 'password_resets',
             'expire'   => 120,
         ],
+        'settings' => [
+            'expire' => 30,
+        ],
     ],
 ];

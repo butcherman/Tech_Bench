@@ -78,6 +78,7 @@ class PasswordPolicyTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertSessionHas(["success" => "User Security Updated"]);
+
     }
 
     //  Try to submit the password policy page as an installer

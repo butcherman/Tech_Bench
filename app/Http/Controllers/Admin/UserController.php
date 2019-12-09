@@ -268,7 +268,7 @@ class UserController extends Controller
         }
         else
         {
-            $nextChange = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
+            $nextChange = config('auth.passwords.settings.expire') != null ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
         }
 
         $user = User::find($request->user_id);

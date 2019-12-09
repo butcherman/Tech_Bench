@@ -99,7 +99,7 @@ class AccountController extends Controller
         ]);
 
         //  Determine if there is a new password expire's date
-        $newExpire = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
+        $newExpire = config('auth.passwords.settings.expire') != null ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
 
         //  Change the password
         $user = Auth::user();
@@ -169,7 +169,7 @@ class AccountController extends Controller
         //  Get the users information
         $userData = User::where('username', $valid->username)->first();
 
-        $nextChange = config('users.passExpires') != null ? Carbon::now()->addDays(config('users.passExpires')) : null;
+        $nextChange = config('auth.passwords.settings.expire') != null ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
 
         //  Update the password
         User::find($userData->user_id)->update(

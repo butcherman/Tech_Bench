@@ -12,7 +12,7 @@ use App\UserRolePermissionTypes;
 
 abstract class TestCase extends BaseTestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     use CreatesApplication;
 
     //  Act as a registered Installer user
