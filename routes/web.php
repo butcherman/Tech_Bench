@@ -46,7 +46,8 @@ Route::delete('notifications/{id}',  'DashboardController@delNotification') ->na
 /*
 *   File Link Routes
 */
-Route::prefix('links')->name('links.')->group(function () {
+Route::prefix('links')->name('links.')->group(function ()
+{
     //  Resource controllers for base access
     Route::resource('data',           'FileLinks\FileLinksController');
     Route::get('new',                 'FileLinks\FileLinksController@create')     ->name('new');
@@ -109,9 +110,10 @@ Route::prefix('tip')->name('tip.')->group(function()
 });
 
 /*
-    *   Administration Routes
+*   Administration Routes
 */
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function ()
+{
 
 
 
@@ -120,9 +122,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         //     Route::get('system-customization', 'Installer\SettingsController@customizeSystem')->name('customize');
         //     Route::post('system-customization', 'Installer\SettingsController@submitCustomizeSystem')->name('customize');
         //     Route::post('new-logo', 'Installer\SettingsController@submitLogo')->name('submitLogo');
-        //     Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
-        //     Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')->name('emailSettings');
-        //     Route::get('email-settings', 'Installer\SettingsController@emailSettings')->name('emailSettings');
 
         //     //  Categories and Systems settings
         //     Route::resource('systems', 'Installer\SystemsController');
@@ -153,6 +152,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('configuratin',            'Installer\SettingsController@submitConfiguration')->name('submitConfig');
     Route::get('configuration',            'Installer\Settingscontroller@configuration')      ->name('config');
 
+    Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')         ->name('emailSettings');
+    Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')                ->name('emailSettings');
+    Route::get('email-settings', 'Installer\SettingsController@emailSettings')                ->name('emailSettings');
 
     //  Admin index route
     Route::get('/', 'Admin\AdminController@index')->name('index');

@@ -23,20 +23,20 @@ class UpdatesForVersion50 extends Migration
     public function up()
     {
         //  See the function itself for a description of the database changes
+        //  DB Adds
+        $this->addSoftDeleteToUsers();
+        $this->addSoftDeleteToCustomerSystems();
+        $this->addSoftDeleteToTechTips();
+        $this->addPasswordExpiresColumn();
+        $this->addHiddenColumn();
+        $this->addColumnsToFileLinksTable();
+        $this->addNotesColumnToFileLinkFiles();
+
         //  DB Modifications
         $this->updatePhoneIcons();
         $this->modifySystemDataTableNames();
         $this->migrateSystemDocumentation();
         $this->migrateUserRoles();
-
-        //  DB Adds
-        $this->addSoftDeleteToCustomerSystems();
-        $this->addSoftDeleteToTechTips();
-        $this->addSoftDeleteToUsers();
-        $this->addPasswordExpiresColumn();
-        $this->addHiddenColumn();
-        $this->addColumnsToFileLinksTable();
-        $this->addNotesColumnToFileLinkFiles();
 
         //  Remove Unneeded Tables
         $this->removeNavBarView();

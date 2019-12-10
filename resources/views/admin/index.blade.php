@@ -77,7 +77,7 @@
                 <ul class="list-group">
                     <li class="list-group-item"><a href="{{route('admin.logoSettings')}}"><i class="ti-image"></i> {{config('app.name')}} Logo</a></li>
                     <li class="list-group-item"><a href="{{route('admin.config')}}"><i class="ti-server"></i> {{config('app.name')}} Configuration</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-email"></i> Email Settings</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.emailSettings')}}"><i class="ti-email"></i> Email Settings</a></li>
                     <li class="list-group-item"><a href="#"><i class="ti-dashboard"></i> {{config('app.name')}} Add-ons</a></li>
                 </ul>
             </div>

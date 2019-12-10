@@ -111,14 +111,54 @@ class SettingsController extends Controller
     //  Email Settings form
     public function emailSettings()
     {
+        $settings = collect([
+            'host'       => config('mail.host'),
+            'port'       => config('mail.port'),
+            'encryption' => config('mail.encryption'),
+            'username'   => config('mail.username'),
+            // 'password'   => config('mail.password'),
+            'fromEmail'  =>config('mail.from.address'),
+            'fromName'   => config('mail.from.name'),
+        ]);
+
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        return view('installer.emailSettings');
+        return view('installer.emailSettings', [
+            'settings' => $settings,
+        ]);
     }
 
     //  Send a test email
     public function sendTestEmail(Request $request)
     {
-        //  to be added
+        $request->validate([
+            'host'       => 'required',
+            'port'       => 'required|numeric',
+            'encryption' => 'required',
+            'username'   => 'required',
+            'fromEmail'  => 'required',
+            'fromName'   => 'required',
+        ]);
+
+        $password = isset($request->password) && $request->password !== 'NULL' ? $request->password : config('mail.password');
+        Config::set('mail.host',         $request->host);
+        Config::set('mail.port',         $request->port);
+        Config::set('mail.encryption',   $request->encryption);
+        Config::set('mail.username',     $request->username);
+        Config::set('mail.password',     $password);
+        Config::set('mail.from.name',    $request->fromName);
+        Config::set('mail.from.address', $request->fromEmail);
+
+        try
+        {
+            Mail::to(Auth::user())->send(new TestEmail($request));
+        }
+        catch (\Exception $e)
+        {
+            // return $e->getMessage();
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Email successfully sent to '.Auth::user()->email]);
     }
 
     //  Submit the test email form
@@ -128,22 +168,51 @@ class SettingsController extends Controller
             'host'       => 'required',
             'port'       => 'required|numeric',
             'encryption' => 'required',
-            'username'   => 'required'
+            'username'   => 'required',
+            'fromEmail'  => 'required',
+            'fromName'   => 'required',
         ]);
 
         //  Update each setting
-        Settings::where('key', 'mail.host')->update(['value' => $request->host]);
-        Settings::where('key', 'mail.port')->update(['value' => $request->port]);
-        Settings::where('key', 'mail.encryption')->update(['value' => $request->encryption]);
-        Settings::where('key', 'mail.username')->update(['value' => $request->username]);
-        if(!empty($request->password))
+        Settings::firstOrCreate(
+            ['key'   => 'mail.host'],
+            ['key'   => 'mail.host', 'value' => $request->host]
+        )->update(['value' => $request->host]);
+        Settings::firstOrCreate(
+            ['key'   => 'mail.port'],
+            ['key'   => 'mail.port', 'value' => $request->port]
+        )->update(['value' => $request->port]);
+        Settings::firstOrCreate(
+            ['key'   => 'mail.encryption'],
+            ['key'   => 'mail.encryption', 'value' => $request->encryption]
+        )->update(['value' => $request->encryption]);
+        Settings::firstOrCreate(
+            ['key'   => 'mail.username'],
+            ['key'   => 'mail.username', 'value' => $request->username]
+        )->update(['value' => $request->username]);
+        Settings::firstOrCreate(
+            ['key'   => 'mail.from.address'],
+            ['key'   => 'mail.from.address', 'value' => $request->fromEmail]
+        )->update(['value' => $request->fromEmail]);
+        Settings::firstOrCreate(
+            ['key'   => 'mail.from.name'],
+            ['key'   => 'mail.from.name', 'value' => $request->fromName]
+        )->update(['value' => $request->fromName]);
+        //  Only update the password if it has changed
+        if(!empty($request->password) && $request->password !== 'NULL')
         {
-            Settings::where('key', 'mail.password')->update(['value' => $request->password]);
+            // Settings::where('key', 'mail.password')->update(['value' => $request->password]);
+            Settings::firstOrCreate(
+                ['key'   => 'mail.password'],
+                ['key'   => 'mail.password', 'value' => $request->password]
+            )->update(['value' => $request->password]);
         }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Submitted Data - ', $request->toArray());
         Log::notice('Email Settings have been changed by User ID-'.Auth::user()->user_id);
-        return redirect()->back()->with('success', 'Tech Bench Successfully Updated');
+        return response()->json(['success' => true]);
     }
+
+
 }
