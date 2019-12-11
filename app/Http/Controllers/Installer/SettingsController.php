@@ -130,35 +130,62 @@ class SettingsController extends Controller
     //  Send a test email
     public function sendTestEmail(Request $request)
     {
-        $request->validate([
-            'host'       => 'required',
-            'port'       => 'required|numeric',
-            'encryption' => 'required',
-            'username'   => 'required',
-            'fromEmail'  => 'required',
-            'fromName'   => 'required',
-        ]);
+        //  TODO - fix this and make it work
+        return response()->json(['success' => false]);
+        // $request->validate([
+        //     'host'       => 'required',
+        //     'port'       => 'required|numeric',
+        //     'encryption' => 'required',
+        //     'username'   => 'required',
+        //     'fromEmail'  => 'required',
+        //     'fromName'   => 'required',
+        // ]);
 
-        $password = isset($request->password) && $request->password !== 'NULL' ? $request->password : config('mail.password');
-        Config::set('mail.host',         $request->host);
-        Config::set('mail.port',         $request->port);
-        Config::set('mail.encryption',   $request->encryption);
-        Config::set('mail.username',     $request->username);
-        Config::set('mail.password',     $password);
-        Config::set('mail.from.name',    $request->fromName);
-        Config::set('mail.from.address', $request->fromEmail);
+        // //  Update each setting
+        // Settings::firstOrCreate(
+        //     ['key'   => 'mail.host'],
+        //     ['key'   => 'mail.host', 'value' => $request->host]
+        // )->update(['value' => $request->host]);
+        // Settings::firstOrCreate(
+        //     ['key'   => 'mail.port'],
+        //     ['key'   => 'mail.port', 'value' => $request->port]
+        // )->update(['value' => $request->port]);
+        // Settings::firstOrCreate(
+        //     ['key'   => 'mail.encryption'],
+        //     ['key'   => 'mail.encryption', 'value' => $request->encryption]
+        // )->update(['value' => $request->encryption]);
+        // Settings::firstOrCreate(
+        //     ['key'   => 'mail.username'],
+        //     ['key'   => 'mail.username', 'value' => $request->username]
+        // )->update(['value' => $request->username]);
+        // Settings::firstOrCreate(
+        //     ['key'   => 'mail.from.address'],
+        //     ['key'   => 'mail.from.address', 'value' => $request->fromEmail]
+        // )->update(['value' => $request->fromEmail]);
+        // Settings::firstOrCreate(
+        //     ['key'   => 'mail.from.name'],
+        //     ['key'   => 'mail.from.name', 'value' => $request->fromName]
+        // )->update(['value' => $request->fromName]);
+        // //  Only update the password if it has changed
+        // if (!empty($request->password) && $request->password !== 'NULL') {
+        //     // Settings::where('key', 'mail.password')->update(['value' => $request->password]);
+        //     Settings::firstOrCreate(
+        //         ['key'   => 'mail.password'],
+        //         ['key'   => 'mail.password', 'value' => $request->password]
+        //     )->update(['value' => $request->password]);
+        // }
 
-        try
-        {
-            Mail::to(Auth::user())->send(new TestEmail($request));
-        }
-        catch (\Exception $e)
-        {
-            // return $e->getMessage();
-            return response()->json(['success' => false, 'message' => $e->getMessage()]);
-        }
+        // try
+        // {
+        //     Mail::to(Auth::user())->send(new TestEmail($request));
+        // }
+        // catch (\Exception $e)
+        // {
+        //     // return $e->getMessage();
+        //     return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        // }
 
-        return response()->json(['success' => true, 'message' => 'Email successfully sent to '.Auth::user()->email]);
+        // return response()->json(['success' => true, 'message' => 'Email successfully sent to '.Auth::user()->email]);
     }
 
     //  Submit the test email form
@@ -213,6 +240,45 @@ class SettingsController extends Controller
         Log::notice('Email Settings have been changed by User ID-'.Auth::user()->user_id);
         return response()->json(['success' => true]);
     }
+
+    // protected function updateEmailSettings($data)
+    // {
+    //     //  Update each setting
+    //     Settings::firstOrCreate(
+    //         ['key'   => 'mail.host'],
+    //         ['key'   => 'mail.host', 'value' => $data->host]
+    //     )->update(['value' => $data->host]);
+    //     Settings::firstOrCreate(
+    //         ['key'   => 'mail.port'],
+    //         ['key'   => 'mail.port', 'value' => $data->port]
+    //     )->update(['value' => $data->port]);
+    //     Settings::firstOrCreate(
+    //         ['key'   => 'mail.encryption'],
+    //         ['key'   => 'mail.encryption', 'value' => $data->encryption]
+    //     )->update(['value' => $data->encryption]);
+    //     Settings::firstOrCreate(
+    //         ['key'   => 'mail.username'],
+    //         ['key'   => 'mail.username', 'value' => $data->username]
+    //     )->update(['value' => $data->username]);
+    //     Settings::firstOrCreate(
+    //         ['key'   => 'mail.from.address'],
+    //         ['key'   => 'mail.from.address', 'value' => $data->fromEmail]
+    //     )->update(['value' => $data->fromEmail]);
+    //     Settings::firstOrCreate(
+    //         ['key'   => 'mail.from.name'],
+    //         ['key'   => 'mail.from.name', 'value' => $data->fromName]
+    //     )->update(['value' => $data->fromName]);
+    //     //  Only update the password if it has changed
+    //     if (!empty($data->password) && $data->password !== 'NULL') {
+    //         // Settings::where('key', 'mail.password')->update(['value' => $request->password]);
+    //         Settings::firstOrCreate(
+    //             ['key'   => 'mail.password'],
+    //             ['key'   => 'mail.password', 'value' => $data->password]
+    //         )->update(['value' => $data->password]);
+    //     }
+
+    //     return true;
+    // }
 
 
 }

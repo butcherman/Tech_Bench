@@ -82,12 +82,12 @@
                                         {{button.text}}
                                     </b-button>
                                 </div>
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">  TODO - Fix This and Make it Work
                                     <b-button block variant="warning" :disabled="test.disable" @click="sendTestEmail">
                                         <span class="spinner-border spinner-border-sm text-primary" v-show="test.disable"></span>
                                         {{test.text}}
                                     </b-button>
-                                </div>
+                                </div> -->
                             </div>
                         </b-form>
                     </div>
@@ -120,7 +120,7 @@ export default {
             },
             test: {
                 disabled: false,
-                text: 'Send Test Email'
+                text: 'Update Settings and Send Test Email'
             },
             portOptions: [
                 {value: 'tls',  text: 'TLS'},
@@ -184,7 +184,7 @@ export default {
                         console.log(res);
                         this.alert.show = true;
                         this.test.disable = false;
-                        this.test.text = 'Send Test Email';
+                        this.test.text = 'Update Settings and Send Test Email';
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             }
         }

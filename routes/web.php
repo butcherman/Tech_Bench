@@ -150,7 +150,7 @@ Route::prefix('admin')->name('admin.')->group(function ()
     Route::post('logo',                    'Installer\SettingsController@submitLogo')         ->name('submitLogo');
     Route::get('logo',                     'Installer\SettingsController@logoSettings')       ->name('logoSettings');
     Route::post('configuratin',            'Installer\SettingsController@submitConfiguration')->name('submitConfig');
-    Route::get('configuration',            'Installer\Settingscontroller@configuration')      ->name('config');
+    Route::get('configuration',            'Installer\SettingsController@configuration')      ->name('config');
 
     Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')         ->name('emailSettings');
     Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')                ->name('emailSettings');
