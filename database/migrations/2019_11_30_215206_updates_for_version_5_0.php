@@ -37,6 +37,7 @@ class UpdatesForVersion50 extends Migration
         $this->modifySystemDataTableNames();
         $this->migrateSystemDocumentation();
         $this->migrateUserRoles();
+        $this->updateCustomersTable();
 
         //  Remove Unneeded Tables
         $this->removeNavBarView();
@@ -346,6 +347,19 @@ class UpdatesForVersion50 extends Migration
             //  Remove the Active column
             Schema::table('users', function (Blueprint $table) {
                 $table->dropColumn('active');
+            });
+        }
+    }
+
+    //  Add the Parent id column to the customers table
+    public function updateCustomersTable()
+    {
+        if(!Schema::hasColumn('customers', 'parent_id'))
+        {
+            Schema::table('customers', function(Blueprint $table)
+            {
+                $table->integer('parent_id')->after('cust_id')->nullable()->unsigned();
+                $table->foreign('parent_id')->references('cust_id')->on('customers')->onUpdate('cascade');
             });
         }
     }

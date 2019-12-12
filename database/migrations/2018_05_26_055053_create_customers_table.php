@@ -15,6 +15,7 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function(Blueprint $table) {
             $table->increments('cust_id');
+            $table->integer('parent_id')->nullable()->unsigned();
             $table->text('name');
             $table->text('dba_name')->nullable();
             $table->text('address');
@@ -24,6 +25,7 @@ class CreateCustomersTable extends Migration
             $table->boolean('active')->default(1);
             $table->softDeletes();
             $table->timestamps();
+            $table->foreign('parent_id')->references('cust_id')->on('customers')->onUpdate('cascade');
         });
     }
 
