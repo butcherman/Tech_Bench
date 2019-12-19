@@ -126,6 +126,8 @@ Vue.component('edit-equipment-form',  require('./components/installer/editEquipm
 Vue.component('logo-form',            require('./components/installer/logoForm.vue').default);
 Vue.component('tb-configuration',     require('./components/installer/configuration.vue').default);
 Vue.component('email-settings',       require('./components/installer/emailSettings.vue').default);
+Vue.component('logs-doughnut-chart',  require('./components/installer/logsDoughnutChart.vue').default);
+Vue.component('delete-log',           require('./components/installer/deleteLog.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

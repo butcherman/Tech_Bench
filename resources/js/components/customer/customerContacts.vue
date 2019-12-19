@@ -218,23 +218,23 @@
             deleteContact(id)
             {
                 this.$bvModal.msgBoxConfirm('Please confirm you want to delete this contact.', {
-                title: 'Are You Sure?',
-                size: 'md',
-                okVariant: 'danger',
-                okTitle: 'Yes',
-                cancelTitle: 'No',
-                centered: true,
-            }).then(res => {
-                if(res)
-                {
-                    this.isLoading = true;
-                    axios.delete(this.route('customer.contacts.destroy', id))
-                        .then(res => {
-                            this.resetForm();
-                            this.getContacts();
-                        }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-                }
-            });
+                    title: 'Are You Sure?',
+                    size: 'md',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No',
+                    centered: true,
+                }).then(res => {
+                    if(res)
+                    {
+                        this.isLoading = true;
+                        axios.delete(this.route('customer.contacts.destroy', id))
+                            .then(res => {
+                                this.resetForm();
+                                this.getContacts();
+                            }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }
+                });
             }
         },
     }

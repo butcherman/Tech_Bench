@@ -127,6 +127,10 @@ Route::prefix('admin')->name('admin.')->group(function ()
         //     Route::resource('systems', 'Installer\SystemsController');
 
 
+    //  Installer Routes
+
+
+
 
 
     //  Administrative routes for equipment and equipment categories
@@ -202,9 +206,6 @@ Route::prefix('admin')->name('admin.')->group(function ()
 */
 //Route::get('/finish-setup/{hash}', 'Admin\UserController@initializeUser')->name('initialize');
 //Route::post('/finish-setup/{hash}', 'Admin\UserController@submitInitializeUser')->name('initialize');
-
-
-
 
 
 

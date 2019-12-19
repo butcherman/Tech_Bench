@@ -62,13 +62,13 @@ class UpdatesForVersion50 extends Migration
     /*
     *   Database Modifications
     */
-    //  Update the icon class to change from font awesome, to theymify icons
+    //  Update the icon class for Font Awesome 5.0
     private function updatePhoneIcons()
     {
         $newIcons = [
-            ['description' => 'Home',   'icon_class' => 'ti-home'],
-            ['description' => 'Work',   'icon_class' => 'ti-briefcase'],
-            ['description' => 'Mobile', 'icon_class' => 'ti-mobile'],
+            ['description' => 'Home',   'icon_class' => 'fas fa-home'],
+            ['description' => 'Work',   'icon_class' => 'fas fa-briefcase'],
+            ['description' => 'Mobile', 'icon_class' => 'fas fa-mobile-alt'],
         ];
 
         foreach($newIcons as $new)

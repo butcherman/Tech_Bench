@@ -28,6 +28,7 @@
     ],
     "require": {
         "php": "^7.2",
+        "arcanedev/log-viewer": "^5.1",
         "barryvdh/laravel-dompdf": "^0.8.5",
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",

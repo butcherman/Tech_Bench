@@ -16,3 +16,4 @@ yarn-error.log
 /packages
 /report
 /tests/_Report/
+modules_statuses.json
