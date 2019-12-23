@@ -28,10 +28,18 @@ class CustomerContactsController extends Controller
             'name'    => 'required'
         ]);
 
+        //  Determine if the contact should be assigned under this site or the parent site
+        $details = Customers::find($request->cust_id);
+        if($details->parent_id && $request->shared)
+        {
+            $request->cust_id = $details->parent_id;
+        }
+
         $cont = CustomerContacts::create([
             'cust_id' => $request->cust_id,
             'name'    => $request->name,
             'email'   => !empty($request->email) ? $request->email : null,
+            'shared'  => $request->shared ? 1 : 0,
         ])->cont_id;
 
         foreach($request->numbers['type'] as $key => $num)
@@ -59,6 +67,18 @@ class CustomerContactsController extends Controller
         $contacts = CustomerContacts::where('cust_id', $id)
             ->with('CustomerContactPhones')
             ->get();
+
+        //  Determine if there is a parent site with shared contacts
+        $parent = Customers::find($id)->parent_id;
+        if ($parent)
+        {
+            $parentList = CustomerContacts::where('cust_id', $parent)
+                ->where('shared', 1)
+                ->with('CustomerContactPhones')
+                ->get();
+
+            $contacts = $contacts->merge($parentList);
+        }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Fetched Data - ', $contacts->toArray());

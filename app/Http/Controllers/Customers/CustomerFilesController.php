@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Files;
+use App\Customers;
 use App\CustomerFiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -47,6 +48,13 @@ class CustomerFilesController extends Controller
         //  See if the upload has finished
         if($save->isFinished())
         {
+            //  Determine if the note should go to the customer, or its parent
+            $details = Customers::find($request->cust_id);
+            if ($details->parent_id && $request->shared)
+            {
+                $request->cust_id = $details->parent_id;
+            }
+
             $file = $save->getFile();
             //  Set file locationi and clean filename for duplicates
             $filePath = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$request->cust_id;
@@ -71,6 +79,7 @@ class CustomerFilesController extends Controller
                 'file_type_id' => $request->type,
                 'cust_id'      => $request->cust_id,
                 'user_id'      => Auth::user()->user_id,
+                'shared'       => $request->shared ? 1 : 0,
                 'name'         => $request->name
             ]);
 
@@ -98,6 +107,18 @@ class CustomerFilesController extends Controller
             ->with('CustomerFileTypes')
             ->with('User')
             ->get();
+
+        //  Determine if there is a parent site with shared files
+        $parent = Customers::find($id)->parent_id;
+        if ($parent) {
+            $parentList = Customerfiles::where('cust_id', $parent)
+                ->with('Files')
+                ->with('CustomerFileTypes')
+                ->with('User')
+                ->get();
+
+            $files = $files->merge($parentList);
+        }
 
         return $files;
     }

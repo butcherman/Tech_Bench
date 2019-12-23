@@ -45,6 +45,20 @@
                         </optgroup>
                     </b-form-select>
                 </b-form-group>
+                <div class="row justify-content-center mt-4" v-show="linked">
+                    <div class="col-10 col-md-4 order-2 order-md-1">
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="shared" class="onoffswitch-checkbox" id="shared" v-model="form.shared">
+                            <label class="onoffswitch-label" for="shared">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 align-self-center order-1 order-md-2">
+                        <h5 class="text-center">Shared Between Sites</h5>
+                    </div>
+                </div>
                 <b-form-group label="Equipment Information" label-size="lg">
                     <b-form-group v-for="data in systemFields" :key="data.field_id" :label="data.system_data_field_types.name" :label-for="'sys-data-'+data.field_id">
                         <b-form-input :id="'sys-data-'+data.field_id" v-model="form['field_'+data.field_id]"></b-form-input>
@@ -81,6 +95,7 @@
 export default {
     props: [
         'cust_id',
+        'linked',
     ],
     data () {
         return {
@@ -94,6 +109,7 @@ export default {
             form: {
                 cust_id: this.cust_id,
                 system: null,
+                shared: false,
             },
             button: {
                 disable: false,

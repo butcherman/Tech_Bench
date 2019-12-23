@@ -9,6 +9,7 @@
         @can('hasAccess', 'deactivate_customer')
             :can_del="true"
         @endcan
+            parent="{{$parent}}"
         >
         </customer-details>
     </div>
@@ -18,7 +19,7 @@
         <div class="card">
             <div class="card-header">Customer Equipiment:</div>
             <div class="card-body">
-                <customer-systems cust_id="{{$cust_id}}"></customer-systems>
+                <customer-systems cust_id="{{$cust_id}}" :linked="{{$linked}}"></customer-systems>
             </div>
         </div>
     </div>
@@ -36,7 +37,7 @@
         <div class="card">
             <div class="card-header">Customer Notes:</div>
             <div class="card-body">
-                <customer-notes cust_id="{{$cust_id}}"></customer-notes>
+                <customer-notes cust_id="{{$cust_id}}" :linked="{{$linked}}"></customer-notes>
             </div>
         </div>
     </div>
@@ -46,7 +47,7 @@
         <div class="card">
             <div class="card-header">Customer Files:</div>
             <div class="card-body">
-                <customer-files cust_id="{{$cust_id}}" :file_types="{{json_encode($fileTypes)}}"></customer-files>
+                <customer-files cust_id="{{$cust_id}}" :file_types="{{json_encode($fileTypes)}}" :linked="{{$linked}}"></customer-files>
             </div>
         </div>
     </div>

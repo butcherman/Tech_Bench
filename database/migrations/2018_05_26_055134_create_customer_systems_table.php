@@ -17,6 +17,7 @@ class CreateCustomerSystemsTable extends Migration
             $table->increments('cust_sys_id');
             $table->integer('cust_id')->unsigned();
             $table->integer('sys_id')->unsigned();
+            $table->boolean('shared')->default(0);
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');

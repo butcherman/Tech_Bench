@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Customers;
 use App\CustomerSystems;
 use App\SystemDataFields;
 use App\SystemCategories;
@@ -37,10 +38,18 @@ class CustomerSystemsController extends Controller
             //  TODO:  validate system is unique to customer (write a test for it)
         ]);
 
+        //  Determine if the system is supposed to be added for the parent, or this site
+        $details = Customers::find($request->cust_id);
+        if($details->parent_id && $request->shared)
+        {
+            $request->cust_id = $details->parent_id;
+        }
+
         //  Insert the system into the DB
         $sys = CustomerSystems::create([
             'cust_id' => $request->cust_id,
-            'sys_id'  => $request->system
+            'sys_id'  => $request->system,
+            'shared'  => $request->shared,
         ]);
 
         //  Get the data fields for the new system
@@ -71,6 +80,20 @@ class CustomerSystemsController extends Controller
                     ->with('SystemDataFields')
                     ->with('SystemDataFields.SystemDataFieldTypes')
                     ->get();
+
+        //  determine if there is a parent site with shared systems
+        $parent = Customers::find($id)->parent_id;
+        if($parent)
+        {
+            $parentList = CustomerSystems::where('cust_id', $parent)
+                                ->where('shared', 1)
+                                ->with('SystemTypes')
+                                ->with('SystemDataFields')
+                                ->with('SystemDataFields.SystemDataFieldTypes')
+                                ->get();
+
+            $sysList = $sysList->merge($parentList);
+        }
 
         return $sysList;
     }

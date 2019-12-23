@@ -71,6 +71,20 @@
                             <h5>Mark this note as urgent</h5>
                         </div>
                     </div>
+                    <div class="row justify-content-center mt-4" v-show="linked">
+                        <div class="col-6 col-md-2 order-2 order-md-2">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="shared" class="onoffswitch-checkbox" id="shared" v-model="form.shared">
+                                <label class="onoffswitch-label" for="shared">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 align-self-center order-1 order-md-2">
+                            <h5 class="text-center">Shared Between Sites</h5>
+                        </div>
+                    </div>
                     <b-button type="submit" block variant="primary" class="pad-top" :disabled="button.disable">
                         <span class="spinner-border spinner-border-sm text-danger" v-show="button.disable"></span>
                         {{button.text}}
@@ -85,6 +99,7 @@
     export default {
         props: [
             'cust_id',
+            'linked',
         ],
         data () {
             return {
@@ -101,6 +116,7 @@
                     title: '',
                     note: '',
                     urgent: false,
+                    shared: false,
                 },
                 button: {
                     diable: false,

@@ -10,8 +10,8 @@ class CustomerSystems extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'cust_sys_id';
-    protected $fillable = ['cust_id', 'sys_id'];
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $fillable   = ['cust_id', 'sys_id', 'shared'];
+    protected $hidden     = ['created_at', 'updated_at'];
 
     public function SystemTypes()
     {

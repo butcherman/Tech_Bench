@@ -29,14 +29,14 @@
                 </span>
                 <span v-else-if="data.column.field == 'email'">
                     <a :href="'mailto:'+data.row.email" v-if="data.row.email">
-                        <i class="ti-email text-muted"></i>
+                        <i class="far fa-envelope text-muted"></i>
                         {{data.row.email}}
                     </a>
                 </span>
                 <span v-else-if="data.column.field == 'actions'">
-                    <i class="ti-pencil pointer" title="Edit" v-b-tooltip @click="loadEditData(data.row)"></i>
-                    <i class="ti-trash pointer" title="Delete" v-b-tooltip @click="deleteContact(data.row.cont_id)"></i>
-                    <a :href="route('customer.contacts.edit', data.row.cont_id)" title="Download" v-b-tooltip class="text-muted"><i class="ti-id-badge"></i></a>
+                    <i class="far fa-edit pointer" title="Edit" v-b-tooltip @click="loadEditData(data.row)"></i>
+                    <i class="far fa-trash-alt pointer" title="Delete" v-b-tooltip @click="deleteContact(data.row.cont_id)"></i>
+                    <a :href="route('customer.contacts.edit', data.row.cont_id)" title="Download" v-b-tooltip class="text-muted"><i class="far fa-address-card"></i></a>
                 </span>
             </template>
             <template slot="loadingContent">
@@ -50,6 +50,20 @@
                     <b-form-input id="name" v-model="form.name" type="text" required autofocus placeholder="Enter Contact Name"></b-form-input>
                     <b-form-invalid-feedback>You must enter a name for the contact</b-form-invalid-feedback>
                 </b-form-group>
+                <div class="row justify-content-center mt-4" v-show="linked">
+                    <div class="col-10 col-md-4 order-2 order-md-1">
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="shared" class="onoffswitch-checkbox" id="shared" v-model="form.shared">
+                            <label class="onoffswitch-label" for="shared">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 align-self-center order-1 order-md-2">
+                        <h5 class="text-center">Shared Between Sites</h5>
+                    </div>
+                </div>
                 <b-form-group label="Email Address" label-for="email">
                     <b-form-input id="email" v-model="form.email" type="email" placeholder="Enter Contact Email Address"></b-form-input>
                     <b-form-invalid-feedback>Please use a valid email format</b-form-invalid-feedback>
@@ -83,6 +97,7 @@
         props: [
             'cust_id',
             'phone_types',
+            'linked',
         ],
         data () {
             return {
@@ -121,7 +136,8 @@
                         type: [2],
                         number: [],
                         ext: [],
-                    }
+                    },
+                    shared: false,
                 },
                 button: {
                     text: 'Submit New Contact',
@@ -155,6 +171,7 @@
             {
                 this.form.name = cont.name;
                 this.form.email = cont.email;
+                this.form.shared = cont.shared;
                 this.button.text = 'Update Contact';
                 this.edit = cont.cont_id;
                 for(var i=0; i < cont.customer_contact_phones.length; i++)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Customers;
 use App\CustomerNotes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -26,10 +27,17 @@ class CustomerNotesController extends Controller
             'note'    => 'required'
         ]);
 
+        //  Determine if the note should go to the customer, or its parent
+        $details = Customers::find($request->cust_id);
+        if ($details->parent_id && $request->shared) {
+            $request->cust_id = $details->parent_id;
+        }
+
         $noteID = CustomerNotes::create([
             'cust_id'     => $request->cust_id,
             'user_id'     => Auth::user()->user_id,
             'urgent'      => $request->urgent,
+            'shared'      => $request->shared ? 1 : 0,
             'subject'     => $request->title,
             'description' => $request->note
         ]);
@@ -44,6 +52,14 @@ class CustomerNotesController extends Controller
     public function show($id)
     {
         $notes = CustomerNotes::where('cust_id', $id)->orderBy('urgent', 'desc')->get();
+
+        //  Determine if there is a parent site with shared contacts
+        $parent = Customers::find($id)->parent_id;
+        if ($parent) {
+            $parentList = CustomerNotes::where('cust_id', $parent)->orderBy('urgent', 'desc')->get();
+
+            $notes = $notes->merge($parentList);
+        }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Fetched Data - ', $notes->toArray());

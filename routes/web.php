@@ -77,21 +77,23 @@ Route::prefix('customer')->name('customer.')->group(function()
     //  Customer Files
     Route::resource('files',                   'Customers\CustomerFilesController');
     //  Custome Notes
-    Route::get('download-note/{id}',           'DownloadController@downloadCustNote')        ->name('download-note');
+    Route::get('download-note/{id}',           'DownloadController@downloadCustNote')             ->name('download-note');
     Route::resource('notes',                   'Customers\CustomerNotesController');
     //  Customer Contacts
     Route::resource('contacts',                'Customers\CustomerContactsController');
     //  Customer Systems
     Route::resource('systems',                 'Customers\CustomerSystemsController');
     //  Customer Details
-    Route::get('id/{id}/{name}',               'Customers\CustomerDetailsController@details')->name('details');
+    Route::get('link-parent/{id}',             'Customers\CustomerDetailsController@removeParent')->name('removeParent');
+    Route::post('link-parent',                 'Customers\CustomerDetailsController@linkParent')  ->name('linkParent');
+    Route::get('id/{id}/{name}',               'Customers\CustomerDetailsController@details')     ->name('details');
     Route::resource('id',                      'Customers\CustomerDetailsController');
     //  check Id and bookmark customer
-    Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')     ->name('toggle-fav');
-    Route::get('check-id/{id}',                'Customers\CustomerController@checkID')       ->name('check-id');
+    Route::get('toggle-fav/{action}/{custID}', 'Customers\CustomerController@toggleFav')          ->name('toggle-fav');
+    Route::get('check-id/{id}',                'Customers\CustomerController@checkID')            ->name('check-id');
     //  Index landing/search page
-    Route::get('search',                       'Customers\CustomerController@search')        ->name('search');
-    Route::get('/',                            'Customers\CustomerController@index')         ->name('index');
+    Route::get('search',                       'Customers\CustomerController@search')             ->name('search');
+    Route::get('/',                            'Customers\CustomerController@index')              ->name('index');
 });
 
 /*

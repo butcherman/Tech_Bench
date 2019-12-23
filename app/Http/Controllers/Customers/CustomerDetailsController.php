@@ -36,31 +36,44 @@ class CustomerDetailsController extends Controller
         $this->authorize('hasAccess', 'Add Customer');
 
         $request->validate([
-            'cust_id'  => 'required|numeric|unique:customers,cust_id',
-            'name'     => 'required',
-            'dba_name' => 'nullable',
-            'address'  => 'required',
-            'city'     => 'required',
-            'zip'      => 'required|numeric'
+            'cust_id'   => 'nullable|numeric|unique:customers,cust_id',
+            'parent_id' => 'nullable|numeric|exists:customers,cust_id',
+            'name'      => 'required',
+            'dba_name'  => 'nullable',
+            'address'   => 'required',
+            'city'      => 'required',
+            'zip'       => 'required|numeric'
         ]);
 
         //  Remove any forward slash (/) from the Customer name field
         $request->merge(['name' => str_replace('/', '-', $request->name)]);
 
-        Customers::create([
-            'cust_id'  => $request->cust_id,
-            'name'     => $request->name,
-            'dba_name' => $request->dba_name,
-            'address'  => $request->address,
-            'city'     => $request->city,
-            'state'    => $request->selectedState,
-            'zip'      => $request->zip,
+        //  Check if the parent ID noted, has a parent of its own
+        if($request->parent_id)
+        {
+            $parentsParent = Customers::find($request->parent_id);
+
+            if($parentsParent->parent_id)
+            {
+                $request->parent_id = $parentsParent->parent_id;
+            }
+        }
+
+        $custData = Customers::create([
+            'cust_id'   => $request->cust_id,
+            'parent_id' => $request->parent_id,
+            'name'      => $request->name,
+            'dba_name'  => $request->dba_name,
+            'address'   => $request->address,
+            'city'      => $request->city,
+            'state'     => $request->selectedState,
+            'zip'       => $request->zip,
         ]);
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::notice('New Customer ID-'.$request->custID.' created by User ID-'.Auth::user()->user_id);
 
-        return response()->json(['success' => true ]);
+        return response()->json(['success' => true, 'cust_id' => $custData->cust_id ]);
     }
 
     //  Show the customer details
@@ -74,9 +87,10 @@ class CustomerDetailsController extends Controller
             return view('customer.customerNotFound');
         }
 
-        $custFav = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
-        $numTypes = new PhoneNumberTypesCollection(PhoneNumberTypes::all());
+        $custFav   = CustomerFavs::where('user_id', Auth::user()->user_id)->where('cust_id', $custDetails->cust_id)->first();
+        $numTypes  = new PhoneNumberTypesCollection(PhoneNumberTypes::all());
         $fileTypes = new CustomerFileTypesCollection(CustomerFileTypes::all());
+        $parent    = $custDetails->parent_id ? Customers::find($custDetails->parent_id)->name : null;
 
         return view('customer.details', [
             'cust_id'     => $custDetails->cust_id,
@@ -84,6 +98,8 @@ class CustomerDetailsController extends Controller
             'isFav'       => empty($custFav) ? 'false' : 'true',
             'numberTypes' => $numTypes,
             'fileTypes'   => $fileTypes,
+            'parent'      => $parent,
+            'linked'      => $custDetails->child_count || $parent ? 'true' : 'false',
         ]);
     }
 
@@ -114,6 +130,34 @@ class CustomerDetailsController extends Controller
         return response()->json([
             'success' => true
         ]);
+    }
+
+    //  Link a site to a parent site
+    public function linkParent(Request $request)
+    {
+        $request->validate([
+            'parent_id' => 'required|numeric|exists:customers,cust_id',
+            'cust_id'   => 'required|numeric|exists:customers,cust_id'
+        ]);
+
+        $parentsParent = Customers::find($request->parent_id);
+
+        if ($parentsParent->parent_id)
+        {
+            $request->parent_id = $parentsParent->parent_id;
+        }
+
+        Customers::find($request->cust_id)->update([
+            'parent_id' => $request->parent_id,
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+
+    public function removeParent($id)
+    {
+        Customers::find($id)->update(['parent_id' => null]);
     }
 
     //  Deactivate a customer - note this will not remove it from the database, but make it inaccessable

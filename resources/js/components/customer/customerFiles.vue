@@ -64,6 +64,20 @@
                     :options="dropzoneOptions">
                 </vue-dropzone>
                 <div v-if="fileError" class="invalid-feedback d-block">You must select a file</div>
+                <div class="row justify-content-center mt-4" v-show="linked">
+                    <div class="col-6 col-md-2 order-2 order-md-2">
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="shared" class="onoffswitch-checkbox" id="shared" v-model="form.shared">
+                            <label class="onoffswitch-label" for="shared">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 align-self-center order-1 order-md-2">
+                        <h5 class="text-center">Shared Between Sites</h5>
+                    </div>
+                </div>
                 <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
                 <b-button type="submit" block variant="primary" class="pad-top" :disabled="button.disable">
                     <span class="spinner-border spinner-border-sm text-danger" v-show="button.disable"></span>
@@ -79,6 +93,7 @@
         props: [
             'cust_id',
             'file_types',
+            'linked',
         ],
         data () {
             return {
@@ -123,6 +138,7 @@
                     cust_id: this.cust_id,
                     name: '',
                     type: null,
+                    shared: false,
                 },
                 progress: 0,
                 showProgress: false,
@@ -228,6 +244,7 @@
                 formData.append('cust_id', this.form.cust_id);
                 formData.append('name', this.form.name);
                 formData.append('type', this.form.type);
+                formData.append('shared', this.form.shared);
             },
             queueComplete()
             {

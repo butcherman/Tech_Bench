@@ -19,6 +19,7 @@ class CreateCustomerFilesTable extends Migration
             $table->integer('file_type_id')->unsigned();
             $table->integer('cust_id')->unsigned();
             $table->integer('user_id')->unsigned();
+            $table->boolean('shared')->default(0);
             $table->text('name');
             $table->timestamps();
             $table->foreign('file_id')->references('file_id')->on('files')->onUpdate('cascade');

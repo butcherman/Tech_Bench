@@ -7,11 +7,12 @@
                     {{details.name}}
                 </h3>
                 <h5>{{details.dba_name}}</h5>
+                <h5 v-if="cust_details.parent_id">Child of - <a :href="route('customer.details', [cust_details.parent_id, dashify(parent)])">{{parent}}</a></h5>
                 <address>
                     <div class="float-left">
-                        <span class="ti-location-pin"></span>
+                        <i class="fas fa-map-marker-alt"></i>
                     </div>
-                    <a :href="url" target="_blank" id="addr-span" class="float-left">
+                    <a :href="url" target="_blank" id="addr-span" class="float-left ml-2">
                         {{details.address}}<br />
                         {{details.city}}, {{details.state}} &nbsp;{{details.zip}}
                     </a>
@@ -100,7 +101,43 @@
                     <span class="spinner-border spinner-border-sm text-danger" v-show="button.dis"></span>
                     {{button.text}}
                 </b-button>
+                <b-button variant="secondary" block @click="openLinkDialog">
+                    {{button.linkText}}
+                </b-button>
             </b-form>
+        </b-modal>
+        <b-modal id="link-parent-modal" title="Link Site To Parent" ref="link-parent-modal" hide-footer centered @cancel="cancelSelectCustomer">
+            <b-form @submit="searchCustomer">
+                <b-input-group>
+                    <b-form-input type="text" v-model="searchParam.name" placeholder="Enter Customer Name or ID Number"></b-form-input>
+                    <b-input-group-append>
+                        <b-button varient="outline-secondary" @click="searchCustomer"><span class="ti-search"></span></b-button>
+                    </b-input-group-append>
+                </b-input-group>
+            </b-form>
+            <div class="row justify-content-center mt-2" v-show="button.allowLink">
+                <div class="col-md-3">
+                    <b-button block variant="primary" @click="saveParentLink">Save</b-button>
+                </div>
+            </div>
+            <div id="search-results" class="mt-4" v-if="searchResults.length > 0">
+                <h4 class="text-center">Select A Customer</h4>
+                <b-list-group>
+                    <b-list-group-item v-for="res in searchResults" v-bind:key="res.cust_id" class="pointer" @click="selectCustomer(res)">{{res.name}}</b-list-group-item>
+                    <b-list-group-item>
+                        <div class="text-muted float-left w-auto">Showing items {{searchMeta.from}} to {{searchMeta.to}} of {{searchMeta.total}}</div>
+                        <div class="text-muted float-right w-auto">
+                            <span class="pointer" v-if="searchMeta.current_page != 1" @click="updatePage(searchMeta.current_page - 1)">
+                                <span class="ti-angle-double-left"></span> Previous
+                            </span>
+                            -
+                            <span class="pointer" v-if="searchMeta.current_page != searchMeta.last_page" @click="updatePage(searchMeta.current_page + 1)">
+                                Next <span class="ti-angle-double-right"></span>
+                            </span>
+                        </div>
+                    </b-list-group-item>
+                </b-list-group>
+            </div>
         </b-modal>
         <b-modal id="loading-modal" size="sm" ref="loading-modal" hide-footer hide-header hide-backdrop centered>
             <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
@@ -114,6 +151,7 @@ export default {
         'cust_details',
         'is_fav',
         'can_del',
+        'parent',
     ],
     data() {
         return {
@@ -121,11 +159,13 @@ export default {
             details: this.cust_details,
             url: '',
             isFav: this.is_fav,
-            classFav: this.is_fav ? 'ti-bookmark-alt bookmark-checked' : 'ti-bookmark bookmark-unchecked',
+            classFav: this.is_fav ? 'fas fa-bookmark bookmark-checked' : 'far fa-bookmark bookmark-unchecked',
             markFav: this.is_fav ? 'Remove From Favorites' : 'Add to Favorites',
             button: {
                 dis: false,
-                text: 'Update Customer Data'
+                text: 'Update Customer Data',
+                linkText: this.cust_details.parent_id ? 'Remove From Linked Site' : 'Link to Parent Site',
+                allowLink: false,
             },
             form: {
                 name: this.cust_details.name,
@@ -187,7 +227,17 @@ export default {
                     {value: 'WI', text: 'Wisconsin'},
                     {value: 'WY', text: 'Wyoming'},
                 ],
-            }
+            },
+            searchParam: {
+                page: '',
+                perPage: 25,
+                sortField: 'name',
+                sortType: 'asc',
+                name: '',
+                cust_id: '',
+            },
+            searchResults: [],
+            searchMeta: [],
         }
     },
     created()
@@ -207,7 +257,7 @@ export default {
                 axios.get(this.route('customer.toggle-fav', ['remove', this.cust_details.cust_id]))
                     .then(res => {
                         this.isFav = false;
-                        this.classFav  = 'ti-bookmark bookmark-unchecked';
+                        this.classFav  = 'far fa-bookmark bookmark-unchecked';
                         this.markFav = 'Add To Favorites'; //  : 'Add to Favorites',
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
@@ -217,7 +267,7 @@ export default {
                 axios.get(this.route('customer.toggle-fav', ['add', this.cust_details.cust_id]))
                     .then(res => {
                         this.isFav = true;
-                        this.classFav  = 'ti-bookmark-alt bookmark-checked';
+                        this.classFav  = 'fas fa-bookmark bookmark-checked';
                         this.markFav = 'Remove From Favorites';
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
@@ -236,7 +286,6 @@ export default {
                 this.button.text = 'Updating Customer';
                 axios.put(this.route('customer.id.update', this.cust_details.cust_id), this.form)
                     .then(res => {
-                        console.log(res);
                         if(res.data.success === true)
                         {
                             this.validated = false;
@@ -272,7 +321,6 @@ export default {
                     this.$refs['loading-modal'].show();
                     axios.delete(this.route('customer.id.destroy', this.cust_details.cust_id))
                     .then(res => {
-                        console.log(res);
                         window.location.href = this.route('customer.index');
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
                 }
@@ -280,6 +328,75 @@ export default {
             .catch(error => {
                 alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error);
             })
+        },
+        openLinkDialog()
+        {
+            if(!this.cust_details.parent_id)
+            {
+                this.$refs['details-edit-modal'].hide();
+                this.$refs['link-parent-modal'].show();
+            }
+            else
+            {
+                this.$bvModal.msgBoxConfirm('Please confirm you want to remove this site as a linked site.', {
+                        title: 'Are You Sure?',
+                        size: 'md',
+                        okVariant: 'danger',
+                        okTitle: 'Yes',
+                        cancelTitle: 'No',
+                        centered: true,
+                    }).then(res => {
+                        if(res)
+                        {
+                            this.$refs['loading-modal'].show();
+                            axios.get(this.route('customer.removeParent', this.cust_details.cust_id))
+                                .then(res => {
+                                    location.reload()
+                                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                        }
+                    });
+            }
+        },
+        searchCustomer(e)
+        {
+            if(e)
+            {
+                e.preventDefault();
+                this.searchParam.page = '';
+            }
+            this.$refs['loading-modal'].show();
+            axios.get(this.route('customer.search', this.searchParam))
+                .then(res => {
+                    this.searchResults = res.data.data;
+                    this.searchMeta = res.data.meta;
+                    this.$refs['loading-modal'].hide();
+                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+        },
+        updatePage(newPage)
+        {
+            this.searchParam.page = newPage;
+            this.searchCustomer();
+        },
+        selectCustomer(custData)
+        {
+            this.searchParam.name = custData.name;
+            this.searchParam.cust_id = custData.cust_id;
+            this.searchResults = [];
+            this.button.allowLink = true;
+        },
+        cancelSelectCustomer() {
+            this.searchParam.name = '';
+            this.searchResults = [];
+        },
+        saveParentLink()
+        {
+            console.log('saved');
+            console.log(this.searchParam.cust_id);
+            axios.post(this.route('customer.linkParent'), {'parent_id': this.searchParam.cust_id, 'cust_id': this.cust_details.cust_id})
+                .then(res => {
+                    console.log(res);
+                    location.reload();
+                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
         }
     }
 }

@@ -362,5 +362,31 @@ class UpdatesForVersion50 extends Migration
                 $table->foreign('parent_id')->references('cust_id')->on('customers')->onUpdate('cascade');
             });
         }
+        if(!Schema::hasColumn('customer_systems', 'shared'))
+        {
+            Schema::table('customer_systems', function (Blueprint $table)
+            {
+                $table->boolean('shared')->default(0)->after('sys_id');
+            });
+        }
+        if (!Schema::hasColumn('customer_contacts', 'shared'))
+        {
+            Schema::table('customer_contacts', function (Blueprint $table)
+            {
+                $table->boolean('shared')->default(0)->after('cust_id');
+            });
+        }
+        if (!Schema::hasColumn('customer_notes', 'shared'))
+        {
+            Schema::table('customer_notes', function (Blueprint $table)
+            {
+                $table->boolean('shared')->default(0)->after('user_id');
+            });
+        }
+        if (!Schema::hasColumn('customer_files', 'shared')) {
+            Schema::table('customer_files', function (Blueprint $table) {
+                $table->boolean('shared')->default(0)->after('user_id');
+            });
+        }
     }
 }
