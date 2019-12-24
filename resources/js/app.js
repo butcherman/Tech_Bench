@@ -26,6 +26,7 @@ import Multiselect          from 'vue-multiselect';
 import vSelect              from 'vue-select';
 import draggable            from 'vuedraggable';
 import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
+import Avatar               from 'vue-avatar'
 
 /*
 *   The TinyMCE library
@@ -54,6 +55,7 @@ Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 Vue.component('multiselect', Multiselect);
 Vue.component('v-select', vSelect);
 Vue.component('draggable',    draggable);
+Vue.component('avatar', Avatar);
 
 Vue.mixin({
     methods: {

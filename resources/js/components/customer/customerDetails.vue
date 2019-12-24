@@ -111,7 +111,7 @@
                 <b-input-group>
                     <b-form-input type="text" v-model="searchParam.name" placeholder="Enter Customer Name or ID Number"></b-form-input>
                     <b-input-group-append>
-                        <b-button varient="outline-secondary" @click="searchCustomer"><span class="ti-search"></span></b-button>
+                        <b-button varient="outline-secondary" @click="searchCustomer"><span class="fas fa-search"></span></b-button>
                     </b-input-group-append>
                 </b-input-group>
             </b-form>
@@ -128,11 +128,11 @@
                         <div class="text-muted float-left w-auto">Showing items {{searchMeta.from}} to {{searchMeta.to}} of {{searchMeta.total}}</div>
                         <div class="text-muted float-right w-auto">
                             <span class="pointer" v-if="searchMeta.current_page != 1" @click="updatePage(searchMeta.current_page - 1)">
-                                <span class="ti-angle-double-left"></span> Previous
+                                <span class="fas fa-angle-double-left"></span> Previous
                             </span>
                             -
                             <span class="pointer" v-if="searchMeta.current_page != searchMeta.last_page" @click="updatePage(searchMeta.current_page + 1)">
-                                Next <span class="ti-angle-double-right"></span>
+                                Next <span class="fas fa-angle-double-right"></span>
                             </span>
                         </div>
                     </b-list-group-item>

@@ -31,12 +31,12 @@
                 </span>
                 <span v-else-if="data.column.field == 'actions'">
                     <div class="d-flex justify-content-between flex-nowrap">
-                        <a v-if="!data.row.expired" :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+route('file-links.show', [data.row.link_hash])" title="Email Link" class="btn btn-rounded px-0 text-muted" v-b-tooltip.hover><span class="ti-email"></span></a>
+                        <a v-if="!data.row.expired" :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+route('file-links.show', [data.row.link_hash])" title="Email Link" class="btn btn-rounded px-0 text-muted" v-b-tooltip.hover><span class="fas fa-envelope"></span></a>
                         <button v-if="!data.row.expired" @click="disableLink(data.row.link_id)" class="btn btn-rounded px-0 text-muted" title="Disable Link" v-b-tooltip.hover>
-                            <span class="ti-unlink"></span>
+                            <span class="fas fa-unlink"></span>
                         </button>
                         <button :id="'confirm-delete'+data.row.link_id" class="btn btn-rounded px-0 text-muted" title="Delete Link" v-b-tooltip.hover>
-                            <span class="ti-trash"></span>
+                            <span class="fas fa-trash-alt"></span>
                         </button>
                         <b-popover :target="'confirm-delete'+data.row.link_id" triggers="focus" placement="left">
                             <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>

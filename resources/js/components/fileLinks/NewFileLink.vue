@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 align-self-center order-1 order-md-2">
-                    <h5 class="text-center">{{button.customerLink}} <span id="explain-allow" class="ti-help-alt"></span></h5>
+                    <h5 class="text-center">{{button.customerLink}} <span id="explain-allow" class="fas fa-info-circle"></span></h5>
                     <b-popover :target="'explain-allow'" trigger="hover" placement="right">
                         <div class="text-center">By allowing this option, you will be able to quickly move an uploaded file to the customer's saved files.</div>
                     </b-popover>
@@ -92,7 +92,7 @@
                 <b-input-group>
                     <b-form-input type="text" v-model="searchParam.name" placeholder="Enter Customer Name or ID Number"></b-form-input>
                     <b-input-group-append>
-                        <b-button varient="outline-secondary" @click="searchCustomer"><span class="ti-search"></span></b-button>
+                        <b-button varient="outline-secondary" @click="searchCustomer"><span class="fas fa-search"></span></b-button>
                     </b-input-group-append>
                 </b-input-group>
             </b-form>
@@ -104,11 +104,11 @@
                         <div class="text-muted float-left w-auto">Showing items {{searchMeta.from}} to {{searchMeta.to}} of {{searchMeta.total}}</div>
                         <div class="text-muted float-right w-auto">
                             <span class="pointer" v-if="searchMeta.current_page != 1" @click="updatePage(searchMeta.current_page - 1)">
-                                <span class="ti-angle-double-left"></span> Previous
+                                <span class="fas fa-angle-double-left"></span> Previous
                             </span>
                             -
                             <span class="pointer" v-if="searchMeta.current_page != searchMeta.last_page" @click="updatePage(searchMeta.current_page + 1)">
-                                Next <span class="ti-angle-double-right"></span>
+                                Next <span class="fas fa-angle-double-right"></span>
                             </span>
                         </div>
                     </b-list-group-item>

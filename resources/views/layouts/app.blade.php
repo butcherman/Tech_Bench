@@ -16,7 +16,7 @@
     <script src="{{asset('js/app.js')}}"></script>
 </head>
 <body>
-    <div class="container-scroller">
+    <div class="container-scroller" id="app">
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo mr-5" href="{{route('dashboard')}}"><img src="{{config('app.logo')}}" class="mr-2" alt="Tech Bench"/></a>
@@ -40,27 +40,27 @@
 -->
                     <li class="nav-item dropdown mr-1">
                         <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="{{route('about')}}">
-                            <i class="ti-help-alt mx-0"></i>
+                            <i class="far fa-question-circle nx-0"></i>
                         </a>
                     </li>
                     <li class="nav-item nav-profile dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="profileDropdown" onclick="return expandProfile();">
-                            <img src="{{asset('img/profile_pic.png')}}" alt="profile"/>
+                            <avatar username="{{Auth::user()->full_name}}"></avatar>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" id="profileDropdownDiv">
                             <a href="{{route('account')}}" class="dropdown-item">
-                                <i class="ti-settings text-primary"></i>
+                                <i class="fas fa-user-cog text-primary"></i>
                                 Settings
                             </a>
                             <a href="{{route('logout')}}" class="dropdown-item">
-                                <i class="ti-power-off text-primary"></i>
+                                <i class="fas fa-power-off text-primary"></i>
                                 Logout
                             </a>
                         </div>
                     </li>
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" onclick="expandNav()">
-                    <span class="ti-view-list"></span>
+                    <i class="fas fa-bars"></i>
                 </button>
             </div>
         </nav>
@@ -69,15 +69,14 @@
                 <ul class="nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('dashboard')}}">
-                            <i class="ti-home menu-icon"></i>
+                            <i class="fas fa-tachometer-alt menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
                    @can('allow_admin')
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.index')}}">
-                            <!--  TODO:  Better icon -->
-                            <i class="ti-pencil-alt menu-icon"></i>
+                            <i class="fas fa-user-shield menu-icon"></i>
                             <span class="menu-title">Administration</span>
                         </a>
                     </li>
@@ -93,34 +92,34 @@
                     @can('hasAccess', 'Use File Links')
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('links.index')}}">
-                            <i class="ti-link menu-icon"></i>
+                            <i class="fas fa-link menu-icon"></i>
                             <span class="menu-title">File Links</span>
                         </a>
                     </li>
                     @endcan
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('customer.index')}}">
-                            <i class="ti-user menu-icon"></i>
+                            <i class="fas fa-user-tie menu-icon"></i>
                             <span class="menu-title">Customers</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('tips.index')}}">
-                            <i class="ti-hummer menu-icon"></i>
+                            <i class="fas fa-tools menu-icon"></i>
                             <span class="menu-title">Tech Tips</span>
                         </a>
                     </li>
                     @foreach($tb_modules as $mod)
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('index').'/'.$mod->getLowerName()}}">
-                            <i class="ti-line-dashed menu-icon"></i>
+                            <i class="fas fa-asterisk menu-icon"></i>
                             <span class="menu-title">{{preg_replace('/(.*?[a-z]{1})([A-Z]{1}.*?)/', '${1} ${2}', $mod->getName())}}</span>
                         </a>
                     </li>
                     @endforeach
                 </ul>
             </nav>
-            <div class="main-panel" id="app">
+            <div class="main-panel">
                 <div class="content-wrapper">
                     @yield('content')
                 </div>

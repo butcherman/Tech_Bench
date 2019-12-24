@@ -63,9 +63,7 @@ class CustomerSystemsTest extends TestCase
     {
         $response = $this->actingAs($this->user)->get(route('customer.systems.show', 243452342345));
 
-        // dd($response);
-        $response->assertSuccessful();
-        $response->assertExactJson([]);
+        $response->assertStatus(404);
     }
 
     //  Test trying to get a list of available systems as a guest
@@ -120,6 +118,7 @@ class CustomerSystemsTest extends TestCase
         $data = [
             'cust_id' => $this->cust->cust_id,
             'system'  => $system->sys_id,
+            'shared'  => 0,
         ];
         foreach($fields as $field)
         {

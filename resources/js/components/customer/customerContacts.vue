@@ -18,7 +18,7 @@
                 <h4 class="text-center">No Contacts</h4>
             </div>
             <div slot="table-actions">
-                <b-button variant="info block" v-b-modal.new-contact-modal><i class="ti-plus" aria-hidden="true"></i> Add Contact</b-button>
+                <b-button variant="info block" v-b-modal.new-contact-modal><i class="fas fa-plus" aria-hidden="true"></i> Add Contact</b-button>
             </div>
             <template slot="table-row" slot-scope="data">
                 <span v-if="data.column.field == 'phone'">

@@ -31,7 +31,7 @@
                 </span>
             </template>
             <div slot="table-actions" v-if="allow_create">
-                <b-button variant="info block" :href="route('customer.id.create')"><i class="ti-plus" aria-hidden="true"></i> Add New Customer</b-button>
+                <b-button variant="info block" :href="route('customer.id.create')"><i class="fas fa-plus" aria-hidden="true"></i> Add New Customer</b-button>
             </div>
             <template slot="loadingContent">
                 <div class="text-center">Loading Customers</div>

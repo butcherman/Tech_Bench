@@ -82,8 +82,8 @@ class CustomerSystemsController extends Controller
                     ->get();
 
         //  determine if there is a parent site with shared systems
-        $parent = Customers::find($id)->parent_id;
-        if($parent)
+        $parent = Customers::findOrFail($id)->parent_id;
+        if($parent != null)
         {
             $parentList = CustomerSystems::where('cust_id', $parent)
                                 ->where('shared', 1)

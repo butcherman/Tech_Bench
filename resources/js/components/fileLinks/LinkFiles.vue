@@ -53,7 +53,7 @@
                     </span>
                     <span v-else-if="data.column.field === 'details'">
                         <div v-if="data.row.note">
-                            <span :id="'details-'+data.row.files.file_id" class="ti-comment pointer text-danger"></span>
+                            <span :id="'details-'+data.row.files.file_id" class="fas fa-comment-dots pointer text-danger"></span>
                             <b-popover :target="'details-'+data.row.files.file_id" triggers="click" placement="left" title="File Details">
                                 <pre>{{data.row.note}}</pre>
                             </b-popover>"
@@ -62,10 +62,10 @@
                     <span v-else-if="data.column.field == 'actions'">
                         <div class="d-flex flex-nowrap">
                             <button v-if="cust_id" class="btn btn-rounded px-0 text-muted mr-2" title="Place File In Customer Files" @click="moveFile = data.row.files" v-b-tooltip.hover v-b-modal.file-type>
-                                <span class="ti-export"></span>
+                                <span class="fas fa-file-export"></span>
                             </button>
                             <button :id="'confirm-delete-'+data.row.files.file_id" class="btn btn-rounded px-0 text-muted" title="Delete File" v-b-tooltip.hover>
-                                <span class="ti-trash"></span>
+                                <span class="fas fa-trash-alt"></span>
                             </button>
                             <b-popover :target="'confirm-delete-'+data.row.files.file_id" triggers="focus" placement="left">
                                 <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>

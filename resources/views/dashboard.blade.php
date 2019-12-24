@@ -57,7 +57,7 @@
                         <div class="card text-white o-hidden h-100 bookmark-card">
                             <a href="{{route('customer.details', [$fav->cust_id, $fav->Customers->name])}}" class="card-body text-white">
                                 <div class="card-body-icon">
-                                    <i class="ti-user"></i>
+                                    <i class="fas fa-user-tie"></i>
                                 </div>
                                 <div class="mr-5">{{$fav->Customers->name}}</div>
                             </a>
@@ -75,25 +75,18 @@
             <div class="card-body">
                 <h4 class="card-title">Tech Tip Favorites</h4>
                 <div class="row">
-
-@foreach($tipFavs as $tip)
-
-
+                    @foreach($tipFavs as $tip)
                     <div class="col-xl-3 col-sm-6 mb-3">
                         <div class="card text-white o-hidden h-100 bookmark-card">
                             <a href="{{route('tip.details', [$tip->tip_id, urlencode($tip->TechTips->subject)])}}" class="card-body text-white">
                                 <div class="card-body-icon">
-                                    <i class="ti-user"></i>
+                                    <i class="fas fa-tools"></i>
                                 </div>
                                 <div class="mr-5">{{$tip->TechTips->subject}}</div>
                             </a>
                         </div>
                     </div>
-
-@endforeach
-
-
-
+                    @endforeach
                 </div>
             </div>
         </div>

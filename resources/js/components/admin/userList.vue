@@ -11,8 +11,8 @@
                     <a :href="route(action_route, data.row.user_id)">{{data.row.full_name}}</a>
                 </span>
                 <span v-else-if="data.column.field == 'actions'">
-                    <i class="ti-key pointer" title="Reset Password" v-b-tooltip:hover v-b-modal:password-form-modal @click="modalTitle = 'Reset password for '+data.row.full_name; form.user_id = data.row.user_id"></i>
-                    <i class="ti-na pointer" title="Disable User" v-b-tooltip:hover @click="disableUser(data.row, data.index)"></i>
+                    <i class="fas fa-key pointer" title="Reset Password" v-b-tooltip:hover v-b-modal:password-form-modal @click="modalTitle = 'Reset password for '+data.row.full_name; form.user_id = data.row.user_id"></i>
+                    <i class="fas fa-user-slash pointer" title="Disable User" v-b-tooltip:hover @click="disableUser(data.row, data.index)"></i>
                 </span>
             </template>
         </vue-good-table>

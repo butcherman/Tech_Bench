@@ -1,5 +1,5 @@
 <template>
-    <b-button variant="info" @click="goBack"><i class="ti-arrow-left"></i> Go Back</b-button>
+    <b-button variant="info" @click="goBack"><i class="fas fa-arrow-left"></i> Go Back</b-button>
 </template>
 
 <script>

@@ -20,9 +20,9 @@
             <div class="card-body">
                 <h4 class="card-title">Users:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="{{route('admin.user.create')}}"><i class="ti-user"></i> Create New User</a></li>
-                    <li class="list-group-item"><a href="{{route('admin.user.index')}}"><i class="ti-wand"></i> Modify User</a></li>
-                    <li class="list-group-item"><a href="{{route('admin.user.links')}}"><i class="ti-link"></i> User File Links</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.user.create')}}"><i class="fas fa-user-plus"></i> Create New User</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.user.index')}}"><i class="fas fa-user-edit"></i> Modify User</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.user.links')}}"><i class="fas fa-user-tag"></i> User File Links</a></li>
                 </ul>
             </div>
         </div>
@@ -32,9 +32,9 @@
             <div class="card-body">
                 <h4 class="card-title">User Settings:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="{{route('admin.passwordPolicy')}}"><i class="ti-settings"></i> User Password Policy</a></li>
-                    <li class="list-group-item"><a href="{{route('admin.roleSettings')}}"><i class="ti-direction-alt"></i> User Permissions and Roles</a></li>
-                    <li class="list-group-item"><a href="{{route('admin.user.show', 'inactive')}}"><i class="ti-na"></i> View Disabled Users</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.passwordPolicy')}}"><i class="fas fa-user-lock"></i> User Password Policy</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.roleSettings')}}"><i class="fas fa-users-cog"></i> User Permissions and Roles</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.user.show', 'inactive')}}"><i class="fas fa-user-slash"></i> View Disabled Users</a></li>
                 </ul>
             </div>
         </div>
@@ -62,8 +62,8 @@
             <div class="card-body">
                 <h4 class="card-title">Equipment:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="{{route('admin.categories.index')}}"><i class="ti-layers"></i> Equipment Categories</a></li>
-                    <li class="list-group-item"><a href="{{route('admin.systems.index')}}"><i class="ti-layers-alt"></i> Equipment Types</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.categories.index')}}"><i class="fas fa-cog"></i> Equipment Categories</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.systems.index')}}"><i class="fas fa-cogs"></i> Equipment Types</a></li>
                 </ul>
             </div>
         </div>
@@ -75,10 +75,10 @@
             <div class="card-body">
                 <h4 class="card-title">{{config('app.name')}} Settings:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="{{route('admin.logoSettings')}}"><i class="ti-image"></i> {{config('app.name')}} Logo</a></li>
-                    <li class="list-group-item"><a href="{{route('admin.config')}}"><i class="ti-server"></i> {{config('app.name')}} Configuration</a></li>
-                    <li class="list-group-item"><a href="{{route('admin.emailSettings')}}"><i class="ti-email"></i> Email Settings</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-dashboard"></i> {{config('app.name')}} Add-ons</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.logoSettings')}}"><i class="fas fa-image"></i> {{config('app.name')}} Logo</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.config')}}"><i class="fas fa-server"></i> {{config('app.name')}} Configuration</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.emailSettings')}}"><i class="fas fa-envelope"></i> Email Settings</a></li>
+                    <li class="list-group-item"><a href="#"><i class="fas fa-asterisk"></i> {{config('app.name')}} Add-ons</a></li>
                 </ul>
             </div>
         </div>
@@ -88,8 +88,8 @@
             <div class="card-body">
                 <h4 class="card-title">Maintenance:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="{{route('log-viewer::dashboard')}}"><i class="ti-write"></i> Logs</a></li>
-                    <li class="list-group-item"><a href="#"><i class="ti-harddrives"></i> Backups</a></li>
+                    <li class="list-group-item"><a href="{{route('log-viewer::dashboard')}}"><i class="fas fa-bug"></i> Logs</a></li>
+                    <li class="list-group-item"><a href="#"><i class="fas fa-database"></i> Backups</a></li>
                     {{-- <li class="list-group-item"><a href="#"><i class="ti-support"></i> Updates</a></li> TODO - COMMING SOON!!! --}}
                     {{-- <li class="list-group-item"><a href="#"><i class="ti-hummer"></i> Tools and Extras</a></li> TODO - COMMING SOON!!! --}}
                 </ul>

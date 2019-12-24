@@ -18,15 +18,15 @@
                 <h4 class="text-center">No Files</h4>
             </div>
             <div slot="table-actions">
-                <b-button variant="info block" v-b-modal.file-form-modal><i class="ti-plus"></i> Add File</b-button>
+                <b-button variant="info block" v-b-modal.file-form-modal><i class="fas fa-plus"></i> Add File</b-button>
             </div>
             <template slot="table-row" slot-scope="data">
                 <span v-if="data.column.field == 'name'">
                     <a :href="route('download', [data.row.files.file_id, data.row.files.file_name])">{{data.row.name}}</a>
                 </span>
                 <span v-else-if="data.column.field == 'actions'">
-                    <i class="ti-pencil pointer" title="Edit" v-b-tooltip @click="editFile(data.row)"></i>
-                    <i class="ti-trash pointer" title="Delete" v-b-tooltip @click="deleteFile(data.row)"></i>
+                    <i class="fas fa-pencil-alt pointer" title="Edit" v-b-tooltip @click="editFile(data.row)"></i>
+                    <i class="fas fa-trash-alt pointer" title="Delete" v-b-tooltip @click="deleteFile(data.row)"></i>
                 </span>
             </template>
         </vue-good-table>

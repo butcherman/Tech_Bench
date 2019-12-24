@@ -49,7 +49,7 @@
                             <b-list-group-item v-if="(form.activeFileList.length < 1)">No Files</b-list-group-item>
                             <b-list-group-item v-for="(file, index) in form.activeFileList" :key="file.tip_file_id" class="d-flex justify-content-between align-items-center">
                                 {{file.files.file_name}}
-                                <b-badge variant="danger" pill class="pointer" title="Remove File" v-b-tooltip:hover @click="delFile(index, file.tip_file_id)"><i class="ti-trash"></i></b-badge>
+                                <b-badge variant="danger" pill class="pointer" title="Remove File" v-b-tooltip:hover @click="delFile(index, file.tip_file_id)"><i class="fas fa-trash-alt"></i></b-badge>
                             </b-list-group-item>
                         </b-list-group>
                     </b-form-group>

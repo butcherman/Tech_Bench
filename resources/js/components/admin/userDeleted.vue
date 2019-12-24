@@ -11,7 +11,7 @@
                     <a :href="route(action_route, data.row.user_id)">{{data.row.full_name}}</a>
                 </span>
                 <span v-else-if="data.column.field == 'actions'">
-                    <i class="ti-unlock pointer" title="Enable User" v-b-tooltip:hover @click="enableUser(data.row, data.index)"></i>
+                    <i class="fas fa-unlock-alt pointer" title="Enable User" v-b-tooltip:hover @click="enableUser(data.row, data.index)"></i>
                 </span>
             </template>
         </vue-good-table>

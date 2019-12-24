@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-12">
                     <h4 v-if="notes.length == 0" class="text-center">No Notes</h4>
-                    <button class="btn btn-info float-right" v-b-modal.note-form-modal><i class="ti-plus"></i> Add Note</button>
+                    <button class="btn btn-info float-right" v-b-modal.note-form-modal><i class="fas fa-plus"></i> Add Note</button>
                 </div>
             </div>
             <div class="row">
@@ -28,7 +28,7 @@
                 <div class="card">
                     <div :class="details.urgent == true ? 'card-header bg-danger' : 'card-header bg-info'">
                         {{details.subject}}
-                        <a :href="route('customer.download-note', details.note_id)" class="float-right text-white" title="Download as PDF" v-b-tooltip.hover><i class="ti-download"></i></a>
+                        <a :href="route('customer.download-note', details.note_id)" class="float-right text-white" title="Download as PDF" v-b-tooltip.hover><i class="fas fa-file-pdf"></i></a>
                     </div>
                     <div class="card-body bigger-note" v-html="details.description"></div>
                 </div>

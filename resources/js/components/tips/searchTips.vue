@@ -8,10 +8,10 @@
                             <b-input-group>
                                 <b-form-input type="text" placeholder="Search Tips..." autofocus v-model="form.search.searchText"></b-form-input>
                                 <b-input-group-append>
-                                    <b-button type="submit" variant="primary" ><span class="ti-search"></span> Search</b-button>
+                                    <b-button type="submit" variant="primary" ><span class="fas fa-search"></span> Search</b-button>
                                 </b-input-group-append>
                                 <b-input-group-append v-if="can_create">
-                                    <a :href="route('tips.create')" class="btn btn-warning"><span class="ti-plus"> Create New</span></a>
+                                    <a :href="route('tips.create')" class="btn btn-warning"><span class="fas fa-plus"> Create New</span></a>
                                 </b-input-group-append>
                             </b-input-group>
                         </b-form>
@@ -25,7 +25,7 @@
                     <template v-slot:header>
                         <h5 class="mb-0">
                             Filter Options
-                            <b-button size="sm" class="float-right d-block d-lg-none" v-b-toggle="'collapse-me'"><i class="ti-menu"></i></b-button>
+                            <b-button size="sm" class="float-right d-block d-lg-none" v-b-toggle="'collapse-me'"><i class="fas fa-bars"></i></b-button>
                         </h5>
                     </template>
                     <b-card-text>

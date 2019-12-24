@@ -19,7 +19,7 @@
                                     {{comment.comment}}
                                 </div>
                                 <div class="card-footer">
-                                    <span v-if="user_id == comment.user_id" class="ti-trash text-danger pointer" title="Delete Comment" v-b-tooltip:hover @click="deleteComment(comment.comment_id)"></span>
+                                    <span v-if="user_id == comment.user_id" class="fas fa-trash-alt text-danger pointer" title="Delete Comment" v-b-tooltip:hover @click="deleteComment(comment.comment_id)"></span>
                                     By: {{comment.user.full_name}}
                                     <span class="float-right">Created: {{comment.created_at}}</span>
                                 </div>

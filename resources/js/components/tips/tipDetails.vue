@@ -49,7 +49,7 @@ export default {
     data() {
         return {
             isFav:    this.is_fav,
-            classFav: this.is_fav ? 'ti-bookmark-alt bookmark-checked' : 'ti-bookmark bookmark-unchecked',
+            classFav: this.is_fav ? 'fas fa-bookmark bookmark-checked' : 'fas fa-bookmark bookmark-unchecked',
             markFav:  this.is_fav ? 'Remove From Favorites' : 'Add to Favorites',
         }
     },
@@ -67,7 +67,7 @@ export default {
                 axios.get(this.route('tip.toggle-fav', ['remove', this.tip_details.tip_id]))
                     .then(res => {
                         this.isFav = false;
-                        this.classFav  = 'ti-bookmark bookmark-unchecked';
+                        this.classFav  = 'fas fa-bookmark bookmark-unchecked';
                         this.markFav = 'Add To Favorites'; //  : 'Add to Favorites',
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
@@ -77,7 +77,7 @@ export default {
                 axios.get(this.route('tip.toggle-fav', ['add', this.tip_details.tip_id]))
                     .then(res => {
                         this.isFav = true;
-                        this.classFav  = 'ti-bookmark-alt bookmark-checked';
+                        this.classFav  = 'fas fa-bookmark bookmark-checked';
                         this.markFav = 'Remove From Favorites';
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
