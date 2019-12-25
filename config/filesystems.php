@@ -16,7 +16,7 @@ return [
         ],
         'backup' => [
             'driver' => 'local',
-            'root'   => env('BACKUP_FOLDER', storage_path('app'.DIRECTORY_SEPARATOR.'backups')),
+            'root'   => env('BACKUP_FOLDER', storage_path('backups')),
         ],
         'logs' => [
             'driver' => 'local',

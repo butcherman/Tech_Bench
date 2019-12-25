@@ -79,6 +79,7 @@ class CustomerSystemsController extends Controller
                     ->with('SystemTypes')
                     ->with('SystemDataFields')
                     ->with('SystemDataFields.SystemDataFieldTypes')
+                    ->orderBy('cust_sys_id', 'DESC')
                     ->get();
 
         //  determine if there is a parent site with shared systems
