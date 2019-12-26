@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 
 class SettingsController extends Controller
 {
@@ -99,9 +101,61 @@ class SettingsController extends Controller
         return response()->json(['success' => true]);
     }
 
+    //  System backups index page
+    public function backupsIndex()
+    {
+        return view('installer.backupsIndex');
+    }
 
+    //  Retrieve the list of backups
+    public function getBackups()
+    {
+        $backups = Storage::disk('backup')->files();
+        $buArray = [];
 
+        //  Filter list to include timestamp
+        foreach($backups as $backup)
+        {
+            $parts = pathinfo($backup);
+            if($parts['extension'] === 'zip')
+            {
+                $buArray[] = [
+                    'name' => $backup,
+                    'date' => Carbon::createFromTimestamp(Storage::disk('backup')->lastModified($backup))->format('M d, Y h:m a'),
+                ];
+            }
+        }
 
+        return $buArray;
+    }
+
+    //  Delete a backup
+    public function delBackup($name)
+    {
+        Storage::disk('backup')->delete($name);
+
+        return response()->json(['success' => true]);
+    }
+
+    //  Download a backup
+    public function downloadBackup($name)
+    {
+        if(Storage::disk('backup')->exists($name))
+        {
+            return Storage::disk('backup')->download($name);
+        }
+
+        return view('err.badFile');
+
+    }
+
+    //  Create a new backup
+    public function runBackup()
+    {
+        Artisan::call('backup:run');
+
+        return response()->json(['success' => true]);
+    }
 
 
 

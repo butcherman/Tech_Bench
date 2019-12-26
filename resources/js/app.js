@@ -130,6 +130,7 @@ Vue.component('tb-configuration',     require('./components/installer/configurat
 Vue.component('email-settings',       require('./components/installer/emailSettings.vue').default);
 Vue.component('logs-doughnut-chart',  require('./components/installer/logsDoughnutChart.vue').default);
 Vue.component('delete-log',           require('./components/installer/deleteLog.vue').default);
+Vue.component('tb-backups',           require('./components/installer/backups.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

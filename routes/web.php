@@ -152,15 +152,20 @@ Route::prefix('admin')->name('admin.')->group(function ()
     Route::get('password-policy',          'Admin\AdminController@passwordPolicy')            ->name('passwordPolicy');
     Route::post('role-policy',             'Admin\AdminController@submitRoleSettings')        ->name('roleSettings');
     Route::get('role-policy',              'Admin\AdminController@roleSettings')              ->name('roleSettings');
-    //  Tech Benc Settings Routes
+    //  Tech Bench Settings Routes
     Route::post('logo',                    'Installer\SettingsController@submitLogo')         ->name('submitLogo');
     Route::get('logo',                     'Installer\SettingsController@logoSettings')       ->name('logoSettings');
     Route::post('configuratin',            'Installer\SettingsController@submitConfiguration')->name('submitConfig');
     Route::get('configuration',            'Installer\SettingsController@configuration')      ->name('config');
-
-    Route::post('email-settings', 'Installer\SettingsController@submitEmailSettings')         ->name('emailSettings');
-    Route::put('email-settings', 'Installer\SettingsController@sendTestEmail')                ->name('emailSettings');
-    Route::get('email-settings', 'Installer\SettingsController@emailSettings')                ->name('emailSettings');
+    Route::post('email-settings',          'Installer\SettingsController@submitEmailSettings')->name('emailSettings');
+    Route::put('email-settings',           'Installer\SettingsController@sendTestEmail')      ->name('emailSettings');
+    Route::get('email-settings',           'Installer\SettingsController@emailSettings')      ->name('emailSettings');
+    //  Tech Bench Backup Routes
+    Route::get('backups/download/{name}',  'Installer\SettingsController@downloadBackup')     ->name('downloadBackup');
+    Route::get('backups/delete/{name}',    'Installer\SettingsController@delBackup')          ->name('delBackup');
+    Route::get('backups/run',              'Installer\SettingsController@runBackup')          ->name('runBackup');
+    Route::get('backups/get',              'Installer\SettingsController@getBackups')         ->name('getBackups');
+    Route::get('backups',                  'Installer\SettingsController@backupsIndex')       ->name('backups');
 
     //  Admin index route
     Route::get('/', 'Admin\AdminController@index')->name('index');
