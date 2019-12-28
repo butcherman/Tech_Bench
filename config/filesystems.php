@@ -18,6 +18,10 @@ return [
             'driver' => 'local',
             'root'   => env('BACKUP_FOLDER', storage_path('backups')),
         ],
+        'staging' =>[
+            'driver' => 'local',
+            'root'   => env('STAGING_FOLDER', storage_path('staging')),
+        ],
         'logs' => [
             'driver' => 'local',
             'root'   => storage_path('logs'),

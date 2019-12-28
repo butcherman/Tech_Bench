@@ -78,7 +78,7 @@
                     <li class="list-group-item"><a href="{{route('admin.logoSettings')}}"><i class="fas fa-image"></i> {{config('app.name')}} Logo</a></li>
                     <li class="list-group-item"><a href="{{route('admin.config')}}"><i class="fas fa-server"></i> {{config('app.name')}} Configuration</a></li>
                     <li class="list-group-item"><a href="{{route('admin.emailSettings')}}"><i class="fas fa-envelope"></i> Email Settings</a></li>
-                    <li class="list-group-item"><a href="#"><i class="fas fa-asterisk"></i> {{config('app.name')}} Add-ons</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.module.index')}}"><i class="fas fa-asterisk"></i> {{config('app.name')}} Add-ons</a></li>
                 </ul>
             </div>
         </div>

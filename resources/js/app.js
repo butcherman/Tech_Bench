@@ -133,6 +133,13 @@ Vue.component('delete-log',           require('./components/installer/deleteLog.
 Vue.component('tb-backups',           require('./components/installer/backups.vue').default);
 
 /*
+*   Add On Module Management Components
+*/
+Vue.component('active-modules', require('./components/modules/active.vue').default);
+Vue.component('staged-modules', require('./components/modules/staged.vue').default);
+Vue.component('upload-module',  require('./components/modules/upload.vue').default);
+
+/*
 *   Include CSRF toden in all axios headers
 */
 window.axios.defaults.headers.common = {

@@ -116,31 +116,21 @@ Route::prefix('tip')->name('tip.')->group(function()
 */
 Route::prefix('admin')->name('admin.')->group(function ()
 {
-
-
-
-
- //     //  System custionization settings
-        //     Route::get('system-customization', 'Installer\SettingsController@customizeSystem')->name('customize');
-        //     Route::post('system-customization', 'Installer\SettingsController@submitCustomizeSystem')->name('customize');
-        //     Route::post('new-logo', 'Installer\SettingsController@submitLogo')->name('submitLogo');
-
-        //     //  Categories and Systems settings
-        //     Route::resource('systems', 'Installer\SystemsController');
-
-
-    //  Installer Routes
-
-
-
-
-
+    //  Routes for Tech Bench Add-ons
+    Route::prefix('modules')->name('module.')->group(function()
+    {
+        Route::delete('delete-staged/{name}', 'Installer\ModuleController@delStaged')->name('deleteStaged');
+        Route::post('upload',                 'Installer\ModuleController@upload')->name('upload');
+        Route::get('activate/{name}',         'Installer\ModuleController@activate')->name('activate');
+        Route::get('disable/{name}',          'Installer\ModuleController@disable')->name('disable');
+        Route::get('enable/{name}',           'Installer\ModuleController@enable')->name('enable');
+        Route::get('get-active',              'Installer\ModuleController@getEnabled')->name('getEnabled');
+        Route::get('get-staged',              'Installer\ModuleController@getStaged')->name('getStaged');
+        Route::get('/',                       'Installer\ModuleController@index')->name('index');
+    });
     //  Administrative routes for equipment and equipment categories
-    Route::resource('categories', 'Installer\CategoriesController');
-    Route::resource('systems',    'Installer\SystemsController');
-
-
-
+    Route::resource('categories',          'Installer\CategoriesController');
+    Route::resource('systems',             'Installer\SystemsController');
     //  Administrative routes for users
     Route::resource('user',                'Admin\UserController');
     Route::get('user/enable/{id}',         'Admin\UserController@reactivateUser')             ->name('user.reactivate');
@@ -166,9 +156,8 @@ Route::prefix('admin')->name('admin.')->group(function ()
     Route::get('backups/run',              'Installer\SettingsController@runBackup')          ->name('runBackup');
     Route::get('backups/get',              'Installer\SettingsController@getBackups')         ->name('getBackups');
     Route::get('backups',                  'Installer\SettingsController@backupsIndex')       ->name('backups');
-
     //  Admin index route
-    Route::get('/', 'Admin\AdminController@index')->name('index');
+    Route::get('/',                        'Admin\AdminController@index')                     ->name('index');
 
 
 
