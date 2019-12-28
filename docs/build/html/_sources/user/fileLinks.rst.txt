@@ -1,12 +1,11 @@
 File Links
 ==========
 
-The File Links section allows you to pass files to non Tech Bench users.  An example would be if a customer needed access to a
+The File Links section allows you to send or receive files to non Tech Bench users.  An example would be if a customer needed access to a
 file that is too large to email, or has a file extension that is commonly blocked by email Spam Filters (.exe for example).
 Files can be uploaded by you for the customer, or you can allow the customer to upload files for you to access.
 
-Each file link has a custom URL and expiration date.  When the file link expires, the files within it can no longer be accessed by
-a non registered user.
+Each file link has a custom URL and expiration date.  When the file link expires, you will be the only one that will still have access to the files.
 
 Primary File Links Page
 -----------------------
@@ -23,7 +22,7 @@ The following options are available in the Primary File Links Page
 Column          Details
 ===========     =======
 Link Name       The assigned name of the file link.  By clicking on the name, you can access the details of the link itself.
-# of Files        The number of files that are attached to the link.  This is the number of files uploaded both by the owner of the link, and any guests that have accessed the link.
+# of Files      The number of files that are attached to the link.  This is the number of files uploaded both by the owner of the link, and any guests that have accessed the link.
 Expire Date     Shows the date that the link will no longer be accessable by a guest.  Note:  if the link is highlighted in red, it has already expired.
 Actions         Options that can be applied to the selected link.
 ===========     =======
@@ -81,7 +80,6 @@ The Link Details page will show all information about the currently selected lin
 |                       | Allow Uploads     | Notes if the guest is allowed to upload files.                                                                |
 |                       +-------------------+---------------------------------------------------------------------------------------------------------------+
 |                       | Link              | The URL the guest will use to access the link.                                                                |
-|                       |                   | Click the "copy" icon next to the link to copy it to the clipboard.                                           |
 +-----------------------+-------------------+---------------------------------------------------------------------------------------------------------------+
 | Actions               | Edit Link         | Modify the link details or the link instructions                                                              |
 |                       +-------------------+---------------------------------------------------------------------------------------------------------------+
@@ -91,14 +89,14 @@ The Link Details page will show all information about the currently selected lin
 +-----------------------+-------------------+---------------------------------------------------------------------------------------------------------------+
 | Instructions          |                   | Instructions will be shown to the guest when they visit the link.  These can be edited by clicking "Edit Link"|
 +-----------------------+-------------------+---------------------------------------------------------------------------------------------------------------+
-| Files Available       | File Name         | Clicking on the name of the file will download it to your device.                                             |
-| to Download           |                   | The "Info" icon will show who uploaded the file and any notes they included with the file.                    |
-| and                   +-------------------+---------------------------------------------------------------------------------------------------------------+
-| Files Uploaded        | Date Added        | Date the file was loaded to the file link.                                                                    |
+| Link Files            | File Name         | Clicking on the name of the file will download it to your device.                                             |
+|                       |                   | The "Info" icon will show who uploaded the file and any notes they included with the file.                    |
+|                       +-------------------+---------------------------------------------------------------------------------------------------------------+
+|                       | Date Added        | Date the file was loaded to the file link.                                                                    |
 |                       +-------------------+---------------------------------------------------------------------------------------------------------------+
 |                       | Added By          | If the file was added by a guest, their name will show in this field.                                         |
 |                       +-------------------+---------------------------------------------------------------------------------------------------------------+
-|                       | File Notes        | If the file was added by a gues, any notes they provided with the file will show in this field.               |
+|                       | File Notes        | If the file was added by a guest, any notes they provided with the file will show in this field.              |
 |                       +-------------------+---------------------------------------------------------------------------------------------------------------+
 |                       | Actions           | - Move File - will move file to customer profile (only available if customer assigned)                        |
 |                       |                   | - Delete File - will delete just this file from the file link                                                 |

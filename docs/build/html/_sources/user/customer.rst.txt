@@ -29,8 +29,9 @@ New Customer Page
 To create a new customer, the following information should be entered in the New Customer form.
 
     * Customer ID - this is an unique numerical identifier for the customer.  If your company uses a separate billing software with a customer database, the Customer ID should match the billing database.
+    * Parent Site ID (optional) - If this site is part of a larger multi-site customer, enter the Customer ID of the primary site.
     * Customer Name
-    * DBA Name - If the customer has an alternate name, it can be entered here.
+    * DBA Name - If the customer operates under an alternate name or nickname, it can be entered here.
     * Address
     * City
     * State
@@ -51,7 +52,7 @@ The Customer Details Page is broken down into sections:
 Systems
 -------
 
-Any system created by the System Administrator can be assigned him to the customer.  When a system is assigned, customer specific information about that system will be requested.  This information can include but is not limited to:
+Any system created by the System Administrator can be assigned to the customer.  When a system is assigned, customer specific information about that system will be requested.  This information can include but is not limited to:
 
     * IP Address
     * Login Information

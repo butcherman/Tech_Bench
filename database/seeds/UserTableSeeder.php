@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 
 class UserTableSeeder extends Seeder
@@ -11,10 +12,13 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        //  Create the test users - note, none are installers - permissions are assigned randomly
-        // factory(App\User::class, 15)->create()->each(function($user)
-        // {
-        //     // $user->UserPermissions()->save(factory(App\UserPermissions::class)->create(['user_id' => $user->user_id]));
-        // });
+        //  Create 25 test users  3 will be admin, 2 will be report users, the remainder will be basic tech users
+        factory(User::class, 3)->create([
+            'role_id' => 2,
+        ]);
+        factory(User::class, 2)->create([
+            'role_id' => 3,
+        ]);
+        factory(User::class, 20)->create();
     }
 }
