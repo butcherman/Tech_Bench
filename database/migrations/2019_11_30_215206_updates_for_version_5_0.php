@@ -389,4 +389,16 @@ class UpdatesForVersion50 extends Migration
             });
         }
     }
+
+    //  Check if the User ID foreign key on the Tech Tip Comments table exists
+    public function checkForeignKeyForTipComments()
+    {
+        if(!Schema::hasForeign('tech_tip_comments', ['user_id']))
+        {
+            Schema::table('tech_tip_comments', function(Blueprint $table)
+            {
+                $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade');
+            });
+        }
+    }
 }

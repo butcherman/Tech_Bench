@@ -152,7 +152,7 @@ class SettingsController extends Controller
     //  Create a new backup
     public function runBackup()
     {
-        Artisan::call('backup:run');
+        Artisan::call('tb-backup:run');
 
         return response()->json(['success' => true]);
     }

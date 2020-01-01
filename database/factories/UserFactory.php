@@ -11,7 +11,7 @@ $factory->define(App\User::class, function(Faker $faker) {
         'last_name'        => $faker->lastName,
         'email'            => $faker->unique()->safeEmail,
         'password'         => bcrypt('password'),  //  All test users will have the password of 'password' to allow testing access
-        'remember_token'   => null, // Str::random(10),
+        'remember_token'   => Str::random(10),
         'password_expires' => null,
     ];
 });

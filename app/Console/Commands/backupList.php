@@ -12,7 +12,7 @@ class backupList extends Command
      *
      * @var string
      */
-    protected $signature = 'backup:list';
+    protected $signature = 'tb-backup:list';
 
     /**
      * The console command description.

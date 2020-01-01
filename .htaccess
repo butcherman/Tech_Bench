@@ -1,0 +1,11 @@
+#  .htaccess file will re-route all incoming traffic to the public folder
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+
+    RewriteRule ^favicon.ico        public/source/img/favicon.ico [L]
+    RewriteRule	^$                  public/    [L]
+    RewriteRule	(.*) 			    public/$1    [L]
+ </IfModule>

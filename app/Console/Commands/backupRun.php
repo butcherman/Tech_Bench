@@ -20,7 +20,7 @@ class backupRun extends Command
      *
      * @var string
      */
-    protected $signature = 'backup:run
+    protected $signature = 'tb-backup:run
                                 {--databaseOnly : Only backup configuration database}
                                 {--filesOnly : Only backup uploaded files}';
 

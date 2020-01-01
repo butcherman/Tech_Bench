@@ -19,7 +19,7 @@ class backupRestore extends Command
      *
      * @var string
      */
-    protected $signature = 'backup:restore {filename} {--confirmed}';
+    protected $signature = 'tb-backup:restore {filename} {--confirmed}';
 
     /**
      * The console command description.

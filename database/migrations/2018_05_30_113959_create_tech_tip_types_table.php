@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\TechTipTypes;
 
 class CreateTechTipTypesTable extends Migration
 {
@@ -20,10 +19,18 @@ class CreateTechTipTypesTable extends Migration
             $table->timestamps();
         });
 
-        //  TODO - Simplify this
-        TechTipTypes::create(['description' => 'Tech Tip']);
-        TechTipTypes::create(['description' => 'Documentation']);
-        TechTipTypes::create(['description' => 'Software']);
+        $tipTypeArr = [
+            ['id' => 1, 'description' => 'Tech Tip'],
+            ['id' => 2, 'description' => 'Documentation'],
+            ['id' => 3, 'description' => 'Software'],
+        ];
+
+        foreach($tipTypeArr as $type)
+        {
+            DB::insert('INSERT INTO `tech_tip_types` (`tip_type_id`, `description`, `created_at`, `updated_at`)
+                        VALUES (?, ?, ?, ?)',
+                        [$type['id'], $type['description'], NOW(), NOW()]);
+        }
     }
 
     /**

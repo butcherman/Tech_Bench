@@ -106,7 +106,7 @@ class UserController extends Controller
     {
         //  Validate the new user form
         $request->validate([
-            'role'       => 'required|numeric',  //  TODO - add validation rule - is in user roles table
+            'role'       => 'required|numeric|exists:user_role_types,role_id',
             'username'   => 'required|unique:users|regex:/^[a-zA-Z0-9_]*$/',
             'first_name' => 'required',
             'last_name'  => 'required',
