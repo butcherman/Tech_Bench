@@ -57,15 +57,9 @@ Whenever a new Tech Tip is created, an email is sent to all registered users not
 
 ## Installing Tech Bench
 
-```php
-TODO:  THIS NEEDS TO BE UPDATED
-```
+Tech Bench is built to be installed on a dedicated Linux server.  For installation instructions, visit https://tech-bench.readthedocs.io/en/latest/installer/install.html and select the option that fits your environment best.
 
-### Dependency Management
-
-Tech Bench is built on the Laravel platform and uses NPM and Composer to maintain the dependent applications required to run the Tech Bench.
-
-## Copyright © 2016-2019 Ron Butcher
+## Copyright © 2016-2020 Ron Butcher
 
 This program is free software:  you can redistribute it and/or modify it under the terms of the GNU
 General Public License as published by the Free Software Foundation, either version 2 of the License,
