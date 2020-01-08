@@ -47,12 +47,8 @@ class DashboardController extends Controller
     //  About page
     public function about()
     {
-        exec('git symbolic-ref HEAD', $output);
-        $t = explode('/', $output[0]);
-        $branch = end($t) === 'master' ? 'latest' : end($t);
-
         return view('about', [
-            'branch' => $branch
+            'branch' => 'latest'
         ]);
     }
 
