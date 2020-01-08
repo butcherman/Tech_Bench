@@ -8,15 +8,11 @@ Auth::routes();
 /*
 *   Non user Routes
 */
-Route::get('/',         'Auth\LoginController@showLoginForm')->name('index');
-Route::get('logout',    'Auth\LoginController@logout')       ->name('logout');
-Route::get('no-script', 'Controller@noScript')               ->name('noscript');
-
-
-
-//  TODO - finishe setting these up
-Route::get('/finish-setup/{hash}', 'AccountController@initializeUser')->name('initialize');
-Route::post('/finish-setup/{hash}', 'AccountController@submitInitializeUser')->name('initialize');
+Route::get('/',                    'Auth\LoginController@showLoginForm')                ->name('index');
+Route::get('logout',               'Auth\LoginController@logout')                       ->name('logout');
+Route::get('no-script',            'Controller@noScript')                               ->name('noscript');
+Route::get('finish-setup/{hash}',  'Auth\InitializeUserController@initializeUser')      ->name('initialize');
+Route::post('finish-setup/{hash}', 'Auth\InitializeUserController@submitInitializeUser')->name('initialize');
 
 /*
 *   Download File Routes
@@ -119,14 +115,14 @@ Route::prefix('admin')->name('admin.')->group(function ()
     //  Routes for Tech Bench Add-ons
     Route::prefix('modules')->name('module.')->group(function()
     {
-        Route::delete('delete-staged/{name}', 'Installer\ModuleController@delStaged')->name('deleteStaged');
-        Route::post('upload',                 'Installer\ModuleController@upload')->name('upload');
-        Route::get('activate/{name}',         'Installer\ModuleController@activate')->name('activate');
-        Route::get('disable/{name}',          'Installer\ModuleController@disable')->name('disable');
-        Route::get('enable/{name}',           'Installer\ModuleController@enable')->name('enable');
+        Route::delete('delete-staged/{name}', 'Installer\ModuleController@delStaged') ->name('deleteStaged');
+        Route::post('upload',                 'Installer\ModuleController@upload')    ->name('upload');
+        Route::get('activate/{name}',         'Installer\ModuleController@activate')  ->name('activate');
+        Route::get('disable/{name}',          'Installer\ModuleController@disable')   ->name('disable');
+        Route::get('enable/{name}',           'Installer\ModuleController@enable')    ->name('enable');
         Route::get('get-active',              'Installer\ModuleController@getEnabled')->name('getEnabled');
-        Route::get('get-staged',              'Installer\ModuleController@getStaged')->name('getStaged');
-        Route::get('/',                       'Installer\ModuleController@index')->name('index');
+        Route::get('get-staged',              'Installer\ModuleController@getStaged') ->name('getStaged');
+        Route::get('/',                       'Installer\ModuleController@index')     ->name('index');
     });
     //  Administrative routes for equipment and equipment categories
     Route::resource('categories',          'Installer\CategoriesController');

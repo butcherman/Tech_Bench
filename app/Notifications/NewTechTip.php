@@ -42,11 +42,10 @@ class NewTechTip extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        //  TODO - make this a proper email
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line('A new Tech Tip has been created')
+                    ->line('Subject:  '.$this->details->subject)
+                    ->action('Click to view Tech Tip', url(route('tip.details', ['id' => $this->details->tip_id, 'name' => urlencode($this->details->subject)])));
     }
 
     /**
