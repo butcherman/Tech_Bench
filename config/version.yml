@@ -5,7 +5,7 @@ current:
   major: 5
   minor: 0
   patch: 0
-  prerelease: dev
+  prerelease: beta
   buildmetadata: null
   commit: 3b0
   timestamp:
