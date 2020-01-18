@@ -38,6 +38,8 @@ class UpdatesForVersion50 extends Migration
         $this->migrateSystemDocumentation();
         $this->migrateUserRoles();
         $this->updateCustomersTable();
+        $this->checkForeignKeyForTipComments();
+        $this->dropUserSettingsTrigger();
 
         //  Remove Unneeded Tables
         $this->removeNavBarView();
@@ -400,5 +402,11 @@ class UpdatesForVersion50 extends Migration
                 $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade');
             });
         }
+    }
+
+    //  Drop the create user settings trigger
+    public function dropUserSettingsTrigger()
+    {
+        DB::unprepared('DROP TRIGGER IF EXISTS `tr_user_settings`');
     }
 }

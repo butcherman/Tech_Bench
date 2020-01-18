@@ -4,25 +4,24 @@ namespace App\Http\Controllers\Admin;
 
 use DB;
 use Mail;
-// use App\Role;
 use App\User;
 use Carbon\Carbon;
+use App\UserLogins;
+use App\UserSettings;
+use App\UserRoleType;
 use App\UserInitialize;
 use Illuminate\Support\Str;
 use App\Mail\InitializeUser;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Notifications\NewUserEmail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\NewUserEmail;
-
-use App\UserRoleType;
-use App\UserLogins;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
@@ -122,8 +121,11 @@ class UserController extends Controller
             'email'      => $request->email,
             'password'   => bcrypt(strtolower(Str::random(15))),
         ]);
-
         $userID = $newUser->user_id;
+        //  Create the user settings table
+        UserSettings::create([
+            'user_id' => $userID,
+        ]);
 
         //  Create the setup user link
         $hash = strtolower(Str::random(30));
@@ -133,7 +135,6 @@ class UserController extends Controller
         ]);
 
         //  Email the new user
-        // Mail::to($request->email)->send(new InitializeUser($hash, $request->username, $request->first_name.' '.$request->last_name));
         Notification::send($newUser, new NewUserEmail($newUser, $hash));
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);

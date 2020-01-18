@@ -57,7 +57,7 @@ Whenever a new Tech Tip is created, an email is sent to all registered users not
 
 ## Installing Tech Bench
 
-Tech Bench is built to be installed on a dedicated Linux server.  For installation instructions, visit https://tech-bench.readthedocs.io/en/latest/installer/install.html and select the option that fits your environment best.
+Tech Bench is built to be installed on a dedicated web server.  For installation instructions, visit https://tech-bench.readthedocs.io/en/latest/installer/install.html and select the option that fits your environment best.
 
 ## Copyright © 2016-2020 Ron Butcher
 
