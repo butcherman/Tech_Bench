@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 use App\User;
+use App\UserSettings;
 use App\UserRoleType;
 use App\UserRolePermissions;
 use App\UserRolePermissionTypes;
@@ -23,6 +24,9 @@ abstract class TestCase extends BaseTestCase
                 'role_id' => 1
             ]
         );
+        UserSettings::create([
+            'user_id' => $user->user_id,
+        ]);
 
         return $user;
     }
@@ -31,6 +35,9 @@ abstract class TestCase extends BaseTestCase
     public function getTech()
     {
         $user = factory(User::class)->create();
+        UserSettings::create([
+            'user_id' => $user->user_id,
+        ]);
 
         return $user;
     }
