@@ -9,9 +9,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Tech Bench') }}</title>
-
+    <noscript><meta http-equiv="refresh" content="0; url={{route('noscript')}}" /></noscript>
     <!-- Scripts -->
-    <script>var maxUpload = {{config('filesystems.paths.max_size')}}</script>
+    <script>
+        window.techBench = {
+            'maxUpload': '{{config('filesystems.paths.max_size')}}',
+            'csrfToken': '{{csrf_token()}}'
+        };
+    </script>
     <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->
@@ -19,13 +24,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/guest.css') }}" rel="stylesheet">
-    <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
-    
 </head>
 <body role="document">
-    <div class="container-fluid" role="main">
+    <div class="container-fluid v-100" role="main" id="app">
         @yield('content')
     </div>
-    @yield('script')
 </body>
 </html>

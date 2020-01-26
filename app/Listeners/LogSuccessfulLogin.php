@@ -2,36 +2,21 @@
 
 namespace App\Listeners;
 
-use Illuminate\Auth\Events\Login;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Auth;
 use App\UserLogins;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class LogSuccessfulLogin
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
+    //  Update the datbase to note the successful login
+    public function handle()
     {
-        //
-    }
-
-    /**
-     * Handle the event.
-     *
-     * @param  Login  $event
-     * @return void
-     */
-    public function handle(Login $event)
-    {
-        UserLogins::create(
+        $user = UserLogins::create(
         [
-            'user_id' => Auth::user()->user_id,
+            'user_id'    => Auth::user()->user_id,
             'ip_address' => \Request::ip()
         ]);
+
+        Log::notice('User Logged In ', $user->toArray());
     }
 }

@@ -3,103 +3,58 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token'
-    ];
-    
+    protected $fillable = ['role_id', 'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active'];
+    protected $hidden = ['password', 'remember_token', 'is_installer', 'active', 'created_at', 'password_expires', 'updated_at', 'user_id', 'username'];
     //  Database primary key
     protected $primaryKey = 'user_id';
-    
+
+    protected $appends = [ 'full_name' ];
+    protected $casts = [
+        'created_at' => 'datetime:M d, Y',
+        'updated_at' => 'datetime:M d, Y',
+        'deleted_at' => 'datetime:M d, Y'
+    ];
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
     public function UserLogins()
     {
         return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
     }
-    
-    public function systemFiles()
-    {
-        return $this->hasMany('App\SystemFiles', 'user_id', 'user_id');
-    }
-    
-    public function customerFavs()
-    {
-        return $this->belongsTo('App\CustomerFavs', 'user_id', 'user_id');
-    }
-    
-    public function customerNotes()
-    {
-        return $this->belongsTo('App\CustomerNotes', 'user_id', 'user_id');
-    }
-    
-    public function techTips()
-    {
-        return $this->belongsTo('App\TechTips', 'user_id', 'user_id');
-    }
-    
-    public function techTipComments()
-    {
-        return $this->belongsTo('App\TechTipComments', 'user_id', 'user_id');
-    }
-    
-    public function fileLinks()
+
+    public function FileLinks()
     {
         return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
     }
-    
-    //  Functions for authentication roles
-    public function roles()
+
+    // public function UserPermissions()
+    // {
+    //     return $this->hasOne('App\UserPermissions', 'user_id', 'user_id');
+    // }
+
+    public function UserSettings()
     {
-        return $this->belongsToMany('App\Role', 'user_role', 'user_id', 'role_id');
+        return $this->hasOne('App\UserSettings', 'user_id', 'user_id');
     }
-    
-    public function hasAnyRole($roles)
-    {
-        if(is_array($roles))
-        {
-            foreach($roles as $role)
-            {
-                if($this->hasRole($role))
-                {
-                    return true;
-                }
-            }
-        }
-        else
-        {
-            if($this->hasRole($roles))
-            {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    public function hasRole($role)
-    {
-        if($this->roles()->where('name', $role)->first())
-        {
-            return true;
-        }
-        return false;
-    }
+
+    // public function UserRolePermissions()
+    // {
+    //     return $this->hasManyThrough('App\UserRolePermissions', 'App\UserRoles', 'user_id', 'role_id', 'user_id', 'role_id');
+    // }
 }

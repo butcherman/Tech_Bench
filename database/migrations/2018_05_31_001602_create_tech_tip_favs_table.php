@@ -13,7 +13,7 @@ class CreateTechTipFavsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tech_tip_favs', function (Blueprint $table) {
+        Schema::create('tech_tip_favs', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('tip_id')->unsigned();

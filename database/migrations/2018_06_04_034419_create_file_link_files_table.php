@@ -13,13 +13,14 @@ class CreateFileLinkFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('file_link_files', function (Blueprint $table) {
+        Schema::create('file_link_files', function(Blueprint $table) {
             $table->increments('link_file_id');
             $table->integer('link_id')->unsigned();
-            $table->integer('file_id')->unsigned(); 
+            $table->integer('file_id')->unsigned();
             $table->integer('user_id')->unsigned()->nullable();
             $table->text('added_by')->nullable();
             $table->boolean('upload')->default(1);
+            $table->longText('note')->nullable();
             $table->timestamps();
             $table->foreign('link_id')->references('link_id')->on('file_links')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('file_id')->references('file_id')->on('files')->onUpdate('cascade');

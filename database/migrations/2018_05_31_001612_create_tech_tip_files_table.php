@@ -13,7 +13,7 @@ class CreateTechTipFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tech_tip_files', function (Blueprint $table) {
+        Schema::create('tech_tip_files', function(Blueprint $table) {
             $table->increments('tip_file_id');
             $table->integer('tip_id')->unsigned();
             $table->integer('file_id')->unsigned();

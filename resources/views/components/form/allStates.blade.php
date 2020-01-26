@@ -55,4 +55,9 @@
         'WY' => 'Wyoming',
     ], 
     $default, ['placeholder' => 'Pick A State', 'class' => 'form-control']) }}
+    @if($errors->has($name))
+        <span class="invalid-feedback d-inline">
+            <strong>{{ $errors->first($name) }}</strong>
+        </span>
+    @endif
 </div>

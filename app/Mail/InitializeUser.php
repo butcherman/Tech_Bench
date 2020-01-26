@@ -7,33 +7,23 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class InitializeUser extends Mailable
+class InitializeUser extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable; // , SerializesModels;
     
-    public $link;
-    public $username;
-    public $fullName;
+    public $link, $username, $name;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
+    //  Constructor prepares the email message
     public function __construct($link, $username, $name)
     {
         $this->link     = $link;
         $this->username = $username;
-        $this->fullName = $name;
+        $this->name     = $name;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
+    //  Send the email message
     public function build()
     {
-        return $this->subject('Welcom to the Tech Bench')->markdown('email.initializeUser');
+        return $this->subject('Welcome to the Tech Bench')->markdown('email.initializeUser');
     }
 }

@@ -1,7 +1,7 @@
 @component('mail::message')
 
 @component('mail::panel')
-    <h2 style="text-align: center;">Welcome to the Tech Bench</h2>
+<h2 style="text-align: center;">Welcome to the Tech Bench</h2>
 @endcomponent
 
 Hello,

@@ -7,15 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class CustomerContacts extends Model
 {
     protected $primaryKey = 'cont_id';
-    protected $fillable = ['cust_id', 'name', 'email'];
-    
+    protected $fillable = ['cust_id', 'name', 'email', 'shared'];
+
     public function CustomerContactPhones()
     {
-        return $this->belongsTo('App\CustomerContactPhones', 'cont_id');
-    }
-    
-    public function CustomerContactsView()
-    {
-        return $this->hasMany('App\CustomerContactsView', 'cont_id', 'cont_id');
+        return $this->hasMany('App\CustomerContactPhones', 'cont_id');
     }
 }

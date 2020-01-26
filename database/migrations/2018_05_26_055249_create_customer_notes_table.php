@@ -13,11 +13,12 @@ class CreateCustomerNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_notes', function (Blueprint $table) {
+        Schema::create('customer_notes', function(Blueprint $table) {
             $table->increments('note_id');
             $table->integer('cust_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->boolean('urgent')->default(0)->nullable();
+            $table->boolean('urgent')->default(0);
+            $table->boolean('shared')->default(0);
             $table->text('subject');
             $table->longText('description');
             $table->timestamps();

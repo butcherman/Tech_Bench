@@ -1,18 +1,18 @@
-let mix = require('laravel-mix');
+const mix = require('laravel-mix');
+const path = require('path');
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
+mix.webpackConfig(
+{
+    resolve:
+    {
+        alias:
+        {
+            ziggy: path.resolve('vendor/tightenco/ziggy/dist/js/route.js'),
+        },
+    },
+});
 
-mix.js('resources/assets/js/app.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css')
-    .sass('resources/assets/sass/guest.scss', 'public/css')
-    .sass('resources/assets/sass/pdfDownload.scss', 'public/css')
-    .copyDirectory('node_modules/tinymce', 'public/js/tinymce');
+mix.js('resources/js/app.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css')
+    .sass('resources/sass/guest.scss', 'public/css')
+    .copy('node_modules/tinymce/skins', 'public/js/skins');

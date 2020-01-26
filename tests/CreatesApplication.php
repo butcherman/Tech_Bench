@@ -2,6 +2,9 @@
 
 namespace Tests;
 
+use App\User;
+use App\Role;
+use App\UserPermissions;
 use Illuminate\Contracts\Console\Kernel;
 
 trait CreatesApplication

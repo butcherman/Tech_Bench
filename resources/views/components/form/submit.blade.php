@@ -1,1 +1,1 @@
-{{ Form::submit($name, ['class' => 'btn btn-info btn-block submit-button']) }}
+{{ Form::submit($name, ['class' => 'btn btn-primary btn-block submit-button']) }}

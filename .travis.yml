@@ -7,9 +7,9 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 7.1
-      env: setup=lowest
     - php: 7.2
+      env: setup=lowest
+    - php: 7.3
       env: setup=lowest
 
 sudo: false
@@ -24,19 +24,27 @@ services:
     - mysql
 
 before_install:
-    - mysql -e 'create database forge;'
-    - mysql -e 'create user forge@localhost; grant all privileges on *.* to forge@localhost with grant option;'
-    
+    - mysql -e 'create database `tb-dev-testing`;'
+
 before_script:
     - cp tests/.env.travis .env
-    - composer self-update
-    - composer install --no-interaction
+    - travis_retry composer self-update
+    - travis_retry composer install --no-interaction
+    # - pear install pear/PHP_CodeSniffer
+    # - phpenv rehash
+    # - npm install npm@latest -g
+    # - npm install -g jshint
+    - npm install
     - php artisan key:generate
-    - php artisan migrate
+    - php artisan migrate --seed
+    - npm run production
 
-install:
-    - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-suggest; fi
-    - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
+script:
+    - php vendor/bin/phpunit --coverage-clover=coverage.clover
 
-script: 
-    - vendor/bin/phpunit
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+after_failure:
+  - cat /home/travis/build/butcherman/Tech_Bench/storage/logs/TechBench.log

@@ -13,7 +13,7 @@ class CreateUserInitializesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_initializes', function (Blueprint $table) {
+        Schema::create('user_initializes', function(Blueprint $table) {
             $table->increments('id');
             $table->string('username')->unique();
             $table->string('token')->unique();

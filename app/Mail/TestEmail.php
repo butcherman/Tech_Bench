@@ -2,14 +2,14 @@
 
 namespace App\Mail;
 
-use Illuminate\Bus\Queueable;
+//use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
+//use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TestEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+//    use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
@@ -28,6 +28,6 @@ class TestEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Test Email From Tech Bench')->markdown('email.testEmail');
+        return $this->subject('Test Email From '.config('app.name'))->markdown('email.testEmail');
     }
 }

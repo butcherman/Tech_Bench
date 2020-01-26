@@ -13,10 +13,12 @@ class CreateCustomerSystemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_systems', function (Blueprint $table) {
+        Schema::create('customer_systems', function(Blueprint $table) {
             $table->increments('cust_sys_id');
             $table->integer('cust_id')->unsigned();
             $table->integer('sys_id')->unsigned();
+            $table->boolean('shared')->default(0);
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('sys_id')->references('sys_id')->on('system_types')->onUpdate('cascade');

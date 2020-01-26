@@ -7,14 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class CustomerContactPhones extends Model
 {
     protected $fillable = ['cont_id', 'phone_type_id', 'phone_number', 'extension'];
-    
-    public function CustomerContacts()
+    protected $appends = ['type_icon', 'type_name', 'readable'];
+
+    public function getTypeIconAttribute()
     {
-        return $this->hasMany('App\CustomerContacts', 'cont_id', 'cont_id');
+        return PhoneNumberTypes::find($this->phone_type_id)->icon_class;
     }
-    
+
+    public function getTypeNameAttribute()
+    {
+        return PhoneNumberTypes::find($this->phone_type_id)->description;
+    }
+
+    public function getReadableAttribute()
+    {
+        return PhoneNumberTypes::readablePhoneNumber($this->phone_number);
+    }
+
     public function PhoneNumberTypes()
     {
-        return $this->hasMany('App\PhoneNumberTypes', 'phone_type_id', 'phone_type_id');
+        return $this->hasOne('App\PhoneNumberTypes', 'phone_type_id', 'phone_type_id');
     }
 }

@@ -1,0 +1,50 @@
+// Typography
+$font-family-sans-serif: "Raleway", sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Body Colors
+$body-bg: #f5f8fa;
+$header-height: 56px;
+$header-background: linear-gradient(#736D6D, #222);
+$side-nav-background: #343A40;
+$nav-link-color: #adb5bd;
+
+//  Sizes
+$side-nav-width: 235px;
+
+//  Shared classes
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hide {
+    display: none;
+}
+
+.pad-bottom {
+    margin-bottom: 20px;
+}
+
+.pad-top {
+    margin-top: 20px;
+}
+
+.buffer-top {
+    padding-top: 20px;
+}
+
+.buffer-bottom {
+    padding-bottom: 20px;
+}
+
+.loadingModal {
+    width: 20%;
+    display: block;
+    @extend .center;
+}
+
+.pointer {
+    cursor: pointer;
+}

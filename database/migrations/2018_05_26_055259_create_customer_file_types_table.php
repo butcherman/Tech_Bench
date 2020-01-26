@@ -14,7 +14,7 @@ class CreateCustomerFileTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_file_types', function (Blueprint $table) {
+        Schema::create('customer_file_types', function(Blueprint $table) {
             $table->increments('file_type_id');
             $table->text('description');
             $table->timestamps();

@@ -1,51 +1,27 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <img src="{{config('app.logo')}}" alt="Company Logo" class="text-center" id="header-logo" />
-            <h1 class="text-center">Tech Bench</h1>
+<div class="row justify-content-center align-items-center login-form-container">
+    <div class="col-lg-8 col-xl-6">
+        <div class="row" id="header-title">
+            <div class="col-12"><h1>Password Request</h1></div>
         </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <div class="row row-eq-height justify-content-center align-items-center login-form-sub-container">
+            <div class="col-md-6">
+                <img src="{{config('app.logo')}}" alt="Company Logo" id="header-logo" />
+            </div>
+            <div class="col-md-6">
+               @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @else
+                    <p>Enter your email address for instructions for accessing your account.</p>
+                    {!! Form::open(['route' => 'password.email', 'id' => 'password-reset-form']) !!}
+                        {{Form::bsEmail('email', null, null, ['placeholder' => 'Enter Your Email Address', 'autofocus'])}}
+                        {{Form::bsSubmit('Send Password Reset Instructions')}}
+                    {!! Form::close() !!}
+                @endif
             </div>
         </div>
     </div>

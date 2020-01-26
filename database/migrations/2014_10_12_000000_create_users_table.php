@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('users', function(Blueprint $table) {
             $table->increments('user_id');
             $table->string('username')->unique;
             $table->string('first_name');
@@ -22,18 +22,19 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
-            $table->boolean('active');
+            $table->timestamp('password_expires')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
-        
+
+        //  Create the initial default user
         User::create([
-            'user_id'    => 1,
-            'username'   => 'admin',
-            'first_name' => 'System',
-            'last_name'  => 'Administrator',
-            'email'      => 'text@em.com',
-            'password'   => bcrypt('password'),
-            'active'     => 1
+            'user_id'      => 1,
+            'username'     => 'admin',
+            'first_name'   => 'System',
+            'last_name'    => 'Administrator',
+            'email'        => 'admin@em.com',
+            'password'     => bcrypt('password'),
         ]);
     }
 

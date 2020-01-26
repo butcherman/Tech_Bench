@@ -9,21 +9,20 @@
     <div class="row justify-content-center">
         <div class="col-10">
             <h2>
-                {{$data->subject}}   
+                {{$data->subject}}
             </h2>
         </div>
     </div>
     <div class="row justify-content-center">
         <div class="col-10 tech-tip-details">
             <span class="d-block d-sm-inline"><strong>ID#: </strong>{{$data->tip_id}}</span> |
-            <span class="d-block d-sm-inline"><strong>Author: </strong>{{$data->user->first_name}} {{$data->user->last_name}}</span> |
             <span class="d-block d-sm-inline"><strong>Date: </strong>{{date('M j, Y', strtotime($data->created_at))}}</span> |
             @if($data->created_at != $data->updated_at)
                 <span class="d-block d-sm-inline"><strong>Updated: </strong>{{date('M j, Y', strtotime($data->updated_at))}}</span> |
             @endif
             <span class="d-block d-sm-inline">
                 <strong>Tags: </strong> <span></span>
-                @foreach($systems as $sys)
+                @foreach($data->SystemTypes as $sys)
                     <div class="tech-tip-tag">{{$sys->name}}</div>
                 @endforeach
             </span>
