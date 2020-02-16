@@ -17,13 +17,13 @@
             'csrfToken': '{{csrf_token()}}'
         };
     </script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
 
     <!-- Styles -->
-    <link href="{{ asset('css/guest.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/guest.css') }}" rel="stylesheet">
 </head>
 <body role="document">
     <div class="container-fluid v-100" role="main" id="app">
