@@ -36,7 +36,6 @@
                 axios.get(this.route('getNotifications'))
                     .then(res => {
                         this.notifications = res.data;
-                        console.log(this.notifications);
                         this.loading = false;
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },

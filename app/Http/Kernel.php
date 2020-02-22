@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             //  Custom middleware
             \App\Http\Middleware\CheckPasswordExpire::class,
+            \App\Http\Middleware\CheckBrowser::class,
         ],
 
         'api' => [
