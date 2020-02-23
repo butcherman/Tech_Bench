@@ -7,9 +7,9 @@
                     {{tip_details.subject}}
                 </h3>
                 <div class="tip-details">
-                    <span><strong>ID:</strong>  {{tip_details.tip_id}}</span>
-                    <span><strong>Created:</strong>  {{tip_details.created_at}}</span>
-                    <span><strong>Updated:</strong>  {{tip_details.updated_at}}</span>
+                    <span class="d-block d-sm-inline-block"><strong>ID:</strong>  {{tip_details.tip_id}}</span>
+                    <span class="d-block d-sm-inline-block"><strong>Created:</strong>  {{tip_details.created_at}}</span>
+                    <span class="d-block d-sm-inline-block"><strong>Updated:</strong>  {{tip_details.updated_at}}</span>
                 </div>
                 <div class="tip-details">
                     <span><strong>Tags:</strong>
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="col-md-4 grid-margin">
-                <div class="float-right">
+                <div class="float-sm-right">
                     <a :href="route('tip.downloadTip', tip_details.tip_id)" class="btn btn-primary btn-block" title="Download As PDF" v-b-tooltip:hover>Download Tip</a>
                     <a :href="route('tips.edit', tip_details.tip_id)" class="btn btn-warning btn-block" title="Edit this Tip" v-b-tooltip:hover v-show="can_edit">Edit Tip</a>
                     <button class="btn btn-danger btn-block" v-show="can_del" @click="deleteTip">Delete Tip</button>

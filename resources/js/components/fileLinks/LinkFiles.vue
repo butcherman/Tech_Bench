@@ -21,7 +21,7 @@
                 </div>
                 <div slot="table-actions-bottom">
                     <div class="row justify-content-center">
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <button class="btn btn-block btn-primary" v-b-modal.new-file-modal>Add File</button>
                         </div>
                     </div>

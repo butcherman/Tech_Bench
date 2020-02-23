@@ -1,7 +1,7 @@
 <template>
 
     <div class="row justify-content-center">
-        <div class="col-8 grid-margin stretch-card">
+        <div class="col-sm-8 grid-margin stretch-card">
             <div class="card">
                 <div class="card-header">Comments</div>
                 <div class="card-body">

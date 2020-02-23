@@ -6,16 +6,16 @@
                 <div class="card-header">Link Details</div>
                 <div class="card-body">
                     <dl class="row h-100"  v-if="loadDone">
-                        <dt class="col-3 text-right">Link Name:</dt>
-                        <dd class="col-9 text-left">{{details.link_name}}</dd>
-                        <dt class="col-3 text-right">Customer:</dt>
-                        <dd class="col-9 text-left">{{details.cust_name}}</dd>
-                        <dt class="col-3 text-right">Expire Date:</dt>
-                        <dd class="col-9 text-left">{{details.exp_format}}</dd>
-                        <dt class="col-3 text-right">Allow Upload:</dt>
-                        <dd class="col-9 text-left">{{details.allow_upload}}</dd>
-                        <dt class="col-3 text-right">Link:</dt>
-                        <dd class="col-9 text-left"><a :href="route('file-links.show', hash)" target="_blank">{{route('file-links.show', hash)}}</a></dd>
+                        <dt class="col-md-3 text-md-right">Link Name:</dt>
+                        <dd class="col-md-9 text-md-left">{{details.link_name}}</dd>
+                        <dt class="col-md-3 text-md-right">Customer:</dt>
+                        <dd class="col-md-9 text-md-left">{{details.cust_name}}</dd>
+                        <dt class="col-md-3 text-md-right">Expire Date:</dt>
+                        <dd class="col-md-9 text-md-left">{{details.exp_format}}</dd>
+                        <dt class="col-md-3 text-md-right">Allow Upload:</dt>
+                        <dd class="col-md-9 text-md-left">{{details.allow_upload}}</dd>
+                        <dt class="col-md-3 text-md-right">Link:</dt>
+                        <dd class="col-md-9 text-md-left"><a :href="route('file-links.show', hash)" target="_blank">{{route('file-links.show', hash)}}</a></dd>
                     </dl>
                     <div v-else-if="error">
                         <h5 class="text-center">Problem Loading Data...</h5>
