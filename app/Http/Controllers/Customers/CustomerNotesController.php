@@ -29,7 +29,7 @@ class CustomerNotesController extends Controller
 
         //  Determine if the note should go to the customer, or its parent
         $details = Customers::find($request->cust_id);
-        if ($details->parent_id && $request->shared) {
+        if ($details->parent_id && $request->shared == 'true') {
             $request->cust_id = $details->parent_id;
         }
 
@@ -37,7 +37,7 @@ class CustomerNotesController extends Controller
             'cust_id'     => $request->cust_id,
             'user_id'     => Auth::user()->user_id,
             'urgent'      => $request->urgent,
-            'shared'      => $request->shared ? 1 : 0,
+            'shared'      => $request->shared == 'true' ? 1 : 0,
             'subject'     => $request->title,
             'description' => $request->note
         ]);
@@ -56,7 +56,7 @@ class CustomerNotesController extends Controller
         //  Determine if there is a parent site with shared contacts
         $parent = Customers::find($id)->parent_id;
         if ($parent) {
-            $parentList = CustomerNotes::where('cust_id', $parent)->orderBy('urgent', 'desc')->get();
+            $parentList = CustomerNotes::where('cust_id', $parent)->where('shared', 1)->orderBy('urgent', 'desc')->get();
 
             $notes = $notes->merge($parentList);
         }

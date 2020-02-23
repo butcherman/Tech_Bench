@@ -30,7 +30,7 @@ class CustomerContactsController extends Controller
 
         //  Determine if the contact should be assigned under this site or the parent site
         $details = Customers::find($request->cust_id);
-        if($details->parent_id && $request->shared)
+        if($details->parent_id && $request->shared == 'true')
         {
             $request->cust_id = $details->parent_id;
         }
@@ -39,7 +39,7 @@ class CustomerContactsController extends Controller
             'cust_id' => $request->cust_id,
             'name'    => $request->name,
             'email'   => !empty($request->email) ? $request->email : null,
-            'shared'  => $request->shared ? 1 : 0,
+            'shared'  => $request->shared == 'true' ? 1 : 0,
         ])->cont_id;
 
         foreach($request->numbers['type'] as $key => $num)

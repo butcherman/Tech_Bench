@@ -92,7 +92,7 @@ export default {
                 },
                 {
                     label: 'Last Login Date',
-                    field: 'user_logins.0.created_at',
+                    field: 'last_user_login.created_at',
                 },
                 {
                     label: 'Actions',
@@ -115,14 +115,9 @@ export default {
             }
         }
     },
-    created() {
-        // this.getUserList();
-        console.log(this.user_list);
-    },
     methods: {
         disableUser(data, index)
         {
-            console.log(data);
             this.$bvModal.msgBoxConfirm('Please confirm that you want to deactivate '+data.full_name, {
                 title: 'Please Confirm',
                 size: 'sm',
@@ -141,7 +136,6 @@ export default {
                     this.$refs['loading-modal'].show();
                     axios.delete(this.route('admin.user.destroy', data.user_id))
                         .then(res => {
-                            console.log(res);
                             this.$refs['loading-modal'].hide();
                             this.$bvModal.msgBoxOk(res.data.reason)
                                 .then(value => {
@@ -158,7 +152,6 @@ export default {
         {
             this.confirmedErr = null;
             e.preventDefault();
-            console.log(this.form);
             if(this.$refs.passwordForm.checkValidity() === false)
             {
                 this.validated = true;
@@ -167,18 +160,15 @@ export default {
             {
                 this.confirmedErr = false;
                 this.validated = false;
-
             }
             else
             {
                 this.validated = true;
                 this.confirmedErr = true;
-                console.log('we are happy');
                 this.button.text = 'Processing...';
                 this.button.disable = true;
                 axios.post(this.route('admin.user.changePassword'), this.form)
                     .then(res => {
-                        console.log(res);
                         this.$refs['passwordFormModal'].hide();
                             this.$bvModal.msgBoxOk(res.data.reason)
                                 .then(value => {
@@ -194,19 +184,6 @@ export default {
             this.form.password = this.generated;
             this.form.password_confirmation = this.generated;
         }
-        // getUserList()
-        // {
-        //     axios.get(this.get_url)
-        //         .then(res => {
-        //             this.rows = res.data;
-        //         })
-        //         .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
-        // },
-        // clickName(par)
-        // {
-        //     var url = this.action_url.replace(':id', par.row.user_id);
-        //     location.href = url;
-        // }
     }
 }
 </script>

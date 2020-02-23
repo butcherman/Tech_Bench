@@ -24,6 +24,7 @@ class CustomerFilesController extends Controller
     //  Store a new customer file
     public function store(Request $request)
     {
+        Log::debug('Uploaded Data - ', $request->toArray());
         //  Validate the form
         $request->validate([
             'cust_id' => 'required',
@@ -50,7 +51,7 @@ class CustomerFilesController extends Controller
         {
             //  Determine if the note should go to the customer, or its parent
             $details = Customers::find($request->cust_id);
-            if ($details->parent_id && $request->shared)
+            if ($details->parent_id && $request->shared == 'true')
             {
                 $request->cust_id = $details->parent_id;
             }
@@ -79,7 +80,7 @@ class CustomerFilesController extends Controller
                 'file_type_id' => $request->type,
                 'cust_id'      => $request->cust_id,
                 'user_id'      => Auth::user()->user_id,
-                'shared'       => $request->shared ? 1 : 0,
+                'shared'       => $request->shared === 'true' ? 1 : 0,
                 'name'         => $request->name
             ]);
 
@@ -112,6 +113,7 @@ class CustomerFilesController extends Controller
         $parent = Customers::find($id)->parent_id;
         if ($parent) {
             $parentList = Customerfiles::where('cust_id', $parent)
+                ->where('shared', 1)
                 ->with('Files')
                 ->with('CustomerFileTypes')
                 ->with('User')
