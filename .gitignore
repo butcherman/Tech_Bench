@@ -18,7 +18,7 @@ yarn-error.log
 /tests/_Report/
 modules_statuses.json
 #  Mix files created by npm run production
-public/mix-manifest.json
-public/css/*.css
-public/js/*.js
-resources/assets/js/ziggy.js
+# public/mix-manifest.json
+# public/css/*.css
+# public/js/*.js
+# resources/assets/js/ziggy.js
