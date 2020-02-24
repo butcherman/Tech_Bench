@@ -68,20 +68,11 @@ class SettingsController extends Controller
     public function submitConfiguration(Request $request)
     {
         $request->validate([
-            'url'      => 'required',
             'timezone' => 'required',
             'filesize' => 'required',
             //  TODO - add additinal validation to make sure proper information is passed in
         ]);
 
-        //  Update the site URL
-        if(config('app.url') !== $request->url)
-        {
-            Settings::firstOrCreate(
-                ['key'   => 'app.url'],
-                ['key'   => 'app.url', 'value' => $request->url]
-            )->update(['value' => $request->url]);
-        }
         //  Update the site timezone
         if (config('app.timezone') !== $request->timezone) {
             Settings::firstOrCreate(
@@ -146,7 +137,6 @@ class SettingsController extends Controller
         }
 
         return view('err.badFile');
-
     }
 
     //  Create a new backup
@@ -170,7 +160,6 @@ class SettingsController extends Controller
             'port'       => config('mail.port'),
             'encryption' => config('mail.encryption'),
             'username'   => config('mail.username'),
-            // 'password'   => config('mail.password'),
             'fromEmail'  =>config('mail.from.address'),
             'fromName'   => config('mail.from.name'),
         ]);
@@ -249,7 +238,6 @@ class SettingsController extends Controller
             'host'       => 'required',
             'port'       => 'required|numeric',
             'encryption' => 'required',
-            'username'   => 'required',
             'fromEmail'  => 'required',
             'fromName'   => 'required',
         ]);
@@ -294,45 +282,4 @@ class SettingsController extends Controller
         Log::notice('Email Settings have been changed by User ID-'.Auth::user()->user_id);
         return response()->json(['success' => true]);
     }
-
-    // protected function updateEmailSettings($data)
-    // {
-    //     //  Update each setting
-    //     Settings::firstOrCreate(
-    //         ['key'   => 'mail.host'],
-    //         ['key'   => 'mail.host', 'value' => $data->host]
-    //     )->update(['value' => $data->host]);
-    //     Settings::firstOrCreate(
-    //         ['key'   => 'mail.port'],
-    //         ['key'   => 'mail.port', 'value' => $data->port]
-    //     )->update(['value' => $data->port]);
-    //     Settings::firstOrCreate(
-    //         ['key'   => 'mail.encryption'],
-    //         ['key'   => 'mail.encryption', 'value' => $data->encryption]
-    //     )->update(['value' => $data->encryption]);
-    //     Settings::firstOrCreate(
-    //         ['key'   => 'mail.username'],
-    //         ['key'   => 'mail.username', 'value' => $data->username]
-    //     )->update(['value' => $data->username]);
-    //     Settings::firstOrCreate(
-    //         ['key'   => 'mail.from.address'],
-    //         ['key'   => 'mail.from.address', 'value' => $data->fromEmail]
-    //     )->update(['value' => $data->fromEmail]);
-    //     Settings::firstOrCreate(
-    //         ['key'   => 'mail.from.name'],
-    //         ['key'   => 'mail.from.name', 'value' => $data->fromName]
-    //     )->update(['value' => $data->fromName]);
-    //     //  Only update the password if it has changed
-    //     if (!empty($data->password) && $data->password !== 'NULL') {
-    //         // Settings::where('key', 'mail.password')->update(['value' => $request->password]);
-    //         Settings::firstOrCreate(
-    //             ['key'   => 'mail.password'],
-    //             ['key'   => 'mail.password', 'value' => $data->password]
-    //         )->update(['value' => $data->password]);
-    //     }
-
-    //     return true;
-    // }
-
-
 }
