@@ -12,8 +12,9 @@ class TechTipComments extends Model
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
     ];
+    protected $hidden = [ 'user_id' ];
 
-    public function user()
+    public function User()
     {
         return $this->hasOne('App\User', 'user_id', 'user_id');
     }

@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: beta
   buildmetadata: null
-  commit: 3b3
+  commit: 3b4
   timestamp:
     year: 2020
-    month: 2
-    day: 23
-    hour: 16
-    minute: 9
-    second: 11
+    month: 3
+    day: 7
+    hour: 17
+    minute: 50
+    second: 47
     timezone: America/Los_Angeles
 commit:
   length: 6

@@ -44,7 +44,7 @@ class TechTipCommentsController extends Controller
     //  Retrieve the comments for a tech tip
     public function show($id)
     {
-        return TechTipComments::where('tip_id', $id)->with('User')->get();
+        return TechTipComments::where('tip_id', $id)->with('user')->get();
     }
 
     //  Delete a comment

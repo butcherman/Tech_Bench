@@ -8,6 +8,9 @@
                         <b-list-group-item v-for="file in tip_files" :key="file.file_id">
                             <a :href="route('download', [file.file_id, file.files.file_name])">{{file.files.file_name}}</a>
                         </b-list-group-item>
+                        <b-list-group-item v-show="tip_files.length == 0">
+                            <h5 class="text-center">No Attachements</h5>
+                        </b-list-group-item>
                     </b-list-group>
                 </div>
             </div>

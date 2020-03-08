@@ -1,7 +1,6 @@
 <?php
 
 use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
 
 return [
     'default'  => env('LOG_CHANNEL', 'daily'),
@@ -12,31 +11,17 @@ return [
             'ignore_exceptions' => false,
         ],
         'single' => [
-            'driver'    => 'single',
-            'path'      => storage_path('logs/TechBench.log'),
-            'level'     => env('LOG_LEVEL', 'debug'),
+            'driver'     => 'single',
+            'path'       => storage_path('logs/TechBench.log'),
+            'level'      => env('LOG_LEVEL', 'debug'),
+            'permission' => 0644
         ],
         'daily' => [
-            'driver'    => 'daily',
-            'path'      => storage_path('logs/TechBench.log'),
-            'level'     => env('LOG_LEVEL', 'debug'),
-            'days'      => 14,
-        ],
-        'slack' => [
-            'driver'    => 'slack',
-            'url'       => env('LOG_SLACK_WEBHOOK_URL'),
-            'username'  => 'Tech Bench Log',
-            'emoji'     => ':boom:',
-            'level'     => 'critical',
-        ],
-        'papertrail'        => [
-            'driver'        => 'monolog',
-            'level'         => env('LOG_LEVEL', 'debug'),
-            'handler'       => SyslogUdpHandler::class,
-            'handler_with'  => [
-                'host' => env('PAPERTRAIL_URL'),
-                'port' => env('PAPERTRAIL_PORT'),
-            ],
+            'driver'     => 'daily',
+            'path'       => storage_path('logs/TechBench.log'),
+            'level'      => env('LOG_LEVEL', 'debug'),
+            'days'       => 14,
+            'permission' => 0664
         ],
         'stderr' => [
             'driver'    => 'monolog',
