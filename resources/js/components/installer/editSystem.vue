@@ -8,20 +8,20 @@
             </b-form-group>
         </fieldset>
         <fieldset>
-            <label>Customer Information to Gather</label> 
-            <div ref="container">  
+            <label>Customer Information to Gather</label>
+            <div ref="container">
                 <draggable group="existing" @start="drag=true" @end="drag=false" v-bind="dragOptions" :list="form.dataOptions">
                    <b-form-input v-for="label in form.dataOptions" :key="label" type="text" :value="label" class="pad-bottom pointer" disabled></b-form-input>
                 </draggable>
-                <v-select v-for="n in range" :key="n" :options="dataTypes" v-model="form.newDataOptions[n]" placeholder="Select An Option" class="pad-bottom" taggable></v-select>                    
+                <v-select v-for="n in range" :key="n" :options="dataTypes" v-model="form.newDataOptions[n]" placeholder="Select An Option" class="pad-bottom" taggable></v-select>
             </div>
-            <span class="pointer float-right" @click="addRow">Add Row</span> 
+            <span class="pointer float-right" @click="addRow">Add Row</span>
         </fieldset>
         <b-button type="submit" variant="info" class="pad-top" block>Update System</b-button>
     </b-form>
 </template>
 
-<script>    
+<script>
 export default {
     props: [
         'dropdown',
@@ -45,7 +45,7 @@ export default {
             }
         }
     },
-    created() 
+    created()
     {
         this.getSystem();
     },
@@ -56,7 +56,6 @@ export default {
                 .then(res => {
                     this.form.name = res.data.name;
                     this.form.dataOptions = res.data.data;
-                    console.log(res.data.data);
                 })
                 .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
         },
@@ -67,7 +66,6 @@ export default {
         validate()
         {
             this.$validator.validateAll();
-            console.log('triggered');
         },
         submitForm(e)
         {
@@ -79,10 +77,7 @@ export default {
                         window.location.href = this.finish_route;
                     }
                 })
-//                .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
-                .catch(error => {
-                    console.log(error);
-                });
+               .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
         }
     }
 }

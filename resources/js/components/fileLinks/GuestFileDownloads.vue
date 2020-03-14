@@ -72,11 +72,9 @@
             {
                 axios.get(this.route('file-links.getFiles', this.link_id))
                     .then(res => {
-                        // console.log(res);
                         this.loadDone = true;
                         this.table.rows = res.data;
                         // this.loading = false;
-                        console.log(this.table.rows);
                     }).catch(error => {this.error = true});
             },
             downloadChecked()
@@ -86,13 +84,11 @@
                 this.$refs['files-table'].selectedRows.forEach(function(file)
                 {
                     fileList.push(file.files.file_id);
-                    console.log(file.files.file_id);
                 });
 
                 //  prepare the zip file for download
                 axios.put(this.route('archiveFiles'), {'fileList': fileList})
                     .then(res => {
-                        console.log(res);
                         window.location.href = this.route('downloadArchive', res.data.archive);
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },

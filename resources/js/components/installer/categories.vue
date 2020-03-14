@@ -64,7 +64,7 @@ export default {
     },
     created()
     {
-        // console.log(this.categories);
+        //
     },
     methods: {
         submitForm(e)
@@ -81,10 +81,8 @@ export default {
                 this.button.disable = true;
                 if(this.form.edit)
                 {
-                    console.log('good to edit');
                      axios.put(this.route('admin.categories.update', this.form.edit), this.form)
                         .then(res => {
-                            console.log(res);
                             location.reload();
                         }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
                 }
@@ -92,7 +90,6 @@ export default {
                 {
                     axios.post(this.route('admin.categories.store'), this.form)
                         .then(res => {
-                            console.log(res);
                             location.reload();
                         }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
                 }
@@ -124,13 +121,11 @@ export default {
                 centered: true
             })
             .then(value => {
-                // console.log(value);
                 if(value)
                 {
                     this.$refs['loading-modal'].show();
                     axios.delete(this.route('admin.categories.destroy', this.form.edit))
                         .then(res => {
-                            console.log(res);
                             this.$refs['loading-modal'].hide();
                             this.$bvModal.msgBoxOk(res.data.reason)
                                 .then(value => {

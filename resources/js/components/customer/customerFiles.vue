@@ -58,7 +58,7 @@
                 <vue-dropzone id="dropzone" v-if="!edit"
                     class="filedrag"
                     ref="fileDropzone"
-                    @vdropzone-total-upload-progress="updateProgressBar"
+                    @vdropzone-upload-progress="updateProgressBar"
                     @vdropzone-sending="sendingFiles"
                     @vdropzone-queue-complete="queueComplete"
                     :options="dropzoneOptions">
@@ -150,7 +150,7 @@
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
                     chunking: true,
-                    chunkSize: 5000000,
+                    chunkSize: window.techBench.chunkSize,
                     parallelChunkUploads: false,
                 },
             }
@@ -234,9 +234,10 @@
                     }
                 });
             },
-            updateProgressBar(progress)
+            updateProgressBar(file, progress, sent)
             {
-                this.progress = progress;
+                var fileProgress = 100 - (file.size / sent * 100);
+                this.progress = Math.round(fileProgress);
             },
             sendingFiles(file, xhr, formData)
             {
@@ -248,7 +249,6 @@
             },
             queueComplete()
             {
-                console.log('done');
                 this.$refs.fileFormModal.hide();
                 this.getFiles();
                 this.resetForm();

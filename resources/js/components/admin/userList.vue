@@ -130,7 +130,6 @@ export default {
                 centered: true
             })
             .then(value => {
-                // console.log(value);
                 if(value)
                 {
                     this.$refs['loading-modal'].show();

@@ -13,13 +13,13 @@ return [
         'single' => [
             'driver'     => 'single',
             'path'       => storage_path('logs/TechBench.log'),
-            'level'      => env('LOG_LEVEL', 'debug'),
+            'level'      => env('LOG_LEVEL', 'info'),
             'permission' => 0644
         ],
         'daily' => [
             'driver'     => 'daily',
             'path'       => storage_path('logs/TechBench.log'),
-            'level'      => env('LOG_LEVEL', 'debug'),
+            'level'      => env('LOG_LEVEL', 'info'),
             'days'       => 14,
             'permission' => 0664
         ],
@@ -33,11 +33,11 @@ return [
         ],
         'syslog' => [
             'driver' => 'syslog',
-            'level'  => env('LOG_LEVEL', 'debug'),
+            'level'  => env('LOG_LEVEL', 'info'),
         ],
         'errorlog' => [
             'driver' => 'errorlog',
-            'level'  => env('LOG_LEVEL', 'debug'),
+            'level'  => env('LOG_LEVEL', 'info'),
         ],
     ],
 ];

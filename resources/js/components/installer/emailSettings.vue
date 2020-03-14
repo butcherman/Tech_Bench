@@ -206,7 +206,6 @@ export default {
                             this.alert.variant = 'danger';
                             this.alert.message = res.data.message;
                         }
-                        console.log(res);
                         this.alert.show = true;
                         this.test.disable = false;
                         this.test.text = 'Update Settings and Send Test Email';

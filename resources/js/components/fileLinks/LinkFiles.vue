@@ -56,7 +56,7 @@
                             <span :id="'details-'+data.row.files.file_id" class="fas fa-comment-dots pointer text-danger"></span>
                             <b-popover :target="'details-'+data.row.files.file_id" triggers="click" placement="left" title="File Details">
                                 <pre>{{data.row.note}}</pre>
-                            </b-popover>"
+                            </b-popover>
                         </div>
                     </span>
                     <span v-else-if="data.column.field == 'actions'">
@@ -81,8 +81,8 @@
         </div>
         <b-modal id="file-type" title="Select File Type" ref="fileTypeModal" hide-footer>
             <b-list-group>
-                <b-list-group-item v-for="type in file_types" v-bind:key="type.file_type_id" @click="setFileType(type)" button>
-                    {{type.description}}
+                <b-list-group-item v-for="type in file_types" v-bind:key="type.value" @click="setFileType(type)" button>
+                    {{type.text}}
                 </b-list-group-item>
             </b-list-group>
         </b-modal>
@@ -91,7 +91,7 @@
                 <vue-dropzone id="dropzone"
                     class="filedrag"
                     ref="fileDropzone"
-                    @vdropzone-total-upload-progress="updateProgressBar"
+                    @vdropzone-upload-progress="updateProgressBar"
                     @vdropzone-sending="sendingFiles"
                     @vdropzone-queue-complete="queueComplete"
                     :options="dropzoneOptions">
@@ -159,7 +159,7 @@
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
                     chunking: true,
-                    chunkSize: 5000000,
+                    chunkSize: window.techBench.chunkSize,
                     parallelChunkUploads: false,
                 },
                 button: {
@@ -182,7 +182,6 @@
                         //  remove the loading screen and populate the table
                         this.loadDone = true;
                         this.table.rows = res.data;
-                        console.log(res.data);
                     }).catch(error => { this.error = true; });
             },
             //  When moving a file to a customer file list, select the appropriate file type tag and move the file
@@ -192,8 +191,9 @@
                 var moveData = {
                     fileID: this.moveFile.file_id,
                     fileName: this.moveFile.file_name,
-                    fileType: type.file_type_id,
+                    fileType: type.value,
                 };
+                console.log(moveData);
                 //  Move the file
                 axios.put(this.route('links.files.update', this.link_id), moveData)
                     .then(res => {
@@ -211,7 +211,6 @@
                             this.alert.variant = 'danger';
                             this.alert.message = res.data.reason;
                         }
-                        console.log(res);
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
             downloadChecked()
@@ -226,20 +225,16 @@
                 //  prepare the zip file for download
                 axios.put(this.route('downloadAll'), {'fileList': fileList})
                     .then(res => {
-                        console.log(res);
-                        // window.location.href = this.route('downloadAll');
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
             //  Add a new file to the link
             addFile(e)
             {
                 e.preventDefault();
-
                 //  Make sure there is a file in place, and process it
                 var myDrop = this.$refs.fileDropzone;
                 if(myDrop.getQueuedFiles().length > 0)
                 {
-                    // console.log('ready to go');
                     this.button.text = 'Loading...';
                     this.button.disable = true;
                     this.showProgress = true;
@@ -269,10 +264,10 @@
                         this.$root.$emit('bv::hide::popover')
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
-            //  Update the progress bar as a file is being uploaded
-            updateProgressBar(progress)
+            updateProgressBar(file, progress, sent)
             {
-                this.progress = progress;
+                var fileProgress = 100 - (file.size / sent * 100);
+                this.progress = Math.round(fileProgress);
             },
             //  As each chunk is sent, include the token to validate request
             sendingFiles(file, xhr, formData)

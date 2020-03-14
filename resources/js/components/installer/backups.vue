@@ -114,7 +114,6 @@ export default {
             this.backupButton.disable = true;
             axios.get(this.route('admin.runBackup'))
                 .then(res => {
-                    console.log(res);
                     this.getBackups();
                     this.backupButton.disable = false;
                     this.backupButton.text = 'Run Backup';

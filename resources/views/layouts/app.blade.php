@@ -10,6 +10,7 @@
     <script>
         window.techBench = {
             'maxUpload': '{{config('filesystems.paths.max_size')}}',
+            'chunkSize': '{{config('filesystems.paths.chunk_size')}}',
             'csrfToken': '{{csrf_token()}}'
         };
     </script>

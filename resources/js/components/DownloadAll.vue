@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        props: 
+        props:
         {
             download_all_route: {required: true},
             file_arr: {type: Array, required: true},
@@ -18,7 +18,6 @@
                         fileArr: this.file_arr
                     })
                     .then(res => {
-                        console.log(res);
                         window.location.href = this.download_all_route
                     })
                     .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));

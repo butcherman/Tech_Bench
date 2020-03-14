@@ -55,7 +55,7 @@ export default {
     },
     created()
     {
-        // console.log(this.tip_details);
+        //
     },
     methods: {
         toggleFav()
@@ -102,7 +102,6 @@ export default {
                     this.$refs['loading-modal'].show();
                     axios.delete(this.route('tips.destroy', this.tip_details.tip_id))
                     .then(res => {
-                        console.log(res);
                         window.location.href = this.route('tips.index');
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
                 }

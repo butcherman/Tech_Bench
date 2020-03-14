@@ -87,7 +87,7 @@ export default {
     },
     created()
     {
-        console.log(this.roles);
+        //
     },
     methods: {
         selectRole(data)
@@ -123,10 +123,8 @@ export default {
             }
             else
             {
-                console.log(this.form);
                 axios.post(this.route('admin.roleSettings'), this.form)
                     .then(res => {
-                        console.log(res);
                         var msg = 'Success';
                         if(!res.data.success)
                         {

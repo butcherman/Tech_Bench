@@ -159,7 +159,6 @@ export default {
             this.button.text = 'Loading...';
             axios.post(this.route('customer.systems.store'), this.form)
                     .then(res => {
-                        // console.log(res);
                         this.$refs.newSystemModal.hide();
                         this.getSystems();
                         this.selectedSystem = '';

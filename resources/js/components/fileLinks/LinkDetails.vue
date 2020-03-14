@@ -264,7 +264,6 @@
                     this.button.customerLink = 'Link To Customer';
                     this.searchParam.name = '';
                 }
-                console.log(this.form.selectedCustomer);
             },
             searchCustomer(e)
             {
@@ -276,7 +275,6 @@
                 this.$refs['loading-modal'].show();
                 axios.get(this.route('customer.search', this.searchParam))
                     .then(res => {
-                        console.log(res.data);
                         this.searchResults = res.data.data;
                         this.searchMeta = res.data.meta;
                         this.$refs['loading-modal'].hide();

@@ -65,18 +65,18 @@
                 <div v-else>
                     <div class="row">
                         <div class="col-12 grid-margin stretch-card" v-for="tip in tips" :key="tip.tip_id">
-                            <div class="card">
-                                <a :href="route('tip.details', [tip.tip_id, dashify(tip.subject)])" class="text-dark">
+                            <a :href="route('tip.details', [tip.tip_id, dashify(tip.subject)])" class="w-100 text-dark">
+                                <div class="card">
                                     <div class="card-header">
-                                    <strong>{{tip.subject}}</strong>
-                                    <span class="float-sm-right text-secondary d-block d-sm-inline">{{tip.created_at}}</span>
+                                        <strong>{{tip.subject}}</strong>
+                                        <span class="float-sm-right text-secondary d-block d-sm-inline">{{tip.created_at}}</span>
+                                        </div>
+                                    <div class="card-body">
+                                        <div v-html="tip.description" class="mb-3"></div>
+                                        <b-badge pill variant="primary" v-for="sys in tip.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
                                     </div>
-                                </a>
-                                <div class="card-body">
-                                    <div v-html="tip.description" class="mb-3"></div>
-                                    <b-badge pill variant="primary" v-for="sys in tip.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                     <div class="row">
@@ -158,7 +158,6 @@ export default {
             window.scrollTo(0, 0);
             axios.get(this.route('tip.search', this.form))
                 .then(res => {
-                    console.log(res);
                     this.form.page            = res.data.meta.current_page;
                     this.form.pagination.rows = res.data.meta.total;
                     this.form.pagination.low  = res.data.meta.from;

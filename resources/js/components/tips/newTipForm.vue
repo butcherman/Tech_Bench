@@ -49,9 +49,9 @@
                         id="dropzone"
                         class="filedrag"
                         ref="fileDropzone"
-                        v-on:vdropzone-total-upload-progress="updateProgressBar"
-                        v-on:vdropzone-sending="sendingFiles"
-                        v-on:vdropzone-queue-complete="queueComplete"
+                        @vdropzone-upload-progress="updateProgressBar"
+                        @vdropzone-sending="sendingFiles"
+                        @vdropzone-queue-complete="queueComplete"
                         :options="dropzoneOptions">
                     </vue-dropzone>
                 </div>
@@ -142,7 +142,7 @@
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
                     chunking: true,
-                    chunkSize: 5000000,
+                    chunkSize: window.techBench.chunkSize,
                     parallelChunkUploads: false,
                 },
                 progress: 0,
@@ -153,7 +153,6 @@
             validateForm(e)
             {
                 e.preventDefault();
-                console.log('form submitted');
                 if(this.$refs.newTipForm.checkValidity() === false || !this.form.equipment || this.form.tip == '')
                 {
                     this.validated  = true;
@@ -162,7 +161,6 @@
                 }
                 else
                 {
-                    console.log(this.form);
                     this.validated  = false;
                     this.validEquip = false;
                     this.validTip   = false;
@@ -176,7 +174,6 @@
                 var myDrop = this.$refs.fileDropzone;
                 if(myDrop.getQueuedFiles().length > 0)
                 {
-                    console.log('has files - process them');
                     this.showProgress = true;
                     myDrop.processQueue();
                 }
@@ -190,13 +187,13 @@
                 this.form._completed = true;
                 axios.post(this.route('tips.store'), this.form)
                     .then(res => {
-                        console.log(res);
                         window.location.href = this.route('tip.details', [res.data.tip_id, this.dashify(this.form.subject)]);
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
-            updateProgressBar(progress)
+            updateProgressBar(file, progress, sent)
             {
-                this.progress = progress;
+                var fileProgress = 100 - (file.size / sent * 100);
+                this.progress = Math.round(fileProgress);
             },
             sendingFiles(file, xhr, formData)
             {

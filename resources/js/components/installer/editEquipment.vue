@@ -18,22 +18,22 @@
                     @start="dragging = true"
                     @end="dragging = false"
                 >
-                    <b-form-input 
-                        v-for="obj in form.dataOptions" 
-                        :key="obj.field_id" type="text" 
-                        :value="obj.name" 
-                        class="mb-2 pointer" 
+                    <b-form-input
+                        v-for="obj in form.dataOptions"
+                        :key="obj.field_id" type="text"
+                        :value="obj.name"
+                        class="mb-2 pointer"
                         disabled
                     ></b-form-input>
                 </draggable>
-                <v-select 
-                    v-for="n in range" 
-                    :key="n" 
-                    :options="data_list" 
-                    label="name" 
-                    v-model="form.newOptions[n]" 
-                    placeholder="Select An Option" 
-                    class="mb-3" 
+                <v-select
+                    v-for="n in range"
+                    :key="n"
+                    :options="data_list"
+                    label="name"
+                    v-model="form.newOptions[n]"
+                    placeholder="Select An Option"
+                    class="mb-3"
                     taggable></v-select>
             </div>
             <span class="pointer float-right" @click="addRow">Add Row</span>
@@ -78,13 +78,12 @@ export default {
     },
     created()
     {
-        console.log(this.sys_data);
+        //
     },
     methods: {
         submitForm(e)
         {
             e.preventDefault();
-            console.log(this.form);
             if(this.$refs.editEquipmentForm.checkValidity() === false)
             {
                 //  TODO - add rule to allow only valid name - no special characters and unique name
@@ -94,10 +93,8 @@ export default {
             {
                 this.button.text = 'Processing...';
                 this.button.disable = true;
-                console.log('ready to go');
                 axios.put(this.route('admin.systems.update', this.sys_data.sys_id), this.form)
                     .then(res => {
-                        console.log(res);
                         window.location.href = this.route('admin.systems.index');
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             }
@@ -125,7 +122,6 @@ export default {
                     this.$refs['loading-modal'].show();
                     axios.delete(this.route('admin.systems.destroy', this.sys_data.sys_id))
                         .then(res => {
-                            console.log(res);
                             this.$refs['loading-modal'].hide();
                             this.$bvModal.msgBoxOk(res.data.reason)
                                 .then(value => {

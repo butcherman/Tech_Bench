@@ -69,17 +69,14 @@
             {
                 axios.get(this.route('admin.module.getEnabled', 'active'))
                     .then(res => {
-                        console.log(res);
                         this.loading = false;
                         this.table.rows = res.data;
                     }).catch(error => this.error = true);
             },
             disableModule(name)
             {
-                console.log(name);
                 axios.get(this.route('admin.module.disable', name))
                     .then(res => {
-                        console.log(res);
                         location.reload();
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
@@ -87,13 +84,12 @@
             {
                 axios.get(this.route('admin.module.enable', name))
                     .then(res => {
-                        console.log(res);
                         location.reload();
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
             deleteModule(name)
             {
-                console.log(name);
+                //
             }
         }
 

@@ -315,7 +315,6 @@ export default {
             centered: true
             })
             .then(value => {
-                // console.log(value);
                 if(value)
                 {
                     this.$refs['loading-modal'].show();
@@ -390,11 +389,8 @@ export default {
         },
         saveParentLink()
         {
-            console.log('saved');
-            console.log(this.searchParam.cust_id);
             axios.post(this.route('customer.linkParent'), {'parent_id': this.searchParam.cust_id, 'cust_id': this.cust_details.cust_id})
                 .then(res => {
-                    console.log(res);
                     location.reload();
                 }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
         }

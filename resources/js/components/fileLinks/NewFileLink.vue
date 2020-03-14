@@ -79,7 +79,7 @@
             <vue-dropzone id="dropzone"
                         class="filedrag"
                         ref="fileDropzone"
-                        @vdropzone-total-upload-progress="updateProgressBar"
+                        @vdropzone-upload-progress="updateProgressBar"
                         @vdropzone-sending="sendingFiles"
                         @vdropzone-queue-complete="queueComplete"
                         :options="dropzoneOptions">
@@ -153,7 +153,7 @@
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
                     chunking: true,
-                    chunkSize: 5000000,
+                    chunkSize: window.techBench.chunkSize,
                     parallelChunkUploads: false,
                 },
                 searchParam: {
@@ -204,14 +204,14 @@
                 linkForm.append('note', this.form.hasInstructions ? this.form.instructions : '');
                 axios.post(this.route('links.data.store'), linkForm)
                     .then(res => {
-                        console.log(res);
                         var url = this.route('links.details', [res.data.link, res.data.name]);
                         window.location.href = url;
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
-            updateProgressBar(progress)
+            updateProgressBar(file, progress, sent)
             {
-                this.progress = progress;
+                var fileProgress = 100 - (file.size / sent * 100);
+                this.progress = Math.round(fileProgress);
             },
             sendingFiles(file, xhr, formData)
             {
@@ -245,11 +245,9 @@
                     e.preventDefault();
                     this.searchParam.page = '';
                 }
-                console.log(this.searchParam);
                 this.$refs['loading-modal'].show();
                 axios.get(this.route('customer.search', this.searchParam))
                     .then(res => {
-                        console.log(res.data);
                         this.searchResults = res.data.data;
                         this.searchMeta = res.data.meta;
                         this.$refs['loading-modal'].hide();
