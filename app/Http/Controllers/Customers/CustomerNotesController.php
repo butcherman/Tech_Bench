@@ -75,8 +75,14 @@ class CustomerNotesController extends Controller
             'note'    => 'required'
         ]);
 
-        CustomerNotes::find($id)->update(
-        [
+        $details = Customers::find($request->cust_id);
+        if ($details->parent_id && $request->shared == 'true') {
+            $request->cust_id = $details->parent_id;
+        }
+
+        CustomerNotes::find($id)->update([
+            'cust_id'     => $request->cust_id,
+            'shared'      => $request->shared == 'true' ? 1 : 0,
             'urgent'      => $request->urgent,
             'subject'     => $request->title,
             'description' => $request->note

@@ -98,7 +98,7 @@ class TechTipDetailsTest extends TestCase
         $response = $this->actingAs($user)->get(route('tip.comments.show', $this->tip->tip_id));
 
         $response->assertSuccessful();
-        $response->assertJsonStructure([['comment', 'comment_id', 'created_at', 'tip_id', 'updated_at', 'user', 'user_id']]);
+        $response->assertJsonStructure([['comment', 'comment_id', 'created_at', 'tip_id', 'updated_at', 'user']]);
     }
 
     //  Try to delete a tip as a guest

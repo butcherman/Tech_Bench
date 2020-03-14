@@ -209,6 +209,7 @@
                 this.edit = data.cust_file_id;
                 this.form.name = data.name;
                 this.form.type = data.customer_file_types.file_type_id;
+                this.form.shared = data.shared
                 this.modalTitle = 'Edit File';
                 this.button.text = 'Update File';
                 this.$bvModal.show('file-form-modal');

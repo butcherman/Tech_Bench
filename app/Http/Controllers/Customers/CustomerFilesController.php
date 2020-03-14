@@ -134,9 +134,16 @@ class CustomerFilesController extends Controller
             'type' => 'required'
         ]);
 
+        $details = Customers::find($request->cust_id);
+        if ($details->parent_id && $request->shared == 1) {
+            $request->cust_id = $details->parent_id;
+        }
+
         CustomerFiles::find($id)->update([
             'name' => $request->name,
-            'file_type_id' => $request->type
+            'file_type_id' => $request->type,
+            'cust_id'      => $request->cust_id,
+            'shared'       => $request->shared == 1 ? 1 : 0,
         ]);
 
         return response()->json(['success' => true]);

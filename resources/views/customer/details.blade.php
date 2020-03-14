@@ -27,7 +27,7 @@
         <div class="card">
             <div class="card-header">Customer Contacts:</div>
             <div class="card-body">
-                <customer-contacts cust_id="{{$cust_id}}" :phone_types="{{json_encode($numberTypes)}}"></customer-contacts>
+                <customer-contacts cust_id="{{$cust_id}}" :phone_types="{{json_encode($numberTypes)}}" :linked="{{$linked}}"></customer-contacts>
             </div>
         </div>
     </div>

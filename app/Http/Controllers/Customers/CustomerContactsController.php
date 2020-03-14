@@ -127,9 +127,16 @@ class CustomerContactsController extends Controller
         ]);
 
         //  Update the primary contact information
+        $details = Customers::find($request->cust_id);
+        if ($details->parent_id && $request->shared == 'true') {
+            $request->cust_id = $details->parent_id;
+        }
+
         CustomerContacts::find($id)->update([
+            'cust_id' => $request->cust_id,
             'name'    => $request->name,
             'email'   => isset($request->email) ? $request->email : null,
+            'shared'  => $request->shared == 'true' ? 1 : 0,
         ]);
 
         $contID = $id;

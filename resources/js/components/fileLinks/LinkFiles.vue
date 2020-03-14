@@ -193,7 +193,6 @@
                     fileName: this.moveFile.file_name,
                     fileType: type.value,
                 };
-                console.log(moveData);
                 //  Move the file
                 axios.put(this.route('links.files.update', this.link_id), moveData)
                     .then(res => {
