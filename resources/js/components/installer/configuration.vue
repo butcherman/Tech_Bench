@@ -1,16 +1,6 @@
 <template>
     <div>
         <b-form @submit="submitForm" novalidate :validated="validated" ref="configForm">
-            <b-form-group label="URL:" label-for="url">
-                <b-form-input
-                    id="url"
-                    type="url"
-                    v-model="form.url"
-                    required
-                ></b-form-input>
-                <b-form-invalid-feedback>Please enter a valid URL</b-form-invalid-feedback>
-                <span class="small"><strong class="text-danger">Important Note:</strong>  Incorrect settings here could cause you to lose connectivity.</span>
-            </b-form-group>
             <b-form-group label="Timezone:" label-for="timezone">
                 <b-form-select v-model="form.timezone" id="timezone">
                     <optgroup v-for="(group, key) in timezones" :key="key" :label="key">
@@ -48,7 +38,6 @@ export default {
         return {
             validated: false,
             form: {
-                url:      this.settings.url,
                 timezone: this.settings.timezone,
                 filesize: this.settings.filesize,
             },

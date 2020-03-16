@@ -18,8 +18,8 @@
                     </a>
                 </address>
             </div>
-            <div class="col-md-4">
-                <div class="float-right">
+            <div class="col-md-4 mt-md-0 mt-4">
+                <div class="float-md-right">
                     <button class="btn btn-light btn-block" v-b-modal.details-edit-modal>Edit Customer</button>
                     <button class="btn btn-danger btn-block" @click="confirmDestroy">Deactivate Customer</button>
                 </div>
@@ -315,7 +315,6 @@ export default {
             centered: true
             })
             .then(value => {
-                // console.log(value);
                 if(value)
                 {
                     this.$refs['loading-modal'].show();
@@ -390,11 +389,8 @@ export default {
         },
         saveParentLink()
         {
-            console.log('saved');
-            console.log(this.searchParam.cust_id);
             axios.post(this.route('customer.linkParent'), {'parent_id': this.searchParam.cust_id, 'cust_id': this.cust_details.cust_id})
                 .then(res => {
-                    console.log(res);
                     location.reload();
                 }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
         }

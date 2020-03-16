@@ -229,7 +229,6 @@ export default {
         validateForm(e)
         {
             e.preventDefault();
-            console.log(this.form);
             if(this.$refs.newCustomerForm.checkValidity() === false)
             {
                 this.validated = true;
@@ -240,7 +239,6 @@ export default {
                 this.button.text = 'Processing...';
                 axios.post(this.route('customer.id.store'), this.form)
                     .then(res => {
-                        console.log(res);
                         if(res.data.success)
                         {
                             window.location.href = this.route('customer.details', [res.data.cust_id, this.dashify(this.form.name)]);
@@ -256,7 +254,6 @@ export default {
                 this.loading.cust_id = true;
                 axios.get(this.route('customer.check-id', this.form.cust_id))
                     .then(res => {
-                        console.log(res.data);
                         this.loading.cust_id = false;
                         if(res.data.dup == true)
                         {

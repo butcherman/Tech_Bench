@@ -24,8 +24,6 @@ export default {
                     {
                         axios.delete(this.route('log-viewer::logs.delete', {date: this.date}))
                             .then(res => {
-                                console.log(res);
-                                // location.reload();
                                 window.location.href = this.route('log-viewer::logs.list');
                             }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
                     }

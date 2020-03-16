@@ -123,7 +123,6 @@ export default {
         }
     },
     created() {
-        // console.log(this.role_list);
         this.checkForEdit();
     },
     methods: {
@@ -142,7 +141,6 @@ export default {
         validateForm(e)
         {
             e.preventDefault();
-            console.log(this.form);
             if(this.$refs.userForm.checkValidity() === false)
             {
                 this.validated = true;
@@ -153,7 +151,6 @@ export default {
                 this.button.text    = 'Processing...';
                 if(this.edit)
                 {
-                    console.log('ready to ed');
                     this.editUser();
                 }
                 else
@@ -220,7 +217,6 @@ export default {
         {
             axios.post(this.route('admin.user.store'), this.form)
                 .then(res => {
-                    console.log(res);
                     if(res.data.success)
                     {
                         this.resetForm();
@@ -232,7 +228,6 @@ export default {
         {
             axios.put(this.route('admin.user.update', this.edit.user_id), this.form)
                 .then(res => {
-                    console.log(res);
                     if(res.data.success)
                     {
                         this.success        = 'User Updated Successfully';

@@ -38,23 +38,18 @@ class User extends Authenticatable
         return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
     }
 
+    public function LastUserLogin()
+    {
+        return $this->hasOne('App\UserLogins', 'user_id', 'user_id')->latest();
+    }
+
     public function FileLinks()
     {
         return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
     }
 
-    // public function UserPermissions()
-    // {
-    //     return $this->hasOne('App\UserPermissions', 'user_id', 'user_id');
-    // }
-
     public function UserSettings()
     {
         return $this->hasOne('App\UserSettings', 'user_id', 'user_id');
     }
-
-    // public function UserRolePermissions()
-    // {
-    //     return $this->hasManyThrough('App\UserRolePermissions', 'App\UserRoles', 'user_id', 'role_id', 'user_id', 'role_id');
-    // }
 }

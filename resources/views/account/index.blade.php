@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="col-md-8 align-self-center order-1 order-md-2">
-                            <h5>Receive Email on New Tech Tip</h5>
+                            <h5 class="text-center text-md-left">Receive Email on New Tech Tip</h5>
                         </div>
                     </div>
                     <div class="row justify-content-center mt-4">
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="col-md-8 align-self-center order-1 order-md-2">
-                            <h5>Receive Email on System Notification</h5>
+                            <h5 class="text-center text-md-left">Receive Email on System Notification</h5>
                         </div>
                     </div>
                     <div class="row justify-content-center mt-4 mb-4">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         <div class="col-md-8 align-self-center order-1 order-md-2">
-                            <h5>Automatically Delete File Links Expired More Than 30 Days</h5>
+                            <h5 class="text-center text-md-left">Automatically Delete File Links Expired More Than 30 Days</h5>
                         </div>
                     </div>
                     <input class="btn btn-primary btn-block submit-button mt-auto" type="submit" value="Update Notifications">

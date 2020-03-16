@@ -71,17 +71,13 @@ export default {
     },
     created() {
         // this.getUserList();
-        console.log(this.user_list);
     },
     methods: {
         enableUser(data, index)
         {
-            console.log(data);
-
             this.$refs['loading-modal'].show();
             axios.get(this.route('admin.user.reactivate', data.user_id))
                 .then(res => {
-                    console.log(res);
                     this.$refs['loading-modal'].hide();
                     this.$bvModal.msgBoxOk(data.full_name+' has been reactivated.  Please go to the user page to update their password.')
                         .then(value => {

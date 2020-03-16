@@ -82,7 +82,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 align-self-center order-1 order-md-2">
-                            <h5 class="text-center">Shared Between Sites</h5>
+                            <h5>Shared Between Sites</h5>
                         </div>
                     </div>
                     <b-button type="submit" block variant="primary" class="pad-top" :disabled="button.disable">
@@ -163,6 +163,7 @@
                 this.form.title  = this.details.subject;
                 this.form.note   = this.details.description;
                 this.form.urgent = this.details.urgent;
+                this.form.shared = this.details.shared;
                 this.$bvModal.show('note-form-modal');
             },
             deleteNote()

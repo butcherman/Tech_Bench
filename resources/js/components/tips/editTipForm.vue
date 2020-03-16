@@ -62,9 +62,9 @@
                         id="dropzone"
                         class="filedrag"
                         ref="fileDropzone"
-                        v-on:vdropzone-total-upload-progress="updateProgressBar"
-                        v-on:vdropzone-sending="sendingFiles"
-                        v-on:vdropzone-queue-complete="queueComplete"
+                        @vdropzone-upload-progress="updateProgressBar"
+                        @vdropzone-sending="sendingFiles"
+                        @vdropzone-queue-complete="queueComplete"
                         :options="dropzoneOptions">
                     </vue-dropzone>
                 </div>
@@ -146,7 +146,7 @@
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
                     chunking: true,
-                    chunkSize: 5000000,
+                    chunkSize: window.techBench.chunkSize,
                     parallelChunkUploads: false,
                 },
                 progress: 0,
@@ -191,13 +191,13 @@
                 this.form._completed = true;
                 axios.put(this.route('tips.update', this.tip_data.tip_id), this.form)
                     .then(res => {
-                        console.log(res);
                         window.location.href = this.route('tip.details', [this.tip_data.tip_id, this.dashify(this.form.subject)]);
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
-            updateProgressBar(progress)
+            updateProgressBar(file, progress, sent)
             {
-                this.progress = progress;
+                var fileProgress = 100 - (file.size / sent * 100);
+                this.progress = Math.round(fileProgress);
             },
             sendingFiles(file, xhr, formData)
             {

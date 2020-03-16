@@ -164,6 +164,11 @@ class CustomerDetailsController extends Controller
     public function destroy($id)
     {
         $this->authorize('hasAccess', 'Deactivate Customer');
+
+        //  Remove the tip from any users favorites
+        CustomerFavs::where('cust_id', $id)->delete();
+
+        //  Disable the tip
         Customers::destroy($id);
 
         Log::notice('User - '.Auth::user()->user_id.' has deactivated Customer ID '.$id);

@@ -4,13 +4,10 @@
             mode="remote"
             ref="customer-list-table"
             styleClass="vgt-table bordered w-100"
-
-            @on-row-click="goToCustomer"
             @on-page-change="newPage"
             @on-sort-change="reSort"
             @on-per-page-change="perPageUpdate"
             @on-column-filter="searchFilter"
-
             :columns="table.columns"
             :rows="table.rows"
             :sort-options="{enabled:true}"
@@ -28,6 +25,9 @@
             <template slot="table-row" slot-scope="data">
                 <span v-if="data.column.field == 'system_list'">
                     <div v-for="sys in data.row.customer_systems" :key="sys.cust_sys_id">{{sys.system_types.name}}</div>
+                </span>
+                <span v-else-if="data.column.field == 'name'" class="d-block w-100 h-100">
+                    <a :href="route('customer.details', [data.row.cust_id, dashify(data.row.name)])" class="d-block w-100 h-100 text-dark">{{data.row.name}}</a>
                 </span>
             </template>
             <div slot="table-actions" v-if="allow_create">

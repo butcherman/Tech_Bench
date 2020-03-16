@@ -44,7 +44,6 @@ export default {
         clickName(par)
         {
             var url = this.route('admin.user.showLinks', par.row.user_id);
-            console.log(par.row);
             location.href = url;
         }
     }

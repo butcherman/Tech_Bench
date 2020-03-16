@@ -50,7 +50,6 @@ export default {
         submitForm(e)
         {
             e.preventDefault();
-            console.log(this.form);
             if(this.$refs.newEquipmentForm.checkValidity() === false)
             {
                 //  TODO - add rule to allow only valid name - no special characters and unique name
@@ -60,10 +59,8 @@ export default {
             {
                 this.button.text = 'Processing...';
                 this.button.disable = true;
-                console.log('ready to go');
                 axios.post(this.route('admin.systems.store'), this.form)
                     .then(res => {
-                        console.log(res);
                         window.location.href = this.route('admin.index');
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             }

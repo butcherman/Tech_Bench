@@ -60,26 +60,21 @@
             {
                 axios.get(this.route('admin.module.getStaged'))
                     .then(res => {
-                        console.log(res);
                         this.loading = false;
                         this.table.rows = res.data;
                     }).catch(error => this.error = true);
             },
             activateModule(name)
             {
-                console.log(name);
                 axios.get(this.route('admin.module.activate', name))
                     .then(res => {
-                        console.log(res);
                         location.reload();
-                        console.log('good to go');
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             },
             deleteModule(name)
             {
                 axios.delete(this.route('admin.module.deleteStaged', name))
                     .then(res => {
-                        console.log(res);
                         location.reload();
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             }

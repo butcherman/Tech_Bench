@@ -6,6 +6,26 @@
                 <div class="card">
                     <div class="card-body">
                         <b-form @submit="submitForm" ref="emailSettingsForm" novalidate :validated="validated">
+                            <b-form-group label="From Name:" label-for="fromName">
+                                <b-form-input
+                                    id="fromName"
+                                    type="text"
+                                    v-model="form.fromName"
+                                    required
+                                    placeholder="Tech Bench"
+                                ></b-form-input>
+                                <b-form-invalid-feedback>Please Enter A From Email Address</b-form-invalid-feedback>
+                            </b-form-group>
+                            <b-form-group label="From Email Address:" label-for="fromEmail">
+                                <b-form-input
+                                    id="fromEmail"
+                                    type="email"
+                                    v-model="form.fromEmail"
+                                    required
+                                    placeholder="no-reply@example.com"
+                                ></b-form-input>
+                                <b-form-invalid-feedback>Please Enter A Valid Email Address</b-form-invalid-feedback>
+                            </b-form-group>
                             <b-form-group label="Host:" label-for="host">
                                 <b-form-input
                                     id="host"
@@ -33,48 +53,52 @@
                                     v-model="form.encryption"
                                     :options="portOptions"
                                 ></b-form-select>
-                                <b-form-invalid-feedback>Please Enter A Valid TCP Port</b-form-invalid-feedback>
                             </b-form-group>
-                            <b-form-group label="Email Username" label-for="username">
-                                <b-form-input
-                                    id="username"
-                                    type="text"
-                                    name="username"
-                                    v-model="form.username"
-                                    placeholder="Enter Username"
-                                ></b-form-input>
-                                <b-form-invalid-feedback>Please Enter A Valid Username</b-form-invalid-feedback>
-                            </b-form-group>
-                            <b-form-group label="Email Password" label-for="password">
-                                <b-form-input
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    v-model="form.password"
-                                    placeholder="Enter Password"
-                                ></b-form-input>
-                                <b-form-invalid-feedback>Please Enter A Valid Password</b-form-invalid-feedback>
-                            </b-form-group>
-                            <b-form-group label="From Name:" label-for="fromName">
-                                <b-form-input
-                                    id="fromName"
-                                    type="text"
-                                    v-model="form.fromName"
-                                    required
-                                    placeholder="Tech Bench"
-                                ></b-form-input>
-                                <b-form-invalid-feedback>Please Enter A From Email Address</b-form-invalid-feedback>
-                            </b-form-group>
-                            <b-form-group label="From Email Address:" label-for="fromEmail">
-                                <b-form-input
-                                    id="fromEmail"
-                                    type="email"
-                                    v-model="form.fromEmail"
-                                    required
-                                    placeholder="no-reply@example.com"
-                                ></b-form-input>
-                                <b-form-invalid-feedback>Please Enter A Valid Email Address</b-form-invalid-feedback>
-                            </b-form-group>
+
+                            <div class="row mt-4">
+                                <div class="col-12 col-md-2 order-2">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="authentication" class="onoffswitch-checkbox" id="authentication" v-model="form.authentication">
+                                        <label class="onoffswitch-label" for="authentication">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 align-self-center order-1">
+                                    <h5>Authentcation:</h5>
+                                </div>
+                            </div>
+
+
+
+                            <div v-if="form.authentication">
+
+
+
+
+                                <b-form-group label="Email Username" label-for="username">
+                                    <b-form-input
+                                        id="username"
+                                        type="text"
+                                        name="username"
+                                        v-model="form.username"
+                                        placeholder="Enter Username"
+                                    ></b-form-input>
+                                    <b-form-invalid-feedback>Please Enter A Valid Username</b-form-invalid-feedback>
+                                </b-form-group>
+
+                                <b-form-group label="Email Password" label-for="password">
+                                    <b-form-input
+                                        id="password"
+                                        type="password"
+                                        name="password"
+                                        v-model="form.password"
+                                        placeholder="Enter Password"
+                                    ></b-form-input>
+                                    <b-form-invalid-feedback>Please Enter A Valid Password</b-form-invalid-feedback>
+                                </b-form-group>
+                            </div>
                             <div class="row justify-content-center">
                                 <div class="col-md-6">
                                     <b-button type="submit" block variant="primary" :disabled="button.disable">
@@ -113,6 +137,7 @@ export default {
                 password:   'NULL',
                 fromEmail:  this.settings.fromEmail,
                 fromName:   this.settings.fromName,
+                authentication: false,
             },
             button: {
                 disabled: false,
@@ -181,7 +206,6 @@ export default {
                             this.alert.variant = 'danger';
                             this.alert.message = res.data.message;
                         }
-                        console.log(res);
                         this.alert.show = true;
                         this.test.disable = false;
                         this.test.text = 'Update Settings and Send Test Email';

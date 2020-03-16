@@ -16,14 +16,14 @@
                 <b-tabs>
                     <b-tab v-for="sys in systems" :key="sys.cust_sys_id" :title="sys.system_types.name" class="pt-2">
                         <dl class="row" v-for="data in sys.system_data_fields" :key="data.field_id">
-                            <dt class="col-sm-6 text-right mb-0">{{data.system_data_field_types.name}}:</dt>
-                            <dd class="col-sm-6 text-left mb-0">{{data.pivot.value}}</dd>
+                            <dt class="col-sm-6 text-sm-right mb-0">{{data.system_data_field_types.name}}:</dt>
+                            <dd class="col-sm-6 text-sm-left mb-0">{{data.pivot.value}}</dd>
                         </dl>
                         <div class="row justify-content-center">
-                            <div class="col-8 col-sm-6 mb-2">
+                            <div class="col-sm-6 mb-2">
                                 <b-button variant="primary" block @click="addSystem">Add Equipment</b-button>
                             </div>
-                            <div class="col-8 col-sm-6">
+                            <div class="col-sm-6">
                                 <b-button variant="warning" block @click="editSystem(sys)">Edit Equipment</b-button>
                             </div>
                         </div>
@@ -138,6 +138,9 @@ export default {
         addSystem()
         {
             this.button.disable = false;
+            this.selectedSystem = '';
+            this.form.system = null;
+            this.systemFields = [];
             this.button.text = 'Add Equipment';
             this.$refs.newSystemModal.show();
             if(!this.systemTypes.length)
@@ -156,7 +159,6 @@ export default {
             this.button.text = 'Loading...';
             axios.post(this.route('customer.systems.store'), this.form)
                     .then(res => {
-                        // console.log(res);
                         this.$refs.newSystemModal.hide();
                         this.getSystems();
                         this.selectedSystem = '';

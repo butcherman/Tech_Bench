@@ -8,10 +8,10 @@
                             <b-input-group>
                                 <b-form-input type="text" placeholder="Search Tips..." autofocus v-model="form.search.searchText"></b-form-input>
                                 <b-input-group-append>
-                                    <b-button type="submit" variant="primary" ><span class="fas fa-search"></span> Search</b-button>
+                                    <b-button type="submit" variant="primary" ><span class="fas fa-search"></span> <span class="d-none d-sm-inline">Search</span></b-button>
                                 </b-input-group-append>
                                 <b-input-group-append v-if="can_create">
-                                    <a :href="route('tips.create')" class="btn btn-warning"><span class="fas fa-plus"> Create New</span></a>
+                                    <a :href="route('tips.create')" class="btn btn-warning"><span class="fas fa-plus"></span> <span class="d-none d-sm-inline">Create New</span></a>
                                 </b-input-group-append>
                             </b-input-group>
                         </b-form>
@@ -65,36 +65,44 @@
                 <div v-else>
                     <div class="row">
                         <div class="col-12 grid-margin stretch-card" v-for="tip in tips" :key="tip.tip_id">
-                            <div class="card">
-                                <a :href="route('tip.details', [tip.tip_id, dashify(tip.subject)])" class="text-dark">
+                            <a :href="route('tip.details', [tip.tip_id, dashify(tip.subject)])" class="w-100 text-dark">
+                                <div class="card">
                                     <div class="card-header">
-                                    {{tip.subject}}
-                                    <span class="float-right">{{tip.created_at}}</span>
+                                        <strong>{{tip.subject}}</strong>
+                                        <span class="float-sm-right text-secondary d-block d-sm-inline">{{tip.created_at}}</span>
+                                        </div>
+                                    <div class="card-body">
+                                        <div v-html="tip.description" class="mb-3"></div>
+                                        <b-badge pill variant="primary" v-for="sys in tip.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
                                     </div>
-                                </a>
-                                <div class="card-body">
-                                    <div v-html="tip.description" class="mb-3"></div>
-                                    <b-badge pill variant="primary" v-for="sys in tip.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 grid-margin stretch-card">
-                            <span class="float-right">Showing {{form.pagination.low}} through {{form.pagination.high}} of {{form.pagination.rows}}</span>
+                        <div class="col-sm-3 text-center text-sm-left mb-2">
+                            Showing {{form.pagination.low}} through {{form.pagination.high}} of {{form.pagination.rows}}
+                        </div>
+                        <div class="col-sm-6">
                             <b-pagination
                                 v-model="form.page"
                                 :total-rows="form.pagination.rows"
                                 :per-page="form.pagination.perPage"
-                                next-text="Next >"
-                                prev-text="< Previous"
-                                class="mx-auto"
+                                next-text="Next"
+                                prev-text="Prev"
+                                align="center"
                                 @change="updatePage"
                             ></b-pagination>
-                            <span class="float-left">
-                                Results Per Page
-                                <b-badge pill variant="primary" class="ml-1 mb-1 pointer" v-for="num in resPerPage" :key="num" @click="updatePerPage(num)">{{num}}</b-badge>
-                            </span>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row">
+                                <div class="col text-center">Results Per Page</div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-center">
+                                    <b-badge pill :variant="form.pagination.perPage == num ? 'success' : 'primary'" class="ml-1 mb-1 pointer" v-for="num in resPerPage" :key="num" @click="updatePerPage(num)">{{num}}</b-badge>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -150,7 +158,6 @@ export default {
             window.scrollTo(0, 0);
             axios.get(this.route('tip.search', this.form))
                 .then(res => {
-                    console.log(res);
                     this.form.page            = res.data.meta.current_page;
                     this.form.pagination.rows = res.data.meta.total;
                     this.form.pagination.low  = res.data.meta.from;

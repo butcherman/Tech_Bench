@@ -443,6 +443,10 @@ class TechTipsController extends Controller
     {
         $this->authorize('hasAccess', 'Delete Tech Tip');
 
+        //  Remove the Tip from any users favorites
+        TechTipFavs::where('tip_id', $id)->delete();
+
+        //  Disable the tip
         TechTips::find($id)->delete();
         Log::warning('User - '.Auth::user()->user_id.' deleted Tech Tip ID - '.$id);
         return response()->json(['success' => true]);

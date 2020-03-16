@@ -40,7 +40,6 @@ class DashboardController extends Controller
            'tipsAll'     => $tipsTotal,
            'activeLinks' => $activeLinks,
            'totalLinks'  => $totalLinks,
-//            'modules'       => $modules
         ]);
     }
 
