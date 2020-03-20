@@ -13,6 +13,11 @@ window.expandProfile = function () {
 }
 
 /*
+*   File chunk size for file uploads
+*/
+window.chunkSize = 500000;
+
+/*
 *   File Imports
 */
 import Vue                  from 'vue';

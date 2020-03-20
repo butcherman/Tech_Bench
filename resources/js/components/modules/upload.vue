@@ -26,7 +26,7 @@
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
                     chunking: true,
-                    chunkSize: window.techBench.chunkSize,
+                    chunkSize: window.chunkSize,
                     parallelChunkUploads: false,
                 },
                 progress: 0,
