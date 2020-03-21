@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Module;
 use App\TechTips;
 use App\FileLinks;
 use Carbon\Carbon;
@@ -10,10 +9,7 @@ use App\TechTipFavs;
 use App\CustomerFavs;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
-
-
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class DashboardController extends Controller
 {
@@ -33,6 +29,11 @@ class DashboardController extends Controller
         $activeLinks = FileLinks::where('user_id', Auth::user()->user_id)->where('expire', '>', Carbon::now())->count();
         $totalLinks  = FileLinks::where('user_id', Auth::user()->user_id)->count();
 
+        //  Debug Data
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Customer Favorites for '.Auth::user()->full_name.': ', $custFavs->toArray());
+        Log::debug('Tech Tip Favorites for ' . Auth::user()->full_name . ': ', $tipFavs->toArray());
+
         return view('dashboard', [
            'custFavs'    => $custFavs,
            'tipFavs'     => $tipFavs,
@@ -46,6 +47,8 @@ class DashboardController extends Controller
     //  About page
     public function about()
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         return view('about', [
             'branch' => 'latest'
         ]);
@@ -54,34 +57,43 @@ class DashboardController extends Controller
     //  Get the users notifications
     public function getNotifications()
     {
+        //  Debug Data
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Notifications for '.Auth::user()->full_name.':', Auth::user()->notifications->toArray());
+
         return Auth::user()->notifications;
     }
 
     //  Mark a notification as read
     public function markNotification($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         $notification = Auth::user()->notifications()->where('id', $id)->where('notifiable_id', Auth::user()->user_id)->first();
         if(!$notification)
         {
+            Log::error('User '.Auth::user()->full_name.' tried to mark an invalid notification as read.  Notification ID: '.$id);
             return abort(404);
         }
         $notification->markAsRead();
 
+        Log::debug('User '.Auth::user()->full_name.' marked notification ID '.$id.' as read');
+
         return response()->json(['success' => true]);
     }
 
-    //  Deelte a user notification
+    //  Delte a user notification
     public function delNotification($id)
     {
         $notification = Auth::user()->notifications()->where('id', $id)->where('notifiable_id', Auth::user()->user_id)->first();
         if($notification)
         {
             $notification->delete();
-            Log::info('Notification ID-'.$id.' deleted for User ID-'.Auth::user()->user_id);
+            Log::info('Notification ID-'.$id.' deleted for '.Auth::user()->full_name);
         }
         else
         {
-            Log::notice('Notification ID-'.$id.' not found for user ID-'.Auth::user()->user_id);
+            Log::error('User ' . Auth::user()->full_name . ' tried to delete an invalid notification as read.  Notification ID: ' . $id);
             return abort(404);
         }
 

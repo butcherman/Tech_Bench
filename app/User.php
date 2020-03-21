@@ -11,18 +11,11 @@ class User extends Authenticatable
     use Notifiable;
     use SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['role_id', 'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active'];
-    protected $hidden = ['password', 'remember_token', 'is_installer', 'active', 'created_at', 'password_expires', 'updated_at', 'user_id', 'username'];
-    //  Database primary key
     protected $primaryKey = 'user_id';
-
-    protected $appends = [ 'full_name' ];
-    protected $casts = [
+    protected $fillable   = ['role_id', 'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active'];
+    protected $appends    = [ 'full_name' ];
+    protected $hidden     = ['password', 'remember_token', 'is_installer', 'active', 'created_at', 'password_expires', 'updated_at', 'user_id', 'username'];
+    protected $casts      = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y'

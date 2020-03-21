@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\User;
 use App\UserRolePermissions;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class GatePolicy
@@ -53,7 +54,7 @@ class GatePolicy
             ->get();
 
         $allow = $data->isEmpty() ? 'false' : 'true';
-        \Log::debug('User ' . $user->full_name . ' is trying to access admin link.  Result - ' . $allow);
+        Log::debug('User ' . $user->full_name . ' is trying to access admin link.  Result - ' . $allow);
 
         return  $data->isEmpty() ? false : true;
     }
@@ -76,7 +77,7 @@ class GatePolicy
             ->get();
 
         $allow = $data->isEmpty() ? 'false' : 'true';
-        \Log::debug('User '.$user->full_name.' is trying to access '.$task.'.  Result - ' . $allow);
+        Log::debug('User '.$user->full_name.' is trying to access '.$task.'.  Result - ' . $allow);
 
         return  $data->isEmpty() ? false : true;
     }

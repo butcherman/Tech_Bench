@@ -10,7 +10,6 @@ use Illuminate\Validation\Rule;
 use App\Rules\ValidatePassword;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 class AccountController extends Controller
@@ -26,7 +25,7 @@ class AccountController extends Controller
         $userData = User::find(Auth::user()->user_id);
         $userSett = UserSettings::where('user_id', Auth::user()->user_id)->first();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('account.index', [
             'userData'     => $userData,
             'userSettings' => $userSett,
@@ -37,6 +36,8 @@ class AccountController extends Controller
     //  Submit the new user settings
     public function submit(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data: ', $request->toArray());
+
         $request->validate([
             'username'   => 'required',
             'first_name' => 'required',
@@ -57,15 +58,15 @@ class AccountController extends Controller
 
         session()->flash('success', 'User Settings Updated');
 
-        Log::notice('User Settings Updated', ['user_id' => Auth::user()->user_id]);
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('User Settings updated for '.Auth::user()->full_name);
         return redirect(route('account'));
     }
 
     //  Submit the user notification settings
     public function notifications(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name . '. Submitted Data: ', $request->toArray());
+
         UserSettings::where('user_id', Auth::user()->user_id)->update(
         [
             'em_tech_tip'     => $request->em_tech_tip === 'on' ? true : false,
@@ -76,22 +77,22 @@ class AccountController extends Controller
 
         session()->flash('success', 'User Notifications Updated');
 
-        Log::notice('User Notifications Updated', ['user_id' => Auth::user()->user_id]);
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data - ', $request->toArray());
+        Log::notice('User Notifications updated for '.Auth::user()->full_name);
         return redirect(route('account'));
     }
 
     //  Bring up the change password form
     public function changePassword()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('account.changePassword');
     }
 
     //  Submit the change password form
     public function submitPassword(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         //  Validate form data
         $request->validate([
             'oldPass' => ['required', new ValidatePassword],
@@ -107,8 +108,7 @@ class AccountController extends Controller
         $user->password_expires = $newExpire;
         $user->save();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::info('User Changed Password', ['user_id' => Auth::user()->user_id]);
+        Log::notice('User password changed for '.Auth::user()->full_name);
 
         return redirect(route('account'))->with('success', 'Password Changed Successfully');
     }

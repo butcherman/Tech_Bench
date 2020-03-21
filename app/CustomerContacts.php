@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CustomerContacts extends Model
 {
     protected $primaryKey = 'cont_id';
-    protected $fillable = ['cust_id', 'name', 'email', 'shared'];
+    protected $fillable   = ['cust_id', 'name', 'email', 'shared'];
 
     public function CustomerContactPhones()
     {
