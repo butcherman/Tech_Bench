@@ -196,7 +196,7 @@
             },
             updateProgressBar(file, progress, sent)
             {
-                var fileProgress = 100 - (file.size / sent * 100);
+                var fileProgress = sent / file.size * 100;
                 this.progress = Math.round(fileProgress);
             },
             sendingFiles(file, xhr, formData)
