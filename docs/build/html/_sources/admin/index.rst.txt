@@ -1,4 +1,0 @@
-Administration Guide
-====================
-
-COMMING SOON!!!!!!!!
