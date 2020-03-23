@@ -136,7 +136,7 @@ Add the following to the `tech-bench-jobs` file
 
 .. code-block:: shell
 
-   * * * * * cd $WEBROOT && php artisan schedule:run >> /dev/null 2>&1  #  Scheduled task will check for a scheduled job every minute
+   * * * * * cd /var/wwww/html && php artisan schedule:run >> /dev/null 2>&1  #  Scheduled task will check for a scheduled job every minute.  Modigy to Web Root of your server
 
 Accessing Tech Bench
 --------------------

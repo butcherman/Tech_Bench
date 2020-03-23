@@ -38,10 +38,7 @@ Whenever a new Tech Tip is created, an email is sent to all registered users not
    :caption: Contents:
 
    installing/index
+   admin/index
+   user/index
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
