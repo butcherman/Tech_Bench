@@ -152,6 +152,9 @@ Route::prefix('admin')->name('admin.')->group(function ()
     Route::get('backups/run',              'Installer\SettingsController@runBackup')          ->name('runBackup');
     Route::get('backups/get',              'Installer\SettingsController@getBackups')         ->name('getBackups');
     Route::get('backups',                  'Installer\SettingsController@backupsIndex')       ->name('backups');
+    //  Tech Bench Updates Routs
+
+    Route::get('updates', 'Installer\UpdateController@index')->name('updates');
     //  Admin index route
     Route::get('/',                        'Admin\AdminController@index')                     ->name('index');
 });

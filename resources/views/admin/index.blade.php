@@ -90,7 +90,7 @@
                 <ul class="list-group">
                     <li class="list-group-item"><a href="{{route('log-viewer::dashboard')}}"><i class="fas fa-bug"></i> Logs</a></li>
                     <li class="list-group-item"><a href="{{route('admin.backups')}}"><i class="fas fa-database"></i> Backups</a></li>
-                    {{-- <li class="list-group-item"><a href="#"><i class="ti-support"></i> Updates</a></li> TODO - COMMING SOON!!! --}}
+                    <li class="list-group-item"><a href="{{route('admin.updates')}}"><i class="fas fa-level-up-alt"></i> Updates</a></li>
                     {{-- <li class="list-group-item"><a href="#"><i class="ti-hummer"></i> Tools and Extras</a></li> TODO - COMMING SOON!!! --}}
                 </ul>
             </div>

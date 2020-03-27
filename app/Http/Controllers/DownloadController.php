@@ -39,7 +39,7 @@ class DownloadController extends Controller
         }
         else
         {
-            $user = Request::ip();
+            $user = \Request::ip();
         }
 
         Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . $user);
@@ -62,7 +62,7 @@ class DownloadController extends Controller
         if (Auth::user()) {
             $user = Auth::user()->full_name;
         } else {
-            $user = Request::ip();
+            $user = \Request::ip();
         }
         Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . $user.'  Request Data:', $request->toArray());
 
@@ -110,7 +110,7 @@ class DownloadController extends Controller
         if (Auth::user()) {
             $user = Auth::user()->full_name;
         } else {
-            $user = Request::ip();
+            $user = \Request::ip();
         }
         Log::debug('Route '.Route::currentRouteName().' visited by '.$user);
 

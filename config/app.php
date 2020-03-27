@@ -15,6 +15,7 @@ return [
     'faker_locale'    => 'en_US',
     'key'             => env('APP_KEY'),
     'cipher'          => 'AES-256-CBC',
+    'copyright'       => '&copy; 2016-2020 - All Rights Reserved',
     'providers'       => [
         //  Laravel Framework Service Providers...
         Illuminate\Auth\AuthServiceProvider::class,
