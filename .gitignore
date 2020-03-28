@@ -3,6 +3,7 @@
 /public/storage
 /public/js/skins
 /storage/*.key
+# /storage/debugbar
 /vendor
 /.vs
 /.vscode
