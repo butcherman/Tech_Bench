@@ -12,7 +12,7 @@
             <div class="card-body">
                 <img src="{{asset('/img/TechBenchLogo.png')}}" class="mx-auto d-block img-fluid" alt="Tech Bench"/>
                 <p class="text-center">
-                    Tech Bench {{config('app.copyright')}}
+                    Tech Bench &copy; {{config('app.copyright')}}
                     <span class="d-inline-block">- All Rights Reserved</span>
                 </p>
                 <p class="text-center">Version - @version('full')</p>

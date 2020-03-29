@@ -53,7 +53,7 @@ class GatePolicy
             ->where('allow', 1)
             ->get();
 
-        $allow = $data->isEmpty() ? 'false' : 'true';
+        $allow = $data->isEmpty() ? 'Denied' : 'Allowed';
         Log::debug('User ' . $user->full_name . ' is trying to access admin link.  Result - ' . $allow);
 
         return  $data->isEmpty() ? false : true;

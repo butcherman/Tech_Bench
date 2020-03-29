@@ -46,7 +46,6 @@ class AdminController extends Controller
                     );
 
         Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-        Log::debug('User Collection Data:', $userLinks->toArray());
         return view('admin.userLinks', [
             'links' => $userLinks,
         ]);

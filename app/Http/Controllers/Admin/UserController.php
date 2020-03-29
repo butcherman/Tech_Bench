@@ -154,9 +154,9 @@ class UserController extends Controller
         $userList = new UserCollection(User::onlyTrashed()->get()
                 /** @scrutinizer ignore-call */
                 ->makeVisible('user_id'));
+                // dd($userList);
 
         Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-        Log::debug('Inactive User List: ', $userList->toArray());
 
         return view('admin.userDeleted', [
             'userList' => $userList,
