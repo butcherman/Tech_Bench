@@ -2,47 +2,21 @@
 
 namespace App\Console\Commands;
 
-// use Doctrine\Common\Cache\Version;
 use Zip;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
-
-use PragmaRX\Version\Package\Version;
-
+use Illuminate\Support\Facades\Storage;
 
 class updateRun extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'tb-update:run';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Update the Tech Bench to a newer version';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $this->line('');
@@ -52,12 +26,15 @@ class updateRun extends Command
             //  Open up the file and verify it is at least the same version as the current setup
             $valid = $this->openUpdate($updateFile);
 
-            if ($valid) {
+            if ($valid)
+            {
                 $this->call('down');
                 $this->copyFiles($updateFile);
 
                 $this->info('Update Completed');
-            } else {
+            }
+            else
+            {
                 $this->error('The selected update is not a newer version');
                 $this->error('Cannot downgrade Tech Bench in this manner');
             }
@@ -71,30 +48,35 @@ class updateRun extends Command
         $updates    = Storage::disk('staging')->files('updates');
 
         //  Cycle through each file in the update directory to see if they are update files
-        foreach ($updates as $update) {
+        foreach ($updates as $update)
+        {
             $baseName = explode('/', $update)[1];
 
             //  Verify the file is in the .zip format
             $fileParts = pathinfo($baseName);
-            if ($fileParts['extension'] == 'zip') {
+            if ($fileParts['extension'] == 'zip')
+            {
                 //  Verify this is actually an update file
                 $zip = Zip::open(config('filesystems.disks.staging.root') .
                     DIRECTORY_SEPARATOR . 'updates' . DIRECTORY_SEPARATOR . $baseName);
                 $files = $zip->listFiles();
-                if (in_array($fileParts['filename'] . '/config/version.yml', $files)) {
+                if (in_array($fileParts['filename'] . '/config/version.yml', $files))
+                {
                     $updateList[] = $baseName;
                 }
             }
         }
 
-        if (empty($updateList)) {
+        if (empty($updateList))
+        {
             $this->error('No updates have been loaded to the system');
             $this->error('Please upload update package to the Storage/Staging/Updates folder');
             return false;
         }
 
         //  Determine if there is more than one update that can be applied
-        if (count($updateList) > 1) {
+        if (count($updateList) > 1)
+        {
             $this->line('');
 
             $anticipate = [];
@@ -104,7 +86,9 @@ class updateRun extends Command
                 $this->line('[' . $opt . '] ' . $up);
             }
             $updateFile = $this->choice('Please select which update you would like to load', $anticipate);
-        } else {
+        }
+        else
+        {
             $updateFile = $updateList[0];
         }
 
@@ -131,11 +115,17 @@ class updateRun extends Command
 
         $verData = [];
         $i = 0;
-        while (!feof($verFile)) {
-            $line = fgets($verFile);
+        while (!feof(
+        /** @scrutinizer ignore-type */
+        $verFile))
+        {
+            $line = fgets(
+            /** @scrutinizer ignore-type */
+            $verFile);
             $data = explode(':', $line);
 
-            if (($data[0] === '  major' || $data[0] === '  minor' || $data[0] === '  patch') && $i < 3) {
+            if (($data[0] === '  major' || $data[0] === '  minor' || $data[0] === '  patch') && $i < 3)
+            {
                 $verData[trim($data[0])] = trim($data[1]);
                 $i++;
             }
@@ -144,11 +134,16 @@ class updateRun extends Command
         $curVersion = new \PragmaRX\Version\Package\Version();
 
         $valid = false;
-        if ($verData['major'] > $curVersion->major()) {
+        if ($verData['major'] > $curVersion->major())
+        {
             $valid = true;
-        } else if ($verData['minor'] > $curVersion->minor()) {
+        }
+        else if ($verData['minor'] > $curVersion->minor())
+        {
             $valid = true;
-        } else if ($verData['patch'] >= $curVersion->patch()) {
+        }
+        else if ($verData['patch'] >= $curVersion->patch())
+        {
             $valid = true;
         }
 
@@ -174,15 +169,14 @@ class updateRun extends Command
         File::copyDirectory($updateFile . 'routes',    base_path() . DIRECTORY_SEPARATOR . 'routes');
 
         //  Run Composer Updates
-        exec('cd ' . base_path() . ' && composer install --no-dev --no-interaction --optimize-autoloader --no-ansi');
-        // exec('cd'.base_path().  ' && ziggy:generate');
+        exec('cd ' . base_path() . ' && composer install --no-dev --no-interaction --optimize-autoloader --no-ansi > /dev/null 2>&1');
         $this->call('ziggy:generate');
         //  Run NPM
-        exec('cd'.base_path().' && npm install --only=production');
-        exec('cd'.base_path().' && npm run production');
+        exec('cd ' . base_path() . ' && npm install --only=production > /dev/null 2>&1');
+        exec('cd ' . base_path() . ' && npm run production > /dev/null 2>&1');
 
         //  Update the database
-        $this->call('migrate', ['--force']);
+        $this->call('migrate', ['--force' => 'default']);
 
         //  Update the cache
         $this->call('config:cache');

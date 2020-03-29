@@ -4,14 +4,10 @@ namespace App\Console\Commands;
 
 use Zip;
 use Carbon\Carbon;
-use FontLib\Table\DirectoryEntry;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-
-
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use Illuminate\Support\Facades\Storage;
 
 class backupRun extends Command
 {
@@ -112,7 +108,9 @@ class backupRun extends Command
     //  Create a MYSQLDUMP of the database
     protected function backupDatabase()
     {
-        $process = new Process('mysqldump tb-dev5-data -u root');
+        $process = new Process(
+        /** @scrutinizer ignore-type */
+        'mysqldump tb-dev5-data -u root');
         $process->run();
 
         File::put(config('filesystems.disks.backup.root') . DIRECTORY_SEPARATOR . 'database.sql', $process->getOutput());
