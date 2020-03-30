@@ -12,7 +12,7 @@ matrix:
     - php: 7.3
       env: setup=lowest
       php: 7.4
-      env: setup=stable
+      env: setup=lowest
 
 sudo: false
 
@@ -35,7 +35,7 @@ before_script:
     - npm install
     - php artisan key:generate
     - php artisan migrate --seed
-      php artisan ziggy:generate
+    - php artisan ziggy:generate
     - npm run production
 
 script:

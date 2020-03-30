@@ -53,7 +53,7 @@ class CustomerNotesController extends Controller
     {
         $notes = CustomerNotes::where('cust_id', $id)->orderBy('urgent', 'desc')->get();
 
-        //  Determine if there is a parent site with shared contacts
+        //  Determine if there is a parent site with shared notes
         $parent = Customers::find($id)->parent_id;
         if ($parent) {
             $parentList = CustomerNotes::where('cust_id', $parent)->where('shared', 1)->orderBy('urgent', 'desc')->get();

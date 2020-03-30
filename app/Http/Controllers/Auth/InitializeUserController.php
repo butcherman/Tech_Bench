@@ -26,7 +26,6 @@ class InitializeUserController extends Controller
         $user = UserInitialize::where('token', $hash)->get();
 
         if ($user->isEmpty()) {
-            Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
             Log::warning('Visitor at IP Address ' . \Request::ip() . ' tried to access invalid initialize hash - ' . $hash);
             return abort(404);
         }
@@ -42,7 +41,6 @@ class InitializeUserController extends Controller
         //  Verify that the link matches the assigned email address
         $valid = UserInitialize::where('token', $hash)->first();
         if (empty($valid)) {
-            Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
             Log::warning('Visitor at IP Address ' . \Request::ip() . ' tried to submit an invalid User Initialization link - ' . $hash);
             return abort(404);
         }

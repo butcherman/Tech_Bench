@@ -34,15 +34,6 @@ class CustomerFilesController extends Controller
 
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
-        //  Verify that the upload is valid and being processed
-        if($receiver->isUploaded() === false)
-        {
-            Log::error('Upload File Missing - ' .
-            /** @scrutinizer ignore-type */
-            $request->toArray());
-            throw new UploadMissingFileException();
-        }
-
         //  Receive and process the file
         $save = $receiver->receive();
 
@@ -125,7 +116,7 @@ class CustomerFilesController extends Controller
         return $files;
     }
 
-    //  Update the test information of the file, but not the file itself
+    //  Update the information of the file, but not the file itself
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -140,7 +131,7 @@ class CustomerFilesController extends Controller
         }
 
         CustomerFiles::find($id)->update([
-            'name' => $request->name,
+            'name'         => $request->name,
             'file_type_id' => $request->type,
             'cust_id'      => $request->cust_id,
             'shared'       => $request->shared == 1 ? 1 : 0,

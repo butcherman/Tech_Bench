@@ -40,7 +40,7 @@ class CustomerSystemsController extends Controller
 
         //  Determine if the system is supposed to be added for the parent, or this site
         $details = Customers::find($request->cust_id);
-        if($details->parent_id && $request->shared == 'true')
+        if($details->parent_id && $request->shared == 1)
         {
             $request->cust_id = $details->parent_id;
         }

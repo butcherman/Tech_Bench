@@ -89,15 +89,6 @@ class GuestLinksController extends Controller
 
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
-        //  Verify that the upload is valid and being processed
-        if($receiver->isUploaded() === false)
-        {
-            Log::error('Upload File Missing - ' .
-            /** @scrutinizer ignore-type */
-            $request->toArray());
-            throw new UploadMissingFileException();
-        }
-
         //  Recieve and process the file
         $save = $receiver->receive();
 

@@ -9,7 +9,7 @@ use App\UserPermissions;
 
 class CustomerDetailsTest extends TestCase
 {
-    private $cust;
+    private $cust, $childCust;
 
     //  Populate a customer into the database
     public function setUp(): void
@@ -17,6 +17,9 @@ class CustomerDetailsTest extends TestCase
         Parent::setup();
 
         $this->cust = factory(Customers::class)->create();
+        $this->childCust = factory(Customers::class)->create([
+            'parent_id' => $this->cust->cust_id,
+        ]);
     }
 
     //  Test visit customer details landing page as guest
@@ -164,6 +167,57 @@ class CustomerDetailsTest extends TestCase
             'city',
             'zip'
         ]);
+    }
+
+    //  Test linking a customer to a parent
+    public function test_link_to_parent()
+    {
+        $user = $this->getTech();
+        $parent = factory(Customers::class)->create();
+
+        $data = [
+            'parent_id' => $parent->cust_id,
+            'cust_id'   => $this->cust->cust_id,
+        ];
+
+        $response = $this->actingAs($user)->post(route('customer.linkParent'), $data);
+
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
+    //  Test linking a customer to a parent when assigning another child as parent
+    public function test_link_to_parent_via_child()
+    {
+        $user = $this->getTech();
+        $parent = factory(Customers::class)->create();
+        $child  = factory(Customers::class)->create([
+            'parent_id' => $parent->cust_id,
+        ]);
+
+        $data = [
+            'parent_id' => $child->cust_id,
+            'cust_id'   => $this->cust->cust_id,
+        ];
+
+        $response = $this->actingAs($user)->post(route('customer.linkParent'), $data);
+
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
+    //  Test removing a linked customer
+    public function test_remove_parent_link()
+    {
+        $user = $this->getTech();
+        $linkedParent = factory(Customers::class)->create();
+        $child = factory(Customers::class)->create([
+            'parent_id' => $linkedParent->cust_id,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('customer.removeParent', $child->cust_id));
+
+        $response->assertSuccessful();
     }
 
     //  Test deactivating the customer as a guest

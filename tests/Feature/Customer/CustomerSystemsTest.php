@@ -58,6 +58,28 @@ class CustomerSystemsTest extends TestCase
         ]]);
     }
 
+    //  Try to get a customers systems from the parent
+    public function test_get_customer_systems_from_parent()
+    {
+        $child = factory(Customers::class)->create([
+            'parent_id' => $this->cust->cust_id,
+        ]);
+        factory(CustomerSystems::class)->create([
+            'cust_id' => $this->cust->cust_id,
+            'shared'  => 1,
+        ]);
+        $response = $this->actingAs($this->user)->get(route('customer.systems.show', $child->cust_id));
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([[
+            'cust_sys_id',
+            'cust_id',
+            'sys_id',
+            'system_types',
+            'system_data_fields'
+        ]]);
+    }
+
     //  Try to get a customers system for a customer that does not exist
     public function test_get_customer_systems_bad_id()
     {
@@ -125,6 +147,32 @@ class CustomerSystemsTest extends TestCase
             $data['field_'.$field->field_id] = 'billy bobs amazing value';
         }
 
+        // dd($data);
+
+        $response = $this->actingAs($this->user)->post(route('customer.systems.store'), $data);
+
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
+    //  Try to add a system to a customer parent
+    public function test_add_system_link_to_parent()
+    {
+        $child  = factory(Customers::class)->create([
+            'parent_id' => $this->cust->cust_id,
+        ]);
+        $system = factory(SystemTypes::class)->create();
+        $fields = factory(SystemDataFields::class, 3)->create();
+
+        $data = [
+            'cust_id' => $child->cust_id,
+            'system'  => $system->sys_id,
+            'shared'  => 1,
+        ];
+        foreach ($fields as $field) {
+            $data['field_' . $field->field_id] = 'billy bobs amazing value';
+        }
+
         $response = $this->actingAs($this->user)->post(route('customer.systems.store'), $data);
 
         $response->assertSuccessful();
@@ -149,7 +197,7 @@ class CustomerSystemsTest extends TestCase
         $this->assertGuest();
     }
 
-    //  Test updating the system date
+    //  Test updating the system data
     public function test_update_system()
     {
         $data = [
@@ -164,6 +212,23 @@ class CustomerSystemsTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertJson(['success' => true]);
+    }
+
+    //  Test updating the system data with mismatching data
+    public function test_update_system_mismatch_data()
+    {
+        $anotherCust = factory(Customers::class)->create();
+        $data = [
+            'cust_id' => $anotherCust->cust_id,
+            'system'  => $this->system->sys_id,
+        ];
+        foreach ($this->sysData as $field) {
+            $data['field_' . $field->field_id] = 'Some new value to add';
+        }
+
+        $response = $this->actingAs($this->user)->put(route('customer.systems.update', $this->system->cust_sys_id), $data);
+
+        $response->assertStatus(400);
     }
 
     //  Test deleting a system as a guest
