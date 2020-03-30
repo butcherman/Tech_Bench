@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class CustomerFilesController extends Controller
 {
@@ -24,7 +23,7 @@ class CustomerFilesController extends Controller
     //  Store a new customer file
     public function store(Request $request)
     {
-        Log::debug('Uploaded Data - ', $request->toArray());
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
         //  Validate the form
         $request->validate([
             'cust_id' => 'required',
@@ -75,15 +74,12 @@ class CustomerFilesController extends Controller
                 'name'         => $request->name
             ]);
 
-            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-            Log::debug('Submitted Data - ', $request->toArray());
-            Log::info('File added for Customer ID-'.$request->custID.' by User ID-'.Auth::user()->user_id.'.  New File ID-'.$fileID);
+            Log::info('File added for Customer ID - '.$request->custID.' by '.Auth::user()->full_name.'.  New File ID - '.$fileID);
         }
 
         //  Get the current progress
         $handler = $save->handler();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
@@ -94,6 +90,8 @@ class CustomerFilesController extends Controller
     //  Get the files for the customer
     public function show($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         $files = CustomerFiles::where('cust_id', $id)
             ->with('Files')
             ->with('CustomerFileTypes')
@@ -119,6 +117,8 @@ class CustomerFilesController extends Controller
     //  Update the information of the file, but not the file itself
     public function update(Request $request, $id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'cust_id' => 'required',
             'name' => 'required',
@@ -137,6 +137,7 @@ class CustomerFilesController extends Controller
             'shared'       => $request->shared == 1 ? 1 : 0,
         ]);
 
+        Log::info('File information updated for customer file ID - '.$id.' by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
@@ -148,8 +149,8 @@ class CustomerFilesController extends Controller
         $fileID = $data->file_id;
         $data->delete();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::info('File Deleted For Customer ID-'.$data->custID.' by User ID-'.Auth::user()->user_id.'.  File ID-'.$id);
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::info('File Deleted For Customer ID-'.$data->custID.' by '.Auth::user()->full_name.'.  File ID - '.$id);
 
         //  Delete from system if no longer in use
         Files::deleteFile($fileID);

@@ -17,6 +17,6 @@ class LogSuccessfulLogin
             'ip_address' => \Request::ip()
         ]);
 
-        Log::notice('User '.Auth::user()->full_name.'Logged In ', $user->toArray());
+        Log::info('User '.Auth::user()->full_name.' logged in from IP Address '.\Request::ip(), $user->toArray());
     }
 }

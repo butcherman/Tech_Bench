@@ -2,12 +2,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Model;
-use Faker\Generator as Faker;
-
-$factory->define(App\UserInitialize::class, function (Faker $faker) {
+$factory->define(App\UserInitialize::class, function () {
     return [
         'username' => factory(App\User::class)->create()->username,
-        'token' => strtolower(Str::random(30)),
+        'token'    => strtolower(Str::random(30)),
     ];
 });

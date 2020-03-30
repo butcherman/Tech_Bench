@@ -26,13 +26,14 @@ class CustomerDetailsController extends Controller
     {
         $this->authorize('hasAccess', 'Add Customer');
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('customer.newCustomer');
     }
 
     //  Submit the new customer form
     public function store(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
         $this->authorize('hasAccess', 'Add Customer');
 
         $request->validate([
@@ -70,9 +71,7 @@ class CustomerDetailsController extends Controller
             'zip'       => $request->zip,
         ]);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::notice('New Customer ID-'.$request->custID.' created by User ID-'.Auth::user()->user_id);
-
+        Log::notice('New Customer ID-'.$request->custID.' created by '.Auth::user()->full_name);
         return response()->json(['success' => true, 'cust_id' => $custData->cust_id ]);
     }
 
@@ -92,6 +91,7 @@ class CustomerDetailsController extends Controller
         $fileTypes = new CustomerFileTypesCollection(CustomerFileTypes::all());
         $parent    = $custDetails->parent_id ? Customers::find($custDetails->parent_id)->name : null;
 
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
         return view('customer.details', [
             'cust_id'     => $custDetails->cust_id,
             'details'     => $custDetails->toJson(),
@@ -106,6 +106,8 @@ class CustomerDetailsController extends Controller
     //  Update the customer details
     public function update(Request $request, $id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'name'     => 'required',
             'dba_name' => 'nullable',
@@ -124,9 +126,7 @@ class CustomerDetailsController extends Controller
             'zip'      => $request->zip
         ]);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::notice('Customer Details Updated for Customer ID-'.$id.' by User ID-'.Auth::user()->user_id);
-        Log::debug('Customer Details Submitted - ', $request->toArray());
+        Log::info('Customer Details Updated for Customer ID-'.$id.' by User ID-'.Auth::user()->user_id);
         return response()->json([
             'success' => true
         ]);
@@ -135,6 +135,8 @@ class CustomerDetailsController extends Controller
     //  Link a site to a parent site
     public function linkParent(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'parent_id' => 'required|numeric|exists:customers,cust_id',
             'cust_id'   => 'required|numeric|exists:customers,cust_id'
@@ -151,26 +153,30 @@ class CustomerDetailsController extends Controller
             'parent_id' => $request->parent_id,
         ]);
 
+        Log::info('Customer ID '.$request->cust_id.' was linked to parent ID '.$request->parent_id.' by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
 
     public function removeParent($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
         Customers::find($id)->update(['parent_id' => null]);
+        Log::info('Parent Customer ID was removed for Customer ID '.$id.' by '.Auth::user()->full_name);
     }
 
     //  Deactivate a customer - note this will not remove it from the database, but make it inaccessable
     public function destroy($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
         $this->authorize('hasAccess', 'Deactivate Customer');
 
-        //  Remove the tip from any users favorites
+        //  Remove the customer from any users favorites
         CustomerFavs::where('cust_id', $id)->delete();
 
         //  Disable the tip
         Customers::destroy($id);
 
-        Log::notice('User - '.Auth::user()->user_id.' has deactivated Customer ID '.$id);
+        Log::notice('User - '.Auth::user()->full_name.' has deactivated Customer ID '.$id);
     }
 }

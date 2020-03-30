@@ -1,8 +1,9 @@
 <?php
 
-use App\FileLinkFiles;
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+
+use App\FileLinkFiles;
 
 $factory->define(FileLinkFiles::class, function() {
     return [

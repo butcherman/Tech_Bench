@@ -30,7 +30,7 @@ class InitializeUserController extends Controller
             return abort(404);
         }
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited.');
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address .'.\Request::ip());
         Log::debug('Link Hash -' . $hash);
         return view('account.initializeUser', ['hash' => $hash]);
     }
@@ -38,6 +38,9 @@ class InitializeUserController extends Controller
     //  Submit the initialize user form
     public function submitInitializeUser(Request $request, $hash)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address -' . \Request::ip().'. Submitted Data - ', $request->toArray());
+        Log::debug('Initialize Data - ', $request->toArray());
+
         //  Verify that the link matches the assigned email address
         $valid = UserInitialize::where('token', $hash)->first();
         if (empty($valid)) {
@@ -55,8 +58,7 @@ class InitializeUserController extends Controller
         ]);
 
         //  Get the users information
-        $userData = User::where('username', $valid->username)->first();
-
+        $userData   = User::where('username', $valid->username)->first();
         $nextChange = config('auth.passwords.settings.expire') != null ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
 
         //  Update the password
@@ -69,14 +71,11 @@ class InitializeUserController extends Controller
 
         //  Remove the initialize instance
         UserInitialize::find($valid->id)->delete();
-
         //  Log in the user
         Auth::loginUsingID($userData->user_id);
 
         //  Redirect the user to the dashboard
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
-        Log::debug('Initialize Data - ', $request->toArray());
-        Log::notice('User has setup account', ['user_id' => $userData->user_id]);
+        Log::info('New user '.$request->username.' has finished setting their account.');
         return redirect(route('dashboard'));
     }
 }

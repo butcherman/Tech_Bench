@@ -21,6 +21,8 @@ class CustomerNotesController extends Controller
     //  Store a new customer note
     public function store(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'cust_id' => 'required|numeric',
             'title'   => 'required',
@@ -42,9 +44,7 @@ class CustomerNotesController extends Controller
             'description' => $request->note
         ]);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data - ', $request->toArray());
-        Log::info('New Customer Note Created for Customer ID-'.$request->custID.' by User ID-'.Auth::user()->user_id.'.  New Note ID-'.$noteID->note_id);
+        Log::info('New Customer Note Created for Customer ID - '.$request->custID.' by '.Auth::user()->full_name.'.  New Note ID - '.$noteID->note_id);
         return response()->json(['success' => true]);
     }
 
@@ -61,14 +61,15 @@ class CustomerNotesController extends Controller
             $notes = $notes->merge($parentList);
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Fetched Data - ', $notes->toArray());
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
         return $notes;
     }
 
     //  Update a customer note
     public function update(Request $request, $id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'cust_id' => 'required',
             'title'   => 'required',
@@ -88,9 +89,7 @@ class CustomerNotesController extends Controller
             'description' => $request->note
         ]);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data - ', $request->toArray());
-        Log::info('Customer Note ID-'.$id.' updated by User ID-'.Auth::user()->user_id);
+        Log::info('Customer Note ID - '.$id.' updated by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
@@ -99,8 +98,8 @@ class CustomerNotesController extends Controller
     {
         CustomerNotes::find($id)->delete();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::notice('Customer Note ID-'.$id.' deleted by User ID-'.Auth::user()->user_id);
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::notice('Customer Note ID - '.$id.' deleted by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 }

@@ -23,6 +23,8 @@ class CustomerContactsController extends Controller
     //  Store a new customer contact
     public function store(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'cust_id' => 'required',
             'name'    => 'required'
@@ -55,9 +57,7 @@ class CustomerContactsController extends Controller
             }
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data - ', $request->toArray());
-        Log::info('New Customer Contact Created for Cust ID - '.$request->cust_id.'.  Contact ID-'.$cont);
+        Log::info('New Customer Contact Created for Cust ID - '.$request->cust_id.'.  New Contact ID-'.$cont);
         return response()->json(['success' => true]);
     }
 
@@ -80,7 +80,7 @@ class CustomerContactsController extends Controller
             $contacts = $contacts->merge($parentList);
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::debug('Fetched Data - ', $contacts->toArray());
         return $contacts;
     }
@@ -114,13 +114,15 @@ class CustomerContactsController extends Controller
         }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::info('Customer Contact Downloaded - Contact ID-'.$id);
+        Log::info('Customer Contact Downloaded - Contact ID-'.$id.' by '.Auth::user()->full_name);
         return $vcard->download();
     }
 
     //  Update an existing Customer Contact
     public function update(Request $request, $id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'cust_id' => 'required',
             'name'    => 'required'
@@ -139,8 +141,6 @@ class CustomerContactsController extends Controller
             'shared'  => $request->shared == 'true' ? 1 : 0,
         ]);
 
-        $contID = $id;
-
         //  Clear all contact phone numbers and re-enter them
         CustomerContactPhones::where('cont_id', $id)->delete();
         foreach($request->numbers['type'] as $key => $num)
@@ -148,7 +148,7 @@ class CustomerContactsController extends Controller
             if(!empty($request->numbers['number'][$key]))
             {
                 CustomerContactPhones::create([
-                    'cont_id'       => $contID,
+                    'cont_id'       => $id,
                     'phone_type_id' => $request->numbers['type'][$key],
                     'phone_number'  => PhoneNumberTypes::cleanPhoneNumber($request->numbers['number'][$key]),
                     'extension'     => isset($request->numbers['ext'][$key]) ? $request->numbers['ext'][$key] : null
@@ -156,9 +156,8 @@ class CustomerContactsController extends Controller
             }
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data - ', $request->toArray());
-        Log::info('Customer Contact Updated for Cust ID - '.$request->cust_id.'.  Contact ID-'.$contID);
+
+        Log::info('Customer Contact Updated for Cust ID - '.$request->cust_id.'.  Contact ID-'.$id);
         return response()->json(['success' => true]);
     }
 
@@ -167,8 +166,8 @@ class CustomerContactsController extends Controller
     {
         $cont = CustomerContacts::find($id);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::info('Customer Contact deleted for Customer ID-'.$cont->cust_id.' by User ID-'.Auth::user()->user_id.'. Deleted Contact ID-'.$id);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+        Log::info('Customer Contact deleted for Customer ID-'.$cont->cust_id.' by User ID-'.Auth::user()->full_name.'. Deleted Contact ID-'.$id);
 
         $cont->delete();
 
