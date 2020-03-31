@@ -101,6 +101,9 @@ class TechTipDetailsTest extends TestCase
         $response->assertJsonStructure([['comment', 'comment_id', 'created_at', 'tip_id', 'updated_at', 'user']]);
     }
 
+    //  Try to delete a tip comment as a guest
+    //  TODO - Add this functionality???
+
     //  Try to delete a tip as a guest
     public function test_delete_tip_as_guest()
     {

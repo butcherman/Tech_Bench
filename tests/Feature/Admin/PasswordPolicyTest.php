@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Settings;
 
 class PasswordPolicyTest extends TestCase
 {
@@ -84,6 +85,12 @@ class PasswordPolicyTest extends TestCase
     //  Try to submit the password policy page as an installer
     public function test_submit_password_policy_page()
     {
+        //  Before running test, change the current password policy to 0 days to test updating users
+        Settings::firstOrCreate(
+            ['key'   => 'auth.passwords.settings.expire'],
+            ['key'   => 'auth.passwords.settings.expire', 'value' => 0]
+        )->update(['value' => 0]);
+
         $data = [
             'passExpire' => 30,
         ];

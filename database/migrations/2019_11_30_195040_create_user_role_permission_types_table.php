@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-use App\UserRolePermissionTypes;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateUserRolePermissionTypesTable extends Migration
 {
@@ -21,7 +20,7 @@ class CreateUserRolePermissionTypesTable extends Migration
             $table->timestamps();
         });
 
-        //  Insert default data
+        //  Insert default roles permission types
         DB::table('user_role_permission_types')->insert([
             ['perm_type_id' => 1,  'description' => 'Manage Users',        'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['perm_type_id' => 2,  'description' => 'Manage User Roles',   'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],

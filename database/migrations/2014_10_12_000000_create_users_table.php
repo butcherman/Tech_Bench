@@ -1,9 +1,9 @@
 <?php
 
+use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\User;
 
 class CreateUsersTable extends Migration
 {
@@ -35,6 +35,7 @@ class CreateUsersTable extends Migration
             'last_name'    => 'Administrator',
             'email'        => 'admin@em.com',
             'password'     => bcrypt('password'),
+            'password_expires' => '2000-01-01 00:00:00',
         ]);
     }
 

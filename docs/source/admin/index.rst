@@ -1,4 +1,4 @@
 Administration Guide
 ====================
 
-COMMING SOON!!!!!!!!
+Comming Soon!!!

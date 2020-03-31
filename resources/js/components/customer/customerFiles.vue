@@ -150,7 +150,7 @@
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
                     chunking: true,
-                    chunkSize: window.techBench.chunkSize,
+                    chunkSize: window.chunkSize,
                     parallelChunkUploads: false,
                 },
             }
@@ -237,7 +237,7 @@
             },
             updateProgressBar(file, progress, sent)
             {
-                var fileProgress = 100 - (file.size / sent * 100);
+                var fileProgress = sent / file.size * 100;
                 this.progress = Math.round(fileProgress);
             },
             sendingFiles(file, xhr, formData)

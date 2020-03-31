@@ -13,7 +13,7 @@ link to view the Tech Tip in it entirety along with any attached files.
 Search Page
 -----------
 
-.. image:: img/tech_tips_search.PNG
+.. image:: img/tech_tip_search.PNG
     :alt: Tech Tips Search Page
 
 The Tech Tips Search page allows you to search through the list of Tech Tips, Documentation, and Software that has been

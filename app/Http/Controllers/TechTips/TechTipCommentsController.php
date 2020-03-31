@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 use App\Notifications\NewTechTipComment;
 use Illuminate\Support\Facades\Notification;
 
@@ -22,6 +23,8 @@ class TechTipCommentsController extends Controller
     //  Add a new Tech Tip Comment
     public function store(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'comment' => 'required',
             'tipID' => 'required',
@@ -38,21 +41,26 @@ class TechTipCommentsController extends Controller
 
         Notification::send($owner, new NewTechTipComment(Auth::user()->full_name, $request->tipID));
 
+        Log::info('User '.Auth::user()->full_name.' left a comment on Tech Tip '.$request->tipID);
         return response()->json(['success' => true]);
     }
 
     //  Retrieve the comments for a tech tip
     public function show($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         return TechTipComments::where('tip_id', $id)->with('user')->get();
     }
 
     //  Delete a comment
     public function destroy($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         TechTipComments::find($id)->delete();
 
-        Log::warning('A Tech Tip Comment (id# '.$id.') was deleted by User ID - '.Auth::user()->user_id);
+        Log::warning('A Tech Tip Comment (id# '.$id.') was deleted by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 }

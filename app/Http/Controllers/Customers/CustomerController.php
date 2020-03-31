@@ -25,7 +25,7 @@ class CustomerController extends Controller
     {
         $systems = new SystemTypesCollection(SystemTypes::orderBy('cat_id', 'ASC')->orderBy('name', 'ASC')->get());
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('customer.index', [
             'sysTypes' => $systems,
         ]);
@@ -34,13 +34,13 @@ class CustomerController extends Controller
     //  Search for a customer
     public function search(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'sortField' => 'required',
             'sortType'  => 'required',
             'perPage'   => 'required'
         ]);
-
-        Log::debug('Request Data - ', $request->toArray());
 
         if(isset($request->name) || isset($request->city) || isset($request->system))
         {
@@ -79,6 +79,7 @@ class CustomerController extends Controller
     //  Check to see if a customer ID already exists
     public function checkID($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
         $cust = Customers::find($id);
 
         if($cust === null)
@@ -87,7 +88,6 @@ class CustomerController extends Controller
             return response()->json(['dup' => false]);
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         Log::debug('Customer ID is in use by - '.$cust->name);
         return response()->json(['dup' => true, 'name' => $cust->name]);
     }
@@ -110,7 +110,7 @@ class CustomerController extends Controller
         }
 
         Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::debug('Customer Bookmark Updated.', [
+        Log::info('Customer Bookmark Updated.', [
             'user_id' => Auth::user()->user_id,
             'cust_id' => $id,
             'action'  => $action

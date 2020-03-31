@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class SystemCategories extends Model
 {
     protected $primaryKey = 'cat_id';
-
-    protected $fillable = ['name'];
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $fillable   = ['name'];
+    protected $hidden     = ['created_at', 'updated_at'];
 
     public function SystemTypes()
     {

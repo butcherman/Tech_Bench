@@ -46,7 +46,9 @@ class backupRestore extends Command
      */
     public function handle()
     {
-        if(!Storage::disk('backup')->exists($this->argument('filename')))
+        if(!Storage::disk('backup')->exists(
+        /** @scrutinizer ignore-type */
+        $this->argument('filename')))
         {
             $this->error('The backup filename you entered does not exist.');
             $this->error('Exiting                                        ');
@@ -86,9 +88,13 @@ class backupRestore extends Command
     protected function prepareBackup()
     {
         $this->bar->advance();
-        $fileParts = pathinfo($this->argument('filename'));
+        $fileParts = pathinfo(
+        /** @scrutinizer ignore-type */
+        $this->argument('filename'));
         $this->baseName = $fileParts['filename'];
-        $this->archive = Zip::open(config('filesystems.disks.backup.root') . DIRECTORY_SEPARATOR.$this->argument('filename'));
+        $this->archive = Zip::open(config('filesystems.disks.backup.root') . DIRECTORY_SEPARATOR .
+        /** @scrutinizer ignore-type */
+        $this->argument('filename'));
         // if (!$this->archive->has('version.txt')) {
         //     $this->error('THIS IS NOT A VALID TECH BENCH BACKUP');
         //     $this->error('Exiting');

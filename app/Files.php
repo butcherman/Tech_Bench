@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Storage;
 class Files extends Model
 {
     protected $primaryKey = 'file_id';
-    protected $fillable = ['file_name', 'file_link', 'mime_type'];
-    protected $hidden = ['created_at', 'updated_at', 'file_link'];
+    protected $fillable   = ['file_name', 'file_link', 'mime_type'];
+    protected $hidden     = ['created_at', 'updated_at', 'file_link'];
 
     //  Remove any illegal characters from filename and make sure it is unique
     public static function cleanFileName($path, $fileName)

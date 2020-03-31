@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-// use ZanySoft\Zip;
-
 class DownloadController extends Controller
 {
     //  File locations for stored files
@@ -34,21 +32,40 @@ class DownloadController extends Controller
     public function index($fileID, $fileName)
     {
         $fileData = Files::where('file_id', $fileID)->where('file_name', $fileName)->first();
+
+        if(Auth::user())
+        {
+            $user = Auth::user()->full_name;
+        }
+        else
+        {
+            $user = \Request::ip();
+        }
+
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . $user);
+
         //  Check that the file exists before allowing it to be downloaded
         if(!empty($fileData) && Storage::exists($fileData->file_link.$fileData->file_name))
         {
-            Log::info('File Downloaded', ['file_id' => $fileID]);
+            Log::info('File Downloaded by '.$user, ['file_id' => $fileID, 'file_name' => $fileName]);
             return Storage::download($fileData->file_link.$fileData->file_name);
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::notice('File Not Found', ['file_id' => $fileID, 'file_name' => $fileName]);
+        Log::error('File Not Found', ['file_id' => $fileID, 'file_name' => $fileName]);
         return view('err.badFile');
     }
 
     //  Package multiple files and prepare them for download
     public function archiveFiles(Request $request)
     {
+        //  Debug Data
+        if (Auth::user()) {
+            $user = Auth::user()->full_name;
+        } else {
+            $user = \Request::ip();
+        }
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . $user.'  Request Data:', $request->toArray());
+
         //  Validate the array
         $request->validate([
             'fileList' => 'required'
@@ -56,6 +73,7 @@ class DownloadController extends Controller
 
         //  Filename of zip archive
         $name = 'zip_archive_'.Carbon::now()->timestamp.'.zip';
+        Log::debug('Archive '.$name.' being created for multiple files.');
 
         //  The archive_downloads directory does not exist by default.  Touching a file in it ensures the directory is created and usable
         Storage::put($this->tmpFolder.'.ignore', '');
@@ -70,38 +88,50 @@ class DownloadController extends Controller
             {
                 // Log::debug('file exists', $data->toArray());
                 $zip->add($this->root.$data->file_link.$data->file_name);
-                Log::debug('File Added - '.$this->root.$data->file_link.$data->file_name);
+                Log::debug('File added to archive '.$name.' - '.$this->root.$data->file_link.$data->file_name);
             }
             else
             {
-                Log::notice('User tried to download an empty zip archive.');
+                Log::error('User '.$user.' tried to download an empty zip archive.');
             }
         }
         //  Close zip file to be processed
         $zip->close();
 
         //  Return the name of the zip file
+        Log::info('Archive '.$name.' created by '.$user.' for download');
         return response()->json(['archive' => $name]);
     }
 
     //  Download multiple files as part of a zip archive that was put together
     public function downloadArchive($fileName)
     {
+        //  Debug Data
+        if (Auth::user()) {
+            $user = Auth::user()->full_name;
+        } else {
+            $user = \Request::ip();
+        }
+        Log::debug('Route '.Route::currentRouteName().' visited by '.$user);
+
         //  Check if the requested archive exists
         if(Storage::exists($this->tmpFolder.$fileName))
         {
-            Log::info('Archive Downloaded - '.$fileName);
-            // return Storage::download($this->tmpFolder.$fileName);
+            Log::info('Archive Downloaded '.$fileName.' downloaded by '.$user);
             return response()->download($this->path.$fileName, 'download.zip')->deleteFileAfterSend(true);
         }
 
-        Log::notice('Archive Not Found - '.$fileName);
+        Log::error('Archive '.$fileName.' not found for '.$user);
         return view('err.badFile');
     }
 
     //  Download Customer Note as PDF
     public function downloadCustNote($id)
     {
+        //  Debug Data
+        $this->middleware('auth');
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         $note = CustomerNotes::find($id);
         $cust = Customers::find($note->cust_id);
 
@@ -111,12 +141,17 @@ class DownloadController extends Controller
             'description' => $note->description
         ]);
 
+        Log::info('Customer note downloaded by '.Auth::user()->full_name.'. Data: ', ['Customer ID: ' => $cust->id, 'Customer Name: ' => $cust->name, 'Note ID: ' => $id, 'Note Subject: ' => $note->subject]);
         return $pdf->download($cust->name.' - Note: '.$note->subject.'.pdf');
     }
 
     //  Download Tech Tip as PDF
     public function downloadTechTip($id)
     {
+        //  Debug Data
+        $this->middleware('auth');
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         //  TODO - Makt this a better looking pdf
         $tip = TechTips::where('tip_id', $id)->with('User')->with('SystemTypes')->first();
 
@@ -125,6 +160,7 @@ class DownloadController extends Controller
             'comments' => collect([])
         ]);
 
+        Log::info('Tech Tip downloaded as PDF by '.Auth::user()->full_name.'.  Data: ', ['Tip ID: ' => $tip->tip_id, 'Subject: ' => $tip->subject]);
         return $pdf->download('Tech Tip - '.$tip->subject.'.pdf');
     }
 }

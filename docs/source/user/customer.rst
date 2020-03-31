@@ -23,7 +23,7 @@ To create a new customer, click the "Add New Customer" link in the top right of 
 New Customer Page
 -----------------
 
-.. image:: img/new_customer_form.PNG
+.. image:: img/customer_new_form.PNG
     :alt: New Customer Form
 
 To create a new customer, the following information should be entered in the New Customer form.

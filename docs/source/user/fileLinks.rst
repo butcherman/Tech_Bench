@@ -10,7 +10,7 @@ Each file link has a custom URL and expiration date.  When the file link expires
 Primary File Links Page
 -----------------------
 
-.. image:: img/file_links_index.PNG
+.. image:: img/file_link_index.PNG
     :alt: File Links Landing Page
 
 The primary page gives basic information about each of the file links you have created, such as the name you assigned to the link, the
@@ -41,7 +41,7 @@ Note:*    These options are only available for links that have not yet expired.
 Create File Link Page
 ---------------------
 
-.. image:: img/create_file_link.PNG
+.. image:: img/file_link_create.PNG
     :alt: New File Link Form
 
 To create a new file link, you will need the following information:
@@ -61,9 +61,9 @@ Create Link                 This will upload attached files (if available) and c
 Link Details Page
 -----------------
 
-.. image:: img/link_details_1.PNG
+.. image:: img/file_link_details_1.PNG
     :alt: Link Details Image
-.. image:: img/link_details_2.PNG
+.. image:: img/file_link_details_2.PNG
     :alt: Link Details Image
 
 The Link Details page will show all information about the currently selected link.

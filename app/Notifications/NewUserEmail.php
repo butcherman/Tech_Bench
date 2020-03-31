@@ -30,7 +30,7 @@ class NewUserEmail extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via(/** @scrutinizer ignore-unused */$notifiable)
     {
         return ['mail'];
     }
@@ -41,7 +41,9 @@ class NewUserEmail extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(
+    /** @scrutinizer ignore-unused */
+    $notifiable)
     {
         return (new MailMessage)
         ->greeting('Hello '.$this->user->full_name)
@@ -57,7 +59,9 @@ class NewUserEmail extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray(
+    /** @scrutinizer ignore-unused */
+    $notifiable)
     {
         return [
             //

@@ -3,12 +3,12 @@ Account Settings
 
 Access the Account Settings page by clicking on the Avatar in the top left with your initials in it.
 
-.. image:: img/settings_menu.PNG
+.. image:: img/account_settings_menu.PNG
     :alt: Settings Menu Loction
 
 The Account Settings page allows you to change basic information about your user account.  These settings can also be modified by your System Administrator.
 
-.. image:: img/user_settings.PNG
+.. image:: img/account_user_settings.PNG
     :alt: Account Settings Page
 
 Additional Options

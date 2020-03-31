@@ -3,6 +3,9 @@ build:
         before:
             - cp tests/.env.scrutinizer .env
             - mysql -e 'create database `scrutinizer`;'
+        after:
+            - php artisan ziggy:generate
+            - npm run production
 
 tools:
     external_code_coverage:

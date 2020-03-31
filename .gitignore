@@ -3,7 +3,7 @@
 /public/storage
 /public/js/skins
 /storage/*.key
-# /storage/debugbar
+/storage/debugbar
 /vendor
 /.vs
 /.vscode
@@ -18,8 +18,4 @@ yarn-error.log
 /report
 /tests/_Report/
 modules_statuses.json
-#  Mix files created by npm run production
-# public/mix-manifest.json
-# public/css/*.css
-# public/js/*.js
-# resources/assets/js/ziggy.js
+public/mix-manifest.json

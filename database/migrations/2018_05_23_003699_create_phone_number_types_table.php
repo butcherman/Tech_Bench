@@ -20,7 +20,7 @@ class CreatePhoneNumberTypesTable extends Migration
             $table->text('icon_class');
             $table->timestamps();
         });
-        
+
         //  Create Default Data
         PhoneNumberTypes::create([
             'phone_type_id' => 1,

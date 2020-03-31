@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class InitializeUser extends Mailable implements ShouldQueue
 {
     use Queueable; // , SerializesModels;
-    
+
     public $link, $username, $name;
 
     //  Constructor prepares the email message

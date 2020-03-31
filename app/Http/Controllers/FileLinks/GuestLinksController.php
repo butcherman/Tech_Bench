@@ -16,14 +16,13 @@ use Illuminate\Support\Facades\Notification;
 use App\Http\Resources\FileLinkFilesCollection;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class GuestLinksController extends Controller
 {
     //  Landing page if no link is sent
     public function index()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.\Request::ip());
+        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip());
         return view('links.guestIndex');
     }
 
@@ -56,8 +55,7 @@ class GuestLinksController extends Controller
             return view('links.guestDeadLink');
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.\Request::ip());
-        Log::debug('Link Hash-'.$id);
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip());
         return view('links.guestDetails', [
             'hash'    => $id,
             'details' => $details,
@@ -69,6 +67,7 @@ class GuestLinksController extends Controller
     //  Get the guest available files for the link
     public function getFiles($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip());
         $linkID = FileLinks::where('link_hash', $id)->first()->link_id;
 
         $files = new FileLinkFilesCollection(
@@ -85,18 +84,10 @@ class GuestLinksController extends Controller
     //  Upload new file
     public function update(Request $request, $id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip().'. Submitted Data - ', $request->toArray());
         $request->validate(['name' => 'required', 'file' => 'required']);
 
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
-
-        //  Verify that the upload is valid and being processed
-        if($receiver->isUploaded() === false)
-        {
-            Log::error('Upload File Missing - ' .
-            /** @scrutinizer ignore-type */
-            $request->toArray());
-            throw new UploadMissingFileException();
-        }
 
         //  Recieve and process the file
         $save = $receiver->receive();
@@ -112,7 +103,6 @@ class GuestLinksController extends Controller
         //  Get the current progress
         $handler = $save->handler();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.\Request::ip());
         Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
@@ -146,7 +136,6 @@ class GuestLinksController extends Controller
         ]);
 
         Log::info('File uploaded by guest '.\Request::ip().' for file link -'.$details->link_id);
-        Log::debug('File Data -', $request->toArray());
 
         return response()->json(['success' => true]);
     }

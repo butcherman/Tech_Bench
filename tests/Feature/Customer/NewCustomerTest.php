@@ -9,7 +9,15 @@ use App\UserPermissions;
 
 class NewCustomerTest extends TestCase
 {
+    protected $parent;
 
+    //  Populate a parent customer into the database
+    public function setUp(): void
+    {
+        Parent::setup();
+
+        $this->parent = factory(Customers::class)->create();
+    }
 
     //  Verify that a guest cannot visit the page
     public function test_if_guest_can_visit_page()
@@ -104,6 +112,60 @@ class NewCustomerTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertJsonStructure(['success']);
+    }
+
+    //  Verify that a tech user can create a new customer that is a child of antoher
+    public function test_submit_new_child_customer()
+    {
+        $user = $this->getTech();
+        $custData = factory(Customers::class)->make();
+
+        $data = [
+            'cust_id'       => $custData->cust_id,
+            'parent_id'     => $this->parent->cust_id,
+            'name'          => $custData->name,
+            'dba_name'      => $custData->dba_name,
+            'address'       => $custData->address,
+            'city'          => $custData->city,
+            'selectedState' => $custData->state,
+            'zip'           => $custData->zip
+        ];
+
+        $response = $this->actingAs($user)->post(route('customer.id.store'), $data);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure(['success']);
+    }
+
+    //  Verify that a tech user can create a new customer that is a child of child
+    public function test_submit_new_child_customer_with_child_parent()
+    {
+        $user = $this->getTech();
+        $custData = factory(Customers::class)->make();
+        $child = factory(Customers::class)->create([
+            'parent_id' => $this->parent->cust_id,
+        ]);
+
+        $data = [
+            'cust_id'       => $custData->cust_id,
+            'parent_id'     => $child->cust_id,
+            'name'          => $custData->name,
+            'dba_name'      => $custData->dba_name,
+            'address'       => $custData->address,
+            'city'          => $custData->city,
+            'selectedState' => $custData->state,
+            'zip'           => $custData->zip
+        ];
+
+        $response = $this->actingAs($user)->post(route('customer.id.store'), $data);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure(['success']);
+
+        //  Verify that the parent id of the new customer is actually the parent and not the other child
+        $data['parent_id'] = $this->parent->cust_id;
+        unset($data['selectedState']);
+        $this->assertDatabaseHas('customers', $data);
     }
 
     //  Verify that a duplicate customer ID cannot be created

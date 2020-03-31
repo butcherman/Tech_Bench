@@ -11,6 +11,8 @@ matrix:
       env: setup=lowest
     - php: 7.3
       env: setup=lowest
+      php: 7.4
+      env: setup=lowest
 
 sudo: false
 
@@ -30,13 +32,10 @@ before_script:
     - cp tests/.env.travis .env
     - travis_retry composer self-update
     - travis_retry composer install --no-interaction
-    # - pear install pear/PHP_CodeSniffer
-    # - phpenv rehash
-    # - npm install npm@latest -g
-    # - npm install -g jshint
     - npm install
     - php artisan key:generate
     - php artisan migrate --seed
+    - php artisan ziggy:generate
     - npm run production
 
 script:

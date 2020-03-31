@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateUserRolePermissionsTable extends Migration
 {
@@ -24,6 +24,7 @@ class CreateUserRolePermissionsTable extends Migration
             $table->foreign('perm_type_id')->references('perm_type_id')->on('user_role_permission_types')->onUpdate('cascade');
         });
 
+        //  Setup the default role permissions
         $defaults = [
             1 => [
                 1  => 1,

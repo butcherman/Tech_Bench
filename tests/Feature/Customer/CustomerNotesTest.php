@@ -41,6 +41,25 @@ class CustomerNotesTest extends TestCase
         $response->assertJsonStructure([['cust_id', 'note_id', 'description', 'subject']]);
     }
 
+    //  Test get notes when the parent has notes too
+    public function test_get_notes_from_parent()
+    {
+        $child = factory(Customers::class)->create([
+            'parent_id' => $this->cust->cust_id,
+        ]);
+        $notes = factory(CustomerNotes::class, 3)->create([
+            'cust_id' => $this->cust->cust_id,
+            'shared'  => 1,
+        ]);
+
+        $user = $this->getTech();
+        $response = $this->actingAs($user)->get(route('customer.notes.show', $child->cust_id));
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([['cust_id', 'note_id', 'description', 'subject']]);
+        $response->assertJsonCount(3);
+    }
+
     //  Test adding notes as a guest
     public function test_add_note_as_guest()
     {
@@ -73,6 +92,29 @@ class CustomerNotesTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertJson(['success' => true]);
+    }
+
+    //  Test adding note as tech to a child customer
+    public function test_add_note_to_child()
+    {
+        $user = $this->getTech();
+        $child = factory(Customers::Class)->create([
+            'parent_id' => $this->cust->cust_id,
+        ]);
+        $data = [
+            'cust_id' => $child->cust_id,
+            'title'   => 'Here is a new note',
+            'note'    => 'Here is some note content',
+            'shared'  => 'true',
+            'urgent'  => true
+        ];
+
+        $response = $this->actingAs($user)->post(route('customer.notes.store'), $data);
+
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+
+        //  TODO - make sure that the new note actually has the parent as the cust_id
     }
 
     //  Test adding a note with validation errors
@@ -121,6 +163,30 @@ class CustomerNotesTest extends TestCase
         ];
 
         $response = $this->actingAs($user)->put(route('customer.notes.update', $this->note->note_id), $data);
+
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
+    //  Test updating note by linking to parent
+    public function test_update_note_link_to_parent()
+    {
+        $user = $this->getTech();
+        $child = factory(Customers::class)->create([
+            'parent_id' => $this->cust->cust_id,
+        ]);
+        $note = factory(CustomerNotes::class)->create([
+            'cust_id' => $child->cust_id
+        ]);
+        $data = [
+            'cust_id' => $child->cust_id,
+            'title'   => 'Here is a new note',
+            'note'    => 'Here is some note content',
+            'urgent'  => true,
+            'shared'  => 'true',
+        ];
+
+        $response = $this->actingAs($user)->put(route('customer.notes.update', $note->note_id), $data);
 
         $response->assertSuccessful();
         $response->assertJson(['success' => true]);

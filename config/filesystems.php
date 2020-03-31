@@ -40,6 +40,5 @@ return [
         'links'      => env('LINK_FOLDER', DIRECTORY_SEPARATOR.'links'),
         'company'    => env('COMP_FOLDER', DIRECTORY_SEPARATOR.'company'),
         'max_size'   => env('MAX_UPLOAD',  1600),    //  Megabytes = Default = 1600 - 2GB
-        'chunk_size' => env('CHUNK_SIZE',  500000), //  Bytes = Default = 500000 = 0.5Mb
     ],
 ];

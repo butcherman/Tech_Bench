@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class SystemDataFields extends Model
 {
     protected $primaryKey = 'field_id';
-    protected $fillable = ['sys_id', 'data_type_id', 'order'];
-    protected $hidden = ['order', 'created_at', 'updated_at'];
+    protected $fillable   = ['sys_id', 'data_type_id', 'order'];
+    protected $hidden     = ['order', 'created_at', 'updated_at'];
 
     public function SystemDataFieldTypes()
     {

@@ -24,6 +24,7 @@ class CustomerSystemsController extends Controller
     //  Get the possible system types that can be assigned to the customer
     public function index()
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
         $sysList = new CategoriesCollection(SystemCategories::with('SystemTypes')->with('SystemTypes.SystemDataFields.SystemDataFieldTypes')->get());
 
         return $sysList;
@@ -32,6 +33,8 @@ class CustomerSystemsController extends Controller
     //  Store a new system for the customer
     public function store(Request $request)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'cust_id' => 'required',
             'system'  => 'required'
@@ -40,7 +43,7 @@ class CustomerSystemsController extends Controller
 
         //  Determine if the system is supposed to be added for the parent, or this site
         $details = Customers::find($request->cust_id);
-        if($details->parent_id && $request->shared == 'true')
+        if($details->parent_id && $request->shared == 1)
         {
             $request->cust_id = $details->parent_id;
         }
@@ -66,15 +69,15 @@ class CustomerSystemsController extends Controller
             ]);
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::info('New Customer System Added - Customer ID-'.$request->cust_id.' System ID-'.$request->system);
-        Log::debug('Submitted System Data', $request->toArray());
+        Log::info('New Customer System Added by '.Auth::user()->user_id.' - Customer ID - '.$request->cust_id.' System ID - '.$request->system);
         return response()->json(['success' => true]);
     }
 
     //  Get the list of systems attached to the customer
     public function show($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         $sysList = CustomerSystems::where('cust_id', $id)
                     ->with('SystemTypes')
                     ->with('SystemDataFields')
@@ -102,6 +105,8 @@ class CustomerSystemsController extends Controller
     // Update the customers system data
     public function update(Request $request, $id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+
         $request->validate([
             'cust_id'    => 'required',
             'system'    => 'required',
@@ -130,21 +135,19 @@ class CustomerSystemsController extends Controller
             ]);
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::notice('Customer System Updated.  Cust ID-'.$request->custID.' System ID-'.$request->sysstem.' User ID-'.Auth::user()->user_id);
-        Log::debug('Submitted Data - ID:'.$id.' - ', $request->toArray());
+        Log::info('Customer System Updated.  Cust ID-'.$request->custID.' System ID-'.$request->sysstem.' by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
     //  Delete a system attached to a customer
     public function destroy($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         // return response('deleted '.$id);
         $system = CustomerSystems::find($id);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::notice('Customer System Deleted for Customer ID-'.$system->cust_id.' by User ID-'.Auth::user()->user_id.'. System ID-'.$id);
-        Log::debug('System Data', $system->toArray());
+        Log::notice('Customer System Deleted for Customer ID-'.$system->cust_id.' by '.Auth::user()->full_name.'. System ID-'.$id);
 
         $system->delete();
 
