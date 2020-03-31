@@ -156,7 +156,7 @@ class AdminController extends Controller
                 return response()->json(['success' => true]);
             }
 
-            Log::error('Role '.$request->name.' could not be Edited by '.Auth::user()->full_name);
+            Log::warning('Role '.$request->name.' could not be Edited by '.Auth::user()->full_name);
             return response()->json(['success' => false, 'reason' => 'Unable to Edit this Role']);
         }
 

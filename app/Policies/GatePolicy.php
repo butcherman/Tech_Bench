@@ -54,7 +54,7 @@ class GatePolicy
             ->get();
 
         $allow = $data->isEmpty() ? 'Denied' : 'Allowed';
-        Log::debug('User ' . $user->full_name . ' is trying to access admin link.  Result - ' . $allow);
+        Log::debug('User ' . $user->full_name . ' is trying to see admin link.  Result - ' . $allow);
 
         return  $data->isEmpty() ? false : true;
     }
@@ -78,6 +78,10 @@ class GatePolicy
 
         $allow = $data->isEmpty() ? 'false' : 'true';
         Log::debug('User '.$user->full_name.' is trying to access '.$task.'.  Result - ' . $allow);
+        if ($allow === 'Denied')
+        {
+            Log::alert('User ' . $user->full_name . ' was denied from accessing '.$task.' link.');
+        }
 
         return  $data->isEmpty() ? false : true;
     }

@@ -176,7 +176,7 @@ class UserController extends Controller
         //  Make sure that the user is not trying to edit someone with more permissions
         if ($user->role_id < Auth::user()->role_id)
         {
-            Log::notice('User '.Auth::user()->full_name.' tried to update a user that has more permissions than they do.  This request was denied.');
+            Log::warning('User '.Auth::user()->full_name.' tried to update a user that has more permissions than they do.  This request was denied.');
             return abort(403);
         }
 
@@ -253,7 +253,7 @@ class UserController extends Controller
         ]);
 
         //  Update the user's role
-        Log::notice('User information for '.$request->first_name.' '.$request->last_name.' (ID: '.$id.') has been updated by '.Auth::user()->full_name);
+        Log::info('User information for '.$request->first_name.' '.$request->last_name.' (ID: '.$id.') has been updated by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
@@ -300,7 +300,7 @@ class UserController extends Controller
             $reason  = 'Password for ' . $user->full_name . ' successfully reset.';
         }
 
-        Log::notice('User ID-' . $request->user_id . ' password chagned by ' . Auth::user()->Full_name, [
+        Log::info('User ID-' . $request->user_id . ' password chagned by ' . Auth::user()->Full_name, [
             'success' => $success,
             'reason'  => $reason,
         ]);
