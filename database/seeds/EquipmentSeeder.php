@@ -57,7 +57,7 @@ class EquipmentSeeder extends Seeder
                 SystemDataFields::create([
                     'sys_id' => $sys->sys_id,
                     'data_type_id' => $i,
-                    'order' => $i-1,
+                    'order' => $i - 1,
                 ]);
             }
         }

@@ -23,7 +23,7 @@ class CustomerContactsController extends Controller
     //  Store a new customer contact
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'cust_id' => 'required',
@@ -70,7 +70,7 @@ class CustomerContactsController extends Controller
 
         //  Determine if there is a parent site with shared contacts
         $parent = Customers::find($id)->parent_id;
-        if ($parent)
+        if($parent)
         {
             $parentList = CustomerContacts::where('cust_id', $parent)
                 ->where('shared', 1)
@@ -121,7 +121,7 @@ class CustomerContactsController extends Controller
     //  Update an existing Customer Contact
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'cust_id' => 'required',
@@ -130,7 +130,8 @@ class CustomerContactsController extends Controller
 
         //  Update the primary contact information
         $details = Customers::find($request->cust_id);
-        if ($details->parent_id && $request->shared == 'true') {
+        if ($details->parent_id && $request->shared == 'true')
+        {
             $request->cust_id = $details->parent_id;
         }
 

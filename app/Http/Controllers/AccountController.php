@@ -36,7 +36,7 @@ class AccountController extends Controller
     //  Submit the new user settings
     public function submit(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data: ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data: ', $request->toArray());
 
         $request->validate([
             'username'   => 'required',
@@ -65,7 +65,7 @@ class AccountController extends Controller
     //  Submit the user notification settings
     public function notifications(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name . '. Submitted Data: ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data: ', $request->toArray());
 
         UserSettings::where('user_id', Auth::user()->user_id)->update(
         [
@@ -91,7 +91,7 @@ class AccountController extends Controller
     //  Submit the change password form
     public function submitPassword(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         //  Validate form data
         $request->validate([

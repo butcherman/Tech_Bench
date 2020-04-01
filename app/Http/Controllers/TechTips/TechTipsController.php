@@ -37,7 +37,7 @@ class TechTipsController extends Controller
     //  Tech Tips landing page
     public function index()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $tipTypes = new TechTipTypesCollection(TechTipTypes::all());
         $sysList  = new CategoriesCollection(SystemCategories::with('SystemTypes')->with('SystemTypes.SystemDataFields.SystemDataFieldTypes')->get());
@@ -50,10 +50,10 @@ class TechTipsController extends Controller
     //  Search for an existing tip - If no paramaters, return all tips
     public function search(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         //  See if there are any search paramaters entered
-        if (!$request->search['searchText'] && !isset($request->search['articleType']) && !isset($request->search['systemType'])) {
+        if(!$request->search['searchText'] && !isset($request->search['articleType']) && !isset($request->search['systemType'])) {
             //  No search paramaters, send all tech tips
             $tips = new TechTipsCollection(
                 TechTips::orderBy('created_at', 'DESC')
@@ -62,21 +62,21 @@ class TechTipsController extends Controller
             );
         } else {
             $article = isset($request->search['articleType']) ? true : false;
-            $system  = isset($request->search['systemType'])  ? true : false;
+            $system  = isset($request->search['systemType']) ? true : false;
             //  Search paramaters, filter results
             $tips = new TechTipsCollection(
                 TechTips::orderBy('created_at', 'DESC')
                     //  Search by id or a phrase in the title or description
-                    ->where(function ($query) use ($request) {
-                        $query->where('subject', 'like', '%' . $request->search['searchText'] . '%')
-                            ->orWhere('tip_id', 'like', '%' . $request->search['searchText'] . '%')
-                            ->orWhere('description', 'like', '%' . $request->search['searchText'] . '%');
+                    ->where(function($query) use ($request) {
+                        $query->where('subject', 'like', '%'.$request->search['searchText'].'%')
+                            ->orWhere('tip_id', 'like', '%'.$request->search['searchText'].'%')
+                            ->orWhere('description', 'like', '%'.$request->search['searchText'].'%');
                     })
-                    ->when($article, function ($query) use ($request) {
+                    ->when($article, function($query) use ($request) {
                         $query->whereIn('tip_type_id', $request->search['articleType']);
                     })
-                    ->when($system, function ($query) use ($request) {
-                        $query->whereHas('SystemTypes', function ($query) use ($request) {
+                    ->when($system, function($query) use ($request) {
+                        $query->whereHas('SystemTypes', function($query) use ($request) {
                             $query->whereIn('system_types.sys_id', $request->search['systemType']);
                         });
                     })
@@ -91,7 +91,7 @@ class TechTipsController extends Controller
     //  Process an image that is attached to a tech tip
     public function processImage(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $this->authorize('hasAccess', 'Create Tech Tip');
 
@@ -110,7 +110,7 @@ class TechTipsController extends Controller
     //  Create a new Tech Tip form
     public function create()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         $this->authorize('hasAccess', 'Create Tech Tip');
 
         $typesArr   = new TechTipTypesCollection(TechTipTypes::all());
@@ -126,7 +126,7 @@ class TechTipsController extends Controller
     //  Submit the form to create a new tech tip
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $this->authorize('hasAccess', 'Create Tech Tip');
 
@@ -151,7 +151,7 @@ class TechTipsController extends Controller
         $save = $receiver->receive();
 
         //  See if the uploade has finished
-        if ($save->isFinished()) {
+        if($save->isFinished()) {
             $this->saveFile($save->getFile());
 
             return 'uploaded successfully';
@@ -160,7 +160,7 @@ class TechTipsController extends Controller
         //  Get the current progress
         $handler = $save->handler();
 
-        Log::debug('File being uploaded.  Percentage done - ' . $handler->getPercentageDone());
+        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
             'status' => true
@@ -199,7 +199,7 @@ class TechTipsController extends Controller
         }
 
         //  Log stored file
-        Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath . DIRECTORY_SEPARATOR . $fileName]);
+        Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
         return $fileID;
     }
 
@@ -252,8 +252,7 @@ class TechTipsController extends Controller
         if(!$tipData->supressEmail)
         {
             $details = TechTips::find($tipID);
-            $users = User::whereHas('UserSettings', function($query)
-            {
+            $users = User::whereHas('UserSettings', function($query) {
                 $query->where('em_tech_tip', 1);
             })->get();
 
@@ -267,7 +266,7 @@ class TechTipsController extends Controller
     //  Details controller - will move to the show controller with just the tech tip id
     public function details($id, $subject)
     {
-        if (session()->has('newTipFile')) {
+        if(session()->has('newTipFile')) {
             session()->forget('newTipFile');
         }
 
@@ -277,7 +276,7 @@ class TechTipsController extends Controller
     //  Show the details about the tech tip
     public function show($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $tipData = TechTips::where('tip_id', $id)->with('User')->with('SystemTypes')->first();
 
@@ -299,9 +298,9 @@ class TechTipsController extends Controller
     //  Add or remove this tip as a favorite of the user
     public function toggleFav($action, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
-        switch ($action) {
+        switch($action) {
             case 'add':
                 TechTipFavs::create([
                     'user_id' => Auth::user()->user_id,
@@ -325,12 +324,12 @@ class TechTipsController extends Controller
     //  Edit an existing tech tip
     public function edit($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $this->authorize('hasAccess', 'Edit Tech Tip');
         $tipData = TechTips::where('tip_id', $id)->with('User')->with('SystemTypes')->with('TechTipTypes')->first();
 
-        if (!$tipData) {
+        if(!$tipData) {
             return view('tips.tipNotFound');
         }
 
@@ -349,7 +348,7 @@ class TechTipsController extends Controller
     //  Store the edited Tech Tip
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $this->authorize('hasAccess', 'Edit Tech Tip');
 
@@ -363,9 +362,9 @@ class TechTipsController extends Controller
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
         //  Verify if there is a file to be processed or not
-        if ($receiver->isUploaded() === false || $request->_completed) {
+        if($receiver->isUploaded() === false || $request->_completed) {
             $this->storeUpdatedTip($request, $id);
-            Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+            Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
             return response()->json(['tip_id' => $id]);
         }
 
@@ -373,7 +372,7 @@ class TechTipsController extends Controller
         $save = $receiver->receive();
 
         //  See if the uploade has finished
-        if ($save->isFinished()) {
+        if($save->isFinished()) {
             $this->saveFile($save->getFile(), $id);
 
             return 'uploaded successfully';
@@ -382,7 +381,7 @@ class TechTipsController extends Controller
         //  Get the current progress
         $handler = $save->handler();
 
-        Log::debug('File being uploaded.  Percentage done - ' . $handler->getPercentageDone());
+        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
             'status' => true
@@ -450,7 +449,7 @@ class TechTipsController extends Controller
     //  Soft delet the Tech Tip
     public function destroy($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $this->authorize('hasAccess', 'Delete Tech Tip');
 

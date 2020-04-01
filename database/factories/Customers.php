@@ -5,7 +5,7 @@
 use App\Customers;
 use Faker\Generator as Faker;
 
-$factory->define(Customers::class, function (Faker $faker) {
+$factory->define(Customers::class, function(Faker $faker) {
     return [
         'cust_id'   => $faker->unique()->numberBetween(50, 10000),
         'parent_id' => null,

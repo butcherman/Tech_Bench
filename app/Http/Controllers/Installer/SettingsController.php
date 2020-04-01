@@ -26,14 +26,14 @@ class SettingsController extends Controller
     //  Bring up the change logo form
     public function logoSettings()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         return view('installer.logoSettings');
     }
     //  Submit the new company logo
     public function submitLogo(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'file' => 'mimes:jpeg,bmp,png,jpg,gif'
@@ -45,17 +45,17 @@ class SettingsController extends Controller
 
         Settings::firstOrCreate(
             ['key'   => 'app.logo'],
-            ['key'   => 'app.logo', 'value' => '/storage/img/' . $fileName]
-        )->update(['value' => '/storage/img/' . $fileName]);
+            ['key'   => 'app.logo', 'value' => '/storage/img/'.$fileName]
+        )->update(['value' => '/storage/img/'.$fileName]);
 
-        Log::notice('A new company logo has been uploaded by ' . Auth::user()->full_name);
+        Log::notice('A new company logo has been uploaded by '.Auth::user()->full_name);
 
-        return response()->json(['url' => '/storage/img/' . $fileName]);
+        return response()->json(['url' => '/storage/img/'.$fileName]);
     }
 
     public function configuration()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $settings = collect([
             // 'url'      => config('app.url'),
@@ -71,7 +71,7 @@ class SettingsController extends Controller
 
     public function submitConfiguration(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'timezone' => 'required',
@@ -80,14 +80,16 @@ class SettingsController extends Controller
         ]);
 
         //  Update the site timezone
-        if (config('app.timezone') !== $request->timezone) {
+        if (config('app.timezone') !== $request->timezone)
+        {
             Settings::firstOrCreate(
                 ['key'   => 'app.timezone'],
                 ['key'   => 'app.timezone', 'value' => $request->timezone]
             )->update(['value' => $request->timezone]);
         }
         //  Update the maximum file upload size
-        if (config('filesystems.paths.max_size') !== $request->filesize) {
+        if (config('filesystems.paths.max_size') !== $request->filesize)
+        {
             Settings::firstOrCreate(
                 ['key'   => 'filesystems.paths.max_size'],
                 ['key'   => 'filesystems.paths.max_size', 'value' => $request->filesize]
@@ -101,7 +103,7 @@ class SettingsController extends Controller
     //  System backups index page
     public function backupsIndex()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         return view('installer.backupsIndex');
     }
@@ -109,7 +111,7 @@ class SettingsController extends Controller
     //  Retrieve the list of backups
     public function getBackups()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $backups = Storage::disk('backup')->files();
         $buArray = [];
@@ -133,7 +135,7 @@ class SettingsController extends Controller
     //  Delete a backup
     public function delBackup($name)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         Storage::disk('backup')->delete($name);
 
@@ -144,7 +146,7 @@ class SettingsController extends Controller
     //  Download a backup
     public function downloadBackup($name)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         if(Storage::disk('backup')->exists($name))
         {
@@ -159,7 +161,7 @@ class SettingsController extends Controller
     //  Create a new backup
     public function runBackup()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         Artisan::call('tb-backup:run');
 
@@ -175,7 +177,7 @@ class SettingsController extends Controller
     //  Email Settings form
     public function emailSettings()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $settings = collect([
             'host'       => config('mail.host'),
@@ -194,7 +196,7 @@ class SettingsController extends Controller
     //  Send a test email
     public function sendTestEmail(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         //  TODO - fix this and make it work
         return response()->json(['success' => false]);
@@ -257,7 +259,7 @@ class SettingsController extends Controller
     //  Submit the test email form
     public function submitEmailSettings(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'host'       => 'required',

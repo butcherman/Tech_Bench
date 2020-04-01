@@ -23,7 +23,7 @@ class TechTipCommentsController extends Controller
     //  Add a new Tech Tip Comment
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'comment' => 'required',
@@ -48,7 +48,7 @@ class TechTipCommentsController extends Controller
     //  Retrieve the comments for a tech tip
     public function show($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         return TechTipComments::where('tip_id', $id)->with('user')->get();
     }
@@ -56,7 +56,7 @@ class TechTipCommentsController extends Controller
     //  Delete a comment
     public function destroy($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         TechTipComments::find($id)->delete();
 

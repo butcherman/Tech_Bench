@@ -21,7 +21,7 @@ class CustomerNotesController extends Controller
     //  Store a new customer note
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'cust_id' => 'required|numeric',
@@ -31,7 +31,8 @@ class CustomerNotesController extends Controller
 
         //  Determine if the note should go to the customer, or its parent
         $details = Customers::find($request->cust_id);
-        if ($details->parent_id && $request->shared == 'true') {
+        if ($details->parent_id && $request->shared == 'true')
+        {
             $request->cust_id = $details->parent_id;
         }
 
@@ -55,7 +56,8 @@ class CustomerNotesController extends Controller
 
         //  Determine if there is a parent site with shared notes
         $parent = Customers::find($id)->parent_id;
-        if ($parent) {
+        if ($parent)
+        {
             $parentList = CustomerNotes::where('cust_id', $parent)->where('shared', 1)->orderBy('urgent', 'desc')->get();
 
             $notes = $notes->merge($parentList);
@@ -77,7 +79,8 @@ class CustomerNotesController extends Controller
         ]);
 
         $details = Customers::find($request->cust_id);
-        if ($details->parent_id && $request->shared == 'true') {
+        if ($details->parent_id && $request->shared == 'true')
+        {
             $request->cust_id = $details->parent_id;
         }
 
@@ -98,7 +101,7 @@ class CustomerNotesController extends Controller
     {
         CustomerNotes::find($id)->delete();
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::notice('Customer Note ID - '.$id.' deleted by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }

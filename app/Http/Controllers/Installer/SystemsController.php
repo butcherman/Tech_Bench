@@ -18,7 +18,7 @@ class SystemsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
+        $this->middleware(function($request, $next) {
             $this->authorize('hasAccess', 'Manage Equipment');
             return $next($request);
         });
@@ -120,7 +120,7 @@ class SystemsController extends Controller
         $fields = SystemDataFieldTypes::all();
         $cat = SystemCategories::where('name', str_replace('-', ' ', $cat))->first();
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.newSystem', [
             'cat'      => $cat,
             'dataList' => $fields,
@@ -131,12 +131,11 @@ class SystemsController extends Controller
     public function edit($id)
     {
         $fields = SystemDataFieldTypes::all();
-        $system = SystemTypes::where('sys_id', $id)->with(['SystemDataFields' => function($query)
-        {
+        $system = SystemTypes::where('sys_id', $id)->with(['SystemDataFields' => function($query) {
             $query->join('system_data_field_types', 'system_data_fields.data_type_id', '=', 'system_data_field_types.data_type_id');
         }])->withCount('SystemDataFields')->first();
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
         return view('installer.editSystem', [
             'system'   => $system,
             'dataList' => $fields,
@@ -209,16 +208,16 @@ class SystemsController extends Controller
     }
 
     //  Delete an existing system - note this will fail if the system has any customers or tech tips assigned to it
-   public function destroy($id)
-   {
-       //
-       try {
+    public function destroy($id)
+    {
+        //
+        try {
             SystemTypes::find($id)->delete();
             return response()->json(['success' => true, 'reason' => 'Equipment Successfully Deleted']);
         }
-        catch (\Illuminate\Database\QueryException $e)
+        catch(\Illuminate\Database\QueryException $e)
         {
             return response()->json(['success' => false, 'reason' => 'Cannot delete this equipment.  It has Customers or Tech Tips assigned to it.  Please delete those first.']);
         }
-   }
+    }
 }

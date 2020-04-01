@@ -25,7 +25,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except('initializeUser', 'submitInitializeUser');
-        $this->middleware(function ($request, $next) {
+        $this->middleware(function($request, $next) {
             $this->authorize('hasAccess', 'Manage Users');
             return $next($request);
         });
@@ -37,7 +37,7 @@ class UserController extends Controller
         $userList = User::with('LastUserLogin')->get()->makeVisible('user_id');
         $route    = 'admin.user.edit';
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::debug('User list:', $userList->toArray());
         return view('admin.userIndex', [
             'userList' => $userList,
@@ -48,7 +48,7 @@ class UserController extends Controller
     //  Check if a username is in use
     public function checkUser($username, $type)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data:', ['username' => $username, 'type' => $type]);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data:', ['username' => $username, 'type' => $type]);
         $user = User::where($type, $username)->first();
 
         if(!$user)
@@ -91,7 +91,7 @@ class UserController extends Controller
             }
         }
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::debug('Role data: ', $roleArr);
         return view('admin.newUser', [
             'roles' => $roleArr
@@ -101,7 +101,7 @@ class UserController extends Controller
     //  Submit the Add User form
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data:', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data:', $request->toArray());
         //  Validate the new user form
         $request->validate([
             'role'       => 'required|numeric|exists:user_role_types,role_id',
@@ -145,7 +145,7 @@ class UserController extends Controller
     //  List all inactive users
     public function show($type)
     {
-        $route    = '';
+        $route = '';
 
         if($type !== 'inactive')
         {
@@ -156,7 +156,7 @@ class UserController extends Controller
                 ->makeVisible('user_id'));
                 // dd($userList);
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         return view('admin.userDeleted', [
             'userList' => $userList,
@@ -171,10 +171,10 @@ class UserController extends Controller
         $roles = UserRoleType::all();
         $user  = new UserResource(User::findOrFail($id));
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         //  Make sure that the user is not trying to edit someone with more permissions
-        if ($user->role_id < Auth::user()->role_id)
+        if($user->role_id < Auth::user()->role_id)
         {
             Log::warning('User '.Auth::user()->full_name.' tried to update a user that has more permissions than they do.  This request was denied.');
             return abort(403);
@@ -182,12 +182,18 @@ class UserController extends Controller
 
         //  Good to go - get role information
         $roleArr = [];
-        foreach ($roles as $role) {
-            if ($role->role_id == 1 && Auth::user()->role_id != 1) {
+        foreach ($roles as $role)
+        {
+            if ($role->role_id == 1 && Auth::user()->role_id != 1)
+            {
                 continue;
-            } else if ($role->role_id == 2 && Auth::user()->role_id > 1) {
+            }
+            else if ($role->role_id == 2 && Auth::user()->role_id > 1)
+            {
                 continue;
-            } else {
+            }
+            else
+            {
                 // $roleArr[$role->role_id] = $role->name;
                 $roleArr[] = [
                     'value' => $role->role_id,
@@ -208,7 +214,7 @@ class UserController extends Controller
     //  Reactivate a disabled user
     public function reactivateUser($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         User::withTrashed()->where('user_id', $id)->restore();
 
         Log::info('User ID '.$id.' reactivated by '.Auth::user()->full_name);
@@ -220,7 +226,7 @@ class UserController extends Controller
     //  Submit the update user form
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data:', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data:', $request->toArray());
         $request->validate([
             'username'   => [
                                 'required',
@@ -238,7 +244,7 @@ class UserController extends Controller
         //  Update the user data
         $user = User::findOrFail($id);
 
-        if ($user->role_id < Auth::user()->role_id)
+        if($user->role_id < Auth::user()->role_id)
         {
             return abort(403);
         }
@@ -260,7 +266,7 @@ class UserController extends Controller
     //  Submit the change password form
     public function submitPassword(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $request->validate([
             'password' => 'required|string|min:6|confirmed',
@@ -279,17 +285,20 @@ class UserController extends Controller
         $user = User::find($request->user_id);
 
         //  Verify this is a valid user ID
-        if (!$user) {
+        if (!$user)
+        {
             $success = false;
             $reason  = 'Cannot find user with this ID';
         }
         //  Make sure that the user is not trying to deactivate someone with more permissions
-        else if ($user->role_id < Auth::user()->role_id) {
+        else if ($user->role_id < Auth::user()->role_id)
+        {
             $success = false;
             $reason  = 'You cannot change password for a user with higher permissions that you.  If this user has locked themselves out, have then use the reset link on the login page.';
         }
         //  Good to go - update user password
-        else {
+        else
+        {
             //  Update the user data
             $user->update(
             [
@@ -297,10 +306,10 @@ class UserController extends Controller
                 'password_expires' => $nextChange
             ]);
             $success = true;
-            $reason  = 'Password for ' . $user->full_name . ' successfully reset.';
+            $reason  = 'Password for '.$user->full_name.' successfully reset.';
         }
 
-        Log::info('User ID-' . $request->user_id . ' password chagned by ' . Auth::user()->Full_name, [
+        Log::info('User ID-'.$request->user_id.' password chagned by '.Auth::user()->Full_name, [
             'success' => $success,
             'reason'  => $reason,
         ]);
@@ -343,7 +352,7 @@ class UserController extends Controller
             $reason  = 'User '.$user->full_name.' successfully deactivated.';
         }
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::notice('User ID-'.$id.' disabled by '.Auth::user()->full_name, [
             'success' => $success,
             'reason'  => $reason,

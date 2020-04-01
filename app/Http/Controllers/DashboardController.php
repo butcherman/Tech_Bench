@@ -35,12 +35,12 @@ class DashboardController extends Controller
         Log::debug('Tech Tip Favorites for ' . Auth::user()->full_name . ': ', $tipFavs->toArray());
 
         return view('dashboard', [
-           'custFavs'    => $custFavs,
-           'tipFavs'     => $tipFavs,
-           'tips30'      => $tips30Days,
-           'tipsAll'     => $tipsTotal,
-           'activeLinks' => $activeLinks,
-           'totalLinks'  => $totalLinks,
+            'custFavs'    => $custFavs,
+            'tipFavs'     => $tipFavs,
+            'tips30'      => $tips30Days,
+            'tipsAll'     => $tipsTotal,
+            'activeLinks' => $activeLinks,
+            'totalLinks'  => $totalLinks,
         ]);
     }
 

@@ -23,7 +23,7 @@ class CustomerFilesController extends Controller
     //  Store a new customer file
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
         //  Validate the form
         $request->validate([
             'cust_id' => 'required',
@@ -41,7 +41,7 @@ class CustomerFilesController extends Controller
         {
             //  Determine if the note should go to the customer, or its parent
             $details = Customers::find($request->cust_id);
-            if ($details->parent_id && $request->shared == 'true')
+            if($details->parent_id && $request->shared == 'true')
             {
                 $request->cust_id = $details->parent_id;
             }
@@ -90,7 +90,7 @@ class CustomerFilesController extends Controller
     //  Get the files for the customer
     public function show($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $files = CustomerFiles::where('cust_id', $id)
             ->with('Files')
@@ -100,7 +100,7 @@ class CustomerFilesController extends Controller
 
         //  Determine if there is a parent site with shared files
         $parent = Customers::find($id)->parent_id;
-        if ($parent) {
+        if($parent) {
             $parentList = Customerfiles::where('cust_id', $parent)
                 ->where('shared', 1)
                 ->with('Files')
@@ -117,7 +117,7 @@ class CustomerFilesController extends Controller
     //  Update the information of the file, but not the file itself
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'cust_id' => 'required',
@@ -126,7 +126,7 @@ class CustomerFilesController extends Controller
         ]);
 
         $details = Customers::find($request->cust_id);
-        if ($details->parent_id && $request->shared == 1) {
+        if($details->parent_id && $request->shared == 1) {
             $request->cust_id = $details->parent_id;
         }
 
@@ -149,7 +149,7 @@ class CustomerFilesController extends Controller
         $fileID = $data->file_id;
         $data->delete();
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::info('File Deleted For Customer ID-'.$data->custID.' by '.Auth::user()->full_name.'.  File ID - '.$id);
 
         //  Delete from system if no longer in use
