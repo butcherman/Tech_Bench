@@ -22,9 +22,9 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 grid-margin stretch-card d-md-flex d-none">
+    <div class="col-md-4 grid-margin d-md-flex d-none pr-0">
         <div class="row w-100">
-            <div class="col-12">
+            <div class="col-12 pr-0">
                 <div class="card">
                     <div class="card-body">
                         <p class="card-title">Tech Tips:</p>
@@ -34,8 +34,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                <div class="card">
+            <div class="col-12 pr-0">
+                <div class="card h-100">
                     <div class="card-body">
                         <p class="card-title">File Links:</p>
                         <h3>{{$activeLinks}} Active File Links</h3>
@@ -54,7 +54,7 @@
                 <div class="row">
                 @foreach($custFavs as $fav)
                     <div class="col-xl-3 col-sm-6 mb-3">
-                        <div class="card text-white o-hidden h-100 bookmark-card">
+                        <div class="card text-white o-hidden h-100 bookmark-card overflow-hidden">
                             <a href="{{route('customer.details', [$fav->cust_id, $fav->Customers->name])}}" class="card-body text-white">
                                 <div class="card-body-icon">
                                     <i class="fas fa-user-tie"></i>
@@ -77,7 +77,7 @@
                 <div class="row">
                     @foreach($tipFavs as $tip)
                     <div class="col-xl-3 col-sm-6 mb-3">
-                        <div class="card text-white o-hidden h-100 bookmark-card">
+                        <div class="card text-white o-hidden h-100 bookmark-card overflow-hidden">
                             <a href="{{route('tip.details', [$tip->tip_id, urlencode($tip->TechTips->subject)])}}" class="card-body text-white">
                                 <div class="card-body-icon">
                                     <i class="fas fa-tools"></i>
