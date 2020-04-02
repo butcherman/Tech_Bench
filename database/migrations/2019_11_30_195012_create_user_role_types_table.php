@@ -15,7 +15,7 @@ class CreateUserRoleTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_role_types', function (Blueprint $table) {
+        Schema::create('user_role_types', function(Blueprint $table) {
             $table->increments('role_id');
             $table->text('name');
             $table->text('description');
@@ -25,10 +25,10 @@ class CreateUserRoleTypesTable extends Migration
 
         //  Insert default data
         DB::table('user_role_types')->insert([
-            ['role_id' => 1, 'name' => 'Installer',     'description' => 'All Access Administrator',    'allow_edit' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['role_id' => 2, 'name' => 'Administrator', 'description' => 'System Administrator',        'allow_edit' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['role_id' => 3, 'name' => 'Reports',       'description' => 'User who can run reports',    'allow_edit' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            ['role_id' => 4, 'name' => 'Tech',          'description' => 'Standard User',               'allow_edit' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['role_id' => 1, 'name' => 'Installer', 'description' => 'All Access Administrator', 'allow_edit' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['role_id' => 2, 'name' => 'Administrator', 'description' => 'System Administrator', 'allow_edit' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['role_id' => 3, 'name' => 'Reports', 'description' => 'User who can run reports', 'allow_edit' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['role_id' => 4, 'name' => 'Tech', 'description' => 'Standard User', 'allow_edit' => 0, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
         ]);
 
         //  Update the users table to include the 'user_role' column

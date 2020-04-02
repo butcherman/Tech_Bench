@@ -79,7 +79,7 @@ class backupRun extends Command
         //  Create the archive and place the version file in it
         $this->zip = Zip::create(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.$backupName);
         $this->bar->advance();
-        $this->zip->add(config('filesystems.disks.backup.root') . DIRECTORY_SEPARATOR . 'version.txt');
+        $this->zip->add(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.'version.txt');
         $this->bar->advance();
         $this->zip->add(base_path().DIRECTORY_SEPARATOR.'.env');
         $this->bar->advance();
@@ -113,9 +113,9 @@ class backupRun extends Command
         'mysqldump tb-dev5-data -u root');
         $process->run();
 
-        File::put(config('filesystems.disks.backup.root') . DIRECTORY_SEPARATOR . 'database.sql', $process->getOutput());
+        File::put(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.'database.sql', $process->getOutput());
         $this->bar->advance();
-        $this->zip->add(config('filesystems.disks.backup.root') . DIRECTORY_SEPARATOR . 'database.sql');
+        $this->zip->add(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.'database.sql');
         $this->bar->advance();
     }
 

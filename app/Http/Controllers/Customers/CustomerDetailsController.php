@@ -33,7 +33,7 @@ class CustomerDetailsController extends Controller
     //  Submit the new customer form
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
         $this->authorize('hasAccess', 'Add Customer');
 
         $request->validate([
@@ -72,7 +72,7 @@ class CustomerDetailsController extends Controller
         ]);
 
         Log::notice('New Customer ID-'.$request->custID.' created by '.Auth::user()->full_name);
-        return response()->json(['success' => true, 'cust_id' => $custData->cust_id ]);
+        return response()->json(['success' => true, 'cust_id' => $custData->cust_id]);
     }
 
     //  Show the customer details
@@ -91,7 +91,7 @@ class CustomerDetailsController extends Controller
         $fileTypes = new CustomerFileTypesCollection(CustomerFileTypes::all());
         $parent    = $custDetails->parent_id ? Customers::find($custDetails->parent_id)->name : null;
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('customer.details', [
             'cust_id'     => $custDetails->cust_id,
             'details'     => $custDetails->toJson(),
@@ -106,7 +106,7 @@ class CustomerDetailsController extends Controller
     //  Update the customer details
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'name'     => 'required',
@@ -135,7 +135,7 @@ class CustomerDetailsController extends Controller
     //  Link a site to a parent site
     public function linkParent(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'parent_id' => 'required|numeric|exists:customers,cust_id',
@@ -144,7 +144,7 @@ class CustomerDetailsController extends Controller
 
         $parentsParent = Customers::find($request->parent_id);
 
-        if ($parentsParent->parent_id)
+        if($parentsParent->parent_id)
         {
             $request->parent_id = $parentsParent->parent_id;
         }
@@ -160,7 +160,7 @@ class CustomerDetailsController extends Controller
 
     public function removeParent($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Customers::find($id)->update(['parent_id' => null]);
         Log::info('Parent Customer ID was removed for Customer ID '.$id.' by '.Auth::user()->full_name);
     }
@@ -168,7 +168,7 @@ class CustomerDetailsController extends Controller
     //  Deactivate a customer - note this will not remove it from the database, but make it inaccessable
     public function destroy($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         $this->authorize('hasAccess', 'Deactivate Customer');
 
         //  Remove the customer from any users favorites

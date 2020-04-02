@@ -34,7 +34,7 @@ class CustomerController extends Controller
     //  Search for a customer
     public function search(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'sortField' => 'required',
@@ -49,12 +49,12 @@ class CustomerController extends Controller
                     //  Search the name, dba name, and cust id columns
                     ->where(function($query) use ($request)
                     {
-                        $query->where('name', 'like', '%' . $request->name . '%')
-                            ->orWhere('cust_id', 'like', '%' . $request->name . '%')
-                            ->orWhere('dba_name', 'like', '%' . $request->name . '%');
+                        $query->where('name', 'like', '%'.$request->name.'%')
+                            ->orWhere('cust_id', 'like', '%'.$request->name.'%')
+                            ->orWhere('dba_name', 'like', '%'.$request->name.'%');
                     })
                     //  Search the city column
-                    ->where('city', 'like', '%' . $request->city . '%')
+                    ->where('city', 'like', '%'.$request->city.'%')
                     //  Include the customers systems
                     ->with('CustomerSystems.SystemTypes')
                     //  If the system field is present - search for system type
@@ -79,7 +79,7 @@ class CustomerController extends Controller
     //  Check to see if a customer ID already exists
     public function checkID($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         $cust = Customers::find($id);
 
         if($cust === null)

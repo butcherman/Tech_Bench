@@ -25,7 +25,7 @@ class CheckPasswordExpire
             if(Auth::user()->password_expires !== null)
             {
                 $passExp = new Carbon((Auth::user()->password_expires));
-                if(Carbon::now() > $passExp )
+                if(Carbon::now() > $passExp)
                 {
                     Log::notice('User '.Auth::user()->full_name.' is being forced to change their password.');
                     $request->session()->flash('change_password', 'change_password');

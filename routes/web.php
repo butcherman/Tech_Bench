@@ -42,8 +42,7 @@ Route::delete('notifications/{id}',  'DashboardController@delNotification') ->na
 /*
 *   File Link Routes
 */
-Route::prefix('links')->name('links.')->group(function ()
-{
+Route::prefix('links')->name('links.')->group(function () {
     //  Resource controllers for base access
     Route::resource('data',           'FileLinks\FileLinksController');
     Route::get('new',                 'FileLinks\FileLinksController@create')     ->name('new');
@@ -68,8 +67,7 @@ Route::get('file-links',                'FileLinks\GuestLinksController@index') 
 /*
 *   Customer Routes
 */
-Route::prefix('customer')->name('customer.')->group(function()
-{
+Route::prefix('customer')->name('customer.')->group(function() {
     //  Customer Files
     Route::resource('files',                   'Customers\CustomerFilesController');
     //  Custome Notes
@@ -97,8 +95,7 @@ Route::prefix('customer')->name('customer.')->group(function()
 */
 Route::resource('tips',                       'TechTips\TechTipsController');
 Route::post('submit-edit/{id}',               'TechTips\TechTipsController@update')      ->name('tips.submit-edit');
-Route::prefix('tip')->name('tip.')->group(function()
-{
+Route::prefix('tip')->name('tip.')->group(function() {
     Route::resource('comments',               'TechTips\TechTipCommentsController');
     Route::get('search',                      'TechTips\TechTipsController@search')      ->name('search');
     Route::get('details/{id}/{name}',         'TechTips\TechTipsController@details')     ->name('details');
@@ -110,11 +107,9 @@ Route::prefix('tip')->name('tip.')->group(function()
 /*
 *   Administration Routes
 */
-Route::prefix('admin')->name('admin.')->group(function ()
-{
+Route::prefix('admin')->name('admin.')->group(function () {
     //  Routes for Tech Bench Add-ons
-    Route::prefix('modules')->name('module.')->group(function()
-    {
+    Route::prefix('modules')->name('module.')->group(function() {
         Route::delete('delete-staged/{name}', 'Installer\ModuleController@delStaged') ->name('deleteStaged');
         Route::post('upload',                 'Installer\ModuleController@upload')    ->name('upload');
         Route::get('activate/{name}',         'Installer\ModuleController@activate')  ->name('activate');

@@ -41,7 +41,7 @@ class ModuleController extends Controller
             ];
         }
         $mods = Module::allDisabled();
-        foreach ($mods as $name => $mod) {
+        foreach($mods as $name => $mod) {
             $moduleList[] = [
                 'name' => $name,
                 'status' => 'Disabled',
@@ -78,8 +78,8 @@ class ModuleController extends Controller
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
         //  Verify that the upload is valid and being processed
-        if ($receiver->isUploaded() === false) {
-            Log::error('Upload File Missing - ' .
+        if($receiver->isUploaded() === false) {
+            Log::error('Upload File Missing - '.
                 /** @scrutinizer ignore-type */
                 $request->toArray());
             throw new UploadMissingFileException();
@@ -89,7 +89,7 @@ class ModuleController extends Controller
         $save = $receiver->receive();
 
         //  See if the uploade has finished
-        if ($save->isFinished()) {
+        if($save->isFinished()) {
             $this->saveFile($save->getFile());
 
             return 'uploaded successfully';
@@ -98,8 +98,8 @@ class ModuleController extends Controller
         //  Get the current progress
         $handler = $save->handler();
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by User ID-' . Auth::user()->user_id);
-        Log::debug('File being uploaded.  Percentage done - ' . $handler->getPercentageDone());
+        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
+        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
         return response()->json([
             'done'   => $handler->getPercentageDone(),
             'status' => true
@@ -110,7 +110,7 @@ class ModuleController extends Controller
     //  Save a file attached to the link
     private function saveFile(UploadedFile $file)
     {
-        $filePath = config('filesystems.disks.staging.root') . DIRECTORY_SEPARATOR . 'modules'.DIRECTORY_SEPARATOR;
+        $filePath = config('filesystems.disks.staging.root').DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
 
         //  Clean the file and store it
         $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
@@ -133,7 +133,7 @@ class ModuleController extends Controller
         $module->extract(config('modules.paths.modules').DIRECTORY_SEPARATOR.$modName);
         $module->close();
 
-        Artisan::call('module:enable',  ['module' => $modName]);
+        Artisan::call('module:enable', ['module' => $modName]);
         Artisan::call('module:migrate', ['module' => $modName]);
         $this->delStaged($name);
 

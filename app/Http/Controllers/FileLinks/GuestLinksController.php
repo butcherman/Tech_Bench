@@ -51,11 +51,11 @@ class GuestLinksController extends Controller
 
         if($files == 0 && $details->allow_upload === 'No')
         {
-            Log::warning('Visitor ' . \Request::ip() . ' visited a link that they cannot do anything with.  Hash - ' . $id);
+            Log::warning('Visitor '.\Request::ip().' visited a link that they cannot do anything with.  Hash - '.$id);
             return view('links.guestDeadLink');
         }
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip());
+        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip());
         return view('links.guestDetails', [
             'hash'    => $id,
             'details' => $details,
@@ -67,7 +67,7 @@ class GuestLinksController extends Controller
     //  Get the guest available files for the link
     public function getFiles($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip());
+        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip());
         $linkID = FileLinks::where('link_hash', $id)->first()->link_id;
 
         $files = new FileLinkFilesCollection(
@@ -84,7 +84,7 @@ class GuestLinksController extends Controller
     //  Upload new file
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip().'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip().'. Submitted Data - ', $request->toArray());
         $request->validate(['name' => 'required', 'file' => 'required']);
 
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));

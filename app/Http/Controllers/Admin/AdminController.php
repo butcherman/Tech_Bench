@@ -26,7 +26,7 @@ class AdminController extends Controller
     //  Admin landing page
     public function index()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('admin.index');
     }
 
@@ -36,8 +36,7 @@ class AdminController extends Controller
         $userLinks = new UserCollection(
                         User::withCount([
                                 'FileLinks',
-                                'FileLinks as expired_file_links_count' => function($query)
-                                {
+                                'FileLinks as expired_file_links_count' => function($query) {
                                     $query->where('expire', '<', Carbon::now());
                                 }
                             ])
@@ -45,7 +44,7 @@ class AdminController extends Controller
                             ->makeVisible('user_id')
                     );
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('admin.userLinks', [
             'links' => $userLinks,
         ]);
@@ -56,7 +55,7 @@ class AdminController extends Controller
     {
         $user = User::find($id);
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::debug('User Link Data:', $user->toArray());
         return view('admin.linkDetails', [
             'user' => $user,
@@ -67,7 +66,7 @@ class AdminController extends Controller
     public function passwordPolicy()
     {
         $this->authorize('hasAccess', 'Manage Users');
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('admin.userSecurity', [
             'passExpire' => config('auth.passwords.settings.expire'),
         ]);
@@ -76,7 +75,7 @@ class AdminController extends Controller
     //  Submit the form to change the user password policy
     public function submitPolicy(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data:', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data:', $request->toArray());
         $this->authorize('hasAccess', 'Manage Users');
 
         $request->validate([
@@ -90,7 +89,8 @@ class AdminController extends Controller
         Log::notice('User '.Auth::user()->full_name.' updated User Password Policy');
 
         //  If the setting is changing from never to xx days, update all users
-        if ($request->passExpire == 0) {
+        if ($request->passExpire == 0)
+        {
             User::whereNotNull('password_expires')->update([
                 'password_expires' => null
             ]);
@@ -111,8 +111,7 @@ class AdminController extends Controller
     {
         $this->authorize('hasAccess', 'Manage User Roles');
         Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-        $roles = UserRoleType::with(['UserRolePermissions' => function($query)
-        {
+        $roles = UserRoleType::with(['UserRolePermissions' => function($query) {
             $query->join('user_role_permission_types', 'user_role_permission_types.perm_type_id', '=', 'user_role_permissions.perm_type_id');
         }])->get();
         $perms = UserRolePermissionTypes::all();
@@ -127,7 +126,7 @@ class AdminController extends Controller
 
     public function submitRoleSettings(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data: ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data: ', $request->toArray());
         $this->authorize('hasAccess', 'Manage User Roles');
 
         $request->validate([
@@ -165,7 +164,7 @@ class AdminController extends Controller
             'name'        => $request->name,
             'description' => $request->description,
         ]);
-        foreach ($request->permissions as $perm)
+        foreach($request->permissions as $perm)
         {
             UserRolePermissions::create([
                 'role_id'      => $role->role_id,

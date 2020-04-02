@@ -47,7 +47,7 @@ class FileLinksController extends Controller
     //  Ajax call to show the links for a specific user
     public function find($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         //  Verify if the user is trying to pull their own links
         if($id == 0)
@@ -55,7 +55,7 @@ class FileLinksController extends Controller
             $id = Auth::user()->user_id;
         }
         //  If the user is trying to pull someone elses links, they must be able to manage users
-        else if ($id != Auth::user()->user_id)
+        else if($id != Auth::user()->user_id)
         {
             $this->authorize('hasAccess', 'manage_users');
         }
@@ -72,14 +72,14 @@ class FileLinksController extends Controller
     //  Create a new file link form
     public function create()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('links.newLink');
     }
 
     //  Submit the new file link form
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'name'       => 'required',
@@ -153,7 +153,7 @@ class FileLinksController extends Controller
     //  Create the new file link
     private function createLink($data)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $data->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $data->toArray());
 
         //  Generate a random hash to use as the file link and make sure it is not already in use
         do
@@ -181,7 +181,7 @@ class FileLinksController extends Controller
     //  Save a file attached to the link
     private function saveFile(UploadedFile $file)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.'_tmp';
 
@@ -209,7 +209,7 @@ class FileLinksController extends Controller
     //  Show details about a file link
     public function details($id, /** @scrutinizer ignore-unused */ $name)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         //  Verify that the link is a valid link
         $linkData = FileLinks::find($id);
@@ -234,14 +234,14 @@ class FileLinksController extends Controller
     {
         $linkData = new FileLinksResource(FileLinks::find($id));
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return $linkData;
     }
 
     //  Update the link's details
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'name'       => 'required',
@@ -271,7 +271,7 @@ class FileLinksController extends Controller
         ]);
 
         Log::info('User '.Auth::user()->full_name.' disabled link ID - '.$id);
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
@@ -294,7 +294,7 @@ class FileLinksController extends Controller
 
         FileLinks::find($id)->delete();
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::info('File link deleted by '.Auth::user()->full_name, ['link_id' => $id, 'user_id' => Auth::user()->user_id]);
 
         return response()->json([

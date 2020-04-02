@@ -92,7 +92,7 @@ class backupRestore extends Command
         /** @scrutinizer ignore-type */
         $this->argument('filename'));
         $this->baseName = $fileParts['filename'];
-        $this->archive = Zip::open(config('filesystems.disks.backup.root') . DIRECTORY_SEPARATOR .
+        $this->archive = Zip::open(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.
         /** @scrutinizer ignore-type */
         $this->argument('filename'));
         // if (!$this->archive->has('version.txt')) {

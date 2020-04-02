@@ -67,8 +67,8 @@ class UpdatesForVersion50 extends Migration
     private function updatePhoneIcons()
     {
         $newIcons = [
-            ['description' => 'Home',   'icon_class' => 'fas fa-home'],
-            ['description' => 'Work',   'icon_class' => 'fas fa-briefcase'],
+            ['description' => 'Home', 'icon_class' => 'fas fa-home'],
+            ['description' => 'Work', 'icon_class' => 'fas fa-briefcase'],
             ['description' => 'Mobile', 'icon_class' => 'fas fa-mobile-alt'],
         ];
 
@@ -84,7 +84,8 @@ class UpdatesForVersion50 extends Migration
     //  Added the ability to set an expiration date for user passwords - will force them to change after this expires
     private function addPasswordExpiresColumn()
     {
-        if(!Schema::hasColumn('users', 'password_expires')) {
+        if(!Schema::hasColumn('users', 'password_expires'))
+        {
             Schema::table('users', function(Blueprint $table) {
                 $table->timestamp('password_expires')
                     ->nullable()
@@ -100,7 +101,7 @@ class UpdatesForVersion50 extends Migration
         {
             if(!Schema::hasColumn('users', 'role_id'))
             {
-                Schema::table('users', function (Blueprint $table) {
+                Schema::table('users', function(Blueprint $table) {
                     $table->integer('role_id')->after('user_id')->unsigned()->default(4);
                     $table->foreign('role_id')->references('role_id')->on('user_role_descriptions')->onUpdate('cascade');
                 });
@@ -120,7 +121,8 @@ class UpdatesForVersion50 extends Migration
     //  Added a 'hidden' attribute to system customer data types to allow passwords to not be viewed unless clicked or focus
     private function addHiddenColumn()
     {
-        if(!Schema::hasColumn('system_data_field_types', 'hidden')) {
+        if(!Schema::hasColumn('system_data_field_types', 'hidden'))
+        {
             Schema::table('system_cust_data_types', function(Blueprint $table) {
                 $table->boolean('hidden')
                     ->default(0)
@@ -132,7 +134,8 @@ class UpdatesForVersion50 extends Migration
     //  Update the File links table - add cust_id and note column
     private function addColumnsToFileLinksTable()
     {
-        if(!Schema::hasColumn('file_links', 'cust_id')) {
+        if(!Schema::hasColumn('file_links', 'cust_id'))
+        {
             Schema::table('file_links', function(Blueprint $table) {
                 $table->integer('cust_id')
                     ->unsigned()
@@ -141,7 +144,8 @@ class UpdatesForVersion50 extends Migration
                 $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');
             });
         }
-        if(!Schema::hasColumn('file_links', 'note')) {
+        if(!Schema::hasColumn('file_links', 'note'))
+        {
             Schema::table('file_links', function(Blueprint $table) {
                 $table->longText('note')
                     ->nullable()
@@ -149,7 +153,8 @@ class UpdatesForVersion50 extends Migration
             });
             //  Migrate the instructions from the old table to the new column
             $instructions = DB::select('SELECT * FROM `file_link_instructions`');
-            foreach($instructions as $ins) {
+            foreach($instructions as $ins)
+            {
                 FileLinks::find($ins->link_id)->update([
                     'note' => $ins->instruction
                 ]);
@@ -160,7 +165,8 @@ class UpdatesForVersion50 extends Migration
     //  Add Notes column to the file links files table
     private function addNotesColumnToFileLinkFiles()
     {
-        if(!Schema::hasColumn('file_link_files', 'note')) {
+        if(!Schema::hasColumn('file_link_files', 'note'))
+        {
             Schema::table('file_link_files', function(Blueprint $table) {
                 $table->longText('note')
                     ->nullable()
@@ -168,7 +174,8 @@ class UpdatesForVersion50 extends Migration
             });
             //  Migrate the existing notes to the new table
             $notes = DB::select('SELECT * FROM `file_link_notes`');
-            foreach($notes as $note) {
+            foreach($notes as $note)
+            {
                 FileLinkFiles::where('file_id', $note->file_id)->update([
                     'note' => $note->note
                 ]);
@@ -179,7 +186,8 @@ class UpdatesForVersion50 extends Migration
     //  Add the documentation column to the tech tips table
     private function migrateSystemDocumentation()
     {
-        if(!Schema::hasColumn('tech_tips', 'tip_type_id')) {
+        if(!Schema::hasColumn('tech_tips', 'tip_type_id'))
+        {
             Schema::table('tech_tips', function(Blueprint $table) {
                 $table->bigInteger('tip_type_id')->unsigned()->after('public')->default(1);
                 $table->foreign('tip_type_id')->references('tip_type_id')->on('tech_tip_types')->onUpdate('cascade');
@@ -187,7 +195,8 @@ class UpdatesForVersion50 extends Migration
 
             //  Move all of the system files over to the tech tips table
             $sysFiles = DB::select('SELECT * FROM `system_files`');
-            foreach($sysFiles as $sysFile) {
+            foreach($sysFiles as $sysFile)
+            {
                 $newTip = TechTips::create([
                     'user_id'       => $sysFile->user_id,
                     'public'        => 0,
@@ -281,7 +290,8 @@ class UpdatesForVersion50 extends Migration
     //  Remove the system files and system file types table
     private function removeSystemFilesTables()
     {
-        if(Schema::hasTable('system_files')) {
+        if(Schema::hasTable('system_files'))
+        {
             Schema::table('system_files', function(Blueprint $table) {
                 $table->dropForeign(['sys_id']);
                 $table->dropForeign(['type_id']);
@@ -327,8 +337,8 @@ class UpdatesForVersion50 extends Migration
     //  Add soft deletes to tech tips table to prevent accidental deletes
     private function addSoftDeleteToTechTips()
     {
-        if (!Schema::hasColumn('tech_tips', 'deleted_at')) {
-            Schema::table('tech_tips', function (Blueprint $table) {
+        if(!Schema::hasColumn('tech_tips', 'deleted_at')) {
+            Schema::table('tech_tips', function(Blueprint $table) {
                 $table->softDeletes()->after('description');
             });
         }
@@ -339,14 +349,13 @@ class UpdatesForVersion50 extends Migration
     {
         if(!Schema::hasColumn('users', 'deleted_at'))
         {
-            Schema::table('users', function(Blueprint $table)
-            {
+            Schema::table('users', function(Blueprint $table) {
                 $table->softDeletes()->after('password_expires');
             });
             //  Migrate over all deactivated users
             DB::update('UPDATE `users` SET `deleted_at` = "'.Carbon::now().'" WHERE `active` = 0');
             //  Remove the Active column
-            Schema::table('users', function (Blueprint $table) {
+            Schema::table('users', function(Blueprint $table) {
                 $table->dropColumn('active');
             });
         }
@@ -365,27 +374,27 @@ class UpdatesForVersion50 extends Migration
         }
         if(!Schema::hasColumn('customer_systems', 'shared'))
         {
-            Schema::table('customer_systems', function (Blueprint $table)
+            Schema::table('customer_systems', function(Blueprint $table)
             {
                 $table->boolean('shared')->default(0)->after('sys_id');
             });
         }
-        if (!Schema::hasColumn('customer_contacts', 'shared'))
+        if(!Schema::hasColumn('customer_contacts', 'shared'))
         {
-            Schema::table('customer_contacts', function (Blueprint $table)
+            Schema::table('customer_contacts', function(Blueprint $table)
             {
                 $table->boolean('shared')->default(0)->after('cust_id');
             });
         }
-        if (!Schema::hasColumn('customer_notes', 'shared'))
+        if(!Schema::hasColumn('customer_notes', 'shared'))
         {
-            Schema::table('customer_notes', function (Blueprint $table)
+            Schema::table('customer_notes', function(Blueprint $table)
             {
                 $table->boolean('shared')->default(0)->after('user_id');
             });
         }
-        if (!Schema::hasColumn('customer_files', 'shared')) {
-            Schema::table('customer_files', function (Blueprint $table) {
+        if(!Schema::hasColumn('customer_files', 'shared')) {
+            Schema::table('customer_files', function(Blueprint $table) {
                 $table->boolean('shared')->default(0)->after('user_id');
             });
         }

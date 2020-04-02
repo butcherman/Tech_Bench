@@ -34,7 +34,7 @@ class LinkFilesController extends Controller
     //  Add a file to the file link
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'linkID' => 'required|exists:file_links,link_id'
@@ -98,14 +98,14 @@ class LinkFilesController extends Controller
             ->get()
         );
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return $files;
     }
 
     //  Move a file to a customer file
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'fileID'   => 'required',
@@ -166,7 +166,7 @@ class LinkFilesController extends Controller
         //  Delete the file from the folder (not, will not delete if in use elsewhere)
         Files::deleteFile($fileID);
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         Log::info('File ID-'.$fileData->file_id.' deleted for Link ID-'.$fileData->link_id.' by '.Auth::user()->user_id);
         return response()->json(['success' => true]);
     }

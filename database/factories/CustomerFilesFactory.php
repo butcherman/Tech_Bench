@@ -5,7 +5,7 @@
 use App\CustomerFiles;
 use Faker\Generator as Faker;
 
-$factory->define(CustomerFiles::class, function (Faker $faker) {
+$factory->define(CustomerFiles::class, function(Faker $faker) {
     return [
         'file_id'      => factory(App\Files::class)->create()->file_id,
         'file_type_id' => factory(App\CustomerFileTypes::class)->create()->file_type_id,

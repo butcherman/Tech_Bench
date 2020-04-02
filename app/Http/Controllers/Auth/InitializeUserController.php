@@ -25,26 +25,26 @@ class InitializeUserController extends Controller
         //  Validate the hash token
         $user = UserInitialize::where('token', $hash)->get();
 
-        if ($user->isEmpty()) {
-            Log::warning('Visitor at IP Address ' . \Request::ip() . ' tried to access invalid initialize hash - ' . $hash);
+        if($user->isEmpty()) {
+            Log::warning('Visitor at IP Address '.\Request::ip().' tried to access invalid initialize hash - '.$hash);
             return abort(404);
         }
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address .'.\Request::ip());
-        Log::debug('Link Hash -' . $hash);
+        Log::debug('Route '.Route::currentRouteName().' visited by IP Address .'.\Request::ip());
+        Log::debug('Link Hash -'.$hash);
         return view('account.initializeUser', ['hash' => $hash]);
     }
 
     //  Submit the initialize user form
     public function submitInitializeUser(Request $request, $hash)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address -' . \Request::ip().'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by IP Address -'.\Request::ip().'. Submitted Data - ', $request->toArray());
         Log::debug('Initialize Data - ', $request->toArray());
 
         //  Verify that the link matches the assigned email address
         $valid = UserInitialize::where('token', $hash)->first();
-        if (empty($valid)) {
-            Log::warning('Visitor at IP Address ' . \Request::ip() . ' tried to submit an invalid User Initialization link - ' . $hash);
+        if(empty($valid)) {
+            Log::warning('Visitor at IP Address '.\Request::ip().' tried to submit an invalid User Initialization link - '.$hash);
             return abort(404);
         }
 
