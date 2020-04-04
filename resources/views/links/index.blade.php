@@ -23,7 +23,7 @@
     <div class="col-md-10 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <list-file-links><img src="{{asset('img/loading.svg')}}" alt="Loading..." class="d-block mx-auto"></list-file-links>
+                <list-file-links></list-file-links>
             </div>
         </div>
     </div>

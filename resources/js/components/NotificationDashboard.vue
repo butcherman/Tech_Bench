@@ -1,7 +1,7 @@
 <template>
    <div class="notification-wrapper">
        <div v-if="error">
-            <h5 class="text-center">Problem Loading Notifications...</h5>
+            <h5 class="text-center text-danger">Error...  We were unable to load your notifications</h5>
         </div>
         <div v-else-if="loading">
             <h5 class="text-center">Loading Notifications</h5>
@@ -38,6 +38,10 @@
                 unreadClass: 'unread'
             }
         },
+        created()
+        {
+            this.getNotifications();
+        },
         methods: {
             getNotifications()
             {
@@ -45,7 +49,7 @@
                     .then(res => {
                         this.notifications = res.data;
                         this.loading = false;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }).catch(error => this.error = true);
             },
             markRead(e, note)
             {
@@ -66,9 +70,5 @@
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
             }
         },
-        created()
-        {
-            this.getNotifications();
-        }
     }
 </script>

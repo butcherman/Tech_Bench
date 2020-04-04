@@ -23,8 +23,6 @@ use App\Http\Resources\FileLinks as FileLinksResource;
 
 class FileLinksController extends Controller
 {
-    private $user;
-
     //  Only authorized users have access
     public function __construct()
     {
@@ -66,6 +64,8 @@ class FileLinksController extends Controller
                 ->orderBy('expire', 'desc')->get()
         );
 
+        Log::debug('File links for User ID - '.$id.': ', array($links));
+
         return $links;
     }
 
@@ -87,6 +87,7 @@ class FileLinksController extends Controller
             'customerID' => 'exists:customers,cust_id|nullable'
         ]);
 
+        //  If there are files, process them first in their chunks
         if(!empty($request->file))
         {
             $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
@@ -98,10 +99,10 @@ class FileLinksController extends Controller
             if($save->isFinished())
             {
                 $this->saveFile($save->getFile());
-                return 'uploaded successfully';
+                return response()->json(['upload_success' => true]);
             }
 
-            //  Get the current progress
+            //  Get the current progress if the file is not done being uploaded
             $handler = $save->handler();
 
             Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
@@ -111,55 +112,49 @@ class FileLinksController extends Controller
             ]);
         }
 
-        //  If there are no files being uploaded or the file uploade process is done
-        if(isset($request->_completed) && $request->_completed)
+        // //  If there are no files being uploaded or the file uploade process is done
+        $linkID = $this->createLink($request);
+        if($request->session()->has('newLinkFile'))
         {
-            $linkID = $this->createLink($request);
-            if($request->session()->has('newLinkFile'))
+            //  If there were files uploaded to the link, process them
+            $files = session('newLinkFile');
+            $path = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
+
+            foreach($files as $file)
             {
-                //  If there were files uploaded to the link, process them
-                $files = session('newLinkFile');
-                $path = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
+                $data = Files::find($file);
+                //  Move the file to the proper folder
+                Storage::move($data->file_link.$data->file_name, $path.DIRECTORY_SEPARATOR.$data->file_name);
+                //  Update file link in DB
+                $data->update([
+                    'file_link' => $path.DIRECTORY_SEPARATOR
+                ]);
+                //  Attach file to the link
+                FileLinkFiles::create([
+                    'link_id' => $linkID,
+                    'file_id' => $data->file_id,
+                    'user_id' => Auth::user()->user_id,
+                    'upload' => 0
+                ]);
 
-                foreach($files as $file)
-                {
-                    $data = Files::find($file);
-                    //  Move the file to the proper folder
-                    Storage::move($data->file_link.$data->file_name, $path.DIRECTORY_SEPARATOR.$data->file_name);
-                    //  Update file link in DB
-                    $data->update([
-                        'file_link' => $path.DIRECTORY_SEPARATOR
-                    ]);
-                    //  Attach file to the link
-                    FileLinkFiles::create([
-                        'link_id' => $linkID,
-                        'file_id' => $data->file_id,
-                        'user_id' => Auth::user()->user_id,
-                        'upload' => 0
-                    ]);
-
-                    Log::info('File Added for link ID - '.$linkID.' by '.Auth::user()->full_name.'.  File ID-'.$data->file_id);
-                }
-
-                $request->session()->forget('newLinkFile');
+                Log::info('File Added for link ID - '.$linkID.' by '.Auth::user()->full_name.'.  File ID-'.$data->file_id);
             }
 
-            return response()->json(['link' => $linkID, 'name' => Str::slug($request->name)]);
+            $request->session()->forget('newLinkFile');
         }
 
-        return response()->json(['complete' => false]);
+        return response()->json(['link' => $linkID, 'name' => Str::slug($request->name)]);
     }
 
     //  Create the new file link
     private function createLink($data)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $data->toArray());
-
         //  Generate a random hash to use as the file link and make sure it is not already in use
         do
         {
             $hash = strtolower(Str::random(15));
             $dup  = FileLinks::where('link_hash', $hash)->get()->count();
+            Log::debug('New possible link hash - '.$hash.'. Is duplicate -> '.$dup == 0 ? 'false' : 'true');
         } while($dup != 0);
 
         //  Create the new file link
@@ -170,10 +165,10 @@ class FileLinksController extends Controller
             'link_name'    => $data->name,
             'expire'       => $data->expire,
             'allow_upload' => isset($data->allowUp) && $data->allowUp ? true : false,
-            'note'         => $data->note
+            'note'         => $data->instructions
         ]);
 
-        Log::info('File Link Created for '.Auth::user()->full_name.'.  Link ID-'.$link->link_id);
+        Log::info('File Link Created for '.Auth::user()->full_name.'.  Link Data - ', $link->toArray());
 
         return $link->link_id;
     }
@@ -181,9 +176,9 @@ class FileLinksController extends Controller
     //  Save a file attached to the link
     private function saveFile(UploadedFile $file)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
+        Log::debug('Preparing to save file. File Data - ', array($file));
         $filePath = config('filesystems.paths.links').DIRECTORY_SEPARATOR.'_tmp';
+        Log:debug('File will be saved to '.$filePath);
 
         //  Clean the file and store it
         $fileName = Files::cleanFilename($filePath, $file->getClientOriginalName());
@@ -202,7 +197,7 @@ class FileLinksController extends Controller
         session(['newLinkFile' => $fileArr]);
 
         //  Log stored file
-        Log::info('File Stored by '.Auth::user()->user_id, ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+        Log::info('File Stored by '.Auth::user()->full_name, ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR, 'file_name' => $fileName]);
         return $fileID;
     }
 
@@ -228,6 +223,16 @@ class FileLinksController extends Controller
             'file_types' => $fileTypes
         ]);
     }
+
+
+
+
+
+
+
+
+
+
 
     //  Ajax call te get JSON details of the link
     public function show($id)
@@ -265,20 +270,23 @@ class FileLinksController extends Controller
     //  Disable a file linke, but do not remove it (set the expire date to a previous date)
     public function disableLink($id)
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+
         //  update the expire date for the link
         FileLinks::find($id)->update([
             'expire' => Carbon::yesterday()
         ]);
 
         Log::info('User '.Auth::user()->full_name.' disabled link ID - '.$id);
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
     //  Delete a file link
     public function destroy($id)
     {
-        //  Remove the file from database
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+
+        //  Remove any files from database
         $data = FileLinkFiles::where('link_id', $id)->get();
         if(!$data->isEmpty())
         {
@@ -286,6 +294,7 @@ class FileLinksController extends Controller
             {
                 $fileID = $file->file_id;
                 $file->delete();
+                Log::debug('File link file ID '.$file->file_id.' deleted from Link ID '.$id);
 
                 //  Delete the file if it is no longer in use
                 Files::deleteFile($fileID);
@@ -294,8 +303,7 @@ class FileLinksController extends Controller
 
         FileLinks::find($id)->delete();
 
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-        Log::info('File link deleted by '.Auth::user()->full_name, ['link_id' => $id, 'user_id' => Auth::user()->user_id]);
+        Log::info('File link ID - '.$id.' deleted by '.Auth::user()->full_name);
 
         return response()->json([
             'success' => true

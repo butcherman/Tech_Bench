@@ -24,7 +24,6 @@ import Vue                  from 'vue';
 import BootstrapVue         from 'bootstrap-vue';
 import VueGoodTablePlugin   from 'vue-good-table';
 import route                from 'ziggy';
-import { Ziggy }            from '../assets/js/ziggy';
 import vue2Dropzone         from 'vue2-dropzone';
 import VuePhoneNumberInput  from 'vue-phone-number-input';
 import Multiselect          from 'vue-multiselect';
@@ -32,6 +31,8 @@ import vSelect              from 'vue-select';
 import draggable            from 'vuedraggable';
 import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 import Avatar               from 'vue-avatar'
+import { Ziggy }            from '../assets/js/ziggy';
+import { AtomSpinner }      from 'epic-spinners'
 
 /*
 *   The TinyMCE library
@@ -54,6 +55,9 @@ Vue.use(VueGoodTablePlugin);
 Vue.use(BootstrapVue);
 Vue.use(vueFilterPrettyBytes);
 
+/*
+*   Third party components
+*/
 Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('editor', require('@tinymce/tinymce-vue').default);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
@@ -61,6 +65,7 @@ Vue.component('multiselect', Multiselect);
 Vue.component('v-select', vSelect);
 Vue.component('draggable',    draggable);
 Vue.component('avatar', Avatar);
+Vue.component('atom-spinner', AtomSpinner);
 
 Vue.mixin({
     methods: {
@@ -76,7 +81,9 @@ Vue.mixin({
 /*
 *   Global Components
 */
-Vue.component('go-back', require('./components/GoBack.vue').default);
+Vue.component('go-back',     require('./components/GoBack.vue').default);
+Vue.component('file-upload', require('./components/fileUpload.vue').default);
+Vue.component('form-submit', require('./components/formSubmit.vue').default);
 
 /*
 *   Dashboard and Template Components
@@ -103,6 +110,7 @@ Vue.component('customer-systems',  require('./components/customer/customerSystem
 Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
 Vue.component('customer-notes',    require('./components/customer/CustomerNotes.vue').default);
 Vue.component('customer-files',    require('./components/customer/customerFiles.vue').default);
+Vue.component('customer-search',   require('./components/customer/customerSearch.vue').default);
 
 /*
 *   Vue Tech Tip Components

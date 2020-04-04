@@ -10,7 +10,10 @@
     <div class="col-md-10 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-            <new-file-link-form expire_date="{{\Carbon\Carbon::now()->addDays(30)->format('Y-m-d')}}"><img src="{{asset('img/loading.svg')}}" alt="Loading..." class="d-block mx-auto"></new-file-link-form>
+                <new-file-link-form
+                    expire_date="{{\Carbon\Carbon::now()->addDays(30)->format('Y-m-d')}}"
+                >
+                </new-file-link-form>
             </div>
         </div>
     </div>

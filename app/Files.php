@@ -16,8 +16,10 @@ class Files extends Model
     //  Remove any illegal characters from filename and make sure it is unique
     public static function cleanFileName($path, $fileName)
     {
+        Log::debug('Preparing to clean a file. Current Name - '.$fileName.'. Current Path - '.$path);
         //  Remove all spaces
         $fileName = str_replace(' ', '_', $fileName);
+        Log::debug('Cleaned Filename. Current Name - ' . $fileName . '. Current Path - ' . $path);
 
         //  Determine if the filename already exists
         if(Storage::exists($path.DIRECTORY_SEPARATOR.$fileName))
@@ -42,6 +44,7 @@ class Files extends Model
             //  Increase the number until one that is not in use is found
             do
             {
+                Log::debug('Filename ' . $fileName . ' already exists.  Appending name.');
                 $fileName = $base.'('.++$number.')'.$extension;
             } while(Storage::exists($path.DIRECTORY_SEPARATOR.$fileName));
         }
@@ -52,6 +55,7 @@ class Files extends Model
     //  Delete a file from both the database and file system
     public static function deleteFile($fileID)
     {
+        Log::debug('Attempting to delete file ID '.$fileID);
         $fileLink = '';
         try
         {
@@ -63,14 +67,14 @@ class Files extends Model
         catch(\Illuminate\Database\QueryException $e)
         {
             //  Unable to remove file from the database
-            Log::info('File Unable to delete - '.$e, ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
+            Log::warning('Attempt to delete file failed.  Reason - '.$e.'. Additional Data - ', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
             return false;
         }
 
         //  Delete the file from the storage system
         Storage::delete($fileLink);
 
-        Log::info('File Deleted', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
+        Log::notice('File deleted by '.Auth::user()->full_name.'. Additional Information - ', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
         return true;
     }
 }

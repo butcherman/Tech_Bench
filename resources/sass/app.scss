@@ -30,6 +30,10 @@ $fa-font-path: '../fonts/font-awesome';
     }
 }
 
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
+}
+
 /*
 *   Bookmarks
 */
@@ -93,10 +97,9 @@ $fa-font-path: '../fonts/font-awesome';
 /*
 *   Dashboard
 */
-
 .notification-wrapper {
     height: 40vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     .notification-message {
         &.unread {
             font-weight: bold !important;
@@ -123,6 +126,13 @@ $fa-font-path: '../fonts/font-awesome';
                     transform: rotate(15deg);
         }
     }
+}
+
+/*
+*   File Links
+*/
+#link_expire__value_ {
+    line-height: 1rem;
 }
 
 
