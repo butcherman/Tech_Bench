@@ -31,6 +31,7 @@ import vSelect              from 'vue-select';
 import draggable            from 'vuedraggable';
 import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 import Avatar               from 'vue-avatar'
+import VueClipboard         from 'vue-clipboard2';
 import { Ziggy }            from '../assets/js/ziggy';
 import { AtomSpinner }      from 'epic-spinners'
 
@@ -54,6 +55,7 @@ window.axios = require('axios');
 Vue.use(VueGoodTablePlugin);
 Vue.use(BootstrapVue);
 Vue.use(vueFilterPrettyBytes);
+Vue.use(VueClipboard);
 
 /*
 *   Third party components
@@ -81,9 +83,10 @@ Vue.mixin({
 /*
 *   Global Components
 */
-Vue.component('go-back',     require('./components/GoBack.vue').default);
-Vue.component('file-upload', require('./components/fileUpload.vue').default);
-Vue.component('form-submit', require('./components/formSubmit.vue').default);
+Vue.component('go-back',       require('./components/GoBack.vue').default);
+// Vue.component('loading-modal', require('./components/LoadingModal.vue').default);
+Vue.component('file-upload',   require('./components/FileUpload.vue').default);
+Vue.component('form-submit',   require('./components/FormSubmit.vue').default);
 
 /*
 *   Dashboard and Template Components
@@ -96,6 +99,7 @@ Vue.component('notification-dashboard', require('./components/NotificationDashbo
 Vue.component('list-file-links',    require('./components/fileLinks/ListFileLinks.vue').default);
 Vue.component('new-file-link-form', require('./components/fileLinks/NewFileLink.vue').default);
 Vue.component('link-details',       require('./components/fileLinks/LinkDetails.vue').default);
+Vue.component('link-instructions',  require('./components/fileLinks/LinkInstructions.vue').default);
 Vue.component('link-files',         require('./components/fileLinks/LinkFiles.vue').default);
 Vue.component('guest-download',     require('./components/fileLinks/GuestFileDownloads.vue').default);
 Vue.component('guest-upload',       require('./components/fileLinks/GuestFileUpload.vue').default);

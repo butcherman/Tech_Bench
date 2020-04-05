@@ -125,7 +125,7 @@
                     .then(res => {
                         var url = this.route('links.details', [res.data.link, res.data.name]);
                         window.location.href = url;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }).catch(error => this.$bvModal.msgBoxOk('Create new link operation failed.  Please try again later.'));
             },
             //  Show form or cancel link to a customer ID
             linkCustomer(state)
@@ -154,7 +154,7 @@
             //  Select customer modal canceled
             selectCancel()
             {
-                if(this.form.cust.id == '')
+                if(this.form.customerID == '')
                 {
                     this.form.link = false;
                     this.custLinkMsg = null;

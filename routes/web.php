@@ -45,14 +45,16 @@ Route::delete('notifications/{id}',  'DashboardController@delNotification') ->na
 Route::prefix('links')->name('links.')->group(function () {
     //  Resource controllers for base access
     Route::resource('data',           'FileLinks\FileLinksController');
-    Route::get('new',                 'FileLinks\FileLinksController@create')     ->name('new');
-    Route::get('find/{id}',           'FileLinks\FileLinksController@find')       ->name('user');
-    Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')    ->name('details');
-    Route::get('disable/{id}',        'FileLinks\FileLinksController@disableLink')->name('disable');
+    Route::get('new',                 'FileLinks\FileLinksController@create')            ->name('new');
+    Route::get('find/{id}',           'FileLinks\FileLinksController@find')              ->name('user');
+    Route::get('instructions/{id}',   'FileLinks\FileLinksController@getInstructions')   ->name('getInstructions');
+    Route::post('instructions/{id}',  'FileLinks\FileLinksController@submitInstructions')->name('submitInstructions');
+    Route::get('details/{id}/{name}', 'FileLinks\FileLinksController@details')           ->name('details');
+    Route::get('disable/{id}',        'FileLinks\FileLinksController@disableLink')       ->name('disable');
     //  File Link Files
     Route::resource('files',          'FileLinks\LinkFilesController');
     //  Index landing page
-    Route::get('/',                   'FileLinks\FileLinksController@index')      ->name('index');
+    Route::get('/',                   'FileLinks\FileLinksController@index')             ->name('index');
 });
 
 /*

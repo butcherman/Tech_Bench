@@ -213,10 +213,11 @@ class FileLinksController extends Controller
         //  If the link is invalid, return an error page
         if(empty($linkData))
         {
-            Log::warning('User '.Auth::user()->full_name.' tried to view bad file link', ['user_id' => Auth::user()->user_id, 'link_id' => $id]);
+            Log::warning('User '.Auth::user()->full_name.' tried to view invalid file link', ['user_id' => Auth::user()->user_id, 'link_id' => $id]);
             return view('links.badLink');
         }
 
+        Log::debug('Link Data Gathered - ', $linkData->toArray());
         return view('links.details', [
             'link_id'    => $linkData->link_id,
             'cust_id'    => $linkData->cust_id,
@@ -224,22 +225,12 @@ class FileLinksController extends Controller
         ]);
     }
 
-
-
-
-
-
-
-
-
-
-
     //  Ajax call te get JSON details of the link
     public function show($id)
     {
-        $linkData = new FileLinksResource(FileLinks::find($id));
-
         Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+        $linkData = new FileLinksResource(FileLinks::find($id));
+        Log::debug('Link Data Gathered - ', array($linkData));
         return $linkData;
     }
 
@@ -257,12 +248,33 @@ class FileLinksController extends Controller
         FileLinks::find($id)->update([
             'link_name'    => $request->name,
             'expire'       => $request->expire,
-            'allow_upload' => isset($request->allowUpload) && $request->allowUpload ? true : false,
-            'cust_id'      => $request->customerTag,
-            'note'         => $request->hasInstructions ? $request->instructions : null
+            'allow_upload' => $request->allowUp,
+            'cust_id'      => $request->customerID,
         ]);
 
         Log::info('File Link Updated by '.Auth::user()->full_name, ['link_id' => $id]);
+        return response()->json(['success' => true]);
+    }
+
+    //  Retrieve the instructions attached to a link
+    public function getInstructions($linkID)
+    {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
+        $linkData = FileLinks::select('note')->where('link_id', $linkID)->first();
+        Log::debug('Link Instructions Gathered - ', array($linkData));
+
+        return $linkData;
+    }
+
+    //  Update the instructions attached to the link
+    public function submitInstructions(Request $request, $linkID)
+    {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name . '. Submitted Data - ', $request->toArray());
+
+        FileLinks::find($linkID)->update([
+            'note' => $request->instructions,
+        ]);
 
         return response()->json(['success' => true]);
     }

@@ -1,23 +1,28 @@
 <template>
-    <div class="row pad-top">
-        <div class="col-12">
-            <div class="card w-100">
-                <div class="card-header"><h5 class="card-title"><i class="fa fa-pencil pointer" id="edit-link-note" title="Edit Instructions for Customer" @click="openEdit" data-tooltip="tooltip" v-b-tooltip.hover></i> Instructions:</h5></div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-header">
+                    Link Instructions:
+                    <b-button pill variant="primary" size="sm" class="float-right" v-b-modal.edit-instructions-modal>Edit Instructions</b-button>
+                </div>
                 <div class="card-body">
-                    <div v-if="instructions == null">
-                        <h4 class="text-center">No Instructions</h4>
+                    <div v-if="error">
+                        <h5 class="text-center text-danger"><i class="fas fa-exclamation-circle"></i> Unable to load Instructions...</h5>
                     </div>
-                    <div v-else v-html=instructions></div>
+                    <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                    <div v-else v-html="note"></div>
                 </div>
             </div>
         </div>
-        <b-modal id="instructions-edit-modal" title="Edit Instructions" ref="instructionsModal" size="xl" hide-footer centered>
-             <b-form id="edit-cust-form" @submit="updateInstructions" method="post" :action=instructions_route>
-                <input type="hidden" name="_token" :value=token />
-                <div class="pt-2 pb-2">
-                    <editor :init="{plugins: 'autolink', height: 500}" v-model=instructions></editor>
-                </div>
-                <b-button type="submit" block variant="primary" :disabled="button.dis">{{button.text}}</b-button>
+        <b-modal id="edit-instructions-modal" title="Edit Link Instructions" ref="editInstructionsModal" hide-footer centered size="lg">
+            <b-form @submit="validateForm" ref="editInstructionsForm">
+                <editor v-if="form.open" :init="{plugins: 'autolink', height:500}" id="instruction-details" v-model="form.instructions"></editor>
+                <img v-else src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                <form-submit
+                    :button_text="buttonText"
+                    :submitted="submitted"
+                ></form-submit>
             </b-form>
         </b-modal>
     </div>
@@ -26,52 +31,56 @@
 <script>
     export default {
         props: [
-            'instructions_route',
+            'link_id',
         ],
         data() {
             return {
-                link_id:      '',
-                instructions: '',
-                token:        window.techBench.csrfToken,
-                button: {
-                    text: 'Update Instructions',
-                    dis:   false
+                loadDone: false,
+                error: false,
+                note: '<h5 class="text-center">No Instructions</h5>',
+                validated: false,
+                submitted: false,
+                buttonText: 'Update Instructions',
+                form: {
+                    open: false,
+                    instructions: '',
                 }
             }
         },
-        created() 
+        created()
         {
-            this.getInstruction();
+            this.getInstructions();
+            this.$root.$on('bv::modal::shown', (bvEvent, modalID) => {
+
+                this.form.open = true;
+            });
+            this.$root.$on('bv::modal::hidden', (bvEvent, modalID) => {
+                this.form.open = false;
+            });
         },
         methods: {
-            getInstruction()
+            getInstructions()
             {
-                axios.get(this.instructions_route)
+                axios.get(this.route('links.getInstructions', this.link_id))
                     .then(res => {
-                        this.instructions = res.data.note;
-                    })
-                    .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+                        this.note = res.data.note != null ? res.data.note : '<h5 class="text-center">No Instructions</h5>';
+                        this.loadDone = true;
+                        this.form.instructions = res.data.note;
+                    }).catch(error => { this.error = true; });
             },
-            openEdit()
-            {
-                this.$refs.instructionsModal.show();
-            },
-            updateInstructions(e)
+            validateForm(e)
             {
                 e.preventDefault();
-                this.button.text = 'Loading...';
-                this.button.dis  = true;
-                
-                axios.post(this.instructions_route, {
-                    note: this.instructions
-                })
-                .then(res => {
-                    this.$refs.instructionsModal.hide();
-                    this.button.text = 'Update Instructions';
-                    this.button.dis  = false;
-                })
-                .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error))
-            }
+                this.submitted = true;
+                axios.post(this.route('links.submitInstructions', this.link_id), this.form)
+                    .then(res => {
+                        this.getInstructions();
+                        this.$refs['editInstructionsModal'].hide();
+                        this.submitted = false;
+                    }).catch(error =>
+                        this.$bvModal.msgBoxOk('Update Instructions operation failed.  Please try again later.')
+                    );
+            },
         }
     }
 </script>

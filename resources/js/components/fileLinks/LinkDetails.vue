@@ -1,164 +1,101 @@
 <template>
-<div>
-    <div class="row">
-        <div class="col-md-8 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-header">Link Details</div>
-                <div class="card-body">
-                    <dl class="row h-100"  v-if="loadDone">
-                        <dt class="col-md-3 text-md-right">Link Name:</dt>
-                        <dd class="col-md-9 text-md-left">{{details.link_name}}</dd>
-                        <dt class="col-md-3 text-md-right">Customer:</dt>
-                        <dd class="col-md-9 text-md-left">{{details.cust_name}}</dd>
-                        <dt class="col-md-3 text-md-right">Expire Date:</dt>
-                        <dd class="col-md-9 text-md-left">{{details.exp_format}}</dd>
-                        <dt class="col-md-3 text-md-right">Allow Upload:</dt>
-                        <dd class="col-md-9 text-md-left">{{details.allow_upload}}</dd>
-                        <dt class="col-md-3 text-md-right">Link:</dt>
-                        <dd class="col-md-9 text-md-left"><a :href="route('file-links.show', hash)" target="_blank">{{route('file-links.show', hash)}}</a></dd>
-                    </dl>
-                    <div v-else-if="error">
-                        <h5 class="text-center">Problem Loading Data...</h5>
-                    </div>
-                    <img v-else src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-header">Actions</div>
-                <div class="card-body">
-                    <b-button block variant="primary" v-b-modal.link-edit-modal>Edit Link</b-button>
-                    <a :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+route('file-links.show', hash)"  class="btn btn-block btn-primary">Email Link</a>
-                    <b-button block variant="primary" @click="confirmDelete">Delete Link</b-button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <b-modal id="link-edit-modal" title="Edit Link Details" ref="editLinkModal" hide-footer centered size="lg" @shown="openEditForm">
-        <b-form @submit="validateForm" ref="editLinkForm" novalidate :validated="validated">
-            <input type="hidden" name="_token" :value=token />
-            <b-form-group id="name"
-                        label="Link Name:"
-                        label-for="link_name">
-                <b-form-input id="link_name"
-                            type="text"
-                            name="name"
-                            placeholder="Enter A User Friendly Name For This Link"
-                            required
-                            v-model="form.name">
-                </b-form-input>
-                <b-form-invalid-feedback>Please Enter A Name For This Link</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group id="expire"
-                        label="Expires On:"
-                        label-for="link_expire">
-                <b-form-input id="link_expire"
-                            type="date"
-                            name="expire"
-                            required
-                            v-model="form.expire">
-                </b-form-input>
-                <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
-            </b-form-group>
-            <div class="row justify-content-center mt-4">
-                <div class="col-6 col-md-2 order-2 order-md-1">
-                    <div class="onoffswitch">
-                        <input type="checkbox" name="allowUp" class="onoffswitch-checkbox" id="allowUp" v-model="form.allowUpload">
-                        <label class="onoffswitch-label" for="allowUp">
-                            <span class="onoffswitch-inner"></span>
-                            <span class="onoffswitch-switch"></span>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-4 align-self-center order-1 order-md-2">
-                    <h5 class="text-center">Allow User to Upload Files</h5>
-                </div>
-            </div>
-            <div class="row justify-content-center mt-4">
-                <div class="col-6 col-md-2 order-2 order-md-1">
-                    <div class="onoffswitch">
-                        <input type="checkbox" name="linkCustomer" class="onoffswitch-checkbox" id="linkCustomer" @change="attachCustomer" v-model="form.selectedCustomer">
-                        <label class="onoffswitch-label" for="linkCustomer">
-                            <span class="onoffswitch-inner"></span>
-                            <span class="onoffswitch-switch"></span>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-4 align-self-center order-1 order-md-2">
-                    <h5 class="text-center">{{button.customerLink}} <span id="explain-allow" class="fas fa-info-circle"></span></h5>
-                    <b-popover :target="'explain-allow'" trigger="hover" placement="right">
-                        <div class="text-center">By allowing this option, you will be able to quickly move an uploaded file to the customer's saved files.</div>
-                    </b-popover>
-                </div>
-            </div>
-            <div class="row justify-content-center mt-4">
-                <div class="col-6 col-md-2 order-2 order-md-1">
-                    <div class="onoffswitch">
-                        <input type="checkbox" name="addInstructions" class="onoffswitch-checkbox" id="addInstructions" v-model="form.hasInstructions">
-                        <label class="onoffswitch-label" for="addInstructions">
-                            <span class="onoffswitch-inner"></span>
-                            <span class="onoffswitch-switch"></span>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-4 align-self-center order-1 order-md-2">
-                    <h5 class="text-center">Add Instructions</h5>
-                </div>
-            </div>
-            <transition name="fade">
-                <div id="instructionsBlock" v-if="form.hasInstructions">
-                    <editor v-if="form.hasInstructions" :init="{plugins: 'autolink', height:500}" v-model=form.instructions></editor>
-                </div>
-            </transition>
-            <input type="hidden" name="customerID" v-model="form.customerTag">
-            <b-button type="submit" block variant="primary" class="mt-4" :disabled="button.disable">{{button.text}}</b-button>
-        </b-form>
-        <b-modal id="select-customer" title="Search For Customer" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer">
-            <b-form @submit="searchCustomer">
-                <b-input-group>
-                    <b-form-input type="text" v-model="searchParam.name" placeholder="Enter Customer Name or ID Number"></b-form-input>
-                    <b-input-group-append>
-                        <b-button varient="outline-secondary" @click="searchCustomer"><span class="fas fa-search"></span></b-button>
-                    </b-input-group-append>
-                </b-input-group>
-            </b-form>
-            <div id="search-results" class="mt-4" v-if="searchResults.length > 0">
-                <h4 class="text-center">Select A Customer</h4>
-                <b-list-group>
-                    <b-list-group-item v-for="res in searchResults" v-bind:key="res.cust_id" class="pointer" @click="selectCustomer(res)">{{res.name}}</b-list-group-item>
-                    <b-list-group-item>
-                        <div class="text-muted float-left w-auto">Showing items {{searchMeta.from}} to {{searchMeta.to}} of {{searchMeta.total}}</div>
-                        <div class="text-muted float-right w-auto">
-                            <span class="pointer" v-if="searchMeta.current_page != 1" @click="updatePage(searchMeta.current_page - 1)">
-                                <span class="fas fa-angle-double-left"></span> Previous
-                            </span>
-                            -
-                            <span class="pointer" v-if="searchMeta.current_page != searchMeta.last_page" @click="updatePage(searchMeta.current_page + 1)">
-                                Next <span class="fas fa-angle-double-right"></span>
-                            </span>
+    <div>
+        <div class="row">
+            <div class="col-md-8 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-header">Details:</div>
+                    <div class="card-body">
+                        <div v-if="error">
+                            <h5 class="text-center text-danger"><i class="fas fa-exclamation-circle"></i> Unable to load Details...</h5>
                         </div>
-                    </b-list-group-item>
-                </b-list-group>
+                        <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                        <dl class="row h-100"  v-else>
+                            <dt class="col-md-3 text-md-right">Link Name:</dt>
+                            <dd class="col-md-9 text-md-left pt-2 pt-md-0">{{details.link_name}}</dd>
+                            <dt class="col-md-3 text-md-right pt-3 pt-md-0">Customer:</dt>
+                            <dd class="col-md-9 text-md-left pt-2 pt-md-0">{{details.cust_name}}</dd>
+                            <dt class="col-md-3 text-md-right pt-3 pt-md-0">Expire Date:</dt>
+                            <dd class="col-md-9 text-md-left pt-2 pt-md-0">{{details.exp_format}}</dd>
+                            <dt class="col-md-3 text-md-right pt-3 pt-md-0">Allow Upload:</dt>
+                            <dd class="col-md-9 text-md-left pt-2 pt-md-0">{{details.allow_upload}}</dd>
+                            <dt class="col-md-3 text-md-right pt-3 pt-md-0">Link URL:</dt>
+                            <dd class="col-md-9 text-md-left pt-2 pt-md-0">
+                                <a :href="linkURL" target="_blank">{{linkURL}}</a>
+                                <b-button
+                                    pill
+                                    :variant="copyClass"
+                                    size="sm"
+                                    class="d-block d-md-inline-block"
+                                    title="Copy Link to Clipboard"
+                                    v-clipboard:copy="linkURL"
+                                    v-clipboard:success="onCopySuccess"
+                                    v-clipboard:error="onCopyError"
+                                    v-b-tooltip.hover>
+                                    <i class="fas fa-copy"></i>
+                                </b-button>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
-        </b-modal>
-    </b-modal>
-    <b-modal id="loading-modal" size="sm" ref="loading-modal" hide-footer hide-header hide-backdrop centered>
-        <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-    </b-modal>
-    <div class="row">
-        <div class="col-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-header">Link Instructions</div>
-                <div class="card-body">
-                    <span v-if="details.note === null && loadDone"><h5 class="text-center">No Instructions</h5></span>
-                    <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-                    <div v-else v-html="details.note"></div>
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-header">Actions:</div>
+                    <div class="card-body">
+                        <b-button pill block variant="primary" v-b-modal.link-edit-modal @click="resetEditForm">Edit Link</b-button>
+                        <b-button pill block variant="primary" :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+linkURL">Email Link</b-button>
+                        <b-button pill block variant="primary" @click="confirmDelete">Delete Link</b-button>
+                    </div>
                 </div>
             </div>
         </div>
+        <b-modal id="link-edit-modal" title="Edit Link Details" ref="editLinkModal" hide-footer centered size="lg">
+            <b-form @submit="validateEditForm" ref="editLinkForm" novalidate :validated="validated">
+                <div class="row">
+                    <div class="col-md-6">
+                        <b-form-group id="name"
+                                    label="Link Name:"
+                                    label-for="link_name">
+                            <b-form-input id="link_name"
+                                        type="text"
+                                        name="name"
+                                        placeholder="Enter A User Friendly Name For This Link"
+                                        required
+                                        v-model="form.name">
+                            </b-form-input>
+                            <b-form-invalid-feedback>Please Enter A Name For This Link</b-form-invalid-feedback>
+                        </b-form-group>
+                    </div>
+                    <div class="col-md-6">
+                        <b-form-group id="expire"
+                                    label="Expires On:"
+                                    label-for="link_expire">
+                            <b-form-datepicker id="link_expire"
+                                        required
+                                        v-model="form.expire">
+                            </b-form-datepicker>
+                            <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
+                        </b-form-group>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-5">
+                        <b-form-checkbox v-model="form.allowUp" switch>Allow Visitor to Upload Files</b-form-checkbox>
+                        <b-form-checkbox switch @change="linkCustomer" v-model="form.link">
+                            Link to Customer
+                            <div v-if="custLinkMsg" class="text-muted">&#123; {{custLinkMsg}} &#125;</div>
+                        </b-form-checkbox>
+                    </div>
+                </div>
+                <form-submit
+                    class="mt-3"
+                    :button_text="buttonText"
+                    :submitted="submitted"
+                ></form-submit>
+            </b-form>
+            <customer-search :show_form="showSearch" @selectedCust="updateCust" @selectCanceled="selectCancel"></customer-search>
+        </b-modal>
     </div>
-</div>
 </template>
 
 <script>
@@ -168,35 +105,27 @@
         ],
         data() {
             return {
-                token: window.techBench.csrfToken,
                 loadDone: false,
                 error: false,
-                validated: false,
-                details: [],
-                hash: '',
+                linkURL: '',
+                copyClass: 'outline-secondary',
+                details: {
+                    hash: '',
+                },
                 form: {
                     name: '',
                     expire: '',
-                    selectedCustomer: '',
-                    customerTag: '',
-                    allowUpload: '',
-                    hasInstructions: false,
+                    allowUp: true,
+                    link: false,
                     instructions: '',
+                    customerID: '',
+                    customerName: '',
                 },
-                button: {
-                    disable: false,
-                    text: 'Update Link',
-                    customerLink: 'Link To Customer'
-                },
-                searchParam: {
-                    page: '',
-                    perPage: 25,
-                    sortField: 'name',
-                    sortType: 'asc',
-                    name: '',
-                },
-                searchResults: [],
-                searchMeta: [],
+                custLinkMsg: null,
+                showSearch: false,
+                validated: false,
+                buttonText: 'Update Link Details',
+                submitted: false,
             }
         },
         created()
@@ -205,103 +134,57 @@
         },
         methods:
         {
+            //  Pull the details about the link
             getDetails()
             {
                 axios.get(this.route('links.data.show', this.link_id))
                     .then(res => {
-                        this.details = res.data;
-                        this.hash = res.data.link_hash;
-                        this.form.name = res.data.link_name;
-                        this.form.expire = res.data.exp_stamp;
-                        this.form.allowUpload = res.data.allow_upload === 'Yes' ? true : false;
-                        this.searchField = res.data.cust_id > 0 ? res.data.cust_name : '';
-                        this.form.selectedCustomer = res.data.cust_id > 0 ? true : false;
-                        this.form.instructions = res.data.note;
-                        this.button.customerLink = res.data.cust_id > 0 ? res.data.cust_name : 'Link To Customer';
                         this.loadDone = true;
+                        this.details = res.data;
+                        this.linkURL = this.route('file-links.show', this.details.link_hash);
                     }).catch(error => { this.error = true; });
             },
-            openEditForm()
+            //  Populate the Edit Details Form
+            resetEditForm()
             {
-                this.form.hasInstructions = this.form.instructions != null ? true : false;
+                this.form.name = this.details.link_name;
+                this.form.expire = this.details.exp_stamp;
+                this.form.allowUp = this.details.allow_upload === 'Yes' ? true : false;
+                if(this.details.cust_id != null)
+                {
+                    this.form.link = true;
+                    this.form.customerName = this.details.cust_name;
+                    this.form.customerID = this.details.cust_id;
+                    this.custLinkMsg = this.details.cust_name != null ? 'Linked to '+this.details.cust_name : '';
+                }
             },
-            validateForm(e)
+            //  Validate the Edit Details Form
+            validateEditForm(e)
             {
                 e.preventDefault();
+
                 if(this.$refs.editLinkForm.checkValidity() === false)
                 {
                     this.validated = true;
                 }
                 else
                 {
-                    this.submitForm();
-                }
-            },
-            submitForm()
-            {
-                this.button.text = 'Loading...';
-                this.button.disable = true;
-                this.$refs['loading-modal'].show();
-
-                axios.put(this.route('links.data.update', this.link_id), this.form)
+                    this.submitted = true;
+                    axios.put(this.route('links.data.update', this.link_id), this.form)
                     .then(res => {
                         this.getDetails();
                         this.$refs['editLinkModal'].hide();
-                        this.button.text = 'Update Link';
-                        this.button.disable = false;
-                        this.$refs['loading-modal'].hide();
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-            },
-            attachCustomer()
-            {
-                if(this.form.selectedCustomer)
-                {
-                    this.$refs.selectCustomerModal.show();
-                }
-                else
-                {
-                    this.form.customerTag = '';
-                    this.button.customerLink = 'Link To Customer';
-                    this.searchParam.name = '';
+                        this.submitted = false;
+                    }).catch(error =>
+                        this.$bvModal.msgBoxOk('Update link operation failed.  Please try again later.')
+                    );
+
                 }
             },
-            searchCustomer(e)
-            {
-                if(e)
-                {
-                    e.preventDefault();
-                    this.searchParam.page = '';
-                }
-                this.$refs['loading-modal'].show();
-                axios.get(this.route('customer.search', this.searchParam))
-                    .then(res => {
-                        this.searchResults = res.data.data;
-                        this.searchMeta = res.data.meta;
-                        this.$refs['loading-modal'].hide();
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-            },
-            updatePage(newPage)
-            {
-                this.searchParam.page = newPage;
-                this.searchCustomer();
-            },
-            selectCustomer(custData)
-            {
-                this.searchParam.name = custData.name;
-                this.form.customerTag = custData.cust_id;
-                this.button.customerLink = 'Linked to '+custData.name;
-                this.searchResults = [];
-                this.form.selectedCustomer = true;
-            },
-            cancelSelectCustomer() {
-                this.searchParam.name = '';
-                this.form.customerTag = '';
-                this.button.customerLink = 'Link to Customer';
-                this.searchResults = [];
-                this.form.selectedCustomer = false;
-            },
+            //  Verify and delete the link
             confirmDelete()
             {
+                console.log('confirm');
                 this.$bvModal.msgBoxConfirm('Are you sure?  This cannot be undone.', {
                     title: 'Please Confirm',
                     size: 'sm',
@@ -322,11 +205,55 @@
                         }
                         else
                         {
-                            alert('We are having difficulties processing your request\nPlease try again later.');
+                            this.$bvModal.msgBoxOk('Delete link operation failed.  Please try again later.');
                         }
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }).catch(error => this.$bvModal.msgBoxOk('Something bad happened.  Please try again later.'));
                 });
-            }
+            },
+            //  Successful and Error functions for copy link URL to clipboard
+            onCopySuccess()
+            {
+                this.copyClass = 'success';
+            },
+            onCopyError()
+            {
+                this.copyClass = 'danger';
+            },
+            //  Show form or cancel link to a customer ID
+            linkCustomer(state)
+            {
+                if(state)
+                {
+                    this.showSearch = true;
+                }
+                else
+                {
+                    //  If turned off, clear customer information
+                    this.showSearch = false;
+                    this.form.customerID = '';
+                    this.form.customerName = '';
+                    this.custLinkMsg = null;
+                }
+            },
+            //  Update the customer ID and Name
+            updateCust(cust)
+            {
+                this.showSearch = false;
+                this.form.customerID = cust.cust_id;
+                this.form.customerName = cust.name;
+                this.custLinkMsg = 'Linking to '+cust.name;
+                this.form.link = true;
+            },
+            //  Select customer modal canceled
+            selectCancel()
+            {
+                if(this.form.customerID == '')
+                {
+                    this.form.link = false;
+                    this.custLinkMsg = null;
+                }
+                this.showSearch = false;
+            },
         }
     }
 </script>
