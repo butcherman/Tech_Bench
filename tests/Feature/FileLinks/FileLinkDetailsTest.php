@@ -3,12 +3,10 @@
 namespace Tests\Feature\FileLinks;
 
 use App\Files;
-use App\User;
 use App\Customers;
 use App\FileLinks;
 use Tests\TestCase;
 use App\FileLinkFiles;
-use App\UserPermissions;
 use Illuminate\Http\File;
 use App\CustomerFileTypes;
 use Illuminate\Http\UploadedFile;
@@ -118,7 +116,7 @@ class FileLinkDetailsTest extends TestCase
         $data = [
             'name'            => 'Updated Link Name',
             'expire'          => date('Y-m-d', strtotime('+90 days')),
-            'allow_upload'    => 'on',
+            'allowUp'         => true,
             'customerTag'     => null,
             'hasInstructions' => false,
             'instructions'    => '',
@@ -137,7 +135,7 @@ class FileLinkDetailsTest extends TestCase
         $data = [
             'name'            => 'Updated Link Name',
             'expire'          => date('Y-m-d', strtotime('+90 days')),
-            'allow_upload'    => 'on',
+            'allowUp'         => true,
             'customerTag'     => null,
             'hasInstructions' => false,
             'instructions'    => '',
@@ -153,7 +151,7 @@ class FileLinkDetailsTest extends TestCase
         $data = [
             'name'            => 'Updated Link Name',
             'expire'          => date('Y-m-d', strtotime('+90 days')),
-            'allow_upload'    => 'on',
+            'allowUp'         => true,
             'customerTag'     => null,
             'hasInstructions' => false,
             'instructions'    => '',
@@ -169,7 +167,7 @@ class FileLinkDetailsTest extends TestCase
     {
         $data = [
             'expire'          => date('Y-m-d', strtotime('+90 days')),
-            'allow_upload'    => 'on',
+            'allowUp'         => true,
             'customerTag'     => null,
             'hasInstructions' => false,
             'instructions'    => '',
@@ -184,8 +182,8 @@ class FileLinkDetailsTest extends TestCase
     public function test_update_link_details_expire_validation_error()
     {
         $data = [
-            'name'         => 'Updated Link Name',
-            'allow_upload'    => 'on',
+            'name'            => 'Updated Link Name',
+            'allowUp'         => true,
             'customerTag'     => null,
             'hasInstructions' => false,
             'instructions'    => '',
@@ -195,6 +193,88 @@ class FileLinkDetailsTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHasErrors('expire');
     }
+
+    /*
+    *   Link Instructions
+    */
+
+    //  Test get link instructions as a guest
+    public function test_get_link_instructions_as_guest()
+    {
+        $response = $this->get(route('links.getInstructions', $this->link->link_id));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    //  Test get link instructions without permissions
+    public function test_get_link_instructions_no_permissions()
+    {
+        $user     = $this->userWithoutPermission('Use File Links');
+        $response = $this->actingAs($user)->get(route('links.getInstructions', $this->link->link_id));
+
+        $response->assertStatus(403);
+    }
+
+    //  Test get link instructions as tech
+    public function test_get_link_instructions()
+    {
+        $response = $this->actingAs($this->tech)->get(route('links.getInstructions', $this->link->link_id));
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure(['note']);
+    }
+
+    //  Test try to update instructions as guest
+    public function test_update_link_instructions_as_guest()
+    {
+        $data = [
+            'note' => 'Here are some basic instructions to load',
+        ];
+
+        $response = $this->post(route('links.submitInstructions', $this->link->link_id), $data);
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    //  Test try to update instructions as user without permission
+    public function test_update_link_instructions_no_permission()
+    {
+        $data = [
+            'note' => 'Here are some basic instructions to load',
+        ];
+
+        $user     = $this->userWithoutPermission('Use File Links');
+        $response = $this->actingAs($user)->post(route('links.submitInstructions', $this->link->link_id), $data);
+
+        $response->assertStatus(403);
+    }
+
+    //  Test updating link instructions - valid
+    public function test_update_link_instructions()
+    {
+        $data = [
+            'note' => 'Here are some basic instructions to load',
+        ];
+
+        $response = $this->actingAs($this->tech)->post(route('links.submitInstructions', $this->link->link_id), $data);
+
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
+
+
+
+
+
+
+
+
+
 
     /*
     *   Delete Link

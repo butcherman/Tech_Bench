@@ -19,7 +19,6 @@
                         {!! $details->note !!}
                     </div>
                 </div>
-
             </div>
         </div>
         @endif

@@ -18,14 +18,14 @@ use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 
 class LinkFilesController extends Controller
 {
-    private $user;
+    // private $user;
 
     public function __construct()
     {
         //  Verify the user is logged in and has permissions for this page
         $this->middleware('auth');
         $this->middleware(function($request, $next) {
-            $this->user = auth()->user();
+            // $this->user = auth()->user();
             $this->authorize('hasAccess', 'Use File Links');
             return $next($request);
         });
@@ -71,7 +71,7 @@ class LinkFilesController extends Controller
             ]);
 
             //  Log stored file
-            Log::info('File Stored', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
+            Log::info('File Stored for file link ID - '.$request->linkID.'. File Data - ', ['file_id' => $fileID, 'file_path' => $filePath.DIRECTORY_SEPARATOR.$fileName]);
 
             return response()->json(['success' => true]); ;
         }
@@ -89,6 +89,8 @@ class LinkFilesController extends Controller
     //  Show the files attached to a link
     public function show($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         $files = new FileLinkFilesCollection(
             FileLinkFiles::where('link_id', $id)
             ->orderBy('user_id', 'ASC')
@@ -98,7 +100,7 @@ class LinkFilesController extends Controller
             ->get()
         );
 
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+        Log::debug('File information gathered - ', array($files));
         return $files;
     }
 
@@ -151,23 +153,25 @@ class LinkFilesController extends Controller
         ]);
 
         Log::debug('File Data - ', $request->toArray());
-        Log::info('File ID-'.$request->fileId.' moved to customer ID-'.$linkData->cust_id.' for link ID-'.$id);
+        Log::info('File ID - '.$request->fileId.' moved to customer ID - '.$linkData->cust_id.' for link ID - '.$id.' by User '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
     //  Delete a file attached to a link
     public function destroy($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Submitted File ID to be deleted - '.$id);
+
         //  Get the necessary file information and delete it from the database
         $fileData = FileLinkFiles::find($id);
         $fileID   = $fileData->file_id;
         $fileData->delete();
 
-        //  Delete the file from the folder (not, will not delete if in use elsewhere)
+        //  Delete the file from the folder (note: will not delete if in use elsewhere)
         Files::deleteFile($fileID);
 
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-        Log::info('File ID-'.$fileData->file_id.' deleted for Link ID-'.$fileData->link_id.' by '.Auth::user()->user_id);
+        Log::info('File ID - '.$fileData->file_id.' deleted for Link ID - '.$fileData->link_id.' by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 }

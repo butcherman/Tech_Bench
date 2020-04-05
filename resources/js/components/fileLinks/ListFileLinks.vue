@@ -165,7 +165,6 @@
                 .then(res => {
                     if(res)
                     {
-                        this.$root.$emit('bv::hide::popover');
                         this.isLoading = true;
                         this.deleteLink(link);
                     }

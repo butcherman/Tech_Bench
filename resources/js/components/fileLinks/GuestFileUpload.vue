@@ -1,8 +1,7 @@
 <template>
     <div>
-        <b-alert variant="success" :show="successAlert"><h3 class="text-center">File Uploaded</h3></b-alert>
-        <b-form @submit="submitFile" method="post" enctype="multipart/form-data" novalidate :validated="validated" ref="guestNewFileForm">
-            <input type="hidden" name="_token" :value=token />
+        <b-alert variant="success" :show="successAlert"><h3 class="text-center">File(s) Uploaded</h3></b-alert>
+        <b-form @submit="submitFile" novalidate :validated="validated" ref="guestNewFileForm">
             <b-form-group
                 label="Your Name:"
                 label-for="name">
@@ -16,15 +15,10 @@
                 </b-form-input>
                 <b-form-invalid-feedback v-show="validated">Please Enter Your Name</b-form-invalid-feedback>
             </b-form-group>
-            <vue-dropzone
-                id="dropzone"
-                class="filedrag"
-                ref="myVueDropzone"
-                @vdropzone-upload-progress="updateProgressBar"
-                @vdropzone-sending="sendingFiles"
-                @vdropzone-queue-complete="completedUpload"
-                :options="dropzoneOptions">
-            </vue-dropzone>
+            <file-upload ref="fileUpload"
+                :submit_url="route('file-links.show', this.link_id)"
+                @uploadFinished="uploadFinished">
+            </file-upload>
             <b-form-invalid-feedback v-show="validatedFileErr">A File Must Be Attached</b-form-invalid-feedback>
             <b-form-textarea
                 id="comments"
@@ -33,8 +27,10 @@
                 rows=10
                 class="mb-2"
             ></b-form-textarea>
-            <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
-            <b-button type="submit" block variant="primary" :disabled="button.disable">{{button.text}}</b-button>
+            <form-submit
+                :button_text="button.text"
+                :submitted="submitted"
+            ></form-submit>
         </b-form>
     </div>
 </template>
@@ -46,31 +42,17 @@
         ],
         data() {
             return {
-                token: window.techBench.csrfToken,
                 validated: false,
                 validatedFileErr: false,
+                submitted: false,
                 form: {
                     name: '',
                     comments: '',
                 },
                 button: {
                     text: 'Upload Files',
-                    disable: false,
-                },
-                dropzoneOptions: {
-                    url: this.route('file-links.show', this.link_id),
-                    autoProcessQueue: false,
-                    parallelUploads: 1,
-                    maxFiles: 5,
-                    maxFilesize: window.techBench.maxUpload,
-                    addRemoveLinks: true,
-                    chunking: true,
-                    chunkSize: window.chunkSize,
-                    parallelChunkUploads: false,
                 },
                 successAlert: false,
-                progress: 0,
-                showProgress: false,
                 numFiles: 0,
             }
         },
@@ -79,57 +61,38 @@
             submitFile(e)
             {
                 e.preventDefault();
-                //  Create the dropzone objects
-                var myDrop = this.$refs.myVueDropzone;
-
-                //  Validate the form to be sure all necessary information is inputted
+                this.successAlert = false;
+                var fileZone = this.$refs.fileUpload;
                 if(this.$refs.guestNewFileForm.checkValidity() === false)
                 {
                     this.validated = true;
                 }
-                //  Make sure there is a file attached
-                else if(myDrop.getQueuedFiles().length < 1)
+                else if(fileZone.getFileCount() == 0)
                 {
                     this.validatedFileErr = true;
                 }
-                //  Valid form - begin upload
                 else
                 {
-                    this.validated = false;
+                    this.submitted = true;
                     this.validatedFileErr = false;
-                    this.button.text  = 'Loading...';
-                    this.button.disable   = true;
-                    this.successAlert = false;
-                    this.showProgress = true;
-
-                    this.numFiles = myDrop.getQueuedFiles().length;
-                    myDrop.processQueue();
+                    this.numFiles = fileZone.getFileCount();
+                    fileZone.submitFiles(this.form);
                 }
             },
-            sendingFiles(file, xhr, formData)
-            {
-                formData.append('_token', this.token);
-                formData.append('name', this.form.name);
-                formData.append('note', this.form.comments);
-            },
-            updateProgressBar(file, progress, sent)
-            {
-                var fileProgress = sent / file.size * 100;
-                this.progress = Math.round(fileProgress);
-            },
-            completedUpload(file, res)
+            //  Finalize upload and send notification
+            uploadFinished()
             {
                 axios.put(this.route('file-links.show', this.link_id), {_complete: 'true', count: this.numFiles})
                     .then(res => {
-                        this.$refs.myVueDropzone.removeAllFiles();
                         this.successAlert = true;
-                        this.button.disable   = false;
-                        this.button.text  = 'Upload Files'
-                        this.showProgress = false;
+                        this.button.text  = 'Upload Files';
+                        this.form.comments = '';
+                        this.submitted = false;
+                        this.$refs.fileUpload.reset();
                     }).catch(error => {
-                        this.successAlert = true;
+                        this.$bvModal.msgBoxOk('File upload failed.  Please try again later.')
                     });
-            },
+            }
         }
     }
 </script>

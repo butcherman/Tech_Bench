@@ -184,7 +184,6 @@
             //  Verify and delete the link
             confirmDelete()
             {
-                console.log('confirm');
                 this.$bvModal.msgBoxConfirm('Are you sure?  This cannot be undone.', {
                     title: 'Please Confirm',
                     size: 'sm',

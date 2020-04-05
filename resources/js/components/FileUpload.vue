@@ -7,6 +7,8 @@
             @vdropzone-upload-progress="updateProgressBar"
             @vdropzone-sending="sendingFiles"
             @vdropzone-queue-complete="queueComplete"
+            @vdropzone-max-files-exceeded="tooManyFiles"
+            @vdropzone-removed-file="removedFile"
             :options="dropzoneOptions">
         </vue-dropzone>
         <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
@@ -24,6 +26,7 @@
                 showProgress: false,
                 fileCount: false,
                 progress: 0,
+                alreadyWarned: false,
                 dropzoneOptions: {
                     url: this.submit_url,
                     autoProcessQueue: false,
@@ -68,10 +71,39 @@
                 }
             },
             //  Notify event that upload is finished
-            queueComplete()
+            queueComplete(file, res)
             {
-                this.$emit('uploadFinished');
+                this.$emit('uploadFinished', res);
             },
+            //  Reset data so that the dropbox can be used again
+            reset()
+            {
+                this.$refs.fileDropzone.removeAllFiles();
+                this.formData =  {};
+                this.showProgress =  false;
+                this.fileCount =  false;
+                this.progress =  0;
+            },
+            //  Alert user that too many files have been selected
+            tooManyFiles()
+            {
+                if(!this.alreadyWarned)
+                {
+                    this.alreadyWarned = true;
+                    this.$bvModal.msgBoxOk('Too many files selected.  You can only upload 5 files at a time', {
+                        buttonSize: 'sm',
+                        centered: true
+                    });
+                }
+            },
+            //  A file was removed
+            removedFile()
+            {
+                if(this.$refs.fileDropzone.getQueuedFiles().length <= this.dropzoneOptions.maxFiles)
+                {
+                    this.alreadyWarned = false;
+                }
+            }
         },
     }
 </script>

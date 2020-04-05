@@ -23,13 +23,17 @@ use App\Http\Resources\FileLinks as FileLinksResource;
 
 class FileLinksController extends Controller
 {
+    // private $user;
+    // TODO:  Get rid of this?
+
     //  Only authorized users have access
     public function __construct()
     {
         //  Verify the user is logged in and has permissions for this page
         $this->middleware('auth');
         $this->middleware(function($request, $next) {
-            $this->user = auth()->user();
+            // $this->user = auth()->user();
+            // TODO:  Get rid of this?
             $this->authorize('hasAccess', 'Use File Links');
             return $next($request);
         });

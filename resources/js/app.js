@@ -84,7 +84,6 @@ Vue.mixin({
 *   Global Components
 */
 Vue.component('go-back',       require('./components/GoBack.vue').default);
-// Vue.component('loading-modal', require('./components/LoadingModal.vue').default);
 Vue.component('file-upload',   require('./components/FileUpload.vue').default);
 Vue.component('form-submit',   require('./components/FormSubmit.vue').default);
 

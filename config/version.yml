@@ -3,9 +3,9 @@ blade-directive: version
 current:
   label: v
   major: 5
-  minor: 0
+  minor: 1
   patch: 0
-  prerelease:
+  prerelease: dev
   buildmetadata: null
   commit: 3ba
   timestamp:

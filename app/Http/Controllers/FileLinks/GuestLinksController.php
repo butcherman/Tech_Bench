@@ -29,6 +29,8 @@ class GuestLinksController extends Controller
     //  Show the link details for the user
     public function show($id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip());
+
         $details = FileLinks::where('link_hash', $id)->first();
 
         //  Verify that the link is valid
@@ -55,7 +57,6 @@ class GuestLinksController extends Controller
             return view('links.guestDeadLink');
         }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip());
         return view('links.guestDetails', [
             'hash'    => $id,
             'details' => $details,
@@ -78,6 +79,7 @@ class GuestLinksController extends Controller
                 ->get()
         );
 
+        Log::debug('Files gathered for link ID '.$linkID, array($files));
         return $files;
     }
 
@@ -85,7 +87,10 @@ class GuestLinksController extends Controller
     public function update(Request $request, $id)
     {
         Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip().'. Submitted Data - ', $request->toArray());
-        $request->validate(['name' => 'required', 'file' => 'required']);
+        $request->validate([
+            'name' => 'required',
+            'file' => 'required'
+        ]);
 
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
@@ -96,8 +101,7 @@ class GuestLinksController extends Controller
         if($save->isFinished())
         {
             $this->saveFile($save->getFile(), $id, $request);
-
-            return 'uploaded successfully';
+            return response()->json(['success' => true]);
         }
 
         //  Get the current progress
@@ -132,27 +136,27 @@ class GuestLinksController extends Controller
             'file_id'  => $fileID,
             'added_by' => $request->name,
             'upload'   => 1,
-            'note'     => $request->note
+            'note'     => $request->comments
         ]);
 
         Log::info('File uploaded by guest '.\Request::ip().' for file link -'.$details->link_id);
-
         return response()->json(['success' => true]);
     }
 
     //  Notify the owner of the link that files were uploaded
     public function notify(Request $request, $id)
     {
+        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip() . '. Submitted Data - ', $request->toArray());
+
         $request->validate([
             '_complete' => 'required',
             'count'     => 'required|integer'
         ]);
 
         $details = FileLinks::where('link_hash', $id)->first();
-
         $user = User::find($details->user_id);
         Notification::send($user, new NewFileUpload($details));
 
-        Log::debug('Notification of file upload sent to User ID - '.$user->user_id);
+        Log::info('Notification of file upload sent to '.$user->full_name);
     }
 }
