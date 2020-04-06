@@ -12,6 +12,10 @@
                 type: String,
                 default: 'Submit',
             },
+            button_disable: {
+                type: Boolean,
+                default: false,
+            },
             submitted: {
                 type: Boolean,
                 default: false,
@@ -21,7 +25,7 @@
             return {
                 button: {
                     text: this.button_text,
-                    disable: false,
+                    disable: this.button_disable,
                 }
             }
         },
@@ -42,6 +46,10 @@
             button_text()
             {
                 this.button.text = this.button_text;
+            },
+            button_disable()
+            {
+                this.button.disable = this.button_disable;
             }
         }
     }
