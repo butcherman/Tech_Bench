@@ -128,11 +128,14 @@ Vue.component('tech-tip-comments', require('./components/tips/tipComments.vue').
 /*
 *   Administration Components
 */
-Vue.component('user-form',        require('./components/admin/userForm.vue').default);
-Vue.component('user-list',        require('./components/admin/userList.vue').default);
-Vue.component('user-roles',       require('./components/admin/userRoles.vue').default);
-Vue.component('user-deleted',     require('./components/admin/userDeleted.vue').default);
-Vue.component('admin-file-links', require('./components/admin/fileLinks.vue').default);
+Vue.component('user-form',           require('./components/admin/userForm.vue').default);
+Vue.component('user-list',           require('./components/admin/userList.vue').default);
+Vue.component('user-roles',          require('./components/admin/userRoles.vue').default);
+Vue.component('user-deleted',        require('./components/admin/userDeleted.vue').default);
+Vue.component('admin-file-links',    require('./components/admin/fileLinks.vue').default);
+Vue.component('customer-id-modify',  require('./components/customer/customerIdModify.vue').default);
+Vue.component('customer-file-types', require('./components/customer/CustomerFileTypes.vue').default);
+Vue.component('customers-disabled',  require('./components/customer/DisabledCustomers.vue').default);
 
 /*
 *   Installer Components

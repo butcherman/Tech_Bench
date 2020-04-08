@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 class="text-center">Deactivated Users</h4>
+        <h4 class="text-center">Deactivated Customers</h4>
         <vue-good-table
             ref="userListTable"
             :columns="columns"
@@ -12,11 +12,8 @@
                 <h4 class="text-center">No Disabled Users</h4>
             </div>
             <template slot="table-row" slot-scope="data">
-                <span v-if="data.column.field == 'full_name'">
-                    <a :href="route(action_route, data.row.user_id)">{{data.row.full_name}}</a>
-                </span>
-                <span v-else-if="data.column.field == 'actions'">
-                    <i class="fas fa-unlock-alt pointer" title="Enable User" v-b-tooltip:hover @click="enableUser(data.row, data.index)"></i>
+                <span v-if="data.column.field == 'actions'">
+                    <i class="fas fa-unlock-alt pointer" title="Enable Customer" v-b-tooltip:hover @click="enableCustomer(data.row, data.index)"></i>
                 </span>
             </template>
         </vue-good-table>
@@ -33,30 +30,22 @@
 <script>
 export default {
     props: [
-        'user_list',
-        'action_route',
+        'cust_list',
     ],
     data() {
         return {
             columns: [
                 {
-                    label: 'User',
-                    field: 'full_name',
+                    label: 'Customer Name',
+                    field: 'name',
                     sortable: true,
                     filterOptions: {
                         enabled: true,
                     }
                 },
+
                 {
-                    label: 'Email Address',
-                    field: 'email',
-                    sortable: true,
-                    filterOptions: {
-                        enabled: true,
-                    }
-                },
-                {
-                    label: 'User Deactivated Date',
+                    label: 'Customer Deactivated Date',
                     field: 'deleted_at',
                     sortable: true,
                 },
@@ -66,21 +55,31 @@ export default {
                     sortable: false,
                 }
             ],
-            rows: this.user_list,
+            rows: this.cust_list,
+
+            button: {
+                disabled: false,
+                text: 'Reset Password',
+            }
         }
     },
+    created() {
+        // this.getUserList();
+        console.log(this.cust_list);
+    },
     methods: {
-        enableUser(data, index)
+        enableCustomer(data, index)
         {
             this.$refs['loading-modal'].show();
-            axios.get(this.route('admin.user.reactivate', data.user_id))
+            axios.get(this.route('admin.enableCustomer', data.cust_id))
                 .then(res => {
                     this.$refs['loading-modal'].hide();
-                    this.$bvModal.msgBoxOk(data.full_name+' has been reactivated.  Please go to the user page to update their password.')
+                    this.$bvModal.msgBoxOk(data.name+' has been reactivated')
                         .then(value => {
                             this.rows.splice(index, 1);
                         });
-                }).catch(error => this.$bvModal.msgBoxOk('Unable to reactivate user at this time.  Please try again later.'));
+                }).catch(error => this.$bvModal.msgBoxOk('Unable to enable customer at this time.  Please try again later'));
+
         },
     }
 }

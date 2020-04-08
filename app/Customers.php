@@ -13,6 +13,9 @@ class Customers extends Model
     protected $fillable   = ['cust_id', 'parent_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip', 'active'];
     protected $hidden     = ['created_at', 'deleted_at', 'updated_at'];
     protected $appends    = ['child_count'];
+    protected $casts      = [
+        'deleted_at' => 'datetime:M d, Y',
+    ];
 
     public function CustomerSystems()
     {

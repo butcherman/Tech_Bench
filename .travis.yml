@@ -46,4 +46,4 @@ after_script:
     - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
 after_failure:
-  - cat /home/travis/build/butcherman/Tech_Bench/storage/logs/TechBench.log
+    - cat /home/travis/build/butcherman/Tech_Bench/storage/logs/TechBench.log

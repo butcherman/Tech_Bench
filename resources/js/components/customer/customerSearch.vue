@@ -1,6 +1,5 @@
 <template>
-    <b-modal id="customer_search_modal" title="Search For Customer" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer" size="lg">
-
+    <b-modal id="customer_search_modal" :title="title" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer" size="lg">
         <b-form @submit="searchCustomer">
             <b-input-group>
                 <b-form-input type="text" v-model="searchParam.name" placeholder="Enter Customer Name or ID Number"></b-form-input>
@@ -40,9 +39,18 @@
 
 <script>
     export default {
-        props: [
-            'show_form',
-        ],
+        props: {
+            show_form: {
+                type: Boolean,
+                default: false,
+                required: false,
+            },
+            title: {
+                type: String,
+                default: 'Search For Customer',
+                required: false,
+            }
+        },
         data: function () {
             return {
                 loading: false,
@@ -55,6 +63,12 @@
                 },
                 searchResults: [],
                 searchMeta: [],
+            }
+        },
+        mounted() {
+            if(this.show_form)
+            {
+                this.$bvModal.show('customer_search_modal');
             }
         },
         methods: {
@@ -84,6 +98,7 @@
             //  Attach the customer
             selectCustomer(cust)
             {
+                this.$bvModal.hide('customer_search_modal');
                 this.$emit('selectedCust', cust);
                 this.reset();
             },
