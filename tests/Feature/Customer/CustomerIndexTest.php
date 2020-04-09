@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\Customer;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Customers;
+use Tests\TestCase;
 use App\SystemTypes;
 use App\CustomerSystems;
 

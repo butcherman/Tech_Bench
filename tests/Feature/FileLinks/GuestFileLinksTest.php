@@ -2,12 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use Carbon\Carbon;
 use App\FileLinks;
 use Tests\TestCase;
 use App\FileLinkFiles;
-use App\UserPermissions;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

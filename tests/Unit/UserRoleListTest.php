@@ -2,9 +2,8 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-
 use App\User;
+use Tests\TestCase;
 use App\UserRoleType;
 
 class UserRoleListTest extends TestCase

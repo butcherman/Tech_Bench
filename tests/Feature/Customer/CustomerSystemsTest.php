@@ -2,18 +2,12 @@
 
 namespace Tests\Feature\Customer;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Customers;
-use App\CustomerSystems;
-use App\CustomerSystemData;
-
-
+use Tests\TestCase;
 use App\SystemTypes;
-use App\SystemCategories;
-use App\SystemDataFieldTypes;
+use App\CustomerSystems;
 use App\SystemDataFields;
+use App\CustomerSystemData;
 
 class CustomerSystemsTest extends TestCase
 {

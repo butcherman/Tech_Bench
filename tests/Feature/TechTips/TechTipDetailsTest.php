@@ -2,14 +2,10 @@
 
 namespace Tests\Feature\TechTips;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\TechTips;
+use Tests\TestCase;
 use App\TechTipSystems;
 use App\TechTipComments;
-use App\User;
-use App\UserPermissions;
 use Illuminate\Support\Facades\Notification;
 
 class TechTipDetailsTest extends TestCase

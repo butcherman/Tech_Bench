@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\FileLinks;
 
-use App\User;
 use App\FileLinks;
 use Tests\TestCase;
-use App\UserPermissions;
 
 class FileLinksIndexTest extends TestCase
 {

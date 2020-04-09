@@ -2,19 +2,14 @@
 
 namespace Tests\Feature\TechTips;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\TechTips;
-use App\TechTipSystems;
-use App\TechTipComments;
-use App\TechTipFiles;
-use App\UserPermissions;
-use App\User;
+use Tests\TestCase;
 use App\SystemTypes;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
+use App\TechTipFiles;
+use App\TechTipSystems;
 use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class EditTipTest extends TestCase
 {

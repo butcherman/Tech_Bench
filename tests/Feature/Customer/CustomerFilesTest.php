@@ -2,12 +2,9 @@
 
 namespace Tests\Feature\Customer;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Customers;
 use App\CustomerFiles;
-use App\CustomerFileTypes;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

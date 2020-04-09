@@ -2,13 +2,8 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-
 use App\User;
-use App\UserLogins;
-// use App\UserPermissions;
+use Tests\TestCase;
 
 class UserModelTest extends TestCase
 {

@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\Customer;
 
-use App\User;
 use App\Customers;
 use Tests\TestCase;
-use App\UserPermissions;
 
 class NewCustomerTest extends TestCase
 {

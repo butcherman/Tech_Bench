@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\FileLinks;
 
-use App\User;
 use App\Customers;
 use Tests\TestCase;
-use App\UserPermissions;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
