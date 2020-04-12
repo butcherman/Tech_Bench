@@ -10,7 +10,13 @@
                     <div v-if="error">
                         <h5 class="text-center text-danger"><i class="fas fa-exclamation-circle"></i> Unable to load Instructions...</h5>
                     </div>
-                    <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                    <hollow-dots-spinner v-else-if="!loadDone"
+                        :animation-duration="1000"
+                        :dot-size="15"
+                        :dots-num="3"
+                        color="#ff1d5e"
+                        class="mx-auto"
+                    />
                     <div v-else v-html="note"></div>
                 </div>
             </div>
@@ -18,7 +24,14 @@
         <b-modal id="edit-instructions-modal" title="Edit Link Instructions" ref="editInstructionsModal" hide-footer centered size="lg">
             <b-form @submit="validateForm" ref="editInstructionsForm">
                 <editor v-if="form.open" :init="{plugins: 'autolink', height:500}" id="instruction-details" v-model="form.instructions"></editor>
-                <img v-else src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                <!-- <img v-else src="/img/loading.svg" alt="Loading..." class="d-block mx-auto"> -->
+                <hollow-dots-spinner v-else
+                    :animation-duration="1000"
+                    :dot-size="15"
+                    :dots-num="3"
+                    color="#ff1d5e"
+                    class="mx-auto"
+                />
                 <form-submit
                     :button_text="buttonText"
                     :submitted="submitted"

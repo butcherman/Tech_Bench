@@ -175,7 +175,7 @@ class NewFileLinkTest extends TestCase
         $response = $this->actingAs($this->user)->post(route('links.data.store'), $data);
 
         $response->assertSuccessful();
-        $response->assertJson(['upload_success' => true]);
+        $response->assertJson(['success' => true]);
 
         unset($data['file']);
         $data['_completed'] = true;

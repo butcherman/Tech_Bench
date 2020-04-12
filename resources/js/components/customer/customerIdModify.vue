@@ -107,7 +107,6 @@ export default {
                 this.submitted = true;
                 axios.post(this.route('admin.submitCustomerID'), this.form)
                     .then(res => {
-                        console.log(res);
                         if(res.data.success == true)
                         {
                             this.$bvModal.msgBoxOk('Customer ID Updated')

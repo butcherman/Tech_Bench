@@ -1,60 +1,62 @@
 <template>
     <div>
         <b-form @submit="validateForm" :validated="validated" ref="newLinkForm" novalidate>
-            <div class="row">
-                <div class="col-md-6">
-                    <b-form-group id="name"
-                                label="Link Name:"
-                                label-for="link_name">
-                        <b-form-input id="link_name"
-                                    type="text"
-                                    name="name"
-                                    placeholder="Enter A User Friendly Name For This Link"
-                                    required
-                                    v-model="form.name">
-                        </b-form-input>
-                        <b-form-invalid-feedback>Please Enter A Name For This Link</b-form-invalid-feedback>
-                    </b-form-group>
+            <fieldset :disabled="submitted">
+                <div class="row">
+                    <div class="col-md-6">
+                        <b-form-group id="name"
+                                    label="Link Name:"
+                                    label-for="link_name">
+                            <b-form-input id="link_name"
+                                        type="text"
+                                        name="name"
+                                        placeholder="Enter A User Friendly Name For This Link"
+                                        required
+                                        v-model="form.name">
+                            </b-form-input>
+                            <b-form-invalid-feedback>Please Enter A Name For This Link</b-form-invalid-feedback>
+                        </b-form-group>
+                    </div>
+                    <div class="col-md-6">
+                        <b-form-group id="expire"
+                                    label="Expires On:"
+                                    label-for="link_expire">
+                            <b-form-datepicker id="link_expire"
+                                        required
+                                        v-model="form.expire">
+                            </b-form-datepicker>
+                            <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
+                        </b-form-group>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <b-form-group id="expire"
-                                label="Expires On:"
-                                label-for="link_expire">
-                        <b-form-datepicker id="link_expire"
-                                    required
-                                    v-model="form.expire">
-                        </b-form-datepicker>
-                        <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
-                    </b-form-group>
+                <div class="row justify-content-center">
+                    <div class="col-md-5">
+                        <b-form-checkbox v-model="form.allowUp" switch>Allow Visitor to Upload Files</b-form-checkbox>
+                        <b-form-checkbox switch @change="linkCustomer" v-model="form.link">
+                            Link to Customer
+                            <div v-if="custLinkMsg" class="text-muted">&#123; {{custLinkMsg}} &#125;</div>
+                        </b-form-checkbox>
+                        <b-form-checkbox switch v-model="hasInstructions">Add Instructions</b-form-checkbox>
+                    </div>
                 </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-5">
-                    <b-form-checkbox v-model="form.allowUp" switch>Allow Visitor to Upload Files</b-form-checkbox>
-                    <b-form-checkbox switch @change="linkCustomer" v-model="form.link">
-                        Link to Customer
-                        <div v-if="custLinkMsg" class="text-muted">&#123; {{custLinkMsg}} &#125;</div>
-                    </b-form-checkbox>
-                    <b-form-checkbox switch v-model="hasInstructions">Add Instructions</b-form-checkbox>
+                <div class="row justify-content-center mt-2">
+                    <div class="col">
+                        <transition name="fade">
+                            <div id="instructionsBlock" v-if="hasInstructions">
+                                <editor v-if="hasInstructions" :init="{plugins: 'autolink', height:500}" v-model=form.instructions></editor>
+                            </div>
+                        </transition>
+                    </div>
                 </div>
-            </div>
-            <div class="row justify-content-center mt-2">
-                <div class="col">
-                    <transition name="fade">
-                        <div id="instructionsBlock" v-if="hasInstructions">
-                            <editor v-if="hasInstructions" :init="{plugins: 'autolink', height:500}" v-model=form.instructions></editor>
-                        </div>
-                    </transition>
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <file-upload ref="fileUpload"
+                            :submit_url="route('links.data.store')"
+                            @uploadFinished="uploadFinished">
+                        </file-upload>
+                    </div>
                 </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <file-upload ref="fileUpload"
-                        :submit_url="route('links.data.store')"
-                        @uploadFinished="uploadFinished">
-                    </file-upload>
-                </div>
-            </div>
+            </fieldset>
             <form-submit
                 :button_text="buttonText"
                 :submitted="submitted"

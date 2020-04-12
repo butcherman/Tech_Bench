@@ -19,7 +19,6 @@
         </div>
         <vue-good-table
             v-else
-            mode="remote"
             ref="file-links-table"
             styleClass="vgt-table bordered w-100"
             :columns="table.columns"
@@ -39,7 +38,7 @@
                 />
             </div>
             <div slot="selected-row-actions">
-                <button @click="deleteChecked" class="btn btn-warning btn-block">Delete Selected</button>
+                <b-button @click="deleteChecked" variant="warning" pill>Delete Selected</b-button>
             </div>
             <div slot="loadingContent">
                 <atom-spinner
@@ -50,8 +49,11 @@
                 />
             </div>
             <template slot="table-row" slot-scope="data">
-                <span v-if="data.column.field == 'name'">
+                <span v-if="data.column.field == 'link_name'">
                     <a :href="route('links.details', [data.row.link_id, dashify(data.row.link_name)])">{{data.row.link_name}}</a>
+                </span>
+                <span v-else-if="data.column.field == 'exp_stamp'">
+                    {{data.row.exp_format}}
                 </span>
                 <span v-else-if="data.column.field == 'actions'">
                     <a v-if="!data.row.expired"
@@ -93,7 +95,7 @@
                     columns: [
                     {
                         label: 'Link Name',
-                        field: 'name',
+                        field: 'link_name',
                         sortable: true,
                     },
                     {
@@ -103,7 +105,7 @@
                     },
                     {
                         label: 'Expire Date',
-                        field: 'exp_format',
+                        field: 'exp_stamp',
                         sortable: true,
                     },
                     {

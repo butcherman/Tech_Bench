@@ -8,7 +8,13 @@
                         <div v-if="error">
                             <h5 class="text-center text-danger"><i class="fas fa-exclamation-circle"></i> Unable to load Details...</h5>
                         </div>
-                        <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                        <hollow-dots-spinner v-else-if="!loadDone"
+                            :animation-duration="1000"
+                            :dot-size="15"
+                            :dots-num="3"
+                            color="#ff1d5e"
+                            class="mx-auto"
+                        />
                         <dl class="row h-100"  v-else>
                             <dt class="col-md-3 text-md-right">Link Name:</dt>
                             <dd class="col-md-9 text-md-left pt-2 pt-md-0">{{details.link_name}}</dd>
@@ -51,42 +57,44 @@
         </div>
         <b-modal id="link-edit-modal" title="Edit Link Details" ref="editLinkModal" hide-footer centered size="lg">
             <b-form @submit="validateEditForm" ref="editLinkForm" novalidate :validated="validated">
-                <div class="row">
-                    <div class="col-md-6">
-                        <b-form-group id="name"
-                                    label="Link Name:"
-                                    label-for="link_name">
-                            <b-form-input id="link_name"
-                                        type="text"
-                                        name="name"
-                                        placeholder="Enter A User Friendly Name For This Link"
-                                        required
-                                        v-model="form.name">
-                            </b-form-input>
-                            <b-form-invalid-feedback>Please Enter A Name For This Link</b-form-invalid-feedback>
-                        </b-form-group>
+                <fieldset :disabled="submitted">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <b-form-group id="name"
+                                        label="Link Name:"
+                                        label-for="link_name">
+                                <b-form-input id="link_name"
+                                            type="text"
+                                            name="name"
+                                            placeholder="Enter A User Friendly Name For This Link"
+                                            required
+                                            v-model="form.name">
+                                </b-form-input>
+                                <b-form-invalid-feedback>Please Enter A Name For This Link</b-form-invalid-feedback>
+                            </b-form-group>
+                        </div>
+                        <div class="col-md-6">
+                            <b-form-group id="expire"
+                                        label="Expires On:"
+                                        label-for="link_expire">
+                                <b-form-datepicker id="link_expire"
+                                            required
+                                            v-model="form.expire">
+                                </b-form-datepicker>
+                                <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
+                            </b-form-group>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <b-form-group id="expire"
-                                    label="Expires On:"
-                                    label-for="link_expire">
-                            <b-form-datepicker id="link_expire"
-                                        required
-                                        v-model="form.expire">
-                            </b-form-datepicker>
-                            <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
-                        </b-form-group>
+                    <div class="row justify-content-center">
+                        <div class="col-md-5">
+                            <b-form-checkbox v-model="form.allowUp" switch>Allow Visitor to Upload Files</b-form-checkbox>
+                            <b-form-checkbox switch @change="linkCustomer" v-model="form.link">
+                                Link to Customer
+                                <div v-if="custLinkMsg" class="text-muted">&#123; {{custLinkMsg}} &#125;</div>
+                            </b-form-checkbox>
+                        </div>
                     </div>
-                </div>
-                <div class="row justify-content-center">
-                    <div class="col-md-5">
-                        <b-form-checkbox v-model="form.allowUp" switch>Allow Visitor to Upload Files</b-form-checkbox>
-                        <b-form-checkbox switch @change="linkCustomer" v-model="form.link">
-                            Link to Customer
-                            <div v-if="custLinkMsg" class="text-muted">&#123; {{custLinkMsg}} &#125;</div>
-                        </b-form-checkbox>
-                    </div>
-                </div>
+                </fieldset>
                 <form-submit
                     class="mt-3"
                     :button_text="buttonText"

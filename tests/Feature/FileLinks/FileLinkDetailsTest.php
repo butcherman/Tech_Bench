@@ -257,7 +257,7 @@ class FileLinkDetailsTest extends TestCase
     public function test_update_link_instructions()
     {
         $data = [
-            'note' => 'Here are some basic instructions to load',
+            'instructions' => 'Here are some basic instructions to load',
         ];
 
         $response = $this->actingAs($this->tech)->post(route('links.submitInstructions', $this->link->link_id), $data);
@@ -265,16 +265,6 @@ class FileLinkDetailsTest extends TestCase
         $response->assertSuccessful();
         $response->assertJson(['success' => true]);
     }
-
-
-
-
-
-
-
-
-
-
 
     /*
     *   Delete Link
@@ -465,7 +455,7 @@ class FileLinkDetailsTest extends TestCase
         //  Try to move the file again
         $moveAgain = $this->actingAs($this->tech)->put(route('links.files.update', $link->link_id), $data);
 
-        $moveAgain->assertExactJson(['success' => 'false', 'reason' => 'This File Already Exists in Customer Files']);
+        $moveAgain->assertExactJson(['success' => false]);
     }
 
     //  Try to move a file that is for some reason missing from the file link
@@ -507,6 +497,6 @@ class FileLinkDetailsTest extends TestCase
 
         //  This should not crash app, but it should trigger exception
         $response->assertSuccessful();
-        $response->assertExactJson(['success' => false, 'reason' => 'Cannot Find File']);
+        $response->assertExactJson(['success' => false]);
     }
 }

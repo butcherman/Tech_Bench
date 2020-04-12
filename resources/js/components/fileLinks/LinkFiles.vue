@@ -10,7 +10,13 @@
                     <div v-if="error">
                         <h5 class="text-center text-danger"><i class="fas fa-exclamation-circle"></i> Unable to load Files...</h5>
                     </div>
-                    <img v-else-if="!loadDone" src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+                    <hollow-dots-spinner v-else-if="!loadDone"
+                        :animation-duration="1000"
+                        :dot-size="15"
+                        :dots-num="3"
+                        color="#ff1d5e"
+                        class="mx-auto"
+                    />
                     <vue-good-table
                         v-else
                         mode="remote"
@@ -217,7 +223,7 @@
                         }
                         else
                         {
-                            msg = res.data.reason;
+                            msg = 'This File Already Exists in Customer Files';
                         }
                         this.$bvModal.msgBoxOk(msg);
                     }).catch(error => {this.$bvModal.msgBoxOk('Move file operation failed.  Please try again later.')});

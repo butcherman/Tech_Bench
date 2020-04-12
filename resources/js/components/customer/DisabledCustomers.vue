@@ -65,7 +65,6 @@ export default {
     },
     created() {
         // this.getUserList();
-        console.log(this.cust_list);
     },
     methods: {
         enableCustomer(data, index)

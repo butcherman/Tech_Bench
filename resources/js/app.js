@@ -33,7 +33,8 @@ import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 import Avatar               from 'vue-avatar'
 import VueClipboard         from 'vue-clipboard2';
 import { Ziggy }            from '../assets/js/ziggy';
-import { AtomSpinner }      from 'epic-spinners'
+import { AtomSpinner }      from 'epic-spinners';
+import {HollowDotsSpinner}  from 'epic-spinners';
 
 /*
 *   The TinyMCE library
@@ -68,6 +69,7 @@ Vue.component('v-select', vSelect);
 Vue.component('draggable',    draggable);
 Vue.component('avatar', Avatar);
 Vue.component('atom-spinner', AtomSpinner);
+Vue.component('hollow-dots-spinner', HollowDotsSpinner);
 
 Vue.mixin({
     methods: {

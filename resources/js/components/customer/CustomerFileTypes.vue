@@ -120,7 +120,6 @@
                 this.loading = true;
                 axios.get(this.route('admin.getCustFileTypes'))
                     .then(res => {
-                        console.log(res);
                         this.table.rows = res.data;
                         this.loadDone = true;
                     }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
@@ -169,7 +168,6 @@
             {
                 axios.put(this.route('admin.setCustFileTypes'), this.form)
                         .then(res => {
-                            console.log(res);
                             this.resetForm();
                         }).catch(error => this.$bvModal.msgBoxOk('Update operation failed.  Please try again later.'));
             },
@@ -182,7 +180,6 @@
             {
                 axios.post(this.route('admin.submitNewFileType'), this.form)
                     .then(res => {
-                        console.log(res);
                         this.resetForm();
                     }).catch(error => this.$bvModal.msgBoxOk('Update operation failed.  Please try again later.'));
             },
