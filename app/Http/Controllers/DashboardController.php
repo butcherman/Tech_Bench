@@ -22,7 +22,7 @@ class DashboardController extends Controller
     //  Dashboard is the Logged In User home landing page
     public function index()
     {
-        Log::debug('Route "' . Route::currentRouteName() . '" visited by ' . Auth::user()->full_name);
+        // Log::debug('Route "' . Route::currentRouteName() . '" visited by ' . Auth::user()->full_name);
 
         //  Get Dashboard data
         $custFavs    = CustomerFavs::where('user_id', Auth::user()->user_id)
@@ -41,8 +41,8 @@ class DashboardController extends Controller
         $totalLinks  = FileLinks::where('user_id', Auth::user()->user_id)->count();
 
         //  Debug Data
-        Log::debug('Dashboard - Customer Favorites for '.Auth::user()->full_name.': ', $custFavs->toArray());
-        Log::debug('Dashboard - Tech Tip Favorites for '.Auth::user()->full_name.': ', $tipFavs->toArray());
+        // Log::debug('Dashboard - Customer Favorites for '.Auth::user()->full_name.': ', $custFavs->toArray());
+        // Log::debug('Dashboard - Tech Tip Favorites for '.Auth::user()->full_name.': ', $tipFavs->toArray());
 
         return view('dashboard', [
             'custFavs'    => $custFavs,
@@ -58,8 +58,8 @@ class DashboardController extends Controller
     public function getNotifications()
     {
         //  Debug Data
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-        Log::debug('Notifications for '.Auth::user()->full_name.':', Auth::user()->notifications->toArray());
+        // Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+        // Log::debug('Notifications for '.Auth::user()->full_name.':', Auth::user()->notifications->toArray());
 
         return Auth::user()->notifications;
     }
@@ -67,7 +67,7 @@ class DashboardController extends Controller
     //  Mark a notification as read
     public function markNotification($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        // Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
 
         $notification = Auth::user()->notifications()->where('id', $id)->where('notifiable_id', Auth::user()->user_id)->first();
         if(!$notification)
@@ -85,7 +85,7 @@ class DashboardController extends Controller
     //  Delte a user notification
     public function delNotification($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        // Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
 
         $notification = Auth::user()->notifications()->where('id', $id)->where('notifiable_id', Auth::user()->user_id)->first();
         if(!$notification)
@@ -103,7 +103,7 @@ class DashboardController extends Controller
     //  About page
     public function about()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+        // Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         return view('about', [
             'branch' => 'latest'
