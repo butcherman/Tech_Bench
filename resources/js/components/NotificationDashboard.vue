@@ -5,7 +5,12 @@
         </div>
         <div v-else-if="loading">
             <h5 class="text-center">Loading Notifications</h5>
-            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+            <atom-spinner
+                :animation-duration="1000"
+                :size="60"
+                color="#ff1d5e"
+                class="mx-auto"
+            />
         </div>
         <b-list-group v-else>
             <b-list-group-item v-if="notifications.length == 0" class="text-center">No Notifications</b-list-group-item>
