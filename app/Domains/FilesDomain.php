@@ -31,6 +31,8 @@ class FilesDomain
             'file_link' => $this->path.DIRECTORY_SEPARATOR
         ]);
 
+        $user = isset(Auth::user()->full_name) ? Auth::user()->full_name : \Request::ip();
+        Log::info('New file stored in database by '.$user.'. File Data - ', array($newFile));
         return  $newFile->file_id;
     }
 
@@ -47,14 +49,14 @@ class FilesDomain
         catch(\Illuminate\Database\QueryException $e)
         {
             //  Unable to remove file from the database
-            Log::warning('Attempt to delete file failed.  Reason - '.$e.'. Additional Data - ', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
+            Log::warning('Attempt to delete file failed.  Reason - '.$e.'. Additional File Data - ', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
             return false;
         }
 
         //  Delete the file from the storage system
         Storage::delete($fileLink);
 
-        Log::notice('File deleted by '.Auth::user()->full_name.'. Additional Information - ', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
+        Log::notice('File deleted by '.Auth::user()->full_name.'. File Information - ', ['file_id' => $fileID, 'file_name' => $fileLink, 'user_id' => Auth::user()->user_id]);
         return true;
     }
 
@@ -63,6 +65,7 @@ class FilesDomain
     {
         //  Remove all spaces
         $fileName = str_replace(' ', '_', $name);
+        Log::debug('Cleaning filename.  Old name - '.$name.'.  New Name - '.$fileName);
 
         return $fileName;
     }
@@ -106,7 +109,7 @@ class FilesDomain
         $data = Files::find($fileID);
         //  Move the file to the proper folder
         try{
-
+            Log::debug('Attempting to moving file '.$fileID.' to '.$newPath);
             Storage::move($data->file_link.$data->file_name, $newPath.DIRECTORY_SEPARATOR.$data->file_name);
         }
         catch(\Exception $e)
@@ -114,6 +117,7 @@ class FilesDomain
             report($e);
             return false;
         }
+        Log::info('Moved file '.$data->file_name.'from '.$data->file_link.' to new location - '.$newPath.'.  File Details - ', array($data));
 
         //  Update file link in DB
         $data->update([

@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\FileLinks;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 use App\Domains\FileLinks\GetFileLinkFiles;
 use App\Domains\FileLinks\SaveFileLinkFile;
@@ -28,12 +25,9 @@ class LinkFilesController extends Controller
     //  Add a file to the file link
     public function store(AddFileLinkFileRequest $request)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
-
         //  Determine if a file is being uploaded still or not
         if((new SaveFileLinkFile)->execute($request, false))
         {
-            Log::info('File Stored for file link ID - '.$request->linkID);
             return response()->json(['success' => true]);
         }
 
@@ -43,29 +37,21 @@ class LinkFilesController extends Controller
     //  Show the files attached to a link
     public function show($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-
         return (new GetFileLinkFiles)->execute($id, true);
     }
 
     //  Move a file to a customer file
     public function update(MoveFileLinkFileToCustomerRequest $request, $id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
-
         $moveObj = new SaveFileLinkFile;
         $success = $moveObj->moveFileToCustomer($request, $id);
-
         return response()->json(['success' => $success]);
     }
 
     //  Delete a file attached to a link
     public function destroy($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-
         (new SaveFileLinkFile)->deleteLinkFile($id);
-
         return response()->json(['success' => true]);
     }
 }

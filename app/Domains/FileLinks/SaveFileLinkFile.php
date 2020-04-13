@@ -47,7 +47,6 @@ class SaveFileLinkFile extends FilesDomain
             }
             else
             {
-                // $uploadDetails = null;
                 if($request->name)
                 {
                     $uploadDetails = [
@@ -85,7 +84,7 @@ class SaveFileLinkFile extends FilesDomain
             return false;
         }
 
-        CustomerFiles::create([
+        $custFileData = CustomerFiles::create([
             'file_id'      => $request->fileID,
             'file_type_id' => $request->fileType,
             'cust_id'      => $linkCustomer,
@@ -93,6 +92,7 @@ class SaveFileLinkFile extends FilesDomain
             'name'         => $request->fileName
         ]);
 
+        Log::info('File ID '.$request->fileID.' has been attached to Customer ID '.$linkCustomer.' by '.Auth::user()->full_name);
         return true;
     }
 
@@ -101,6 +101,7 @@ class SaveFileLinkFile extends FilesDomain
     {
         $fileData = FileLinkFiles::find($fileLinkID);
         $fileID   = $fileData->file_id;
+        Log::notice('A file for a File Link has been deleted by '.Auth::user()->full_name.'.  File Data - ', array($fileData));
         $fileData->delete();
 
         $this->deleteFile($fileID);
@@ -118,6 +119,7 @@ class SaveFileLinkFile extends FilesDomain
             'note'     => $upload ? $uploadDetails['note'] : null,
         ]);
 
+        Log::info('A new file has been attached to File Link ID '.$linkID.'.  File Data - ', array($fileData));
         return $fileData;
     }
 
@@ -130,9 +132,7 @@ class SaveFileLinkFile extends FilesDomain
         foreach($files as $file)
         {
             $this->moveFile($this->path, $file);
-
             $this->attachFile($linkID, $file);
-            Log::info('File Added for link ID - '.$linkID.' by '.Auth::user()->full_name.'.  File ID-'.$file);
         }
 
         session()->forget('newLinkFile');

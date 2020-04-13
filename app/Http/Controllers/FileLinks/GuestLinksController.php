@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\FileLinks;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
 
 use App\Domains\FileLinks\GetFileLinkFiles;
 use App\Domains\FileLinks\SaveFileLinkFile;
@@ -18,15 +18,12 @@ class GuestLinksController extends Controller
     //  Landing page if no link is sent
     public function index()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip());
         return view('links.guestIndex');
     }
 
     //  Show the link details for the user
     public function show($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by IP Address ' . \Request::ip());
-
         $linkObj = new GetFileLinkDetails;
         $linkID = $linkObj->getLinkID($id);
 
@@ -58,23 +55,17 @@ class GuestLinksController extends Controller
     //  Get the guest available files for the link
     public function getFiles($id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip());
-
         $linkID = (new GetFileLinkDetails)->getLinkID($id);
-
         return (new GetFileLinkFiles)->getGuestFiles($linkID);
     }
 
     //  Upload new file
     public function update(AddFileLinkGuestFileRequest $request, $id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip().'. Submitted Data - ', $request->toArray());
-
         $request->linkID = (new GetFileLinkDetails)->getLinkID($id);
         //  Determine if a file is being uploaded still or not
         if((new SaveFileLinkFile)->execute($request, false))
         {
-            Log::info('A Guest has stored a file for file link ID - '.$request->linkID);
             return response()->json(['success' => true]);
         }
 
@@ -85,14 +76,11 @@ class GuestLinksController extends Controller
     //  Notify the owner of the link that files were uploaded
     public function notify(Request $request, $id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by IP Address '.\Request::ip().'. Submitted Data - ', $request->toArray());
-
         $linkObj = new GetFileLinkDetails;
         $linkObj->getLinkID($id);
         $linkData = $linkObj->execute();
 
         (new SaveFileLinkFile)->notifyOwnerOfUpload($linkData->user_id, $linkData);
-
         return response()->json(['success' => true]);
     }
 }

@@ -103,7 +103,7 @@ class DashboardTest extends TestCase
         $user = $this->getTech();
         $response = $this->actingAs($user)->get(route('markNotification', $this->notifications[0]->id));
 
-        $response->assertStatus(404);
+        $response->assertStatus(500);
     }
 
     //  Try to mark a notification
@@ -111,7 +111,7 @@ class DashboardTest extends TestCase
     {
         $response = $this->actingAs($this->user)->get(route('markNotification', $this->notifications[0]->id));
 
-        $response->assertStatus(404);
+        $response->assertStatus(500);
     }
 
     //  Try to delete a notification as guest
@@ -130,7 +130,7 @@ class DashboardTest extends TestCase
         $user = $this->getTech();
         $response = $this->actingAs($user)->delete(route('delNotification', $this->notifications[0]->id));
 
-        $response->assertStatus(404);
+        $response->assertStatus(500);
     }
 
     //  Try to delete a notification
@@ -138,6 +138,6 @@ class DashboardTest extends TestCase
     {
         $response = $this->actingAs($this->user)->delete(route('delNotification', $this->notifications[0]->id));
 
-        $response->assertStatus(404);
+        $response->assertStatus(500);
     }
 }

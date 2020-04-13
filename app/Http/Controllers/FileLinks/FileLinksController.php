@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\FileLinks;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 use App\Domains\FileLinks\GetFileLinks;
 use App\Domains\FileLinks\KillFileLink;
@@ -35,15 +35,12 @@ class FileLinksController extends Controller
     //  Landing page shows all links that the user owns
     public function index()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('links.index');
     }
 
     //  Ajax call to show the links for a specific user
     public function find($id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
         //  If the user is trying to access the links of another user, they must have the proper permissions permissions
         if ($id != 0)
         {
@@ -56,15 +53,12 @@ class FileLinksController extends Controller
     //  Create a new file link form
     public function create()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('links.newLink');
     }
 
     //  Submit the new file link form
     public function store(NewFileLinkRequest $request)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
-
         //  If there are files, process them first in their chunks
         if(!empty($request->file))
         {
@@ -75,15 +69,12 @@ class FileLinksController extends Controller
         $linkObj = new CreateFileLink();
         $linkData = $linkObj->create($request);
 
-        Log::info('File Link Created for '.Auth::user()->full_name.'.  Link Data - ', $linkData);
         return response()->json($linkData);
     }
 
     //  Show details about a file link
     public function details($id, /** @scrutinizer ignore-unused */ $name)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
         $linkDataObj = new GetFileLinkDetails($id);
 
         //  If the link is invalid, return an error page
@@ -103,61 +94,42 @@ class FileLinksController extends Controller
     //  Ajax call te get JSON details of the link
     public function show($id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
         $linkDataObj = new GetFileLinkDetails($id);
         $linkData = $linkDataObj->execute(true);
-
         return $linkData;
     }
 
     //  Update the link's details
     public function update(UpdateFileLinkRequest $request, $id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
-
         (new SetFileLinkDetails)->execute($request, $id);
-
-        Log::info('File Link Updated by '.Auth::user()->full_name, ['link_id' => $id]);
         return response()->json(['success' => true]);
     }
 
     //  Retrieve the instructions attached to a link
     public function getInstructions($linkID)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return response()->json(['note' => (new GetFileLinkDetails($linkID))->getLinkInstructions()]);
     }
 
     //  Update the instructions attached to the link
     public function submitInstructions(UpdateFileLinkInstructionsRequest $request, $linkID)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name . '. Submitted Data - ', $request->toArray());
-
         (new SetFileLinkDetails)->setLinkInstructions($request, $linkID);
-
         return response()->json(['success' => true]);
     }
 
     //  Disable a file linke, but do not remove it (set the expire date to a previous date)
     public function disableLink($id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
         (new KillFileLink)->disableLink($id);
-
-        Log::info('User '.Auth::user()->full_name.' disabled link ID - '.$id);
         return response()->json(['success' => true]);
     }
 
     //  Delete a file link
     public function destroy($id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
         (new KillFileLink)->deleteFileLink($id);
-
-        Log::info('File link ID - '.$id.' deleted by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 }

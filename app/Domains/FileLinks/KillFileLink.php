@@ -2,6 +2,9 @@
 
 namespace App\Domains\FileLinks;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
 use Carbon\Carbon;
 
 use App\FileLinks;
@@ -16,10 +19,11 @@ class KillFileLink extends FilesDomain
     //  Only disable the link by adjusting the expire date
     public function disableLink($linkID)
     {
-        FileLinks::findOrFail($linkID)->update([
+        $linkData = FileLinks::findOrFail($linkID)->update([
             'expire' => Carbon::yesterday()
         ]);
 
+        Log::info('File Link has been disabled by '.Auth::user()->full_name.'.  Link Data - ', array($linkData));
         return true;
     }
 
@@ -29,6 +33,7 @@ class KillFileLink extends FilesDomain
         $linkData = FileLinks::findOrFail($linkID);
 
         $this->removeLinkFiles();
+        Log::notice('File Link has been deleted by '.Auth::user()->full_name.'.  Link Data - ', array($linkData));
         $linkData->delete();
 
         return true;
@@ -43,6 +48,7 @@ class KillFileLink extends FilesDomain
         {
             foreach($fileList as $file)
             {
+                Log::debug('File from File Link being deleted.  File Data - ', array($file));
                 $fileID = $file->file_id;
                 $file->delete();
 

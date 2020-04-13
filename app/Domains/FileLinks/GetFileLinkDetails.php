@@ -26,6 +26,7 @@ class GetFileLinkDetails
     //  Return the details of the file link
     public function execute($collection = false)
     {
+        Log::debug('File link details gathered for '.$this->linkID.'.  Data gathered - ', array($this->linkDetails));
         if($collection)
         {
             return new FileLinksResource($this->linkDetails);
@@ -61,6 +62,7 @@ class GetFileLinkDetails
         {
             $this->linkID = $data->link_id;
             $this->linkDetails = $data;
+            Log::debug('File link details gathered for '.$this->linkID.'.  Data gathered - ', array($this->linkDetails));
             return $this->linkID;
         }
 

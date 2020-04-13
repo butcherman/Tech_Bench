@@ -3,6 +3,7 @@
 namespace App\Domains\FileLinks;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\FileLinks;
@@ -39,6 +40,7 @@ class CreateFileLink extends SaveFileLinkFile
             'note'         => $data->instructions
         ]);
 
+        Log::info('User '.Auth::user()->full_name.' created new file link.  Data - ', array($link));
         return $link->link_id;
     }
 
@@ -49,6 +51,7 @@ class CreateFileLink extends SaveFileLinkFile
         {
             $hash = strtolower(Str::random(15));
             $dup  = FileLinks::where('link_hash', $hash)->get()->count();
+            Log::debug('New hash created - '.$hash.'.  Checking for duplicate.  Result - '.$dup);
         } while($dup != 0);
 
         return $hash;

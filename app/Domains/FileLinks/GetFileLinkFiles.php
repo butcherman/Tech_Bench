@@ -2,6 +2,8 @@
 
 namespace App\Domains\FileLinks;
 
+use Illuminate\Support\Facades\Log;
+
 use App\FileLinkFiles;
 
 use App\Http\Resources\FileLinkFilesCollection;
@@ -18,6 +20,7 @@ class GetFileLinkFiles
                     ->with('User')
                     ->get();
 
+        Log::debug('Retrieved files attached to File Link ID '.$linkID.'.  Data Gathered - ', array($files));
         if($collection)
         {
             return new FileLinkFilesCollection($files);
@@ -37,6 +40,7 @@ class GetFileLinkFiles
                 ->get()
         );
 
+        Log::debug('Retrieved guest files attached to File Link ID '.$linkID.'.  Data Gathered - ', array($files));
         return $files;
     }
 }

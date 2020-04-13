@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Domains\Users\GetUserStats;
