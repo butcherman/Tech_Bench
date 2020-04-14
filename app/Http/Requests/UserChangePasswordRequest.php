@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ValidatePassword;
+
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateFileLinkInstructionsRequest extends FormRequest
+class UserChangePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +26,8 @@ class UpdateFileLinkInstructionsRequest extends FormRequest
     public function rules()
     {
         return [
-            'instructions' => 'required',
+            'oldPass' => ['required', new ValidatePassword],
+            'newPass' => 'required|string|min:6|confirmed|different:oldPass'
         ];
     }
 }

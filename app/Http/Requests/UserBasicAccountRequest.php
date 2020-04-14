@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateFileLinkInstructionsRequest extends FormRequest
+class UserBasicAccountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +26,12 @@ class UpdateFileLinkInstructionsRequest extends FormRequest
     public function rules()
     {
         return [
-            'instructions' => 'required',
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'email'      => [
+                'required',
+                Rule::unique('users')->ignore(Auth::user())
+            ],
         ];
     }
 }

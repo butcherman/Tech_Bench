@@ -64,6 +64,7 @@ class UserController extends Controller
         return response()->json([
             'duplicate' => true,
             'user'      => $user->full_name,
+            'username'  => $user->username,
             'active'    => $user->deleted_at == null ? 1 : 0,
         ]);
     }

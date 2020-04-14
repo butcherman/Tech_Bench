@@ -57,6 +57,6 @@ class DashboardController extends Controller
     //  About page
     public function about()
     {
-        return view('about', ['branch' => 'latest']);
+        return view('about');
     }
 }

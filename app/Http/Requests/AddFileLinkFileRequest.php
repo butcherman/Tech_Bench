@@ -23,7 +23,6 @@ class AddFileLinkFileRequest extends FormRequest
      */
     public function rules()
     {
-        \Log::debug('triggered');
         return [
             'linkID' => 'required|exists:file_links,link_id'
         ];

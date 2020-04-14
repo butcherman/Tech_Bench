@@ -95,6 +95,12 @@ Vue.component('form-submit',   require('./components/FormSubmit.vue').default);
 Vue.component('notification-dashboard', require('./components/NotificationDashboard.vue').default);
 
 /*
+*   User Profile Components
+*/
+Vue.component('user-profile',  require('./components/user/userProfile.vue').default);
+Vue.component('user-settings', require('./components/user/userSettings.vue').default);
+
+/*
 *   Vue File Link Components
 */
 Vue.component('list-file-links',    require('./components/fileLinks/ListFileLinks.vue').default);
