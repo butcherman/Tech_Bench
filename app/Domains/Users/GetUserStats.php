@@ -32,6 +32,13 @@ class GetUserStats
         return $custFavs;
     }
 
+    public function checkForCustomerFav($custID)
+    {
+        $isFav = CustomerFavs::where('user_id', $this->userID)->where('cust_id', $custID)->first();
+
+        return $isFav ? true : false;
+    }
+
     public function getUserTechTipFavs()
     {
         $tipFavs     = TechTipFavs::where('user_id', $this->userID)

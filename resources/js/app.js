@@ -85,9 +85,9 @@ Vue.mixin({
 /*
 *   Global Components
 */
-Vue.component('go-back',       require('./components/GoBack.vue').default);
-Vue.component('file-upload',   require('./components/FileUpload.vue').default);
-Vue.component('form-submit',   require('./components/FormSubmit.vue').default);
+Vue.component('go-back',         require('./components/GoBack.vue').default);
+Vue.component('file-upload',     require('./components/FileUpload.vue').default);
+Vue.component('form-submit',     require('./components/FormSubmit.vue').default);
 
 /*
 *   Dashboard and Template Components

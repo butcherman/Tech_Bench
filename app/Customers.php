@@ -26,4 +26,9 @@ class Customers extends Model
     {
         return Customers::where('parent_id', $this->cust_id)->count();
     }
+
+    public function ParentCustomer()
+    {
+        return $this->hasOne('App\Customers', 'cust_id', 'parent_id');
+    }
 }

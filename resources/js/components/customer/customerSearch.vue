@@ -49,6 +49,10 @@
                 type: String,
                 default: 'Search For Customer',
                 required: false,
+            },
+            search_name: {
+                type: String,
+                required: false,
             }
         },
         data: function () {
@@ -124,6 +128,11 @@
             show_form()
             {
                 this.show_form ? this.$bvModal.show('customer_search_modal') : this.$bvModal.hide('customer_search_modal');
+            },
+            search_name()
+            {
+                this.searchParam.name = this.search_name;
+                this.searchCustomer();
             }
         }
     }

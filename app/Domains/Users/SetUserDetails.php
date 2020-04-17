@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests\UserBasicAccountRequest;
-use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserNotificationSettingsRequest;
 
 use Carbon\Carbon;
