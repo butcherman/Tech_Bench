@@ -114,24 +114,26 @@ Vue.component('guest-upload',       require('./components/fileLinks/GuestFileUpl
 /*
 *   Vue Customer Components
 */
-Vue.component('customer-list',     require('./components/customer/customerList.vue').default);
-Vue.component('new-customer-form', require('./components/customer/newCustomer.vue').default);
-Vue.component('customer-details',  require('./components/customer/customerDetails.vue').default);
-Vue.component('customer-systems',  require('./components/customer/customerSystems.vue').default);
-Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
-Vue.component('customer-notes',    require('./components/customer/CustomerNotes.vue').default);
-Vue.component('customer-files',    require('./components/customer/customerFiles.vue').default);
-Vue.component('customer-search',   require('./components/customer/customerSearch.vue').default);
+Vue.component('customer-master',     require('./components/customer/customerDetailsMaster.vue').default);
+Vue.component('customer-list',       require('./components/customer/customerList.vue').default);
+Vue.component('new-customer-form',   require('./components/customer/newCustomer.vue').default);
+Vue.component('customer-details',    require('./components/customer/customerDetails.vue').default);
+Vue.component('customer-equipment',  require('./components/customer/customerEquipment.vue').default);
+Vue.component('equipment-form',      require('./components/customer/customerEquipmentForm.vue').default);
+Vue.component('customer-contacts',   require('./components/customer/customerContacts.vue').default);
+Vue.component('customer-notes',      require('./components/customer/CustomerNotes.vue').default);
+Vue.component('customer-files',      require('./components/customer/customerFiles.vue').default);
+Vue.component('customer-search',     require('./components/customer/customerSearch.vue').default);
 
 /*
 *   Vue Tech Tip Components
 */
-Vue.component('search-tips',       require('./components/tips/searchTips.vue').default);
-Vue.component('new-tip-form',      require('./components/tips/newTipForm.vue').default);
-Vue.component('edit-tip-form',     require('./components/tips/editTipForm.vue').default);
-Vue.component('tech-tip-details',  require('./components/tips/tipDetails.vue').default);
-Vue.component('tech-tip-files',    require('./components/tips/tipFiles.vue').default);
-Vue.component('tech-tip-comments', require('./components/tips/tipComments.vue').default);
+Vue.component('search-tips',         require('./components/tips/searchTips.vue').default);
+Vue.component('new-tip-form',        require('./components/tips/newTipForm.vue').default);
+Vue.component('edit-tip-form',       require('./components/tips/editTipForm.vue').default);
+Vue.component('tech-tip-details',    require('./components/tips/tipDetails.vue').default);
+Vue.component('tech-tip-files',      require('./components/tips/tipFiles.vue').default);
+Vue.component('tech-tip-comments',   require('./components/tips/tipComments.vue').default);
 
 /*
 *   Administration Components

@@ -237,7 +237,7 @@
             init()
             {
                 this.url = 'https://maps.google.com/?q='+encodeURI(this.details.address+','+this.details.city+','+this.details.state);
-                this.linkBtn = this.cust_details.parent_id == null ? 'Link to Parent Site' : 'Unlink From Parent Site';
+                this.linkBtn = this.details.parent_id == null ? 'Link to Parent Site' : 'Unlink From Parent Site';
                 if(this.details.parent_id == null && this.details.child_count == 0 && this.can_del == true)
                 {
                     this.allowDeact = true;
@@ -287,6 +287,8 @@
                 {
                     this.unlinkCust();
                 }
+
+                this.$emit('parentUpdated', );
             },
             updateCust(data)
             {
@@ -302,7 +304,6 @@
                             name: this.linkData.name,
                         };
                         this.details.parent_id = this.linkData.cust_id;
-                        // this.linkBtn = 'Unlink From Parent Site';
                         this.init();
                     }).catch(error => this.$bvModal.msgBoxOk('Link to Parent operation failed.  Please try again later.'));
             },

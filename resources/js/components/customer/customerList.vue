@@ -176,22 +176,7 @@ export default {
         //  Reset the search back to a blank state
         resetSearch()
         {
-            // this.pagination.links      = {};
-            // this.pagination.meta       = {};
-            // this.searchParam.page      = '';
-            // this.searchParam.page      = '';
-            // this.searchParam.perPage   = 25;
-            // this.searchParam.sortField = 'name';
-            // this.searchParam.sortType  = 'asc';
-            // this.searchParam.name      = '';
-            // this.searchParam.city      = '';
-            // this.searchParam.system    = '';
-            // // this.filter = null;
-            // console.log('1');
-            // this.updateSearch();
-            // console.log('2');
             this.$refs['customer-list-table'].reset();
-            // console.log('3');
         }
     }
 }

@@ -50,20 +50,7 @@
                     <b-form-input id="name" v-model="form.name" type="text" required autofocus placeholder="Enter Contact Name"></b-form-input>
                     <b-form-invalid-feedback>You must enter a name for the contact</b-form-invalid-feedback>
                 </b-form-group>
-                <div class="row justify-content-center mt-4" v-show="linked">
-                    <div class="col-10 col-md-4 order-2 order-md-1">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="shared" class="onoffswitch-checkbox" id="shared" v-model="form.shared">
-                            <label class="onoffswitch-label" for="shared">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 align-self-center order-1 order-md-2">
-                        <h5 class="text-center">Shared Between Sites</h5>
-                    </div>
-                </div>
+
                 <b-form-group label="Email Address" label-for="email">
                     <b-form-input id="email" v-model="form.email" type="email" placeholder="Enter Contact Email Address"></b-form-input>
                     <b-form-invalid-feedback>Please use a valid email format</b-form-invalid-feedback>
@@ -147,7 +134,7 @@
         },
         created()
         {
-            this.getContacts();
+            // this.getContacts();
             this.$root.$on('bv::modal::hide', (bvEvent, modalID) => {
                 this.resetForm();
             });

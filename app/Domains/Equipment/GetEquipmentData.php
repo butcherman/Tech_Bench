@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\SystemTypes;
+use App\SystemCategories;
 use App\Http\Resources\SystemTypesCollection;
 
 
@@ -23,5 +24,14 @@ class GetEquipmentData
         }
 
         return $sysList;
+    }
+
+    //  Get a list of all equipment along with possible data fields
+    public function getAllEquipmentWithDataList()
+    {
+        $equipList = SystemCategories::with('SystemTypes')->with('SystemTypes.SystemDataFields')->get();
+        Log::debug('Equipment list gathered with Data Fields.  Data Gathered - ', array($equipList));
+
+        return $equipList->forget('system_data_field_types');
     }
 }
