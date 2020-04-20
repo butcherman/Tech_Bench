@@ -60,10 +60,11 @@
                     color="#ff1d5e"
                     class="mx-auto"
                 />
+                Loading Customers...
             </div>
             <template slot="table-row" slot-scope="data">
                 <span v-if="data.column.field == 'system_list'">
-                    <div v-for="sys in data.row.customer_systems" :key="sys.cust_sys_id">{{sys.system_types.name}}</div>
+                    <div v-for="sys in data.row.customer_systems" :key="sys.cust_sys_id">{{sys.sys_name}}</div>
                 </span>
                 <span v-else-if="data.column.field == 'name'" class="d-block w-100 h-100">
                     <a :href="route('customer.details', [data.row.cust_id, dashify(data.row.name)])" class="d-block w-100 h-100 text-dark">{{data.row.name}}</a>
@@ -130,7 +131,7 @@ export default {
             },
         }
     },
-    created() {
+    mounted() {
         this.updateSearch();
     },
     methods: {
@@ -139,6 +140,7 @@ export default {
         {
             axios.get(this.route('customer.search', this.searchParam))
                 .then(res => {
+                    console.log(res.data);
                     this.pagination.links = res.data.links;
                     this.pagination.meta  = res.data.meta;
                     this.table.rows = res.data.data;

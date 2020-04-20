@@ -287,8 +287,6 @@
                 {
                     this.unlinkCust();
                 }
-
-                this.$emit('parentUpdated', );
             },
             updateCust(data)
             {
@@ -305,6 +303,7 @@
                         };
                         this.details.parent_id = this.linkData.cust_id;
                         this.init();
+                        this.$emit('parentUpdated', this.details.parent_id);
                     }).catch(error => this.$bvModal.msgBoxOk('Link to Parent operation failed.  Please try again later.'));
             },
             unlinkCust()
@@ -327,8 +326,8 @@
                                     this.details.parent_customer.name = '';
                                     this.details.parent_id = null;
                                     this.submitted = false;
-                                    // this.linkBtn = 'Link to Parent Site';
                                     this.init();
+                                    this.$emit('parentUpdated', this.details.parent_id);
                                 }).catch(error => this.$bvModal.msgBoxOk('Unlink to Parent operation failed.  Please try again later.'));
                         }
                     });

@@ -8,6 +8,7 @@ class CustomerContactPhones extends Model
 {
     protected $fillable = ['cont_id', 'phone_type_id', 'phone_number', 'extension'];
     protected $appends  = ['type_icon', 'type_name', 'readable'];
+    protected $hidden   = ['created_at', 'updated_at'];
 
     public function getTypeIconAttribute()
     {
@@ -21,7 +22,8 @@ class CustomerContactPhones extends Model
 
     public function getReadableAttribute()
     {
-        return PhoneNumberTypes::readablePhoneNumber($this->phone_number);
+        // return PhoneNumberTypes::readablePhoneNumber($this->phone_number);
+        return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '($1) $2-$3', $this->phone_number);
     }
 
     public function PhoneNumberTypes()

@@ -10,6 +10,13 @@ use App\Http\Resources\Customers as CustomerResource;
 
 class GetCustomerDetails
 {
+    public function getDetails($custID)
+    {
+        $details = Customers::find($custID);
+
+        return $details;
+    }
+
     public function getDetailsWithParent($custID, $collection = false)
     {
         $details = Customers::where('cust_id', $custID)->with('ParentCustomer')->first();

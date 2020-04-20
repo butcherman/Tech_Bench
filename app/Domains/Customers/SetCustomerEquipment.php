@@ -51,8 +51,8 @@ class SetCustomerEquipment
         {
             CustomerSystemData::create([
                 'cust_sys_id' => $newSys->cust_sys_id,
-                'field_id' => $field['field_id'],
-                'value' => isset($field['value']) ? $field['value'] : null,
+                'field_id'    => $field['field_id'],
+                'value'       => isset($field['value']) ? $field['value'] : null,
             ]);
         }
 
@@ -64,12 +64,12 @@ class SetCustomerEquipment
     public function updateEquipment(CustomerEditEquipmentRequest $request)
     {
         //  Verify equipment is valid
-        $equipID = $this->validateEquipment($request->equip['sys_id'])->cust_sys_id;
+        $equipID = $this->validateEquipment($request->equip['sys_id']); // ->cust_sys_id;
         if(!$equipID)
         {
             return false;
         }
-        $this->updateEquipmentFields($equipID, $request->fields);
+        $this->updateEquipmentFields($equipID->cust_sys_id, $request->fields);
 
         Log::info('Customer Equipment Updated for Customer ID - '.$this->custID.' by '.Auth::user()->full_name.'.  Equipment Data - ', array($request->equip));
         return true;
@@ -96,16 +96,18 @@ class SetCustomerEquipment
     {
         //  Check local customer first
         $valid = CustomerSystems::where('cust_id', $this->custID)->where('sys_id', $sysID)->first();
+        Log::debug('valid data - ', array($valid));
 
         if(!$valid)
         {
-            $parent = Customers::find($this->custID)->parent_id;
+            $parent = Customers::find($this->custID);
             if($parent)
             {
-                $valid = CustomerSystems::where('cust_id', $parent)->where('sys_id', $sysID)->first();
+                $valid = CustomerSystems::where('cust_id', $parent->parent_id)->where('sys_id', $sysID)->first();
             }
         }
 
+        Log::debug('new valid data - ', array($valid));
         return $valid;
     }
 

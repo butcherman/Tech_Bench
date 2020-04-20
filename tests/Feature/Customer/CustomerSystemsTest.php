@@ -217,80 +217,72 @@ class CustomerSystemsTest extends TestCase
         $this->assertGuest();
     }
 
-    // //  Test updating the system data
-    // public function test_update_system()
-    // {
-    //     $data = [
-    //         'cust_id' => $this->cust->cust_id,
-    //         'equip'  => [
-    //             'name' => $this->system->name,
-    //             'sys_id' => $this->system->sys_id,
-    //         ],
-    //         'share'  => false,
-    //     ];
-    //     foreach($this->sysData as $field)
-    //     {
-    //         $data['fields'][] = [
-    //             'field_id' => $field->field_id,
-    //             'value' => 'Some amazing value',
-    //         ];
-    //     }
+    //  Test updating the system data
+    public function test_update_system()
+    {
+        $data = [
+            'cust_id' => $this->cust->cust_id,
+            'equip'  => [
+                'name' => 'this is a name',
+                'sys_id' => $this->system->sys_id,
+            ],
+            'share'  => false,
+        ];
+        foreach($this->sysData as $field)
+        {
+            $data['fields'][] = [
+                'field_id' => $field->field_id,
+                'value' => 'Some amazing value',
+            ];
+        }
 
-    //     $response = $this->actingAs($this->user)->put(route('customer.systems.update', $this->system->cust_sys_id), $data);
+        $response = $this->actingAs($this->user)->put(route('customer.systems.update', $this->system->cust_id), $data);
 
-    //     $response->assertSuccessful();
-    //     $response->assertJson(['success' => true]);
-    // }
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
 
-    // //  Test updating the system data with mismatching data
-    // public function test_update_system_mismatch_data()
-    // {
-    //     $anotherCust = factory(Customers::class)->create();
-    //     // $data = [
-    //     //     'cust_id' => $anotherCust->cust_id,
-    //     //     'system'  => $this->system->sys_id,
-    //     // ];
-    //     // foreach ($this->sysData as $field) {
-    //     //     $data['field_' . $field->field_id] = 'Some new value to add';
-    //     // }
-    //     $data = [
-    //         'cust_id' => $anotherCust->cust_id,
-    //         'equip'  => [
-    //             'name' => $this->system->name,
-    //             'sys_id' => $this->system->sys_id,
-    //         ],
-    //         'share'  => false,
-    //     ];
-    //     foreach($this->sysData as $field)
-    //     {
-    //         $data['fields'][] = [
-    //             'field_id' => $field->field_id,
-    //             'value' => 'Some amazing value',
-    //         ];
-    //     }
+    //  Test updating the system data with mismatching data
+    public function test_update_system_mismatch_data()
+    {
+        $anotherCust = factory(Customers::class)->create();
+        $data = [
+            'cust_id' => $anotherCust->cust_id,
+            'equip'  => [
+                'name' => 'this is a name',
+                'sys_id' => $this->system->sys_id,
+            ],
+            'share'  => false,
+        ];
+        foreach($this->sysData as $field)
+        {
+            $data['fields'][] = [
+                'field_id' => $field->field_id,
+                'value' => 'Some amazing value',
+            ];
+        }
 
-    //     $response = $this->actingAs($this->user)->put(route('customer.systems.update', $this->system->cust_sys_id), $data);
+        $response = $this->actingAs($this->user)->put(route('customer.systems.update', $anotherCust->cust_id), $data);
 
-    //     $response->assertStatus(400);
-    // }
+        $response->assertStatus(404);
+    }
 
     //  Test deleting a system as a guest
-    // public function test_delete_system_as_guest()
-    // {
-    //     $response = $this->delete(route('customer.delEquip', [$this->system->cust_sys_id, $this->cust->cust_id]));
+    public function test_delete_system_as_guest()
+    {
+        $response = $this->delete(route('customer.delEquip', [$this->system->cust_sys_id, $this->cust->cust_id]));
 
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // //  Test deleting a system
-    // public function test_delete_system()
-    // {
-    //     $response = $this->actingAs($this->user)->delete(route('customer.delEquip', [$this->system->cust_sys_id, $this->cust->cust_id]));
+    //  Test deleting a system
+    public function test_delete_system()
+    {
+        $response = $this->actingAs($this->user)->delete(route('customer.delEquip', [$this->system->cust_sys_id, $this->cust->cust_id]));
 
-    //     $response->assertSuccessful();
-    //     $response->assertJson(['success' => true]);
-    //     $this->assertSoftDeleted('customer_systems', $this->system->toArray());
-    // }
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
 }

@@ -7,10 +7,15 @@ use App\PhoneNumberTypes;
 use App\CustomerContacts;
 use Illuminate\Http\Request;
 use App\CustomerContactPhones;
+use App\Domains\Customers\GetCustomerContacts;
+use App\Domains\Customers\GetCustomerDetails;
+use App\Domains\Customers\SetCustomerContacts;
 use JeroenDesloovere\VCard\VCard;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerEditContactRequest;
+use App\Http\Requests\CustomerNewContactRequest;
 use Illuminate\Support\Facades\Route;
 
 class CustomerContactsController extends Controller
@@ -20,158 +25,58 @@ class CustomerContactsController extends Controller
         $this->middleware('auth');
     }
 
-    //  Store a new customer contact
-    public function store(Request $request)
+    //  Index funtion will only return the type of phone numbers that can be assigned to a customer
+    public function index()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        return (new GetCustomerContacts)->getPhoneNumberTypes(true);
+    }
 
-        $request->validate([
-            'cust_id' => 'required',
-            'name'    => 'required'
-        ]);
-
-        //  Determine if the contact should be assigned under this site or the parent site
-        $details = Customers::find($request->cust_id);
-        if($details->parent_id && $request->shared == 'true')
-        {
-            $request->cust_id = $details->parent_id;
-        }
-
-        $cont = CustomerContacts::create([
-            'cust_id' => $request->cust_id,
-            'name'    => $request->name,
-            'email'   => !empty($request->email) ? $request->email : null,
-            'shared'  => $request->shared == 'true' ? 1 : 0,
-        ])->cont_id;
-
-        foreach($request->numbers['type'] as $key => $num)
-        {
-            if(!empty($request->numbers['number'][$key]))
-            {
-                CustomerContactPhones::create([
-                    'cont_id'       => $cont,
-                    'phone_type_id' => $request->numbers['type'][$key],
-                    'phone_number'  => PhoneNumberTypes::cleanPhoneNumber($request->numbers['number'][$key]),
-                    'extension'     => isset($request->numbers['ext'][$key]) ? $request->numbers['ext'][$key] : null
-                ]);
-            }
-        }
-
-        Log::info('New Customer Contact Created for Cust ID - '.$request->cust_id.'.  New Contact ID-'.$cont);
+    //  Store a new customer contact
+    public function store(CustomerNewContactRequest $request)
+    {
+        (new SetCustomerContacts($request->cust_id))->createContact($request);
         return response()->json(['success' => true]);
     }
 
     //  Get the contacts for a customer
     public function show($id)
     {
-        $contacts = CustomerContacts::where('cust_id', $id)
-            ->with('CustomerContactPhones')
-            ->get();
-
-        //  Determine if there is a parent site with shared contacts
-        $parent = Customers::find($id)->parent_id;
-        if($parent)
-        {
-            $parentList = CustomerContacts::where('cust_id', $parent)
-                ->where('shared', 1)
-                ->with('CustomerContactPhones')
-                ->get();
-
-            $contacts = $contacts->merge($parentList);
-        }
-
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-        Log::debug('Fetched Data - ', $contacts->toArray());
-        return $contacts;
+        return (new GetCustomerContacts($id))->execute();
     }
 
     //  Edit function will actually download the contact information in V-Card format
     public function edit($id)
     {
-        $contact  = CustomerContacts::find($id);
-        $numbers  = CustomerContactPhones::where('cont_id', $id)->get();
-        $custData = Customers::find($contact->cust_id);
+        $contData = (new GetCustomerContacts)->getOneContact($id);
+        $custData = (new GetCustomerDetails)->getDetails($contData['cust_id']);
 
-        $contactName = explode(' ', $contact->name);
-        $firstName   = $contactName[0];
-        $lastName    = isset($contactName[1]) ? $contactName[1] : '';
-        $additional  = '';
-        $prefix      = '';
-        $suffix      = '';
 
         $vcard = new VCard();
-        $vcard->addName($lastName, $firstName, $additional, $prefix, $suffix);
-        $vcard->addCompany($custData->name);
-        $vcard->addEmail($contact->email);
-        $vcard->addAddress(null, null, $custData->address, $custData->city, $custData->state, $custData->zip, null);
-
-        if(!empty($numbers))
+        $vcard->addName($contData['lastName'], $contData['firstName'], $contData['additional'], $contData['prefix'], $contData['suffix']);
+        $vcard->addCompany($custData['name']);
+        $vcard->addEmail($contData['email']);
+        $vcard->addAddress(null, null, $custData['address'], $custData['city'], $custData['state'], $custData['zip'], null);
+        if(!empty($contData['numbers']))
         {
-            foreach($numbers as $phone)
+            foreach($contData['numbers'] as $phone)
             {
                 $vcard->addPhoneNumber($phone->phone_number, $phone->description);
             }
         }
-
-        Log::debug('Route '.Route::currentRouteName().' visited by User ID-'.Auth::user()->user_id);
-        Log::info('Customer Contact Downloaded - Contact ID-'.$id.' by '.Auth::user()->full_name);
         return $vcard->download();
     }
 
     //  Update an existing Customer Contact
-    public function update(Request $request, $id)
+    public function update(CustomerEditContactRequest $request, $id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
-
-        $request->validate([
-            'cust_id' => 'required',
-            'name'    => 'required'
-        ]);
-
-        //  Update the primary contact information
-        $details = Customers::find($request->cust_id);
-        if ($details->parent_id && $request->shared == 'true')
-        {
-            $request->cust_id = $details->parent_id;
-        }
-
-        CustomerContacts::find($id)->update([
-            'cust_id' => $request->cust_id,
-            'name'    => $request->name,
-            'email'   => isset($request->email) ? $request->email : null,
-            'shared'  => $request->shared == 'true' ? 1 : 0,
-        ]);
-
-        //  Clear all contact phone numbers and re-enter them
-        CustomerContactPhones::where('cont_id', $id)->delete();
-        foreach($request->numbers['type'] as $key => $num)
-        {
-            if(!empty($request->numbers['number'][$key]))
-            {
-                CustomerContactPhones::create([
-                    'cont_id'       => $id,
-                    'phone_type_id' => $request->numbers['type'][$key],
-                    'phone_number'  => PhoneNumberTypes::cleanPhoneNumber($request->numbers['number'][$key]),
-                    'extension'     => isset($request->numbers['ext'][$key]) ? $request->numbers['ext'][$key] : null
-                ]);
-            }
-        }
-
-
-        Log::info('Customer Contact Updated for Cust ID - '.$request->cust_id.'.  Contact ID-'.$id);
+        (new SetCustomerContacts($id))->updateContact($request);
         return response()->json(['success' => true]);
     }
 
     //  Delete an existing contact
     public function destroy($id)
     {
-        $cont = CustomerContacts::find($id);
-
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-        Log::info('Customer Contact deleted for Customer ID-'.$cont->cust_id.' by User ID-'.Auth::user()->full_name.'. Deleted Contact ID-'.$id);
-
-        $cont->delete();
-
+        (new SetCustomerContacts($id))->deleteContact($id);
         return response()->json(['success' => true]);
     }
 }

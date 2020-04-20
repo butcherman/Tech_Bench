@@ -62,9 +62,15 @@ class CustomerContactsTest extends TestCase
     public function test_add_contact_as_guest()
     {
         $data = [
-            'cust_id' => $this->cust->cust_id,
-            'name' => 'Mickey Mouse',
-            'email' => 'mickey@mouse.email',
+            'cust_id'  => $this->cust->cust_id,
+            'name'    => 'Mickey Mouse',
+            'email'   => 'mickey@mouse.email',
+            'shared'  => false,
+            'customer_contact_phones' => [
+                'phone_type_id' => [2],
+                'readable'      => [5306654744],
+                'extension'     => null
+            ]
         ];
 
         $response = $this->post(route('customer.contacts.store'), $data);
@@ -82,11 +88,11 @@ class CustomerContactsTest extends TestCase
             'cust_id'  => $this->cust->cust_id,
             'name'    => 'Mickey Mouse',
             'email'   => 'mickey@mouse.email',
-            'numbers' => [
-                'type'   => [2],
-                //  TODO:  fix this to pull a proper number from DB
-                'number' => [5306654744],
-                'ext'    => null
+            'shared'  => false,
+            'customer_contact_phones' => [
+                'phone_type_id' => [2],
+                'readable'      => [5306654744],
+                'extension'     => null
             ]
         ];
 
@@ -102,14 +108,13 @@ class CustomerContactsTest extends TestCase
         $user = $this->getTech();
         $data = [
             'cust_id'  => $this->childCust->cust_id,
-            'shared'  => 'true',
             'name'    => 'Mickey Mouse',
             'email'   => 'mickey@mouse.email',
-            'numbers' => [
-                'type'   => [2],
-                //  TODO:  fix this to pull a proper number from DB
-                'number' => [5306654744],
-                'ext'    => null
+            'shared'  => false,
+            'customer_contact_phones' => [
+                'phone_type_id' => [2],
+                'readable'      => [5306654744],
+                'extension'     => null
             ]
         ];
 
@@ -123,9 +128,16 @@ class CustomerContactsTest extends TestCase
     public function test_update_contact_as_guest()
     {
         $data = [
-            'cust_id' => $this->cust->cust_id,
-            'name' => 'Jimmy Mouse',
-            'email' => 'jimmy@mouse.email',
+            'cont_id'  => $this->cont[0]->cont_id,
+            'cust_id'  => $this->cust->cust_id,
+            'name'    => 'Mickey Mouse',
+            'email'   => 'mickey@mouse.email',
+            'shared'  => false,
+            'customer_contact_phones' => [
+                'phone_type_id' => [2],
+                'readable'      => [5306654744],
+                'extension'     => null
+            ]
         ];
 
         $response = $this->put(route('customer.contacts.update', $this->cont[0]->cont_id), $data);
@@ -140,13 +152,15 @@ class CustomerContactsTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'cust_id' => $this->cust->cust_id,
-            'name'   => 'Jimmy Mouse',
-            'email'  => 'jimmy@mouse.email',
-            'numbers' => [
-                'type'   => [2],
-                'number' => [5306654744],
-                'ext'    => null
+            'cont_id'  => $this->cont[0]->cont_id,
+            'cust_id'  => $this->cust->cust_id,
+            'name'    => 'Mickey Mouse',
+            'email'   => 'mickey@mouse.email',
+            'shared'  => false,
+            'customer_contact_phones' => [
+                'phone_type_id' => [2],
+                'readable'      => [5306654744],
+                'extension'     => null
             ]
         ];
 
@@ -161,13 +175,15 @@ class CustomerContactsTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'cust_id' => $this->childCust->cust_id,
-            'name'   => 'Jimmy Mouse',
-            'email'  => 'jimmy@mouse.email',
-            'numbers' => [
-                'type'   => [2],
-                'number' => [5306654744],
-                'ext'    => null
+            'cont_id'  => $this->childCust->cust_id,
+            'cust_id'  => $this->cust->cust_id,
+            'name'    => 'Mickey Mouse',
+            'email'   => 'mickey@mouse.email',
+            'shared'  => false,
+            'customer_contact_phones' => [
+                'phone_type_id' => [2],
+                'readable'      => [5306654744],
+                'extension'     => null
             ]
         ];
 
@@ -184,14 +200,15 @@ class CustomerContactsTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'cust_id' => $this->childCust->cust_id,
-            'shared'  => 'true',
-            'name'   => 'Jimmy Mouse',
-            'email'  => 'jimmy@mouse.email',
-            'numbers' => [
-                'type'   => [2],
-                'number' => [5306654744],
-                'ext'    => null
+            'cont_id'  => $this->childCust->cust_id,
+            'cust_id'  => $this->cust->cust_id,
+            'name'    => 'Mickey Mouse',
+            'email'   => 'mickey@mouse.email',
+            'shared'  => true,
+            'customer_contact_phones' => [
+                'phone_type_id' => [2],
+                'readable'      => [5306654744],
+                'extension'     => null
             ]
         ];
 

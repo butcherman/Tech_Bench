@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 class LogDebugVisits
 {
-    protected $ignore = ['_token'];
+    protected $ignore = ['_token', 'token'];
     protected $redact = ['password', 'password_confirmation', 'oldPass', 'newPass', 'newPass_confirmation'];
 
     /**

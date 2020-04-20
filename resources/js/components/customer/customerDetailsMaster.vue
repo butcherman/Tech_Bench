@@ -6,21 +6,17 @@
                     :cust_details="cust_details"
                     :is_fav="is_fav"
                     :can_del="can_del"
-                    @parentUpdated="reload"
+                    @parentUpdated="reloadParent"
                 >
                 </customer-details>
             </div>
         </div>
         <div class="row">
             <div class="col-md-5 grid-margin stretch-card">
-                <customer-equipment :cust_id="cust_details.cust_id"></customer-equipment>
+                <customer-equipment :cust_id="custDetails.cust_id"></customer-equipment>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">customer contacts</div>
-                </div>
+            <div class="col-md-7 grid-margin stretch-card">
+                <customer-contacts :cust_id="custDetails.cust_id" :linked="linked"></customer-contacts>
             </div>
         </div>
     </div>
@@ -47,16 +43,34 @@
         data() {
             return {
                 //
+                recomputeCounter: 0,
+                custDetails: this.cust_details,
             }
         },
-        created() {
+        mounted() {
+            //
+            // console.log(this.cust_details);
+        },
+        computed: {
+            linked()
+            {
+                this.recomputeCounter;
+                if(this.custDetails.parent_id != null || this.custDetails.child_count > 0)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        },
+        watch: {
             //
         },
         methods: {
-            //
-            reload()
+            reloadParent(data)
             {
-                console.log('reloaded');
+                this.custDetails.parent_id = data;
+                this.recomputeCounter++;
             },
         }
     }
