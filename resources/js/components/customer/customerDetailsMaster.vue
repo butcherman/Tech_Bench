@@ -19,6 +19,11 @@
                 <customer-contacts :cust_id="custDetails.cust_id" :linked="linked"></customer-contacts>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+                <customer-notes :cust_id="custDetails.cust_id" :linked="linked"></customer-notes>
+            </div>
+        </div>
     </div>
 </template>
 

@@ -123,6 +123,7 @@ Vue.component('equipment-form',      require('./components/customer/customerEqui
 Vue.component('customer-contacts',   require('./components/customer/customerContacts.vue').default);
 Vue.component('contact-form',        require('./components/customer/CustomerContactForm.vue').default);
 Vue.component('customer-notes',      require('./components/customer/CustomerNotes.vue').default);
+Vue.component('note-form',           require('./components/customer/customerNoteForm.vue').default);
 Vue.component('customer-files',      require('./components/customer/customerFiles.vue').default);
 Vue.component('customer-search',     require('./components/customer/customerSearch.vue').default);
 

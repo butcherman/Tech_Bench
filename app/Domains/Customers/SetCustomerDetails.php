@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Customers;
 
 use App\Http\Requests\CustomerCreateRequest;
-use App\Http\Requests\CustomerDetailsUpdateRequest;
 use App\Http\Requests\CustomerParentSetRequest;
+use App\Http\Requests\CustomerDetailsUpdateRequest;
 
 class SetCustomerDetails
 {

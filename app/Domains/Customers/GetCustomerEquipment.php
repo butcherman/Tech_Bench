@@ -3,7 +3,6 @@
 namespace App\Domains\Customers;
 
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 use App\Customers;
 use App\CustomerSystems;
