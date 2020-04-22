@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Files;
-use App\Customers;
-use App\CustomerFiles;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
-use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
+
+use App\Domains\Customers\GetCustomerFiles;
+use App\Domains\Customers\SetCustomerFiles;
+use App\Domains\FileTypes\GetCustomerFileTypes;
+
+use App\Http\Requests\CustomerFileNewRequest;
+use App\Http\Requests\CustomerFileUpdateRequest;
 
 class CustomerFilesController extends Controller
 {
@@ -20,141 +18,41 @@ class CustomerFilesController extends Controller
         $this->middleware('auth');
     }
 
-    //  Store a new customer file
-    public function store(Request $request)
+    //  Index funtion will return an array of file types that can be assigned to a file
+    public function index()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
-        //  Validate the form
-        $request->validate([
-            'cust_id' => 'required',
-            'name'    => 'required',
-            'type'    => 'required'
-        ]);
+        return (new GetCustomerFileTypes)->execute(true);
+    }
 
-        $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
-
-        //  Receive and process the file
-        $save = $receiver->receive();
-
-        //  See if the upload has finished
-        if($save->isFinished())
+    //  Store a new customer file
+    public function store(CustomerFileNewRequest $request)
+    {
+        //  Determine if a file is being uploaded still or not
+        if((new SetCustomerFiles($request->cust_id))->createFile($request))
         {
-            //  Determine if the note should go to the customer, or its parent
-            $details = Customers::find($request->cust_id);
-            if($details->parent_id && $request->shared == 'true')
-            {
-                $request->cust_id = $details->parent_id;
-            }
-
-            $file = $save->getFile();
-            //  Set file locationi and clean filename for duplicates
-            $filePath = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$request->cust_id;
-            $fileName = Files::cleanFileName($filePath, $file->getClientOriginalName());
-
-            //  Store the file
-            $file->storeAs($filePath, $fileName);
-
-            //  Put the file in the database
-            $file = Files::create(
-            [
-                'file_name' => $fileName,
-                'file_link' => $filePath.DIRECTORY_SEPARATOR
-            ]);
-
-            //  Get information for system files table
-            $fileID = $file->file_id;
-
-            //  Input the file into the customer files table
-            CustomerFiles::create([
-                'file_id'      => $fileID,
-                'file_type_id' => $request->type,
-                'cust_id'      => $request->cust_id,
-                'user_id'      => Auth::user()->user_id,
-                'shared'       => $request->shared === 'true' ? 1 : 0,
-                'name'         => $request->name
-            ]);
-
-            Log::info('File added for Customer ID - '.$request->custID.' by '.Auth::user()->full_name.'.  New File ID - '.$fileID);
+            return response()->json(['success' => true]);
         }
 
-        //  Get the current progress
-        $handler = $save->handler();
-
-        Log::debug('File being uploaded.  Percentage done - '.$handler->getPercentageDone());
-        return response()->json([
-            'done'   => $handler->getPercentageDone(),
-            'status' => true
-        ]);
+        return response()->json(['success' =>false]);
     }
 
     //  Get the files for the customer
     public function show($id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
-        $files = CustomerFiles::where('cust_id', $id)
-            ->with('Files')
-            ->with('CustomerFileTypes')
-            ->with('User')
-            ->get();
-
-        //  Determine if there is a parent site with shared files
-        $parent = Customers::find($id)->parent_id;
-        if($parent) {
-            $parentList = Customerfiles::where('cust_id', $parent)
-                ->where('shared', 1)
-                ->with('Files')
-                ->with('CustomerFileTypes')
-                ->with('User')
-                ->get();
-
-            $files = $files->merge($parentList);
-        }
-
-        return $files;
+        return (new GetCustomerFiles($id))->execute();
     }
 
     //  Update the information of the file, but not the file itself
-    public function update(Request $request, $id)
+    public function update(CustomerFileUpdateRequest $request, $id)
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
-
-        $request->validate([
-            'cust_id' => 'required',
-            'name' => 'required',
-            'type' => 'required'
-        ]);
-
-        $details = Customers::find($request->cust_id);
-        if($details->parent_id && $request->shared == 1) {
-            $request->cust_id = $details->parent_id;
-        }
-
-        CustomerFiles::find($id)->update([
-            'name'         => $request->name,
-            'file_type_id' => $request->type,
-            'cust_id'      => $request->cust_id,
-            'shared'       => $request->shared == 1 ? 1 : 0,
-        ]);
-
-        Log::info('File information updated for customer file ID - '.$id.' by '.Auth::user()->full_name);
+        (new SetCustomerFiles($request->cust_id))->updateFile($request, $id);
         return response()->json(['success' => true]);
     }
 
     //  Remove a customer file
     public function destroy($id)
     {
-        //  Remove the file from SystemFiles table
-        $data = CustomerFiles::find($id);
-        $fileID = $data->file_id;
-        $data->delete();
-
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-        Log::info('File Deleted For Customer ID-'.$data->custID.' by '.Auth::user()->full_name.'.  File ID - '.$id);
-
-        //  Delete from system if no longer in use
-        Files::deleteFile($fileID);
-
+        (new SetCustomerFiles($id))->deleteCustFile($id);
         return response()->json(['success' => true]);
     }
 }

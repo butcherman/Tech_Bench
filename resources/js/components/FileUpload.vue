@@ -17,9 +17,18 @@
 
 <script>
     export default {
-        props: [
-            'submit_url',
-        ],
+        props: {
+            // 'submit_url',
+            submit_url: {
+                type: String,
+                required: true,
+            },
+            max_files: {
+                type: Number,
+                required: false,
+                default: 5
+            }
+        },
         data: function () {
             return {
                 formData: {},
@@ -31,7 +40,7 @@
                     url: this.submit_url,
                     autoProcessQueue: false,
                     parallelUploads: 1,
-                    maxFiles: 5,
+                    maxFiles: this.max_files,
                     maxFilesize: window.techBench.maxUpload,
                     addRemoveLinks: true,
                     chunking: true,

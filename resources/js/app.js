@@ -125,6 +125,7 @@ Vue.component('contact-form',        require('./components/customer/CustomerCont
 Vue.component('customer-notes',      require('./components/customer/CustomerNotes.vue').default);
 Vue.component('note-form',           require('./components/customer/customerNoteForm.vue').default);
 Vue.component('customer-files',      require('./components/customer/customerFiles.vue').default);
+Vue.component('file-form',           require('./components/customer/customerFileForm.vue').default);
 Vue.component('customer-search',     require('./components/customer/customerSearch.vue').default);
 
 /*
@@ -175,7 +176,8 @@ Vue.component('upload-module',  require('./components/modules/upload.vue').defau
 */
 window.axios.defaults.headers.common = {
    'X-Requested-With': 'XMLHttpRequest',
-   'X-CSRF-TOKEN': window.techBench.csrfToken
+   'X-CSRF-TOKEN':      window.techBench.csrfToken,
+   'Content-Type':     'application/json',
 }
 
 /*
