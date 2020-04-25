@@ -18,12 +18,14 @@
                         </b-form-group>
                     </div>
                     <div class="col-md-6">
-                        <b-form-group id="expire"
-                                    label="Expires On:"
-                                    label-for="link_expire">
+                        <b-form-group
+                            id="expire"
+                            label="Expires On:"
+                            label-for="link_expire"
+                        >
                             <b-form-datepicker id="link_expire"
-                                        required
-                                        v-model="form.expire">
+                                required
+                                v-model="form.expire">
                             </b-form-datepicker>
                             <b-form-invalid-feedback>Please Enter An Expiration Date For This Link</b-form-invalid-feedback>
                         </b-form-group>

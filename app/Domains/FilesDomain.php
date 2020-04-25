@@ -5,8 +5,12 @@ namespace App\Domains;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 use App\Files;
+
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 
 class FilesDomain
 {
@@ -18,8 +22,23 @@ class FilesDomain
         $this->path = config('filesystems.paths.default');
     }
 
+    //  Process a file chunk
+    protected function processFileChunk($data)
+    {
+        $this->receiver = new FileReceiver('file', $data, HandlerFactory::classFromRequest($data));
+
+        $save = $this->receiver->receive();
+        if($save->isFinished())
+        {
+            $fileID = $this->saveFile($save->getFile());
+            return $fileID;
+        }
+
+        return false;
+    }
+
     //  Save a file after it has been uploaded
-    protected function saveFile($file)
+    protected function saveFile(UploadedFile $file)
     {
         $fileName = $this->cleanFilename($file->getClientOriginalName());
         $fileName = $this->isFileDup($fileName);

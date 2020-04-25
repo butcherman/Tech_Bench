@@ -30,8 +30,8 @@
                     </template>
                     <b-card-text>
                         <b-collapse id="collapse-me" is-nav visible class="w-100">
-                            <div class="w-100">
-                                <h6 class="mt-4 mb-2">Article Type</h6>
+                            <div class="w-100 filter-wrapper">
+                                <h6 class="mt-4 mb-2">Article Type:</h6>
                                 <b-form-group>
                                     <b-form-checkbox-group
                                         v-model="form.search.articleType"
@@ -40,7 +40,7 @@
                                         @change="updateSearch"
                                     ></b-form-checkbox-group>
                                 </b-form-group>
-                                <h6 class="mt-4 mb-2">Equipment Type</h6>
+                                <h6 class="mt-4 mb-2">Equipment Type:</h6>
                                 <b-form-group v-for="cat in sys_types" :key="cat.cat_id" :label="cat.name">
                                     <b-form-checkbox
                                         v-for="sys in cat.system_types"
@@ -52,56 +52,97 @@
                                         @change="updateSearch"
                                     >{{sys.name}}</b-form-checkbox>
                                 </b-form-group>
-                                <!-- <b-button variant="info" block @click="resetFilters">Reset Filters</b-button> TODO:  Fix reset button -->
+                                <b-button variant="info" block @click="resetFilters">Reset Filters</b-button>
                             </div>
                         </b-collapse>
                     </b-card-text>
                 </b-card>
             </div>
             <div class="col-md-10">
-                <div v-if="loading" class="loading">
-                    <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-                </div>
-                <div v-else>
-                    <div class="row">
-                        <div class="col-12 grid-margin stretch-card" v-for="tip in tips" :key="tip.tip_id">
-                            <a :href="route('tip.details', [tip.tip_id, dashify(tip.subject)])" class="w-100 text-dark">
+                <b-overlay :show="loading" class="h-100">
+                    <template v-slot:overlay>
+                        <atom-spinner
+                            :animation-duration="1000"
+                            :size="60"
+                            color="#ff1d5e"
+                            class="mx-auto"
+                        />
+                        <h4 class="text-center">Loading Tech Tips</h4>
+                    </template>
+                    <div class="row h-100" v-if="error">
+                        <div class="col-12">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <img src="/img/err_img/sry_error.png" alt="Error Image" />
+                                    <div class="mt-4 text-danger">
+                                        <p>
+                                            Sorry, but something bad happend.
+                                        </p>
+                                        <p>
+                                            A log has been generated and our minions are busy at work to determine what went wrong.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row h-100" v-else-if="loading">
+                        <div class="col-12"></div>
+                    </div>
+                    <div class="row h-100" v-else-if="!tips.length">
+                        <div class="col-12">
+                            <div class="card h-100  grid-margin stretch-card">
+                                <div class="card-body text-center">
+                                    <img src="/img/err_img/search.png" alt="Error Image" />
+                                    <div class="mt-4">
+                                        <p>
+                                            It seems that there are no Tech Tips with your search criteria.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" v-else>
+                        <div class="col-12 grid-margin  tip-link" v-for="tip in tips" :key="tip.tip_id">
+                            <a :href="route('tip.details', [tip.tip_id, dashify(tip.subject)])" class="w-100 text-dark" title="Click to See Rest of Tip" v-b-tooltip.hover>
                                 <div class="card">
                                     <div class="card-header">
                                         <strong>{{tip.subject}}</strong>
                                         <span class="float-sm-right text-secondary d-block d-sm-inline">{{tip.created_at}}</span>
                                         </div>
                                     <div class="card-body">
-                                        <div v-html="tip.description" class="mb-3"></div>
+                                        <div v-html="tip.description" class="mb-3 tip-preview"></div>
+                                        <strong>For Equipment: </strong>
                                         <b-badge pill variant="primary" v-for="sys in tip.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
                                     </div>
                                 </div>
                             </a>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-3 text-center text-sm-left mb-2">
-                            Showing {{form.pagination.low}} through {{form.pagination.high}} of {{form.pagination.rows}}
+                </b-overlay>
+                <div class="row">
+                    <div class="col-sm-3 text-center text-sm-left mb-2">
+                        Showing {{form.pagination.low}} through {{form.pagination.high}} of {{form.pagination.rows}}
+                    </div>
+                    <div class="col-sm-6">
+                        <b-pagination
+                            v-model="form.page"
+                            :total-rows="form.pagination.rows"
+                            :per-page="form.pagination.perPage"
+                            next-text="Next"
+                            prev-text="Prev"
+                            align="center"
+                            @change="updatePage"
+                        ></b-pagination>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="row">
+                            <div class="col text-center">Results Per Page</div>
                         </div>
-                        <div class="col-sm-6">
-                            <b-pagination
-                                v-model="form.page"
-                                :total-rows="form.pagination.rows"
-                                :per-page="form.pagination.perPage"
-                                next-text="Next"
-                                prev-text="Prev"
-                                align="center"
-                                @change="updatePage"
-                            ></b-pagination>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="row">
-                                <div class="col text-center">Results Per Page</div>
-                            </div>
-                            <div class="row">
-                                <div class="col text-center">
-                                    <b-badge pill :variant="form.pagination.perPage == num ? 'success' : 'primary'" class="ml-1 mb-1 pointer" v-for="num in resPerPage" :key="num" @click="updatePerPage(num)">{{num}}</b-badge>
-                                </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <b-badge pill :variant="form.pagination.perPage == num ? 'success' : 'primary'" class="ml-1 mb-1 pointer" v-for="num in resPerPage" :key="num" @click="updatePerPage(num)">{{num}}</b-badge>
                             </div>
                         </div>
                     </div>
@@ -120,6 +161,7 @@ export default {
     ],
     data () {
         return {
+            error:   false,
             loading: true,
             form: {
                 search: {
@@ -139,10 +181,9 @@ export default {
             system_types: [],
             tips:         [],
             resPerPage:   [10, 25, 50, 100],
-
         }
     },
-    created()
+    mounted()
     {
         this.updateSearch();
     },
@@ -155,7 +196,6 @@ export default {
         updateSearch()
         {
             this.loading = true;
-            window.scrollTo(0, 0);
             axios.get(this.route('tip.search', this.form))
                 .then(res => {
                     this.form.page            = res.data.meta.current_page;
@@ -164,13 +204,15 @@ export default {
                     this.form.pagination.high = res.data.meta.to;
                     this.tips                 = res.data.data;
                     this.loading              = false;
-                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                }).catch(error => this.error = true);
         },
         resetFilters()
         {
-            this.form.articleType = [];
-            this.form.systemType  = [];
-            this.form.searchText  = '';
+            console.log('triggered');
+            this.form.search.searchText  = null;
+            this.form.search.articleType = [];
+            this.form.search.systemType  = [];
+            this.updateSearch();
         },
         updatePage(newPage)
         {

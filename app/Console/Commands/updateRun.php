@@ -161,6 +161,7 @@ class updateRun extends Command
             DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR;
 
         // Copy files
+		// TODO: Copy composer and package files
         File::copyDirectory($updateFile.'app', base_path().DIRECTORY_SEPARATOR.'app');
         File::copyDirectory($updateFile.'bootstrap', base_path().DIRECTORY_SEPARATOR.'bootstrap');
         File::copyDirectory($updateFile.'config', base_path().DIRECTORY_SEPARATOR.'config');

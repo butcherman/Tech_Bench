@@ -48,6 +48,9 @@ require('tinymce/plugins/lists');
 require('tinymce/plugins/link');
 require('tinymce/plugins/image');
 require('tinymce/plugins/table');
+require('tinymce/plugins/fullscreen');
+require('tinymce/plugins/spellchecker');
+require('tinymce/plugins/preview');
 
 /*
 *   Vue, Bootstrap and third party libraries

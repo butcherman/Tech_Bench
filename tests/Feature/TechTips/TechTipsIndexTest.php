@@ -51,15 +51,14 @@ class TechTipsIndexTest extends TestCase
         $data = [
             'search' => [
                 'searchText' => '',
-                // 'articleType' => [],
-                // 'systemType' => [],
             ],
-            'pagination' => [
-                'rows' => '',
-                'low'  => '',
-                'high' => '',
-                'perPage' => 10
-            ]
+            'pagination'  => [
+                'rows'    => '',
+                'low'     => '',
+                'high'    => '',
+                'perPage' => 10,
+            ],
+            'page'        => 1
         ];
         $response = $this->get(route('tip.search', $data));
 
@@ -75,15 +74,14 @@ class TechTipsIndexTest extends TestCase
         $data = [
             'search' => [
                 'searchText' => '',
-                // 'articleType' => [],
-                // 'systemType' => [],
             ],
-            'pagination' => [
-                'rows' => '',
-                'low'  => '',
-                'high' => '',
-                'perPage' => 10
-            ]
+            'pagination'  => [
+                'rows'    => '',
+                'low'     => '',
+                'high'    => '',
+                'perPage' => 10,
+            ],
+            'page'        => 1
         ];
         $response = $this->actingAs($user)->get(route('tip.search', $data));
 
@@ -98,15 +96,14 @@ class TechTipsIndexTest extends TestCase
         $data = [
             'search' => [
                 'searchText' => $this->tips[2]->subject,
-                // 'articleType' => [],
-                // 'systemType' => [],
             ],
             'pagination' => [
                 'rows' => '',
                 'low'  => '',
                 'high' => '',
                 'perPage' => 10
-            ]
+            ],
+            'page' => 1
         ];
         $response = $this->actingAs($user)->get(route('tip.search', $data));
 
@@ -122,14 +119,14 @@ class TechTipsIndexTest extends TestCase
             'search' => [
                 'searchText' => $this->tips[2]->subject,
                 'articleType' => [$this->tips[2]->tip_type_id],
-                // 'systemType' => [],
             ],
             'pagination' => [
                 'rows' => '',
                 'low'  => '',
                 'high' => '',
                 'perPage' => 10
-            ]
+            ],
+            'page' => 1
         ];
         $response = $this->actingAs($user)->get(route('tip.search', $data));
 
@@ -144,7 +141,6 @@ class TechTipsIndexTest extends TestCase
         $data = [
             'search' => [
                 'searchText' => $this->tips[2]->subject,
-                // 'articleType' => [$this->tips[2]->tip_type_id],
                 'systemType' => [$this->sysArr[0]],
             ],
             'pagination' => [
@@ -152,7 +148,8 @@ class TechTipsIndexTest extends TestCase
                 'low'  => '',
                 'high' => '',
                 'perPage' => 10
-            ]
+            ],
+            'page' => 1
         ];
         $response = $this->actingAs($user)->get(route('tip.search', $data));
 

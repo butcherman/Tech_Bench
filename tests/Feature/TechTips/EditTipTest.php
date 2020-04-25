@@ -202,42 +202,42 @@ class EditTipTest extends TestCase
         $response->assertSessionHasErrors('tip');
     }
 
-    //  Submit a tip that includes a file
-    public function test_submit_edit_tip_with_file()
-    {
-        Storage::fake(config('filesystems.paths.tips'));
+    // //  Submit a tip that includes a file
+    // public function test_submit_edit_tip_with_file()
+    // {
+    //     Storage::fake(config('filesystems.paths.tips'));
 
-        $tipData = factory(TechTips::class)->make();
-        $systems = factory(SystemTypes::class)->create();
-        $fileName = Str::random(5) . '.jpg';
-        $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => $tipData->description,
-            'file'      => $file = UploadedFile::fake()->image($fileName),
-            'deletedFileList' => [],
-        ];
-        $user = $this->getInstaller();
+    //     $tipData = factory(TechTips::class)->make();
+    //     $systems = factory(SystemTypes::class)->create();
+    //     $fileName = Str::random(5) . '.jpg';
+    //     $data = [
+    //         'subject'   => $tipData->subject,
+    //         'equipment' => [$systems],
+    //         'tipType'   => 1,
+    //         'tip'       => $tipData->description,
+    //         'file'      => $file = UploadedFile::fake()->image($fileName),
+    //         'deletedFileList' => [],
+    //     ];
+    //     $user = $this->getInstaller();
 
-        $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
+    //     $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
 
-        $response->assertSuccessful();
-        $response->assertSeeText('uploaded successfully');
+    //     $response->assertSuccessful();
+    //     $response->assertSeeText('uploaded successfully');
 
-        unset($data['file']);
-        $data['_completed'] = true;
+    //     unset($data['file']);
+    //     $data['_completed'] = true;
 
-        //  After file load completed - a second request is sent to actually create the tip
-        $response2 = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
+    //     //  After file load completed - a second request is sent to actually create the tip
+    //     $response2 = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
 
-        $response2->assertSuccessful();
-        $response2->assertJsonStructure(['tip_id']);
+    //     $response2->assertSuccessful();
+    //     $response2->assertJsonStructure(['tip_id']);
 
-        //  Make sure the file is in the correct place
-        $tipID = $response2->getOriginalContent()['tip_id'];
-        Storage::disk('local')->assertExists(config('filesystems.paths.tips') . DIRECTORY_SEPARATOR . $tipID . DIRECTORY_SEPARATOR . $fileName);
-    }
+    //     //  Make sure the file is in the correct place
+    //     $tipID = $response2->getOriginalContent()['tip_id'];
+    //     Storage::disk('local')->assertExists(config('filesystems.paths.tips') . DIRECTORY_SEPARATOR . $tipID . DIRECTORY_SEPARATOR . $fileName);
+    // }
 
     //  Try to submit edited tech tip and delete a couple of attached files
     public function test_submit_edit_tip_delete_some_files()
