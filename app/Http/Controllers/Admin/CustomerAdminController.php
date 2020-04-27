@@ -39,7 +39,7 @@ class CustomerAdminController extends Controller
             'cust_id'     => 'nullable|numeric|unique:customers,cust_id',
         ]);
 
-        $data = Customers::find($request->original_id)->update([
+        Customers::find($request->original_id)->update([
             'cust_id' => $request->cust_id,
         ]);
 

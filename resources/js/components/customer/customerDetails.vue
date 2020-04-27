@@ -7,7 +7,7 @@
                     {{details.name}}
                 </h3>
                 <h5>{{details.dba_name}}</h5>
-                <h5 v-if="details.parent_id">Child of - <a :href="route('customer.details', [details.parent_customer.cust_id, dashify(details.parent_customer.name)])">{{details.parent_customer.name}}</a></h5>
+                <h5 v-if="details.parent_id">Child of - <a :href="route('customer.details', [details.parent_customer.cust_id, dashify(details.parent_customer.name)])" target="_blank">{{details.parent_customer.name}}</a></h5>
                 <address>
                     <div class="float-left">
                         <i class="fas fa-map-marker-alt"></i>
@@ -292,19 +292,31 @@
             {
                 this.linkData  = data;
                 this.submitted = true;
-                axios.post(this.route('customer.linkParent'), {'parent_id': data.cust_id, 'cust_id': this.cust_details.cust_id})
-                    .then(res => {
-                        this.showSearch = false;
-                        this.submitted  = false;
-                        this.$refs['details-edit-modal'].hide();
-                        this.details.parent_customer = {
-                            cust_id: this.linkData.cust_id,
-                            name: this.linkData.name,
-                        };
-                        this.details.parent_id = this.linkData.cust_id;
-                        this.init();
-                        this.$emit('parentUpdated', this.details.parent_id);
-                    }).catch(error => this.$bvModal.msgBoxOk('Link to Parent operation failed.  Please try again later.'));
+
+                if(data.cust_id == this.cust_details.cust_id)
+                {
+                    this.$bvModal.msgBoxOk('Cannot link a site to itself');
+                    this.showSearch = false;
+                    this.submitted  = false;
+                    this.$refs['details-edit-modal'].hide();
+                }
+                else
+                {
+                    axios.post(this.route('customer.linkParent'), {'parent_id': data.cust_id, 'cust_id': this.cust_details.cust_id})
+                        .then(res => {
+                            this.showSearch = false;
+                            this.submitted  = false;
+                            this.$refs['details-edit-modal'].hide();
+                            this.details.parent_customer = {
+                                cust_id: this.linkData.cust_id,
+                                name: this.linkData.name,
+                            };
+                            this.details.parent_id = this.linkData.cust_id;
+                            this.init();
+                            this.$emit('parentUpdated', this.details.parent_id);
+                        }).catch(error => this.$bvModal.msgBoxOk('Link to Parent operation failed.  Please try again later.'));
+                }
+
             },
             unlinkCust()
             {

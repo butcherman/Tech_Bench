@@ -62,7 +62,7 @@ class GetUserStats
     {
         $activeLinks = FileLinks::where('user_id', $this->userID)->where('expire', '>', Carbon::now())->count();
 
-        Log::debug('Retrieved count of active File Links for User ID'.$this->userID.'. Data - '.$activeLinks.' found');
+        Log::debug('Retrieved count of active File Links for User ID'.$this->userID.'. Data - './** @scrutinizer ignore-type */$activeLinks.' found');
         return $activeLinks;
     }
 
@@ -70,7 +70,7 @@ class GetUserStats
     {
         $totalLinks  = FileLinks::where('user_id', $this->userID)->count();
 
-        Log::debug('Retrieved count of total File Links for User ID'.$this->userID.'. Data - '.$totalLinks.' found');
+        Log::debug('Retrieved count of total File Links for User ID'.$this->userID.'. Data - './** @scrutinizer ignore-type */$totalLinks.' found');
         return $totalLinks;
     }
 }

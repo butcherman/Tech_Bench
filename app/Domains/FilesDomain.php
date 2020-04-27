@@ -58,11 +58,12 @@ class FilesDomain
     //  Try to delete a file - note this will fail if it is still in use
     protected function deleteFile($fileID)
     {
+        $fileData = Files::find($fileID);
+        $fileLink = $fileData->file_link.$fileData->file_name;
+
         try
         {
             //  Try to delete file from database - will throw error if foreign key is in use
-            $fileData = Files::find($fileID);
-            $fileLink = $fileData->file_link.$fileData->file_name;
             $fileData->delete();
         }
         catch(\Illuminate\Database\QueryException $e)

@@ -25,7 +25,7 @@ class CustomerCreateRequest extends FormRequest
     {
         return [
             'cust_id'   => 'nullable|numeric|unique:customers,cust_id',
-            'parent_id' => 'nullable|numeric|exists:customers,cust_id',
+            'parent_id' => 'nullable|numeric|exists:customers,cust_id|different:cust_id',
             'name'      => 'required',
             'dba_name'  => 'nullable',
             'address'   => 'required',

@@ -20,6 +20,9 @@
                 />
                 <h4 class="text-center">Loading Notes</h4>
             </div>
+            <div v-else-if="!notes.length">
+                <h5 class="text-center text-muted">No Notes Have Been Created Yet</h5>
+            </div>
             <div v-else class="row">
                 <div class="col-md-3 grid-margin stretch-card customer-note-card" v-for="note in notes" :key="note.note_id">
                     <div class="card">

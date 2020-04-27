@@ -29,7 +29,7 @@ class SetFileLinkDetails
     //  Update only the instructions attached to the link
     public function setLinkInstructions(UpdateFileLinkInstructionsRequest $request, $linkID)
     {
-        $inst = FileLinks::find($linkID)->update([
+        FileLinks::find($linkID)->update([
             'note' => $request->instructions,
         ]);
 

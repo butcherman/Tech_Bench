@@ -44,7 +44,7 @@ class KillFileLink extends FilesDomain
     {
         $fileList = FileLinkFiles::where('link_id', $this->linkID);
 
-        if($fileList)
+        if(!empty($fileList))
         {
             foreach($fileList as $file)
             {

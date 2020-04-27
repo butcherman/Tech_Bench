@@ -84,7 +84,7 @@ class SaveFileLinkFile extends FilesDomain
             return false;
         }
 
-        $custFileData = CustomerFiles::create([
+        CustomerFiles::create([
             'file_id'      => $request->fileID,
             'file_type_id' => $request->fileType,
             'cust_id'      => $linkCustomer,

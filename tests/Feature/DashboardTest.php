@@ -57,14 +57,14 @@ class DashboardTest extends TestCase
     }
 
     // //  Try to visist the about page  TODO - why does this fail on Scrutinizer and Travis CI???
-    // public function test_about_page()
-    // {
-    //     $user = $this->getTech();
-    //     $response = $this->actingAs($user)->get(route('about'));
+    public function test_about_page()
+    {
+        $user = $this->getTech();
+        $response = $this->actingAs($user)->get(route('about'));
 
-    //     $response->assertSuccessful();
-    //     $response->assertViewIs('about');
-    // }
+        $response->assertSuccessful();
+        $response->assertViewIs('about');
+    }
 
     //  Try to retrieve some notifications as a guest
     public function test_get_notifications_as_guest()

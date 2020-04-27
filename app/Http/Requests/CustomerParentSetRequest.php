@@ -24,7 +24,7 @@ class CustomerParentSetRequest extends FormRequest
     public function rules()
     {
         return [
-            'parent_id' => 'required|numeric|exists:customers,cust_id',
+            'parent_id' => 'required|numeric|exists:customers,cust_id|different:cust_id',
             'cust_id'   => 'required|numeric|exists:customers,cust_id'
         ];
     }

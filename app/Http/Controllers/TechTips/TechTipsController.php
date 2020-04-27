@@ -2,42 +2,20 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use App\Domains\Equipment\GetEquipmentData;
-use App\Domains\TechTips\GetTechTips;
-use App\User;
-use App\Files;
-use App\TechTips;
-use App\TechTipFavs;
-use App\TechTipFiles;
-use App\TechTipTypes;
-use App\TechTipSystems;
-use Illuminate\Http\File;
-use App\SystemCategories;
-use Illuminate\Http\Request;
-use App\Notifications\NewTechTip;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Resources\TechTipsCollection;
-use Illuminate\Support\Facades\Notification;
-use App\Http\Resources\TechTipTypesCollection;
-use App\Http\Resources\SystemCategoriesCollection;
-use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
-use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
-use App\Http\Resources\SystemCategoriesCollection as CategoriesCollection;
 
-
-use App\Domains\TechTips\GetTechTipTypes;
-use App\Domains\TechTips\SetTechTips;
-use App\Domains\Users\GetUserStats;
 use App\Domains\Users\UserFavs;
-use App\Http\Requests\TechTipEditTipRequest;
+use App\Domains\Users\GetUserStats;
+use App\Domains\TechTips\SetTechTips;
+use App\Domains\TechTips\GetTechTips;
+use App\Domains\TechTips\GetTechTipTypes;
+use App\Domains\Equipment\GetEquipmentData;
+
 use App\Http\Requests\TechTipNewTipRequest;
-use App\Http\Requests\TechTipProcessImageRequest;
 use App\Http\Requests\TechTipSearchRequest;
+use App\Http\Requests\TechTipEditTipRequest;
+use App\Http\Requests\TechTipProcessImageRequest;
 
 class TechTipsController extends Controller
 {
@@ -151,26 +129,10 @@ class TechTipsController extends Controller
         return response()->json(['success' => true]);
     }
 
-
-
-
-
-
-
-
     //  Soft delet the Tech Tip
     public function destroy($id)
     {
-        // Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
         $this->authorize('hasAccess', 'Delete Tech Tip');
-
-        // //  Remove the Tip from any users favorites
-        // TechTipFavs::where('tip_id', $id)->delete();
-
-        // //  Disable the tip
-        // TechTips::find($id)->delete();
-        // Log::warning('User - '.Auth::user()->user_id.' deleted Tech Tip ID - '.$id);
 
         (new SetTechTips)->deleteTip($id);
         return response()->json(['success' => true]);

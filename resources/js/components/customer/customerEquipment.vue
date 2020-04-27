@@ -20,6 +20,9 @@
                 />
                 <h4 class="text-center">Loading Equipment</h4>
             </div>
+            <div v-else-if="!equipment.length">
+                <h4 class="text-center text-muted">No Equipment Assigned</h4>
+            </div>
             <b-tabs v-else>
                 <b-tab v-for="sys in equipment" :key="sys.cust_sys_id" :title="sys.sys_name" class="pt-2">
                     <dl class="row" v-for="data in sys.customer_system_data" :key="data.field_id">

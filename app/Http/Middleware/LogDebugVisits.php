@@ -29,7 +29,7 @@ class LogDebugVisits
 
             Log::debug('Route '.Route::currentRouteName().' visited by '.$user);
 
-            if($requestData)
+            if(!empty($requestData))
             {
                 foreach($this->redact as $i)
                 {
