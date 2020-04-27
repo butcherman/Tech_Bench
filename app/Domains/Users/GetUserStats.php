@@ -2,8 +2,8 @@
 
 namespace App\Domains\Users;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 
@@ -49,6 +49,13 @@ class GetUserStats
 
         Log::debug('Retrieved Tech Tip favorites for User ID'.$this->userID.'. Data - ', array($tipFavs));
         return $tipFavs;
+    }
+
+    public function checkForTechTipFav($tipID)
+    {
+        $isFav = TechTipFavs::where('user_id', $this->userID)->where('tip_id', $tipID)->first();
+
+        return $isFav ? true : false;
     }
 
     public function getUserActiveFileLinks()

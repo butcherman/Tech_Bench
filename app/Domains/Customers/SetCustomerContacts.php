@@ -2,12 +2,13 @@
 
 namespace App\Domains\Customers;
 
-use App\CustomerContactPhones;
-use App\CustomerContacts;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Customers;
+use App\CustomerContacts;
+use App\CustomerContactPhones;
+
 use App\Http\Requests\CustomerEditContactRequest;
 use App\Http\Requests\CustomerNewContactRequest;
 

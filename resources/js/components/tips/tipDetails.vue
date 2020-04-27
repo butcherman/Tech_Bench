@@ -1,115 +1,94 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-md-8 grid-margin">
-                <h3>
-                    <span :class="classFav" :title="markFav" v-b-tooltip.hover @click="toggleFav"></span>
-                    {{tip_details.subject}}
-                </h3>
-                <div class="tip-details">
-                    <span class="d-block d-sm-inline-block"><strong>ID:</strong>  {{tip_details.tip_id}}</span>
-                    <span class="d-block d-sm-inline-block"><strong>Created:</strong>  {{tip_details.created_at}}</span>
-                    <span class="d-block d-sm-inline-block"><strong>Updated:</strong>  {{tip_details.updated_at}}</span>
+            <div class="col-12 grid-margin">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3>
+                            <bookmark :is_fav="is_fav" toggle_route="tip.toggle-fav" :bookmark_id="tip_data.details.tip_id"></bookmark>
+                            {{tip_data.details.subject}}
+                        </h3>
+                        <div class="tip-details">
+                            <span class="d-block d-sm-inline-block"><strong>ID:</strong>  {{tip_data.details.tip_id}}</span>
+                            <span class="d-block d-sm-inline-block"><strong>Created:</strong> {{tip_data.details.created_at}}</span>
+                            <span class="d-block d-sm-inline-block"><strong>Updated:</strong> {{tip_data.details.updated_at}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <b-button variant="info" block pill size="sm" :href="route('tip.downloadTip', tip_data.details.tip_id)">
+                            <i class="fas fa-download"></i>
+                            Download Tip
+                        </b-button>
+                        <b-button v-if="can_edit" variant="warning" block pill size="sm" :href="route('tips.edit', tip_data.details.tip_id)">
+                            <i class="far fa-edit"></i>
+                            Edit Tip
+                        </b-button>
+                    </div>
                 </div>
-                <div class="tip-details">
-                    <span><strong>Tags:</strong>
-                        <b-badge pill variant="primary" v-for="sys in tip_details.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
-                    </span>
-                </div>
-            </div>
-            <div class="col-md-4 grid-margin">
-                <div class="float-sm-right">
-                    <a :href="route('tip.downloadTip', tip_details.tip_id)" class="btn btn-primary btn-block" title="Download As PDF" v-b-tooltip:hover>Download Tip</a>
-                    <a :href="route('tips.edit', tip_details.tip_id)" class="btn btn-warning btn-block" title="Edit this Tip" v-b-tooltip:hover v-show="can_edit">Edit Tip</a>
-                    <button class="btn btn-danger btn-block" v-show="can_del" @click="deleteTip">Delete Tip</button>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div class="tip-equipment">
+                            <div><strong>For Equipment:</strong></div>
+                            <b-badge pill variant="info" v-for="sys in tip_data.details.system_types" :key="sys.sys_id" class="ml-1 mb-1">{{sys.name}}</b-badge>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12 stretch-card grid-margin">
-                <div class="card">
-                    <div class="card-body tip-description" v-html="tip_details.description"></div>
+                <div class="card rounded">
+                    <div class="card-body tip-description">
+                        <div class="card-title border-bottom">Details:</div>
+                        <div v-html="tip_data.details.description"></div>
+                    </div>
                 </div>
             </div>
         </div>
-        <b-modal id="loading-modal" size="sm" ref="loading-modal" hide-footer hide-header hide-backdrop centered>
-            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-        </b-modal>
+        <div class="row" v-if="tip_data.files.length">
+            <div class="col-12 stretch-card grid-margin">
+                <div class="card rounded">
+                    <div class="card-body">
+                        <div class="card-title border-bottom">Attachments:</div>
+                        <ul class="pl-5">
+                            <li v-for="file in tip_data.files" :key="file.tip_file_id">
+                                <a :href="route('download', [file.file_id, file.files.file_name])">{{file.files.file_name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 stretch-card grid-margin">
+                <div class="card rounded">
+                    <div class="card-body">
+                        <div class="card-title border-bottom">Discussion:</div>
+                        <tech-tip-comments :tip_id="tip_data.details.tip_id"></tech-tip-comments>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-export default {
-    props: [
-        'tip_details',
-        'is_fav',
-        'can_edit',
-        'can_del',
-    ],
-    data() {
-        return {
-            isFav:    this.is_fav,
-            classFav: this.is_fav ? 'fas fa-bookmark bookmark-checked' : 'fas fa-bookmark bookmark-unchecked',
-            markFav:  this.is_fav ? 'Remove From Favorites' : 'Add to Favorites',
-        }
-    },
-    created()
-    {
-        //
-    },
-    methods: {
-        toggleFav()
-        {
-            //
-            this.classFav = 'spinner-grow text-light';
-            if(this.isFav)
-            {
-                axios.get(this.route('tip.toggle-fav', ['remove', this.tip_details.tip_id]))
-                    .then(res => {
-                        this.isFav = false;
-                        this.classFav  = 'fas fa-bookmark bookmark-unchecked';
-                        this.markFav = 'Add To Favorites'; //  : 'Add to Favorites',
-                    })
-                    .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
-            }
-            else
-            {
-                axios.get(this.route('tip.toggle-fav', ['add', this.tip_details.tip_id]))
-                    .then(res => {
-                        this.isFav = true;
-                        this.classFav  = 'fas fa-bookmark bookmark-checked';
-                        this.markFav = 'Remove From Favorites';
-                    })
-                    .catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
+    export default {
+        props: {
+            tip_data: {
+                type: Object,
+                required: true,
+            },
+            is_fav: {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            can_edit: {
+                type: Boolean,
+                required: false,
+                default: false,
             }
         },
-        deleteTip()
-        {
-            this.$bvModal.msgBoxConfirm('Please confirm that you want to delete this Tech Tip.', {
-                title: 'Please Confirm',
-                size: 'sm',
-                buttonSize: 'sm',
-                okVariant: 'danger',
-                okTitle: 'YES',
-                cancelTitle: 'NO',
-                footerClass: 'p-2',
-                hideHeaderClose: false,
-                centered: true
-            })
-            .then(value => {
-                if(value)
-                {
-                    this.$refs['loading-modal'].show();
-                    axios.delete(this.route('tips.destroy', this.tip_details.tip_id))
-                    .then(res => {
-                        window.location.href = this.route('tips.index');
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-                }
-            })
-            .catch(error => {
-                alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error);
-            });
-        }
     }
-}
 </script>

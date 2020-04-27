@@ -66,7 +66,7 @@ class TechTipDetailsTest extends TestCase
         Notification::fake();
 
         $data = [
-            'tipID'   => $this->tip->tip_id,
+            'tip_id'   => $this->tip->tip_id,
             'comment' => 'This is a comment',
         ];
         $user = $this->getTech();

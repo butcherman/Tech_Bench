@@ -13,12 +13,10 @@
                 <edit-tip-form
                     :tip_types="{{json_encode($tipTypes)}}"
                     :sys_types="{{json_encode($sysTypes)}}"
-                    :tip_data="{{json_encode($details)}}"
-                    :tip_files="{{json_encode($files)}}"
+                    :tip_data="{{json_encode($tipData)}}"
                 ></edit-tip-form>
             </div>
         </div>
     </div>
 </div>
-<div class="clearfix pad-bottom">&nbsp;</div>
 @endsection

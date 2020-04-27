@@ -18,5 +18,4 @@
         </div>
     </div>
 </div>
-<div class="clearfix pad-bottom">&nbsp;</div>
 @endsection

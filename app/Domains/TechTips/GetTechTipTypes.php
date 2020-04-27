@@ -2,17 +2,14 @@
 
 namespace App\Domains\TechTips;
 
-use App\Http\Resources\TechTipTypesCollection;
 use Illuminate\Support\Facades\Log;
-
-use Carbon\Carbon;
 
 use App\TechTipTypes;
 
+use App\Http\Resources\TechTipTypesCollection;
+
 class GetTechTipTypes
 {
-
-
     public function execute($collection = false)
     {
         $types = TechTipTypes::all();

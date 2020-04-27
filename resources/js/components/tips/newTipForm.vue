@@ -84,7 +84,7 @@
                 </div>
                 <transition name="fade" v-show="showAdv">
                     <div v-if="showAdv" class="mt-2 mb-2">
-                        <b-form-checkbox v-model="form.noEmail" switch class="text-center">Supress Email Notification</b-form-checkbox>
+                        <b-form-checkbox v-model="form.noEmail" switch class="text-center">Supress Notification</b-form-checkbox>
                     </div>
                 </transition>
             </div>

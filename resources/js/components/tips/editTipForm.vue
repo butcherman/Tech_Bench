@@ -1,6 +1,15 @@
 <template>
-    <div>
-        <b-form @submit="validateForm" :action="route('tips.store')" method="post" enctype="multipart/form-data" ref="newTipForm" novalidate :validated="validated">
+    <b-overlay :show="showOverlay">
+        <template v-slot:overlay>
+            <atom-spinner
+                :animation-duration="1000"
+                :size="60"
+                color="#ff1d5e"
+                class="mx-auto"
+            />
+            <h4 class="text-center">Processing...</h4>
+        </template>
+        <b-form @submit="validateForm" ref="techTipForm" novalidate :validated="validated">
             <b-form-group label="Subject:" label-for="subject">
                 <b-form-input
                     id="subject"
@@ -13,7 +22,7 @@
             </b-form-group>
             <b-form-group label="Tip Type:" label-for="tip-type">
                 <b-form-select
-                    v-model="form.tipType"
+                    v-model="form.tip_type_id"
                     :options="tip_types"
                     required
                 >
@@ -25,199 +34,194 @@
             </b-form-group>
             <b-form-group label="Equipment Types:" label-for="equipment">
                 <multiselect
-                    v-model="form.equipment"
-                    :options="sys_types"
-                    :multiple="true"
+                    id="equipment"
+                    v-model="form.system_types"
+                    placeholder="Select A System Type"
                     group-values="system_types"
                     group-label="name"
                     label="name"
                     track-by="sys_id"
+                    :options="sys_types"
+                    :multiple="true"
                     :allow-empty="false"
                     :group-select="true"
-                    placeholder="Select A System Type"
+                    required
                 ></multiselect>
-                <b-form-invalid-feedback class="d-block" v-if="validEquip">You Must Select At Least One Equipment Type</b-form-invalid-feedback>
+                <b-form-invalid-feedback :state="validated && form.equipment == null ? false : null">You Must Select At Least One Equipment Type</b-form-invalid-feedback>
             </b-form-group>
-            <b-form-group label="Tip Details:" label-for="tip">
-                <editor :init="tinymce" v-model="form.tip"></editor>
-                <b-form-invalid-feedback class="d-block" v-if="validTip">What is a Tech Tip without an actual Tip?</b-form-invalid-feedback>
+            <b-form-group label="Tip Details:" label-for="description">
+                <editor :init="tinymce" v-model="form.description" id="description"></editor>
+                <b-form-invalid-feedback :state="validated && form.description == null ? false : null">What is a Tech Tip without an actual Tip?</b-form-invalid-feedback>
             </b-form-group>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <b-form-group label="Attached Files" label-for="files">
-                        <b-list-group id="files">
-                            <b-list-group-item v-if="(form.activeFileList.length < 1)">No Files</b-list-group-item>
-                            <b-list-group-item v-for="(file, index) in form.activeFileList" :key="file.tip_file_id" class="d-flex justify-content-between align-items-center">
-                                {{file.files.file_name}}
-                                <b-badge variant="danger" pill class="pointer" title="Remove File" v-b-tooltip:hover @click="delFile(index, file.tip_file_id)"><i class="fas fa-trash-alt"></i></b-badge>
-                            </b-list-group-item>
-                        </b-list-group>
-                    </b-form-group>
+            <div class="mb-2">
+                <div class="row justify-content-center">
+                    <div class="col-md-2">
+                        <b-button size="sm" pill @click="showFile = !showFile" variant="primary" block>
+                            File Upload
+                            <i v-if="showFile" class="fas fa-angle-down"></i>
+                            <i v-else class="fas fa-angle-right"></i>
+                        </b-button>
+                    </div>
                 </div>
+                <transition name="fade" v-show="showFile">
+                    <div v-show="showFile" class="mt-3">
+                        <div class="row justify-content-center" v-if="tip_data.files.length">
+                            <div class="col-md-6">
+                                <h4 class="text-center border-bottom">Current Files</h4>
+                                <ul class="pl-5">
+                                    <li v-for="(file, index) in files" :key="file.tip_file_id">
+                                        <i class="far fa-trash-alt text-danger pointer mr-2" @click="deleteFile(file.tip_file_id, index)" title="Delete File" v-b-tooltip.hover></i>
+                                        <a :href="route('download', [file.file_id, file.files.file_name])">
+                                            {{file.files.file_name}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h4 class="text-center border-bottom">Add Files</h4>
+                        <file-upload
+                            ref="fileUpload"
+                            :submit_url="route('tips.submit-edit', this.tip_data.details.tip_id)"
+                            @uploadFinished="updateTip">
+                        </file-upload>
+                    </div>
+                </transition>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <h4 class="text-center pad-top">Attach File</h4>
-                    <vue-dropzone
-                        id="dropzone"
-                        class="filedrag"
-                        ref="fileDropzone"
-                        @vdropzone-upload-progress="updateProgressBar"
-                        @vdropzone-sending="sendingFiles"
-                        @vdropzone-queue-complete="queueComplete"
-                        :options="dropzoneOptions">
-                    </vue-dropzone>
-                </div>
-            </div>
-            <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
-
-            <b-button type="submit" block variant="primary" :disabled="button.dis">
-                <span class="spinner-border spinner-border-sm text-danger" v-show="button.dis"></span>
-                {{button.text}}
-            </b-button>
+            <form-submit
+                button_text="Update Tech Tip"
+                :submitted="submitted"
+            ></form-submit>
+            <b-button block variant="danger" @click="deleteTip">Delete Tech Tip</b-button>
         </b-form>
-    </div>
+    </b-overlay>
 </template>
 
 <script>
-    export default {
-        props: [
-            'tip_types',
-            'sys_types',
-            'tip_data',
-            'tip_files',
-        ],
-        data () {
-            return {
-                validated: false,
-                validEquip: false,
-                validTip: false,
-                attachFile: false,
-                form: {
-                    token: window.techBench.csrfToken,
-                    subject: this.tip_data.subject,
-                    tip: this.tip_data.description,
-                    tipType: this.tip_data.tech_tip_types.tip_type_id,
-                    equipment: this.tip_data.system_types,
-                    supressEmail: false,
-                    activeFileList: this.tip_files,
-                    deletedFileList: [],
-                },
-                button: {
-                    text: 'Update Tech Tip',
-                    dis: false,
-                },
-                tinymce: {
-                    plugins: 'autolink advlist lists link image table',
-                    height: 500,
-                    browser_spellcheck: true,
-                    toolbar: 'formatselect | bold italic strikethrough forecolor | link image | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | table',
-                    relative_urls: false,
-                    automatic_uploads: true,
-                    images_upload_url: this.route('tip.processImage'),
-                    file_picker_types: 'image',
-                    file_picker_callback: function(cb, value, meta)
-                    {
-                        var input = document.createElement('input');
-                        input.setAttribute('type', 'file');
-                        input.setAttribute('accept', 'image/*');
-                        input.onchange = function() {
-                            var file = this.files[0];
-                            var reader = new FileReader();
-                            reader.readAsDataURL(file);
-                            reader.onload = function ()
-                            {
-                                var id = 'blobid' + (new Date()).getTime();
-                                var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-                                var base64 = reader.result.split(',')[1];
-                                var blobInfo = blobCache.create(id, file, base64);
-                                blobCache.add(blobInfo);
-                                cb(blobInfo.blobUri(), { title: file.name });
-                            };
-                        };
-                        input.click();
-                    }
-                },
-                dropzoneOptions: {
-                    url: this.route('tips.submit-edit', this.tip_data.tip_id),
-                    autoProcessQueue: false,
-                    parallelUploads: 1,
-                    maxFiles: 5,
-                    maxFilesize: window.techBench.maxUpload,
-                    addRemoveLinks: true,
-                    chunking: true,
-                    chunkSize: window.chunkSize,
-                    parallelChunkUploads: false,
-                },
-                progress: 0,
-                showProgress: false,
-            }
+export default {
+    props: {
+        tip_types: {
+            type:     Array,
+            required: true,
         },
-        methods: {
-            validateForm(e)
-            {
-                e.preventDefault();
-                if(this.$refs.newTipForm.checkValidity() === false || !this.form.equipment || this.form.tip == '')
+        sys_types: {
+            type:     Array,
+            required: true,
+        },
+        tip_data: {
+            type: Object,
+            required: true,
+        }
+    },
+    data() {
+        return {
+            error:       false,
+            submitted:   false,
+            validated:   false,
+            showFile:    false,
+            showAdv:     false,
+            showOverlay: false,
+            form:        this.tip_data.details,
+            files:       this.tip_data.files,
+            tinymce: {
+                plugins:             'autolink advlist lists link image table spellchecker fullscreen preview',
+                height:               500,
+                browser_spellcheck:   true,
+                toolbar:             'formatselect spellchecker | bold italic strikethrough forecolor | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | table | fullscreen preview link image',
+                relative_urls:        false,
+                automatic_uploads:    true,
+                images_upload_url:    this.route('tip.processImage'),
+                file_picker_types:   'image',
+                file_picker_callback: function(cb, value, meta)
                 {
-                    this.validated  = true;
-                    this.validEquip = !this.form.equipment ? true : false;
-                    this.validTip   = this.form.tip == '' ? true : false;
+                    var input = document.createElement('input');
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('accept', 'image/*');
+                    input.onchange    = function() {
+                        var file      = this.files[0];
+                        var reader    = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = function ()
+                        {
+                            var id        = 'blobid' + (new Date()).getTime();
+                            var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                            var base64    = reader.result.split(',')[1];
+                            var blobInfo  = blobCache.create(id, file, base64);
+                            blobCache.add(blobInfo);
+                            cb(blobInfo.blobUri(), { title: file.name });
+                        };
+                    };
+                    input.click();
                 }
-                else
-                {
-                    this.validated  = false;
-                    this.validEquip = false;
-                    this.validTip   = false;
-                    this.button.dis = true;
-                    this.button.text = 'Loading...';
-                    this.submitForm();
-                }
-            },
-            submitForm()
+            }
+        }
+    },
+    methods: {
+        validateForm(e)
+        {
+            e.preventDefault();
+            console.log(this.form);
+            if(this.$refs.techTipForm.checkValidity() === false)
             {
-                var myDrop = this.$refs.fileDropzone;
-                if(myDrop.getQueuedFiles().length > 0)
+                this.validated = true;
+            }
+            else
+            {
+                var fileZone = this.$refs.fileUpload;
+                this.submitted = true;
+                if(fileZone.getFileCount() > 0)
                 {
-                    this.showProgress = true;
-                    myDrop.processQueue();
+                    fileZone.submitFiles(this.form);
                 }
                 else
                 {
                     this.updateTip();
                 }
-            },
-            updateTip()
-            {
-                this.form._completed = true;
-                axios.put(this.route('tips.update', this.tip_data.tip_id), this.form)
-                    .then(res => {
-                        window.location.href = this.route('tip.details', [this.tip_data.tip_id, this.dashify(this.form.subject)]);
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-            },
-            updateProgressBar(file, progress, sent)
-            {
-                var fileProgress = sent / file.size * 100;
-                this.progress = Math.round(fileProgress);
-            },
-            sendingFiles(file, xhr, formData)
-            {
-                formData.append('_token', this.form.token);
-                formData.append('subject', this.form.subject);
-                formData.append('tip', this.form.tip);
-                formData.append('tipType', this.form.tipType);
-                formData.append('equipment', this.form.equipiment);
-            },
-            queueComplete()
-            {
-                //
-                this.button.text = 'Processing, please wait';
-                this.updateTip();
-            },
-            delFile(index, fileID)
-            {
-                this.form.activeFileList.splice(index, 1);
-                this.form.deletedFileList.push(fileID);
             }
+        },
+        deleteFile(fileID, index)
+        {
+            if(!this.form.deletedFileList)
+            {
+                this.form.deletedFileList = [];
+            }
+            this.files.splice(index, 1);
+            this.form.deletedFileList.push(fileID);
+        },
+        updateTip()
+        {
+            axios.put(this.route('tips.update', this.tip_data.details.tip_id), this.form)
+                    .then(res => {
+                        console.log(res);
+                        window.location.href = this.route('tip.details', [this.tip_data.details.tip_id, this.dashify(this.form.subject)]);
+                    }).catch(error => alert(error));
+        },
+        deleteTip()
+        {
+            this.$bvModal.msgBoxConfirm('Please confirm that you want to delete this Tech Tip.', {
+                title: 'Please Confirm',
+                size: 'sm',
+                buttonSize: 'sm',
+                okVariant: 'danger',
+                okTitle: 'YES',
+                cancelTitle: 'NO',
+                footerClass: 'p-2',
+                hideHeaderClose: false,
+                centered: true
+            })
+            .then(value => {
+                if(value)
+                {
+                    this.showOverlay = true;
+                    axios.delete(this.route('tips.destroy', this.tip_data.details.tip_id))
+                    .then(res => {
+                        window.location.href = this.route('tips.index');
+                    }).catch(error => this.$bvModal.msgBoxOk('Delete Tech Tip operation failed.  Please try again later.'));
+                }
+            })
+            .catch(error => {
+                this.$bvModal.msgBoxOk('Delete Tech Tip operation failed.  Please try again later.')
+            });
         }
     }
+}
 </script>

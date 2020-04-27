@@ -3,6 +3,7 @@
 namespace App\Domains\TechTips;
 
 use Illuminate\Http\File;
+
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,14 +16,13 @@ use App\Domains\FilesDomain;
 
 use App\User;
 use App\Files;
+use App\Http\Requests\TechTipEditTipRequest;
 use App\TechTips;
 use App\TechTipFiles;
-use App\TechTipTypes;
 use App\TechTipSystems;
+use App\TechTipFavs;
 
 use App\Notifications\NewTechTip;
-
-
 
 class SetTechTips extends FilesDomain
 {
@@ -57,6 +57,47 @@ class SetTechTips extends FilesDomain
         return $this->createTip($request);
     }
 
+    //  Update an existin gTech Tip
+    public function processEditTip(TechTipEditTipRequest $request, $tipID)
+    {
+        if(isset($request->file))
+        {
+            $this->path = config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID;
+            $fileID = $this->processFileChunk($request);
+            if($fileID)
+            {
+                //  Attach file to Tech Tip
+                TechTipFiles::create([
+                    'tip_id' => $tipID,
+                    'file_id' => $fileID,
+                ]);
+            }
+
+            return false;
+        }
+
+        $this->updateTipDetails($request);
+        $this->updateTipEquipment($request->system_types, $tipID);
+        if(isset($request->deletedFileList))
+        {
+            $this->updateTipFiles($request->deletedFileList);
+        }
+
+        return true;
+    }
+
+    //  Delete the Tech Tip
+    public function deleteTip($tipID)
+    {
+        TechTipFavs::where('tip_id', $tipID)->delete();
+
+        //  Disable the tip
+        TechTips::find($tipID)->delete();
+        Log::warning('User - '.Auth::user()->full_name.' deleted Tech Tip ID - '.$tipID);
+
+        return true;
+    }
+
     //  Create the Tech Tip in the datbase
     protected function createTip($tipData)
     {
@@ -77,6 +118,63 @@ class SetTechTips extends FilesDomain
         $this->sendNotification($tipData->noEmail, $tipID);
 
         return $tipID;
+    }
+
+    //  Update the tip details
+    protected function updateTipDetails($data)
+    {
+        //  Update the base information
+        TechTips::find($data->tip_id)->update([
+            'tip_type_id' => $data->tip_type_id,
+            'subject'     => $data->subject,
+            'description' => $data->description,
+        ]);
+
+        return true;
+    }
+
+    //  Add or remove any system types attached to the tip
+    protected function updateTipEquipment($equipTypes, $tipID)
+    {
+        $current = TechTipSystems::where('tip_id', $tipID)->get();
+        $newEquip = [];
+
+        foreach($equipTypes as $equip)
+        {
+            if(isset($equip['laravel_through_key']))
+            {
+                $current = $current->filter(function($item) use ($equip)
+                {
+                    return $item->sys_id != $equip['sys_id'];
+                });
+            }
+            else
+            {
+                $newEquip[] = $equip;
+            }
+        }
+
+        $this->processTipEquipment($newEquip, $tipID);
+
+        foreach($current as $cur)
+        {
+            TechTipSystems::find($cur->tip_tag_id)->delete();
+        }
+
+        return true;
+    }
+
+    //  Remove any files that were deleted from the tip
+    protected function updateTipFiles($deletedList)
+    {
+        foreach($deletedList as $delFile)
+        {
+            $details = TechTipFiles::find($delFile);
+            $fileID = $details->file_id;
+            $details->delete();
+
+            $this->deleteFile($fileID);
+        }
     }
 
     //  Store any equipment types that were attached to the tip
@@ -115,6 +213,8 @@ class SetTechTips extends FilesDomain
                     'file_id' => $data->file_id
                 ]);
             }
+
+            session()->forget('newTipFile');
         }
 
         return true;

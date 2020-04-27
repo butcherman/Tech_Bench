@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 use App\TechTips;
+use App\TechTipFiles;
 
 use App\Http\Resources\TechTipsCollection;
 use App\Http\Requests\TechTipSearchRequest;
@@ -54,5 +55,14 @@ class GetTechTips
 
         Log::debug('Tech Tip search query performed.  Results - ', array($tips));
         return $tips;
+    }
+
+    //  Get the details about a tech tip
+    public function getTipDetails($tipID)
+    {
+        $tipData = TechTips::where('tip_id', $tipID)->with('User')->with('SystemTypes')->first();
+        $files = TechTipFiles::where('tip_id', $tipID)->with('Files')->get();
+
+        return collect(['details' => $tipData, 'files' => $files]);
     }
 }

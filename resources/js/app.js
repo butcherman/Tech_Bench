@@ -91,6 +91,7 @@ Vue.mixin({
 Vue.component('go-back',         require('./components/GoBack.vue').default);
 Vue.component('file-upload',     require('./components/FileUpload.vue').default);
 Vue.component('form-submit',     require('./components/FormSubmit.vue').default);
+Vue.component('bookmark',        require('./components/Bookmark.vue').default);
 
 /*
 *   Dashboard and Template Components
@@ -137,8 +138,9 @@ Vue.component('customer-search',     require('./components/customer/customerSear
 Vue.component('search-tips',         require('./components/tips/searchTips.vue').default);
 Vue.component('new-tip-form',        require('./components/tips/newTipForm.vue').default);
 Vue.component('edit-tip-form',       require('./components/tips/editTipForm.vue').default);
+// Vue.component('tech-tip-master',     require('./components/tips/tipMaster.vue').default);
 Vue.component('tech-tip-details',    require('./components/tips/tipDetails.vue').default);
-Vue.component('tech-tip-files',      require('./components/tips/tipFiles.vue').default);
+// Vue.component('tech-tip-files',      require('./components/tips/tipFiles.vue').default);
 Vue.component('tech-tip-comments',   require('./components/tips/tipComments.vue').default);
 
 /*

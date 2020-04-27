@@ -27,6 +27,11 @@
                 type: Number,
                 required: false,
                 default: 5
+            },
+            method: {
+                type: String,
+                required: false,
+                default: 'POST'
             }
         },
         data: function () {
@@ -38,6 +43,7 @@
                 alreadyWarned: false,
                 dropzoneOptions: {
                     url: this.submit_url,
+                    method: this.method,
                     autoProcessQueue: false,
                     parallelUploads: 1,
                     maxFiles: this.max_files,
@@ -46,7 +52,10 @@
                     chunking: true,
                     chunkSize: window.chunkSize,
                     parallelChunkUploads: false,
-                    dictDefaultMessage: '<i class="fas fa-cloud-upload-alt"></i> Drag File Here or Click to Upload'
+                    dictDefaultMessage: '<i class="fas fa-cloud-upload-alt"></i> Drag File Here or Click to Upload',
+                    headers: {
+                        'X-CSRF-TOKEN': window.techBench.csrfToken,
+                    }
                 },
             }
         },

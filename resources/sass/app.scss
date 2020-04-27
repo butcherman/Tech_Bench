@@ -109,6 +109,16 @@ $fa-font-path: '../fonts/font-awesome';
     }
 }
 
+.tip-equipment {
+    color: #999999;
+    border-top: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    padding: 4px 0;
+    span {
+        padding: 3px 5px;
+    }
+}
+
 .tip-description {
     min-height: 25vh;
 }

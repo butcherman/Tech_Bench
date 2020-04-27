@@ -19,7 +19,29 @@ class UserFavs
 
     public function updateTechTipFav($tipID)
     {
-        //
+        $favData = TechTipFavs::where('tip_id', $tipID)->where('user_id', $this->userID)->first();
+
+        if($favData)
+        {
+            Log::info('Tech Tip Bookmark removed.  Detais', [
+                'user_id' => $this->userID,
+                'tip_id' => $tipID,
+            ]);
+            $favData->delete();
+        }
+        else
+        {
+            TechTipFavs::create([
+                'user_id' => $this->userID,
+                'tip_id' => $tipID,
+            ]);
+            Log::info('Tech Tip Bookmark added.  Detais', [
+                'user_id' => $this->userID,
+                'tip_id' => $tipID,
+            ]);
+        }
+
+        return true;
     }
 
     public function updateCustomerFav($custID)
