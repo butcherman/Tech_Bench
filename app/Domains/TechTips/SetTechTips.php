@@ -9,18 +9,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 
-use App\Http\Requests\TechTipNewTipRequest;
-use App\Http\Requests\TechTipProcessImageRequest;
-
 use App\Domains\FilesDomain;
 
 use App\User;
 use App\Files;
-use App\Http\Requests\TechTipEditTipRequest;
 use App\TechTips;
+use App\TechTipFavs;
 use App\TechTipFiles;
 use App\TechTipSystems;
-use App\TechTipFavs;
+
+use App\Http\Requests\TechTipNewTipRequest;
+use App\Http\Requests\TechTipEditTipRequest;
+use App\Http\Requests\TechTipProcessImageRequest;
 
 use App\Notifications\NewTechTip;
 

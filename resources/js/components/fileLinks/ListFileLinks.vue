@@ -3,10 +3,9 @@
         <div v-if="error">
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-4">
-                    <img src="/img/err_img/sry_error.png" alt="Error" id="header-logo" />
-                    <!-- TODO - Replace this with head-scratch image -->
+                    <img src="/img/err_img/confused.png" alt="Error" id="header-logo" />
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 text-center">
                     <h3 class="text-danger">Something Bad Happened:</h3>
                     <p>
                         Sorry about that.
@@ -30,12 +29,6 @@
         >
             <div slot="emptystate">
                 <h4 v-if="loadDone" class="text-center">No File Links Available</h4>
-                <atom-spinner v-else
-                    :animation-duration="1000"
-                    :size="60"
-                    color="#ff1d5e"
-                    class="mx-auto"
-                />
             </div>
             <div slot="selected-row-actions">
                 <b-button @click="deleteChecked" variant="warning" pill>Delete Selected</b-button>
@@ -82,135 +75,137 @@
 </template>
 
 <script>
-    export default {
-        props: [
-            'user_id',
-        ],
-        data() {
-            return {
-                loadDone: false,
-                isLoading: true,
-                error: false,
-                table: {
-                    columns: [
-                    {
-                        label: 'Link Name',
-                        field: 'link_name',
-                        sortable: true,
-                    },
-                    {
-                        label: '# of Files',
-                        field: 'file_count',
-                        sortable: false,
-                    },
-                    {
-                        label: 'Expire Date',
-                        field: 'exp_stamp',
-                        sortable: true,
-                    },
-                    {
-                        label: 'Actions',
-                        field: 'actions',
-                        sortable: false,
-                    }],
-                    rows: []
-                }
-            }
-        },
-        created() {
-            this.fetchLinks();
-        },
-        methods: {
-            //  Ajax call to pull links for the user
-            fetchLinks()
-            {
-                this.isLoading = true;
-                var user = this.user_id ? this.user_id : 0
-                axios.get(this.route('links.user', user))
-                    .then(res => {
-                        this.table.rows = res.data;
-                        this.isLoading = false;
-                        this.loadDone = true;
-                    }).catch(error => this.error = true);
-            },
-            //  Determine if the link is expired and should be highlighted
-            linkRowClass(row)
-            {
-                return row.expired ? 'table-danger': '';
-            },
-            //  Set the expire date of the link to yesterday
-            disableLink(link)
-            {
-                axios.get(this.route('links.disable', [link]))
-                    .then(res => {
-                        if(res.data.success)
-                        {
-                            this.fetchLinks();
-                        }
-                        else
-                        {
-                            this.$bvModal.msgBoxOk('Disable link operation failed.  Please try again later.');
-                        }
-                    }).catch(error => this.error = true);
-            },
-            //  Verify that the link should be disabled
-            deleteLinkConfirm(link)
-            {
-                this.$bvModal.msgBoxConfirm('This cannot be undone.', {
-                    title: 'Are You Sure?',
-                    size: 'md',
-                    okVariant: 'danger',
-                    okTitle: 'Yes',
-                    cancelTitle: 'No',
-                    centered: true,
-                })
-                .then(res => {
-                    if(res)
-                    {
-                        this.isLoading = true;
-                        this.deleteLink(link);
-                    }
-                });
-            },
-            //  Delete the link and any files associated with it
-            deleteLink(link)
-            {
-                axios.delete(this.route('links.data.destroy', [link]))
-                    .then(res => {
-                        if(res.data.success)
-                        {
-                            this.fetchLinks();
-                        }
-                        else
-                        {
-                            this.$bvModal.msgBoxOk('Delete link operation failed.  Please try again later.');
-                        }
-                    }).catch(error => this.error = true);
-            },
-            //  Delete a series of links
-            deleteChecked()
-            {
-                var list = this;
-                this.$bvModal.msgBoxConfirm('This cannot be undone.', {
-                    title: 'Are You Sure?',
-                    size: 'md',
-                    okVariant: 'danger',
-                    okTitle: 'Yes',
-                    cancelTitle: 'No',
-                    centered: true,
-                })
-                .then(res => {
-                    if(res)
-                    {
-                        this.$root.$emit('bv::hide::popover');
-                        this.isLoading = true;
-                        this.$refs['file-links-table'].selectedRows.forEach(function(link)
-                        {
-                            list.deleteLink(link.link_id);
-                        });
-                    }
-                });
+export default {
+    props: {
+        user_id: {
+            type:     Number,
+            required: false,
+        }
+    },
+    data() {
+        return {
+            loadDone:  false,
+            isLoading: true,
+            error:     false,
+            table: {
+                columns: [
+                {
+                    label:   'Link Name',
+                    field:   'link_name',
+                    sortable: true,
+                },
+                {
+                    label:   '# of Files',
+                    field:   'file_count',
+                    sortable: false,
+                },
+                {
+                    label:   'Expire Date',
+                    field:   'exp_stamp',
+                    sortable: true,
+                },
+                {
+                    label:   'Actions',
+                    field:   'actions',
+                    sortable: false,
+                }],
+                rows: []
             }
         }
+    },
+    mounted() {
+        this.fetchLinks();
+    },
+    methods: {
+        //  Ajax call to pull links for the user
+        fetchLinks()
+        {
+            this.isLoading = true;
+            var user = this.user_id ? this.user_id : 0
+            axios.get(this.route('links.user', user))
+                .then(res => {
+                    this.table.rows = res.data;
+                    this.isLoading  = false;
+                    this.loadDone   = true;
+                }).catch(error => this.error = true);
+        },
+        //  Determine if the link is expired and should be highlighted
+        linkRowClass(row)
+        {
+            return row.expired ? 'table-danger': '';
+        },
+        //  Set the expire date of the link to yesterday
+        disableLink(link)
+        {
+            axios.get(this.route('links.disable', [link]))
+                .then(res => {
+                    if(res.data.success)
+                    {
+                        this.fetchLinks();
+                    }
+                    else
+                    {
+                        this.$bvModal.msgBoxOk('Disable link operation failed.  Please try again later.');
+                    }
+                }).catch(error => this.error = true);
+        },
+        //  Verify that the link should be disabled
+        deleteLinkConfirm(link)
+        {
+            this.$bvModal.msgBoxConfirm('This cannot be undone.', {
+                title:       'Are You Sure?',
+                size:        'md',
+                okVariant:   'danger',
+                okTitle:     'Yes',
+                cancelTitle: 'No',
+                centered:     true,
+            })
+            .then(res => {
+                if(res)
+                {
+                    this.isLoading = true;
+                    this.deleteLink(link);
+                }
+            });
+        },
+        //  Delete the link and any files associated with it
+        deleteLink(link)
+        {
+            axios.delete(this.route('links.data.destroy', [link]))
+                .then(res => {
+                    if(res.data.success)
+                    {
+                        this.fetchLinks();
+                    }
+                    else
+                    {
+                        this.$bvModal.msgBoxOk('Delete link operation failed.  Please try again later.');
+                    }
+                }).catch(error => this.error = true);
+        },
+        //  Delete a series of links
+        deleteChecked()
+        {
+            var list = this;
+            this.$bvModal.msgBoxConfirm('This cannot be undone.', {
+                title:       'Are You Sure?',
+                size:        'md',
+                okVariant:   'danger',
+                okTitle:     'Yes',
+                cancelTitle: 'No',
+                centered:     true,
+            }).then(res => {
+                if(res)
+                {
+                    this.$root.$emit('bv::hide::popover');
+                    this.isLoading = true;
+                    this.$refs['file-links-table'].selectedRows.forEach(function(link)
+                    {
+                        list.deleteLink(link.link_id);
+                    });
+                }
+            });
+        }
     }
+}
 </script>

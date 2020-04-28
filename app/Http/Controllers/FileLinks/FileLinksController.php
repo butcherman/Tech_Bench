@@ -9,13 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Domains\FileLinks\GetFileLinks;
 use App\Domains\FileLinks\KillFileLink;
-use App\Domains\FileLinks\CreateFileLink;
-use App\Domains\FileLinks\SaveFileLinkFile;
 use App\Domains\FileLinks\GetFileLinkDetails;
 use App\Domains\FileLinks\SetFileLinkDetails;
 use App\Domains\FileTypes\GetCustomerFileTypes;
 
-use App\Http\Requests\NewFileLinkRequest;
+use App\Http\Requests\FileLinkCreateRequest;
 use App\Http\Requests\UpdateFileLinkRequest;
 use App\Http\Requests\UpdateFileLinkInstructionsRequest;
 
@@ -57,20 +55,21 @@ class FileLinksController extends Controller
     }
 
     //  Submit the new file link form
-    public function store(NewFileLinkRequest $request)
+    public function store(FileLinkCreateRequest $request)
     {
-        //  If there are files, process them first in their chunks
-        if(!empty($request->file))
-        {
-            (new SaveFileLinkFile)->execute($request);
-            return response()->json(['success' => true]);
-        }
+        $linkData = (new SetFileLinkDetails)->processNewLink($request);
 
-        $linkObj = new CreateFileLink();
-        $linkData = $linkObj->create($request);
-
-        return response()->json($linkData);
+        // return response()->json($linkData);
+        return response()->json([
+            'success' => $linkData ? true : false,
+            'link_id' => $linkData ? $linkData : false,
+        ]);
     }
+
+
+
+
+
 
     //  Show details about a file link
     public function details($id, /** @scrutinizer ignore-unused */ $name)
