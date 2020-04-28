@@ -1,222 +1,113 @@
 <template>
-    <div>
-        <div v-if="error">
-            <h5 class="text-center">Problem Loading Data...</h5>
+    <div class="card">
+        <div class="card-header">
+            Customer Files:
+            <b-button variant="primary" pill size="sm" class="float-right" @click="newFileForm">
+                <i class="fas fa-plus" aria-hidden="true"></i>
+                Add File
+            </b-button>
         </div>
-        <div v-else-if="loading">
-            <h5 class="text-center">Loading Files</h5>
-            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+        <div class="card-body">
+            <div v-if="error">
+                <h5 class="text-center text-danger"><i class="fas fa-exclamation-circle"></i> Unable to load Equipment...</h5>
+            </div>
+            <div v-else-if="loading">
+                <atom-spinner
+                    :animation-duration="1000"
+                    :size="60"
+                    color="#ff1d5e"
+                    class="mx-auto"
+                />
+                <h4 class="text-center">Loading Files</h4>
+            </div>
+            <vue-good-table v-else
+                ref="customer-files-table"
+                styleClass="vgt-table bordered w-100"
+                :columns="table.columns"
+                :rows="table.rows"
+            >
+                <template slot="emptystate">
+                    <h4 class="text-center">No Files</h4>
+                </template>
+                <template slot="table-row" slot-scope="data">
+                    <span v-if="data.column.field == 'name'">
+                        <a :href="route('download', [data.row.files.file_id, data.row.files.file_name])">{{data.row.name}}</a>
+                    </span>
+                    <span v-else-if="data.column.field == 'actions'">
+                        <i class="fas fa-pencil-alt pointer" title="Edit" v-b-tooltip @click="editFileForm(data.row)"></i>
+                        <i class="fas fa-trash-alt pointer" title="Delete" v-b-tooltip @click="deleteFile(data.row)"></i>
+                    </span>
+                </template>
+            </vue-good-table>
         </div>
-        <vue-good-table v-else
-            ref="customer-files-table"
-            styleClass="vgt-table bordered w-100"
-            :columns="table.columns"
-            :rows="table.rows"
-            isLoading.sync="isLoading"
-        >
-            <div slot="emptystate">
-                <h4 class="text-center">No Files</h4>
-            </div>
-            <div slot="table-actions">
-                <b-button variant="info block" v-b-modal.file-form-modal><i class="fas fa-plus"></i> Add File</b-button>
-            </div>
-            <template slot="table-row" slot-scope="data">
-                <span v-if="data.column.field == 'name'">
-                    <a :href="route('download', [data.row.files.file_id, data.row.files.file_name])">{{data.row.name}}</a>
-                </span>
-                <span v-else-if="data.column.field == 'actions'">
-                    <i class="fas fa-pencil-alt pointer" title="Edit" v-b-tooltip @click="editFile(data.row)"></i>
-                    <i class="fas fa-trash-alt pointer" title="Delete" v-b-tooltip @click="deleteFile(data.row)"></i>
-                </span>
-            </template>
-        </vue-good-table>
-        <b-modal :title="modalTitle" id="file-form-modal" ref="fileFormModal" size="lg" hide-footer>
-            <b-form @submit="submitFile" novalidate :validated="validated" ref="fileForm" method="post" enctype="multipart/form-data">
-                <b-form-group
-                label="File Name"
-                label-for="fileName"
-                >
-                    <b-form-input
-                        id="fileName"
-                        v-model="form.name"
-                        type="text"
-                        required
-                        placeholder="Enter Descriptive Name"></b-form-input>
-                        <b-form-invalid-feedback>You must enter a name for the file</b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group
-                    label="File Type"
-                    label-for="fileType"
-                    >
-                    <b-form-select v-model="form.type" :options="file_types" required>
-                        <template v-slot:first>
-                            <option :value="null" disabled>Please Select An Option</option>
-                        </template>
-                    </b-form-select>
-                    <b-form-invalid-feedback>You must select a file type</b-form-invalid-feedback>
-                </b-form-group>
-                <vue-dropzone id="dropzone" v-if="!edit"
-                    class="filedrag"
-                    ref="fileDropzone"
-                    @vdropzone-upload-progress="updateProgressBar"
-                    @vdropzone-sending="sendingFiles"
-                    @vdropzone-queue-complete="queueComplete"
-                    :options="dropzoneOptions">
-                </vue-dropzone>
-                <div v-if="fileError" class="invalid-feedback d-block">You must select a file</div>
-                <div class="row justify-content-center mt-4" v-show="linked">
-                    <div class="col-6 col-md-2 order-2 order-md-2">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="shared" class="onoffswitch-checkbox" id="shared" v-model="form.shared">
-                            <label class="onoffswitch-label" for="shared">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 align-self-center order-1 order-md-2">
-                        <h5 class="text-center">Shared Between Sites</h5>
-                    </div>
-                </div>
-                <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
-                <b-button type="submit" block variant="primary" class="pad-top" :disabled="button.disable">
-                    <span class="spinner-border spinner-border-sm text-danger" v-show="button.disable"></span>
-                    {{button.text}}
-                </b-button>
-            </b-form>
-        </b-modal>
+        <file-form ref="customer-file-form" :cust_id="cust_id" @completed="getFiles"></file-form>
     </div>
 </template>
 
 <script>
-    export default {
-        props: [
-            'cust_id',
-            'file_types',
-            'linked',
-        ],
-        data () {
-            return {
-                token: window.techBench.csrfToken,
-                loading: true,
-                error: false,
-                fileError: false,
-                isLoading: false,
-                validated: false,
-                edit: false,
-                modalTitle: 'Add File',
-                table: {
-                    columns: [
-                        {
-                            label: 'File Name',
-                            field: 'name'
-                        },
-                        {
-                            label: 'File Type',
-                            field: 'customer_file_types.description',
-                        },
-                        {
-                            label: 'Uploaded By',
-                            field: 'user.full_name',
-                        },
-                        {
-                            label: 'Uploaded Date',
-                            field: 'created_at',
-                        },
-                        {
-                            label: 'Actions',
-                            field: 'actions',
-                        }
-                    ],
-                    rows: [],
-                },
-                button: {
-                    disable: false,
-                    text: 'Add File',
-                },
-                form: {
-                    cust_id: this.cust_id,
-                    name: '',
-                    type: null,
-                    shared: false,
-                },
-                progress: 0,
-                showProgress: false,
-                dropzoneOptions: {
-                    url: this.route('customer.files.store'),
-                    autoProcessQueue: false,
-                    parallelUploads: 1,
-                    maxFiles: 1,
-                    maxFilesize: window.techBench.maxUpload,
-                    addRemoveLinks: true,
-                    chunking: true,
-                    chunkSize: window.chunkSize,
-                    parallelChunkUploads: false,
-                },
+export default {
+    props: {
+        cust_id: {
+        type:     Number,
+        required: true,
+        },
+        linked: {
+            type:     Boolean,
+            required: false,
+            default:  false,
+        }
+    },
+    data() {
+        return {
+            error: false,
+            loading: true,
+            table: {
+                columns: [
+                    {
+                        label: 'File Name',
+                        field: 'name',
+                        sortable: true,
+                    },
+                    {
+                        label: 'File Type',
+                        field: 'customer_file_types.description',
+                        sortable: true,
+                    },
+                    {
+                        label: 'Uploaded By',
+                        field: 'user.full_name',
+                        sortable: true,
+                    },
+                    {
+                        label: 'Uploaded Date',
+                        field: 'created_at',
+                        sortable: true,
+                    },
+                    {
+                        label: 'Actions',
+                        field: 'actions',
+                        sortable: false,
+                    }
+                ],
+                rows: [],
             }
-        },
-        created()
+        }
+    },
+    mounted() {
+        this.getFiles();
+    },
+    methods: {
+        newFileForm()
         {
-            this.getFiles();
+            this.$refs['customer-file-form'].initNewFile();
         },
-        methods: {
-            getFiles()
-            {
-                axios.get(this.route('customer.files.show', this.cust_id))
-                    .then(res => {
-                        this.loading = false;
-                        this.table.rows = res.data;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: '+error));
-            },
-            submitFile(e)
-            {
-                e.preventDefault();
-                if(!this.edit)
-                {
-                    var myDrop = this.$refs.fileDropzone;
-
-                    if(this.$refs.fileForm.checkValidity() === false || myDrop.getQueuedFiles().length != 1)
-                    {
-                        this.validated = true;
-                        if(myDrop.getQueuedFiles().lenght != 1 && !this.edit)
-                        {
-                            this.fileError = true;
-                        }
-                    }
-                    else
-                    {
-                        this.fileError = false;
-                        this.button.diable = true;
-                        this.button.text = 'Uploading File';
-                        this.showProgress = true;
-                        myDrop.processQueue();
-                    }
-                }
-                else
-                {
-                    this.button.disable = true;
-                    this.button.text = 'Processing...';
-                    axios.put(this.route('customer.files.update', this.edit), this.form)
-                        .then(res => {
-                            this.$bvModal.hide('file-form-modal');
-                            this.resetForm();
-                            this.getFiles();
-                        }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-                }
-            },
-            editFile(data)
-            {
-                this.edit = data.cust_file_id;
-                this.form.name = data.name;
-                this.form.type = data.customer_file_types.file_type_id;
-                this.form.shared = data.shared
-                this.modalTitle = 'Edit File';
-                this.button.text = 'Update File';
-                this.$bvModal.show('file-form-modal');
-            },
-            deleteFile(data)
-            {
-                this.$bvModal.msgBoxConfirm('Please confirm you want to delete the file.', {
+        editFileForm(file)
+        {
+            this.$refs['customer-file-form'].initEditFile(file);
+        },
+        deleteFile(data)
+        {
+            this.$bvModal.msgBoxConfirm('Please confirm you want to delete the file.', {
                     title: 'Are You Sure?',
                     size: 'md',
                     okVariant: 'danger',
@@ -230,40 +121,18 @@
                         axios.delete(this.route('customer.files.destroy', data.cust_file_id))
                             .then(res => {
                                 this.getFiles();
-                                this.resetForm();
-                            }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                            }).catch(error => this.$bvModal.msgBoxOk('Something bad happened.  Please try again later.'));
                     }
                 });
-            },
-            updateProgressBar(file, progress, sent)
-            {
-                var fileProgress = sent / file.size * 100;
-                this.progress = Math.round(fileProgress);
-            },
-            sendingFiles(file, xhr, formData)
-            {
-                formData.append('_token', this.token);
-                formData.append('cust_id', this.form.cust_id);
-                formData.append('name', this.form.name);
-                formData.append('type', this.form.type);
-                formData.append('shared', this.form.shared);
-            },
-            queueComplete()
-            {
-                this.$refs.fileFormModal.hide();
-                this.getFiles();
-                this.resetForm();
-            },
-            resetForm()
-            {
-                this.form.name = '';
-                this.form.type = null;
-                this.button.text = 'Add File';
-                this.button.disable = false;
-                this.showProgress = false;
-                this.edit = false;
-                this.validated = false;
-            }
+        },
+        getFiles()
+        {
+            axios.get(this.route('customer.files.show', this.cust_id))
+                .then(res => {
+                    this.loading = false;
+                    this.table.rows = res.data;
+                }).catch(error => this.error = true);
         },
     }
+}
 </script>

@@ -2,11 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\User;
-use Illuminate\Support\Facades\Notification;
+use Tests\TestCase;
 
 class EditUserTest extends TestCase
 {

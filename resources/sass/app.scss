@@ -9,6 +9,7 @@
 @import '~vue-phone-number-input/dist/vue-phone-number-input.css';
 @import '~vue-multiselect/dist/vue-multiselect.min.css';
 @import '~vue-select/src/scss/vue-select.scss';
+@import 'custom';
 
 $fa-font-path: '../fonts/font-awesome';
 
@@ -27,6 +28,10 @@ $fa-font-path: '../fonts/font-awesome';
         background-position:right center;
         background-repeat: no-repeat;
     }
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
 }
 
 /*
@@ -70,6 +75,25 @@ $fa-font-path: '../fonts/font-awesome';
 /*
 *   Tech Tips
 */
+.tip-link {
+    a:hover {
+        text-decoration: none;
+    }
+    .tip-preview {
+        max-height: 100px;
+        overflow: hidden;
+        img {
+            display: none;
+        }
+    }
+}
+
+.filter-wrapper {
+    .col-form-label {
+        font-weight: bold;
+    }
+}
+
 .tip-details {
     a, span:not(.badge) {
         padding: 0 5px;
@@ -85,6 +109,16 @@ $fa-font-path: '../fonts/font-awesome';
     }
 }
 
+.tip-equipment {
+    color: #999999;
+    border-top: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    padding: 4px 0;
+    span {
+        padding: 3px 5px;
+    }
+}
+
 .tip-description {
     min-height: 25vh;
 }
@@ -92,10 +126,9 @@ $fa-font-path: '../fonts/font-awesome';
 /*
 *   Dashboard
 */
-
 .notification-wrapper {
     height: 40vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     .notification-message {
         &.unread {
             font-weight: bold !important;
@@ -122,6 +155,13 @@ $fa-font-path: '../fonts/font-awesome';
                     transform: rotate(15deg);
         }
     }
+}
+
+/*
+*   File Links
+*/
+#link_expire__value_ {
+    line-height: 1rem;
 }
 
 

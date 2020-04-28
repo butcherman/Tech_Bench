@@ -18,9 +18,7 @@
         };
     </script>
     <script src="{{ mix('js/app.js') }}"></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    {{-- TODO: Make js just for guest layout --}}
 
     <!-- Styles -->
     <link href="{{ mix('css/guest.css') }}" rel="stylesheet">

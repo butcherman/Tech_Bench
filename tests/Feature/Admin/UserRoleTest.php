@@ -2,12 +2,10 @@
 
 namespace Tests\Feature\admin;
 
+use Tests\TestCase;
 use App\UserRoleType;
 use App\UserRolePermissions;
 use App\UserRolePermissionTypes;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
 class UserRoleTest extends TestCase
 {

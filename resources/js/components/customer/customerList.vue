@@ -1,13 +1,27 @@
 <template>
     <div class="table">
-        <vue-good-table v-if="loadDone"
+        <div v-if="error">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-4">
+                    <img src="/img/err_img/sry_error.png" alt="Error" id="header-logo" />
+                    <!-- TODO - Replace this with head-scratch image -->
+                </div>
+                <div class="col-md-5">
+                    <h3 class="text-danger">Something Bad Happened:</h3>
+                    <p>
+                        Sorry about that.
+                    </p>
+                    <p>
+                        Our minions are busy at work to determine what happened.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <vue-good-table
+            v-else
             mode="remote"
             ref="customer-list-table"
             styleClass="vgt-table bordered w-100"
-            @on-page-change="newPage"
-            @on-sort-change="reSort"
-            @on-per-page-change="perPageUpdate"
-            @on-column-filter="searchFilter"
             :columns="table.columns"
             :rows="table.rows"
             :sort-options="{enabled:true}"
@@ -21,43 +35,42 @@
                 perPageDropdown: [25, 50, 100, 250],
                 dropdownAllowAll: true,
             }"
+            @on-page-change="newPage"
+            @on-sort-change="reSort"
+            @on-per-page-change="perPageUpdate"
+            @on-column-filter="searchFilter"
         >
+            <div slot="table-actions">
+                <!-- <b-button variant="warning" @click="resetSearch" pill size="sm"><i class="fas fa-sync-alt" aria-hidden="true"></i> Reset Search Filters</b-button> -->
+                <b-button v-if="allow_create" variant="info" :href="route('customer.id.create')" pill size="sm"><i class="fas fa-plus" aria-hidden="true"></i> Add New Customer</b-button>
+            </div>
+            <div slot="emptystate">
+                <h4 v-if="loadDone" class="text-center">No Customers Available</h4>
+                <atom-spinner v-else
+                    :animation-duration="1000"
+                    :size="60"
+                    color="#ff1d5e"
+                    class="mx-auto"
+                />
+            </div>
+            <div slot="loadingContent">
+                <atom-spinner
+                    :animation-duration="1000"
+                    :size="60"
+                    color="#ff1d5e"
+                    class="mx-auto"
+                />
+                Loading Customers...
+            </div>
             <template slot="table-row" slot-scope="data">
                 <span v-if="data.column.field == 'system_list'">
-                    <div v-for="sys in data.row.customer_systems" :key="sys.cust_sys_id">{{sys.system_types.name}}</div>
+                    <div v-for="sys in data.row.customer_systems" :key="sys.cust_sys_id">{{sys.sys_name}}</div>
                 </span>
                 <span v-else-if="data.column.field == 'name'" class="d-block w-100 h-100">
                     <a :href="route('customer.details', [data.row.cust_id, dashify(data.row.name)])" class="d-block w-100 h-100 text-dark">{{data.row.name}}</a>
                 </span>
             </template>
-            <div slot="table-actions" v-if="allow_create">
-                <b-button variant="info block" :href="route('customer.id.create')"><i class="fas fa-plus" aria-hidden="true"></i> Add New Customer</b-button>
-            </div>
-            <template slot="loadingContent">
-                <div class="text-center">Loading Customers</div>
-                <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-            </template>
         </vue-good-table>
-        <div v-else-if="hasError" class="card">
-            <div class="card-header text-danger"><h4>Error:</h4></div>
-            <div class="card-body d-flex flex-row">
-            <img src="/img/err_img/sry_error.png" alt="Error Image" />
-                <div class="my-auto ml-4">
-                    <p>
-                        Well, this is embarrassing...
-                    </p>
-                    <p>
-                        I cannot retrieve any customers.
-                    </p>
-                    <p>
-                        A log has been generated and our minions are hard at work to determine what went wrong.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div v-else>
-            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-        </div>
     </div>
 </template>
 
@@ -69,22 +82,9 @@ export default {
     ],
     data() {
         return {
-            loadDone: false,
+            error: false,
             isLoading: true,
-            hasError: false,
-            pagination: {
-                links: {},
-                meta:  {},
-            },
-            searchParam: {
-                page: '',
-                perPage: 25,
-                sortField: 'name',
-                sortType: 'asc',
-                name: '',
-                city: '',
-                system: '',
-            },
+            loadDone: false,
             table: {
                 columns: [
                     {
@@ -115,11 +115,23 @@ export default {
                     },
                 ],
                 rows: [],
-                sysFilter: [],
+            },
+            pagination: {
+                links: {},
+                meta:  {},
+            },
+            searchParam: {
+                page: '',
+                perPage: 25,
+                sortField: 'name',
+                sortType: 'asc',
+                name: '',
+                city: '',
+                system: '',
             },
         }
     },
-    created() {
+    mounted() {
         this.updateSearch();
     },
     methods: {
@@ -128,11 +140,12 @@ export default {
         {
             axios.get(this.route('customer.search', this.searchParam))
                 .then(res => {
+                    console.log(res.data);
                     this.pagination.links = res.data.links;
                     this.pagination.meta  = res.data.meta;
                     this.table.rows = res.data.data;
                     this.loadDone = true;
-                }).catch(error => this.hasError = true);
+                }).catch(error => this.error = true);
         },
         //  If the user goes to the next page
         newPage(param)
@@ -154,11 +167,6 @@ export default {
             this.searchParam.perPage = param.currentPerPage;
             this.updateSearch();
         },
-        //  Go to the customert's details page
-        goToCustomer(data)
-        {
-            window.location.href = this.route('customer.details', [data.row.cust_id, this.dashify(data.row.name)]);
-        },
         //  Filter the search paramaters
         searchFilter(data)
         {
@@ -166,10 +174,12 @@ export default {
             this.searchParam.city = data.columnFilters.city;
             this.searchParam.system = data.columnFilters.system_list;
             this.updateSearch();
+        },
+        //  Reset the search back to a blank state
+        resetSearch()
+        {
+            this.$refs['customer-list-table'].reset();
         }
     }
 }
 </script>
-
-
-

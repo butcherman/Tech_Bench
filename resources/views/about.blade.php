@@ -20,7 +20,7 @@
                 <p class="text-center">
                     Looking for guidance?
                     <span class="d-inline-block">
-                        <a href="https://tech-bench.readthedocs.io/en/{{$branch}}/user/index.html" target="_blank">Click here for the Tech Bench User Guide.</a>
+                        <a href="https://tech-bench.readthedocs.io/en/latest/user/index.html" target="_blank">Click here for the Tech Bench User Guide.</a>
                     </span>
                 </p>
             </div>
@@ -42,7 +42,7 @@
                 <p class="text-center">
                     Installer and Administration guides can be
                     <span class="d-inline-block">
-                        found at <a href="https://tech-bench.readthedocs.io/en/{{$branch}}">readthedocs.org</a>.
+                        found at <a href="https://tech-bench.readthedocs.io/en/latest">readthedocs.org</a>.
                     </span>
                 </p>
                 <p class="text-center">

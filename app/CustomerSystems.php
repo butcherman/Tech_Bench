@@ -11,7 +11,8 @@ class CustomerSystems extends Model
 
     protected $primaryKey = 'cust_sys_id';
     protected $fillable   = ['cust_id', 'sys_id', 'shared'];
-    protected $hidden     = ['created_at', 'updated_at'];
+    protected $hidden     = ['created_at', 'updated_at', 'deleted_at', 'SystemTypes'];
+    protected $appends    = ['sys_name'];
 
     public function SystemTypes()
     {
@@ -26,5 +27,10 @@ class CustomerSystems extends Model
     public function SystemDataFields()
     {
         return $this->belongsToMany('App\SystemDataFields', 'customer_system_data', 'cust_sys_id', 'field_id')->withPivot('value')->orderBy('order', 'ASC');
+    }
+
+    public function getSysNameAttribute()
+    {
+        return $this->SystemTypes->name;
     }
 }

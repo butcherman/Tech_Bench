@@ -42,7 +42,7 @@ class DownloadController extends Controller
             $user = \Request::ip();
         }
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . $user);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.$user);
 
         //  Check that the file exists before allowing it to be downloaded
         if(!empty($fileData) && Storage::exists($fileData->file_link.$fileData->file_name))
@@ -59,12 +59,12 @@ class DownloadController extends Controller
     public function archiveFiles(Request $request)
     {
         //  Debug Data
-        if (Auth::user()) {
+        if(Auth::user()) {
             $user = Auth::user()->full_name;
         } else {
             $user = \Request::ip();
         }
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . $user.'  Request Data:', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.$user.'  Request Data:', $request->toArray());
 
         //  Validate the array
         $request->validate([
@@ -107,7 +107,7 @@ class DownloadController extends Controller
     public function downloadArchive($fileName)
     {
         //  Debug Data
-        if (Auth::user()) {
+        if(Auth::user()) {
             $user = Auth::user()->full_name;
         } else {
             $user = \Request::ip();
@@ -130,7 +130,7 @@ class DownloadController extends Controller
     {
         //  Debug Data
         $this->middleware('auth');
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $note = CustomerNotes::find($id);
         $cust = Customers::find($note->cust_id);
@@ -150,7 +150,7 @@ class DownloadController extends Controller
     {
         //  Debug Data
         $this->middleware('auth');
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         //  TODO - Makt this a better looking pdf
         $tip = TechTips::where('tip_id', $id)->with('User')->with('SystemTypes')->first();

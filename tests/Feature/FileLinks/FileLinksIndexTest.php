@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\FileLinks;
 
-use App\User;
 use App\FileLinks;
 use Tests\TestCase;
-use App\UserPermissions;
 
 class FileLinksIndexTest extends TestCase
 {
@@ -95,21 +93,7 @@ class FileLinksIndexTest extends TestCase
     {
         $response = $this->actingAs($this->tech)->get(route('links.user', $this->tech->user_id));
 
-        $response->assertSuccessful();
-        $response->assertJsonStructure([[
-            'link_id',
-            'user_id',
-            'cust_id',
-            'cust_name',
-            'link_hash',
-            'link_name',
-            'exp_format',
-            'expired',
-            'exp_stamp',
-            'allow_upload',
-            'file_count',
-            'note'
-        ]]);
+        $response->assertStatus(403);
     }
 
     //  Test JSON call to get the file links of another user

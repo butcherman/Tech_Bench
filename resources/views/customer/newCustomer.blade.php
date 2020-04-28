@@ -10,7 +10,7 @@
     <div class="col-md-8 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <new-customer-form><img src="{{asset('img/loading.svg')}}" alt="Loading..." class="d-block mx-auto"></new-customer-form>
+                <new-customer-form></new-customer-form>
             </div>
         </div>
     </div>

@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Installer;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\SystemCategories;
 use App\SystemTypes;
+use App\SystemCategories;
 
 class CategoriesTest extends TestCase
 {

@@ -63,9 +63,7 @@ class AccountTest extends TestCase
 
         $response = $this->actingAs($this->user)->from(route('account'))->post(route('account'), $data);
 
-        $response->assertStatus(302);
-        $response->assertRedirect(route('account'));
-        $response->assertSessionHas('success', 'User Settings Updated');
+        $response->assertJson(['success' => true]);
     }
 
     //  Verify a guest cannot view the change password page
@@ -168,27 +166,25 @@ class AccountTest extends TestCase
     public function test_update_notifications()
     {
         $data = [
-            'em_tech_tip'     => 'on',
-            'em_file_link'    => 'on',
-            'em_notification' => 'on',
-            'auto_del_link'   => 'on',
+            'em_tech_tip'     => true,
+            'em_file_link'    => true,
+            'em_notification' => true,
+            'auto_del_link'   => true,
         ];
 
         $response = $this->actingAs($this->user)->put(route('account'), $data);
 
-        $response->assertStatus(302);
-        $response->assertRedirect(route('account'));
-        $response->assertSessionHas('success', 'User Notifications Updated');
+        $response->assertJson(['success' => true]);
     }
 
     //  Verify that a guest cannot update a user's notification settings
     public function test_update_notifications_as_guest()
     {
         $data = [
-            'em_tech_tip'     => 'on',
-            'em_file_link'    => 'on',
-            'em_notification' => 'on',
-            'auto_del_link'   => 'on',
+            'em_tech_tip'     => true,
+            'em_file_link'    => true,
+            'em_notification' => true,
+            'auto_del_link'   => true,
         ];
 
         $response = $this->put(route('account'), $data);

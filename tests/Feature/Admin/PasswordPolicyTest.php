@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\Admin;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Settings;
+use Tests\TestCase;
 
 class PasswordPolicyTest extends TestCase
 {
@@ -93,6 +91,24 @@ class PasswordPolicyTest extends TestCase
 
         $data = [
             'passExpire' => 30,
+        ];
+        $response = $this->actingAs($this->getInstaller())->post(route('admin.passwordPolicy'), $data);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas(["success" => "User Security Updated"]);
+    }
+
+    //  Try to submit the password policy page as an installer and zero out password policy
+    public function test_submit_password_policy_page_zero_out()
+    {
+        //  Before running test, change the current password policy to 0 days to test updating users
+        Settings::firstOrCreate(
+            ['key'   => 'auth.passwords.settings.expire'],
+            ['key'   => 'auth.passwords.settings.expire', 'value' => 90]
+        )->update(['value' => 90]);
+
+        $data = [
+            'passExpire' => 0,
         ];
         $response = $this->actingAs($this->getInstaller())->post(route('admin.passwordPolicy'), $data);
 

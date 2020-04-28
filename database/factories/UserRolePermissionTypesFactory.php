@@ -5,7 +5,7 @@
 use Faker\Generator as Faker;
 use App\UserRolePermissionTypes;
 
-$factory->define(UserRolePermissionTypes::class, function (Faker $faker) {
+$factory->define(UserRolePermissionTypes::class, function(Faker $faker) {
     return [
         'description' => $faker->words(2, true),
     ];

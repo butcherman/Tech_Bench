@@ -2,19 +2,14 @@
 
 namespace Tests\Feature\TechTips;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\TechTips;
-use App\TechTipSystems;
-use App\TechTipComments;
-use App\TechTipFiles;
-use App\UserPermissions;
-use App\User;
+use Tests\TestCase;
 use App\SystemTypes;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
+use App\TechTipFiles;
+use App\TechTipSystems;
 use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class EditTipTest extends TestCase
 {
@@ -87,8 +82,6 @@ class EditTipTest extends TestCase
 
         $response = $this->put(route('tips.update', $this->tip->tip_id), $data);
 
-        // dd($response);
-
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
@@ -100,10 +93,12 @@ class EditTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'  => $tipData->subject,
-            'eqipment' => [$systems->sys_id],
-            'tipType'  => 1,
-            'tip'      => $tipData->description
+            'tip_id'          => $this->tip->tip_id,
+            'subject'         => $tipData->subject,
+            'system_types'    => $systems,
+            'tip_type_id'     => $tipData->tip_type_id,
+            'description'     => $tipData->description,
+            'deletedFileList' => null
         ];
         $user     = $this->userWithoutPermission('Edit Tech Tip');
         $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
@@ -117,18 +112,19 @@ class EditTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => $tipData->description,
-            'deletedFileList' => [],
+            'tip_id'          => $this->tip->tip_id,
+            'subject'         => $tipData->subject,
+            'system_types'    => [$systems],
+            'tip_type_id'     => $tipData->tip_type_id,
+            'description'     => $tipData->description,
+            'deletedFileList' => null
         ];
         $user = $this->getInstaller();
 
         $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
 
         $response->assertSuccessful();
-        $response->assertJsonStructure(['tip_id']);
+        $response->assertJson(['success' => true]);
     }
 
     //  Try to submit tech tip with subject validation error
@@ -137,10 +133,12 @@ class EditTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => '',
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => $tipData->description
+            'tip_id'          => $this->tip->tip_id,
+            'subject'         => null,
+            'system_types'    => [$systems],
+            'tip_type_id'     => $tipData->tip_type_id,
+            'description'     => $tipData->description,
+            'deletedFileList' => null
         ];
         $user = $this->getInstaller();
 
@@ -154,19 +152,20 @@ class EditTipTest extends TestCase
     public function test_submit_edit_tip_equipment_validation_error()
     {
         $tipData = factory(TechTips::class)->make();
-        $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => '',
-            'tipType'   => 1,
-            'tip'       => $tipData->description
+            'tip_id'          => $this->tip->tip_id,
+            'subject'         => $tipData->subject,
+            'system_types'    => null,
+            'tip_type_id'     => $tipData->tip_type_id,
+            'description'     => $tipData->description,
+            'deletedFileList' => null
         ];
         $user = $this->getInstaller();
 
         $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors('equipment');
+        $response->assertSessionHasErrors('system_types');
     }
 
     //  Try to submit tech tip with tipType validation error
@@ -175,17 +174,19 @@ class EditTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => '',
-            'tip'       => $tipData->description
+            'tip_id'          => $this->tip->tip_id,
+            'subject'         => $tipData->subject,
+            'system_types'    => [$systems],
+            'tip_type_id'     => null,
+            'description'     => $tipData->description,
+            'deletedFileList' => null
         ];
         $user = $this->getInstaller();
 
         $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors('tipType');
+        $response->assertSessionHasErrors('tip_type_id');
     }
 
     //  Try to submit tech tip with tip validation error
@@ -194,17 +195,19 @@ class EditTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => ''
+            'tip_id'          => $this->tip->tip_id,
+            'subject'         => $tipData->subject,
+            'system_types'    => [$systems],
+            'tip_type_id'     => $tipData->tip_type_id,
+            'description'     => null,
+            'deletedFileList' => null
         ];
         $user = $this->getInstaller();
 
         $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors('tip');
+        $response->assertSessionHasErrors('description');
     }
 
     //  Submit a tip that includes a file
@@ -216,53 +219,19 @@ class EditTipTest extends TestCase
         $systems = factory(SystemTypes::class)->create();
         $fileName = Str::random(5) . '.jpg';
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => $tipData->description,
-            'file'      => $file = UploadedFile::fake()->image($fileName),
-            'deletedFileList' => [],
+            'tip_id'          => $this->tip->tip_id,
+            'subject'         => $tipData->subject,
+            'system_types'    => [$systems],
+            'tip_type_id'     => $tipData->tip_type_id,
+            'description'     => $tipData->description,
+            'deletedFileList' => null,
+            'file'            => $file = UploadedFile::fake()->image($fileName),
         ];
         $user = $this->getInstaller();
 
         $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
 
         $response->assertSuccessful();
-        $response->assertSeeText('uploaded successfully');
-
-        unset($data['file']);
-        $data['_completed'] = true;
-
-        //  After file load completed - a second request is sent to actually create the tip
-        $response2 = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
-
-        $response2->assertSuccessful();
-        $response2->assertJsonStructure(['tip_id']);
-
-        //  Make sure the file is in the correct place
-        $tipID = $response2->getOriginalContent()['tip_id'];
-        Storage::disk('local')->assertExists(config('filesystems.paths.tips') . DIRECTORY_SEPARATOR . $tipID . DIRECTORY_SEPARATOR . $fileName);
-    }
-
-    //  Try to submit edited tech tip and delete a couple of attached files
-    public function test_submit_edit_tip_delete_some_files()
-    {
-        $tipData = factory(TechTips::class)->make();
-        $systems = factory(SystemTypes::class)->create();
-        $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => $tipData->description,
-            'deletedFileList' => [
-                $this->files[0]->tip_file_id, $this->files[1]->tip_file_id, $this->files[2]->tip_file_id,
-            ],
-        ];
-        $user = $this->getInstaller();
-
-        $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
-
-        $response->assertSuccessful();
-        $response->assertJsonStructure(['tip_id']);
+        $response->assertJson(['success' => true]);
     }
 }

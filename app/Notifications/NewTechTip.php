@@ -59,7 +59,7 @@ class NewTechTip extends Notification implements ShouldQueue
         return [
             //
             'type'    => 'warning',
-            'message' => 'New Tech Tip Created - ' . $this->details->subject,
+            'message' => 'New Tech Tip Created - '.$this->details->subject,
             'link'    => url(route(
                 'tip.details',
                     [

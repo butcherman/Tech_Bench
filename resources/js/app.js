@@ -24,7 +24,6 @@ import Vue                  from 'vue';
 import BootstrapVue         from 'bootstrap-vue';
 import VueGoodTablePlugin   from 'vue-good-table';
 import route                from 'ziggy';
-import { Ziggy }            from '../assets/js/ziggy';
 import vue2Dropzone         from 'vue2-dropzone';
 import VuePhoneNumberInput  from 'vue-phone-number-input';
 import Multiselect          from 'vue-multiselect';
@@ -32,6 +31,10 @@ import vSelect              from 'vue-select';
 import draggable            from 'vuedraggable';
 import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 import Avatar               from 'vue-avatar'
+import VueClipboard         from 'vue-clipboard2';
+import { Ziggy }            from '../assets/js/ziggy';
+import { AtomSpinner }      from 'epic-spinners';
+import {HollowDotsSpinner}  from 'epic-spinners';
 
 /*
 *   The TinyMCE library
@@ -45,6 +48,9 @@ require('tinymce/plugins/lists');
 require('tinymce/plugins/link');
 require('tinymce/plugins/image');
 require('tinymce/plugins/table');
+require('tinymce/plugins/fullscreen');
+require('tinymce/plugins/spellchecker');
+require('tinymce/plugins/preview');
 
 /*
 *   Vue, Bootstrap and third party libraries
@@ -53,7 +59,11 @@ window.axios = require('axios');
 Vue.use(VueGoodTablePlugin);
 Vue.use(BootstrapVue);
 Vue.use(vueFilterPrettyBytes);
+Vue.use(VueClipboard);
 
+/*
+*   Third party components
+*/
 Vue.component('vue-dropzone', vue2Dropzone);
 Vue.component('editor', require('@tinymce/tinymce-vue').default);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
@@ -61,6 +71,8 @@ Vue.component('multiselect', Multiselect);
 Vue.component('v-select', vSelect);
 Vue.component('draggable',    draggable);
 Vue.component('avatar', Avatar);
+Vue.component('atom-spinner', AtomSpinner);
+Vue.component('hollow-dots-spinner', HollowDotsSpinner);
 
 Vue.mixin({
     methods: {
@@ -76,7 +88,10 @@ Vue.mixin({
 /*
 *   Global Components
 */
-Vue.component('go-back', require('./components/GoBack.vue').default);
+Vue.component('go-back',         require('./components/GoBack.vue').default);
+Vue.component('file-upload',     require('./components/FileUpload.vue').default);
+Vue.component('form-submit',     require('./components/FormSubmit.vue').default);
+Vue.component('bookmark',        require('./components/Bookmark.vue').default);
 
 /*
 *   Dashboard and Template Components
@@ -84,11 +99,18 @@ Vue.component('go-back', require('./components/GoBack.vue').default);
 Vue.component('notification-dashboard', require('./components/NotificationDashboard.vue').default);
 
 /*
+*   User Profile Components
+*/
+Vue.component('user-profile',  require('./components/user/userProfile.vue').default);
+Vue.component('user-settings', require('./components/user/userSettings.vue').default);
+
+/*
 *   Vue File Link Components
 */
 Vue.component('list-file-links',    require('./components/fileLinks/ListFileLinks.vue').default);
 Vue.component('new-file-link-form', require('./components/fileLinks/NewFileLink.vue').default);
 Vue.component('link-details',       require('./components/fileLinks/LinkDetails.vue').default);
+Vue.component('link-instructions',  require('./components/fileLinks/LinkInstructions.vue').default);
 Vue.component('link-files',         require('./components/fileLinks/LinkFiles.vue').default);
 Vue.component('guest-download',     require('./components/fileLinks/GuestFileDownloads.vue').default);
 Vue.component('guest-upload',       require('./components/fileLinks/GuestFileUpload.vue').default);
@@ -96,32 +118,42 @@ Vue.component('guest-upload',       require('./components/fileLinks/GuestFileUpl
 /*
 *   Vue Customer Components
 */
-Vue.component('customer-list',     require('./components/customer/customerList.vue').default);
-Vue.component('new-customer-form', require('./components/customer/newCustomer.vue').default);
-Vue.component('customer-details',  require('./components/customer/customerDetails.vue').default);
-Vue.component('customer-systems',  require('./components/customer/customerSystems.vue').default);
-Vue.component('customer-contacts', require('./components/customer/customerContacts.vue').default);
-Vue.component('customer-notes',    require('./components/customer/CustomerNotes.vue').default);
-Vue.component('customer-files',    require('./components/customer/customerFiles.vue').default);
+Vue.component('customer-master',     require('./components/customer/customerDetailsMaster.vue').default);
+Vue.component('customer-list',       require('./components/customer/customerList.vue').default);
+Vue.component('new-customer-form',   require('./components/customer/newCustomer.vue').default);
+Vue.component('customer-details',    require('./components/customer/customerDetails.vue').default);
+Vue.component('customer-equipment',  require('./components/customer/customerEquipment.vue').default);
+Vue.component('equipment-form',      require('./components/customer/customerEquipmentForm.vue').default);
+Vue.component('customer-contacts',   require('./components/customer/customerContacts.vue').default);
+Vue.component('contact-form',        require('./components/customer/CustomerContactForm.vue').default);
+Vue.component('customer-notes',      require('./components/customer/CustomerNotes.vue').default);
+Vue.component('note-form',           require('./components/customer/customerNoteForm.vue').default);
+Vue.component('customer-files',      require('./components/customer/customerFiles.vue').default);
+Vue.component('file-form',           require('./components/customer/customerFileForm.vue').default);
+Vue.component('customer-search',     require('./components/customer/customerSearch.vue').default);
 
 /*
 *   Vue Tech Tip Components
 */
-Vue.component('search-tips',       require('./components/tips/searchTips.vue').default);
-Vue.component('new-tip-form',      require('./components/tips/newTipForm.vue').default);
-Vue.component('edit-tip-form',     require('./components/tips/editTipForm.vue').default);
-Vue.component('tech-tip-details',  require('./components/tips/tipDetails.vue').default);
-Vue.component('tech-tip-files',    require('./components/tips/tipFiles.vue').default);
-Vue.component('tech-tip-comments', require('./components/tips/tipComments.vue').default);
+Vue.component('search-tips',         require('./components/tips/searchTips.vue').default);
+Vue.component('new-tip-form',        require('./components/tips/newTipForm.vue').default);
+Vue.component('edit-tip-form',       require('./components/tips/editTipForm.vue').default);
+// Vue.component('tech-tip-master',     require('./components/tips/tipMaster.vue').default);
+Vue.component('tech-tip-details',    require('./components/tips/tipDetails.vue').default);
+// Vue.component('tech-tip-files',      require('./components/tips/tipFiles.vue').default);
+Vue.component('tech-tip-comments',   require('./components/tips/tipComments.vue').default);
 
 /*
 *   Administration Components
 */
-Vue.component('user-form',        require('./components/admin/userForm.vue').default);
-Vue.component('user-list',        require('./components/admin/userList.vue').default);
-Vue.component('user-roles',       require('./components/admin/userRoles.vue').default);
-Vue.component('user-deleted',     require('./components/admin/userDeleted.vue').default);
-Vue.component('admin-file-links', require('./components/admin/fileLinks.vue').default);
+Vue.component('user-form',           require('./components/admin/userForm.vue').default);
+Vue.component('user-list',           require('./components/admin/userList.vue').default);
+Vue.component('user-roles',          require('./components/admin/userRoles.vue').default);
+Vue.component('user-deleted',        require('./components/admin/userDeleted.vue').default);
+Vue.component('admin-file-links',    require('./components/admin/fileLinks.vue').default);
+Vue.component('customer-id-modify',  require('./components/customer/customerIdModify.vue').default);
+Vue.component('customer-file-types', require('./components/customer/CustomerFileTypes.vue').default);
+Vue.component('customers-disabled',  require('./components/customer/DisabledCustomers.vue').default);
 
 /*
 *   Installer Components
@@ -149,7 +181,8 @@ Vue.component('upload-module',  require('./components/modules/upload.vue').defau
 */
 window.axios.defaults.headers.common = {
    'X-Requested-With': 'XMLHttpRequest',
-   'X-CSRF-TOKEN': window.techBench.csrfToken
+   'X-CSRF-TOKEN':      window.techBench.csrfToken,
+   'Content-Type':     'application/json',
 }
 
 /*

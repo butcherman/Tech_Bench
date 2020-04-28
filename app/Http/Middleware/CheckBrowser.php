@@ -19,7 +19,7 @@ class CheckBrowser
         if(!empty($_SERVER['HTTP_USER_AGENT']))
         {
             //  Check for Internet Explorer 11
-            if (preg_match("/Trident\/7.0;(.*)rv:11.0/", $_SERVER["HTTP_USER_AGENT"], $match) != 0)
+            if(preg_match("/Trident\/7.0;(.*)rv:11.0/", $_SERVER["HTTP_USER_AGENT"], $match) != 0)
             {
                 return response()->make(view('error.426'), 426);
             }

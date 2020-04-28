@@ -20,6 +20,6 @@ class FileLinkFiles extends Model
 
     public function User()
     {
-        return $this->hasMany('App\User', 'user_id', 'user_id');
+        return $this->hasOne('App\User', 'user_id', 'user_id');
     }
 }

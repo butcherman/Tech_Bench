@@ -3,7 +3,7 @@
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin">
-        <h3>Change Password</h3>
+        <h4>Change Password</h4>
     </div>
 </div>
 @if(session()->has('change_password'))

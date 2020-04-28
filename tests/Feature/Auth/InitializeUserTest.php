@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\Auth;
 
-use App\UserInitialize;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\UserInitialize;
 
 class InitializeUserTest extends TestCase
 {

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{csrf_token()}}">
     <title>{{config('app.name', 'Tech Bench')}}</title>
+    <noscript><meta http-equiv="refresh" content="0; url={{route('noscript')}}" /></noscript>
     <link rel="stylesheet" href="{{mix('css/app.css')}}">
     <script>
         window.techBench = {
@@ -39,7 +40,7 @@
                     </li>
 -->
                     <li class="nav-item dropdown mr-1">
-                        <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="{{route('about')}}">
+                        <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="{{route('about')}}" title="About {{config('app.name')}}" v-b-tooltip.hover>
                             <i class="far fa-question-circle nx-0"></i>
                         </a>
                     </li>

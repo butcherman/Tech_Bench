@@ -17,7 +17,7 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/guest.scss', 'public/css')
     .copy('node_modules/tinymce/skins', 'public/js/skins');
 
-if (mix.inProduction()) 
+if (mix.inProduction())
 {
-    mix.version();
+    mix.version().disableNotifications();
 }

@@ -13,7 +13,7 @@ class CreateTechTipTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tech_tip_types', function (Blueprint $table) {
+        Schema::create('tech_tip_types', function(Blueprint $table) {
             $table->bigIncrements('tip_type_id');
             $table->text('description');
             $table->timestamps();

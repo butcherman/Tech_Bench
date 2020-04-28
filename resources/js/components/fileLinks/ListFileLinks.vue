@@ -1,57 +1,83 @@
 <template>
     <div class="table">
-        <vue-good-table v-if="loadDone"
+        <div v-if="error">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-4">
+                    <img src="/img/err_img/sry_error.png" alt="Error" id="header-logo" />
+                    <!-- TODO - Replace this with head-scratch image -->
+                </div>
+                <div class="col-md-5">
+                    <h3 class="text-danger">Something Bad Happened:</h3>
+                    <p>
+                        Sorry about that.
+                    </p>
+                    <p>
+                        Our minions are busy at work to determine what happened.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <vue-good-table
+            v-else
             ref="file-links-table"
             styleClass="vgt-table bordered w-100"
             :columns="table.columns"
             :rows="table.rows"
+            :sort-options="{enabled:true}"
             :select-options="{enabled:true, selectOnCheckboxOnly: true}"
+            :isLoading.sync="isLoading"
             :row-style-class="linkRowClass"
         >
             <div slot="emptystate">
-                <h4 class="text-center">No File Links Available</h4>
+                <h4 v-if="loadDone" class="text-center">No File Links Available</h4>
+                <atom-spinner v-else
+                    :animation-duration="1000"
+                    :size="60"
+                    color="#ff1d5e"
+                    class="mx-auto"
+                />
             </div>
             <div slot="selected-row-actions">
-                <div class="row justify-content-center">
-                    <div class="col-md-3">
-                        <button id="delete-selected" class="btn btn-warning btn-block">Delete Selected</button>
-                        <b-popover :target="'delete-selected'" triggers="focus" placement="bottom">
-                            <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>
-                            <div class="text-center">
-                                <button class="btn btn-danger" @click="deleteChecked">Yes</button>
-                                <button class="btn btn-primary" @click="$root.$emit('bv::hide::popover')">No</button>
-                            </div>
-                        </b-popover>
-                    </div>
-                </div>
+                <b-button @click="deleteChecked" variant="warning" pill>Delete Selected</b-button>
+            </div>
+            <div slot="loadingContent">
+                <atom-spinner
+                    :animation-duration="1000"
+                    :size="60"
+                    color="#ff1d5e"
+                    class="mx-auto"
+                />
             </div>
             <template slot="table-row" slot-scope="data">
-                <span v-if="data.column.field == 'name'">
+                <span v-if="data.column.field == 'link_name'">
                     <a :href="route('links.details', [data.row.link_id, dashify(data.row.link_name)])">{{data.row.link_name}}</a>
                 </span>
+                <span v-else-if="data.column.field == 'exp_stamp'">
+                    {{data.row.exp_format}}
+                </span>
                 <span v-else-if="data.column.field == 'actions'">
-                    <div class="d-flex justify-content-between flex-nowrap">
-                        <a v-if="!data.row.expired" :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+route('file-links.show', [data.row.link_hash])" title="Email Link" class="btn btn-rounded px-0 text-muted" v-b-tooltip.hover><span class="fas fa-envelope"></span></a>
-                        <button v-if="!data.row.expired" @click="disableLink(data.row.link_id)" class="btn btn-rounded px-0 text-muted" title="Disable Link" v-b-tooltip.hover>
-                            <span class="fas fa-unlink"></span>
-                        </button>
-                        <button :id="'confirm-delete'+data.row.link_id" class="btn btn-rounded px-0 text-muted" title="Delete Link" v-b-tooltip.hover>
-                            <span class="fas fa-trash-alt"></span>
-                        </button>
-                        <b-popover :target="'confirm-delete'+data.row.link_id" triggers="focus" placement="left">
-                            <template v-slot:title><strong class="d-block text-center">Are You Sure?</strong>This cannot be undone.</template>
-                            <div class="text-center">
-                                <button class="btn btn-danger" @click="deleteLink(data.row.link_id)">Yes</button>
-                                <button class="btn btn-primary" @click="$root.$emit('bv::hide::popover')">No</button>
-                            </div>
-                        </b-popover>
-                    </div>
+                    <a v-if="!data.row.expired"
+                        :href="'mailto:?subject=A File Link Has Been Created For You&body=View the link details here: '+route('file-links.show', [data.row.link_hash])"
+                        title="Email Link"
+                        class="text-muted pl-2"
+                        v-b-tooltip.hover>
+                            <span class="fas fa-envelope"></span>
+                    </a>
+                    <i v-if="!data.row.expired"
+                        class="fas fa-unlink pointer pl-2"
+                        title="Disable Link"
+                        v-b-tooltip.hover
+                        @click="disableLink(data.row.link_id)">
+                    </i>
+                    <i
+                        class="fas fa-trash-alt pl-2"
+                        title="Delete Link"
+                        v-b-tooltip.hover
+                        @click="deleteLinkConfirm(data.row.link_id)">
+                    </i>
                 </span>
             </template>
         </vue-good-table>
-        <div v-else>
-            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-        </div>
     </div>
 </template>
 
@@ -64,12 +90,13 @@
             return {
                 loadDone: false,
                 isLoading: true,
+                error: false,
                 table: {
                     columns: [
                     {
                         label: 'Link Name',
-                        field: 'name',
-                        sortable: false,
+                        field: 'link_name',
+                        sortable: true,
                     },
                     {
                         label: '# of Files',
@@ -78,8 +105,8 @@
                     },
                     {
                         label: 'Expire Date',
-                        field: 'exp_format',
-                        sortable: false,
+                        field: 'exp_stamp',
+                        sortable: true,
                     },
                     {
                         label: 'Actions',
@@ -94,19 +121,24 @@
             this.fetchLinks();
         },
         methods: {
+            //  Ajax call to pull links for the user
             fetchLinks()
             {
+                this.isLoading = true;
                 var user = this.user_id ? this.user_id : 0
                 axios.get(this.route('links.user', user))
                     .then(res => {
                         this.table.rows = res.data;
+                        this.isLoading = false;
                         this.loadDone = true;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }).catch(error => this.error = true);
             },
+            //  Determine if the link is expired and should be highlighted
             linkRowClass(row)
             {
                 return row.expired ? 'table-danger': '';
             },
+            //  Set the expire date of the link to yesterday
             disableLink(link)
             {
                 axios.get(this.route('links.disable', [link]))
@@ -117,33 +149,68 @@
                         }
                         else
                         {
-                            alert('We are having difficulties processing your request\nPlease try again later.');
+                            this.$bvModal.msgBoxOk('Disable link operation failed.  Please try again later.');
                         }
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }).catch(error => this.error = true);
             },
+            //  Verify that the link should be disabled
+            deleteLinkConfirm(link)
+            {
+                this.$bvModal.msgBoxConfirm('This cannot be undone.', {
+                    title: 'Are You Sure?',
+                    size: 'md',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No',
+                    centered: true,
+                })
+                .then(res => {
+                    if(res)
+                    {
+                        this.isLoading = true;
+                        this.deleteLink(link);
+                    }
+                });
+            },
+            //  Delete the link and any files associated with it
             deleteLink(link)
             {
                 axios.delete(this.route('links.data.destroy', [link]))
                     .then(res => {
                         if(res.data.success)
                         {
-                            this.$root.$emit('bv::hide::popover')
                             this.fetchLinks();
                         }
                         else
                         {
-                            alert('We are having difficulties processing your request\nPlease try again later.');
+                            this.$bvModal.msgBoxOk('Delete link operation failed.  Please try again later.');
                         }
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                    }).catch(error => this.error = true);
             },
+            //  Delete a series of links
             deleteChecked()
             {
                 var list = this;
-                this.$refs['file-links-table'].selectedRows.forEach(function(link)
-                {
-                    list.deleteLink(link.link_id);
+                this.$bvModal.msgBoxConfirm('This cannot be undone.', {
+                    title: 'Are You Sure?',
+                    size: 'md',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No',
+                    centered: true,
+                })
+                .then(res => {
+                    if(res)
+                    {
+                        this.$root.$emit('bv::hide::popover');
+                        this.isLoading = true;
+                        this.$refs['file-links-table'].selectedRows.forEach(function(link)
+                        {
+                            list.deleteLink(link.link_id);
+                        });
+                    }
                 });
-            },
+            }
         }
     }
 </script>

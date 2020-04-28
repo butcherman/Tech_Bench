@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Installer;
 
+use Tests\TestCase;
 use App\SystemCategories;
 use App\SystemDataFieldTypes;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
 class NewSystemsTest extends TestCase
 {

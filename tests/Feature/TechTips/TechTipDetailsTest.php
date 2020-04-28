@@ -2,14 +2,10 @@
 
 namespace Tests\Feature\TechTips;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\TechTips;
+use Tests\TestCase;
 use App\TechTipSystems;
 use App\TechTipComments;
-use App\User;
-use App\UserPermissions;
 use Illuminate\Support\Facades\Notification;
 
 class TechTipDetailsTest extends TestCase
@@ -70,7 +66,7 @@ class TechTipDetailsTest extends TestCase
         Notification::fake();
 
         $data = [
-            'tipID'   => $this->tip->tip_id,
+            'tip_id'   => $this->tip->tip_id,
             'comment' => 'This is a comment',
         ];
         $user = $this->getTech();

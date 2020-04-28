@@ -9,21 +9,9 @@
 <div class="row justify-content-center">
     <div class="col-md-10 grid-margin stretch-card">
         <div class="card">
+            <div class="card-header text-center"><b-button href="{{route('links.new')}}" variant="info" pill>Create New File Link</a></div>
             <div class="card-body">
-                <div class="row justify-content-center">
-                    <div class="col-md-4">
-                        <a href="{{route('links.new')}}" class="btn btn-block btn-info">Create New File Link</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row justify-content-center">
-    <div class="col-md-10 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <list-file-links><img src="{{asset('img/loading.svg')}}" alt="Loading..." class="d-block mx-auto"></list-file-links>
+                <list-file-links></list-file-links>
             </div>
         </div>
     </div>

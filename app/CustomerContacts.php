@@ -8,6 +8,7 @@ class CustomerContacts extends Model
 {
     protected $primaryKey = 'cont_id';
     protected $fillable   = ['cust_id', 'name', 'email', 'shared'];
+    protected $hidden     = ['created_at', 'updated_at'];
 
     public function CustomerContactPhones()
     {

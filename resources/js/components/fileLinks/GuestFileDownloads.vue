@@ -1,24 +1,32 @@
 <template>
     <div class="table">
-        <vue-good-table v-if="loadDone"
-            mode="remote"
+        <div v-if="error">
+            <h5 class="text-center text-danger"><i class="fas fa-exclamation-circle"></i> Unable to load files...</h5>
+        </div>
+        <div v-else-if="!loadDone">
+            <p class="text-center">Gathering Files</p>
+            <atom-spinner
+                :animation-duration="1000"
+                :size="60"
+                color="#ff1d5e"
+                class="mx-auto"
+            />
+        </div>
+        <vue-good-table v-else
             ref="files-table"
             styleClass="vgt-table bordered w-100"
             :columns="table.columns"
             :rows="table.rows"
             :select-options="{enabled:true, selectOnCheckboxOnly: true}"
-            :sort-options="{enabled:true}"
-            :isLoading.sync="isLoading"
         >
             <div slot="emptystate">
                 <h4 class="text-center">No Files Available</h4>
             </div>
             <div slot="selected-row-actions">
-                <div class="row justify-content-center">
-                    <div class="col-md-3">
-                        <button id="download-selected" class="btn btn-primary btn-block" @click="downloadChecked">Download Selected Files</button>
-                    </div>
-                </div>
+                <button @click="downloadChecked" class="btn btn-warning float-right mb-2">
+                    <span class="spinner-border spinner-border-sm text-danger" v-show="downloadButton.disable"></span>
+                    {{downloadButton.text}}
+                </button>
             </div>
             <template slot="table-row" slot-scope="data">
                 <span v-if="data.column.field == 'name'">
@@ -26,13 +34,6 @@
                 </span>
             </template>
         </vue-good-table>
-        <div v-else-if="error">
-            <h5 class="text-center text-danger">Problem Loading Files...</h5>
-        </div>
-        <div v-else>
-            <p class="text-center">Gathering Files</p>
-            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
-        </div>
     </div>
 </template>
 
@@ -44,8 +45,11 @@
         data() {
             return {
                 loadDone: false,
-                isLoading: true,
                 error: false,
+                downloadButton: {
+                    text: 'Download Selected',
+                    disable: false,
+                },
                 table: {
                     columns: [
                     {
@@ -74,11 +78,13 @@
                     .then(res => {
                         this.loadDone = true;
                         this.table.rows = res.data;
-                        // this.loading = false;
                     }).catch(error => {this.error = true});
             },
             downloadChecked()
             {
+                this.downloadButton.text = 'Processing..';
+                this.downloadButton.disable = true;
+
                 //  place all of the files in an array to be sent for zipping
                 var fileList = [];
                 this.$refs['files-table'].selectedRows.forEach(function(file)
@@ -90,7 +96,11 @@
                 axios.put(this.route('archiveFiles'), {'fileList': fileList})
                     .then(res => {
                         window.location.href = this.route('downloadArchive', res.data.archive);
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                        this.downloadButton.text = 'Download Selected';
+                        this.downloadButton.disable = false;
+                    }).catch(error =>
+                        this.$bvModal.msgBoxOk('Download operation failed.  Please try again later.')
+                    );
             },
         }
     }

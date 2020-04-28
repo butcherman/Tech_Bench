@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use App\User;
-use App\TechTips;
-use App\TechTipComments;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Route;
-use App\Notifications\NewTechTipComment;
-use Illuminate\Support\Facades\Notification;
+
+use App\Domains\TechTips\GetTechTipComments;
+use App\Domains\TechTips\SetTechTipComments;
+
+use App\Http\Requests\TechTipNewCommentRequest;
 
 class TechTipCommentsController extends Controller
 {
@@ -21,46 +17,22 @@ class TechTipCommentsController extends Controller
     }
 
     //  Add a new Tech Tip Comment
-    public function store(Request $request)
+    public function store(TechTipNewCommentRequest $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
-
-        $request->validate([
-            'comment' => 'required',
-            'tipID' => 'required',
-        ]);
-
-        TechTipComments::create([
-            'tip_id' => $request->tipID,
-            'user_id' => Auth::user()->user_id,
-            'comment' => $request->comment
-        ]);
-
-        $ownerID = TechTips::find($request->tipID)->user_id;
-        $owner = User::find($ownerID);
-
-        Notification::send($owner, new NewTechTipComment(Auth::user()->full_name, $request->tipID));
-
-        Log::info('User '.Auth::user()->full_name.' left a comment on Tech Tip '.$request->tipID);
+        (new SetTechTipComments)->createTipComment($request);
         return response()->json(['success' => true]);
     }
 
     //  Retrieve the comments for a tech tip
     public function show($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-
-        return TechTipComments::where('tip_id', $id)->with('user')->get();
+        return (new GetTechTipComments)->execute($id);
     }
 
     //  Delete a comment
     public function destroy($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-
-        TechTipComments::find($id)->delete();
-
-        Log::warning('A Tech Tip Comment (id# '.$id.') was deleted by '.Auth::user()->full_name);
+        (new SetTechTipComments)->deleteTipComment($id);
         return response()->json(['success' => true]);
     }
 }

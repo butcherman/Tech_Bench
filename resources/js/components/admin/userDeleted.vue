@@ -2,12 +2,17 @@
     <div>
         <h4 class="text-center">Deactivated Users</h4>
         <vue-good-table
+            ref="userListTable"
             :columns="columns"
-            :rows="user_list"
+            :rows="rows"
+            :sort-options="{enabled:true}"
             styleClass="vgt-table striped bordered"
         >
+            <div slot="emptystate">
+                <h4 class="text-center">No Disabled Users</h4>
+            </div>
             <template slot="table-row" slot-scope="data">
-                <span v-if="data.column.field == 'user'">
+                <span v-if="data.column.field == 'full_name'">
                     <a :href="route(action_route, data.row.user_id)">{{data.row.full_name}}</a>
                 </span>
                 <span v-else-if="data.column.field == 'actions'">
@@ -16,9 +21,13 @@
             </template>
         </vue-good-table>
         <b-modal id="loading-modal" size="sm" ref="loading-modal" hide-footer hide-header hide-backdrop centered>
-            <img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto">
+            <atom-spinner
+                :animation-duration="1000"
+                :size="60"
+                color="#ff1d5e"
+                class="mx-auto"
+            />
         </b-modal>
-
     </div>
 </template>
 <script>
@@ -32,7 +41,8 @@ export default {
             columns: [
                 {
                     label: 'User',
-                    field: 'user',
+                    field: 'full_name',
+                    sortable: true,
                     filterOptions: {
                         enabled: true,
                     }
@@ -40,6 +50,7 @@ export default {
                 {
                     label: 'Email Address',
                     field: 'email',
+                    sortable: true,
                     filterOptions: {
                         enabled: true,
                     }
@@ -47,30 +58,16 @@ export default {
                 {
                     label: 'User Deactivated Date',
                     field: 'deleted_at',
+                    sortable: true,
                 },
                 {
                     label: 'Actions',
                     field: 'actions',
+                    sortable: false,
                 }
             ],
-            form: {
-                password: '',
-                password_confirmation: '',
-                user_id: '',
-                force_change: true,
-            },
-            validated: false,
-            confirmedErr: null,
-            modalTitle: 'Reset Password',
-            generated: '',
-            button: {
-                disabled: false,
-                text: 'Reset Password',
-            }
+            rows: this.user_list,
         }
-    },
-    created() {
-        // this.getUserList();
     },
     methods: {
         enableUser(data, index)
@@ -81,10 +78,9 @@ export default {
                     this.$refs['loading-modal'].hide();
                     this.$bvModal.msgBoxOk(data.full_name+' has been reactivated.  Please go to the user page to update their password.')
                         .then(value => {
-                            location.reload();
+                            this.rows.splice(index, 1);
                         });
-                }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-
+                }).catch(error => this.$bvModal.msgBoxOk('Unable to reactivate user at this time.  Please try again later.'));
         },
     }
 }

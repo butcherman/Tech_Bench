@@ -8,7 +8,7 @@
                 <h1>{{config('app.name', 'Tech Bench')}}</h1>
             </div>
         </div>
-        @if($details->note != '')
+        @if($instructions)
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -16,10 +16,9 @@
                         <h4>Details:</h4>
                     </div>
                     <div class="card-body" id="guest-link-instructions">
-                        {!! $details->note !!}
+                        {!! $instructions !!}
                     </div>
                 </div>
-
             </div>
         </div>
         @endif
@@ -41,7 +40,7 @@
                 <div class="card">
                     <div class="card-header"><h4>Upload File</h4></div>
                     <div class="card-body">
-                        <guest-upload link_id="{{$hash}}"><img src="/img/loading.svg" alt="Loading..." class="d-block mx-auto"></guest-upload>
+                        <guest-upload link_id="{{$hash}}"></guest-upload>
                     </div>
                 </div>
             </div>

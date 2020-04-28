@@ -20,6 +20,10 @@
     flex-direction: column;
     margin-bottom: 60px;
 
+    // position: fixed;
+    // top: calc(0 - #{$navbar-height});
+    // left: 0;
+
     .nav-item {
       @include transition-duration(0.25s);
       transition-property: background;
@@ -135,7 +139,7 @@
           > .nav-link, &[aria-expanded="true"] {
             background: $sidebar-light-menu-hover-bg;
             color: $sidebar-light-menu-hover-color;
-            border-radius: 0.437rem;                         
+            border-radius: 0.437rem;
           }
         }
         > .nav-link {

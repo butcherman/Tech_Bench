@@ -5,7 +5,7 @@
                 <h4 class="text-center">Select A Role to Edit or Enter New Role Information Below</h4>
                 <b-list-group>
                     <b-list-group-item button v-for="(item, key) in roles" :key="key" class="pointer text-center" @click="selectRole(item)">{{item.name}}</b-list-group-item>
-                    <b-list-group-item button class="pointer text-center" @click="selectRole()">Create New Role</b-list-group-item>
+                    <b-list-group-item button variant="warning" class="pointer text-center" @click="selectRole()">Create New Role</b-list-group-item>
                 </b-list-group>
             </div>
         </div>
@@ -85,10 +85,6 @@ export default {
             }
         }
     },
-    created()
-    {
-        //
-    },
     methods: {
         selectRole(data)
         {
@@ -130,11 +126,8 @@ export default {
                         {
                             msg = res.data.reason
                         }
-                        this.$bvModal.msgBoxOk(msg)
-                            .then(value => {
-                                location.reload();
-                            }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                        this.$bvModal.msgBoxOk('User Role Updated');
+                    }).catch(error => this.$bvModal.msgBoxOk('Unable to update User Role at this time.  Please try again later'));
             }
         }
     }

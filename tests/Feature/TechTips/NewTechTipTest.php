@@ -48,10 +48,11 @@ class NewTechTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject' => $tipData->subject,
-            'eqipment' => [$systems->sys_id],
-            'tipType' => 1,
-            'tip' => $tipData->description
+            'subject'     => $tipData->subject,
+            'eqipment'    => [$systems->sys_id],
+            'tip_type_id' => 1,
+            'description' => $tipData->description,
+            'noEmail'     => false,
         ];
 
         $response = $this->post(route('tips.store'), $data);
@@ -67,10 +68,11 @@ class NewTechTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'  => $tipData->subject,
-            'eqipment' => [$systems->sys_id],
-            'tipType'  => 1,
-            'tip'      => $tipData->description
+            'subject'     => $tipData->subject,
+            'equipment'   => [$systems->sys_id],
+            'tip_type_id' => 1,
+            'description' => $tipData->description,
+            'noEmail'     => false,
         ];
         $user     = $this->userWithoutPermission('Create Tech Tip');
         $response = $this->actingAs($user)->post(route('tips.store'), $data);
@@ -86,17 +88,18 @@ class NewTechTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => $tipData->description
+            'subject'     => $tipData->subject,
+            'equipment'   => [$systems],
+            'tip_type_id' => 1,
+            'description' => $tipData->description,
+            'noEmail'     => false,
         ];
         $user = $this->getTech();
 
         $response = $this->actingAs($user)->post(route('tips.store'), $data);
 
         $response->assertSuccessful();
-        $response->assertJsonStructure(['tip_id']);
+        $response->assertJsonStructure(['success']);
     }
 
     //  Try to submit a new tech tip with subject validation error
@@ -107,10 +110,11 @@ class NewTechTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => '',
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => $tipData->description
+            'subject'     => '',
+            'equipment'   => [$systems],
+            'tip_type_id' => 1,
+            'description' => $tipData->description,
+            'noEmail'     => false,
         ];
         $user = $this->getTech();
 
@@ -128,10 +132,11 @@ class NewTechTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => '',
-            'tipType'   => 1,
-            'tip'       => $tipData->description
+            'subject'     => '',
+            'equipment'   => null,
+            'tip_type_id' => 1,
+            'description' => $tipData->description,
+            'noEmail'     => false,
         ];
         $user = $this->getTech();
 
@@ -149,17 +154,18 @@ class NewTechTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => '',
-            'tip'       => $tipData->description
+            'subject'     => $tipData->subject,
+            'equipment'   => [$systems],
+            'tip_type_id' => null,
+            'description' => $tipData->description,
+            'noEmail'     => false,
         ];
         $user = $this->getTech();
 
         $response = $this->actingAs($user)->post(route('tips.store'), $data);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors('tipType');
+        $response->assertSessionHasErrors('tip_type_id');
     }
 
     //  Try to submit a new tech tip with tip validation error
@@ -170,17 +176,18 @@ class NewTechTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => ''
+            'subject'     => $tipData->subject,
+            'equipment'   => [$systems],
+            'tip_type_id' => 1,
+            'description' => null,
+            'noEmail'     => false,
         ];
         $user = $this->getTech();
 
         $response = $this->actingAs($user)->post(route('tips.store'), $data);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors('tip');
+        $response->assertSessionHasErrors('description');
     }
 
     //  Submit a tip that includes a file
@@ -193,18 +200,18 @@ class NewTechTipTest extends TestCase
         $systems = factory(SystemTypes::class)->create();
         $fileName = Str::random(5).'.jpg';
         $data = [
-            'subject'   => $tipData->subject,
-            'equipment' => [$systems],
-            'tipType'   => 1,
-            'tip'       => $tipData->description,
-            'file'      => $file = UploadedFile::fake()->image($fileName)
+            'subject'     => $tipData->subject,
+            'equipment'   => [$systems],
+            'tip_type_id' => 1,
+            'description' => $tipData->description,
+            'noEmail'     => false,
+            'file'        => $file = UploadedFile::fake()->image($fileName)
         ];
         $user = $this->getTech();
 
         $response = $this->actingAs($user)->post(route('tips.store'), $data);
 
         $response->assertSuccessful();
-        $response->assertSeeText('uploaded successfully');
 
         unset($data['file']);
         $data['_completed'] = true;
@@ -213,10 +220,10 @@ class NewTechTipTest extends TestCase
         $response2 = $this->actingAs($user)->post(route('tips.store'), $data);
 
         $response2->assertSuccessful();
-        $response2->assertJsonStructure(['tip_id']);
+        $response2->assertJsonStructure(['success']);
 
         //  Make sure the file is in the correct place
-        $tipID = $response2->getOriginalContent()['tip_id'];
+        $tipID = $response2->getOriginalContent()['success'];
         Storage::disk('local')->assertExists(config('filesystems.paths.tips').DIRECTORY_SEPARATOR.$tipID.DIRECTORY_SEPARATOR.$fileName);
     }
 

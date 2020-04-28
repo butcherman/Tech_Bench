@@ -15,7 +15,7 @@ class CategoriesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
+        $this->middleware(function($request, $next) {
             $this->authorize('hasAccess', 'Manage Equipment');
             return $next($request);
         });
@@ -35,7 +35,7 @@ class CategoriesController extends Controller
     //  Store the new category form
     public function store(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'name' => 'required|string|unique:system_categories|regex:/^[a-zA-Z0-9_ ]*$/'
@@ -53,7 +53,7 @@ class CategoriesController extends Controller
     //  Submit the Edit Category form
     public function update(Request $request, $id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
 
         $request->validate([
             'name' => [
@@ -75,14 +75,15 @@ class CategoriesController extends Controller
     //  Delete an existing category - note this will fail if the category has systems assigned to it
     public function destroy($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
-        try {
+        try
+        {
             SystemCategories::find($id)->delete();
             Log::notice('Category ID '.$id.' deleted by '.Auth::user()->full_name);
             return response()->json(['success' => true, 'reason' => 'Category Successfully Deleted']);
         }
-        catch (\Illuminate\Database\QueryException $e)
+        catch(\Illuminate\Database\QueryException $e)
         {
             Log::warning('User '.Auth::user()->full_name.' tried to delete category ID '.$id.' but was unable to since it is still in use.');
             return response()->json(['success' => false, 'reason' => 'Category still in use.  You must delete all systems attached to this category first.']);

@@ -2,14 +2,13 @@
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-
 use App\User;
 use App\UserSettings;
 use App\UserRoleType;
 use App\UserRolePermissions;
 use App\UserRolePermissionTypes;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {

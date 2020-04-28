@@ -64,10 +64,11 @@ class CustomerNotesTest extends TestCase
     public function test_add_note_as_guest()
     {
         $data = [
-            'cust_id' => $this->cust->cust_id,
-            'title'   => 'Here is a new note',
-            'note'    => 'Here is some note content',
-            'urgent'  => true
+            'cust_id'     => $this->cust->cust_id,
+            'subject'     => 'Here is a new note',
+            'description' => 'Here is some note content',
+            'urgent'      => true,
+            'shared'      => false,
         ];
 
         $response = $this->post(route('customer.notes.store'), $data);
@@ -82,10 +83,11 @@ class CustomerNotesTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'cust_id' => $this->cust->cust_id,
-            'title'   => 'Here is a new note',
-            'note'    => 'Here is some note content',
-            'urgent'  => true
+            'cust_id'     => $this->cust->cust_id,
+            'subject'     => 'Here is a new note',
+            'description' => 'Here is some note content',
+            'urgent'      => true,
+            'shared'      => false,
         ];
 
         $response = $this->actingAs($user)->post(route('customer.notes.store'), $data);
@@ -102,19 +104,17 @@ class CustomerNotesTest extends TestCase
             'parent_id' => $this->cust->cust_id,
         ]);
         $data = [
-            'cust_id' => $child->cust_id,
-            'title'   => 'Here is a new note',
-            'note'    => 'Here is some note content',
-            'shared'  => 'true',
-            'urgent'  => true
+            'cust_id'     => $child->cust_id,
+            'subject'     => 'Here is a new note',
+            'description' => 'Here is some note content',
+            'urgent'      => true,
+            'shared'      => true,
         ];
 
         $response = $this->actingAs($user)->post(route('customer.notes.store'), $data);
 
         $response->assertSuccessful();
         $response->assertJson(['success' => true]);
-
-        //  TODO - make sure that the new note actually has the parent as the cust_id
     }
 
     //  Test adding a note with validation errors
@@ -122,26 +122,28 @@ class CustomerNotesTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'cust_id' => null,
-            'title'   => null,
-            'note'    => null,
-            'urgent'  => null
+            'cust_id'     => null,
+            'subject'     => null,
+            'description' => null,
+            'urgent'      => null,
+            'shared'      => null,
         ];
 
         $response = $this->actingAs($user)->post(route('customer.notes.store'), $data);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors('title', 'note');
     }
 
     //  Test updating note as guest
     public function test_update_note_as_guest()
     {
         $data = [
-            'cust_id' => $this->cust->cust_id,
-            'title'   => 'Here is a new note',
-            'note'    => 'Here is some note content',
-            'urgent'  => true
+            'note_id'     => $this->note->note_id,
+            'cust_id'     => $this->cust->cust_id,
+            'subject'     => 'Here is a new note',
+            'description' => 'Here is some note content',
+            'urgent'      => true,
+            'shared'      => false,
         ];
 
         $response = $this->put(route('customer.notes.update', $this->note->note_id), $data);
@@ -156,10 +158,12 @@ class CustomerNotesTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'cust_id' => $this->cust->cust_id,
-            'title'   => 'Here is a new note',
-            'note'    => 'Here is some note content',
-            'urgent'  => true
+            'note_id'     => $this->note->note_id,
+            'cust_id'     => $this->cust->cust_id,
+            'subject'     => 'Here is a new note',
+            'description' => 'Here is some note content',
+            'urgent'      => true,
+            'shared'      => false,
         ];
 
         $response = $this->actingAs($user)->put(route('customer.notes.update', $this->note->note_id), $data);
@@ -179,11 +183,12 @@ class CustomerNotesTest extends TestCase
             'cust_id' => $child->cust_id
         ]);
         $data = [
-            'cust_id' => $child->cust_id,
-            'title'   => 'Here is a new note',
-            'note'    => 'Here is some note content',
-            'urgent'  => true,
-            'shared'  => 'true',
+            'note_id'     => $this->note->note_id,
+            'cust_id'     => $child->cust_id,
+            'subject'     => 'Here is a new note',
+            'description' => 'Here is some note content',
+            'urgent'      => true,
+            'shared'      => true,
         ];
 
         $response = $this->actingAs($user)->put(route('customer.notes.update', $note->note_id), $data);
@@ -197,16 +202,17 @@ class CustomerNotesTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'cust_id' => null,
-            'title'   => null,
-            'note'    => null,
-            'urgent'  => null
+            'note_id'     => $this->note->note_id,
+            'cust_id'     => null,
+            'subject'     => null,
+            'description' => null,
+            'urgent'      => true,
+            'shared'      => true,
         ];
 
         $response = $this->actingAs($user)->put(route('customer.notes.update', $this->note->note_id), $data);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors('title', 'note');
     }
 
     //  Test deleting note as Guest

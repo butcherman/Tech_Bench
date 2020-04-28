@@ -1,9 +1,12 @@
 @import '~bootstrap/scss/bootstrap';
-//@import '~bootstrap-vue/src/index.scss';
-//@import '~font-awesome/scss/font-awesome';
-//@import '~vue2-dropzone/dist/vue2Dropzone.min.css';
-
 @import 'fileDrag';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
+@import '~vue-good-table/dist/vue-good-table.css';
+
+$fa-font-path: '../fonts/font-awesome';
 
 .center {
     margin-left: auto;
@@ -65,8 +68,6 @@ body {
     cursor: pointer;
 }
 
-//#guest-link-instructions {
-//    background-color: #ffdf80;
-//    padding: 10px;
-//    border-radius: 10px;
-//}
+.modal-content {
+    color: #000000;
+}

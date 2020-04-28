@@ -26,26 +26,28 @@ class AdminController extends Controller
     //  Admin landing page
     public function index()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+
         return view('admin.index');
     }
 
     //  Display all file links
     public function userLinks()
     {
-        $userLinks = new UserCollection(
-                        User::withCount([
-                                'FileLinks',
-                                'FileLinks as expired_file_links_count' => function($query)
-                                {
-                                    $query->where('expire', '<', Carbon::now());
-                                }
-                            ])
-                            ->get()
-                            ->makeVisible('user_id')
-                    );
-
         Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
+        $userLinks = new UserCollection(
+            User::withCount([
+                    'FileLinks',
+                    'FileLinks as expired_file_links_count' => function($query) {
+                        $query->where('expire', '<', Carbon::now());
+                    }
+                ])
+                ->get()
+                ->makeVisible('user_id')
+        );
+
+        Log::debug('User link information gathered - ', array($userLinks));
         return view('admin.userLinks', [
             'links' => $userLinks,
         ]);
@@ -54,10 +56,11 @@ class AdminController extends Controller
     //  Show the links for the selected user
     public function showLinks($id)
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
+
         $user = User::find($id);
 
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-        Log::debug('User Link Data:', $user->toArray());
+        Log::debug('User link data being gathered for user - ', $user->toArray());
         return view('admin.linkDetails', [
             'user' => $user,
         ]);
@@ -66,8 +69,9 @@ class AdminController extends Controller
     //  Get the form to change the user password policy
     public function passwordPolicy()
     {
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         $this->authorize('hasAccess', 'Manage Users');
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+
         return view('admin.userSecurity', [
             'passExpire' => config('auth.passwords.settings.expire'),
         ]);
@@ -76,7 +80,7 @@ class AdminController extends Controller
     //  Submit the form to change the user password policy
     public function submitPolicy(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data:', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data:', $request->toArray());
         $this->authorize('hasAccess', 'Manage Users');
 
         $request->validate([
@@ -87,13 +91,15 @@ class AdminController extends Controller
             ['key'   => 'auth.passwords.settings.expire'],
             ['key'   => 'auth.passwords.settings.expire', 'value' => $request->passExpire]
         )->update(['value' => $request->passExpire]);
-        Log::notice('User '.Auth::user()->full_name.' updated User Password Policy');
+        Log::notice('User '.Auth::user()->full_name.' updated User Password Policy requiring resets every '.$request->passExpire.' days');
 
         //  If the setting is changing from never to xx days, update all users
-        if ($request->passExpire == 0) {
+        if ($request->passExpire == 0)
+        {
             User::whereNotNull('password_expires')->update([
                 'password_expires' => null
             ]);
+            Log::notice('Password Expires field cleard for all active users');
         }
         else
         {
@@ -101,6 +107,7 @@ class AdminController extends Controller
             User::whereNull('password_expires')->update([
                 'password_expires' => $newExpire
             ]);
+            Log::notice('Password Expires field updated for all active users to be '.$newExpire);
         }
 
         return redirect()->back()->with('success', 'User Security Updated');
@@ -109,13 +116,14 @@ class AdminController extends Controller
     //  View the current roles that can be assigned to users
     public function roleSettings()
     {
-        $this->authorize('hasAccess', 'Manage User Roles');
         Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
-        $roles = UserRoleType::with(['UserRolePermissions' => function($query)
-        {
+        $this->authorize('hasAccess', 'Manage User Roles');
+
+        $roles = UserRoleType::with(['UserRolePermissions' => function($query) {
             $query->join('user_role_permission_types', 'user_role_permission_types.perm_type_id', '=', 'user_role_permissions.perm_type_id');
         }])->get();
         $perms = UserRolePermissionTypes::all();
+
         Log::debug('User Role Data', $roles->toArray());
         Log::debug('Role Permissions Data', $perms->toArray());
 
@@ -127,7 +135,7 @@ class AdminController extends Controller
 
     public function submitRoleSettings(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name.'. Submitted Data: ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data: ', $request->toArray());
         $this->authorize('hasAccess', 'Manage User Roles');
 
         $request->validate([
@@ -152,7 +160,7 @@ class AdminController extends Controller
                     ]);
                 }
 
-                Log::notice('Role '.$request->name.' (ID '.$request->role_id.') updated by '.Auth::user()->full_name);
+                Log::notice('Role '.$request->name.' (ID '.$request->role_id.') updated by '.Auth::user()->full_name.'. New Settings - ', array($request->permissions));
                 return response()->json(['success' => true]);
             }
 
@@ -160,12 +168,13 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'reason' => 'Unable to Edit this Role']);
         }
 
+        //  If a role ID was not provided, we create a new one
         $role = UserRoleType::create(
         [
             'name'        => $request->name,
             'description' => $request->description,
         ]);
-        foreach ($request->permissions as $perm)
+        foreach($request->permissions as $perm)
         {
             UserRolePermissions::create([
                 'role_id'      => $role->role_id,
@@ -174,7 +183,7 @@ class AdminController extends Controller
             ]);
         }
 
-        Log::notice('New role "'.$role->name.'" created by '.Auth::user()->full_name);
+        Log::notice('New role "'.$role->name.'" created by '.Auth::user()->full_name.'. New Settings - ', array($request->permissions));
         return response()->json(['success' => true]);
     }
 }

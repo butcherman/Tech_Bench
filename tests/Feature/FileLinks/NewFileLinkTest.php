@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\FileLinks;
 
-use App\User;
 use App\Customers;
 use Tests\TestCase;
-use App\UserPermissions;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -177,7 +175,7 @@ class NewFileLinkTest extends TestCase
         $response = $this->actingAs($this->user)->post(route('links.data.store'), $data);
 
         $response->assertSuccessful();
-        $response->assertSeeText('uploaded successfully');
+        $response->assertJson(['success' => true]);
 
         unset($data['file']);
         $data['_completed'] = true;

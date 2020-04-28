@@ -5,7 +5,7 @@ build:
             - mysql -e 'create database `scrutinizer`;'
         after:
             - php artisan ziggy:generate
-            - npm run production
+            - npm run dev
 
 tools:
     external_code_coverage:

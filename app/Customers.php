@@ -13,6 +13,9 @@ class Customers extends Model
     protected $fillable   = ['cust_id', 'parent_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip', 'active'];
     protected $hidden     = ['created_at', 'deleted_at', 'updated_at'];
     protected $appends    = ['child_count'];
+    protected $casts      = [
+        'deleted_at' => 'datetime:M d, Y',
+    ];
 
     public function CustomerSystems()
     {
@@ -22,5 +25,10 @@ class Customers extends Model
     public function getChildCountAttribute()
     {
         return Customers::where('parent_id', $this->cust_id)->count();
+    }
+
+    public function ParentCustomer()
+    {
+        return $this->hasOne('App\Customers', 'cust_id', 'parent_id');
     }
 }
