@@ -5,16 +5,16 @@ current:
   major: 5
   minor: 1
   patch: 0
-  prerelease: dev
+  prerelease: null
   buildmetadata: null
-  commit: 3c4
+  commit: 3c5
   timestamp:
     year: 2020
     month: 4
     day: 27
-    hour: 15
-    minute: 56
-    second: 5
+    hour: 17
+    minute: 38
+    second: 7
     timezone: America/Los_Angeles
 commit:
   length: 6
