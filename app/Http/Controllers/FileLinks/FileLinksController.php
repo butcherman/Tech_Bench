@@ -4,18 +4,14 @@ namespace App\Http\Controllers\FileLinks;
 
 use App\Http\Controllers\Controller;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-
 use App\Domains\FileLinks\GetFileLinks;
 use App\Domains\FileLinks\KillFileLink;
 use App\Domains\FileLinks\GetFileLinkDetails;
 use App\Domains\FileLinks\SetFileLinkDetails;
-use App\Domains\FileTypes\GetCustomerFileTypes;
 
 use App\Http\Requests\FileLinkCreateRequest;
-use App\Http\Requests\UpdateFileLinkRequest;
-use App\Http\Requests\UpdateFileLinkInstructionsRequest;
+use App\Http\Requests\FileLinkUpdateRequest;
+use App\Http\Requests\FileLinkInstructionsRequest;
 
 class FileLinksController extends Controller
 {
@@ -66,11 +62,6 @@ class FileLinksController extends Controller
         ]);
     }
 
-
-
-
-
-
     //  Show details about a file link
     public function details($id, /** @scrutinizer ignore-unused */ $name)
     {
@@ -79,14 +70,11 @@ class FileLinksController extends Controller
         //  If the link is invalid, return an error page
         if(!$linkDataObj->isLinkValid())
         {
-            Log::warning('User '.Auth::user()->full_name.' tried to view invalid file link', ['user_id' => Auth::user()->user_id, 'link_id' => $id]);
             return view('links.badLink');
         }
 
         return view('links.details', [
-            'link_id'    => $id,
-            'cust_id'    => $linkDataObj->getLinkCustomer(),
-            'file_types' => (new GetCustomerFileTypes)->execute(true),
+            'details'    => $linkDataObj->execute(true),
         ]);
     }
 
@@ -99,9 +87,9 @@ class FileLinksController extends Controller
     }
 
     //  Update the link's details
-    public function update(UpdateFileLinkRequest $request, $id)
+    public function update(FileLinkUpdateRequest $request, $id)
     {
-        (new SetFileLinkDetails)->execute($request, $id);
+        (new SetFileLinkDetails)->updateLink($request, $id);
         return response()->json(['success' => true]);
     }
 
@@ -112,7 +100,7 @@ class FileLinksController extends Controller
     }
 
     //  Update the instructions attached to the link
-    public function submitInstructions(UpdateFileLinkInstructionsRequest $request, $linkID)
+    public function submitInstructions(FileLinkInstructionsRequest $request, $linkID)
     {
         (new SetFileLinkDetails)->setLinkInstructions($request, $linkID);
         return response()->json(['success' => true]);

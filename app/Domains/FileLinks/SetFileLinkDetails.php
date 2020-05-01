@@ -12,6 +12,8 @@ use App\FileLinkFiles;
 use App\Domains\FilesDomain;
 
 use App\Http\Requests\FileLinkCreateRequest;
+use App\Http\Requests\FileLinkInstructionsRequest;
+use App\Http\Requests\FileLinkUpdateRequest;
 use App\Http\Requests\UpdateFileLinkRequest;
 use App\Http\Requests\UpdateFileLinkInstructionsRequest;
 
@@ -38,15 +40,14 @@ class SetFileLinkDetails extends FilesDomain
 
 
 
-    //  Execute will process an uploading file
-    //  TODO - rename this function
-    public function execute(UpdateFileLinkRequest $request, $linkID)
+    //  Update the file link
+    public function updateLink(FileLinkUpdateRequest $request, $linkID)
     {
         $linkData = FileLinks::find($linkID)->update([
             'link_name'    => $request->name,
             'expire'       => $request->expire,
-            'allow_upload' => $request->allowUp,
-            'cust_id'      => $request->customerID,
+            'allow_upload' => $request->allow_upload,
+            'cust_id'      => $request->cust_id,
         ]);
 
         Log::info('File Link ID '.$linkID.' has been updated by '.Auth::user()->full_name.'.  Link Data - ', array($linkData));
@@ -54,7 +55,7 @@ class SetFileLinkDetails extends FilesDomain
     }
 
     //  Update only the instructions attached to the link
-    public function setLinkInstructions(UpdateFileLinkInstructionsRequest $request, $linkID)
+    public function setLinkInstructions(FileLinkInstructionsRequest $request, $linkID)
     {
         FileLinks::find($linkID)->update([
             'note' => $request->instructions,

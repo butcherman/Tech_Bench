@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 use App\Domains\Users\UserFavs;
@@ -106,7 +105,6 @@ class TechTipsController extends Controller
         $this->authorize('hasAccess', 'Edit Tech Tip');
 
         $tipData = (new GetTechTips)->getTipDetails($id);
-        Log::emergency('tip details', array($tipData));
         if(!$tipData['details'])
         {
             return view('tips.tipNotFound');

@@ -109,6 +109,7 @@ Vue.component('user-settings', require('./components/user/userSettings.vue').def
 */
 Vue.component('list-file-links',    require('./components/fileLinks/ListFileLinks.vue').default);
 Vue.component('new-file-link-form', require('./components/fileLinks/NewFileLink.vue').default);
+Vue.component('link-details-form',  require('./components/fileLinks/LinkDetailsForm.vue').default);
 Vue.component('link-details',       require('./components/fileLinks/LinkDetails.vue').default);
 Vue.component('link-instructions',  require('./components/fileLinks/LinkInstructions.vue').default);
 Vue.component('link-files',         require('./components/fileLinks/LinkFiles.vue').default);
