@@ -12,10 +12,8 @@ use App\FileLinkFiles;
 use App\Domains\FilesDomain;
 
 use App\Http\Requests\FileLinkCreateRequest;
-use App\Http\Requests\FileLinkInstructionsRequest;
 use App\Http\Requests\FileLinkUpdateRequest;
-use App\Http\Requests\UpdateFileLinkRequest;
-use App\Http\Requests\UpdateFileLinkInstructionsRequest;
+use App\Http\Requests\FileLinkInstructionsRequest;
 
 class SetFileLinkDetails extends FilesDomain
 {

@@ -2,21 +2,16 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Customers;
-use App\PhoneNumberTypes;
-use App\CustomerContacts;
-use Illuminate\Http\Request;
-use App\CustomerContactPhones;
+use App\Http\Controllers\Controller;
+
+use JeroenDesloovere\VCard\VCard;
+
 use App\Domains\Customers\GetCustomerContacts;
 use App\Domains\Customers\GetCustomerDetails;
 use App\Domains\Customers\SetCustomerContacts;
-use JeroenDesloovere\VCard\VCard;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+
 use App\Http\Requests\CustomerEditContactRequest;
 use App\Http\Requests\CustomerNewContactRequest;
-use Illuminate\Support\Facades\Route;
 
 class CustomerContactsController extends Controller
 {
@@ -53,7 +48,7 @@ class CustomerContactsController extends Controller
 
         $vcard = new VCard();
         $vcard->addName($contData['lastName'], $contData['firstName'], $contData['additional'], $contData['prefix'], $contData['suffix']);
-        $vcard->addCompany($custData['name']);
+        $vcard->addCompany(/** @scrutinizer ignore-type */ $custData['name']);
         $vcard->addEmail($contData['email']);
         $vcard->addAddress(null, null, $custData['address'], $custData['city'], $custData['state'], $custData['zip'], null);
         if(!empty($contData['numbers']))

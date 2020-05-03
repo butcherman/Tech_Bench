@@ -117,10 +117,8 @@ class backupRun extends Command
             config('database.connections.mysql.database').' -u '.
             config('database.connections.mysql.user').' -p'.
             config('database.connections.mysql.password');
-        // $process = new Process(
-        // /** @scrutinizer ignore-type */
-        // 'mysqldump tb-dev5-data -u root');
-        $process = new Process($processStr);
+        //  TODO - should this be an array??
+        $process = new Process(/** @scrutinizer ignore-type */$processStr);
         $process->run();
 
         File::put(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.'database.sql', $process->getOutput());
