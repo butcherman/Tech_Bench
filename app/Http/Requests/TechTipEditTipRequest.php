@@ -25,11 +25,13 @@ class TechTipEditTipRequest extends FormRequest
     {
         return [
             'tip_id'          => 'required',
+            'sticky'          => 'required',
             'subject'         => 'required',
             'system_types'    => 'required',
             'tip_type_id'     => 'required',
             'description'     => 'required',
             'deletedFileList' => 'nullable',
+            'resendNotification' => 'nullable',
         ];
     }
 }

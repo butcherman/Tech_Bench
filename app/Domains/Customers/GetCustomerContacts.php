@@ -37,7 +37,7 @@ class GetCustomerContacts
     {
         $contact        = CustomerContacts::where('cont_id', $contID)->with('CustomerContactPhones')->first();
         $contactName    = explode(' ', $contact->name);
-        $contactDetails = collect( (object) [
+        $contactDetails = collect((object) [
             'firstName'   => $contactName[0],
             'lastName'    => isset($contactName[1]) ? $contactName[1] : '',
             'email'       => $contact->eamil,

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class NewFileLinkRequest extends FormRequest
+class DownloadArchiveRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class NewFileLinkRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'       => 'required',
-            'expire'     => 'required',
-            'customerID' => 'exists:customers,cust_id|nullable'
+            'fileList' => 'required',
         ];
     }
 }

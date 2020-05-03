@@ -124,19 +124,19 @@ class SaveFileLinkFile extends FilesDomain
     }
 
     //  Move files from the default file location to the proper file link folder
-    public function relocateFiles($linkID)
-    {
-        $files = session('newLinkFile');
-        $this->path = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
+    // public function relocateFiles($linkID)
+    // {
+    //     $files = session('newLinkFile');
+    //     $this->path = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$linkID;
 
-        foreach($files as $file)
-        {
-            $this->moveFile($this->path, $file);
-            $this->attachFile($linkID, $file);
-        }
+    //     foreach($files as $file)
+    //     {
+    //         $this->moveFile($this->path, $file);
+    //         $this->attachFile($linkID, $file);
+    //     }
 
-        session()->forget('newLinkFile');
-    }
+    //     session()->forget('newLinkFile');
+    // }
 
     //  When a guest uploads a new file, the owner is notified
     public function notifyOwnerOfUpload($userID, $linkDetails)

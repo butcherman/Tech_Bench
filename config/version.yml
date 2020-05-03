@@ -3,18 +3,18 @@ blade-directive: version
 current:
   label: v
   major: 5
-  minor: 1
+  minor: 2
   patch: 0
   prerelease: null
   buildmetadata: null
-  commit: 3c5
+  commit: 3cc
   timestamp:
     year: 2020
-    month: 4
-    day: 27
-    hour: 17
-    minute: 38
-    second: 7
+    month: 5
+    day: 3
+    hour: 16
+    minute: 12
+    second: 6
     timezone: America/Los_Angeles
 commit:
   length: 6

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TechTipNewTipRequest extends FormRequest
+class FileLinkAddFileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,8 @@ class TechTipNewTipRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject'     => 'required',
-            'equipment'   => 'required',
-            'tip_type_id' => 'required',
-            'description' => 'required',
-            'noEmail'     => 'required',
-            'sticky'      => 'required',
+            'linkID' => 'required|exists:file_links,link_id',
+            'file'   => 'required',
         ];
     }
 }

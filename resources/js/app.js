@@ -109,6 +109,7 @@ Vue.component('user-settings', require('./components/user/userSettings.vue').def
 */
 Vue.component('list-file-links',    require('./components/fileLinks/ListFileLinks.vue').default);
 Vue.component('new-file-link-form', require('./components/fileLinks/NewFileLink.vue').default);
+Vue.component('link-details-form',  require('./components/fileLinks/LinkDetailsForm.vue').default);
 Vue.component('link-details',       require('./components/fileLinks/LinkDetails.vue').default);
 Vue.component('link-instructions',  require('./components/fileLinks/LinkInstructions.vue').default);
 Vue.component('link-files',         require('./components/fileLinks/LinkFiles.vue').default);
@@ -138,9 +139,7 @@ Vue.component('customer-search',     require('./components/customer/customerSear
 Vue.component('search-tips',         require('./components/tips/searchTips.vue').default);
 Vue.component('new-tip-form',        require('./components/tips/newTipForm.vue').default);
 Vue.component('edit-tip-form',       require('./components/tips/editTipForm.vue').default);
-// Vue.component('tech-tip-master',     require('./components/tips/tipMaster.vue').default);
 Vue.component('tech-tip-details',    require('./components/tips/tipDetails.vue').default);
-// Vue.component('tech-tip-files',      require('./components/tips/tipFiles.vue').default);
 Vue.component('tech-tip-comments',   require('./components/tips/tipComments.vue').default);
 
 /*

@@ -151,10 +151,8 @@ class FileLinkDetailsTest extends TestCase
         $data = [
             'name'            => 'Updated Link Name',
             'expire'          => date('Y-m-d', strtotime('+90 days')),
-            'allowUp'         => true,
-            'customerTag'     => null,
-            'hasInstructions' => false,
-            'instructions'    => '',
+            'allow_upload'    => true,
+            'cust_id'         => null,
         ];
         $response = $this->actingAs($this->tech)->put(route('links.data.update', $this->link->link_id), $data);
 
@@ -167,10 +165,8 @@ class FileLinkDetailsTest extends TestCase
     {
         $data = [
             'expire'          => date('Y-m-d', strtotime('+90 days')),
-            'allowUp'         => true,
-            'customerTag'     => null,
-            'hasInstructions' => false,
-            'instructions'    => '',
+            'allow_upload'    => true,
+            'cust_id'         => null,
         ];
         $response = $this->actingAs($this->tech)->put(route('links.data.update', $this->link->link_id), $data);
 
@@ -183,10 +179,8 @@ class FileLinkDetailsTest extends TestCase
     {
         $data = [
             'name'            => 'Updated Link Name',
-            'allowUp'         => true,
-            'customerTag'     => null,
-            'hasInstructions' => false,
-            'instructions'    => '',
+            'allow_upload'    => true,
+            'cust_id'         => null,
         ];
         $response = $this->actingAs($this->tech)->put(route('links.data.update', $this->link->link_id), $data);
 

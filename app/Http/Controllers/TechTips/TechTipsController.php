@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 use App\Domains\Users\UserFavs;
@@ -74,9 +73,14 @@ class TechTipsController extends Controller
     {
         $tipData = (new GetTechTips)->getTipDetails($id);
 
+        if($tipData['details'] === null)
+        {
+            return view('tips.tipNotFound');
+        }
+
         return view('tips.details', [
             'details' => $tipData->toJson(),
-            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false',   // empty($isFav) ? 'false' : 'true',
+            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false', // empty($isFav) ? 'false' : 'true',
         ]);
 
     }
@@ -88,7 +92,7 @@ class TechTipsController extends Controller
 
         return view('tips.details', [
             'details' => $tipData['data'],
-            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false',   // empty($isFav) ? 'false' : 'true',
+            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false', // empty($isFav) ? 'false' : 'true',
             'files'   => $tipData['files'],
         ]);
     }
@@ -106,7 +110,6 @@ class TechTipsController extends Controller
         $this->authorize('hasAccess', 'Edit Tech Tip');
 
         $tipData = (new GetTechTips)->getTipDetails($id);
-        Log::emergency('tip details', array($tipData));
         if(!$tipData['details'])
         {
             return view('tips.tipNotFound');

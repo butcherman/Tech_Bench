@@ -12,11 +12,12 @@ class TechTips extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'tip_id';
-    protected $fillable   = ['user_id', 'subject', 'tip_type_id', 'description'];
-    protected $hidden     = ['public', 'user_id', 'deleted_at'];
+    protected $fillable   = ['user_id', 'updated_id', 'subject', 'tip_type_id', 'description', 'public', 'sticky'];
+    protected $hidden     = ['public', 'user_id', 'updated_id', 'deleted_at'];
     protected $casts      = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
+        'sticky'     => 'boolean',
     ];
 
     public function systemTypes()

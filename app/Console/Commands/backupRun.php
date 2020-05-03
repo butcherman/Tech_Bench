@@ -25,7 +25,7 @@ class backupRun extends Command
      *
      * @var string
      */
-    protected $description = 'Creates a Tech Bench Bacup';
+    protected $description = 'Creates a Tech Bench Backup';
 
     protected $archive, $bar;
 
@@ -46,6 +46,7 @@ class backupRun extends Command
      */
     public function handle()
     {
+        Storage::disk('backup')->put('.ignore', '');
         $this->line('Creating Tech Bench Backup...');
         $this->bar = $this->output->createProgressBar(12);
 
@@ -53,6 +54,9 @@ class backupRun extends Command
 
         if(!$this->option('databaseOnly'))
         {
+            $this->line('');
+            $this->line('Backing up files');
+            $this->line('This may take some time');
             $this->backupFiles();
         }
         if(!$this->option('filesOnly'))
@@ -63,6 +67,7 @@ class backupRun extends Command
         $this->closeBackupArchive();
         $this->cleanup();
         $this->bar->finish();
+        $this->line('');
         $this->info('Backup Completed');
     }
 
@@ -108,9 +113,12 @@ class backupRun extends Command
     //  Create a MYSQLDUMP of the database
     protected function backupDatabase()
     {
-        $process = new Process(
-        /** @scrutinizer ignore-type */
-        'mysqldump tb-dev5-data -u root');
+        $processStr = 'mysqldump '.
+            config('database.connections.mysql.database').' -u '.
+            config('database.connections.mysql.user').' -p'.
+            config('database.connections.mysql.password');
+        //  TODO - should this be an array??
+        $process = new Process(/** @scrutinizer ignore-type */$processStr);
         $process->run();
 
         File::put(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.'database.sql', $process->getOutput());

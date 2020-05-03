@@ -80,7 +80,7 @@ class SettingsController extends Controller
         ]);
 
         //  Update the site timezone
-        if (config('app.timezone') !== $request->timezone)
+        if(config('app.timezone') !== $request->timezone)
         {
             Settings::firstOrCreate(
                 ['key'   => 'app.timezone'],
@@ -88,7 +88,7 @@ class SettingsController extends Controller
             )->update(['value' => $request->timezone]);
         }
         //  Update the maximum file upload size
-        if (config('filesystems.paths.max_size') !== $request->filesize)
+        if(config('filesystems.paths.max_size') !== $request->filesize)
         {
             Settings::firstOrCreate(
                 ['key'   => 'filesystems.paths.max_size'],

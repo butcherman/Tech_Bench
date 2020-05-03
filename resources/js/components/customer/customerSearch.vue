@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="customer_search_modal" :title="title" ref="selectCustomerModal" scrollable @cancel="cancelSelectCustomer" size="lg">
+    <b-modal id="customer_search_modal" :title="title" ref="selectCustomerModal" scrollable @close="cancelSelectCustomer" @cancel="cancelSelectCustomer" size="lg">
         <b-form @submit="searchCustomer">
             <b-input-group>
                 <b-form-input type="text" v-model="searchParam.name" placeholder="Enter Customer Name or ID Number"></b-form-input>
@@ -41,17 +41,17 @@
     export default {
         props: {
             show_form: {
-                type: Boolean,
-                default: false,
+                type:     Boolean,
+                default:  false,
                 required: false,
             },
             title: {
-                type: String,
+                type:     String,
                 default: 'Search For Customer',
                 required: false,
             },
             search_name: {
-                type: String,
+                type:     String,
                 required: false,
             }
         },
@@ -59,14 +59,14 @@
             return {
                 loading: false,
                 searchParam: {
-                    name: '',
-                    page: '',
-                    perPage: 25,
+                    name:      '',
+                    page:      '',
+                    perPage:    25,
                     sortField: 'name',
-                    sortType: 'asc',
+                    sortType:  'asc',
                 },
                 searchResults: [],
-                searchMeta: [],
+                searchMeta:    [],
             }
         },
         mounted() {
@@ -89,9 +89,9 @@
                 axios.get(this.route('customer.search', this.searchParam))
                     .then(res => {
                         this.searchResults = res.data.data;
-                        this.searchMeta = res.data.meta;
-                        this.loading = false;
-                    }).catch(error => alert('There was an issue processing your request\nPlease try again later. \n\nError Info: ' + error));
+                        this.searchMeta    = res.data.meta;
+                        this.loading       = false;
+                    }).catch(error => this.$bvModal.msgBoxOk('There was an error processing your request.  Please try again later.'));
             },
             //  Move to a page number
             updatePage(newPage)
@@ -116,11 +116,11 @@
             //  Reset the default values
             reset()
             {
-                this.loading = false,
+                this.loading          = false,
                 this.searchParam.name = '';
                 this.searchParam.page = '';
-                this.searchResults = [];
-                this.searchMeta =  [];
+                this.searchResults    = [];
+                this.searchMeta       = [];
             },
         },
         watch: {

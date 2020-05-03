@@ -9,7 +9,12 @@
 <div class="row justify-content-center">
     <div class="col-md-10 grid-margin stretch-card">
         <div class="card">
-            <div class="card-header text-center"><b-button href="{{route('links.new')}}" variant="info" pill>Create New File Link</a></div>
+            <div class="card-header text-center">
+                <b-button href="{{route('links.new')}}" variant="info" pill>
+                    <i class="fas fa-plus"></i>
+                    Create New File Link
+                </b-button>
+            </div>
             <div class="card-body">
                 <list-file-links></list-file-links>
             </div>

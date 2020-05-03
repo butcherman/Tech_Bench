@@ -89,18 +89,16 @@
                 var fileList = [];
                 this.$refs['files-table'].selectedRows.forEach(function(file)
                 {
-                    fileList.push(file.files.file_id);
+                    fileList.push({file_id: file.file_id, file_name: file.files.file_name});
                 });
 
-                //  prepare the zip file for download
-                axios.put(this.route('archiveFiles'), {'fileList': fileList})
+                 //  prepare the zip file for download
+                axios.post(this.route('dlArchive'), {'fileList': fileList})
                     .then(res => {
-                        window.location.href = this.route('downloadArchive', res.data.archive);
-                        this.downloadButton.text = 'Download Selected';
+                        window.location.href        = this.route('downloadArchive', res.data.archive);
+                        this.downloadButton.text    = 'Download Selected';
                         this.downloadButton.disable = false;
-                    }).catch(error =>
-                        this.$bvModal.msgBoxOk('Download operation failed.  Please try again later.')
-                    );
+                    }).catch(error => this.$bvModal.msgBoxOk('Download Checked operation failed.  Please try again later.'));
             },
         }
     }

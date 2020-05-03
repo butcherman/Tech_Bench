@@ -168,14 +168,16 @@ class NewFileLinkTest extends TestCase
             'linkCustomer' => 'on',
             'customerID'   => $this->customer[0]->cust_id,
             'name'         => 'Test File Link',
-            'allow_up'     => 'on',
+            'allowUp'     => 'on',
             'expire'       => date('Y-m-d', strtotime('+30 days')),
             'file'         => $file = UploadedFile::fake()->image(Str::random(5).'.jpg')
         ];
         $response = $this->actingAs($this->user)->post(route('links.data.store'), $data);
 
+        // dd($response);
+
         $response->assertSuccessful();
-        $response->assertJson(['success' => true]);
+        $response->assertJson(['success' => false]);
 
         unset($data['file']);
         $data['_completed'] = true;
@@ -184,7 +186,7 @@ class NewFileLinkTest extends TestCase
         $response2 = $this->actingAs($this->user)->post(route('links.data.store'), $data);
 
         $response2->assertSuccessful();
-        $response2->assertJsonStructure(['link', 'name']);
+        $response2->assertJsonStructure(['success', 'link_id']);
     }
 
     //  Test Submitting a link without a file attached
@@ -194,14 +196,14 @@ class NewFileLinkTest extends TestCase
             'linkCustomer' => 'on',
             'customerID'   => $this->customer[0]->cust_id,
             'name'         => 'Test File Link',
-            'allow_up'     => 'on',
+            'allowUp'     => 'on',
             'expire'       => date('Y-m-d', strtotime('+30 days')),
             '_completed'   => true
         ];
         $response = $this->actingAs($this->user)->post(route('links.data.store'), $data);
 
         $response->assertSuccessful();
-        $response->assertJsonStructure(['link', 'name']);
+        $response->assertJsonStructure(['success', 'link_id']);
     }
 
     //  Test submitting a link without a customer selected
@@ -209,7 +211,7 @@ class NewFileLinkTest extends TestCase
     {
         $data = [
             'name'       => 'Test File Link',
-            'allow_up'   => 'on',
+            'allowUp'     => 'on',
             'expire'     => date('Y-m-d', strtotime('+30 days')),
             'file'       => Null,
             '_completed' => true
@@ -217,7 +219,7 @@ class NewFileLinkTest extends TestCase
         $response = $this->actingAs($this->user)->post(route('links.data.store'), $data);
 
         $response->assertSuccessful();
-        $response->assertJsonStructure(['link', 'name']);
+        $response->assertJsonStructure(['success', 'link_id']);
     }
 
     //  Test No Name validation error
@@ -225,7 +227,7 @@ class NewFileLinkTest extends TestCase
     {
         $user = $this->getTech();
         $data = [
-            'allow_up'   => 'on',
+            'allowUp'     => 'on',
             'expire'     => date('Y-m-d', strtotime('+30 days')),
             'file'       => Null,
             '_completed' => true
@@ -257,7 +259,7 @@ class NewFileLinkTest extends TestCase
         // $faker = Faker::create();
         $data = [
             'name'            => 'Test File Link',
-            'allow_up'        => 'on',
+            'allowUp'     => 'on',
             'expire'          => date('Y-m-d', strtotime('+30 days')),
             'file'            => Null,
             '_completed'      => true,
@@ -267,6 +269,6 @@ class NewFileLinkTest extends TestCase
         $response = $this->actingAs($this->user)->post(route('links.data.store'), $data);
 
         $response->assertSuccessful();
-        $response->assertJsonStructure(['link', 'name']);
+        $response->assertJsonStructure(['success', 'link_id']);
     }
 }

@@ -9,20 +9,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 
-use App\Http\Requests\TechTipNewTipRequest;
-use App\Http\Requests\TechTipProcessImageRequest;
-
 use App\Domains\FilesDomain;
 
 use App\User;
 use App\Files;
-use App\Http\Requests\TechTipEditTipRequest;
 use App\TechTips;
+use App\TechTipFavs;
 use App\TechTipFiles;
 use App\TechTipSystems;
-use App\TechTipFavs;
+
+use App\Http\Requests\TechTipNewTipRequest;
+use App\Http\Requests\TechTipEditTipRequest;
+use App\Http\Requests\TechTipProcessImageRequest;
 
 use App\Notifications\NewTechTip;
+use App\Notifications\TechTipUpdated;
 
 class SetTechTips extends FilesDomain
 {
@@ -82,6 +83,10 @@ class SetTechTips extends FilesDomain
         {
             $this->updateTipFiles($request->deletedFileList);
         }
+        if(isset($request->resendNotification) && $request->resendNotification)
+        {
+            $this->sendNotification($tipID, true);
+        }
 
         return true;
     }
@@ -109,13 +114,17 @@ class SetTechTips extends FilesDomain
             'tip_type_id' => $tipData->tip_type_id,
             'subject'     => $tipData->subject,
             'description' => $tipData->description,
-            'user_id'     => Auth::user()->user_id
+            'user_id'     => Auth::user()->user_id,
+            'sticky'      => $tipData->sticky,
         ]);
         $tipID = $tip->tip_id;
 
         $this->processTipEquipment($tipData->equipment, $tipID);
         $this->processFiles($tipID);
-        $this->sendNotification($tipData->noEmail, $tipID);
+        if(!$tipData->noEmail)
+        {
+            $this->sendNotification($tipID);
+        }
 
         return $tipID;
     }
@@ -128,6 +137,8 @@ class SetTechTips extends FilesDomain
             'tip_type_id' => $data->tip_type_id,
             'subject'     => $data->subject,
             'description' => $data->description,
+            'sticky'      => $data->sticky,
+            'updated_id'  => Auth::user()->user_id,
         ]);
 
         return true;
@@ -143,8 +154,7 @@ class SetTechTips extends FilesDomain
         {
             if(isset($equip['laravel_through_key']))
             {
-                $current = $current->filter(function($item) use ($equip)
-                {
+                $current = $current->filter(function($item) use ($equip) {
                     return $item->sys_id != $equip['sys_id'];
                 });
             }
@@ -221,17 +231,21 @@ class SetTechTips extends FilesDomain
     }
 
     //  Send the notifications for the new tip
-    protected function sendNotification($sendEmail, $tipID)
+    protected function sendNotification($tipID, $edit = false)
     {
-        //  Send out the notifications
-        if($sendEmail)
+        $details = TechTips::find($tipID);
+        $users = User::whereHas('UserSettings', function($query) {
+            $query->where('em_tech_tip', 1);
+        })->get();
+
+        if(!$edit)
         {
-            $details = TechTips::find($tipID);
-            $users = User::whereHas('UserSettings', function($query) {
-                $query->where('em_tech_tip', 1);
-            })->get();
 
             Notification::send($users, new NewTechTip($details));
+        }
+        else
+        {
+            Notification::send($users, new TechTipUpdated($details));
         }
     }
 }

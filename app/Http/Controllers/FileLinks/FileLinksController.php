@@ -4,20 +4,14 @@ namespace App\Http\Controllers\FileLinks;
 
 use App\Http\Controllers\Controller;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-
 use App\Domains\FileLinks\GetFileLinks;
 use App\Domains\FileLinks\KillFileLink;
-use App\Domains\FileLinks\CreateFileLink;
-use App\Domains\FileLinks\SaveFileLinkFile;
 use App\Domains\FileLinks\GetFileLinkDetails;
 use App\Domains\FileLinks\SetFileLinkDetails;
-use App\Domains\FileTypes\GetCustomerFileTypes;
 
-use App\Http\Requests\NewFileLinkRequest;
-use App\Http\Requests\UpdateFileLinkRequest;
-use App\Http\Requests\UpdateFileLinkInstructionsRequest;
+use App\Http\Requests\FileLinkCreateRequest;
+use App\Http\Requests\FileLinkUpdateRequest;
+use App\Http\Requests\FileLinkInstructionsRequest;
 
 class FileLinksController extends Controller
 {
@@ -42,7 +36,7 @@ class FileLinksController extends Controller
     public function find($id)
     {
         //  If the user is trying to access the links of another user, they must have the proper permissions permissions
-        if ($id != 0)
+        if($id != 0)
         {
             $this->authorize('hasAccess', 'manage_users');
         }
@@ -57,19 +51,15 @@ class FileLinksController extends Controller
     }
 
     //  Submit the new file link form
-    public function store(NewFileLinkRequest $request)
+    public function store(FileLinkCreateRequest $request)
     {
-        //  If there are files, process them first in their chunks
-        if(!empty($request->file))
-        {
-            (new SaveFileLinkFile)->execute($request);
-            return response()->json(['success' => true]);
-        }
+        $linkData = (new SetFileLinkDetails)->processNewLink($request);
 
-        $linkObj = new CreateFileLink();
-        $linkData = $linkObj->create($request);
-
-        return response()->json($linkData);
+        // return response()->json($linkData);
+        return response()->json([
+            'success' => $linkData ? true : false,
+            'link_id' => $linkData ? $linkData : false,
+        ]);
     }
 
     //  Show details about a file link
@@ -80,14 +70,11 @@ class FileLinksController extends Controller
         //  If the link is invalid, return an error page
         if(!$linkDataObj->isLinkValid())
         {
-            Log::warning('User '.Auth::user()->full_name.' tried to view invalid file link', ['user_id' => Auth::user()->user_id, 'link_id' => $id]);
             return view('links.badLink');
         }
 
         return view('links.details', [
-            'link_id'    => $id,
-            'cust_id'    => $linkDataObj->getLinkCustomer(),
-            'file_types' => (new GetCustomerFileTypes)->execute(true),
+            'details'    => $linkDataObj->execute(true),
         ]);
     }
 
@@ -100,9 +87,9 @@ class FileLinksController extends Controller
     }
 
     //  Update the link's details
-    public function update(UpdateFileLinkRequest $request, $id)
+    public function update(FileLinkUpdateRequest $request, $id)
     {
-        (new SetFileLinkDetails)->execute($request, $id);
+        (new SetFileLinkDetails)->updateLink($request, $id);
         return response()->json(['success' => true]);
     }
 
@@ -113,7 +100,7 @@ class FileLinksController extends Controller
     }
 
     //  Update the instructions attached to the link
-    public function submitInstructions(UpdateFileLinkInstructionsRequest $request, $linkID)
+    public function submitInstructions(FileLinkInstructionsRequest $request, $linkID)
     {
         (new SetFileLinkDetails)->setLinkInstructions($request, $linkID);
         return response()->json(['success' => true]);

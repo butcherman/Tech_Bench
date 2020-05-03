@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Domains\FileLinks\GetFileLinkFiles;
 use App\Domains\FileLinks\SaveFileLinkFile;
 
-use App\Http\Requests\AddFileLinkFileRequest;
+use App\Http\Requests\FileLinkAddFileRequest;
 use App\Http\Requests\MoveFileLinkFileToCustomerRequest;
 
 class LinkFilesController extends Controller
@@ -23,7 +23,7 @@ class LinkFilesController extends Controller
     }
 
     //  Add a file to the file link
-    public function store(AddFileLinkFileRequest $request)
+    public function store(FileLinkAddFileRequest $request)
     {
         //  Determine if a file is being uploaded still or not
         if((new SaveFileLinkFile)->execute($request, false))

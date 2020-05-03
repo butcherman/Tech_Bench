@@ -7,14 +7,6 @@
     </div>
 </div>
 <link-details
-    link_id="{{$link_id}}"
+    :init_details="{{json_encode($details)}}"
 ></link-details>
-<link-instructions
-    link_id="{{$link_id}}"
-></link-instructions>
-<link-files
-    link_id="{{$link_id}}"
-    cust_id="{{$cust_id}}"
-    :file_types="{{json_encode($file_types)}}"
-></link-files>
 @endsection

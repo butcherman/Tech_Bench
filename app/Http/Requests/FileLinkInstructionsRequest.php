@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddFileLinkFileRequest extends FormRequest
+class FileLinkInstructionsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class AddFileLinkFileRequest extends FormRequest
     public function rules()
     {
         return [
-            'linkID' => 'required|exists:file_links,link_id'
+            'instructions' => 'nullable',
         ];
     }
 }
