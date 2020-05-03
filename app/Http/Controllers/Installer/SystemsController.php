@@ -211,7 +211,8 @@ class SystemsController extends Controller
     public function destroy($id)
     {
         //
-        try {
+        try
+        {
             SystemTypes::find($id)->delete();
             return response()->json(['success' => true, 'reason' => 'Equipment Successfully Deleted']);
         }

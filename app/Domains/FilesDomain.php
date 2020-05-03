@@ -94,13 +94,13 @@ class FilesDomain
     protected function isFileDup($fileName)
     {
         //  Determine if the filename already exists
-        if (Storage::exists($this->path . DIRECTORY_SEPARATOR . $fileName))
+        if(Storage::exists($this->path.DIRECTORY_SEPARATOR.$fileName))
         {
             $fileParts = pathinfo($fileName);
-            $extension = isset($fileParts['extension']) ? ('.' . $fileParts['extension']) : '';
+            $extension = isset($fileParts['extension']) ? ('.'.$fileParts['extension']) : '';
 
             //  Look to see if a number is already appended to a file.  (example - file(1).pdf)
-            if (preg_match('/(.*?)(\d+)$/', $fileParts['filename'], $match))
+            if(preg_match('/(.*?)(\d+)$/', $fileParts['filename'], $match))
             {
                 // Has a number, increment it
                 $base = $match[1];
@@ -116,8 +116,8 @@ class FilesDomain
             //  Increase the number until one that is not in use is found
             do
             {
-                $fileName = $base . '(' . ++$number . ')' . $extension;
-            } while (Storage::exists($this->path.DIRECTORY_SEPARATOR.$fileName));
+                $fileName = $base.'('.++$number.')'.$extension;
+            } while(Storage::exists($this->path.DIRECTORY_SEPARATOR.$fileName));
         }
 
         return $fileName;
@@ -128,7 +128,7 @@ class FilesDomain
     {
         $data = Files::find($fileID);
         //  Move the file to the proper folder
-        try{
+        try {
             Log::debug('Attempting to moving file '.$fileID.' to '.$newPath);
             Storage::move($data->file_link.$data->file_name, $newPath.DIRECTORY_SEPARATOR.$data->file_name);
         }

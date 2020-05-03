@@ -36,7 +36,7 @@ class FileLinksController extends Controller
     public function find($id)
     {
         //  If the user is trying to access the links of another user, they must have the proper permissions permissions
-        if ($id != 0)
+        if($id != 0)
         {
             $this->authorize('hasAccess', 'manage_users');
         }

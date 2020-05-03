@@ -147,10 +147,10 @@ class DownloadController extends Controller
 
         //  Begin the file download.  File is broken into sections to better be handled by browser
         set_time_limit(0);
-        $file = fopen($path,"rb");
+        $file = fopen($path, "rb");
         while(!feof($file))
         {
-            print(@fread($file, 1024*8));
+            print(@fread($file, 1024 * 8));
             ob_flush();
             flush();
         }

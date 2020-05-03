@@ -41,7 +41,8 @@ class ModuleController extends Controller
             ];
         }
         $mods = Module::allDisabled();
-        foreach($mods as $name => $mod) {
+        foreach($mods as $name => $mod)
+        {
             $moduleList[] = [
                 'name' => $name,
                 'status' => 'Disabled',
@@ -78,7 +79,8 @@ class ModuleController extends Controller
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
         //  Verify that the upload is valid and being processed
-        if($receiver->isUploaded() === false) {
+        if($receiver->isUploaded() === false)
+        {
             Log::error('Upload File Missing - '.
                 /** @scrutinizer ignore-type */
                 $request->toArray());
@@ -89,7 +91,8 @@ class ModuleController extends Controller
         $save = $receiver->receive();
 
         //  See if the uploade has finished
-        if($save->isFinished()) {
+        if($save->isFinished())
+        {
             $this->saveFile($save->getFile());
 
             return 'uploaded successfully';

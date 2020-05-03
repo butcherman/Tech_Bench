@@ -26,7 +26,7 @@ class GetFileLinks
                     ->orderBy('expire', 'desc')->get();
 
         Log::debug('Retrieved all File Links for User ID '.$this->id.'.  Data Gathered - ', array($links));
-        if ($this->collection) {
+        if($this->collection) {
             return new FileLinksCollection($links);
         }
 

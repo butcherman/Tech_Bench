@@ -80,8 +80,7 @@ class SetUserDetails
 
         //  Determine if there is a new password expire's date
         $newExpire = config('auth.passwords.settings.expire') != null ?
-            Carbon::now()->addDays(config('auth.passwords.settings.expire')) :
-            null;
+            Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
 
         User::find($userID)->update([
             'password' => bcrypt($request->newPass),

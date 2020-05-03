@@ -80,7 +80,7 @@ class TechTipsController extends Controller
 
         return view('tips.details', [
             'details' => $tipData->toJson(),
-            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false',   // empty($isFav) ? 'false' : 'true',
+            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false', // empty($isFav) ? 'false' : 'true',
         ]);
 
     }
@@ -92,7 +92,7 @@ class TechTipsController extends Controller
 
         return view('tips.details', [
             'details' => $tipData['data'],
-            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false',   // empty($isFav) ? 'false' : 'true',
+            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false', // empty($isFav) ? 'false' : 'true',
             'files'   => $tipData['files'],
         ]);
     }
