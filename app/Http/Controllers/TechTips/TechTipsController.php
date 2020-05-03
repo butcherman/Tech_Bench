@@ -73,6 +73,11 @@ class TechTipsController extends Controller
     {
         $tipData = (new GetTechTips)->getTipDetails($id);
 
+        if($tipData['details'] === null)
+        {
+            return view('tips.tipNotFound');
+        }
+
         return view('tips.details', [
             'details' => $tipData->toJson(),
             'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false',   // empty($isFav) ? 'false' : 'true',

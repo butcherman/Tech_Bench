@@ -231,7 +231,7 @@ class UserController extends Controller
             'roles' => $roleArr,
             'user'  => $user->
             /** @scrutinizer ignore-call */
-            makeVisible(['user_id', 'username']),
+            makeVisible(['user_id', 'username', 'role_id']),
         ]);
     }
 
