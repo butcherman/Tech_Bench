@@ -17,11 +17,9 @@ class CreateSystemTypesTable extends Migration
             $table->increments('sys_id');
             $table->integer('cat_id')->unsigned();
             $table->string('name');
-            $table->integer('parent_id')->nullable()->unsigned();
             $table->string('folder_location');
             $table->timestamps();
             $table->foreign('cat_id')->references('cat_id')->on('system_categories')->onUpdate('cascade');
-            $table->foreign('parent_id')->references('sys_id')->on('system_types')->onUpdate('cascade');
         });
     }
 

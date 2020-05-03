@@ -84,7 +84,18 @@
                 </div>
                 <transition name="fade" v-show="showAdv">
                     <div v-if="showAdv" class="mt-2 mb-2">
-                        <b-form-checkbox v-model="form.noEmail" switch class="text-center">Supress Notification</b-form-checkbox>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3">
+                                <b-form-checkbox v-model="form.noEmail" switch>
+                                    Supress Notification
+                                    <i class="far fa-question-circle pointer" title="More Information" v-b-popover.hover.top="'When enabled, Tech Tip will be created, but no notifications will be sent to other users'" ></i>
+                                </b-form-checkbox>
+                                <b-form-checkbox v-model="form.sticky" switch>
+                                    Make Sticky Tip
+                                    <i class="far fa-question-circle pointer" title="More Information" v-b-popover.hover.top="'Sticky Tech Tips will always be at the top of the search list'" ></i>
+                                </b-form-checkbox>
+                            </div>
+                        </div>
                     </div>
                 </transition>
             </div>
@@ -128,6 +139,7 @@ export default {
                 equipment:   null,
                 description: null,
                 noEmail:     false,
+                sticky:      false,
             },
             tinymce: {
                 plugins:             'autolink advlist lists link image table spellchecker fullscreen preview',

@@ -17,7 +17,9 @@ class UpdatesForVersion52 extends Migration
      */
     public function up()
     {
+        $this->updateSystemTypesTable();
         $this->updateFilesTable();
+        $this->updateTechTipsTable();
     }
 
     /**
@@ -32,6 +34,35 @@ class UpdatesForVersion52 extends Migration
             Schema::table('files', function(Blueprint $table)
             {
                 $table->dropColumn('public');
+            });
+        }
+
+        if(Schema::hasColumn('tech_tips', 'sticky'))
+        {
+            Schema::table('tech_tips', function(Blueprint $table)
+            {
+                $table->dropColumn('sticky');
+            });
+        }
+
+        if(Schema::hasColumn('tech_tips', 'updated_id'))
+        {
+            Schema::table('tech_tips', function(Blueprint $table)
+            {
+                $table->dropForeign(['updated_id']);
+                $table->dropColumn('updated_id');
+            });
+        }
+    }
+
+    protected function updateSystemTypesTable()
+    {
+        if(Schema::hasColumn('system_types', 'parent_id'))
+        {
+            Schema::table('system_types', function(Blueprint $table)
+            {
+                $table->dropForeign(['parent_id']);
+                $table->dropColumn('parent_id');
             });
         }
     }
@@ -55,6 +86,19 @@ class UpdatesForVersion52 extends Migration
                     'public' => 1,
                 ]);
             }
+        }
+    }
+
+    protected function updateTechTipsTable()
+    {
+        if(!Schema::hasColumn('tech_tips', 'sticky'))
+        {
+            Schema::table('tech_tips', function(Blueprint $table)
+            {
+                $table->integer('updated_id')->unsigned()->nullable()->after('user_id');
+                $table->boolean('sticky')->default(0)->after('public');
+                $table->foreign('updated_id')->references('user_id')->on('users')->onUpdate('cascade');
+            });
         }
     }
 }

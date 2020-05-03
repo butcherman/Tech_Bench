@@ -22,7 +22,8 @@ class GetTechTips
         {
             //  No search paramaters, send all tech tips
             $tips = new TechTipsCollection(
-                TechTips::orderBy('created_at', 'DESC')
+                TechTips::orderBy('sticky', 'DESC')
+                    ->orderBy('created_at', 'DESC')
                     ->with('SystemTypes')
                     ->paginate($request->pagination['perPage']
             ));
@@ -33,7 +34,7 @@ class GetTechTips
             $system  = Arr::has($searchFields, 'systemType');
             //  Search paramaters, filter results
             $tips = new TechTipsCollection(
-                TechTips::orderBy('created_at', 'DESC')
+                TechTips::orderBy('sticky', 'DESC')->orderBy('created_at', 'DESC')
                     //  Search by id or a phrase in the title or description
                     ->where(function($query) use ($searchFields) {
                         $query->where('subject', 'like', '%'.$searchFields['searchText'].'%')

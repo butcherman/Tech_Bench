@@ -18,6 +18,7 @@ class TechTips extends JsonResource
     {
         return [
             'tip_id'       => $this->tip_id,
+            'sticky'       => $this->sticky,
             'subject'      => $this->subject,
             'description'  => Str::words($this->description, 50),
             'created_at'   => Carbon::parse($this->created_at)->format('M d, Y'),

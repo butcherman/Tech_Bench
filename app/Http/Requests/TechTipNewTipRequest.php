@@ -29,6 +29,7 @@ class TechTipNewTipRequest extends FormRequest
             'tip_type_id' => 'required',
             'description' => 'required',
             'noEmail'     => 'required',
+            'sticky'      => 'required',
         ];
     }
 }

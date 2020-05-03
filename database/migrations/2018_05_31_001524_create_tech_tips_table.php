@@ -16,13 +16,16 @@ class CreateTechTipsTable extends Migration
         Schema::create('tech_tips', function(Blueprint $table) {
             $table->increments('tip_id');
             $table->integer('user_id')->unsigned();
+            $table->integer('updated_id')->unsigned()->nullable();
             $table->boolean('public')->default(0);
+            $table->boolean('sticky')->default(0);
             $table->bigInteger('tip_type_id')->unsigned();
             $table->text('subject');
             $table->longText('description');
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade');
+            $table->foreign('updated_id')->references('user_id')->on('users')->onUpdate('cascade');
             $table->foreign('tip_type_id')->references('tip_type_id')->on('tech_tip_types')->onUpdate('cascade');
         });
     }

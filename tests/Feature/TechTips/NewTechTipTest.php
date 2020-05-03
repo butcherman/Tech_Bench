@@ -53,6 +53,7 @@ class NewTechTipTest extends TestCase
             'tip_type_id' => 1,
             'description' => $tipData->description,
             'noEmail'     => false,
+            'sticky'      => false,
         ];
 
         $response = $this->post(route('tips.store'), $data);
@@ -73,6 +74,7 @@ class NewTechTipTest extends TestCase
             'tip_type_id' => 1,
             'description' => $tipData->description,
             'noEmail'     => false,
+            'sticky'      => false,
         ];
         $user     = $this->userWithoutPermission('Create Tech Tip');
         $response = $this->actingAs($user)->post(route('tips.store'), $data);
@@ -93,6 +95,7 @@ class NewTechTipTest extends TestCase
             'tip_type_id' => 1,
             'description' => $tipData->description,
             'noEmail'     => false,
+            'sticky'      => false,
         ];
         $user = $this->getTech();
 
@@ -115,6 +118,7 @@ class NewTechTipTest extends TestCase
             'tip_type_id' => 1,
             'description' => $tipData->description,
             'noEmail'     => false,
+            'sticky'      => false,
         ];
         $user = $this->getTech();
 
@@ -137,6 +141,7 @@ class NewTechTipTest extends TestCase
             'tip_type_id' => 1,
             'description' => $tipData->description,
             'noEmail'     => false,
+            'sticky'      => false,
         ];
         $user = $this->getTech();
 
@@ -159,6 +164,7 @@ class NewTechTipTest extends TestCase
             'tip_type_id' => null,
             'description' => $tipData->description,
             'noEmail'     => false,
+            'sticky'      => false,
         ];
         $user = $this->getTech();
 
@@ -181,6 +187,7 @@ class NewTechTipTest extends TestCase
             'tip_type_id' => 1,
             'description' => null,
             'noEmail'     => false,
+            'sticky'      => false,
         ];
         $user = $this->getTech();
 
@@ -205,6 +212,7 @@ class NewTechTipTest extends TestCase
             'tip_type_id' => 1,
             'description' => $tipData->description,
             'noEmail'     => false,
+            'sticky'      => false,
             'file'        => $file = UploadedFile::fake()->image($fileName)
         ];
         $user = $this->getTech();

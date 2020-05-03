@@ -73,11 +73,10 @@ class EditTipTest extends TestCase
         $tipData = factory(TechTips::class)->make();
         $systems = factory(SystemTypes::class)->create();
         $data = [
-            '_completed' => 'true',
             'subject' => $tipData->subject,
             'eqipment' => [$systems->sys_id],
             'tipType' => 1,
-            'tip' => $tipData->description
+            'tip' => $tipData->description,
         ];
 
         $response = $this->put(route('tips.update', $this->tip->tip_id), $data);
@@ -98,7 +97,9 @@ class EditTipTest extends TestCase
             'system_types'    => $systems,
             'tip_type_id'     => $tipData->tip_type_id,
             'description'     => $tipData->description,
-            'deletedFileList' => null
+            'deletedFileList' => null,
+            'sticky'          => false,
+            'resendNotivication' => false,
         ];
         $user     = $this->userWithoutPermission('Edit Tech Tip');
         $response = $this->actingAs($user)->put(route('tips.update', $this->tip->tip_id), $data);
@@ -117,7 +118,9 @@ class EditTipTest extends TestCase
             'system_types'    => [$systems],
             'tip_type_id'     => $tipData->tip_type_id,
             'description'     => $tipData->description,
-            'deletedFileList' => null
+            'deletedFileList' => null,
+            'sticky'          => false,
+            'resendNotivication' => false,
         ];
         $user = $this->getInstaller();
 
@@ -138,7 +141,9 @@ class EditTipTest extends TestCase
             'system_types'    => [$systems],
             'tip_type_id'     => $tipData->tip_type_id,
             'description'     => $tipData->description,
-            'deletedFileList' => null
+            'deletedFileList' => null,
+            'sticky'          => false,
+            'resendNotivication' => false,
         ];
         $user = $this->getInstaller();
 
@@ -158,7 +163,9 @@ class EditTipTest extends TestCase
             'system_types'    => null,
             'tip_type_id'     => $tipData->tip_type_id,
             'description'     => $tipData->description,
-            'deletedFileList' => null
+            'deletedFileList' => null,
+            'sticky'          => false,
+            'resendNotivication' => false,
         ];
         $user = $this->getInstaller();
 
@@ -179,7 +186,9 @@ class EditTipTest extends TestCase
             'system_types'    => [$systems],
             'tip_type_id'     => null,
             'description'     => $tipData->description,
-            'deletedFileList' => null
+            'deletedFileList' => null,
+            'sticky'          => false,
+            'resendNotivication' => false,
         ];
         $user = $this->getInstaller();
 
@@ -200,7 +209,9 @@ class EditTipTest extends TestCase
             'system_types'    => [$systems],
             'tip_type_id'     => $tipData->tip_type_id,
             'description'     => null,
-            'deletedFileList' => null
+            'deletedFileList' => null,
+            'sticky'          => false,
+            'resendNotivication' => false,
         ];
         $user = $this->getInstaller();
 
@@ -225,6 +236,8 @@ class EditTipTest extends TestCase
             'tip_type_id'     => $tipData->tip_type_id,
             'description'     => $tipData->description,
             'deletedFileList' => null,
+            'sticky'          => false,
+            'resendNotivication' => false,
             'file'            => $file = UploadedFile::fake()->image($fileName),
         ];
         $user = $this->getInstaller();

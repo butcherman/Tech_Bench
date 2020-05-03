@@ -87,6 +87,33 @@
                     </div>
                 </transition>
             </div>
+            <div class="mb-2">
+                <div class="row justify-content-center">
+                    <div class="col-md-2">
+                        <b-button size="sm" pill @click="showAdv = !showAdv" variant="primary" block>
+                            Advanced Options
+                            <i v-if="showAdv" class="fas fa-angle-down"></i>
+                            <i v-else class="fas fa-angle-right"></i>
+                        </b-button>
+                    </div>
+                </div>
+                <transition name="fade" v-show="showAdv">
+                    <div v-if="showAdv" class="mt-2 mb-2">
+                        <div class="row justify-content-center">
+                            <div class="col-md-3">
+                                <b-form-checkbox v-model="form.resendNotification" switch>
+                                    Resend Notification
+                                    <i class="far fa-question-circle pointer" title="More Information" v-b-popover.hover.top="'When enabled, a notificaiton will be sent notifying everyone that the Tech Tip has been updated'" ></i>
+                                </b-form-checkbox>
+                                <b-form-checkbox v-model="form.sticky" switch>
+                                    Make Sticky Tip
+                                    <i class="far fa-question-circle pointer" title="More Information" v-b-popover.hover.top="'Sticky Tech Tips will always be at the top of the search list'" ></i>
+                                </b-form-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </div>
             <form-submit
                 button_text="Update Tech Tip"
                 :submitted="submitted"
@@ -159,7 +186,6 @@ export default {
         validateForm(e)
         {
             e.preventDefault();
-            console.log(this.form);
             if(this.$refs.techTipForm.checkValidity() === false)
             {
                 this.validated = true;
