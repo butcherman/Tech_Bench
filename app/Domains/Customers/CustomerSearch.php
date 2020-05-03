@@ -19,8 +19,7 @@ class CustomerSearch
             $searchResults = new CustomersCollection(
                 Customers::orderBy($request->sortField, $request->sortType)
                     //  Search the name, dba name, and cust id columns
-                    ->where(function($query) use ($request)
-                    {
+                    ->where(function($query) use ($request) {
                         $query->where('name', 'like', '%'.$request->name.'%')
                             ->orWhere('cust_id', 'like', '%'.$request->name.'%')
                             ->orWhere('dba_name', 'like', '%'.$request->name.'%');
@@ -30,10 +29,8 @@ class CustomerSearch
                     //  Include the customers systems
                     ->with('CustomerSystems.SystemTypes')
                     //  If the system field is present - search for system type
-                    ->when($request->system, function($query) use ($request)
-                    {
-                        $query->whereHas('CustomerSystems.SystemTypes', function($query) use ($request)
-                        {
+                    ->when($request->system, function($query) use ($request) {
+                        $query->whereHas('CustomerSystems.SystemTypes', function($query) use ($request) {
                             $query->where('sys_id', $request->system);
                         });
                     })

@@ -37,13 +37,13 @@ class GatePolicy
     //  Determine if a user can see the Administration Nav Link
     public function seeAdminLink(User $user)
     {
-        if ($this->isInstaller($user))
+        if($this->isInstaller($user))
         {
             return true;
         }
 
         $data = UserRolePermissions::with('UserRolePermissionTypes')
-            ->whereHas('UserRolePermissionTypes', function ($query) {
+            ->whereHas('UserRolePermissionTypes', function($query) {
                 $query->where('description', 'Manage Users')
                     ->orWhere('description', 'Manage User Roles')
                     ->orWhere('description', 'Manage Customers')
@@ -54,7 +54,7 @@ class GatePolicy
             ->get();
 
         $allow = $data->isEmpty() ? 'Denied' : 'Allowed';
-        Log::debug('User ' . $user->full_name . ' is trying to see admin link.  Result - ' . $allow);
+        Log::debug('User '.$user->full_name.' is trying to see admin link.  Result - '.$allow);
 
         return  $data->isEmpty() ? false : true;
     }
@@ -69,7 +69,7 @@ class GatePolicy
         }
 
         $data = UserRolePermissions::with('UserRolePermissionTypes')
-            ->whereHas('UserRolePermissionTypes', function ($query) use ($task) {
+            ->whereHas('UserRolePermissionTypes', function($query) use ($task) {
                 $query->where('description', $task);
             })
             ->where('role_id', $user->role_id)
@@ -77,10 +77,10 @@ class GatePolicy
             ->get();
 
         $allow = $data->isEmpty() ? 'false' : 'true';
-        Log::debug('User '.$user->full_name.' is trying to access '.$task.'.  Result - ' . $allow);
-        if ($allow === 'Denied')
+        Log::debug('User '.$user->full_name.' is trying to access '.$task.'.  Result - '.$allow);
+        if($allow === 'Denied')
         {
-            Log::alert('User ' . $user->full_name . ' was denied from accessing '.$task.' link.');
+            Log::alert('User '.$user->full_name.' was denied from accessing '.$task.' link.');
         }
 
         return  $data->isEmpty() ? false : true;

@@ -34,7 +34,7 @@ class AdminController extends Controller
     //  Display all file links
     public function userLinks()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $userLinks = new UserCollection(
             User::withCount([
@@ -94,7 +94,7 @@ class AdminController extends Controller
         Log::notice('User '.Auth::user()->full_name.' updated User Password Policy requiring resets every '.$request->passExpire.' days');
 
         //  If the setting is changing from never to xx days, update all users
-        if ($request->passExpire == 0)
+        if($request->passExpire == 0)
         {
             User::whereNotNull('password_expires')->update([
                 'password_expires' => null
@@ -116,7 +116,7 @@ class AdminController extends Controller
     //  View the current roles that can be assigned to users
     public function roleSettings()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         $this->authorize('hasAccess', 'Manage User Roles');
 
         $roles = UserRoleType::with(['UserRolePermissions' => function($query) {

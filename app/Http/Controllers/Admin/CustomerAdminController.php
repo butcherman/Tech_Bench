@@ -16,7 +16,7 @@ class CustomerAdminController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
+        $this->middleware(function($request, $next) {
             $this->authorize('hasAccess', 'Manage Customers');
             return $next($request);
         });
@@ -50,14 +50,14 @@ class CustomerAdminController extends Controller
     //  Form to view what kind of file types can be assigned to customers
     public function fileTypes()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
         return view('admin.customerFileTypes');
     }
 
     //  Get the types of files that can be assigned to a customer file
     public function getFileTypes()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $types = new CustomerFileTypesCollection(CustomerFileTypes::all());
 
@@ -68,7 +68,7 @@ class CustomerAdminController extends Controller
     //  Submit a new file type name
     public function submitNewFileType(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name . '. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
         $request->validate([
             'name' => 'required',
         ]);
@@ -77,14 +77,14 @@ class CustomerAdminController extends Controller
             'description' => $request->name,
         ]);
 
-        Log::notice('New Customer File Type ' . $request->name . ' created by '. Auth::user()->full_name);
+        Log::notice('New Customer File Type '.$request->name.' created by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 
     //  Update the name of a file type
     public function setFileTypes(Request $request)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name . '. Submitted Data - ', $request->toArray());
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name.'. Submitted Data - ', $request->toArray());
         $request->validate([
             'name' => 'required',
             'id'   => 'required|exists:customer_file_types,file_type_id',
@@ -101,14 +101,14 @@ class CustomerAdminController extends Controller
     //  Try to delete a file type
     public function delFileType($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         try {
             //  Try to delete file type from database - will throw error if foreign key is in use
             CustomerFileTypes::find($id)->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch(\Illuminate\Database\QueryException $e) {
             //  Unable to remove file type  from the database
-            Log::warning('Attempt to delete file type ID '.$id.' by User '.Auth::user()->full_name.' failed.  Reason - ' . $e);
+            Log::warning('Attempt to delete file type ID '.$id.' by User '.Auth::user()->full_name.' failed.  Reason - '.$e);
             return response()->json(['success' => false, 'reason' => 'In Use']);
         }
 
@@ -119,7 +119,7 @@ class CustomerAdminController extends Controller
     //  Show all disabled customers
     public function showDisabled()
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         $custList = Customers::select('cust_id', 'name', 'deleted_at')
             ->onlyTrashed()
@@ -133,7 +133,7 @@ class CustomerAdminController extends Controller
     //  Re-enable a customer
     public function enableCustomer($id)
     {
-        Log::debug('Route ' . Route::currentRouteName() . ' visited by ' . Auth::user()->full_name);
+        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
 
         Customers::withTrashed()->where('cust_id', $id)->restore();
 

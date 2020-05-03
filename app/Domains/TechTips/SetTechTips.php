@@ -154,8 +154,7 @@ class SetTechTips extends FilesDomain
         {
             if(isset($equip['laravel_through_key']))
             {
-                $current = $current->filter(function($item) use ($equip)
-                {
+                $current = $current->filter(function($item) use ($equip) {
                     return $item->sys_id != $equip['sys_id'];
                 });
             }
