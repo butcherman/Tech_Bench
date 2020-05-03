@@ -3,8 +3,7 @@
         <div v-if="error">
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-4">
-                    <img src="/img/err_img/sry_error.png" alt="Error" id="header-logo" />
-                    <!-- TODO - Replace this with head-scratch image -->
+                    <img src="/img/err_img/confused.png" alt="Error" id="header-logo" />
                 </div>
                 <div class="col-md-5">
                     <h3 class="text-danger">Something Bad Happened:</h3>

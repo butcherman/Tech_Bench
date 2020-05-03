@@ -9,18 +9,22 @@ use App\TechTips;
 use App\Customers;
 use Carbon\Carbon;
 use App\CustomerNotes;
+use App\Domains\DownloadDomain;
+use App\Http\Requests\DownloadArchiveRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\File;
 
 class DownloadController extends Controller
 {
     //  File locations for stored files
-    private $tmpFolder = 'archive_downloads'.DIRECTORY_SEPARATOR;
-    private $root;
-    private $path;
+    protected $tmpFolder = 'archive_downloads'.DIRECTORY_SEPARATOR;
+    protected $root;
+    protected $path;
 
     public function __construct()
     {
@@ -31,99 +35,54 @@ class DownloadController extends Controller
     //  Download one file
     public function index($fileID, $fileName)
     {
-        $fileData = Files::where('file_id', $fileID)->where('file_name', $fileName)->first();
+        $fileObj = new DownloadDomain;
+        $fileObj->setFileDetails($fileID, $fileName);
 
-        if(Auth::user())
+        if($fileObj->isFileValid() && $fileObj->canUserDownload())
         {
-            $user = Auth::user()->full_name;
-        }
-        else
-        {
-            $user = \Request::ip();
-        }
+            $path = config('filesystems.disks.local.root').$fileObj->getFileLinkForDownload();
+            if(!$this->downloadFile($path))
+            {
+                abort(500);
+            }
 
-        Log::debug('Route '.Route::currentRouteName().' visited by '.$user);
-
-        //  Check that the file exists before allowing it to be downloaded
-        if(!empty($fileData) && Storage::exists($fileData->file_link.$fileData->file_name))
-        {
-            Log::info('File Downloaded by '.$user, ['file_id' => $fileID, 'file_name' => $fileName]);
-            return Storage::download($fileData->file_link.$fileData->file_name);
+            exit;
         }
 
-        Log::error('File Not Found', ['file_id' => $fileID, 'file_name' => $fileName]);
         return view('err.badFile');
     }
 
-    //  Package multiple files and prepare them for download
-    public function archiveFiles(Request $request)
+    //  Create an archive of files and download them
+    public function archive(DownloadArchiveRequest $request)
     {
-        //  Debug Data
-        if(Auth::user()) {
-            $user = Auth::user()->full_name;
-        } else {
-            $user = \Request::ip();
-        }
-        Log::debug('Route '.Route::currentRouteName().' visited by '.$user.'  Request Data:', $request->toArray());
+        $fileObj = new DownloadDomain;
+        $archive = $fileObj->createArchive($request->fileList);
 
-        //  Validate the array
-        $request->validate([
-            'fileList' => 'required'
-        ]);
-
-        //  Filename of zip archive
-        $name = 'zip_archive_'.Carbon::now()->timestamp.'.zip';
-        Log::debug('Archive '.$name.' being created for multiple files.');
-
-        //  The archive_downloads directory does not exist by default.  Touching a file in it ensures the directory is created and usable
-        Storage::put($this->tmpFolder.'.ignore', '');
-
-        //  Create the zip file
-        $zip = Zip::create($this->path.$name);
-        foreach($request->fileList as $file)
-        {
-            //  Place each file inside of the zip
-            $data = Files::find($file);
-            if($data->count() > 0)
-            {
-                // Log::debug('file exists', $data->toArray());
-                $zip->add($this->root.$data->file_link.$data->file_name);
-                Log::debug('File added to archive '.$name.' - '.$this->root.$data->file_link.$data->file_name);
-            }
-            else
-            {
-                Log::error('User '.$user.' tried to download an empty zip archive.');
-            }
-        }
-        //  Close zip file to be processed
-        $zip->close();
-
-        //  Return the name of the zip file
-        Log::info('Archive '.$name.' created by '.$user.' for download');
-        return response()->json(['archive' => $name]);
+        return response()->json(['archive' => $archive]);
     }
 
     //  Download multiple files as part of a zip archive that was put together
     public function downloadArchive($fileName)
     {
-        //  Debug Data
-        if(Auth::user()) {
-            $user = Auth::user()->full_name;
-        } else {
-            $user = \Request::ip();
-        }
-        Log::debug('Route '.Route::currentRouteName().' visited by '.$user);
-
-        //  Check if the requested archive exists
-        if(Storage::exists($this->tmpFolder.$fileName))
+        $fileObj = new DownloadDomain;
+        if($aboslutePath = $fileObj->validateArchive($fileName))
         {
-            Log::info('Archive Downloaded '.$fileName.' downloaded by '.$user);
-            return response()->download($this->path.$fileName, 'download.zip')->deleteFileAfterSend(true);
+            if(!$this->downloadFile($aboslutePath))
+            {
+                abort(500);
+            }
+
+            $fileObj->deleteArchive($fileName);
+            exit;
         }
 
-        Log::error('Archive '.$fileName.' not found for '.$user);
         return view('err.badFile');
     }
+
+
+
+
+
 
     //  Download Customer Note as PDF
     public function downloadCustNote($id)
@@ -162,5 +121,40 @@ class DownloadController extends Controller
 
         Log::info('Tech Tip downloaded as PDF by '.Auth::user()->full_name.'.  Data: ', ['Tip ID: ' => $tip->tip_id, 'Subject: ' => $tip->subject]);
         return $pdf->download('Tech Tip - '.$tip->subject.'.pdf');
+    }
+
+
+
+
+
+
+
+    //  Download the file in chunks to allow for large file download
+    protected function downloadFile($path)
+    {
+        $fileName = basename($path);
+
+        //  Prepare header information for file download
+        header('Content-Description:  File Transfer');
+        // header('Content-Type:  '.$fileData->mime_type);
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename='.basename($fileName));
+        header('Content-Transfer-Encoding:  binary');
+        header('Expires:  0');
+        header('Cache-Control:  must-revalidate, post-check=0, pre-check=0');
+        header('Pragma:  public');
+        header('Content-Length:  '.filesize($path));
+
+        //  Begin the file download.  File is broken into sections to better be handled by browser
+        set_time_limit(0);
+        $file = fopen($path,"rb");
+        while(!feof($file))
+        {
+            print(@fread($file, 1024*8));
+            ob_flush();
+            flush();
+        }
+
+        return true;
     }
 }

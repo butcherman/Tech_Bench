@@ -17,9 +17,10 @@ Route::post('finish-setup/{hash}', 'Auth\InitializeUserController@submitInitiali
 /*
 *   Download File Routes
 */
+Route::post('download/archive',           'DownloadController@archive')        ->name('dlArchive');
 Route::get('download/{id}/{filename}',    'DownloadController@index')          ->name('download');
 Route::get('download-archive/{filename}', 'DownloadController@downloadArchive')->name('downloadArchive');
-Route::put('download-archive',            'DownloadController@archiveFiles')   ->name('archiveFiles');
+// Route::put('download-archive',            'DownloadController@archiveFiles')   ->name('archiveFiles');
 
 /*
 *   User Settings Routes

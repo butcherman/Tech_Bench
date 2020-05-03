@@ -50,7 +50,8 @@
                     </span>
                     <span v-else-if="data.column.field == 'user'">
                         <span v-if="data.row.added_by">{{data.row.added_by}}</span>
-                        <span v-else>{{data.row.user.full_name}}</span>
+                        <span v-else-if="data.row.user">{{data.row.user.full_name}}</span>
+                        <span v-else>Unknown</span>
                     </span>
                     <span v-else-if="data.column.field === 'details'">
                         <div v-if="data.row.note">
@@ -174,11 +175,11 @@
                 var fileList = [];
                 this.$refs['files-table'].selectedRows.forEach(function(file)
                 {
-                    fileList.push(file.file_id);
+                    fileList.push({file_id: file.file_id, file_name: file.files.file_name});
                 });
 
                 //  prepare the zip file for download
-                axios.put(this.route('archiveFiles'), {'fileList': fileList})
+                axios.post(this.route('dlArchive'), {'fileList': fileList})
                     .then(res => {
                         window.location.href        = this.route('downloadArchive', res.data.archive);
                         this.downloadButton.text    = 'Download Selected';
