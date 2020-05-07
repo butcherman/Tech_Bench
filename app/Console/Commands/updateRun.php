@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use Zip;
+use Exception;
 
 use Illuminate\Console\Command;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,13 +25,18 @@ class updateRun extends Command
         {
             //  Open up the file and verify it is at least the same version as the current setup
             $valid = $this->openUpdate($updateFile);
-
-            if($valid)
+            if($valid >= 0)
             {
                 $this->call('down');
-                $this->copyFiles($updateFile);
+                if($this->copyFiles($updateFile))
+                {
+                    $this->info('Update Completed');
+                }
+                else
+                {
+                    $this->error('Unable to update.  Check the logs for details');
+                }
 
-                $this->info('Update Completed');
             }
             else
             {
@@ -44,6 +51,9 @@ class updateRun extends Command
     {
         $updateList = [];
         $updates    = Storage::disk('staging')->files('updates');
+
+        //  See if the temporary directory already exists, or if it needs to be deleted
+        Storage::disk('staging')->deleteDirectory('updates'.DIRECTORY_SEPARATOR.'tmp');
 
         //  Cycle through each file in the update directory to see if they are update files
         foreach($updates as $update)
@@ -79,9 +89,8 @@ class updateRun extends Command
 
             $anticipate = [];
             foreach($updateList as $key => $up) {
-                $opt = $key + 1;
+                $opt = $key;
                 $anticipate[$opt] = $up;
-                $this->line('['.$opt.'] '.$up);
             }
             $updateFile = $this->choice('Please select which update you would like to load', $anticipate);
         }
@@ -128,22 +137,12 @@ class updateRun extends Command
                 $i++;
             }
         }
+        $newVersion = $verData['major'].'.'.$verData['minor'].'.'.$verData['patch'];
 
-        $curVersion = new \PragmaRX\Version\Package\Version();
+        $verObj = new \PragmaRX\Version\Package\Version();
+        $curVersion = $verObj->major().'.'.$verObj->minor().'.'.$verObj->patch();
 
-        $valid = false;
-        if($verData['major'] > $curVersion->major())
-        {
-            $valid = true;
-        }
-        else if($verData['minor'] > $curVersion->minor())
-        {
-            $valid = true;
-        }
-        else if($verData['patch'] >= $curVersion->patch())
-        {
-            $valid = true;
-        }
+        $valid = version_compare($newVersion, $curVersion);
 
         return $valid;
     }
@@ -151,32 +150,53 @@ class updateRun extends Command
     //  copy the update files to the proper folders
     protected function copyFiles($updateFile)
     {
+        //  Verify that the root directory is writable
+        try
+        {
+            File::put(base_path().DIRECTORY_SEPARATOR.'.ignore', '');
+        }
+        catch(Exception $e)
+        {
+            Log::emergency('Unable to Update, Web Root Directory is not writable');
+            return false;
+        }
+
         $fileParts = pathinfo($updateFile);
         $folder = $fileParts['filename'];
 
         $updateFile = config('filesystems.disks.staging.root').
             DIRECTORY_SEPARATOR.'updates'.DIRECTORY_SEPARATOR.'tmp'.
             DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR;
+        $backupFile = config('filesystems.disks.staging.root').
+            DIRECTORY_SEPARATOR.'updates'.DIRECTORY_SEPARATOR.'tmp'.
+            DIRECTORY_SEPARATOR.'backup';
+        File::makeDirectory($backupFile);
 
-        // Copy files
-        File::copyDirectory($updateFile.'app',       base_path().DIRECTORY_SEPARATOR.'app');
-        File::copyDirectory($updateFile.'bootstrap', base_path().DIRECTORY_SEPARATOR.'bootstrap');
-        File::copyDirectory($updateFile.'config',    base_path().DIRECTORY_SEPARATOR.'config');
-        File::copyDirectory($updateFile.'database',  base_path().DIRECTORY_SEPARATOR.'database');
-        File::copyDirectory($updateFile.'public',    base_path().DIRECTORY_SEPARATOR.'public');
-        File::copyDirectory($updateFile.'resources', base_path().DIRECTORY_SEPARATOR.'resources');
-        File::copyDirectory($updateFile.'routes',    base_path().DIRECTORY_SEPARATOR.'routes');
-        File::copy($updateFile.'composer.json',      base_path().DIRECTORY_SEPARATOR.'composer.json');
-        File::copy($updateFile.'composer.lock',      base_path().DIRECTORY_SEPARATOR.'composer.lock');
-        File::copy($updateFile.'package.json',       base_path().DIRECTORY_SEPARATOR.'package.json');
-        File::copy($updateFile.'package-lock.json',  base_path().DIRECTORY_SEPARATOR.'package-lock.json');
+        $folderArr = ['app', 'bootstrap', 'config', 'database', 'public', 'routes'];
+        $fileArr   = ['artisan', 'composer.json', 'package-lock.json', 'server.php', 'webpack.mix.js'];
+
+        //  Backup existing folders wile copying new ones
+        foreach($folderArr as $newFolder)
+        {
+            File::copyDirectory(base_path().DIRECTORY_SEPARATOR.$newFolder, $backupFile.DIRECTORY_SEPARATOR.$newFolder);
+            File::deleteDirectory(base_path().DIRECTORY_SEPARATOR.$newFolder);
+            File::move($updateFile.$newFolder, base_path().DIRECTORY_SEPARATOR.$newFolder);
+        }
+
+        //  Backup existing files in root directory, while copying new ones
+        foreach($fileArr as $file)
+        {
+            File::copy(base_path().DIRECTORY_SEPARATOR.$file, $backupFile.DIRECTORY_SEPARATOR.$file);
+            File::delete(base_path().DIRECTORY_SEPARATOR.$file);
+            File::move($updateFile.$file, base_path().DIRECTORY_SEPARATOR.$file);
+        }
 
         //  Run Composer Updates
-        exec('cd '.base_path().' && composer install --no-dev --no-interaction --optimize-autoloader --no-ansi > /dev/null 2>&1');
-        $this->call('ziggy:generate');
+        exec('cd '.base_path().' && composer install --no-dev --no-interaction --optimize-autoloader --no-ansi');
+        $this->callSilent('ziggy:generate');
         //  Run NPM Updates
-        exec('cd '.base_path().' && npm install --only=production > /dev/null 2>&1');
-        exec('cd '.base_path().' && npm run production > /dev/null 2>&1');
+        exec('cd '.base_path().' && npm install --only=production');
+        exec('cd '.base_path().' && npm run production');
 
         //  Update the database
         $this->call('migrate', ['--force' => 'default']);
