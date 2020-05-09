@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 use App\User;
+use App\Files;
+use App\TechTipFiles;
 use App\UserSettings;
+use App\CustomerFiles;
+use App\FileLinkFiles;
 use App\Domains\Maintenance\DatabaseCheck as MaintenanceDatabaseCheck;
-
 
 class databaseCheck extends Command
 {
@@ -37,17 +40,21 @@ class databaseCheck extends Command
         //  Begin check
         $fixStr = $this->fix ? 'on' : 'off';
         $this->line('');
-        $this->line('Running Database Check...');
+        $this->info('Running Database Check...');
         $this->line('');
         Log::alert('The database check has been initiated.  Fix option is set to '.$fixStr);
 
         $this->checkUsers();
         $this->checkForeignKeys();
+        $this->verifyFilesExist();
+        $this->checkForStraglerFiles();
+        $this->checkForEmptyFolders();
+
+        $this->line('');
+        $this->info('Database Check Completed');
     }
 
-
-
-    //  User check will count users and administrators
+    //  User check will count users and administrators and verify each user has a proper settings table
     protected function checkUsers()
     {
         $activeUsers   = User::all()->count();
@@ -118,6 +125,7 @@ class databaseCheck extends Command
         }
     }
 
+    //  Verify that all foreign keys point to valid database entries
     protected function checkForeignKeys()
     {
         $tableList = [
@@ -153,6 +161,95 @@ class databaseCheck extends Command
                 $str = 'Foreign Key Check for '.$table.' failed';
                 $this->error($str);
                 Log::error($str);
+            }
+        }
+    }
+
+    //  Verify that all files listed in the files table actually exist
+    protected function verifyFilesExist()
+    {
+        $this->line('Checking to see if all files are present');
+        $fileList = Files::all();
+
+        foreach($fileList as $file)
+        {
+            if(!Storage::exists($file->file_link.$file->file_name))
+            {
+                $str = 'File '.$file->file_link.$file->file_name.' missing';
+                $this->error($str);
+                Log::error($str);
+
+                if($this->fix)
+                {
+                    $fileData = Files::where('file_id', $file->file_id)->with(['CustomerFiles', 'FileLinkFiles', 'TechTipFiles'])->first();
+                    Log::notice('Deleted file ID '.$file->file_id.' from database as it does not exist.  File Data - ', array($fileData));
+
+                    if(isset($fileData->CustomerFiles->cust_file_id))
+                    {
+                        CustomerFiles::find($fileData->CustomerFiles->cust_file_id)->delete();
+                    }
+                    else if(isset($fileData->FileLinkFiles->link_file_id))
+                    {
+                        FileLinkFiles::find($fileData->FileLinkFiles->link_file_id)->delete();
+                    }
+                    else if(isset($fileData->TechTipFiles->tip_file_id))
+                    {
+                        TechTipFiles::find($fileData->TechTipFiles->tip_file_id)->delete();
+                    }
+
+                    $fileData->delete();
+                }
+            }
+        }
+    }
+
+    //  Check for files that exist, but are not listed in the database
+    protected function checkForStraglerFiles()
+    {
+        //  Pull a list of all files in the local disk
+        $fileList = Storage::allFiles();
+        foreach($fileList as $file)
+        {
+            $parts = pathinfo($file);
+            if($parts['dirname'] != 'chunks')
+            {
+                $dbData = Files::where('file_name', $parts['basename'])->first();
+                if(!$dbData)
+                {
+                    $str = 'File '.$file.' does not have a matching database record';
+                    Log::notice($str);
+                    $this->error($str);
+                    if($this->fix)
+                    {
+                        Storage::delete($file);
+                        Log::alert('Deleted file - '.$file);
+                    }
+                }
+            }
+        }
+    }
+
+    //  Check the local disk to see if any of the folders are empty and can be deleted
+    protected function checkForEmptyFolders()
+    {
+        $this->line('Checking for empty directories');
+        $directories = Storage::allDirectories();
+
+        foreach($directories as $dir)
+        {
+            $fileCount = count(Storage::allFiles($dir));
+
+            // dd($fileCount);
+            if($fileCount == 0)
+            {
+                $str = 'Directory '.$dir.' is empty and can be deleted';
+                $this->error($str);
+                Log::notice($str);
+                if($this->fix)
+                {
+                    Storage::deleteDirectory($dir);
+                    Log::notice('Deleted Directory '.$dir);
+                }
             }
         }
     }
