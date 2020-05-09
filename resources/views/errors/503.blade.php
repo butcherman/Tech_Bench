@@ -7,7 +7,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="jumbotron text-center text-danger">
-            <h4 class="text-center">We are hard at work running scheduled maintenacne</h4>
+            <h4 class="text-center">We are hard at work running scheduled maintenance</h4>
             <p>Check back soon!!!</p>
             <img src="/img/err_img/sleep.png" alt="sorry" />
             <div class="clearfix"></div>
