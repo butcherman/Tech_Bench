@@ -2,15 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Zip;
-use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
+use Zip;
 
 class backupRestore extends Command
 {
@@ -65,6 +63,7 @@ class backupRestore extends Command
 
         if($this->option('confirmed') || $this->confirm('Are You Sure?'))
         {
+            Log::critical('Restoring Backup from filename '.$this->archive);
             $this->line('Restoring Backup.  Please Wait');
             $this->line('This could take some time');
             $this->bar = $this->output->createProgressBar(10);
@@ -89,17 +88,13 @@ class backupRestore extends Command
     {
         $this->bar->advance();
         $fileParts = pathinfo(
-        /** @scrutinizer ignore-type */
-        $this->argument('filename'));
+            /** @scrutinizer ignore-type */
+            $this->argument('filename'));
+
         $this->baseName = $fileParts['filename'];
         $this->archive = Zip::open(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.
-        /** @scrutinizer ignore-type */
-        $this->argument('filename'));
-        // if (!$this->archive->has('version.txt')) {
-        //     $this->error('THIS IS NOT A VALID TECH BENCH BACKUP');
-        //     $this->error('Exiting');
-        //     return 1;
-        // }
+            /** @scrutinizer ignore-type */
+            $this->argument('filename'));
 
         $this->archive->extract(config('filesystems.disks.backup.root').DIRECTORY_SEPARATOR.$this->baseName);
         $this->bar->advance();

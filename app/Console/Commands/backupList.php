@@ -19,12 +19,12 @@ class backupList extends Command
     {
         $this->line('Showing all available backups');
         $this->line('');
-        $this->line('Name              Date     Time');
+        $this->line('Backup Name');
         $this->line('-------------------------------------');
         $fileList = Storage::disk('backup')->files();
         foreach($fileList as $file)
         {
-            if($file != '.gitignore')
+            if($file != '.gitignore' && $file != '.ignore')
             {
                 $this->info($file);
             }
