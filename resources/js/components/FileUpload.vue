@@ -9,6 +9,7 @@
             @vdropzone-queue-complete="queueComplete"
             @vdropzone-max-files-exceeded="tooManyFiles"
             @vdropzone-removed-file="removedFile"
+            @vdropzone-file-added="newFile"
             :options="dropzoneOptions">
         </vue-dropzone>
         <b-progress v-show="showProgress" :value="progress" variant="success" striped animate show-progress></b-progress>
@@ -18,18 +19,17 @@
 <script>
     export default {
         props: {
-            // 'submit_url',
             submit_url: {
-                type: String,
+                type:     String,
                 required: true,
             },
             max_files: {
-                type: Number,
+                type:     Number,
                 required: false,
-                default: 5
+                default:  5
             },
             method: {
-                type: String,
+                type:     String,
                 required: false,
                 default: 'POST'
             }
@@ -121,6 +121,11 @@
                 {
                     this.alreadyWarned = false;
                 }
+            },
+            //  Emit the name of the file that was just added
+            newFile(file)
+            {
+                this.$emit('fileAdded', file.name);
             }
         },
     }

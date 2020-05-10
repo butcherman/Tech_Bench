@@ -12,7 +12,7 @@
             />
             <h4 class="text-center">Loading Form</h4>
         </div>
-        <b-overlay v-else :show="submitted">
+        <b-overlay v-else :show="showOverlay">
             <template v-slot:overlay>
                 <atom-spinner
                     :animation-duration="1000"
@@ -23,35 +23,38 @@
                 <h4 class="text-center">Processing...</h4>
             </template>
             <b-form @submit="validateForm" novalidate :validated="validated" ref="fileForm">
-                <b-form-group
-                    label="File Name"
-                    label-for="fileName"
-                >
-                    <b-form-input
-                        id="fileName"
-                        v-model="form.name"
-                        type="text"
-                        required
-                        placeholder="Enter Descriptive Name"></b-form-input>
-                        <b-form-invalid-feedback>You must enter a name for the file</b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group
-                    label="File Type"
-                    label-for="fileType"
+                <fieldset :disabled="submitted">
+                    <b-form-group
+                        label="File Name"
+                        label-for="fileName"
                     >
-                    <b-form-select v-model="form.customer_file_types.file_type_id" :options="fileTypes" required>
-                        <template v-slot:first>
-                            <option :value="null" disabled>Please Select An Option</option>
-                        </template>
-                    </b-form-select>
-                    <b-form-invalid-feedback>You must select a file type</b-form-invalid-feedback>
-                </b-form-group>
-                <file-upload ref="fileUpload"
-                    :submit_url="route('customer.files.store')"
-                    :max_files="1"
-                    @uploadFinished="uploadFinished">
-                </file-upload>
-                <b-form-invalid-feedback v-show="validatedFileErr">A File Must Be Attached</b-form-invalid-feedback>
+                        <b-form-input
+                            id="fileName"
+                            v-model="form.name"
+                            type="text"
+                            required
+                            placeholder="Enter Descriptive Name"></b-form-input>
+                            <b-form-invalid-feedback>You must enter a name for the file</b-form-invalid-feedback>
+                    </b-form-group>
+                    <b-form-group
+                        label="File Type"
+                        label-for="fileType"
+                        >
+                        <b-form-select v-model="form.customer_file_types.file_type_id" :options="fileTypes" required>
+                            <template v-slot:first>
+                                <option :value="null" disabled>Please Select An Option</option>
+                            </template>
+                        </b-form-select>
+                        <b-form-invalid-feedback>You must select a file type</b-form-invalid-feedback>
+                    </b-form-group>
+                    <file-upload ref="fileUpload"
+                        :submit_url="route('customer.files.store')"
+                        :max_files="1"
+                        @fileAdded="newFileAdded"
+                        @uploadFinished="uploadFinished">
+                    </file-upload>
+                    <b-form-invalid-feedback v-show="validatedFileErr">A File Must Be Attached</b-form-invalid-feedback>
+                </fieldset>
                 <form-submit
                     class="mt-3"
                     :button_text="btnText"
@@ -65,25 +68,25 @@
 <script>
 export default {
     props: {
-        //
         cust_id: {
-            type: Number,
+            type:     Number,
             required: true,
         },
     },
     data() {
         return {
-            error: false,
-            loading: false,
-            submitted: false,
-            validated: false,
+            error:            false,
+            loading:          false,
+            submitted:        false,
+            showOverlay:      false,
+            validated:        false,
             validatedFileErr: false,
-            newFile: false,
-            fileTypes: [],
+            newFile:          false,
+            fileTypes:        [],
             form: {
-                cust_id: this.cust_id,
-                name: '',
-                shared: false,
+                cust_id:      this.cust_id,
+                name:         '',
+                shared:       false,
                 customer_file_types: {
                     file_type_id: null,
                 },
@@ -113,7 +116,6 @@ export default {
         },
         initEditFile(file)
         {
-            console.log(file);
             this.getFileTypes();
             this.newFile = false;
             this.form = file;
@@ -145,9 +147,9 @@ export default {
                     var fileZone = this.$refs.fileUpload;
                     if(fileZone.getFileCount() != 1)
                     {
-                        this.validated = true;
+                        this.validated        = true;
                         this.validatedFileErr = true;
-                        this.submitted = false;
+                        this.submitted        = false;
                     }
                     else
                     {
@@ -168,9 +170,18 @@ export default {
         },
         uploadFinished()
         {
+            this.showOverlay = true;
             this.$emit('completed');
             this.$refs['fileModal'].hide();
             this.submitted = false;
+            this.showOverlay = false;
+        },
+        newFileAdded(fileName)
+        {
+            if(this.form.name == '')
+            {
+                this.form.name = fileName;
+            }
         }
     }
 }
