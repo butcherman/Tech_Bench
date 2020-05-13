@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use PDF;
-use Zip;
-use App\Files;
-use App\TechTips;
-use App\Customers;
-use Carbon\Carbon;
-use App\CustomerNotes;
-use App\Domains\DownloadDomain;
-use App\Http\Requests\DownloadArchiveRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Http\File;
+
+use PDF;
+
+use App\TechTips;
+use App\Customers;
+use App\CustomerNotes;
+use App\Domains\DownloadDomain;
+
+use App\Http\Requests\DownloadArchiveRequest;
 
 class DownloadController extends Controller
 {

@@ -26,8 +26,6 @@ class AdminController extends Controller
     //  Admin landing page
     public function index()
     {
-        Log::debug('Route '.Route::currentRouteName().' visited by '.Auth::user()->full_name);
-
         return view('admin.index');
     }
 

@@ -7,12 +7,11 @@
     </div>
 </div>
 <div class="row justify-content-center">
-    <div class="col-md-8 grid-margin stretch-card">
+    <div class="col-md-10 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <user-list
-                    :user_list="{{json_encode($userList)}}"
-                    action_route="{{$route}}"
+                    :user_list="{{$userList}}"
                 ></user-list>
             </div>
         </div>

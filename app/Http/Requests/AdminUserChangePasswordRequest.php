@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserBasicAccountRequest extends FormRequest
+class AdminUserChangePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,8 @@ class UserBasicAccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'   => 'nullable',
-            'role_id'    => 'nullable',
-            'first_name' => 'required',
-            'last_name'  => 'required',
-            'email'      => 'required',
+            'password' => 'required|string|min:6|confirmed',
+            'user_id'  => 'required|exists:users,user_id',
         ];
     }
 }

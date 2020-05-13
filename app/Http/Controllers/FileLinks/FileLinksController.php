@@ -55,7 +55,6 @@ class FileLinksController extends Controller
     {
         $linkData = (new SetFileLinkDetails)->processNewLink($request);
 
-        // return response()->json($linkData);
         return response()->json([
             'success' => $linkData ? true : false,
             'link_id' => $linkData ? $linkData : false,

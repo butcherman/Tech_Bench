@@ -10,7 +10,7 @@
     <div class="col-md-8 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <user-form :role_list="{{json_encode($roles)}}" :edit="{{json_encode($user)}}"></user-form>
+                <user-form :role_list="{{$roles}}" :edit="{{$user}}"></user-form>
             </div>
         </div>
     </div>

@@ -50,7 +50,7 @@ class AccountController extends Controller
     //  Submit the change password form
     public function submitPassword(UserChangePasswordRequest $request)
     {
-        (new SetUserDetails)->updateUserPassword($request);
+        (new SetUserDetails)->updateUserPassword($request->newPass);
         return redirect(route('account'))->with('success', 'Password Changed Successfully');
     }
 }

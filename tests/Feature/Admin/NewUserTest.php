@@ -97,7 +97,7 @@ class NewUserTest extends TestCase
     {
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'username'   => $newData->username,
             'first_name' => $newData->first_name,
             'last_name'  => $newData->last_name,
@@ -115,7 +115,7 @@ class NewUserTest extends TestCase
     {
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'username'   => $newData->username,
             'first_name' => $newData->first_name,
             'last_name'  => $newData->last_name,
@@ -133,7 +133,7 @@ class NewUserTest extends TestCase
 
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'username'   => $newData->username,
             'first_name' => $newData->first_name,
             'last_name'  => $newData->last_name,
@@ -159,14 +159,14 @@ class NewUserTest extends TestCase
         $response = $this->actingAs($this->installer)->post(route('admin.user.store'), $data);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors('role');
+        $response->assertSessionHasErrors('role_id');
     }
 
     public function test_create_new_user_username_validation_error()
     {
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'first_name' => $newData->first_name,
             'last_name'  => $newData->last_name,
             'email'      => $newData->email,
@@ -182,7 +182,7 @@ class NewUserTest extends TestCase
     {
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'username'   => $this->user->username,
             'first_name' => $newData->first_name,
             'last_name'  => $newData->last_name,
@@ -199,7 +199,7 @@ class NewUserTest extends TestCase
     {
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'username'   => $newData->username,
             'last_name'  => $newData->last_name,
             'email'      => $newData->email,
@@ -215,7 +215,7 @@ class NewUserTest extends TestCase
     {
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'username'   => $newData->username,
             'first_name' => $newData->first_name,
             'email'      => $newData->email,
@@ -231,7 +231,7 @@ class NewUserTest extends TestCase
     {
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'username'   => $newData->username,
             'first_name' => $newData->first_name,
             'last_name'  => $newData->last_name,
@@ -247,7 +247,7 @@ class NewUserTest extends TestCase
     {
         $newData = factory(User::class)->make();
         $data = [
-            'role'       => 4,
+            'role_id'    => 4,
             'username'   => $newData->username,
             'first_name' => $newData->first_name,
             'last_name'  => $newData->last_name,

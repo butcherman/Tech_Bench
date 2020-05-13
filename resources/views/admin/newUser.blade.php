@@ -7,10 +7,10 @@
     </div>
 </div>
 <div class="row justify-content-center">
-    <div class="col-md-8 grid-margin stretch-card">
+    <div class="col-lg-8 col-md-10 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <user-form :role_list="{{json_encode($roles)}}"></user-form>
+                <user-form :role_list="{{$roles}}"></user-form>
             </div>
         </div>
     </div>
