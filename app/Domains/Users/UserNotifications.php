@@ -2,10 +2,10 @@
 
 namespace App\Domains\Users;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
-class MarkUserNotifications
+class UserNotifications
 {
     public function markNotificationRead($id)
     {

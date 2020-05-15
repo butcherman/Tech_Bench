@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
+use App\UserSettings;
 
 $factory->define(App\User::class, function(Faker $faker) {
     return [
@@ -14,4 +15,10 @@ $factory->define(App\User::class, function(Faker $faker) {
         'remember_token'   => Str::random(10),
         'password_expires' => null,
     ];
+});
+
+$factory->afterCreating(App\User::class, function($user) {
+    UserSettings::create([
+        'user_id' => $user->user_id,
+    ]);
 });

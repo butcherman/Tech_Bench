@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 
 use App\Domains\Users\GetUserStats;
+use App\Domains\Users\UserNotifications;
 use App\Domains\TechTips\GetTechTipStats;
-use App\Domains\Users\MarkUserNotifications;
 
 class DashboardController extends Controller
 {
@@ -41,7 +41,7 @@ class DashboardController extends Controller
     //  Mark a notification as read
     public function markNotification($id)
     {
-        (new MarkUserNotifications)->markNotificationRead($id);
+        (new UserNotifications)->markNotificationRead($id);
 
         return response()->json(['success' => true]);
     }
@@ -49,7 +49,7 @@ class DashboardController extends Controller
     //  Delte a user notification
     public function delNotification($id)
     {
-        (new MarkUserNotifications)->deleteNotification($id);
+        (new UserNotifications)->deleteNotification($id);
 
         return response()->json(['success' => true]);
     }

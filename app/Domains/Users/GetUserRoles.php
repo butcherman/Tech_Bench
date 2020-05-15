@@ -22,7 +22,6 @@ class GetUserRoles
                 $roles->forget(0);
             }
 
-            //TOTO - Test this and make sure it is working
             if(Auth::user()->role_id > 2)
             {
                 $roles->forget(1);

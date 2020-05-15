@@ -55,7 +55,7 @@ class SetUserDetails
         //  Email the new user
         Notification::send($newUser, new NewUserEmail($newUser, $hash));
 
-        return true;
+        return $userID;
     }
 
     //  Disable a user

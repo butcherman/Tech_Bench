@@ -23,10 +23,21 @@ abstract class TestCase extends BaseTestCase
                 'role_id' => 1
             ]
         );
-        UserSettings::create([
-            'user_id' => $user->user_id,
-        ]);
+        // UserSettings::create([
+        //     'user_id' => $user->user_id,
+        // ]);
 
+        return $user;
+    }
+
+    //  Act as a registered Admin user
+    public function getAdministrator()
+    {
+        $user = factory(User::class)->create(
+            [
+                'role_id' => 2
+            ]
+        );
         return $user;
     }
 
@@ -34,15 +45,11 @@ abstract class TestCase extends BaseTestCase
     public function getTech()
     {
         $user = factory(User::class)->create();
-        UserSettings::create([
-            'user_id' => $user->user_id,
-        ]);
-
         return $user;
     }
 
     //  Create a user missing a specific permission
-    public function userWithoutPermission($permission)
+    public function getUserWithoutPermission($permission)
     {
         $role = factory(UserRoleType::class)->create();
         $permTypes = UserRolePermissionTypes::all();
@@ -62,7 +69,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     //  Create a user that has a specific permission
-    public function userWithPermission($permission)
+    public function getUserWithPermission($permission)
     {
         $role = factory(UserRoleType::class)->create();
         $permTypes = UserRolePermissionTypes::all();
