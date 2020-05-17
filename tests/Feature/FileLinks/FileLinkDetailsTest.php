@@ -453,44 +453,44 @@ class FileLinkDetailsTest extends TestCase
     // }
 
     //  Try to move a file that is for some reason missing from the file link
-    public function test_move_missing_file()
-    {
-        Storage::fake(config('filesystems.paths.links'));
-        Storage::fake(config('filesystems.paths.customers'));
+    // public function test_move_missing_file()
+    // {
+    //     Storage::fake(config('filesystems.paths.links'));
+    //     Storage::fake(config('filesystems.paths.customers'));
 
-        //  Create a new link and assign a customer to it
-        $link = factory(FileLinks::class)->create([
-            'cust_id' => $cust = factory(Customers::class)->create()
-        ]);
-        //  Place a test file for linking
-        $testFile = new File(base_path() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'testFiles' . DIRECTORY_SEPARATOR . 'hi.png');
-        $testFileName = 'testImg.png';
-        $testFilePath = config('filesystems.paths.links') . DIRECTORY_SEPARATOR . $link->link_id . DIRECTORY_SEPARATOR;
-        $newFilePath  = config('filesystems.paths.customers') . DIRECTORY_SEPARATOR . $cust->cust_id . DIRECTORY_SEPARATOR;
+    //     //  Create a new link and assign a customer to it
+    //     $link = factory(FileLinks::class)->create([
+    //         'cust_id' => $cust = factory(Customers::class)->create()
+    //     ]);
+    //     //  Place a test file for linking
+    //     $testFile = new File(base_path() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'testFiles' . DIRECTORY_SEPARATOR . 'hi.png');
+    //     $testFileName = 'testImg.png';
+    //     $testFilePath = config('filesystems.paths.links') . DIRECTORY_SEPARATOR . $link->link_id . DIRECTORY_SEPARATOR;
+    //     $newFilePath  = config('filesystems.paths.customers') . DIRECTORY_SEPARATOR . $cust->cust_id . DIRECTORY_SEPARATOR;
 
-        //  Put the file in the database
-        $fileData = factory(Files::class)->create([
-            'file_name' => $testFileName,
-            'file_link' => $testFilePath
-        ]);
-        factory(FileLinkFiles::class)->create([
-            'link_id'  => $link->link_id,
-            'file_id'  => $fileData->file_id,
-            'user_id'  => null,
-            'added_by' => 'Billy Bob',
-            'upload'   => 1
-        ]);
+    //     //  Put the file in the database
+    //     $fileData = factory(Files::class)->create([
+    //         'file_name' => $testFileName,
+    //         'file_link' => $testFilePath
+    //     ]);
+    //     factory(FileLinkFiles::class)->create([
+    //         'link_id'  => $link->link_id,
+    //         'file_id'  => $fileData->file_id,
+    //         'user_id'  => null,
+    //         'added_by' => 'Billy Bob',
+    //         'upload'   => 1
+    //     ]);
 
-        $data = [
-            'fileID' => $fileData->file_id,
-            'fileName' => $fileData->file_name,
-            'fileType' => CustomerFileTypes::all()->first()->file_type_id
-        ];
+    //     $data = [
+    //         'fileID' => $fileData->file_id,
+    //         'fileName' => $fileData->file_name,
+    //         'fileType' => CustomerFileTypes::all()->first()->file_type_id
+    //     ];
 
-        $response = $this->actingAs($this->tech)->put(route('links.files.update', $link->link_id), $data);
+    //     $response = $this->actingAs($this->tech)->put(route('links.files.update', $link->link_id), $data);
 
-        //  This should not crash app, but it should trigger exception
-        $response->assertSuccessful();
-        $response->assertExactJson(['success' => false]);
-    }
+    //     //  This should not crash app, but it should trigger exception
+    //     $response->assertSuccessful();
+    //     $response->assertExactJson(['success' => false]);
+    // }
 }
