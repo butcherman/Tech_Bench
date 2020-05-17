@@ -58,7 +58,7 @@ class SetTechTips extends FilesDomain
         return $this->createTip($request);
     }
 
-    //  Update an existin gTech Tip
+    //  Update an existing Tech Tip
     public function processEditTip(TechTipEditTipRequest $request, $tipID)
     {
         if(isset($request->file))
