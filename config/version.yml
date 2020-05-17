@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: null
   buildmetadata: null
-  commit: 3d5
+  commit: 3d6
   timestamp:
     year: 2020
     month: 5
     day: 16
-    hour: 17
-    minute: 29
-    second: 45
+    hour: 18
+    minute: 1
+    second: 57
     timezone: America/Los_Angeles
 commit:
   length: 6
