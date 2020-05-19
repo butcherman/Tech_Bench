@@ -36,8 +36,6 @@ class SetFileLinkDetails extends FilesDomain
         return $this->createLink($request);
     }
 
-
-
     //  Update the file link
     public function updateLink(FileLinkUpdateRequest $request, $linkID)
     {

@@ -11,6 +11,7 @@ $factory->define(FileLinkFiles::class, function() {
         'file_id'  => factory(App\Files::class)->create()->file_id,
         'user_id'  => factory(App\User::class)->create()->user_id,
         'added_by' => null,
-        'upload'   => 0
+        'upload'   => 0,
+        'note'     => null,
     ];
 });
