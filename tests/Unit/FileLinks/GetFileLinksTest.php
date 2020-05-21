@@ -2,8 +2,10 @@
 
 namespace Tests\Unit\FileLinks;
 
-use App\Domains\FileLinks\GetFileLinks;
 use Tests\TestCase;
+
+use App\Domains\FileLinks\GetFileLinks;
+
 use App\FileLinks;
 
 class GetFileLinksTest extends TestCase
@@ -28,6 +30,6 @@ class GetFileLinksTest extends TestCase
         $testObj = new GetFileLinks($this->testUser->user_id);
         $data    = $testObj->execute();
 
-        // $this->assertEquals($data->makeHidden(['link_id', 'FileLinkFilesCount'])->toJson(), $this->testLink->toJson());
+        $this->assertEquals($data->makeHidden(['file_link_files_count', 'link_id', 'created_at', 'updated_at'])->toJson(), $this->testLink->makeHidden(['link_id', 'created_at', 'updated_at'])->toJson());
     }
 }

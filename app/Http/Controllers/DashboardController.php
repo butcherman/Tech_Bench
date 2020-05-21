@@ -53,10 +53,4 @@ class DashboardController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-    //  About page
-    public function about()
-    {
-        return view('about');
-    }
 }

@@ -34,7 +34,8 @@ Route::post('/account/change-password', 'AccountController@submitPassword')->nam
 /*
 *   Basic Logged In Routes
 */
-Route::get('about',                  'DashboardController@about')           ->name('about');
+// Route::get('about',                  'DashboardController@about')           ->name('about');
+Route::view('about',                 'about')                               ->name('about');
 Route::get('dashboard',              'DashboardController@index')           ->name('dashboard');
 Route::get('notifications',          'DashboardController@getNotifications')->name('getNotifications');
 Route::get('mark-notification/{id}', 'DashboardController@markNotification')->name('markNotification');

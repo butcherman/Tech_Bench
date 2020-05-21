@@ -30,6 +30,7 @@ class GetFileLinkFilesTest extends TestCase
     {
         $data = $this->testObj->execute($this->testLink->link_id);
         $allFiles = $this->testFiles->merge($this->guestFiles);
+
         $this->assertEquals($allFiles->toArray(), $data->makeHidden(['Files', 'User'])->toArray());
     }
 

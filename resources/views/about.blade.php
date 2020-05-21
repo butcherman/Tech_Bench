@@ -13,9 +13,9 @@
                 <img src="{{asset('/img/TechBenchLogo.png')}}" class="mx-auto d-block img-fluid" alt="Tech Bench"/>
                 <p class="text-center">
                     Tech Bench &copy; {{config('app.copyright')}}
-                    <span class="d-inline-block">- All Rights Reserved</span>
+                    <span class="d-inline-block">Butcherman - All Rights Reserved</span>
                 </p>
-                <p class="text-center">Version - @version('full')</p>
+                <p class="text-center">@version('full')</p>
                 <p class="text-center">Build Date - @version('timestamp-simple')</p>
                 <p class="text-center">
                     Looking for guidance?

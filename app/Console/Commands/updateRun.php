@@ -204,6 +204,7 @@ class updateRun extends Command
         //  Update the cache
         $this->call('config:cache');
         $this->call('route:cache');
+        $this->call('view:cache');
 
         //  Put the app back in working order
         $this->call('up');

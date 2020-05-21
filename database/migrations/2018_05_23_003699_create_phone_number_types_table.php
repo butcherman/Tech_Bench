@@ -21,22 +21,16 @@ class CreatePhoneNumberTypesTable extends Migration
             $table->timestamps();
         });
 
-        //  Create Default Data
-        PhoneNumberTypes::create([
-            'phone_type_id' => 1,
-            'description'   => 'Home',
-            'icon_class'    => 'ti-home'
-        ]);
-        PhoneNumberTypes::create([
-            'phone_type_id' => 2,
-            'description'   => 'Work',
-            'icon_class'    => 'ti-briefcase'
-        ]);
-        PhoneNumberTypes::create([
-            'phone_type_id' => 3,
-            'description'   => 'Mobile',
-            'icon_class'    => 'ti-mobile'
-        ]);
+        $defaultData = [
+            ['phone_type_id' => 1, 'description'   => 'Home',   'icon_class'    => 'fas fa-home',],
+            ['phone_type_id' => 2, 'description'   => 'Work',   'icon_class'    => 'fas fa-briefcase',],
+            ['phone_type_id' => 3, 'description'   => 'Mobile', 'icon_class'    => 'fas fa-mobile-alt',],
+        ];
+
+        foreach($defaultData as $data)
+        {
+            PhoneNumberTypes::create($data);
+        }
     }
 
     /**

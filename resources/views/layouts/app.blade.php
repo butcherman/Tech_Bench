@@ -41,7 +41,7 @@
 -->
                     <li class="nav-item dropdown mr-1">
                         <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="{{route('about')}}" title="About {{config('app.name')}}" v-b-tooltip.hover>
-                            <i class="far fa-question-circle nx-0"></i>
+                            <i class="fas fa-info-circle mx-0"></i>
                         </a>
                     </li>
                     <li class="nav-item nav-profile dropdown">

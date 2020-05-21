@@ -40,7 +40,7 @@ class GetCustomerContacts
         $contactDetails = collect((object) [
             'firstName'   => $contactName[0],
             'lastName'    => isset($contactName[1]) ? $contactName[1] : '',
-            'email'       => $contact->eamil,
+            'email'       => $contact->eamil,   //  FIXME:  is this broken???
             'additional'  => '',
             'prefix'      => '',
             'suffix'      => '',
