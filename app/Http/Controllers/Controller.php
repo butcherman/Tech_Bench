@@ -13,9 +13,4 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function noScript()
-    {
-        Log::notice('Visitor at '.Request::ip().' tried to visit '.config('app.name').' with Javascript disabled.');
-        return view('err.noscript');
-    }
 }

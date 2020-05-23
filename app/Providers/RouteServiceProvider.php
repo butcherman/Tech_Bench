@@ -15,6 +15,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected $namespace = 'App\Http\Controllers';
+    public const HOME = '/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -33,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
+        // $this->mapApiRoutes();
 
         $this->mapWebRoutes();
 

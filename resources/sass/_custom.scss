@@ -1,5 +1,6 @@
-// Overrides for template and bootstrap styles
-
+/*
+*   Overrides for template and bootstrap styles
+*/
 .card-body-icon {
     position: absolute;
     z-index: 0;
@@ -7,4 +8,24 @@
     right: -10px !important;
     font-size: 5rem;
     transform: rotate(15deg);
+}
+
+/*
+*   Custom styles used throughout app
+*/
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.was-validated {
+    .no-validate {
+        input, label {
+            color: #000000 !important;
+        }
+    }
 }

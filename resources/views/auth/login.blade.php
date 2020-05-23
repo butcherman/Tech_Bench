@@ -11,17 +11,50 @@
                 <img src="{{config('app.logo')}}" alt="Company Logo" id="header-logo" />
             </div>
             <div class="col-md-6">
-                {!! Form::open(['route' => 'login', 'id' => 'user-login-form']) !!}
-                    {{ Form::bsText('username', null, null, ['placeholder' => 'Username', 'autofocus']) }}
-                    {{ Form::bsPassword('password', null, null, ['placeholder' => 'Password']) }}
-                    {{ Form::bsCheckbox('remember', 'Remember Me') }}
-                    {{ Form::bsSubmit('Login') }}
+                <noscript>
+                    <h4 class="text-center">Javascript is Disabled</h4>
+                    <p class="text-center">
+                        {{config('app.name')}} requires Javascript to work properly.
+                    </p>
+                    <p class="text-center">
+                        Please enable Javascript and reload page
+                    </p>
+                </noscript>
+                @error('username')
+                    <h6 class="text-danger text-center">Username or Password Incorrect</h6>
+                @enderror
+                <b-form method="post" action="/login">
+                        @csrf
+                        <b-form-group
+                            label="Username:"
+                            label-for="username"
+                        >
+                            <b-form-input
+                                id="username"
+                                name="username"
+                                type="text"
+                                required
+                                placeholder="Username"></b-form-input>
+                        </b-form-group>
+                        <b-form-group
+                            label="Password:"
+                            label-for="password"
+                        >
+                            <b-form-input
+                                id="password"
+                                name="password"
+                                type="password"
+                                required
+                                placeholder="Password"></b-form-input>
+                        </b-form-group>
+                        <b-checkbox class="no-validate">Remember Me</b-checkbox>
+                    <form-submit button_text="Login" ></form-submit>
                     <div class="form-group row justify-content-center mb-0">
                         <div class="col-md-8 text-center">
-                            <a class="btn btn-link" href="{{ route('password.request') }}">Forgot Your Password?</a>
+                            <a class="btn btn-link text-muted" href="{{ route('password.request') }}">Forgot Your Password?</a>
                         </div>
                     </div>
-                {!! Form::close() !!}
+                </b-form>
             </div>
         </div>
     </div>

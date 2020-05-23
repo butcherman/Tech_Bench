@@ -11,17 +11,29 @@
                 <img src="{{config('app.logo')}}" alt="Company Logo" id="header-logo" />
             </div>
             <div class="col-md-6">
-               @if (session('status'))
-                    <div class="alert alert-success">
-                        {{ session('status') }}
+                @if (session('status'))
+                    <div class="alert alert-success" role="alert">
+                        Check your email for additional instructions
                     </div>
-                @else
-                    <p>Enter your email address for instructions for accessing your account.</p>
-                    {!! Form::open(['route' => 'password.email', 'id' => 'password-reset-form']) !!}
-                        {{Form::bsEmail('email', null, null, ['placeholder' => 'Enter Your Email Address', 'autofocus'])}}
-                        {{Form::bsSubmit('Send Password Reset Instructions')}}
-                    {!! Form::close() !!}
                 @endif
+                <h6 class="text-center">Enter your email address for instructions for accessing your account.</h6>
+                <form method="POST" action="{{ route('password.email') }}">
+                    @csrf
+                    <div class="form-group">
+                        <label for="email">{{ __('E-Mail Address') }}</label>
+                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Enter Email Address">
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group row mb-0">
+                        <button type="submit" class="btn btn-primary mx-auto">
+                            {{ __('Send Password Reset Link') }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

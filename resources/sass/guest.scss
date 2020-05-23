@@ -1,4 +1,5 @@
 @import '~bootstrap/scss/bootstrap';
+@import 'custom';
 @import 'fileDrag';
 @import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
 @import '~@fortawesome/fontawesome-free/scss/solid.scss';
@@ -7,11 +8,6 @@
 @import '~vue-good-table/dist/vue-good-table.css';
 
 $fa-font-path: '../fonts/font-awesome';
-
-.center {
-    margin-left: auto;
-    margin-right: auto;
-}
 
 body {
 	background: #090321;
@@ -44,30 +40,13 @@ body {
         color: #000000;
         min-height: 300px;
         form {
-            .form-group>label {
-                display: none;
+            .form-group label {
+                display: none !important;
             }
-            .form-group>input {
+            .form-group input {
                 border: none;
                 border-bottom: 1px solid #ced4da;
             }
         }
     }
-}
-
-.invalid-feedback {
-    display: inline;
-}
-
-.card {
-    color: #000000;
-    margin: 0.5em;
-}
-
-.pointer {
-    cursor: pointer;
-}
-
-.modal-content {
-    color: #000000;
 }

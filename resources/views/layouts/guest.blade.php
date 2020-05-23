@@ -9,7 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Tech Bench') }}</title>
-    <noscript><meta http-equiv="refresh" content="0; url={{route('noscript')}}" /></noscript>
     <!-- Scripts -->
     <script>
         window.techBench = {
@@ -17,8 +16,7 @@
             'csrfToken': '{{csrf_token()}}'
         };
     </script>
-    <script src="{{ mix('js/app.js') }}"></script>
-    {{-- TODO: Make js just for guest layout --}}
+    <script src="{{ mix('js/guest.js') }}"></script>
 
     <!-- Styles -->
     <link href="{{ mix('css/guest.css') }}" rel="stylesheet">
