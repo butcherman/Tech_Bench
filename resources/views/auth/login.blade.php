@@ -47,7 +47,7 @@
                                 required
                                 placeholder="Password"></b-form-input>
                         </b-form-group>
-                        <b-checkbox class="no-validate">Remember Me</b-checkbox>
+                        <b-checkbox class="no-validate" name="remember">Remember Me</b-checkbox>
                     <form-submit button_text="Login" ></form-submit>
                     <div class="form-group row justify-content-center mb-0">
                         <div class="col-md-8 text-center">
