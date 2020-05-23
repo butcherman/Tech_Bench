@@ -29,7 +29,7 @@ class CheckPasswordExpire
                 {
                     Log::notice('User '.Auth::user()->full_name.' is being forced to change their password.');
                     $request->session()->flash('change_password', 'change_password');
-                    return redirect()->route('changePassword');
+                    return redirect()->route('change_password');
                 }
             }
         }

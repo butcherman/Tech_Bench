@@ -28,6 +28,9 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    protected $maxAttempts = 5;
+    protected $decayMinutes = 10;
+
     /**
      * Create a new controller instance.
      *
@@ -36,8 +39,6 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->maxAttempts  = 5;
-        $this->decayMinutes = 10;
     }
 
     //  Override username function to use the username instead of email

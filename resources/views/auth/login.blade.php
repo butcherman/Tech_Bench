@@ -21,7 +21,7 @@
                     </p>
                 </noscript>
                 @error('username')
-                    <h6 class="text-danger text-center">Username or Password Incorrect</h6>
+                    <h6 class="text-danger text-center">{{$message}}</h6>
                 @enderror
                 <b-form method="post" action="/login">
                         @csrf

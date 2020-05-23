@@ -11,7 +11,7 @@ Auth::routes(['register' => false]);
 */
 Route::middleware('guest')->group(function()
 {
-    Route::view('/', 'auth.login');
+    Route::view('/', 'auth.login')->name('index');
 });
 
 
@@ -33,9 +33,9 @@ Route::get('/logout', function()
 Route::get('/change-password', function()
 {
     return response('change password');
-})->name('changePassword');
+})->name('change_password');
 
 Route::get('/dashboard', function()
 {
     return response('worked');
-});
+})->middleware('auth')->name('dashboard');

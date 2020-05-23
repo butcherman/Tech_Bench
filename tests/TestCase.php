@@ -3,7 +3,6 @@
 namespace Tests;
 
 use App\User;
-use App\UserSettings;
 use App\UserRoleType;
 use App\UserRolePermissions;
 use App\UserRolePermissionTypes;
@@ -23,9 +22,6 @@ abstract class TestCase extends BaseTestCase
                 'role_id' => 1
             ]
         );
-        // UserSettings::create([
-        //     'user_id' => $user->user_id,
-        // ]);
 
         return $user;
     }
