@@ -1,5 +1,6 @@
 <?php
 
+use App\TechTipTypes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,18 +20,12 @@ class CreateTechTipTypesTable extends Migration
             $table->timestamps();
         });
 
-        $tipTypeArr = [
-            ['id' => 1, 'description' => 'Tech Tip'],
-            ['id' => 2, 'description' => 'Documentation'],
-            ['id' => 3, 'description' => 'Software'],
+        $defaultData = [
+            ['tip_type_id' => 1, 'description' => 'Tech Tip',      'created_at' => NOW(), 'updated_at' => NOW()],
+            ['tip_type_id' => 2, 'description' => 'Documentation', 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['tip_type_id' => 3, 'description' => 'Software',      'created_at' => NOW(), 'updated_at' => NOW()],
         ];
-
-        foreach($tipTypeArr as $type)
-        {
-            DB::insert('INSERT INTO `tech_tip_types` (`tip_type_id`, `description`, `created_at`, `updated_at`)
-                        VALUES (?, ?, ?, ?)',
-                        [$type['id'], $type['description'], NOW(), NOW()]);
-        }
+        TechTipTypes::insert($defaultData);
     }
 
     /**

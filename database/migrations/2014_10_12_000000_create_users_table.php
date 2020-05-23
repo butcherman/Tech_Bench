@@ -29,12 +29,12 @@ class CreateUsersTable extends Migration
 
         //  Create the initial default user
         User::create([
-            'user_id'      => 1,
-            'username'     => 'admin',
-            'first_name'   => 'System',
-            'last_name'    => 'Administrator',
-            'email'        => 'admin@em.com',
-            'password'     => bcrypt('password'),
+            'user_id'          => 1,
+            'username'         => 'admin',
+            'first_name'       => 'System',
+            'last_name'        => 'Administrator',
+            'email'            => 'admin@em.com',
+            'password'         => bcrypt('password'),
             'password_expires' => '2000-01-01 00:00:00',
         ]);
     }

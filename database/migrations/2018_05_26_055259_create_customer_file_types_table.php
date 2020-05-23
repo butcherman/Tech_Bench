@@ -21,18 +21,13 @@ class CreateCustomerFileTypesTable extends Migration
         });
 
         $defaultData = [
-            ['file_type_id' => 1, 'description' => 'Equipment Backup'],
-            ['file_type_id' => 2, 'description' => 'Installation Packet'],
-            ['file_type_id' => 3, 'description' => 'License'],
-            ['file_type_id' => 4, 'description' => 'Site Map'],
-            ['file_type_id' => 5, 'description' => 'Other'],
+            ['file_type_id' => 1, 'description' => 'Equipment Backup',    'created_at' => NOW(), 'updated_at' => NOW()],
+            ['file_type_id' => 2, 'description' => 'Installation Packet', 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['file_type_id' => 3, 'description' => 'License',             'created_at' => NOW(), 'updated_at' => NOW()],
+            ['file_type_id' => 4, 'description' => 'Site Map',            'created_at' => NOW(), 'updated_at' => NOW()],
+            ['file_type_id' => 5, 'description' => 'Other',               'created_at' => NOW(), 'updated_at' => NOW()],
         ];
-
-        //  Create default data
-        foreach($defaultData as $data)
-        {
-            CustomerFileTypes::create($data);
-        }
+        CustomerFileTypes::insert($defaultData);
     }
 
     /**
