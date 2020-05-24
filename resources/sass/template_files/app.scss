@@ -1,0 +1,34 @@
+@import 'reset';
+@import 'variables';
+
+/*
+*   Bootstrap Library
+*/
+@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
+
+/*
+*   Fonts
+*/
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+
+/*
+*   Style Variables
+*/
+$default-font-size: .875rem;
+$header-height: 70px;
+$navbar-width: 237px;
+
+/*
+*   Section Styles
+*/
+@import 'typography';
+@import "body";
+@import "header";
+
+//  Additional Styles
+// @import 'custom';
+// @import 'fileDrag';
+

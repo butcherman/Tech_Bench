@@ -30,12 +30,5 @@ Route::get('/logout', function()
 
 });
 
-Route::get('/change-password', function()
-{
-    return response('change password');
-})->name('change_password');
 
-Route::get('/dashboard', function()
-{
-    return response('worked');
-})->middleware('auth')->name('dashboard');
+

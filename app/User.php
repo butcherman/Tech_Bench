@@ -13,7 +13,7 @@ class User extends Authenticatable
 
     protected $primaryKey = 'user_id';
     protected $fillable   = ['role_id', 'username', 'first_name', 'last_name', 'email', 'password', 'password_expires', 'active'];
-    protected $appends    = ['full_name'];
+    protected $appends    = ['full_name', 'initials'];
     protected $hidden     = ['role_id', 'password', 'remember_token', 'is_installer', 'deleted_at', 'created_at', 'password_expires', 'updated_at', 'user_id', 'username'];
     protected $casts      = [
         'created_at' => 'datetime:M d, Y',
@@ -24,6 +24,11 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getInitialsAttribute()
+    {
+        return "{$this->first_name[0]} {$this->last_name[0]}";
     }
 
     public function UserLogins()

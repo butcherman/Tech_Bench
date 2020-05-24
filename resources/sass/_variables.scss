@@ -1,19 +1,16 @@
-// Body
-$body-bg: #f8fafc;
+//  Font Awesome
+// $fa-font-path: '../fonts/font-awesome';
 
-// Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+$grid-breakpoints: (
+    xs: 0,
+    sm: 600px,
+    md: 800px,
+    lg: 1000px,
+    xl: 1280px
+);
 
-// Colors
-$blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66d9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
+$brk-xs: map-get($grid-breakpoints, xs);
+$brk-sm: map-get($grid-breakpoints, sm);
+$brk-md: map-get($grid-breakpoints, md);
+$brk-lg: map-get($grid-breakpoints, lg);
+$brk-xl: map-get($grid-breakpoints, xl);
