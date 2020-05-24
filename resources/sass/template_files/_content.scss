@@ -1,0 +1,19 @@
+/*
+*   Application Primary Content Styles
+*/
+.content {
+    background-color: $content-background;
+    padding: 25px;
+    position: absolute;
+    top: $header-height;
+    z-index: 1;
+
+    @media(min-width: $brk-md) {
+
+        left: $navbar-width;
+        width: calc(100% - #{$navbar-width});
+    }
+    @media(max-width: $brk-md) {
+        width: 100%;
+    }
+}

@@ -2,9 +2,12 @@
 *   Header Styles
 */
 .top-navbar {
+    background-color: #ffffff;
     height: $header-height;
     margin: 0;
     padding: 0;
+    // z-index: 11;
+    width: 100%;
     .navbar-logo-wrapper {
         height: 100%;
         @media (min-width: $brk-md) {
@@ -18,7 +21,8 @@
         }
     }
     .navbar-data {
-        padding-right: 5px;
         font-size: 1.2rem;
+        margin-right: 10px;
+        padding-right: 5px;
     }
 }

@@ -1912,27 +1912,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {//
-  },
   data: function data() {
-    return {//
+    return {
+      processing: false
     };
   },
-  created: function created() {//
+  computed: {
+    iconClass: function iconClass() {
+      return this.processing ? 'spinner-grow text-success' : 'fas fa-sign-out-alt pointer';
+    }
   },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
-  methods: {//
+  methods: {
+    logout: function logout() {
+      var _this = this;
+
+      this.processing = true;
+      axios.post(this.route('logout'), this.form).then(function (res) {
+        location.href = _this.route('logout_complete');
+      })["catch"](function (error) {
+        return _this.bvModal.msgBoxOk('Something bad happened.  Please try again later.');
+      });
+    }
   }
 });
 
@@ -53737,11 +53738,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("b-form", { attrs: { method: "POST", action: "/logout" } }, [
-    _c("button", { attrs: { type: "submit" } }, [
-      _c("i", { staticClass: "fas fa-sign-out-alt" })
-    ])
-  ])
+  return _c("i", {
+    directives: [
+      {
+        name: "b-tooltip",
+        rawName: "v-b-tooltip.hover",
+        modifiers: { hover: true }
+      }
+    ],
+    class: _vm.iconClass,
+    attrs: { title: "logout" },
+    on: { click: _vm.logout }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -65895,11 +65903,10 @@ __webpack_require__.r(__webpack_exports__);
 /*
 *   Non Vue Javascript for Template
 */
-// window.expandNav = function () {
-//     var el = document.getElementById('sidebar');
-//     el.classList.toggle('active');
-// }
-// window.expandProfile = function () {
+window.expandNav = function () {
+  var el = document.getElementById('side-nav');
+  el.classList.toggle('active');
+}; // window.expandProfile = function () {
 //     var el = document.getElementById('profileDropdownDiv');
 //     el.classList.toggle('show');
 //     return false;
@@ -65908,6 +65915,8 @@ __webpack_require__.r(__webpack_exports__);
 /*
 *   File chunk size for file uploads
 */
+
+
 window.chunkSize = 500000;
 /*
 *   File Imports

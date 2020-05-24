@@ -12,6 +12,7 @@
     <title>{{config('app.name', 'Tech Bench')}}</title>
 
     <!-- Scripts -->
+    @routes
     <script>
         window.techBench = {
             'maxUpload': '{{config('filesystems.paths.max_size')}}',
@@ -26,31 +27,87 @@
 
 <body>
     <div class="container-scroller" id="app">
-        <nav class="navbar top-navbar">
+        <nav class="navbar top-navbar fixed-top">
             <div class="navbar-logo-wrapper d-flex">
-                <a class="navbar-logo mr-5" href="{{route('dashboard')}}"><img src="{{config('app.logo')}}" class="mr-2" alt="Tech Bench"/></a>
+                <a class="navbar-logo" href="{{route('dashboard')}}"><img src="{{config('app.logo')}}" class="mr-2" alt="Tech Bench"/></a>
             </div>
             <div class="navbar-brand d-none d-md-flex">
                 <h2>{{config('app.name', 'Tech Bench')}}</h2>
             </div>
             <div class="navbar-data">
-                <b-button href="#" variant="light" size="sm" pill title="Help" v-b-tooltip.hover>
+                <a href="#" class="text-muted" title="Help" v-b-tooltip.hover>
                     <i class="far fa-question-circle"></i>
-                </b-button>
-                <b-button href="#" variant="light" size="sm" pill title="About {{config('app.name')}}" v-b-tooltip.hover>
+                </a>
+                <a href="#" class="text-muted" title="About {{config('app.name')}}" v-b-tooltip.hover>
                     <i class="fas fa-info-circle"></i>
-                </b-button>
-                <b-form method="POST" action="/logout" class="d-inline">
-                    @csrf
-                    <b-button type="submit" pill size="sm" title="Log Off" v-b-tooltip.hover variant="light">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </b-button>
-                </b-form>
+                </a>
+                <logout></logout>
+                <button class="navbar-toggler d-lg-none" type="button" onclick="expandNav()">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <a href="#" title="Settings" v-b-tooltip.hover>
                     <b-avatar variant="warning" text="{{Auth::user()->initials}}"></b-avatar>
                 </a>
             </div>
         </nav>
+        <div class="container-fluid page-body-wrapper">
+            <nav class="sidebar sidebar-nav" id="side-nav">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('dashboard')}}">
+                            <i class="fas fa-tachometer-alt menu-icon"></i>
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user-shield menu-icon"></i>
+                            <span class="menu-title">Administration</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-book"></i>
+                            <span class="menu-title">Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-link menu-icon"></i>
+                            <span class="menu-title">File Links</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user-tie menu-icon"></i>
+                            <span class="menu-title">Customers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-tools menu-icon"></i>
+                            <span class="menu-title">Tech Tips</span>
+                        </a>
+                    </li>
+                    @foreach($tb_modules as $mod)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('index').'/'.$mod->getLowerName()}}">
+                            {{-- <i class="fas fa-asterisk menu-icon"></i> --}}
+                            <i class="{{config($mod->getLowerName().'.icon')}} menu-icon"></i>
+                            <span class="menu-title">{{preg_replace('/(.*?[a-z]{1})([A-Z]{1}.*?)/', '${1} ${2}', $mod->getName())}}</span>
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
+            </nav>
+            <div class="content">
+                @for($i=0; $i < 100; $i++)
+                <p>
+                    You are at number {{$i}}
+                </p>
+                @endfor
+            </div>
+        </div>
     </div>
 </body>
 </html>

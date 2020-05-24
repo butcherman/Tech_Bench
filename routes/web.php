@@ -1,6 +1,4 @@
 <?php
-
-use Illuminate\Support\Facades\Auth;
 /*
 *   Built in Authorization Routes
 */
@@ -12,23 +10,5 @@ Auth::routes(['register' => false]);
 Route::middleware('guest')->group(function()
 {
     Route::view('/', 'auth.login')->name('index');
+    Route::view('logout', 'auth.logout')->name('logout_complete');
 });
-
-
-
-
-
-
-
-
-
-
-Route::get('/logout', function()
-{
-    Auth::logout();
-
-
-});
-
-
-

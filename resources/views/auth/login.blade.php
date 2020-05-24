@@ -34,6 +34,7 @@
                                 name="username"
                                 type="text"
                                 required
+                                autofocus
                                 placeholder="Username"></b-form-input>
                         </b-form-group>
                         <b-form-group

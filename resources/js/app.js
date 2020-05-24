@@ -1,10 +1,10 @@
 /*
 *   Non Vue Javascript for Template
 */
-// window.expandNav = function () {
-//     var el = document.getElementById('sidebar');
-//     el.classList.toggle('active');
-// }
+window.expandNav = function () {
+    var el = document.getElementById('side-nav');
+    el.classList.toggle('active');
+}
 
 // window.expandProfile = function () {
 //     var el = document.getElementById('profileDropdownDiv');
