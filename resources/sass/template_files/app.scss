@@ -18,11 +18,13 @@
 *   Theme Style Variables
 */
 $default-font-size: .875rem;
+$soft-border: 1px solid rgba(0,0,0,.06);
 $header-height: 70px;
 $navbar-width: 237px;
 $navbar-background: #dddce1;
 $navbar-link-color: #5f5f5f;
 $content-background: #dddce1;
+$footer-background: #dddce1;
 
 /*
 *   Section Styles
@@ -32,6 +34,7 @@ $content-background: #dddce1;
 @import "header";
 @import "navbar";
 @import "content";
+@import "footer";
 
 //  Additional Styles
 // @import 'custom';

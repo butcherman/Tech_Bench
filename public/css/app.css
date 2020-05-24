@@ -2952,7 +2952,7 @@ input:focus {
   --dark: #343a40;
   --breakpoint-xs: 0;
   --breakpoint-sm: 600px;
-  --breakpoint-md: 800px;
+  --breakpoint-md: 1000px;
   --breakpoint-lg: 1200px;
   --breakpoint-xl: 1280px;
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -3507,7 +3507,7 @@ pre code {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .container {
     max-width: 720px;
   }
@@ -3544,7 +3544,7 @@ pre code {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .container,
   .container-sm,
   .container-md {
@@ -4085,7 +4085,7 @@ pre code {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .col-md {
     flex-basis: 0;
     flex-grow: 1;
@@ -5021,7 +5021,7 @@ pre code {
   }
 }
 
-@media (max-width: 799.98px) {
+@media (max-width: 999.98px) {
   .table-responsive-md {
     display: block;
     width: 100%;
@@ -6398,7 +6398,7 @@ input[type="button"].btn-block {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .dropdown-menu-md-left {
     right: auto;
     left: 0;
@@ -7594,7 +7594,7 @@ input[type="button"].btn-block {
   }
 }
 
-@media (max-width: 799.98px) {
+@media (max-width: 999.98px) {
   .navbar-expand-md > .container,
   .navbar-expand-md > .container-fluid,
   .navbar-expand-md > .container-sm,
@@ -7606,7 +7606,7 @@ input[type="button"].btn-block {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .navbar-expand-md {
     flex-flow: row nowrap;
     justify-content: flex-start;
@@ -8790,7 +8790,7 @@ a.badge-dark.focus {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .list-group-horizontal-md {
     flex-direction: row;
   }
@@ -10202,7 +10202,7 @@ button.bg-dark:focus {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .d-md-none {
     display: none !important;
   }
@@ -10671,7 +10671,7 @@ button.bg-dark:focus {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .flex-md-row {
     flex-direction: row !important;
   }
@@ -11111,7 +11111,7 @@ button.bg-dark:focus {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .float-md-left {
     float: left !important;
   }
@@ -12196,7 +12196,7 @@ button.bg-dark:focus {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .m-md-0 {
     margin: 0 !important;
   }
@@ -13558,7 +13558,7 @@ button.bg-dark:focus {
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .text-md-left {
     text-align: left !important;
   }
@@ -20037,6 +20037,10 @@ address p {
   }
 }
 
+/*
+*   Application Body
+*/
+
 .container-scroller {
   overflow: hidden;
   margin: 0;
@@ -20064,7 +20068,7 @@ address p {
   height: 100%;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
   .top-navbar .navbar-logo-wrapper {
     width: 237px;
   }
@@ -20133,27 +20137,83 @@ address p {
 }
 
 /*
-*   Application Primary Content Styles
+*   Content Box Styles
 */
 
 .content {
   background-color: #dddce1;
-  padding: 25px;
   position: absolute;
   top: 70px;
   z-index: 1;
+  padding: 0;
+  margin: 0;
+  min-height: calc(100vh - 70px);
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1200px) {
   .content {
     left: 237px;
     width: calc(100% - 237px);
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
   .content {
+    left: 0;
     width: 100%;
+  }
+}
+
+.content .content-wrapper {
+  padding: 25px;
+  margin-bottom: 75px;
+}
+
+/*
+*   Application Primary Content Styles
+*/
+
+.grid-margin {
+  margin-bottom: 1.875rem;
+  flex-grow: 1;
+}
+
+.card {
+  height: 100%;
+  box-shadow: 4px 8px 9px -2px #c7c5d8;
+}
+
+.card .card-title {
+  color: #787878;
+  font-size: .875rem;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/*
+*   Footer Styles
+*/
+
+.footer {
+  background-color: #dddce1;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+}
+
+@media (min-width: 1000px) {
+  .footer {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .footer {
+    padding: 10px;
   }
 }
 

@@ -101,11 +101,15 @@
                 </ul>
             </nav>
             <div class="content">
-                @for($i=0; $i < 100; $i++)
-                <p>
-                    You are at number {{$i}}
-                </p>
-                @endfor
+                <div class="content-wrapper">
+                    @yield('content')
+                </div>
+                <footer class=" footer page-footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; {{config('app.copyright')}}<span class="d-none d-md-inline"> - All rights reserved.</span></span>
+                        <span class="text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center">@version('version-only') @version('prerelease')</span>
+                    </div>
+                </footer>
             </div>
         </div>
     </div>

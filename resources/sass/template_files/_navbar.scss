@@ -3,7 +3,7 @@
 */
 .sidebar {
     background: $navbar-background;
-    border-right: 1px solid rgba(0,0,0,.06);
+    border-right: $soft-border;
     font-weight: 500;
     height: calc(100vh - #{$header-height});
     margin: 0;
