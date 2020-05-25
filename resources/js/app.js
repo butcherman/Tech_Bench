@@ -92,7 +92,11 @@ Vue.mixin({
 // Vue.component('file-upload',     require('./components/FileUpload.vue').default);
 // Vue.component('form-submit',     require('./components/FormSubmit.vue').default);
 // Vue.component('bookmark',        require('./components/Bookmark.vue').default);
+/*
+*   Individual Page Components
+*/
 Vue.component('logout', require('./components/auth/logout.vue').default);
+Vue.component('dashboard-nofifications', require('./components/auth/dashboardNotifications.vue').default);
 
 
 /*

@@ -124,12 +124,12 @@ class LoginControllerTest extends TestCase
     }
 
     //  Test user is able to logout
-    // public function test_logout()
-    // {
-    //     $user = $this->getTech();
+    public function test_logout()
+    {
+        $user = $this->getTech();
 
-    //     $response = $this->actingAs($user)->get(route('logout'));
-    //     $response->assertRedirect('/');
-    //     $this->assertGuest();
-    // }
+        $response = $this->actingAs($user)->post(route('logout', ['logout' => true]));
+        $response->assertRedirect('/');
+        $this->assertGuest();
+    }
 }

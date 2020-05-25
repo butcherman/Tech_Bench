@@ -18,6 +18,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Notifications</h4>
+                <dashboard-nofifications></dashboard-nofifications>
             </div>
         </div>
     </div>
@@ -27,9 +28,9 @@
                 <div class="card">
                     <div class="card-body">
                         <p class="card-title">Tech Tips:</p>
-                        <h3>zz New Tips</h3>
+                        <h3>{{$tips30}} New Tips</h3>
                         <p class="text-small">(Last 30 Days)</p>
-                        <h4>zz Total Tips</h4>
+                        <h4>{{$tipsAll}} Total Tips</h4>
                     </div>
                 </div>
             </div>
@@ -37,8 +38,8 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <p class="card-title">File Links:</p>
-                        <h3>zz Active File Links</h3>
-                        <h4>zz Total File Links</h4>
+                        <h3>{{$linksActive}} Active File Links</h3>
+                        <h4>{{$linksTotal}} Total File Links</h4>
                     </div>
                 </div>
             </div>
@@ -49,9 +50,20 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Customer Favorites</h4>
+                <h4 class="card-title">Customer Favorites:</h4>
                 <div class="row">
-
+                    @foreach($custFavs as $fav)
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="card text-white o-hidden h-100 bookmark-card overflow-hidden">
+                            <a href="{{route('customer.details', [$fav->cust_id, urlencode($fav->name)])}}" class="card-body text-white">
+                                <div class="card-body-icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="mr-5">{{$fav->name}}</div>
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -63,7 +75,18 @@
             <div class="card-body">
                 <h4 class="card-title">Tech Tip Favorites</h4>
                 <div class="row">
-
+                    @foreach($tipFavs as $tip)
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="card text-white o-hidden h-100 bookmark-card overflow-hidden">
+                            <a href="{{route('tip.details', [$tip->tip_id, urlencode($tip->subject)])}}" class="card-body text-white">
+                                <div class="card-body-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div class="mr-5">{{$tip->subject}}</div>
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
