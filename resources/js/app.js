@@ -74,6 +74,7 @@ Vue.use(BootstrapVue);
 Vue.component('atom-spinner', AtomSpinner);
 // Vue.component('hollow-dots-spinner', HollowDotsSpinner);
 
+const eventHub = new Vue();
 Vue.mixin({
     methods: {
         route: (name, params, absolute) => route(name, params, absolute, Ziggy),
@@ -81,6 +82,7 @@ Vue.mixin({
     data: function () {
         return {
             dashify: require('dashify'),
+            eventHub: eventHub,
         }
     }
 });
@@ -90,13 +92,23 @@ Vue.mixin({
 */
 // Vue.component('go-back',         require('./components/GoBack.vue').default);
 // Vue.component('file-upload',     require('./components/FileUpload.vue').default);
-// Vue.component('form-submit',     require('./components/FormSubmit.vue').default);
+Vue.component('form-submit',     require('./components/formSubmit.vue').default);
 // Vue.component('bookmark',        require('./components/Bookmark.vue').default);
+Vue.component('axios-error', require('./components/errorMessage.vue').default);
+
 /*
 *   Individual Page Components
 */
 Vue.component('logout', require('./components/auth/logout.vue').default);
 Vue.component('dashboard-nofifications', require('./components/auth/dashboardNotifications.vue').default);
+
+/*
+*   User Components
+*/
+Vue.component('user-account', require('./components/auth/accountSettings.vue').default);
+Vue.component('user-settings', require('./components/auth/userSettings.vue').default);
+Vue.component('change-password', require('./components/auth/changePassword.vue').default);
+
 
 
 /*

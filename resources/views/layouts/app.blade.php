@@ -35,17 +35,17 @@
                 <h2>{{config('app.name', 'Tech Bench')}}</h2>
             </div>
             <div class="navbar-data">
-                <a href="#" class="text-muted" title="Help" v-b-tooltip.hover>
+                {{-- <a href="#" class="text-muted" title="Help" v-b-tooltip.hover>
                     <i class="far fa-question-circle"></i>
-                </a>
-                <a href="#" class="text-muted" title="About {{config('app.name')}}" v-b-tooltip.hover>
+                </a> --}}
+                <a href="{{route('about')}}" class="text-muted" title="About {{config('app.name')}}" v-b-tooltip.hover>
                     <i class="fas fa-info-circle"></i>
                 </a>
                 <logout></logout>
                 <button class="navbar-toggler d-lg-none" type="button" onclick="expandNav()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <a href="#" title="Settings" v-b-tooltip.hover>
+                <a href="{{route('settings')}}" title="Settings" v-b-tooltip.hover>
                     <b-avatar variant="warning" text="{{Auth::user()->initials}}"></b-avatar>
                 </a>
             </div>
@@ -59,24 +59,30 @@
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
+                    @can('allow_admin')
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{route('admin.index')}}">
                             <i class="fas fa-user-shield menu-icon"></i>
                             <span class="menu-title">Administration</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('hasAccess', 'Run Reports')
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <i class="fas fa-book"></i>
                             <span class="menu-title">Reports</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('hasAccess', 'Use File Links')
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <i class="fas fa-link menu-icon"></i>
                             <span class="menu-title">File Links</span>
                         </a>
                     </li>
+                    @endcan
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <i class="fas fa-user-tie menu-icon"></i>
@@ -103,6 +109,7 @@
             <div class="content">
                 <div class="content-wrapper">
                     @yield('content')
+                    <axios-error></axios-error>
                 </div>
                 <footer class=" footer page-footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
