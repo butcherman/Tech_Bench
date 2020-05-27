@@ -1899,6 +1899,260 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/newUserForm.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/newUserForm.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    role_list: {
+      type: Array,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      submitted: false,
+      validated: false,
+      success: null,
+      form: {
+        username: null,
+        email: null,
+        first_name: null,
+        last_name: null,
+        role_id: 4
+      },
+      validate: {
+        state: {
+          username: null,
+          email: null,
+          first_name: null,
+          last_name: null
+        },
+        message: {
+          username: ['Username field is required'],
+          email: ['Email field is required'],
+          first_name: ['First Name field is required'],
+          last_name: ['Last Name field is required']
+        }
+      },
+      loading: {
+        username: false,
+        email: false
+      }
+    };
+  },
+  methods: {
+    //  Check for a duplicate username or email address
+    checkForDup: function checkForDup(type) {
+      var _this = this;
+
+      if (this.form[type]) {
+        this.loading[type] = true;
+        axios.get(this.route('admin.user.check', [this.form[type], type])).then(function (res) {
+          _this.loading[type] = false;
+
+          if (res.data.duplicate) {
+            _this.validate.state[type] = false;
+            _this.validate.message[type][0] = type + ' is currently in use by ' + res.data.user;
+
+            if (!res.data.active) {
+              _this.validate.message[type][1] = 'Note - this user has been deactivated';
+            }
+          } else {
+            _this.validate.state[type] = true;
+          }
+        })["catch"](function (error) {
+          return _this.eventHub.$emit('axiosError', error);
+        });
+      }
+    },
+    //  Validate the infividual inputs that do not require axios requests
+    validateInput: function validateInput(field) {
+      if (this.form[field]) {
+        this.validate.state[field] = true;
+      } else {
+        this.validate.state[field] = null;
+      }
+    },
+    //  Validate and submit the form
+    validateForm: function validateForm(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+
+      if (this.$refs['new-user-form'].checkValidity() === 'false') {
+        this.validated = true;
+      } else {
+        this.submitted = true;
+        axios.post(this.route('admin.user.store'), this.form).then(function (res) {
+          _this2.success = 'User ' + _this2.form.first_name + ' ' + _this2.form.last_name + ' created';
+
+          _this2.resetForm();
+        })["catch"](function (error) {
+          _this2.submitted = false;
+
+          if (error.response.status === 422) {
+            _this2.validate.message = error.response.data.errors;
+            var errors = error.response.data.errors;
+            _this2.validate.state.username = errors.username ? false : true;
+            _this2.validate.state.email = errors.email ? false : true;
+            _this2.validate.state.first_name = errors.first_name ? false : true;
+            _this2.validate.state.last_name = errors.last_name ? false : true;
+          } else {
+            _this2.eventHub.$emit('axiosError', error);
+          }
+        });
+      }
+    },
+    //  Reset the user form so it can be used again
+    resetForm: function resetForm() {
+      this.submitted = false;
+      this.validated = false;
+      this.validate.message.username = ['Username field is required'];
+      this.validate.message.email = ['Email field is required'];
+      this.validate.message.first_name = ['First Name field is required'];
+      this.validate.message.last_name = ['Last Name field is required'];
+      this.validate.state.username = null;
+      this.validate.state.email = null;
+      this.validate.state.first_name = null;
+      this.validate.state.last_name = null;
+      this.form.username = null;
+      this.form.email = null;
+      this.form.first_name = null;
+      this.form.last_name = null;
+      this.form.role_id = 4;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/accountSettings.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/auth/accountSettings.vue?vue&type=script&lang=js& ***!
@@ -1995,7 +2249,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.form.email) {
         this.loading.email = true;
-        axios.get(this.route('admin.check_user', [this.form.email, 'email'])).then(function (res) {
+        axios.get(this.route('admin.user.check', [this.form.email, 'email'])).then(function (res) {
           _this.loading.email = false;
 
           if (res.data.duplicate && res.data.username != _this.user_data.username) {
@@ -2403,7 +2657,7 @@ __webpack_require__.r(__webpack_exports__);
             _this.$bvModal.msgBoxOk('Unable to update notification settings.  Please try again later.');
           }
         })["catch"](function (error) {
-          return _this.$bvModal.msgBoxOk('Unable to update notification settings.  Please try again later.');
+          return _this.eventHub.$emit('axiosError', error);
         });
       }
     }
@@ -54343,6 +54597,362 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/newUserForm.vue?vue&type=template&id=e82ea818&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/newUserForm.vue?vue&type=template&id=e82ea818& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "b-overlay",
+    {
+      attrs: { show: _vm.submitted },
+      scopedSlots: _vm._u([
+        {
+          key: "overlay",
+          fn: function() {
+            return [
+              _c("atom-spinner", {
+                staticClass: "mx-auto",
+                attrs: {
+                  "animation-duration": 1000,
+                  size: 60,
+                  color: "#ff1d5e"
+                }
+              }),
+              _vm._v(" "),
+              _c("h4", { staticClass: "text-center" }, [_vm._v("Processing")])
+            ]
+          },
+          proxy: true
+        }
+      ])
+    },
+    [
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.success,
+              expression: "success"
+            }
+          ],
+          staticClass: "row justify-content-center"
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "col-md-8" },
+            [
+              _c(
+                "b-alert",
+                {
+                  staticClass: "text-center",
+                  attrs: { variant: "success", show: "" }
+                },
+                [_c("h3", [_vm._v(_vm._s(_vm.success))])]
+              )
+            ],
+            1
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "b-form",
+        {
+          ref: "new-user-form",
+          attrs: { validated: _vm.validated, novalidate: "" },
+          on: { submit: _vm.validateForm }
+        },
+        [
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-form-group",
+                  { attrs: { label: "Username:", "label-for": "username" } },
+                  [
+                    _c("b-form-input", {
+                      class: _vm.loading.username ? "loading" : "",
+                      attrs: {
+                        id: "username",
+                        type: "text",
+                        required: "",
+                        placeholder: "Enter A Unique Username",
+                        autocomplete: "false",
+                        state: _vm.validate.state.username
+                      },
+                      on: {
+                        blur: function($event) {
+                          return _vm.checkForDup("username")
+                        }
+                      },
+                      model: {
+                        value: _vm.form.username,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "username", $$v)
+                        },
+                        expression: "form.username"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.validate.message.username
+                      ? _c(
+                          "b-form-invalid-feedback",
+                          _vm._l(_vm.validate.message.username, function(msg) {
+                            return _c("div", { key: msg }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(msg) +
+                                  "\n                        "
+                              )
+                            ])
+                          }),
+                          0
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-form-group",
+                  { attrs: { label: "Email Address:", "label-for": "email" } },
+                  [
+                    _c("b-form-input", {
+                      class: _vm.loading.email ? "loading" : "",
+                      attrs: {
+                        id: "email",
+                        type: "email",
+                        required: "",
+                        placeholder: "johedoe@example.com",
+                        state: _vm.validate.state.email
+                      },
+                      on: {
+                        blur: function($event) {
+                          return _vm.checkForDup("email")
+                        }
+                      },
+                      model: {
+                        value: _vm.form.email,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "email", $$v)
+                        },
+                        expression: "form.email"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.validate.message.email
+                      ? _c(
+                          "b-form-invalid-feedback",
+                          _vm._l(_vm.validate.message.email, function(msg) {
+                            return _c("div", { key: msg }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(msg) +
+                                  "\n                        "
+                              )
+                            ])
+                          }),
+                          0
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-form-group",
+                  {
+                    attrs: { label: "First Name:", "label-for": "first_name" }
+                  },
+                  [
+                    _c("b-form-input", {
+                      attrs: {
+                        id: "first_name",
+                        type: "text",
+                        required: "",
+                        placeholder: "Example - John",
+                        state: _vm.validate.state.first_name
+                      },
+                      on: {
+                        blur: function($event) {
+                          return _vm.validateInput("first_name")
+                        }
+                      },
+                      model: {
+                        value: _vm.form.first_name,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "first_name", $$v)
+                        },
+                        expression: "form.first_name"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.validate.message.first_name
+                      ? _c(
+                          "b-form-invalid-feedback",
+                          _vm._l(_vm.validate.message.first_name, function(
+                            msg
+                          ) {
+                            return _c("div", { key: msg }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(msg) +
+                                  "\n                        "
+                              )
+                            ])
+                          }),
+                          0
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-form-group",
+                  { attrs: { label: "Last Name:", "label-for": "last_name" } },
+                  [
+                    _c("b-form-input", {
+                      attrs: {
+                        id: "last_name",
+                        type: "text",
+                        required: "",
+                        placeholder: "Example - Doe",
+                        state: _vm.validate.state.last_name
+                      },
+                      on: {
+                        blur: function($event) {
+                          return _vm.validateInput("last_name")
+                        }
+                      },
+                      model: {
+                        value: _vm.form.last_name,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "last_name", $$v)
+                        },
+                        expression: "form.last_name"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.validate.message.last_name
+                      ? _c(
+                          "b-form-invalid-feedback",
+                          _vm._l(_vm.validate.message.last_name, function(msg) {
+                            return _c("div", { key: msg }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(msg) +
+                                  "\n                        "
+                              )
+                            ])
+                          }),
+                          0
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-form-group",
+                  { attrs: { label: "User Role:", "label-for": "role" } },
+                  [
+                    _c("b-form-select", {
+                      attrs: {
+                        id: "role",
+                        type: "text",
+                        options: _vm.role_list,
+                        "value-field": "role_id",
+                        "text-field": "name",
+                        required: ""
+                      },
+                      model: {
+                        value: _vm.form.role_id,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "role_id", $$v)
+                        },
+                        expression: "form.role_id"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("b-form-invalid-feedback", [
+                      _vm._v("This field is required")
+                    ])
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("form-submit", {
+            attrs: { button_text: "Create New User", submitted: _vm.submitted }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/auth/accountSettings.vue?vue&type=template&id=45131754&":
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/auth/accountSettings.vue?vue&type=template&id=45131754& ***!
@@ -67413,6 +68023,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('user-account', __webpack_r
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('user-settings', __webpack_require__(/*! ./components/auth/userSettings.vue */ "./resources/js/components/auth/userSettings.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('change-password', __webpack_require__(/*! ./components/auth/changePassword.vue */ "./resources/js/components/auth/changePassword.vue")["default"]);
 /*
+*   Administration Components
+*/
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('new-user-form', __webpack_require__(/*! ./components/admin/newUserForm.vue */ "./resources/js/components/admin/newUserForm.vue")["default"]);
+/*
 *   Include CSRF toden in all axios headers
 */
 
@@ -67433,19 +68048,87 @@ window.onload = function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/admin/newUserForm.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/admin/newUserForm.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _newUserForm_vue_vue_type_template_id_e82ea818___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./newUserForm.vue?vue&type=template&id=e82ea818& */ "./resources/js/components/admin/newUserForm.vue?vue&type=template&id=e82ea818&");
+/* harmony import */ var _newUserForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./newUserForm.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/newUserForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _newUserForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _newUserForm_vue_vue_type_template_id_e82ea818___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _newUserForm_vue_vue_type_template_id_e82ea818___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/admin/newUserForm.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/newUserForm.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/admin/newUserForm.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_newUserForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./newUserForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/newUserForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_newUserForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/newUserForm.vue?vue&type=template&id=e82ea818&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/admin/newUserForm.vue?vue&type=template&id=e82ea818& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_newUserForm_vue_vue_type_template_id_e82ea818___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./newUserForm.vue?vue&type=template&id=e82ea818& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/newUserForm.vue?vue&type=template&id=e82ea818&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_newUserForm_vue_vue_type_template_id_e82ea818___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_newUserForm_vue_vue_type_template_id_e82ea818___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/auth/accountSettings.vue":
 /*!**********************************************************!*\
   !*** ./resources/js/components/auth/accountSettings.vue ***!
   \**********************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _accountSettings_vue_vue_type_template_id_45131754___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./accountSettings.vue?vue&type=template&id=45131754& */ "./resources/js/components/auth/accountSettings.vue?vue&type=template&id=45131754&");
 /* harmony import */ var _accountSettings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./accountSettings.vue?vue&type=script&lang=js& */ "./resources/js/components/auth/accountSettings.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _accountSettings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _accountSettings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -67475,7 +68158,7 @@ component.options.__file = "resources/js/components/auth/accountSettings.vue"
 /*!***********************************************************************************!*\
   !*** ./resources/js/components/auth/accountSettings.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

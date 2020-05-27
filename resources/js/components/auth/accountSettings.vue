@@ -85,7 +85,7 @@
                 if(this.form.email)
                 {
                     this.loading.email = true;
-                    axios.get(this.route('admin.check_user', [this.form.email, 'email']))
+                    axios.get(this.route('admin.user.check', [this.form.email, 'email']))
                         .then(res => {
                             this.loading.email = false;
                             if(res.data.duplicate && res.data.username != this.user_data.username)

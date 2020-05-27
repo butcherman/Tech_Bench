@@ -95,7 +95,7 @@
                             {
                                 this.$bvModal.msgBoxOk('Unable to update notification settings.  Please try again later.');
                             }
-                        }).catch(error => this.$bvModal.msgBoxOk('Unable to update notification settings.  Please try again later.'));
+                        }).catch(error => this.eventHub.$emit('axiosError', error));
                 }
             }
         }

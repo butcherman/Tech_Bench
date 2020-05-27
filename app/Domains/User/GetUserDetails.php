@@ -36,6 +36,6 @@ class GetUserDetails
     //  Determine if a username or email address is already in use
     public function checkForDuplicate($type, $value)
     {
-        return User::where($type, $value)->first();
+        return User::where($type, $value)->withTrashed()->first();
     }
 }

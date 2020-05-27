@@ -110,6 +110,12 @@ Vue.component('user-settings', require('./components/auth/userSettings.vue').def
 Vue.component('change-password', require('./components/auth/changePassword.vue').default);
 
 
+/*
+*   Administration Components
+*/
+Vue.component('new-user-form', require('./components/admin/newUserForm.vue').default);
+
+
 
 /*
 *   Include CSRF toden in all axios headers

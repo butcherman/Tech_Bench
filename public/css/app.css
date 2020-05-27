@@ -20244,6 +20244,10 @@ address p {
   background-repeat: no-repeat;
 }
 
+.invalid-feedback {
+  text-transform: capitalize;
+}
+
 /*
 *   Global Variable Files
 */

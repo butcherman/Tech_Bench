@@ -5,7 +5,10 @@ namespace Tests\Unit\User;
 use Carbon\Carbon;
 use Tests\TestCase;
 
+use Illuminate\Support\Facades\Notification;
+
 use App\Domains\User\SetUserDetails;
+use App\Http\Requests\Admin\NewUserRequest;
 
 use App\User;
 
@@ -20,8 +23,22 @@ class SetUserDetailsTest extends TestCase
     {
         Parent::setup();
 
-        $this->testUser = factory(User::class)->create()->makeVisible(['user_id', 'role_id', 'username'])->makeHidden('full_name');
+        $this->testUser = factory(User::class)->create()->makeVisible(['user_id', 'role_id', 'username'])->makeHidden('full_name', 'initials');
         $this->testObj  = new SetUserDetails;
+    }
+
+    public function test_create_user()
+    {
+        Notification::fake();
+
+        $data = factory(User::class)->make()->makeVisible('username');
+        $data = new NewUserRequest($data->toArray());
+
+        $res = $this->testObj->createUser($data);
+        $this->assertTrue($res > 0);
+        $this->assertDatabaseHas('users', ['user_id' => $res, 'username' => $data->username]);
+
+        //  TODO - Assert event triggered and email sent
     }
 
     public function test_update_user()

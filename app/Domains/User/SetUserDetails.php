@@ -2,6 +2,8 @@
 
 namespace App\Domains\User;
 
+use App\Events\NewUserCreated;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -12,11 +14,28 @@ use App\UserSettings;
 
 class SetUserDetails
 {
+    //  Create a new user
+    public function createUser($request)
+    {
+        $request = collect($request);
+        $request->put('password', bcrypt(strtoLower(Str::random(15))));
+        $request->put('password_expires', Carbon::now()->subDay());
+
+        $user = User::create($request->toArray());
+        UserSettings::create([
+            'user_id' => $user->user_id,
+        ]);
+
+        //  Event will trigger the welcome email
+        event(new NewUserCreated($user->makeVisible('user_id')));
+
+        return $user->user_id;
+    }
+
     //  Update a users primary details (name and email address)
     public function updateUser($request, $userID)
     {
         User::find($userID)->update($request->toArray());
-        Log::notice('User ID '.$userID.' has been updated by '.Auth::user()->full_name.'.  Details - ', $request->toArray());
 
         return true;
     }
@@ -25,7 +44,6 @@ class SetUserDetails
     public function updateSettings($request, $userID)
     {
         UserSettings::where('user_id', $userID)->update($request->toArray());
-        Log::notice('Settings for User ID '.$userID.' have been updated by '.Auth::user()->full_name.'.  Details - ', $request->toArray());
 
         return true;
     }
@@ -50,7 +68,6 @@ class SetUserDetails
             'password_expires' => $newExpire,
         ]);
 
-        Log::notice('Password has been changed for User ID '.$userID.' by '.Auth::user()->full_name);
         return true;
     }
 }
