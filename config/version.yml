@@ -4,17 +4,17 @@ current:
   label: v
   major: 5
   minor: 2
-  patch: 0
+  patch: 1
   prerelease: null
   buildmetadata: null
-  commit: 3cc
+  commit: 3cd
   timestamp:
     year: 2020
     month: 5
-    day: 3
-    hour: 16
-    minute: 12
-    second: 6
+    day: 27
+    hour: 13
+    minute: 50
+    second: 40
     timezone: America/Los_Angeles
 commit:
   length: 6

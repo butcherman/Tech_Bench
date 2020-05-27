@@ -22,7 +22,7 @@ class SetFileLinkDetails extends FilesDomain
     {
         if(isset($request->file))
         {
-            $fileID = $this->processFileChunk($request);
+            $fileID = $this->processFileChunk($request, true);
             if($fileID)
             {
                 $fileArr = session('newLinkFile') != null ? session('newLinkFile') : [];
@@ -110,6 +110,8 @@ class SetFileLinkDetails extends FilesDomain
                 FileLinkFiles::create([
                     'link_id' => $linkID,
                     'file_id' => $file,
+                    'user_id' => Auth::user()->user_id,
+                    'upload'  => 0,
                 ]);
             }
 

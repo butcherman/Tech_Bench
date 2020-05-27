@@ -23,14 +23,14 @@ class FilesDomain
     }
 
     //  Process a file chunk
-    protected function processFileChunk($data)
+    protected function processFileChunk($data, $public = false)
     {
         $this->receiver = new FileReceiver('file', $data, HandlerFactory::classFromRequest($data));
 
         $save = $this->receiver->receive();
         if($save->isFinished())
         {
-            $fileID = $this->saveFile($save->getFile());
+            $fileID = $this->saveFile($save->getFile(), $public);
             return $fileID;
         }
 
@@ -38,7 +38,7 @@ class FilesDomain
     }
 
     //  Save a file after it has been uploaded
-    protected function saveFile(UploadedFile $file)
+    protected function saveFile(UploadedFile $file, $public = false)
     {
         $fileName = $this->cleanFilename($file->getClientOriginalName());
         $fileName = $this->isFileDup($fileName);
@@ -47,7 +47,8 @@ class FilesDomain
         //  Place file in Files table of DB
         $newFile = Files::create([
             'file_name' => $fileName,
-            'file_link' => $this->path.DIRECTORY_SEPARATOR
+            'file_link' => $this->path.DIRECTORY_SEPARATOR,
+            'public'    => $public,
         ]);
 
         $user = isset(Auth::user()->full_name) ? Auth::user()->full_name : \Request::ip();

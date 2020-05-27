@@ -37,7 +37,7 @@ class SaveFileLinkFile extends FilesDomain
                 $this->path = config('filesystems.paths.links').DIRECTORY_SEPARATOR.$request->linkID;
             }
 
-            $fileID = $this->saveFile($save->getFile());
+            $fileID = $this->saveFile($save->getFile(), true);
 
             if($new)
             {
