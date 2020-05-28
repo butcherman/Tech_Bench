@@ -95,4 +95,12 @@ class SetUserDetailsTest extends TestCase
         //     'password'         => bcrypt($newPass),
         // ]);
     }
+
+    public function test_disable_user()
+    {
+        $res = $this->testObj->disableUser($this->testUser->user_id);
+
+        $this->assertTrue($res);
+        $this->assertSoftDeleted('users', $this->testUser->toArray());
+    }
 }

@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         //  Custom MIddleware
         'password_expired' => \App\Http\Middleware\CheckPasswordExpire::class,
+        'check_role'       => \App\Http\Middleware\CheckRole::class,
     ];
 
     /**

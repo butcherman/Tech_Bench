@@ -21,7 +21,8 @@
                 <h4 class="card-title">Users:</h4>
                 <ul class="list-group">
                     <li class="list-group-item"><a href="{{route('admin.user.create')}}" class="text-muted"><i class="fas fa-user-plus"></i> Create New User</a></li>
-                    <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-user-edit"></i> Modify User</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.user.active_users')}}" class="text-muted"><i class="fas fa-user-edit"></i> Modify User</a></li>
+                    <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-user-slash"></i> View Disabled Users</a></li>
                     <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-user-tag"></i> User File Links</a></li>
                 </ul>
             </div>
@@ -34,7 +35,6 @@
                 <ul class="list-group">
                     <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-user-lock"></i> User Password Policy</a></li>
                     <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-users-cog"></i> User Permissions and Roles</a></li>
-                    <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-user-slash"></i> View Disabled Users</a></li>
                 </ul>
             </div>
         </div>

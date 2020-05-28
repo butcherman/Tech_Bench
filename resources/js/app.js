@@ -22,7 +22,7 @@ window.chunkSize = 500000;
 */
 import Vue                  from 'vue';
 import BootstrapVue         from 'bootstrap-vue';
-// import VueGoodTablePlugin   from 'vue-good-table';
+import VueGoodTablePlugin   from 'vue-good-table';
 // import route                from 'ziggy';
 // import vue2Dropzone         from 'vue2-dropzone';
 // import VuePhoneNumberInput  from 'vue-phone-number-input';
@@ -56,7 +56,7 @@ import { AtomSpinner }      from 'epic-spinners';
 *   Vue, Bootstrap and third party libraries
 */
 window.axios = require('axios');
-// Vue.use(VueGoodTablePlugin);
+Vue.use(VueGoodTablePlugin);
 Vue.use(BootstrapVue);
 // Vue.use(vueFilterPrettyBytes);
 // Vue.use(VueClipboard);
@@ -113,8 +113,10 @@ Vue.component('change-password', require('./components/auth/changePassword.vue')
 /*
 *   Administration Components
 */
-Vue.component('new-user-form', require('./components/admin/newUserForm.vue').default);
-
+Vue.component('new-user-form',    require('./components/admin/newUserForm.vue').default);
+Vue.component('edit-user-form', require('./components/admin/editUserForm.vue').default);
+Vue.component('active-user-list', require('./components/admin/activeUserList.vue').default);
+Vue.component('reset-user-password', require('./components/admin/resetUserPassword.vue').default);
 
 
 /*

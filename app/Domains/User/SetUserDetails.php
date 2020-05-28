@@ -70,4 +70,11 @@ class SetUserDetails
 
         return true;
     }
+
+    //  Disable the user
+    public function disableUser($userID)
+    {
+        User::findOrFail($userID)->delete();
+        return true;
+    }
 }
