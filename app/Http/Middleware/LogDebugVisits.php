@@ -47,8 +47,6 @@ class LogDebugVisits
                 }
                 Log::debug('Submitted Data ', $requestData);
             }
-
-            return $next($request);
         }
 
         return $next($request);
