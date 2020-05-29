@@ -99,23 +99,25 @@ Vue.component('axios-error', require('./components/errorMessage.vue').default);
 /*
 *   Individual Page Components
 */
-Vue.component('logout', require('./components/auth/logout.vue').default);
+Vue.component('logout',                  require('./components/auth/logout.vue').default);
 Vue.component('dashboard-nofifications', require('./components/auth/dashboardNotifications.vue').default);
 
 /*
 *   User Components
 */
-Vue.component('user-account', require('./components/auth/accountSettings.vue').default);
-Vue.component('user-settings', require('./components/auth/userSettings.vue').default);
+Vue.component('user-account',    require('./components/auth/accountSettings.vue').default);
+Vue.component('user-settings',   require('./components/auth/userSettings.vue').default);
 Vue.component('change-password', require('./components/auth/changePassword.vue').default);
 
 
 /*
 *   Administration Components
 */
+Vue.component('password-policy',  require('./components/admin/passwordPolicy.vue').default);
 Vue.component('new-user-form',    require('./components/admin/newUserForm.vue').default);
 Vue.component('edit-user-form', require('./components/admin/editUserForm.vue').default);
 Vue.component('active-user-list', require('./components/admin/activeUserList.vue').default);
+Vue.component('inactive-user-list', require('./components/admin/inactiveUserList.vue').default);
 Vue.component('reset-user-password', require('./components/admin/resetUserPassword.vue').default);
 
 

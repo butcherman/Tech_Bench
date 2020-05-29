@@ -60,6 +60,15 @@ class UserController extends Controller
         ]);
     }
 
+    //  List all users who have been disabled
+    public function listInactive()
+    {
+        return view('admin.userList', [
+            'userList' => (new GetUserList)->getInactiveUsers(),
+            'active'   => false,
+        ]);
+    }
+
     //  Form to edit an existing user
     public function edit($userID)
     {
@@ -125,6 +134,14 @@ class UserController extends Controller
 
         (new SetUserDetails)->disableUser($userID);
         Log::notice('User '.$user->full_name.' has been disabled by '.Auth::user()->full_name.'.  Details - ', $user->toArray());
+        return response()->json(['success' => true]);
+    }
+
+    //  Reactivate a disabled user
+    public function activate($userID)
+    {
+        (new SetUserDetails)->reactivateUser($userID);
+        Log::notice('User ID '.$userID.' has been reactivated by '.Auth::user()->full_name);
         return response()->json(['success' => true]);
     }
 }

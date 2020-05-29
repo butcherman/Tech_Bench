@@ -3,7 +3,11 @@
 @section('content')
 <div class="row">
     <div class="col grid-margins">
+        @if($active)
         <h4>User Administration</h4>
+        @else
+        <h4>Deactivated Users</h4>
+        @endif
     </div>
 </div>
 <div class="row justify-content-center">
@@ -15,7 +19,9 @@
                     :user_list='@json($userList)'
                 ></active-user-list>
                 @else
-                blah
+                <inactive-user-list
+                    :user_list='@json($userList)'
+                ></inactive-user-list>
                 @endif
             </div>
         </div>

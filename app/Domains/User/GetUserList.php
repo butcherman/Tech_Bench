@@ -14,4 +14,9 @@ class GetUserList
     {
         return User::with('LastUserLogin')->get()->makeVisible('user_id');
     }
+
+    public function getInactiveUsers()
+    {
+        return User::onlyTrashed()->get()->makeVisible(['user_id', 'deleted_at']);
+    }
 }

@@ -325,4 +325,37 @@ class UserControllerTest extends TestCase
         $response->assertSuccessful();
         $response->assertJson(['success' => true]);
     }
+
+    public function test_activate_guest()
+    {
+        $user = factory(User::class)->create([
+            'deleted_at' => NOW(),
+        ]);
+
+        $response = $this->get(route('admin.user.activate', $user->user_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_activate_no_permission()
+    {
+        $user = factory(User::class)->create([
+            'deleted_at' => NOW(),
+        ]);
+
+        $response = $this->actingAs($this->getTech())->get(route('admin.user.activate', $user->user_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_activate()
+    {
+        $user = factory(User::class)->create([
+            'deleted_at' => NOW(),
+        ]);
+
+        $response = $this->actingAs($this->getInstaller())->get(route('admin.user.activate', $user->user_id));
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
 }

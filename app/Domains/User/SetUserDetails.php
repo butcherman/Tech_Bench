@@ -71,6 +71,13 @@ class SetUserDetails
         return true;
     }
 
+    //  Re-enable a user
+    public function reactivateUser($userID)
+    {
+        User::withTrashed()->where('user_id', $userID)->restore();
+        return true;
+    }
+
     //  Disable the user
     public function disableUser($userID)
     {

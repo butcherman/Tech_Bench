@@ -103,4 +103,15 @@ class SetUserDetailsTest extends TestCase
         $this->assertTrue($res);
         $this->assertSoftDeleted('users', $this->testUser->toArray());
     }
+
+    public function test_activate()
+    {
+        $user = factory(User::class)->create([
+            'deleted_at' => NOW(),
+        ]);
+
+        $res = $this->testObj->reactivateUser($user->user_id);
+        $this->assertTrue($res);
+        $this->assertDatabaseHas('users', ['user_id' => $user->user_id, 'deleted_at' => null]);
+    }
 }
