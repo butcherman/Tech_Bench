@@ -1,6 +1,6 @@
 <template>
     <b-button type="submit" block variant="primary" :disabled="button.disable">
-        <span class="spinner-border spinner-border-sm text-danger" v-show="button.disable"></span>
+        <span class="spinner-border spinner-border-sm text-danger" v-show="submitted"></span>
         {{button.text}}
     </b-button>
 </template>
@@ -9,22 +9,22 @@
     export default {
         props: {
             button_text: {
-                type: String,
+                type:     String,
                 default: 'Submit',
             },
             button_disable: {
-                type: Boolean,
+                type:    Boolean,
                 default: false,
             },
             submitted: {
-                type: Boolean,
+                type:    Boolean,
                 default: false,
             }
         },
         data: function () {
             return {
                 button: {
-                    text: this.button_text,
+                    text:    this.button_text,
                     disable: this.button_disable,
                 }
             }
@@ -34,12 +34,12 @@
             {
                 if(this.submitted)
                 {
-                    this.button.text = "Loading...";
+                    this.button.text    = "Loading...";
                     this.button.disable = true;
                 }
                 else
                 {
-                    this.button.text = this.button_text;
+                    this.button.text    = this.button_text;
                     this.button.disable = false;
                 }
             },

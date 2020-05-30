@@ -24,7 +24,7 @@ class CreateUserRolePermissionTypesTable extends Migration
         //  Insert default roles permission types
         $defaultData = [
             ['perm_type_id' => 1,  'description' => 'Manage Users',        'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 2,  'description' => 'Manage User Roles',   'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 2,  'description' => 'Manage Permissions',  'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 3,  'description' => 'Run Reports',         'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 4,  'description' => 'Add Customer',        'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 5,  'description' => 'Manage Customers',    'created_at' => NOW(), 'updated_at' => NOW()],

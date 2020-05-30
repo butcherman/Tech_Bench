@@ -27,7 +27,7 @@ class GetRolesTest extends TestCase
     {
         $data = $this->actingAs($this->getInstaller())->testObj->getRoleList();
 
-        $this->assertEquals($data->makeHidden(['created_at', 'updated_at'])->toArray(), $this->defaultData);
+        $this->assertEquals($data->makeHidden(['created_at', 'updated_at', 'UserRolePermissions'])->toArray(), $this->defaultData);
     }
 
     public function test_get_role_list_limit()
@@ -37,6 +37,6 @@ class GetRolesTest extends TestCase
         $newData = $this->defaultData;
         Arr::forget($newData, [0, 1]);
 
-        $this->assertEquals($data->makeHidden(['created_at', 'updated_at'])->toArray(), $newData);
+        $this->assertEquals($data->makeHidden(['created_at', 'updated_at', 'UserRolePermissions'])->toArray(), $newData);
     }
 }

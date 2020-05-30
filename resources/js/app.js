@@ -111,14 +111,15 @@ Vue.component('change-password', require('./components/auth/changePassword.vue')
 
 
 /*
-*   Administration Components
+*   User Administration Components
 */
-Vue.component('password-policy',  require('./components/admin/passwordPolicy.vue').default);
-Vue.component('new-user-form',    require('./components/admin/newUserForm.vue').default);
-Vue.component('edit-user-form', require('./components/admin/editUserForm.vue').default);
-Vue.component('active-user-list', require('./components/admin/activeUserList.vue').default);
-Vue.component('inactive-user-list', require('./components/admin/inactiveUserList.vue').default);
+Vue.component('password-policy',     require('./components/admin/passwordPolicy.vue').default);
+Vue.component('new-user-form',       require('./components/admin/newUserForm.vue').default);
+Vue.component('edit-user-form',      require('./components/admin/editUserForm.vue').default);
+Vue.component('active-user-list',    require('./components/admin/activeUserList.vue').default);
+Vue.component('inactive-user-list',  require('./components/admin/inactiveUserList.vue').default);
 Vue.component('reset-user-password', require('./components/admin/resetUserPassword.vue').default);
+Vue.component('user-permissions',    require('./components/admin/userPermissions.vue').default);
 
 
 /*

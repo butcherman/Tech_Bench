@@ -115,8 +115,6 @@ class LoginControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('dashboard'));
 
-        // dd($response);
-
         $response->assertStatus(302);
         $response->assertRedirect(route('change_password'));
         $response->assertSessionHas('change_password');
@@ -129,7 +127,17 @@ class LoginControllerTest extends TestCase
         $user = $this->getTech();
 
         $response = $this->actingAs($user)->post(route('logout', ['logout' => true]));
+        $response->assertStatus(302);
         $response->assertRedirect('/');
         $this->assertGuest();
+    }
+
+    //  Test visiting login page when already logged in
+    public function test_login_already_logged_in()
+    {
+        $response = $this->actingAs($this->getTech())->get(route('index'));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('dashboard'));
     }
 }

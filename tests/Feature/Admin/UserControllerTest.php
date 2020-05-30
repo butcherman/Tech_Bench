@@ -138,6 +138,47 @@ class UserControllerTest extends TestCase
         $response->assertViewIs('admin.userList');
     }
 
+
+
+
+
+    public function test_list_inactive_guest()
+    {
+        factory(User::class, 10)->create(['deleted_at' => NOW()]);
+        $response = $this->get(route('admin.user.inactive_users'));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_list_inactive_no_permission()
+    {
+        factory(User::class, 10)->create(['deleted_at' => NOW()]);
+        $response = $this->actingAs($this->getTech())->get(route('admin.user.inactive_users'));
+
+        $response->assertStatus(403);
+    }
+
+    public function test_list_inactive()
+    {
+        factory(User::class, 10)->create(['deleted_at' => NOW()]);
+        $response = $this->actingAs($this->getInstaller())->get(route('admin.user.inactive_users'));
+
+        $response->assertSuccessful();
+        $response->assertViewIs('admin.userList');
+    }
+
+
+
+
+
+
+
+
+
+
+
     public function test_edit_guest()
     {
         $response = $this->get(route('admin.user.edit', $this->getTech()->user_id));

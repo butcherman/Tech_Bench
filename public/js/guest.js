@@ -68834,8 +68834,8 @@ var render = function() {
           {
             name: "show",
             rawName: "v-show",
-            value: _vm.button.disable,
-            expression: "button.disable"
+            value: _vm.submitted,
+            expression: "submitted"
           }
         ],
         staticClass: "spinner-border spinner-border-sm text-danger"

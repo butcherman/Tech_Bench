@@ -34,7 +34,9 @@
                 <h4 class="card-title">User Settings:</h4>
                 <ul class="list-group">
                     <li class="list-group-item"><a href="{{route('admin.user.password_policy')}}" class="text-muted"><i class="fas fa-user-lock"></i> User Password Policy</a></li>
-                    <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-users-cog"></i> User Permissions and Roles</a></li>
+                    @can('hasAccess', 'Manage Permissions')
+                    <li class="list-group-item"><a href="{{route('admin.user.permissions')}}" class="text-muted"><i class="fas fa-users-cog"></i> User Permissions and Roles</a></li>
+                    @endcan
                 </ul>
             </div>
         </div>

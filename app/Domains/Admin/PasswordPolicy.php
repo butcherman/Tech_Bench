@@ -4,9 +4,6 @@ namespace App\Domains\Admin;
 
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
 
 class PasswordPolicy extends SettingsDomain
 {

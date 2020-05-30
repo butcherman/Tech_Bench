@@ -38,7 +38,7 @@ class UserController extends Controller
     public function create()
     {
         return view('admin.newUser', [
-            'roles' => (new GetRoles)->getRoleList()->makeHidden('allow_edit'),
+            'roles' => (new GetRoles)->getRoleList()->makeHidden(['allow_edit', 'user_role_permissions']),
         ]);
     }
 
@@ -81,7 +81,7 @@ class UserController extends Controller
 
         return view('admin.userEdit', [
             'details' => $user,
-            'roles' => (new GetRoles)->getRoleList()->makeHidden('allow_edit'),
+            'roles' => (new GetRoles)->getRoleList()->makeHidden(['allow_edit', 'user_role_permissions']),
         ]);
     }
 
