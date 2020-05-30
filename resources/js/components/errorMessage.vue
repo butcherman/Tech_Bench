@@ -25,7 +25,7 @@
         },
         mounted() {
              this.eventHub.$on('axiosError', err => {
-                //  console.log(err);
+                 console.log(err);
                  this.assignError(err);
                  this.$refs['axios-error-modal'].show();
              });

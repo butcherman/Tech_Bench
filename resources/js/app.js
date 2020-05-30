@@ -121,6 +121,10 @@ Vue.component('inactive-user-list',  require('./components/admin/inactiveUserLis
 Vue.component('reset-user-password', require('./components/admin/resetUserPassword.vue').default);
 Vue.component('user-permissions',    require('./components/admin/userPermissions.vue').default);
 
+/*
+*   Equipment Administration Components
+*/
+Vue.component('equipment-category-form', require('./components/equipment/categoryForm.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

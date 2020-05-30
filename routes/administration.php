@@ -4,7 +4,14 @@
 */
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function()
 {
-
+    /*
+    *   System Administration
+    */
+    Route::prefix('equipment')->name('equipment.')->middleware('check_role:Manage Equipment')->group(function()
+    {
+        Route::resource('categories', 'Admin\EquipmentCategoriesController');
+        Route::get('/', 'Admin\EquipmentTypesController@index')->name('index');
+    });
 
 
 
