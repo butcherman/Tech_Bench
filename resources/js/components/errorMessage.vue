@@ -47,6 +47,9 @@
                     case 422:
                         this.error422(err);
                         break;
+                    case 428:
+                        this.error428(err);
+                        break;
                     default:
                         this.error500(err);
                 }
@@ -76,6 +79,12 @@
                 });
 
                 this.details = details+'</ul>';
+            },
+            error428(err)
+            {
+                this.header  = 'There was a problem with the information you submitted';
+                this.message = err.response.data.message;
+                // this.details = err.response.message;
             }
         }
     }

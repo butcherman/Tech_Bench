@@ -68,7 +68,7 @@
                     </li>
                     @endcan
                     @can('hasAccess', 'Run Reports')
-                    <li class="nav-item">
+                    <li class="nav-itema">
                         <a class="nav-link" href="#">
                             <i class="fas fa-book"></i>
                             <span class="menu-title">Reports</span>
@@ -76,27 +76,27 @@
                     </li>
                     @endcan
                     @can('hasAccess', 'Use File Links')
-                    <li class="nav-item">
+                    <li class="nav-itema">
                         <a class="nav-link" href="#">
                             <i class="fas fa-link menu-icon"></i>
                             <span class="menu-title">File Links</span>
                         </a>
                     </li>
                     @endcan
-                    <li class="nav-item">
+                    <li class="nav-itema">
                         <a class="nav-link" href="#">
                             <i class="fas fa-user-tie menu-icon"></i>
                             <span class="menu-title">Customers</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-itema">
                         <a class="nav-link" href="#">
                             <i class="fas fa-tools menu-icon"></i>
                             <span class="menu-title">Tech Tips</span>
                         </a>
                     </li>
                     @foreach($tb_modules as $mod)
-                    <li class="nav-item">
+                    <li class="nav-itema">
                         <a class="nav-link" href="{{route('index').'/'.$mod->getLowerName()}}">
                             {{-- <i class="fas fa-asterisk menu-icon"></i> --}}
                             <i class="{{config($mod->getLowerName().'.icon')}} menu-icon"></i>

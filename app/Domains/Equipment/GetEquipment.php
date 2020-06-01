@@ -2,8 +2,9 @@
 
 namespace App\Domains\Equipment;
 
-use App\SystemCategories;
 use App\SystemTypes;
+use App\SystemCategories;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -22,5 +23,15 @@ class GetEquipment
         }
 
         return $list;
+    }
+
+    public function getCatList()
+    {
+        return SystemCategories::all();
+    }
+
+    public function getEquipmentData($sysID)
+    {
+        return SystemTypes::where('sys_id', $sysID)->with('SystemDataFields')->first();
     }
 }

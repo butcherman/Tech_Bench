@@ -9,6 +9,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function()
     */
     Route::prefix('equipment')->name('equipment.')->middleware('check_role:Manage Equipment')->group(function()
     {
+        Route::resource('types', 'Admin\EquipmentTypesController');
         Route::resource('categories', 'Admin\EquipmentCategoriesController');
         Route::get('/', 'Admin\EquipmentTypesController@index')->name('index');
     });

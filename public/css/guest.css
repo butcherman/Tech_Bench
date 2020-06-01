@@ -13749,6 +13749,10 @@ a.text-dark:focus {
   color: #000000 !important;
 }
 
+.no-bullet {
+  list-style-type: none;
+}
+
 .filedrag {
   font-weight: bold;
   text-align: center;

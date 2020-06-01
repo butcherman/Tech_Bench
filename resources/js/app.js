@@ -6,12 +6,6 @@ window.expandNav = function () {
     el.classList.toggle('active');
 }
 
-// window.expandProfile = function () {
-//     var el = document.getElementById('profileDropdownDiv');
-//     el.classList.toggle('show');
-//     return false;
-// }
-
 /*
 *   File chunk size for file uploads
 */
@@ -28,7 +22,7 @@ import VueGoodTablePlugin   from 'vue-good-table';
 // import VuePhoneNumberInput  from 'vue-phone-number-input';
 // import Multiselect          from 'vue-multiselect';
 // import vSelect              from 'vue-select';
-// import draggable            from 'vuedraggable';
+import draggable            from 'vuedraggable';
 // import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 // import Avatar               from 'vue-avatar'
 // import VueClipboard         from 'vue-clipboard2';
@@ -69,7 +63,7 @@ Vue.use(BootstrapVue);
 // Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 // Vue.component('multiselect', Multiselect);
 // Vue.component('v-select', vSelect);
-// Vue.component('draggable',    draggable);
+Vue.component('draggable', draggable);
 // Vue.component('avatar', Avatar);
 Vue.component('atom-spinner', AtomSpinner);
 // Vue.component('hollow-dots-spinner', HollowDotsSpinner);
@@ -125,6 +119,7 @@ Vue.component('user-permissions',    require('./components/admin/userPermissions
 *   Equipment Administration Components
 */
 Vue.component('equipment-category-form', require('./components/equipment/categoryForm.vue').default);
+Vue.component('equipment-type-form',     require('./components/equipment/typeForm.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

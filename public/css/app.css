@@ -10521,7 +10521,8 @@ button.bg-dark:focus {
   align-self: flex-end !important;
 }
 
-.align-self-center {
+.align-self-center,
+.input-group-append {
   align-self: center !important;
 }
 
@@ -20206,6 +20207,14 @@ address p {
   right: -25px;
   font-size: 5rem;
   transform: rotate(15deg);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+ul.no-bullet {
+  list-style-type: none;
 }
 
 /*

@@ -15,3 +15,7 @@
 .invalid-feedback {
     text-transform: capitalize;
 }
+
+.input-group-append {
+    @extend .align-self-center;
+}
