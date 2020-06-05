@@ -16,6 +16,11 @@ class SystemDataFields extends Model
         return $this->belongsTo('App\SystemDataFieldTypes', 'data_type_id', 'data_type_id');
     }
 
+    public function SystemTypes()
+    {
+        return $this->belongsTo('App\SystemTypes', 'sys_id', 'sys_id');
+    }
+
     public function getDataFieldNameAttribute()
     {
         return $this->SystemDataFieldTypes->name;

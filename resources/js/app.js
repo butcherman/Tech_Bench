@@ -120,6 +120,7 @@ Vue.component('user-permissions',    require('./components/admin/userPermissions
 */
 Vue.component('equipment-category-form', require('./components/equipment/categoryForm.vue').default);
 Vue.component('equipment-type-form',     require('./components/equipment/typeForm.vue').default);
+Vue.component('equipment-information', require('./components/equipment/equipmentInformation.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

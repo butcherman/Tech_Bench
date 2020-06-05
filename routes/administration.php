@@ -9,9 +9,13 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function()
     */
     Route::prefix('equipment')->name('equipment.')->middleware('check_role:Manage Equipment')->group(function()
     {
-        Route::resource('types', 'Admin\EquipmentTypesController');
-        Route::resource('categories', 'Admin\EquipmentCategoriesController');
-        Route::get('/', 'Admin\EquipmentTypesController@index')->name('index');
+        Route::resource('types',              'Admin\EquipmentTypesController');
+        Route::resource('categories',         'Admin\EquipmentCategoriesController');
+        Route::delete('equipment-information/{id}', 'Admin\EquipmentInformationController@deleteField')->name('delete_field');
+        Route::post('equipmment-information', 'Admin\EquipmentInformationController@newField')->name('new_field');
+        Route::put('equipmment-information', 'Admin\EquipmentInformationController@submitFieldName')->name('submit_field');
+        Route::get('equipment-information',   'Admin\EquipmentInformationController@index')          ->name('equipment_information');
+        Route::get('/',                       'Admin\EquipmentTypesController@index')                ->name('index');
     });
 
 

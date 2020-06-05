@@ -65,7 +65,8 @@
                 <h4 class="card-title">Equipment:</h4>
                 <ul class="list-group">
                     <li class="list-group-item"><a href="{{route('admin.equipment.index')}}" class="text-muted"><i class="fas fa-cogs"></i> Equipment Types</a></li>
-                    <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-cogs"></i> Equipment Information</a></li>
+                    <li class="list-group-item"><a href="{{route('admin.equipment.equipment_information')}}" class="text-muted"><i class="fas fa-database"></i> Equipment Information</a></li>
+                    <li class="list-group-item"><a href="#" class="text-muteda"><i class="fas fa-wrench"></i> Tech Tip Types</a></li>
                 </ul>
             </div>
         </div>

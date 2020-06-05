@@ -126,13 +126,13 @@ class SetEquipmentDataFields extends GetEquipDataFields
     }
 
     //  Determine if a field is actually new, or already exists in the database
-    protected function processNewField($field)
+    public function processNewField($field, $hidden = false)
     {
         $fieldData = SystemDataFieldTypes::where('name', $field)->first();
 
         if(!$fieldData)
         {
-            $dataID = SystemDataFieldTypes::create(['name' => $field])->data_type_id;
+            $dataID = SystemDataFieldTypes::create(['name' => $field, 'hidden' => $hidden])->data_type_id;
         }
         else
         {
@@ -140,5 +140,29 @@ class SetEquipmentDataFields extends GetEquipDataFields
         }
 
         return $dataID;
+    }
+
+    //  Update an existing field
+    public function editExistingField($fieldID, $name, $hidden)
+    {
+        Log::emergency('data type id - '.$fieldID);
+        SystemDataFieldTypes::find($fieldID)->update(['name' => $name, 'hidden' => $hidden]);
+        return true;
+    }
+
+    //  Delete a field
+    public function deleteField($fieldID)
+    {
+        try
+        {
+            SystemDataFieldTypes::find($fieldID)->delete();
+        }
+        catch(\Illuminate\Database\QueryException $e)
+        {
+            Log::emergency('Tried to delete a field that is still in use.  Field ID - '.$fieldID);
+            return false;
+        }
+
+        return true;
     }
 }

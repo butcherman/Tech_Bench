@@ -27,7 +27,6 @@ class EquipmentRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'regex:/^[a-zA-Z0-9_ ]*$/',
             ],
             'sys_id' => 'nullable|exists:system_types',
             'system_data_fields' => 'required|array',

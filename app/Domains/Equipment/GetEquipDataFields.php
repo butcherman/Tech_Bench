@@ -16,6 +16,12 @@ class GetEquipDataFields
         return SystemDataFieldTypes::all();
     }
 
+    public function getAllFieldsWithStats()
+    {
+        $data = SystemDataFieldTypes::with('SystemDataFields.SystemTypes')->get();
+        return $data;
+    }
+
     public function getFieldsForEquip($sysID)
     {
         return SystemDataFields::where('sys_id', $sysID)->orderBy('order')->get();
