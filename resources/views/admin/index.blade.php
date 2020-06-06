@@ -78,7 +78,7 @@
             <div class="card-body">
                 <h4 class="card-title">{{config('app.name')}} Settings:</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="#"><i class="fas fa-image"></i> {{config('app.name')}} Logo</a></li>
+                    <li class="list-group-item"><a href="{{route('settings.logo_form')}}" class="text-muted"><i class="fas fa-image"></i> {{config('app.name')}} Logo</a></li>
                     <li class="list-group-item"><a href="#"><i class="fas fa-server"></i> {{config('app.name')}} Configuration</a></li>
                     <li class="list-group-item"><a href="#"><i class="fas fa-envelope"></i> Email Settings</a></li>
                     <li class="list-group-item"><a href="#"><i class="fas fa-asterisk"></i> {{config('app.name')}} Add-ons</a></li>

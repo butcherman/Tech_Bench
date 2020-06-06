@@ -18,7 +18,7 @@ import Vue                  from 'vue';
 import BootstrapVue         from 'bootstrap-vue';
 import VueGoodTablePlugin   from 'vue-good-table';
 // import route                from 'ziggy';
-// import vue2Dropzone         from 'vue2-dropzone';
+import vue2Dropzone         from 'vue2-dropzone';
 // import VuePhoneNumberInput  from 'vue-phone-number-input';
 // import Multiselect          from 'vue-multiselect';
 // import vSelect              from 'vue-select';
@@ -58,7 +58,7 @@ Vue.use(BootstrapVue);
 /*
 *   Third party components
 */
-// Vue.component('vue-dropzone', vue2Dropzone);
+Vue.component('vue-dropzone', vue2Dropzone);
 // Vue.component('editor', require('@tinymce/tinymce-vue').default);
 // Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 // Vue.component('multiselect', Multiselect);
@@ -120,7 +120,12 @@ Vue.component('user-permissions',    require('./components/admin/userPermissions
 */
 Vue.component('equipment-category-form', require('./components/equipment/categoryForm.vue').default);
 Vue.component('equipment-type-form',     require('./components/equipment/typeForm.vue').default);
-Vue.component('equipment-information', require('./components/equipment/equipmentInformation.vue').default);
+Vue.component('equipment-information',   require('./components/equipment/equipmentInformation.vue').default);
+
+/*
+*   Tech Bench Settings Components
+*/
+Vue.component('tech-bench-logo', require('./components/settings/logoForm.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

@@ -11,7 +11,7 @@ return [
         'public' => [
             'driver'     => 'local',
             'root'       => storage_path('app'.DIRECTORY_SEPARATOR.'public'),
-            'url'        => env('APP_URL').DIRECTORY_SEPARATOR.'/storage',
+            'url'        => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
         'backup' => [
