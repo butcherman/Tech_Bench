@@ -22,6 +22,14 @@ class SettingsDomain
         return true;
     }
 
+    public function submitNewSettings($request)
+    {
+        $this->updateSettings('app.timezone', $request->timezone);
+        $this->updateSettings('filesystems.paths.max_size', $request->filesize);
+
+        return true;
+    }
+
     //  Save a new application logo
     public function saveNewLogo(UploadedFile $file)
     {

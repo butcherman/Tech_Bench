@@ -55,4 +55,6 @@ Route::middleware(['auth', 'can:is_installer'])->prefix('settings')->name('setti
 {
     Route::view('logo', 'settings.logoForm')->name('logo_form');
     Route::post('logo', 'Admin\SettingsController@submitLogo')->name('submit_logo');
+    Route::post('general-settings', 'Admin\SettingsController@submitSettings')->name('submit_general');
+    Route::get('general-settings', 'Admin\SettingsController@settingsForm')->name('general');
 });

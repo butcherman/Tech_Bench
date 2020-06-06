@@ -23,7 +23,7 @@ import vue2Dropzone         from 'vue2-dropzone';
 // import Multiselect          from 'vue-multiselect';
 // import vSelect              from 'vue-select';
 import draggable            from 'vuedraggable';
-// import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
+import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 // import Avatar               from 'vue-avatar'
 // import VueClipboard         from 'vue-clipboard2';
 // import { Ziggy }            from '../assets/js/ziggy';
@@ -52,7 +52,7 @@ import { AtomSpinner }      from 'epic-spinners';
 window.axios = require('axios');
 Vue.use(VueGoodTablePlugin);
 Vue.use(BootstrapVue);
-// Vue.use(vueFilterPrettyBytes);
+Vue.use(vueFilterPrettyBytes);
 // Vue.use(VueClipboard);
 
 /*
@@ -126,6 +126,7 @@ Vue.component('equipment-information',   require('./components/equipment/equipme
 *   Tech Bench Settings Components
 */
 Vue.component('tech-bench-logo', require('./components/settings/logoForm.vue').default);
+Vue.component('tech-bench-settings', require('./components/settings/generalSettings.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

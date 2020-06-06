@@ -8,6 +8,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 use App\Domains\Admin\SettingsDomain;
+use App\Http\Requests\Settings\GeneralSettingsRequest;
 
 class SettingsDomainTest extends TestCase
 {
@@ -26,6 +27,19 @@ class SettingsDomainTest extends TestCase
 
         $this->assertTrue($res);
         $this->assertDatabaseHas('settings', ['key' => 'test.key', 'value' => 'test.value']);
+    }
+
+    public function test_submit_new_settings()
+    {
+        $data = new GeneralSettingsRequest([
+            'timezone' => 'America/Log_Angeles',
+            'filesize' => 500,
+        ]);
+
+        $res = $this->testObj->submitNewSettings($data);
+        $this->assertTrue($res);
+        $this->assertDatabaseHas('settings', ['key' => 'app.timezone', 'value' => 'America/Log_Angeles']);
+        $this->assertDatabaseHas('settings', ['key' => 'filesystems.paths.max_size', 'value' => 500]);
     }
 
     public function test_save_new_logo()

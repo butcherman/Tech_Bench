@@ -140,4 +140,20 @@ class LoginControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));
     }
+
+    // //  Test Internet Explorer redirect
+    // public function test_ie_redirect()
+    // {
+    //     // $response = $this->withHeaders(['user-agent' => ['Trident/7.0; rv:11.0']])->get(route('index'));
+
+
+
+
+    //     $response = $this->withHeaders(['user-agent' => 'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'])->get(route('index'));
+
+
+
+
+    //     dd($response->getContent());
+    // }
 }
