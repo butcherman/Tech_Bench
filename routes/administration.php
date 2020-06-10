@@ -53,8 +53,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function()
 */
 Route::middleware(['auth', 'can:is_installer'])->prefix('settings')->name('settings.')->group(function()
 {
-    Route::view('logo', 'settings.logoForm')->name('logo_form');
-    Route::post('logo', 'Admin\SettingsController@submitLogo')->name('submit_logo');
-    Route::post('general-settings', 'Admin\SettingsController@submitSettings')->name('submit_general');
-    Route::get('general-settings', 'Admin\SettingsController@settingsForm')->name('general');
+    Route::view('logo',             'settings.logoForm')                           ->name('logo_form');
+    Route::post('logo',             'Admin\SettingsController@submitLogo')         ->name('submit_logo');
+    Route::post('general-settings', 'Admin\SettingsController@submitSettings')     ->name('submit_general');
+    Route::post('email-settings',   'Admin\SettingsController@submitEmailSettings')->name('submit_email');
+    Route::get('general-settings',  'Admin\SettingsController@settingsForm')       ->name('general');
+    Route::get('email-settings',    'Admin\SettingsController@emailForm')          ->name('email');
+    Route::put('email-settings',    'Admin\SettingsController@sendTestEmail')      ->name('test_email');
 });

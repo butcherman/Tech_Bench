@@ -23,7 +23,7 @@ class LogSuccessfulLogout
      * @param  object  $event
      * @return void
      */
-    public function handle($event)
+    public function handle()
     {
         Log::info('User '.Auth::user()->full_name.' logged out', ['User ID' => Auth::user()->user_id, 'Username' => Auth::user()->username, 'IP Address' => \Request::ip()]);
     }

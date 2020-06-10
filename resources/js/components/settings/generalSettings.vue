@@ -59,35 +59,19 @@
                 }
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-             console.log(this.tz_list);
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
             validateForm(e)
             {
                 e.preventDefault();
-                console.log(this.form);
                 if(this.$refs['settings-form'].checkValidity() === false)
                 {
                      this.validated = true;
                 }
                 else
                 {
-                     console.log('ready to go');
                      this.submitted = true;
                      axios.post(this.route('settings.submit_general'), this.form)
                          .then(res => {
-                             console.log(res);
                              this.submitted = false;
                              this.$bvModal.msgBoxOk('Settings Updated');
                          }).catch(error => this.eventHub.$emit('axiosError', error));

@@ -127,6 +127,7 @@ Vue.component('equipment-information',   require('./components/equipment/equipme
 */
 Vue.component('tech-bench-logo', require('./components/settings/logoForm.vue').default);
 Vue.component('tech-bench-settings', require('./components/settings/generalSettings.vue').default);
+Vue.component('email-settings', require('./components/settings/emailSettings.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

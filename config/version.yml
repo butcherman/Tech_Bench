@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: null
   buildmetadata: null
-  commit: 3ee
+  commit: 3ef
   timestamp:
     year: 2020
     month: 6
-    day: 6
-    hour: 12
-    minute: 47
-    second: 45
+    day: 9
+    hour: 17
+    minute: 28
+    second: 13
     timezone: America/Los_Angeles
 commit:
   length: 6

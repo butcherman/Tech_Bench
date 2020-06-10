@@ -74,3 +74,11 @@
 ul.no-bullet {
     list-style-type: none;
 }
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}

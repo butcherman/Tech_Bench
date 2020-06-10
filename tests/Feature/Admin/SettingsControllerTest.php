@@ -99,4 +99,76 @@ class SettingsControllerTest extends TestCase
 
         $response->assertJson(['url' => config('app.url').'/storage/images/logo/newLogo.png']);
     }
+
+    public function test_email_form_guest()
+    {
+        $response = $this->get(route('settings.email'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_email_form_no_permission()
+    {
+        $response = $this->actingAs($this->getTech())->get(route('settings.email'));
+        $response->assertStatus(403);
+    }
+
+    public function test_email_form()
+    {
+        $response = $this->actingAs($this->getInstaller())->get(route('settings.email'));
+        $response->assertSuccessful();
+        $response->assertViewIs('settings.emailSettings');
+    }
+
+    public function test_submit_email_settings_guest()
+    {
+        $data = [
+            'from_address'   => 'from@em.com',
+            'username'       => 'TestUsername',
+            'password'       => 'TestPassword',
+            'host'           => 'testHost.com',
+            'port'           => 587,
+            'encryption'     => 'TLS',
+            'authentication' => true,
+        ];
+
+        $response = $this->post(route('settings.submit_email'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_submit_email_settings_no_permission()
+    {
+        $data = [
+            'from_address'   => 'from@em.com',
+            'username'       => 'TestUsername',
+            'password'       => 'TestPassword',
+            'host'           => 'testHost.com',
+            'port'           => 587,
+            'encryption'     => 'TLS',
+            'authentication' => true,
+        ];
+
+        $response = $this->actingAs($this->getTech())->post(route('settings.submit_email'), $data);
+        $response->assertStatus(403);
+    }
+
+    public function test_submit_email_settings()
+    {
+        $data = [
+            'from_address'   => 'from@em.com',
+            'username'       => 'TestUsername',
+            'password'       => 'TestPassword',
+            'host'           => 'testHost.com',
+            'port'           => 587,
+            'encryption'     => 'TLS',
+            'authentication' => true,
+        ];
+
+        $response = $this->actingAs($this->getInstaller())->post(route('settings.submit_email'), $data);
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
 }
