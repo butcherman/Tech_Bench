@@ -125,9 +125,14 @@ Vue.component('equipment-information',   require('./components/equipment/equipme
 /*
 *   Tech Bench Settings Components
 */
-Vue.component('tech-bench-logo', require('./components/settings/logoForm.vue').default);
+Vue.component('tech-bench-logo',     require('./components/settings/logoForm.vue').default);
 Vue.component('tech-bench-settings', require('./components/settings/generalSettings.vue').default);
-Vue.component('email-settings', require('./components/settings/emailSettings.vue').default);
+Vue.component('email-settings',      require('./components/settings/emailSettings.vue').default);
+
+/*
+*   Customers Components
+*/
+Vue.component('customer-search-full', require('./components/customers/searchForm.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

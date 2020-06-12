@@ -83,8 +83,8 @@
                         </a>
                     </li>
                     @endcan
-                    <li class="nav-itema">
-                        <a class="nav-link" href="#">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('customer.index')}}">
                             <i class="fas fa-user-tie menu-icon"></i>
                             <span class="menu-title">Customers</span>
                         </a>

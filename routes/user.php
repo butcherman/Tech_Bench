@@ -30,12 +30,6 @@ Route::middleware('auth')->group(function()
 });
 
 
-
-
-Route::get('/customer/stuff/{id}/{name}', function()
-{
-    return 'customer';
-})->name('customer.details');
 Route::get('tips/stuff/{id}/{name}', function()
 {
     return 'Tech Tip';

@@ -22,13 +22,18 @@ class Customers extends Model
         return $this->hasMany('App\CustomerSystems', 'cust_id', 'cust_id');
     }
 
-    public function getChildCountAttribute()
+    public function ParentSystems()
     {
-        return Customers::where('parent_id', $this->cust_id)->count();
+        return $this->hasMany('App\CustomerSystems', 'cust_id', 'parent_id');
     }
 
     public function ParentCustomer()
     {
         return $this->hasOne('App\Customers', 'cust_id', 'parent_id');
+    }
+
+    public function getChildCountAttribute()
+    {
+        return Customers::where('parent_id', $this->cust_id)->count();
     }
 }

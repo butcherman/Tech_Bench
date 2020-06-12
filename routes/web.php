@@ -9,13 +9,6 @@ Auth::routes(['register' => false]);
 */
 Route::middleware('guest')->group(function()
 {
-    Route::get('welcome', function()
-    {
-        return response('worked');
-    })->name('initialize');
-
-
-
     Route::view('logout', 'auth.logout')->name('logout_complete');
     Route::view('/', 'auth.login')->name('index');
 });

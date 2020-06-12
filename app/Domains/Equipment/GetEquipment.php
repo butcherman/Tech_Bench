@@ -25,6 +25,22 @@ class GetEquipment
         return $list;
     }
 
+    public function getEquipmentArray()
+    {
+        $list = SystemTypes::orderBy('cat_id', 'ASC')->orderBy('name', 'ASC')->get();
+
+        $newList = [];
+        foreach($list as $item)
+        {
+            $newList[] = [
+                'value' => $item->sys_id,
+                'text'  => $item->name,
+            ];
+        }
+
+        return $newList;
+    }
+
     public function getCatList()
     {
         return SystemCategories::all();
