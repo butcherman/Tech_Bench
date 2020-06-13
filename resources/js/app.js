@@ -89,6 +89,7 @@ Vue.mixin({
 Vue.component('form-submit',     require('./components/formSubmit.vue').default);
 // Vue.component('bookmark',        require('./components/Bookmark.vue').default);
 Vue.component('axios-error', require('./components/errorMessage.vue').default);
+Vue.component('all-states',  require('./components/allStates.vue').default);
 
 /*
 *   Individual Page Components
@@ -132,7 +133,9 @@ Vue.component('email-settings',      require('./components/settings/emailSetting
 /*
 *   Customers Components
 */
-Vue.component('customer-search-full', require('./components/customers/searchForm.vue').default);
+Vue.component('customer-search-full',   require('./components/customers/searchForm.vue').default);
+Vue.component('customer-simple-search', require('./components/customers/simpleSearch.vue').default);
+Vue.component('create-customer-form',   require('./components/customers/createCustomerForm.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

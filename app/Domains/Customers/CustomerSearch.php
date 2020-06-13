@@ -3,8 +3,9 @@
 namespace App\Domains\Customers;
 
 use App\Customers;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 
 class CustomerSearch
@@ -26,6 +27,12 @@ class CustomerSearch
         }
 
         return $results;
+    }
+
+    //  Search specifically for a customer ID
+    public function searchID($id)
+    {
+        return Customers::find($id);
     }
 
     //  Separate the name, city, and equipment id fields from request data

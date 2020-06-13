@@ -51,18 +51,18 @@
                 />
                 Loading Customers...
             </div>
+            <div slot="table-actions">
+                <b-button v-if="allow_new" variant="info" :href="route('customer.create')" pill size="sm"><i class="fas fa-plus" aria-hidden="true"></i> Add New Customer</b-button>
+            </div>
             <template slot="table-row" slot-scope="data">
-
                 <span v-if="data.column.field == 'name'" class="d-block w-100 h-100">
                     <a :href="route('customer.details', [data.row.cust_id, cleanURL(data.row.name)])" class="d-block w-100 h-100 text-dark">{{data.row.name}}</a>
                 </span>
                 <span v-else-if="data.column.field == 'equip_list'">
-                    <div v-for="sys in data.row.parent_systems" :key="sys.cust_sys_id"><i class="fas fa-share-alt" title="Shared Equpipment" v-b-tooltip.hover></i> {{sys.sys_name}}</div>
+                    <div v-for="sys in data.row.parent_systems" :key="sys.cust_sys_id"><i class="fas fa-share-alt" title="Shared Equipment" v-b-tooltip.hover></i> {{sys.sys_name}}</div>
                     <div v-for="sys in data.row.customer_systems" :key="sys.cust_sys_id">{{sys.sys_name}}</div>
                 </span>
             </template>
-
-
         </vue-good-table>
     </div>
 </template>
@@ -130,17 +130,8 @@
                 },
             }
         },
-        created() {
-            //
-        },
         mounted() {
              this.search();
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
         },
         methods: {
             search()
@@ -148,13 +139,9 @@
                 this.isLoading = true;
                 axios.get(this.route('customer.search', this.searchParam))
                     .then(res => {
-                        console.log(res.data);
-                        this.isLoading = false;
-                        // this.pagination.links = res.data.links;
-                        // this.pagination.meta  = res.data.meta;
+                        this.isLoading             = false;
                         this.pagination.meta.total = res.data.total;
-                        this.table.rows = res.data.data;
-                        // this.loadDone = true;
+                        this.table.rows            = res.data.data;
                     }).catch(error => this.error = true);
             },
             filterSearch(data)

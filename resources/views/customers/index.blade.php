@@ -13,7 +13,7 @@
                 <customer-search-full
                     :equipment_types='@json($equipList)'
                 @can('hasAccess', 'Add Customer')
-                    :allow_create="true"
+                    :allow_new="true"
                 @endcan
                 ></customer-search-full>
             </div>

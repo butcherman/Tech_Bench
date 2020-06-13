@@ -138,4 +138,12 @@ class CustomerSearchTest extends TestCase
 
         $this->assertCount(3, $res);
     }
+
+    public function test_search_id()
+    {
+        $cust = factory(Customers::class)->create();
+
+        $res = $this->testObj->searchID($cust->cust_id);
+        $this->assertEquals($cust->toArray(), $res->toArray());
+    }
 }
