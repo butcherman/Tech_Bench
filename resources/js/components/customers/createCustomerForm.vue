@@ -122,6 +122,7 @@
                     parent_id:   '',
                     parent_name: '',
                     name:        '',
+                    dba_name:    '',
                     address:     '',
                     city:        '',
                     state:       '',
@@ -147,18 +148,15 @@
             validateForm(e)
             {
                 e.preventDefault();
-                console.log(this.form);
                 if(this.$refs['new-customer-form'].checkValidity() === false)
                 {
                      this.validated = true;
                 }
                 else
                 {
-                     console.log('ready to go');
                      this.submitted = true;
                      axios.post(this.route('customer.store'), this.form)
                          .then(res => {
-                             console.log(res);
                              location.href = this.route('customer.details', [res.data.cust_id, encodeURI(this.dashify(this.form.name))])
                          }).catch(error => this.eventHub.$emit('axiosError', error));
                 }

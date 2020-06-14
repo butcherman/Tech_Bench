@@ -28,6 +28,12 @@ class GetUserStats
         return $favs->makeHidden('Customers');
     }
 
+    //  Check if a customer is listed as a favorite for the user
+    public function checkCustomerForFav($custID)
+    {
+        return CustomerFavs::where('user_id', $this->userID)->where('cust_id', $custID)->first();
+    }
+
     //  Get all Tech Tip Favorites assigned to the user
     public function getUserTipFavs()
     {

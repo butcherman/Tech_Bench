@@ -75,7 +75,6 @@
             validateForm(e)
             {
                 e.preventDefault();
-                console.log(this.form);
                 if(this.$refs['user-settings-form'].checkValidity() === false)
                 {
                      this.validated = true;

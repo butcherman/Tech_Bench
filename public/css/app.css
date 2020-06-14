@@ -20209,7 +20209,17 @@ address p {
   transform: rotate(15deg);
 }
 
+.bookmark-unchecked {
+  color: #C4C4C4;
+}
+
+.bookmark-checked {
+  color: #D46E70;
+}
+
 .pointer,
+.bookmark-unchecked,
+.bookmark-checked,
 .filedrag {
   cursor: pointer;
 }

@@ -75,8 +75,9 @@
             }
         },
         methods: {
-            search()
+            search(e)
             {
+                e.preventDefault();
                 this.loading = true;
                 axios.get(this.route('customer.search', this.form))
                     .then(res => {

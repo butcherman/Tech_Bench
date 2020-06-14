@@ -157,22 +157,19 @@
             validateForm(e)
             {
                 e.preventDefault();
-                console.log(this.form);
                 if(this.$refs['email-settings-form'].checkValidity() === false)
                 {
                      this.validated = true;
                 }
                 else
                 {
-                     console.log('ready to go');
-                     this.submitted = true;
-                     axios.post(this.route('settings.submit_email'), this.form)
-                         .then(res => {
-                             console.log(res);
-                             this.$bvModal.msgBoxOk('Email Settings Updated');
-                             this.submitted = false;
-                             this.validated = false;
-                         }).catch(error => this.eventHub.$emit('axiosError', error));
+                    this.submitted = true;
+                    axios.post(this.route('settings.submit_email'), this.form)
+                        .then(res => {
+                            this.$bvModal.msgBoxOk('Email Settings Updated');
+                            this.submitted = false;
+                            this.validated = false;
+                        }).catch(error => this.eventHub.$emit('axiosError', error));
                 }
             }
         }

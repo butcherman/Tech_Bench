@@ -67,6 +67,16 @@
     }
 }
 
+.bookmark-unchecked {
+    color: #C4C4C4;
+    @extend .pointer;
+}
+
+.bookmark-checked {
+    color: #D46E70;
+    @extend .pointer;
+}
+
 .pointer {
     cursor: pointer;
 }

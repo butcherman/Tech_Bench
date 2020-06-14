@@ -59,6 +59,23 @@ class GetUserStatsTest extends TestCase
         $this->assertTrue($testFavs->count() == 5);
     }
 
+    public function test_check_customer_for_fav_true()
+    {
+        $cust = factory(Customers::class)->create();
+        CustomerFavs::create(['user_id' => $this->testUser->user_id, 'cust_id' => $cust->cust_id]);
+
+        $res = $this->statObj->checkCustomerForFav($cust->cust_id);
+        $this->assertEquals($res->cust_id, $cust->cust_id);
+    }
+
+    public function test_check_customer_for_fav_false()
+    {
+        $cust = factory(Customers::class)->create();
+
+        $res = $this->statObj->checkCustomerForFav($cust->cust_id);
+        $this->assertNull($res);
+    }
+
     //  Test that all of the users tip favorites are there - test will only count the results
     public function test_get_user_tip_favs()
     {

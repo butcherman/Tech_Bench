@@ -136,6 +136,8 @@ Vue.component('email-settings',      require('./components/settings/emailSetting
 Vue.component('customer-search-full',   require('./components/customers/searchForm.vue').default);
 Vue.component('customer-simple-search', require('./components/customers/simpleSearch.vue').default);
 Vue.component('create-customer-form',   require('./components/customers/createCustomerForm.vue').default);
+Vue.component('customer-details', require('./components/customers/customerDetails.vue').default);
+Vue.component('edit-cust-details', require('./components/customers/editCustomerDetails.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers
