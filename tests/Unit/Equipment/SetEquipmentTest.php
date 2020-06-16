@@ -10,9 +10,12 @@ use App\SystemDataFields;
 use App\SystemDataFieldTypes;
 use App\SystemTypes;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SetEquipmentTest extends TestCase
 {
+    use RefreshDatabase;
+    
     public function test_create_equipment()
     {
         $makeEquip = factory(SystemTypes::class)->make();
