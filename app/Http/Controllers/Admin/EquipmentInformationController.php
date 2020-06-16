@@ -21,6 +21,11 @@ class EquipmentInformationController extends Controller
         ]);
     }
 
+    public function getFields($sysID)
+    {
+        return (new GetEquipDataFields)->getFieldsForEquip($sysID);
+    }
+
     public function newField(NewFieldRequest $request)
     {
         (new SetEquipmentDataFields)->processNewField($request->name, $request->hidden);

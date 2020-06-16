@@ -56,14 +56,11 @@ class EquipmentTypesController extends Controller
     {
         $result = (new SetEquipment)->updateEquipment($request, $id);
 
-
         if(is_array($result))
         {
             Log::error('Unable to remove Field '.$result[0]['data_field_name'].' - it is still in use by some customers');
             abort(428, 'Unable to remove Field '.$result[0]['data_field_name'].' - it is still in use by some customers');
         }
-
-
 
         Log::notice('Equipment ID '.$id.' has been updated by '.Auth::user()->full_name.'. Data - ', $request->toArray());
         return response()->json(['success' => true]);

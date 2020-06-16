@@ -17,6 +17,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function()
         Route::get(     'equipment-information',      'Admin\EquipmentInformationController@index')          ->name('equipment_information');
         Route::get(     '/',                          'Admin\EquipmentTypesController@index')                ->name('index');
     });
+    Route::get('equipment-information/{id}',          'Admin\EquipmentInformationController@getFields')      ->name('equipment.get_fields');
 
     /*
     *   User Administration
