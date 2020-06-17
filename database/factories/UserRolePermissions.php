@@ -6,7 +6,7 @@ use App\UserRolePermissions;
 
 $factory->define(UserRolePermissions::class, function() {
     return [
-        'role_id'      => factory(App\UserRoleType::class)->create()->role_id,
-        'perm_type_id' => factory(App\UserRolePermissionTypes::class)->create()->perm_type_id,
+        'role_id'      => factory(App\UserRoleType::class),
+        'perm_type_id' => factory(App\UserRolePermissionTypes::class),
     ];
 });

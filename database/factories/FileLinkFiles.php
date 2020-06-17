@@ -7,9 +7,9 @@ use App\FileLinkFiles;
 
 $factory->define(FileLinkFiles::class, function() {
     return [
-        'link_id'  => factory(App\FileLinks::class)->create()->link_id,
-        'file_id'  => factory(App\Files::class)->create()->file_id,
-        'user_id'  => factory(App\User::class)->create()->user_id,
+        'link_id'  => factory(App\FileLinks::class),
+        'file_id'  => factory(App\Files::class),
+        'user_id'  => factory(App\User::class),
         'added_by' => null,
         'upload'   => 0,
         'note'     => null,

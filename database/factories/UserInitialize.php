@@ -4,7 +4,7 @@
 
 $factory->define(App\UserInitialize::class, function() {
     return [
-        'username' => factory(App\User::class)->create()->username,
+        'username' => factory(App\User::class),
         'token'    => strtolower(Str::random(30)),
     ];
 });
