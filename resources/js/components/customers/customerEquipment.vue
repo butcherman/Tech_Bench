@@ -55,17 +55,11 @@
                 equipment: [],
             }
         },
-        created() {
-            //
-        },
         mounted() {
              this.getEquipment();
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
+             this.eventHub.$on('parent-linked', data => {
+                 this.getEquipment();
+             });
         },
         methods: {
             getEquipment()
@@ -73,7 +67,6 @@
                 this.loading = true;
                 axios.get(this.route('customer.equipment.show', this.cust_id))
                     .then(res => {
-                        console.log(res);
                         this.equipment = res.data;
                         this.loading = false;
                     }).catch(error => {this.error = true});

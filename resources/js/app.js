@@ -19,7 +19,7 @@ import BootstrapVue         from 'bootstrap-vue';
 import VueGoodTablePlugin   from 'vue-good-table';
 // import route                from 'ziggy';
 import vue2Dropzone         from 'vue2-dropzone';
-// import VuePhoneNumberInput  from 'vue-phone-number-input';
+import VuePhoneNumberInput  from 'vue-phone-number-input';
 // import Multiselect          from 'vue-multiselect';
 // import vSelect              from 'vue-select';
 import draggable            from 'vuedraggable';
@@ -60,7 +60,7 @@ Vue.use(vueFilterPrettyBytes);
 */
 Vue.component('vue-dropzone', vue2Dropzone);
 // Vue.component('editor', require('@tinymce/tinymce-vue').default);
-// Vue.component('vue-phone-number-input', VuePhoneNumberInput);
+Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 // Vue.component('multiselect', Multiselect);
 // Vue.component('v-select', vSelect);
 Vue.component('draggable', draggable);
@@ -140,6 +140,8 @@ Vue.component('customer-details',        require('./components/customers/custome
 Vue.component('edit-cust-details',       require('./components/customers/editCustomerDetails.vue').default);
 Vue.component('customer-equipment',      require('./components/customers/customerEquipment.vue').default);
 Vue.component('edit-customer-equipment', require('./components/customers/editCustomerEquipment.vue').default);
+Vue.component('customer-contacts',       require('./components/customers/customerContacts.vue').default);
+Vue.component('edit-customer-contact',   require('./components/customers/editCustomerContact.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

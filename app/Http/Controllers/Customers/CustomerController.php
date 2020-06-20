@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Domains\Equipment\GetEquipment;
 use App\Domains\Customers\CustomerSearch;
+use App\Domains\Customers\GetCustomerDetails;
 use App\Domains\Customers\SetCustomerDetails;
 use App\Domains\User\GetUserStats;
 use App\Domains\User\SetUserFavorites;
@@ -37,8 +38,9 @@ class CustomerController extends Controller
 
     public function details($id)
     {
-        $custObj = new CustomerSearch;
-        $details = $custObj->searchID($id);
+        // $custObj = new CustomerSearch;
+        $custObj = new GetCustomerDetails;
+        $details = $custObj->getDetails($id);
         if(!$details)
         {
             abort(404, 'The customer you are looking for does not exist or cannot be found');
@@ -47,7 +49,7 @@ class CustomerController extends Controller
         $isFav = (new GetUserStats(Auth::user()->user_id))->checkCustomerForFav($details->cust_id);
         return view('customers.details', [
             'details' => $details,
-            'parent' => $details->parent_id ? $custObj->searchID($details->parent_id) : null,
+            'parent' => $details->parent_id ? $custObj->getDetails($details->parent_id) : null,
             'isFav'  => $isFav ? true : false,
         ]);
     }

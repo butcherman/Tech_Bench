@@ -22,7 +22,6 @@ class CustomerContactPhones extends Model
 
     public function getReadableAttribute()
     {
-        // return PhoneNumberTypes::readablePhoneNumber($this->phone_number);
         return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '($1) $2-$3', $this->phone_number);
     }
 

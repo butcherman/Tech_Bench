@@ -15,3 +15,4 @@ class UserSettings extends Model
         return $this->hasOne('App\User', 'user_id', 'user_id')->withTrashed();
     }
 }
+

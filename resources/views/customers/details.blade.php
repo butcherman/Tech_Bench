@@ -16,5 +16,11 @@
             :linked_site='@json($parent || $details->childCount ? true : false)'
         ></customer-equipment>
     </div>
+    <div class="col-md-7 grid-margin stretch-card">
+        <customer-contacts
+            :cust_id='@json($details->cust_id)'
+            :linked_site='@json($parent || $details->childCount ? true : false)'
+        ></customer-contacts>
+    </div>
 </div>
 @endsection

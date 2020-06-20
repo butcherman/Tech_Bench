@@ -67,14 +67,14 @@
                         </a>
                     </li>
                     @endcan
-                    @can('hasAccess', 'Run Reports')
+                    {{-- @can('hasAccess', 'Run Reports')
                     <li class="nav-itema">
                         <a class="nav-link" href="#">
                             <i class="fas fa-book"></i>
                             <span class="menu-title">Reports</span>
                         </a>
                     </li>
-                    @endcan
+                    @endcan --}}
                     @can('hasAccess', 'Use File Links')
                     <li class="nav-itema">
                         <a class="nav-link" href="#">

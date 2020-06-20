@@ -84,12 +84,6 @@
                 }
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
         computed: {
             button_class()
             {
@@ -107,9 +101,6 @@
             {
                 return this.equipment_data ? true : false;
             }
-        },
-        watch: {
-             //
         },
         methods: {
             openModal()
@@ -147,20 +138,17 @@
             validateForm(e)
             {
                 e.preventDefault();
-                console.log(this.form);
                 if(this.$refs['equipment-form'].checkValidity() === false)
                 {
                      this.validated = true;
                 }
                 else
                 {
-                     console.log('ready to go');
                      this.submitted = true;
                      if(this.edit_equip)
                      {
                          axios.put(this.route('customer.equipment.update', this.equipment_data.cust_sys_id), this.form)
                              .then(res => {
-                                 console.log(res);
                                  this.submitted = false;
                                  this.$emit('equipment-updated');
                                  this.$refs['customer-equipment-modal'].hide();
@@ -170,7 +158,6 @@
                      {
                          axios.post(this.route('customer.equipment.store'), this.form)
                              .then(res => {
-                                 console.log(res);
                                  this.submitted = false;
                                  this.$emit('equipment-updated');
                                  this.$refs['customer-equipment-modal'].hide();

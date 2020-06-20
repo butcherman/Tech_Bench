@@ -10,5 +10,6 @@ $factory->define(CustomerContacts::class, function(Faker $faker) {
         'cust_id' => factory(App\Customers::class),
         'name'    => $faker->name(),
         'email'   => $faker->email(),
+        'shared'  => false,
     ];
 });

@@ -56,13 +56,10 @@
                 parent: this.parent_details,
             }
         },
-        created() {
-            //
-        },
         mounted() {
              this.eventHub.$on('parent-linked', data => {
                  this.parentLinked(data);
-             })
+             });
         },
         computed: {
             bookmark_class()
@@ -86,9 +83,6 @@
 
                 return false;
             },
-        },
-        watch: {
-             //
         },
         methods: {
             toggleFav()
