@@ -1,0 +1,24 @@
+/*
+*   Customer Notes
+*/
+.customer-note-card {
+    .card {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        .card-header {
+            @extend .pointer;
+        }
+        .card-body {
+            max-height: 50px;
+        }
+        .card-footer {
+            display: none;
+        }
+    }
+}
+
+.bigger-note {
+    height: 60vh;
+    overflow-y: auto;
+}

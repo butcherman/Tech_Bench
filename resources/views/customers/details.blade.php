@@ -23,4 +23,8 @@
         ></customer-contacts>
     </div>
 </div>
+<customer-notes
+    :cust_id='@json($details->cust_id)'
+    :linked_site='@json($parent || $details->childCount ? true : false)'
+></customer-notes>
 @endsection

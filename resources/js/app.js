@@ -33,18 +33,19 @@ import { AtomSpinner }      from 'epic-spinners';
 /*
 *   The TinyMCE library
 */
-// require('tinymce');
-// require('tinymce/themes/silver');
-// require('tinymce/themes/mobile');
-// require('tinymce/plugins/advlist');
-// require('tinymce/plugins/autolink');
-// require('tinymce/plugins/lists');
-// require('tinymce/plugins/link');
-// require('tinymce/plugins/image');
-// require('tinymce/plugins/table');
-// require('tinymce/plugins/fullscreen');
-// require('tinymce/plugins/spellchecker');
-// require('tinymce/plugins/preview');
+require('tinymce');
+require('tinymce/icons/default');
+require('tinymce/themes/silver');
+require('tinymce/themes/mobile');
+require('tinymce/plugins/advlist');
+require('tinymce/plugins/autolink');
+require('tinymce/plugins/lists');
+require('tinymce/plugins/link');
+require('tinymce/plugins/image');
+require('tinymce/plugins/table');
+require('tinymce/plugins/fullscreen');
+require('tinymce/plugins/spellchecker');
+require('tinymce/plugins/preview');
 
 /*
 *   Vue, Bootstrap and third party libraries
@@ -59,7 +60,7 @@ Vue.use(vueFilterPrettyBytes);
 *   Third party components
 */
 Vue.component('vue-dropzone', vue2Dropzone);
-// Vue.component('editor', require('@tinymce/tinymce-vue').default);
+Vue.component('editor', require('@tinymce/tinymce-vue').default);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 // Vue.component('multiselect', Multiselect);
 // Vue.component('v-select', vSelect);
@@ -142,6 +143,9 @@ Vue.component('customer-equipment',      require('./components/customers/custome
 Vue.component('edit-customer-equipment', require('./components/customers/editCustomerEquipment.vue').default);
 Vue.component('customer-contacts',       require('./components/customers/customerContacts.vue').default);
 Vue.component('edit-customer-contact',   require('./components/customers/editCustomerContact.vue').default);
+Vue.component('customer-notes',          require('./components/customers/customerNotes.vue').default);
+Vue.component('edit-customer-note',      require('./components/customers/editCustomerNote.vue').default);
+Vue.component('show-customer-note',      require('./components/customers/showCustomerNote.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

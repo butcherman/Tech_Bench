@@ -20220,7 +20220,8 @@ address p {
 .pointer,
 .bookmark-unchecked,
 .bookmark-checked,
-.filedrag {
+.filedrag,
+.customer-note-card .card .card-header {
   cursor: pointer;
 }
 
@@ -20308,11 +20309,30 @@ ul.no-bullet {
 }
 
 /*
-*   Global Variable Files
+*   Customer Notes
 */
 
+.customer-note-card .card {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.customer-note-card .card .card-body {
+  max-height: 50px;
+}
+
+.customer-note-card .card .card-footer {
+  display: none;
+}
+
+.bigger-note {
+  height: 60vh;
+  overflow-y: auto;
+}
+
 /*
-*   Override Bootstrap's default breakpoints
+*   Global Variable Files
 */
 
 /*
