@@ -53,6 +53,9 @@
         },
         mounted() {
              this.getNotes();
+             this.eventHub.$on('parent-linked', data => {
+                 this.getNotes();
+             });
         },
         methods: {
             getNotes()

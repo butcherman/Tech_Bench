@@ -97,6 +97,9 @@
         },
         mounted() {
             this.getContacts();
+            this.eventHub.$on('parent-linked', data => {
+                 this.getContacts();
+             });
         },
         methods: {
             getContacts()

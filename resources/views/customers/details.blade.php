@@ -27,4 +27,8 @@
     :cust_id='@json($details->cust_id)'
     :linked_site='@json($parent || $details->childCount ? true : false)'
 ></customer-notes>
+<customer-files
+    :cust_id='@json($details->cust_id)'
+    :linked_site='@json($parent || $details->childCount ? true : false)'
+></customer-files>
 @endsection

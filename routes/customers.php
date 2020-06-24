@@ -4,7 +4,8 @@
 */
 Route::middleware('auth')->prefix('customer')->name('customer.')->group(function()
 {
-    Route::resource('notes',             'Customers\CUstomerNotesController');
+    Route::resource('files',             'Customers\CustomerFilesController');
+    Route::resource('notes',             'Customers\CustomerNotesController');
     Route::resource('contacts',          'Customers\CustomerContactsController');
     Route::resource('equipment',         'Customers\CustomerEquipmentController');
     Route::delete('disable/{id}',        'Customers\CustomerController@delete')          ->name('destroy')->middleware('check_role:Deactivate Customer');

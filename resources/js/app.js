@@ -86,7 +86,7 @@ Vue.mixin({
 *   Global Components
 */
 // Vue.component('go-back',         require('./components/GoBack.vue').default);
-// Vue.component('file-upload',     require('./components/FileUpload.vue').default);
+Vue.component('file-upload',     require('./components/fileUpload.vue').default);
 Vue.component('form-submit',     require('./components/formSubmit.vue').default);
 // Vue.component('bookmark',        require('./components/Bookmark.vue').default);
 Vue.component('axios-error', require('./components/errorMessage.vue').default);
@@ -146,6 +146,9 @@ Vue.component('edit-customer-contact',   require('./components/customers/editCus
 Vue.component('customer-notes',          require('./components/customers/customerNotes.vue').default);
 Vue.component('edit-customer-note',      require('./components/customers/editCustomerNote.vue').default);
 Vue.component('show-customer-note',      require('./components/customers/showCustomerNote.vue').default);
+Vue.component('customer-files',          require('./components/customers/customerFiles.vue').default);
+Vue.component('new-customer-file',       require('./components/customers/newCustomerFile.vue').default);
+Vue.component('edit-customer-file',      require('./components/customers/editCustomerFile.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

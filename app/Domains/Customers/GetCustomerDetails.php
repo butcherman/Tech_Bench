@@ -16,7 +16,7 @@ class GetCustomerDetails
         return $details;
     }
 
-    protected function getParentID($custID)
+    public function getParentID($custID)
     {
         return Customers::findOrFail($custID)->parent_id;
     }

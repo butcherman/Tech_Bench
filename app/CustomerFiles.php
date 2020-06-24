@@ -26,6 +26,6 @@ class CustomerFiles extends Model
 
     public function User()
     {
-        return $this->hasOne('App\User', 'user_id', 'user_id');
+        return $this->hasOne('App\User', 'user_id', 'user_id')->withTrashed();
     }
 }

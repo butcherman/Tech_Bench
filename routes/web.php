@@ -3,6 +3,7 @@
 *   Built in Authorization Routes
 */
 Auth::routes(['register' => false]);
+Route::get('download/{id}/{name}', 'DownloadController@index')->name('download');
 
 /*
 *   Basic Non-User Routes
