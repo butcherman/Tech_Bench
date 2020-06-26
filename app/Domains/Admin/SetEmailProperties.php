@@ -59,7 +59,7 @@ class SetEmailProperties extends SettingsDomain
             $mail->to($emailAddress)->send(new TestEmail);
             Log::info('Test email sent to '.$emailAddress);
         }
-        catch (\Exception $e)
+        catch(\Exception $e)
         {
             Log::alert('Test Email to '.$emailAddress.' failed.  Reason - ', array($e));
             return $e->getMessage();

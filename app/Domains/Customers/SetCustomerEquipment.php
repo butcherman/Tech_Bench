@@ -83,9 +83,9 @@ class SetCustomerEquipment extends GetCustomerDetails
                 'cust_sys_id' => $equipID,
                 'field_id'    => $field['field_id'],
             ],
-            [   'cust_sys_id' => $equipID,
+            ['cust_sys_id' => $equipID,
                 'field_id'    => $field['field_id'],
-                'value' => isset($field['value']) ? $field['value'] : null,])->update([
+                'value' => isset($field['value']) ? $field['value'] : null, ])->update([
                 'value' => isset($field['value']) ? $field['value'] : null,
             ]);
         }

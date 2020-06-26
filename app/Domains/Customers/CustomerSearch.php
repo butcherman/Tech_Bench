@@ -16,7 +16,7 @@ class CustomerSearch
         $sort       = $this->getSortFields($request);
 
         //  Determine if the search request is blank - if so, return all customers
-        if((array)$searchData)
+        if((array) $searchData)
         {
             $results = $this->searchFor($searchData, $pagination, $sort, true);
         }
@@ -78,11 +78,11 @@ class CustomerSearch
             //  Search equipment field
             ->when(isset($searchData->equipment), function($q) use ($searchData)
             {
-                $q->whereHas('ParentSystems.SystemTypes', function ($qry) use ($searchData)
+                $q->whereHas('ParentSystems.SystemTypes', function($qry) use ($searchData)
                 {
                     $qry->where('sys_id', $searchData->equipment);
                 })
-                ->orWhereHas('CustomerSystems.SystemTypes', function ($qry) use ($searchData)
+                ->orWhereHas('CustomerSystems.SystemTypes', function($qry) use ($searchData)
                 {
                     $qry->where('sys_id', $searchData->equipment);
                 });
@@ -96,14 +96,14 @@ class CustomerSearch
             ->when(isset($searchData->name), function($q) use ($searchData)
             {
                 $q->where('name', 'like', '%'.$searchData->name.'%')
-                  ->orWhere('cust_id', 'like', '%'.$searchData->name.'%')
-                  ->orWhere('dba_name', 'like', '%'.$searchData->name.'%');
+                    ->orWhere('cust_id', 'like', '%'.$searchData->name.'%')
+                    ->orWhere('dba_name', 'like', '%'.$searchData->name.'%');
             })
             //  Search by equipment type
             ->when($includeSystems, function($q)
             {
                 $q->with('CustomerSystems.SystemTypes')
-                  ->with('ParentSystems.SystemTypes');
+                    ->with('ParentSystems.SystemTypes');
             })
             ->paginate($pagination->perPage);
     }
@@ -112,8 +112,7 @@ class CustomerSearch
     protected function getAllCustomers($pagination, $sort, $includeSystems = false)
     {
         return Customers::orderBy($sort->sortField, $sort->sortType)
-            ->when($includeSystems, function($q)
-            {
+            ->when($includeSystems, function($q) {
                 $q->with('CustomerSystems.SystemTypes')
                 ->with('ParentSystems.SystemTypes');
             })

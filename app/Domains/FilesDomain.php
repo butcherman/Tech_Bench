@@ -40,7 +40,7 @@ class FilesDomain
             $parts = pathinfo($name);
             $ext   = isset($parts['extension']) ? ('.'.$parts['extension']) : '';
             $base = $parts['filename'];
-             $number = 0;
+                $number = 0;
 
             do
             {

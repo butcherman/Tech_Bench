@@ -29,7 +29,7 @@ class setCustomerFiles extends SetFiles
             return false;
         }
 
-        $fileID   = $this->addDatabaseRow($filename, $this->path);
+        $fileID = $this->addDatabaseRow($filename, $this->path);
         $this->processCustFile($fileID, $userID, $request);
 
         return true;

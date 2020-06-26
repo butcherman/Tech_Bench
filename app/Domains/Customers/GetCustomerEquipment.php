@@ -27,8 +27,7 @@ class GetCustomerEquipment extends GetCustomerDetails
     protected function getEquipment($custID, $shared = false)
     {
         return CustomerSystems::where('cust_id', $custID)
-            ->when($shared, function($q)
-            {
+            ->when($shared, function($q) {
                 $q->where('shared', 1);
             })
             ->with('CustomerSystemData')

@@ -34,7 +34,7 @@ class databaseCheck extends Command
             $this->fix = true;
         }
         //  Extend the amount of time the script is allowed to run
-        ini_set('max_execution_time', 600);  //  600 seconds = 10 minutes
+        ini_set('max_execution_time', 600); //  600 seconds = 10 minutes
 
         //  Begin check
         $fixStr = $this->fix ? 'on' : 'off';
@@ -86,7 +86,7 @@ class databaseCheck extends Command
         Log::notice('Current Active Installers - ', $instArr);
 
         //  All Active Administrators
-        $adminArr    = [];
+        $adminArr = [];
         $administrators = User::where('role_id', 2)->get();
         foreach($administrators as $adm)
         {
@@ -104,7 +104,7 @@ class databaseCheck extends Command
         //  Validate that each user has a user_settings entry
         $this->line('');
         $this->line('Validating User Settings');
-        $userList   = User::all();
+        $userList = User::all();
         foreach($userList as $user)
         {
             $row = UserSettings::where('user_id', $user->user_id)->count();

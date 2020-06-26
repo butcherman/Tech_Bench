@@ -55,8 +55,7 @@ class GetCustomerContacts extends GetCustomerDetails
     protected function getAllContacts($custID, $shared = false)
     {
         return CustomerContacts::where('cust_id', $custID)
-            ->when($shared, function($q)
-            {
+            ->when($shared, function($q) {
                 $q->where('shared', 1);
             })
             ->with('CustomerContactPhones')
