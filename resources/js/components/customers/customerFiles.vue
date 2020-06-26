@@ -121,7 +121,6 @@
                 this.loading = true;
                 axios.get(this.route('customer.files.show', this.cust_id))
                     .then(res => {
-                        console.log(res);
                         this.table.rows = res.data;
                         this.loading = false;
                     }).catch(error => this.eventHub.$emit('axiosError', error));

@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\PasswordPolicyRequest;
 
 class PasswordPolicyController extends Controller
 {
+    //  Update the existing password policy
     public function submitPolicy(PasswordPolicyRequest $request)
     {
         (new PasswordPolicy)->setPolicy($request);

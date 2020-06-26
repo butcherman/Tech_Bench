@@ -7,9 +7,9 @@ use App\SystemTypes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-
 class SetEquipment extends SetEquipmentDataFields
 {
+    //  build a new equipment type
     public function createEquipment($request)
     {
         $newEquip = SystemTypes::create([
@@ -22,6 +22,7 @@ class SetEquipment extends SetEquipmentDataFields
         return true;
     }
 
+    //  Update the name of an equipment type
     public function updateEquipment($request, $sysID)
     {
         $equip = SystemTypes::findOrFail($sysID);
@@ -33,13 +34,18 @@ class SetEquipment extends SetEquipmentDataFields
         $success = $this->updateEquipFields($request->system_data_fields, $sysID);
         if(is_array($success))
         {
+            Log::error('Unaable to Update Equpiment information.  Reason - ', $success);
             DB::rollBack();
-            // abort(428, 'Unable to remove Field '.$success[0]['data_field_name'].' - it is still in use by some customers');
         }
-        DB::commit();
+        else
+        {
+            DB::commit();
+        }
+
         return $success;
     }
 
+    //  Delete an equipment type - note cannot delete if the equipment is in use
     public function deleteEquipment($sysID)
     {
         try

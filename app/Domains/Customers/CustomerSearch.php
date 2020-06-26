@@ -5,8 +5,6 @@ namespace App\Domains\Customers;
 use App\Customers;
 
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-
 
 class CustomerSearch
 {
@@ -17,6 +15,7 @@ class CustomerSearch
         $pagination = $this->getPagination($request);
         $sort       = $this->getSortFields($request);
 
+        //  Determine if the search request is blank - if so, return all customers
         if((array)$searchData)
         {
             $results = $this->searchFor($searchData, $pagination, $sort, true);
@@ -26,13 +25,17 @@ class CustomerSearch
             $results = $this->getAllCustomers($pagination, $sort, true);
         }
 
+        Log::debug('Customer Search performed for ', $request->toArray());
+        Log::debug('Customer Search Results', $results != null ? $results->toArray() : []);
         return $results;
     }
 
     //  Search specifically for a customer ID
     public function searchID($id)
     {
-        return Customers::find($id);
+        $cust = Customers::find($id);
+        Log::debug('Customer search for ID '.$id.' performed.  Results - ', $cust != null ? $cust->toArray() : []);
+        return $cust;
     }
 
     //  Separate the name, city, and equipment id fields from request data
@@ -52,6 +55,7 @@ class CustomerSearch
             $searchData['equipment'] = $request->equipment;
         }
 
+        Log::debug('Search Fields pulled from request.  Data - ', $searchData);
         return (object) $searchData;
     }
 
@@ -95,6 +99,7 @@ class CustomerSearch
                   ->orWhere('cust_id', 'like', '%'.$searchData->name.'%')
                   ->orWhere('dba_name', 'like', '%'.$searchData->name.'%');
             })
+            //  Search by equipment type
             ->when($includeSystems, function($q)
             {
                 $q->with('CustomerSystems.SystemTypes')

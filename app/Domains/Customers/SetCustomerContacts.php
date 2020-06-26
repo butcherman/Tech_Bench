@@ -2,14 +2,14 @@
 
 namespace App\Domains\Customers;
 
-use App\CustomerContactPhones;
 use App\CustomerContacts;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\CustomerContactPhones;
 
+use Illuminate\Support\Facades\Log;
 
 class SetCustomerContacts extends GetCustomerDetails
 {
+    //  Create a new contact for a customer
     public function createNewContact($request, $custID)
     {
         if($request->shared)
@@ -27,6 +27,7 @@ class SetCustomerContacts extends GetCustomerDetails
         return true;
     }
 
+    //  Update a contact
     public function updateExistingContact($request, $contID)
     {
         $custID = $request->cust_id;
@@ -45,6 +46,7 @@ class SetCustomerContacts extends GetCustomerDetails
         return true;
     }
 
+    //  Remove a contact
     public function deleteContact($contID)
     {
         CustomerContacts::find($contID)->delete();
@@ -75,6 +77,7 @@ class SetCustomerContacts extends GetCustomerDetails
         return true;
     }
 
+    //  Add any new phone numbers to the contact
     protected function processNewPhoneNumbers($contID, $phoneData)
     {
         foreach($phoneData as $number)
@@ -92,6 +95,7 @@ class SetCustomerContacts extends GetCustomerDetails
         }
     }
 
+    //  Update any existing phone numbers to the edited contact
     protected function processExistingNumbers($contID, $phoneData)
     {
         $curentData = CustomerContactPhones::where('cont_id', $contID)->get()->keyBy('id');
@@ -128,6 +132,7 @@ class SetCustomerContacts extends GetCustomerDetails
         return true;
     }
 
+    //  Remove a phone number from a contact
     protected function deletePhoneNumbers($delArray)
     {
         foreach($delArray as $del)
@@ -138,8 +143,11 @@ class SetCustomerContacts extends GetCustomerDetails
         return true;
     }
 
+    //  Remove all extra charachters from the phone number.  Number should be stored as 10 digit direct number
     protected function cleanPhoneNumber($number)
     {
-        return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '$1$2$3', $number);
+        $newNumber =  preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '$1$2$3', $number);
+        Log::debug('Phone number '.$number.' cleaned to '.$newNumber);
+        return $newNumber;
     }
 }

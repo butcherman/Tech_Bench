@@ -16,6 +16,7 @@ use App\Http\Requests\Settings\GeneralSettingsRequest;
 
 class SettingsController extends Controller
 {
+    //  Open the systems settings page
     public function settingsForm()
     {
         return view('settings.generalSettings', [
@@ -27,6 +28,7 @@ class SettingsController extends Controller
         ]);
     }
 
+    //  Submit new system settings
     public function submitSettings(GeneralSettingsRequest $request)
     {
         (new SettingsDomain)->submitNewSettings($request);
@@ -35,6 +37,7 @@ class SettingsController extends Controller
         return response()->json(['success' => true]);
     }
 
+    //  Upload a new Company Logo
     public function submitLogo(NewLogoRequest $request)
     {
         $newPath = (new SettingsDomain)->saveNewLogo($request->file);
@@ -43,6 +46,7 @@ class SettingsController extends Controller
         return response()->json(['url' => $newPath]);
     }
 
+    //  Update Email Settings form
     public function emailForm()
     {
         return view('settings.emailSettings', [
@@ -56,6 +60,7 @@ class SettingsController extends Controller
         ]);
     }
 
+    //  Send a test email to verify if the new settings will work
     public function sendTestEmail(EmailSettingsRequest $request)
     {
         $obj = new SetEmailProperties;
@@ -64,6 +69,7 @@ class SettingsController extends Controller
         return response()->json(['success' => $res]);
     }
 
+    //  Save the new email settings
     public function submitEmailSettings(EmailSettingsRequest $request)
     {
         (new SetEmailProperties)->saveEmailSettings($request);

@@ -4,11 +4,17 @@ namespace App\Http\Controllers\Customers;
 
 use App\Domains\Customers\GetCustomerNotes;
 use App\Domains\Customers\SetCustomerNotes;
+use App\Domains\Customers\GetCustomerDetails;
+
 use App\Http\Controllers\Controller;
+
 use App\Http\Requests\Customers\CustomerNoteRequest;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
+use PDF;
 
 class CustomerNotesController extends Controller
 {
@@ -26,8 +32,23 @@ class CustomerNotesController extends Controller
         return (new GetCustomerNotes)->execute($id);
     }
 
+    //  Download a note as a PDF file
+    public function download($id)
+    {
+        $noteData = (new GetCustomerNotes)->getOneNote($id);
+        $custData = (new GetCustomerDetails)->getDetails($noteData->cust_id);
+
+        $pdf = PDF::loadView('pdf.customerNote', [
+            'cust_name'   => $custData->name,
+            'subject'     => $noteData->subject,
+            'description' => $noteData->description,
+        ]);
+
+        return $pdf->download($custData->name.' - Note: '.$noteData->subject.'.pdf');
+    }
+
     //  Update an existing note
-    public function update(Request $request, $id)
+    public function update(CustomerNoteRequest $request, $id)
     {
         (new SetCustomerNotes)->updateNote($request, $request->cust_id, $id);
         Log::info('Customer Note ID '.$id.' updated by '.Auth::user()->full_name);

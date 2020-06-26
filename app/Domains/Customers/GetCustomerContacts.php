@@ -2,13 +2,15 @@
 
 namespace App\Domains\Customers;
 
-use App\CustomerContacts;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+
+use App\CustomerContacts;
+
 use JeroenDesloovere\VCard\VCard;
 
 class GetCustomerContacts extends GetCustomerDetails
 {
+    //  Get all of the contacts for a customer
     public function execute($custID)
     {
         $contacts = $this->getAllContacts($custID);
@@ -19,9 +21,11 @@ class GetCustomerContacts extends GetCustomerDetails
             $contacts = $contacts->merge($this->getAllContacts($parent, true));
         }
 
+        Log::debug('Customer Contacts for Customer ID '.$custID.' gathered.  Data - ', $contacts->toArray());
         return $contacts;
     }
 
+    // Build a V-Card object and pass it back to the controller for a single contact
     public function getOneContact($contID)
     {
         $cont = CustomerContacts::where('cont_id', $contID)->with('CustomerContactPhones')->first();

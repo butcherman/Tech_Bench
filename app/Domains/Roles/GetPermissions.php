@@ -3,9 +3,8 @@
 namespace App\Domains\Roles;
 
 use App\UserRolePermissionTypes;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Log;
 
 class GetPermissions
 {

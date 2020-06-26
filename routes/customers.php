@@ -12,6 +12,7 @@ Route::middleware('auth')->prefix('customer')->name('customer.')->group(function
     Route::view('new',                   'customers.create')                             ->name('create');
     Route::post('new',                   'Customers\CustomerController@store')           ->name('store');
     Route::put('update/{id}',            'Customers\CustomerController@update')          ->name('update');
+    Route::get('notes/download/{id}',    'Customers\CustomerNotesController@download')   ->name('notes.download');
     Route::get('contacts/download/{id}', 'Customers\CustomerContactsController@download')->name('contacts.download');
     Route::get('link-parent',            'Customers\CustomerController@linkParent')      ->name('link_parent');
     Route::get('toggle-fav/{id}',        'Customers\CustomerController@toggleFav')       ->name('toggle_fav');

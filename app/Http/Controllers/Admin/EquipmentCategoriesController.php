@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Domains\Equipment\GetCategory;
 use App\Domains\Equipment\SetCategory;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\CategoryRequest;
-use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class EquipmentCategoriesController extends Controller
 {
@@ -42,7 +42,6 @@ class EquipmentCategoriesController extends Controller
     {
         (new SetCategory)->updateCategory($request, $id);
         Log::notice('Category ID '.$id.' - '.$request->name.' has been updated by '.Auth::user()->full_name);
-
         return response()->json(['success' => true]);
     }
 

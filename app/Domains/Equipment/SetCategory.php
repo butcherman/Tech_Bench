@@ -3,12 +3,12 @@
 namespace App\Domains\Equipment;
 
 use App\SystemCategories;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Log;
 
 class SetCategory
 {
+    //  Create a new equipment category
     public function createCategory($request)
     {
         SystemCategories::create([
@@ -18,6 +18,7 @@ class SetCategory
         return true;
     }
 
+    //  Modify the name of an existing category
     public function updateCategory($request, $catID)
     {
         SystemCategories::findOrFail($catID)->update([
@@ -27,6 +28,7 @@ class SetCategory
         return true;
     }
 
+    //  Delete a category - note cannot delete if the category is in use
     public function deleteCategory($catID)
     {
         try

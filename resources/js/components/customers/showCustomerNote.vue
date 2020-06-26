@@ -19,6 +19,7 @@
                     <div class="card">
                         <div class="card-header" :class="note_class">
                             {{note_data.subject}}
+                            <a :href="route('customer.notes.download', note_data.note_id)" class="float-right text-white" title="Download Note as PDF" v-b-tooltip.hover><i class="fas fa-download"></i></a>
                         </div>
                         <div class="card-body bigger-note" v-html="note_data.description"></div>
                     </div>

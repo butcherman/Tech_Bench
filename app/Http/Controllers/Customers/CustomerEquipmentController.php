@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Domains\Equipment\GetEquipment;
 use App\Domains\Customers\GetCustomerEquipment;
 use App\Domains\Customers\SetCustomerEquipment;
-use App\Domains\Equipment\GetEquipment;
+
 use App\Http\Controllers\Controller;
+
 use App\Http\Requests\Customers\CustomerEquipmentRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerEquipmentController extends Controller
 {

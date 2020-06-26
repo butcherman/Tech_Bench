@@ -18,10 +18,12 @@ class SettingsDomain
             ['key' => $key],
             ['key' => $key, 'value' => $value]
         )->update(['value' => $value]);
+        Log::debug('App Settings key '.$key.' updated');
 
         return true;
     }
 
+    //  Updat the Timezone, and Max File size settings
     public function submitNewSettings($request)
     {
         $this->updateSettings('app.timezone', $request->timezone);

@@ -4,16 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Domains\Equipment\GetEquipDataFields;
 use App\Domains\Equipment\SetEquipmentDataFields;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Equipment\EditFieldRequest;
-use App\Http\Requests\Equipment\NewFieldRequest;
-use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+
+use App\Http\Requests\Equipment\NewFieldRequest;
+use App\Http\Requests\Equipment\EditFieldRequest;
+
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class EquipmentInformationController extends Controller
 {
+    //  Index/landing page will show all possible customer data fields that can be assigned to a customer's equipment and which equipment it is currently assigned to
     public function index()
     {
         return view('admin.equipment.equipmentInformation', [
@@ -21,17 +23,20 @@ class EquipmentInformationController extends Controller
         ]);
     }
 
+    //  Get all of the fields for a specific piece of equipment
     public function getFields($sysID)
     {
         return (new GetEquipDataFields)->getFieldsForEquip($sysID);
     }
 
+    //  Submit a new field for a customer's equipment
     public function newField(NewFieldRequest $request)
     {
         (new SetEquipmentDataFields)->processNewField($request->name, $request->hidden);
         return response()->json(['success' => true]);
     }
 
+    //  Update an existing fields name
     public function submitFieldName(EditFieldRequest $request)
     {
         (new SetEquipmentDataFields)->editExistingField($request->data_type_id, $request->name, $request->hidden);
@@ -39,6 +44,7 @@ class EquipmentInformationController extends Controller
         return response()->json(['success' => true]);
     }
 
+    //  Delete an existing field  note - if the field is in use, the delete will fail
     public function deleteField($id)
     {
         (new SetEquipmentDataFields)->deleteField($id);

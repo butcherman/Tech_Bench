@@ -2,8 +2,8 @@
 
 namespace App\Domains\User;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 use App\User;
 use App\UserSettings;

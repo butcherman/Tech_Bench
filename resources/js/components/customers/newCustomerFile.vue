@@ -146,7 +146,6 @@
             },
             uploadComplete()
             {
-                console.log('upload finished');
                 this.form = {
                     cust_id:      this.cust_id,
                     name:         '',

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Customers;
 use App\Domains\Customers\GetCustomerContacts;
 use App\Domains\Customers\SetCustomerContacts;
 use App\Domains\PhoneNumbers\GetPhoneNumberTypes;
+
 use App\Http\Controllers\Controller;
+
 use App\Http\Requests\Customers\CustomerContactRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerContactsController extends Controller
 {
@@ -22,9 +24,7 @@ class CustomerContactsController extends Controller
     //  Store a new customer contact
     public function store(CustomerContactRequest $request)
     {
-
         (new SetCustomerContacts)->createNewContact($request, $request->cust_id);
-
         return response()->json(['success' => true]);
     }
 

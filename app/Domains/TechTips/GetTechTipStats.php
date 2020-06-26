@@ -8,9 +8,9 @@ use Carbon\Carbon;
 
 use App\TechTips;
 
-
 class GetTechTipStats
 {
+    //  Count the tips created in the last xx days
     public function getTipsInLastDays($numDays = 30)
     {
         $tips = TechTips::where('created_at', '>', Carbon::now()->subDays($numDays))->count();
@@ -19,6 +19,7 @@ class GetTechTipStats
         return $tips;
     }
 
+    //  Count the total number of Tech Tips
     public function getTotalTipsCount()
     {
         $tipsTotal = TechTips::all()->count();

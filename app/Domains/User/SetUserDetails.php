@@ -3,8 +3,8 @@
 namespace App\Domains\User;
 
 use App\Events\NewUserCreated;
+
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 use Carbon\Carbon;

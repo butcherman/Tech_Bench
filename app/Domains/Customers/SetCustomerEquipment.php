@@ -2,14 +2,14 @@
 
 namespace App\Domains\Customers;
 
-use App\CustomerSystemData;
 use App\CustomerSystems;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\CustomerSystemData;
 
+use Illuminate\Support\Facades\Log;
 
 class SetCustomerEquipment extends GetCustomerDetails
 {
+    //  Assign a new piece of equipment to the customer
     public function createNewEquipment($request, $custID)
     {
         if($request->shared)
@@ -27,6 +27,7 @@ class SetCustomerEquipment extends GetCustomerDetails
         return true;
     }
 
+    //  Update the information for an existing piece of equipment
     public function updateExistingEquipment($request, $custID, $equipID)
     {
         if($request->shared)
@@ -44,6 +45,7 @@ class SetCustomerEquipment extends GetCustomerDetails
         return true;
     }
 
+    //  Soft delete equipment.  Note - soft deleted equipment is cleaned up nightly during garbage collection
     public function deleteEquip($equipID)
     {
         CustomerSystems::find($equipID)->delete();
@@ -67,8 +69,11 @@ class SetCustomerEquipment extends GetCustomerDetails
             'cust_id' => $custID,
             'shared'  => $shared,
         ]);
+
+        return true;
     }
 
+    //  Go through each field attached to the equipment and update it
     protected function processFields($fieldData, $equipID)
     {
         foreach($fieldData as $field)

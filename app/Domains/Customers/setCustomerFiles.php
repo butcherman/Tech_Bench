@@ -3,11 +3,10 @@
 namespace App\Domains\Customers;
 
 use App\CustomerFiles;
-use App\CustomerFileTypes;
-use App\Domains\Files\SetFiles;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
+use App\Domains\Files\SetFiles;
+
+use Illuminate\Support\Facades\Log;
 
 class setCustomerFiles extends SetFiles
 {
@@ -15,11 +14,12 @@ class setCustomerFiles extends SetFiles
 
     public function __construct()
     {
-        $this->path = config('filesystems.paths.default');
-        $this->disk = 'local';
+        $this->path    = config('filesystems.paths.default');
+        $this->disk    = 'local';
         $this->custObj = new GetCustomerDetails;
     }
 
+    //  Attach a new file to the customer
     public function createFile($request, $userID)
     {
         $this->path = config('filesystems.paths.customers').DIRECTORY_SEPARATOR.$request->cust_id;
@@ -35,6 +35,7 @@ class setCustomerFiles extends SetFiles
         return true;
     }
 
+    //  Update the database information attached to the file, but will not modify the file itself
     public function updateFile($request, $custFileID)
     {
         $custID = $request->cust_id;
@@ -57,6 +58,7 @@ class setCustomerFiles extends SetFiles
         return true;
     }
 
+    //  Delete a file from the database and storage
     public function deleteCustFile($custFileID)
     {
         $file = CustomerFiles::find($custFileID);

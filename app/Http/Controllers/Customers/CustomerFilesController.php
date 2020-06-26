@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Domains\Files\GetCustomerFileTypes;
 use App\Domains\Customers\getCustomerFiles;
 use App\Domains\Customers\setCustomerFiles;
-use App\Domains\Files\GetCustomerFileTypes;
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Customers\EditFileRequest;
+
 use App\Http\Requests\Customers\NewFileRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\Customers\EditFileRequest;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 

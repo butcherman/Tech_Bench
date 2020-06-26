@@ -4,12 +4,12 @@ namespace App\Domains\Customers;
 
 use App\Customers;
 use App\CustomerSystems;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Log;
 
 class GetCustomerEquipment extends GetCustomerDetails
 {
+    //  Get all equipment that belongs to the customer
     public function execute($custID)
     {
         $equip = $this->getEquipment($custID);
@@ -20,6 +20,7 @@ class GetCustomerEquipment extends GetCustomerDetails
             $equip = $equip->merge($this->getEquipment($parent, true));
         }
 
+        Log::debug('Customer Equipment for Customer ID '.$custID.' gathered.  Data - ', $equip->toArray());
         return $equip;
     }
 

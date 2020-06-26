@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
 use App\Domains\Roles\GetRoles;
-use App\Domains\User\GetUserDetails;
 use App\Domains\User\GetUserList;
+use App\Domains\User\GetUserDetails;
 use App\Domains\User\SetUserDetails;
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ChangeUserPasswordRequest;
-use App\Http\Requests\Admin\EditUserRequest;
+
 use App\Http\Requests\Admin\NewUserRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\EditUserRequest;
+use App\Http\Requests\Admin\ChangeUserPasswordRequest;
 
 class UserController extends Controller
 {

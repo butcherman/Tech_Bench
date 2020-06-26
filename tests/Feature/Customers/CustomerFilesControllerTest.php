@@ -6,6 +6,8 @@ use App\CustomerFiles;
 use App\Customers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CustomerFilesControllerTest extends TestCase
@@ -25,8 +27,44 @@ class CustomerFilesControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    //  TODO - test file uploads
+    public function test_create()
+    {
+        Storage::fake(config('filesystems.paths.customers'));
 
+        $cust = factory(Customers::class)->create();
+        $file = UploadedFile::fake()->image('image.jpg');
+        $data = [
+            'cust_id'      => $cust->cust_id,
+            'name'         => 'Test File Description',
+            'file_type_id' => 1,
+            'shared'       => false,
+            'file'         => $file,
+        ];
+
+        $response = $this->actingAs($this->getTech())->post(route('customer.files.store'), $data);
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
+    public function test_create_guest()
+    {
+        Storage::fake(config('filesystems.paths.customers'));
+
+        $cust = factory(Customers::class)->create();
+        $file = UploadedFile::fake()->image('image.jpg');
+        $data = [
+            'cust_id'      => $cust->cust_id,
+            'name'         => 'Test File Description',
+            'file_type_id' => 1,
+            'shared'       => false,
+            'file'         => $file,
+        ];
+
+        $response = $this->post(route('customer.files.store'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
     public function test_show()
     {

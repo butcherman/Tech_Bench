@@ -3,26 +3,27 @@
 namespace App\Domains\Files;
 
 use App\Files;
+
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 
-
 class SetFiles
 {
-    // protected $receiver;
     protected $path, $disk;
 
+    //  Constructor will set the default path for files to be stored
     public function __construct()
     {
         $this->path = config('filesystems.paths.default');
         $this->disk = 'local';
     }
 
+    //  Process a single chunk of a larger file
     protected function getChunk($request)
     {
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
@@ -36,6 +37,7 @@ class SetFiles
         return false;
     }
 
+    //  Save the file to the storage system
     protected function saveFile(UploadedFile $file)
     {
         $fileName = $this->cleanFilename($file->getClientOriginalName());
@@ -48,6 +50,7 @@ class SetFiles
         return $fileName;
     }
 
+    //  Delete a file from the database and file system - note will fail if the file is linked in the database
     protected function deleteFile($fileID)
     {
         $fileData = Files::find($fileID);
@@ -72,6 +75,7 @@ class SetFiles
         return true;
     }
 
+    //  Add the new file to the database
     protected function addDatabaseRow($filename, $path)
     {
         $file = Files::create([
@@ -82,7 +86,7 @@ class SetFiles
         return $file->file_id;
     }
 
-    //  Sanitize the filename to remove any illegal characters
+    //  Sanitize the filename to remove any illegal characters and spaces
     protected function cleanFilename($name)
     {
         return preg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name);

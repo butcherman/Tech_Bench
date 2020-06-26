@@ -3,9 +3,8 @@
 namespace App\Domains\User;
 
 use App\CustomerFavs;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Log;
 
 class SetUserFavorites
 {

@@ -2,18 +2,17 @@
 
 namespace App\Domains\Equipment;
 
-use App\CustomerSystemData;
 use App\SystemDataFields;
+use App\CustomerSystemData;
 use App\SystemDataFieldTypes;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
 
 class SetEquipmentDataFields extends GetEquipDataFields
 {
     protected $sysID, $fields;
 
+    //  Create a new field for customer data to be gathered for that equipment
     public function createEquipmentFields($fieldArr, $sysID)
     {
         $this->sysID = $sysID;
@@ -25,6 +24,7 @@ class SetEquipmentDataFields extends GetEquipDataFields
         return true;
     }
 
+    //  Update an existing field
     public function updateEquipFields($fieldArr, $sysID)
     {
         $this->sysID = $sysID;
@@ -150,7 +150,7 @@ class SetEquipmentDataFields extends GetEquipDataFields
         return true;
     }
 
-    //  Delete a field
+    //  Delete a field - note cannot delete the field if it is in use
     public function deleteField($fieldID)
     {
         try

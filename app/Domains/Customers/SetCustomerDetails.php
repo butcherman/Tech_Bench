@@ -3,12 +3,12 @@
 namespace App\Domains\Customers;
 
 use App\Customers;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Log;
 
 class SetCustomerDetails
 {
+    //  Build a new customer
     public function createCustomer($request)
     {
         if($request->parent_id != null)
@@ -21,18 +21,21 @@ class SetCustomerDetails
         return $newCust->cust_id;
     }
 
+    //  Update a customers information - note regular users cannot update a customers Cust ID
     public function updateCustomer($custID, $details)
     {
         Customers::find($custID)->update($details->toArray());
         return true;
     }
 
+    //  Soft delete a customer.  It can be re-activated later
     public function deactivateCustomer($custID)
     {
         Customers::find($custID)->delete();
         return true;
     }
 
+    //  Attach a parent customer
     public function linkParent($request)
     {
         if(isset($request->parent_id))

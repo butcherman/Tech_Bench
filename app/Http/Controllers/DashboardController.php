@@ -38,7 +38,6 @@ class DashboardController extends Controller
     public function markNotification($id)
     {
         (new UserNotifications)->markNotificationRead($id);
-
         return response()->json(['success' => true]);
     }
 
@@ -46,7 +45,6 @@ class DashboardController extends Controller
     public function delNotification($id)
     {
         (new UserNotifications)->deleteNotification($id);
-
         return response()->json(['success' => true]);
     }
 }

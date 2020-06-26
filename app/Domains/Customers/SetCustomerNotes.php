@@ -3,12 +3,12 @@
 namespace App\Domains\Customers;
 
 use App\CustomerNotes;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Log;
 
 class SetCustomerNotes extends GetCustomerDetails
 {
+    //  Attach a new note to the customer
     public function createNewNote($request, $custID, $userID)
     {
         if($request->shared)
@@ -32,6 +32,7 @@ class SetCustomerNotes extends GetCustomerDetails
         return true;
     }
 
+    //  Update an existing note
     public function updateNote($request, $custID, $noteID)
     {
         if($request->shared)
@@ -54,6 +55,7 @@ class SetCustomerNotes extends GetCustomerDetails
         return true;
     }
 
+    //  Remove a note from the customer
     public function deleteNote($noteID)
     {
         CustomerNotes::find($noteID)->delete();

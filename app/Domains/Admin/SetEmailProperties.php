@@ -3,9 +3,7 @@
 namespace App\Domains\Admin;
 
 use Illuminate\Mail\Mailer;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 use App\Mail\TestEmail;
 
@@ -14,6 +12,7 @@ use Swift_SmtpTransport;
 
 class SetEmailProperties extends SettingsDomain
 {
+    //  Save the new Email Settings
     public function saveEmailSettings($request)
     {
         $username = $request->authentication ? $request->username : null;
@@ -30,11 +29,16 @@ class SetEmailProperties extends SettingsDomain
         foreach($mailSettings as $key => $value)
         {
             $this->updateSettings($key, $value);
+            if($key != 'mail.password')
+            {
+                Log::debug('Email Setting Key '.$key.' updated to '.$value);
+            }
         }
 
         return true;
     }
 
+    //  Send a test email using temporary credentials to verify if the settings are correct or not
     public function sendTestEmail($request, $emailAddress)
     {
         $password = $request->password === 'RandomString' ? config('mail.password') : $request->password;
@@ -53,9 +57,11 @@ class SetEmailProperties extends SettingsDomain
         try
         {
             $mail->to($emailAddress)->send(new TestEmail);
+            Log::info('Test email sent to '.$emailAddress);
         }
         catch (\Exception $e)
         {
+            Log::alert('Test Email to '.$emailAddress.' failed.  Reason - ', array($e));
             return $e->getMessage();
         }
 
