@@ -146,7 +146,7 @@ class SetCustomerContacts extends GetCustomerDetails
     //  Remove all extra charachters from the phone number.  Number should be stored as 10 digit direct number
     protected function cleanPhoneNumber($number)
     {
-        $newNumber =  preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '$1$2$3', $number);
+        $newNumber = preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '$1$2$3', $number);
         Log::debug('Phone number '.$number.' cleaned to '.$newNumber);
         return $newNumber;
     }

@@ -26,8 +26,7 @@ class getCustomerFiles extends GetCustomerDetails
     protected function getAllFiles($custID, $shared = false)
     {
         return CustomerFiles::where('cust_id', $custID)
-            ->when($shared, function($q)
-            {
+            ->when($shared, function($q) {
                 $q->where('shared', 1);
             })
             ->with('Files')

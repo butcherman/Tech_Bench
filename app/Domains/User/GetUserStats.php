@@ -55,7 +55,7 @@ class GetUserStats
     //  Get the total count of file links the user has
     public function getUserTotalLinks()
     {
-        $totalLinks  = FileLinks::where('user_id', $this->userID)->count();
+        $totalLinks = FileLinks::where('user_id', $this->userID)->count();
         Log::debug('Retrieved count of total File Links for User ID'.$this->userID.'. Data - ', ['Total Links' => $totalLinks]);
 
         return $totalLinks;

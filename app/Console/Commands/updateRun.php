@@ -88,7 +88,8 @@ class updateRun extends Command
             $this->line('');
 
             $anticipate = [];
-            foreach($updateList as $key => $up) {
+            foreach($updateList as $key => $up)
+            {
                 $opt = $key;
                 $anticipate[$opt] = $up;
             }

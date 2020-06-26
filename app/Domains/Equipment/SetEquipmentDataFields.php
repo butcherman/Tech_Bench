@@ -75,7 +75,7 @@ class SetEquipmentDataFields extends GetEquipDataFields
     //  Find any fields that have been removed from the list
     protected function findRemovedFields()
     {
-        $curFields = $this->getFieldsForEquip($this->sysID);    //SystemDataFields::where('sys_id', $this->sysID)->get();
+        $curFields = $this->getFieldsForEquip($this->sysID); //SystemDataFields::where('sys_id', $this->sysID)->get();
 
         $removedList = [];
         foreach($curFields as $field)
