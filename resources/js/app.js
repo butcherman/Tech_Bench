@@ -89,8 +89,8 @@ Vue.mixin({
 Vue.component('file-upload',     require('./components/fileUpload.vue').default);
 Vue.component('form-submit',     require('./components/formSubmit.vue').default);
 // Vue.component('bookmark',        require('./components/Bookmark.vue').default);
-Vue.component('axios-error', require('./components/errorMessage.vue').default);
-Vue.component('all-states',  require('./components/allStates.vue').default);
+Vue.component('axios-error',     require('./components/errorMessage.vue').default);
+Vue.component('all-states',      require('./components/allStates.vue').default);
 
 /*
 *   Individual Page Components
@@ -149,6 +149,11 @@ Vue.component('show-customer-note',      require('./components/customers/showCus
 Vue.component('customer-files',          require('./components/customers/customerFiles.vue').default);
 Vue.component('new-customer-file',       require('./components/customers/newCustomerFile.vue').default);
 Vue.component('edit-customer-file',      require('./components/customers/editCustomerFile.vue').default);
+
+/*
+*   Tech Tip Components
+*/
+Vue.component('search-tech-tips', require('./components/tips/searchTips.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

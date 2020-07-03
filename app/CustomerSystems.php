@@ -24,11 +24,6 @@ class CustomerSystems extends Model
         return $this->hasMany('App\CustomerSystemData', 'cust_sys_id');
     }
 
-    public function SystemDataFields()
-    {
-        return $this->belongsToMany('App\SystemDataFields', 'customer_system_data', 'cust_sys_id', 'field_id')->withPivot('value')->orderBy('order', 'ASC');
-    }
-
     public function getSysNameAttribute()
     {
         return $this->SystemTypes->name;

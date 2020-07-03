@@ -20332,6 +20332,22 @@ ul.no-bullet {
 }
 
 /*
+*   Tech Tip Styles
+*/
+
+.tip-link a:hover {
+  text-decoration: none;
+}
+
+.tip-link a:hover .card-header {
+  font-weight: bold;
+}
+
+.tip-link img {
+  display: none;
+}
+
+/*
 *   Global Variable Files
 */
 

@@ -24,9 +24,4 @@ class CustomerContactPhones extends Model
     {
         return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '($1) $2-$3', $this->phone_number);
     }
-
-    public function PhoneNumberTypes()
-    {
-        return $this->hasOne('App\PhoneNumberTypes', 'phone_type_id', 'phone_type_id');
-    }
 }

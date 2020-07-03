@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -14,11 +15,17 @@ class TechTips extends Model
     protected $primaryKey = 'tip_id';
     protected $fillable   = ['user_id', 'updated_id', 'subject', 'tip_type_id', 'description', 'public', 'sticky'];
     protected $hidden     = ['public', 'user_id', 'updated_id', 'deleted_at'];
+    protected $appends    = ['summary'];
     protected $casts      = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'sticky'     => 'boolean',
     ];
+
+    public function getSummaryAttribute()
+    {
+        return Str::words($this->description, 50);
+    }
 
     public function systemTypes()
     {

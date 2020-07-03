@@ -46,6 +46,26 @@ class CustomerFilesControllerTest extends TestCase
         $response->assertJson(['success' => true]);
     }
 
+    public function test_create_to_parent()
+    {
+        Storage::fake(config('filesystems.paths.customers'));
+
+        $parent = factory(Customers::class)->create();
+        $cust   = factory(Customers::class)->create(['parent_id' => $parent->cust_id]);
+        $file   = UploadedFile::fake()->image('image.jpg');
+        $data   = [
+            'cust_id'      => $cust->cust_id,
+            'name'         => 'Test File Description',
+            'file_type_id' => 1,
+            'shared'       => true,
+            'file'         => $file,
+        ];
+
+        $response = $this->actingAs($this->getTech())->post(route('customer.files.store'), $data);
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
     public function test_create_guest()
     {
         Storage::fake(config('filesystems.paths.customers'));

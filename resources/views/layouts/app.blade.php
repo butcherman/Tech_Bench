@@ -89,8 +89,8 @@
                             <span class="menu-title">Customers</span>
                         </a>
                     </li>
-                    <li class="nav-itema">
-                        <a class="nav-link" href="#">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('tips.index')}}">
                             <i class="fas fa-tools menu-icon"></i>
                             <span class="menu-title">Tech Tips</span>
                         </a>

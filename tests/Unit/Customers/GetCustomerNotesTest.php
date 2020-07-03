@@ -29,4 +29,12 @@ class GetCustomerNotesTest extends TestCase
         $res = (new GetCustomerNotes)->execute($cust->cust_id);
         $this->assertCount(10, $res);
     }
+
+    public function test_get_one_note()
+    {
+        $note = factory(CustomerNotes::class)->create();
+
+        $res = (new GetCustomerNotes)->getOneNote($note->note_id);
+        $this->assertEquals($note->toArray(), $res->makeHidden('shared')->toArray());
+    }
 }

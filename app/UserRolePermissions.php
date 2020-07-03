@@ -19,9 +19,4 @@ class UserRolePermissions extends Model
     {
         return $this->hasOne('App\UserRolePermissionTypes', 'perm_type_id', 'perm_type_id');
     }
-
-    public function UserRoleType()
-    {
-        return $this->belongsTo('App\UserRoleType', 'role_id', 'role_id');
-    }
 }

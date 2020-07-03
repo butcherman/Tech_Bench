@@ -1,0 +1,14 @@
+/*
+*   Tech Tip Styles
+*/
+.tip-link {
+    a:hover {
+        text-decoration: none;
+        .card-header {
+            font-weight: bold;
+        }
+    }
+    img {
+        display: none;
+    }
+}
