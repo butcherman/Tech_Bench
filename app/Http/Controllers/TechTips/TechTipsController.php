@@ -6,11 +6,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests\TechTips\NewTipRequest;
 use App\Http\Requests\TechTips\SearchTipsRequest;
+use App\Http\Requests\TechTips\UploadImageRequest;
 
 use App\Domains\TechTips\SearchTips;
+use App\Domains\TechTips\SetTechTips;
 use App\Domains\Equipment\GetEquipment;
 use App\Domains\TechTips\GetTechTipTypes;
+
 
 class TechTipsController extends Controller
 {
@@ -32,19 +36,24 @@ class TechTipsController extends Controller
     //  New tech tip form
     public function create()
     {
-        //
-        echo 'new tip form';
+        return view('tips.create', [
+            'types' => (new GetTechTipTypes)->execute(),
+            'equip' => (new GetEquipment)->getAllEquipment(true),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    //  Upload an image file to be included with the tech tip text
+    public function uploadImage(UploadImageRequest $request)
     {
-        //
+        $local = (new SetTechTips)->processImage($request);
+        return response()->json(['location' => $local]);
+    }
+
+    //  Store a new Tech Tip into the database along with any files attached
+    public function store(NewTipRequest $request)
+    {
+        $tip = (new SetTechTips)->processNewTip($request);
+        return response()->json(['success' => true, 'tip_id' => $tip]);
     }
 
     //  Show the Tech Tip Details

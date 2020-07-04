@@ -16,7 +16,7 @@ class GetFiles
 
         if(!$fileData || !Storage::exists($fileData->file_link.$fileData->file_name))
         {
-            Log::error('Unable to locate filename '.$fileName);
+            Log::error('Unable to locate filename '.$fileName.' at path '.$fileData->file_link);
             return false;
         }
 

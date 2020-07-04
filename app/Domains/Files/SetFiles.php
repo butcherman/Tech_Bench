@@ -75,6 +75,18 @@ class SetFiles
         return true;
     }
 
+    //  Move a file from one folder to another
+    protected function moveFile($fileID, $newPath)
+    {
+        $file = Files::find($fileID);
+        Storage::move($file->file_link.$file->file_name, $newPath.$file->file_name);
+        $file->update([
+            'file_link' => $newPath
+        ]);
+
+        return true;
+    }
+
     //  Add the new file to the database
     protected function addDatabaseRow($filename, $path)
     {

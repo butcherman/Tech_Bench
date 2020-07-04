@@ -6,6 +6,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\TechTips;
+use App\SystemTypes;
+
+use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
 
 class TechTipsControllerTest extends TestCase
 {
@@ -114,5 +120,146 @@ class TechTipsControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+    }
+
+    public function test_create()
+    {
+        $response = $this->actingAs($this->getTech())->get(route('tips.create'));
+        $response->assertSuccessful();
+        $response->assertViewIs('tips.create');
+    }
+
+    public function test_create_guest()
+    {
+        $response = $this->get(route('tips.create'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_upload_image()
+    {
+        Storage::fake('public');
+
+        $filename = Str::random(5).'.jpg';
+        $data = [
+            'file' => UploadedFile::fake()->image($filename),
+        ];
+
+        $response = $this->actingAs($this->getTech())->post(route('tips.upload_image'), $data);
+        $response->assertSuccessful();
+        $response->assertJsonStructure(['location']);
+    }
+
+    public function test_upload_image_guest()
+    {
+        Storage::fake('public');
+
+        $filename = Str::random(5).'.jpg';
+        $data = [
+            'file' => UploadedFile::fake()->image($filename),
+        ];
+
+        $response = $this->post(route('tips.upload_image'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_upload_image_without_permission()
+    {
+        Storage::fake('public');
+
+        $filename = Str::random(5).'.jpg';
+        $data = [
+            'file' => UploadedFile::fake()->image($filename),
+        ];
+
+        $response = $this->actingAs($this->getUserWithoutPermission('Create Tech Tip'))->post(route('tips.upload_image'), $data);
+        $response->assertStatus(403);
+    }
+
+    public function test_store()
+    {
+        Notification::fake();
+
+        $sys  = factory(SystemTypes::class)->create();
+        $tip  = factory(TechTips::class)->make();
+        $data = [
+            'subject'     => $tip->subject,
+            'equipment'   => [$sys],
+            'tip_type_id' => 1,
+            'description' => $tip->description,
+            'noEmail'     => false,
+            'sticky'      => true,
+        ];
+
+        $response = $this->actingAs($this->getTech())->post(route('tips.store'), $data);
+        $response->assertSuccessful();
+        $response->assertJsonStructure(['success', 'tip_id']);
+    }
+
+    // public function test_store_with_file()
+    // {
+    //     Notification::fake();
+    //     Storage::fake('local');
+
+    //     $sys  = factory(SystemTypes::class)->create();
+    //     $tip  = factory(TechTips::class)->make();
+    //     $data = [
+    //         'subject'     => $tip->subject,
+    //         'equipment'   => [$sys],
+    //         'tip_type_id' => 1,
+    //         'description' => $tip->description,
+    //         'noEmail'     => false,
+    //         'sticky'      => true,
+    //         'file'        => $file = UploadedFile::fake()->image('image.jpg'),
+    //     ];
+
+    //     $response = $this->actingAs($this->getTech())->post(route('tips.store'), $data);
+    //     $response->assertSuccessful();
+    //     $response->assertJsonStructure(['success', 'tip_id']);
+
+    //     dd($response->getContent());
+    // }
+
+    public function test_store_guest()
+    {
+        Notification::fake();
+
+        $sys  = factory(SystemTypes::class)->create();
+        $tip  = factory(TechTips::class)->make();
+        $data = [
+            'subject'     => $tip->subject,
+            'equipment'   => [$sys],
+            'tip_type_id' => 1,
+            'description' => $tip->description,
+            'noEmail'     => false,
+            'sticky'      => true,
+        ];
+
+        $response = $this->post(route('tips.store'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_store_no_permission()
+    {
+        Notification::fake();
+
+        $sys  = factory(SystemTypes::class)->create();
+        $tip  = factory(TechTips::class)->make();
+        $data = [
+            'subject'     => $tip->subject,
+            'equipment'   => [$sys],
+            'tip_type_id' => 1,
+            'description' => $tip->description,
+            'noEmail'     => false,
+            'sticky'      => true,
+        ];
+
+        $response = $this->actingAs($this->getUserWithoutPermission('Create Tech Tip'))->post(route('tips.store'), $data);
+        $response->assertStatus(403);
     }
 }
