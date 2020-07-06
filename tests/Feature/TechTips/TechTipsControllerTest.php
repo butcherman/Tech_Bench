@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\TechTips;
 use App\SystemTypes;
-
+use App\TechTipFavs;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -261,5 +261,63 @@ class TechTipsControllerTest extends TestCase
 
         $response = $this->actingAs($this->getUserWithoutPermission('Create Tech Tip'))->post(route('tips.store'), $data);
         $response->assertStatus(403);
+    }
+
+    public function test_show()
+    {
+        $tip = factory(TechTips::class)->create();
+
+        $response = $this->actingAs($this->getTech())->get(route('tips.details', [$tip->tip_id, $tip->subject]));
+        $response->assertSuccessful();
+        $response->assertViewIs('tips.details');
+    }
+
+    public function test_show_guest()
+    {
+        $tip = factory(TechTips::class)->create();
+
+        $response = $this->get(route('tips.details', [$tip->tip_id, $tip->subject]));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_show_invalid()
+    {
+        $response = $this->actingAs($this->getTech())->get(route('tips.details', [546786, 'Random Subject']));
+        $response->assertStatus(404);
+    }
+
+    public function test_toggle_fav_add()
+    {
+        $tip = factory(TechTips::class)->create();
+
+        $response = $this->actingAs($this->getTech())->get(route('tips.toggle_fav', $tip->tip_id));
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true, 'favorite' => true]);
+    }
+
+    public function test_toggle_fav_remove()
+    {
+        $tip = factory(TechTips::class)->create();
+        $user = $this->getTech();
+        TechTipFavs::create([
+            'tip_id' => $tip->tip_id,
+            'user_id' => $user->user_id,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('tips.toggle_fav', $tip->tip_id));
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true, 'favorite' => false]);
+    }
+
+    public function test_toggle_fav_guest()
+    {
+        $tip = factory(TechTips::class)->create();
+
+        $response = $this->get(route('tips.toggle_fav', $tip->tip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
     }
 }

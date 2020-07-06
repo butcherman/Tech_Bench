@@ -3,7 +3,7 @@
 namespace App\Domains\User;
 
 use App\CustomerFavs;
-
+use App\TechTipFavs;
 use Illuminate\Support\Facades\Log;
 
 class SetUserFavorites
@@ -19,10 +19,29 @@ class SetUserFavorites
             return false;
         }
 
-        Log::info('Customer Favorite Addes.  Data - ', ['user_id' => $userID, 'cust_id' => $custID]);
+        Log::info('Customer Favorite Added.  Data - ', ['user_id' => $userID, 'cust_id' => $custID]);
         CustomerFavs::create([
             'user_id' => $userID,
             'cust_id' => $custID,
+        ]);
+        return true;
+    }
+
+    public function toggleTechTipFavorite($tipID, $userID)
+    {
+        $favData = TechTipFavs::where('tip_id', $tipID)->where('user_id', $userID)->first();
+
+        if($favData)
+        {
+            Log::info('Tech Tip Favorite Removed.  Data - ', ['user_id' => $userID, 'tip_id' => $tipID]);
+            $favData->delete();
+            return false;
+        }
+
+        Log::info('Tech Tip Favorite Added.  Data - ', ['user_id' => $userID, 'tip_id' => $tipID]);
+        TechTipFavs::create([
+            'user_id' => $userID,
+            'tip_id' => $tipID,
         ]);
         return true;
     }

@@ -19,18 +19,4 @@ Route::middleware('auth')->group(function()
     Route::put( '/settings',        'Auth\SettingsController@updateSettings')->name('update_settings');
     Route::post('/settings',        'Auth\SettingsController@updateAccount') ->name('update_account');
     Route::post('/change-password', 'Auth\SettingsController@changePassword')->name('submit_password');
-
-
-
-
-
-
-
-
 });
-
-
-Route::get('tips/stuff/{id}/{name}', function()
-{
-    return 'Tech Tip';
-})->name('tip.details');

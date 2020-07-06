@@ -78,7 +78,7 @@
                     @foreach($tipFavs as $tip)
                     <div class="col-xl-3 col-sm-6 mb-3">
                         <div class="card text-white o-hidden h-100 bookmark-card overflow-hidden">
-                            <a href="{{route('tip.details', [$tip->tip_id, urlencode($tip->subject)])}}" class="card-body text-white">
+                            <a href="{{route('tips.details', [$tip->tip_id, urlencode($tip->subject)])}}" class="card-body text-white">
                                 <div class="card-body-icon">
                                     <i class="fas fa-tools"></i>
                                 </div>

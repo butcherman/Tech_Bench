@@ -56,7 +56,7 @@ class SetTechTipsTest extends TestCase
         $this->assertNotFalse($res);
         $this->assertDatabaseHas('tech_tips', ['tip_id' => $res]);
         $this->assertDatabaseHas('tech_tip_systems', ['tip_id' => $res, 'sys_id' => $sys->sys_id]);
-        Notification:: assertSentTo([$user], NewTechTipNotification::class);
+        Notification::assertSentTo([$user], NewTechTipNotification::class);
     }
 
     public function test_process_new_tip_no_notification()

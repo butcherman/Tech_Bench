@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\FileLInks;
 use App\TechTipFavs;
 use App\CustomerFavs;
+use App\TechTips;
 
 class GetUserStats
 {
@@ -43,7 +44,13 @@ class GetUserStats
         return $favs->makeHidden('TechTips');
     }
 
-    //  Get a count of acctive file links the user has
+    //  Check if a Tech Tip is listed as a favorite for the user
+    public function checkTipForFav($tipID)
+    {
+        return TechTipFavs::where('user_id', $this->userID)->where('tip_id', $tipID)->first();
+    }
+
+    //  Get a count of active file links the user has
     public function getUserActiveLinks()
     {
         $activeLinks = FileLinks::where('user_id', $this->userID)->where('expire', '>', Carbon::now())->count();

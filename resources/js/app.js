@@ -155,6 +155,8 @@ Vue.component('edit-customer-file',      require('./components/customers/editCus
 */
 Vue.component('search-tech-tips',  require('./components/tips/searchTips.vue').default);
 Vue.component('new-tech-tip-form', require('./components/tips/newTipForm.vue').default);
+Vue.component('tech-tip-bookmark', require('./components/tips/tipBookmark.vue').default);
+Vue.component('tech-tip-comments', require('./components/tips/tipComments.vue').default);
 
 /*
 *   Include CSRF toden in all axios headers

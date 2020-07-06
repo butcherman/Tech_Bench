@@ -46,4 +46,9 @@ class TechTips extends Model
     {
         return $this->hasMany('App\TechTipSystems', 'tip_id', 'tip_id');
     }
+
+    public function techTipFiles()
+    {
+        return $this->hasMany('App\TechTipFiles', 'tip_id', 'tip_id');
+    }
 }

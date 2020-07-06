@@ -13,8 +13,14 @@ use App\Http\Requests\TechTips\UploadImageRequest;
 use App\Domains\TechTips\SearchTips;
 use App\Domains\TechTips\SetTechTips;
 use App\Domains\Equipment\GetEquipment;
+use App\Domains\TechTips\GetTechTips;
 use App\Domains\TechTips\GetTechTipTypes;
+use App\Domains\User\GetUserStats;
+use App\Domains\User\SetUserFavorites;
 
+use Illuminate\Support\Facades\Auth;
+
+use PDF;
 
 class TechTipsController extends Controller
 {
@@ -59,9 +65,44 @@ class TechTipsController extends Controller
     //  Show the Tech Tip Details
     public function show($id)
     {
-        //
-        echo 'tip details';
+        $details = (new GetTechTips)->getTip($id);
+
+        if(!$details)
+        {
+            abort(404, 'The Tech Tip you are looking for does not exist or cannot be found');
+        }
+
+        $isFav = (new GetUserStats(Auth::user()->user_id))->checkTipForFav($id);
+        return view('tips.details', [
+            'details' => $details,
+            'isFav' => $isFav ? true : false,
+        ]);
     }
+
+    //  Toggle if a Tech Tip is listed as a users favorite or not
+    public function toggleFav($id)
+    {
+        $result = (new SetUserFavorites)->toggleTechTipFavorite($id, Auth::user()->user_id);
+        return response()->json(['success' => true, 'favorite' => $result]);
+    }
+
+    //  Download a tip as a pdf file
+    public function download($id)
+    {
+        $tipData = (new GetTechTips)->getTip($id);
+
+        $pdf = PDF::loadView('pdf.techTip', [
+            'data' => $tipData,
+        ]);
+
+        return $pdf->download($tipData->subject.'.pdf');
+    }
+
+
+
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -72,6 +113,7 @@ class TechTipsController extends Controller
     public function edit($id)
     {
         //
+        echo 'just the tip';
     }
 
     /**
