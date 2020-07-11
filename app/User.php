@@ -31,20 +31,20 @@ class User extends Authenticatable
         return "{$this->first_name[0]}{$this->last_name[0]}";
     }
 
-    public function UserLogins()
-    {
-        return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
-    }
+    // public function UserLogins()
+    // {
+    //     return $this->hasMany('App\UserLogins', 'user_id', 'user_id');
+    // }
 
     public function LastUserLogin()
     {
         return $this->hasOne('App\UserLogins', 'user_id', 'user_id')->latest();
     }
 
-    public function FileLinks()
-    {
-        return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
-    }
+    // public function FileLinks()
+    // {
+    //     return $this->hasMany('App\FileLinks', 'user_id', 'user_id');
+    // }
 
     public function UserSettings()
     {

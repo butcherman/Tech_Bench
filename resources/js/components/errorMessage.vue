@@ -71,7 +71,14 @@
                 this.message = 'Please check the Technical Details for additional information';
 
                 var details = '<ul class="list-group">';
-                var errObj = err.response.data.errors;
+                if(err.response.data)
+                {
+                    var errObj = err.response.data.errors;
+                }
+                else
+                {
+                    var errObj = null;
+                }
 
                 Object.keys(errObj).forEach(function(key)
                 {

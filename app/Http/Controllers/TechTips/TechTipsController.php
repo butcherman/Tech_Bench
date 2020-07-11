@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Requests\TechTips\NewTipRequest;
+use App\Http\Requests\TechTips\EditTipRequest;
 use App\Http\Requests\TechTips\SearchTipsRequest;
 use App\Http\Requests\TechTips\UploadImageRequest;
 
+use App\Domains\User\GetUserStats;
 use App\Domains\TechTips\SearchTips;
 use App\Domains\TechTips\SetTechTips;
-use App\Domains\Equipment\GetEquipment;
 use App\Domains\TechTips\GetTechTips;
-use App\Domains\TechTips\GetTechTipTypes;
-use App\Domains\User\GetUserStats;
 use App\Domains\User\SetUserFavorites;
-
-use Illuminate\Support\Facades\Auth;
+use App\Domains\Equipment\GetEquipment;
+use App\Domains\TechTips\GetTechTipTypes;
 
 use PDF;
 
@@ -58,7 +58,7 @@ class TechTipsController extends Controller
     //  Store a new Tech Tip into the database along with any files attached
     public function store(NewTipRequest $request)
     {
-        $tip = (new SetTechTips)->processNewTip($request);
+        $tip = (new SetTechTips)->processNewTip($request, Auth::user()->user_id);
         return response()->json(['success' => true, 'tip_id' => $tip]);
     }
 
@@ -98,34 +98,28 @@ class TechTipsController extends Controller
         return $pdf->download($tipData->subject.'.pdf');
     }
 
-
-
-
-
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //  Edit an existing Tech Tip
     public function edit($id)
     {
-        //
-        echo 'just the tip';
+        $details = (new GetTechTips)->getTip($id);
+
+        if(!$details)
+        {
+            abort(404, 'The Tech Tip you are looking for does not exist or cannot be found');
+        }
+
+        return view('tips.edit', [
+            'types'   => (new GetTechTipTypes)->execute(),
+            'equip'   => (new GetEquipment)->getAllEquipment(true),
+            'details' => $details,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    //  Submit the edit tip form
+    public function update(EditTipRequest $request, $id)
     {
-        //
+        (new SetTechTips)->processEditTip($request, $id, Auth::user()->user_Id);
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -136,6 +130,8 @@ class TechTipsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        (new SetTechTips)->deactivateTip($id);
+        Log::notice('User '.Auth::user()->full_name.' has deleted Tech Tip ID '.$id);
+        return response()->json(['success' => true]);
     }
 }

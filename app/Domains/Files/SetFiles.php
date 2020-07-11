@@ -78,10 +78,14 @@ class SetFiles
     //  Move a file from one folder to another
     protected function moveFile($fileID, $newPath)
     {
-        $file = Files::find($fileID);
+        $this->path = $newPath;
+        $file    = Files::find($fileID);
+        $newName = $this->checkForDuplicate($file->file_name);
+
         Storage::move($file->file_link.$file->file_name, $newPath.$file->file_name);
         $file->update([
-            'file_link' => $newPath
+            'file_link' => $newPath,
+            'file_name' => $newName,
         ]);
 
         return true;

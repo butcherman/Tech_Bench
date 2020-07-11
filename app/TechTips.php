@@ -32,20 +32,20 @@ class TechTips extends Model
         return $this->hasManyThrough('App\SystemTypes', 'App\TechTipSystems', 'tip_id', 'sys_id', 'tip_id', 'sys_id');
     }
 
-    public function user()
-    {
-        return $this->hasOne('App\User', 'user_id', 'user_id');
-    }
+    // public function user()
+    // {
+    //     return $this->hasOne('App\User', 'user_id', 'user_id');
+    // }
 
     public function techTipTypes()
     {
         return $this->hasOne('App\TechTipTypes', 'tip_type_id', 'tip_type_id');
     }
 
-    public function techTipSystems()
-    {
-        return $this->hasMany('App\TechTipSystems', 'tip_id', 'tip_id');
-    }
+    // public function techTipSystems()
+    // {
+    //     return $this->hasMany('App\TechTipSystems', 'tip_id', 'tip_id');
+    // }
 
     public function techTipFiles()
     {

@@ -12,8 +12,8 @@ class UserLogins extends Model
         'updated_at' => 'datetime:M d, Y',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo('App\User', 'user_id', 'user_id');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo('App\User', 'user_id', 'user_id');
+    // }
 }

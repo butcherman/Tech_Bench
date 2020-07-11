@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\TechTips;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+
 use App\TechTips;
 use App\SystemTypes;
 use App\TechTipFavs;
+
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -316,6 +316,129 @@ class TechTipsControllerTest extends TestCase
         $tip = factory(TechTips::class)->create();
 
         $response = $this->get(route('tips.toggle_fav', $tip->tip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_edit()
+    {
+        $existing = factory(TechTips::class)->create();
+
+        $response = $this->actingAs($this->getUserWithPermission('Edit Tech Tip'))->get(route('tips.edit', $existing->tip_id));
+        $response->assertSuccessful();
+        $response->assertViewIs('tips.edit');
+    }
+
+    public function test_edit_invalid()
+    {
+        $response = $this->actingAs($this->getUserWithPermission('Edit Tech Tip'))->get(route('tips.edit', 65485121));
+        $response->assertStatus(404);
+    }
+
+    public function test_edit_no_permission()
+    {
+        $existing = factory(TechTips::class)->create();
+
+        $response = $this->actingAs($this->getUserWithoutPermission('Edit Tech Tip'))->get(route('tips.edit', $existing->tip_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_edit_guest()
+    {
+        $existing = factory(TechTips::class)->create();
+
+        $response = $this->get(route('tips.edit', $existing->tip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_update()
+    {
+        Notification::fake();
+
+        $sys      = factory(SystemTypes::class)->create();
+        $existing = factory(TechTips::class)->create();
+        $tip      = factory(TechTips::class)->make();
+        $data     = [
+            'subject'     => $tip->subject,
+            'equipment'   => [$sys],
+            'tip_type_id' => 1,
+            'description' => $tip->description,
+            'notify'      => true,
+            'sticky'      => true,
+        ];
+
+        $response = $this->actingAs($this->getUserWithPermission('Edit Tech Tip'))->post(route('tips.update', $existing->tip_id), $data);
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
+    public function test_update_no_permission()
+    {
+        Notification::fake();
+
+        $sys      = factory(SystemTypes::class)->create();
+        $existing = factory(TechTips::class)->create();
+        $tip      = factory(TechTips::class)->make();
+        $data     = [
+            'subject'     => $tip->subject,
+            'equipment'   => [$sys],
+            'tip_type_id' => 1,
+            'description' => $tip->description,
+            'notify'      => true,
+            'sticky'      => true,
+        ];
+
+        $response = $this->actingAs($this->getUserWithoutPermission('Edit Tech Tip'))->post(route('tips.update', $existing->tip_id), $data);
+        $response->assertStatus(403);
+    }
+
+    public function test_update_guest()
+    {
+        Notification::fake();
+
+        $sys      = factory(SystemTypes::class)->create();
+        $existing = factory(TechTips::class)->create();
+        $tip      = factory(TechTips::class)->make();
+        $data     = [
+            'subject'     => $tip->subject,
+            'equipment'   => [$sys],
+            'tip_type_id' => 1,
+            'description' => $tip->description,
+            'notify'      => true,
+            'sticky'      => true,
+        ];
+
+        $response = $this->post(route('tips.update', $existing->tip_id), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_destroy()
+    {
+        $tip = factory(TechTips::class)->create();
+
+        $response = $this->actingAs($this->getUserWithPermission('Delete Tech Tip'))->delete(route('tips.destroy', $tip->tip_id));
+        $response->assertSuccessful();
+        $response->assertJson(['success' => true]);
+    }
+
+    public function test_destroy_no_permission()
+    {
+        $tip = factory(TechTips::class)->create();
+
+        $response = $this->actingAs($this->getUserWithoutPermission('Delete Tech Tip'))->delete(route('tips.destroy', $tip->tip_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_destroy_guest()
+    {
+        $tip = factory(TechTips::class)->create();
+
+        $response = $this->delete(route('tips.destroy', $tip->tip_id));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();

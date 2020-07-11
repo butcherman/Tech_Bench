@@ -15,6 +15,7 @@ use App\TechTipSystems;
 
 use App\Domains\Files\SetFiles;
 use App\Notifications\NewTechTipNotification;
+use App\Notifications\UpdateTechTipNotification;
 
 class SetTechTips extends SetFiles
 {
@@ -31,7 +32,7 @@ class SetTechTips extends SetFiles
     }
 
     //  Process the submitted data of a new tech tip - if a file chunk is sent, store that first
-    public function processNewTip($request)
+    public function processNewTip($request, $userID)
     {
         //  Determine if a file is being uploaded
         if(isset($request->file))
@@ -39,7 +40,26 @@ class SetTechTips extends SetFiles
             return $this->uploadFile($request);
         }
 
-        return $this->createTip($request);
+        return $this->createTip($request, $userID);
+    }
+
+    //  Edit an existing tech tips information
+    public function processEditTip($request, $tipID, $userID)
+    {
+        //  Determine if a file is being uploaded
+        if(isset($request->file))
+        {
+            return $this->uploadFile($request);
+        }
+
+        return $this->updateTip($request, $tipID, $userID);
+    }
+
+    //  Soft delete tech tip
+    public function deactivateTip($tipID)
+    {
+        TechTips::find($tipID)->delete();
+        return true;
     }
 
     //  Process the file chunk - if a full file is uploaded, set the file ID into session data
@@ -60,13 +80,13 @@ class SetTechTips extends SetFiles
     }
 
     //  Create a new Tech Tip
-    protected function createTip($tipData)
+    protected function createTip($tipData, $userID)
     {
         $tip = TechTips::create([
             'tip_type_id' => $tipData->tip_type_id,
             'subject'     => $tipData->subject,
             'description' => $tipData->description,
-            'user_id'     => Auth::user()->user_id,
+            'user_id'     => $userID,
             'sticky'      => $tipData->sticky,
         ]);
 
@@ -78,6 +98,67 @@ class SetTechTips extends SetFiles
         }
 
         return $tip->tip_id;
+    }
+
+    //  Update an existing Tech Tip
+    protected function updateTip($tipData, $tipID, $userID)
+    {
+        TechTips::find($tipID)->update([
+            'tip_type_id' => $tipData->tip_type_id,
+            'subject'     => $tipData->subject,
+            'description' => $tipData->description,
+            'updated_id'  => $userID,
+            'sticky'      => $tipData->sticky,
+        ]);
+
+        $this->checkTipEquipment($tipData->equipment, $tipID);
+        $this->processTipFiles($tipID);
+        if(isset($tipData->deletedFileList))
+        {
+            $this->removeTipFiles($tipData->deletedFileList, $tipID);
+        }
+
+        //  Send an updated notification if necessary
+        if($tipData->notify)
+        {
+            $tip = TechTips::find($tipID);
+            $this->sendNotification($tip, true);
+        }
+
+        return true;
+    }
+
+    //  Determine if any equipment types have been removed from the tip
+    protected function checkTipEquipment($equipArr, $tipID)
+    {
+        $current  = TechTipSystems::where('tip_id', $tipID)->get();
+        $newEquip = [];
+
+        //  Cycle through all equipment to see if it is new or existing
+        foreach($equipArr as $equip)
+        {
+            if(isset($equip['laravel_through_key']))
+            {
+                $current = $current->filter(function($item) use ($equip)
+                {
+                    return $item->sys_id != $equip['sys_id'];
+                });
+            }
+            else
+            {
+                $newEquip[] = $equip;
+            }
+        }
+
+        //  Remove anything left in the current field as it has been removed
+        foreach($current as $cur)
+        {
+            TechTipSystems::find($cur->tip_tag_id)->delete();
+        }
+
+        //  Process all new equipment
+        $this->processTipEquipment($newEquip, $tipID);
+        return true;
     }
 
     //  Add any equipment types to the tech tip
@@ -117,10 +198,24 @@ class SetTechTips extends SetFiles
         return false;
     }
 
+    //  Remove any files that are no longer needed for the tip
+    protected function removeTipFiles($fileList, $tipID)
+    {
+        foreach($fileList as $file)
+        {
+            $details = TechTipFiles::find($file);
+            $fileID  = $details->file_id;
+            $details->delete();
+
+            $this->deleteFile($fileID);
+        }
+
+        return true;
+    }
+
     //  Send a notification of the new/edited tech tip
     protected function sendNotification($tip, $edit = false)
     {
-        // $details = TechTips::find($tipID);
         $users = User::whereHas('UserSettings', function($q)
         {
             $q->where('em_tech_tip', true);
@@ -132,7 +227,7 @@ class SetTechTips extends SetFiles
         }
         else
         {
-            abort(500);
+            Notification::send($users, new UpdateTechTipNotification($tip));
         }
 
         return true;
