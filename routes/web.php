@@ -1,15 +1,18 @@
 <?php
-/*
-*   Built in Authorization Routes
-*/
-Auth::routes(['register' => false]);
-Route::get('download/{id}/{name}', 'DownloadController@index')->name('download');
+
+use Illuminate\Support\Facades\Route;
 
 /*
-*   Basic Non-User Routes
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
 */
-Route::middleware('guest')->group(function()
-{
-    Route::view('logout', 'auth.logout')->name('logout_complete');
-    Route::view('/', 'auth.login')->name('index');
+
+Route::get('/', function () {
+    return view('welcome');
 });

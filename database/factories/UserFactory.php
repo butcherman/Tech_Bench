@@ -1,24 +1,47 @@
 <?php
 
+namespace Database\Factories;
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Faker\Generator as Faker;
-use App\UserSettings;
 
-$factory->define(App\User::class, function(Faker $faker) {
-    return [
-        'role_id'          => 4,
-        'username'         => $faker->unique()->lastName,
-        'first_name'       => $faker->firstName,
-        'last_name'        => $faker->lastName,
-        'email'            => $faker->unique()->safeEmail,
-        'password'         => bcrypt('password'), //  All test users will have the password of 'password' to allow testing access
-        'remember_token'   => Str::random(10),
-        'password_expires' => null,
-    ];
-});
+class UserFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = User::class;
 
-$factory->afterCreating(App\User::class, function($user) {
-    UserSettings::create([
-        'user_id' => $user->user_id,
-    ]);
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'email_verified_at' => now(),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
+        ];
+    }
+
+    /**
+     * Indicate that the model's email address should be unverified.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function unverified()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'email_verified_at' => null,
+            ];
+        });
+    }
+}

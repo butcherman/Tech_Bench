@@ -1,73 +1,62 @@
-# Tech Bench
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub release](https://img.shields.io/github/release/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/releases/)
-[![Documentation Status](https://readthedocs.org/projects/tech-bench/badge/?version=latest)](https://tech-bench.readthedocs.io/en/latest/?badge=latest)
-[![GitHub issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## Scrutinizer CI
+## About Laravel
 
-[![Working Branch](https://img.shields.io/badge/Working%20Branch-master-green
-)](https://github.com/butcherman/Tech_Bench)
-&nbsp; [![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/test5)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-[![Development Branch](https://img.shields.io/badge/Development%20-dev5-yellow
-)](https://github.com/butcherman/Tech_Bench/tree/dev5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=dev5)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/dev5)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=dev5)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev5)
-[![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=dev5)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev5)
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## Travis CI
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-[![Working Branch](https://img.shields.io/badge/Working%20Branch-Master-green
-)](https://github.com/butcherman/Tech_Bench)&nbsp;
-[![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=master)](https://travis-ci.com/butcherman/Tech_Bench)
+## Learning Laravel
 
-[![Development Branch](https://img.shields.io/badge/Development%20%20-dev5-yellow
-)](https://github.com/butcherman/Tech_Bench/tree/dev5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=dev5)](https://travis-ci.com/butcherman/Tech_Bench)
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-## About Tech Bench
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-Tech Bench is a custom Content Management System (CMS) built to aid service technicians by allowing them to store and share information about their customers and equipment they install and maintain.
+## Laravel Sponsors
 
-## The Tech Bench consists of two major sections
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Customer Information
+### Premium Partners
 
-Users can create customer accounts and store customer specific information for each of these customers such as:
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[Many](https://www.many.co.uk)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- **[Curotec](https://www.curotec.com/)**
+- **[OP.GG](https://op.gg)**
 
-* The type of equipment they have installed
-* Login papsswords and other information for the equipment
-* Notes and files speific to that customer and their equipment.
+## Contributing
 
-This central storage location ensures that all field staff have access to the same information.
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-Additional features for customers include the ability to create a custom link that will allow files to be accessed by guests or allow guests to upload their own files.  These links are temporary links that are only available for a configurable amount of time
+## Code of Conduct
 
-### Tech Tips and Documentation
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-While working in the field, all service technicians run across tips and tricks that they use to make their jobs easier.  The Tech Tips section allows for registered users to share these tips with all other users.  This creates a custom Knowledge Base for registered users.
+## Security Vulnerabilities
 
-The Knowledge Base can also include official documentation for the different equiopment that your company installs and maintains.
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-Whenever a new Tech Tip is created, an email is sent to all registered users notifying them of the tip.
+## License
 
-## Installing Tech Bench
-
-Tech Bench is built to be installed on a dedicated web server.  For installation instructions, visit https://tech-bench.readthedocs.io/en/latest/installer/install.html and select the option that fits your environment best.
-
-## Copyright © 2016-2020 Ron Butcher
-
-This program is free software:  you can redistribute it and/or modify it under the terms of the GNU
-General Public License as published by the Free Software Foundation, either version 2 of the License,
-or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
-License for more details.
-
-You should have received a copy of the GNU General Public License along with this program.  If not, see
-www.gnu.org/licenses.
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
