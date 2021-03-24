@@ -35,7 +35,7 @@ class CreateUserRolePermissionTypesTable extends Migration
             ['perm_type_id' => 10, 'description' => 'Delete Tech Tip',     'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 11, 'description' => 'Manage Equipment',    'created_at' => NOW(), 'updated_at' => NOW()],
         ];
-        UserRolePermissionTypes::insert($defaultData);
+        // UserRolePermissionTypes::insert($defaultData);
     }
 
     /**

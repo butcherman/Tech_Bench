@@ -25,7 +25,7 @@ class CreateTechTipTypesTable extends Migration
             ['tip_type_id' => 2, 'description' => 'Documentation', 'created_at' => NOW(), 'updated_at' => NOW()],
             ['tip_type_id' => 3, 'description' => 'Software',      'created_at' => NOW(), 'updated_at' => NOW()],
         ];
-        TechTipTypes::insert($defaultData);
+        // TechTipTypes::insert($defaultData);
     }
 
     /**

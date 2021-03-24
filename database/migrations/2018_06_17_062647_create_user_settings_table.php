@@ -24,9 +24,9 @@ class CreateUserSettingsTable extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });
-        UserSettings::create([
-            'user_id' => 1,
-        ]);
+        // UserSettings::create([
+        //     'user_id' => 1,
+        // ]);
     }
 
     /**

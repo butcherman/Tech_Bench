@@ -17,9 +17,9 @@ class UpdatesForVersion52 extends Migration
      */
     public function up()
     {
-        $this->updateSystemTypesTable();
-        $this->updateFilesTable();
-        $this->updateTechTipsTable();
+        // $this->updateSystemTypesTable();
+        // $this->updateFilesTable();
+        // $this->updateTechTipsTable();
     }
 
     /**

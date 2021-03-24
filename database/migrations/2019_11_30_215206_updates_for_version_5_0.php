@@ -24,29 +24,29 @@ class UpdatesForVersion50 extends Migration
     {
         //  See the function itself for a description of the database changes
         //  DB Adds
-        $this->addSoftDeleteToUsers();
-        $this->addSoftDeleteToCustomerSystems();
-        $this->addSoftDeleteToTechTips();
-        $this->addPasswordExpiresColumn();
-        $this->addHiddenColumn();
-        $this->addColumnsToFileLinksTable();
-        $this->addNotesColumnToFileLinkFiles();
+        // $this->addSoftDeleteToUsers();
+        // $this->addSoftDeleteToCustomerSystems();
+        // $this->addSoftDeleteToTechTips();
+        // $this->addPasswordExpiresColumn();
+        // $this->addHiddenColumn();
+        // $this->addColumnsToFileLinksTable();
+        // $this->addNotesColumnToFileLinkFiles();
 
-        //  DB Modifications
-        $this->updatePhoneIcons();
-        $this->modifySystemDataTableNames();
-        $this->migrateSystemDocumentation();
-        $this->migrateUserRoles();
-        $this->updateCustomersTable();
-        $this->dropUserSettingsTrigger();
+        // //  DB Modifications
+        // $this->updatePhoneIcons();
+        // $this->modifySystemDataTableNames();
+        // $this->migrateSystemDocumentation();
+        // $this->migrateUserRoles();
+        // $this->updateCustomersTable();
+        // $this->dropUserSettingsTrigger();
 
-        //  Remove Unneeded Tables
-        $this->removeNavBarView();
-        $this->removeUserRolesTables();
-        $this->removeFileLinkInstructionsTable();
-        $this->removeFileLinkNotesTable();
-        $this->removeSystemFilesTables();
-        $this->removeActiveFromCustomers();
+        // //  Remove Unneeded Tables
+        // $this->removeNavBarView();
+        // $this->removeUserRolesTables();
+        // $this->removeFileLinkInstructionsTable();
+        // $this->removeFileLinkNotesTable();
+        // $this->removeSystemFilesTables();
+        // $this->removeActiveFromCustomers();
 
     }
 

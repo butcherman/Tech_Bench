@@ -32,18 +32,18 @@ class CreateUserRoleTypesTable extends Migration
             ['role_id' => 3, 'name' => 'Reports',       'description' => 'User who can run reports', 'allow_edit' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['role_id' => 4, 'name' => 'Tech',          'description' => 'Standard User',            'allow_edit' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
         ];
-        UserRoleType::insert($defaultData);
+        // UserRoleType::insert($defaultData);
 
         //  Update the users table to include the 'user_role' column
-        Schema::table('users', function(Blueprint $table)
-        {
-            $table->integer('role_id')->unsigned()->after('user_id')->default(4);
-            $table->foreign('role_id')->references('role_id')->on('user_role_types')->onUpdate('cascade');
-        });
+        // Schema::table('users', function(Blueprint $table)
+        // {
+        //     $table->integer('role_id')->unsigned()->after('user_id')->default(4);
+        //     $table->foreign('role_id')->references('role_id')->on('user_role_types')->onUpdate('cascade');
+        // });
 
-        User::find(1)->update([
-            'role_id' => 1,
-        ]);
+        // User::find(1)->update([
+        //     'role_id' => 1,
+        // ]);
     }
 
     /**

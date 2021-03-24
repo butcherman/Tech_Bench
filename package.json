@@ -10,19 +10,24 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "axios": "^0.21.1",
+        "axios": "^0.21",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "resolve-url-loader": "^3.1.2",
         "sass": "^1.32.8",
         "sass-loader": "^10.1.1",
+        "vue-loader": "^15.9.5",
+        "vue-template-compiler": "^2.6.12"
+    },
+    "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.3",
         "@inertiajs/inertia": "^0.8.5",
         "@inertiajs/inertia-vue": "^0.5.5",
         "@inertiajs/progress": "^0.2.4",
         "bootstrap": "^4.6.0",
         "bootstrap-vue": "^2.21.2",
+        "vue": "^2.6.12",
         "vue-meta": "^2.4.0"
     }
 }

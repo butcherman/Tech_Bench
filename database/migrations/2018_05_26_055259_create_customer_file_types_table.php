@@ -27,7 +27,7 @@ class CreateCustomerFileTypesTable extends Migration
             ['file_type_id' => 4, 'description' => 'Site Map',            'created_at' => NOW(), 'updated_at' => NOW()],
             ['file_type_id' => 5, 'description' => 'Other',               'created_at' => NOW(), 'updated_at' => NOW()],
         ];
-        CustomerFileTypes::insert($defaultData);
+        // CustomerFileTypes::insert($defaultData);
     }
 
     /**

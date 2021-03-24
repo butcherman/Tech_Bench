@@ -14,7 +14,7 @@ class UpdatesForVersion53 extends Migration
      */
     public function up()
     {
-        $this->updateUserRolePermissionTypes();
+        // $this->updateUserRolePermissionTypes();
     }
 
     /**

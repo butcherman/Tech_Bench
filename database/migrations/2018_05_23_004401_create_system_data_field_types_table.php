@@ -33,7 +33,7 @@ class CreateSystemDataFieldTypesTable extends Migration
             ['data_type_id' => 8, 'name' => 'Primary DNS',     'hidden' => false, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['data_type_id' => 9, 'name' => 'Secondary DNS',   'hidden' => false, 'created_at' => NOW(), 'updated_at' => NOW()],
         ];
-        SystemDataFieldTypes::insert($defaultData);
+        // SystemDataFieldTypes::insert($defaultData);
     }
 
     /**
