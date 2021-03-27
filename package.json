@@ -27,6 +27,7 @@
         "@inertiajs/progress": "^0.2.4",
         "bootstrap": "^4.6.0",
         "bootstrap-vue": "^2.21.2",
+        "vee-validate": "^3.4.5",
         "vue": "^2.6.12",
         "vue-meta": "^2.4.0"
     }

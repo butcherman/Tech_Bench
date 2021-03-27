@@ -1,8 +1,5 @@
 <template>
-    <div>
-        //
-        yes
-
+    <div class="guest-layout">
         <slot />
     </div>
 </template>
@@ -31,6 +28,10 @@
         },
         methods: {
             //
+        },
+        metaInfo: {
+            title: 'Welcome',
+            titleTemplate: '%s | Tech Bench',
         }
     }
 </script>

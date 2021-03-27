@@ -13,7 +13,8 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Tech Bench'),
+    'logo' => '/images/TechBenchLogo.png',
 
     /*
     |--------------------------------------------------------------------------
@@ -165,7 +166,6 @@ return [
         /*
          * Package Service Providers...
          */
-        App\Providers\FortifyServiceProvider::class,
 
         /*
          * Application Service Providers...
