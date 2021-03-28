@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Home;
 
+use Inertia\Inertia;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetLinkRequest;
 use App\Http\Requests\Auth\ResetTokenRequest;
-use Illuminate\Auth\Events\PasswordReset;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Inertia\Inertia;
-
+use Illuminate\Auth\Events\PasswordReset;
 
 class AuthController extends Controller
 {
