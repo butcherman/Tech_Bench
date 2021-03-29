@@ -3,6 +3,7 @@
 use App\TechTipTypes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateTechTipTypesTable extends Migration
@@ -26,6 +27,7 @@ class CreateTechTipTypesTable extends Migration
             ['tip_type_id' => 3, 'description' => 'Software',      'created_at' => NOW(), 'updated_at' => NOW()],
         ];
         // TechTipTypes::insert($defaultData);
+        DB::table('tech_tip_types')->insert($defaultData);
     }
 
     /**

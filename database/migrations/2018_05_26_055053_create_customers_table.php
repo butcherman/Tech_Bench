@@ -22,7 +22,6 @@ class CreateCustomersTable extends Migration
             $table->text('city');
             $table->text('state');
             $table->integer('zip');
-            $table->boolean('active')->default(1);
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('parent_id')->references('cust_id')->on('customers')->onUpdate('cascade');

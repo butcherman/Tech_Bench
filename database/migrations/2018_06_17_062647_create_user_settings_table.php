@@ -4,6 +4,7 @@ use App\UserSettings;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateUserSettingsTable extends Migration
 {
@@ -27,6 +28,11 @@ class CreateUserSettingsTable extends Migration
         // UserSettings::create([
         //     'user_id' => 1,
         // ]);
+        DB::table('user_settings')->insert([
+            'user_id' => 1,
+            'created_at' => NOW(),
+            'updated_at' => NOW(),
+        ]);
     }
 
     /**
@@ -36,6 +42,10 @@ class CreateUserSettingsTable extends Migration
      */
     public function down()
     {
+        Schema::table('user_settings', function(Blueprint $table)
+        {
+            $table->dropForeign(['user_id']);
+        });
         Schema::dropIfExists('user_settings');
     }
 }

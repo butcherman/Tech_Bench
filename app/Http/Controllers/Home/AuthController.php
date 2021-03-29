@@ -37,6 +37,17 @@ class AuthController extends Controller
     }
 
     /*
+    *   Post request to log a user out
+    */
+    public function logout()
+    {
+        Auth::logout();
+        session()->flush();
+
+        return redirect(route('home'));
+    }
+
+    /*
     *   Forgot Password Form
     */
     public function forgotPassword()

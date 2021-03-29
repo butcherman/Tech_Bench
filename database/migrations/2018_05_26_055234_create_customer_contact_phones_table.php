@@ -32,6 +32,10 @@ class CreateCustomerContactPhonesTable extends Migration
      */
     public function down()
     {
+        Schema::table('customer_contact_phones', function(Blueprint $table)
+        {
+            $table->dropForeign(['cont_id', 'phone_type_id']);
+        });
         Schema::dropIfExists('customer_contact_phones');
     }
 }

@@ -34,6 +34,10 @@ class CreateFileLinksTable extends Migration
      */
     public function down()
     {
+        Schema::table('file_links', function(Blueprint $table)
+        {
+            $table->dropForeign(['user_id', 'cust_id']);
+        });
         Schema::dropIfExists('file_links');
     }
 }

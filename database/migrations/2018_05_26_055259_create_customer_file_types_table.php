@@ -4,6 +4,7 @@ use App\CustomerFileTypes;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateCustomerFileTypesTable extends Migration
 {
@@ -28,6 +29,7 @@ class CreateCustomerFileTypesTable extends Migration
             ['file_type_id' => 5, 'description' => 'Other',               'created_at' => NOW(), 'updated_at' => NOW()],
         ];
         // CustomerFileTypes::insert($defaultData);
+        DB::table('customer_file_types')->insert($defaultData);
     }
 
     /**

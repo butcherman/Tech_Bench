@@ -30,6 +30,10 @@ class CreateTechTipFavsTable extends Migration
      */
     public function down()
     {
+        Schema::table('tech_tip_favs', function(Blueprint $table)
+        {
+            $table->dropForeign(['user_id', 'tip_id']);
+        });
         Schema::dropIfExists('tech_tip_favs');
     }
 }

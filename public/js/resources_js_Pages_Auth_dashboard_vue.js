@@ -18,18 +18,80 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {//
   },
   data: function data() {
-    return {//
+    return {
+      //
+      showNav: false
     };
   },
   created: function created() {//
   },
   mounted: function mounted() {//
   },
-  computed: {//
+  computed: {
+    app: function app() {
+      return this.$page.props.app;
+    },
+    user: function user() {
+      return this.$page.props.user;
+    },
+    navbarActive: function navbarActive() {
+      return this.showNav ? 'active' : '';
+    },
+    navbar: function navbar() {
+      return this.$page.props.navBar;
+    }
   },
   watch: {//
   },
@@ -240,9 +302,220 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    app layout\n    "), _vm._t("default")], 2)
+  return _c("div", { staticClass: "app-layout" }, [
+    _c("nav", { staticClass: "navbar top-navbar fixed-top" }, [
+      _c("div", { staticClass: "navbar-logo-wrapper d-flex" }, [
+        _c(
+          "a",
+          {
+            staticClass: "navbar-logo",
+            attrs: { href: _vm.route("dashboard") }
+          },
+          [
+            _c("img", {
+              staticClass: "mr-2",
+              attrs: { src: _vm.app.logo, alt: _vm.app.name }
+            })
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "navbar-brand d-none d-md-flex" }, [
+        _c("h2", [_vm._v(_vm._s(_vm.app.name))])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "navbar-data" },
+        [
+          _c(
+            "inertia-link",
+            {
+              directives: [
+                {
+                  name: "b-tooltip",
+                  rawName: "v-b-tooltip.hover",
+                  modifiers: { hover: true }
+                }
+              ],
+              staticClass: "text-muted",
+              attrs: { href: "#", title: "Help" }
+            },
+            [_c("i", { staticClass: "far fa-question-circle" })]
+          ),
+          _vm._v(" "),
+          _c(
+            "inertia-link",
+            {
+              directives: [
+                {
+                  name: "b-tooltip",
+                  rawName: "v-b-tooltip.hover",
+                  modifiers: { hover: true }
+                }
+              ],
+              staticClass: "text-muted",
+              attrs: { href: "#", title: "About " + _vm.app.name }
+            },
+            [_c("i", { staticClass: "fas fa-info-circle" })]
+          ),
+          _vm._v(" "),
+          _c(
+            "b-dropdown",
+            {
+              directives: [
+                {
+                  name: "b-tooltip",
+                  rawName: "v-b-tooltip.hover",
+                  modifiers: { hover: true }
+                }
+              ],
+              attrs: { variant: "link", title: "Account" },
+              scopedSlots: _vm._u([
+                {
+                  key: "button-content",
+                  fn: function() {
+                    return [
+                      _c("b-avatar", {
+                        attrs: { variant: "warning", text: _vm.user.initials }
+                      })
+                    ]
+                  },
+                  proxy: true
+                }
+              ])
+            },
+            [
+              _vm._v(" "),
+              _c(
+                "inertia-link",
+                { attrs: { as: "b-dropdown-item", href: "#" } },
+                [_c("i", { staticClass: "fas fa-cog" }), _vm._v(" Settings")]
+              ),
+              _vm._v(" "),
+              _c("b-dropdown-divider"),
+              _vm._v(" "),
+              _c(
+                "inertia-link",
+                {
+                  attrs: {
+                    as: "b-dropdown-item",
+                    method: "post",
+                    href: _vm.route("logout")
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-sign-out-alt" }),
+                  _vm._v(" Logout")
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "navbar-toggler d-lg-none",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  _vm.showNav = !_vm.showNav
+                }
+              }
+            },
+            [_c("i", { staticClass: "fas fa-bars" })]
+          )
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "container-fluid page-body-wrapper" }, [
+      _c(
+        "nav",
+        {
+          staticClass: "sidebar sidebar-nav",
+          class: _vm.navbarActive,
+          attrs: { id: "side-nav" }
+        },
+        [
+          _c(
+            "ul",
+            { staticClass: "nav" },
+            _vm._l(_vm.navbar, function(l) {
+              return _c(
+                "li",
+                { key: l.name, staticClass: "nav-item" },
+                [
+                  _c(
+                    "inertia-link",
+                    { staticClass: "nav-link", attrs: { href: l.route } },
+                    [
+                      _c("i", { staticClass: "menu-icon", class: l.icon }),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "menu-title" }, [
+                        _vm._v(_vm._s(l.name))
+                      ])
+                    ]
+                  )
+                ],
+                1
+              )
+            }),
+            0
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "content" }, [
+        _c("div", { staticClass: "content-wrapper" }, [_vm._t("default")], 2),
+        _vm._v(" "),
+        _vm._m(0)
+      ])
+    ])
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("footer", { staticClass: " footer page-footer" }, [
+      _c(
+        "div",
+        {
+          staticClass:
+            "d-sm-flex justify-content-center justify-content-sm-between"
+        },
+        [
+          _c(
+            "span",
+            {
+              staticClass:
+                "text-muted text-center text-sm-left d-block d-sm-inline-block"
+            },
+            [
+              _vm._v("Copyright © "),
+              _c("span", { staticClass: "d-none d-md-inline" }, [
+                _vm._v(" - All rights reserved.")
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticClass:
+                "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+            },
+            [_vm._v("version")]
+          )
+        ]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 

@@ -12,21 +12,24 @@ use Inertia\Inertia;
 *   Authentication Routes
 */
 Route::middleware(['guest'])->group(function () {
-    Route::get('/',                 [HomeController::class, 'index'])->name('home');
-    Route::get('/login',            [HomeController::class, 'index'])->name('login');
-    Route::post('/login',           [AuthController::class, 'login'])->name('login');
+    Route::get('/',                 [HomeController::class, 'index'])         ->name('home');
+    Route::get('/login',            [HomeController::class, 'index'])         ->name('login');
+    Route::post('/login',           [AuthController::class, 'login'])         ->name('login');
     Route::get('/forgot-password',  [AuthController::class, 'forgotPassword'])->name('forgot-password');
-    Route::post('/forgot-password', [AuthController::class, 'getResetLink'])->name('forgot-password');
-    Route::get('/reset-password',   [AuthController::class, 'resetPassword'])->name('password.reset');
-    Route::post('/reset-password',  [AuthController::class, 'submitReset'])->name('password.reset');
+    Route::post('/forgot-password', [AuthController::class, 'getResetLink'])  ->name('forgot-password');
+    Route::get('/reset-password',   [AuthController::class, 'resetPassword']) ->name('password.reset');
+    Route::post('/reset-password',  [AuthController::class, 'submitReset'])   ->name('password.reset');
 });
 
 
 
-
+/*
+*   Basic Authenticated User Routes
+*/
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::post('/logout',   [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
@@ -35,10 +38,3 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-Route::get('/del-session', function()
-{
-    Auth::logout();
-    session()->flush();
-
-    return 'logged out';
-});

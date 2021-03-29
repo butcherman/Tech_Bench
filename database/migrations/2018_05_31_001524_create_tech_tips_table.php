@@ -37,6 +37,10 @@ class CreateTechTipsTable extends Migration
      */
     public function down()
     {
+        Schema::table('tech_tips', function(Blueprint $table)
+        {
+            $table->dropForeign(['user_id', 'updated_id', 'tip_type_id']);
+        });
         Schema::dropIfExists('tech_tips');
     }
 }

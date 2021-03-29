@@ -29,6 +29,10 @@ class CreateFileLinkInstructionsTable extends Migration
      */
     public function down()
     {
+        Schema::table('file_link_instructions', function(Blueprint $table)
+        {
+            $table->dropForeign(['link_id']);
+        });
         Schema::dropIfExists('file_link_instructions');
     }
 }

@@ -31,6 +31,10 @@ class CreateFileLinkNotesTable extends Migration
      */
     public function down()
     {
+        Schema::table('file_link_notes', function(Blueprint $table)
+        {
+            $table->dropForeign(['link_id', 'file_id']);
+        });
         Schema::dropIfExists('file_link_notes');
     }
 }

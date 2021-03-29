@@ -1,14 +1,16 @@
 <?php
 
-use App\User;
-use App\TechTips;
-use App\Customers;
-use App\FileLinks;
 use Carbon\Carbon;
-use App\TechTipFiles;
-use App\FileLinkFiles;
-use App\TechTipSystems;
-use App\PhoneNumberTypes;
+
+use App\Models\User;
+use App\Models\TechTips;
+use App\Models\Customers;
+use App\Models\FileLinks;
+use App\Models\TechTipFiles;
+use App\Models\FileLinkFiles;
+use App\Models\TechTipSystems;
+use App\Models\PhoneNumberTypes;
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -24,29 +26,29 @@ class UpdatesForVersion50 extends Migration
     {
         //  See the function itself for a description of the database changes
         //  DB Adds
-        // $this->addSoftDeleteToUsers();
-        // $this->addSoftDeleteToCustomerSystems();
-        // $this->addSoftDeleteToTechTips();
-        // $this->addPasswordExpiresColumn();
-        // $this->addHiddenColumn();
-        // $this->addColumnsToFileLinksTable();
-        // $this->addNotesColumnToFileLinkFiles();
+        $this->addSoftDeleteToUsers();
+        $this->addSoftDeleteToCustomerSystems();
+        $this->addSoftDeleteToTechTips();
+        $this->addPasswordExpiresColumn();
+        $this->addHiddenColumn();
+        $this->addColumnsToFileLinksTable();
+        $this->addNotesColumnToFileLinkFiles();
 
-        // //  DB Modifications
-        // $this->updatePhoneIcons();
-        // $this->modifySystemDataTableNames();
-        // $this->migrateSystemDocumentation();
-        // $this->migrateUserRoles();
-        // $this->updateCustomersTable();
-        // $this->dropUserSettingsTrigger();
+        //  DB Modifications
+        $this->updatePhoneIcons();
+        $this->modifySystemDataTableNames();
+        $this->migrateSystemDocumentation();
+        $this->migrateUserRoles();
+        $this->updateCustomersTable();
+        $this->dropUserSettingsTrigger();
 
-        // //  Remove Unneeded Tables
-        // $this->removeNavBarView();
-        // $this->removeUserRolesTables();
-        // $this->removeFileLinkInstructionsTable();
-        // $this->removeFileLinkNotesTable();
-        // $this->removeSystemFilesTables();
-        // $this->removeActiveFromCustomers();
+        //  Remove Unneeded Tables
+        $this->removeNavBarView();
+        $this->removeUserRolesTables();
+        $this->removeFileLinkInstructionsTable();
+        $this->removeFileLinkNotesTable();
+        $this->removeSystemFilesTables();
+        $this->removeActiveFromCustomers();
 
     }
 
@@ -121,14 +123,18 @@ class UpdatesForVersion50 extends Migration
     //  Added a 'hidden' attribute to system customer data types to allow passwords to not be viewed unless clicked or focus
     private function addHiddenColumn()
     {
-        if(!Schema::hasColumn('system_data_field_types', 'hidden'))
+        if(Schema::hasTable('system_data_field_types'))
         {
-            Schema::table('system_cust_data_types', function(Blueprint $table) {
-                $table->boolean('hidden')
-                    ->default(0)
-                    ->after('name');
-            });
+            if(!Schema::hasColumn('system_data_field_types', 'hidden'))
+            {
+                Schema::table('system_cust_data_types', function(Blueprint $table) {
+                    $table->boolean('hidden')
+                        ->default(0)
+                        ->after('name');
+                });
+            }
         }
+
     }
 
     //  Update the File links table - add cust_id and note column
@@ -326,11 +332,14 @@ class UpdatesForVersion50 extends Migration
     //  Add soft deletes to customer systems table to prevent accidental deletes
     private function addSoftDeleteToCustomerSystems()
     {
-        if(!Schema::hasColumn('customer_systems', 'deleted_at'))
+        if(Schema::hasTable('customer_systems'))
         {
-            Schema::table('customer_systems', function(Blueprint $table) {
-                $table->softDeletes()->after('sys_id');
-            });
+            if(!Schema::hasColumn('customer_systems', 'deleted_at'))
+            {
+                Schema::table('customer_systems', function(Blueprint $table) {
+                    $table->softDeletes()->after('sys_id');
+                });
+            }
         }
     }
 
@@ -372,7 +381,7 @@ class UpdatesForVersion50 extends Migration
                 $table->foreign('parent_id')->references('cust_id')->on('customers')->onUpdate('cascade');
             });
         }
-        if(!Schema::hasColumn('customer_systems', 'shared'))
+        if(Schema::hasTable('customer_systems') && !Schema::hasColumn('customer_systems', 'shared'))
         {
             Schema::table('customer_systems', function(Blueprint $table)
             {

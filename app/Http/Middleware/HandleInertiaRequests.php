@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Actions\General\BuildNavbar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -45,6 +47,8 @@ class HandleInertiaRequests extends Middleware
                 'name' => config('app.name'),
                 'logo' => config('app.logo'),
             ],
+            'user'   => fn() => $request->user() ? $request->user() : null,
+            'navBar' => fn() => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
         ]);
     }
 }

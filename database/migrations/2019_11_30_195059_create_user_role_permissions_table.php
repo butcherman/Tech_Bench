@@ -80,19 +80,19 @@ class CreateUserRolePermissionsTable extends Migration
             ],
         ];
 
-        // foreach($defaults as $role_id => $perms)
-        // {
-        //     foreach($perms as $perm_type_id => $allow)
-        //     {
-        //         DB::table('user_role_permissions')->insert([
-        //             'role_id'      => $role_id,
-        //             'perm_type_id' => $perm_type_id,
-        //             'allow'        => $allow,
-        //             'created_at'   => Carbon::now(),
-        //             'updated_at'   => Carbon::now(),
-        //         ]);
-        //     }
-        // }
+        foreach($defaults as $role_id => $perms)
+        {
+            foreach($perms as $perm_type_id => $allow)
+            {
+                DB::table('user_role_permissions')->insert([
+                    'role_id'      => $role_id,
+                    'perm_type_id' => $perm_type_id,
+                    'allow'        => $allow,
+                    'created_at'   => Carbon::now(),
+                    'updated_at'   => Carbon::now(),
+                ]);
+            }
+        }
     }
 
     /**
@@ -102,6 +102,10 @@ class CreateUserRolePermissionsTable extends Migration
      */
     public function down()
     {
+        Schema::table('user_role_permissions', function(Blueprint $table)
+        {
+            $table->dropForeign(['role_id', 'perm_type_id']);
+        });
         Schema::dropIfExists('user_role_permissions');
     }
 }

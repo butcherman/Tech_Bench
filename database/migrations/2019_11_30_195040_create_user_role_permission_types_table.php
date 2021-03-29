@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateUserRolePermissionTypesTable extends Migration
 {
@@ -36,6 +37,7 @@ class CreateUserRolePermissionTypesTable extends Migration
             ['perm_type_id' => 11, 'description' => 'Manage Equipment',    'created_at' => NOW(), 'updated_at' => NOW()],
         ];
         // UserRolePermissionTypes::insert($defaultData);
+        DB::table('user_role_permission_types')->insert($defaultData);
     }
 
     /**
