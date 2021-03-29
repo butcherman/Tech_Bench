@@ -66,6 +66,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {//
   },
@@ -113,6 +116,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Layouts_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Layouts/app */ "./resources/js/Layouts/app.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -339,23 +357,10 @@ var render = function() {
                 }
               ],
               staticClass: "text-muted",
-              attrs: { href: "#", title: "Help" }
-            },
-            [_c("i", { staticClass: "far fa-question-circle" })]
-          ),
-          _vm._v(" "),
-          _c(
-            "inertia-link",
-            {
-              directives: [
-                {
-                  name: "b-tooltip",
-                  rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
-              ],
-              staticClass: "text-muted",
-              attrs: { href: "#", title: "About " + _vm.app.name }
+              attrs: {
+                href: _vm.route("about"),
+                title: "About " + _vm.app.name
+              }
             },
             [_c("i", { staticClass: "fas fa-info-circle" })]
           ),
@@ -469,9 +474,51 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "content" }, [
-        _c("div", { staticClass: "content-wrapper" }, [_vm._t("default")], 2),
+        _c(
+          "div",
+          { staticClass: "content-wrapper" },
+          [
+            _c(
+              "b-alert",
+              {
+                attrs: {
+                  variant: _vm.$page.props.flash.type,
+                  show: _vm.$page.props.flash.message ? true : false
+                }
+              },
+              [
+                _c("p", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(_vm.$page.props.flash.message))
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _vm._t("default")
+          ],
+          2
+        ),
         _vm._v(" "),
-        _vm._m(0)
+        _c("footer", { staticClass: " footer page-footer" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "d-sm-flex justify-content-center justify-content-sm-between"
+            },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "span",
+                {
+                  staticClass:
+                    "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                },
+                [_vm._v(_vm._s(_vm.app.version))]
+              )
+            ]
+          )
+        ])
       ])
     ])
   ])
@@ -481,39 +528,19 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("footer", { staticClass: " footer page-footer" }, [
-      _c(
-        "div",
-        {
-          staticClass:
-            "d-sm-flex justify-content-center justify-content-sm-between"
-        },
-        [
-          _c(
-            "span",
-            {
-              staticClass:
-                "text-muted text-center text-sm-left d-block d-sm-inline-block"
-            },
-            [
-              _vm._v("Copyright © "),
-              _c("span", { staticClass: "d-none d-md-inline" }, [
-                _vm._v(" - All rights reserved.")
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "span",
-            {
-              staticClass:
-                "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
-            },
-            [_vm._v("version")]
-          )
-        ]
-      )
-    ])
+    return _c(
+      "span",
+      {
+        staticClass:
+          "text-muted text-center text-sm-left d-block d-sm-inline-block"
+      },
+      [
+        _vm._v("Copyright © 2016-2021"),
+        _c("span", { staticClass: "d-none d-md-inline" }, [
+          _vm._v(" Butcherman - All rights reserved.")
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -538,9 +565,39 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    hello world\n")])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-12 grid-margin" }, [
+          _c("h4", { staticClass: "text-center text-md-left" }, [
+            _vm._v("Dashboard")
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-8 grid-margin" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v("Notifications")
+              ]),
+              _vm._v(
+                "\n                    notifications here\n                "
+              )
+            ])
+          ])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 

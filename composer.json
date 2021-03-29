@@ -30,7 +30,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
-        "butcherman/artisan-dev-commands": "^0.0.2",
+        "butcherman/artisan-dev-commands": "^0.0.3",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",

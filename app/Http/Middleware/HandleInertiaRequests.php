@@ -6,6 +6,7 @@ use App\Actions\General\BuildNavbar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
+use PragmaRX\Version\Package\Version;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -46,6 +47,7 @@ class HandleInertiaRequests extends Middleware
             'app' => [
                 'name' => config('app.name'),
                 'logo' => config('app.logo'),
+                'version' => (new Version)->full(),
             ],
             'user'   => fn() => $request->user() ? $request->user() : null,
             'navBar' => fn() => $request->user() ? (new BuildNavbar)->build($request->user()) : [],

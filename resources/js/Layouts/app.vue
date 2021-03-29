@@ -8,10 +8,10 @@
                 <h2>{{app.name}}</h2>
             </div>
             <div class="navbar-data">
-                <inertia-link href="#" class="text-muted" title="Help" v-b-tooltip.hover>
+                <!-- <inertia-link href="#" class="text-muted" title="Help" v-b-tooltip.hover>
                     <i class="far fa-question-circle"></i>
-                </inertia-link>
-                <inertia-link href="#" class="text-muted" :title="'About '+app.name" v-b-tooltip.hover>
+                </inertia-link> -->
+                <inertia-link :href="route('about')" class="text-muted" :title="'About '+app.name" v-b-tooltip.hover>
                     <i class="fas fa-info-circle"></i>
                 </inertia-link>
                 <b-dropdown variant="link" title="Account" v-b-tooltip.hover>
@@ -40,12 +40,15 @@
             </nav>
             <div class="content">
                 <div class="content-wrapper">
+                    <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? true : false">
+                        <p class="text-center">{{$page.props.flash.message}}</p>
+                    </b-alert>
                     <slot />
                 </div>
                 <footer class=" footer page-footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; <span class="d-none d-md-inline"> - All rights reserved.</span></span>
-                        <span class="text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center">version</span>
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; 2016-2021<span class="d-none d-md-inline"> Butcherman - All rights reserved.</span></span>
+                        <span class="text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center">{{app.version}}</span>
                     </div>
                 </footer>
             </div>
