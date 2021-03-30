@@ -11,7 +11,7 @@
             <submit-button button_text="Login" :submitted="submitted"></submit-button>
             <div class="form-group row justify-content-center mb-0">
                 <div class="col-md-8 text-center">
-                    <inertia-link class="btn btn-link text-muted" :href="route('forgot-password')">Forgot Your Password?</inertia-link>
+                    <inertia-link class="btn btn-link text-muted" :href="route('password.forgot')">Forgot Your Password?</inertia-link>
                 </div>
             </div>
         </b-form>
@@ -41,7 +41,7 @@
             submitForm()
             {
                 this.submitted = true;
-                this.$inertia.post(route('login'), this.form, {onFinish: () => {this.submitted = false}});
+                this.$inertia.post(route('login.submit'), this.form, {onFinish: () => {this.submitted = false}});
             }
         },
         metaInfo: {

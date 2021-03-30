@@ -37,7 +37,7 @@
             submitForm()
             {
                 this.submitted = true;
-                this.$inertia.post(route('forgot-password'), this.form, {onFinish: () => {this.submitted = false}});
+                this.$inertia.post(route('password.store'), this.form, {onFinish: () => {this.submitted = false}});
             }
         },
         metaInfo: {
