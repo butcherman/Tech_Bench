@@ -13,8 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Tech Bench'),
-    'logo' => '/images/TechBenchLogo.png',
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
