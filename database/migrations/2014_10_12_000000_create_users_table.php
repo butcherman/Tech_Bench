@@ -16,7 +16,8 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function(Blueprint $table) {
-            $table->increments('user_id');
+            $table->id('user_id');
+            $table->bigInteger('role_id')->unsigned();
             $table->string('username')->unique;
             $table->string('first_name');
             $table->string('last_name');
@@ -26,11 +27,13 @@ class CreateUsersTable extends Migration
             $table->timestamp('password_expires')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->foreign('role_id')->references('role_id')->on('user_roles')->onUpdate('cascade');
         });
 
         //  Create the initial default user
         User::create([
             'user_id'          => 1,
+            'role_id'          => 1,
             'username'         => 'admin',
             'first_name'       => 'System',
             'last_name'        => 'Administrator',
@@ -47,6 +50,10 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::table('users', function(Blueprint $table)
+        {
+            $table->dropForeign(['role_id']);
+        });
         Schema::dropIfExists('users');
     }
 }
