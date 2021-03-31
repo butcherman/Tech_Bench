@@ -41,7 +41,11 @@ Route::middleware(['auth'])->group(function () {
 *   User Settings Routes
 */
 Route::middleware('auth')->group(function () {
-    Route::resource('settings', UserController::class);
+    //  Primary User Settings
+    Route::resource('settings',            UserController::class);
     Route::resource('email-notifications', UserEmailNotificationsController::class);
+    //  Change Password
+    Route::get('password/{change}', [PasswordController::class, 'edit'])  ->name('password.edit');
+    Route::put('password/{id}',     [PasswordController::class, 'update'])->name('password.update');
 });
 

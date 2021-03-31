@@ -90,9 +90,6 @@
             //
             submitForm()
             {
-                console.log('submitted');
-                console.log(this.form);
-
                 this.submitted = true;
                 this.$inertia.put(route('password.reset'), this.form, {onFinish: () => {this.submitted = false}});
             }

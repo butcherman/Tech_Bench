@@ -19,6 +19,7 @@
                         <b-avatar variant="warning" :text="user.initials"></b-avatar>
                     </template>
                     <inertia-link as="b-dropdown-item" :href="route('settings.index')"><i class="fas fa-cog"></i> Settings</inertia-link>
+                    <inertia-link as="b-dropdown-item" :href="route('password.edit', 'change')"><i class="fas fa-key"></i> Change Password</inertia-link>
                     <b-dropdown-divider></b-dropdown-divider>
                     <inertia-link as="b-dropdown-item" method="post" :href="route('logout')"><i class="fas fa-sign-out-alt"></i> Logout</inertia-link>
                 </b-dropdown>

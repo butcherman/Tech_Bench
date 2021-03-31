@@ -69,6 +69,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {//
   },
@@ -499,6 +500,20 @@ var render = function() {
                   }
                 },
                 [_c("i", { staticClass: "fas fa-cog" }), _vm._v(" Settings")]
+              ),
+              _vm._v(" "),
+              _c(
+                "inertia-link",
+                {
+                  attrs: {
+                    as: "b-dropdown-item",
+                    href: _vm.route("password.edit", "change")
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-key" }),
+                  _vm._v(" Change Password")
+                ]
               ),
               _vm._v(" "),
               _c("b-dropdown-divider"),

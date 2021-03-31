@@ -15,7 +15,7 @@ class User extends Authenticatable
 
     protected $primaryKey = 'user_id';
     protected $guarded    = ['created_at', 'updated_at'];
-    protected $hidden     = ['role_id', 'password', 'remember_token', 'deleted_at', 'created_at', 'password_expires', 'updated_at', 'user_id', 'username'];
+    protected $hidden     = ['role_id', 'password', 'remember_token', 'deleted_at', 'created_at', 'password_expires', 'updated_at', 'user_id'];
     protected $appends    = ['full_name', 'initials'];
     protected $casts      = [
         'created_at' => 'datetime:M d, Y',

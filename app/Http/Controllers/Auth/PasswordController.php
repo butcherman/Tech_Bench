@@ -8,7 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetLinkRequest;
 use App\Http\Requests\Auth\ResetTokenRequest;
-
+use App\Http\Requests\User\PasswordRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -55,26 +56,31 @@ class PasswordController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Show the change password form
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        return Inertia::render('User/changePassword');
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Update the users password
      */
-    public function update(Request $request, $id)
+    public function update(PasswordRequest $request, $id)
     {
-        //
+        $user = User::where('username', $id)->first();
+
+        //  Verify that the user is actually using a new password
+        if(Hash::check($request->password, $user->password))
+        {
+            return back()->with(['message' => 'You cannot use the same password', 'type' => 'danger']);
+        }
+
+        $user->forceFill(['password' => Hash::make($request->password)]);
+        $user->save();
+
+        event(new PasswordReset($user));
+        return back()->with(['message' => 'Password Successfully Updated', 'type' => 'success']);
     }
 
     /**

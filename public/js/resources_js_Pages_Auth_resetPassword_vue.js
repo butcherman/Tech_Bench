@@ -153,8 +153,6 @@ __webpack_require__.r(__webpack_exports__);
     submitForm: function submitForm() {
       var _this = this;
 
-      console.log('submitted');
-      console.log(this.form);
       this.submitted = true;
       this.$inertia.put(route('password.reset'), this.form, {
         onFinish: function onFinish() {
