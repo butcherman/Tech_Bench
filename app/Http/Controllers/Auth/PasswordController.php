@@ -10,6 +10,7 @@ use App\Http\Requests\Auth\ResetLinkRequest;
 use App\Http\Requests\Auth\ResetTokenRequest;
 use App\Http\Requests\User\PasswordRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -76,7 +77,10 @@ class PasswordController extends Controller
             return back()->with(['message' => 'You cannot use the same password', 'type' => 'danger']);
         }
 
-        $user->forceFill(['password' => Hash::make($request->password)]);
+        //  Determine the new expiration date
+        $expires = config('auth.passwords.settings.expire') ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+
+        $user->forceFill(['password' => Hash::make($request->password), 'password_expires' => $expires]);
         $user->save();
 
         event(new PasswordReset($user));
@@ -115,8 +119,12 @@ class PasswordController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function($user, $password) use ($request)
             {
+                //  Determine the new expiration date
+                $expires = config('auth.passwords.settings.expire') ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+
                 $user->forceFill([
-                    'password' => Hash::make($password)
+                    'password' => Hash::make($password),
+                    'password_expires' => $expires,
                 ]);
 
                 $user->save();
