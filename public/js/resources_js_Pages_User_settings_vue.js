@@ -198,6 +198,10 @@ __webpack_require__.r(__webpack_exports__);
     user: {
       type: Object,
       required: true
+    },
+    notify: {
+      type: Object,
+      required: true
     }
   },
   data: function data() {
@@ -208,10 +212,10 @@ __webpack_require__.r(__webpack_exports__);
         email: this.user.email
       },
       notifications: {
-        em_tech_tip: false,
-        em_notification: false,
-        em_file_link: false,
-        auto_del_link: false
+        em_tech_tip: this.notify.em_tech_tip,
+        em_notification: this.notify.em_notification,
+        em_file_link: this.notify.em_file_link,
+        auto_del_link: this.notify.auto_del_link
       },
       submit: {
         settings: false,
@@ -228,7 +232,6 @@ __webpack_require__.r(__webpack_exports__);
   watch: {//
   },
   methods: {
-    //
     submitSettings: function submitSettings() {
       var _this = this;
 
@@ -240,7 +243,15 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     submitNotifications: function submitNotifications() {
+      var _this2 = this;
+
       console.log('submitted');
+      this.submit.notifications = true;
+      this.$inertia.put(route('email-notifications.update', this.user.user_id), this.notifications, {
+        onFinish: function onFinish() {
+          _this2.submit.notifications = false;
+        }
+      });
     }
   }
 });

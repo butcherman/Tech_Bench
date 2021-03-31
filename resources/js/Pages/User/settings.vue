@@ -80,7 +80,11 @@
         layout: App,
         props: {
             user: {
-                type: Object,
+                type:     Object,
+                required: true,
+            },
+            notify: {
+                type:     Object,
                 required: true,
             }
         },
@@ -92,13 +96,13 @@
                     email:      this.user.email,
                 },
                 notifications: {
-                    em_tech_tip: false,
-                    em_notification: false,
-                    em_file_link: false,
-                    auto_del_link: false,
+                    em_tech_tip:     this.notify.em_tech_tip,
+                    em_notification: this.notify.em_notification,
+                    em_file_link:    this.notify.em_file_link,
+                    auto_del_link:   this.notify.auto_del_link,
                 },
                 submit: {
-                    settings: false,
+                    settings:      false,
                     notifications: false,
                 }
             }
@@ -116,7 +120,6 @@
              //
         },
         methods: {
-            //
             submitSettings()
             {
                 this.submit.settings = true;
@@ -125,6 +128,8 @@
             submitNotifications()
             {
                 console.log('submitted');
+                this.submit.notifications = true;
+                this.$inertia.put(route('email-notifications.update', this.user.user_id), this.notifications, {onFinish: () => {this.submit.notifications = false}});
             }
         }
     }

@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class UserRolePermissions extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    public function UserRolePermissionTypes()
+    {
+        return $this->hasOne('App\Models\UserRolePermissionTypes', 'perm_type_id', 'perm_type_id');
+    }
 }
