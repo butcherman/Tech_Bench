@@ -3,6 +3,7 @@
 namespace App\Actions\General;
 
 use App\Models\UserRolePermissionTypes;
+use Illuminate\Support\Facades\Gate;
 
 class BuildNavbar
 {
@@ -12,11 +13,11 @@ class BuildNavbar
     {
         $this->user = $user;
 
-        // $admin  = $this->getAdminNavbar();
+        $admin  = $this->getAdminNavbar();
         $navBar = $this->getPrimaryNavbar();
 
-        // return array_merge($navBar, $admin);
-        return $navBar;
+        return array_merge($navBar, $admin);
+        // return $navBar;
     }
 
     /*
@@ -48,16 +49,11 @@ class BuildNavbar
     */
     protected function getAdminNavbar()
     {
-        $response = UserRolePermissionTypes::whereIsAdminLink(1)->whereHas('UserRolePermissions', function($q)
-        {
-            $q->where('role_id', $this->user->role_id)->whereAllow(1);
-        })->get();
-
-        if($response->count() > 0 ? true : false)
+        if(Gate::allows('admin-link', $this->user))
         {
             return [[
                 'name'  => 'Administration',
-                'route' => '#',
+                'route' => route('admin.index'),
                 'icon'  => 'fas fa-user-shield',
             ]];
         }

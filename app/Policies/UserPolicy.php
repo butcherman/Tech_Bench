@@ -48,14 +48,11 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
+     *  Only users with "Manage Users" access can create a new user
      */
     public function create(User $user)
     {
-        //
+        return true; //  $this->before($user, 'create');
     }
 
     /**

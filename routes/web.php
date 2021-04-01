@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminHomeController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Guest\HomeController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserEmailNotificationsController;
+use App\Http\Controllers\User\UserInitializeController;
+use App\Models\UserInitialize;
 
 /*
 *   Authentication Routes
@@ -26,6 +29,9 @@ Route::middleware('guest')->group(function()
     Route::post('/forgot-password', [PasswordController::class, 'store'])        ->name('password.store');
     Route::get( '/reset-password',  [PasswordController::class, 'resetPassword'])->name('password.reset');
     Route::put( '/reset-password',  [PasswordController::class, 'submitReset'])  ->name('password.reset');
+
+    //  Finish setting up new user route
+    Route::get('/finish-setup/{token}', [UserInitializeController::class, 'show'])->name('initialize');
 });
 
 /*
@@ -47,5 +53,16 @@ Route::middleware('auth')->group(function () {
     //  Change Password
     Route::get('password/{change}', [PasswordController::class, 'edit'])  ->name('password.edit');
     Route::put('password/{id}',     [PasswordController::class, 'update'])->name('password.update');
+});
+
+/*
+*   Administration Routes
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/administration', AdminHomeController::class)->name('admin.index');
+
+
+    Route::get('/administration/create-user', [UserController::class, 'create'])->name('user.create');
+    Route::post('/administration/create-user', [UserController::class, 'store'])->name('user.store');
 });
 

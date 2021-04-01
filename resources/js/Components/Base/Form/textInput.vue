@@ -12,6 +12,7 @@
                 v-model="curVal"
             ></b-form-input>
             <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
+            <b-form-invalid-feedback :state="false" v-if="errors && errors[name]">{{errors[name]}}</b-form-invalid-feedback>
         </b-form-group>
     </ValidationProvider>
 </template>
@@ -39,7 +40,11 @@
                 type:    String,
                 default: 'text',
             },
-
+            errors: {
+                type: Object,
+                required: false,
+                default: null,
+            }
         },
         data() {
             return {

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Policies\GatePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -25,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        //  Gate to determine if the Administration link should show up on the navigation menu
+        Gate::define('admin-link', [GatePolicy::class, 'adminLink']);
     }
 }

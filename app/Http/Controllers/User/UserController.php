@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\NewUserCreated;
 use Inertia\Inertia;
 
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
 use App\Models\UserEmailNotifications;
+use App\Models\UserRoles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -34,24 +38,32 @@ class UserController extends Controller
 
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     *  Administration page for creating new users
      */
     public function create()
     {
-        //
+        $this->authorize('create', Auth::user());
+
+        return Inertia::render('User/create', [
+            'roles' => UserRoles::all(),
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     *  Submit the new user form
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        $user = $request->toArray();
+        //  Generate a random password for the user
+        $user['password'] = Hash::make(strtolower(Str::random(15)));
+
+
+
+        $newUser = User::create($user);
+        event(new NewUserCreated($newUser));
+
+        return back()->with(['message' => 'New User Created Successfully', 'type' => 'success']);
     }
 
     /**
@@ -85,7 +97,7 @@ class UserController extends Controller
 
 
     /**
-     *  Update the users account settings
+     *  Update a users account settings
      */
     public function update(UserRequest $request, $id)
     {
