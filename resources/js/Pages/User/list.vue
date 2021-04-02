@@ -119,18 +119,6 @@
                 userData: '',
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
             disableUser(row)
             {
@@ -153,7 +141,6 @@
             },
             submitForm()
             {
-                console.log('submitted');
                 this.submitted = true;
                 this.$inertia.put(route('password.update', this.userData.username), this.form, {onFinish: () => {
                     this.form.password = '';

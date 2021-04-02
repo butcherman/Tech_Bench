@@ -224,14 +224,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
     submitSettings: function submitSettings() {
       var _this = this;

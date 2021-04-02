@@ -9,6 +9,7 @@ use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Home\DashboardController;
+use App\Http\Controllers\User\DisabledUserController;
 use App\Http\Controllers\User\ListActiveUsersController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserEmailNotificationsController;
@@ -63,12 +64,14 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::get('/', AdminHomeController::class)->name('index');
 
     //  User Administration Routes
-    Route::get(   '/create-user',            [UserController::class, 'create']) ->name('user.create');
-    Route::post(  '/create-user',            [UserController::class, 'store'])  ->name('user.store');
-    Route::get(   '/modify-user',             ListActiveUsersController::class) ->name('user.list');
-    Route::get(   '/modify-user/{username}', [UserController::class, 'edit'])   ->name('user.edit');
-    Route::put(   '/modify-user/{setting}',  [UserController::class, 'update']) ->name('user.update');
-    Route::delete('/modify-user/{username}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::get(   '/create-user',            [UserController::class, 'create'])       ->name('user.create');
+    Route::post(  '/create-user',            [UserController::class, 'store'])        ->name('user.store');
+    Route::get(   '/modify-user',             ListActiveUsersController::class)       ->name('user.list');
+    Route::get(   '/modify-user/{username}', [UserController::class, 'edit'])         ->name('user.edit');
+    Route::put(   '/modify-user/{setting}',  [UserController::class, 'update'])       ->name('user.update');
+    Route::delete('/modify-user/{username}', [UserController::class, 'destroy'])      ->name('user.destroy');
+    Route::get(   '/disabled-users',         [DisabledUserController::class, 'index'])->name('disabled.index');
+    Route::put(   '/disabled-users/{id}',    [DisabledUserController::class, 'update'])->name('disabled.update');
 
 });
 

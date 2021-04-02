@@ -230,14 +230,6 @@ __webpack_require__.r(__webpack_exports__);
       userData: ''
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
     disableUser: function disableUser(row) {
       var _this = this;
@@ -261,7 +253,6 @@ __webpack_require__.r(__webpack_exports__);
     submitForm: function submitForm() {
       var _this2 = this;
 
-      console.log('submitted');
       this.submitted = true;
       this.$inertia.put(route('password.update', this.userData.username), this.form, {
         onFinish: function onFinish() {

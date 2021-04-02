@@ -54,7 +54,7 @@
                 }
             },
             errors: {
-                type: Object,
+                type:     Object,
                 required: false,
             }
         },
@@ -63,12 +63,6 @@
                 submitted: false,
                 form:      this.$inertia.form(this.user_details),
             }
-        },
-        created() {
-            //
-        },
-        mounted() {
-             //
         },
         computed: {
             newUser()
@@ -79,9 +73,6 @@
             {
                 return this.newUser ? 'Create New User' : 'Update User';
             }
-        },
-        watch: {
-             //
         },
         methods: {
             submitForm()

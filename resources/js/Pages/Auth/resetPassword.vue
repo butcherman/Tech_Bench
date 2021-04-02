@@ -74,20 +74,7 @@
                 submitted: false,
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-            //
-        },
-        computed: {
-            //
-        },
-        watch: {
-            //
-        },
         methods: {
-            //
             submitForm()
             {
                 this.submitted = true;

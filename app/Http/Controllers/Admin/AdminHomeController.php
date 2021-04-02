@@ -50,7 +50,7 @@ class AdminHomeController extends Controller
                 [
                     'name' => 'Show Deactivated Users',
                     'icon' => 'fas fa-store-alt-slash',
-                    'link' => '#',
+                    'link' => route('admin.disabled.index'),
                 ],
             ];
         }

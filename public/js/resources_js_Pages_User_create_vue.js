@@ -180,10 +180,6 @@ __webpack_require__.r(__webpack_exports__);
       form: this.$inertia.form(this.user_details)
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
   computed: {
     newUser: function newUser() {
       return this.$options.propsData.user_details ? false : true;
@@ -191,8 +187,6 @@ __webpack_require__.r(__webpack_exports__);
     button_text: function button_text() {
       return this.newUser ? 'Create New User' : 'Update User';
     }
-  },
-  watch: {//
   },
   methods: {
     submitForm: function submitForm() {
