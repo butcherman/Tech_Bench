@@ -57,12 +57,8 @@
 
     export default {
         layout: App,
-        props: {
-            //
-        },
         data() {
             return {
-                //
                 form: {
                     password: '',
                     password_confirmation: '',
@@ -70,20 +66,7 @@
                 submitted: false,
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
-            //
             submitForm()
             {
                 this.submitted = true;

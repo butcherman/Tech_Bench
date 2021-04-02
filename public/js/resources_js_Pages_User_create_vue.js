@@ -177,8 +177,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       submitted: false,
-      // button_text: 'Create New User',
-      form: this.user_details
+      form: this.$inertia.form(this.user_details)
     };
   },
   created: function created() {//
@@ -200,11 +199,23 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.submitted = true;
-      this.$inertia.post(route('user.store'), this.form, {
-        onFinish: function onFinish() {
-          _this.submitted = false;
-        }
-      }); // this.$inertia.post(route('user.store'), this.form, {onFinish: () => {console.log(this.errors)}});
+
+      if (this.newUser) {
+        this.form.post(route('admin.user.store'), {
+          onFinish: function onFinish() {
+            _this.form.reset();
+
+            _this.submitted = false;
+          }
+        });
+      } else {
+        console.log('updating');
+        this.form.put(route('admin.user.update', this.user_details.user_id), {
+          onFinish: function onFinish() {
+            _this.submitted = false;
+          }
+        });
+      }
     }
   }
 });

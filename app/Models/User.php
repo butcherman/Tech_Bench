@@ -32,4 +32,9 @@ class User extends Authenticatable
     {
         return "{$this->first_name[0]}{$this->last_name[0]}";
     }
+
+    public function UserRoles()
+    {
+        return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
+    }
 }

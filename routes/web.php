@@ -9,6 +9,7 @@ use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Home\DashboardController;
+use App\Http\Controllers\User\ListActiveUsersController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserEmailNotificationsController;
 use App\Http\Controllers\User\UserInitializeController;
@@ -20,15 +21,15 @@ use App\Models\UserInitialize;
 Route::middleware('guest')->group(function()
 {
     //  Primary Login Routes
-    Route::get( '/',      HomeController::class) ->name('home');
-    Route::get( '/login', HomeController::class) ->name('login.index');
-    Route::post('/login', LoginController::class)->name('login.submit');
+    Route::get( '/',                     HomeController::class) ->name('home');
+    Route::get( '/login',                HomeController::class) ->name('login.index');
+    Route::post('/login',                LoginController::class)->name('login.submit');
 
     //  Forgot password routes
-    Route::get( '/forgot-password', [PasswordController::class, 'index'])        ->name('password.forgot');
-    Route::post('/forgot-password', [PasswordController::class, 'store'])        ->name('password.store');
-    Route::get( '/reset-password',  [PasswordController::class, 'resetPassword'])->name('password.reset');
-    Route::put( '/reset-password',  [PasswordController::class, 'submitReset'])  ->name('password.reset');
+    Route::get( '/forgot-password',     [PasswordController::class, 'index'])        ->name('password.forgot');
+    Route::post('/forgot-password',     [PasswordController::class, 'store'])        ->name('password.store');
+    Route::get( '/reset-password',      [PasswordController::class, 'resetPassword'])->name('password.reset');
+    Route::put( '/reset-password',      [PasswordController::class, 'submitReset'])  ->name('password.reset');
 
     //  Finish setting up new user route
     Route::get('/finish-setup/{token}', [UserInitializeController::class, 'show'])->name('initialize');
@@ -51,18 +52,23 @@ Route::middleware('auth')->group(function () {
     Route::resource('settings',            UserController::class);
     Route::resource('email-notifications', UserEmailNotificationsController::class);
     //  Change Password
-    Route::get('password/{change}', [PasswordController::class, 'edit'])  ->name('password.edit');
-    Route::put('password/{id}',     [PasswordController::class, 'update'])->name('password.update');
+    Route::get('password/{change}',       [PasswordController::class, 'edit'])  ->name('password.edit');
+    Route::put('password/{id}',           [PasswordController::class, 'update'])->name('password.update');
 });
 
 /*
 *   Administration Routes
 */
-Route::middleware('auth')->group(function () {
-    Route::get('/administration', AdminHomeController::class)->name('admin.index');
+Route::middleware('auth')->prefix('administration')->name('admin.')->group(function () {
+    Route::get('/', AdminHomeController::class)->name('index');
 
+    //  User Administration Routes
+    Route::get(   '/create-user',            [UserController::class, 'create']) ->name('user.create');
+    Route::post(  '/create-user',            [UserController::class, 'store'])  ->name('user.store');
+    Route::get(   '/modify-user',             ListActiveUsersController::class) ->name('user.list');
+    Route::get(   '/modify-user/{username}', [UserController::class, 'edit'])   ->name('user.edit');
+    Route::put(   '/modify-user/{setting}',  [UserController::class, 'update']) ->name('user.update');
+    Route::delete('/modify-user/{username}', [UserController::class, 'destroy'])->name('user.destroy');
 
-    Route::get('/administration/create-user', [UserController::class, 'create'])->name('user.create');
-    Route::post('/administration/create-user', [UserController::class, 'store'])->name('user.store');
 });
 

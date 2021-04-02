@@ -38,9 +38,10 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+        // dd($this->route());
         return [
             'username'   => [
-                Rule::unique('users')->ignore($this->route('setting')),
+                Rule::unique('users')->ignore($this->route('setting'), 'user_id'),
                 Rule::requiredIf(fn() => Route::current()->getName() === 'user.store'),
             ],
             'first_name' => 'required|string',
@@ -48,7 +49,7 @@ class UserRequest extends FormRequest
             'email'      => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($this->route('setting')), // ->ignore(),
+                Rule::unique('users')->ignore($this->route('setting'), 'user_id'),
             ],
         ];
     }

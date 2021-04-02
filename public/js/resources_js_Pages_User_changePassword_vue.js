@@ -174,11 +174,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
-  props: {//
-  },
   data: function data() {
     return {
-      //
       form: {
         password: '',
         password_confirmation: ''
@@ -186,16 +183,7 @@ __webpack_require__.r(__webpack_exports__);
       submitted: false
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
-    //
     submitForm: function submitForm() {
       var _this = this;
 

@@ -52,15 +52,11 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return true; //  $this->before($user, 'create');
+        return false;
     }
 
     /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return mixed
+     *  A user can update their own profile
      */
     public function update(User $user, User $model)
     {
@@ -68,15 +64,11 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return mixed
+     *  Only users with Manage Users access can disable a user
      */
     public function delete(User $user, User $model)
     {
-        //
+        return false;
     }
 
     /**

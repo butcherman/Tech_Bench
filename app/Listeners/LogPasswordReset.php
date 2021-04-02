@@ -27,6 +27,11 @@ class LogPasswordReset
      */
     public function handle(PasswordReset $event)
     {
-        Log::stack(['auth', 'user'])->notice('User'.$event->user->full_name.' has reset their password', ['User ID' => event->user->user_id, 'Username' => event->user->username, 'IP Address' => \Request::ip()]);
+        Log::stack(['auth', 'user'])->notice('Password for User '.$event->user->full_name.' has been reset',
+        [
+            'User ID'    => $event->user->user_id,
+            'Username'   => $event->user->username,
+            'IP Address' => \Request::ip()
+        ]);
     }
 }

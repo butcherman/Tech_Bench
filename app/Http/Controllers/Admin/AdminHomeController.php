@@ -40,17 +40,12 @@ class AdminHomeController extends Controller
                 [
                     'name' => 'Create New User',
                     'icon' => 'fas fa-user-plus',
-                    'link' => route('user.create'),
+                    'link' => route('admin.user.create'),
                 ],
                 [
                     'name' => 'Modify User',
                     'icon' => 'fas fa-user-edit',
-                    'link' => '#',
-                ],
-                [
-                    'name' => 'Deactivate User',
-                    'icon' => 'fas fa-user-slash',
-                    'link' => '#',
+                    'link' => route('admin.user.list'),
                 ],
                 [
                     'name' => 'Show Deactivated Users',
