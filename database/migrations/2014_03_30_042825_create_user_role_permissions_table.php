@@ -20,7 +20,7 @@ class CreateUserRolePermissionsTable extends Migration
             $table->unsignedBigInteger('perm_type_id');
             $table->boolean('allow')->default(0);
             $table->timestamps();
-            $table->foreign('role_id')->references('role_id')->on('user_roles')->onUpdate('cascade');
+            $table->foreign('role_id')->references('role_id')->on('user_roles')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('perm_type_id')->references('perm_type_id')->on('user_role_permission_types')->onUpdate('cascade');
         });
 

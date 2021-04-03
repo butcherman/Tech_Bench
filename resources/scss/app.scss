@@ -1,5 +1,16 @@
+/*
+*   Application styles
+*/
 @import 'bootstrap';
 @import 'Layouts/guest';
 @import 'Layouts/app';
 
+/*
+*   Third party styles
+*/
+@import '~vue-good-table/dist/vue-good-table.css';
+
+/*
+*   Individual page styles
+*/
 @import 'Pages/login';

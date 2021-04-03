@@ -10,6 +10,7 @@ class UserRolePermissionTypes extends Model
     use HasFactory;
 
     protected $primaryKey = 'perm_type_id';
+    protected $hidden     = ['created_at', 'is_admin_link', 'updated_at'];
 
     public function UserRolePermissions()
     {

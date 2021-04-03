@@ -26,19 +26,6 @@ class UserPolicy
         return $allowed->allow;
     }
 
-
-
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
-
     /**
      *  Users can only update their own profiles
      */
@@ -72,15 +59,11 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return mixed
+     *  Only admin's can restore a user
      */
     public function restore(User $user, User $model)
     {
-        //
+        return false;
     }
 
     /**

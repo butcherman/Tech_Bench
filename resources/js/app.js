@@ -20,6 +20,13 @@ import camelCase from 'lodash/camelCase';
 require('./validation.js');
 
 /*
+*   Third party Components
+*/
+import VueGoodTablePlugin from 'vue-good-table';
+
+Vue.use(VueGoodTablePlugin);
+
+/*
 *   Default Layout
 */
 import Guest from './Layouts/guest';

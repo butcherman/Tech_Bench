@@ -61,7 +61,7 @@ class AdminHomeController extends Controller
             $roleBuild = [[
                 'name' => 'User Roles and Permissions',
                 'icon' => 'fas fa-users-cog',
-                'link' => '#',
+                'link' => route('admin.user-roles.index'),
             ]];
         }
 

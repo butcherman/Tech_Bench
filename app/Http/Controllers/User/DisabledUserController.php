@@ -11,69 +11,24 @@ use Inertia\Inertia;
 class DisabledUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     *  Show all disabled users
      */
     public function index()
     {
+        $this->authorize('restore', User::class);
+
         return Inertia::render('User/disabled', [
             'user_list' => User::onlyTrashed()->get()->makeVisible(['user_id', 'deleted_at'])->makeHidden(['first_name', 'last_name', 'initials']),
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Restore a user who has been deactivated
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('restore', User::class);
+
         $user = User::withTrashed()->where('user_id', $id)->first();
         $user->restore();
 

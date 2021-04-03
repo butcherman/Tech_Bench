@@ -14,6 +14,7 @@ use App\Http\Controllers\User\ListActiveUsersController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserEmailNotificationsController;
 use App\Http\Controllers\User\UserInitializeController;
+use App\Http\Controllers\User\UserRolesController;
 use App\Models\UserInitialize;
 
 /*
@@ -73,5 +74,6 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::get(   '/disabled-users',         [DisabledUserController::class, 'index'])->name('disabled.index');
     Route::put(   '/disabled-users/{id}',    [DisabledUserController::class, 'update'])->name('disabled.update');
 
+    Route::resource('user-roles',             UserRolesController::class);
 });
 

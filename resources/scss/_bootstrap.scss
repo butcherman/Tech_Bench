@@ -44,5 +44,9 @@ $fa-font-path: '../fonts/font-awesome';
 }
 
 .pointer {
-    cursor: pointer;
+    cursor: pointer !important;
+}
+
+.nope {
+    cursor: not-allowed !important;
 }
