@@ -24,8 +24,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        $this->authorize('view', Auth::user());
-
         return Inertia::render('User/settings', [
             'user'   => Auth::user()->makeVisible('user_id'),
             'notify' => UserEmailNotifications::find(Auth::user()->user_id),
@@ -62,36 +60,15 @@ class UserController extends Controller
         return back()->with(['message' => 'New User Created Successfully', 'type' => 'success']);
     }
 
-
-
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-
-
-
-
-
     /**
      *  Edit a users information
      */
     public function edit($id)
     {
-        $this->authorize('update', Auth::user());
+        $userDetails = User::where('username', $id)->first()->makeVisible(['role_id', 'user_id']);
 
         //  A user cannot add a update with higher permissions than themselves
-        $userDetails = User::where('username', $id)->first()->makeVisible(['role_id', 'user_id']);
+        $this->authorize('update', $userDetails);
         if(Auth::user()->role_id > $userDetails->role_id)
         {
             return back()->with(['message' => 'You cannot modify a user with higher permissions than you', 'type' => 'danger']);

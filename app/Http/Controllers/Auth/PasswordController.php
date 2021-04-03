@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Carbon\Carbon;
 use Inertia\Inertia;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\User\PasswordRequest;
 use App\Http\Requests\Auth\ResetLinkRequest;
 use App\Http\Requests\Auth\ResetTokenRequest;
-use App\Http\Requests\User\PasswordRequest;
-use App\Models\User;
-use Carbon\Carbon;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
@@ -28,32 +27,12 @@ class PasswordController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      *  Submit Forgot Password page
      */
     public function store(ResetLinkRequest $request)
     {
         $status = Password::sendResetLink($request->only('email'));
         return $status === Password::RESET_LINK_SENT ? back()->with(['message' => $status, 'type' => 'success']) : back()->withErrors(['email' => $status]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -86,18 +65,6 @@ class PasswordController extends Controller
         event(new PasswordReset($user));
         return back()->with(['message' => 'Password Successfully Updated', 'type' => 'success']);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
 
     /*
     *   Reset password page for users who have successfully submitted a reset request

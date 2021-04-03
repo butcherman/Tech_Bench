@@ -47,6 +47,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
+        // dd($model);
         return $user->user_id === $model->user_id;
     }
 

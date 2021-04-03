@@ -38,7 +38,6 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        // dd($this->route());
         return [
             'username'   => [
                 Rule::unique('users')->ignore($this->route('setting'), 'user_id'),
