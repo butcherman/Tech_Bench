@@ -35,6 +35,7 @@ Route::middleware('guest')->group(function()
 
     //  Finish setting up new user route
     Route::get('/finish-setup/{token}', [UserInitializeController::class, 'show'])->name('initialize');
+    Route::put('/finish-setup/{token}', [UserInitializeController::class, 'update'])->name('initialize.update');
 });
 
 /*

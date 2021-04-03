@@ -22,7 +22,10 @@ class UserRolePermissionsPolicy
             $q->where('description', 'Manage Permissions');
         })->first();
 
-        return $allowed->allow;
+        if($allowed)
+        {
+            return $allowed;
+        }
     }
 
     /**

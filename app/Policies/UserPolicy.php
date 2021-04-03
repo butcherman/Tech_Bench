@@ -23,7 +23,10 @@ class UserPolicy
 
         Log::channel('auth')->debug('User '.$user->username.' is checking Admin access to '.$method.'.  Result - '.($allowed->allow ? 'Allow' : 'Deny'));
 
-        return $allowed->allow;
+        if($allowed->allow)
+        {
+            return $allowed->allow;
+        }
     }
 
     /**
@@ -47,7 +50,6 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        // dd($model);
         return $user->user_id === $model->user_id;
     }
 

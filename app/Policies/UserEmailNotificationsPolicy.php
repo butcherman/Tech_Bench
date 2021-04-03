@@ -24,7 +24,10 @@ class UserEmailNotificationsPolicy
 
         Log::channel('auth')->debug('User '.$user->username.' is checking Admin access to '.$method.'.  Result - '.($allowed->allow ? 'Allow' : 'Deny'));
 
-        return $allowed->allow;
+        if($allowed->allow)
+        {
+            return $allowed->allow;
+        }
     }
 
     /**

@@ -1,0 +1,13 @@
+build:
+    dependencies:
+        before:
+            - cp tests/.env.scrutinizer .env
+            - mysql -e 'create database `scrutinizer`;'
+        after:
+            - php artisan ziggy:generate
+            - npm run dev
+
+tools:
+    external_code_coverage:
+        timeout: 900
+        runs: 2

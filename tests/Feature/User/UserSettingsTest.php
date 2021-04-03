@@ -40,13 +40,24 @@ class UserSettingsTest extends TestCase
         $response->assertRedirect(route('login.index'));
     }
 
-    // public function test_submit_settings()
-    // {
-    //     $form = User::factory()->make();
+    public function test_submit_settings()
+    {
+        $form = User::factory()->make();
 
-    //     $response = $this->actingAs($this->user)
-    //                     ->put(route('settings.update', $this->user->user_id), $form->only(['first_name', 'last_name', 'email']));
-    //     $response->assertSuccessful();
-    //     $this->assertDatabaseHas('users', ['user_id' => $this->user->user_id, 'first_name' => $form->first_name, 'last_name' => $form->last_name]);
-    // }
+        $response = $this->actingAs($this->user)
+                        ->put(route('settings.update', $this->user->user_id), $form->only(['first_name', 'last_name', 'email']));
+        $response->assertStatus(302);
+        $response->assertSessionHas(['message' => 'Account Settings Updated']);
+        $this->assertDatabaseHas('users', ['user_id' => $this->user->user_id, 'first_name' => $form->first_name, 'last_name' => $form->last_name]);
+    }
+
+    public function test_submit_someone_elses_settings()
+    {
+        $anotherUser = User::factory()->create();
+        $form = User::factory()->make();
+
+        $response = $this->actingAs($this->user)
+                        ->put(route('settings.update', $anotherUser->user_id), $form->only(['first_name', 'last_name', 'email']));
+        $response->assertStatus(403);
+    }
 }

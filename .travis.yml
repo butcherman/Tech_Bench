@@ -1,0 +1,46 @@
+language: php
+
+env:
+  global:
+    - setup=stable
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.3
+      env: setup=lowest
+    - php: 7.4
+      env: setup=lowest
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services:
+    - memcached
+    - redis-server
+    - mysql
+
+before_install:
+    - mysql -e 'create database `tb-dev-testing`;'
+
+before_script:
+    - cp tests/.env.travis .env
+    - travis_retry composer self-update
+    - travis_retry composer install --no-interaction
+    - npm install
+    - php artisan key:generate
+    - php artisan migrate
+    - npm run production
+
+script:
+    - php vendor/bin/phpunit --coverage-clover=coverage.clover
+
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+after_failure:
+    - cat /home/travis/build/butcherman/Tech_Bench/storage/logs/TechBench.log
