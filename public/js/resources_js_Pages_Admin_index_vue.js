@@ -592,61 +592,67 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "col-md-12 grid-margin" },
-        [
-          _c("h4", { staticClass: "text-center text-md-left" }, [
-            _vm._v("Administration")
-          ]),
-          _vm._v(" "),
-          _vm._l(_vm.links, function(options, key) {
-            return _c("div", { key: key, staticClass: "row" }, [
-              _c("div", { staticClass: "col-12" }, [
-                _c("div", { staticClass: "card" }, [
-                  _c("div", { staticClass: "card-body" }, [
-                    _c("div", { staticClass: "card-title" }, [
-                      _vm._v(_vm._s(key) + ":")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "ul",
-                      _vm._l(options, function(opt) {
-                        return _c(
-                          "li",
-                          { key: opt.name },
+  return _c(
+    "div",
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._l(_vm.links, function(options, key) {
+        return _c("div", { key: key, staticClass: "row" }, [
+          _c("div", { staticClass: "col-12" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "card-title" }, [
+                  _vm._v(_vm._s(key) + ":")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "ul",
+                  _vm._l(options, function(opt) {
+                    return _c(
+                      "li",
+                      { key: opt.name },
+                      [
+                        _c(
+                          "inertia-link",
+                          {
+                            staticClass: "text-secondary",
+                            attrs: { href: opt.link }
+                          },
                           [
-                            _c(
-                              "inertia-link",
-                              {
-                                staticClass: "text-secondary",
-                                attrs: { href: opt.link }
-                              },
-                              [
-                                _c("i", { class: opt.icon }),
-                                _vm._v(" " + _vm._s(opt.name))
-                              ]
-                            )
-                          ],
-                          1
+                            _c("i", { class: opt.icon }),
+                            _vm._v(" " + _vm._s(opt.name))
+                          ]
                         )
-                      }),
-                      0
+                      ],
+                      1
                     )
-                  ])
-                ])
+                  }),
+                  0
+                )
               ])
             ])
-          })
-        ],
-        2
-      )
-    ])
-  ])
+          ])
+        ])
+      })
+    ],
+    2
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12 grid-margin" }, [
+        _c("h4", { staticClass: "text-center text-md-left" }, [
+          _vm._v("Administration")
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 

@@ -17,7 +17,6 @@ class BuildNavbar
         $navBar = $this->getPrimaryNavbar();
 
         return array_merge($navBar, $admin);
-        // return $navBar;
     }
 
     /*
@@ -33,7 +32,7 @@ class BuildNavbar
             ],
             [
                 'name'  => 'Customers',
-                'route' => '#',
+                'route' => route('customers.index'),
                 'icon'  => 'fas fa-user-tie',
             ],
             [

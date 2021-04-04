@@ -12,7 +12,7 @@ use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
-
+use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
 use App\Http\Controllers\User\DisabledUserController;
@@ -61,6 +61,11 @@ Route::middleware('auth')->group(function () {
     Route::get('password/{change}',       [PasswordController::class, 'edit'])  ->name('password.edit');
     Route::put('password/{id}',           [PasswordController::class, 'update'])->name('password.update');
 });
+
+/*
+*   Customer Routes
+*/
+Route::middleware('auth')->resource('customers', CustomerController::class);
 
 /*
 *   Administration Routes

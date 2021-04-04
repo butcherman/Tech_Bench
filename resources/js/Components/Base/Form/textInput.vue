@@ -4,12 +4,16 @@
             :label="label+':'"
             :label-for="name"
         >
+            <template slot="label">
+                <slot name="label"></slot>
+            </template>
             <b-form-input
                 :id="name"
                 :name="name"
                 :type="type"
-                :placeholder="label"
+                :placeholder="placeholder"
                 v-model="curVal"
+                @blur="emitBlur"
             ></b-form-input>
             <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
             <b-form-invalid-feedback :state="false" v-if="errors && errors[name]">{{errors[name]}}</b-form-invalid-feedback>
@@ -44,6 +48,11 @@
                 type: Object,
                 required: false,
                 default: null,
+            },
+            placeholder: {
+                type: String,
+                required: false,
+                default: '',
             }
         },
         data() {
@@ -55,7 +64,14 @@
             curVal(val)
             {
                 this.$emit('input', val);
-            }
+            },
+
         },
+        methods: {
+            emitBlur()
+            {
+                this.$emit('blur');
+            }
+        }
     }
 </script>
