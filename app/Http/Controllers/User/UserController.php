@@ -50,6 +50,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $this->authorize('create', Auth::user());
         $user = $request->toArray();
         //  Generate a random password for the user
         $user['password'] = Hash::make(strtolower(Str::random(15)));
@@ -65,7 +66,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $userDetails = User::where('username', $id)->first()->makeVisible(['role_id', 'user_id']);
+        $userDetails = User::where('username', $id)->firstOrFail()->makeVisible(['role_id', 'user_id']);
 
         //  A user cannot add a update with higher permissions than themselves
         $this->authorize('update', $userDetails);
@@ -88,6 +89,13 @@ class UserController extends Controller
     public function update(UserRequest $request, $id)
     {
         $user = User::findOrFail($id);
+
+        $this->authorize('update', $user);
+        if(Auth::user()->role_id > $user->role_id)
+        {
+            return back()->with(['message' => 'You cannot modify a user with higher permissions than you', 'type' => 'danger']);
+        }
+
         $user->update($request->toArray());
 
         return back()->with(['message' => 'Account Settings Updated', 'type' => 'success']);
@@ -99,6 +107,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::where('username', $id)->first();
+        $this->authorize('delete', $user);
 
         $msg = 'Successfully Deactivated '.$user->full_name;
         Log::stack(['user', 'auth'])->notice('User '.$user->username.' has been deactivated by '.Auth::user()->username);

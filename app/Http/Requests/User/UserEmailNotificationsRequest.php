@@ -16,7 +16,6 @@ class UserEmailNotificationsRequest extends FormRequest
     {
 
         $user = UserEmailNotifications::find($this->route('email_notification'));
-        // dd($user);
         return $user && $this->user()->can('update', $user);
     }
 

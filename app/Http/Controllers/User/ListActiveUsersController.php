@@ -11,15 +11,13 @@ use Inertia\Inertia;
 class ListActiveUsersController extends Controller
 {
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     *  List all active users
      */
     public function __invoke(Request $request)
     {
-        $userList = User::with('UserRoles')->get()->makeHidden(['first_name', 'last_name', 'initials']);
+        $this->authorize('create', User::class);
 
+        $userList = User::with('UserRoles')->get()->makeHidden(['first_name', 'last_name', 'initials']);
         return Inertia::render('User/list', ['users' => $userList]);
     }
 }

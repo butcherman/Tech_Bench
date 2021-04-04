@@ -19,6 +19,8 @@ class UserRolesController extends Controller
      */
     public function index()
     {
+        $this->authorize('view', UserRolePermissions::class);
+
         return Inertia::render('User/Roles/index', [
             'roles' => UserRoles::all()->makeVisible('allow_edit'),
         ]);
@@ -29,6 +31,8 @@ class UserRolesController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', UserRolePermissions::class);
+
         return Inertia::render('User/Roles/new', [
             'permissions' => UserRolePermissionTypes::all(),
         ]);
@@ -39,6 +43,8 @@ class UserRolesController extends Controller
      */
     public function store(UserRoleRequest $request)
     {
+        $this->authorize('create', UserRolePermissions::class);
+
         //  Create the new role
         $newRole = UserRoles::create($request->only(['name', 'description']));
 
@@ -96,6 +102,15 @@ class UserRolesController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('create', UserRolePermissions::class);
+
+        //  verify this is not a default role
+        $role = UserRoles::find($id);
+        if(!$role->allow_edit)
+        {
+            return back()->with(['message' => 'You cannot delete one of the default User Roles', 'type' => 'danger']);
+        }
+
         //  Verify that it is not in use
         $inUse = User::where('role_id', $id)->count();
 
@@ -104,7 +119,7 @@ class UserRolesController extends Controller
             return back()->with(['message' => 'This User Role is in use.  Please remove all users from this role before deleting', 'type' => 'danger']);
         }
 
-        UserRoles::find($id)->delete();
+        $role->delete();
 
         return redirect(route('admin.user-roles.index'));
     }

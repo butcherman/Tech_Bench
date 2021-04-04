@@ -15,7 +15,7 @@ class DisabledUserController extends Controller
      */
     public function index()
     {
-        $this->authorize('restore', User::class);
+        $this->authorize('create', User::class);
 
         return Inertia::render('User/disabled', [
             'user_list' => User::onlyTrashed()->get()->makeVisible(['user_id', 'deleted_at'])->makeHidden(['first_name', 'last_name', 'initials']),
@@ -25,9 +25,9 @@ class DisabledUserController extends Controller
     /**
      *  Restore a user who has been deactivated
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        $this->authorize('restore', User::class);
+        $this->authorize('restore', User::withTrashed()->where('user_id', $id)->first());
 
         $user = User::withTrashed()->where('user_id', $id)->first();
         $user->restore();
@@ -37,13 +37,10 @@ class DisabledUserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Perminately delete a user and all of their information
      */
-    public function destroy($id)
-    {
-        //
-    }
+    // public function destroy($id)
+    // {
+    //     //
+    // }
 }

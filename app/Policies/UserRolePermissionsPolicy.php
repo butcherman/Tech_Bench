@@ -22,9 +22,11 @@ class UserRolePermissionsPolicy
             $q->where('description', 'Manage Permissions');
         })->first();
 
+        Log::channel('auth')->debug('User '.$user->username.' is checking User Role Permissions Policy access. Result - '.($allowed->allow ? 'Allow' : 'Deny'));
+
         if($allowed)
         {
-            return $allowed;
+            return $allowed->allow;
         }
     }
 
@@ -37,15 +39,11 @@ class UserRolePermissionsPolicy
     }
 
     /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\UserRolePermissions  $userRolePermissions
-     * @return mixed
+     *  Only administrators can do this
      */
     public function view(User $user, UserRolePermissions $userRolePermissions)
     {
-        //
+        return false;
     }
 
     /**
@@ -64,43 +62,27 @@ class UserRolePermissionsPolicy
         return false;
     }
 
-
-
-
-
     /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\UserRolePermissions  $userRolePermissions
-     * @return mixed
+     *  Only administrators can do this
      */
     public function delete(User $user, UserRolePermissions $userRolePermissions)
     {
-        //
+        return false;
     }
 
     /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\UserRolePermissions  $userRolePermissions
-     * @return mixed
+     *  Only administrators can do this
      */
     public function restore(User $user, UserRolePermissions $userRolePermissions)
     {
-        //
+        return false;
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\UserRolePermissions  $userRolePermissions
-     * @return mixed
+     *  Only administrators can do this
      */
     public function forceDelete(User $user, UserRolePermissions $userRolePermissions)
     {
-        //
+        return false;
     }
 }

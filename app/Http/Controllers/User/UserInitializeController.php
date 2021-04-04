@@ -17,41 +17,7 @@ use Inertia\Inertia;
 class UserInitializeController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Show the finish setup form
      */
     public function show($id)
     {
@@ -69,28 +35,12 @@ class UserInitializeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      *  Finish setting up the new user
      */
     public function update(InitializeUserRequest $request, $id)
     {
         //  Validate the user
-        $link = UserInitialize::where('token', $id)->first();
-
-        if(!$link)
-        {
-            abort(404, 'The Setup Link you are looking for cannot be found');
-        }
+        $link = UserInitialize::where('token', $id)->firstOrFail();
 
         $user = User::where('email', $request->email)->first();
 
@@ -110,16 +60,5 @@ class UserInitializeController extends Controller
         Auth::login($user);
 
         return redirect(route('dashboard'))->with(['message' => 'Your account is setup', 'type' => 'success']);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

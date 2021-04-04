@@ -1,21 +1,24 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminHomeController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\AdminHomeController;
+
 use App\Http\Controllers\Guest\HomeController;
-use App\Http\Controllers\Auth\LoginController;
+
 use App\Http\Controllers\Home\AboutController;
+use App\Http\Controllers\Home\DashboardController;
+
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Home\DashboardController;
-use App\Http\Controllers\User\DisabledUserController;
-use App\Http\Controllers\User\ListActiveUsersController;
+
 use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\User\UserEmailNotificationsController;
-use App\Http\Controllers\User\UserInitializeController;
 use App\Http\Controllers\User\UserRolesController;
-use App\Models\UserInitialize;
+use App\Http\Controllers\User\DisabledUserController;
+use App\Http\Controllers\User\UserInitializeController;
+use App\Http\Controllers\User\ListActiveUsersController;
+use App\Http\Controllers\User\UserEmailNotificationsController;
 
 /*
 *   Authentication Routes
@@ -34,7 +37,7 @@ Route::middleware('guest')->group(function()
     Route::put( '/reset-password',      [PasswordController::class, 'submitReset'])  ->name('password.reset');
 
     //  Finish setting up new user route
-    Route::get('/finish-setup/{token}', [UserInitializeController::class, 'show'])->name('initialize');
+    Route::get('/finish-setup/{token}', [UserInitializeController::class, 'show'])  ->name('initialize');
     Route::put('/finish-setup/{token}', [UserInitializeController::class, 'update'])->name('initialize.update');
 });
 
@@ -63,18 +66,17 @@ Route::middleware('auth')->group(function () {
 *   Administration Routes
 */
 Route::middleware('auth')->prefix('administration')->name('admin.')->group(function () {
-    Route::get('/', AdminHomeController::class)->name('index');
+    Route::get('/',                             AdminHomeController::class)->name('index');
 
     //  User Administration Routes
-    Route::get(   '/create-user',            [UserController::class, 'create'])       ->name('user.create');
-    Route::post(  '/create-user',            [UserController::class, 'store'])        ->name('user.store');
-    Route::get(   '/modify-user',             ListActiveUsersController::class)       ->name('user.list');
-    Route::get(   '/modify-user/{username}', [UserController::class, 'edit'])         ->name('user.edit');
-    Route::put(   '/modify-user/{setting}',  [UserController::class, 'update'])       ->name('user.update');
-    Route::delete('/modify-user/{username}', [UserController::class, 'destroy'])      ->name('user.destroy');
-    Route::get(   '/disabled-users',         [DisabledUserController::class, 'index'])->name('disabled.index');
-    Route::put(   '/disabled-users/{id}',    [DisabledUserController::class, 'update'])->name('disabled.update');
-
-    Route::resource('user-roles',             UserRolesController::class);
+    Route::get(     '/create-user',            [UserController::class, 'create'])        ->name('user.create');
+    Route::post(    '/create-user',            [UserController::class, 'store'])         ->name('user.store');
+    Route::get(     '/modify-user',             ListActiveUsersController::class)        ->name('user.list');
+    Route::get(     '/modify-user/{username}', [UserController::class, 'edit'])          ->name('user.edit');
+    Route::put(     '/modify-user/{setting}',  [UserController::class, 'update'])        ->name('user.update');
+    Route::delete(  '/modify-user/{username}', [UserController::class, 'destroy'])       ->name('user.destroy');
+    Route::get(     '/disabled-users',         [DisabledUserController::class, 'index']) ->name('disabled.index');
+    Route::put(     '/disabled-users/{id}',    [DisabledUserController::class, 'update'])->name('disabled.update');
+    Route::resource('user-roles',               UserRolesController::class);
 });
 

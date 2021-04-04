@@ -22,7 +22,7 @@ class UserEmailNotificationsPolicy
             $q->where('description', 'Manage Users');
         })->first();
 
-        Log::channel('auth')->debug('User '.$user->username.' is checking Admin access to '.$method.'.  Result - '.($allowed->allow ? 'Allow' : 'Deny'));
+        Log::channel('auth')->debug('User '.$user->username.' is checking User Email Notification Policy access to '.$method.'.  Result - '.($allowed->allow ? 'Allow' : 'Deny'));
 
         if($allowed->allow)
         {

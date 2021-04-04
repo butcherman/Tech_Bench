@@ -28,7 +28,6 @@ class UserRequest extends FormRequest
         }
 
         $user = User::find($this->route('setting'));
-        // dd($user);
         return $user && $this->user()->can('update', $user);
     }
 
