@@ -5,8 +5,8 @@
                 <h4 class="text-center text-md-left">Administration</h4>
             </div>
         </div>
-         <div class="row" v-for="(options, key) in links" :key="key">
-            <div class="col-12">
+         <div class="row grid-margin justify-content-center" v-for="(options, key) in links" :key="key">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">{{key}}:</div>

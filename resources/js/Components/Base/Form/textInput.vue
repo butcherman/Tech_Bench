@@ -45,15 +45,15 @@
                 default: 'text',
             },
             errors: {
-                type: Object,
+                type:     Object,
                 required: false,
-                default: null,
+                default:  null,
             },
             placeholder: {
-                type: String,
+                type:     String,
                 required: false,
                 default: '',
-            }
+            },
         },
         data() {
             return {
@@ -65,7 +65,6 @@
             {
                 this.$emit('input', val);
             },
-
         },
         methods: {
             emitBlur()

@@ -12,7 +12,6 @@ use Inertia\Inertia;
 
 class AdminHomeController extends Controller
 {
-    protected $userPermissions;
     /**
      *  Administration Home Page
      */
@@ -20,17 +19,20 @@ class AdminHomeController extends Controller
     {
         Gate::authorize('admin-link', Auth::user());
 
-        $this->userPermissions = UserRolePermissions::where('role_id', Auth::user()->role_id)->with('UserRolePermissionTypes');
+        //  Build each of the Administration menus depending on customer's access
+        $userBuild      = $this->buildUserList();
+        $equipmentBuild = $this->buildEquipmentList();
 
-        $userBuild = $this->buildUserList();
+
 
 
 
         return Inertia::render('Admin/index', [
-            'links' => array_merge($userBuild),
+            'links' => array_merge($userBuild, $equipmentBuild),
         ]);
     }
 
+    //  Build the user administration links if the user has access
     protected function buildUserList()
     {
         $userBuild = [];
@@ -66,6 +68,45 @@ class AdminHomeController extends Controller
         }
 
         return ['users' => array_merge($userBuild, $roleBuild)];
+    }
+
+    //  Build the equipment administration links if the user has access
+    protected function buildEquipmentList()
+    {
+        if($this->getPermissionValue('Manage Equipment'))
+        {
+            return [
+                'equipment types and categories' => [
+                    [
+                        'name' => 'Create New Category',
+                        'icon' => 'far fa-plus-square',
+                        'link' => route('admin.equipment.categories.create'),
+                    ],
+                    [
+                        'name' => 'Modify Existing Category',
+                        'icon' => 'far fa-edit',
+                        'link' => route('admin.equipment.categories.index'),
+                    ],
+                    [
+                        'name' => 'Create New Equipment',
+                        'icon' => 'far fa-plus-square',
+                        'link' => route('admin.equipment.create'),
+                    ],
+                    [
+                        'name' => 'Modify Existing Equipment',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'Modify Information Gathered for Customer Equipment',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                ]
+                ];
+        }
+
+        return [];
     }
 
 

@@ -598,42 +598,46 @@ var render = function() {
       _vm._m(0),
       _vm._v(" "),
       _vm._l(_vm.links, function(options, key) {
-        return _c("div", { key: key, staticClass: "row" }, [
-          _c("div", { staticClass: "col-12" }, [
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-body" }, [
-                _c("div", { staticClass: "card-title" }, [
-                  _vm._v(_vm._s(key) + ":")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "ul",
-                  _vm._l(options, function(opt) {
-                    return _c(
-                      "li",
-                      { key: opt.name },
-                      [
-                        _c(
-                          "inertia-link",
-                          {
-                            staticClass: "text-secondary",
-                            attrs: { href: opt.link }
-                          },
-                          [
-                            _c("i", { class: opt.icon }),
-                            _vm._v(" " + _vm._s(opt.name))
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  }),
-                  0
-                )
+        return _c(
+          "div",
+          { key: key, staticClass: "row grid-margin justify-content-center" },
+          [
+            _c("div", { staticClass: "col-md-8" }, [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "card-title" }, [
+                    _vm._v(_vm._s(key) + ":")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    _vm._l(options, function(opt) {
+                      return _c(
+                        "li",
+                        { key: opt.name },
+                        [
+                          _c(
+                            "inertia-link",
+                            {
+                              staticClass: "text-secondary",
+                              attrs: { href: opt.link }
+                            },
+                            [
+                              _c("i", { class: opt.icon }),
+                              _vm._v(" " + _vm._s(opt.name))
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    }),
+                    0
+                  )
+                ])
               ])
             ])
-          ])
-        ])
+          ]
+        )
       })
     ],
     2

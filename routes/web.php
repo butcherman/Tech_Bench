@@ -13,6 +13,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customers\CustomerController;
+use App\Http\Controllers\Equip\EquipmentCategoriesController;
+use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
 use App\Http\Controllers\User\DisabledUserController;
@@ -83,5 +85,12 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::get(     '/disabled-users',         [DisabledUserController::class, 'index']) ->name('disabled.index');
     Route::put(     '/disabled-users/{id}',    [DisabledUserController::class, 'update'])->name('disabled.update');
     Route::resource('user-roles',               UserRolesController::class);
+
+    //  Equipment Administration Routes
+    Route::prefix('equipment')->name('equipment.')->group(function()
+    {
+        Route::resource('categories', EquipmentCategoriesController::class);
+        Route::resource('/',       EquipmentTypesController::class);
+    });
 });
 

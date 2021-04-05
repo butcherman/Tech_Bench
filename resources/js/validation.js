@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
+import { Validator } from 'vee-validate';
 import { required, email, confirmed, min } from 'vee-validate/dist/rules';
 
 extend('required', {
@@ -20,6 +21,17 @@ extend('confirmed', {
 extend('min', {
     ...min,
     message: 'This field must have at least {length} characters',
+});
+
+extend('no-special', value => {
+    const valid = new RegExp(/^[a-zA-Z0-9_ ]*$/);
+
+    if(valid.test(value))
+    {
+        return true;
+    }
+
+    return 'Special characters are not allowed';
 });
 
 
