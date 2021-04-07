@@ -158,38 +158,56 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
   props: {
-    //
     categories: {
+      type: Array,
+      required: true
+    },
+    dataList: {
       type: Array,
       required: true
     }
   },
   data: function data() {
     return {
-      //
       submitted: false,
       form: {
         cat_id: '',
-        name: ''
-      }
+        name: '',
+        data_fields: []
+      },
+      fields: 5
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
-    //
     submitForm: function submitForm() {
-      console.log(this.form);
+      this.$inertia.post(route('admin.equipment.store'), this.form);
+    },
+    delOption: function delOption(index) {
+      this.form.data_fields.splice(index, 1);
+      this.fields--;
     }
   }
 });
@@ -654,7 +672,7 @@ var render = function() {
                                 label: "Select Category",
                                 name: "category",
                                 "text-field": "name",
-                                "value-field": "cat_id",
+                                "value-field": "name",
                                 placeholder:
                                   "Select A Category This Equipment Belongs To",
                                 rules: "required",
@@ -688,9 +706,134 @@ var render = function() {
                             _vm._v(" "),
                             _c("fieldset", [
                               _c("label", [
-                                _vm._v("Customer Information to Gather")
+                                _vm._v("Customer Information to Gather:")
                               ])
                             ]),
+                            _vm._v(" "),
+                            _c(
+                              "draggable",
+                              {
+                                attrs: {
+                                  animation: "200",
+                                  list: _vm.form.system_data_fields
+                                }
+                              },
+                              _vm._l(_vm.fields, function(index) {
+                                return _c(
+                                  "b-input-group",
+                                  { key: index, staticClass: "my-2" },
+                                  [
+                                    _c(
+                                      "b-input-group-prepend",
+                                      {
+                                        staticClass: "align-middle d-block mr-1"
+                                      },
+                                      [
+                                        _c("i", {
+                                          directives: [
+                                            {
+                                              name: "b-tooltip",
+                                              rawName: "v-b-tooltip.hover",
+                                              modifiers: { hover: true }
+                                            }
+                                          ],
+                                          staticClass:
+                                            "fas fa-sort align-middle pointer",
+                                          attrs: {
+                                            title: "Drag to Change Order"
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("b-form-input", {
+                                      attrs: {
+                                        type: "text",
+                                        list: "data-list",
+                                        placeholder:
+                                          "Input information to gather for the customer",
+                                        autocomplete: "false"
+                                      },
+                                      model: {
+                                        value: _vm.form.data_fields[index],
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.form.data_fields,
+                                            index,
+                                            $$v
+                                          )
+                                        },
+                                        expression: "form.data_fields[index]"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-input-group-append",
+                                      {
+                                        staticClass: "align-middle d-block ml-1"
+                                      },
+                                      [
+                                        _c("i", {
+                                          directives: [
+                                            {
+                                              name: "b-tooltip",
+                                              rawName: "v-b-tooltip.hover",
+                                              modifiers: { hover: true }
+                                            }
+                                          ],
+                                          staticClass:
+                                            "far fa-times-circle text-danger pointer",
+                                          attrs: {
+                                            title: "Remove this Option"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.delOption(index)
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                )
+                              }),
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              [
+                                _c(
+                                  "b-button",
+                                  {
+                                    staticClass: "float-right my-2",
+                                    attrs: { variant: "warning" },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.fields++
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", { staticClass: "fas fa-plus" }),
+                                    _vm._v(" Add Row")
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "datalist",
+                              { attrs: { id: "data-list" } },
+                              _vm._l(_vm.dataList, function(data) {
+                                return _c("option", { key: data }, [
+                                  _vm._v(_vm._s(data))
+                                ])
+                              }),
+                              0
+                            ),
                             _vm._v(" "),
                             _c("submit-button", {
                               attrs: {

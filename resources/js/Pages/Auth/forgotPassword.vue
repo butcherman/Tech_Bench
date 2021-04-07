@@ -9,7 +9,7 @@
         </b-alert>
         <ValidationObserver v-slot="{handleSubmit}">
             <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-                <text-input v-model="form.email" rules="required|email" label="Email Address" name="email" type="email"></text-input>
+                <text-input v-model="form.email" rules="required|email" label="Email Address" name="email" type="email" placeholder="Email Address"></text-input>
                 <submit-button button_text="Sent Password Reset Link" :submitted="submitted"></submit-button>
             </b-form>
         </ValidationObserver>

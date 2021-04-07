@@ -387,7 +387,8 @@ var render = function() {
                   attrs: {
                     rules: "required",
                     label: "Username",
-                    name: "username"
+                    name: "username",
+                    placeholder: "Username"
                   },
                   model: {
                     value: _vm.form.username,
@@ -403,7 +404,8 @@ var render = function() {
                     rules: "required",
                     label: "Password",
                     name: "password",
-                    type: "password"
+                    type: "password",
+                    placeholder: "Password"
                   },
                   model: {
                     value: _vm.form.password,

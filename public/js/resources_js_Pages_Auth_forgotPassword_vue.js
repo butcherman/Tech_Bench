@@ -397,7 +397,8 @@ var render = function() {
                         rules: "required|email",
                         label: "Email Address",
                         name: "email",
-                        type: "email"
+                        type: "email",
+                        placeholder: "Email Address"
                       },
                       model: {
                         value: _vm.form.email,

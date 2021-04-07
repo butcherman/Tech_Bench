@@ -12,4 +12,14 @@ class EquipmentType extends Model
     protected $primaryKey = 'equip_id';
     protected $fillable   = ['cat_id', 'name'];
     protected $hidden     = ['updated_at', 'created_at'];
+
+    public function EquipmentCategory()
+    {
+        return $this->belongsTo('App\Models\EquipmentCategory', 'cat_id', 'cat_id');
+    }
+
+    public function DataFieldType()
+    {
+        return $this->hasManyThrough('App\Models\DataFieldType', 'App\Models\DataField', 'equip_id', 'type_id', 'equip_id', 'type_id');
+    }
 }

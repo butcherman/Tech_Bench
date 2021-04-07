@@ -5,8 +5,8 @@
             <p class="text-center">{{$page.props.flash.message}}</p>
         </b-alert>
         <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-            <text-input v-model="form.username" rules="required" label="Username" name="username"></text-input>
-            <text-input v-model="form.password" rules="required" label="Password" name="password" type="password"></text-input>
+            <text-input v-model="form.username" rules="required" label="Username" name="username" placeholder="Username"></text-input>
+            <text-input v-model="form.password" rules="required" label="Password" name="password" type="password" placeholder="Password"></text-input>
             <b-checkbox class="no-validate" name="remember" v-model="form.remember">Remember Me</b-checkbox>
             <submit-button button_text="Login" :submitted="submitted"></submit-button>
             <div class="form-group row justify-content-center mb-0">

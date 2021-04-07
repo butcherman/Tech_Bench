@@ -3,77 +3,134 @@
 namespace App\Http\Controllers\Equip;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\EquipmentTypeRequest;
+use App\Models\DataField;
+use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
+use App\Models\EquipmentType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class EquipmentTypesController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     *  Show the list of Equipment Types that can be edited
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return Inertia::render('Equipment/createEquipment', [
-            'categories' => EquipmentCategory::all(),
+        return Inertia::render('Equipment/listEquipment', [
+            'equipmentList' => EquipmentCategory::with('EquipmentType')->get(),
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     *  Create new equipment form
      */
-    public function store(Request $request)
+    public function create()
     {
-        //
+        $this->authorize('create', EquipmentType::class);
+
+        return Inertia::render('Equipment/createEquipment', [
+            'categories' => EquipmentCategory::all(),
+            'dataList'  => DataFieldType::all()->pluck('name'),
+        ]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Store the new equipment type
      */
-    public function show($id)
+    public function store(EquipmentTypeRequest $request)
     {
-        //
+        $order = 0;
+
+        //  Create the new equipment
+        $newEquip = EquipmentType::create([
+            'cat_id' => EquipmentCategory::where('name', $request->cat_id)->first()->cat_id,
+            'name'   => $request->name,
+        ]);
+
+        //  Input the customer information
+        foreach($request->data_fields as $field)
+        {
+            if($field !== null)
+            {
+                //  Determine if this is a new or existing field type
+                $fieldID  = DataFieldType::where('name', $field)->first();
+                if(!$fieldID)
+                {
+                    $fieldID = DataFieldType::create(['name' => $field]);
+                }
+
+                //  Attach the field to the equipment type
+                DataField::create([
+                    'equip_id' => $newEquip->equip_id,
+                    'type_id'  => $fieldID->type_id,
+                    'order'    => $order,
+                ]);
+
+                $order++;
+            }
+        }
+
+        return redirect()->route('admin.index')->with(['message' => 'New Equipment Created Successfully', 'type' => 'success']);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Form to edit existing equipment
      */
     public function edit($id)
     {
-        //
+        $this->authorize('update', EquipmentType::class);
+
+        return Inertia::render('Equipment/editEquipment', [
+            'categories' => EquipmentCategory::all(),
+            'dataList'   => DataFieldType::all()->pluck('name'),
+            'equipment'  => EquipmentType::with('EquipmentCategory')->with('DataFieldType')->findOrFail($id),
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Update Equipment
      */
-    public function update(Request $request, $id)
+    public function update(EquipmentTypeRequest $request, $id)
     {
-        //
+        $order = 0;
+
+        //  Create the new equipment
+        EquipmentType::findOrFail($id)->update([
+            'cat_id' => EquipmentCategory::where('name', $request->cat_id)->first()->cat_id,
+            'name'   => $request->name,
+        ]);
+
+        // return $request->data_fields;
+//  TODO - FInish updating existing equipment
+        //  Update the existing customer fields
+        // foreach($request->data_fields as $field)
+        // {
+        //     if($field !== null)
+        //     {
+        //         //  Determine if this is a new or existing field type
+        //         $fieldID  = DataFieldType::where('name', $field)->first();
+        //         if(!$fieldID)
+        //         {
+        //             $fieldID = DataFieldType::create(['name' => $field]);
+        //         }
+
+        //         //  Attach the field to the equipment type
+        //         // DataField::updateOrCreate(
+        //         // [
+        //         //     'equip_id' => $id,
+        //         //     'type_id'  => $fieldID->type_id,
+        //         // ],
+        //         // [
+        //         //     'order'    => $order,
+        //         // ]);
+
+        //         // $order++;
+        //     }
+        // }
+
+        return redirect()->route('admin.index')->with(['message' => 'Equipment Updated Successfully', 'type' => 'success']);
     }
 
     /**

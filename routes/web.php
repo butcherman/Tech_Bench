@@ -90,7 +90,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::prefix('equipment')->name('equipment.')->group(function()
     {
         Route::resource('categories', EquipmentCategoriesController::class);
-        Route::resource('/',       EquipmentTypesController::class);
     });
+    Route::resource('equipment',      EquipmentTypesController::class);
 });
 

@@ -73,9 +73,10 @@ class AdminHomeController extends Controller
     //  Build the equipment administration links if the user has access
     protected function buildEquipmentList()
     {
+        $nav = [];
         if($this->getPermissionValue('Manage Equipment'))
         {
-            return [
+            $nav = [
                 'equipment types and categories' => [
                     [
                         'name' => 'Create New Category',
@@ -94,8 +95,8 @@ class AdminHomeController extends Controller
                     ],
                     [
                         'name' => 'Modify Existing Equipment',
-                        'icon' => '',
-                        'link' => '#',
+                        'icon' => 'far fa-edit',
+                        'link' => route('admin.equipment.index'),
                     ],
                     [
                         'name' => 'Modify Information Gathered for Customer Equipment',
@@ -106,7 +107,7 @@ class AdminHomeController extends Controller
                 ];
         }
 
-        return [];
+        return $nav;
     }
 
 

@@ -11,24 +11,43 @@
                     <div class="card-body">
                         <ValidationObserver v-slot="{handleSubmit}">
                             <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-
                                 <dropdown-input
                                     v-model="form.cat_id"
                                     label="Select Category"
                                     name="category"
                                     text-field="name"
-                                    value-field="cat_id"
+                                    value-field="name"
                                     placeholder="Select A Category This Equipment Belongs To"
                                     rules="required"
                                     :options="categories">
                                 </dropdown-input>
                                 <text-input v-model="form.name" label="Equipment Name" rules="required|no-special" name="name" placeholder="Enter A Unique Name for the Equipment"></text-input>
                                 <fieldset>
-                                    <label>Customer Information to Gather</label>
+                                    <label>Customer Information to Gather:</label>
                                 </fieldset>
-
-                                <!-- TODO - Input customer information to gather -->
-
+                                <draggable animation="200" :list="form.system_data_fields">
+                                    <b-input-group v-for="index in fields" :key="index" class="my-2">
+                                        <b-input-group-prepend class="align-middle d-block mr-1">
+                                            <i class="fas fa-sort align-middle pointer" title="Drag to Change Order" v-b-tooltip.hover></i>
+                                        </b-input-group-prepend>
+                                        <b-form-input
+                                            v-model="form.data_fields[index]"
+                                            type="text"
+                                            list="data-list"
+                                            placeholder="Input information to gather for the customer"
+                                            autocomplete="false"
+                                        ></b-form-input>
+                                        <b-input-group-append class="align-middle d-block ml-1">
+                                            <i class="far fa-times-circle text-danger pointer" title="Remove this Option" v-b-tooltip.hover @click="delOption(index)"></i>
+                                        </b-input-group-append>
+                                    </b-input-group>
+                                </draggable>
+                                <div>
+                                    <b-button class="float-right my-2" variant="warning" @click="fields++"><i class="fas fa-plus"></i> Add Row</b-button>
+                                </div>
+                                <datalist id="data-list">
+                                    <option v-for="data in dataList" :key="data">{{data}}</option>
+                                </datalist>
                                 <submit-button button_text="Create Equipment" :submitted="submitted"></submit-button>
                             </b-form>
                         </ValidationObserver>
@@ -45,39 +64,35 @@
     export default {
         layout: App,
         props: {
-            //
             categories: {
-                type: Array,
+                type:     Array,
+                required: true,
+            },
+            dataList: {
+                type:     Array,
                 required: true,
             }
         },
         data() {
             return {
-                //
                 submitted: false,
                 form: {
                     cat_id: '',
                     name: '',
-                }
+                    data_fields: [],
+                },
+                fields: 5,
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
-            //
             submitForm()
             {
-                console.log(this.form);
+                this.$inertia.post(route('admin.equipment.store'), this.form);
+            },
+            delOption(index)
+            {
+                this.form.data_fields.splice(index, 1);
+                this.fields--;
             }
         }
     }

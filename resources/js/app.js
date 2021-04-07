@@ -23,8 +23,10 @@ require('./validation.js');
 *   Third party Components
 */
 import VueGoodTablePlugin from 'vue-good-table';
+import draggable from 'vuedraggable';
 
 Vue.use(VueGoodTablePlugin);
+Vue.component('draggable', draggable);
 
 /*
 *   Default Layout
