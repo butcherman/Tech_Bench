@@ -25,7 +25,7 @@
                                 <fieldset>
                                     <label>Customer Information to Gather:</label>
                                 </fieldset>
-                                <draggable animation="200" :list="form.system_data_fields">
+                                <draggable animation="200" :list="form.system_data_fields" @end="reorder">
                                     <b-input-group v-for="(index, key) in form.data_fields" :key="index.name" class="my-2">
                                         <b-input-group-prepend class="align-middle d-block mr-1">
                                             <i class="fas fa-sort align-middle pointer" title="Drag to Change Order" v-b-tooltip.hover></i>
@@ -42,7 +42,7 @@
                                             <i class="far fa-times-circle text-danger pointer" title="Remove this Option" v-b-tooltip.hover @click="delOption(key)"></i>
                                         </b-input-group-append>
                                     </b-input-group>
-                                    <b-input-group v-for="index in fields" :key="index" class="my-2">
+                                    <!-- <b-input-group v-for="index in fields" :key="index" class="my-2">
                                         <b-input-group-prepend class="align-middle d-block mr-1">
                                             <i class="fas fa-sort align-middle pointer" title="Drag to Change Order" v-b-tooltip.hover></i>
                                         </b-input-group-prepend>
@@ -56,7 +56,7 @@
                                         <b-input-group-append class="align-middle d-block ml-1">
                                             <i class="far fa-times-circle text-danger pointer" title="Remove this Option" v-b-tooltip.hover @click="delNewOption(index)"></i>
                                         </b-input-group-append>
-                                    </b-input-group>
+                                    </b-input-group> -->
                                 </draggable>
                                 <div>
                                     <b-button class="float-right my-2" variant="warning" @click="fields++"><i class="fas fa-plus"></i> Add Row</b-button>
@@ -122,7 +122,7 @@
             {
                 console.log(this.form);
                 this.submitted = true;
-                this.$inertia.put(route('admin.equipment.update', this.equipment.equip_id), this.form);
+                // this.$inertia.put(route('admin.equipment.update', this.equipment.equip_id), this.form);
             },
             delOption(index)
             {
@@ -156,6 +156,10 @@
             {
                 this.form.new_data_fields.splice(index, 1);
                 this.fields--;
+            },
+            reorder(list)
+            {
+                console.log(list);
             }
         }
     }

@@ -17,8 +17,6 @@ class SendWelcomeEmail extends Notification
 
     /**
      * Create a new notification instance.
-     *
-     * @return void
      */
     public function __construct(User $user, $token)
     {
@@ -28,9 +26,6 @@ class SendWelcomeEmail extends Notification
 
     /**
      * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
      */
     public function via($notifiable)
     {
@@ -38,10 +33,7 @@ class SendWelcomeEmail extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     *  Send an email to the new user with instructions to finish setting up their account
      */
     public function toMail($notifiable)
     {
@@ -55,14 +47,11 @@ class SendWelcomeEmail extends Notification
 
     /**
      * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
      */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
+    // public function toArray($notifiable)
+    // {
+    //     return [
+    //         //
+    //     ];
+    // }
 }

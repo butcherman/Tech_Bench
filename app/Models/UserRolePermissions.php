@@ -12,6 +12,9 @@ class UserRolePermissions extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $hidden  = ['created_at', 'updated_at', 'id'];
 
+    /*
+    *   User Role Permissions explain what a peprmission type id is for
+    */
     public function UserRolePermissionTypes()
     {
         return $this->hasOne('App\Models\UserRolePermissionTypes', 'perm_type_id', 'perm_type_id');

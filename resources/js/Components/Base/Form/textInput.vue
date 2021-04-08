@@ -1,5 +1,5 @@
 <template>
-    <ValidationProvider v-slot="v" :rules="rules">
+    <ValidationProvider v-slot="v" :rules="rules" mode="eager">
         <b-form-group
             :label="label+':'"
             :label-for="name"
@@ -12,6 +12,7 @@
                 :name="name"
                 :type="type"
                 :placeholder="placeholder"
+                :state="state(v)"
                 v-model="curVal"
                 @blur="emitBlur"
             ></b-form-input>
@@ -54,6 +55,10 @@
                 required: false,
                 default: '',
             },
+            hideState: {
+                type:    Boolean,
+                default: false,
+            }
         },
         data() {
             return {
@@ -66,10 +71,22 @@
                 this.$emit('input', val);
             },
         },
+        computed: {
+
+        },
         methods: {
             emitBlur()
             {
                 this.$emit('blur');
+            },
+            state(v)
+            {
+                if(v.untouched || this.hideState)
+                {
+                    return null;
+                }
+
+                return v.valid;
             }
         }
     }

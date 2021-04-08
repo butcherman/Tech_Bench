@@ -2,7 +2,6 @@
 
 namespace App\Actions\General;
 
-use App\Models\UserRolePermissionTypes;
 use Illuminate\Support\Facades\Gate;
 
 class BuildNavbar

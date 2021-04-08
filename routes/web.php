@@ -12,6 +12,7 @@ use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
@@ -68,6 +69,7 @@ Route::middleware('auth')->group(function () {
 *   Customer Routes
 */
 Route::middleware('auth')->resource('customers', CustomerController::class);
+Route::middleware('auth')->post('customers/check-id', CheckCustIdController::class)->name('customers.check-id');
 
 /*
 *   Administration Routes

@@ -19,8 +19,6 @@ class NewUserCreated
 
     /**
      * Create a new event instance.
-     *
-     * @return void
      */
     public function __construct(User $user)
     {
@@ -32,8 +30,8 @@ class NewUserCreated
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
-    }
+    // public function broadcastOn()
+    // {
+    //     return new PrivateChannel('channel-name');
+    // }
 }

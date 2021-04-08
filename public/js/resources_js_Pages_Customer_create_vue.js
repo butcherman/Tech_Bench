@@ -164,6 +164,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
@@ -196,9 +202,6 @@ __webpack_require__.r(__webpack_exports__);
     //
     submitForm: function submitForm() {
       console.log(this.form);
-    },
-    checkCustId: function checkCustId() {
-      console.log('check customer id');
     }
   }
 });
@@ -672,7 +675,8 @@ var render = function() {
                                           label: "Customer ID",
                                           name: "cust_id",
                                           placeholder:
-                                            "Enter Customer ID Number"
+                                            "Enter Customer ID Number",
+                                          rules: "numeric|unique-customer"
                                         },
                                         on: { blur: _vm.checkCustId },
                                         scopedSlots: _vm._u(
@@ -752,9 +756,116 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
+                              _c("text-input", {
+                                attrs: {
+                                  label: "Customer Name",
+                                  name: "name",
+                                  placeholder: "Enter Customer Name",
+                                  rules: "required"
+                                },
+                                model: {
+                                  value: _vm.form.name,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "name", $$v)
+                                  },
+                                  expression: "form.name"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("text-input", {
+                                attrs: {
+                                  label: "DBA Name",
+                                  name: "dba_name",
+                                  placeholder:
+                                    "Customer secondary name/AKA name"
+                                },
+                                model: {
+                                  value: _vm.form.dba_name,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "dba_name", $$v)
+                                  },
+                                  expression: "form.dba_name"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("text-input", {
+                                attrs: {
+                                  label: "Customer Address",
+                                  name: "address",
+                                  rules: "required"
+                                },
+                                model: {
+                                  value: _vm.form.address,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "address", $$v)
+                                  },
+                                  expression: "form.address"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("text-input", {
+                                attrs: {
+                                  label: "City",
+                                  name: "city",
+                                  rules: "required"
+                                },
+                                model: {
+                                  value: _vm.form.city,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "city", $$v)
+                                  },
+                                  expression: "form.city"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "b-form-row",
+                                [
+                                  _c(
+                                    "b-col",
+                                    { attrs: { md: "6" } },
+                                    [
+                                      _c("all-states", {
+                                        model: {
+                                          value: _vm.form.state,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "state", $$v)
+                                          },
+                                          expression: "form.state"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-col",
+                                    { attrs: { md: "6" } },
+                                    [
+                                      _c("text-input", {
+                                        attrs: {
+                                          label: "Zip Code",
+                                          name: "zip",
+                                          rules: "required|numeric"
+                                        },
+                                        model: {
+                                          value: _vm.form.zip,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "zip", $$v)
+                                          },
+                                          expression: "form.zip"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
                               _c("submit-button", {
                                 attrs: {
-                                  button_text: "Login",
+                                  button_text: "Create Customer",
                                   submitted: _vm.submitted
                                 }
                               })

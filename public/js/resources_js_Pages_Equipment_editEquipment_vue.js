@@ -233,8 +233,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     submitForm: function submitForm() {
       console.log(this.form);
-      this.submitted = true;
-      this.$inertia.put(route('admin.equipment.update', this.equipment.equip_id), this.form);
+      this.submitted = true; // this.$inertia.put(route('admin.equipment.update', this.equipment.equip_id), this.form);
     },
     delOption: function delOption(index) {
       var _this = this;
@@ -267,6 +266,9 @@ __webpack_require__.r(__webpack_exports__);
     delNewOption: function delNewOption(index) {
       this.form.new_data_fields.splice(index, 1);
       this.fields--;
+    },
+    reorder: function reorder(list) {
+      console.log(list);
     }
   }
 });
@@ -775,178 +777,90 @@ var render = function() {
                                 attrs: {
                                   animation: "200",
                                   list: _vm.form.system_data_fields
-                                }
+                                },
+                                on: { end: _vm.reorder }
                               },
-                              [
-                                _vm._l(_vm.form.data_fields, function(
-                                  index,
-                                  key
-                                ) {
-                                  return _c(
-                                    "b-input-group",
-                                    { key: index.name, staticClass: "my-2" },
-                                    [
-                                      _c(
-                                        "b-input-group-prepend",
-                                        {
-                                          staticClass:
-                                            "align-middle d-block mr-1"
-                                        },
-                                        [
-                                          _c("i", {
-                                            directives: [
-                                              {
-                                                name: "b-tooltip",
-                                                rawName: "v-b-tooltip.hover",
-                                                modifiers: { hover: true }
-                                              }
-                                            ],
-                                            staticClass:
-                                              "fas fa-sort align-middle pointer",
-                                            attrs: {
-                                              title: "Drag to Change Order"
+                              _vm._l(_vm.form.data_fields, function(
+                                index,
+                                key
+                              ) {
+                                return _c(
+                                  "b-input-group",
+                                  { key: index.name, staticClass: "my-2" },
+                                  [
+                                    _c(
+                                      "b-input-group-prepend",
+                                      {
+                                        staticClass: "align-middle d-block mr-1"
+                                      },
+                                      [
+                                        _c("i", {
+                                          directives: [
+                                            {
+                                              name: "b-tooltip",
+                                              rawName: "v-b-tooltip.hover",
+                                              modifiers: { hover: true }
                                             }
-                                          })
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("b-form-input", {
-                                        attrs: {
-                                          type: "text",
-                                          list: "data-list",
-                                          placeholder:
-                                            "Input information to gather for the customer",
-                                          autocomplete: "false",
-                                          disabled: ""
+                                          ],
+                                          staticClass:
+                                            "fas fa-sort align-middle pointer",
+                                          attrs: {
+                                            title: "Drag to Change Order"
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("b-form-input", {
+                                      attrs: {
+                                        type: "text",
+                                        list: "data-list",
+                                        placeholder:
+                                          "Input information to gather for the customer",
+                                        autocomplete: "false",
+                                        disabled: ""
+                                      },
+                                      model: {
+                                        value: index.name,
+                                        callback: function($$v) {
+                                          _vm.$set(index, "name", $$v)
                                         },
-                                        model: {
-                                          value: index.name,
-                                          callback: function($$v) {
-                                            _vm.$set(index, "name", $$v)
+                                        expression: "index.name"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-input-group-append",
+                                      {
+                                        staticClass: "align-middle d-block ml-1"
+                                      },
+                                      [
+                                        _c("i", {
+                                          directives: [
+                                            {
+                                              name: "b-tooltip",
+                                              rawName: "v-b-tooltip.hover",
+                                              modifiers: { hover: true }
+                                            }
+                                          ],
+                                          staticClass:
+                                            "far fa-times-circle text-danger pointer",
+                                          attrs: {
+                                            title: "Remove this Option"
                                           },
-                                          expression: "index.name"
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c(
-                                        "b-input-group-append",
-                                        {
-                                          staticClass:
-                                            "align-middle d-block ml-1"
-                                        },
-                                        [
-                                          _c("i", {
-                                            directives: [
-                                              {
-                                                name: "b-tooltip",
-                                                rawName: "v-b-tooltip.hover",
-                                                modifiers: { hover: true }
-                                              }
-                                            ],
-                                            staticClass:
-                                              "far fa-times-circle text-danger pointer",
-                                            attrs: {
-                                              title: "Remove this Option"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.delOption(key)
-                                              }
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.delOption(key)
                                             }
-                                          })
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                }),
-                                _vm._v(" "),
-                                _vm._l(_vm.fields, function(index) {
-                                  return _c(
-                                    "b-input-group",
-                                    { key: index, staticClass: "my-2" },
-                                    [
-                                      _c(
-                                        "b-input-group-prepend",
-                                        {
-                                          staticClass:
-                                            "align-middle d-block mr-1"
-                                        },
-                                        [
-                                          _c("i", {
-                                            directives: [
-                                              {
-                                                name: "b-tooltip",
-                                                rawName: "v-b-tooltip.hover",
-                                                modifiers: { hover: true }
-                                              }
-                                            ],
-                                            staticClass:
-                                              "fas fa-sort align-middle pointer",
-                                            attrs: {
-                                              title: "Drag to Change Order"
-                                            }
-                                          })
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("b-form-input", {
-                                        attrs: {
-                                          type: "text",
-                                          list: "data-list",
-                                          placeholder:
-                                            "Input information to gather for the customer",
-                                          autocomplete: "false"
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.form.new_data_fields[index],
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form.new_data_fields,
-                                              index,
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "form.new_data_fields[index]"
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c(
-                                        "b-input-group-append",
-                                        {
-                                          staticClass:
-                                            "align-middle d-block ml-1"
-                                        },
-                                        [
-                                          _c("i", {
-                                            directives: [
-                                              {
-                                                name: "b-tooltip",
-                                                rawName: "v-b-tooltip.hover",
-                                                modifiers: { hover: true }
-                                              }
-                                            ],
-                                            staticClass:
-                                              "far fa-times-circle text-danger pointer",
-                                            attrs: {
-                                              title: "Remove this Option"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.delNewOption(index)
-                                              }
-                                            }
-                                          })
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                })
-                              ],
-                              2
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                )
+                              }),
+                              1
                             ),
                             _vm._v(" "),
                             _c(
