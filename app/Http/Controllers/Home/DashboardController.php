@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Home;
 
 use Inertia\Inertia;
+
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller

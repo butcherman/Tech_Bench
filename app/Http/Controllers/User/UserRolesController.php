@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\NewUserRoleRequest;
-use App\Http\Requests\User\UserRoleRequest;
-use App\Models\User;
-use App\Models\UserRolePermissions;
-use App\Models\UserRolePermissionTypes;
-use App\Models\UserRoles;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+
+use App\Models\User;
+use App\Models\UserRoles;
+use App\Models\UserRolePermissions;
+use App\Http\Controllers\Controller;
+use App\Models\UserRolePermissionTypes;
+use App\Http\Requests\User\UserRoleRequest;
+
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class UserRolesController extends Controller
 {
@@ -58,6 +60,7 @@ class UserRolesController extends Controller
             ]);
         }
 
+        Log::info('New User Role '.$newRole->name.' has been created by '.Auth::user()->full_name);
         return redirect(route('admin.user-roles.index'))->with(['message' => 'New User Role Created', 'type' => 'success']);
     }
 
@@ -83,6 +86,7 @@ class UserRolesController extends Controller
         //  If the user is trying to update one of the built in policies, it will be denied
         if($id < 5)
         {
+            Log::alert('User '.Auth::user()->full_name.' is trying to modify a default User Role');
             abort(403, 'You cannot modify a default User Role');
         }
 
@@ -94,6 +98,7 @@ class UserRolesController extends Controller
             UserRolePermissions::where(['role_id' => $perm['role_id'], 'perm_type_id' => $perm['perm_type_id']])->update(['allow' => $perm['allow']]);
         }
 
+        Log::info('User Role ID '.$id.' Name - '.$request->name.' has been updated by '.Auth::user()->full_name);
         return back()->with(['message' => 'Role Updated', 'type' => 'success']);
     }
 
@@ -108,6 +113,7 @@ class UserRolesController extends Controller
         $role = UserRoles::find($id);
         if(!$role->allow_edit)
         {
+            Log::alert('User '.Auth::user()->full_name.' is trying to delete one of the default User Roles');
             return back()->with(['message' => 'You cannot delete one of the default User Roles', 'type' => 'danger']);
         }
 
@@ -121,6 +127,7 @@ class UserRolesController extends Controller
 
         $role->delete();
 
+        Log::notice('User Role ID '.$id.' Name '.$role->name.' has been deleted by '.Auth::user()->full_name);
         return redirect(route('admin.user-roles.index'));
     }
 }

@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Equip;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Equipment\EquipmentTypeRequest;
+use Inertia\Inertia;
+
 use App\Models\DataField;
 use App\Models\DataFieldType;
-use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
-use Illuminate\Http\Request;
+use App\Models\EquipmentCategory;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\EquipmentTypeRequest;
+
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class EquipmentTypesController extends Controller
 {
@@ -75,6 +77,7 @@ class EquipmentTypesController extends Controller
             }
         }
 
+        Log::info('New Equipment ID '.$newEquip->equip_id.' name - '.$newEquip->name.' has been created by '.Auth::user()->full_name);
         return redirect()->route('admin.index')->with(['message' => 'New Equipment Created Successfully', 'type' => 'success']);
     }
 
@@ -149,7 +152,11 @@ class EquipmentTypesController extends Controller
         $this->authorize('delete', EquipmentType::find($id));
 
         //  TODO - Add checks to make sure it can be deleted
-        EquipmentType::find($id)->delete();
+        $equip = EquipmentType::find($id);
+
+
+        Log::notice('Equipment ID '.$id.' Name - '.$equip->name.' has been deleted by '.Auth::user()->full_name);
+        $equip->delete();
 
         return redirect()->route('admin.index')->with(['message' => 'Equipment Deleted Successfully', 'type' => 'success']);
     }

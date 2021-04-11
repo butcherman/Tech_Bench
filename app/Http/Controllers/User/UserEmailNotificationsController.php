@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UserEmailNotificationsRequest;
 use App\Models\UserEmailNotifications;
-use Illuminate\Http\Request;
+use App\Http\Requests\User\UserEmailNotificationsRequest;
 
 class UserEmailNotificationsController extends Controller
 {

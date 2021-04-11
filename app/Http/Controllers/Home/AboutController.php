@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Home;
 
 use Inertia\Inertia;
+
 use App\Http\Controllers\Controller;
+
 use PragmaRX\Version\Package\Version;
 
 class AboutController extends Controller

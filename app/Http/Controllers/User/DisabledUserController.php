@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+
+use App\Models\User;
+use App\Http\Controllers\Controller;
+
+use Illuminate\Support\Facades\Log;
 
 class DisabledUserController extends Controller
 {

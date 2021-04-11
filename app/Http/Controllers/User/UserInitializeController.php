@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\InitializeUserRequest;
-use App\Http\Requests\User\PasswordRequest;
+use Carbon\Carbon;
+use Inertia\Inertia;
+
 use App\Models\User;
 use App\Models\UserInitialize;
-use Carbon\Carbon;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\User\InitializeUserRequest;
+
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Inertia\Inertia;
+use Illuminate\Auth\Events\PasswordReset;
 
 class UserInitializeController extends Controller
 {
@@ -59,6 +60,7 @@ class UserInitializeController extends Controller
         $link->delete();
         Auth::login($user);
 
+        Log::stack(['auth', 'user'])->notice('User '.$user->username.' has completed setting up their account');
         return redirect(route('dashboard'))->with(['message' => 'Your account is setup', 'type' => 'success']);
     }
 }

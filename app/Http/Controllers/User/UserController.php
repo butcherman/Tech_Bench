@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Actions\User\GetUserRoles;
-use App\Events\NewUserCreated;
 use Inertia\Inertia;
 
-use Illuminate\Support\Str;
 use App\Models\User;
+use App\Events\NewUserCreated;
+use App\Actions\User\GetUserRoles;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UserRequest;
 use App\Models\UserEmailNotifications;
-use App\Models\UserRoles;
-use Illuminate\Http\Request;
+use App\Http\Requests\User\UserRequest;
+
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -38,7 +37,7 @@ class UserController extends Controller
         $this->authorize('create', Auth::user());
 
         //  A user cannot add a user with higher permissions than themselves
-        $roles = (new GetUserRoles)->run();
+        $roles = (new GetUserRoles)->run(Auth::user());
 
         return Inertia::render('User/create', [
             'roles' => $roles,
@@ -56,6 +55,7 @@ class UserController extends Controller
         $user['password'] = Hash::make(strtolower(Str::random(15)));
 
         $newUser = User::create($user);
+        Log::notice('New user '.$newUser->full_name.' has been created by '.Auth::user()->full_name);
         event(new NewUserCreated($newUser));
 
         return back()->with(['message' => 'New User Created Successfully', 'type' => 'success']);
@@ -75,7 +75,7 @@ class UserController extends Controller
             return back()->with(['message' => 'You cannot modify a user with higher permissions than you', 'type' => 'danger']);
         }
 
-        $roles = (new GetUserRoles)->run();
+        $roles = (new GetUserRoles)->run(Auth::user());
 
         return Inertia::render('User/create', [
             'roles'        => $roles,
@@ -98,6 +98,7 @@ class UserController extends Controller
 
         $user->update($request->toArray());
 
+        Log::info('User information for User ID '.$id.' Name - '.$user->username.' has been updated by '.Auth::user()->full_name);
         return back()->with(['message' => 'Account Settings Updated', 'type' => 'success']);
     }
 
@@ -110,7 +111,7 @@ class UserController extends Controller
         $this->authorize('delete', $user);
 
         $msg = 'Successfully Deactivated '.$user->full_name;
-        Log::stack(['user', 'auth'])->notice('User '.$user->username.' has been deactivated by '.Auth::user()->username);
+        Log::notice('User '.$user->username.' has been deactivated by '.Auth::user()->username);
 
         $user->delete();
         return back()->with(['message' => $msg, 'type' => 'success']);

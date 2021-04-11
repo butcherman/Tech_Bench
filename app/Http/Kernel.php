@@ -43,6 +43,7 @@ class Kernel extends HttpKernel
             *   Custom Middleware
             */
             'password_expired' => \App\Http\Middleware\CheckPasswordExpire::class,
+            'log_debug_visits' => \App\Http\Middleware\LogDebugVisits::class,
         ],
 
         'api' => [

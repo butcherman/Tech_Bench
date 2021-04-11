@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\UserRoles;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+
+use App\Models\User;
+use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
 
 class ListActiveUsersController extends Controller
 {
