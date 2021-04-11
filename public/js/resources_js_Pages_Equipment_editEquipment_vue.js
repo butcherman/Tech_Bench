@@ -178,6 +178,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
@@ -268,6 +277,27 @@ __webpack_require__.r(__webpack_exports__);
     },
     addRow: function addRow() {
       this.form.data_fields.push(null);
+    },
+    deleteEquipment: function deleteEquipment() {
+      var _this2 = this;
+
+      this.$bvModal.msgBoxConfirm('Are you sure you want to delete this Equipment?', {
+        title: 'This action canot be undone',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      }).then(function (value) {
+        if (value) {
+          _this2.submitted = true;
+
+          _this2.$inertia["delete"](_this2.route('admin.equipment.destroy', _this2.equipment.equip_id));
+        }
+      });
     }
   }
 });
@@ -909,6 +939,28 @@ var render = function() {
                   }
                 ])
               })
+            ],
+            1
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row gris-margin justify-content-center" }, [
+      _c("div", { staticClass: "col-md-4" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body text-center" },
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: { variant: "danger", block: "" },
+                  on: { click: _vm.deleteEquipment }
+                },
+                [_vm._v("Delete Equipment")]
+              )
             ],
             1
           )

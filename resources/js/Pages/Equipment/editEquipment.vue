@@ -56,6 +56,15 @@
                 </div>
             </div>
         </div>
+        <div class="row gris-margin justify-content-center">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <b-button variant="danger" block @click="deleteEquipment">Delete Equipment</b-button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -160,6 +169,26 @@
             addRow()
             {
                 this.form.data_fields.push(null);
+            },
+            deleteEquipment()
+            {
+                this.$bvModal.msgBoxConfirm('Are you sure you want to delete this Equipment?', {
+                    title:          'This action canot be undone',
+                    size:           'sm',
+                    buttonSize:     'sm',
+                    okVariant:      'danger',
+                    okTitle:        'YES',
+                    cancelTitle:    'NO',
+                    footerClass:    'p-2',
+                    hideHeaderClose: false,
+                    centered:        true
+                }).then(value => {
+                    if(value)
+                    {
+                        this.submitted = true;
+                        this.$inertia.delete(this.route('admin.equipment.destroy', this.equipment.equip_id));
+                    }
+                });
             }
         }
     }

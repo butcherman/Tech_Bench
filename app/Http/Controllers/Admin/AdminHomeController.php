@@ -98,11 +98,12 @@ class AdminHomeController extends Controller
                         'icon' => 'far fa-edit',
                         'link' => route('admin.equipment.index'),
                     ],
-                    [
-                        'name' => 'Modify Information Gathered for Customer Equipment',
-                        'icon' => '',
-                        'link' => '#',
-                    ],
+                    //  TODO - Finish Me
+                    // [
+                    //     'name' => 'Modify Information Gathered for Customer Equipment',
+                    //     'icon' => '',
+                    //     'link' => '#',
+                    // ],
                 ]
                 ];
         }

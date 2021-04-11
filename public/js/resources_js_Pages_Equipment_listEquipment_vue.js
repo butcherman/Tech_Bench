@@ -620,7 +620,7 @@ var render = function() {
                               attrs: {
                                 href: _vm.route(
                                   "admin.equipment.edit",
-                                  cat.cat_id
+                                  type.equip_id
                                 )
                               }
                             },

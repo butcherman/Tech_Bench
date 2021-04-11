@@ -14,7 +14,7 @@
                             <li class = "list-group-item" v-for="cat in equipmentList" :key="cat.cat_id">
                                 <h4 class = "list-group-item-heading">{{cat.name}}</h4>
                                 <p class = "list-group-item-text ml-4" v-for="type in cat.equipment_type" :key="type.equip_id">
-                                    <inertia-link :href="route('admin.equipment.edit', cat.cat_id)">
+                                    <inertia-link :href="route('admin.equipment.edit', type.equip_id)">
                                         {{type.name}}
                                     </inertia-link>
                                 </p>

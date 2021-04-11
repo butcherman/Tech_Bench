@@ -140,13 +140,13 @@ class EquipmentTypesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Remove equipment from the database
      */
     public function destroy($id)
     {
-        //
+        //  TODO - Add checks to make sure it can be deleted
+        EquipmentType::find($id)->delete();
+
+        return redirect()->route('admin.index')->with(['message' => 'Equipment Deleted Successfully', 'type' => 'success']);
     }
 }
