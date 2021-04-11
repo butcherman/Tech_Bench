@@ -9,6 +9,7 @@ use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class EquipmentTypesController extends Controller
@@ -102,33 +103,38 @@ class EquipmentTypesController extends Controller
             'name'   => $request->name,
         ]);
 
-        // return $request->data_fields;
-//  TODO - FInish updating existing equipment
         //  Update the existing customer fields
-        // foreach($request->data_fields as $field)
-        // {
-        //     if($field !== null)
-        //     {
-        //         //  Determine if this is a new or existing field type
-        //         $fieldID  = DataFieldType::where('name', $field)->first();
-        //         if(!$fieldID)
-        //         {
-        //             $fieldID = DataFieldType::create(['name' => $field]);
-        //         }
+        foreach($request->data_fields as $field)
+        {
+            if($field !== null)
+            {
+                //  Determine if this is a new or existing field type
+                $fieldID  = DataFieldType::where('name', $field)->first();
+                if(!$fieldID)
+                {
+                    $fieldID = DataFieldType::create(['name' => $field]);
+                }
 
-        //         //  Attach the field to the equipment type
-        //         // DataField::updateOrCreate(
-        //         // [
-        //         //     'equip_id' => $id,
-        //         //     'type_id'  => $fieldID->type_id,
-        //         // ],
-        //         // [
-        //         //     'order'    => $order,
-        //         // ]);
+                //  Attach the field to the equipment type
+                DataField::updateOrCreate(
+                [
+                    'equip_id' => $id,
+                    'type_id'  => $fieldID->type_id,
+                ],
+                [
+                    'order'    => $order,
+                ]);
 
-        //         // $order++;
-        //     }
-        // }
+                $order++;
+            }
+
+            //  Remove any fields that were deleted
+            foreach($request->del_fields as $deleted)
+            {
+                $fieldID = DataFieldType::where('name', $deleted)->first();
+                DataField::where(['equip_id' => $id, 'type_id' => $fieldID->type_id])->delete();
+            }
+        }
 
         return redirect()->route('admin.index')->with(['message' => 'Equipment Updated Successfully', 'type' => 'success']);
     }

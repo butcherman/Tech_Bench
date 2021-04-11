@@ -8,9 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class EquipmentTypeRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     *  Only users with "Manage Equipment" policy are allowed to submit the request
      */
     public function authorize()
     {
@@ -19,18 +17,16 @@ class EquipmentTypeRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules()
     {
         return [
-            'cat_id' => 'required|exists:equipment_categories,name',
-            'name' => [
+            'cat_id' => 'required|exists:equipment_categories,name',        //  Must contain a valid Category ID
+            'name'   => [
                 'required',
                 'string',
-                'regex:/^[a-zA-Z0-9_ ]*$/',
-                'unique:equipment_categories',
+                'regex:/^[a-zA-Z0-9_ ]*$/',                                 //  No special characters are allowed
+                'unique:equipment_categories',                              //  Equipment with this name must not already exist
             ]
         ];
     }

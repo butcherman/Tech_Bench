@@ -25,44 +25,29 @@
                                 <fieldset>
                                     <label>Customer Information to Gather:</label>
                                 </fieldset>
-                                <draggable animation="200" :list="form.system_data_fields" @end="reorder">
-                                    <b-input-group v-for="(index, key) in form.data_fields" :key="index.name" class="my-2">
+                                <draggable animation="200" :list="form.data_fields">
+                                    <b-input-group v-for="(name, index) in form.data_fields" :key="index" class="my-2">
                                         <b-input-group-prepend class="align-middle d-block mr-1">
                                             <i class="fas fa-sort align-middle pointer" title="Drag to Change Order" v-b-tooltip.hover></i>
                                         </b-input-group-prepend>
                                         <b-form-input
-                                            v-model="index.name"
+                                            v-model="form.data_fields[index]"
                                             type="text"
                                             list="data-list"
                                             placeholder="Input information to gather for the customer"
                                             autocomplete="false"
-                                            disabled
+                                            :disabled="isNewOption(name)"
                                         ></b-form-input>
                                         <b-input-group-append class="align-middle d-block ml-1">
-                                            <i class="far fa-times-circle text-danger pointer" title="Remove this Option" v-b-tooltip.hover @click="delOption(key)"></i>
+                                            <i class="far fa-times-circle text-danger pointer" title="Remove this Option" v-b-tooltip.hover @click="delOption(name, index)"></i>
                                         </b-input-group-append>
                                     </b-input-group>
-                                    <!-- <b-input-group v-for="index in fields" :key="index" class="my-2">
-                                        <b-input-group-prepend class="align-middle d-block mr-1">
-                                            <i class="fas fa-sort align-middle pointer" title="Drag to Change Order" v-b-tooltip.hover></i>
-                                        </b-input-group-prepend>
-                                        <b-form-input
-                                            v-model="form.new_data_fields[index]"
-                                            type="text"
-                                            list="data-list"
-                                            placeholder="Input information to gather for the customer"
-                                            autocomplete="false"
-                                        ></b-form-input>
-                                        <b-input-group-append class="align-middle d-block ml-1">
-                                            <i class="far fa-times-circle text-danger pointer" title="Remove this Option" v-b-tooltip.hover @click="delNewOption(index)"></i>
-                                        </b-input-group-append>
-                                    </b-input-group> -->
                                 </draggable>
                                 <div>
-                                    <b-button class="float-right my-2" variant="warning" @click="fields++"><i class="fas fa-plus"></i> Add Row</b-button>
+                                    <b-button class="float-right my-2" variant="warning" @click="addRow"><i class="fas fa-plus"></i> Add Row</b-button>
                                 </div>
                                 <datalist id="data-list">
-                                    <option v-for="data in dataList" :key="data">{{data}}</option>
+                                    <option v-for="data in data_list" :key="data">{{data}}</option>
                                 </datalist>
                                 <submit-button button_text="Save Changes" :submitted="submitted"></submit-button>
                             </b-form>
@@ -97,69 +82,84 @@
             return {
                 submitted: false,
                 form: {
-                    cat_id:          this.equipment.equipment_category.name,
-                    name:            this.equipment.name,
-                    data_fields:     this.equipment.data_field_type,
-                    new_data_fields: [],
+                    cat_id:      this.equipment.equipment_category.name,
+                    name:        this.equipment.name,
+                    data_fields: [],
+                    del_fields:  []
                 },
-                fields: 1,
+                data_list: this.dataList,
             }
         },
         created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
+            this.setValues();
         },
         methods: {
             submitForm()
             {
-                console.log(this.form);
                 this.submitted = true;
-                // this.$inertia.put(route('admin.equipment.update', this.equipment.equip_id), this.form);
+                this.$inertia.put(route('admin.equipment.update', this.equipment.equip_id), this.form);
             },
-            delOption(index)
+            delOption(name, index)
             {
-                this.$bvModal.msgBoxConfirm('This information already gathered will be deleted', {
-                    title:          'Are you sure?',
-                    size:           'sm',
-                    buttonSize:     'sm',
-                    okVariant:      'danger',
-                    okTitle:        'YES',
-                    cancelTitle:    'NO',
-                    footerClass:    'p-2',
-                    hideHeaderClose: false,
-                    centered:        true
-                }).then(value => {
-                    if(value)
+                if(name)
+                {
+                    this.$bvModal.msgBoxConfirm('This information already gathered will be deleted',
                     {
-                        this.form.data_fields.splice(index, 1);
+                        title:          'Are you sure?',
+                        size:           'sm',
+                        buttonSize:     'sm',
+                        okVariant:      'danger',
+                        okTitle:        'YES',
+                        cancelTitle:    'NO',
+                        footerClass:    'p-2',
+                        hideHeaderClose: false,
+                        centered:        true
+                    }).then(value => {
+                        if(value)
+                        {
+                            this.form.data_fields.splice(index, 1);
+                            this.form.del_fields.push(name);
 
-                        this.$bvModal.msgBoxOk('Settings will not be perminate until you save the changes', {
-                            title:          'Save Changes to Commit',
-                            size:           'sm',
-                            buttonSize:     'sm',
-                            footerClass:    'p-2',
-                            hideHeaderClose: false,
-                            centered:        true
-                        })
-                    }
+                            this.$bvModal.msgBoxOk('Settings will not be perminate until you save the changes', {
+                                title:          'Save Changes to Commit',
+                                size:           'sm',
+                                buttonSize:     'sm',
+                                footerClass:    'p-2',
+                                hideHeaderClose: false,
+                                centered:        true,
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    this.form.data_fields.splice(name, 1);
+                }
+            },
+            setValues()
+            {
+                for(var i=0; i < this.equipment.data_field_type.length; i++)
+                {
+                    this.form.data_fields.push(this.equipment.data_field_type[i].name);
+                    this.data_list = this.arrayRemove(this.data_list, this.equipment.data_field_type[i].name)
+
+                }
+            },
+            arrayRemove(arr, value)
+            {
+                return arr.filter(function(el)
+                {
+                    return el != value;
                 });
             },
-            delNewOption(index)
+            isNewOption(opt)
             {
-                this.form.new_data_fields.splice(index, 1);
-                this.fields--;
+                var index = this.equipment.data_field_type.find(el => el.name === opt);
+                return index ? true : false;
             },
-            reorder(list)
+            addRow()
             {
-                console.log(list);
+                this.form.data_fields.push(null);
             }
         }
     }

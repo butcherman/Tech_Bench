@@ -2,12 +2,16 @@
 
 namespace App\Http\Middleware;
 
-use Carbon\Carbon;
 use Closure;
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
+/*
+*   If a user's password has expired, they must update it before being allowed to continue
+*/
 class CheckPasswordExpire
 {
     //  Routes that are not affected by the password expiring
@@ -16,6 +20,7 @@ class CheckPasswordExpire
         'password.update',
         'logout',
     ];
+
     /**
      *  Check to see if the users password has expired recently
      */

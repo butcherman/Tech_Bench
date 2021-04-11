@@ -3,15 +3,13 @@
 namespace App\Http\Requests\User;
 
 use App\Models\UserRolePermissions;
+
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 
 class UserRoleRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * Only users with "Manage Roles" permissions can submit this request
      */
     public function authorize()
     {
@@ -20,8 +18,6 @@ class UserRoleRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules()
     {

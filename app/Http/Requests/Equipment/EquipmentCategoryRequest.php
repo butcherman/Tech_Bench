@@ -3,14 +3,13 @@
 namespace App\Http\Requests\Equipment;
 
 use App\Models\EquipmentCategory;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class EquipmentCategoryRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * Only user with the "Manage Equipment" policy are allowed to submit this request
      */
     public function authorize()
     {
@@ -19,8 +18,6 @@ class EquipmentCategoryRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules()
     {
@@ -28,8 +25,8 @@ class EquipmentCategoryRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'regex:/^[a-zA-Z0-9_ ]*$/',
-                'unique:equipment_categories',
+                'regex:/^[a-zA-Z0-9_ ]*$/',     //  No special characters are allowed
+                'unique:equipment_categories',  //  Category name must not already exist
             ]
         ];
     }

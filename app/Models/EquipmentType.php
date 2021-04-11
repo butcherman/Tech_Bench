@@ -26,6 +26,6 @@ class EquipmentType extends Model
     */
     public function DataFieldType()
     {
-        return $this->hasManyThrough('App\Models\DataFieldType', 'App\Models\DataField', 'equip_id', 'type_id', 'equip_id', 'type_id');
+        return $this->hasManyThrough('App\Models\DataFieldType', 'App\Models\DataField', 'equip_id', 'type_id', 'equip_id', 'type_id')->orderBy('order');
     }
 }

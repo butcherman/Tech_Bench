@@ -8,8 +8,6 @@ class InitializeUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize()
     {
@@ -18,13 +16,11 @@ class InitializeUserRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules()
     {
         return [
-            'email'    => 'required|exists:users',
+            'email'    => 'required|exists:users',              //  Must be a valid email address
             'password' => 'required|string|min:6|confirmed',
         ];
     }

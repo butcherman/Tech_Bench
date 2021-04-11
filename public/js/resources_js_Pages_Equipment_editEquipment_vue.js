@@ -178,21 +178,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
@@ -216,59 +201,73 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         cat_id: this.equipment.equipment_category.name,
         name: this.equipment.name,
-        data_fields: this.equipment.data_field_type,
-        new_data_fields: []
+        data_fields: [],
+        del_fields: []
       },
-      fields: 1
+      data_list: this.dataList
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
+  created: function created() {
+    this.setValues();
   },
   methods: {
     submitForm: function submitForm() {
-      console.log(this.form);
-      this.submitted = true; // this.$inertia.put(route('admin.equipment.update', this.equipment.equip_id), this.form);
+      this.submitted = true;
+      this.$inertia.put(route('admin.equipment.update', this.equipment.equip_id), this.form);
     },
-    delOption: function delOption(index) {
+    delOption: function delOption(name, index) {
       var _this = this;
 
-      this.$bvModal.msgBoxConfirm('This information already gathered will be deleted', {
-        title: 'Are you sure?',
-        size: 'sm',
-        buttonSize: 'sm',
-        okVariant: 'danger',
-        okTitle: 'YES',
-        cancelTitle: 'NO',
-        footerClass: 'p-2',
-        hideHeaderClose: false,
-        centered: true
-      }).then(function (value) {
-        if (value) {
-          _this.form.data_fields.splice(index, 1);
+      if (name) {
+        this.$bvModal.msgBoxConfirm('This information already gathered will be deleted', {
+          title: 'Are you sure?',
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          okTitle: 'YES',
+          cancelTitle: 'NO',
+          footerClass: 'p-2',
+          hideHeaderClose: false,
+          centered: true
+        }).then(function (value) {
+          if (value) {
+            _this.form.data_fields.splice(index, 1);
 
-          _this.$bvModal.msgBoxOk('Settings will not be perminate until you save the changes', {
-            title: 'Save Changes to Commit',
-            size: 'sm',
-            buttonSize: 'sm',
-            footerClass: 'p-2',
-            hideHeaderClose: false,
-            centered: true
-          });
-        }
+            _this.form.del_fields.push(name);
+
+            _this.$bvModal.msgBoxOk('Settings will not be perminate until you save the changes', {
+              title: 'Save Changes to Commit',
+              size: 'sm',
+              buttonSize: 'sm',
+              footerClass: 'p-2',
+              hideHeaderClose: false,
+              centered: true
+            });
+          }
+        });
+      } else {
+        this.form.data_fields.splice(name, 1);
+      }
+    },
+    setValues: function setValues() {
+      for (var i = 0; i < this.equipment.data_field_type.length; i++) {
+        this.form.data_fields.push(this.equipment.data_field_type[i].name);
+        this.data_list = this.arrayRemove(this.data_list, this.equipment.data_field_type[i].name);
+      }
+    },
+    arrayRemove: function arrayRemove(arr, value) {
+      return arr.filter(function (el) {
+        return el != value;
       });
     },
-    delNewOption: function delNewOption(index) {
-      this.form.new_data_fields.splice(index, 1);
-      this.fields--;
+    isNewOption: function isNewOption(opt) {
+      var index = this.equipment.data_field_type.find(function (el) {
+        return el.name === opt;
+      });
+      return index ? true : false;
     },
-    reorder: function reorder(list) {
-      console.log(list);
+    addRow: function addRow() {
+      this.form.data_fields.push(null);
     }
   }
 });
@@ -776,17 +775,16 @@ var render = function() {
                               {
                                 attrs: {
                                   animation: "200",
-                                  list: _vm.form.system_data_fields
-                                },
-                                on: { end: _vm.reorder }
+                                  list: _vm.form.data_fields
+                                }
                               },
                               _vm._l(_vm.form.data_fields, function(
-                                index,
-                                key
+                                name,
+                                index
                               ) {
                                 return _c(
                                   "b-input-group",
-                                  { key: index.name, staticClass: "my-2" },
+                                  { key: index, staticClass: "my-2" },
                                   [
                                     _c(
                                       "b-input-group-prepend",
@@ -818,14 +816,18 @@ var render = function() {
                                         placeholder:
                                           "Input information to gather for the customer",
                                         autocomplete: "false",
-                                        disabled: ""
+                                        disabled: _vm.isNewOption(name)
                                       },
                                       model: {
-                                        value: index.name,
+                                        value: _vm.form.data_fields[index],
                                         callback: function($$v) {
-                                          _vm.$set(index, "name", $$v)
+                                          _vm.$set(
+                                            _vm.form.data_fields,
+                                            index,
+                                            $$v
+                                          )
                                         },
-                                        expression: "index.name"
+                                        expression: "form.data_fields[index]"
                                       }
                                     }),
                                     _vm._v(" "),
@@ -850,7 +852,7 @@ var render = function() {
                                           },
                                           on: {
                                             click: function($event) {
-                                              return _vm.delOption(key)
+                                              return _vm.delOption(name, index)
                                             }
                                           }
                                         })
@@ -871,11 +873,7 @@ var render = function() {
                                   {
                                     staticClass: "float-right my-2",
                                     attrs: { variant: "warning" },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.fields++
-                                      }
-                                    }
+                                    on: { click: _vm.addRow }
                                   },
                                   [
                                     _c("i", { staticClass: "fas fa-plus" }),
@@ -889,7 +887,7 @@ var render = function() {
                             _c(
                               "datalist",
                               { attrs: { id: "data-list" } },
-                              _vm._l(_vm.dataList, function(data) {
+                              _vm._l(_vm.data_list, function(data) {
                                 return _c("option", { key: data }, [
                                   _vm._v(_vm._s(data))
                                 ])

@@ -3,14 +3,13 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class PasswordRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     *  A user can change their own password, or an admin with "Manage Users" permissions can do it for them
      */
     public function authorize()
     {
@@ -20,8 +19,6 @@ class PasswordRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules()
     {

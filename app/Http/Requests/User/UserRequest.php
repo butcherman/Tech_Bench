@@ -3,25 +3,19 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
+
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
 {
-    // protected $usernameRequiredRoutes = [
-    //     'user.store',
-    // ];
-
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * A user can update their own information, or an administrator with "Manage Users" permissions can do if for them
      */
     public function authorize()
     {
+        //  On creating a new user, only an admin can submit the request
         if($this->route('setting') === null)
         {
             return $this->user()->can('create', User::class);
@@ -33,8 +27,6 @@ class UserRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules()
     {

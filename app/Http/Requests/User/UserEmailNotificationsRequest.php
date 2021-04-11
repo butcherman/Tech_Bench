@@ -3,14 +3,13 @@
 namespace App\Http\Requests\User;
 
 use App\Models\UserEmailNotifications;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserEmailNotificationsRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * Users can update their own notification settings, or an administrator with "Manage Users" permissions can do it for them
      */
     public function authorize()
     {
@@ -21,8 +20,6 @@ class UserEmailNotificationsRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules()
     {
