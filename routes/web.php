@@ -89,7 +89,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::resource('user-roles',               UserRolesController::class);
 
     //  Equipment Administration Routes
-    Route::prefix('equipment')->name('equipment.')->group(function()
+    Route::prefix(  'equipment')->name('equipment.')->group(function()
     {
         Route::resource('categories', EquipmentCategoriesController::class);
     });

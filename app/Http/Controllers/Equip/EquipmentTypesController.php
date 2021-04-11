@@ -19,6 +19,8 @@ class EquipmentTypesController extends Controller
      */
     public function index()
     {
+        $this->authorize('create', EquipmentType::class);
+
         return Inertia::render('Equipment/listEquipment', [
             'equipmentList' => EquipmentCategory::with('EquipmentType')->get(),
         ]);
@@ -81,7 +83,7 @@ class EquipmentTypesController extends Controller
      */
     public function edit($id)
     {
-        $this->authorize('update', EquipmentType::class);
+        $this->authorize('update', EquipmentType::find($id));
 
         return Inertia::render('Equipment/editEquipment', [
             'categories' => EquipmentCategory::all(),
@@ -144,6 +146,8 @@ class EquipmentTypesController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('delete', EquipmentType::find($id));
+
         //  TODO - Add checks to make sure it can be deleted
         EquipmentType::find($id)->delete();
 

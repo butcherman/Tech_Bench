@@ -4,6 +4,7 @@ namespace App\Http\Requests\Equipment;
 
 use App\Models\EquipmentType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class EquipmentTypeRequest extends FormRequest
 {
@@ -27,7 +28,8 @@ class EquipmentTypeRequest extends FormRequest
                 'string',
                 'regex:/^[a-zA-Z0-9_ ]*$/',                                 //  No special characters are allowed
                 'unique:equipment_categories',                              //  Equipment with this name must not already exist
-            ]
+            ],
+            'data_fields' => 'required|array',
         ];
     }
 }

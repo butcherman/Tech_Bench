@@ -22,7 +22,7 @@ class EquipmentTypePolicy
             $q->where('description', 'Manage Equipment');
         })->first();
 
-        Log::channel('auth')->debug('User '.$user->username.' is checking User Policy access to '.$method.'.  Result - '.($allowed->allow ? 'Allow' : 'Deny'));
+        Log::channel('auth')->debug('User '.$user->username.' is checking Equipment Policy access to '.$method.'.  Result - '.($allowed->allow ? 'Allow' : 'Deny'));
 
         if($allowed->allow)
         {
