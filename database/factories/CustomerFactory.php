@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Customer;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerFactory extends Factory
@@ -23,8 +24,9 @@ class CustomerFactory extends Factory
     {
         return [
             'parent_id' => null,
-            'name'      => $this->faker->company(),
+            'name'      => $name = $this->faker->company(),
             'dba_name'  => null,
+            'slug'      => Str::slug($name),
             'address'   => $this->faker->streetAddress(),
             'city'      => $this->faker->city(),
             'state'     => $this->faker->stateAbbr(),

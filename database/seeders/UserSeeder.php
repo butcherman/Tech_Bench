@@ -9,9 +9,7 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     *  Create 10 random users with different roles
      */
     public function run()
     {

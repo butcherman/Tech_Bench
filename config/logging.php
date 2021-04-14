@@ -39,6 +39,13 @@ return [
             'days'   => 14,
             'permission' => 0777,
         ],
+        'cust' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/Cust/CustLog.log'),
+            'level'  => env('LOG_LEVEL', 'info'),
+            'days'   => 14,
+            'permission' => 0777,
+        ],
 
         'stderr' => [
             'driver' => 'monolog',

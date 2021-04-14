@@ -10,13 +10,10 @@ use Illuminate\Database\Seeder;
 class EquipmentSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     *  Create sample categories and equipment (rather than relying on Faker to generate random words)
      */
     public function run()
     {
-        //  Create sample categories and equipment (rather than relying on Faker to generate random words)
         $equip = collect([
             'Cisco' => [
                 '1900 Series',

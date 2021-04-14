@@ -143,15 +143,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
-  props: {//
+  props: {
+    can_create: {
+      type: Boolean,
+      "default": false
+    }
   },
   data: function data() {
     return {
-      //
       table: {
+        loading: true,
         columns: [{
           label: 'Customer Name',
           field: 'name',
@@ -170,22 +197,72 @@ __webpack_require__.r(__webpack_exports__);
           label: 'Equipment',
           field: 'equipment',
           filterOptions: {
-            enabled: true,
+            enabled: false,
             placeholder: 'Search by Equipment Type'
           }
-        }]
+        }],
+        rows: []
+      },
+      pagination: {
+        links: {},
+        meta: {
+          total: 0
+        }
+      },
+      searchParam: {
+        page: null,
+        perPage: 25,
+        sortField: 'name',
+        sortType: 'asc',
+        name: null,
+        city: null,
+        equipment: null
       }
     };
   },
   created: function created() {//
   },
-  mounted: function mounted() {//
+  mounted: function mounted() {
+    this.search();
   },
   computed: {//
   },
   watch: {//
   },
-  methods: {//
+  methods: {
+    //  Submit Search Query
+    search: function search() {
+      var _this = this;
+
+      axios.post(this.route('customers.search'), this.searchParam).then(function (res) {
+        _this.table.rows = res.data.data;
+        _this.pagination.meta.total = res.data.total;
+      });
+    },
+    //  Include search parameters to filter search
+    filterSearch: function filterSearch(data) {
+      this.searchParam.page = 1;
+      this.searchParam.name = data.columnFilters.name ? data.columnFilters.name : null;
+      this.searchParam.city = data.columnFilters.city ? data.columnFilters.city : null;
+      this.searchParam.equipment = data.columnFilters.equip_list;
+      this.search();
+    },
+    //  Increase or decrease the current page
+    newPage: function newPage(data) {
+      this.searchParam.page = data.currentPage;
+      this.search();
+    },
+    //  Change the order of items listed
+    reSort: function reSort(data) {
+      this.searchParam.sortField = data[0].field;
+      this.searchParam.sortType = data[0].type;
+      this.search();
+    },
+    //  Change how many rows are shown per page
+    perPageUpdate: function perPageUpdate(data) {
+      this.searchParam.perPage = data.currentPerPage;
+      this.search();
+    }
   }
 });
 
@@ -625,38 +702,106 @@ var render = function() {
             "div",
             { staticClass: "card-body" },
             [
-              _c(
-                "vue-good-table",
-                { attrs: { mode: "remote", columns: _vm.table.columns } },
-                [
-                  _c(
-                    "div",
-                    { attrs: { slot: "table-actions" }, slot: "table-actions" },
-                    [
-                      _c(
-                        "inertia-link",
-                        {
-                          attrs: {
-                            as: "b-button",
-                            variant: "info",
-                            href: _vm.route("customers.create"),
-                            pill: "",
-                            size: "sm"
-                          }
-                        },
-                        [
-                          _c("i", {
-                            staticClass: "fas fa-plus",
-                            attrs: { "aria-hidden": "true" }
-                          }),
-                          _vm._v(" Add New Customer")
-                        ]
-                      )
-                    ],
-                    1
-                  )
-                ]
-              )
+              _c("vue-good-table", {
+                attrs: {
+                  mode: "remote",
+                  columns: _vm.table.columns,
+                  rows: _vm.table.rows,
+                  isLoading: _vm.table.loading,
+                  totalRows: _vm.pagination.meta.total,
+                  "pagination-options": {
+                    enabled: true,
+                    mode: "records",
+                    perPage: _vm.searchParam.perPage,
+                    position: "bottom",
+                    perPageDropdown: [25, 50, 100, 250],
+                    dropdownAllowAll: true
+                  }
+                },
+                on: {
+                  "update:isLoading": function($event) {
+                    return _vm.$set(_vm.table, "loading", $event)
+                  },
+                  "update:is-loading": function($event) {
+                    return _vm.$set(_vm.table, "loading", $event)
+                  },
+                  "on-column-filter": _vm.filterSearch,
+                  "on-page-change": _vm.newPage,
+                  "on-sort-change": _vm.reSort,
+                  "on-per-page-change": _vm.perPageUpdate
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "table-actions",
+                    fn: function() {
+                      return [
+                        _vm.can_create
+                          ? _c(
+                              "inertia-link",
+                              {
+                                attrs: {
+                                  as: "b-button",
+                                  variant: "info",
+                                  href: _vm.route("customers.create"),
+                                  pill: "",
+                                  size: "sm"
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-plus",
+                                  attrs: { "aria-hidden": "true" }
+                                }),
+                                _vm._v(" Add New Customer")
+                              ]
+                            )
+                          : _vm._e()
+                      ]
+                    },
+                    proxy: true
+                  },
+                  {
+                    key: "emptystate",
+                    fn: function() {
+                      return [
+                        !_vm.table.loading
+                          ? _c("h4", { staticClass: "text-center" }, [
+                              _vm._v("No Customers Found")
+                            ])
+                          : _vm._e()
+                      ]
+                    },
+                    proxy: true
+                  },
+                  {
+                    key: "table-row",
+                    fn: function(data) {
+                      return [
+                        data.column.field === "name"
+                          ? _c(
+                              "span",
+                              [
+                                _c(
+                                  "inertia-link",
+                                  {
+                                    attrs: {
+                                      href: _vm.route(
+                                        "customers.show",
+                                        data.row.slug
+                                      )
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(data.row.name))]
+                                )
+                              ],
+                              1
+                            )
+                          : _vm._e()
+                      ]
+                    }
+                  }
+                ])
+              })
             ],
             1
           )

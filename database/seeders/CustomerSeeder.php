@@ -8,12 +8,10 @@ use Illuminate\Database\Seeder;
 class CustomerSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     *  Create 50 random customers
      */
     public function run()
     {
-        Customer::factory()->count(10)->create();
+        Customer::factory()->count(50)->create();
     }
 }

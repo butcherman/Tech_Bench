@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerController;
+use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\User\UserController;
@@ -60,6 +61,7 @@ Route::middleware('auth')->group(function () {
     //  Primary User Settings
     Route::resource('settings',            UserController::class);
     Route::resource('email-notifications', UserEmailNotificationsController::class);
+
     //  Change Password
     Route::get('password/{change}',       [PasswordController::class, 'edit'])  ->name('password.edit');
     Route::put('password/{id}',           [PasswordController::class, 'update'])->name('password.update');
@@ -68,8 +70,12 @@ Route::middleware('auth')->group(function () {
 /*
 *   Customer Routes
 */
-Route::middleware('auth')->resource('customers', CustomerController::class);
-Route::middleware('auth')->post('customers/check-id', CheckCustIdController::class)->name('customers.check-id');
+Route::middleware('auth')->group(function()
+{
+    Route::resource('customers',      CustomerController::class);
+    Route::post('customers/check-id', CheckCustIdController::class)->name('customers.check-id');
+    Route::post('search',             CustomerSearchController::class)->name('customers.search');
+});
 
 /*
 *   Administration Routes

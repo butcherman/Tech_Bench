@@ -1,5 +1,5 @@
 <template>
-    <ValidationProvider v-slot="v" :rules="rules" mode="eager">
+    <ValidationProvider v-slot="v" :rules="rules" :mode="mode">
         <b-form-group
             :label="label+':'"
             :label-for="name"
@@ -13,8 +13,12 @@
                 :type="type"
                 :placeholder="placeholder"
                 :state="state(v)"
+                :list="list"
+                :autofocus="autofocus"
                 v-model="curVal"
                 @blur="emitBlur"
+                @change="emitChange"
+                @update="emitUpdate"
             ></b-form-input>
             <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
             <b-form-invalid-feedback :state="false" v-if="errors && errors[name]">{{errors[name]}}</b-form-invalid-feedback>
@@ -58,6 +62,18 @@
             hideState: {
                 type:    Boolean,
                 default: false,
+            },
+            mode: {
+                type:     String,
+                default: 'eager',
+            },
+            list: {
+                type:    String,
+                default: null,
+            },
+            autofocus: {
+                type:    Boolean,
+                default: false,
             }
         },
         data() {
@@ -78,6 +94,14 @@
             emitBlur()
             {
                 this.$emit('blur');
+            },
+            emitUpdate()
+            {
+                this.$emit('update');
+            },
+            emitChange()
+            {
+                this.$emit('change');
             },
             state(v)
             {

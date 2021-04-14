@@ -10,6 +10,6 @@ class Customer extends Model
     use HasFactory;
 
     protected $primaryKey = 'cust_id';
-    protected $guarded    = ['updated_at', 'created_at'];
-    protected $hidden     = [];
+    protected $guarded    = ['updated_at', 'created_at', 'deleted_at'];
+    protected $hidden     = ['updated_at', 'created_at', 'deleted_at'];
 }

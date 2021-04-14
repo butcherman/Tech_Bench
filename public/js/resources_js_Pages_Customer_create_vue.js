@@ -170,16 +170,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
-  props: {//
+  props: {
+    errors: {
+      type: Object,
+      required: false
+    }
   },
   data: function data() {
     return {
       form: {
         cust_id: '',
         parent_id: '',
+        parent_name: '',
         name: '',
         dba_name: '',
         address: '',
@@ -187,21 +218,25 @@ __webpack_require__.r(__webpack_exports__);
         state: '',
         zip: ''
       },
-      submitted: false
+      parentState: null,
+      submitted: false,
+      parentList: []
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
-    //
     submitForm: function submitForm() {
-      console.log(this.form);
+      this.$inertia.post(route('customers.store'), this.form);
+    },
+    checkParent: function checkParent(e) {
+      if (this.form.parent_name === null || this.form.parent_name === '' && e.type !== 'click') {
+        this.form.parent_id = null;
+      } else {
+        this.$refs['quick-search'].open(this.form.parent_name);
+      }
+    },
+    selectedParent: function selectedParent(parent) {
+      this.form.parent_name = parent.name;
+      this.form.parent_id = parent.cust_id;
     }
   }
 });
@@ -672,13 +707,13 @@ var render = function() {
                                     [
                                       _c("text-input", {
                                         attrs: {
-                                          label: "Customer ID",
                                           name: "cust_id",
                                           placeholder:
                                             "Enter Customer ID Number",
-                                          rules: "numeric|unique-customer"
+                                          rules: "numeric|unique-customer",
+                                          mode: "lazy",
+                                          errors: _vm.errors
                                         },
-                                        on: { blur: _vm.checkCustId },
                                         scopedSlots: _vm._u(
                                           [
                                             {
@@ -735,19 +770,147 @@ var render = function() {
                                     "b-col",
                                     { attrs: { md: "6" } },
                                     [
-                                      _c("text-input", {
-                                        attrs: {
-                                          label: "Parent Customer",
-                                          name: "parent_id",
-                                          placeholder: "(optional)"
-                                        },
-                                        model: {
-                                          value: _vm.form.parent_id,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "parent_id", $$v)
-                                          },
-                                          expression: "form.parent_id"
-                                        }
+                                      _c("ValidationProvider", {
+                                        attrs: { mode: "lazy" },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "default",
+                                              fn: function(v) {
+                                                return [
+                                                  _c(
+                                                    "b-form-group",
+                                                    {
+                                                      attrs: {
+                                                        "label-for":
+                                                          "parent_name"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "template",
+                                                        { slot: "label" },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                Parent Site:\n                                                "
+                                                          ),
+                                                          _c("i", {
+                                                            directives: [
+                                                              {
+                                                                name:
+                                                                  "b-tooltip",
+                                                                rawName:
+                                                                  "v-b-tooltip:hover",
+                                                                arg: "hover"
+                                                              }
+                                                            ],
+                                                            staticClass:
+                                                              "far fa-question-circle pointer text-warning",
+                                                            attrs: {
+                                                              title:
+                                                                "Click for More Information"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.$bvToast.show(
+                                                                  "parent-id-toast"
+                                                                )
+                                                              }
+                                                            }
+                                                          })
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "b-input-group",
+                                                        [
+                                                          _c("b-form-input", {
+                                                            attrs: {
+                                                              id: "parent_name",
+                                                              name:
+                                                                "parent_name",
+                                                              type: "text",
+                                                              placeholder:
+                                                                "(Optional)",
+                                                              state:
+                                                                _vm.parentState
+                                                            },
+                                                            on: {
+                                                              blur:
+                                                                _vm.checkParent
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.form
+                                                                  .parent_name,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.$set(
+                                                                  _vm.form,
+                                                                  "parent_name",
+                                                                  $$v
+                                                                )
+                                                              },
+                                                              expression:
+                                                                "form.parent_name"
+                                                            }
+                                                          }),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "b-input-group-append",
+                                                            [
+                                                              _c(
+                                                                "b-button",
+                                                                {
+                                                                  attrs: {
+                                                                    varient:
+                                                                      "primary"
+                                                                  },
+                                                                  on: {
+                                                                    click:
+                                                                      _vm.checkParent
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c("span", {
+                                                                    staticClass:
+                                                                      "fas fa-search"
+                                                                  })
+                                                                ]
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "b-form-invalid-feedback",
+                                                        {
+                                                          attrs: {
+                                                            state: false
+                                                          }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(v.errors[0])
+                                                          )
+                                                        ]
+                                                      )
+                                                    ],
+                                                    2
+                                                  )
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          null,
+                                          true
+                                        )
                                       })
                                     ],
                                     1
@@ -761,7 +924,8 @@ var render = function() {
                                   label: "Customer Name",
                                   name: "name",
                                   placeholder: "Enter Customer Name",
-                                  rules: "required"
+                                  rules: "required",
+                                  errors: _vm.errors
                                 },
                                 model: {
                                   value: _vm.form.name,
@@ -777,7 +941,8 @@ var render = function() {
                                   label: "DBA Name",
                                   name: "dba_name",
                                   placeholder:
-                                    "Customer secondary name/AKA name"
+                                    "Customer secondary name/AKA name",
+                                  errors: _vm.errors
                                 },
                                 model: {
                                   value: _vm.form.dba_name,
@@ -792,7 +957,8 @@ var render = function() {
                                 attrs: {
                                   label: "Customer Address",
                                   name: "address",
-                                  rules: "required"
+                                  rules: "required",
+                                  errors: _vm.errors
                                 },
                                 model: {
                                   value: _vm.form.address,
@@ -807,7 +973,8 @@ var render = function() {
                                 attrs: {
                                   label: "City",
                                   name: "city",
-                                  rules: "required"
+                                  rules: "required",
+                                  errors: _vm.errors
                                 },
                                 model: {
                                   value: _vm.form.city,
@@ -846,7 +1013,8 @@ var render = function() {
                                         attrs: {
                                           label: "Zip Code",
                                           name: "zip",
-                                          rules: "required|numeric"
+                                          rules: "required|numeric",
+                                          errors: _vm.errors
                                         },
                                         model: {
                                           value: _vm.form.zip,
@@ -906,7 +1074,30 @@ var render = function() {
             _vm._v("Leave blank to auto generate an ID.")
           ])
         ]
-      )
+      ),
+      _vm._v(" "),
+      _c(
+        "b-toast",
+        {
+          attrs: {
+            id: "parent-id-toast",
+            title: "Instructions for Parent Site",
+            variant: "info"
+          }
+        },
+        [
+          _c("p", { staticClass: "my-4 text-center" }, [
+            _vm._v(
+              "If this is part of a Multi-Site customer that needs to include its own information, or share information with another site, enter the name of the priamry customer site."
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("quick-search", {
+        ref: "quick-search",
+        on: { "selected-customer": _vm.selectedParent }
+      })
     ],
     1
   )

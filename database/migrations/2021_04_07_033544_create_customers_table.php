@@ -18,6 +18,7 @@ class CreateCustomersTable extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->text('name');
             $table->text('dba_name')->nullable();
+            $table->text('slug');
             $table->text('address');
             $table->text('city');
             $table->text('state');
