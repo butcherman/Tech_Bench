@@ -24,7 +24,7 @@ services:
     - mysql
 
 before_install:
-    - mysql -e 'create database `tb-dev-testing`;'
+    - mysql -e 'create database `tb-php-unit`;'
 
 before_script:
     - cp tests/.env.travis .env
