@@ -30,10 +30,8 @@ before_script:
     - cp tests/.env.travis .env
     - travis_retry composer self-update
     - travis_retry composer install --no-interaction
-    - npm install
     - php artisan key:generate
     - php artisan migrate
-    - npm run production
 
 script:
     - php vendor/bin/phpunit --coverage-clover=coverage.clover
