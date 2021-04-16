@@ -38,11 +38,24 @@ class CustomerSearchController extends Controller
         return $this->search($request->only(['city', 'name', 'equipment']));
     }
 
+    /*
+    *   Perform the actual search
+    */
     protected function search($params)
     {
         return Customer::orderBy($this->sortField, $this->sortType)
-            //  TODO - Add search by equipment
-
+            //  Search by equipment
+            ->when(isset($params['equipment']), function($q) use ($params)
+            {
+                $q->whereHas('ParentEquipment', function($q2) use ($params)
+                {
+                    $q2->where('name', $params['equipment']);
+                })
+                ->orWhereHas('EquipmentType', function($q2) use ($params)
+                {
+                    $q2->where('name', $params['equipment']);
+                });
+            })
             //  Search by City
             ->when(isset($params['city']), function($q) use ($params)
             {
@@ -55,9 +68,9 @@ class CustomerSearchController extends Controller
                     ->orWhere('cust_id', 'like', '%'.$params['name'].'%')
                     ->orWhere('dba_name', 'like', '%'.$params['name'].'%');
             })
+            ->with('EquipmentType')
+            ->with('ParentEquipment')
             ->paginate($this->perPage);
-
-
     }
 
     /*
@@ -66,6 +79,8 @@ class CustomerSearchController extends Controller
     protected function getAllCustomers()
     {
         return Customer::orderBy($this->sortField, $this->sortType)
+            ->with('EquipmentType')
+            ->with('ParentEquipment')
             ->paginate($this->perPage);
     }
 }

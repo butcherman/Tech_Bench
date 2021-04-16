@@ -26,7 +26,7 @@ class CustomerSearchRequest extends FormRequest
             'sortType'  => 'required|string',
             'name'      => 'nullable|string',
             'city'      => 'nullable|string',
-            'equipment' => 'nullable|numeric',
+            'equipment' => 'nullable|string',
         ];
     }
 }

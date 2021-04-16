@@ -166,6 +166,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
@@ -173,6 +182,10 @@ __webpack_require__.r(__webpack_exports__);
     can_create: {
       type: Boolean,
       "default": false
+    },
+    equip_types: {
+      type: Array,
+      required: true
     }
   },
   data: function data() {
@@ -197,8 +210,9 @@ __webpack_require__.r(__webpack_exports__);
           label: 'Equipment',
           field: 'equipment',
           filterOptions: {
-            enabled: false,
-            placeholder: 'Search by Equipment Type'
+            enabled: true,
+            placeholder: 'Search by Equipment Type',
+            filterDropdownItems: this.equip_types
           }
         }],
         rows: []
@@ -220,14 +234,8 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  created: function created() {//
-  },
   mounted: function mounted() {
     this.search();
-  },
-  computed: {//
-  },
-  watch: {//
   },
   methods: {
     //  Submit Search Query
@@ -244,7 +252,7 @@ __webpack_require__.r(__webpack_exports__);
       this.searchParam.page = 1;
       this.searchParam.name = data.columnFilters.name ? data.columnFilters.name : null;
       this.searchParam.city = data.columnFilters.city ? data.columnFilters.city : null;
-      this.searchParam.equipment = data.columnFilters.equip_list;
+      this.searchParam.equipment = data.columnFilters.equipment;
       this.search();
     },
     //  Increase or decrease the current page
@@ -795,6 +803,50 @@ var render = function() {
                                 )
                               ],
                               1
+                            )
+                          : data.column.field === "equipment"
+                          ? _c(
+                              "span",
+                              [
+                                _vm._l(data.row.equipment_type, function(
+                                  equip
+                                ) {
+                                  return _c("div", { key: equip.equip_id }, [
+                                    _vm._v(
+                                      "\n                                    " +
+                                        _vm._s(equip.name) +
+                                        "\n                                "
+                                    )
+                                  ])
+                                }),
+                                _vm._v(" "),
+                                _vm._l(data.row.parent_equipment, function(
+                                  equip
+                                ) {
+                                  return _c("div", { key: equip.equip_id }, [
+                                    _c("i", {
+                                      directives: [
+                                        {
+                                          name: "b-tooltip",
+                                          rawName: "v-b-tooltip:hover",
+                                          arg: "hover"
+                                        }
+                                      ],
+                                      staticClass: "fas fa-share",
+                                      attrs: {
+                                        title:
+                                          "Equipment Belongs to Parent Site"
+                                      }
+                                    }),
+                                    _vm._v(
+                                      "\n                                    " +
+                                        _vm._s(equip.name) +
+                                        "\n                                "
+                                    )
+                                  ])
+                                })
+                              ],
+                              2
                             )
                           : _vm._e()
                       ]

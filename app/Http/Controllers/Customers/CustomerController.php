@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Customers;
 
+use Inertia\Inertia;
+
+use App\Models\Customer;
+use App\Models\EquipmentType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerRequest;
-use App\Models\Customer;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
+
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -19,7 +22,8 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Customer/index', [
-            'can_create' => $request->user()->can('create', Customer::class),
+            'can_create'  => $request->user()->can('create', Customer::class),
+            'equip_types' => EquipmentType::orderBy('cat_id')->get()->pluck('name')->values(),
         ]);
     }
 

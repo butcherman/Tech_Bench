@@ -38,6 +38,15 @@
                                 <span v-if="data.column.field === 'name'">
                                     <inertia-link :href="route('customers.show', data.row.slug)">{{data.row.name}}</inertia-link>
                                 </span>
+                                <span v-else-if="data.column.field === 'equipment'">
+                                    <div v-for="equip in data.row.equipment_type" :key="equip.equip_id">
+                                        {{equip.name}}
+                                    </div>
+                                    <div v-for="equip in data.row.parent_equipment" :key="equip.equip_id">
+                                        <i class="fas fa-share" title="Equipment Belongs to Parent Site" v-b-tooltip:hover></i>
+                                        {{equip.name}}
+                                    </div>
+                                </span>
                             </template>
                         </vue-good-table>
                     </div>
@@ -56,6 +65,10 @@
             can_create: {
                 type:    Boolean,
                 default: false,
+            },
+            equip_types: {
+                type:     Array,
+                required: true,
             }
         },
         data() {
@@ -67,7 +80,7 @@
                             label: 'Customer Name',
                             field: 'name',
                             filterOptions: {
-                                enabled: true,
+                                enabled:      true,
                                 placeholder: 'Search for Customer by Name or Customer ID',
                             },
                         },
@@ -75,7 +88,7 @@
                             label: 'City',
                             field: 'city',
                             filterOptions: {
-                                enabled: true,
+                                enabled:      true,
                                 placeholder: 'Search by City',
                             },
                         },
@@ -83,8 +96,9 @@
                             label: 'Equipment',
                             field: 'equipment',
                             filterOptions: {
-                                enabled: false,
-                                placeholder: 'Search by Equipment Type',
+                                enabled:             true,
+                                placeholder:        'Search by Equipment Type',
+                                filterDropdownItems: this.equip_types,
                             },
                         },
                     ],
@@ -107,17 +121,8 @@
                 },
             }
         },
-        created() {
-            //
-        },
         mounted() {
              this.search();
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
         },
         methods: {
             //  Submit Search Query
@@ -135,7 +140,7 @@
                 this.searchParam.page      = 1;
                 this.searchParam.name      = data.columnFilters.name  ? data.columnFilters.name : null;
                 this.searchParam.city      = data.columnFilters.city  ? data.columnFilters.city : null;
-                this.searchParam.equipment = data.columnFilters.equip_list;
+                this.searchParam.equipment = data.columnFilters.equipment;
                 this.search();
             },
             //  Increase or decrease the current page
