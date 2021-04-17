@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customers\CheckCustIdController;
+use App\Http\Controllers\Customers\CustomerBookmarksController;
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
@@ -75,6 +76,7 @@ Route::middleware('auth')->group(function()
     Route::resource('customers',      CustomerController::class);
     Route::post('customers/check-id', CheckCustIdController::class)->name('customers.check-id');
     Route::post('search',             CustomerSearchController::class)->name('customers.search');
+    Route::put('toggle-bookmark',     CustomerBookmarksController::class)->name('customers.bookmark');
 });
 
 /*

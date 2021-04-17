@@ -47,7 +47,7 @@ class CustomerPolicy
             $q->where('description', 'Add Customer');
         })->first();
 
-        if($allowed->allow)
+        if($allowed)
         {
             return $allowed->allow;
         }
@@ -64,7 +64,17 @@ class CustomerPolicy
      */
     public function update(User $user, Customer $customer)
     {
-        //
+        $allowed = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function($q)
+        {
+            $q->where('description', 'Update Customer');
+        })->first();
+
+        if($allowed)
+        {
+            return $allowed->allow;
+        }
+
+        return false;
     }
 
     /**

@@ -123,24 +123,77 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
-  props: {//
+  props: {
+    details: {
+      type: Object,
+      required: true
+    },
+    user_functions: {
+      type: Object,
+      required: true
+    }
   },
   data: function data() {
-    return {//
+    return {
+      is_fav: this.user_functions.fav
     };
   },
   created: function created() {//
   },
   mounted: function mounted() {//
   },
-  computed: {//
+  computed: {
+    map_url: function map_url() {
+      return 'https://maps.google.com/?q=' + encodeURI(this.details.address + ',' + this.details.city + ',' + this.details.state);
+    },
+    bookmark_class: function bookmark_class() {
+      return this.is_fav ? 'fas fa-bookmark bookmark-checked' : 'far fa-bookmark bookmark-unchecked';
+    },
+    bookmark_title: function bookmark_title() {
+      return this.is_fav ? 'Remove From Bookmarks' : 'Add to Bookmarks';
+    }
   },
   watch: {//
   },
-  methods: {//
+  methods: {
+    toggleFav: function toggleFav() {
+      var _this = this;
+
+      axios.put(this.route('customers.bookmark'), {
+        cust_id: this.details.cust_id,
+        state: !this.is_fav
+      }).then(function (res) {
+        if (res.data.success) {
+          _this.is_fav = !_this.is_fav;
+        }
+      });
+    }
   }
 });
 
@@ -570,14 +623,111 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-8 grid-margin stretch-card" }, [
+        _c("h3", [
+          _c("i", {
+            directives: [
+              {
+                name: "b-tooltip",
+                rawName: "v-b-tooltip.hover",
+                modifiers: { hover: true }
+              }
+            ],
+            class: _vm.bookmark_class,
+            attrs: { title: _vm.bookmark_title },
+            on: { click: _vm.toggleFav }
+          }),
+          _vm._v(
+            "\n                " + _vm._s(_vm.details.name) + "\n            "
+          )
+        ]),
+        _vm._v(" "),
+        _vm.details.dba_name
+          ? _c("h5", [_vm._v("AKA - " + _vm._s(_vm.details.dba_name))])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.details.parent_id
+          ? _c(
+              "h5",
+              [
+                _vm._v("Child Site of - "),
+                _c(
+                  "inertia-link",
+                  {
+                    attrs: {
+                      href: _vm.route("customers.show", _vm.details.parent.slug)
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.details.parent.name))]
+                )
+              ],
+              1
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c("address", [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              directives: [
+                {
+                  name: "b-tooltip",
+                  rawName: "v-b-tooltip.hover",
+                  modifiers: { hover: true }
+                }
+              ],
+              staticClass: "float-left ml-2",
+              attrs: {
+                href: _vm.map_url,
+                target: "_blank",
+                id: "addr-span",
+                title: "Click for Google Maps"
+              }
+            },
+            [
+              _vm._v("\n                    " + _vm._s(_vm.details.address)),
+              _c("br"),
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.details.city) +
+                  ", " +
+                  _vm._s(_vm.details.state) +
+                  "  " +
+                  _vm._s(_vm.details.zip) +
+                  "\n                "
+              )
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-4 mt-md-0 mt-4" }, [
+        _c(
+          "div",
+          { staticClass: "float-md-right" },
+          [
+            _vm.user_functions.edit
+              ? _c("edit-details", { attrs: { details: _vm.details } })
+              : _vm._e()
+          ],
+          1
+        )
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", [_vm._v("Hello World")])])
+    return _c("div", { staticClass: "float-left" }, [
+      _c("i", { staticClass: "fas fa-map-marked-alt text-muted" })
+    ])
   }
 ]
 render._withStripped = true

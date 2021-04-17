@@ -7,10 +7,10 @@ use Inertia\Inertia;
 use App\Models\Customer;
 use App\Models\EquipmentType;
 use App\Http\Controllers\Controller;
+use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
 
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,10 +19,10 @@ class CustomerController extends Controller
     /**
      *  Customer search page
      */
-    public function index(Request $request)
+    public function index()
     {
         return Inertia::render('Customer/index', [
-            'can_create'  => $request->user()->can('create', Customer::class),
+            'can_create'  => Auth::user()->can('create', Customer::class),
             'equip_types' => EquipmentType::orderBy('cat_id')->get()->pluck('name')->values(),
         ]);
     }
@@ -55,30 +55,36 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        return Inertia::render('Customer/details');
+        $customer = Customer::where('slug', $id)->with('Parent')->firstOrFail();
+        $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $customer->cust_id)->count();
+
+        return Inertia::render('Customer/details', [
+            'details' => $customer,
+            'user_functions' => [
+                'fav'  => $isFav,                                           //  Customer is bookmarked by the user
+                'edit' => Auth::user()->can('update', $customer),           //  User is allowed to edit the customers basic details
+            ],
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  TODO - Go away???
      */
-    public function edit($id)
-    {
-        //
-    }
+    // public function edit($id)
+    // {
+    //     //
+    // }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Update the customers basic information
      */
-    public function update(Request $request, $id)
+    public function update(CustomerRequest $request, $id)
     {
-        //
+        $cust         = $request->toArray();
+        $cust['slug'] = Str::slug($request->name);
+        Customer::find($id)->update($cust);
+
+        return redirect(route('customers.show', $cust['slug']))->with(['message' => 'Customer Details Updated', 'type' => 'success']);
     }
 
     /**

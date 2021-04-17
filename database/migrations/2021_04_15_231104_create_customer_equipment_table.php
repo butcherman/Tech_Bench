@@ -32,6 +32,10 @@ class CreateCustomerEquipmentTable extends Migration
      */
     public function down()
     {
+        Schema::table('customer_equipment', function(Blueprint $table)
+        {
+            $table->dropForeign(['cust_id', 'equip_id']);
+        });
         Schema::dropIfExists('customer_equipment');
     }
 }

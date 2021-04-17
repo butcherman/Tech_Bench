@@ -24,4 +24,9 @@ class Customer extends Model
     {
         return $this->hasManyThrough('App\Models\EquipmentType', 'App\Models\CustomerEquipment', 'cust_id', 'equip_id', 'parent_id', 'equip_id');
     }
+
+    public function Parent()
+    {
+        return $this->belongsTo('App\Models\Customer', 'parent_id', 'cust_id');
+    }
 }
