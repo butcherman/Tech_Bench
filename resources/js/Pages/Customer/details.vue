@@ -74,12 +74,7 @@
             toggleFav()
             {
                 axios.put(this.route('customers.bookmark'), {cust_id: this.details.cust_id, state: !this.is_fav})
-                    .then(res => {
-                        if(res.data.success)
-                        {
-                            this.is_fav = !this.is_fav;
-                        }
-                    });
+                    .then(this.is_fav = !this.is_fav);
             }
         }
     }

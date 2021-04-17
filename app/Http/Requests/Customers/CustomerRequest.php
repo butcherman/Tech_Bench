@@ -12,6 +12,11 @@ class CustomerRequest extends FormRequest
      */
     public function authorize()
     {
+        if($this->route('customer'))
+        {
+            return $this->user()->can('update', Customer::find($this->route('customer')));
+        }
+
         return $this->user()->can('create', Customer::class);
     }
 

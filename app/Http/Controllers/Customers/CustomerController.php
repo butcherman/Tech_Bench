@@ -55,7 +55,15 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $customer = Customer::where('slug', $id)->with('Parent')->firstOrFail();
+        //  Check if we are passing the customer slugged name, or customer ID number
+        if(is_numeric($id))
+        {
+            //  To keep things uniform, redirect to a link that has the customers name rather than the ID
+            $customer = Customer::findOrFail($id);
+            return redirect(route('customers.show', $customer->slug));
+        }
+
+        $customer = Customer::where('slug', $id)->orWhere('cust_id', $id)->with('Parent')->firstOrFail();
         $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $customer->cust_id)->count();
 
         return Inertia::render('Customer/details', [
@@ -88,13 +96,10 @@ class CustomerController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Deactivate the customer
      */
-    public function destroy($id)
-    {
-        //
-    }
+    // public function destroy($id)
+    // {
+    //     //
+    // }
 }

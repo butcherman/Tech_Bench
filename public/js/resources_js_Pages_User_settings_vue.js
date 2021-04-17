@@ -593,7 +593,7 @@ var render = function() {
               {
                 attrs: {
                   variant: _vm.$page.props.flash.type,
-                  show: _vm.$page.props.flash.message ? true : false
+                  show: _vm.$page.props.flash.message ? 30 : false
                 }
               },
               [

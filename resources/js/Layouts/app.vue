@@ -41,7 +41,7 @@
             </nav>
             <div class="content">
                 <div class="content-wrapper">
-                    <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? true : false">
+                    <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? 30 : false">
                         <p class="text-center">{{$page.props.flash.message}}</p>
                     </b-alert>
                     <slot />

@@ -183,16 +183,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     toggleFav: function toggleFav() {
-      var _this = this;
-
       axios.put(this.route('customers.bookmark'), {
         cust_id: this.details.cust_id,
         state: !this.is_fav
-      }).then(function (res) {
-        if (res.data.success) {
-          _this.is_fav = !_this.is_fav;
-        }
-      });
+      }).then(this.is_fav = !this.is_fav);
     }
   }
 });
@@ -541,7 +535,7 @@ var render = function() {
               {
                 attrs: {
                   variant: _vm.$page.props.flash.type,
-                  show: _vm.$page.props.flash.message ? true : false
+                  show: _vm.$page.props.flash.message ? 30 : false
                 }
               },
               [

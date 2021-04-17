@@ -27,6 +27,6 @@ class CustomerBookmarksController extends Controller
             UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $request->cust_id)->first()->delete();
         }
 
-        return response()->json(['success' => true]);
+        return response()->noContent();              //->json(['success' => true]);
     }
 }
