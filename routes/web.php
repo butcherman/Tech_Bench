@@ -15,8 +15,10 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerBookmarksController;
 use App\Http\Controllers\Customers\CustomerController;
+use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
+use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
@@ -73,10 +75,20 @@ Route::middleware('auth')->group(function () {
 */
 Route::middleware('auth')->group(function()
 {
+    Route::prefix('customers')->name('customers.')->group(function()
+    {
+        //  Customer Details Section
+        Route::post('customers/check-id', CheckCustIdController::class)->name('check-id');
+        Route::post('search',             CustomerSearchController::class)->name('search');
+        Route::put('toggle-bookmark',     CustomerBookmarksController::class)->name('bookmark');
+
+        //  Customer Equipment Section
+        Route::get('equipment-list', EquipmentListController::class)->name('equip-list');
+        Route::resource('equipment', CustomerEquipmentController::class);
+    });
+
+    //  Customer primary resource Routes
     Route::resource('customers',      CustomerController::class);
-    Route::post('customers/check-id', CheckCustIdController::class)->name('customers.check-id');
-    Route::post('search',             CustomerSearchController::class)->name('customers.search');
-    Route::put('toggle-bookmark',     CustomerBookmarksController::class)->name('customers.bookmark');
 });
 
 /*

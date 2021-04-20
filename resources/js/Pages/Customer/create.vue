@@ -79,7 +79,10 @@
 
 <script>
     import App from '../../Layouts/app';
+    import QuickSearch from '../../Components/Customer/quickSearch.vue';
+
     export default {
+        components: {QuickSearch},
         layout: App,
         props: {
             errors: {

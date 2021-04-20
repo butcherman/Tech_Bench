@@ -388,7 +388,8 @@ var render = function() {
                     rules: "required",
                     label: "Username",
                     name: "username",
-                    placeholder: "Username"
+                    placeholder: "Username",
+                    autofocus: ""
                   },
                   model: {
                     value: _vm.form.username,

@@ -39,7 +39,7 @@
                                     <inertia-link :href="route('customers.show', data.row.slug)">{{data.row.name}}</inertia-link>
                                 </span>
                                 <span v-else-if="data.column.field === 'equipment'">
-                                    <div v-for="equip in data.row.equipment_type" :key="equip.equip_id">
+                                    <div v-for="equip in data.row.customer_equipment" :key="equip.cust_equip_id">
                                         {{equip.name}}
                                     </div>
                                     <div v-for="equip in data.row.parent_equipment" :key="equip.equip_id">

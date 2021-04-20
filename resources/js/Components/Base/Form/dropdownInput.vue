@@ -14,7 +14,10 @@
                 :options="options"
                 required
                 :placeholder="placeholder"
-            ></b-form-select>
+                @change="emitChange"
+            >
+                <slot />
+            </b-form-select>
             <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
             <b-form-invalid-feedback :state="false" v-if="errors && errors[name]">{{errors[name]}}</b-form-invalid-feedback>
         </b-form-group>
@@ -25,7 +28,7 @@
     export default {
         props: {
             value: {
-                type:    String,
+                type:    String|Object,
                 default: '',
             },
             rules: {
@@ -62,7 +65,7 @@
             },
             options: {
                 type:     Array,
-                required: true,
+                required: false,
             }
         },
         data() {
@@ -77,7 +80,10 @@
             },
         },
         methods: {
-            //
+            emitChange(val)
+            {
+                this.$emit('change', val);
+            }
         },
     }
 </script>

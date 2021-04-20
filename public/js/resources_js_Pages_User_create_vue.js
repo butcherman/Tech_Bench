@@ -378,21 +378,26 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "app-layout" }, [
     _c("nav", { staticClass: "navbar top-navbar fixed-top" }, [
-      _c("div", { staticClass: "navbar-logo-wrapper d-flex" }, [
-        _c(
-          "a",
-          {
-            staticClass: "navbar-logo",
-            attrs: { href: _vm.route("dashboard") }
-          },
-          [
-            _c("img", {
-              staticClass: "mr-2",
-              attrs: { src: _vm.app.logo, alt: _vm.app.name }
-            })
-          ]
-        )
-      ]),
+      _c(
+        "div",
+        { staticClass: "navbar-logo-wrapper d-flex" },
+        [
+          _c(
+            "inertia-link",
+            {
+              staticClass: "navbar-logo",
+              attrs: { href: _vm.route("dashboard") }
+            },
+            [
+              _c("img", {
+                staticClass: "mr-2",
+                attrs: { src: _vm.app.logo, alt: _vm.app.name }
+              })
+            ]
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "navbar-brand d-none d-md-flex" }, [
         _c("h2", [_vm._v(_vm._s(_vm.app.name))])

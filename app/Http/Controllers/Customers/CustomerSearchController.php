@@ -68,7 +68,7 @@ class CustomerSearchController extends Controller
                     ->orWhere('cust_id', 'like', '%'.$params['name'].'%')
                     ->orWhere('dba_name', 'like', '%'.$params['name'].'%');
             })
-            ->with('EquipmentType')
+            ->with('CustomerEquipment')
             ->with('ParentEquipment')
             ->paginate($this->perPage);
     }
@@ -79,7 +79,7 @@ class CustomerSearchController extends Controller
     protected function getAllCustomers()
     {
         return Customer::orderBy($this->sortField, $this->sortType)
-            ->with('EquipmentType')
+            ->with('CustomerEquipment')
             ->with('ParentEquipment')
             ->paginate($this->perPage);
     }

@@ -2,7 +2,7 @@
     <div class="app-layout">
         <nav class="navbar top-navbar fixed-top">
             <div class="navbar-logo-wrapper d-flex">
-                <a class="navbar-logo" :href="route('dashboard')"><img :src="app.logo" class="mr-2" :alt="app.name"/></a>
+                <inertia-link class="navbar-logo" :href="route('dashboard')"><img :src="app.logo" class="mr-2" :alt="app.name"/></inertia-link>
             </div>
             <div class="navbar-brand d-none d-md-flex">
                 <h2>{{app.name}}</h2>

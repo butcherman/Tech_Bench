@@ -44,7 +44,7 @@ Vue.mixin({ methods: { route }});
 /*
 *   Globally Register all Base Components in the Components/Base Folder
 */
-const requireComponent = require.context('./Components', true, /[A-Z]\w+\.(vue|js)$/);
+const requireComponent = require.context('./Components/Base', true, /[A-Z]\w+\.(vue|js)$/);
 
   requireComponent.keys().forEach(fileName => {
     const componentConfig = requireComponent(fileName)

@@ -63,7 +63,7 @@ class CustomerController extends Controller
             return redirect(route('customers.show', $customer->slug));
         }
 
-        $customer = Customer::where('slug', $id)->orWhere('cust_id', $id)->with('Parent')->firstOrFail();
+        $customer = Customer::where('slug', $id)->orWhere('cust_id', $id)->with('Parent')->with('CustomerEquipment.CustomerEquipmentData')->firstOrFail();
         $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $customer->cust_id)->count();
 
         return Inertia::render('Customer/details', [

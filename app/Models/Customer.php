@@ -15,14 +15,15 @@ class Customer extends Model
     protected $guarded    = ['updated_at', 'created_at', 'deleted_at'];
     protected $hidden     = ['updated_at', 'created_at', 'deleted_at'];
 
-    public function EquipmentType()
-    {
-        return $this->hasManyThrough('App\Models\EquipmentType', 'App\Models\CustomerEquipment', 'cust_id', 'equip_id', 'cust_id', 'equip_id');
-    }
-
     public function ParentEquipment()
     {
-        return $this->hasManyThrough('App\Models\EquipmentType', 'App\Models\CustomerEquipment', 'cust_id', 'equip_id', 'parent_id', 'equip_id');
+        //  TODO - verify only shared equipment make it through
+        return $this->hasMany('App\Models\CustomerEquipment', 'cust_id', 'parent_id')->where('shared', true);
+    }
+
+    public function CustomerEquipment()
+    {
+        return $this->hasMany('App\Models\CustomerEquipment', 'cust_id', 'cust_id');
     }
 
     public function Parent()

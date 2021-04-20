@@ -438,21 +438,26 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "app-layout" }, [
     _c("nav", { staticClass: "navbar top-navbar fixed-top" }, [
-      _c("div", { staticClass: "navbar-logo-wrapper d-flex" }, [
-        _c(
-          "a",
-          {
-            staticClass: "navbar-logo",
-            attrs: { href: _vm.route("dashboard") }
-          },
-          [
-            _c("img", {
-              staticClass: "mr-2",
-              attrs: { src: _vm.app.logo, alt: _vm.app.name }
-            })
-          ]
-        )
-      ]),
+      _c(
+        "div",
+        { staticClass: "navbar-logo-wrapper d-flex" },
+        [
+          _c(
+            "inertia-link",
+            {
+              staticClass: "navbar-logo",
+              attrs: { href: _vm.route("dashboard") }
+            },
+            [
+              _c("img", {
+                staticClass: "mr-2",
+                attrs: { src: _vm.app.logo, alt: _vm.app.name }
+              })
+            ]
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "navbar-brand d-none d-md-flex" }, [
         _c("h2", [_vm._v(_vm._s(_vm.app.name))])
@@ -808,16 +813,20 @@ var render = function() {
                           ? _c(
                               "span",
                               [
-                                _vm._l(data.row.equipment_type, function(
+                                _vm._l(data.row.customer_equipment, function(
                                   equip
                                 ) {
-                                  return _c("div", { key: equip.equip_id }, [
-                                    _vm._v(
-                                      "\n                                    " +
-                                        _vm._s(equip.name) +
-                                        "\n                                "
-                                    )
-                                  ])
+                                  return _c(
+                                    "div",
+                                    { key: equip.cust_equip_id },
+                                    [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(equip.name) +
+                                          "\n                                "
+                                      )
+                                    ]
+                                  )
                                 }),
                                 _vm._v(" "),
                                 _vm._l(data.row.parent_equipment, function(

@@ -24,14 +24,37 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <customer-equipment :customer_equipment="details.customer_equipment" :cust_id="details.cust_id"></customer-equipment>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Contacts:</div>
+                        <b-list-group>
+                            <b-list-group-item>Something</b-list-group-item>
+                        </b-list-group>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import App from '../../Layouts/app';
+    import editDetails from '../../Components/Customer/editDetails.vue';
+    import CustomerEquipment from '../../Components/Customer/customerEquipment.vue';
 
     export default {
+        components: { editDetails, CustomerEquipment },
         layout: App,
+
         props: {
             details: {
                 type:     Object,
@@ -75,7 +98,7 @@
             {
                 axios.put(this.route('customers.bookmark'), {cust_id: this.details.cust_id, state: !this.is_fav})
                     .then(this.is_fav = !this.is_fav);
-            }
+            },
         }
     }
 </script>
