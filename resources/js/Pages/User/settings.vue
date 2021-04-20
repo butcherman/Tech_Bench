@@ -115,7 +115,6 @@
             },
             submitNotifications()
             {
-                console.log('submitted');
                 this.submit.notifications = true;
                 this.$inertia.put(route('email-notifications.update', this.user.user_id), this.notifications, {onFinish: () => {this.submit.notifications = false}});
             }

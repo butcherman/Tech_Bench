@@ -59,7 +59,6 @@
         methods: {
             submitForm()
             {
-                console.log(this.form);
                 this.submitted = true;
                 if(this.cat)
                 {

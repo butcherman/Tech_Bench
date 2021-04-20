@@ -174,7 +174,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitForm: function submitForm() {
-      console.log(this.form);
       this.submitted = true;
 
       if (this.cat) {

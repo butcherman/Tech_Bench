@@ -99,7 +99,6 @@
                 this.loading = true;
                 axios.post(this.route('customers.search'), this.searchParam)
                     .then(res => {
-                        console.log(res);
                         this.searchParam.page = res.data.current_page;
                         this.results          = res.data.data;
                         this.meta.from        = res.data.from;

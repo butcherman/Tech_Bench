@@ -68,10 +68,8 @@
         methods: {
             submitForm()
             {
-                console.log('submitted');
                 this.submitted = true;
                 this.$inertia.post(route('admin.user-roles.store'), this.form);
-                console.log(this.form);
             }
         }
     }

@@ -137,17 +137,8 @@ __webpack_require__.r(__webpack_exports__);
       submitted: false
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
     submitForm: function submitForm() {
-      console.log('submitted');
       this.$inertia.put(route('initialize.update', this.token), this.form);
     }
   }

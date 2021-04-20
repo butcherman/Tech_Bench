@@ -2,7 +2,11 @@
     <div>
         <div class="card-title">
             Equipment:
-            <new-equipment-modal :existing_equip="equipIdList" :cust_id="cust_id" @completed="getEquipment"></new-equipment-modal>
+            <new-equipment-modal
+                :existing_equip="equipIdList"
+                :cust_id="cust_id"
+                @completed="getEquipment"
+            ></new-equipment-modal>
         </div>
         <b-overlay :show="loading">
             <div v-if="equipment.length > 0">
@@ -14,10 +18,14 @@
                         <b-card-body>
                             <b-table stacked small :items="getEquipData(equip.customer_equipment_data)"></b-table>
                             <div class="text-center">
-                                <b-button variant="warning" pill size="sm">
-                                    <i class="fas fa-pencil-alt"></i>
-                                    Update
-                                </b-button>
+                                <edit-equipment-modal
+                                    :cust_id="cust_id"
+                                    :data="equip.customer_equipment_data"
+                                    :name="equip.name"
+                                    :equip_id="equip.equip_id"
+                                    :cust_equip_id="equip.cust_equip_id"
+                                    @completed="getEquipment"
+                                ></edit-equipment-modal>
                             </div>
                         </b-card-body>
                     </b-collapse>
@@ -31,10 +39,11 @@
 </template>
 
 <script>
+    import EditEquipmentModal from './Equipment/editEquipmentModal.vue';
     import newEquipmentModal from './Equipment/newEquipmentModal.vue';
 
     export default {
-        components: { newEquipmentModal },
+        components: { newEquipmentModal, EditEquipmentModal },
         props: {
             customer_equipment: {
                 type:     Array,
@@ -51,13 +60,6 @@
                 loading:   false,
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-            //
-            // console.log(this.equipIdList);
-        },
         computed: {
             equipIdList()
             {
@@ -69,9 +71,6 @@
 
                 return list;
             }
-        },
-        watch: {
-            //
         },
         methods: {
             getEquipData(data)
@@ -88,7 +87,6 @@
                 this.loading = true;
                 axios.get(this.route('customers.equipment.show', this.cust_id))
                     .then(res => {
-                        console.log(res);
                         this.equipment = res.data;
                         this.loading = false;
                     }).catch(error => this.eventHub.$emit('axiosError', error));

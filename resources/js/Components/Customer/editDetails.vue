@@ -52,7 +52,6 @@
         methods: {
             submitForm()
             {
-                console.log(this.form);
                 this.submitted = true;
                 this.$inertia.put(route('customers.update', this.details.cust_id), this.form, {onFinish: () => {
                     this.submitted = false;

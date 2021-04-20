@@ -71,22 +71,9 @@
                 submitted: false,
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
             submitForm()
             {
-                console.log('submitted');
                 this.$inertia.put(route('initialize.update', this.token), this.form);
             }
         }

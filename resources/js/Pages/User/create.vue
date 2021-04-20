@@ -88,7 +88,6 @@
                 }
                 else
                 {
-                    console.log('updating');
                     this.form.put(route('admin.user.update', this.user_details.user_id), {onFinish: () => {
                         this.submitted = false
                     }});

@@ -2,36 +2,16 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Customers\CustomerEquipmentRequest;
-use App\Models\CustomerEquipment;
-use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
-use Illuminate\Http\Request;
+use App\Models\CustomerEquipment;
+use App\Http\Controllers\Controller;
+use App\Models\CustomerEquipmentData;
+use App\Http\Requests\Customers\CustomerEquipmentRequest;
+
 use Illuminate\Support\Facades\Log;
 
 class CustomerEquipmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      *  Store the new Customer Equipment
      */
@@ -63,36 +43,29 @@ class CustomerEquipmentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Update the customers equipment information
      */
-    public function edit($id)
+    public function update(CustomerEquipmentRequest $request, $id)
     {
-        //
+        foreach($request->data as $field)
+        {
+            CustomerEquipmentData::where('id', $field['id'])->where('cust_equip_id', $id)->update([
+                'value' => $field['value'],
+            ]);
+        }
+
+        Log::notice('Customer Equipment ID '.$id.' has been updated for Customer ID '.$request->cust_id);
+        return back()->with(['message' => 'Successfully Updated Equipment', 'type' => 'success']);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Remove the selected equipment
      */
     public function destroy($id)
     {
-        //
+        CustomerEquipment::find($id)->delete();
+        Log::notice('Equipment ID '.$id.' for a customer was deleted');
+
+        return response()->noContent();
     }
 }

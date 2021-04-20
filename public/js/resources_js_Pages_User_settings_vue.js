@@ -238,7 +238,6 @@ __webpack_require__.r(__webpack_exports__);
     submitNotifications: function submitNotifications() {
       var _this2 = this;
 
-      console.log('submitted');
       this.submit.notifications = true;
       this.$inertia.put(route('email-notifications.update', this.user.user_id), this.notifications, {
         onFinish: function onFinish() {

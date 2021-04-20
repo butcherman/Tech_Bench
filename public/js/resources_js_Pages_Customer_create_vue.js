@@ -110,7 +110,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       axios.post(this.route('customers.search'), this.searchParam).then(function (res) {
-        console.log(res);
         _this.searchParam.page = res.data.current_page;
         _this.results = res.data.data;
         _this.meta.from = res.data.from;

@@ -184,10 +184,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitForm: function submitForm() {
-      console.log('submitted');
       this.submitted = true;
       this.$inertia.post(route('admin.user-roles.store'), this.form);
-      console.log(this.form);
     }
   }
 });
