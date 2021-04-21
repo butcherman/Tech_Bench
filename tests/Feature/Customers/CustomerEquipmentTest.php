@@ -1,0 +1,200 @@
+<?php
+
+namespace Tests\Feature\Customers;
+
+use App\Models\Customer;
+use App\Models\CustomerEquipment;
+use App\Models\CustomerEquipmentData;
+use App\Models\DataField;
+use App\Models\EquipmentType;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class CustomerEquipmentTest extends TestCase
+{
+    /*
+    *   Store Method
+    */
+    public function test_store_guest()
+    {
+        $equipment = EquipmentType::factory()->create();
+        $cust      = Customer::factory()->create();
+
+        for($i=0; $i<5; $i++)
+        {
+            DataField::create([
+                'equip_id' => $equipment->equip_id,
+                'type_id'  => $i + 1,
+                'order'    => $i,
+            ]);
+        }
+
+        $data = [
+            'cust_id'  => $cust->cust_id,
+            'equip_id' => $equipment->equip_id,
+            'shared'   => false,
+            'data'     => [
+                ['type_id' => 1, 'value' => 'something'],
+                ['type_id' => 2, 'value' => 'something 2'],
+                ['type_id' => 3, 'value' => 'something 3'],
+                ['type_id' => 4, 'value' => 'something 4'],
+            ],
+        ];
+
+        $result = $this->post(route('customers.equipment.store'), $data);
+        $result->assertStatus(302);
+        $result->assertRedirect(route('login.index'));
+    }
+
+    public function test_store()
+    {
+        $equipment   = EquipmentType::factory()->create();
+        $equipFields = [];
+        $cust        = Customer::factory()->create();
+
+        for($i=0; $i<5; $i++)
+        {
+            $equipFields[$i] = DataField::create([
+                'equip_id' => $equipment->equip_id,
+                'type_id'  => $i + 1,
+                'order'    => $i,
+            ]);
+        }
+
+        $data = [
+            'cust_id'  => $cust->cust_id,
+            'equip_id' => $equipment->equip_id,
+            'shared'   => false,
+            'data'     => [
+                ['type_id' => 1, 'value' => 'something'],
+                ['type_id' => 2, 'value' => 'something 2'],
+                ['type_id' => 3, 'value' => 'something 3'],
+                ['type_id' => 4, 'value' => 'something 4'],
+            ],
+        ];
+
+        $result = $this->actingAs(User::factory()->create())->post(route('customers.equipment.store'), $data);
+        $result->assertStatus(302);
+        $this->assertDatabaseHas('customer_equipment', ['cust_id' => $cust->cust_id, 'equip_id' => $equipment->equip_id, 'shared' => false]);
+        $this->assertDatabaseHas('customer_equipment_data', ['field_id' => $equipFields[0]->field_id, 'value' => 'something']);
+        $this->assertDatabaseHas('customer_equipment_data', ['field_id' => $equipFields[1]->field_id, 'value' => 'something 2']);
+        $this->assertDatabaseHas('customer_equipment_data', ['field_id' => $equipFields[2]->field_id, 'value' => 'something 3']);
+        $this->assertDatabaseHas('customer_equipment_data', ['field_id' => $equipFields[3]->field_id, 'value' => 'something 4']);
+    }
+
+    /*
+    *   Show Method
+    */
+    public function test_show_guest()
+    {
+        $customer  = Customer::factory()->create();
+        $equipment = EquipmentType::factory()->create();
+        $custEquip = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equipment->equip_id, 'shared' => false]);
+        $field     = DataField::create(['equip_id' => $equipment->equip_id, 'type_id' => 1, 'order' => 0]);
+        CustomerEquipmentData::create(['cust_equip_id' => $custEquip->cust_equip_id, 'field_id' => $field->field_id, 'value' => 'something']);
+
+        $response = $this->get(route('customers.equipment.show', $customer->cust_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_show()
+    {
+        $customer  = Customer::factory()->create();
+        $equipment = EquipmentType::factory()->create();
+        $custEquip = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equipment->equip_id, 'shared' => false]);
+        $field     = DataField::create(['equip_id' => $equipment->equip_id, 'type_id' => 1, 'order' => 0]);
+        $dataField = CustomerEquipmentData::create(['cust_equip_id' => $custEquip->cust_equip_id, 'field_id' => $field->field_id, 'value' => 'something']);
+
+        $response = $this->actingAs(User::factory()->create())->get(route('customers.equipment.show', $customer->cust_id));
+        $response->assertSuccessful();
+        $response->assertJson([[
+            'cust_equip_id' => $custEquip->cust_equip_id,
+            'equip_id'      => $equipment->equip_id,
+            'shared'        => 0,
+            'name'          => $equipment->name,
+            'customer_equipment_data' => [[
+                'id'         => $dataField->id,
+                'value'      => 'something',
+                'field_name' => $dataField->field_name,
+            ]]]
+        ]);
+    }
+
+    /*
+    *   Update Method
+    */
+    public function test_update_guest()
+    {
+        $customer  = Customer::factory()->create();
+        $equipment = EquipmentType::factory()->create();
+        $custEquip = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equipment->equip_id, 'shared' => false]);
+        $field     = DataField::create(['equip_id' => $equipment->equip_id, 'type_id' => 1, 'order' => 0]);
+        $dataField = CustomerEquipmentData::create(['cust_equip_id' => $custEquip->cust_equip_id, 'field_id' => $field->field_id, 'value' => 'something']);
+
+        $data = [
+            'cust_id'  => $customer->cust_id,
+            'equip_id' => $equipment->equip_id,
+            'shared'   => false,
+            'data'     => [
+                ['id' => $dataField->id, 'value' => 'New Value', 'field_name' => $field->name],
+            ]
+        ];
+
+        $response = $this->put(route('customers.equipment.update', $custEquip->equip_id), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_update()
+    {
+        $customer  = Customer::factory()->create();
+        $equipment = EquipmentType::factory()->create();
+        $custEquip = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equipment->equip_id, 'shared' => false]);
+        $field     = DataField::create(['equip_id' => $equipment->equip_id, 'type_id' => 1, 'order' => 0]);
+        $dataField = CustomerEquipmentData::create(['cust_equip_id' => $custEquip->cust_equip_id, 'field_id' => $field->field_id, 'value' => 'something']);
+
+        $data = [
+            'cust_id'  => $customer->cust_id,
+            'equip_id' => $equipment->equip_id,
+            'shared'   => false,
+            'data'     => [
+                ['id' => $dataField->id, 'value' => 'New Value', 'field_name' => 'IP Address'],
+            ]
+        ];
+
+        $response = $this->actingAs(User::factory()->create())->put(route('customers.equipment.update', $custEquip->cust_equip_id), $data);
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('customer_equipment_data', ['id' => $dataField->id, 'field_id' => $dataField->field_id, 'value' => 'New Value']);
+    }
+
+    /*
+    *   Destroy Method
+    */
+    public function test_destroy_guest()
+    {
+        $customer  = Customer::factory()->create();
+        $equipment = EquipmentType::factory()->create();
+        $custEquip = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equipment->equip_id, 'shared' => false]);
+        $field     = DataField::create(['equip_id' => $equipment->equip_id, 'type_id' => 1, 'order' => 0]);
+        $dataField = CustomerEquipmentData::create(['cust_equip_id' => $custEquip->cust_equip_id, 'field_id' => $field->field_id, 'value' => 'something']);
+
+        $response = $this->delete(route('customers.equipment.destroy', $custEquip->cust_equip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_destroy()
+    {
+        $customer  = Customer::factory()->create();
+        $equipment = EquipmentType::factory()->create();
+        $custEquip = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equipment->equip_id, 'shared' => false]);
+        $field     = DataField::create(['equip_id' => $equipment->equip_id, 'type_id' => 1, 'order' => 0]);
+
+        $response = $this->actingAs(User::factory()->create())->delete(route('customers.equipment.destroy', $custEquip->cust_equip_id));
+        $response->assertSuccessful();
+        $this->assertSoftDeleted('customer_equipment', $custEquip->only(['cust_id', 'equip_id', 'shared']));
+    }
+}
