@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\User;
 
+use Tests\TestCase;
+
 use App\Models\User;
 use App\Models\UserEmailNotifications;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
 class UserEmailNotificationsTest extends TestCase
 {

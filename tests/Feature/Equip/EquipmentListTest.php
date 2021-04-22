@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Equip;
 
-use App\Models\EquipmentCategory;
-use App\Models\EquipmentType;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+
+use App\Models\User;
+use App\Models\EquipmentType;
+use App\Models\EquipmentCategory;
 
 class EquipmentListTest extends TestCase
 {

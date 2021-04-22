@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerBookmarksController;
+use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerSearchController;
@@ -85,6 +86,9 @@ Route::middleware('auth')->group(function()
         //  Customer Equipment Section
         Route::get('equipment-list', EquipmentListController::class)->name('equip-list');
         Route::resource('equipment', CustomerEquipmentController::class);
+
+        //  Customer Contacts Section
+        Route::resource('contacts', CustomerContactsController::class);
     });
 
     //  Customer primary resource Routes

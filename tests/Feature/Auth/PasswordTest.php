@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Auth;
 
-use Carbon\Carbon;
 use Tests\TestCase;
 
 use App\Models\User;

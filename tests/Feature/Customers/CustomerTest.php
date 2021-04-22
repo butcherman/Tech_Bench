@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\Customers;
 
-use App\Models\Customer;
-use App\Models\User;
-use App\Models\UserRolePermissions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+
+use App\Models\User;
+use App\Models\Customer;
+use App\Models\UserRolePermissions;
 
 class CustomerTest extends TestCase
 {

@@ -35,10 +35,7 @@
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">Contacts:</div>
-                        <b-list-group>
-                            <b-list-group-item>Something</b-list-group-item>
-                        </b-list-group>
+                        <customer-contacts :cust_id="details.cust_id"></customer-contacts>
                     </div>
                 </div>
             </div>
@@ -47,14 +44,14 @@
 </template>
 
 <script>
-    import App from '../../Layouts/app';
-    import editDetails from '../../Components/Customer/editDetails.vue';
+    import App               from '../../Layouts/app';
+    import editDetails       from '../../Components/Customer/editDetails.vue';
+    import CustomerContacts  from '../../Components/Customer/customerContacts.vue';
     import CustomerEquipment from '../../Components/Customer/customerEquipment.vue';
 
     export default {
-        components: { editDetails, CustomerEquipment },
+        components: { editDetails, CustomerEquipment, CustomerContacts },
         layout: App,
-
         props: {
             details: {
                 type:     Object,

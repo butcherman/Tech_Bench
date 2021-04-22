@@ -2,15 +2,14 @@
 
 namespace Tests\Feature\Customers;
 
+use Tests\TestCase;
+
+use App\Models\User;
 use App\Models\Customer;
-use App\Models\CustomerEquipment;
-use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use App\Models\EquipmentType;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use App\Models\CustomerEquipment;
+use App\Models\CustomerEquipmentData;
 
 class CustomerEquipmentTest extends TestCase
 {

@@ -9,7 +9,7 @@ use App\Models\EquipmentType;
 use App\Http\Controllers\Controller;
 use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
-
+use App\Models\PhoneNumberType;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -63,11 +63,18 @@ class CustomerController extends Controller
             return redirect(route('customers.show', $customer->slug));
         }
 
-        $customer = Customer::where('slug', $id)->orWhere('cust_id', $id)->with('Parent')->with('CustomerEquipment.CustomerEquipmentData')->firstOrFail();
-        $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $customer->cust_id)->count();
+        $customer = Customer::where('slug', $id)
+                        ->orWhere('cust_id', $id)
+                        ->with('Parent')
+                        ->with('CustomerEquipment.CustomerEquipmentData')
+                        ->firstOrFail();
+        $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)
+                        ->where('cust_id', $customer->cust_id)
+                        ->count();
 
         return Inertia::render('Customer/details', [
-            'details' => $customer,
+            'details'        => $customer,
+            'phone_types'    => PhoneNumberType::all(),
             'user_functions' => [
                 'fav'  => $isFav,                                           //  Customer is bookmarked by the user
                 'edit' => Auth::user()->can('update', $customer),           //  User is allowed to edit the customers basic details
