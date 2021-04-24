@@ -25,17 +25,17 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
+            <div class="col-md-4 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <customer-equipment :customer_equipment="details.customer_equipment" :cust_id="details.cust_id"></customer-equipment>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 grid-margin stretch-card">
+            <div class="col-md-8 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <customer-contacts :cust_id="details.cust_id"></customer-contacts>
+                        <customer-contacts :cust_id="details.cust_id" :customer_contacts="details.customer_contact"></customer-contacts>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,127 @@
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_Pages_Customer_details_vue"],{
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue_phone_number_input__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-phone-number-input */ "./node_modules/vue-phone-number-input/dist/vue-phone-number-input.common.js");
+/* harmony import */ var vue_phone_number_input__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_phone_number_input__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    VuePhoneNumberInput: (vue_phone_number_input__WEBPACK_IMPORTED_MODULE_0___default())
+  },
+  props: {
+    cust_id: {
+      type: Number,
+      required: true
+    },
+    contact_data: {
+      type: Object,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      loading: false,
+      submitted: false,
+      form: {
+        cust_id: this.cust_id,
+        name: this.contact_data.name,
+        email: this.contact_data.email,
+        shared: this.contact_data.shared,
+        phones: this.contact_data.customer_contact_phone
+      }
+    };
+  },
+  computed: {
+    errors: function errors() {
+      return this.$page.props.errors;
+    },
+    phone_types: function phone_types() {
+      return this.$page.props.phone_types;
+    }
+  },
+  methods: {
+    submitForm: function submitForm() {
+      var _this = this;
+
+      console.log(this.form);
+      this.submitted = true;
+      this.loading = true;
+      this.$inertia.put(route('customers.contacts.update', this.contact_data.cont_id), this.form, {
+        onFinish: function onFinish() {
+          _this.$refs['edit-contact-modal'].hide();
+
+          _this.$emit('completed');
+        }
+      });
+    },
+    addRow: function addRow() {
+      this.form.phones.push({
+        phone_number_type: {
+          description: 'Mobile'
+        },
+        phone_number: '',
+        extension: ''
+      });
+    },
+    removeRow: function removeRow(key) {
+      this.form.phones.splice(key, 1);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customer/Contacts/newContactModal.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customer/Contacts/newContactModal.vue?vue&type=script&lang=js& ***!
@@ -210,9 +332,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    openModal: function openModal() {
-      this.$refs['edit-equipment-modal'].show();
-    },
     submitForm: function submitForm() {
       var _this = this;
 
@@ -273,8 +392,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
 //
 //
 //
@@ -397,7 +514,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Contacts_newContactModal_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Contacts/newContactModal.vue */ "./resources/js/Components/Customer/Contacts/newContactModal.vue");
+/* harmony import */ var _Contacts_editContactModal_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Contacts/editContactModal.vue */ "./resources/js/Components/Customer/Contacts/editContactModal.vue");
+/* harmony import */ var _Contacts_newContactModal_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Contacts/newContactModal.vue */ "./resources/js/Components/Customer/Contacts/newContactModal.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -411,19 +556,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    newContactModal: _Contacts_newContactModal_vue__WEBPACK_IMPORTED_MODULE_0__.default
+    newContactModal: _Contacts_newContactModal_vue__WEBPACK_IMPORTED_MODULE_1__.default,
+    EditContactModal: _Contacts_editContactModal_vue__WEBPACK_IMPORTED_MODULE_0__.default
   },
   props: {
     cust_id: {
       type: Number,
       required: true
+    },
+    customer_contacts: {
+      type: Array,
+      required: true
     }
   },
   data: function data() {
     return {
-      loading: false
+      loading: false,
+      contacts: {
+        fields: [{
+          key: 'name',
+          label: 'Name',
+          sortable: true
+        }, {
+          key: 'phone',
+          label: 'Phone Number',
+          sortable: false
+        }, {
+          key: 'email',
+          label: 'Email',
+          sortable: true
+        }, {
+          key: 'actions',
+          label: '',
+          sortable: false
+        }],
+        data: this.customer_contacts
+      }
     };
   },
   created: function created() {//
@@ -434,7 +605,42 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {//
   },
-  methods: {//
+  methods: {
+    getContacts: function getContacts() {
+      var _this = this;
+
+      console.log('get contacts');
+      this.loading = true;
+      axios.get(this.route('customers.contacts.show', this.cust_id)).then(function (res) {
+        console.log(res);
+        _this.contacts.data = res.data;
+        _this.loading = false;
+      })["catch"](function (error) {
+        return _this.eventHub.$emit('axiosError', error);
+      });
+    },
+    deleteContact: function deleteContact(cont_id) {
+      var _this2 = this;
+
+      console.log(cont_id);
+      this.$bvModal.msgBoxConfirm('Please confirm you want to delete this contact.', {
+        title: 'Are You Sure?',
+        size: 'md',
+        okVariant: 'danger',
+        okTitle: 'Yes',
+        cancelTitle: 'No',
+        centered: true
+      }).then(function (res) {
+        if (res) {
+          _this2.loading = true;
+          axios["delete"](_this2.route('customers.contacts.destroy', cont_id)).then(function (res) {
+            _this2.getContacts();
+          })["catch"](function (error) {
+            return _this2.eventHub.$emit('axiosError', error);
+          });
+        }
+      });
+    }
   }
 });
 
@@ -848,6 +1054,45 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/Customer/Contacts/editContactModal.vue":
+/*!************************************************************************!*\
+  !*** ./resources/js/Components/Customer/Contacts/editContactModal.vue ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _editContactModal_vue_vue_type_template_id_ce37e966___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editContactModal.vue?vue&type=template&id=ce37e966& */ "./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=template&id=ce37e966&");
+/* harmony import */ var _editContactModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./editContactModal.vue?vue&type=script&lang=js& */ "./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _editContactModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _editContactModal_vue_vue_type_template_id_ce37e966___WEBPACK_IMPORTED_MODULE_0__.render,
+  _editContactModal_vue_vue_type_template_id_ce37e966___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Components/Customer/Contacts/editContactModal.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/Components/Customer/Contacts/newContactModal.vue":
 /*!***********************************************************************!*\
   !*** ./resources/js/Components/Customer/Contacts/newContactModal.vue ***!
@@ -1160,6 +1405,22 @@ component.options.__file = "resources/js/Pages/Customer/details.vue"
 
 /***/ }),
 
+/***/ "./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_editContactModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./editContactModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_editContactModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/Components/Customer/Contacts/newContactModal.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************!*\
   !*** ./resources/js/Components/Customer/Contacts/newContactModal.vue?vue&type=script&lang=js& ***!
@@ -1285,6 +1546,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_details_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./details.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Pages/Customer/details.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_details_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=template&id=ce37e966&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=template&id=ce37e966& ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editContactModal_vue_vue_type_template_id_ce37e966___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editContactModal_vue_vue_type_template_id_ce37e966___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editContactModal_vue_vue_type_template_id_ce37e966___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./editContactModal.vue?vue&type=template&id=ce37e966& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=template&id=ce37e966&");
+
 
 /***/ }),
 
@@ -1420,6 +1698,302 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_details_vue_vue_type_template_id_0301263a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_details_vue_vue_type_template_id_0301263a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./details.vue?vue&type=template&id=0301263a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Pages/Customer/details.vue?vue&type=template&id=0301263a&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=template&id=ce37e966&":
+/*!**********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customer/Contacts/editContactModal.vue?vue&type=template&id=ce37e966& ***!
+  \**********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "b-button",
+    {
+      directives: [
+        {
+          name: "b-tooltip",
+          rawName: "v-b-tooltip.hover",
+          modifiers: { hover: true }
+        }
+      ],
+      attrs: { pill: "", size: "sm", variant: "light", title: "Edit" },
+      on: {
+        click: function($event) {
+          return _vm.$refs["edit-contact-modal"].show()
+        }
+      }
+    },
+    [
+      _c("i", { staticClass: "far fa-edit" }),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "edit-contact-modal",
+          attrs: { title: "Update Contact", "hide-footer": "" }
+        },
+        [
+          _c(
+            "b-overlay",
+            { attrs: { show: _vm.loading } },
+            [
+              _c("ValidationObserver", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var handleSubmit = ref.handleSubmit
+                      return [
+                        _c(
+                          "b-form",
+                          {
+                            attrs: { novalidate: "" },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return handleSubmit(_vm.submitForm)
+                              }
+                            }
+                          },
+                          [
+                            _c("text-input", {
+                              attrs: {
+                                label: "Contact Name",
+                                name: "name",
+                                rules: "required"
+                              },
+                              model: {
+                                value: _vm.form.name,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "name", $$v)
+                                },
+                                expression: "form.name"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("text-input", {
+                              attrs: {
+                                label: "Email Address",
+                                name: "email",
+                                rules: "email"
+                              },
+                              model: {
+                                value: _vm.form.email,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "email", $$v)
+                                },
+                                expression: "form.email"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-checkbox",
+                              {
+                                staticClass: "text-center",
+                                attrs: { switch: "" },
+                                model: {
+                                  value: _vm.form.shared,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "shared", $$v)
+                                  },
+                                  expression: "form.shared"
+                                }
+                              },
+                              [_vm._v("Share Contact Across All Sites")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-group",
+                              {
+                                staticClass: "mt-2",
+                                attrs: {
+                                  label: "Phone Numbers",
+                                  "label-for": "numbers"
+                                }
+                              },
+                              _vm._l(_vm.form.phones, function(data, key) {
+                                return _c(
+                                  "div",
+                                  { key: key, staticClass: "row mt-2" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-sm-3 col-4 pr-1" },
+                                      [
+                                        _c("b-form-select", {
+                                          attrs: {
+                                            options: _vm.phone_types,
+                                            "value-field": "description",
+                                            "text-field": "description"
+                                          },
+                                          model: {
+                                            value:
+                                              data.phone_number_type
+                                                .description,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                data.phone_number_type,
+                                                "description",
+                                                $$v
+                                              )
+                                            },
+                                            expression:
+                                              "data.phone_number_type.description"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-sm-5 col-4 px-1" },
+                                      [
+                                        _c("vue-phone-number-input", {
+                                          attrs: { "no-country-selector": "" },
+                                          model: {
+                                            value: data.phone_number,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                data,
+                                                "phone_number",
+                                                $$v
+                                              )
+                                            },
+                                            expression: "data.phone_number"
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("b-form-invalid-feedback", [
+                                          _vm._v(
+                                            "Please use a valid phone number format"
+                                          )
+                                        ])
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-2 px-1" },
+                                      [
+                                        _c("b-form-input", {
+                                          attrs: {
+                                            type: "text",
+                                            placeholder: "Ext"
+                                          },
+                                          model: {
+                                            value: data.extension,
+                                            callback: function($$v) {
+                                              _vm.$set(data, "extension", $$v)
+                                            },
+                                            expression: "data.extension"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-1" },
+                                      [
+                                        _c(
+                                          "b-button",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "b-tooltip",
+                                                rawName: "v-b-tooltip.hover",
+                                                modifiers: { hover: true }
+                                              }
+                                            ],
+                                            attrs: {
+                                              variant: "danger",
+                                              title: "Remove Number",
+                                              size: "sm",
+                                              pill: ""
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.removeRow(key)
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass: "fas fa-phone-slash"
+                                            })
+                                          ]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                )
+                              }),
+                              0
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-button",
+                              {
+                                staticClass: "float-right mb-3",
+                                attrs: {
+                                  size: "sm",
+                                  variant: "primary",
+                                  pill: ""
+                                },
+                                on: { click: _vm.addRow }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-plus d-none d-sm-inline",
+                                  attrs: { "aria-hidden": "true" }
+                                }),
+                                _vm._v(" Add Row")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("submit-button", {
+                              attrs: {
+                                button_text: "Update Contact",
+                                submitted: _vm.submitted
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    }
+                  }
+                ])
+              })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
 
 
 /***/ }),
@@ -1732,7 +2306,11 @@ var render = function() {
         "b-button",
         {
           attrs: { pill: "", variant: "warning", size: "sm" },
-          on: { click: _vm.openModal }
+          on: {
+            click: function($event) {
+              return _vm.$refs["edit-equipment-modal"].show()
+            }
+          }
         },
         [
           _c("i", { staticClass: "fas fa-pencil-alt" }),
@@ -1866,166 +2444,150 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
-    [
-      _c(
-        "b-button",
+    "b-button",
+    {
+      directives: [
         {
-          directives: [
-            {
-              name: "b-modal",
-              rawName: "v-b-modal.new-equipment-modal",
-              modifiers: { "new-equipment-modal": true }
-            }
-          ],
-          staticClass: "float-right",
-          attrs: { pill: "", variant: "primary", size: "sm" }
+          name: "b-modal",
+          rawName: "v-b-modal.new-equipment-modal",
+          modifiers: { "new-equipment-modal": true }
+        }
+      ],
+      staticClass: "float-right",
+      attrs: { pill: "", variant: "primary", size: "sm" }
+    },
+    [
+      _c("i", { staticClass: "fas fa-plus" }),
+      _vm._v("\n    New\n    "),
+      _c(
+        "b-modal",
+        {
+          ref: "new-equipment-modal",
+          attrs: {
+            id: "new-equipment-modal",
+            title: "Add New Equipment",
+            "hide-footer": ""
+          },
+          on: { show: _vm.getEquipList, hidden: _vm.resetForm }
         },
         [
-          _c("i", { staticClass: "fas fa-plus" }),
-          _vm._v("\n        New\n        "),
           _c(
-            "b-modal",
-            {
-              ref: "new-equipment-modal",
-              attrs: {
-                id: "new-equipment-modal",
-                title: "Add New Equipment",
-                "hide-footer": ""
-              },
-              on: { show: _vm.getEquipList, hidden: _vm.resetForm }
-            },
+            "b-overlay",
+            { attrs: { show: _vm.loading } },
             [
-              _c(
-                "b-overlay",
-                { attrs: { show: _vm.loading } },
-                [
-                  _c("ValidationObserver", {
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function(ref) {
-                          var handleSubmit = ref.handleSubmit
-                          return [
+              _c("ValidationObserver", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var handleSubmit = ref.handleSubmit
+                      return [
+                        _c(
+                          "b-form",
+                          {
+                            attrs: { novalidate: "" },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return handleSubmit(_vm.submitForm)
+                              }
+                            }
+                          },
+                          [
                             _c(
-                              "b-form",
+                              "dropdown-input",
                               {
-                                attrs: { novalidate: "" },
-                                on: {
-                                  submit: function($event) {
-                                    $event.preventDefault()
-                                    return handleSubmit(_vm.submitForm)
-                                  }
+                                attrs: {
+                                  rules: "required",
+                                  label: "Select Equipment Type"
+                                },
+                                on: { change: _vm.populateForm },
+                                model: {
+                                  value: _vm.form.equip_id,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "equip_id", $$v)
+                                  },
+                                  expression: "form.equip_id"
                                 }
                               },
                               [
-                                _c(
-                                  "dropdown-input",
-                                  {
-                                    attrs: {
-                                      rules: "required",
-                                      label: "Select Equipment Type"
+                                _c("option", { domProps: { value: null } }, [
+                                  _vm._v("Select An Equipment Type")
+                                ]),
+                                _vm._v(" "),
+                                _vm._l(_vm.equipList, function(cat) {
+                                  return _c(
+                                    "optgroup",
+                                    {
+                                      key: cat.cat_id,
+                                      attrs: { label: cat.name }
                                     },
-                                    on: { change: _vm.populateForm },
-                                    model: {
-                                      value: _vm.form.equip_id,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "equip_id", $$v)
-                                      },
-                                      expression: "form.equip_id"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "option",
-                                      { domProps: { value: null } },
-                                      [_vm._v("Select An Equipment Type")]
-                                    ),
-                                    _vm._v(" "),
-                                    _vm._l(_vm.equipList, function(cat) {
+                                    _vm._l(cat.equipment_type, function(equip) {
                                       return _c(
-                                        "optgroup",
+                                        "option",
                                         {
-                                          key: cat.cat_id,
-                                          attrs: { label: cat.name }
+                                          key: equip.equip_id,
+                                          attrs: {
+                                            disabled: _vm.existing_equip.includes(
+                                              equip.equip_id
+                                            )
+                                          },
+                                          domProps: { value: equip.equip_id }
                                         },
-                                        _vm._l(cat.equipment_type, function(
-                                          equip
-                                        ) {
-                                          return _c(
-                                            "option",
-                                            {
-                                              key: equip.equip_id,
-                                              attrs: {
-                                                disabled: _vm.existing_equip.includes(
-                                                  equip.equip_id
-                                                )
-                                              },
-                                              domProps: {
-                                                value: equip.equip_id
-                                              }
-                                            },
-                                            [_vm._v(_vm._s(equip.name))]
-                                          )
-                                        }),
-                                        0
+                                        [_vm._v(_vm._s(equip.name))]
                                       )
-                                    })
-                                  ],
-                                  2
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "b-form-checkbox",
-                                  {
-                                    staticClass: "text-center",
-                                    attrs: { switch: "" },
-                                    model: {
-                                      value: _vm.form.shared,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "shared", $$v)
-                                      },
-                                      expression: "form.shared"
-                                    }
-                                  },
-                                  [_vm._v("Share Equipment Across All Sites")]
-                                ),
-                                _vm._v(" "),
-                                _vm._l(_vm.form.data, function(d, index) {
-                                  return _c("text-input", {
-                                    key: index,
-                                    attrs: { label: d.name },
-                                    model: {
-                                      value: _vm.form.data[index].value,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.form.data[index],
-                                          "value",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "form.data[index].value"
-                                    }
-                                  })
-                                }),
-                                _vm._v(" "),
-                                _c("submit-button", {
-                                  attrs: {
-                                    button_text: "Add Equipment",
-                                    submitted: _vm.submitted
-                                  }
+                                    }),
+                                    0
+                                  )
                                 })
                               ],
                               2
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  })
-                ],
-                1
-              )
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-form-checkbox",
+                              {
+                                staticClass: "text-center",
+                                attrs: { switch: "" },
+                                model: {
+                                  value: _vm.form.shared,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "shared", $$v)
+                                  },
+                                  expression: "form.shared"
+                                }
+                              },
+                              [_vm._v("Share Equipment Across All Sites")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.form.data, function(d, index) {
+                              return _c("text-input", {
+                                key: index,
+                                attrs: { label: d.name },
+                                model: {
+                                  value: _vm.form.data[index].value,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form.data[index], "value", $$v)
+                                  },
+                                  expression: "form.data[index].value"
+                                }
+                              })
+                            }),
+                            _vm._v(" "),
+                            _c("submit-button", {
+                              attrs: {
+                                button_text: "Add Equipment",
+                                submitted: _vm.submitted
+                              }
+                            })
+                          ],
+                          2
+                        )
+                      ]
+                    }
+                  }
+                ])
+              })
             ],
             1
           )
@@ -2067,14 +2629,147 @@ var render = function() {
         { staticClass: "card-title" },
         [
           _vm._v("\n        Contacts:\n        "),
-          _c("new-contact-modal", { attrs: { cust_id: _vm.cust_id } })
+          _c("new-contact-modal", {
+            attrs: { cust_id: _vm.cust_id },
+            on: { completed: _vm.getContacts }
+          })
         ],
         1
       ),
       _vm._v(" "),
-      _c("b-overlay", { attrs: { show: _vm.loading } }, [
-        _vm._v("\n        blah\n    ")
-      ])
+      _c(
+        "b-overlay",
+        { attrs: { show: _vm.loading } },
+        [
+          _c("b-table", {
+            attrs: {
+              striped: "",
+              items: _vm.contacts.data,
+              fields: _vm.contacts.fields,
+              "empty-text": "No Contacts"
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "cell(phone)",
+                fn: function(data) {
+                  return _vm._l(data.item.customer_contact_phone, function(ph) {
+                    return _c("div", { key: ph.id }, [
+                      _c(
+                        "a",
+                        {
+                          directives: [
+                            {
+                              name: "b-tooltip",
+                              rawName: "v-b-tooltip.hover",
+                              modifiers: { hover: true }
+                            }
+                          ],
+                          attrs: {
+                            href: "tel:" + ph.phone_number + "," + ph.extnesion,
+                            title: ph.phone_number_type.description
+                          }
+                        },
+                        [
+                          _c("i", { class: ph.phone_number_type.icon_class }),
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(ph.formatted) +
+                              "\n                    "
+                          )
+                        ]
+                      )
+                    ])
+                  })
+                }
+              },
+              {
+                key: "cell(email)",
+                fn: function(data) {
+                  return [
+                    data.item.email
+                      ? _c(
+                          "a",
+                          { attrs: { href: "mailto:" + data.item.email } },
+                          [
+                            _c("i", {
+                              staticClass: "far fa-envelope text-muted"
+                            }),
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(data.item.email) +
+                                "\n                "
+                            )
+                          ]
+                        )
+                      : _vm._e()
+                  ]
+                }
+              },
+              {
+                key: "cell(actions)",
+                fn: function(data) {
+                  return [
+                    _c("edit-contact-modal", {
+                      attrs: { cust_id: _vm.cust_id, contact_data: data.item },
+                      on: { completed: _vm.getContacts }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "b-button",
+                      {
+                        directives: [
+                          {
+                            name: "b-tooltip",
+                            rawName: "v-b-tooltip.hover",
+                            modifiers: { hover: true }
+                          }
+                        ],
+                        attrs: {
+                          href: _vm.route(
+                            "customers.contacts.download",
+                            data.item.cont_id
+                          ),
+                          pill: "",
+                          size: "sm",
+                          variant: "light",
+                          title: "Download Contact"
+                        }
+                      },
+                      [_c("i", { staticClass: "far fa-address-card" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-button",
+                      {
+                        directives: [
+                          {
+                            name: "b-tooltip",
+                            rawName: "v-b-tooltip.hover",
+                            modifiers: { hover: true }
+                          }
+                        ],
+                        attrs: {
+                          pill: "",
+                          size: "sm",
+                          variant: "light",
+                          title: "Delete Contact"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteContact(data.item.cont_id)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "far fa-trash-alt" })]
+                    )
+                  ]
+                }
+              }
+            ])
+          })
+        ],
+        1
+      )
     ],
     1
   )
@@ -2819,7 +3514,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-6 grid-margin stretch-card" }, [
+      _c("div", { staticClass: "col-md-4 grid-margin stretch-card" }, [
         _c("div", { staticClass: "card" }, [
           _c(
             "div",
@@ -2837,14 +3532,17 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-6 grid-margin stretch-card" }, [
+      _c("div", { staticClass: "col-md-8 grid-margin stretch-card" }, [
         _c("div", { staticClass: "card" }, [
           _c(
             "div",
             { staticClass: "card-body" },
             [
               _c("customer-contacts", {
-                attrs: { cust_id: _vm.details.cust_id }
+                attrs: {
+                  cust_id: _vm.details.cust_id,
+                  customer_contacts: _vm.details.customer_contact
+                }
               })
             ],
             1

@@ -12,26 +12,6 @@ use Illuminate\Http\Request;
 class CustomerContactsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      *  Create a new contact
      */
     public function store(CustomerContactRequest $request)
@@ -57,48 +37,61 @@ class CustomerContactsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Ajax call to get the contacts for a customer
      */
     public function show($id)
     {
-        //
+        return CustomerContact::where('cust_id', $id)->with('CustomerContactPhone.PhoneNumberType')->get();
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Update an existing contact
      */
-    public function edit($id)
+    public function update(CustomerContactRequest $request, $id)
     {
-        //
+        CustomerContact::find($id)->update($request->only(['cust_id', 'name', 'email', 'shared']));
+
+        $updatedNumbers = [];
+        foreach($request->phones as $phone)
+        {
+            //  If the number is an existing number, update it
+            if(isset($phone['id']))
+            {
+                CustomerContactPhone::find($phone['id'])->update([
+                    'phone_type_id' => PhoneNumberType::where('description', $phone['phone_number_type']['description'])->first()->phone_type_id,
+                    'phone_number'  => $this->cleanPhoneNumber($phone['phone_number']),
+                    'extension'     => $phone['extension'],
+                ]);
+                $updatedNumbers[] = $phone['id'];
+            }
+            //  Otherwise enter a new number
+            else
+            {
+                $new = CustomerContactPhone::create([
+                    'cont_id'       => $id,
+                    'phone_type_id' =>PhoneNumberType::where('description', $phone['phone_number_type']['description'])->first()->phone_type_id,
+                    'phone_number'  => $this->cleanPhoneNumber($phone['phone_number']),
+                    'extension'     => $phone['extension'],
+                ]);
+                $updatedNumbers[] = $new->id;
+            }
+        }
+
+        $oldContacts = CustomerContactPhone::where('cont_id', $id)->whereNotIn('id', $updatedNumbers)->get();
+        foreach($oldContacts as $cont)
+        {
+            $cont->delete();
+        }
+
+        return back()->with(['message' => 'Contact Updated', 'type' => 'success']);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Delete a contact
      */
     public function destroy($id)
     {
-        //
+        CustomerContact::findOrFail($id)->delete();
     }
 
     /*

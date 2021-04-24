@@ -1,18 +1,17 @@
 <template>
-    <div>
-        <b-button class="float-right" pill variant="primary" size="sm" v-b-modal.new-equipment-modal>
-            <i class="fas fa-plus"></i>
-            New
-            <b-modal
-                id="new-equipment-modal"
-                ref="new-equipment-modal"
-                title="Add New Equipment"
-                hide-footer
-                @show="getEquipList"
-                @hidden="resetForm"
-            >
+    <b-button class="float-right" pill variant="primary" size="sm" v-b-modal.new-equipment-modal>
+        <i class="fas fa-plus"></i>
+        New
+        <b-modal
+            id="new-equipment-modal"
+            ref="new-equipment-modal"
+            title="Add New Equipment"
+            hide-footer
+            @show="getEquipList"
+            @hidden="resetForm"
+        >
             <b-overlay :show="loading">
-               <ValidationObserver v-slot="{handleSubmit}">
+                <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
                         <dropdown-input v-model="form.equip_id" rules="required" label="Select Equipment Type" @change="populateForm">
                             <option :value="null">Select An Equipment Type</option>
@@ -26,9 +25,8 @@
                     </b-form>
                 </ValidationObserver>
             </b-overlay>
-            </b-modal>
-        </b-button>
-    </div>
+        </b-modal>
+    </b-button>
 </template>
 
 <script>

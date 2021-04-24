@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-button pill variant="warning" size="sm" @click="openModal">
+        <b-button pill variant="warning" size="sm" @click="$refs['edit-equipment-modal'].show();">
             <i class="fas fa-pencil-alt"></i>
             Edit
             <b-modal
@@ -67,10 +67,6 @@
             }
         },
         methods: {
-            openModal()
-            {
-                this.$refs['edit-equipment-modal'].show();
-            },
             submitForm()
             {
                 this.submitted = true;

@@ -12,15 +12,19 @@ use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Customers\CheckCustIdController;
-use App\Http\Controllers\Customers\CustomerBookmarksController;
-use App\Http\Controllers\Customers\CustomerContactsController;
+
 use App\Http\Controllers\Customers\CustomerController;
-use App\Http\Controllers\Customers\CustomerEquipmentController;
+use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerSearchController;
-use App\Http\Controllers\Equip\EquipmentCategoriesController;
+use App\Http\Controllers\Customers\DownloadContactController;
+use App\Http\Controllers\Customers\CustomerContactsController;
+use App\Http\Controllers\Customers\CustomerEquipmentController;
+use App\Http\Controllers\Customers\CustomerBookmarksController;
+
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
+use App\Http\Controllers\Equip\EquipmentCategoriesController;
+
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
 use App\Http\Controllers\User\DisabledUserController;
@@ -89,6 +93,7 @@ Route::middleware('auth')->group(function()
 
         //  Customer Contacts Section
         Route::resource('contacts', CustomerContactsController::class);
+        Route::get(     'download/{id}', DownloadContactController::class)->name('contacts.download');
     });
 
     //  Customer primary resource Routes

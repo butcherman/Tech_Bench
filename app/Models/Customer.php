@@ -25,16 +25,26 @@ class Customer extends Model
     public function ParentEquipment()
     {
         //  TODO - verify only shared equipment make it through
-        return $this->hasMany('App\Models\CustomerEquipment', 'cust_id', 'parent_id')->where('shared', true);
+        return $this->hasMany(CustomerEquipment::class, 'cust_id', 'parent_id')->where('shared', true);
     }
 
     public function CustomerEquipment()
     {
-        return $this->hasMany('App\Models\CustomerEquipment', 'cust_id', 'cust_id');
+        return $this->hasMany(CustomerEquipment::class, 'cust_id', 'cust_id');
     }
 
     public function Parent()
     {
-        return $this->belongsTo('App\Models\Customer', 'parent_id', 'cust_id');
+        return $this->belongsTo(Customer::class, 'parent_id', 'cust_id');
+    }
+
+    public function CustomerContact()
+    {
+        return $this->hasMany(CustomerContact::class, 'cust_id', 'cust_id');
+    }
+
+    public function ParentContact()
+    {
+        return $this->hasMany(CustomerContact::class, 'cust_id', 'parent_id')->where('shared', true);
     }
 }
