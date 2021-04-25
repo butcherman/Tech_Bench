@@ -92,6 +92,7 @@ class CustomerContactsController extends Controller
     public function destroy($id)
     {
         CustomerContact::findOrFail($id)->delete();
+        return response()->noContent();
     }
 
     /*
