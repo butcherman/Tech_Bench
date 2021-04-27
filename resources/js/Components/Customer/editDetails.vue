@@ -6,6 +6,9 @@
         </b-button>
         <b-modal title="Edit Customer Details" ref="edit-customer-modal" id="edit-customer-modal" hide-footer>
             <b-overlay :show="submitted">
+                <template #overlay>
+                    <form-loader></form-loader>
+                </template>
                 <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
                         <text-input v-model="form.name" label="Customer Name" name="name" placeholder="Enter Customer Name" rules="required"></text-input>

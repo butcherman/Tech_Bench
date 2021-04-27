@@ -8,7 +8,10 @@
             ></new-contact-modal>
         </div>
         <b-overlay :show="loading">
-            <b-table striped :items="contacts.data" :fields="contacts.fields" empty-text="No Contacts" responsive>
+            <template #overlay>
+                <atom-loader text="Loading Contacts..."></atom-loader>
+            </template>
+            <b-table striped :items="contacts.data" :fields="contacts.fields" empty-text="No Contacts" responsive show-empty>
                 <template #row-details="data">
                     <b-table-simple class="w-100">
                         <b-thead>

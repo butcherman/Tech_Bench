@@ -9,6 +9,9 @@
             ></new-equipment-modal>
         </div>
         <b-overlay :show="loading">
+            <template #overlay>
+                <atom-loader text="Loading Equipment..."></atom-loader>
+            </template>
             <div v-if="equipment.length > 0">
                 <div v-for="(equip, index) in equipment" :key="index" >
                     <b-card-header >

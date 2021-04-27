@@ -55,6 +55,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -103,6 +106,9 @@ __webpack_require__.r(__webpack_exports__);
         onFinish: function onFinish() {
           _this.$refs['edit-contact-modal'].hide();
 
+          _this.loading = false;
+          _this.submitted = false;
+
           _this.$emit('completed');
         }
       });
@@ -137,6 +143,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue_phone_number_input__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-phone-number-input */ "./node_modules/vue-phone-number-input/dist/vue-phone-number-input.common.js");
 /* harmony import */ var vue_phone_number_input__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_phone_number_input__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
 //
 //
 //
@@ -297,6 +306,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     cust_id: {
@@ -369,6 +381,7 @@ __webpack_require__.r(__webpack_exports__);
         centered: true
       }).then(function (value) {
         if (value) {
+          _this2.loading = true;
           axios["delete"](_this2.route('customers.equipment.destroy', _this2.cust_equip_id)).then(function (res) {
             _this2.$refs['edit-equipment-modal'].hide();
 
@@ -398,6 +411,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -522,6 +538,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Contacts_editContactModal_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Contacts/editContactModal.vue */ "./resources/js/Components/Customer/Contacts/editContactModal.vue");
 /* harmony import */ var _Contacts_newContactModal_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Contacts/newContactModal.vue */ "./resources/js/Components/Customer/Contacts/newContactModal.vue");
+//
+//
+//
 //
 //
 //
@@ -713,6 +732,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -780,6 +802,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -1762,8 +1787,20 @@ var render = function() {
         [
           _c(
             "b-overlay",
-            { attrs: { show: _vm.loading } },
+            {
+              attrs: { show: _vm.loading },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("form-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
             [
+              _vm._v(" "),
               _c("ValidationObserver", {
                 scopedSlots: _vm._u([
                   {
@@ -2083,8 +2120,20 @@ var render = function() {
         [
           _c(
             "b-overlay",
-            { attrs: { show: _vm.loading } },
+            {
+              attrs: { show: _vm.loading },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("form-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
             [
+              _vm._v(" "),
               _c("ValidationObserver", {
                 scopedSlots: _vm._u([
                   {
@@ -2389,8 +2438,20 @@ var render = function() {
             [
               _c(
                 "b-overlay",
-                { attrs: { show: _vm.loading } },
+                {
+                  attrs: { show: _vm.loading },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "overlay",
+                      fn: function() {
+                        return [_c("form-loader")]
+                      },
+                      proxy: true
+                    }
+                  ])
+                },
                 [
+                  _vm._v(" "),
                   _c("ValidationObserver", {
                     scopedSlots: _vm._u([
                       {
@@ -2538,8 +2599,20 @@ var render = function() {
         [
           _c(
             "b-overlay",
-            { attrs: { show: _vm.loading } },
+            {
+              attrs: { show: _vm.loading },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("form-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
             [
+              _vm._v(" "),
               _c("ValidationObserver", {
                 scopedSlots: _vm._u([
                   {
@@ -2704,15 +2777,30 @@ var render = function() {
       _vm._v(" "),
       _c(
         "b-overlay",
-        { attrs: { show: _vm.loading } },
+        {
+          attrs: { show: _vm.loading },
+          scopedSlots: _vm._u([
+            {
+              key: "overlay",
+              fn: function() {
+                return [
+                  _c("atom-loader", { attrs: { text: "Loading Contacts..." } })
+                ]
+              },
+              proxy: true
+            }
+          ])
+        },
         [
+          _vm._v(" "),
           _c("b-table", {
             attrs: {
               striped: "",
               items: _vm.contacts.data,
               fields: _vm.contacts.fields,
               "empty-text": "No Contacts",
-              responsive: ""
+              responsive: "",
+              "show-empty": ""
             },
             scopedSlots: _vm._u([
               {
@@ -2964,95 +3052,113 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("b-overlay", { attrs: { show: _vm.loading } }, [
-        _vm.equipment.length > 0
-          ? _c(
-              "div",
-              _vm._l(_vm.equipment, function(equip, index) {
-                return _c(
-                  "div",
-                  { key: index },
-                  [
-                    _c(
-                      "b-card-header",
-                      [
-                        _c(
-                          "b-button",
-                          {
-                            directives: [
-                              {
-                                name: "b-toggle",
-                                rawName: "v-b-toggle",
-                                value: "equip-" + index,
-                                expression: "'equip-'+index"
-                              }
-                            ],
-                            attrs: { block: "", variant: "info" }
-                          },
-                          [_vm._v(_vm._s(equip.name))]
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-collapse",
-                      {
-                        attrs: {
-                          id: "equip-" + index,
-                          accordion: "equipment-accordion",
-                          visible: index === 0 ? true : false
-                        }
-                      },
-                      [
-                        _c(
-                          "b-card-body",
-                          [
-                            _c("b-table", {
-                              attrs: {
-                                stacked: "",
-                                small: "",
-                                items: _vm.getEquipData(
-                                  equip.customer_equipment_data
-                                )
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "text-center" },
-                              [
-                                _c("edit-equipment-modal", {
-                                  attrs: {
-                                    cust_id: _vm.cust_id,
-                                    data: equip.customer_equipment_data,
-                                    name: equip.name,
-                                    equip_id: equip.equip_id,
-                                    cust_equip_id: equip.cust_equip_id
-                                  },
-                                  on: { completed: _vm.getEquipment }
-                                })
+      _c(
+        "b-overlay",
+        {
+          attrs: { show: _vm.loading },
+          scopedSlots: _vm._u([
+            {
+              key: "overlay",
+              fn: function() {
+                return [
+                  _c("atom-loader", { attrs: { text: "Loading Equipment..." } })
+                ]
+              },
+              proxy: true
+            }
+          ])
+        },
+        [
+          _vm._v(" "),
+          _vm.equipment.length > 0
+            ? _c(
+                "div",
+                _vm._l(_vm.equipment, function(equip, index) {
+                  return _c(
+                    "div",
+                    { key: index },
+                    [
+                      _c(
+                        "b-card-header",
+                        [
+                          _c(
+                            "b-button",
+                            {
+                              directives: [
+                                {
+                                  name: "b-toggle",
+                                  rawName: "v-b-toggle",
+                                  value: "equip-" + index,
+                                  expression: "'equip-'+index"
+                                }
                               ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
-              }),
-              0
-            )
-          : _c("div", [
-              _c("h5", { staticClass: "text-center" }, [
-                _vm._v("No Equipment Has Been Assigned")
+                              attrs: { block: "", variant: "info" }
+                            },
+                            [_vm._v(_vm._s(equip.name))]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-collapse",
+                        {
+                          attrs: {
+                            id: "equip-" + index,
+                            accordion: "equipment-accordion",
+                            visible: index === 0 ? true : false
+                          }
+                        },
+                        [
+                          _c(
+                            "b-card-body",
+                            [
+                              _c("b-table", {
+                                attrs: {
+                                  stacked: "",
+                                  small: "",
+                                  items: _vm.getEquipData(
+                                    equip.customer_equipment_data
+                                  )
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "text-center" },
+                                [
+                                  _c("edit-equipment-modal", {
+                                    attrs: {
+                                      cust_id: _vm.cust_id,
+                                      data: equip.customer_equipment_data,
+                                      name: equip.name,
+                                      equip_id: equip.equip_id,
+                                      cust_equip_id: equip.cust_equip_id
+                                    },
+                                    on: { completed: _vm.getEquipment }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                }),
+                0
+              )
+            : _c("div", [
+                _c("h5", { staticClass: "text-center" }, [
+                  _vm._v("No Equipment Has Been Assigned")
+                ])
               ])
-            ])
-      ])
+        ]
+      )
     ],
     1
   )
@@ -3125,8 +3231,20 @@ var render = function() {
         [
           _c(
             "b-overlay",
-            { attrs: { show: _vm.submitted } },
+            {
+              attrs: { show: _vm.submitted },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("form-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
             [
+              _vm._v(" "),
               _c("ValidationObserver", {
                 scopedSlots: _vm._u([
                   {

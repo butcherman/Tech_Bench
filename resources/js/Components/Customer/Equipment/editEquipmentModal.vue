@@ -9,6 +9,9 @@
                 hide-footer
             >
             <b-overlay :show="loading">
+                <template #overlay>
+                    <form-loader></form-loader>
+                </template>
                <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
                         <h4 class="text-center">{{name}}</h4>
@@ -94,6 +97,7 @@
                     }).then(value => {
                         if(value)
                         {
+                            this.loading = true;
                             axios.delete(this.route('customers.equipment.destroy', this.cust_equip_id))
                                 .then(res => {
                                     this.$refs['edit-equipment-modal'].hide();

@@ -6,13 +6,13 @@ require('./bootstrap');
 /*
 *   Vue and base libraries
 */
-import Vue from 'vue';
-import BootstrapVue from 'bootstrap-vue';
-import VueMeta from 'vue-meta';
-import { App, plugin } from '@inertiajs/inertia-vue';
+import Vue                 from 'vue';
+import BootstrapVue        from 'bootstrap-vue';
+import VueMeta             from 'vue-meta';
+import { App, plugin }     from '@inertiajs/inertia-vue';
 import { InertiaProgress } from '@inertiajs/progress';
-import upperFirst from 'lodash/upperFirst';
-import camelCase from 'lodash/camelCase';
+import upperFirst          from 'lodash/upperFirst';
+import camelCase           from 'lodash/camelCase';
 
 /*
 *   Vee-Validate and all validation rules
@@ -23,7 +23,7 @@ require('./validation.js');
 *   Third party Components
 */
 import VueGoodTablePlugin from 'vue-good-table';
-import draggable from 'vuedraggable';
+import draggable          from 'vuedraggable';
 
 Vue.use(VueGoodTablePlugin);
 Vue.component('draggable', draggable);

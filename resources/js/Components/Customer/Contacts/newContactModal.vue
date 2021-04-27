@@ -9,6 +9,9 @@
             hide-footer
         >
             <b-overlay :show="loading">
+                <template #overlay>
+                    <form-loader></form-loader>
+                </template>
                 <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
                         <text-input label="Contact Name" name="name" v-model="form.name" rules="required"></text-input>

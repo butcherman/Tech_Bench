@@ -11,6 +11,9 @@
             @hidden="resetForm"
         >
             <b-overlay :show="loading">
+                <template #overlay>
+                    <form-loader></form-loader>
+                </template>
                 <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
                         <dropdown-input v-model="form.equip_id" rules="required" label="Select Equipment Type" @change="populateForm">
