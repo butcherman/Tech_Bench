@@ -12,7 +12,9 @@
                 <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
                         <text-input label="Contact Name" name="name" v-model="form.name" rules="required"></text-input>
+                        <text-input label="Title" name="title" v-model="form.title"></text-input>
                         <text-input label="Email Address" name="email" v-model="form.email" rules="email"></text-input>
+                        <b-form-textarea v-model="form.note" placeholder="Notes about this contact..." rows="3"></b-form-textarea>
                         <b-form-checkbox v-model="form.shared" class="text-center" switch>Share Contact Across All Sites</b-form-checkbox>
                         <b-form-group label="Phone Numbers" label-for="numbers" class="mt-2">
                             <div class="row mt-2" v-for="(data, key) in form.phones" :key="key">
@@ -58,7 +60,9 @@
                 form: {
                     cust_id: this.cust_id,
                     name:    '',
+                    title:   '',
                     email:   '',
+                    note:    '',
                     shared:  false,
                     phones: [
                         {

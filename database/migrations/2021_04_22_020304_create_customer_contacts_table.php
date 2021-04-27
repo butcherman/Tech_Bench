@@ -19,6 +19,8 @@ class CreateCustomerContactsTable extends Migration
             $table->boolean('shared');
             $table->text('name');
             $table->text('email')->nullable();
+            $table->text('title')->nullable();
+            $table->longText('note')->nullable();
             $table->timestamps();
             $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');
         });

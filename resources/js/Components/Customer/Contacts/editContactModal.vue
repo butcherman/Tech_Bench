@@ -10,11 +10,12 @@
                 <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
                         <text-input label="Contact Name" name="name" v-model="form.name" rules="required"></text-input>
+                        <text-input label="Title" name="title" v-model="form.title"></text-input>
                         <text-input label="Email Address" name="email" v-model="form.email" rules="email"></text-input>
+                        <b-form-textarea v-model="form.note" placeholder="Notes about this contact..." rows="3"></b-form-textarea>
                         <b-form-checkbox v-model="form.shared" class="text-center" switch>Share Contact Across All Sites</b-form-checkbox>
                         <b-form-group label="Phone Numbers" label-for="numbers" class="mt-2">
                             <div class="row mt-2" v-for="(data, key) in form.phones" :key="key">
-                                <!-- {{data}} -->
                                 <div class="col-sm-3 col-4 pr-1">
                                     <b-form-select v-model="data.phone_number_type.description" :options="phone_types" value-field="description" text-field="description"></b-form-select>
                                 </div>
@@ -61,7 +62,9 @@
                 form: {
                     cust_id: this.cust_id,
                     name:    this.contact_data.name,
+                    title:   this.contact_data.title,
                     email:   this.contact_data.email,
+                    note:    this.contact_data.note,
                     shared:  this.contact_data.shared,
                     phones:  this.contact_data.customer_contact_phone,
                 },
@@ -80,7 +83,6 @@
         methods: {
             submitForm()
             {
-                console.log(this.form);
                 this.submitted = true;
                 this.loading   = true;
                 this.$inertia.put(route('customers.contacts.update', this.contact_data.cont_id), this.form, {onFinish: () => {

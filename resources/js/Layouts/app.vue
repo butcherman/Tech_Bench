@@ -46,6 +46,7 @@
                     </b-alert>
                     <slot />
                 </div>
+                <axios-error></axios-error>
                 <footer class=" footer page-footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; 2016-2021<span class="d-none d-md-inline"> Butcherman - All rights reserved.</span></span>

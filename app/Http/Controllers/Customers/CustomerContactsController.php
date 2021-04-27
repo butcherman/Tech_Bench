@@ -17,7 +17,7 @@ class CustomerContactsController extends Controller
     public function store(CustomerContactRequest $request)
     {
         //  Create the contact
-        $newContact = CustomerContact::create($request->only(['cust_id', 'name', 'email', 'shared']));
+        $newContact = CustomerContact::create($request->only(['cust_id', 'name', 'email', 'shared', 'title', 'note']));
 
         //  Input the contacts phone numbers
         foreach($request->phones as $phone)
@@ -49,7 +49,7 @@ class CustomerContactsController extends Controller
      */
     public function update(CustomerContactRequest $request, $id)
     {
-        CustomerContact::find($id)->update($request->only(['cust_id', 'name', 'email', 'shared']));
+        CustomerContact::find($id)->update($request->only(['cust_id', 'name', 'email', 'shared', 'title', 'note']));
 
         $updatedNumbers = [];
         foreach($request->phones as $phone)

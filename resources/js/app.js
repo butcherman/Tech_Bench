@@ -59,6 +59,7 @@ const requireComponent = require.context('./Components/Base', true, /[A-Z]\w+\.(
 */
 const el = document.getElementById('app');
 InertiaProgress.init();
+Vue.prototype.eventHub = new Vue();
 
 new Vue({
   render: h => h(App, {

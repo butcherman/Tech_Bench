@@ -70,6 +70,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {//
   },
@@ -587,53 +588,60 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "content" }, [
-        _c(
-          "div",
-          { staticClass: "content-wrapper" },
-          [
-            _c(
-              "b-alert",
-              {
-                attrs: {
-                  variant: _vm.$page.props.flash.type,
-                  show: _vm.$page.props.flash.message ? 30 : false
-                }
-              },
-              [
-                _c("p", { staticClass: "text-center" }, [
-                  _vm._v(_vm._s(_vm.$page.props.flash.message))
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _vm._t("default")
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("footer", { staticClass: " footer page-footer" }, [
+      _c(
+        "div",
+        { staticClass: "content" },
+        [
           _c(
             "div",
-            {
-              staticClass:
-                "d-sm-flex justify-content-center justify-content-sm-between"
-            },
+            { staticClass: "content-wrapper" },
             [
-              _vm._m(0),
-              _vm._v(" "),
               _c(
-                "span",
+                "b-alert",
                 {
-                  staticClass:
-                    "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                  attrs: {
+                    variant: _vm.$page.props.flash.type,
+                    show: _vm.$page.props.flash.message ? 30 : false
+                  }
                 },
-                [_vm._v(_vm._s(_vm.app.version))]
-              )
-            ]
-          )
-        ])
-      ])
+                [
+                  _c("p", { staticClass: "text-center" }, [
+                    _vm._v(_vm._s(_vm.$page.props.flash.message))
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _vm._t("default")
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("axios-error"),
+          _vm._v(" "),
+          _c("footer", { staticClass: " footer page-footer" }, [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "d-sm-flex justify-content-center justify-content-sm-between"
+              },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    staticClass:
+                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                  },
+                  [_vm._v(_vm._s(_vm.app.version))]
+                )
+              ]
+            )
+          ])
+        ],
+        1
+      )
     ])
   ])
 }

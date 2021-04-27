@@ -26,7 +26,9 @@ class CustomerContactRequest extends FormRequest
         return [
             'cust_id' => 'required|exists:customers',
             'name'    => 'required|string',
+            'title'   => 'nullable|string',
             'email'   => 'nullable|email',
+            'note'    => 'nullable|string',
             'shared'  => 'required|boolean',
             'phones'  => 'array',
         ];

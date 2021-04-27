@@ -8,20 +8,39 @@
             ></new-contact-modal>
         </div>
         <b-overlay :show="loading">
-            <b-table striped :items="contacts.data" :fields="contacts.fields" empty-text="No Contacts">
-                <template #cell(phone)="data">
-                    <div v-for="ph in data.item.customer_contact_phone" :key="ph.id">
-                        <a :href="'tel:'+ph.phone_number+','+ph.extnesion" :title="ph.phone_number_type.description" v-b-tooltip.hover>
-                            <i :class="ph.phone_number_type.icon_class"></i>
-                            {{ph.formatted}}
-                        </a>
-                    </div>
+            <b-table striped :items="contacts.data" :fields="contacts.fields" empty-text="No Contacts" responsive>
+                <template #row-details="data">
+                    <b-table-simple class="w-100">
+                        <b-thead>
+                            <b-tr>
+                                <b-th>Email</b-th>
+                                <b-th>Phones</b-th>
+                                <b-th>Note:</b-th>
+                            </b-tr>
+                        </b-thead>
+                        <b-tbody>
+                            <b-tr>
+                                <b-td><a :href="'mailto:'+data.item.email" title="Click to Send Email" v-b-tooltip.hover>{{data.item.email}}</a></b-td>
+                                <b-td>
+                                    <div v-for="phone in data.item.customer_contact_phone" :key="phone.id">
+                                        <a :href="'tel:'+phone.phone_number+','+phone.extension" :title="phone.phone_number_type.description" v-b-tooltip.hover>
+                                            <i :class="phone.phone_number_type.icon_class"></i>
+                                            {{phone.formatted}}
+                                            <span v-if="phone.extension">
+                                                Ext. {{phone.extension}}
+                                            </span>
+                                        </a>
+                                    </div>
+                                </b-td>
+                                <b-td>{{data.item.note}}</b-td>
+                            </b-tr>
+                        </b-tbody>
+                    </b-table-simple>
                 </template>
-                <template #cell(email)="data">
-                    <a :href="'mailto:'+data.item.email" v-if="data.item.email">
-                        <i class="far fa-envelope text-muted"></i>
-                        {{data.item.email}}
-                    </a>
+                <template #cell(details)="data">
+                    <b-button @click="data.toggleDetails" variant="info">
+                        {{data.detailsShowing ? 'Hide' : 'Show'}} Details
+                    </b-button>
                 </template>
                 <template #cell(actions)="data">
                     <edit-contact-modal :cust_id="cust_id" :contact_data="data.item" @completed="getContacts"></edit-contact-modal>
@@ -59,18 +78,18 @@
                 contacts: {
                     fields: [
                         {
+                            key:     'details',
+                            label:   '',
+                            sortable: false,
+                        },
+                        {
                             key:     'name',
                             label:   'Name',
                             sortable: true,
                         },
                         {
-                            key:     'phone',
-                            label:   'Phone Number',
-                            sortable: false,
-                        },
-                        {
-                            key:     'email',
-                            label:   'Email',
+                            key:     'title',
+                            label:   'Title',
                             sortable: true,
                         },
                         {
@@ -83,33 +102,18 @@
                 }
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-            //
-        },
-        computed: {
-            //
-        },
-        watch: {
-            //
-        },
         methods: {
             getContacts()
             {
-                console.log('get contacts');
                 this.loading = true;
                 axios.get(this.route('customers.contacts.show', this.cust_id))
                     .then(res => {
-                        console.log(res);
                         this.contacts.data = res.data;
                         this.loading = false;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
             deleteContact(cont_id)
             {
-                console.log(cont_id);
                 this.$bvModal.msgBoxConfirm('Please confirm you want to delete this contact.', {
                     title: 'Are You Sure?',
                     size: 'md',
@@ -122,7 +126,7 @@
                     {
                         this.loading = true;
                         axios.delete(this.route('customers.contacts.destroy', cont_id))
-                            .then(res => {
+                            .then(() => {
                                 this.getContacts();
                             }).catch(error => this.eventHub.$emit('axiosError', error));
                     }

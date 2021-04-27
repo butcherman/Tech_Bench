@@ -54,6 +54,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -76,7 +77,9 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         cust_id: this.cust_id,
         name: this.contact_data.name,
+        title: this.contact_data.title,
         email: this.contact_data.email,
+        note: this.contact_data.note,
         shared: this.contact_data.shared,
         phones: this.contact_data.customer_contact_phone
       }
@@ -94,7 +97,6 @@ __webpack_require__.r(__webpack_exports__);
     submitForm: function submitForm() {
       var _this = this;
 
-      console.log(this.form);
       this.submitted = true;
       this.loading = true;
       this.$inertia.put(route('customers.contacts.update', this.contact_data.cont_id), this.form, {
@@ -177,6 +179,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -195,7 +199,9 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         cust_id: this.cust_id,
         name: '',
+        title: '',
         email: '',
+        note: '',
         shared: false,
         phones: [{
           type: 'Mobile',
@@ -555,6 +561,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -577,16 +602,16 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       contacts: {
         fields: [{
+          key: 'details',
+          label: '',
+          sortable: false
+        }, {
           key: 'name',
           label: 'Name',
           sortable: true
         }, {
-          key: 'phone',
-          label: 'Phone Number',
-          sortable: false
-        }, {
-          key: 'email',
-          label: 'Email',
+          key: 'title',
+          label: 'Title',
           sortable: true
         }, {
           key: 'actions',
@@ -597,22 +622,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
     getContacts: function getContacts() {
       var _this = this;
 
-      console.log('get contacts');
       this.loading = true;
       axios.get(this.route('customers.contacts.show', this.cust_id)).then(function (res) {
-        console.log(res);
         _this.contacts.data = res.data;
         _this.loading = false;
       })["catch"](function (error) {
@@ -622,7 +637,6 @@ __webpack_require__.r(__webpack_exports__);
     deleteContact: function deleteContact(cont_id) {
       var _this2 = this;
 
-      console.log(cont_id);
       this.$bvModal.msgBoxConfirm('Please confirm you want to delete this contact.', {
         title: 'Are You Sure?',
         size: 'md',
@@ -633,7 +647,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         if (res) {
           _this2.loading = true;
-          axios["delete"](_this2.route('customers.contacts.destroy', cont_id)).then(function (res) {
+          axios["delete"](_this2.route('customers.contacts.destroy', cont_id)).then(function () {
             _this2.getContacts();
           })["catch"](function (error) {
             return _this2.eventHub.$emit('axiosError', error);
@@ -845,6 +859,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
 //
 //
 //
@@ -1784,6 +1799,17 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("text-input", {
+                              attrs: { label: "Title", name: "title" },
+                              model: {
+                                value: _vm.form.title,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "title", $$v)
+                                },
+                                expression: "form.title"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("text-input", {
                               attrs: {
                                 label: "Email Address",
                                 name: "email",
@@ -1795,6 +1821,20 @@ var render = function() {
                                   _vm.$set(_vm.form, "email", $$v)
                                 },
                                 expression: "form.email"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("b-form-textarea", {
+                              attrs: {
+                                placeholder: "Notes about this contact...",
+                                rows: "3"
+                              },
+                              model: {
+                                value: _vm.form.note,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "note", $$v)
+                                },
+                                expression: "form.note"
                               }
                             }),
                             _vm._v(" "),
@@ -2080,6 +2120,17 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("text-input", {
+                              attrs: { label: "Title", name: "title" },
+                              model: {
+                                value: _vm.form.title,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "title", $$v)
+                                },
+                                expression: "form.title"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("text-input", {
                               attrs: {
                                 label: "Email Address",
                                 name: "email",
@@ -2091,6 +2142,20 @@ var render = function() {
                                   _vm.$set(_vm.form, "email", $$v)
                                 },
                                 expression: "form.email"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("b-form-textarea", {
+                              attrs: {
+                                placeholder: "Notes about this contact...",
+                                rows: "3"
+                              },
+                              model: {
+                                value: _vm.form.note,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "note", $$v)
+                                },
+                                expression: "form.note"
                               }
                             }),
                             _vm._v(" "),
@@ -2646,62 +2711,148 @@ var render = function() {
               striped: "",
               items: _vm.contacts.data,
               fields: _vm.contacts.fields,
-              "empty-text": "No Contacts"
+              "empty-text": "No Contacts",
+              responsive: ""
             },
             scopedSlots: _vm._u([
               {
-                key: "cell(phone)",
+                key: "row-details",
                 fn: function(data) {
-                  return _vm._l(data.item.customer_contact_phone, function(ph) {
-                    return _c("div", { key: ph.id }, [
-                      _c(
-                        "a",
-                        {
-                          directives: [
-                            {
-                              name: "b-tooltip",
-                              rawName: "v-b-tooltip.hover",
-                              modifiers: { hover: true }
-                            }
+                  return [
+                    _c(
+                      "b-table-simple",
+                      { staticClass: "w-100" },
+                      [
+                        _c(
+                          "b-thead",
+                          [
+                            _c(
+                              "b-tr",
+                              [
+                                _c("b-th", [_vm._v("Email")]),
+                                _vm._v(" "),
+                                _c("b-th", [_vm._v("Phones")]),
+                                _vm._v(" "),
+                                _c("b-th", [_vm._v("Note:")])
+                              ],
+                              1
+                            )
                           ],
-                          attrs: {
-                            href: "tel:" + ph.phone_number + "," + ph.extnesion,
-                            title: ph.phone_number_type.description
-                          }
-                        },
-                        [
-                          _c("i", { class: ph.phone_number_type.icon_class }),
-                          _vm._v(
-                            "\n                        " +
-                              _vm._s(ph.formatted) +
-                              "\n                    "
-                          )
-                        ]
-                      )
-                    ])
-                  })
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-tbody",
+                          [
+                            _c(
+                              "b-tr",
+                              [
+                                _c("b-td", [
+                                  _c(
+                                    "a",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "b-tooltip",
+                                          rawName: "v-b-tooltip.hover",
+                                          modifiers: { hover: true }
+                                        }
+                                      ],
+                                      attrs: {
+                                        href: "mailto:" + data.item.email,
+                                        title: "Click to Send Email"
+                                      }
+                                    },
+                                    [_vm._v(_vm._s(data.item.email))]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "b-td",
+                                  _vm._l(
+                                    data.item.customer_contact_phone,
+                                    function(phone) {
+                                      return _c("div", { key: phone.id }, [
+                                        _c(
+                                          "a",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "b-tooltip",
+                                                rawName: "v-b-tooltip.hover",
+                                                modifiers: { hover: true }
+                                              }
+                                            ],
+                                            attrs: {
+                                              href:
+                                                "tel:" +
+                                                phone.phone_number +
+                                                "," +
+                                                phone.extension,
+                                              title:
+                                                phone.phone_number_type
+                                                  .description
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              class:
+                                                phone.phone_number_type
+                                                  .icon_class
+                                            }),
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(phone.formatted) +
+                                                "\n                                        "
+                                            ),
+                                            phone.extension
+                                              ? _c("span", [
+                                                  _vm._v(
+                                                    "\n                                            Ext. " +
+                                                      _vm._s(phone.extension) +
+                                                      "\n                                        "
+                                                  )
+                                                ])
+                                              : _vm._e()
+                                          ]
+                                        )
+                                      ])
+                                    }
+                                  ),
+                                  0
+                                ),
+                                _vm._v(" "),
+                                _c("b-td", [_vm._v(_vm._s(data.item.note))])
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ]
                 }
               },
               {
-                key: "cell(email)",
+                key: "cell(details)",
                 fn: function(data) {
                   return [
-                    data.item.email
-                      ? _c(
-                          "a",
-                          { attrs: { href: "mailto:" + data.item.email } },
-                          [
-                            _c("i", {
-                              staticClass: "far fa-envelope text-muted"
-                            }),
-                            _vm._v(
-                              "\n                    " +
-                                _vm._s(data.item.email) +
-                                "\n                "
-                            )
-                          ]
+                    _c(
+                      "b-button",
+                      {
+                        attrs: { variant: "info" },
+                        on: { click: data.toggleDetails }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(data.detailsShowing ? "Hide" : "Show") +
+                            " Details\n                "
                         )
-                      : _vm._e()
+                      ]
+                    )
                   ]
                 }
               },
@@ -3325,53 +3476,60 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "content" }, [
-        _c(
-          "div",
-          { staticClass: "content-wrapper" },
-          [
-            _c(
-              "b-alert",
-              {
-                attrs: {
-                  variant: _vm.$page.props.flash.type,
-                  show: _vm.$page.props.flash.message ? 30 : false
-                }
-              },
-              [
-                _c("p", { staticClass: "text-center" }, [
-                  _vm._v(_vm._s(_vm.$page.props.flash.message))
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _vm._t("default")
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("footer", { staticClass: " footer page-footer" }, [
+      _c(
+        "div",
+        { staticClass: "content" },
+        [
           _c(
             "div",
-            {
-              staticClass:
-                "d-sm-flex justify-content-center justify-content-sm-between"
-            },
+            { staticClass: "content-wrapper" },
             [
-              _vm._m(0),
-              _vm._v(" "),
               _c(
-                "span",
+                "b-alert",
                 {
-                  staticClass:
-                    "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                  attrs: {
+                    variant: _vm.$page.props.flash.type,
+                    show: _vm.$page.props.flash.message ? 30 : false
+                  }
                 },
-                [_vm._v(_vm._s(_vm.app.version))]
-              )
-            ]
-          )
-        ])
-      ])
+                [
+                  _c("p", { staticClass: "text-center" }, [
+                    _vm._v(_vm._s(_vm.$page.props.flash.message))
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _vm._t("default")
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("axios-error"),
+          _vm._v(" "),
+          _c("footer", { staticClass: " footer page-footer" }, [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "d-sm-flex justify-content-center justify-content-sm-between"
+              },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    staticClass:
+                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                  },
+                  [_vm._v(_vm._s(_vm.app.version))]
+                )
+              ]
+            )
+          ])
+        ],
+        1
+      )
     ])
   ])
 }
@@ -3514,7 +3672,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4 grid-margin stretch-card" }, [
+      _c("div", { staticClass: "col-md-5 grid-margin stretch-card" }, [
         _c("div", { staticClass: "card" }, [
           _c(
             "div",
@@ -3532,7 +3690,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-8 grid-margin stretch-card" }, [
+      _c("div", { staticClass: "col-md-7 grid-margin stretch-card" }, [
         _c("div", { staticClass: "card" }, [
           _c(
             "div",
