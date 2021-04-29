@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
+use App\Models\CustomerNote;
+use App\Models\CustomerNotes;
 use App\Models\DataField;
 use App\Models\EquipmentType;
 use Illuminate\Database\Seeder;
@@ -36,6 +38,13 @@ class CustomerSeeder extends Seeder
                     'field_id'      => $field->field_id,
                 ]);
             }
+        }
+
+        //  Assign notes to 20 of those customers
+        $custList = Customer::inRandomOrder()->limit(20)->get();
+        foreach($custList as $cust)
+        {
+            CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
         }
     }
 }

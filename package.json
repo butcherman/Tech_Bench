@@ -30,6 +30,7 @@
         "epic-spinners": "^1.1.0",
         "vee-validate": "^3.4.5",
         "vue": "^2.6.12",
+        "vue-clamp": "^0.3.2",
         "vue-good-table": "^2.21.10",
         "vue-meta": "^2.4.0",
         "vue-phone-number-input": "^1.1.10",

@@ -3,9 +3,6 @@ build:
         before:
             - cp tests/.env.scrutinizer .env
             - mysql -e 'create database `scrutinizer`;'
-        after:
-            - npm run production
-
 tools:
     external_code_coverage:
         timeout: 900

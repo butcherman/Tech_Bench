@@ -40,6 +40,15 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <customer-notes :cust_id="details.cust_id" :customer_notes="details.customer_note"></customer-notes>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -48,9 +57,10 @@
     import editDetails       from '../../Components/Customer/editDetails.vue';
     import CustomerContacts  from '../../Components/Customer/customerContacts.vue';
     import CustomerEquipment from '../../Components/Customer/customerEquipment.vue';
+    import CustomerNotes     from '../../Components/Customer/customerNotes.vue';
 
     export default {
-        components: { editDetails, CustomerEquipment, CustomerContacts },
+        components: { editDetails, CustomerEquipment, CustomerContacts, CustomerNotes },
         layout: App,
         props: {
             details: {

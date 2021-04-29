@@ -20,7 +20,7 @@ use App\Http\Controllers\Customers\DownloadContactController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerBookmarksController;
-
+use App\Http\Controllers\Customers\CustomerNoteController;
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
@@ -94,6 +94,9 @@ Route::middleware('auth')->group(function()
         //  Customer Contacts Section
         Route::resource('contacts', CustomerContactsController::class);
         Route::get(     'download/{id}', DownloadContactController::class)->name('contacts.download');
+
+        //  Customer Notes Section
+        Route::resource('notes', CustomerNoteController::class);
     });
 
     //  Customer primary resource Routes

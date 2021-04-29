@@ -67,9 +67,10 @@ class CustomerController extends Controller
                         ->orWhere('cust_id', $id)
                         ->with('Parent')
                         ->with('CustomerEquipment.CustomerEquipmentData')
-                        ->with('ParentEquipment.CustomerEquipmentData')
+                        // ->with('ParentEquipment.CustomerEquipmentData')
                         ->with('CustomerContact.CustomerContactPhone.PhoneNumberType')
-                        ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
+                        // ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
+                        ->with('CustomerNote')
                         ->firstOrFail();
         $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)
                         ->where('cust_id', $customer->cust_id)

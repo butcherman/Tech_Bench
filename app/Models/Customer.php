@@ -47,4 +47,9 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerContact::class, 'cust_id', 'parent_id')->where('shared', true);
     }
+
+    public function CustomerNote()
+    {
+        return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id');
+    }
 }
