@@ -507,7 +507,14 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       this.$inertia.post(route('customers.equipment.store'), this.form, {
         onFinish: function onFinish() {
-          _this3.$refs['new-equipment-modal'].hide();
+          _this3.submitted = false;
+          _this3.loading = false;
+          _this3.form = {
+            cust_id: _this3.cust_id,
+            equip_id: null,
+            shared: false,
+            data: []
+          }, _this3.$refs['new-equipment-modal'].hide();
 
           _this3.$emit('completed');
         }

@@ -90,6 +90,14 @@
                 this.submitted = true;
                 this.loading   = true;
                 this.$inertia.post(route('customers.equipment.store'), this.form, {onFinish: () => {
+                    this.submitted = false;
+                    this.loading   = false;
+                    this.form      = {
+                        cust_id:  this.cust_id,
+                        equip_id: null,
+                        shared:   false,
+                        data:     [],
+                    },
                     this.$refs['new-equipment-modal'].hide();
                     this.$emit('completed');
                 }});
