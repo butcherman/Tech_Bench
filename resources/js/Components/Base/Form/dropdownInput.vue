@@ -12,7 +12,6 @@
                 :value-field="valueField"
                 :text-field="textField"
                 :options="options"
-                required
                 :placeholder="placeholder"
                 @change="emitChange"
             >

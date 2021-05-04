@@ -43,6 +43,12 @@ class HandleInertiaRequests extends Middleware
             'user'   => fn() => $request->user() ? $request->user() : null,
             //  Dynamically built navigation menu
             'navBar' => fn() => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
+            //  File information
+            'fileData' => [
+                'maxSize'   => config('filesystems.max_filesize'),
+                'chunkSize' => config('filesystems.chunk_size'),
+                'token'     => csrf_token(),
+            ]
         ]);
     }
 }

@@ -86,9 +86,13 @@
             {
                 this.$emit('input', val);
             },
+            value(newVal)
+            {
+                this.curVal = newVal;
+            }
         },
         computed: {
-
+            //
         },
         methods: {
             emitBlur()

@@ -27,7 +27,6 @@
 <script>
     export default {
         props: {
-            //
             cust_id: {
                 type:     Number,
                 required: true,
@@ -41,7 +40,13 @@
             return {
                 loading:   false,
                 submitted: false,
-                form:      this.note,
+                form: {
+                    cust_id: this.note.cust_id,
+                    subject: this.note.subject,
+                    details: this.note.details,
+                    shared:  this.note.shared,
+                    urgent:  this.note.urgent,
+                }
             }
         },
         methods: {

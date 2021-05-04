@@ -9,6 +9,7 @@ use App\Models\EquipmentType;
 use App\Http\Controllers\Controller;
 use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
+use App\Models\CustomerFileType;
 use App\Models\PhoneNumberType;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -71,6 +72,9 @@ class CustomerController extends Controller
                         ->with('CustomerContact.CustomerContactPhone.PhoneNumberType')
                         // ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
                         ->with('CustomerNote')
+                        // ->with('ParentNote')
+                        ->with('CustomerFile.FileUpload')
+                        // ->with('ParentFile')
                         ->firstOrFail();
         $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)
                         ->where('cust_id', $customer->cust_id)
@@ -79,6 +83,7 @@ class CustomerController extends Controller
         return Inertia::render('Customer/details', [
             'details'        => $customer,
             'phone_types'    => PhoneNumberType::all(),
+            'file_types'     => CustomerFileType::all(),
             'user_functions' => [
                 'fav'  => $isFav,                                           //  Customer is bookmarked by the user
                 'edit' => Auth::user()->can('update', $customer),           //  User is allowed to edit the customers basic details

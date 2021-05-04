@@ -13,7 +13,9 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default'      => env('FILESYSTEM_DRIVER', 'local'),
+    'max_filesize' => env('MAX_UPLOAD', 1600),      //  1600 Megabytes = 2GB
+    'chunk_size'   => 500000,                       //  500000 Bytes = 4 MB
 
     /*
     |--------------------------------------------------------------------------
@@ -35,6 +37,11 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'customers' => [
+            'driver' => 'local',
+            'root'   => storage_path('app/customers'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -42,17 +49,18 @@ return [
             'visibility' => 'public',
         ],
 
-        's3' => [
-            'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
-        ],
+
 
     ],
+
+    /*
+    *   Path locations for uploaded files to the local disk
+    */
+    // 'paths' => [
+    //     'default'    => env('DFLT_FOLDER', DIRECTORY_SEPARATOR.'default'),
+    //     'customers'  => env('CUST_FOLDER', DIRECTORY_SEPARATOR.'customers'),
+    //     'tips'       => env('TIP_FOLDER',  DIRECTORY_SEPARATOR.'tips'),
+    // ],
 
     /*
     |--------------------------------------------------------------------------

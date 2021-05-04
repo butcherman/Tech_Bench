@@ -49,6 +49,15 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12 grid-magrin">
+                <div class="card">
+                    <div class="card-body">
+                        <customer-files :cust_id="details.cust_id" :customer_files="details.customer_file"></customer-files>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -58,9 +67,10 @@
     import CustomerContacts  from '../../Components/Customer/customerContacts.vue';
     import CustomerEquipment from '../../Components/Customer/customerEquipment.vue';
     import CustomerNotes     from '../../Components/Customer/customerNotes.vue';
+    import CustomerFiles from '../../Components/Customer/customerFiles.vue';
 
     export default {
-        components: { editDetails, CustomerEquipment, CustomerContacts, CustomerNotes },
+        components: { editDetails, CustomerEquipment, CustomerContacts, CustomerNotes, CustomerFiles },
         layout: App,
         props: {
             details: {

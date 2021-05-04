@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
+use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\CustomerNotes;
 use App\Models\DataField;
@@ -45,6 +46,13 @@ class CustomerSeeder extends Seeder
         foreach($custList as $cust)
         {
             CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
+        }
+
+        //  Assign files to 10 of the customers
+        $custList = Customer::inRandomOrder()->limit(10)->get();
+        foreach($custList as $cust)
+        {
+            CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
         }
     }
 }
