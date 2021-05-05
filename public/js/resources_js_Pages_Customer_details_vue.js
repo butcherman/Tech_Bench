@@ -1171,7 +1171,7 @@ __webpack_require__.r(__webpack_exports__);
       files: this.customer_files,
       fields: [{
         key: 'selected',
-        lable: 'Selected',
+        label: '',
         sortable: false
       }, {
         key: 'name',
@@ -1192,21 +1192,47 @@ __webpack_require__.r(__webpack_exports__);
       }]
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
-    //
     getFiles: function getFiles() {
-      console.log('get files');
+      var _this = this;
+
+      this.loading = true;
+      axios.get(this.route('customers.files.show', this.cust_id)).then(function (res) {
+        _this.files = res.data;
+        _this.loading = false;
+      })["catch"](function (error) {
+        return _this.eventHub.$emit('axiosError', error);
+      });
     },
     onRowSelect: function onRowSelect(items) {
       this.selected = items;
+    },
+    deleteSelected: function deleteSelected() {
+      var _this2 = this;
+
+      this.$bvModal.msgBoxConfirm('Please Verify You Want Delete These Files', {
+        title: 'Are you sure?',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      }).then(function (value) {
+        if (value) {
+          _this2.loading = true;
+
+          for (var i = 0; i < _this2.selected.length; i++) {
+            axios["delete"](_this2.route('customers.files.destroy', _this2.selected[i].cust_file_id))["catch"](function (error) {
+              return _this2.eventHub.$emit('axiosError', error);
+            });
+          }
+
+          _this2.getFiles();
+        }
+      });
     }
   }
 });
@@ -5311,16 +5337,23 @@ var render = function() {
                     )
                   }),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "text-center mt-2" },
-                    [
-                      _c("b-button", { attrs: { variant: "danger" } }, [
-                        _vm._v("Delete Selected")
-                      ])
-                    ],
-                    1
-                  )
+                  _vm.selected.length > 0
+                    ? _c(
+                        "div",
+                        { staticClass: "text-center mt-2" },
+                        [
+                          _c(
+                            "b-button",
+                            {
+                              attrs: { variant: "danger" },
+                              on: { click: _vm.deleteSelected }
+                            },
+                            [_vm._v("Delete Selected")]
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ],
                 1
               )

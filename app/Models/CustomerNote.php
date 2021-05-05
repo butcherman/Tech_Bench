@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CustomerNote extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $primaryKey = 'note_id';
     protected $guarded    = ['updated_at', 'created_at'];
@@ -20,11 +22,17 @@ class CustomerNote extends Model
         'shared'     => 'boolean',
     ];
 
+    /*
+    *   Name of the user who created the note
+    */
     public function getAuthorAttribute()
     {
         return User::find($this->created_by)->full_name;
     }
 
+    /*
+    *   Name of the user who most recently updated the note
+    */
     public function getUpdatedAuthorAttribute()
     {
         $user = User::find($this->updated_by);

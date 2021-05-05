@@ -9,58 +9,63 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <ValidationObserver v-slot="{handleSubmit}">
-                            <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-                                <b-form-row>
-                                    <b-col md="6">
-                                        <text-input v-model="form.cust_id" name="cust_id" placeholder="Enter Customer ID Number" rules="numeric|unique-customer" mode="lazy" :errors="errors">
-                                            <template #label>
-                                                Customer ID:
-                                                <i class="far fa-question-circle pointer text-warning" title="Click for More Information" v-b-tooltip:hover @click="$bvToast.show('cust-id-toast')"></i>
-                                            </template>
-                                        </text-input>
-                                    </b-col>
-                                    <b-col md="6">
-                                        <ValidationProvider v-slot="v" mode="lazy">
-                                            <b-form-group label-for="parent_name">
-                                                <template slot="label">
-                                                    Parent Site:
-                                                    <i class="far fa-question-circle pointer text-warning" title="Click for More Information" v-b-tooltip:hover @click="$bvToast.show('parent-id-toast')"></i>
+                        <b-overlay :show="submitted">
+                            <template #overlay>
+                                <form-loader></form-loader>
+                            </template>
+                            <ValidationObserver v-slot="{handleSubmit}">
+                                <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
+                                    <b-form-row>
+                                        <b-col md="6">
+                                            <text-input v-model="form.cust_id" name="cust_id" placeholder="Enter Customer ID Number" rules="numeric|unique-customer" mode="lazy" :errors="errors">
+                                                <template #label>
+                                                    Customer ID:
+                                                    <i class="far fa-question-circle pointer text-warning" title="Click for More Information" v-b-tooltip:hover @click="$bvToast.show('cust-id-toast')"></i>
                                                 </template>
-                                                <b-input-group>
-                                                    <b-form-input
-                                                        id="parent_name"
-                                                        name="parent_name"
-                                                        type="text"
-                                                        placeholder="(Optional)"
-                                                        v-model="form.parent_name"
-                                                        :state="parentState"
-                                                        @blur="checkParent"
-                                                    ></b-form-input>
-                                                    <b-input-group-append>
-                                                        <b-button varient="primary" @click="checkParent"><span class="fas fa-search"></span></b-button>
-                                                    </b-input-group-append>
-                                                </b-input-group>
-                                                <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
-                                            </b-form-group>
-                                        </ValidationProvider>
-                                    </b-col>
-                                </b-form-row>
-                                <text-input v-model="form.name" label="Customer Name" name="name" placeholder="Enter Customer Name" rules="required" :errors="errors"></text-input>
-                                <text-input v-model="form.dba_name" label="DBA Name" name="dba_name" placeholder="Customer secondary name/AKA name" :errors="errors"></text-input>
-                                <text-input v-model="form.address" label="Customer Address" name="address" rules="required" :errors="errors"></text-input>
-                                <text-input v-model="form.city" label="City" name="city" rules="required" :errors="errors"></text-input>
-                                <b-form-row>
-                                    <b-col md="6">
-                                        <all-states v-model="form.state"></all-states>
-                                    </b-col>
-                                    <b-col md="6">
-                                        <text-input v-model="form.zip" label="Zip Code" name="zip" rules="required|numeric" :errors="errors"></text-input>
-                                    </b-col>
-                                </b-form-row>
-                                <submit-button button_text="Create Customer" :submitted="submitted"></submit-button>
-                            </b-form>
-                        </ValidationObserver>
+                                            </text-input>
+                                        </b-col>
+                                        <b-col md="6">
+                                            <ValidationProvider v-slot="v" mode="lazy">
+                                                <b-form-group label-for="parent_name">
+                                                    <template slot="label">
+                                                        Parent Site:
+                                                        <i class="far fa-question-circle pointer text-warning" title="Click for More Information" v-b-tooltip:hover @click="$bvToast.show('parent-id-toast')"></i>
+                                                    </template>
+                                                    <b-input-group>
+                                                        <b-form-input
+                                                            id="parent_name"
+                                                            name="parent_name"
+                                                            type="text"
+                                                            placeholder="(Optional)"
+                                                            v-model="form.parent_name"
+                                                            :state="parentState"
+                                                            @blur="checkParent"
+                                                        ></b-form-input>
+                                                        <b-input-group-append>
+                                                            <b-button varient="primary" @click="checkParent"><span class="fas fa-search"></span></b-button>
+                                                        </b-input-group-append>
+                                                    </b-input-group>
+                                                    <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
+                                                </b-form-group>
+                                            </ValidationProvider>
+                                        </b-col>
+                                    </b-form-row>
+                                    <text-input v-model="form.name" label="Customer Name" name="name" placeholder="Enter Customer Name" rules="required" :errors="errors"></text-input>
+                                    <text-input v-model="form.dba_name" label="DBA Name" name="dba_name" placeholder="Customer secondary name/AKA name" :errors="errors"></text-input>
+                                    <text-input v-model="form.address" label="Customer Address" name="address" rules="required" :errors="errors"></text-input>
+                                    <text-input v-model="form.city" label="City" name="city" rules="required" :errors="errors"></text-input>
+                                    <b-form-row>
+                                        <b-col md="6">
+                                            <all-states v-model="form.state"></all-states>
+                                        </b-col>
+                                        <b-col md="6">
+                                            <text-input v-model="form.zip" label="Zip Code" name="zip" rules="required|numeric" :errors="errors"></text-input>
+                                        </b-col>
+                                    </b-form-row>
+                                    <submit-button button_text="Create Customer" :submitted="submitted"></submit-button>
+                                </b-form>
+                            </ValidationObserver>
+                        </b-overlay>
                     </div>
                 </div>
             </div>
@@ -111,6 +116,7 @@
         methods: {
             submitForm()
             {
+                this.submitted = true;
                 this.$inertia.post(route('customers.store'), this.form);
             },
             checkParent(e)

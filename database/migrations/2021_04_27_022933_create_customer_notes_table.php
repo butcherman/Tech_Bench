@@ -22,6 +22,7 @@ class CreateCustomerNotesTable extends Migration
             $table->boolean('shared');
             $table->text('subject');
             $table->longText('details');
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('created_by')->references('user_id')->on('users')->onUpdate('cascade');

@@ -21,6 +21,7 @@ class CreateCustomerFilesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('shared')->default(0);
             $table->text('name');
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('file_id')->references('file_id')->on('file_uploads')->onUpdate('cascade');
             $table->foreign('file_type_id')->references('file_type_id')->on('customer_file_types')->onUpdate('cascade');

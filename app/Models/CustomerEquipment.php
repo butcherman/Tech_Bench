@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CustomerEquipment extends Model
 {
@@ -16,11 +16,17 @@ class CustomerEquipment extends Model
     protected $hidden     = ['created_at', 'updated_at', 'deleted_at', 'cust_id'];
     protected $appends    = ['name'];
 
+    /*
+    *   Get the name of the equipment without attaching the entire equipment object
+    */
     public function getNameAttribute()
     {
         return EquipmentType::find($this->equip_id)->name;
     }
 
+    /*
+    *   Site specific information for the selected piece of equipment
+    */
     public function CustomerEquipmentData()
     {
         return $this->hasMany('App\Models\CustomerEquipmentData', 'cust_equip_id', 'cust_equip_id');

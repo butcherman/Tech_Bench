@@ -328,6 +328,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -361,6 +366,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitForm: function submitForm() {
+      this.submitted = true;
       this.$inertia.post(route('customers.store'), this.form);
     },
     checkParent: function checkParent(e) {
@@ -1123,372 +1129,407 @@ var render = function() {
               "div",
               { staticClass: "card-body" },
               [
-                _c("ValidationObserver", {
-                  scopedSlots: _vm._u([
-                    {
-                      key: "default",
-                      fn: function(ref) {
-                        var handleSubmit = ref.handleSubmit
-                        return [
-                          _c(
-                            "b-form",
-                            {
-                              attrs: { novalidate: "" },
-                              on: {
-                                submit: function($event) {
-                                  $event.preventDefault()
-                                  return handleSubmit(_vm.submitForm)
-                                }
-                              }
-                            },
-                            [
+                _c(
+                  "b-overlay",
+                  {
+                    attrs: { show: _vm.submitted },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "overlay",
+                        fn: function() {
+                          return [_c("form-loader")]
+                        },
+                        proxy: true
+                      }
+                    ])
+                  },
+                  [
+                    _vm._v(" "),
+                    _c("ValidationObserver", {
+                      scopedSlots: _vm._u([
+                        {
+                          key: "default",
+                          fn: function(ref) {
+                            var handleSubmit = ref.handleSubmit
+                            return [
                               _c(
-                                "b-form-row",
+                                "b-form",
+                                {
+                                  attrs: { novalidate: "" },
+                                  on: {
+                                    submit: function($event) {
+                                      $event.preventDefault()
+                                      return handleSubmit(_vm.submitForm)
+                                    }
+                                  }
+                                },
                                 [
                                   _c(
-                                    "b-col",
-                                    { attrs: { md: "6" } },
+                                    "b-form-row",
                                     [
-                                      _c("text-input", {
-                                        attrs: {
-                                          name: "cust_id",
-                                          placeholder:
-                                            "Enter Customer ID Number",
-                                          rules: "numeric|unique-customer",
-                                          mode: "lazy",
-                                          errors: _vm.errors
-                                        },
-                                        scopedSlots: _vm._u(
-                                          [
-                                            {
-                                              key: "label",
-                                              fn: function() {
-                                                return [
-                                                  _vm._v(
-                                                    "\n                                            Customer ID:\n                                            "
-                                                  ),
-                                                  _c("i", {
-                                                    directives: [
-                                                      {
-                                                        name: "b-tooltip",
-                                                        rawName:
-                                                          "v-b-tooltip:hover",
-                                                        arg: "hover"
-                                                      }
-                                                    ],
-                                                    staticClass:
-                                                      "far fa-question-circle pointer text-warning",
-                                                    attrs: {
-                                                      title:
-                                                        "Click for More Information"
-                                                    },
-                                                    on: {
-                                                      click: function($event) {
-                                                        return _vm.$bvToast.show(
-                                                          "cust-id-toast"
-                                                        )
-                                                      }
-                                                    }
-                                                  })
-                                                ]
-                                              },
-                                              proxy: true
-                                            }
-                                          ],
-                                          null,
-                                          true
-                                        ),
-                                        model: {
-                                          value: _vm.form.cust_id,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "cust_id", $$v)
-                                          },
-                                          expression: "form.cust_id"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-col",
-                                    { attrs: { md: "6" } },
-                                    [
-                                      _c("ValidationProvider", {
-                                        attrs: { mode: "lazy" },
-                                        scopedSlots: _vm._u(
-                                          [
-                                            {
-                                              key: "default",
-                                              fn: function(v) {
-                                                return [
-                                                  _c(
-                                                    "b-form-group",
-                                                    {
-                                                      attrs: {
-                                                        "label-for":
-                                                          "parent_name"
-                                                      }
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "template",
-                                                        { slot: "label" },
-                                                        [
-                                                          _vm._v(
-                                                            "\n                                                Parent Site:\n                                                "
-                                                          ),
-                                                          _c("i", {
-                                                            directives: [
-                                                              {
-                                                                name:
-                                                                  "b-tooltip",
-                                                                rawName:
-                                                                  "v-b-tooltip:hover",
-                                                                arg: "hover"
-                                                              }
-                                                            ],
-                                                            staticClass:
-                                                              "far fa-question-circle pointer text-warning",
-                                                            attrs: {
-                                                              title:
-                                                                "Click for More Information"
-                                                            },
-                                                            on: {
-                                                              click: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.$bvToast.show(
-                                                                  "parent-id-toast"
-                                                                )
-                                                              }
-                                                            }
-                                                          })
-                                                        ]
+                                      _c(
+                                        "b-col",
+                                        { attrs: { md: "6" } },
+                                        [
+                                          _c("text-input", {
+                                            attrs: {
+                                              name: "cust_id",
+                                              placeholder:
+                                                "Enter Customer ID Number",
+                                              rules: "numeric|unique-customer",
+                                              mode: "lazy",
+                                              errors: _vm.errors
+                                            },
+                                            scopedSlots: _vm._u(
+                                              [
+                                                {
+                                                  key: "label",
+                                                  fn: function() {
+                                                    return [
+                                                      _vm._v(
+                                                        "\n                                                Customer ID:\n                                                "
                                                       ),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "b-input-group",
-                                                        [
-                                                          _c("b-form-input", {
-                                                            attrs: {
-                                                              id: "parent_name",
-                                                              name:
-                                                                "parent_name",
-                                                              type: "text",
-                                                              placeholder:
-                                                                "(Optional)",
-                                                              state:
-                                                                _vm.parentState
-                                                            },
-                                                            on: {
-                                                              blur:
-                                                                _vm.checkParent
-                                                            },
-                                                            model: {
-                                                              value:
-                                                                _vm.form
-                                                                  .parent_name,
-                                                              callback: function(
-                                                                $$v
-                                                              ) {
-                                                                _vm.$set(
-                                                                  _vm.form,
-                                                                  "parent_name",
-                                                                  $$v
-                                                                )
-                                                              },
-                                                              expression:
-                                                                "form.parent_name"
-                                                            }
-                                                          }),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "b-input-group-append",
-                                                            [
-                                                              _c(
-                                                                "b-button",
-                                                                {
-                                                                  attrs: {
-                                                                    varient:
-                                                                      "primary"
-                                                                  },
-                                                                  on: {
-                                                                    click:
-                                                                      _vm.checkParent
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _c("span", {
-                                                                    staticClass:
-                                                                      "fas fa-search"
-                                                                  })
-                                                                ]
-                                                              )
-                                                            ],
-                                                            1
-                                                          )
+                                                      _c("i", {
+                                                        directives: [
+                                                          {
+                                                            name: "b-tooltip",
+                                                            rawName:
+                                                              "v-b-tooltip:hover",
+                                                            arg: "hover"
+                                                          }
                                                         ],
-                                                        1
-                                                      ),
-                                                      _vm._v(" "),
+                                                        staticClass:
+                                                          "far fa-question-circle pointer text-warning",
+                                                        attrs: {
+                                                          title:
+                                                            "Click for More Information"
+                                                        },
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.$bvToast.show(
+                                                              "cust-id-toast"
+                                                            )
+                                                          }
+                                                        }
+                                                      })
+                                                    ]
+                                                  },
+                                                  proxy: true
+                                                }
+                                              ],
+                                              null,
+                                              true
+                                            ),
+                                            model: {
+                                              value: _vm.form.cust_id,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "cust_id",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.cust_id"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "b-col",
+                                        { attrs: { md: "6" } },
+                                        [
+                                          _c("ValidationProvider", {
+                                            attrs: { mode: "lazy" },
+                                            scopedSlots: _vm._u(
+                                              [
+                                                {
+                                                  key: "default",
+                                                  fn: function(v) {
+                                                    return [
                                                       _c(
-                                                        "b-form-invalid-feedback",
+                                                        "b-form-group",
                                                         {
                                                           attrs: {
-                                                            state: false
+                                                            "label-for":
+                                                              "parent_name"
                                                           }
                                                         },
                                                         [
-                                                          _vm._v(
-                                                            _vm._s(v.errors[0])
+                                                          _c(
+                                                            "template",
+                                                            { slot: "label" },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                    Parent Site:\n                                                    "
+                                                              ),
+                                                              _c("i", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "b-tooltip",
+                                                                    rawName:
+                                                                      "v-b-tooltip:hover",
+                                                                    arg: "hover"
+                                                                  }
+                                                                ],
+                                                                staticClass:
+                                                                  "far fa-question-circle pointer text-warning",
+                                                                attrs: {
+                                                                  title:
+                                                                    "Click for More Information"
+                                                                },
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.$bvToast.show(
+                                                                      "parent-id-toast"
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "b-input-group",
+                                                            [
+                                                              _c(
+                                                                "b-form-input",
+                                                                {
+                                                                  attrs: {
+                                                                    id:
+                                                                      "parent_name",
+                                                                    name:
+                                                                      "parent_name",
+                                                                    type:
+                                                                      "text",
+                                                                    placeholder:
+                                                                      "(Optional)",
+                                                                    state:
+                                                                      _vm.parentState
+                                                                  },
+                                                                  on: {
+                                                                    blur:
+                                                                      _vm.checkParent
+                                                                  },
+                                                                  model: {
+                                                                    value:
+                                                                      _vm.form
+                                                                        .parent_name,
+                                                                    callback: function(
+                                                                      $$v
+                                                                    ) {
+                                                                      _vm.$set(
+                                                                        _vm.form,
+                                                                        "parent_name",
+                                                                        $$v
+                                                                      )
+                                                                    },
+                                                                    expression:
+                                                                      "form.parent_name"
+                                                                  }
+                                                                }
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "b-input-group-append",
+                                                                [
+                                                                  _c(
+                                                                    "b-button",
+                                                                    {
+                                                                      attrs: {
+                                                                        varient:
+                                                                          "primary"
+                                                                      },
+                                                                      on: {
+                                                                        click:
+                                                                          _vm.checkParent
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c(
+                                                                        "span",
+                                                                        {
+                                                                          staticClass:
+                                                                            "fas fa-search"
+                                                                        }
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            ],
+                                                            1
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "b-form-invalid-feedback",
+                                                            {
+                                                              attrs: {
+                                                                state: false
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  v.errors[0]
+                                                                )
+                                                              )
+                                                            ]
                                                           )
-                                                        ]
+                                                        ],
+                                                        2
                                                       )
-                                                    ],
-                                                    2
-                                                  )
-                                                ]
-                                              }
-                                            }
-                                          ],
-                                          null,
-                                          true
-                                        )
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("text-input", {
-                                attrs: {
-                                  label: "Customer Name",
-                                  name: "name",
-                                  placeholder: "Enter Customer Name",
-                                  rules: "required",
-                                  errors: _vm.errors
-                                },
-                                model: {
-                                  value: _vm.form.name,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "name", $$v)
-                                  },
-                                  expression: "form.name"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("text-input", {
-                                attrs: {
-                                  label: "DBA Name",
-                                  name: "dba_name",
-                                  placeholder:
-                                    "Customer secondary name/AKA name",
-                                  errors: _vm.errors
-                                },
-                                model: {
-                                  value: _vm.form.dba_name,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "dba_name", $$v)
-                                  },
-                                  expression: "form.dba_name"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("text-input", {
-                                attrs: {
-                                  label: "Customer Address",
-                                  name: "address",
-                                  rules: "required",
-                                  errors: _vm.errors
-                                },
-                                model: {
-                                  value: _vm.form.address,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "address", $$v)
-                                  },
-                                  expression: "form.address"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("text-input", {
-                                attrs: {
-                                  label: "City",
-                                  name: "city",
-                                  rules: "required",
-                                  errors: _vm.errors
-                                },
-                                model: {
-                                  value: _vm.form.city,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "city", $$v)
-                                  },
-                                  expression: "form.city"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-row",
-                                [
-                                  _c(
-                                    "b-col",
-                                    { attrs: { md: "6" } },
-                                    [
-                                      _c("all-states", {
-                                        model: {
-                                          value: _vm.form.state,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "state", $$v)
-                                          },
-                                          expression: "form.state"
-                                        }
-                                      })
+                                                    ]
+                                                  }
+                                                }
+                                              ],
+                                              null,
+                                              true
+                                            )
+                                          })
+                                        ],
+                                        1
+                                      )
                                     ],
                                     1
                                   ),
                                   _vm._v(" "),
+                                  _c("text-input", {
+                                    attrs: {
+                                      label: "Customer Name",
+                                      name: "name",
+                                      placeholder: "Enter Customer Name",
+                                      rules: "required",
+                                      errors: _vm.errors
+                                    },
+                                    model: {
+                                      value: _vm.form.name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "name", $$v)
+                                      },
+                                      expression: "form.name"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("text-input", {
+                                    attrs: {
+                                      label: "DBA Name",
+                                      name: "dba_name",
+                                      placeholder:
+                                        "Customer secondary name/AKA name",
+                                      errors: _vm.errors
+                                    },
+                                    model: {
+                                      value: _vm.form.dba_name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "dba_name", $$v)
+                                      },
+                                      expression: "form.dba_name"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("text-input", {
+                                    attrs: {
+                                      label: "Customer Address",
+                                      name: "address",
+                                      rules: "required",
+                                      errors: _vm.errors
+                                    },
+                                    model: {
+                                      value: _vm.form.address,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "address", $$v)
+                                      },
+                                      expression: "form.address"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("text-input", {
+                                    attrs: {
+                                      label: "City",
+                                      name: "city",
+                                      rules: "required",
+                                      errors: _vm.errors
+                                    },
+                                    model: {
+                                      value: _vm.form.city,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "city", $$v)
+                                      },
+                                      expression: "form.city"
+                                    }
+                                  }),
+                                  _vm._v(" "),
                                   _c(
-                                    "b-col",
-                                    { attrs: { md: "6" } },
+                                    "b-form-row",
                                     [
-                                      _c("text-input", {
-                                        attrs: {
-                                          label: "Zip Code",
-                                          name: "zip",
-                                          rules: "required|numeric",
-                                          errors: _vm.errors
-                                        },
-                                        model: {
-                                          value: _vm.form.zip,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "zip", $$v)
-                                          },
-                                          expression: "form.zip"
-                                        }
-                                      })
+                                      _c(
+                                        "b-col",
+                                        { attrs: { md: "6" } },
+                                        [
+                                          _c("all-states", {
+                                            model: {
+                                              value: _vm.form.state,
+                                              callback: function($$v) {
+                                                _vm.$set(_vm.form, "state", $$v)
+                                              },
+                                              expression: "form.state"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "b-col",
+                                        { attrs: { md: "6" } },
+                                        [
+                                          _c("text-input", {
+                                            attrs: {
+                                              label: "Zip Code",
+                                              name: "zip",
+                                              rules: "required|numeric",
+                                              errors: _vm.errors
+                                            },
+                                            model: {
+                                              value: _vm.form.zip,
+                                              callback: function($$v) {
+                                                _vm.$set(_vm.form, "zip", $$v)
+                                              },
+                                              expression: "form.zip"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
                                     ],
                                     1
-                                  )
+                                  ),
+                                  _vm._v(" "),
+                                  _c("submit-button", {
+                                    attrs: {
+                                      button_text: "Create Customer",
+                                      submitted: _vm.submitted
+                                    }
+                                  })
                                 ],
                                 1
-                              ),
-                              _vm._v(" "),
-                              _c("submit-button", {
-                                attrs: {
-                                  button_text: "Create Customer",
-                                  submitted: _vm.submitted
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ]
-                      }
-                    }
-                  ])
-                })
+                              )
+                            ]
+                          }
+                        }
+                      ])
+                    })
+                  ],
+                  1
+                )
               ],
               1
             )

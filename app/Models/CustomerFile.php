@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CustomerFile extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $primaryKey = 'cust_file_id';
     protected $guarded    = ['cust_file_id', 'created_at', 'updated_at'];
@@ -20,16 +22,25 @@ class CustomerFile extends Model
     ];
 
 
+    /*
+    *   Each file is attached to a specific file entry
+    */
     public function FileUpload()
     {
         return $this->hasOne(FileUploads::class, 'file_id', 'file_id');
     }
 
+    /*
+    *   Full name of the user that uploaded the file
+    */
     public function getUploadedByAttribute()
     {
         return User::find($this->user_id)->full_name;
     }
 
+    /*
+    *   Type of file that was uploaded (i.e. Backup, Site Map, etc)
+    */
     public function getFileTypeAttribute()
     {
         return CustomerFileType::find($this->file_type_id)->description;

@@ -28,6 +28,9 @@
                             @on-sort-change="reSort"
                             @on-per-page-change="perPageUpdate"
                         >
+                            <template #loadingContent>
+                                <atom-loader></atom-loader>
+                            </template>
                             <template #table-actions>
                                 <inertia-link v-if="can_create" as="b-button" variant="info" :href="route('customers.create')" pill size="sm"><i class="fas fa-plus" aria-hidden="true"></i> Add New Customer</inertia-link>
                             </template>
@@ -128,6 +131,7 @@
             //  Submit Search Query
             search()
             {
+                this.table.loading = true;
                 axios.post(this.route('customers.search'), this.searchParam)
                     .then(res => {
                         this.table.rows            = res.data.data;

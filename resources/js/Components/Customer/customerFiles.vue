@@ -27,8 +27,8 @@
                         <a href="#" title="Click to Download" v-b-tooltip.hover>{{row.item.name}}</a>
                     </template>
                 </b-table>
-                <div class="text-center mt-2">
-                    <b-button variant="danger">Delete Selected</b-button>
+                <div v-if="selected.length > 0" class="text-center mt-2">
+                    <b-button variant="danger" @click="deleteSelected">Delete Selected</b-button>
                 </div>
             </div>
             <div v-else>
@@ -55,13 +55,13 @@
         },
         data() {
             return {
-                loading: false,
+                loading:  false,
                 selected: [],
-                files:   this.customer_files,
-                fields: [
+                files:    this.customer_files,
+                fields:   [
                     {
                         key:     'selected',
-                        lable:   'Selected',
+                        label:   '',
                         sortable: false,
                     },
                     {
@@ -87,27 +87,45 @@
                 ]
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-            //
-        },
-        computed: {
-            //
-        },
-        watch: {
-            //
-        },
         methods: {
-            //
             getFiles()
             {
-                console.log('get files');
+                this.loading = true;
+                axios.get(this.route('customers.files.show', this.cust_id))
+                    .then(res => {
+                        this.files   = res.data;
+                        this.loading = false;
+                    }).catch(error => this.eventHub.$emit('axiosError', error));
             },
             onRowSelect(items)
             {
                 this.selected = items;
+            },
+            deleteSelected()
+            {
+                this.$bvModal.msgBoxConfirm('Please Verify You Want Delete These Files',
+                    {
+                        title:          'Are you sure?',
+                        size:           'sm',
+                        buttonSize:     'sm',
+                        okVariant:      'danger',
+                        okTitle:        'YES',
+                        cancelTitle:    'NO',
+                        footerClass:    'p-2',
+                        hideHeaderClose: false,
+                        centered:        true
+                    }).then(value => {
+                        if(value)
+                        {
+                            this.loading = true;
+                            for(var i = 0; i < this.selected.length; i++)
+                            {
+                                axios.delete(this.route('customers.files.destroy', this.selected[i].cust_file_id))
+                                    .catch(error => this.eventHub.$emit('axiosError', error));
+                            }
+                            this.getFiles();
+                        }
+                    });
             }
         },
     }

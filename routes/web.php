@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function()
     Route::prefix('customers')->name('customers.')->group(function()
     {
         //  Customer Details Section
-        Route::post('customers/check-id', CheckCustIdController::class)->name('check-id');
+        Route::post('check-id', CheckCustIdController::class)->name('check-id');
         Route::post('search',             CustomerSearchController::class)->name('search');
         Route::put('toggle-bookmark',     CustomerBookmarksController::class)->name('bookmark');
 

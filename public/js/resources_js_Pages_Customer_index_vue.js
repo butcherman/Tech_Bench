@@ -176,6 +176,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
@@ -243,6 +246,7 @@ __webpack_require__.r(__webpack_exports__);
     search: function search() {
       var _this = this;
 
+      this.table.loading = true;
       axios.post(this.route('customers.search'), this.searchParam).then(function (res) {
         _this.table.rows = res.data.data;
         _this.pagination.meta.total = res.data.total;
@@ -752,6 +756,13 @@ var render = function() {
                   "on-per-page-change": _vm.perPageUpdate
                 },
                 scopedSlots: _vm._u([
+                  {
+                    key: "loadingContent",
+                    fn: function() {
+                      return [_c("atom-loader")]
+                    },
+                    proxy: true
+                  },
                   {
                     key: "table-actions",
                     fn: function() {
