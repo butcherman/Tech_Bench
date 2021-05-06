@@ -21,12 +21,13 @@ class CustomerFilesTest extends TestCase
     {
         Storage::fake('customers');
 
+        $file = UploadedFile::fake()->image('image.jpg');
         $data = [
             'cust_id' => Customer::factory()->create()->cust_id,
             'name'    => 'This is a test file',
             'type'    => CustomerFileType::inRandomOrder()->first()->description,
             'shared'  => false,
-            'file'    => UploadedFile::fake()->image('image.jpg'),
+            'file'    => $file,
         ];
 
         $response = $this->post(route('customers.files.store'), $data);
@@ -38,12 +39,13 @@ class CustomerFilesTest extends TestCase
     {
         Storage::fake('customers');
 
+        $file = UploadedFile::fake()->image('image.jpg');
         $data = [
             'cust_id' => Customer::factory()->create()->cust_id,
             'name'    => 'This is a test file',
             'type'    => CustomerFileType::inRandomOrder()->first()->description,
             'shared'  => false,
-            'file'    => UploadedFile::fake()->image('image.jpg'),
+            'file'    => $file,
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('customers.files.store'), $data);
