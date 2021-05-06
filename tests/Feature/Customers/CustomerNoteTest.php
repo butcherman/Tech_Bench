@@ -119,6 +119,6 @@ class CustomerNoteTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->delete(route('customers.notes.destroy', $note->note_id));
         $response->assertSuccessful();
-        $this->assertDatabaseMissing('customer_notes', $note->only(['note_id', 'subject', 'details']));
+        $this->assertSoftDeleted('customer_notes', $note->only(['note_id', 'subject', 'details']));
     }
 }

@@ -88,5 +88,7 @@ class CustomerFilesController extends Controller
     public function destroy($id)
     {
         CustomerFile::find($id)->delete();
+
+        return response()->noContent();
     }
 }
