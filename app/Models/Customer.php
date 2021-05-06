@@ -14,6 +14,7 @@ class Customer extends Model
     protected $primaryKey = 'cust_id';
     protected $guarded    = ['updated_at', 'created_at', 'deleted_at'];
     protected $hidden     = ['updated_at', 'created_at', 'deleted_at'];
+    protected $appends    = ['child_count'];
 
     /*
     *   If a customer is part of a multi-site customer, each site can be listed separately yet still be linked to the main site
@@ -21,6 +22,14 @@ class Customer extends Model
     public function Parent()
     {
         return $this->belongsTo(Customer::class, 'parent_id', 'cust_id');
+    }
+
+    /*
+    *   If a customer is the parent and has children below it, they will be counted
+    */
+    public function getChildCountAttribute()
+    {
+        return Customer::where('parent_id', $this->cust_id)->count();
     }
 
     /*
@@ -47,7 +56,7 @@ class Customer extends Model
     public function ParentEquipment()
     {
         //  TODO - verify only shared equipment make it through
-        return $this->hasMany(CustomerEquipment::class, 'cust_id', 'parent_id')->where('shared', true);
+        return $this->hasMany(CustomerEquipment::class, 'cust_id', 'parent_id')->whereShared(true); // ->where('shared', true);
     }
 
         /*

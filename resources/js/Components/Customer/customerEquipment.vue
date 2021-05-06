@@ -15,7 +15,10 @@
             <div v-if="equipment.length > 0">
                 <div v-for="(equip, index) in equipment" :key="index" >
                     <b-card-header >
-                        <b-button block variant="info" v-b-toggle="'equip-'+index">{{equip.name}}</b-button>
+                        <b-button block variant="info" v-b-toggle="'equip-'+index">
+                            <i v-if="equip.shared" class="fas fa-share" title="Equipment Shared Across Sites" v-b-tooltip.hover></i>
+                            {{equip.name}}
+                        </b-button>
                     </b-card-header>
                     <b-collapse :id="'equip-'+index" accordion="equipment-accordion" :visible="index === 0 ? true : false">
                         <b-card-body>
@@ -27,6 +30,7 @@
                                     :name="equip.name"
                                     :equip_id="equip.equip_id"
                                     :cust_equip_id="equip.cust_equip_id"
+                                    :shared="equip.shared"
                                     @completed="getEquipment"
                                 ></edit-equipment-modal>
                             </div>
@@ -92,6 +96,8 @@
                     .then(res => {
                         this.equipment = res.data;
                         this.loading = false;
+
+                        console.log(res.data);
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             }
         },

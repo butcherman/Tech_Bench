@@ -330,6 +330,10 @@ __webpack_require__.r(__webpack_exports__);
     cust_equip_id: {
       type: Number,
       required: true
+    },
+    shared: {
+      type: Boolean,
+      required: true
     }
   },
   data: function data() {
@@ -339,7 +343,7 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         cust_id: this.cust_id,
         equip_id: this.equip_id,
-        shared: false,
+        shared: this.shared,
         data: this.data
       }
     };
@@ -509,12 +513,10 @@ __webpack_require__.r(__webpack_exports__);
         onFinish: function onFinish() {
           _this3.submitted = false;
           _this3.loading = false;
-          _this3.form = {
-            cust_id: _this3.cust_id,
-            equip_id: null,
-            shared: false,
-            data: []
-          }, _this3.$refs['new-equipment-modal'].hide();
+
+          _this3.resetForm();
+
+          _this3.$refs['new-equipment-modal'].hide();
 
           _this3.$emit('completed');
         }
@@ -522,6 +524,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     resetForm: function resetForm() {
       this.form = {
+        cust_id: this.cust_id,
         equip_id: null,
         shared: false,
         data: []
@@ -1041,6 +1044,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1088,6 +1095,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(this.route('customers.equipment.show', this.cust_id)).then(function (res) {
         _this.equipment = res.data;
         _this.loading = false;
+        console.log(res.data);
       })["catch"](function (error) {
         return _this.eventHub.$emit('axiosError', error);
       });
@@ -5153,7 +5161,28 @@ var render = function() {
                               ],
                               attrs: { block: "", variant: "info" }
                             },
-                            [_vm._v(_vm._s(equip.name))]
+                            [
+                              equip.shared
+                                ? _c("i", {
+                                    directives: [
+                                      {
+                                        name: "b-tooltip",
+                                        rawName: "v-b-tooltip.hover",
+                                        modifiers: { hover: true }
+                                      }
+                                    ],
+                                    staticClass: "fas fa-share",
+                                    attrs: {
+                                      title: "Equipment Shared Across Sites"
+                                    }
+                                  })
+                                : _vm._e(),
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(equip.name) +
+                                  "\n                    "
+                              )
+                            ]
                           )
                         ],
                         1
@@ -5192,7 +5221,8 @@ var render = function() {
                                       data: equip.customer_equipment_data,
                                       name: equip.name,
                                       equip_id: equip.equip_id,
-                                      cust_equip_id: equip.cust_equip_id
+                                      cust_equip_id: equip.cust_equip_id,
+                                      shared: equip.shared
                                     },
                                     on: { completed: _vm.getEquipment }
                                   })
@@ -6226,7 +6256,9 @@ var render = function() {
             [
               _c("customer-equipment", {
                 attrs: {
-                  customer_equipment: _vm.details.customer_equipment,
+                  customer_equipment: _vm.details.parent_equipment.concat(
+                    _vm.details.customer_equipment
+                  ),
                   cust_id: _vm.details.cust_id
                 }
               })

@@ -27,6 +27,7 @@ class CustomerEquipmentRequest extends FormRequest
             'cust_id'  => 'required|exists:customers',
             'equip_id' => 'required|exists:equipment_types',
             'data'     => 'required|array',
+            'shared'   => 'required|boolean',
         ];
     }
 }

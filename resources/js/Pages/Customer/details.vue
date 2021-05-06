@@ -28,7 +28,7 @@
             <div class="col-md-5 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <customer-equipment :customer_equipment="details.customer_equipment" :cust_id="details.cust_id"></customer-equipment>
+                        <customer-equipment :customer_equipment="details.parent_equipment.concat(details.customer_equipment)" :cust_id="details.cust_id"></customer-equipment>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
     import CustomerContacts  from '../../Components/Customer/customerContacts.vue';
     import CustomerEquipment from '../../Components/Customer/customerEquipment.vue';
     import CustomerNotes     from '../../Components/Customer/customerNotes.vue';
-    import CustomerFiles from '../../Components/Customer/customerFiles.vue';
+    import CustomerFiles     from '../../Components/Customer/customerFiles.vue';
 
     export default {
         components: { editDetails, CustomerEquipment, CustomerContacts, CustomerNotes, CustomerFiles },

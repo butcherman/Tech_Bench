@@ -15,6 +15,9 @@ class CustomerEquipment extends Model
     protected $guarded    = ['cust_equip_id', 'updated_at', 'created_at'];
     protected $hidden     = ['created_at', 'updated_at', 'deleted_at', 'cust_id'];
     protected $appends    = ['name'];
+    protected $casts      = [
+        'shared' => 'boolean',
+    ];
 
     /*
     *   Get the name of the equipment without attaching the entire equipment object

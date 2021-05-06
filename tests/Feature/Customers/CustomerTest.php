@@ -77,7 +77,7 @@ class CustomerTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('customers.store'), $newCust->only(['name', 'dba_name', 'address', 'city', 'state', 'zip']));
         $response->assertStatus(403);
-        $this->assertDatabaseMissing('customers', $newCust->toArray());
+        $this->assertDatabaseMissing('customers', $newCust->only(['name', 'dba_name', 'address', 'city', 'state', 'zip']));
     }
 
     public function test_store()
@@ -87,7 +87,7 @@ class CustomerTest extends TestCase
         $response = $this->actingAs(User::factory()->create())->post(route('customers.store'), $newCust->only(['cust_id', 'parent_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip']));
         $response->assertStatus(302);
         $response->assertRedirect(route('customers.show', $newCust->slug));
-        $this->assertDatabaseHas('customers', $newCust->toArray());
+        $this->assertDatabaseHas('customers', $newCust->only(['name', 'dba_name', 'address', 'city', 'state', 'zip']));
     }
 
     /*

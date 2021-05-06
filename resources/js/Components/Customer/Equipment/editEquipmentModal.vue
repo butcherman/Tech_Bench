@@ -49,6 +49,10 @@
             cust_equip_id: {
                 type:     Number,
                 required: true,
+            },
+            shared: {
+                type:     Boolean,
+                required: true,
             }
         },
         data() {
@@ -58,7 +62,7 @@
                 form: {
                     cust_id:  this.cust_id,
                     equip_id: this.equip_id,
-                    shared:   false,
+                    shared:   this.shared,
                     data:     this.data,
                 },
             }
