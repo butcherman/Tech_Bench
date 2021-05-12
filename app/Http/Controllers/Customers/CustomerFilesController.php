@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Customers\CustomerFileRequest;
+use App\Traits\FileTrait;
+use App\Models\FileUploads;
 use App\Models\CustomerFile;
 use App\Models\CustomerFileType;
-use App\Models\FileUploads;
-use App\Traits\FileTrait;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Customers\CustomerFileRequest;
 
 class CustomerFilesController extends Controller
 {
@@ -63,24 +61,6 @@ class CustomerFilesController extends Controller
     {
         return CustomerFile::where('cust_id', $id)->with('FileUpload')->get();
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     */
-    // public function edit($id)
-    // {
-    //     //
-    // }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     */
-    // public function update(Request $request, $id)
-    // {
-    //     //
-    // }
 
     /**
      *  Delete a customer File

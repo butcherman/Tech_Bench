@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Models\CustomerNote;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerNoteRequest;
-use App\Models\CustomerNote;
 
 class CustomerNoteController extends Controller
 {

@@ -64,7 +64,7 @@ trait FileTrait
     //  Sanitize the filename to remove any illegal characters and spaces
     protected function cleanFilename($name)
     {
-        $newName =  preg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name);
+        $newName =  str_replace(' ', '_', preg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name));
         Log::debug('Cleaned Filename', ['original_name' => $name, 'clean_name' => $newName]);
 
         return $newName;

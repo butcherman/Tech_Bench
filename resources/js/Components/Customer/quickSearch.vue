@@ -5,7 +5,7 @@
         scrollable
         hide-footer
         :visible="showModal"
-        title="Select Customer From List"
+        :title="modalTitle"
         @close="close"
         @cancel="close"
         @hide="close"
@@ -58,6 +58,12 @@
 
 <script>
     export default {
+        props: {
+            modalTitle: {
+                type:     String,
+                default: 'Select Customer From List',
+            },
+        },
         data() {
             return {
                 loading:   false,

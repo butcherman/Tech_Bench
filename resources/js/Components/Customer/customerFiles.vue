@@ -24,7 +24,7 @@
                         </template>
                     </template>
                     <template #cell(name)="row">
-                        <a href="#" title="Click to Download" v-b-tooltip.hover>{{row.item.name}}</a>
+                        <a :href="route('download', [row.item.file_upload.file_id, row.item.file_upload.file_name])" title="Click to Download" v-b-tooltip.hover>{{row.item.name}}</a>
                     </template>
                 </b-table>
                 <div v-if="selected.length > 0" class="text-center mt-2">

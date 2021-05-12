@@ -9,8 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Models\CustomerEquipmentData;
 use App\Http\Requests\Customers\CustomerEquipmentRequest;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerEquipmentController extends Controller
 {
@@ -103,9 +103,29 @@ class CustomerEquipmentController extends Controller
     public function destroy($id)
     {
         $equip = CustomerEquipment::find($id);
-        Log::channel('cust')->notice('Equipment '.$equip->name.' for Customer ID '.$equip->cust_id.' was Soft Deleted by'.Auth::user()->username);
 
+        Log::channel('cust')->notice('Equipment '.$equip->name.' for Customer ID '.$equip->cust_id.' was Soft Deleted by'.Auth::user()->username);
         $equip->delete();
         return response()->noContent();
+    }
+
+    /*
+    *   Restore a piece of equipment that was deleted
+    */
+    public function restore($id)
+    {
+        CustomerEquipment::withTrashed()->where('cust_equip_id', $id)->restore();
+        $equip = CustomerEquipment::find($id);
+        Log::channel('cust')->info('Equipment '.$equip->equip_id.' was restored for Customer ID '.$equip->cust_id.' by '.Auth::user()->username);
+
+        return redirect()->back();
+    }
+
+    /*
+    *   Completely delete the equipment
+    */
+    public function forceDelete($id)
+    {
+        return 'force delete equipment';
     }
 }

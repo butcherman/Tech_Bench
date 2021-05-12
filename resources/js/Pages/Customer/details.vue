@@ -21,11 +21,18 @@
             <div class="col-md-4 mt-md-0 mt-4">
                 <div class="float-md-right">
                     <edit-details v-if="user_functions.edit" :details="details"></edit-details>
+                    <manage-customer
+                        v-if="user_functions.manage"
+                        :cust_id="details.cust_id"
+                        :can_deactivate="user_functions.deactivate"
+                        :linked="details.parent_id > 0 ? true : false"
+                        :is_parent="details.child_count > 0 ? true : false"
+                    ></manage-customer>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5 grid-margin stretch-card">
+            <!-- <div class="col-md-5 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <customer-equipment :customer_equipment="details.parent_equipment.concat(details.customer_equipment)" :cust_id="details.cust_id"></customer-equipment>
@@ -38,25 +45,25 @@
                         <customer-contacts :cust_id="details.cust_id" :customer_contacts="details.customer_contact"></customer-contacts>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="row">
-            <div class="col-12 grid-margin">
+            <!-- <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
                         <customer-notes :cust_id="details.cust_id" :customer_notes="details.customer_note"></customer-notes>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="row">
-            <div class="col-12 grid-magrin">
+            <!-- <div class="col-12 grid-magrin">
                 <div class="card">
                     <div class="card-body">
                         <customer-files :cust_id="details.cust_id" :customer_files="details.customer_file"></customer-files>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -68,9 +75,10 @@
     import CustomerEquipment from '../../Components/Customer/customerEquipment.vue';
     import CustomerNotes     from '../../Components/Customer/customerNotes.vue';
     import CustomerFiles     from '../../Components/Customer/customerFiles.vue';
+    import ManageCustomer    from '../../Components/Customer/manageCustomer.vue';
 
     export default {
-        components: { editDetails, CustomerEquipment, CustomerContacts, CustomerNotes, CustomerFiles },
+        components: { editDetails, CustomerEquipment, CustomerContacts, CustomerNotes, CustomerFiles, ManageCustomer },
         layout: App,
         props: {
             details: {

@@ -2,114 +2,62 @@
 
 namespace App\Policies;
 
-use App\Models\Customer;
 use App\Models\User;
-use App\Models\UserRolePermissions;
+use App\Models\Customer;
+use App\Traits\AllowTrait;
+
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CustomerPolicy
 {
     use HandlesAuthorization;
+    use AllowTrait;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
+    /*
+    *   Manage customers determines if they can deactivate and recover customers
+    */
+    public function manage(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Manage Customers');
     }
 
     /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return mixed
-     */
-    public function view(User $user, Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
+     *  Determine whether the user can create new customers
      */
     public function create(User $user)
     {
-        $allowed = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function($q)
-        {
-            $q->where('description', 'Add Customer');
-        })->first();
-
-        if($allowed)
-        {
-            return $allowed->allow;
-        }
-
-        return false;
+        return $this->checkPermission($user, 'Add Customer');
     }
 
     /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return mixed
+     *  Determine if the user can update the customers basic details
      */
     public function update(User $user, Customer $customer)
     {
-        $allowed = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function($q)
-        {
-            $q->where('description', 'Update Customer');
-        })->first();
-
-        if($allowed)
-        {
-            return $allowed->allow;
-        }
-
-        return false;
+        return $this->checkPermission($user, 'Update Customer');
     }
 
     /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return mixed
+     *  Determine if the user can deactivate the customer
      */
     public function delete(User $user, Customer $customer)
     {
-        //
+        return $this->checkPermission($user, 'Deactivate Customer');
     }
 
     /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return mixed
+     *  Determine if the user can re-activate a deactivated customer
      */
     public function restore(User $user, Customer $customer)
     {
-        //
+        return $this->checkPermission($user, 'Manage Customers');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return mixed
+     *  Determine if the user can permanently delete the customer and all associated information
      */
     public function forceDelete(User $user, Customer $customer)
     {
-        //
+        return $this->checkPermission($user, 'Delete Customers');
     }
 }

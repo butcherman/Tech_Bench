@@ -6,11 +6,12 @@ use Inertia\Inertia;
 
 use App\Models\Customer;
 use App\Models\EquipmentType;
+use App\Models\PhoneNumberType;
+use App\Models\CustomerFileType;
 use App\Http\Controllers\Controller;
 use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
-use App\Models\CustomerFileType;
-use App\Models\PhoneNumberType;
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -88,19 +89,13 @@ class CustomerController extends Controller
             'phone_types'    => PhoneNumberType::all(),
             'file_types'     => CustomerFileType::all(),
             'user_functions' => [
-                'fav'  => $isFav,                                           //  Customer is bookmarked by the user
-                'edit' => Auth::user()->can('update', $customer),           //  User is allowed to edit the customers basic details
+                'fav'        => $isFav,                                             //  Customer is bookmarked by the user
+                'edit'       => Auth::user()->can('update', $customer),             //  User is allowed to edit the customers basic details
+                'manage'     => Auth::user()->can('manage', $customer),             //  User can recover deleted items
+                'deactivate' => Auth::user()->can('delete', $customer),             //  User can deactivate the customer profile
             ],
         ]);
     }
-
-    /**
-     *  TODO - Go away???
-     */
-    // public function edit($id)
-    // {
-    //     //
-    // }
 
     /**
      *  Update the customers basic information
@@ -117,8 +112,14 @@ class CustomerController extends Controller
     /**
      *  Deactivate the customer
      */
-    // public function destroy($id)
-    // {
-    //     //
-    // }
+    public function destroy($id)
+    {
+        $cust = Customer::findOrFail($id);
+
+        $this->authorize('delete', $cust);
+        $cust->delete();
+
+        Log::channel('cust')->alert('Customer ID '.$id.' has been deactivated by '.Auth::user()->username);
+        return redirect(route('customers.index'))->with(['message' => 'Customer '.$cust->name.' deactivated', 'type' => 'danger']);
+    }
 }

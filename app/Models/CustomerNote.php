@@ -14,10 +14,11 @@ class CustomerNote extends Model
     protected $primaryKey = 'note_id';
     protected $guarded    = ['updated_at', 'created_at'];
     protected $appends    = ['author', 'updated_author'];
-    protected $hidden     = ['created_by', 'updated_by'];
+    protected $hidden     = ['created_by', 'updated_by', 'deleted_at'];
     protected $casts      = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
+        'deleted_at' => 'datetime:M d, Y',
         'urgent'     => 'boolean',
         'shared'     => 'boolean',
     ];

@@ -70,6 +70,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    modalTitle: {
+      type: String,
+      "default": 'Select Customer From List'
+    }
+  },
   data: function data() {
     return {
       loading: false,
@@ -626,7 +632,7 @@ var render = function() {
         scrollable: "",
         "hide-footer": "",
         visible: _vm.showModal,
-        title: "Select Customer From List"
+        title: _vm.modalTitle
       },
       on: { close: _vm.close, cancel: _vm.close, hide: _vm.close }
     },

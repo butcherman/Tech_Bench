@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Equip;
 
-use App\Http\Controllers\Controller;
 use App\Models\EquipmentCategory;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class EquipmentListController extends Controller
 {
