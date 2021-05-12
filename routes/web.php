@@ -14,18 +14,20 @@ use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Customers\BreakCustomerLinkController;
+
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CheckCustIdController;
+use App\Http\Controllers\Customers\LinkCustomerController;
+use App\Http\Controllers\Customers\CustomerNoteController;
+use App\Http\Controllers\Customers\CustomerFilesController;
 use App\Http\Controllers\Customers\CustomerSearchController;
+use App\Http\Controllers\Customers\GetDeletedItemsController;
 use App\Http\Controllers\Customers\DownloadContactController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerBookmarksController;
-use App\Http\Controllers\Customers\CustomerFilesController;
-use App\Http\Controllers\Customers\CustomerNoteController;
-use App\Http\Controllers\Customers\GetDeletedItemsController;
-use App\Http\Controllers\Customers\LinkCustomerController;
+use App\Http\Controllers\Customers\BreakCustomerLinkController;
+
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
@@ -93,17 +95,18 @@ Route::middleware('auth')->group(function()
     Route::prefix('customers')->name('customers.')->group(function()
     {
         //  Customer Details Section
-        Route::post('check-id',           CheckCustIdController::class)->name('check-id');
-        Route::post('search',             CustomerSearchController::class)->name('search');
-        Route::put('toggle-bookmark',     CustomerBookmarksController::class)->name('bookmark');
-        Route::get('get-deleted/{id}',    GetDeletedItemsController::class)->name('get-deleted');
-        Route::post('link-customer',      LinkCustomerController::class)->name('link-customer');
-        Route::get('break-link/{id}',     BreakCustomerLinkController::class)->name('break-link');
+        Route::get( 'get-deleted/{id}',   GetDeletedItemsController::class)  ->name('get-deleted');
+        Route::get( 'break-link/{id}',    BreakCustomerLinkController::class)->name('break-link');
+        Route::put( 'toggle-bookmark',    CustomerBookmarksController::class)->name('bookmark');
+        Route::post('check-id',           CheckCustIdController::class)      ->name('check-id');
+        Route::post('search',             CustomerSearchController::class)   ->name('search');
+        Route::post('link-customer',      LinkCustomerController::class)     ->name('link-customer');
 
         //  Customer Equipment Section
-        Route::get('equipment-list', EquipmentListController::class)->name('equip-list');
-        Route::resource('equipment', CustomerEquipmentController::class);
-        Route::get('equipment/restore/{id}', [CustomerEquipmentController::class, 'restore'])->name('equipment.restore');
+        Route::resource('equipment',                CustomerEquipmentController::class);
+        Route::get(     'equipment-list',           EquipmentListController::class)                    ->name('equip-list');
+        Route::get(     'equip/{id}/restore',      [CustomerEquipmentController::class, 'restore'])    ->name('equipment.restore');
+        Route::delete(  'equip/{id}/force-delete', [CustomerEquipmentController::class, 'forceDelete'])->name('equipment.force-delete');
 
         //  Customer Contacts Section
         Route::resource('contacts', CustomerContactsController::class);

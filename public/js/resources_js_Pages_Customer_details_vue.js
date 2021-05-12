@@ -1549,6 +1549,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -1673,8 +1674,26 @@ __webpack_require__.r(__webpack_exports__);
       this.$inertia.get(this.route('customers.equipment.restore', equip.cust_equip_id));
     },
     deleteEquipment: function deleteEquipment(item) {
-      console.log('delete');
-      console.log(item);
+      var _this5 = this;
+
+      this.$bvModal.msgBoxConfirm('This action cannot be undone', {
+        title: 'Are You Sure?',
+        size: 'md',
+        okVariant: 'danger',
+        okTitle: 'Yes',
+        cancelTitle: 'No',
+        centered: true
+      }).then(function (res) {
+        if (res) {
+          _this5.loading = true;
+
+          _this5.$inertia["delete"](_this5.route('customers.equipment.force-delete', item.cust_equip_id), {
+            onFinish: function onFinish() {
+              _this5.$refs['manage-customer-modal'].hide();
+            }
+          });
+        }
+      });
     }
   }
 });
@@ -7239,7 +7258,45 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-5 grid-margin stretch-card" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("customer-equipment", {
+                attrs: {
+                  customer_equipment: _vm.details.parent_equipment.concat(
+                    _vm.details.customer_equipment
+                  ),
+                  cust_id: _vm.details.cust_id
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-7 grid-margin stretch-card" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("customer-contacts", {
+                attrs: {
+                  cust_id: _vm.details.cust_id,
+                  customer_contacts: _vm.details.customer_contact
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }),
     _vm._v(" "),

@@ -12,7 +12,6 @@
                 <template #overlay>
                     <atom-loader text="Loading Data..."></atom-loader>
                 </template>
-
                 <div class="mt-2" v-if="deleted['equipment'] && deleted['equipment'].length > 0">
                     <h5 class="text-center">Deleted Equipment</h5>
                     <ul class="list-group">
@@ -24,6 +23,8 @@
                         </li>
                     </ul>
                 </div>
+
+
 
                 <div class="mt-2" v-if="deleted['contacts'] && deleted['contacts'].length > 0">
                     <h5 class="text-center">Deleted Contacts</h5>
@@ -176,8 +177,22 @@
             },
             deleteEquipment(item)
             {
-                console.log('delete');
-                console.log(item);
+                this.$bvModal.msgBoxConfirm('This action cannot be undone', {
+                    title: 'Are You Sure?',
+                    size: 'md',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No',
+                    centered: true,
+                }).then(res => {
+                    if(res)
+                    {
+                        this.loading = true;
+                        this.$inertia.delete(this.route('customers.equipment.force-delete', item.cust_equip_id), {
+                            onFinish: () => { this.$refs['manage-customer-modal'].hide(); }
+                        });
+                    }
+                });
             }
         },
     }

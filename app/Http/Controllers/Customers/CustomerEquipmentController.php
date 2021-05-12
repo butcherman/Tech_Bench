@@ -20,18 +20,20 @@ class CustomerEquipmentController extends Controller
     public function store(CustomerEquipmentRequest $request)
     {
         $cust = Customer::findOrFail($request->cust_id);
+        $cust_id = $cust->cust_id;
 
         //  If the equipment is shared, it must be assigned to the parent site
-        if($request->shared)
+        if($request->shared && $cust->parent_id > 0)
         {
-            if($cust->parent_id !== null)
-            {
-                $request->cust_id = $cust->parent_id;
-            }
+            $cust_id = $cust->parent_id;
         }
 
         //  Input the equipment type
-        $newEquip = CustomerEquipment::create($request->only(['cust_id', 'equip_id', 'shared']));
+        $newEquip = CustomerEquipment::create([
+            'cust_id'  => $cust_id,
+            'equip_id' => $request->equip_id,
+            'shared'   => $request->shared,
+        ]);
 
         //  Input the equipment data
         foreach($request->data as $field)
@@ -44,7 +46,7 @@ class CustomerEquipmentController extends Controller
         }
 
         Log::channel('cust')->notice('New Equipment ID '.$request->equip_id.' has been added for Customer ID '.$request->cust_id.'('.$cust->name.') by '.$request->user()->username);
-        return back()->with(['message' => 'Successfully Added Equipment', 'type' => 'success']);
+        return redirect()->back()->with(['message' => 'Successfully Added Equipment', 'type' => 'success']);
     }
 
     /**
@@ -94,7 +96,7 @@ class CustomerEquipmentController extends Controller
         }
 
         Log::channel('cust')->notice('Customer Equipment ID '.$id.' has been updated for Customer ID '.$request->cust_id.'('.$cust->name.') by '.$request->user()->username);
-        return back()->with(['message' => 'Successfully Updated Equipment', 'type' => 'success']);
+        return redirect()->back()->with(['message' => 'Successfully Updated Equipment', 'type' => 'success']);
     }
 
     /**
@@ -126,6 +128,10 @@ class CustomerEquipmentController extends Controller
     */
     public function forceDelete($id)
     {
-        return 'force delete equipment';
+        $equip = CustomerEquipment::withTrashed()->where('cust_equip_id', $id)->first();
+        Log::channel('cust')->alert('Equipment ID '.$id.' permanently deleted by '.Auth::user()->username);
+        $equip->forceDelete();
+
+        return redirect()->back()->with(['message' => 'Equipment permanently deleted', 'type' => 'danger']);
     }
 }

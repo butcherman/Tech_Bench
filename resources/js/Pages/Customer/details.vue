@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="row">
-            <!-- <div class="col-md-5 grid-margin stretch-card">
+            <div class="col-md-5 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <customer-equipment :customer_equipment="details.parent_equipment.concat(details.customer_equipment)" :cust_id="details.cust_id"></customer-equipment>
@@ -45,7 +45,7 @@
                         <customer-contacts :cust_id="details.cust_id" :customer_contacts="details.customer_contact"></customer-contacts>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="row">
             <!-- <div class="col-12 grid-margin">
