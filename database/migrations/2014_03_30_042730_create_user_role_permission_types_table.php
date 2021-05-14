@@ -38,6 +38,7 @@ class CreateUserRolePermissionTypesTable extends Migration
             //  Customer Equipment Permissions
             ['perm_type_id' => 11, 'description' => 'Add Customer Equipment',  'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 12, 'description' => 'Edit Customer Equipment', 'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 13, 'description' => 'Delete Customer Equipment', 'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
 
 
 

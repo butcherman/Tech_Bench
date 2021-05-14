@@ -48,16 +48,16 @@ class CustomerPolicy
     /**
      *  Determine if the user can re-activate a deactivated customer
      */
-    public function restore(User $user, Customer $customer)
-    {
-        return $this->checkPermission($user, 'Manage Customers');
-    }
+    // public function restore(User $user, Customer $customer)
+    // {
+    //     return $this->checkPermission($user, 'Manage Customers');
+    // }
 
     /**
      *  Determine if the user can permanently delete the customer and all associated information
      */
-    public function forceDelete(User $user, Customer $customer)
-    {
-        return $this->checkPermission($user, 'Delete Customers');
-    }
+    // public function forceDelete(User $user, Customer $customer)
+    // {
+    //     return $this->checkPermission($user, 'Delete Customers');
+    // }
 }

@@ -106,6 +106,8 @@ class CustomerEquipmentController extends Controller
     {
         $equip = CustomerEquipment::find($id);
 
+        $this->authorize('delete', $equip);
+
         Log::channel('cust')->notice('Equipment '.$equip->name.' for Customer ID '.$equip->cust_id.' was Soft Deleted by'.Auth::user()->username);
         $equip->delete();
         return response()->noContent();
@@ -116,8 +118,11 @@ class CustomerEquipmentController extends Controller
     */
     public function restore($id)
     {
-        CustomerEquipment::withTrashed()->where('cust_equip_id', $id)->restore();
-        $equip = CustomerEquipment::find($id);
+        $equip = CustomerEquipment::withTrashed()->where('cust_equip_id', $id)->first();
+
+        $this->authorize('restore', $equip);
+
+        $equip->restore();
         Log::channel('cust')->info('Equipment '.$equip->equip_id.' was restored for Customer ID '.$equip->cust_id.' by '.Auth::user()->username);
 
         return redirect()->back();
@@ -129,6 +134,8 @@ class CustomerEquipmentController extends Controller
     public function forceDelete($id)
     {
         $equip = CustomerEquipment::withTrashed()->where('cust_equip_id', $id)->first();
+        $this->authorize('forceDelete', $equip);
+
         Log::channel('cust')->alert('Equipment ID '.$id.' permanently deleted by '.Auth::user()->username);
         $equip->forceDelete();
 

@@ -2,9 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\CustomerEquipment;
-use App\Models\User;
 use App\Traits\AllowTrait;
+
+use App\Models\User;
+use App\Models\CustomerEquipment;
+
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CustomerEquipmentPolicy
@@ -13,84 +15,42 @@ class CustomerEquipmentPolicy
     use AllowTrait;
 
     /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\CustomerEquipment  $customerEquipment
-     * @return mixed
-     */
-    public function view(User $user, CustomerEquipment $customerEquipment)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
+     *  Determine if the user can create new equipment for the customer
      */
     public function create(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Add Customer Equipment');
     }
 
     /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\CustomerEquipment  $customerEquipment
-     * @return mixed
+     *  Determine if the user can update the information for the given equipment
      */
     public function update(User $user, CustomerEquipment $customerEquipment)
     {
-        //
+        return $this->checkPermission($user, 'Edit Customer Equipment');
     }
 
     /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\CustomerEquipment  $customerEquipment
-     * @return mixed
+     *  Determine if the user can delete Customer Equipment
      */
     public function delete(User $user, CustomerEquipment $customerEquipment)
     {
-        //
+        return $this->checkPermission($user, 'Delete Customer Equipment');
     }
 
     /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\CustomerEquipment  $customerEquipment
-     * @return mixed
+     *  Determine if the user can restore deleted customer equipment
      */
     public function restore(User $user, CustomerEquipment $customerEquipment)
     {
-        //
+        return $this->checkPermission($user, 'Delete Customer Equipment');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\CustomerEquipment  $customerEquipment
-     * @return mixed
+     *  Determine if the user can completely delete customer equipment
      */
     public function forceDelete(User $user, CustomerEquipment $customerEquipment)
     {
-        //
+        return $this->checkPermission($user, 'Delete Customer');
     }
 }

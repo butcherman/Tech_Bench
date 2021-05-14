@@ -39,7 +39,7 @@ class CustomerTest extends TestCase
     public function test_create_no_permission()
     {
         //  Remove the "Add Customer" permission from the Tech Role
-        UserRolePermissions::whereRoleId(4)->wherePermTypeId(4)->update([
+        UserRolePermissions::whereRoleId(4)->wherePermTypeId(7)->update([
             'allow' => false,
         ]);
         $user = User::factory()->create();
@@ -69,7 +69,7 @@ class CustomerTest extends TestCase
     public function test_store_no_permission()
     {
         //  Remove the "Add Customer" permission from the Tech Role
-        UserRolePermissions::whereRoleId(4)->wherePermTypeId(4)->update([
+        UserRolePermissions::whereRoleId(4)->wherePermTypeId(7)->update([
             'allow' => false,
         ]);
         $user    = User::factory()->create();
@@ -143,7 +143,7 @@ class CustomerTest extends TestCase
     public function test_update_no_permission()
     {
         //  Remove the "Update Customer" permission from the Tech Role
-        UserRolePermissions::whereRoleId(4)->wherePermTypeId(12)->update([
+        UserRolePermissions::whereRoleId(4)->wherePermTypeId(8)->update([
             'allow' => false,
         ]);
         $customer = Customer::factory()->create();
@@ -166,5 +166,35 @@ class CustomerTest extends TestCase
             'name'    => $updated->name,
             'address' => $updated->address,
         ]);
+    }
+
+    /*
+    *   Destroy Method
+    */
+    public function test_destroy_guest()
+    {
+        $cust = Customer::factory()->create();
+
+        $response = $this->delete(route('customers.destroy', $cust->cust_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_destroy_no_permission()
+    {
+        $cust = Customer::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())->delete(route('customers.destroy', $cust->cust_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_destroy()
+    {
+        $cust = Customer::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.destroy', $cust->cust_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('customers.index'));
+        $this->assertSoftDeleted('customers', $cust->only(['cust_id']));
     }
 }

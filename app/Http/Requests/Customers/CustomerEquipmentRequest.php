@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Customers;
 
+use App\Models\CustomerEquipment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerEquipmentRequest extends FormRequest
@@ -13,7 +14,12 @@ class CustomerEquipmentRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if($this->route('equipment'))
+        {
+            return $this->user()->can('update', CustomerEquipment::find($this->route('equipment')));
+        }
+
+        return $this->user()->can('create', CustomerEquipment::class);
     }
 
     /**

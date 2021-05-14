@@ -177,6 +177,6 @@ class CustomerContactsTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->delete(route('customers.contacts.destroy', $cont->cont_id));
         $response->assertSuccessful();
-        $this->assertDatabaseMissing('customer_contacts', $cont->toArray());
+        $this->assertSoftDeleted('customer_contacts', $cont->toArray());
     }
 }
