@@ -21,7 +21,7 @@ class CustomerFilesTest extends TestCase
     {
         Storage::fake('customers');
 
-        $file = UploadedFile::fake()->image('image.jpg');
+        $file = UploadedFile::fake()->image('image.png');
         $data = [
             'cust_id' => Customer::factory()->create()->cust_id,
             'name'    => 'This is a test file',
@@ -39,7 +39,7 @@ class CustomerFilesTest extends TestCase
     {
         Storage::fake('customers');
 
-        $file = UploadedFile::fake()->image('image.jpg');
+        $file = UploadedFile::fake()->image('image.png');
         $data = [
             'cust_id' => Customer::factory()->create()->cust_id,
             'name'    => 'This is a test file',
