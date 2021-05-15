@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Traits\FileTrait;
+
+use App\Models\Customer;
 use App\Models\FileUploads;
 use App\Models\CustomerFile;
 use App\Models\CustomerFileType;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerFileRequest;
+
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerFilesController extends Controller
 {
@@ -25,15 +31,24 @@ class CustomerFilesController extends Controller
      */
     public function store(CustomerFileRequest $request)
     {
+        $cust    = Customer::findOrFail($request->cust_id);
+        $cust_id = $cust->cust_id;
+
+        //  If the equipment is shared, it must be assigned to the parent site
+        if(filter_var($request->shared, FILTER_VALIDATE_BOOL) && $cust->parent_id > 0)
+        {
+            $cust_id = $cust->parent_id;
+        }
+
         //  Process the chunk of file being uploaded
-        $status = $this->getChunk($request, $this->disk, $request->cust_id);
+        $status = $this->getChunk($request, $this->disk, $cust_id);
 
         //  If the file upload is completed, save to database
         if($status['done'] === 100)
         {
             $newFile = FileUploads::create([
                 'disk'      => $this->disk,
-                'folder'    => $request->cust_id,
+                'folder'    => $cust_id,
                 'file_name' => $status['filename'],
                 'public'    => false,
             ]);
@@ -41,12 +56,13 @@ class CustomerFilesController extends Controller
             CustomerFile::create([
                 'file_id'      => $newFile->file_id,
                 'file_type_id' => CustomerFileType::where('description', $request->type)->first()->file_type_id,
-                'cust_id'      => $request->cust_id,
+                'cust_id'      => $cust_id,
                 'user_id'      => $request->user()->user_id,
                 'shared'       => filter_var($request->shared, FILTER_VALIDATE_BOOL),
                 'name'         => $request->name,
             ]);
 
+            Log::channel('cust')->info('New file '.$request->name.' has been uploaded for Customer '.$cust->name.' by '.$request->user()->username);
             return response()->noContent();
         }
 
@@ -59,7 +75,15 @@ class CustomerFilesController extends Controller
      */
     public function show($id)
     {
-        return CustomerFile::where('cust_id', $id)->with('FileUpload')->get();
+        $cust = Customer::findOrFail($id);
+
+        return CustomerFile::where('cust_id', $id)
+                ->when($cust->parent_id, function($q) use ($cust)
+                {
+                    $q->orWhere('cust_id', $cust->parent_id)->where('shared', true);
+                })
+                ->with('FileUpload')
+                ->get();
     }
 
     /**
@@ -67,8 +91,10 @@ class CustomerFilesController extends Controller
      */
     public function destroy($id)
     {
-        CustomerFile::find($id)->delete();
+        $this->authorize('delete', CustomerFile::class);
 
+        CustomerFile::find($id)->delete();
+        Log::channel('cust')->notice('Customer FIle ID '.$id.' has been deleted by '.Auth::user()->username);
         return response()->noContent();
     }
 }

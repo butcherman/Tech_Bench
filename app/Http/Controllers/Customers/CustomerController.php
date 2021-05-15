@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Customers;
 use Inertia\Inertia;
 
 use App\Models\Customer;
+use App\Models\CustomerNote;
+use App\Models\CustomerFile;
 use App\Models\EquipmentType;
+use App\Models\CustomerContact;
 use App\Models\PhoneNumberType;
 use App\Models\CustomerFileType;
 use App\Models\CustomerEquipment;
 use App\Http\Controllers\Controller;
 use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
-use App\Models\CustomerContact;
-use App\Models\CustomerNote;
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -77,14 +79,11 @@ class CustomerController extends Controller
                         ->with('CustomerNote')
                         ->with('ParentNote')
                         ->with('CustomerFile.FileUpload')
-                        // ->with('ParentFile')
+                        ->with('ParentFile.FileUpload')
                         ->firstOrFail();
         $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)
                         ->where('cust_id', $customer->cust_id)
                         ->count();
-
-
-                        // return $customer;
 
         return Inertia::render('Customer/details', [
             'details'        => $customer,
@@ -109,6 +108,11 @@ class CustomerController extends Controller
                     'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
                     'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
                     'delete' => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
+                ],
+                'files'     => [
+                    'create' => Auth::user()->can('create', CustomerFile::class),        //  If user can add file
+                    'update' => Auth::user()->can('update', CustomerFile::class),        //  If user can edit file
+                    'delete' => Auth::user()->can('delete', CustomerFile::class),        //  If user can delete file
                 ],
             ],
         ]);

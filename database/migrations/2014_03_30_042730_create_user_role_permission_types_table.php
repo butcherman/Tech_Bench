@@ -47,6 +47,10 @@ class CreateUserRolePermissionTypesTable extends Migration
             ['perm_type_id' => 17, 'description' => 'Add Customer Note',         'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 18, 'description' => 'Edit Customer Note',        'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 19, 'description' => 'Delete Customer Note',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            //  Customer Notes Permissions
+            ['perm_type_id' => 20, 'description' => 'Add Customer File',         'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 21, 'description' => 'Edit Customer File',        'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 22, 'description' => 'Delete Customer File',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
 
 
             // ['perm_type_id' => 7,  'description' => 'Use File Links',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],

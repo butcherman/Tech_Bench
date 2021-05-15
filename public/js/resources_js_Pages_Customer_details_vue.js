@@ -603,6 +603,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     cust_id: {
@@ -1187,9 +1192,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -1203,12 +1205,15 @@ __webpack_require__.r(__webpack_exports__);
     customer_files: {
       type: Array,
       required: true
+    },
+    permissions: {
+      type: Object,
+      required: true
     }
   },
   data: function data() {
     return {
       loading: false,
-      selected: [],
       files: this.customer_files,
       fields: [{
         key: 'selected',
@@ -1230,6 +1235,10 @@ __webpack_require__.r(__webpack_exports__);
         key: 'updated_at',
         label: 'Date',
         sortable: true
+      }, {
+        key: 'actions',
+        label: '',
+        sortable: false
       }]
     };
   },
@@ -1245,13 +1254,10 @@ __webpack_require__.r(__webpack_exports__);
         return _this.eventHub.$emit('axiosError', error);
       });
     },
-    onRowSelect: function onRowSelect(items) {
-      this.selected = items;
-    },
-    deleteSelected: function deleteSelected() {
+    deleteFile: function deleteFile(file) {
       var _this2 = this;
 
-      this.$bvModal.msgBoxConfirm('Please Verify You Want Delete These Files', {
+      this.$bvModal.msgBoxConfirm('Please Verify You Want Delete This File', {
         title: 'Are you sure?',
         size: 'sm',
         buttonSize: 'sm',
@@ -1264,12 +1270,9 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (value) {
         if (value) {
           _this2.loading = true;
-
-          for (var i = 0; i < _this2.selected.length; i++) {
-            axios["delete"](_this2.route('customers.files.destroy', _this2.selected[i].cust_file_id))["catch"](function (error) {
-              return _this2.eventHub.$emit('axiosError', error);
-            });
-          }
+          axios["delete"](_this2.route('customers.files.destroy', file))["catch"](function (error) {
+            return _this2.eventHub.$emit('axiosError', error);
+          });
 
           _this2.getFiles();
         }
@@ -2058,6 +2061,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Customer_customerNotes_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Components/Customer/customerNotes.vue */ "./resources/js/Components/Customer/customerNotes.vue");
 /* harmony import */ var _Components_Customer_customerFiles_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Components/Customer/customerFiles.vue */ "./resources/js/Components/Customer/customerFiles.vue");
 /* harmony import */ var _Components_Customer_manageCustomer_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Components/Customer/manageCustomer.vue */ "./resources/js/Components/Customer/manageCustomer.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -5084,6 +5091,34 @@ var render = function() {
                               }
                             }),
                             _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "row justify-content-center" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "col-md-8" },
+                                  [
+                                    _c(
+                                      "b-form-checkbox",
+                                      {
+                                        attrs: { switch: "" },
+                                        model: {
+                                          value: _vm.form.shared,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "shared", $$v)
+                                          },
+                                          expression: "form.shared"
+                                        }
+                                      },
+                                      [_vm._v("Share File Across All Sites")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
                             _c("submit-button", {
                               attrs: {
                                 button_text: "Upload File",
@@ -5973,10 +6008,12 @@ var render = function() {
         { staticClass: "card-title" },
         [
           _vm._v("\n        Files:\n        "),
-          _c("new-file-modal", {
-            attrs: { cust_id: _vm.cust_id },
-            on: { "upload-completed": _vm.getFiles }
-          })
+          _vm.permissions.create
+            ? _c("new-file-modal", {
+                attrs: { cust_id: _vm.cust_id },
+                on: { "upload-completed": _vm.getFiles }
+              })
+            : _vm._e()
         ],
         1
       ),
@@ -6006,30 +6043,30 @@ var render = function() {
                   _c("b-table", {
                     attrs: {
                       striped: "",
-                      selectable: "",
                       responsive: "",
                       items: _vm.files,
-                      fields: _vm.fields,
-                      "select-mode": "multi"
+                      fields: _vm.fields
                     },
-                    on: { "row-selected": _vm.onRowSelect },
                     scopedSlots: _vm._u(
                       [
-                        {
-                          key: "cell(selected)",
-                          fn: function(ref) {
-                            var rowSelected = ref.rowSelected
-                            return [
-                              rowSelected
-                                ? [_c("span", [_vm._v("✓")])]
-                                : _vm._e()
-                            ]
-                          }
-                        },
                         {
                           key: "cell(name)",
                           fn: function(row) {
                             return [
+                              row.item.shared
+                                ? _c("i", {
+                                    directives: [
+                                      {
+                                        name: "b-tooltip",
+                                        rawName: "v-b-tooltip.hover",
+                                        modifiers: { hover: true }
+                                      }
+                                    ],
+                                    staticClass: "fas fa-share",
+                                    attrs: { title: "File Shared Across Sites" }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
                               _c(
                                 "a",
                                 {
@@ -6052,31 +6089,52 @@ var render = function() {
                               )
                             ]
                           }
+                        },
+                        {
+                          key: "cell(actions)",
+                          fn: function(data) {
+                            return [
+                              _vm.permissions.delete
+                                ? _c(
+                                    "b-button",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "b-tooltip",
+                                          rawName: "v-b-tooltip.hover",
+                                          modifiers: { hover: true }
+                                        }
+                                      ],
+                                      attrs: {
+                                        pill: "",
+                                        size: "sm",
+                                        variant: "light",
+                                        title: "Delete File"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.deleteFile(
+                                            data.item.cust_file_id
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "far fa-trash-alt"
+                                      })
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]
+                          }
                         }
                       ],
                       null,
                       false,
-                      1327240716
+                      1658437011
                     )
-                  }),
-                  _vm._v(" "),
-                  _vm.selected.length > 0
-                    ? _c(
-                        "div",
-                        { staticClass: "text-center mt-2" },
-                        [
-                          _c(
-                            "b-button",
-                            {
-                              attrs: { variant: "danger" },
-                              on: { click: _vm.deleteSelected }
-                            },
-                            [_vm._v("Delete Selected")]
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e()
+                  })
                 ],
                 1
               )
@@ -7603,7 +7661,28 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "row" })
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12 grid-magrin" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("customer-files", {
+                attrs: {
+                  cust_id: _vm.details.cust_id,
+                  customer_files: _vm.details.parent_file.concat(
+                    _vm.details.customer_file
+                  ),
+                  permissions: _vm.user_functions.files
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    ])
   ])
 }
 var staticRenderFns = [

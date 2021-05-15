@@ -41,6 +41,11 @@
                             @completed="uploadDone"
                             @validation-error="canceled"
                         ></dropzone-upload>
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <b-form-checkbox v-model="form.shared" switch>Share File Across All Sites</b-form-checkbox>
+                            </div>
+                        </div>
                         <submit-button button_text="Upload File" :submitted="submitted"></submit-button>
                     </b-form>
                 </ValidationObserver>

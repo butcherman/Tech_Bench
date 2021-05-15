@@ -2,7 +2,7 @@
     <div>
         <div class="card-title">
             Files:
-            <new-file-modal :cust_id="cust_id" @upload-completed="getFiles"></new-file-modal>
+            <new-file-modal v-if="permissions.create" :cust_id="cust_id" @upload-completed="getFiles"></new-file-modal>
         </div>
         <b-overlay :show="loading">
             <template #overlay>
@@ -11,25 +11,22 @@
             <div v-if="files.length > 0">
                 <b-table
                     striped
-                    selectable
                     responsive
                     :items="files"
                     :fields="fields"
-                    select-mode="multi"
-                    @row-selected="onRowSelect"
                 >
-                    <template #cell(selected)="{ rowSelected }">
-                        <template v-if="rowSelected">
-                            <span>&check;</span>
-                        </template>
-                    </template>
                     <template #cell(name)="row">
+                        <i v-if="row.item.shared" class="fas fa-share" title="File Shared Across Sites" v-b-tooltip.hover></i>
                         <a :href="route('download', [row.item.file_upload.file_id, row.item.file_upload.file_name])" title="Click to Download" v-b-tooltip.hover>{{row.item.name}}</a>
                     </template>
+                    <template #cell(actions)="data">
+                        <!-- <edit-file-modal v-if="permissions.update" :cust_id="cust_id" :contact_data="data.item" @completed="getFiles"></edit-file-modal> -->
+
+                        <b-button v-if="permissions.delete" pill size="sm" variant="light" title="Delete File" v-b-tooltip.hover @click="deleteFile(data.item.cust_file_id)">
+                            <i class="far fa-trash-alt"></i>
+                        </b-button>
+                    </template>
                 </b-table>
-                <div v-if="selected.length > 0" class="text-center mt-2">
-                    <b-button variant="danger" @click="deleteSelected">Delete Selected</b-button>
-                </div>
             </div>
             <div v-else>
                 <h5 class="text-center">No Files Have Been Uploaded</h5>
@@ -51,12 +48,15 @@
             customer_files: {
                 type:     Array,
                 required: true,
+            },
+            permissions: {
+                type:     Object,
+                required: true,
             }
         },
         data() {
             return {
                 loading:  false,
-                selected: [],
                 files:    this.customer_files,
                 fields:   [
                     {
@@ -84,6 +84,11 @@
                         label:   'Date',
                         sortable: true,
                     },
+                    {
+                        key:      'actions',
+                        label:    '',
+                        sortable: false,
+                    }
                 ]
             }
         },
@@ -97,13 +102,10 @@
                         this.loading = false;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
-            onRowSelect(items)
+
+            deleteFile(file)
             {
-                this.selected = items;
-            },
-            deleteSelected()
-            {
-                this.$bvModal.msgBoxConfirm('Please Verify You Want Delete These Files',
+                this.$bvModal.msgBoxConfirm('Please Verify You Want Delete This File',
                     {
                         title:          'Are you sure?',
                         size:           'sm',
@@ -118,11 +120,8 @@
                         if(value)
                         {
                             this.loading = true;
-                            for(var i = 0; i < this.selected.length; i++)
-                            {
-                                axios.delete(this.route('customers.files.destroy', this.selected[i].cust_file_id))
-                                    .catch(error => this.eventHub.$emit('axiosError', error));
-                            }
+                            axios.delete(this.route('customers.files.destroy', file))
+                                .catch(error => this.eventHub.$emit('axiosError', error));
                             this.getFiles();
                         }
                     });

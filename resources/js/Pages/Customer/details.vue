@@ -69,13 +69,17 @@
             </div>
         </div>
         <div class="row">
-            <!-- <div class="col-12 grid-magrin">
+            <div class="col-12 grid-magrin">
                 <div class="card">
                     <div class="card-body">
-                        <customer-files :cust_id="details.cust_id" :customer_files="details.customer_file"></customer-files>
+                        <customer-files
+                            :cust_id="details.cust_id"
+                            :customer_files="details.parent_file.concat(details.customer_file)"
+                            :permissions="user_functions.files"
+                        ></customer-files>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
