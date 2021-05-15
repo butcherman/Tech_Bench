@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\EquipmentType;
 use App\Models\PhoneNumberType;
 use App\Models\CustomerFileType;
+use App\Models\CustomerEquipment;
 use App\Http\Controllers\Controller;
 use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
@@ -89,10 +90,14 @@ class CustomerController extends Controller
             'phone_types'    => PhoneNumberType::all(),
             'file_types'     => CustomerFileType::all(),
             'user_functions' => [
-                'fav'        => $isFav,                                             //  Customer is bookmarked by the user
-                'edit'       => Auth::user()->can('update', $customer),             //  User is allowed to edit the customers basic details
-                'manage'     => Auth::user()->can('manage', $customer),             //  User can recover deleted items
-                'deactivate' => Auth::user()->can('delete', $customer),             //  User can deactivate the customer profile
+                'fav'        => $isFav,                                                   //  Customer is bookmarked by the user
+                'edit'       => Auth::user()->can('update', $customer),                  //  User is allowed to edit the customers basic details
+                'manage'     => Auth::user()->can('manage', $customer),                  //  User can recover deleted items
+                'deactivate' => Auth::user()->can('delete', $customer),                  //  User can deactivate the customer profile
+                'equipment'  => [
+                    'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
+                    'update' => Auth::user()->can('edit', CustomerEquipment::class),     //  If user can edit equipment
+                ],
             ],
         ]);
     }

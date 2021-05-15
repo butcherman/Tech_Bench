@@ -25,6 +25,14 @@ class CustomerEquipmentPolicy
     /**
      *  Determine if the user can update the information for the given equipment
      */
+    public function edit(User $user)
+    {
+        return $this->checkPermission($user, 'Edit Customer Equipment');
+    }
+
+    /**
+     *  Determine if the user can update the information for the given equipment
+     */
     public function update(User $user, CustomerEquipment $customerEquipment)
     {
         return $this->checkPermission($user, 'Edit Customer Equipment');

@@ -3,6 +3,7 @@
         <div class="card-title">
             Equipment:
             <new-equipment-modal
+                v-if="can_add"
                 :existing_equip="equipIdList"
                 :cust_id="cust_id"
                 @completed="getEquipment"
@@ -25,6 +26,7 @@
                             <b-table stacked small :items="getEquipData(equip.customer_equipment_data)"></b-table>
                             <div class="text-center">
                                 <edit-equipment-modal
+                                    v-if="can_edit"
                                     :cust_id="cust_id"
                                     :data="equip.customer_equipment_data"
                                     :name="equip.name"
@@ -47,7 +49,7 @@
 
 <script>
     import EditEquipmentModal from './Equipment/editEquipmentModal.vue';
-    import newEquipmentModal from './Equipment/newEquipmentModal.vue';
+    import newEquipmentModal  from './Equipment/newEquipmentModal.vue';
 
     export default {
         components: { newEquipmentModal, EditEquipmentModal },
@@ -59,6 +61,14 @@
             cust_id: {
                 type:     Number,
                 required: true,
+            },
+            can_add: {
+                type:    Boolean,
+                default: false,
+            },
+            can_edit: {
+                type:    Boolean,
+                default: false,
             }
         },
         data() {

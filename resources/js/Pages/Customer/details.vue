@@ -35,14 +35,22 @@
             <div class="col-md-5 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <customer-equipment :customer_equipment="details.parent_equipment.concat(details.customer_equipment)" :cust_id="details.cust_id"></customer-equipment>
+                        <customer-equipment
+                            :customer_equipment="details.parent_equipment.concat(details.customer_equipment)"
+                            :cust_id="details.cust_id"
+                            :can_add="user_functions.equipment.create"
+                            :can_edit="user_functions.equipment.update"
+                        ></customer-equipment>
                     </div>
                 </div>
             </div>
             <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <customer-contacts :cust_id="details.cust_id" :customer_contacts="details.customer_contact"></customer-contacts>
+                        <customer-contacts
+                            :customer_contacts="details.customer_contact"
+                            :cust_id="details.cust_id"
+                        ></customer-contacts>
                     </div>
                 </div>
             </div>

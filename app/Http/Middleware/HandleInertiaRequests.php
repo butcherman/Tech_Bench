@@ -35,8 +35,8 @@ class HandleInertiaRequests extends Middleware
             ],
             //  App information that is shared and used on all pages
             'app' => [
-                'name' => config('app.name'),
-                'logo' => config('app.logo'),
+                'name'    => config('app.name'),
+                'logo'    => config('app.logo'),
                 'version' => (new Version)->full(),
             ],
             //  Current logged in user

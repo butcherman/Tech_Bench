@@ -1048,6 +1048,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1063,6 +1065,14 @@ __webpack_require__.r(__webpack_exports__);
     cust_id: {
       type: Number,
       required: true
+    },
+    can_add: {
+      type: Boolean,
+      "default": false
+    },
+    can_edit: {
+      type: Boolean,
+      "default": false
     }
   },
   data: function data() {
@@ -1960,6 +1970,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Customer_customerNotes_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Components/Customer/customerNotes.vue */ "./resources/js/Components/Customer/customerNotes.vue");
 /* harmony import */ var _Components_Customer_customerFiles_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Components/Customer/customerFiles.vue */ "./resources/js/Components/Customer/customerFiles.vue");
 /* harmony import */ var _Components_Customer_manageCustomer_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Components/Customer/manageCustomer.vue */ "./resources/js/Components/Customer/manageCustomer.vue");
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5623,10 +5641,15 @@ var render = function() {
         { staticClass: "card-title" },
         [
           _vm._v("\n        Equipment:\n        "),
-          _c("new-equipment-modal", {
-            attrs: { existing_equip: _vm.equipIdList, cust_id: _vm.cust_id },
-            on: { completed: _vm.getEquipment }
-          })
+          _vm.can_add
+            ? _c("new-equipment-modal", {
+                attrs: {
+                  existing_equip: _vm.equipIdList,
+                  cust_id: _vm.cust_id
+                },
+                on: { completed: _vm.getEquipment }
+              })
+            : _vm._e()
         ],
         1
       ),
@@ -5727,17 +5750,19 @@ var render = function() {
                                 "div",
                                 { staticClass: "text-center" },
                                 [
-                                  _c("edit-equipment-modal", {
-                                    attrs: {
-                                      cust_id: _vm.cust_id,
-                                      data: equip.customer_equipment_data,
-                                      name: equip.name,
-                                      equip_id: equip.equip_id,
-                                      cust_equip_id: equip.cust_equip_id,
-                                      shared: equip.shared
-                                    },
-                                    on: { completed: _vm.getEquipment }
-                                  })
+                                  _vm.can_edit
+                                    ? _c("edit-equipment-modal", {
+                                        attrs: {
+                                          cust_id: _vm.cust_id,
+                                          data: equip.customer_equipment_data,
+                                          name: equip.name,
+                                          equip_id: equip.equip_id,
+                                          cust_equip_id: equip.cust_equip_id,
+                                          shared: equip.shared
+                                        },
+                                        on: { completed: _vm.getEquipment }
+                                      })
+                                    : _vm._e()
                                 ],
                                 1
                               )
@@ -7270,7 +7295,9 @@ var render = function() {
                   customer_equipment: _vm.details.parent_equipment.concat(
                     _vm.details.customer_equipment
                   ),
-                  cust_id: _vm.details.cust_id
+                  cust_id: _vm.details.cust_id,
+                  can_add: _vm.user_functions.equipment.create,
+                  can_edit: _vm.user_functions.equipment.update
                 }
               })
             ],
@@ -7287,8 +7314,8 @@ var render = function() {
             [
               _c("customer-contacts", {
                 attrs: {
-                  cust_id: _vm.details.cust_id,
-                  customer_contacts: _vm.details.customer_contact
+                  customer_contacts: _vm.details.customer_contact,
+                  cust_id: _vm.details.cust_id
                 }
               })
             ],
