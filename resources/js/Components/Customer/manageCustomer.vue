@@ -36,7 +36,17 @@
                 </div>
 
 
-
+                <div class="mt-2" v-if="deleted['notes'] && deleted['notes'].length > 0">
+                    <h5 class="text-center">Deleted Notes</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item text-center" v-for="item in deleted['notes']" :key="item.note_id">
+                            <i class="fas fa-trash-restore text-success pointer float-left mr-2" title="Restore" v-b-tooltip.hover @click="restoreNote(item)"></i>
+                            <i class="fas fa-trash text-danger pointer float-left" title="Perminately Delete" v-b-tooltip.hover @click="deleteNote(item)"></i>
+                            {{item.subject}}
+                            <span class="float-right text-muted">Deleted: {{item.deleted_at}}</span>
+                        </li>
+                    </ul>
+                </div>
 
 
 
@@ -210,6 +220,32 @@
                     {
                         this.loading = true;
                         this.$inertia.delete(this.route('customers.contacts.force-delete', cont.cont_id), {
+                            onFinish: () => { this.$refs['manage-customer-modal'].hide(); }
+                        });
+                    }
+                });
+            },
+            restoreNote(item)
+            {
+                this.loading = true;
+                this.$inertia.get(this.route('customers.notes.restore', item.note_id));
+            },
+            deleteNote(item)
+            {
+                console.log(item);
+
+                this.$bvModal.msgBoxConfirm('This action cannot be undone', {
+                    title: 'Are You Sure?',
+                    size: 'md',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No',
+                    centered: true,
+                }).then(res => {
+                    if(res)
+                    {
+                        this.loading = true;
+                        this.$inertia.delete(this.route('customers.notes.force-delete', item.note_id), {
                             onFinish: () => { this.$refs['manage-customer-modal'].hide(); }
                         });
                     }

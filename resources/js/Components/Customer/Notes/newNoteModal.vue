@@ -16,10 +16,14 @@
                 <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
                         <text-input label="Subject" v-model="form.subject"></text-input>
-                        <b-form-checkbox v-model="form.urgent" class="text-center" switch>Mark Note As Important</b-form-checkbox>
-                        <b-form-checkbox v-model="form.shared" class="text-center" switch>Share Note Across All Sites</b-form-checkbox>
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <b-form-checkbox v-model="form.urgent" switch>Mark Note As Important</b-form-checkbox>
+                                <b-form-checkbox v-model="form.shared" switch>Share Note Across All Sites</b-form-checkbox>
+                            </div>
+                        </div>
                         <b-form-textarea v-model="form.details" placeholder="Enter Note" rows="5"></b-form-textarea>
-                        <submit-button button_text="Add Note" :submitted="submitted"></submit-button>
+                        <submit-button class="mt-2" button_text="Add Note" :submitted="submitted"></submit-button>
                     </b-form>
                 </ValidationObserver>
             </b-overlay>
@@ -67,6 +71,8 @@
                     .then(() => {
                         this.$refs['new-note-modal'].hide();
                         this.$emit('completed');
+                        this.loading   = false;
+                        this.submitted = false;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
         },

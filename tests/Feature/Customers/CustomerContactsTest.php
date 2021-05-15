@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Customers;
 
+use App\Models\User;
 use App\Models\Customer;
 use App\Models\CustomerContact;
-use App\Models\CustomerContactPhone;
-use App\Models\User;
 use App\Models\UserRolePermissions;
+use App\Models\CustomerContactPhone;
+
 use Tests\TestCase;
 
 class CustomerContactsTest extends TestCase
@@ -138,6 +139,16 @@ class CustomerContactsTest extends TestCase
     {
         $cust = Customer::factory()->create();
         $data = CustomerContact::factory()->count(3)->create(['cust_id' => $cust->cust_id]);
+
+        $response = $this->actingAs(User::factory()->create())->get(route('customers.contacts.show', $cust->cust_id));
+        $response->assertSuccessful();
+        $response->assertJson($data->toArray());
+    }
+
+    public function test_show_shared()
+    {
+        $cust = Customer::factory()->create(['parent_id' => Customer::factory()->create()]);
+        $data = CustomerContact::factory()->count(3)->create(['cust_id' => $cust->parent_id, 'shared' => true]);
 
         $response = $this->actingAs(User::factory()->create())->get(route('customers.contacts.show', $cust->cust_id));
         $response->assertSuccessful();

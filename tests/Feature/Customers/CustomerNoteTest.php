@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\CustomerNote;
+use App\Models\UserRolePermissions;
 
 class CustomerNoteTest extends TestCase
 {
@@ -28,6 +29,22 @@ class CustomerNoteTest extends TestCase
         $response->assertRedirect(route('login.index'));
     }
 
+    public function test_store_no_permission()
+    {
+        $data = [
+            'cust_id' => Customer::factory()->create()->cust_id,
+            'subject' => 'This is a test Note',
+            'details' => 'This is the notes details',
+            'shared'  => false,
+            'urgent'  => true,
+        ];
+
+        UserRolePermissions::where('role_id', 4)->where('perm_type_id', 17)->update(['allow' => false]);
+
+        $response = $this->actingAs(User::factory()->create())->post(route('customers.notes.store'), $data);
+        $response->assertStatus(403);
+    }
+
     public function test_store()
     {
         $data = [
@@ -41,6 +58,28 @@ class CustomerNoteTest extends TestCase
         $response = $this->actingAs(User::factory()->create())->post(route('customers.notes.store'), $data);
         $response->assertSuccessful();
         $this->assertDatabaseHas('customer_notes', $data);
+    }
+
+    public function test_store_parent()
+    {
+        $cust = Customer::factory()->create(['parent_id' => Customer::factory()->create()->cust_id]);
+        $data = [
+            'cust_id' => $cust->cust_id,
+            'subject' => 'This is a test Note',
+            'details' => 'This is the notes details',
+            'shared'  => true,
+            'urgent'  => true,
+        ];
+
+        $response = $this->actingAs(User::factory()->create())->post(route('customers.notes.store'), $data);
+        $response->assertSuccessful();
+        $this->assertDatabaseHas('customer_notes', [
+            'cust_id' => $cust->parent_id,
+            'subject' => $data['subject'],
+            'details' => $data['details'],
+            'shared'  => $data['shared'],
+            'urgent'  => $data['urgent'],
+        ]);
     }
 
     /*
@@ -64,6 +103,16 @@ class CustomerNoteTest extends TestCase
         $response->assertJson([$note->toArray()]);
     }
 
+    public function test_show_shared()
+    {
+        $cust = Customer::factory()->create(['parent_id' => Customer::factory()->create()->cust_id]);
+        $note = CustomerNote::factory()->create(['cust_id' => $cust->parent_id, 'shared' => true]);
+
+        $response = $this->actingAs(User::factory()->create())->get(route('customers.notes.show', $cust->cust_id));
+        $response->assertSuccessful();
+        $response->assertJson([$note->toArray()]);
+    }
+
     /*
     *   Update Method
     */
@@ -83,6 +132,23 @@ class CustomerNoteTest extends TestCase
         $response->assertRedirect(route('login.index'));
     }
 
+    public function test_update_no_permission()
+    {
+        $note = CustomerNote::factory()->create();
+        $data = [
+            'cust_id' => $note->cust_id,
+            'subject' => 'This is a test Note',
+            'details' => 'This is the notes details',
+            'shared'  => false,
+            'urgent'  => true,
+        ];
+
+        UserRolePermissions::where('role_id', 4)->where('perm_type_id', 18)->update(['allow' => false]);
+
+        $response = $this->actingAs(User::factory()->create())->put(route('customers.notes.update', $note->note_id), $data);
+        $response->assertStatus(403);
+    }
+
     public function test_update()
     {
         $note = CustomerNote::factory()->create();
@@ -99,6 +165,30 @@ class CustomerNoteTest extends TestCase
         $this->assertDatabaseHas('customer_notes', $data);
     }
 
+    public function test_update_parent()
+    {
+        $cust = Customer::factory()->create(['parent_id' => Customer::factory()->create()->cust_id]);
+        $note = CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
+        $data = [
+            'cust_id' => $note->cust_id,
+            'subject' => 'This is a test Note',
+            'details' => 'This is the notes details',
+            'shared'  => true,
+            'urgent'  => true,
+        ];
+
+        $response = $this->actingAs(User::factory()->create())->put(route('customers.notes.update', $note->note_id), $data);
+        $response->assertSuccessful();
+        $this->assertDatabaseHas('customer_notes', [
+            'note_id' => $note->note_id,
+            'cust_id' => $cust->parent_id,
+            'subject' => $data['subject'],
+            'details' => $data['details'],
+            'shared'  => $data['shared'],
+            'urgent'  => $data['urgent'],
+        ]);
+    }
+
     /*
     *   Destroy Function
     */
@@ -113,6 +203,17 @@ class CustomerNoteTest extends TestCase
         $this->assertDatabaseHas('customer_notes', $note->only(['note_id', 'subject', 'details']));
     }
 
+    public function test_destroy_no_permission()
+    {
+        $note = CustomerNote::factory()->create();
+
+        UserRolePermissions::where('role_id', 4)->where('perm_type_id', 19)->update(['allow' => false]);
+
+        $response = $this->actingAs(User::factory()->create())->delete(route('customers.notes.destroy', $note->note_id));
+        $response->assertStatus(403);
+
+    }
+
     public function test_destroy()
     {
         $note = CustomerNote::factory()->create();
@@ -120,5 +221,77 @@ class CustomerNoteTest extends TestCase
         $response = $this->actingAs(User::factory()->create())->delete(route('customers.notes.destroy', $note->note_id));
         $response->assertSuccessful();
         $this->assertSoftDeleted('customer_notes', $note->only(['note_id', 'subject', 'details']));
+    }
+
+    /*
+    *   Restore Function
+    */
+    public function test_restore_guest()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+        $note->save();
+
+        $response = $this->get(route('customers.notes.restore', $note->note_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_restore_no_permission()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+        $note->save();
+
+        $response = $this->actingAs(User::factory()->create())->get(route('customers.notes.restore', $note->note_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_restore()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+        $note->save();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('customers.notes.restore', $note->note_id));
+        $response->assertStatus(302);
+        $response->assertSessionHas(['message' => 'Customer Note restored', 'type' => 'success']);
+        $this->assertDatabaseHas('customer_notes', $note->only(['note_id', 'subject', 'details']));
+    }
+
+    /*
+    *   Force Delete Method
+    */
+    public function test_force_delete_guest()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+        $note->save();
+
+        $response = $this->delete(route('customers.notes.force-delete', $note->note_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_force_delete_no_permission()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+        $note->save();
+
+        $response = $this->actingAs(User::factory()->create())->delete(route('customers.notes.force-delete', $note->note_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_force_delete()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+        $note->save();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.notes.force-delete', $note->note_id));
+        $response->assertStatus(302);
+        $response->assertSessionHas(['message' => 'Note permanently deleted', 'type' => 'danger']);
+        $this->assertDatabaseMissing('customer_notes', $note->only(['note_id']));
     }
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
 use App\Models\CustomerContact;
+use App\Models\CustomerNote;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -74,7 +75,7 @@ class CustomerController extends Controller
                         ->with('CustomerContact.CustomerContactPhone.PhoneNumberType')
                         ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
                         ->with('CustomerNote')
-                        // ->with('ParentNote')
+                        ->with('ParentNote')
                         ->with('CustomerFile.FileUpload')
                         // ->with('ParentFile')
                         ->firstOrFail();
@@ -103,7 +104,12 @@ class CustomerController extends Controller
                     'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
                     'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
                     'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
-                ]
+                ],
+                'notes'      => [
+                    'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
+                    'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
+                    'delete' => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
+                ],
             ],
         ]);
     }

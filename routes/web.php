@@ -115,7 +115,9 @@ Route::middleware('auth')->group(function()
         Route::delete(  'contacts/{id}/force-delete', [CustomerContactsController::class, 'forceDelete'])->name('contacts.force-delete');
 
         //  Customer Notes Section
-        Route::resource('notes', CustomerNoteController::class);
+        Route::resource('notes',                    CustomerNoteController::class);
+        Route::get(     'notes/{id}/restore',      [CustomerNoteController::class, 'restore'])    ->name('notes.restore');
+        Route::delete(  'notes/{id}/force-delete', [CustomerNoteController::class, 'forceDelete'])->name('notes.force-delete');
 
         //  Customer Files Section
         Route::resource('files', CustomerFilesController::class);

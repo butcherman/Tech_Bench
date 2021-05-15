@@ -2,7 +2,7 @@
     <div>
         <div class="card-title">
             Notes:
-            <new-note-modal :cust_id="cust_id" @completed="getNotes"></new-note-modal>
+            <new-note-modal v-if="permissions.create" :cust_id="cust_id" @completed="getNotes"></new-note-modal>
         </div>
         <b-overlay :show="loading">
             <template #overlay>
@@ -14,11 +14,12 @@
             <b-card
                 v-for="note in notes"
                 :key="note.note_id"
-                class="pointer"
+                class="pointer grid-margin"
                 @click="openNote(note)"
             >
                 <b-card-title>
                     <i v-if="note.urgent" class="fas fa-exclamation-circle text-danger" title="Important!" v-b-tooltip.hover></i>
+                    <i v-if="note.shared" class="fas fa-share" title="Note Shared Across Sites" v-b-tooltip.hover></i>
                     {{note.subject}}
                 </b-card-title>
                 <b-card-text>
@@ -39,8 +40,8 @@
             @hidden="note = {}"
         >
             <template #modal-footer="{ok}">
-                <edit-note-modal :cust_id="cust_id" :note="openedNote" @completed="getNotes"></edit-note-modal>
-                <b-button variant="danger" @click="deleteNote(openedNote.note_id)">Delete</b-button>
+                <edit-note-modal v-if="permissions.update" :cust_id="cust_id" :note="openedNote" @completed="getNotes"></edit-note-modal>
+                <b-button v-if="permissions.delete" variant="danger" @click="deleteNote(openedNote.note_id)">Delete</b-button>
                 <b-button variant="primary" @click="ok()">Ok</b-button>
             </template>
             <div>
@@ -77,6 +78,10 @@
             customer_notes: {
                 type:     Array,
                 required: true,
+            },
+            permissions: {
+                type:     Object,
+                required: true,
             }
         },
         data() {
@@ -104,7 +109,7 @@
             },
             deleteNote(noteID)
             {
-                this.$bvModal.msgBoxConfirm('This cannot be undone',
+                this.$bvModal.msgBoxConfirm('Please Verify',
                     {
                         title:          'Are you sure?',
                         size:           'sm',

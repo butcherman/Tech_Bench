@@ -59,7 +59,15 @@ class CustomerContactsController extends Controller
      */
     public function show($id)
     {
-        return CustomerContact::where('cust_id', $id)->with('CustomerContactPhone.PhoneNumberType')->get();
+        $cust = Customer::findOrFail($id);
+
+        return CustomerContact::where('cust_id', $id)
+            ->with('CustomerContactPhone.PhoneNumberType')
+            ->when($cust->parent_id, function($q) use ($cust)
+            {
+                $q->orWhere('cust_id', $cust->parent_id)->where('shared', true);
+            })
+            ->get();
     }
 
     /**

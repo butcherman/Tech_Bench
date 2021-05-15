@@ -48,15 +48,12 @@ class Customer extends Model
         return $this->hasMany(CustomerEquipment::class, 'cust_id', 'cust_id');
     }
 
-    //  TODO - ParentEquipmentType()
-
     /*
     *   Equipment that is shared and belong to the parent site will show up for this customer
     */
     public function ParentEquipment()
     {
-        //  TODO - verify only shared equipment make it through
-        return $this->hasMany(CustomerEquipment::class, 'cust_id', 'parent_id')->whereShared(true); // ->where('shared', true);
+        return $this->hasMany(CustomerEquipment::class, 'cust_id', 'parent_id')->whereShared(true);
     }
 
         /*
@@ -80,13 +77,16 @@ class Customer extends Model
     */
     public function CustomerNote()
     {
-        return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id');
+        return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id')->orderBy('urgent', 'DESC');
     }
 
     /*
     *   Shared notes throughout all sites
     */
-    //  TODO - Parent Notes
+    public function ParentNote()
+    {
+        return $this->hasMany(CustomerNote::class, 'cust_id', 'parent_id')->orderBy('urgent', 'DESC')->whereShared(true);
+    }
 
     /*
     *   Files attached to this customer

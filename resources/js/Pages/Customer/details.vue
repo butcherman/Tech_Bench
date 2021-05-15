@@ -56,13 +56,17 @@
             </div>
         </div>
         <div class="row">
-            <!-- <div class="col-12 grid-margin">
+            <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <customer-notes :cust_id="details.cust_id" :customer_notes="details.customer_note"></customer-notes>
+                        <customer-notes
+                            :cust_id="details.cust_id"
+                            :customer_notes="details.parent_note.concat(details.customer_note)"
+                            :permissions="user_functions.notes"
+                        ></customer-notes>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="row">
             <!-- <div class="col-12 grid-magrin">

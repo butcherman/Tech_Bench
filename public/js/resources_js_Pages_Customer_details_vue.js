@@ -709,6 +709,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     cust_id: {
@@ -792,6 +796,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     cust_id: {
@@ -831,6 +839,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.$refs['new-note-modal'].hide();
 
         _this.$emit('completed');
+
+        _this.loading = false;
+        _this.submitted = false;
       })["catch"](function (error) {
         return _this.eventHub.$emit('axiosError', error);
       });
@@ -1343,6 +1354,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -1359,6 +1371,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     customer_notes: {
       type: Array,
+      required: true
+    },
+    permissions: {
+      type: Object,
       required: true
     }
   },
@@ -1389,7 +1405,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteNote: function deleteNote(noteID) {
       var _this2 = this;
 
-      this.$bvModal.msgBoxConfirm('This cannot be undone', {
+      this.$bvModal.msgBoxConfirm('Please Verify', {
         title: 'Are you sure?',
         size: 'sm',
         buttonSize: 'sm',
@@ -1512,6 +1528,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _quickSearch_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./quickSearch.vue */ "./resources/js/Components/Customer/quickSearch.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1735,6 +1761,33 @@ __webpack_require__.r(__webpack_exports__);
           _this6.$inertia["delete"](_this6.route('customers.contacts.force-delete', cont.cont_id), {
             onFinish: function onFinish() {
               _this6.$refs['manage-customer-modal'].hide();
+            }
+          });
+        }
+      });
+    },
+    restoreNote: function restoreNote(item) {
+      this.loading = true;
+      this.$inertia.get(this.route('customers.notes.restore', item.note_id));
+    },
+    deleteNote: function deleteNote(item) {
+      var _this7 = this;
+
+      console.log(item);
+      this.$bvModal.msgBoxConfirm('This action cannot be undone', {
+        title: 'Are You Sure?',
+        size: 'md',
+        okVariant: 'danger',
+        okTitle: 'Yes',
+        cancelTitle: 'No',
+        centered: true
+      }).then(function (res) {
+        if (res) {
+          _this7.loading = true;
+
+          _this7.$inertia["delete"](_this7.route('customers.notes.force-delete', item.note_id), {
+            onFinish: function onFinish() {
+              _this7.$refs['manage-customer-modal'].hide();
             }
           });
         }
@@ -2005,6 +2058,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Customer_customerNotes_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Components/Customer/customerNotes.vue */ "./resources/js/Components/Customer/customerNotes.vue");
 /* harmony import */ var _Components_Customer_customerFiles_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Components/Customer/customerFiles.vue */ "./resources/js/Components/Customer/customerFiles.vue");
 /* harmony import */ var _Components_Customer_manageCustomer_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Components/Customer/manageCustomer.vue */ "./resources/js/Components/Customer/manageCustomer.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -5140,35 +5197,46 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c(
-                              "b-form-checkbox",
-                              {
-                                staticClass: "text-center",
-                                attrs: { switch: "" },
-                                model: {
-                                  value: _vm.form.urgent,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "urgent", $$v)
-                                  },
-                                  expression: "form.urgent"
-                                }
-                              },
-                              [_vm._v("Mark Note As Important")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-form-checkbox",
-                              {
-                                staticClass: "text-center",
-                                attrs: { switch: "" },
-                                model: {
-                                  value: _vm.form.shared,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "shared", $$v)
-                                  },
-                                  expression: "form.shared"
-                                }
-                              },
-                              [_vm._v("Share Note Across All Sites")]
+                              "div",
+                              { staticClass: "row justify-content-center" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "col-md-8" },
+                                  [
+                                    _c(
+                                      "b-form-checkbox",
+                                      {
+                                        attrs: { switch: "" },
+                                        model: {
+                                          value: _vm.form.urgent,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "urgent", $$v)
+                                          },
+                                          expression: "form.urgent"
+                                        }
+                                      },
+                                      [_vm._v("Mark Note As Important")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-form-checkbox",
+                                      {
+                                        attrs: { switch: "" },
+                                        model: {
+                                          value: _vm.form.shared,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "shared", $$v)
+                                          },
+                                          expression: "form.shared"
+                                        }
+                                      },
+                                      [_vm._v("Share Note Across All Sites")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
                             ),
                             _vm._v(" "),
                             _c("b-form-textarea", {
@@ -5183,6 +5251,7 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
+                              staticClass: "mt-2",
                               attrs: {
                                 button_text: "Update Note",
                                 submitted: _vm.submitted
@@ -5304,35 +5373,46 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c(
-                              "b-form-checkbox",
-                              {
-                                staticClass: "text-center",
-                                attrs: { switch: "" },
-                                model: {
-                                  value: _vm.form.urgent,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "urgent", $$v)
-                                  },
-                                  expression: "form.urgent"
-                                }
-                              },
-                              [_vm._v("Mark Note As Important")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-form-checkbox",
-                              {
-                                staticClass: "text-center",
-                                attrs: { switch: "" },
-                                model: {
-                                  value: _vm.form.shared,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "shared", $$v)
-                                  },
-                                  expression: "form.shared"
-                                }
-                              },
-                              [_vm._v("Share Note Across All Sites")]
+                              "div",
+                              { staticClass: "row justify-content-center" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "col-md-8" },
+                                  [
+                                    _c(
+                                      "b-form-checkbox",
+                                      {
+                                        attrs: { switch: "" },
+                                        model: {
+                                          value: _vm.form.urgent,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "urgent", $$v)
+                                          },
+                                          expression: "form.urgent"
+                                        }
+                                      },
+                                      [_vm._v("Mark Note As Important")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-form-checkbox",
+                                      {
+                                        attrs: { switch: "" },
+                                        model: {
+                                          value: _vm.form.shared,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "shared", $$v)
+                                          },
+                                          expression: "form.shared"
+                                        }
+                                      },
+                                      [_vm._v("Share Note Across All Sites")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
                             ),
                             _vm._v(" "),
                             _c("b-form-textarea", {
@@ -5347,6 +5427,7 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
+                              staticClass: "mt-2",
                               attrs: {
                                 button_text: "Add Note",
                                 submitted: _vm.submitted
@@ -6041,10 +6122,12 @@ var render = function() {
         { staticClass: "card-title" },
         [
           _vm._v("\n        Notes:\n        "),
-          _c("new-note-modal", {
-            attrs: { cust_id: _vm.cust_id },
-            on: { completed: _vm.getNotes }
-          })
+          _vm.permissions.create
+            ? _c("new-note-modal", {
+                attrs: { cust_id: _vm.cust_id },
+                on: { completed: _vm.getNotes }
+              })
+            : _vm._e()
         ],
         1
       ),
@@ -6078,7 +6161,7 @@ var render = function() {
               "b-card",
               {
                 key: note.note_id,
-                staticClass: "pointer",
+                staticClass: "pointer grid-margin",
                 on: {
                   click: function($event) {
                     return _vm.openNote(note)
@@ -6098,6 +6181,20 @@ var render = function() {
                         ],
                         staticClass: "fas fa-exclamation-circle text-danger",
                         attrs: { title: "Important!" }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  note.shared
+                    ? _c("i", {
+                        directives: [
+                          {
+                            name: "b-tooltip",
+                            rawName: "v-b-tooltip.hover",
+                            modifiers: { hover: true }
+                          }
+                        ],
+                        staticClass: "fas fa-share",
+                        attrs: { title: "Note Shared Across Sites" }
                       })
                     : _vm._e(),
                   _vm._v(
@@ -6161,23 +6258,27 @@ var render = function() {
               fn: function(ref) {
                 var ok = ref.ok
                 return [
-                  _c("edit-note-modal", {
-                    attrs: { cust_id: _vm.cust_id, note: _vm.openedNote },
-                    on: { completed: _vm.getNotes }
-                  }),
+                  _vm.permissions.update
+                    ? _c("edit-note-modal", {
+                        attrs: { cust_id: _vm.cust_id, note: _vm.openedNote },
+                        on: { completed: _vm.getNotes }
+                      })
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "b-button",
-                    {
-                      attrs: { variant: "danger" },
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteNote(_vm.openedNote.note_id)
-                        }
-                      }
-                    },
-                    [_vm._v("Delete")]
-                  ),
+                  _vm.permissions.delete
+                    ? _c(
+                        "b-button",
+                        {
+                          attrs: { variant: "danger" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteNote(_vm.openedNote.note_id)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "b-button",
@@ -6662,6 +6763,76 @@ var render = function() {
                             _vm._v(
                               "\n                        " +
                                 _vm._s(item.name) +
+                                "\n                        "
+                            ),
+                            _c(
+                              "span",
+                              { staticClass: "float-right text-muted" },
+                              [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
+                            )
+                          ]
+                        )
+                      }),
+                      0
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.deleted["notes"] && _vm.deleted["notes"].length > 0
+                ? _c("div", { staticClass: "mt-2" }, [
+                    _c("h5", { staticClass: "text-center" }, [
+                      _vm._v("Deleted Notes")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "ul",
+                      { staticClass: "list-group" },
+                      _vm._l(_vm.deleted["notes"], function(item) {
+                        return _c(
+                          "li",
+                          {
+                            key: item.note_id,
+                            staticClass: "list-group-item text-center"
+                          },
+                          [
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "b-tooltip",
+                                  rawName: "v-b-tooltip.hover",
+                                  modifiers: { hover: true }
+                                }
+                              ],
+                              staticClass:
+                                "fas fa-trash-restore text-success pointer float-left mr-2",
+                              attrs: { title: "Restore" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.restoreNote(item)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "b-tooltip",
+                                  rawName: "v-b-tooltip.hover",
+                                  modifiers: { hover: true }
+                                }
+                              ],
+                              staticClass:
+                                "fas fa-trash text-danger pointer float-left",
+                              attrs: { title: "Perminately Delete" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteNote(item)
+                                }
+                              }
+                            }),
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(item.subject) +
                                 "\n                        "
                             ),
                             _c(
@@ -7409,7 +7580,28 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12 grid-margin" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("customer-notes", {
+                attrs: {
+                  cust_id: _vm.details.cust_id,
+                  customer_notes: _vm.details.parent_note.concat(
+                    _vm.details.customer_note
+                  ),
+                  permissions: _vm.user_functions.notes
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" })
   ])

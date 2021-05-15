@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Customers;
 
+use App\Models\CustomerNote;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerNoteRequest extends FormRequest
@@ -13,7 +14,12 @@ class CustomerNoteRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if($this->route('note'))
+        {
+            return $this->user()->can('update', CustomerNote::find($this->route('note')));
+        }
+
+        return $this->user()->can('create', CustomerNote::class);
     }
 
     /**

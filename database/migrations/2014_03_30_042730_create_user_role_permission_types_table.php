@@ -40,9 +40,13 @@ class CreateUserRolePermissionTypesTable extends Migration
             ['perm_type_id' => 12, 'description' => 'Edit Customer Equipment',   'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 13, 'description' => 'Delete Customer Equipment', 'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             //  Customer Contact Permissions
-            ['perm_type_id' => 14, 'description' => 'Add Customer Contact',     'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 15, 'description' => 'Edit Customer Contact',    'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 16, 'description' => 'Delete Customer Contact',  'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 14, 'description' => 'Add Customer Contact',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 15, 'description' => 'Edit Customer Contact',     'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 16, 'description' => 'Delete Customer Contact',   'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            //  Customer Notes Permissions
+            ['perm_type_id' => 17, 'description' => 'Add Customer Note',         'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 18, 'description' => 'Edit Customer Note',        'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 19, 'description' => 'Delete Customer Note',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
 
 
             // ['perm_type_id' => 7,  'description' => 'Use File Links',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
