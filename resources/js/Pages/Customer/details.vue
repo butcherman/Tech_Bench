@@ -38,8 +38,7 @@
                         <customer-equipment
                             :customer_equipment="details.parent_equipment.concat(details.customer_equipment)"
                             :cust_id="details.cust_id"
-                            :can_add="user_functions.equipment.create"
-                            :can_edit="user_functions.equipment.update"
+                            :permissions="user_functions.equipment"
                         ></customer-equipment>
                     </div>
                 </div>
@@ -48,8 +47,9 @@
                 <div class="card">
                     <div class="card-body">
                         <customer-contacts
-                            :customer_contacts="details.customer_contact"
+                            :customer_contacts="details.parent_contact.concat(details.customer_contact)"
                             :cust_id="details.cust_id"
+                            :permissions="user_functions.contacts"
                         ></customer-contacts>
                     </div>
                 </div>

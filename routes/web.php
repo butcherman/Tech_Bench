@@ -109,8 +109,10 @@ Route::middleware('auth')->group(function()
         Route::delete(  'equip/{id}/force-delete', [CustomerEquipmentController::class, 'forceDelete'])->name('equipment.force-delete');
 
         //  Customer Contacts Section
-        Route::resource('contacts', CustomerContactsController::class);
-        Route::get(     'download/{id}', DownloadContactController::class)->name('contacts.download');
+        Route::resource('contacts',                    CustomerContactsController::class);
+        Route::get(     'contacts/{id}/download',      DownloadContactController::class)                 ->name('contacts.download');
+        Route::get(     'contacts/{id}/restore',      [CustomerContactsController::class, 'restore'])    ->name('contacts.restore');
+        Route::delete(  'contacts/{id}/force-delete', [CustomerContactsController::class, 'forceDelete'])->name('contacts.force-delete');
 
         //  Customer Notes Section
         Route::resource('notes', CustomerNoteController::class);

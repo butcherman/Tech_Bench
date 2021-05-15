@@ -3,7 +3,7 @@
         <div class="card-title">
             Equipment:
             <new-equipment-modal
-                v-if="can_add"
+                v-if="permissions.create"
                 :existing_equip="equipIdList"
                 :cust_id="cust_id"
                 @completed="getEquipment"
@@ -26,13 +26,14 @@
                             <b-table stacked small :items="getEquipData(equip.customer_equipment_data)"></b-table>
                             <div class="text-center">
                                 <edit-equipment-modal
-                                    v-if="can_edit"
+                                    v-if="permissions.update"
                                     :cust_id="cust_id"
                                     :data="equip.customer_equipment_data"
                                     :name="equip.name"
                                     :equip_id="equip.equip_id"
                                     :cust_equip_id="equip.cust_equip_id"
                                     :shared="equip.shared"
+                                    :can_delete="permissions.delete"
                                     @completed="getEquipment"
                                 ></edit-equipment-modal>
                             </div>
@@ -62,13 +63,9 @@
                 type:     Number,
                 required: true,
             },
-            can_add: {
-                type:    Boolean,
-                default: false,
-            },
-            can_edit: {
-                type:    Boolean,
-                default: false,
+            permissions: {
+                type:     Object,
+                required: true,
             }
         },
         data() {

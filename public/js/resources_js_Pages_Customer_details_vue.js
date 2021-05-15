@@ -238,6 +238,8 @@ __webpack_require__.r(__webpack_exports__);
         onFinish: function onFinish() {
           _this.$refs['new-contact-modal'].hide();
 
+          _this.submitted = false;
+          _this.loading = false;
           _this.form = {
             cust_id: _this.cust_id,
             name: '',
@@ -332,6 +334,10 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     },
     shared: {
+      type: Boolean,
+      required: true
+    },
+    can_delete: {
       type: Boolean,
       required: true
     }
@@ -908,6 +914,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -922,6 +933,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     customer_contacts: {
       type: Array,
+      required: true
+    },
+    permissions: {
+      type: Object,
       required: true
     }
   },
@@ -1050,6 +1065,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1066,13 +1082,9 @@ __webpack_require__.r(__webpack_exports__);
       type: Number,
       required: true
     },
-    can_add: {
-      type: Boolean,
-      "default": false
-    },
-    can_edit: {
-      type: Boolean,
-      "default": false
+    permissions: {
+      type: Object,
+      required: true
     }
   },
   data: function data() {
@@ -1557,9 +1569,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -1700,6 +1709,32 @@ __webpack_require__.r(__webpack_exports__);
           _this5.$inertia["delete"](_this5.route('customers.equipment.force-delete', item.cust_equip_id), {
             onFinish: function onFinish() {
               _this5.$refs['manage-customer-modal'].hide();
+            }
+          });
+        }
+      });
+    },
+    restoreContact: function restoreContact(cont) {
+      this.loading = true;
+      this.$inertia.get(this.route('customers.contacts.restore', cont.cont_id));
+    },
+    deleteContact: function deleteContact(cont) {
+      var _this6 = this;
+
+      this.$bvModal.msgBoxConfirm('This action cannot be undone', {
+        title: 'Are You Sure?',
+        size: 'md',
+        okVariant: 'danger',
+        okTitle: 'Yes',
+        cancelTitle: 'No',
+        centered: true
+      }).then(function (res) {
+        if (res) {
+          _this6.loading = true;
+
+          _this6.$inertia["delete"](_this6.route('customers.contacts.force-delete', cont.cont_id), {
+            onFinish: function onFinish() {
+              _this6.$refs['manage-customer-modal'].hide();
             }
           });
         }
@@ -4634,15 +4669,17 @@ var render = function() {
                               2
                             ),
                             _vm._v(" "),
-                            _c(
-                              "b-button",
-                              {
-                                staticClass: "mt-4",
-                                attrs: { variant: "danger", block: "" },
-                                on: { click: _vm.deleteEquip }
-                              },
-                              [_vm._v("Delete Equipment")]
-                            )
+                            _vm.can_delete
+                              ? _c(
+                                  "b-button",
+                                  {
+                                    staticClass: "mt-4",
+                                    attrs: { variant: "danger", block: "" },
+                                    on: { click: _vm.deleteEquip }
+                                  },
+                                  [_vm._v("Delete Equipment")]
+                                )
+                              : _vm._e()
                           ]
                         }
                       }
@@ -5364,10 +5401,12 @@ var render = function() {
         { staticClass: "card-title" },
         [
           _vm._v("\n        Contacts:\n        "),
-          _c("new-contact-modal", {
-            attrs: { cust_id: _vm.cust_id },
-            on: { completed: _vm.getContacts }
-          })
+          _vm.permissions.create
+            ? _c("new-contact-modal", {
+                attrs: { cust_id: _vm.cust_id },
+                on: { completed: _vm.getContacts }
+              })
+            : _vm._e()
         ],
         1
       ),
@@ -5521,6 +5560,31 @@ var render = function() {
                 }
               },
               {
+                key: "cell(name)",
+                fn: function(data) {
+                  return [
+                    data.item.shared
+                      ? _c("i", {
+                          directives: [
+                            {
+                              name: "b-tooltip",
+                              rawName: "v-b-tooltip.hover",
+                              modifiers: { hover: true }
+                            }
+                          ],
+                          staticClass: "fas fa-share",
+                          attrs: { title: "Contact Shared Across Sites" }
+                        })
+                      : _vm._e(),
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(data.item.name) +
+                        "\n            "
+                    )
+                  ]
+                }
+              },
+              {
                 key: "cell(details)",
                 fn: function(data) {
                   return [
@@ -5545,10 +5609,15 @@ var render = function() {
                 key: "cell(actions)",
                 fn: function(data) {
                   return [
-                    _c("edit-contact-modal", {
-                      attrs: { cust_id: _vm.cust_id, contact_data: data.item },
-                      on: { completed: _vm.getContacts }
-                    }),
+                    _vm.permissions.update
+                      ? _c("edit-contact-modal", {
+                          attrs: {
+                            cust_id: _vm.cust_id,
+                            contact_data: data.item
+                          },
+                          on: { completed: _vm.getContacts }
+                        })
+                      : _vm._e(),
                     _vm._v(" "),
                     _c(
                       "b-button",
@@ -5574,30 +5643,32 @@ var render = function() {
                       [_c("i", { staticClass: "far fa-address-card" })]
                     ),
                     _vm._v(" "),
-                    _c(
-                      "b-button",
-                      {
-                        directives: [
+                    _vm.permissions.delete
+                      ? _c(
+                          "b-button",
                           {
-                            name: "b-tooltip",
-                            rawName: "v-b-tooltip.hover",
-                            modifiers: { hover: true }
-                          }
-                        ],
-                        attrs: {
-                          pill: "",
-                          size: "sm",
-                          variant: "light",
-                          title: "Delete Contact"
-                        },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteContact(data.item.cont_id)
-                          }
-                        }
-                      },
-                      [_c("i", { staticClass: "far fa-trash-alt" })]
-                    )
+                            directives: [
+                              {
+                                name: "b-tooltip",
+                                rawName: "v-b-tooltip.hover",
+                                modifiers: { hover: true }
+                              }
+                            ],
+                            attrs: {
+                              pill: "",
+                              size: "sm",
+                              variant: "light",
+                              title: "Delete Contact"
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteContact(data.item.cont_id)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "far fa-trash-alt" })]
+                        )
+                      : _vm._e()
                   ]
                 }
               }
@@ -5641,7 +5712,7 @@ var render = function() {
         { staticClass: "card-title" },
         [
           _vm._v("\n        Equipment:\n        "),
-          _vm.can_add
+          _vm.permissions.create
             ? _c("new-equipment-modal", {
                 attrs: {
                   existing_equip: _vm.equipIdList,
@@ -5750,7 +5821,7 @@ var render = function() {
                                 "div",
                                 { staticClass: "text-center" },
                                 [
-                                  _vm.can_edit
+                                  _vm.permissions.update
                                     ? _c("edit-equipment-modal", {
                                         attrs: {
                                           cust_id: _vm.cust_id,
@@ -5758,7 +5829,8 @@ var render = function() {
                                           name: equip.name,
                                           equip_id: equip.equip_id,
                                           cust_equip_id: equip.cust_equip_id,
-                                          shared: equip.shared
+                                          shared: equip.shared,
+                                          can_delete: _vm.permissions.delete
                                         },
                                         on: { completed: _vm.getEquipment }
                                       })
@@ -6562,7 +6634,12 @@ var render = function() {
                               ],
                               staticClass:
                                 "fas fa-trash-restore text-success pointer float-left mr-2",
-                              attrs: { title: "Restore" }
+                              attrs: { title: "Restore" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.restoreContact(item)
+                                }
+                              }
                             }),
                             _vm._v(" "),
                             _c("i", {
@@ -6575,7 +6652,12 @@ var render = function() {
                               ],
                               staticClass:
                                 "fas fa-trash text-danger pointer float-left",
-                              attrs: { title: "Perminately Delete" }
+                              attrs: { title: "Perminately Delete" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteContact(item)
+                                }
+                              }
                             }),
                             _vm._v(
                               "\n                        " +
@@ -7296,8 +7378,7 @@ var render = function() {
                     _vm.details.customer_equipment
                   ),
                   cust_id: _vm.details.cust_id,
-                  can_add: _vm.user_functions.equipment.create,
-                  can_edit: _vm.user_functions.equipment.update
+                  permissions: _vm.user_functions.equipment
                 }
               })
             ],
@@ -7314,8 +7395,11 @@ var render = function() {
             [
               _c("customer-contacts", {
                 attrs: {
-                  customer_contacts: _vm.details.customer_contact,
-                  cust_id: _vm.details.cust_id
+                  customer_contacts: _vm.details.parent_contact.concat(
+                    _vm.details.customer_contact
+                  ),
+                  cust_id: _vm.details.cust_id,
+                  permissions: _vm.user_functions.contacts
                 }
               })
             ],

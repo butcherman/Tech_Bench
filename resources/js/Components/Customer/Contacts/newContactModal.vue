@@ -94,7 +94,9 @@
                 this.loading   = true;
                 this.$inertia.post(route('customers.contacts.store'), this.form, {onFinish: () => {
                     this.$refs['new-contact-modal'].hide();
-                    this.form = {
+                    this.submitted = false;
+                    this.loading   = false;
+                    this.form      = {
                         cust_id: this.cust_id,
                         name:    '',
                         email:   '',

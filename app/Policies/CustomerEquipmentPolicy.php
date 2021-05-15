@@ -25,15 +25,7 @@ class CustomerEquipmentPolicy
     /**
      *  Determine if the user can update the information for the given equipment
      */
-    public function edit(User $user)
-    {
-        return $this->checkPermission($user, 'Edit Customer Equipment');
-    }
-
-    /**
-     *  Determine if the user can update the information for the given equipment
-     */
-    public function update(User $user, CustomerEquipment $customerEquipment)
+    public function update(User $user)
     {
         return $this->checkPermission($user, 'Edit Customer Equipment');
     }
@@ -41,7 +33,7 @@ class CustomerEquipmentPolicy
     /**
      *  Determine if the user can delete Customer Equipment
      */
-    public function delete(User $user, CustomerEquipment $customerEquipment)
+    public function delete(User $user)
     {
         return $this->checkPermission($user, 'Delete Customer Equipment');
     }
@@ -49,7 +41,7 @@ class CustomerEquipmentPolicy
     /**
      *  Determine if the user can restore deleted customer equipment
      */
-    public function restore(User $user, CustomerEquipment $customerEquipment)
+    public function restore(User $user)
     {
         return $this->checkPermission($user, 'Delete Customer Equipment');
     }
@@ -57,7 +49,7 @@ class CustomerEquipmentPolicy
     /**
      *  Determine if the user can completely delete customer equipment
      */
-    public function forceDelete(User $user, CustomerEquipment $customerEquipment)
+    public function forceDelete(User $user)
     {
         return $this->checkPermission($user, 'Delete Customer');
     }

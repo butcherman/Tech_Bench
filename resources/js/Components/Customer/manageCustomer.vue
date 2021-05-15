@@ -23,15 +23,12 @@
                         </li>
                     </ul>
                 </div>
-
-
-
                 <div class="mt-2" v-if="deleted['contacts'] && deleted['contacts'].length > 0">
                     <h5 class="text-center">Deleted Contacts</h5>
                     <ul class="list-group">
                         <li class="list-group-item text-center" v-for="item in deleted['contacts']" :key="item.cont_id">
-                            <i class="fas fa-trash-restore text-success pointer float-left mr-2" title="Restore" v-b-tooltip.hover></i>
-                            <i class="fas fa-trash text-danger pointer float-left" title="Perminately Delete" v-b-tooltip.hover></i>
+                            <i class="fas fa-trash-restore text-success pointer float-left mr-2" title="Restore" v-b-tooltip.hover @click="restoreContact(item)"></i>
+                            <i class="fas fa-trash text-danger pointer float-left" title="Perminately Delete" v-b-tooltip.hover @click="deleteContact(item)"></i>
                             {{item.name}}
                             <span class="float-right text-muted">Deleted: {{item.deleted_at}}</span>
                         </li>
@@ -189,6 +186,30 @@
                     {
                         this.loading = true;
                         this.$inertia.delete(this.route('customers.equipment.force-delete', item.cust_equip_id), {
+                            onFinish: () => { this.$refs['manage-customer-modal'].hide(); }
+                        });
+                    }
+                });
+            },
+            restoreContact(cont)
+            {
+                this.loading = true;
+                this.$inertia.get(this.route('customers.contacts.restore', cont.cont_id));
+            },
+            deleteContact(cont)
+            {
+                this.$bvModal.msgBoxConfirm('This action cannot be undone', {
+                    title: 'Are You Sure?',
+                    size: 'md',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No',
+                    centered: true,
+                }).then(res => {
+                    if(res)
+                    {
+                        this.loading = true;
+                        this.$inertia.delete(this.route('customers.contacts.force-delete', cont.cont_id), {
                             onFinish: () => { this.$refs['manage-customer-modal'].hide(); }
                         });
                     }

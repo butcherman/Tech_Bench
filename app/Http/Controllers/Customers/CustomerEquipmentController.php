@@ -19,7 +19,7 @@ class CustomerEquipmentController extends Controller
      */
     public function store(CustomerEquipmentRequest $request)
     {
-        $cust = Customer::findOrFail($request->cust_id);
+        $cust    = Customer::findOrFail($request->cust_id);
         $cust_id = $cust->cust_id;
 
         //  If the equipment is shared, it must be assigned to the parent site

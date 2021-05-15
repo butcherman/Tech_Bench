@@ -7,6 +7,9 @@ use App\Models\CustomerContact;
 use App\Models\CustomerContactPhone;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerContactRequest;
+use App\Models\Customer;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CustomerContactsController extends Controller
 {
@@ -15,8 +18,24 @@ class CustomerContactsController extends Controller
      */
     public function store(CustomerContactRequest $request)
     {
+        $cust    = Customer::findOrFail($request->cust_id);
+        $cust_id = $cust->cust_id;
+
+        //  If the equipment is shared, it must be assigned to the parent site
+        if($request->shared && $cust->parent_id > 0)
+        {
+            $cust_id = $cust->parent_id;
+        }
+
         //  Create the contact
-        $newContact = CustomerContact::create($request->only(['cust_id', 'name', 'email', 'shared', 'title', 'note']));
+        $newContact = CustomerContact::create([
+            'cust_id' => $cust_id,
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'shared'  => $request->shared,
+            'title'   => $request->title,
+            'note'    => $request->note,
+        ]);
 
         //  Input the contacts phone numbers
         foreach($request->phones as $phone)
@@ -48,7 +67,23 @@ class CustomerContactsController extends Controller
      */
     public function update(CustomerContactRequest $request, $id)
     {
-        CustomerContact::find($id)->update($request->only(['cust_id', 'name', 'email', 'shared', 'title', 'note']));
+        $cust    = Customer::findOrFail($request->cust_id);
+        $cust_id = $cust->cust_id;
+
+        //  If the equipment is shared, it must be assigned to the parent site
+        if($request->shared && $cust->parent_id > 0)
+        {
+            $cust_id = $cust->parent_id;
+        }
+
+        CustomerContact::find($id)->update([
+            'cust_id' => $cust_id,
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'shared'  => $request->shared,
+            'title'   => $request->title,
+            'note'    => $request->note,
+        ]);
 
         $updatedNumbers = [];
         foreach($request->phones as $phone)
@@ -90,8 +125,33 @@ class CustomerContactsController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('delete', CustomerContact::class);
+
         CustomerContact::findOrFail($id)->delete();
         return response()->noContent();
+    }
+
+
+    public function restore($id)
+    {
+        $this->authorize('restore', CustomerContact::class);
+        $cont = CustomerContact::withTrashed()->where('cont_id', $id)->first();
+        $cont->restore();
+
+        Log::channel('cust')->info('Customer Contact '.$cont->cont_id.' was restored for Customer ID '.$cont->cust_id.' by '.Auth::user()->username);
+        return redirect()->back()->with(['message' => 'Contact '.$cont->name.' restored', 'type' => 'success']);
+    }
+
+    public function forceDelete($id)
+    {
+        $this->authorize('forceDelete', CustomerContact::class);
+
+        $cont = CustomerContact::withTrashed()->where('cont_id', $id)->first();
+
+        Log::channel('cust')->alert('Customer Contact '.$cont->name.' has been permanently deleted by '.Auth::user()->username);
+        $cont->forceDelete();
+
+        return redirect()->back()->with(['message' => 'Contact permanently deleted', 'type' => 'danger']);
     }
 
     /*

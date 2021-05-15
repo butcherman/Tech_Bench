@@ -12,7 +12,7 @@ use App\Models\CustomerEquipment;
 use App\Http\Controllers\Controller;
 use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
-
+use App\Models\CustomerContact;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -72,7 +72,7 @@ class CustomerController extends Controller
                         ->with('CustomerEquipment.CustomerEquipmentData')
                         ->with('ParentEquipment.CustomerEquipmentData')
                         ->with('CustomerContact.CustomerContactPhone.PhoneNumberType')
-                        // ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
+                        ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
                         ->with('CustomerNote')
                         // ->with('ParentNote')
                         ->with('CustomerFile.FileUpload')
@@ -90,14 +90,20 @@ class CustomerController extends Controller
             'phone_types'    => PhoneNumberType::all(),
             'file_types'     => CustomerFileType::all(),
             'user_functions' => [
-                'fav'        => $isFav,                                                   //  Customer is bookmarked by the user
+                'fav'        => $isFav,                                                  //  Customer is bookmarked by the user
                 'edit'       => Auth::user()->can('update', $customer),                  //  User is allowed to edit the customers basic details
                 'manage'     => Auth::user()->can('manage', $customer),                  //  User can recover deleted items
                 'deactivate' => Auth::user()->can('delete', $customer),                  //  User can deactivate the customer profile
                 'equipment'  => [
                     'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
-                    'update' => Auth::user()->can('edit', CustomerEquipment::class),     //  If user can edit equipment
+                    'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
+                    'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete eqipment
                 ],
+                'contacts'   => [
+                    'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
+                    'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
+                    'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
+                ]
             ],
         ]);
     }

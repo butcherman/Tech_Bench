@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Customers;
 
+use App\Models\CustomerContact;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerContactRequest extends FormRequest
@@ -13,7 +14,12 @@ class CustomerContactRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if($this->route('contact'))
+        {
+            return $this->user()->can('update', CustomerContact::find($this->route('contact')));
+        }
+
+        return $this->user()->can('create', CustomerContact::class);
     }
 
     /**
@@ -30,7 +36,7 @@ class CustomerContactRequest extends FormRequest
             'email'   => 'nullable|email',
             'note'    => 'nullable|string',
             'shared'  => 'required|boolean',
-            'phones'  => 'array',
+            'phones'  => 'nullable|array',
         ];
     }
 }

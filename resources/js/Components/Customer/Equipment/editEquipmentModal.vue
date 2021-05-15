@@ -19,7 +19,7 @@
                         <text-input v-for="(d, index) in form.data" :key="index" :label="d.field_name" v-model="form.data[index].value"></text-input>
                         <submit-button button_text="Update Equipment" :submitted="submitted"></submit-button>
                     </b-form>
-                    <b-button variant="danger" class="mt-4" block @click="deleteEquip">Delete Equipment</b-button>
+                    <b-button v-if="can_delete" variant="danger" class="mt-4" block @click="deleteEquip">Delete Equipment</b-button>
                 </ValidationObserver>
             </b-overlay>
             </b-modal>
@@ -51,6 +51,10 @@
                 required: true,
             },
             shared: {
+                type:     Boolean,
+                required: true,
+            },
+            can_delete: {
                 type:     Boolean,
                 required: true,
             }

@@ -24,22 +24,25 @@ class CreateUserRolePermissionTypesTable extends Migration
         //  Default roles permission types
         $defaultData = [
             //  Administrative Permissions
-            ['perm_type_id' => 1,  'description' => 'App Settings',            'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 2,  'description' => 'Manage Users',            'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 3,  'description' => 'Manage Permissions',      'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 4,  'description' => 'Run Reports',             'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 5,  'description' => 'Manage Equipment',        'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 1,  'description' => 'App Settings',              'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 2,  'description' => 'Manage Users',              'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 3,  'description' => 'Manage Permissions',        'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 4,  'description' => 'Run Reports',               'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 5,  'description' => 'Manage Equipment',          'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
             //  Customer Permissions
-            ['perm_type_id' => 6,  'description' => 'Manage Customers',        'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 7,  'description' => 'Add Customer',            'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 8,  'description' => 'Update Customer',         'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 9,  'description' => 'Deactivate Customer',     'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 10, 'description' => 'Delete Customer',         'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 6,  'description' => 'Manage Customers',          'is_admin_link' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 7,  'description' => 'Add Customer',              'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 8,  'description' => 'Update Customer',           'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 9,  'description' => 'Deactivate Customer',       'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 10, 'description' => 'Delete Customer',           'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             //  Customer Equipment Permissions
-            ['perm_type_id' => 11, 'description' => 'Add Customer Equipment',  'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['perm_type_id' => 12, 'description' => 'Edit Customer Equipment', 'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 11, 'description' => 'Add Customer Equipment',    'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 12, 'description' => 'Edit Customer Equipment',   'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 13, 'description' => 'Delete Customer Equipment', 'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-
+            //  Customer Contact Permissions
+            ['perm_type_id' => 14, 'description' => 'Add Customer Contact',     'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 15, 'description' => 'Edit Customer Contact',    'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 16, 'description' => 'Delete Customer Contact',  'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
 
 
             // ['perm_type_id' => 7,  'description' => 'Use File Links',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],

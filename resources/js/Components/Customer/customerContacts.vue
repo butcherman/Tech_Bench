@@ -3,6 +3,7 @@
         <div class="card-title">
             Contacts:
             <new-contact-modal
+                v-if="permissions.create"
                 :cust_id="cust_id"
                 @completed="getContacts"
             ></new-contact-modal>
@@ -40,17 +41,21 @@
                         </b-tbody>
                     </b-table-simple>
                 </template>
+                <template #cell(name)="data">
+                    <i v-if="data.item.shared" class="fas fa-share" title="Contact Shared Across Sites" v-b-tooltip.hover></i>
+                    {{data.item.name}}
+                </template>
                 <template #cell(details)="data">
                     <b-button @click="data.toggleDetails" variant="info">
                         {{data.detailsShowing ? 'Hide' : 'Show'}} Details
                     </b-button>
                 </template>
                 <template #cell(actions)="data">
-                    <edit-contact-modal :cust_id="cust_id" :contact_data="data.item" @completed="getContacts"></edit-contact-modal>
+                    <edit-contact-modal v-if="permissions.update" :cust_id="cust_id" :contact_data="data.item" @completed="getContacts"></edit-contact-modal>
                     <b-button :href="route('customers.contacts.download', data.item.cont_id)" pill size="sm" variant="light" title="Download Contact" v-b-tooltip.hover>
                         <i class="far fa-address-card"></i>
                     </b-button>
-                    <b-button pill size="sm" variant="light" title="Delete Contact" v-b-tooltip.hover @click="deleteContact(data.item.cont_id)">
+                    <b-button v-if="permissions.delete" pill size="sm" variant="light" title="Delete Contact" v-b-tooltip.hover @click="deleteContact(data.item.cont_id)">
                         <i class="far fa-trash-alt"></i>
                     </b-button>
                 </template>
@@ -72,6 +77,10 @@
             },
             customer_contacts: {
                 type:     Array,
+                required: true,
+            },
+            permissions: {
+                type:     Object,
                 required: true,
             }
         },
