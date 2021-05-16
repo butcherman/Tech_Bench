@@ -14,10 +14,10 @@ class CustomerFileRequest extends FormRequest
      */
     public function authorize()
     {
-        // if($this->route('equipment'))
-        // {
-        //     return $this->user()->can('update', CustomerEquipment::find($this->route('equipment')));
-        // }
+        if($this->route('file'))
+        {
+            return $this->user()->can('update', CustomerFile::find($this->route('file')));
+        }
 
         return $this->user()->can('create', CustomerFile::class);
     }

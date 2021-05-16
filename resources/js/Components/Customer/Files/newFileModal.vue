@@ -97,8 +97,9 @@
                     type:   null,
                     shared: false,
                 };
-                this.submitted = false;
-                this.loading   = false;
+                this.fileProgress = 0;
+                this.submitted    = false;
+                this.loading      = false;
             },
             //  If the name field is empty, we will populate it with the name of the file
             checkName(name)

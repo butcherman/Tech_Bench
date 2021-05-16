@@ -20,8 +20,7 @@
                         <a :href="route('download', [row.item.file_upload.file_id, row.item.file_upload.file_name])" title="Click to Download" v-b-tooltip.hover>{{row.item.name}}</a>
                     </template>
                     <template #cell(actions)="data">
-                        <!-- <edit-file-modal v-if="permissions.update" :cust_id="cust_id" :contact_data="data.item" @completed="getFiles"></edit-file-modal> -->
-
+                        <edit-file-modal v-if="permissions.update" :cust_id="cust_id" :data="data.item" @completed="getFiles"></edit-file-modal>
                         <b-button v-if="permissions.delete" pill size="sm" variant="light" title="Delete File" v-b-tooltip.hover @click="deleteFile(data.item.cust_file_id)">
                             <i class="far fa-trash-alt"></i>
                         </b-button>
@@ -36,10 +35,11 @@
 </template>
 
 <script>
-    import newFileModal from './Files/newFileModal.vue'
+    import newFileModal  from './Files/newFileModal.vue';
+    import editFileModal from './Files/editFileModal.vue';
 
     export default {
-        components: { newFileModal },
+        components: { newFileModal, editFileModal },
         props: {
             cust_id: {
                 type:     Number,
@@ -102,7 +102,6 @@
                         this.loading = false;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
-
             deleteFile(file)
             {
                 this.$bvModal.msgBoxConfirm('Please Verify You Want Delete This File',
@@ -121,8 +120,10 @@
                         {
                             this.loading = true;
                             axios.delete(this.route('customers.files.destroy', file))
+                                .then(() => {
+                                    this.getFiles();
+                                })
                                 .catch(error => this.eventHub.$emit('axiosError', error));
-                            this.getFiles();
                         }
                     });
             }

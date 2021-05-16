@@ -26,7 +26,7 @@ class CustomerFilePolicy
      */
     public function update(User $user)
     {
-        return $this->checkPermission($user, 'Update Customer File');
+        return $this->checkPermission($user, 'Edit Customer File');
     }
 
     /**

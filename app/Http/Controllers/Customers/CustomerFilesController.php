@@ -86,6 +86,31 @@ class CustomerFilesController extends Controller
                 ->get();
     }
 
+    /*
+    *   Update the basic information for an uploaded file
+    */
+    public function update(CustomerFileRequest $request, $id)
+    {
+        $cust    = Customer::findOrFail($request->cust_id);
+        $cust_id = $cust->cust_id;
+
+        //  If the equipment is shared, it must be assigned to the parent site
+        if($request->shared && $cust->parent_id > 0)
+        {
+            $cust_id = $cust->parent_id;
+        }
+
+        CustomerFile::find($id)->update([
+            'file_type_id' => CustomerFileType::where('description', $request->type)->first()->file_type_id,
+            'cust_id'      => $cust_id,
+            'shared'       => $request->shared,
+            'name'         => $request->name,
+        ]);
+
+        Log::channel('cust')->info('Customer File ID '.$id.' has been updated by '.Auth::user()->username);
+        return redirect()->back()->with(['message' => 'File Information Updated', 'type' => 'success']);
+    }
+
     /**
      *  Delete a customer File
      */
@@ -96,5 +121,36 @@ class CustomerFilesController extends Controller
         CustomerFile::find($id)->delete();
         Log::channel('cust')->notice('Customer FIle ID '.$id.' has been deleted by '.Auth::user()->username);
         return response()->noContent();
+    }
+
+    /*
+    *   Restore a file that was deleted
+    */
+    public function restore($id)
+    {
+        $this->authorize('restore', CustomerFile::class);
+        $file = CustomerFile::withTrashed()->where('cust_file_id', $id)->first();
+        $file->restore();
+
+        Log::channel('cust')->info('Customer File ID '.$id.' has been restored for Customer ID '.$file->cust_id.' by '.Auth::user()->username);
+
+        return redirect()->back()->with(['message' => 'Customer File restored', 'type' => 'success']);
+    }
+
+    /*
+    *   Permanently delete a file
+    */
+    public function forceDelete($id)
+    {
+        $this->authorize('forceDelete', CustomerFile::class);
+
+        $file   = CustomerFile::withTrashed()->where('cust_file_id', $id)->first();
+        $fileID = $file->file_id;
+
+        Log::channel('cust')->alert('Customer File ID '.$id.' has been permanently deleted by '.Auth::user()->username);
+        $file->forceDelete();
+        $this->deleteFile($fileID);
+
+        return redirect()->back()->with(['message' => 'File permanently deleted', 'type' => 'danger']);
     }
 }
