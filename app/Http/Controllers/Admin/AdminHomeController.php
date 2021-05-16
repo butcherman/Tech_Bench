@@ -22,13 +22,13 @@ class AdminHomeController extends Controller
         //  Build each of the Administration menus depending on customer's access
         $userBuild      = $this->buildUserList();
         $equipmentBuild = $this->buildEquipmentList();
-
+        $custBuild      = $this->buildCustomerList();
 
 
 
 
         return Inertia::render('Admin/index', [
-            'links' => array_merge($userBuild, $equipmentBuild),
+            'links' => array_merge($userBuild, $equipmentBuild, $custBuild),
         ]);
     }
 
@@ -80,22 +80,22 @@ class AdminHomeController extends Controller
                 'equipment types and categories' => [
                     [
                         'name' => 'Create New Category',
-                        'icon' => 'far fa-plus-square',
+                        'icon' => 'fas fa-plus-square',
                         'link' => route('admin.equipment.categories.create'),
                     ],
                     [
                         'name' => 'Modify Existing Category',
-                        'icon' => 'far fa-edit',
+                        'icon' => 'fas fa-edit',
                         'link' => route('admin.equipment.categories.index'),
                     ],
                     [
                         'name' => 'Create New Equipment',
-                        'icon' => 'far fa-plus-square',
+                        'icon' => 'fas fa-plus-square',
                         'link' => route('admin.equipment.create'),
                     ],
                     [
                         'name' => 'Modify Existing Equipment',
-                        'icon' => 'far fa-edit',
+                        'icon' => 'fas fa-edit',
                         'link' => route('admin.equipment.index'),
                     ],
                     //  TODO - Finish Me
@@ -110,6 +110,43 @@ class AdminHomeController extends Controller
 
         return $nav;
     }
+
+    //  Build Customer Management list
+    protected function buildCustomerList()
+    {
+        $nav = [];
+
+        if($this->getPermissionValue('Manage Customers'))
+        {
+            $nav = [
+                'Manage Customers' => [
+                    [
+                        'name' => 'Change Customer ID Number',
+                        'icon' => 'fas fa-fingerprint',
+                        'link' => route('customers.change-id.index'),
+                    ],
+                    [
+                        'name' => 'View Deactivated Customers',
+                        'icon' => 'fas fa-ban',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'View Deleted Customer Information',
+                        'icon' => 'fas fa-trash-alt',
+                        'link' => '#',
+                    ],
+                ],
+            ];
+        }
+
+        return $nav;
+    }
+
+
+
+
+
+
 
 
     //  Determine if the user has permissions for a specific area

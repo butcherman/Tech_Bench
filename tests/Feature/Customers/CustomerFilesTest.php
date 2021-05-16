@@ -180,6 +180,23 @@ class CustomerFilesTest extends TestCase
         $this->assertDatabaseHas('customer_files', ['cust_id' => $data['cust_id'], 'name' => $data['name'], 'shared' => $data['shared']]);
     }
 
+    public function test_update_to_parent()
+    {
+        $cust = Customer::factory()->create(['parent_id' => Customer::factory()->create()->cust_id]);
+        $file = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
+        $data = [
+            'cust_id' => $cust->cust_id,
+            'name'    => 'This is a test file',
+            'type'    => CustomerFileType::inRandomOrder()->first()->description,
+            'shared'  => true,
+        ];
+
+        $response = $this->actingAs(User::factory()->create())->put(route('customers.files.update', $file->cust_file_id), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas(['message' => 'File Information Updated', 'type' => 'success']);
+        $this->assertDatabaseHas('customer_files', ['cust_id' => $cust->parent_id, 'name' => $data['name'], 'shared' => $data['shared']]);
+    }
+
     /*
     *   Destroy Method
     */

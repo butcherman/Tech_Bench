@@ -31,7 +31,7 @@ class UserTest extends TestCase
 
     public function test_index()
     {
-        $response = $this->actingAs($this->user)->get(route('settings.index'));
+        $response = $this->from(route('dashboard'))->actingAs($this->user)->get(route('settings.index'));
         $response->assertSuccessful();
     }
 

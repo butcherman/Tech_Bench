@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\CustomerContact;
@@ -17,6 +18,8 @@ class GetDeletedItemsController extends Controller
      */
     public function __invoke($id, Request $request)
     {
+        $this->authorize('manage', Customer::class);
+
         $deleted = [];
 
         //  Get deleted Equipment

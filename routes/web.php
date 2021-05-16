@@ -27,7 +27,7 @@ use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerBookmarksController;
 use App\Http\Controllers\Customers\BreakCustomerLinkController;
-
+use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
@@ -123,6 +123,9 @@ Route::middleware('auth')->group(function()
         Route::resource('files',                    CustomerFilesController::class);
         Route::get(     'files/{id}/restore',      [CustomerFilesController::class, 'restore'])    ->name('files.restore');
         Route::delete(  'files/{id}/force-delete', [CustomerFilesController::class, 'forceDelete'])->name('files.force-delete');
+
+        //  Customer Management
+        Route::resource('change-id',                CustomerIdController::class);
     });
 
     //  Customer primary resource Routes
