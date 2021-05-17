@@ -30,30 +30,7 @@ class EquipmentCategoryPolicy
         }
     }
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\EquipmentCategory  $equipmentCategory
-     * @return mixed
-     */
-    public function view(User $user, EquipmentCategory $equipmentCategory)
-    {
-        return false;
-    }
-
-    /**
+        /**
      * Determine whether the user can create models.
      *
      * @param  \App\Models\User  $user
@@ -84,30 +61,6 @@ class EquipmentCategoryPolicy
      * @return mixed
      */
     public function delete(User $user, EquipmentCategory $equipmentCategory)
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\EquipmentCategory  $equipmentCategory
-     * @return mixed
-     */
-    public function restore(User $user, EquipmentCategory $equipmentCategory)
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\EquipmentCategory  $equipmentCategory
-     * @return mixed
-     */
-    public function forceDelete(User $user, EquipmentCategory $equipmentCategory)
     {
         return false;
     }

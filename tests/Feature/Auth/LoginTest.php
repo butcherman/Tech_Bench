@@ -68,5 +68,14 @@ class LoginTest extends TestCase
         $response->assertRedirect(route('dashboard'));
     }
 
+    public function test_password_expired_redirect()
+    {
+        $user = User::factory()->create(['password_expires' => Carbon::yesterday()]);
+
+        $response = $this->actingAs($user)->get(route('home'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('password.edit', 'change'));
+    }
+
     //  TODO - Test Remember Me Token
 }
