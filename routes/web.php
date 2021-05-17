@@ -28,6 +28,7 @@ use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerBookmarksController;
 use App\Http\Controllers\Customers\BreakCustomerLinkController;
 use App\Http\Controllers\Customers\CustomerIdController;
+use App\Http\Controllers\Customers\DeactivatedCustomersController;
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
@@ -95,18 +96,18 @@ Route::middleware('auth')->group(function()
     Route::prefix('customers')->name('customers.')->group(function()
     {
         //  Customer Details Section
-        Route::get( 'get-deleted/{id}',   GetDeletedItemsController::class)  ->name('get-deleted');
-        Route::get( 'break-link/{id}',    BreakCustomerLinkController::class)->name('break-link');
-        Route::put( 'toggle-bookmark',    CustomerBookmarksController::class)->name('bookmark');
-        Route::post('check-id',           CheckCustIdController::class)      ->name('check-id');
-        Route::post('search',             CustomerSearchController::class)   ->name('search');
-        Route::post('link-customer',      LinkCustomerController::class)     ->name('link-customer');
+        Route::get( 'get-deleted/{id}',                GetDeletedItemsController::class)  ->name('get-deleted');
+        Route::get( 'break-link/{id}',                 BreakCustomerLinkController::class)->name('break-link');
+        Route::put( 'toggle-bookmark',                 CustomerBookmarksController::class)->name('bookmark');
+        Route::post('check-id',                        CheckCustIdController::class)      ->name('check-id');
+        Route::post('search',                          CustomerSearchController::class)   ->name('search');
+        Route::post('link-customer',                   LinkCustomerController::class)     ->name('link-customer');
 
         //  Customer Equipment Section
-        Route::resource('equipment',                CustomerEquipmentController::class);
-        Route::get(     'equipment-list',           EquipmentListController::class)                    ->name('equip-list');
-        Route::get(     'equip/{id}/restore',      [CustomerEquipmentController::class, 'restore'])    ->name('equipment.restore');
-        Route::delete(  'equip/{id}/force-delete', [CustomerEquipmentController::class, 'forceDelete'])->name('equipment.force-delete');
+        Route::resource('equipment',                   CustomerEquipmentController::class);
+        Route::get(     'equipment-list',              EquipmentListController::class)                    ->name('equip-list');
+        Route::get(     'equip/{id}/restore',         [CustomerEquipmentController::class, 'restore'])    ->name('equipment.restore');
+        Route::delete(  'equip/{id}/force-delete',    [CustomerEquipmentController::class, 'forceDelete'])->name('equipment.force-delete');
 
         //  Customer Contacts Section
         Route::resource('contacts',                    CustomerContactsController::class);
@@ -115,17 +116,20 @@ Route::middleware('auth')->group(function()
         Route::delete(  'contacts/{id}/force-delete', [CustomerContactsController::class, 'forceDelete'])->name('contacts.force-delete');
 
         //  Customer Notes Section
-        Route::resource('notes',                    CustomerNoteController::class);
-        Route::get(     'notes/{id}/restore',      [CustomerNoteController::class, 'restore'])    ->name('notes.restore');
-        Route::delete(  'notes/{id}/force-delete', [CustomerNoteController::class, 'forceDelete'])->name('notes.force-delete');
+        Route::resource('notes',                       CustomerNoteController::class);
+        Route::get(     'notes/{id}/restore',         [CustomerNoteController::class, 'restore'])    ->name('notes.restore');
+        Route::delete(  'notes/{id}/force-delete',    [CustomerNoteController::class, 'forceDelete'])->name('notes.force-delete');
 
         //  Customer Files Section
-        Route::resource('files',                    CustomerFilesController::class);
-        Route::get(     'files/{id}/restore',      [CustomerFilesController::class, 'restore'])    ->name('files.restore');
-        Route::delete(  'files/{id}/force-delete', [CustomerFilesController::class, 'forceDelete'])->name('files.force-delete');
+        Route::resource('files',                       CustomerFilesController::class);
+        Route::get(     'files/{id}/restore',         [CustomerFilesController::class, 'restore'])    ->name('files.restore');
+        Route::delete(  'files/{id}/force-delete',    [CustomerFilesController::class, 'forceDelete'])->name('files.force-delete');
 
         //  Customer Management
-        Route::resource('change-id',                CustomerIdController::class);
+        Route::resource('change-id',                   CustomerIdController::class);
+        Route::get('show-deactivated',                 DeactivatedCustomersController::class)->name('show-deactivated');
+        Route::get('{id}/restore',                    [CustomerController::class, 'restore'])->name('restore');
+        Route::delete('{id}/force-delete',            [CustomerController::class, 'forceDelete'])->name('force-delete');
     });
 
     //  Customer primary resource Routes

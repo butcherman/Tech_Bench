@@ -197,4 +197,74 @@ class CustomerTest extends TestCase
         $response->assertRedirect(route('customers.index'));
         $this->assertSoftDeleted('customers', $cust->only(['cust_id']));
     }
+
+    /*
+    *   Restore Method
+    */
+    public function test_restore_guest()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+
+        $response = $this->get(route('customers.restore', $cust->cust_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_restore_no_permission()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+
+        $response = $this->actingAs(User::factory()->create())->get(route('customers.restore', $cust->cust_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_restore()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('customers.restore', $cust->cust_id));
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('customers', ['cust_id' => $cust->cust_id, 'deleted_at' => null]);
+    }
+
+    /*
+    *   Force Delete Method
+    */
+    public function test_force_delete_guest()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+
+        $response = $this->delete(route('customers.force-delete', $cust->cust_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_force_delete_no_permission()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+
+        $response = $this->actingAs(User::factory()->create())->delete(route('customers.force-delete', $cust->cust_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_force_delete()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.force-delete', $cust->cust_id));
+        $response->assertSuccessful();
+        $this->assertDatabaseMissing('customers', $cust->only(['cust_id']));
+    }
 }

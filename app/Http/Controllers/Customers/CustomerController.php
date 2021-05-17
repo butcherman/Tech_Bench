@@ -17,6 +17,7 @@ use App\Models\UserCustomerBookmark;
 use App\Http\Requests\Customers\CustomerRequest;
 
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -142,5 +143,35 @@ class CustomerController extends Controller
 
         Log::channel('cust')->alert('Customer ID '.$id.' has been deactivated by '.Auth::user()->username);
         return redirect(route('customers.index'))->with(['message' => 'Customer '.$cust->name.' deactivated', 'type' => 'danger']);
+    }
+
+    /*
+    *   Restore a customer who was deactivated
+    */
+    public function restore($id)
+    {
+        $this->authorize('manage', Customer::class);
+
+        $cust = Customer::withTrashed()->where('cust_id', $id)->firstOrFail();
+        $cust->restore();
+
+        Log::channel('cust')->info('Customer '.$cust->name.' has been restored by '.Auth::user()->username);
+
+        return redirect()->back()->with(['message' => 'Customers Restored', 'type' => 'success']);
+    }
+
+    /*
+    *   Completely Delete a customer and all associated informatin/files
+    */
+    public function forceDelete($id)
+    {
+        $this->authorize('manage', Customer::class);
+
+        $cust = Customer::withTrashed()->where('cust_id', $id)->firstOrFail();
+
+        Log::channel('cust')->notice('Customer '.$cust->name.' deleted by '.Auth::user()->username);
+        $cust->forceDelete();
+
+        return response()->noContent();
     }
 }

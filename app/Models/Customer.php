@@ -15,6 +15,11 @@ class Customer extends Model
     protected $guarded    = ['updated_at', 'created_at', 'deleted_at'];
     protected $hidden     = ['updated_at', 'created_at', 'deleted_at'];
     protected $appends    = ['child_count'];
+    protected $casts      = [
+        'created_at' => 'datetime:M d, Y',
+        'updated_at' => 'datetime:M d, Y',
+        'deleted_at' => 'datetime:M d, Y',
+    ];
 
     /*
     *   If a customer is part of a multi-site customer, each site can be listed separately yet still be linked to the main site

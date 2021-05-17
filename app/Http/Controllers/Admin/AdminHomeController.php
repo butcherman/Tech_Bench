@@ -128,7 +128,7 @@ class AdminHomeController extends Controller
                     [
                         'name' => 'View Deactivated Customers',
                         'icon' => 'fas fa-ban',
-                        'link' => '#',
+                        'link' => route('customers.show-deactivated'),
                     ],
                     [
                         'name' => 'View Deleted Customer Information',
