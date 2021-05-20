@@ -833,6 +833,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     cust_id: {
@@ -887,6 +888,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
 //
 //
 //
@@ -1414,10 +1416,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Notes_editNoteModal_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Notes/editNoteModal.vue */ "./resources/js/Components/Customer/Notes/editNoteModal.vue");
 /* harmony import */ var _Notes_newNoteModal_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Notes/newNoteModal.vue */ "./resources/js/Components/Customer/Notes/newNoteModal.vue");
 /* harmony import */ var vue_clamp__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-clamp */ "./node_modules/vue-clamp/Clamp.js");
-//
-//
-//
-//
 //
 //
 //
@@ -5491,7 +5489,7 @@ var render = function() {
         "b-modal",
         {
           ref: "edit-note-modal",
-          attrs: { title: "Edit Note", "hide-footer": "" }
+          attrs: { title: "Edit Note", "hide-footer": "", size: "lg" }
         },
         [
           _c(
@@ -5583,8 +5581,12 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c("b-form-textarea", {
-                              attrs: { placeholder: "Enter Note", rows: "5" },
+                            _c("text-editor", {
+                              attrs: {
+                                placeholder: "Enter Note",
+                                label: "Note Details",
+                                rules: "required"
+                              },
                               model: {
                                 value: _vm.form.details,
                                 callback: function($$v) {
@@ -5665,6 +5667,7 @@ var render = function() {
           attrs: {
             id: "new-note-modal",
             title: "Add New Note",
+            size: "lg",
             "hide-footer": ""
           },
           on: { hidden: _vm.resetForm }
@@ -5706,7 +5709,7 @@ var render = function() {
                           },
                           [
                             _c("text-input", {
-                              attrs: { label: "Subject" },
+                              attrs: { label: "Subject", rules: "required" },
                               model: {
                                 value: _vm.form.subject,
                                 callback: function($$v) {
@@ -5759,8 +5762,12 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c("b-form-textarea", {
-                              attrs: { placeholder: "Enter Note", rows: "5" },
+                            _c("text-editor", {
+                              attrs: {
+                                placeholder: "Enter Note",
+                                label: "Note Details",
+                                rules: "required"
+                              },
                               model: {
                                 value: _vm.form.details,
                                 callback: function($$v) {
@@ -6581,23 +6588,12 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _c(
-                  "b-card-text",
-                  [
-                    _c(
-                      "v-clamp",
-                      { attrs: { autoresize: "", "max-lines": 3 } },
-                      [
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(note.details) +
-                            "\n                "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                ),
+                _c("b-card-text", {
+                  staticClass: "customer-note-minimized ql-editor",
+                  domProps: { innerHTML: _vm._s(note.details) }
+                }),
+                _vm._v(" "),
+                _c("div", [_vm._v("...")]),
                 _vm._v(" "),
                 _c("span", { staticClass: "float-left text-muted" }, [
                   _vm._v("Click to Expand")
@@ -6676,11 +6672,10 @@ var render = function() {
         },
         [
           _vm._v(" "),
-          _c("div", [
-            _vm._v(
-              "\n            " + _vm._s(_vm.openedNote.details) + "\n        "
-            )
-          ]),
+          _c("div", {
+            staticClass: "ql-editor",
+            domProps: { innerHTML: _vm._s(_vm.openedNote.details) }
+          }),
           _vm._v(" "),
           _c("div", { staticClass: "mt-4" }, [
             _vm.openedNote.updated_author

@@ -6,6 +6,7 @@
             id="new-note-modal"
             ref="new-note-modal"
             title="Add New Note"
+            size="lg"
             hide-footer
             @hidden="resetForm"
         >
@@ -15,14 +16,14 @@
                 </template>
                 <ValidationObserver v-slot="{handleSubmit}">
                     <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-                        <text-input label="Subject" v-model="form.subject"></text-input>
+                        <text-input label="Subject" v-model="form.subject" rules="required"></text-input>
                         <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <b-form-checkbox v-model="form.urgent" switch>Mark Note As Important</b-form-checkbox>
                                 <b-form-checkbox v-model="form.shared" switch>Share Note Across All Sites</b-form-checkbox>
                             </div>
                         </div>
-                        <b-form-textarea v-model="form.details" placeholder="Enter Note" rows="5"></b-form-textarea>
+                        <text-editor v-model="form.details" placeholder="Enter Note" label="Note Details" rules="required"></text-editor>
                         <submit-button class="mt-2" button_text="Add Note" :submitted="submitted"></submit-button>
                     </b-form>
                 </ValidationObserver>

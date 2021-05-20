@@ -5,6 +5,7 @@
             ref="edit-note-modal"
             title="Edit Note"
             hide-footer
+            size="lg"
         >
             <b-overlay :show="loading">
                 <template #overlay>
@@ -19,7 +20,7 @@
                                 <b-form-checkbox v-model="form.shared" switch>Share Note Across All Sites</b-form-checkbox>
                             </div>
                         </div>
-                        <b-form-textarea v-model="form.details" placeholder="Enter Note" rows="5"></b-form-textarea>
+                        <text-editor v-model="form.details" placeholder="Enter Note" label="Note Details" rules="required"></text-editor>
                         <submit-button class="mt-2" button_text="Update Note" :submitted="submitted"></submit-button>
                     </b-form>
                 </ValidationObserver>
