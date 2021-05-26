@@ -32,7 +32,7 @@ use App\Http\Controllers\Customers\DeactivatedCustomersController;
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
-
+use App\Http\Controllers\Home\UploadImageController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
 use App\Http\Controllers\User\DisabledUserController;
@@ -70,9 +70,10 @@ Route::middleware('guest')->group(function()
 *   Basic Authenticated User Routes
 */
 Route::middleware(['auth'])->group(function () {
-    Route::post('/logout',    LogoutController::class)   ->name('logout');
-    Route::get( '/dashboard', DashboardController::class)->name('dashboard');
-    Route::get( '/about',     AboutController::class)    ->name('about');
+    Route::post('/logout',      LogoutController::class)     ->name('logout');
+    Route::get( '/dashboard',   DashboardController::class)  ->name('dashboard');
+    Route::get( '/about',       AboutController::class)      ->name('about');
+    Route::post('upload-image', UploadImageController::class) ->name('upload-image');
 });
 
 /*

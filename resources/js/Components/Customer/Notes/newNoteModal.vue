@@ -9,6 +9,7 @@
             size="lg"
             hide-footer
             @hidden="resetForm"
+            no-enforce-focus
         >
             <b-overlay :show="loading">
                 <template #overlay>
@@ -68,6 +69,7 @@
             {
                 this.loading   = true;
                 this.submitted = true;
+
                 axios.post(this.route('customers.notes.store'), this.form)
                     .then(() => {
                         this.$refs['new-note-modal'].hide();

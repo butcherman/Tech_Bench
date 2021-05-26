@@ -6,6 +6,7 @@
             title="Edit Note"
             hide-footer
             size="lg"
+            no-enforce-focus
         >
             <b-overlay :show="loading">
                 <template #overlay>

@@ -20,13 +20,20 @@ import camelCase           from 'lodash/camelCase';
 require('./validation.js');
 
 /*
+*   TinyMCE
+*/
+require('./tinyMce.js');
+
+/*
 *   Third party Components
 */
 import VueGoodTablePlugin from 'vue-good-table';
 import draggable          from 'vuedraggable';
+import Editor             from '@tinymce/tinymce-vue';
 
 Vue.use(VueGoodTablePlugin);
 Vue.component('draggable', draggable);
+Vue.component('editor', Editor);
 
 /*
 *   Default Layout

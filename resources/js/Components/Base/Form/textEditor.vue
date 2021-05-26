@@ -7,7 +7,11 @@
             <template slot="label">
                 <slot name="label"></slot>
             </template>
-            <quill-editor v-model="curVal" :options="editorOptions"></quill-editor>
+            <editor
+                v-model="curVal"
+                api-key="no-api-key"
+                :init="editorInit"
+            ></editor>
             <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
             <b-form-invalid-feedback :state="false" v-if="errors && errors[name]">{{errors[name]}}</b-form-invalid-feedback>
         </b-form-group>
@@ -15,11 +19,10 @@
 </template>
 
 <script>
-    import { quillEditor } from 'vue-quill-editor'
-    // import Quill from 'quill';
-
+    /*
+    *   If the editor is inside a BootstrapVue Modal, be sure to set the "no-enforce-focus" property
+    */
     export default {
-        components: { quillEditor },
         props: {
             value: {
                 type:    [String, Number],
@@ -47,30 +50,54 @@
                 required: false,
                 default: '',
             },
-
             mode: {
                 type:     String,
                 default: 'eager',
             },
+            allow_image: {
+                type:    Boolean,
+                default: false,
+            }
         },
         data() {
             return {
                 curVal: this.value,
-                editorOptions: {
-                    placeholder: this.placeholder,
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'underline', 'strike'],
-                            [{size: ['small', false, 'large', 'huge']}],
-                            ['blockquote', 'code-block'],
-                            [{list: 'ordered'}, {list: 'bullet'}],
-                            [{ 'indent': '-1'}, { 'indent': '+1' }],
-                            [{ 'align': [] }],
-                            ['clean']
-                        ],
+                editorInit: {
+                    plugins             : 'autolink advlist lists link image table spellchecker fullscreen preview',
+                    height              : 500,
+                    browser_spellcheck  : true,
+                    toolbar             : 'formatselect spellchecker | bold italic strikethrough forecolor | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | table | fullscreen preview link image',
+                    relative_urls       : false,
+                    automatic_uploads   : true,
+                    images_upload_url   : route('upload-image'),
+                    file_picker_types   : 'image',
+                    file_picker_callback: function(cb, value, meta)
+                    {
+                        var input = document.createElement('input');
+                        input.setAttribute('type', 'file');
+                        input.setAttribute('accept', 'image/*');
+                        input.onchange    = function() {
+                            var file   = this.files[0];
+                            var reader = new FileReader();
+                            reader.readAsDataURL(file);
+                            reader.onload = function ()
+                            {
+                                var id        = 'blobid' + (new Date()).getTime();
+                                var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                                var base64    = reader.result.split(',')[1];
+                                var blobInfo  = blobCache.create(id, file, base64);
+                                blobCache.add(blobInfo);
+                                cb(blobInfo.blobUri(), { title: file.name });
+                            };
+                        };
+                        input.click();
                     }
+
                 }
             }
+        },
+        mounted() {
+            //  this.displayEditor(true);
         },
         watch: {
             curVal(val)
@@ -83,7 +110,10 @@
             }
         },
         computed: {
-            //
+            image()
+            {
+                return this.allow_image ? 'image' : '';
+            }
         },
         methods: {
             emitBlur()
@@ -106,7 +136,7 @@
                 }
 
                 return v.valid;
-            }
+            },
         }
     }
 </script>
