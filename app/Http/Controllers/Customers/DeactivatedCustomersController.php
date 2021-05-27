@@ -12,8 +12,10 @@ class DeactivatedCustomersController extends Controller
     /**
      *  Show all customers who have been deactivated
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
+        $this->authorize('manage', Customer::class);
+
         return Inertia::render('Customer/listDeactivated', [
             'list' => Customer::onlyTrashed()->get()->makeVisible('deleted_at'),
         ]);
