@@ -228,7 +228,7 @@ return [
     */
     'cache' => [
         'enabled'  => false,
-        'key'      => 'laravel-modules',
+        'key'      => 'tech-bench-modules',
         'lifetime' => 60,
     ],
     /*

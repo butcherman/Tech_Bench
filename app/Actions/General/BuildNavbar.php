@@ -3,6 +3,7 @@
 namespace App\Actions\General;
 
 use Illuminate\Support\Facades\Gate;
+use Nwidart\Modules\Facades\Module;
 
 class BuildNavbar
 {
@@ -15,7 +16,9 @@ class BuildNavbar
         $admin  = $this->getAdminNavbar();
         $navBar = $this->getPrimaryNavbar();
 
-        return array_merge($navBar, $admin);
+        $modules = $this->getModules();
+
+        return array_merge($navBar, $admin, $modules);
     }
 
     /*
@@ -57,5 +60,29 @@ class BuildNavbar
         }
 
         return [];
+    }
+
+    //  Get landing routes for all active modules
+    protected function getModules()
+    {
+        $nav     = [];
+        $modules = Module::allEnabled();
+
+        foreach($modules as $module)
+        {
+            $name = $module->getLowerName();
+            $navData = config($name.'.navbar');
+
+            if($navData['enable'])
+            {
+                $nav[] = [
+                    'name'  => $navData['name'],
+                    'route' => route($navData['route']),
+                    'icon'  => $navData['icon'],
+                ];
+            }
+        }
+
+        return $nav;
     }
 }
