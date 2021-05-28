@@ -25,6 +25,7 @@
         "jeroendesloovere/vcard": "^1.7",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "nwidart/laravel-modules": "^8.2",
         "pion/laravel-chunk-upload": "^1.4",
         "pragmarx/version": "^1.2",
         "spatie/laravel-cookie-consent": "^2.12",
@@ -54,6 +55,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Modules\\": "Modules/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
