@@ -69,16 +69,43 @@ InertiaProgress.init();
 Vue.prototype.eventHub = new Vue();
 
 new Vue({
-  render: h => h(App, {
-    props: {
-      initialPage: JSON.parse(el.dataset.page),
-      resolveComponent: name => import(`./Pages/${name}`)
-        .then(({ default: page }) => {
-            if (page.layout === undefined) {
-                page.layout = Guest;
+    render: h => h(App, {
+        props: {
+            initialPage: JSON.parse(el.dataset.page),
+
+            resolveComponent: (name) => {
+                //  Determine if this is a primary page, or module page
+                let parts  = name.split('::');
+                let module = false;
+                if(parts.length > 1)
+                {
+                    //  If it is a module page, load the module from the correct folder
+                    module = parts[0];
+                    if(module)
+                    {
+                        return import(`./Modules/${parts[0]}/Pages/${parts[1]}`)
+                            .then(({ default: page }) =>
+                            {
+                                if (page.layout === undefined)
+                                {
+                                    page.layout = Guest;
+                                }
+                                return page;
+                            });
+                    }
+                }
+
+                //  primary page, load from the Pages folder
+                return import(`./Pages/${name}`)
+                    .then(({ default: page }) =>
+                    {
+                        if (page.layout === undefined)
+                        {
+                            page.layout = Guest;
+                        }
+                        return page;
+                    });
             }
-            return page;
-        }),
     },
   }),
 }).$mount(el)
