@@ -13,9 +13,8 @@ class BuildNavbar
     {
         $this->user = $user;
 
-        $admin  = $this->getAdminNavbar();
-        $navBar = $this->getPrimaryNavbar();
-
+        $admin   = $this->getAdminNavbar();
+        $navBar  = $this->getPrimaryNavbar();
         $modules = $this->getModules();
 
         return array_merge($navBar, $admin, $modules);
@@ -37,11 +36,11 @@ class BuildNavbar
                 'route' => route('customers.index'),
                 'icon'  => 'fas fa-user-tie',
             ],
-            [
-                'name'  => 'Tech Tips',
-                'route' => '#',
-                'icon'  => 'fas fa-tools',
-            ],
+ //           [
+ //               'name'  => 'Tech Tips',
+ //               'route' => '#',
+ //               'icon'  => 'fas fa-tools',
+ //           ],
         ];
     }
 
@@ -62,7 +61,9 @@ class BuildNavbar
         return [];
     }
 
-    //  Get landing routes for all active modules
+    /*
+    *   If any add-on modules have been installed, add those to the navigation bar
+    */
     protected function getModules()
     {
         $nav     = [];
@@ -73,16 +74,19 @@ class BuildNavbar
             $name = $module->getLowerName();
             $navData = config($name.'.navbar');
 
-            if($navData['enable'])
+            foreach($navData as $n)
             {
-                $nav[] = [
-                    'name'  => $navData['name'],
-                    'route' => route($navData['route']),
-                    'icon'  => $navData['icon'],
-                ];
+                if($n['enable'])
+                {
+                    $nav[] = [
+                        'name'  => $n['name'],
+                        'route' => route($n['route']),
+                        'icon'  => $n['icon'],
+                    ];
+                }
             }
         }
 
-        return $nav;
+        return [$n];
     }
 }
