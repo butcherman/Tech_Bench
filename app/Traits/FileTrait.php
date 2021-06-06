@@ -63,6 +63,25 @@ trait FileTrait
         return $fileName;
     }
 
+    //  Move a file to a new location
+    protected function moveFile($fileID, $newDisk, $newFolder)
+    {
+        $fileData = FileUploads::find($fileID);
+
+        $this->disk   = $newDisk;
+        $this->folder = $newFolder;
+
+        $newName = $this->checkForDuplicate($fileData->file_name);
+        Storage::disk($this->disk)->move($fileData->folder.DIRECTORY_SEPARATOR.$fileData['file_name'], $this->folder.DIRECTORY_SEPARATOR.$newName);
+
+        $fileData->file_name = $newName;
+        $fileData->folder    = $this->folder;
+        $fileData->disk      = $this->disk;
+        $fileData->save();
+
+        return true;
+    }
+
     //  Sanitize the filename to remove any illegal characters and spaces
     protected function cleanFilename($name)
     {

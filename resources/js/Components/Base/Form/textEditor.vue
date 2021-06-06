@@ -40,11 +40,6 @@
                 type:    String,
                 default: '',
             },
-            errors: {
-                type:     Object,
-                required: false,
-                default:  null,
-            },
             placeholder: {
                 type:     String,
                 required: false,
@@ -113,7 +108,11 @@
             image()
             {
                 return this.allow_image ? 'image' : '';
-            }
+            },
+            errors()
+            {
+                return this.$page.props.errors;
+            },
         },
         methods: {
             emitBlur()

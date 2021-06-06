@@ -10,8 +10,8 @@
             @vdropzone-error="errorOccured"
             @vdropzone-error-multiple="errorOccured"
             @vdropzone-canceled="canceledFile"
-            @vdropzone-complete="successfullUpload"
             @vdropzone-total-upload-progress="emitTotalProgress"
+            @vdropzone-queue-complete="queueComplete"
         ></vue-dropzone>
         <div class="invalid-feedback" :class="validationShow">{{validationError}}</div>
         <b-modal
@@ -76,7 +76,7 @@
                     },
                 },
                 formData: {},
-                errors: {},
+                // errors: {},
                 validationError: null,
                 totalSize: 0,
                 sent: 0,
@@ -86,9 +86,26 @@
             validationShow()
             {
                 return this.validationError ? 'd-inline' : 'd-none';
-            }
+            },
+            errors:
+            {
+                get: function()
+                {
+                    return this.$page.props.errors;
+                },
+
+                set: function(setter)
+                {
+                    return setter;
+                }
+            },
         },
         methods: {
+            //  Count files attached to dropzone
+            getFileCount()
+            {
+                return this.$refs['dropzone-file'].getQueuedFiles().length;
+            },
             //  Upload the file along with any form data
             process(form)
             {
@@ -147,6 +164,7 @@
                 {
                     this.$refs['upload-error-modal'].show();
                     this.errors = message;
+                    // console.log(message);
                 }
                 else
                 {
@@ -159,10 +177,27 @@
                 this.$emit('upload-canceled');
             },
             //  File was uploaded successfully
-            successfullUpload(file, response)
+            // successfullUpload(file, response)
+            // {
+            //     if(this.maxFiles == 1)
+            //     {
+            //         this.$emit('upload-progress', 100);
+            //         this.$emit('completed', response);
+            //         this.resetDropzone();
+            //     }
+            // },
+            //  Multiple files were uploaded successfully
+            // successfullUploadMulti(file, response)
+            // {
+            //     this.$emit('upload-progress', 100);
+            //     this.$emit('completed', response);
+            //     this.resetDropzone();
+            // },
+            //  All files are completed
+            queueComplete()
             {
                 this.$emit('upload-progress', 100);
-                this.$emit('completed', response);
+                this.$emit('completed', 'success');
                 this.resetDropzone();
             },
             //  Send out the total progress for all files in the queue

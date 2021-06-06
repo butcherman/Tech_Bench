@@ -87,6 +87,6 @@ class BuildNavbar
             }
         }
 
-        return [$n];
+        return $nav;
     }
 }

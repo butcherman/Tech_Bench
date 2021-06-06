@@ -49,11 +49,6 @@
                 type:    String,
                 default: 'text',
             },
-            errors: {
-                type:     Object,
-                required: false,
-                default:  null,
-            },
             placeholder: {
                 type:     String,
                 required: false,
@@ -92,7 +87,10 @@
             }
         },
         computed: {
-            //
+            errors()
+            {
+                return this.$page.props.errors;
+            },
         },
         methods: {
             emitBlur()

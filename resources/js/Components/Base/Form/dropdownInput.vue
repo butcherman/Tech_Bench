@@ -42,11 +42,6 @@
                 type:    String,
                 default: '',
             },
-            errors: {
-                type:     Object,
-                required: false,
-                default:  null,
-            },
             placeholder: {
                 type:     String,
                 required: false,
@@ -76,6 +71,12 @@
             curVal(val)
             {
                 this.$emit('input', val);
+            },
+        },
+        computed: {
+            errors()
+            {
+                return this.$page.props.errors;
             },
         },
         methods: {
