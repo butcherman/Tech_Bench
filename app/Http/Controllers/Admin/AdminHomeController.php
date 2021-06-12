@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
+use Nwidart\Modules\Facades\Module;
 
 use App\Models\UserRolePermissions;
 use App\Http\Controllers\Controller;
@@ -23,12 +24,12 @@ class AdminHomeController extends Controller
         $userBuild      = $this->buildUserList();
         $equipmentBuild = $this->buildEquipmentList();
         $custBuild      = $this->buildCustomerList();
-
+        $moduleBuild    = $this->buildModuleAdmin();
 
 
 
         return Inertia::render('Admin/index', [
-            'links' => array_merge($userBuild, $equipmentBuild, $custBuild),
+            'links' => array_merge($userBuild, $equipmentBuild, $custBuild, $moduleBuild),
         ]);
     }
 
@@ -137,6 +138,33 @@ class AdminHomeController extends Controller
                     ],
                 ],
             ];
+        }
+
+        return $nav;
+    }
+
+    protected function buildModuleAdmin()
+    {
+        $nav = [];
+        $modules = Module::allEnabled();
+
+        foreach($modules as $module)
+        {
+            $name    = $module->getLowerName();
+            $navData = config($name.'.admin_nav');
+            $modNav  = [];
+
+            foreach($navData as $n)
+            {
+                $modNav[] = [
+                    'name' => $n['name'],
+                    'link' => route($n['route']),
+                    'icon' => $n['icon'],
+                ];
+            }
+
+            //  Split Camel Case name into normal name
+            $nav[implode(' ',preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
         }
 
         return $nav;

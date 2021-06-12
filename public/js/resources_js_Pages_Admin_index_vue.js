@@ -624,10 +624,10 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "ul",
-                    _vm._l(options, function(opt) {
+                    _vm._l(options, function(opt, key) {
                       return _c(
                         "li",
-                        { key: opt.name },
+                        { key: key },
                         [
                           _c(
                             "inertia-link",

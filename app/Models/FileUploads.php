@@ -11,5 +11,5 @@ class FileUploads extends Model
 
     protected $primaryKey = 'file_id';
     protected $guarded    = ['file_id', 'created_at', 'updated_at'];
-    protected $hidden     = ['disk', 'created_at', 'folder'];
+    protected $hidden     = ['disk', 'created_at', 'folder', 'updated_at', 'public'];
 }

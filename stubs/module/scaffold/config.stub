@@ -1,0 +1,47 @@
+<?php
+
+return [
+    /*
+    *   Basic Module Information - Name and Version
+    */
+    'name' => '$STUDLY_NAME$',
+    'ver'  => '0.0.0-dev',
+
+    /*
+    *   Information for the Navbar
+    */
+    'navbar' => [
+        [
+            'enable' =>  true,
+            'name'   => '$STUDLY_NAME$',
+            'icon'   => 'far fa-smile',
+            'route'  => '$STUDLY_NAME$.index',
+        ],
+    ],
+
+    /*
+    *   Information for the Administration home page navigation links
+    */
+    'admin_nav' => [
+        [
+            'name'  => '$STUDLY_NAME$',
+            'icon'  => 'fas fa-tools',
+            'route' => '$STUDLY_NAME$.index',
+        ],
+    ],
+
+    /*
+    *   Notes if there are migrations that need to be added to the database
+    */
+    'has_migrations' => false,
+
+    /*
+    *   Location for uploaded files - Uncomment if this Module needs its own Disk instance
+    */
+    'disks' => [
+//        '$STUDLY_NAME$' => [
+//            'driver' => 'local',
+//            'root'   => storage_path('app/$STUDLY_NAME$'),
+//        ],
+    ],
+];

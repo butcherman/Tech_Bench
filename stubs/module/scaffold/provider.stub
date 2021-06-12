@@ -1,0 +1,75 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Factory;
+
+class $CLASS$ extends ServiceProvider
+{
+    protected $moduleName      = '$MODULE$';
+    protected $moduleNameLower = '$LOWER_NAME$';
+
+    /**
+     * Boot the application events.
+     */
+    public function boot()
+    {
+        $this->registerTranslations();
+        $this->registerConfig();
+        $this->registerDisk();
+        $this->loadMigrationsFrom(module_path($this->moduleName, '$MIGRATIONS_PATH$'));
+    }
+
+    /**
+     * Register the service provider.
+     */
+    public function register()
+    {
+        $this->app->register(RouteServiceProvider::class);
+    }
+
+    /**
+     * Register config.
+     */
+    protected function registerConfig()
+    {
+        $this->publishes([
+            module_path($this->moduleName, '$PATH_CONFIG$/config.php') => config_path($this->moduleNameLower . '.php'),
+        ], 'config');
+        $this->mergeConfigFrom(
+            module_path($this->moduleName, '$PATH_CONFIG$/config.php'), $this->moduleNameLower
+        );
+    }
+
+    /*
+    *   Register Disk
+    */
+    public function registerDisk()
+    {
+        $disks = config($this->moduleNameLower.'.disks');
+        config(['filesystems.disks' => array_merge($disks, config('filesystems.disks'))]);
+    }
+
+    /**
+     * Register translations.
+     */
+    public function registerTranslations()
+    {
+        $langPath = resource_path('lang/modules/' . $this->moduleNameLower);
+
+        if (is_dir($langPath)) {
+            $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
+        } else {
+            $this->loadTranslationsFrom(module_path($this->moduleName, '$PATH_LANG$'), $this->moduleNameLower);
+        }
+    }
+
+    /**
+     * Get the services provided by the provider.
+     */
+    public function provides()
+    {
+        return [];
+    }
+}

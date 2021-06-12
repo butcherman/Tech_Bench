@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <div class="card-title">{{key}}:</div>
                         <ul>
-                            <li v-for="opt in options" :key="opt.name">
+                            <li v-for="(opt, key) in options" :key="key">
                                 <inertia-link :href="opt.link" class="text-secondary"><i :class="opt.icon"></i> {{opt.name}}</inertia-link>
                             </li>
                         </ul>
