@@ -9,6 +9,7 @@ use App\Events\NewUserCreated;
 use App\Actions\User\GetUserRoles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
+use App\Models\UserRolePermissions;
 use App\Models\UserSetting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -22,9 +23,22 @@ class UserController extends Controller
      */
     public function index()
     {
+        $userSettings = UserSetting::where('user_id', Auth::user()->user_id)->with('UserSettingType')->get();
+        foreach($userSettings as $key => $setting)
+        {
+            if($setting->UserSettingType->perm_type_id)
+            {
+                $allowed = UserRolePermissions::where('role_id', Auth::user()->user_id)->where('perm_type_id', $setting->UserSettingType->perm_type_id)->first()->allow;
+                if(!$allowed)
+                {
+                    $userSettings->forget($key);
+                }
+            }
+        }
+
         return Inertia::render('User/settings', [
             'user'     => Auth::user()->makeVisible('user_id'),
-            'settings' => UserSetting::where('user_id', Auth::user()->user_id)->with('UserSettingType')->get(),
+            'settings' => $userSettings,
         ]);
     }
 

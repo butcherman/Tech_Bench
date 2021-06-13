@@ -17,8 +17,7 @@ class CreateUserSettingTypesTable extends Migration
         Schema::create('user_setting_types', function (Blueprint $table) {
             $table->id('setting_type_id');
             $table->text('name');
-            $table->boolean('for_module')->default(false);
-            $table->text('module_name')->nullable();
+            $table->unsignedBigInteger('perm_type_id')->nullable();
             $table->timestamps();
         });
 
