@@ -175,24 +175,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
@@ -201,48 +183,46 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       required: true
     },
-    notify: {
-      type: Object,
+    settings: {
+      type: Array,
       required: true
     }
   },
   data: function data() {
     return {
-      settings: {
+      userData: {
         first_name: this.user.first_name,
         last_name: this.user.last_name,
         email: this.user.email
       },
-      notifications: {
-        em_tech_tip: this.notify.em_tech_tip,
-        em_notification: this.notify.em_notification,
-        em_file_link: this.notify.em_file_link,
-        auto_del_link: this.notify.auto_del_link
-      },
+      userSettings: this.settings,
       submit: {
-        settings: false,
-        notifications: false
+        userData: false,
+        settings: false
       }
     };
   },
   methods: {
-    submitSettings: function submitSettings() {
+    submitUserData: function submitUserData() {
       var _this = this;
 
-      this.submit.settings = true;
-      this.$inertia.put(route('settings.update', this.user.user_id), this.settings, {
+      this.submit.userData = true;
+      this.$inertia.put(route('settings.update', this.user.user_id), this.userData, {
         onFinish: function onFinish() {
-          _this.submit.settings = false;
+          _this.submit.userData = false;
         }
       });
     },
-    submitNotifications: function submitNotifications() {
+    submitSettings: function submitSettings() {
       var _this2 = this;
 
-      this.submit.notifications = true;
-      this.$inertia.put(route('email-notifications.update', this.user.user_id), this.notifications, {
+      this.submit.settings = true;
+      console.log(this.settings);
+      this.$inertia.post(route('update-settings', this.user.user_id), {
+        settingsData: this.userSettings
+      }, {
         onFinish: function onFinish() {
-          _this2.submit.notifications = false;
+          _this2.submit.settings = false;
         }
       });
     }
@@ -708,8 +688,24 @@ var render = function() {
                       return [
                         _c(
                           "b-overlay",
-                          { attrs: { show: _vm.submit.settings } },
+                          {
+                            attrs: { show: _vm.submit.userData },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "overlay",
+                                  fn: function() {
+                                    return [_c("form-loader")]
+                                  },
+                                  proxy: true
+                                }
+                              ],
+                              null,
+                              true
+                            )
+                          },
                           [
+                            _vm._v(" "),
                             _c(
                               "b-form",
                               {
@@ -717,7 +713,7 @@ var render = function() {
                                 on: {
                                   submit: function($event) {
                                     $event.preventDefault()
-                                    return handleSubmit(_vm.submitSettings)
+                                    return handleSubmit(_vm.submitUserData)
                                   }
                                 }
                               },
@@ -729,11 +725,11 @@ var render = function() {
                                     name: "first_name"
                                   },
                                   model: {
-                                    value: _vm.settings.first_name,
+                                    value: _vm.userData.first_name,
                                     callback: function($$v) {
-                                      _vm.$set(_vm.settings, "first_name", $$v)
+                                      _vm.$set(_vm.userData, "first_name", $$v)
                                     },
-                                    expression: "settings.first_name"
+                                    expression: "userData.first_name"
                                   }
                                 }),
                                 _vm._v(" "),
@@ -744,11 +740,11 @@ var render = function() {
                                     name: "last_name"
                                   },
                                   model: {
-                                    value: _vm.settings.last_name,
+                                    value: _vm.userData.last_name,
                                     callback: function($$v) {
-                                      _vm.$set(_vm.settings, "last_name", $$v)
+                                      _vm.$set(_vm.userData, "last_name", $$v)
                                     },
-                                    expression: "settings.last_name"
+                                    expression: "userData.last_name"
                                   }
                                 }),
                                 _vm._v(" "),
@@ -759,18 +755,18 @@ var render = function() {
                                     name: "email"
                                   },
                                   model: {
-                                    value: _vm.settings.email,
+                                    value: _vm.userData.email,
                                     callback: function($$v) {
-                                      _vm.$set(_vm.settings, "email", $$v)
+                                      _vm.$set(_vm.userData, "email", $$v)
                                     },
-                                    expression: "settings.email"
+                                    expression: "userData.email"
                                   }
                                 }),
                                 _vm._v(" "),
                                 _c("submit-button", {
                                   attrs: {
                                     button_text: "Update Settings",
-                                    submitted: _vm.submit.settings
+                                    submitted: _vm.submit.userData
                                   }
                                 })
                               ],
@@ -807,9 +803,23 @@ var render = function() {
                           "b-overlay",
                           {
                             staticClass: "h-100",
-                            attrs: { show: _vm.submit.notifications }
+                            attrs: { show: _vm.submit.settings },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "overlay",
+                                  fn: function() {
+                                    return [_c("form-loader")]
+                                  },
+                                  proxy: true
+                                }
+                              ],
+                              null,
+                              true
+                            )
                           },
                           [
+                            _vm._v(" "),
                             _c(
                               "b-form",
                               {
@@ -818,133 +828,52 @@ var render = function() {
                                 on: {
                                   submit: function($event) {
                                     $event.preventDefault()
-                                    return handleSubmit(_vm.submitNotifications)
+                                    return handleSubmit(_vm.submitSettings)
                                   }
                                 }
                               },
                               [
                                 _c("div", { staticClass: "card-title" }, [
-                                  _vm._v("Notification Settings")
+                                  _vm._v("Settings")
                                 ]),
                                 _vm._v(" "),
-                                _c(
-                                  "b-form-checkbox",
-                                  {
-                                    attrs: {
-                                      value: "1",
-                                      "unchecked-value": "0",
-                                      switch: ""
+                                _vm._l(_vm.settings, function(item, key) {
+                                  return _c(
+                                    "b-form-checkbox",
+                                    {
+                                      key: key,
+                                      attrs: { switch: "" },
+                                      model: {
+                                        value: _vm.userSettings[key].value,
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.userSettings[key],
+                                            "value",
+                                            $$v
+                                          )
+                                        },
+                                        expression: "userSettings[key].value"
+                                      }
                                     },
-                                    model: {
-                                      value: _vm.notifications.em_tech_tip,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.notifications,
-                                          "em_tech_tip",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "notifications.em_tech_tip"
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                    Recieve Email On New Tech Tip\n                                "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "b-form-checkbox",
-                                  {
-                                    attrs: {
-                                      value: "1",
-                                      "unchecked-value": "0",
-                                      switch: ""
-                                    },
-                                    model: {
-                                      value: _vm.notifications.em_notification,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.notifications,
-                                          "em_notification",
-                                          $$v
-                                        )
-                                      },
-                                      expression:
-                                        "notifications.em_notification"
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                    Recieve Email On System Notification\n                                "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "b-form-checkbox",
-                                  {
-                                    attrs: {
-                                      value: "1",
-                                      "unchecked-value": "0",
-                                      switch: ""
-                                    },
-                                    model: {
-                                      value: _vm.notifications.em_file_link,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.notifications,
-                                          "em_file_link",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "notifications.em_file_link"
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                    Recieve Email When A New File Is Added To A File Link\n                                "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "b-form-checkbox",
-                                  {
-                                    attrs: {
-                                      value: "1",
-                                      "unchecked-value": "0",
-                                      switch: ""
-                                    },
-                                    model: {
-                                      value: _vm.notifications.auto_del_link,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.notifications,
-                                          "auto_del_link",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "notifications.auto_del_link"
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                    Automatically Delete File Links Expired More Than 30 Days\n                                "
-                                    )
-                                  ]
-                                ),
+                                    [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(item.user_setting_type.name) +
+                                          "\n                                "
+                                      )
+                                    ]
+                                  )
+                                }),
                                 _vm._v(" "),
                                 _c("submit-button", {
                                   staticClass: "mt-auto",
                                   attrs: {
                                     button_text: "Update Notifications",
-                                    submitted: _vm.submit.notifications
+                                    submitted: _vm.submit.settings
                                   }
                                 })
                               ],
-                              1
+                              2
                             )
                           ],
                           1

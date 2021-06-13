@@ -170,7 +170,7 @@ class UserTest extends TestCase
 
         $response = $this->actingAs($this->admin)->put(route('admin.user.update', $user2->user_id), $form);
         $response->assertStatus(302);
-        $response->assertSessionHas(['message' => 'Account Settings Updated']);
+        $response->assertSessionHas(['message' => 'Account Details Updated']);
         $this->assertDatabaseHas('users', ['user_id' => $user2->user_id, 'username' => $form['username'], 'first_name' => $form['first_name'], 'last_name' => $form['last_name'], 'email' => $form['email']]);
     }
 
@@ -180,7 +180,7 @@ class UserTest extends TestCase
 
         $response = $this->actingAs($this->user)->put(route('settings.update', $this->user->user_id), $form);
         $response->assertStatus(302);
-        $response->assertSessionHas(['message' => 'Account Settings Updated']);
+        $response->assertSessionHas(['message' => 'Account Details Updated']);
         $this->assertDatabaseHas('users', ['user_id' => $this->user->user_id, 'first_name' => $form['first_name'], 'last_name' => $form['last_name'], 'email' => $form['email']]);
     }
 

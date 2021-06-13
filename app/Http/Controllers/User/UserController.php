@@ -8,9 +8,8 @@ use App\Models\User;
 use App\Events\NewUserCreated;
 use App\Actions\User\GetUserRoles;
 use App\Http\Controllers\Controller;
-use App\Models\UserEmailNotifications;
 use App\Http\Requests\User\UserRequest;
-
+use App\Models\UserSetting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +23,8 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('User/settings', [
-            'user'   => Auth::user()->makeVisible('user_id'),
-            'notify' => UserEmailNotifications::find(Auth::user()->user_id),
+            'user'     => Auth::user()->makeVisible('user_id'),
+            'settings' => UserSetting::where('user_id', Auth::user()->user_id)->with('UserSettingType')->get(),
         ]);
     }
 
@@ -99,7 +98,7 @@ class UserController extends Controller
         $user->update($request->toArray());
 
         Log::info('User information for User ID '.$id.' Name - '.$user->username.' has been updated by '.Auth::user()->full_name);
-        return back()->with(['message' => 'Account Settings Updated', 'type' => 'success']);
+        return back()->with(['message' => 'Account Details Updated', 'type' => 'success']);
     }
 
     /**

@@ -11,12 +11,15 @@
                     <div class="card-body">
                         <div class="card-title">Account</div>
                         <ValidationObserver v-slot="{handleSubmit}">
-                            <b-overlay :show="submit.settings">
-                                <b-form @submit.prevent="handleSubmit(submitSettings)" novalidate>
-                                    <text-input v-model="settings.first_name" rules="required" label="First Name" name="first_name"></text-input>
-                                    <text-input v-model="settings.last_name" rules="required" label="Last Name" name="last_name"></text-input>
-                                    <text-input v-model="settings.email" rules="required|email" label="Email Address" name="email"></text-input>
-                                    <submit-button button_text="Update Settings" :submitted="submit.settings" />
+                            <b-overlay :show="submit.userData">
+                                <template #overlay>
+                                    <form-loader></form-loader>
+                                </template>
+                                <b-form @submit.prevent="handleSubmit(submitUserData)" novalidate>
+                                    <text-input v-model="userData.first_name" rules="required" label="First Name" name="first_name"></text-input>
+                                    <text-input v-model="userData.last_name" rules="required" label="Last Name" name="last_name"></text-input>
+                                    <text-input v-model="userData.email" rules="required|email" label="Email Address" name="email"></text-input>
+                                    <submit-button button_text="Update Settings" :submitted="submit.userData" />
                                 </b-form>
                             </b-overlay>
                         </ValidationObserver>
@@ -27,42 +30,21 @@
                 <div class="card">
                     <div class="card-body">
                         <ValidationObserver v-slot="{handleSubmit}">
-                            <b-overlay :show="submit.notifications" class="h-100">
-                                <b-form @submit.prevent="handleSubmit(submitNotifications)" novalidate class="h-100 d-flex flex-column">
-                                    <div class="card-title">Notification Settings</div>
+                            <b-overlay :show="submit.settings" class="h-100">
+                                <template #overlay>
+                                    <form-loader></form-loader>
+                                </template>
+                                <b-form @submit.prevent="handleSubmit(submitSettings)" novalidate class="h-100 d-flex flex-column">
+                                    <div class="card-title">Settings</div>
                                     <b-form-checkbox
-                                        v-model="notifications.em_tech_tip"
-                                        value="1"
-                                        unchecked-value="0"
+                                        v-for="(item, key) in settings"
+                                        :key="key"
+                                        v-model="userSettings[key].value"
                                         switch
                                     >
-                                        Recieve Email On New Tech Tip
+                                        {{item.user_setting_type.name}}
                                     </b-form-checkbox>
-                                    <b-form-checkbox
-                                        v-model="notifications.em_notification"
-                                        value="1"
-                                        unchecked-value="0"
-                                        switch
-                                    >
-                                        Recieve Email On System Notification
-                                    </b-form-checkbox>
-                                    <b-form-checkbox
-                                        v-model="notifications.em_file_link"
-                                        value="1"
-                                        unchecked-value="0"
-                                        switch
-                                    >
-                                        Recieve Email When A New File Is Added To A File Link
-                                    </b-form-checkbox>
-                                    <b-form-checkbox
-                                        v-model="notifications.auto_del_link"
-                                        value="1"
-                                        unchecked-value="0"
-                                        switch
-                                    >
-                                        Automatically Delete File Links Expired More Than 30 Days
-                                    </b-form-checkbox>
-                                    <submit-button class="mt-auto" button_text="Update Notifications" :submitted="submit.notifications" />
+                                    <submit-button class="mt-auto" button_text="Update Notifications" :submitted="submit.settings" />
                                 </b-form>
                             </b-overlay>
                         </ValidationObserver>
@@ -83,40 +65,36 @@
                 type:     Object,
                 required: true,
             },
-            notify: {
-                type:     Object,
+            settings: {
+                type:     Array,
                 required: true,
             }
         },
         data() {
             return {
-                settings: {
+                userData: {
                     first_name: this.user.first_name,
                     last_name:  this.user.last_name,
                     email:      this.user.email,
                 },
-                notifications: {
-                    em_tech_tip:     this.notify.em_tech_tip,
-                    em_notification: this.notify.em_notification,
-                    em_file_link:    this.notify.em_file_link,
-                    auto_del_link:   this.notify.auto_del_link,
-                },
+                userSettings: this.settings,
                 submit: {
-                    settings:      false,
-                    notifications: false,
-                }
+                    userData:      false,
+                    settings: false,
+                },
             }
         },
         methods: {
+            submitUserData()
+            {
+                this.submit.userData = true;
+                this.$inertia.put(route('settings.update', this.user.user_id), this.userData, {onFinish: () => {this.submit.userData = false}});
+            },
             submitSettings()
             {
                 this.submit.settings = true;
-                this.$inertia.put(route('settings.update', this.user.user_id), this.settings, {onFinish: () => {this.submit.settings = false}});
-            },
-            submitNotifications()
-            {
-                this.submit.notifications = true;
-                this.$inertia.put(route('email-notifications.update', this.user.user_id), this.notifications, {onFinish: () => {this.submit.notifications = false}});
+                console.log(this.settings);
+                this.$inertia.post(route('update-settings', this.user.user_id), {settingsData: this.userSettings}, {onFinish: () => {this.submit.settings = false}});
             }
         }
     }

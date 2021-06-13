@@ -38,7 +38,7 @@ use App\Http\Controllers\User\UserRolesController;
 use App\Http\Controllers\User\DisabledUserController;
 use App\Http\Controllers\User\UserInitializeController;
 use App\Http\Controllers\User\ListActiveUsersController;
-use App\Http\Controllers\User\UserEmailNotificationsController;
+use App\Http\Controllers\User\UserSettingsController;
 
 /*
 *   File Download routes
@@ -82,7 +82,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware('auth')->group(function () {
     //  Primary User Settings
     Route::resource('settings',            UserController::class);
-    Route::resource('email-notifications', UserEmailNotificationsController::class);
+    // Route::resource('email-notifications', UserEmailNotificationsController::class);
+    Route::post('update-settings', UserSettingsController::class)->name('update-settings');
 
     //  Change Password
     Route::get('password/{change}',       [PasswordController::class, 'edit'])  ->name('password.edit');
