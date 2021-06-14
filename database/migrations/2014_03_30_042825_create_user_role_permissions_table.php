@@ -49,6 +49,10 @@ class CreateUserRolePermissionsTable extends Migration
                 20 => 1,
                 21 => 1,
                 22 => 1,
+                23 => 1,
+                24 => 1,
+                25 => 1,
+                26 => 1,
             ],
             2 => [
                 1  => 0,
@@ -73,6 +77,10 @@ class CreateUserRolePermissionsTable extends Migration
                 20 => 1,
                 21 => 1,
                 22 => 1,
+                23 => 1,
+                24 => 1,
+                25 => 1,
+                26 => 1,
             ],
             3 => [
                 1  => 0,
@@ -97,6 +105,10 @@ class CreateUserRolePermissionsTable extends Migration
                 20 => 1,
                 21 => 1,
                 22 => 1,
+                23 => 0,
+                24 => 0,
+                25 => 0,
+                26 => 0,
             ],
             4 => [
                 1  => 0,
@@ -121,6 +133,10 @@ class CreateUserRolePermissionsTable extends Migration
                 20 => 1,
                 21 => 1,
                 22 => 1,
+                23 => 0,
+                24 => 0,
+                25 => 0,
+                26 => 0,
             ],
         ];
 

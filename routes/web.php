@@ -33,6 +33,7 @@ use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
 use App\Http\Controllers\Home\UploadImageController;
+use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
 use App\Http\Controllers\User\DisabledUserController;
@@ -136,6 +137,13 @@ Route::middleware('auth')->group(function()
 
     //  Customer primary resource Routes
     Route::resource('customers',      CustomerController::class);
+});
+
+/*
+*   Tech Tips Routes
+*/
+Route::middleware('auth')->group(function () {
+    Route::resource('tech-tips', TechTipsController::class);
 });
 
 /*

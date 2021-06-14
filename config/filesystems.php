@@ -42,6 +42,11 @@ return [
             'root'   => storage_path('app/customers'),
         ],
 
+        'tips' => [
+            'driver' => 'local',
+            'root'   => storage_path('app/tips'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -52,15 +57,6 @@ return [
 
 
     ],
-
-    /*
-    *   Path locations for uploaded files to the local disk
-    */
-    // 'paths' => [
-    //     'default'    => env('DFLT_FOLDER', DIRECTORY_SEPARATOR.'default'),
-    //     'customers'  => env('CUST_FOLDER', DIRECTORY_SEPARATOR.'customers'),
-    //     'tips'       => env('TIP_FOLDER',  DIRECTORY_SEPARATOR.'tips'),
-    // ],
 
     /*
     |--------------------------------------------------------------------------

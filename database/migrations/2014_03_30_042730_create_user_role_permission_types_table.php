@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateUserRolePermissionTypesTable extends Migration
 {
@@ -51,12 +51,11 @@ class CreateUserRolePermissionTypesTable extends Migration
             ['perm_type_id' => 20, 'description' => 'Add Customer File',         'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 21, 'description' => 'Edit Customer File',        'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 22, 'description' => 'Delete Customer File',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-
-
-            // ['perm_type_id' => 7,  'description' => 'Use File Links',      'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            // ['perm_type_id' => 8,  'description' => 'Create Tech Tip',     'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            // ['perm_type_id' => 9,  'description' => 'Edit Tech Tip',       'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            // ['perm_type_id' => 10, 'description' => 'Delete Tech Tip',     'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            //  Tech Tips Permissions
+            ['perm_type_id' => 23, 'description' => 'Add Tech Tip',              'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 24, 'description' => 'Edit Tech Tip',             'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 25, 'description' => 'Delete Tech Tip',           'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 26, 'description' => 'Manage Tech Tips',          'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
         ];
 
         DB::table('user_role_permission_types')->insert($defaultData);

@@ -36,11 +36,11 @@ class BuildNavbar
                 'route' => route('customers.index'),
                 'icon'  => 'fas fa-user-tie',
             ],
- //           [
- //               'name'  => 'Tech Tips',
- //               'route' => '#',
- //               'icon'  => 'fas fa-tools',
- //           ],
+            [
+                'name'  => 'Tech Tips',
+                'route' => route('tech-tips.index'),
+                'icon'  => 'fas fa-tools',
+            ],
         ];
     }
 
