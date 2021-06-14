@@ -46,4 +46,12 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
     }
+
+    /*
+    *   Each user has their own individual settings
+    */
+    public function UserSetting()
+    {
+        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
+    }
 }

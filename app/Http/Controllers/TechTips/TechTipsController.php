@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\TechTips;
 
+use App\Events\NewTechTip;
 use Inertia\Inertia;
 
 use Illuminate\Http\Request;
@@ -112,19 +113,19 @@ class TechTipsController extends Controller
         }
 
         Log::channel('user')->info('New Tech Tip - '.$request->subject.' was created by '.$request->user()->username);
+        if(!$request->noEmail)
+        {
+            event(new NewTechTip($newTip));
+        }
         return redirect(route('tech-tips.show', $newTip->slug));
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Show the Tech Tip details
      */
     public function show($id)
     {
-        //
-        return 'show new tip';
+        return Inertia::render('TechTips/show');
     }
 
     /**

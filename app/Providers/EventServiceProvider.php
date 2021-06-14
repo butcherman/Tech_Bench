@@ -34,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NewUserCreated' => [
             'App\Listeners\NotifyNewUser',
         ],
+        'App\Events\NewTechTip' => [
+            'App\Listeners\NotifyOfNewTechTip',
+        ]
     ];
 
     /**

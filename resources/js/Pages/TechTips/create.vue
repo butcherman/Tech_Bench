@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <b-overlay :show="submitted">
                             <template #overlay>
-                                <form-loader></form-loader>
+                                <progress-bar :percent-done="fileProgress"></progress-bar>
                             </template>
                             <ValidationObserver v-slot="{handleSubmit}">
                                 <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
@@ -122,34 +122,19 @@
                 }
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
             submitForm()
             {
+                this.submitted = true;
                 if(this.$refs['dropzone-upload'].getFileCount() > 0)
                 {
-                    console.log('has files');
                     this.$refs['dropzone-upload'].process(this.form);
                 }
                 else
                 {
-                    console.log('no files');
                     this.uploadDone();
                 }
             },
-
-
             //  If a file was canceled during upload, go back to form
             canceled()
             {
@@ -164,11 +149,6 @@
             //  File upload is completed
             uploadDone()
             {
-                console.log(this.form);
-                // this.$emit('upload-completed');
-                // this.$refs['new-file-modal'].hide();
-                // this.resetForm();
-
                 this.$inertia.post(route('tech-tips.store'), this.form);
             }
         }
