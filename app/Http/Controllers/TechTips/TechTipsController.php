@@ -16,6 +16,7 @@ use App\Models\TechTip;
 use App\Models\TechTipFile;
 use App\Models\TechTipType;
 use App\Traits\FileTrait;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -37,7 +38,17 @@ class TechTipsController extends Controller
      */
     public function index()
     {
-        return Inertia::render('TechTips/index');
+        $filterData = [
+            'tip_types'   => TechTipType::all(),
+            'equip_types' => EquipmentCategory::with('EquipmentType')->get(),
+        ];
+
+        return Inertia::render('TechTips/index', [
+            'filter_data' => $filterData,
+            'permissions' => [
+                'create' => Auth::user()->can('create', TechTip::class),
+            ],
+        ]);
     }
 
     /**
