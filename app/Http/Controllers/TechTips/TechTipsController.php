@@ -13,6 +13,7 @@ use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\FileUploads;
 use App\Models\TechTip;
+use App\Models\TechTipEquipment;
 use App\Models\TechTipFile;
 use App\Models\TechTipType;
 use App\Traits\FileTrait;
@@ -106,6 +107,14 @@ class TechTipsController extends Controller
             'details'     => $request->details,
         ]);
 
+        //  Add the equipment for this Tech Tip
+        foreach($request->equipment as $equip)
+        {
+            TechTipEquipment::create([
+                'tip_id'   => $newTip->tip_id,
+                'equip_id' => $equip['equip_id'],
+            ]);
+        }
 
         //  Move the files into a folder with the name of the tip_id
         if(session('new-file-upload') !== null)

@@ -10,12 +10,14 @@ use App\Http\Controllers\Guest\HomeController;
 
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
+use App\Http\Controllers\Home\UploadImageController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordController;
 
 use App\Http\Controllers\Customers\CustomerController;
+use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\LinkCustomerController;
 use App\Http\Controllers\Customers\CustomerNoteController;
@@ -27,19 +29,21 @@ use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerBookmarksController;
 use App\Http\Controllers\Customers\BreakCustomerLinkController;
-use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\DeactivatedCustomersController;
+
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
-use App\Http\Controllers\Home\UploadImageController;
+
 use App\Http\Controllers\TechTips\TechTipsController;
+use App\Http\Controllers\TechTips\SearchTipsController;
+
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
+use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Controllers\User\DisabledUserController;
 use App\Http\Controllers\User\UserInitializeController;
 use App\Http\Controllers\User\ListActiveUsersController;
-use App\Http\Controllers\User\UserSettingsController;
 
 /*
 *   File Download routes
@@ -143,6 +147,11 @@ Route::middleware('auth')->group(function()
 *   Tech Tips Routes
 */
 Route::middleware('auth')->group(function () {
+    Route::prefix('tech-tips')->name('tips.')->group(function()
+    {
+        Route::get('search', SearchTipsController::class)->name('search');
+    });
+
     Route::resource('tech-tips', TechTipsController::class);
 });
 
