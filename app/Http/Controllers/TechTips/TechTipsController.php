@@ -2,24 +2,28 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use App\Events\NewTechTip;
 use Inertia\Inertia;
 
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TechTips\NewTipRequest;
-use App\Models\EquipmentCategory;
-use App\Models\EquipmentType;
-use App\Models\FileUploads;
+
 use App\Models\TechTip;
-use App\Models\TechTipEquipment;
+use App\Models\FileUploads;
 use App\Models\TechTipFile;
 use App\Models\TechTipType;
+use App\Models\EquipmentType;
+use App\Models\TechTipEquipment;
+use App\Models\EquipmentCategory;
+
 use App\Traits\FileTrait;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Events\NewTechTip;
+
+use App\Http\Requests\TechTips\NewTipRequest;
+use App\Models\TechTipBookmark;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class TechTipsController extends Controller
 {
@@ -145,7 +149,23 @@ class TechTipsController extends Controller
      */
     public function show($id)
     {
-        return Inertia::render('TechTips/show');
+        //  Determine if the Tip ID or Slug is being used to find the Tech Tip
+        if(is_numeric($id))
+        {
+            $tip = TechTip::findOrFail($id);
+            return redirect(route('tech-tips.show', $tip->slug));
+        }
+
+        $tip = TechTip::where('slug', $id)->with('EquipmentType')->with('FileUploads')->firstOrFail()->makeHidden(['summary', 'sticky']);
+        $fav = TechTipBookmark::where('user_id', Auth::user()->user_id)->where('tip_id', $tip->tip_id)->count();
+
+        return Inertia::render('TechTips/show', [
+            'details'     => $tip,
+            'fav'         => $fav == 1 ? true : false,
+            'permissions' => [
+                //
+            ],
+        ]);
     }
 
     /**

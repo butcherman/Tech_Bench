@@ -16,3 +16,4 @@ mix.js('resources/js/app.js', 'public/js')
     .copyDirectory('resources/images', 'public/images')
     .copy('node_modules/tinymce/skins', 'public/js/skins')
     .vue();
+

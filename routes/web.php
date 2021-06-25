@@ -34,10 +34,10 @@ use App\Http\Controllers\Customers\DeactivatedCustomersController;
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
-
+use App\Http\Controllers\TechTips\DownloadTipController;
 use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
-
+use App\Http\Controllers\TechTips\TechTipBookmarkController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
 use App\Http\Controllers\User\UserSettingsController;
@@ -149,7 +149,9 @@ Route::middleware('auth')->group(function()
 Route::middleware('auth')->group(function () {
     Route::prefix('tech-tips')->name('tips.')->group(function()
     {
-        Route::get('search', SearchTipsController::class)->name('search');
+        Route::get('search',        SearchTipsController::class)->name('search');
+        Route::put('bookmark',      TechTipBookmarkController::class)->name('bookmark');
+        Route::get('{id}/download', DownloadTipController::class)->name('download');
     });
 
     Route::resource('tech-tips', TechTipsController::class);

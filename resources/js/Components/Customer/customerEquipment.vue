@@ -103,8 +103,6 @@
                     .then(res => {
                         this.equipment = res.data;
                         this.loading = false;
-
-                        console.log(res.data);
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             }
         },

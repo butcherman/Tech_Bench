@@ -19241,3 +19241,26 @@ p.customer-note-minimized {
   overflow: hidden;
   max-height: 50px;
 }
+
+.tip-details a, .tip-details span:not(.badge) {
+  padding: 0 5px;
+  border-right: 1px solid #999999;
+  color: #999999;
+  display: inline-block;
+}
+.tip-details a:last-child, .tip-details span:not(.badge):last-child {
+  border-right: none;
+}
+.tip-details a span, .tip-details span:not(.badge) span {
+  display: inline-block;
+}
+
+.tip-equipment {
+  color: #999999;
+  border-top: 1px solid #999999;
+  border-bottom: 1px solid #999999;
+  padding: 4px 0;
+}
+.tip-equipment span {
+  padding: 3px 5px;
+}

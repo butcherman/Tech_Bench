@@ -217,7 +217,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.submit.settings = true;
-      console.log(this.settings);
       this.$inertia.post(route('update-settings', this.user.user_id), {
         settingsData: this.userSettings
       }, {

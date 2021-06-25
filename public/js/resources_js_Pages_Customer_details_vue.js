@@ -619,19 +619,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
   computed: {
     file_types: function file_types() {
       return this.$page.props.file_types;
     }
   },
-  watch: {//
-  },
   methods: {
-    //
     submitForm: function submitForm() {
       var _this = this;
 
@@ -639,8 +632,6 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       this.$inertia.put(route('customers.files.update', this.data.cust_file_id), this.form, {
         onFinish: function onFinish() {
-          console.log('done');
-
           _this.$refs['edit-file-modal'].hide();
 
           _this.loading = false;
@@ -1252,7 +1243,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(this.route('customers.equipment.show', this.cust_id)).then(function (res) {
         _this.equipment = res.data;
         _this.loading = false;
-        console.log(res.data);
       })["catch"](function (error) {
         return _this.eventHub.$emit('axiosError', error);
       });
@@ -1418,7 +1408,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Notes_editNoteModal_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Notes/editNoteModal.vue */ "./resources/js/Components/Customer/Notes/editNoteModal.vue");
 /* harmony import */ var _Notes_newNoteModal_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Notes/newNoteModal.vue */ "./resources/js/Components/Customer/Notes/newNoteModal.vue");
 /* harmony import */ var vue_clamp__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-clamp */ "./node_modules/vue-clamp/Clamp.js");
-//
 //
 //
 //

@@ -137,7 +137,6 @@
                             this.selected.forEach(item => {
                                 axios.delete(this.route('customers.force-delete', item.cust_id))
                                     .then(res => {
-                                        // console.log(res);
                                         processed++;
                                         if(processed === this.selected.length)
                                         {

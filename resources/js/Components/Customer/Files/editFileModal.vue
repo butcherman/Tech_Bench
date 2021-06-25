@@ -66,28 +66,17 @@
                 },
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-            //
-        },
         computed: {
             file_types() {
                 return this.$page.props.file_types;
             }
         },
-        watch: {
-            //
-        },
         methods: {
-            //
             submitForm()
             {
                 this.submitted = true;
                 this.loading   = true;
                 this.$inertia.put(route('customers.files.update', this.data.cust_file_id), this.form, {onFinish: () => {
-                    console.log('done');
                     this.$refs['edit-file-modal'].hide();
                     this.loading   = false;
                     this.submitted = false;

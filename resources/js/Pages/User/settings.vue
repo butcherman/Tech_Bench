@@ -93,7 +93,6 @@
             submitSettings()
             {
                 this.submit.settings = true;
-                console.log(this.settings);
                 this.$inertia.post(route('update-settings', this.user.user_id), {settingsData: this.userSettings}, {onFinish: () => {this.submit.settings = false}});
             }
         }

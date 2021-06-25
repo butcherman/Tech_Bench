@@ -245,7 +245,6 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.selected.forEach(function (item) {
             axios["delete"](_this2.route('customers.force-delete', item.cust_id)).then(function (res) {
-              // console.log(res);
               processed++;
 
               if (processed === _this2.selected.length) {

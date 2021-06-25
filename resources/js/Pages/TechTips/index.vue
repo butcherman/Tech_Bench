@@ -74,7 +74,11 @@
             <div class="col-lg-9 col-12 stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <b-table :items="tech_tips" :fields="fields" striped responsive :busy="loading">
+                        <b-table :items="tech_tips" :fields="fields" striped responsive :busy="loading" show-empty>
+                            <template #empty>
+                                <h5 class="text-center">Nothing to See Here</h5>
+                                <p class="text-center">No Tech Tips found.  Try searching for something else</p>
+                            </template>
                             <template #table-busy>
                                 <atom-loader></atom-loader>
                             </template>
@@ -197,14 +201,16 @@
                 ]
             }
         },
+        mounted()
+        {
+            this.search();
+        },
         methods: {
             search()
             {
                 this.loading = true;
-                console.log(this.form);
                 axios.get(this.route('tips.search', this.form))
                     .then(res => {
-                        console.log(res);
                         this.tech_tips     = res.data.data;
                         this.results.total = res.data.total;
                         this.results.low   = res.data.from;

@@ -22,8 +22,7 @@
                     <i v-if="note.shared" class="fas fa-share" title="Note Shared Across Sites" v-b-tooltip.hover></i>
                     {{note.subject}}
                 </b-card-title>
-                <b-card-text v-html="note.details" class="customer-note-minimized ql-editor">
-                </b-card-text>
+                <b-card-text v-html="note.details" class="customer-note-minimized ql-editor"></b-card-text>
                 <div>...</div>
                 <span class="float-left text-muted">Click to Expand</span>
                 <span class="float-right text-muted">Updated: {{note.updated_at}}</span>

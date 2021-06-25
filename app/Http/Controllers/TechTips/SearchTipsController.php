@@ -6,8 +6,6 @@ use App\Models\TechTip;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\SearchTipsRequest;
 
-use Illuminate\Http\Request;
-
 class SearchTipsController extends Controller
 {
     /**
@@ -29,12 +27,13 @@ class SearchTipsController extends Controller
         //  If no search queries, send all Tech Tips (limited by pagination)
         if(!$dirty)
         {
-            return TechTip::with('EquipmentType')->orderBy('sticky', 'DESC')->paginate($request->pagination_perPage);
+            return TechTip::with('EquipmentType')->orderBy('sticky', 'DESC')->orderBy('created_at', 'DESC')->paginate($request->pagination_perPage);
         }
 
         //  Perform the search query
         return TechTip::with('EquipmentType')
             ->orderBy('sticky', 'DESC')
+            ->orderBy('created_at', 'DESC')
             //  Search text fields
             ->when($searchText, function ($q) use($searchText)
                 {
