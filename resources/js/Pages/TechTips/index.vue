@@ -99,7 +99,7 @@
                                 </div>
                             </template>
                         </b-table>
-                        <div class="row">
+                        <div class="row" v-if="!loading">
                             <div class="col-sm-3 text-center text-sm-left">
                                 {{results.low}} through {{results.high}} of {{results.total}}
                             </div>
