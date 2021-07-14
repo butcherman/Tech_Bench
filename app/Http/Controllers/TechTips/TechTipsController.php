@@ -163,7 +163,7 @@ class TechTipsController extends Controller
             'details'     => $tip,
             'fav'         => $fav == 1 ? true : false,
             'permissions' => [
-                //
+                'edit' => true,
             ],
         ]);
     }

@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\TechTip;
 use App\Models\TechTipComment;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TechTipCommentFactory extends Factory
@@ -22,7 +24,9 @@ class TechTipCommentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'tip_id'  => TechTip::factory()->create()->tip_id,
+            'user_id' => User::factory()->create()->user_id,
+            'comment' => $this->faker->realText(),
         ];
     }
 }
