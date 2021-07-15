@@ -19,6 +19,7 @@ use App\Traits\FileTrait;
 use App\Events\NewTechTipEvent;
 use App\Http\Requests\TechTips\NewTipRequest;
 use App\Models\TechTipBookmark;
+use App\Models\TechTipComment;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -166,7 +167,10 @@ class TechTipsController extends Controller
             'details'     => $tip,
             'fav'         => $fav == 1 ? true : false,
             'permissions' => [
-                'edit' => true,
+                'edit'      => true,
+                'comment'   => [
+                    'create' => Auth::user()->can('create', TechTipComment::class),
+                ]
             ],
         ]);
     }

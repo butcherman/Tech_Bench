@@ -39,6 +39,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\NewTipCommentEvent' => [
             'App\Listeners\NotifyOfNewComment',
+        ],
+        'App\Events\FlaggedTipCommentEvent' => [
+            'App\Listeners\NotifyOfFlaggedComment',
         ]
     ];
 

@@ -56,6 +56,7 @@ class CreateUserRolePermissionTypesTable extends Migration
             ['perm_type_id' => 24, 'description' => 'Edit Tech Tip',             'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 25, 'description' => 'Delete Tech Tip',           'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['perm_type_id' => 26, 'description' => 'Manage Tech Tips',          'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            ['perm_type_id' => 27, 'description' => 'Comment on Tech Tip',       'is_admin_link' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
         ];
 
         DB::table('user_role_permission_types')->insert($defaultData);

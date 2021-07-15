@@ -61,6 +61,7 @@
                                 <div class="mb-2">
                                     <span class="float-right">
 
+                                        <i class="fas fa-flag pl-2" :class="isFlaggedClass(comment.flagged)" title="Flag as Innappropriate" v-b-tooltip.hover @click="flagComment(comment)"></i>
 
 
                                     </span>
@@ -79,7 +80,7 @@
                             <template #overlay>
                                 <atom-loader></atom-loader>
                             </template>
-                            <ValidationObserver v-slot="{handleSubmit}">
+                            <ValidationObserver v-slot="{handleSubmit}" v-if="permissions.comment.create">
                                 <b-form @submit.prevent="handleSubmit(submitComment)" novalidate>
                                     <ValidationProvider v-slot="v" rules="required">
                                         <b-form-group>
@@ -118,6 +119,10 @@
             },
             fav: {
                 type:     Boolean,
+                required: true,
+            },
+            permissions: {
+                type:     Object,
                 required: true,
             }
         },
@@ -158,8 +163,6 @@
             },
             submitComment()
             {
-                console.log(this.form);
-
                 this.submitted = true;
                 this.$inertia.post(route('tips.comments.store'), this.form, {
                     onFinish: () => {
@@ -167,7 +170,20 @@
                         this.form.comment = null;
                     }
                 });
-            }
+            },
+            flagComment(comment)
+            {
+                console.log(comment);
+
+                if(!comment.flagged)
+                {
+                    this.$inertia.get(route('tips.comments.flag', comment.id));
+                }
+            },
+            isFlaggedClass(isFlagged)
+            {
+                return isFlagged ?  'text-danger' : 'pointer text-muted';
+            },
         }
     }
 </script>
