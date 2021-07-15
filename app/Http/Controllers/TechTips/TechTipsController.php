@@ -170,6 +170,7 @@ class TechTipsController extends Controller
                 'edit'      => true,
                 'comment'   => [
                     'create' => Auth::user()->can('create', TechTipComment::class),
+                    'manage' => Auth::user()->can('manage', TechTipComment::class),
                 ]
             ],
         ]);

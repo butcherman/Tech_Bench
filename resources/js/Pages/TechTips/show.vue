@@ -49,8 +49,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="row grid-margin justify-content-center">
             <div class="col-md-8">
                 <div class="card rounded">
@@ -60,10 +58,9 @@
                             <div v-for="comment in details.tech_tip_comment" :key="comment.comment_id" class="border rounded p-4 mt-2">
                                 <div class="mb-2">
                                     <span class="float-right">
-
                                         <i class="fas fa-flag pl-2" :class="isFlaggedClass(comment.flagged)" title="Flag as Innappropriate" v-b-tooltip.hover @click="flagComment(comment)"></i>
-
-
+                                        <!-- <i v-if="canEditComment(comment.user)" class="fas fa-pencil-alt text-info pointer" title="Edit" v-b-tooltip.hover></i> -->
+                                        <i v-if="canEditComment(comment.user)" class="far fa-trash-alt text-danger pointer" title="Delete" v-b-tooltip.hover @click="deleteComment(comment)"></i>
                                     </span>
                                     {{comment.comment}}
                                 </div>
@@ -184,6 +181,31 @@
             {
                 return isFlagged ?  'text-danger' : 'pointer text-muted';
             },
+            canEditComment(user)
+            {
+                if(this.permissions.comment.manage)
+                {
+                    return true;
+                }
+
+                return user.username === this.$page.props.user.username;
+            },
+            deleteComment(comment)
+            {
+                this.$bvModal.msgBoxConfirm('Please confirm you want to delete this comment.', {
+                    title: 'Are You Sure?',
+                    size: 'md',
+                    okVariant: 'danger',
+                    okTitle: 'Yes',
+                    cancelTitle: 'No',
+                    centered: true,
+                }).then(res => {
+                    if(res)
+                    {
+                        this.$inertia.delete(route('tips.comments.destroy', comment.id));
+                    }
+                });
+            }
         }
     }
 </script>

@@ -20,9 +20,20 @@ class UserSeeder extends Seeder
             'password_expires' => null,
         ]);
 
+        //  Create a Tech User that has restricted access
+        User::create([
+            'user_id'          => 2,
+            'role_id'          => 4,
+            'username'         => 'tech',
+            'first_name'       => 'Tech',
+            'last_name'        => 'User',
+            'email'            => 'tech@em.com',
+            'password'         => bcrypt('password'),
+            'password_expires' => null,
+        ]);
+
         //  Create 10 users each with a different role_id
         $newUsers = User::factory()->count(10)->state(new Sequence(
-            ['role_id' => 1],
             ['role_id' => 2],
             ['role_id' => 3],
             ['role_id' => 4]
@@ -30,6 +41,16 @@ class UserSeeder extends Seeder
 
         //  Create the user settings for each of the new users
         $settingData = UserSettingType::all();
+
+        foreach($settingData as $setting)
+        {
+            UserSetting::create([
+                'user_id'         => 2,
+                'setting_type_id' => $setting->setting_type_id,
+                'value'           => true,
+            ]);
+        }
+
         foreach($newUsers as $user)
         {
             foreach($settingData as $setting)

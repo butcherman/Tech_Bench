@@ -12,27 +12,9 @@ class TechTipCommentPolicy
     use HandlesAuthorization;
     use AllowTrait;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
+    public function manage(User $user)
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\TechTipComment  $techTipComment
-     * @return mixed
-     */
-    public function view(User $user, TechTipComment $techTipComment)
-    {
-        //
+        return $this->checkPermission($user, 'Manage Tech Tips');
     }
 
     /**
@@ -67,7 +49,12 @@ class TechTipCommentPolicy
      */
     public function delete(User $user, TechTipComment $techTipComment)
     {
-        //
+        if($this->checkPermission($user, 'Manage Tech Tips'))
+        {
+            return true;
+        }
+
+        return $user->user_id === $techTipComment->user_id;
     }
 
     /**

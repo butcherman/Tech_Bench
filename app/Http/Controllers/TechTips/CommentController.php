@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\CommentRequest;
 use App\Models\TechTipComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
@@ -91,6 +92,13 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = TechTipComment::findOrFail($id);
+
+        $this->authorize('delete', $comment);
+        $comment->delete();
+
+        Log::info('A Comment on Tech Tip ID '.$comment->tip_id.' has been deleted by '.Auth::user()->username.'.  Comment ID - '.$comment->id);
+
+        return back()->with(['message' => 'Comment has been deleted', 'type' => 'danger']);
     }
 }
