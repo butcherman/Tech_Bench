@@ -34,6 +34,7 @@ use App\Http\Controllers\Customers\DeactivatedCustomersController;
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
+use App\Http\Controllers\TechTips\CommentController;
 use App\Http\Controllers\TechTips\DownloadTipController;
 use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
@@ -152,9 +153,12 @@ Route::middleware('auth')->group(function () {
         Route::get('search',        SearchTipsController::class)->name('search');
         Route::put('bookmark',      TechTipBookmarkController::class)->name('bookmark');
         Route::get('{id}/download', DownloadTipController::class)->name('download');
+
+        Route::resource('comments', CommentController::class);
     });
 
     Route::resource('tech-tips', TechTipsController::class);
+
 });
 
 /*

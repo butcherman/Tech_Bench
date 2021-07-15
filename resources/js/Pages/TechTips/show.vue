@@ -49,6 +49,60 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="row grid-margin justify-content-center">
+            <div class="col-md-8">
+                <div class="card rounded">
+                    <div class="card-body">
+                        <div class="card-title">Discussion:</div>
+                        <div v-if="details.tech_tip_comment.length" class="mb-3">
+                            <div v-for="comment in details.tech_tip_comment" :key="comment.comment_id" class="border rounded p-4 mt-2">
+                                <div class="mb-2">
+                                    <span class="float-right">
+
+
+
+                                    </span>
+                                    {{comment.comment}}
+                                </div>
+                                <div class="border-top text-secondary">
+                                    {{comment.user.full_name}}
+                                    <div class="float-right">{{comment.created_at}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3" v-else>
+                            <h5 class="text-center">No Comments Yet</h5>
+                        </div>
+                        <b-overlay :show="submitted">
+                            <template #overlay>
+                                <atom-loader></atom-loader>
+                            </template>
+                            <ValidationObserver v-slot="{handleSubmit}">
+                                <b-form @submit.prevent="handleSubmit(submitComment)" novalidate>
+                                    <ValidationProvider v-slot="v" rules="required">
+                                        <b-form-group>
+                                            <b-form-textarea
+                                                v-model="form.comment"
+                                                placeholder="Comment on this Tech Tip..."
+                                                rows="3"
+                                                max-rows="6"
+                                            ></b-form-textarea>
+                                            <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
+                                        </b-form-group>
+                                    </ValidationProvider>
+                                    <submit-button class="mt-2" button_text="Add Comment" :submitted="submitted"></submit-button>
+                                </b-form>
+                            </ValidationObserver>
+                        </b-overlay>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 </template>
 
@@ -70,6 +124,11 @@
         data() {
             return {
                 is_fav: this.fav,
+                submitted: false,
+                form: {
+                    tip_id:  this.details.tip_id,
+                    comment: null,
+                }
             }
         },
         created() {
@@ -97,6 +156,18 @@
                 axios.put(this.route('tips.bookmark'), {tip_id: this.details.tip_id, state: !this.is_fav})
                     .then(this.is_fav = !this.is_fav);
             },
+            submitComment()
+            {
+                console.log(this.form);
+
+                this.submitted = true;
+                this.$inertia.post(route('tips.comments.store'), this.form, {
+                    onFinish: () => {
+                        this.submitted    = false;
+                        this.form.comment = null;
+                    }
+                });
+            }
         }
     }
 </script>

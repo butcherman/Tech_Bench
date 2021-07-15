@@ -11,4 +11,13 @@ class TechTipComment extends Model
 
     protected $guarded    = ['id', 'created_at', 'updated_at'];
     protected $hidden     = [];
+    protected $casts      = [
+        'created_at' => 'datetime:M d, Y',
+        'updated_at' => 'datetime:M d, Y',
+    ];
+
+    public function User()
+    {
+        return $this->hasOne(User::class, 'user_id', 'user_id');
+    }
 }

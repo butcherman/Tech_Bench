@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\TechTip;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,20 +10,24 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewTechTip
+class NewTipCommentEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $tipData;
+    public $tip_id;
+    public $comment;
+    public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(TechTip $tipData)
+    public function __construct($tip, $comment, $user)
     {
-        $this->tipData = $tipData;
+        $this->tip_id  = $tip;
+        $this->comment = $comment;
+        $this->user    = $user;
     }
 
     /**

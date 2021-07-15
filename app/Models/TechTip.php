@@ -33,4 +33,9 @@ class TechTip extends Model
     {
         return $this->hasManyThrough(FileUploads::class, TechTipFile::class, 'tip_id', 'file_id', 'tip_id', 'file_id');
     }
+
+    public function TechTipComment()
+    {
+        return $this->hasMany(TechTipComment::class, 'tip_id', 'tip_id');
+    }
 }

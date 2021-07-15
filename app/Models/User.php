@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
     }
+
+    public function TechTipBookmark()
+    {
+        return $this->hasOne(TechTipBookmark::class, 'user_id', 'user_id');
+    }
 }

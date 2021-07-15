@@ -12,13 +12,11 @@ use App\Models\TechTip;
 use App\Models\FileUploads;
 use App\Models\TechTipFile;
 use App\Models\TechTipType;
-use App\Models\EquipmentType;
 use App\Models\TechTipEquipment;
 use App\Models\EquipmentCategory;
 
 use App\Traits\FileTrait;
-use App\Events\NewTechTip;
-
+use App\Events\NewTechTipEvent;
 use App\Http\Requests\TechTips\NewTipRequest;
 use App\Models\TechTipBookmark;
 use Illuminate\Support\Str;
@@ -139,7 +137,7 @@ class TechTipsController extends Controller
         Log::channel('user')->info('New Tech Tip - '.$request->subject.' was created by '.$request->user()->username);
         if(!$request->noEmail)
         {
-            event(new NewTechTip($newTip));
+            event(new NewTechTipEvent($newTip));
         }
         return redirect(route('tech-tips.show', $newTip->slug));
     }
@@ -156,7 +154,12 @@ class TechTipsController extends Controller
             return redirect(route('tech-tips.show', $tip->slug));
         }
 
-        $tip = TechTip::where('slug', $id)->with('EquipmentType')->with('FileUploads')->firstOrFail()->makeHidden(['summary', 'sticky']);
+        $tip = TechTip::where('slug', $id)
+                ->with('EquipmentType')
+                ->with('FileUploads')
+                ->with('TechTipComment.User')
+                ->firstOrFail()
+                ->makeHidden(['summary', 'sticky']);
         $fav = TechTipBookmark::where('user_id', Auth::user()->user_id)->where('tip_id', $tip->tip_id)->count();
 
         return Inertia::render('TechTips/show', [
