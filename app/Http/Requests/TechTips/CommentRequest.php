@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\TechTips;
 
+use App\Models\TechTipComment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CommentRequest extends FormRequest
@@ -13,7 +14,7 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('create', TechTipComment::class);
     }
 
     /**

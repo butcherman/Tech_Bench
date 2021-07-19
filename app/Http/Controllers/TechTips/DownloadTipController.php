@@ -26,9 +26,5 @@ class DownloadTipController extends Controller
 
 
         return $pdf->stream();
-
-        // return view('pdf.tech_tip', [
-        //     'details' => $tip,
-        // ]);
     }
 }
