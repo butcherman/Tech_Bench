@@ -17,6 +17,7 @@
                     <i class="fas fa-download"></i>
                     Download Tip
                 </b-button>
+                <manage-tip v-if="canManage" :permissions="permissions" :tipId="details.tip_id"></manage-tip>
             </div>
         </div>
         <div class="row grid-margin">
@@ -59,7 +60,6 @@
                                 <div class="mb-2">
                                     <span class="float-right">
                                         <i class="fas fa-flag pl-2" :class="isFlaggedClass(comment.flagged)" title="Flag as Innappropriate" v-b-tooltip.hover @click="flagComment(comment)"></i>
-                                        <!-- <i v-if="canEditComment(comment.user)" class="fas fa-pencil-alt text-info pointer" title="Edit" v-b-tooltip.hover></i> -->
                                         <i v-if="canEditComment(comment.user)" class="far fa-trash-alt text-danger pointer" title="Delete" v-b-tooltip.hover @click="deleteComment(comment)"></i>
                                     </span>
                                     {{comment.comment}}
@@ -106,9 +106,11 @@
 
 <script>
     import App from '../../Layouts/app';
+    import ManageTip from "../../Components/TechTips/ManageTip.vue";
 
     export default {
         layout: App,
+        components: { ManageTip },
         props: {
             details: {
                 type:     Object,
@@ -147,6 +149,10 @@
             bookmark_title()
             {
                 return this.is_fav ? 'Remove From Bookmarks' : 'Add to Bookmarks'
+            },
+            canManage()
+            {
+                return this.permissions.manage || this.permissions.edit || this.permissions.delete;
             }
         },
         watch: {

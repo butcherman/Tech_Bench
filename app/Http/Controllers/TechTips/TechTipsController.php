@@ -16,10 +16,11 @@ use App\Models\TechTipEquipment;
 use App\Models\EquipmentCategory;
 
 use App\Traits\FileTrait;
-use App\Events\NewTechTipEvent;
-use App\Http\Requests\TechTips\NewTipRequest;
-use App\Models\TechTipBookmark;
 use App\Models\TechTipComment;
+use App\Events\NewTechTipEvent;
+use App\Models\TechTipBookmark;
+use App\Http\Requests\TechTips\NewTipRequest;
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -167,32 +168,31 @@ class TechTipsController extends Controller
             'details'     => $tip,
             'fav'         => $fav == 1 ? true : false,
             'permissions' => [
-                'edit'      => true,
+                'edit'      => Auth::user()->can('update', TechTip::class),
+                'delete'    => Auth::user()->can('delete', TechTip::class),
+                'manage'    => Auth::user()->can('manage', TechTip::class),
                 'comment'   => [
-                    'create' => Auth::user()->can('create', TechTipComment::class),
-                    'manage' => Auth::user()->can('manage', TechTipComment::class),
-                ]
+                    'create'  => Auth::user()->can('create', TechTipComment::class),
+                    'manage'  => Auth::user()->can('manage', TechTipComment::class),
+                ],
             ],
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Edit a Tech Tip
      */
     public function edit($id)
     {
-        //
+        $tip = TechTip::findOrFail($id);
+        $this->authorize('update', $tip);
+
+
+        return Inertia::render('TechTips/edit');
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Submit an edit to an existing Tech Tip
      */
     public function update(Request $request, $id)
     {
@@ -200,13 +200,16 @@ class TechTipsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Soft Delete the Tech Tip
      */
     public function destroy($id)
     {
-        //
+        $tip = TechTip::findOrFail($id);
+        $this->authorize('delete', $tip);
+
+        Log::notice('Tech Tip ID '.$tip->tip_id.' - '.$tip->subject.' has been deleted by '.Auth::user()->username);
+        $tip->delete();
+
+        return response()->noContent();
     }
 }

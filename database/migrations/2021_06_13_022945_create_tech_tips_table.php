@@ -22,6 +22,7 @@ class CreateTechTipsTable extends Migration
             $table->text('subject');
             $table->text('slug');
             $table->longText('details');
+            $table->integer('views')->default(0);
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade');

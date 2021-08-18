@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TechTip extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $primaryKey = 'tip_id';
     protected $guarded    = ['tip_id', 'created_at', 'updated_at'];
@@ -37,5 +39,15 @@ class TechTip extends Model
     public function TechTipComment()
     {
         return $this->hasMany(TechTipComment::class, 'tip_id', 'tip_id');
+    }
+
+    public function CreatedBy()
+    {
+        return $this->hasOne(User::class, 'user_id', 'user_id');
+    }
+
+    public function UpdatedBy()
+    {
+        return $this->hasOne(User::class, 'user_id', 'updated_id');
     }
 }

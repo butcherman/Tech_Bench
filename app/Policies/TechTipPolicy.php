@@ -10,8 +10,16 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TechTipPolicy
 {
-    use HandlesAuthorization;
     use AllowTrait;
+    use HandlesAuthorization;
+
+    /*
+    *   Determine if a user can Manage Tech Tips
+    */
+    public function manage(User $user)
+    {
+        return $this->checkPermission($user, 'Manage Tech Tips');
+    }
 
     /**
      *  Determine if a user can add a new Tech Tip

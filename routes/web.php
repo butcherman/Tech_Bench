@@ -37,6 +37,7 @@ use App\Http\Controllers\Equip\EquipmentCategoriesController;
 use App\Http\Controllers\TechTips\CommentController;
 use App\Http\Controllers\TechTips\DownloadTipController;
 use App\Http\Controllers\TechTips\FlagCommentController;
+use App\Http\Controllers\TechTips\GetDetailsController;
 use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 use App\Http\Controllers\TechTips\TechTipBookmarkController;
@@ -154,6 +155,7 @@ Route::middleware('auth')->group(function () {
         Route::get('search',        SearchTipsController::class)->name('search');
         Route::put('bookmark',      TechTipBookmarkController::class)->name('bookmark');
         Route::get('{id}/download', DownloadTipController::class)->name('download');
+        Route::get('{id}/details', GetDetailsController::class)->name('get-details');
 
         Route::resource('comments', CommentController::class);
         Route::get('{id}/flag-comment', FlagCommentController::class)->name('comments.flag');
