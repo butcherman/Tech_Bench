@@ -184,11 +184,15 @@ class TechTipsController extends Controller
      */
     public function edit($id)
     {
-        $tip = TechTip::findOrFail($id);
+        $tip = TechTip::with(['EquipmentType', 'FileUploads'])->findOrFail($id)->makeVisible('tip_type_id');
         $this->authorize('update', $tip);
 
 
-        return Inertia::render('TechTips/edit');
+        return Inertia::render('TechTips/edit', [
+            'tipData' => $tip,
+            'tipTypes'  => TechTipType::all(),
+            'equipment' => EquipmentCategory::with('EquipmentType')->get(),
+        ]);
     }
 
     /**

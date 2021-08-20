@@ -45,7 +45,8 @@
         props: {
             url: {
                 type:     String,
-                required: true,
+                required: false,
+                default:  this.route('upload-file'),
             },
             maxFiles: {
                 type:     Number,

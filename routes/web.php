@@ -34,6 +34,7 @@ use App\Http\Controllers\Customers\DeactivatedCustomersController;
 use App\Http\Controllers\Equip\EquipmentListController;
 use App\Http\Controllers\Equip\EquipmentTypesController;
 use App\Http\Controllers\Equip\EquipmentCategoriesController;
+use App\Http\Controllers\Home\UploadFileController;
 use App\Http\Controllers\TechTips\CommentController;
 use App\Http\Controllers\TechTips\DownloadTipController;
 use App\Http\Controllers\TechTips\FlagCommentController;
@@ -82,6 +83,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get( '/dashboard',   DashboardController::class)  ->name('dashboard');
     Route::get( '/about',       AboutController::class)      ->name('about');
     Route::post('upload-image', UploadImageController::class) ->name('upload-image');
+    Route::post('upload-file',  UploadFileController::class)  ->name('upload-file');
 });
 
 /*
