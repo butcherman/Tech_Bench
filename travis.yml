@@ -1,0 +1,43 @@
+language: php
+
+env:
+  global:
+    - setup=stable
+    - XDEBUG_MODE=coverage
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.4
+      env: setup=lowest
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services:
+    - memcached
+    - redis-server
+    - mysql
+
+before_install:
+    - mysql -e 'create database `tb-php-unit`;'
+
+before_script:
+    - cp tests/.env.travis .env
+    - travis_retry composer self-update
+    - travis_retry composer install --no-interaction
+    - php artisan key:generate
+    - php artisan migrate
+
+script:
+    - php vendor/bin/phpunit --coverage-clover=coverage.clover
+
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+after_failure:
+    - cat /home/travis/build/butcherman/Tech_Bench/storage/logs/TechBench.log
