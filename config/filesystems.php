@@ -13,9 +13,7 @@ return [
     |
     */
 
-    'default'      => env('FILESYSTEM_DRIVER', 'local'),
-    'max_filesize' => env('MAX_UPLOAD', 1600),      //  1600 Megabytes = 2GB
-    'chunk_size'   => 500000,                       //  500000 Bytes = 4 MB
+    'default' => env('FILESYSTEM_DRIVER', 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,16 +35,6 @@ return [
             'root' => storage_path('app'),
         ],
 
-        'customers' => [
-            'driver' => 'local',
-            'root'   => storage_path('app/customers'),
-        ],
-
-        'tips' => [
-            'driver' => 'local',
-            'root'   => storage_path('app/tips'),
-        ],
-
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -54,7 +42,16 @@ return [
             'visibility' => 'public',
         ],
 
-
+        's3' => [
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+            'url' => env('AWS_URL'),
+            'endpoint' => env('AWS_ENDPOINT'),
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+        ],
 
     ],
 

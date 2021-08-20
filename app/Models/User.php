@@ -4,59 +4,41 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\CanResetPassword;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    protected $primaryKey = 'user_id';
-    protected $guarded    = ['created_at', 'updated_at'];
-    protected $hidden     = ['role_id', 'password', 'remember_token', 'deleted_at', 'created_at', 'password_expires', 'updated_at', 'user_id'];
-    protected $appends    = ['full_name', 'initials'];
-    protected $casts      = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'deleted_at' => 'datetime:M d, Y'
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
     ];
 
-    /*
-    *   Users First and Last name combined
-    */
-    public function getFullNameAttribute()
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
-    /*
-    *   User Initials
-    */
-    public function getInitialsAttribute()
-    {
-        return "{$this->first_name[0]}{$this->last_name[0]}";
-    }
-
-    /*
-    *   Each user is assigned to a role that determines what permissions they are allowed
-    */
-    public function UserRoles()
-    {
-        return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
-    }
-
-    /*
-    *   Each user has their own individual settings
-    */
-    public function UserSetting()
-    {
-        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
-    }
-
-    public function TechTipBookmark()
-    {
-        return $this->hasOne(TechTipBookmark::class, 'user_id', 'user_id');
-    }
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }
