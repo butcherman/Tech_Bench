@@ -12,9 +12,11 @@ class LogLockout
      */
     public function handle(Lockout $event)
     {
-        Log::channel('auth')->notice('Username '.$event->credentials['username'].' has been locked out due to too many failed login attempts', [
-            'Username'   => $event->credentials['username'],
-            'IP Address' => \Request::ip(),
+        Log::channel('auth')->notice('Username '.$event->request->username.' has been locked out due to too many failed login attempts', [
+            'Username'         => $event->request->username,
+            'Attempts Made'    => session('failed_login'),
+            'Locked Out Until' => session('timeout'),
+            'IP Address'       => \Request::ip(),
         ]);
     }
 }

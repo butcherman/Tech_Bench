@@ -15,6 +15,7 @@ class LogFailedLoginAttempt
         Log::channel('auth')->warning('User tried to login with invalid credentils', [
             'Username'   => $event->credentials['username'],
             'IP Address' => \Request::ip(),
+            'Attempt Number' => session('failed_login') + 1,
         ]);
     }
 }

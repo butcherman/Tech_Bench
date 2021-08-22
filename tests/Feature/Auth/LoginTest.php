@@ -36,7 +36,7 @@ class LoginTest extends TestCase
         ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('home'));
-        $response->assertSessionHasErrors('username');
+        $response->assertSessionHasErrors(['username' => 'Your username or password does not match our records']);
         $this->assertGuest();
     }
 
@@ -54,7 +54,7 @@ class LoginTest extends TestCase
         ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('home'));
-        $response->assertSessionHasErrors('username');
+        $response->assertSessionHasErrors(['username' => 'Your username or password does not match our records']);
         $this->assertGuest();
     }
 
@@ -66,6 +66,45 @@ class LoginTest extends TestCase
         $response = $this->actingAs($user)->get(route('home'));
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));
+    }
+
+    //  Verify that a user is locked out if they try more than five login attempts
+    public function test_login_lockout()
+    {
+        $user = User::factory()->create();
+
+        //  Attempt five failed attempts
+        $this->post(route('login.submit'), [
+            'username' => $user->username,
+            'password' => 'somethingElse'
+        ]);
+        $this->post(route('login.submit'), [
+            'username' => $user->username,
+            'password' => 'somethingElse'
+        ]);
+        $this->post(route('login.submit'), [
+            'username' => $user->username,
+            'password' => 'somethingElse'
+        ]);
+        $this->post(route('login.submit'), [
+            'username' => $user->username,
+            'password' => 'somethingElse'
+        ]);
+        $this->post(route('login.submit'), [
+            'username' => $user->username,
+            'password' => 'somethingElse'
+        ]);
+
+        //  Sixth attempt should fail
+        $response = $this->post(route('login.submit'), [
+            'username' => $user->username,
+            'password' => 'somethingElse'
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHasErrors(['username' => 'You have attempted to log in too many times.  Please wait 10 minutes before trying again.']);
+        $this->assertGuest();
     }
 
     // public function test_password_expired_redirect()
