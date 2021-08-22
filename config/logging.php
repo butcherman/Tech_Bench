@@ -18,6 +18,7 @@ return [
             'level' => env('LOG_LEVEL', 'info'),
             'permission' => 0777,
         ],
+        //  Default logging channel
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/TechBench.log'),
@@ -25,6 +26,7 @@ return [
             'days' => 14,
             'permission' => 0777,
         ],
+        //  All User related logging
         'user' => [
             'driver' => 'daily',
             'path'   => storage_path('logs/Users/UserLog.log'),
@@ -32,6 +34,7 @@ return [
             'days'   => 14,
             'permission' => 0777,
         ],
+        //  All authentication - login/logout logging
         'auth' => [
             'driver' => 'daily',
             'path'   => storage_path('logs/Auth/AuthLog.log'),
@@ -39,13 +42,14 @@ return [
             'days'   => 14,
             'permission' => 0777,
         ],
-        'cust' => [
-            'driver' => 'daily',
-            'path'   => storage_path('logs/Cust/CustLog.log'),
-            'level'  => env('LOG_LEVEL', 'info'),
-            'days'   => 14,
-            'permission' => 0777,
-        ],
+        //  All customer specific logging
+        // 'cust' => [
+        //     'driver' => 'daily',
+        //     'path'   => storage_path('logs/Cust/CustLog.log'),
+        //     'level'  => env('LOG_LEVEL', 'info'),
+        //     'days'   => 14,
+        //     'permission' => 0777,
+        // ],
 
         'stderr' => [
             'driver' => 'monolog',

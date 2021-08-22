@@ -26,7 +26,7 @@ class CustomerNoteFactory extends Factory
     {
         return [
             'cust_id'    => Customer::factory()->create()->cust_id,
-            'created_by' => User::factory()->create()->user_id,
+            'created_by' => User::inRandomOrder()->first()->user_id,
             'urgent'     => $this->faker->boolean(),
             'shared'     => $this->faker->boolean(),
             'subject'    => $this->faker->sentence(4),

@@ -30,7 +30,7 @@ class CustomerFileFactory extends Factory
             'file_id'      => FileUploads::factory()->create()->file_id,
             'file_type_id' => CustomerFileType::inRandomOrder()->first()->file_type_id,
             'cust_id'      => Customer::factory()->create()->cust_id,
-            'user_id'      => User::factory()->create()->user_id,
+            'user_id'      => User::inRandomOrder()->first()->user_id,
             'shared'       => $this->faker->boolean(),
             'name'         => $this->faker->word(2),
         ];

@@ -19,7 +19,9 @@ class TechTipSeeder extends Seeder
     public function run()
     {
         //  Create 10 random Tech Tips
-        $tips  = TechTip::factory()->count(10)->create();
+        $tips  = TechTip::factory()->count(10)->create([
+            'user_id' => 2,
+        ]);
         // $equip = EquipmentType::inRandomOrder()->get();
 
         for($i = 0; $i < 10; $i++)

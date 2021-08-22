@@ -38,17 +38,17 @@ class HandleInertiaRequests extends Middleware
                 'name'    => config('app.name'),
                 'logo'    => config('app.logo'),
                 'version' => (new Version)->full(),
+                //  Current logged in user
+                'user'   => fn() => $request->user() ? $request->user() : null,
+                //  File information
+                'fileData' => [
+                    'maxSize'   => config('filesystems.max_filesize'),
+                    'chunkSize' => config('filesystems.chunk_size'),
+                    'token'     => csrf_token(),
+                ],
             ],
-            //  Current logged in user
-            'user'   => fn() => $request->user() ? $request->user() : null,
             //  Dynamically built navigation menu
             'navBar' => fn() => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
-            //  File information
-            'fileData' => [
-                'maxSize'   => config('filesystems.max_filesize'),
-                'chunkSize' => config('filesystems.chunk_size'),
-                'token'     => csrf_token(),
-            ]
         ]);
     }
 }

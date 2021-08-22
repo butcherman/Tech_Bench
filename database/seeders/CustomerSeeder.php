@@ -10,6 +10,7 @@ use App\Models\CustomerNote;
 use App\Models\CustomerNotes;
 use App\Models\DataField;
 use App\Models\EquipmentType;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder
@@ -45,14 +46,18 @@ class CustomerSeeder extends Seeder
         $custList = Customer::inRandomOrder()->limit(20)->get();
         foreach($custList as $cust)
         {
-            CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
+            CustomerNote::factory()->create([
+                'cust_id'    => $cust->cust_id,
+            ]);
         }
 
         //  Assign files to 10 of the customers
         $custList = Customer::inRandomOrder()->limit(10)->get();
         foreach($custList as $cust)
         {
-            CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
+            CustomerFile::factory()->create([
+                'cust_id' => $cust->cust_id,
+            ]);
         }
     }
 }

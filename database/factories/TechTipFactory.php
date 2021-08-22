@@ -26,7 +26,7 @@ class TechTipFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'     => User::factory()->create()->user_id,
+            'user_id'     => User::inRandomOrder()->first()->user_id,
             'tip_type_id' => TechTipType::inRandomOrder()->first()->tip_type_id,
             'sticky'      => false,
             'subject'     => $subject = $this->faker->realText(25),

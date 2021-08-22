@@ -1,0 +1,48 @@
+/*
+*   Navbar/sidebar styles
+*/
+.sidebar {
+    background: $navbar-background;
+
+    border-left: $soft-border;
+    font-weight: 500;
+    height: calc(100vh - #{$header-height});
+    margin: 0;
+    padding: 0;
+    transition: all .25s ease-out;
+    width: $navbar-width;
+    position: fixed;
+      top: $header-height;
+      right: -$navbar-width;
+      z-index: 11;
+    @media(min-width: $brk-lg) {
+        display: block;
+        opacity: 1;
+        left: 0;
+        border-left: $soft-border;
+        border-right: none;
+    }
+}
+
+.sidebar-nav {
+    .nav {
+        margin-left: .375rem;
+        margin-right: .375rem;
+        margin-top: 1.45rem;
+        .nav-item {
+            .nav-link {
+                align-items: center;
+                color: $navbar-link-color;
+                white-space: nowrap;
+                .menu-title {
+                    margin-left: 4px;
+                }
+            }
+        }
+
+    }
+    &.active {
+        position: fixed;
+          right: 0;
+    }
+}

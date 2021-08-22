@@ -31,18 +31,18 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\PasswordReset' => [
             'App\Listeners\LogPasswordReset',
         ],
-        'App\Events\NewUserCreated' => [
-            'App\Listeners\NotifyNewUser',
-        ],
-        'App\Events\NewTechTipEvent' => [
-            'App\Listeners\NotifyOfNewTechTip',
-        ],
-        'App\Events\NewTipCommentEvent' => [
-            'App\Listeners\NotifyOfNewComment',
-        ],
-        'App\Events\FlaggedTipCommentEvent' => [
-            'App\Listeners\NotifyOfFlaggedComment',
-        ]
+        // 'App\Events\NewUserCreated' => [
+        //     'App\Listeners\NotifyNewUser',
+        // ],
+        // 'App\Events\NewTechTipEvent' => [
+        //     'App\Listeners\NotifyOfNewTechTip',
+        // ],
+        // 'App\Events\NewTipCommentEvent' => [
+        //     'App\Listeners\NotifyOfNewComment',
+        // ],
+        // 'App\Events\FlaggedTipCommentEvent' => [
+        //     'App\Listeners\NotifyOfFlaggedComment',
+        // ]
     ];
 
     /**

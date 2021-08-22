@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\EquipmentCategory;
-use App\Models\EquipmentType;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
