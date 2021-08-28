@@ -4,13 +4,16 @@ namespace App\Http\Controllers\User;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\User;
+use App\Models\UserSetting;
 
 use App\Traits\UserSettingsTrait;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Http\Requests\User\UserRequest;
-use App\Models\User;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\User\UserNotificationsRequest;
 
 class UserSettingsController extends Controller
 {
@@ -32,20 +35,24 @@ class UserSettingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+    // public function create()
+    // {
+    //     //
+    // }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     *  Submit the User Notification settings
      */
-    public function store(Request $request)
+    public function store(UserNotificationsRequest $request)
     {
-        //
+        foreach($request->settingsData as $setting)
+        {
+            UserSetting::where('user_id', $request->user_id)->where('setting_type_id', $setting['setting_type_id'])->update([
+                'value' => $setting['value'],
+            ]);
+        }
+
+        return back()->with(['message' => 'Settings Updated', 'type' => 'success']);
     }
 
     /**
@@ -54,10 +61,10 @@ class UserSettingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    // public function show($id)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -65,13 +72,13 @@ class UserSettingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+    // public function edit($id)
+    // {
+    //     //
+    // }
 
     /**
-     *  update a users settings
+     *  update a users account settings
      */
     public function update(UpdateUserRequest $request, $id)
     {
@@ -92,8 +99,8 @@ class UserSettingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+    // public function destroy($id)
+    // {
+    //     //
+    // }
 }

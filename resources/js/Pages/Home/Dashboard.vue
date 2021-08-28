@@ -31,6 +31,9 @@
         },
         methods: {
             //
+        },
+        metaInfo: {
+            title: 'Dashboard',
         }
     }
 </script>

@@ -68,6 +68,9 @@
         },
         methods: {
             //
+        },
+        metaInfo: {
+            title: 'About',
         }
     }
 </script>

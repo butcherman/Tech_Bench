@@ -103,8 +103,11 @@
             submitSettings()
             {
                 this.submit.settings = true;
-                // this.$inertia.post(route('update-settings', this.user.user_id), {settingsData: this.userSettings}, {onFinish: () => {this.submit.settings = false}});
+                this.$inertia.post(route('settings.store'), {settingsData: this.userSettings, user_id: this.user.user_id}, {onFinish: () => {this.submit.settings = false}});
             }
+        },
+        metaInfo: {
+            title: 'User Settings',
         }
     }
 </script>

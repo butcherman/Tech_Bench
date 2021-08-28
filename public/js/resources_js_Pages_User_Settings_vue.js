@@ -240,8 +240,21 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     submitSettings: function submitSettings() {
-      this.submit.settings = true; // this.$inertia.post(route('update-settings', this.user.user_id), {settingsData: this.userSettings}, {onFinish: () => {this.submit.settings = false}});
+      var _this2 = this;
+
+      this.submit.settings = true;
+      this.$inertia.post(route('settings.store'), {
+        settingsData: this.userSettings,
+        user_id: this.user.user_id
+      }, {
+        onFinish: function onFinish() {
+          _this2.submit.settings = false;
+        }
+      });
     }
+  },
+  metaInfo: {
+    title: 'User Settings'
   }
 });
 

@@ -54,7 +54,7 @@ class UserPolicy
         if($this->checkPermission($user, 'Manage Users'))
         {
             //  If they user has permission to Manage Users, they cannot manage anyone with a higher role than themselves
-            if($user->role_id < $model->role_id)
+            if($user->role_id > $model->role_id)
             {
                 return Response::deny('You cannot modify a user with higher permissions than yourself');
             }
