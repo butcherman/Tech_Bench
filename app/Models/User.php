@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -45,21 +44,21 @@ class User extends Authenticatable
     /*
     *   Each user is assigned to a role that determines what permissions they are allowed
     */
-    public function UserRoles()
-    {
-        return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
-    }
+    // public function UserRoles()
+    // {
+    //     return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
+    // }
 
     /*
     *   Each user has their own individual settings
     */
-    public function UserSetting()
-    {
-        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
-    }
+    // public function UserSetting()
+    // {
+    //     return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
+    // }
 
-    public function TechTipBookmark()
-    {
-        return $this->hasOne(TechTipBookmark::class, 'user_id', 'user_id');
-    }
+    // public function TechTipBookmark()
+    // {
+    //     return $this->hasOne(TechTipBookmark::class, 'user_id', 'user_id');
+    // }
 }

@@ -12,6 +12,7 @@ class LogPasswordReset
      */
     public function handle(PasswordReset $event)
     {
+        //  TODO - Why doesn't this fire?
         Log::stack(['auth', 'user'])->notice('Password for User '.$event->user->full_name.' has been reset',
         [
             'User ID'    => $event->user->user_id,

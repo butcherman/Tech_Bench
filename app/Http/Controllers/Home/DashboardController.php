@@ -4,19 +4,18 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     *  Landing page for authorized users
      */
     public function __invoke(Request $request)
     {
-        //
+        // dd($request->user());
+        // return $request->user();
 
-        return 'logged in';
+        return Inertia::render('Home/Dashboard');
     }
 }

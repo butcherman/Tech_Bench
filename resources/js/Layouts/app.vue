@@ -16,7 +16,7 @@
                 </inertia-link>
                 <b-dropdown variant="link" title="Account" v-b-tooltip.hover>
                     <template #button-content>
-                        <b-avatar variant="warning" :text="user.initials"></b-avatar>
+                        <b-avatar variant="warning" :text="app.user.initials"></b-avatar>
                     </template>
                     <inertia-link as="b-dropdown-item" :href="route('settings.index')"><i class="fas fa-cog"></i> Settings</inertia-link>
                     <inertia-link as="b-dropdown-item" :href="route('password.edit', 'change')"><i class="fas fa-key"></i> Change Password</inertia-link>
@@ -44,6 +44,9 @@
                     <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? 30 : false">
                         <p class="text-center">{{$page.props.flash.message}}</p>
                     </b-alert>
+                    <b-alert :variant="alert.type" :show="alert.message ? 30 : false">
+                        <p class="text-center">{{alert.message}}</p>
+                    </b-alert>
                     <slot />
                 </div>
                 <axios-error></axios-error>
@@ -67,27 +70,39 @@
             return {
                 //
                 showNav: false,
+                alert: {
+                    type:    null,
+                    message: null,
+                }
             }
         },
         created() {
             //
         },
         mounted() {
-             //
+            //  Manually trigger alert from Vue Component
+            this.eventHub.$on('show-alert', alert => {
+                this.alert.message = alert.message;
+                this.alert.type    = alert.type;
+            });
+            //  Manually cancel alert that was triggered
+            this.eventHub.$on('clear-alert', () => {
+                this.alert.message = null;
+                this.alert.type    = null;
+            });
         },
         computed: {
+            //  All application information
             app()
             {
                 return this.$page.props.app;
             },
-            user()
-            {
-                return this.$page.props.user;
-            },
+            //  If the navbar is open or closed
             navbarActive()
             {
                 return this.showNav ? 'active' : '';
             },
+            //  Dynamically built navbar
             navbar()
             {
                 return this.$page.props.navBar;

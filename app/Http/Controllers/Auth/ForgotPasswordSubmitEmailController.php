@@ -20,7 +20,7 @@ class ForgotPasswordSubmitEmailController extends Controller
         return $status === Password::RESET_LINK_SENT ?
             back()->with([
                 'message' => $status,
-                'type' => 'success'
+                'type'    => 'success'
             ]) : back()->withErrors(['email' => $status]);
     }
 }

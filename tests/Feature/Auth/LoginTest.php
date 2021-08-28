@@ -66,6 +66,7 @@ class LoginTest extends TestCase
         $response = $this->actingAs($user)->get(route('home'));
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));
+        $this->assertAuthenticatedAs($user);
     }
 
     //  Verify that a user is locked out if they try more than five login attempts
@@ -104,6 +105,18 @@ class LoginTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('home'));
         $response->assertSessionHasErrors(['username' => 'You have attempted to log in too many times.  Please wait 10 minutes before trying again.']);
+        $this->assertGuest();
+
+        //  After more than 10 minutes, user should be able to try again
+        Carbon::setTestNow(Carbon::now()->addMinutes(15));
+        $response = $this->post(route('login.submit'), [
+            'username' => $user->username,
+            'password' => 'somethingElse'
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHasErrors(['username' => 'Your username or password does not match our records']);
         $this->assertGuest();
     }
 

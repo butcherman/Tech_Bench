@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Actions\General\BuildNavbar;
-use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Http\Request;
 use PragmaRX\Version\Package\Version;
+
+use App\Actions\BuildNavbar;
 
 class HandleInertiaRequests extends Middleware
 {
