@@ -120,14 +120,19 @@ class LoginTest extends TestCase
         $this->assertGuest();
     }
 
-    // public function test_password_expired_redirect()
-    // {
-    //     $user = User::factory()->create(['password_expires' => Carbon::yesterday()]);
+    //  Make sure that the user is redirected to the Change Password page if their password has expired
+    public function test_password_expired_redirect()
+    {
+        $user = User::factory()->create(['password_expires' => Carbon::yesterday()]);
 
-    //     $response = $this->actingAs($user)->get(route('home'));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('password.edit', 'change'));
-    // }
+        $response = $this->actingAs($user)->get(route('home'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('password.index'));
+        $response->assertSessionHas([
+            'message' => 'Your Password Has Expired.  You must change your password to continue',
+            'type'    => 'warning',
+        ]);
+    }
 
     //  TODO - Test Remember Me Token
 }

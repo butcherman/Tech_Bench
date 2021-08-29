@@ -36,11 +36,11 @@ class HandleInertiaRequests extends Middleware
             ],
             //  App information that is shared and used on all pages
             'app' => [
-                'name'    => config('app.name'),
-                'logo'    => config('app.logo'),
-                'version' => (new Version)->full(),
+                'name'     => config('app.name'),
+                'logo'     => config('app.logo'),
+                'version'  => (new Version)->full(),
                 //  Current logged in user
-                'user'   => fn() => $request->user() ? $request->user() : null,
+                'user'     => fn() => $request->user() ? $request->user() : null,
                 //  File information
                 'fileData' => [
                     'maxSize'   => config('filesystems.max_filesize'),

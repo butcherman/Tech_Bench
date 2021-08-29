@@ -2,10 +2,8 @@
 
 namespace App\Actions;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Nwidart\Modules\Facades\Module;
+use Illuminate\Support\Facades\Gate;
 
 class BuildNavbar
 {

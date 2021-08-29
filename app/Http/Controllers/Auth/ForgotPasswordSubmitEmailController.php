@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Password;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ForgotPasswordEmailRequest;
-use Illuminate\Support\Facades\Log;
 
 class ForgotPasswordSubmitEmailController extends Controller
 {

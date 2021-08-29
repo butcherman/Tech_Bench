@@ -1,5 +1,5 @@
 <template>
-    <ValidationProvider v-slot="v" :rules="rules" :mode="mode">
+    <ValidationProvider v-slot="v" :rules="rules" :mode="mode" :vid="vid">
         <b-form-group
             :label="label+':'"
             :label-for="name"
@@ -69,6 +69,10 @@
             autofocus: {
                 type:    Boolean,
                 default: false,
+            },
+            vid: {
+                type:    String,
+                default: null,
             }
         },
         data() {

@@ -29,8 +29,10 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\LogLockout',
         ],
         'Illuminate\Auth\Events\PasswordReset' => [
-            // 'App\Listeners\LogPasswordReset',
             'App\Listeners\LogPasswordReset',
+        ],
+        'App\Events\UserPasswordChanged' => [
+            'App\Listeners\LogUserPasswordChanged',
         ],
         // 'App\Events\NewUserCreated' => [
         //     'App\Listeners\NotifyNewUser',

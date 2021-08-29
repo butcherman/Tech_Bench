@@ -455,7 +455,7 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("password.edit", "change")
+                    href: _vm.route("password.index")
                   }
                 },
                 [
