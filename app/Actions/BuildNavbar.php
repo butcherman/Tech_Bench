@@ -33,7 +33,7 @@ class BuildNavbar
             ],
             [
                 'name'  => 'Customers',
-                'route' => '#', // route('customers.index'),
+                'route' => route('customers.index'),
                 'icon'  => 'fas fa-user-tie',
             ],
             [
