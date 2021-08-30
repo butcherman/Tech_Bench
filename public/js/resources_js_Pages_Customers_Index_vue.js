@@ -294,6 +294,9 @@ __webpack_require__.r(__webpack_exports__);
       this.searchParam.perPage = data.currentPerPage;
       this.search();
     }
+  },
+  metaInfo: {
+    title: 'Customers'
   }
 });
 

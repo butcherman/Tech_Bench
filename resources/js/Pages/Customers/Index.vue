@@ -166,6 +166,9 @@
                 this.searchParam.perPage = data.currentPerPage;
                 this.search();
             }
+        },
+        metaInfo: {
+            title: 'Customers',
         }
     }
 </script>

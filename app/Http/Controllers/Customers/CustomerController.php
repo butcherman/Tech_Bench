@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Events\NewCustomerCreated;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\Customers\NewCustomerRequest;
 use App\Models\Customer;
 use App\Models\EquipmentType;
+use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
@@ -23,37 +25,36 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new Customer
      */
     public function create()
     {
-        //
-        return 'new customer page';
+        $this->authorize('create', Customer::class);
+        return Inertia::render('Customers/Create');
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Create a new Customer
      */
-    public function store(Request $request)
+    public function store(NewCustomerRequest $request)
     {
-        //
+        $cust         = $request->toArray();
+        $cust['slug'] = Str::slug($request->name);
+        $newCust      = Customer::create($cust);
+
+        // Log::channel('cust')->info('New Customer - '.$request->name.' created by '.Auth::user()->full_name);
+
+        event(new NewCustomerCreated($newCust));
+        return redirect(route('customers.show',$newCust->slug))->with(['message' => 'New Customer Created', 'type' => 'success']);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Display the Customers Information
      */
     public function show($id)
     {
         //
-        return 'id';
+        return Inertia::render('Customers/Show');
     }
 
     /**
