@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Events\CustomerDetailsUpdated;
 use App\Events\NewCustomerCreated;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customers\EditCustomerRequest;
 use App\Http\Requests\Customers\NewCustomerRequest;
 use App\Models\Customer;
+use App\Models\CustomerFileType;
 use App\Models\EquipmentType;
+use App\Models\PhoneNumberType;
+use App\Models\UserCustomerBookmark;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class CustomerController extends Controller
@@ -42,8 +48,6 @@ class CustomerController extends Controller
         $cust['slug'] = Str::slug($request->name);
         $newCust      = Customer::create($cust);
 
-        // Log::channel('cust')->info('New Customer - '.$request->name.' created by '.Auth::user()->full_name);
-
         event(new NewCustomerCreated($newCust));
         return redirect(route('customers.show',$newCust->slug))->with(['message' => 'New Customer Created', 'type' => 'success']);
     }
@@ -53,31 +57,79 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
-        return Inertia::render('Customers/Show');
+        //  Check if we are passing the customer slugged name, or customer ID number
+        if(is_numeric($id))
+        {
+            //  To keep things uniform, redirect to a link that has the customers name rather than the ID
+            $customer = Customer::findOrFail($id);
+            return redirect(route('customers.show', $customer->slug));
+        }
+
+        //  Pull the customers information
+        $customer = Customer::where('slug', $id)
+                        ->orWhere('cust_id', $id)
+                        ->with('Parent')
+                        ->with('CustomerEquipment.CustomerEquipmentData')
+                        ->with('ParentEquipment.CustomerEquipmentData')
+                        ->with('CustomerContact.CustomerContactPhone.PhoneNumberType')
+                        ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
+                        ->with('CustomerNote')
+                        ->with('ParentNote')
+                        ->with('CustomerFile.FileUpload')
+                        ->with('ParentFile.FileUpload')
+                        ->firstOrFail();
+        //  Determine if the customer is bookmarked by the user
+        $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)
+                        ->where('cust_id', $customer->cust_id)
+                        ->count();
+
+        return Inertia::render('Customers/Show', [
+            'details'        => $customer,
+            // 'phone_types'    => PhoneNumberType::all(),
+            // 'file_types'     => CustomerFileType::all(),
+            //  User Permissions for customers
+            'user_data' => [
+                'fav'        => $isFav,                                                  //  Customer is bookmarked by the user
+                'edit'       => Auth::user()->can('update', $customer),                  //  User is allowed to edit the customers basic details
+                'manage'     => Auth::user()->can('manage', $customer),                  //  User can recover deleted items
+                'deactivate' => Auth::user()->can('delete', $customer),                  //  User can deactivate the customer profile
+            //     'equipment'  => [
+            //         'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
+            //         'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
+            //         'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete eqipment
+            //     ],
+            //     'contacts'   => [
+            //         'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
+            //         'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
+            //         'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
+            //     ],
+            //     'notes'      => [
+            //         'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
+            //         'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
+            //         'delete' => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
+            //     ],
+            //     'files'     => [
+            //         'create' => Auth::user()->can('create', CustomerFile::class),        //  If user can add file
+            //         'update' => Auth::user()->can('update', CustomerFile::class),        //  If user can edit file
+            //         'delete' => Auth::user()->can('delete', CustomerFile::class),        //  If user can delete file
+            //     ],
+            ],
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update the customers basic details
      */
-    public function edit($id)
+    public function update(EditCustomerRequest $request, $id)
     {
-        //
-    }
+        $cust         = $request->toArray();
+        $cust['slug'] = Str::slug($request->name);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $data = Customer::findOrFail($id);
+        $data->update($cust);
+        event(new CustomerDetailsUpdated($data, $id));
+
+        return redirect(route('customers.show', $cust['slug']))->with(['message' => 'Customer Details Updated', 'type' => 'success']);
     }
 
     /**

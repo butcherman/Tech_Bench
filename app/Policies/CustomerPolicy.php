@@ -2,44 +2,27 @@
 
 namespace App\Policies;
 
-use App\Models\Customer;
 use App\Models\User;
+use App\Models\Customer;
 use App\Traits\AllowTrait;
+
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CustomerPolicy
 {
-    use HandlesAuthorization;
     use AllowTrait;
+    use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(User $user)
+    /*
+    * Manage customers determines if they can deactivate and recover customers
+    */
+    public function manage(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Manage Customers');
     }
 
     /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function view(User $user, Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * Determine whether the user can create new customers
      */
     public function create(User $user)
     {
@@ -47,27 +30,19 @@ class CustomerPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Auth\Access\Response|bool
+     * Determine whether the user can update the customer
      */
     public function update(User $user, Customer $customer)
     {
-        //
+        return $this->checkPermission($user, 'Update Customer');
     }
 
     /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Auth\Access\Response|bool
+     * Determine whether the user can delete the customer
      */
     public function delete(User $user, Customer $customer)
     {
-        //
+        return $this->checkPermission($user, 'Deactivate Customer');
     }
 
     /**

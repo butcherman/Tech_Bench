@@ -11,6 +11,9 @@
         @hide="close"
     >
         <b-overlay :show="loading">
+            <template #overlay>
+                <atom-loader text="Loading Data..."></atom-loader>
+            </template>
             <ValidationObserver v-slot="{handleSubmit}">
                 <b-form @submit.prevent="handleSubmit(search)" novalidate>
                     <b-form-row>

@@ -69,6 +69,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     modalTitle: {
@@ -645,8 +648,22 @@ var render = function() {
     [
       _c(
         "b-overlay",
-        { attrs: { show: _vm.loading } },
+        {
+          attrs: { show: _vm.loading },
+          scopedSlots: _vm._u([
+            {
+              key: "overlay",
+              fn: function() {
+                return [
+                  _c("atom-loader", { attrs: { text: "Loading Data..." } })
+                ]
+              },
+              proxy: true
+            }
+          ])
+        },
         [
+          _vm._v(" "),
           _c("ValidationObserver", {
             scopedSlots: _vm._u([
               {

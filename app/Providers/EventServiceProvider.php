@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        /**
+         * Authentication Events
+         */
         'Illuminate\Auth\Events\Login' => [
             'App\Listeners\LogSuccessfulLogin',
         ],
@@ -34,9 +37,21 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserPasswordChanged' => [
             'App\Listeners\LogUserPasswordChanged',
         ],
+
+        /**
+         * Customer Events
+         */
         'App\Events\NewCustomerCreated' => [
             'App\Listeners\LogNewCustomerCreated',
         ],
+        'App\Events\CustomerDetailsUpdated' => [
+            'App\Listeners\LogUpdatedCustomer',
+        ],
+        'App\Events\CustomerLinkedEvent' => [
+            'App\Listeners\LogCustomerLinked',
+        ],
+
+
         // 'App\Events\NewUserCreated' => [
         //     'App\Listeners\NotifyNewUser',
         // ],
