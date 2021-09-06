@@ -1,6 +1,56 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_Pages_Customers_Show_vue"],{
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    cust_id: {
+      type: Number,
+      required: true
+    }
+  },
+  methods: {
+    deactivate: function deactivate() {
+      var _this = this;
+
+      this.$bvModal.msgBoxConfirm('Deactivating Customer will make it inaccessable', {
+        title: 'Are You Sure?',
+        size: 'md',
+        okVariant: 'danger',
+        okTitle: 'Yes',
+        cancelTitle: 'No',
+        centered: true
+      }).then(function (res) {
+        if (res) {
+          _this.loading = true;
+
+          _this.$inertia["delete"](route('customers.destroy', _this.cust_id));
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/linkCustomer.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/linkCustomer.vue?vue&type=script&lang=js& ***!
@@ -230,6 +280,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Manage_linkCustomer_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Manage/linkCustomer.vue */ "./resources/js/Components/Customers/Manage/linkCustomer.vue");
 /* harmony import */ var _Manage_unlinkCustomer_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Manage/unlinkCustomer.vue */ "./resources/js/Components/Customers/Manage/unlinkCustomer.vue");
+/* harmony import */ var _Manage_deactivateCustomer_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Manage/deactivateCustomer.vue */ "./resources/js/Components/Customers/Manage/deactivateCustomer.vue");
 //
 //
 //
@@ -267,12 +318,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     LinkCustomer: _Manage_linkCustomer_vue__WEBPACK_IMPORTED_MODULE_0__.default,
-    UnlinkCustomer: _Manage_unlinkCustomer_vue__WEBPACK_IMPORTED_MODULE_1__.default
+    UnlinkCustomer: _Manage_unlinkCustomer_vue__WEBPACK_IMPORTED_MODULE_1__.default,
+    DeactivateCustomer: _Manage_deactivateCustomer_vue__WEBPACK_IMPORTED_MODULE_2__.default
   },
   props: {
     cust_id: {
@@ -300,8 +355,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    /**
+     * Close the Manage Customer Modal
+     */
     closeModal: function closeModal() {
-      console.log('triggered');
       this.$refs['manage-customer-modal'].hide();
     },
     //  Get all items that have been soft deleted from the customer
@@ -312,49 +369,13 @@ __webpack_require__.r(__webpack_exports__);
       //         this.loading = false;
       //     }).catch(error => this.eventHub.$emit('axiosError', error));
     },
-    //  Make customer solo site and not linked to a parent site
-    breakLink: function breakLink() {
-      var _this = this;
-
-      this.$bvModal.msgBoxConfirm('Breaking the link will remove any shared data', {
-        title: 'Are You Sure?',
-        size: 'md',
-        okVariant: 'danger',
-        okTitle: 'Yes',
-        cancelTitle: 'No',
-        centered: true
-      }).then(function (res) {
-        if (res) {
-          _this.loading = true; // this.$inertia.get(route('customers.break-link', this.cust_id),
-          //     { onFinish: () => { this.$refs['manage-customer-modal'].hide(); } });
-        }
-      });
-    },
-    //  Deactivate the customer so they no longer show in customer list
-    deactivate: function deactivate() {
-      var _this2 = this;
-
-      this.$bvModal.msgBoxConfirm('Deactivating Customer will make it inaccessable', {
-        title: 'Are You Sure?',
-        size: 'md',
-        okVariant: 'danger',
-        okTitle: 'Yes',
-        cancelTitle: 'No',
-        centered: true
-      }).then(function (res) {
-        if (res) {
-          _this2.loading = true;
-          console.log('deactivate'); // this.$inertia.delete(route('customers.destroy', this.cust_id));
-        }
-      });
-    },
     //  Restore an item that has been deleted
     restore: function restore(type, item) {
       this.loading = true; // this.$inertia.get(this.route('customers.'+type+'.restore', item));
     },
     //  Permanently delete an item that was deleted
     destroy: function destroy(type, item) {
-      var _this3 = this;
+      var _this = this;
 
       this.$bvModal.msgBoxConfirm('This action cannot be undone', {
         title: 'Are You Sure?',
@@ -365,7 +386,7 @@ __webpack_require__.r(__webpack_exports__);
         centered: true
       }).then(function (res) {
         if (res) {
-          _this3.loading = true; // this.$inertia.delete(this.route('customers.'+type+'.force-delete', item), {
+          _this.loading = true; // this.$inertia.delete(this.route('customers.'+type+'.force-delete', item), {
           //     onFinish: () => { this.$refs['manage-customer-modal'].hide(); }
           // });
         }
@@ -687,6 +708,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -708,7 +742,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      is_fav: this.user_data.fav
+      is_fav: this.user_data.fav,
+      linked: [],
+      loading: false
     };
   },
   created: function created() {//
@@ -737,17 +773,67 @@ __webpack_require__.r(__webpack_exports__);
         state: !this.is_fav
       };
       axios.post(this.route('customers.bookmark'), form).then(function (res) {
-        console.log(res);
         _this.is_fav = !_this.is_fav;
       })["catch"](function (error) {
         return _this.eventHub.$emit('axiosError', error);
       });
+    },
+    getLinkedCustomers: function getLinkedCustomers() {
+      var _this2 = this;
+
+      if (this.linked.length == 0) {
+        this.loading = true;
+        axios.get(this.route('customers.get-linked', this.details.cust_id)).then(function (res) {
+          _this2.linked = res.data;
+          _this2.loading = false;
+        })["catch"](function (error) {
+          return _this2.eventHub.$emit('axiosError', error);
+        });
+      }
     }
   },
   metaInfo: {
     title: 'Customer Details'
   }
 });
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Manage/deactivateCustomer.vue":
+/*!*************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Manage/deactivateCustomer.vue ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _deactivateCustomer_vue_vue_type_template_id_496bf1f2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./deactivateCustomer.vue?vue&type=template&id=496bf1f2& */ "./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=template&id=496bf1f2&");
+/* harmony import */ var _deactivateCustomer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./deactivateCustomer.vue?vue&type=script&lang=js& */ "./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _deactivateCustomer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _deactivateCustomer_vue_vue_type_template_id_496bf1f2___WEBPACK_IMPORTED_MODULE_0__.render,
+  _deactivateCustomer_vue_vue_type_template_id_496bf1f2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Components/Customers/Manage/deactivateCustomer.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
 
@@ -1017,6 +1103,21 @@ component.options.__file = "resources/js/Pages/Customers/Show.vue"
 
 /***/ }),
 
+/***/ "./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_deactivateCustomer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./deactivateCustomer.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_deactivateCustomer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/Components/Customers/Manage/linkCustomer.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************!*\
   !*** ./resources/js/Components/Customers/Manage/linkCustomer.vue?vue&type=script&lang=js& ***!
@@ -1119,6 +1220,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Pages/Customers/Show.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=template&id=496bf1f2&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=template&id=496bf1f2& ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_deactivateCustomer_vue_vue_type_template_id_496bf1f2___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_deactivateCustomer_vue_vue_type_template_id_496bf1f2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_deactivateCustomer_vue_vue_type_template_id_496bf1f2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./deactivateCustomer.vue?vue&type=template&id=496bf1f2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=template&id=496bf1f2&");
+
 
 /***/ }),
 
@@ -1230,6 +1347,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_5e1b2300___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_5e1b2300___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Show.vue?vue&type=template&id=5e1b2300& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Pages/Customers/Show.vue?vue&type=template&id=5e1b2300&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=template&id=496bf1f2&":
+/*!***********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/deactivateCustomer.vue?vue&type=template&id=496bf1f2& ***!
+  \***********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "b-button",
+    { attrs: { variant: "danger" }, on: { click: _vm.deactivate } },
+    [_vm._v("\n    Deactivate Customer\n")]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
 
 
 /***/ }),
@@ -1604,7 +1749,9 @@ var render = function() {
             },
             [
               _vm._v(" "),
-              _c("div", [_vm._v("deleted stuff")]),
+              _c("div", [
+                _vm._v("\n                deleted stuff\n                ")
+              ]),
               _vm._v(" "),
               _c(
                 "div",
@@ -1636,16 +1783,17 @@ var render = function() {
                     on: { completed: _vm.closeModal }
                   }),
                   _vm._v(" "),
-                  !_vm.linked && !_vm.is_parent
-                    ? _c(
-                        "b-button",
-                        {
-                          attrs: { variant: "danger" },
-                          on: { click: _vm.deactivate }
-                        },
-                        [_vm._v("Deactivate Customer")]
-                      )
-                    : _vm._e()
+                  _c("deactivate-customer", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.linked && !_vm.is_parent,
+                        expression: "!linked && !is_parent"
+                      }
+                    ],
+                    attrs: { cust_id: _vm.cust_id }
+                  })
                 ],
                 1
               )
@@ -2210,56 +2358,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-8 grid-margin stretch-card" }, [
-        _c("h3", [
-          _c("i", {
-            directives: [
-              {
-                name: "b-tooltip",
-                rawName: "v-b-tooltip.hover",
-                modifiers: { hover: true }
-              }
-            ],
-            class: _vm.bookmark_class,
-            attrs: { title: _vm.bookmark_title },
-            on: { click: _vm.toggleFav }
-          }),
-          _vm._v(
-            "\n                " + _vm._s(_vm.details.name) + "\n            "
-          )
-        ]),
-        _vm._v(" "),
-        _vm.details.dba_name
-          ? _c("h5", [_vm._v("AKA - " + _vm._s(_vm.details.dba_name))])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.details.parent_id
-          ? _c(
-              "h5",
-              [
-                _vm._v("Child Site of - "),
-                _c(
-                  "inertia-link",
-                  {
-                    attrs: {
-                      href: _vm.route("customers.show", _vm.details.parent.slug)
-                    }
-                  },
-                  [_vm._v(_vm._s(_vm.details.parent.name))]
-                )
-              ],
-              1
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        _c("address", [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-8 grid-margin stretch-card" }, [
+          _c("h3", [
+            _c("i", {
               directives: [
                 {
                   name: "b-tooltip",
@@ -2267,54 +2372,179 @@ var render = function() {
                   modifiers: { hover: true }
                 }
               ],
-              staticClass: "float-left ml-2",
-              attrs: {
-                href: _vm.map_url,
-                target: "_blank",
-                id: "addr-span",
-                title: "Click for Google Maps"
-              }
-            },
-            [
-              _vm._v("\n                    " + _vm._s(_vm.details.address)),
-              _c("br"),
-              _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.details.city) +
-                  ", " +
-                  _vm._s(_vm.details.state) +
-                  "  " +
-                  _vm._s(_vm.details.zip) +
-                  "\n                "
+              class: _vm.bookmark_class,
+              attrs: { title: _vm.bookmark_title },
+              on: { click: _vm.toggleFav }
+            }),
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm.details.name) +
+                "\n                "
+            ),
+            _c("small", [
+              _vm.details.child_count > 0
+                ? _c("i", {
+                    directives: [
+                      {
+                        name: "b-tooltip",
+                        rawName: "v-b-tooltip.hover",
+                        modifiers: { hover: true }
+                      },
+                      {
+                        name: "b-modal",
+                        rawName: "v-b-modal.linked-customers-modal",
+                        modifiers: { "linked-customers-modal": true }
+                      }
+                    ],
+                    staticClass: "fas fa-link pointer text-secondary",
+                    attrs: { title: "Show Linked Customers" }
+                  })
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _vm.details.dba_name
+            ? _c("h5", [_vm._v("AKA - " + _vm._s(_vm.details.dba_name))])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.details.parent_id
+            ? _c(
+                "h5",
+                [
+                  _vm._v("Child Site of - "),
+                  _c(
+                    "inertia-link",
+                    {
+                      attrs: {
+                        href: _vm.route(
+                          "customers.show",
+                          _vm.details.parent.slug
+                        )
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.details.parent.name))]
+                  )
+                ],
+                1
               )
-            ]
+            : _vm._e(),
+          _vm._v(" "),
+          _c("address", [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                directives: [
+                  {
+                    name: "b-tooltip",
+                    rawName: "v-b-tooltip.hover",
+                    modifiers: { hover: true }
+                  }
+                ],
+                staticClass: "float-left ml-2",
+                attrs: {
+                  href: _vm.map_url,
+                  target: "_blank",
+                  id: "addr-span",
+                  title: "Click for Google Maps"
+                }
+              },
+              [
+                _vm._v("\n                    " + _vm._s(_vm.details.address)),
+                _c("br"),
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.details.city) +
+                    ", " +
+                    _vm._s(_vm.details.state) +
+                    "  " +
+                    _vm._s(_vm.details.zip) +
+                    "\n                "
+                )
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-4 mt-md-0 mt-4" }, [
+          _c(
+            "div",
+            { staticClass: "float-md-right" },
+            [
+              _c("edit-details", { attrs: { details: _vm.details } }),
+              _vm._v(" "),
+              _vm.user_data.manage
+                ? _c("manage-customer", {
+                    attrs: {
+                      cust_id: _vm.details.cust_id,
+                      can_deactivate: _vm.user_data.deactivate,
+                      linked: _vm.details.parent_id > 0 ? true : false,
+                      is_parent: _vm.details.child_count > 0 ? true : false
+                    }
+                  })
+                : _vm._e()
+            ],
+            1
           )
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-4 mt-md-0 mt-4" }, [
-        _c(
-          "div",
-          { staticClass: "float-md-right" },
-          [
-            _c("edit-details", { attrs: { details: _vm.details } }),
-            _vm._v(" "),
-            _vm.user_data.manage
-              ? _c("manage-customer", {
-                  attrs: {
-                    cust_id: _vm.details.cust_id,
-                    can_deactivate: _vm.user_data.deactivate,
-                    linked: _vm.details.parent_id > 0 ? true : false,
-                    is_parent: _vm.details.child_count > 0 ? true : false
-                  }
-                })
-              : _vm._e()
-          ],
-          1
-        )
-      ])
-    ])
-  ])
+      _c(
+        "b-modal",
+        {
+          attrs: {
+            id: "linked-customers-modal",
+            title: "Customers linked to " + _vm.details.name
+          },
+          on: { show: _vm.getLinkedCustomers }
+        },
+        [
+          _c(
+            "b-overlay",
+            {
+              attrs: { show: _vm.loading },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("atom-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
+            [
+              _vm._v(" "),
+              _c(
+                "b-list-group",
+                _vm._l(_vm.linked, function(l) {
+                  return _c(
+                    "b-list-group-item",
+                    { key: l.cust_id, staticClass: "text-center" },
+                    [
+                      _c(
+                        "inertia-link",
+                        {
+                          attrs: { href: _vm.route("customers.show", l.slug) }
+                        },
+                        [_vm._v(_vm._s(l.name))]
+                      )
+                    ],
+                    1
+                  )
+                }),
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {

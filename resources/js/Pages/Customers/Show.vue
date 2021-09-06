@@ -5,6 +5,9 @@
                 <h3>
                     <i :class="bookmark_class" :title="bookmark_title" v-b-tooltip.hover @click="toggleFav"></i>
                     {{details.name}}
+                    <small>
+                        <i v-if="details.child_count > 0" class="fas fa-link pointer text-secondary" title="Show Linked Customers" v-b-tooltip.hover v-b-modal.linked-customers-modal></i>
+                    </small>
                 </h3>
                 <h5 v-if="details.dba_name">AKA - {{details.dba_name}}</h5>
                 <h5 v-if="details.parent_id">Child Site of - <inertia-link :href="route('customers.show', details.parent.slug)">{{details.parent.name}}</inertia-link></h5>
@@ -31,12 +34,22 @@
                 </div>
             </div>
         </div>
+        <b-modal id="linked-customers-modal" :title="'Customers linked to '+details.name" @show="getLinkedCustomers">
+            <b-overlay :show="loading">
+                <template #overlay>
+                    <atom-loader></atom-loader>
+                </template>
+                <b-list-group>
+                    <b-list-group-item v-for="l in linked" :key="l.cust_id" class="text-center"><inertia-link :href="route('customers.show', l.slug)">{{l.name}}</inertia-link></b-list-group-item>
+                </b-list-group>
+            </b-overlay>
+        </b-modal>
     </div>
 </template>
 
 <script>
-    import App from '../../Layouts/app';
-    import editDetails from '../../Components/Customers/editDetails.vue';
+    import App            from '../../Layouts/app';
+    import editDetails    from '../../Components/Customers/editDetails.vue';
     import ManageCustomer from '../../Components/Customers/manageCustomer.vue';
 
     export default {
@@ -54,7 +67,9 @@
         },
         data() {
             return {
-                is_fav: this.user_data.fav,
+                is_fav:  this.user_data.fav,
+                linked:  [],
+                loading: false,
             }
         },
         created() {
@@ -90,10 +105,21 @@
 
                 axios.post(this.route('customers.bookmark'), form)
                     .then(res => {
-                        console.log(res);
                         this.is_fav = !this.is_fav;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
+            getLinkedCustomers()
+            {
+                if(this.linked.length == 0)
+                {
+                    this.loading = true;
+                    axios.get(this.route('customers.get-linked', this.details.cust_id))
+                        .then(res => {
+                            this.linked  = res.data;
+                            this.loading = false;
+                        }).catch(error => this.eventHub.$emit('axiosError', error));
+                }
+            }
         },
         metaInfo: {
             title: 'Customer Details',

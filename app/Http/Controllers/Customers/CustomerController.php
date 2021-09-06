@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Events\CustomerDeactivatedEvent;
 use App\Events\CustomerDetailsUpdated;
 use App\Events\NewCustomerCreated;
 use Inertia\Inertia;
@@ -133,13 +134,15 @@ class CustomerController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Soft Delete a Customer from the database
      */
     public function destroy($id)
     {
-        //
+        $cust = Customer::findOrFail($id);
+        $this->authorize('delete', $cust);
+        $cust->delete();
+
+        event(new CustomerDeactivatedEvent($cust));
+        return redirect(route('customers.index'))->with(['message' => 'Customer '.$cust->name.' deactivated', 'type' => 'danger']);
     }
 }

@@ -12,7 +12,10 @@
                 <template #overlay>
                     <atom-loader text="Loading Data..."></atom-loader>
                 </template>
-                <div>deleted stuff</div>
+                <div>
+                    deleted stuff
+                    <!--  TODO - Finish Me !-->
+                </div>
                 <div class="text-center mt-2">
                     <link-customer
                         v-show="!linked && !is_parent"
@@ -24,26 +27,24 @@
                         :cust_id="cust_id"
                         @completed="closeModal"
                     ></unlink-customer>
-
-
-                    <!-- <b-button variant="warning" v-if="linked && !is_parent" @click="breakLink">Break Link to Parent</b-button> -->
-                    <b-button variant="danger" v-if="!linked && !is_parent" @click="deactivate">Deactivate Customer</b-button>
+                    <deactivate-customer
+                        v-show="!linked && !is_parent"
+                        :cust_id="cust_id"
+                    ></deactivate-customer>
                 </div>
             </b-overlay>
         </b-modal>
-
     </b-button>
 </template>
 
 <script>
-    import LinkCustomer from './Manage/linkCustomer.vue';
-    import UnlinkCustomer from './Manage/unlinkCustomer.vue';
+    import LinkCustomer       from './Manage/linkCustomer.vue';
+    import UnlinkCustomer     from './Manage/unlinkCustomer.vue';
+    import DeactivateCustomer from './Manage/deactivateCustomer.vue';
 
     export default {
-        components: { LinkCustomer, UnlinkCustomer },
+        components: { LinkCustomer, UnlinkCustomer, DeactivateCustomer },
         props: {
-
-
             cust_id: {
                 type:     Number,
                 required: true,
@@ -69,11 +70,17 @@
             }
         },
         methods: {
+            /**
+             * Close the Manage Customer Modal
+             */
             closeModal()
             {
-                console.log('triggered');
                 this.$refs['manage-customer-modal'].hide();
             },
+
+
+
+
             //  Get all items that have been soft deleted from the customer
             getDeletedItems()
             {
@@ -86,45 +93,6 @@
             },
 
 
-
-            //  Make customer solo site and not linked to a parent site
-            breakLink()
-            {
-                this.$bvModal.msgBoxConfirm('Breaking the link will remove any shared data', {
-                    title: 'Are You Sure?',
-                    size: 'md',
-                    okVariant: 'danger',
-                    okTitle: 'Yes',
-                    cancelTitle: 'No',
-                    centered: true,
-                }).then(res => {
-                    if(res)
-                    {
-                        this.loading = true;
-                        // this.$inertia.get(route('customers.break-link', this.cust_id),
-                        //     { onFinish: () => { this.$refs['manage-customer-modal'].hide(); } });
-                    }
-                });
-            },
-            //  Deactivate the customer so they no longer show in customer list
-            deactivate()
-            {
-                this.$bvModal.msgBoxConfirm('Deactivating Customer will make it inaccessable', {
-                    title: 'Are You Sure?',
-                    size: 'md',
-                    okVariant: 'danger',
-                    okTitle: 'Yes',
-                    cancelTitle: 'No',
-                    centered: true,
-                }).then(res => {
-                    if(res)
-                    {
-                        this.loading = true;
-                        console.log('deactivate');
-                        // this.$inertia.delete(route('customers.destroy', this.cust_id));
-                    }
-                });
-            },
             //  Restore an item that has been deleted
             restore(type, item)
             {

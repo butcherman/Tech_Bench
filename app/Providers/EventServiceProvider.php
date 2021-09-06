@@ -50,6 +50,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\CustomerLinkedEvent' => [
             'App\Listeners\LogCustomerLinked',
         ],
+        'App\Events\CustomerDeactivatedEvent' => [
+            'App\Listeners\LogDeactivatedCustomer',
+        ],
 
 
         // 'App\Events\NewUserCreated' => [

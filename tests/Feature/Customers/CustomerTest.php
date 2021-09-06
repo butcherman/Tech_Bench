@@ -174,4 +174,36 @@ class CustomerTest extends TestCase
             'address' => $updated->address,
         ]);
     }
+
+    /**
+     * Destroy Method
+     */
+    public function test_destroy_guest()
+    {
+        $cust = Customer::factory()->create();
+
+        $response = $this->delete(route('customers.destroy', $cust->cust_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+        $this->assertGuest();
+    }
+
+    public function test_destroy_no_permission()
+    {
+        $cust = Customer::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())->delete(route('customers.destroy', $cust->cust_id));
+        $response->assertStatus(403);
+        $this->assertDatabaseHas('customers', $cust->only(['cust_id', 'name', 'address', 'city', 'state', 'zip']));
+    }
+
+    public function test_destroy()
+    {
+        $cust = Customer::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.destroy', $cust->cust_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('customers.index'));
+        $this->assertSoftDeleted('customers', $cust->only(['cust_id']));
+    }
 }
