@@ -73,7 +73,7 @@
                 alert: {
                     type:    null,
                     message: null,
-                }
+                },
             }
         },
         created() {
@@ -110,6 +110,8 @@
         },
         watch: {
              //
+
+
         },
         methods: {
             //

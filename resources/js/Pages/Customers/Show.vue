@@ -34,6 +34,36 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-5 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            Equipment:
+                            <new-equipment
+                                v-if="user_data.equipment.create"
+                                :cust_id="details.cust_id"
+                                :existing_equip="equipIdList"
+                                :allow_share="allowShare"
+                            ></new-equipment>
+                        </div>
+                        <equipment
+                            :cust_id="details.cust_id"
+                            :equipment="details.customer_equipment"
+                            :permissions="user_data.equipment"
+                            :allow_share="allowShare"
+                        ></equipment>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        Contacts
+                    </div>
+                </div>
+            </div>
+        </div>
         <b-modal id="linked-customers-modal" :title="'Customers linked to '+details.name" @show="getLinkedCustomers">
             <b-overlay :show="loading">
                 <template #overlay>
@@ -52,8 +82,16 @@
     import editDetails    from '../../Components/Customers/editDetails.vue';
     import ManageCustomer from '../../Components/Customers/manageCustomer.vue';
 
+    import Equipment      from '../../Components/Customers/Equipment/equipment.vue';
+    import NewEquipment   from '../../Components/Customers/Equipment/newEquipment.vue';
+
     export default {
-        components: { editDetails, ManageCustomer },
+        components: {
+            editDetails,
+            ManageCustomer,
+            Equipment,
+            NewEquipment,
+        },
         layout: App,
         props: {
             details: {
@@ -67,9 +105,10 @@
         },
         data() {
             return {
-                is_fav:  this.user_data.fav,
-                linked:  [],
-                loading: false,
+                is_fav:    this.user_data.fav,
+                linked:    [],
+                loading:   false,
+                equipment: this.details.parent_equipment.concat(this.details.customer_equipment),
             }
         },
         created() {
@@ -90,6 +129,20 @@
             bookmark_title()
             {
                 return this.is_fav ? 'Remove From Bookmarks' : 'Add to Bookmarks'
+            },
+            equipIdList()
+            {
+                var list = [];
+                this.equipment.forEach(function(item)
+                {
+                    list.push(item.equip_id);
+                });
+
+                return list;
+            },
+            allowShare()
+            {
+                return this.details.parent_id !== null || this.details.child_count > 0 ? true : false;
             }
         },
         watch: {

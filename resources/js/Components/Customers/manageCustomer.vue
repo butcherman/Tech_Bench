@@ -13,7 +13,7 @@
                     <atom-loader text="Loading Data..."></atom-loader>
                 </template>
                 <div>
-                    deleted stuff
+                    <!-- deleted stuff -->
                     <!--  TODO - Finish Me !-->
                 </div>
                 <div class="text-center mt-2">

@@ -53,6 +53,16 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\CustomerDeactivatedEvent' => [
             'App\Listeners\LogDeactivatedCustomer',
         ],
+        'App\Events\CustomerEquipmentAddedEvent' => [
+            'App\Listeners\LogNewCustomerEquipment',
+        ],
+        'App\Events\CustomerEquipmentUpdatedEvent' => [
+            'App\Listeners\LogUpdatedCustomerEquipment',
+        ],
+        'App\Events\CustomerEquipmentDeletedEvent' => [
+            'App\Listeners\LogDeletedCustomerEquipment',
+        ],
+
 
 
         // 'App\Events\NewUserCreated' => [

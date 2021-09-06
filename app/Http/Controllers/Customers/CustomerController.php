@@ -94,11 +94,11 @@ class CustomerController extends Controller
                 'edit'       => Auth::user()->can('update', $customer),                  //  User is allowed to edit the customers basic details
                 'manage'     => Auth::user()->can('manage', $customer),                  //  User can recover deleted items
                 'deactivate' => Auth::user()->can('delete', $customer),                  //  User can deactivate the customer profile
-            //     'equipment'  => [
-            //         'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
-            //         'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
-            //         'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete eqipment
-            //     ],
+                'equipment'  => [
+                    'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
+                    'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
+                    'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete eqipment
+                ],
             //     'contacts'   => [
             //         'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
             //         'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
