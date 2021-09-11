@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Events\CustomerDeactivatedEvent;
-use App\Events\CustomerDetailsUpdated;
-use App\Events\NewCustomerCreated;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Customers\EditCustomerRequest;
-use App\Http\Requests\Customers\NewCustomerRequest;
+
+use App\Events\NewCustomerCreated;
+use App\Events\CustomerDetailsUpdated;
+use App\Events\CustomerDeactivatedEvent;
+
 use App\Models\Customer;
-use App\Models\CustomerFileType;
 use App\Models\EquipmentType;
 use App\Models\PhoneNumberType;
+use App\Models\CustomerFileType;
 use App\Models\UserCustomerBookmark;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+
+use App\Http\Requests\Customers\NewCustomerRequest;
+use App\Http\Requests\Customers\EditCustomerRequest;
 
 class CustomerController extends Controller
 {
@@ -86,7 +90,7 @@ class CustomerController extends Controller
 
         return Inertia::render('Customers/Show', [
             'details'        => $customer,
-            // 'phone_types'    => PhoneNumberType::all(),
+            'phone_types'    => PhoneNumberType::all(),
             // 'file_types'     => CustomerFileType::all(),
             //  User Permissions for customers
             'user_data' => [
@@ -99,11 +103,11 @@ class CustomerController extends Controller
                     'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
                     'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete eqipment
                 ],
-            //     'contacts'   => [
-            //         'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
-            //         'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
-            //         'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
-            //     ],
+                'contacts'   => [
+                    'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
+                    'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
+                    'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
+                ],
             //     'notes'      => [
             //         'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
             //         'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note

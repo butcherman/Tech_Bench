@@ -28,6 +28,7 @@
             <file>./app/Providers/BroadcastServiceProvider.php</file>
             <file>./app/Providers/EventServiceProvider.php</file>
             <file>./app/Providers/RouteServiceProvider.php</file>
+            <file>./app/Http/Controllers/Customers/DownloadContactController.php</file>
         </exclude>
     </coverage>
     <php>

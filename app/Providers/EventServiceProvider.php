@@ -53,6 +53,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\CustomerDeactivatedEvent' => [
             'App\Listeners\LogDeactivatedCustomer',
         ],
+        //  Customer Equipment
         'App\Events\CustomerEquipmentAddedEvent' => [
             'App\Listeners\LogNewCustomerEquipment',
         ],
@@ -62,6 +63,20 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\CustomerEquipmentDeletedEvent' => [
             'App\Listeners\LogDeletedCustomerEquipment',
         ],
+        //  Customer Contacts
+        'App\Events\Customers\CustomerContactAddedEvent' => [
+            'App\Listeners\Customers\LogAddedCustomerContact'
+        ],
+        'App\Events\Customers\CustomerContactUpdatedEvent' => [
+            'App\Listeners\Customers\LogUpdatedCustomerContact'
+        ],
+        'App\Events\Customers\CustomerContactDeletedEvent' => [
+            'App\Listeners\Customers\LogDeletedContact'
+        ],
+        'App\Events\Customers\CustomerContactDownloadedEvent' => [
+            'App\Listeners\Customers\LogDownloadedCustomerContact'
+        ],
+
 
 
 

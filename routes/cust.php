@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Customers\DownloadContactController;
 use App\Http\Controllers\Customers\CheckIdController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
+use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerSearchController;
@@ -18,12 +20,14 @@ Route::middleware('auth')->group(function()
 
     Route::prefix('customers')->name('customers.')->group(function()
     {
-        Route::post('search',          CustomerSearchController::class)  ->name('search');
-        Route::post('check-id',        CheckIdController::class)         ->name('check-id');
-        Route::post('bookmark',        CustomerBookmarkController::class)->name('bookmark');
-        Route::post('link-customer',   LinkCustomerController::class)    ->name('link-customer');
-        Route::get( '{id}/get-linked', GetLinkedController::class)       ->name('get-linked');
+        Route::post('search',                CustomerSearchController::class)  ->name('search');
+        Route::post('check-id',              CheckIdController::class)         ->name('check-id');
+        Route::post('bookmark',              CustomerBookmarkController::class)->name('bookmark');
+        Route::post('link-customer',         LinkCustomerController::class)    ->name('link-customer');
+        Route::get( '{id}/get-linked',       GetLinkedController::class)       ->name('get-linked');
+        Route::get( '{id}/download-contact', DownloadContactController::class) ->name('contacts.download');
 
         Route::resource('equipment', CustomerEquipmentController::class);
+        Route::resource('contacts',  CustomerContactsController::class);
     });
 });

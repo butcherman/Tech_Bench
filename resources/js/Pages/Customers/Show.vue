@@ -59,7 +59,20 @@
             <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        Contacts
+                        <div class="card-title">
+                            Contacts:
+                            <new-contact
+                                v-if="user_data.contacts.create"
+                                :cust_id="details.cust_id"
+                                :allow_share="allowShare"
+                            ></new-contact>
+                        </div>
+                        <contacts
+                            :cust_id="details.cust_id"
+                            :contacts="details.customer_contact"
+                            :permissions="user_data.contacts"
+                            :allow_share="allowShare"
+                        ></contacts>
                     </div>
                 </div>
             </div>
@@ -85,12 +98,17 @@
     import Equipment      from '../../Components/Customers/Equipment/equipment.vue';
     import NewEquipment   from '../../Components/Customers/Equipment/newEquipment.vue';
 
+    import Contacts       from '../../Components/Customers/Contacts/contacts.vue';
+    import NewContact     from '../../Components/Customers/Contacts/newContact.vue';
+
     export default {
         components: {
             editDetails,
             ManageCustomer,
             Equipment,
             NewEquipment,
+            Contacts,
+            NewContact,
         },
         layout: App,
         props: {
