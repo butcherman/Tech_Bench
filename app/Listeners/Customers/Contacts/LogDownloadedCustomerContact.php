@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Listeners\Customers;
+namespace App\Listeners\Customers\Contacts;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Events\Customers\CustomerContactDownloadedEvent;
+use App\Events\Customers\Contacts\CustomerContactDownloadedEvent;
 
 class LogDownloadedCustomerContact
 {

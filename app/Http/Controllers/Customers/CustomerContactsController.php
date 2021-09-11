@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Customers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Customer;
 use App\Models\PhoneNumberType;
 use App\Models\CustomerContact;
 use App\Models\CustomerContactPhone;
-use App\Events\Customers\CustomerContactAddedEvent;
-use App\Events\Customers\CustomerContactDeletedEvent;
-use App\Events\Customers\CustomerContactUpdatedEvent;
+
 use App\Http\Requests\Customers\CustomerContactsRequest;
-use Inertia\Inertia;
+use App\Events\Customers\Contacts\CustomerContactAddedEvent;
+use App\Events\Customers\Contacts\CustomerContactDeletedEvent;
+use App\Events\Customers\Contacts\CustomerContactForceDeletedEvent;
+use App\Events\Customers\Contacts\CustomerContactRestoredEvent;
+use App\Events\Customers\Contacts\CustomerContactUpdatedEvent;
 
 class CustomerContactsController extends Controller
 {
@@ -131,6 +132,37 @@ class CustomerContactsController extends Controller
         event(new CustomerContactDeletedEvent(Customer::find($cont->cust_id), $cont));
         return back()->with(['message' => 'Contact deleted', 'type' => 'danger']);
     }
+
+
+    /**
+     * Restore a contact that was soft deleted
+     */
+    public function restore($id)
+    {
+        $this->authorize('restore', CustomerContact::class);
+        $cont = CustomerContact::withTrashed()->where('cont_id', $id)->first();
+        $cont->restore();
+
+        event(new CustomerContactRestoredEvent(Customer::find($cont->cust_id), $cont));
+        return back()->with(['message' => 'Contact '.$cont->name.' restored', 'type' => 'success']);
+    }
+
+    /**
+     * Permanently delete a contact
+     */
+    public function forceDelete($id)
+    {
+        $cont = CustomerContact::withTrashed()->where('cont_id', $id)->first();
+        $this->authorize('forceDelete', $cont);
+        $cont->forceDelete();
+
+        event(new CustomerContactForceDeletedEvent(Customer::find($cont->cust_id), $cont));
+        return back()->with(['message' => 'Contact permanently deleted', 'type' => 'danger']);
+    }
+
+
+
+
 
     /*
     *   Clean the phone number to be digits only

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Customers\Equipment;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 
-class CustomerEquipmentDeletedEvent
+class CustomerEquipmentUpdatedEvent
 {
     use Dispatchable;
     use SerializesModels;

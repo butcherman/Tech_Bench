@@ -7,7 +7,7 @@ use JeroenDesloovere\VCard\VCard;
 use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Http\Controllers\Controller;
-use App\Events\Customers\CustomerContactDownloadedEvent;
+use App\Events\Customers\Contacts\CustomerContactDownloadedEvent;
 
 class DownloadContactController extends Controller
 {

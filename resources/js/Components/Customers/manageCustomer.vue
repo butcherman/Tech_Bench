@@ -13,8 +13,50 @@
                     <atom-loader text="Loading Data..."></atom-loader>
                 </template>
                 <div>
-                    <!-- deleted stuff -->
-                    <!--  TODO - Finish Me !-->
+                    <div class="mt-2" v-if="deleted['equipment'] && deleted['equipment'].length > 0">
+                        <h5 class="text-center">Deleted Equipment</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item text-center" v-for="item in deleted['equipment']" :key="item.cust_equip_id">
+                                <i class="fas fa-trash-restore text-success pointer float-left mr-2" title="Restore" v-b-tooltip.hover @click="restore('equipment', item.cust_equip_id)"></i>
+                                <i class="fas fa-trash text-danger pointer float-left" title="Perminately Delete" v-b-tooltip.hover @click="destroy('equipment', item.cust_equip_id)"></i>
+                                {{item.name}}
+                                <span class="float-right text-muted">Deleted: {{item.deleted_at}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-2" v-if="deleted['contacts'] && deleted['contacts'].length > 0">
+                        <h5 class="text-center">Deleted Contacts</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item text-center" v-for="item in deleted['contacts']" :key="item.cont_id">
+                                <i class="fas fa-trash-restore text-success pointer float-left mr-2" title="Restore" v-b-tooltip.hover @click="restore('contacts', item.cont_id)"></i>
+                                <i class="fas fa-trash text-danger pointer float-left" title="Perminately Delete" v-b-tooltip.hover @click="destroy('contacts', item.cont_id)"></i>
+                                {{item.name}}
+                                <span class="float-right text-muted">Deleted: {{item.deleted_at}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-2" v-if="deleted['notes'] && deleted['notes'].length > 0">
+                        <h5 class="text-center">Deleted Notes</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item text-center" v-for="item in deleted['notes']" :key="item.note_id">
+                                <i class="fas fa-trash-restore text-success pointer float-left mr-2" title="Restore" v-b-tooltip.hover @click="restore('notes', item.note_id)"></i>
+                                <i class="fas fa-trash text-danger pointer float-left" title="Perminately Delete" v-b-tooltip.hover @click="destroy('notes', item.note_id)"></i>
+                                {{item.subject}}
+                                <span class="float-right text-muted">Deleted: {{item.deleted_at}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-2" v-if="deleted['files'] && deleted['files'].length > 0">
+                        <h5 class="text-center">Deleted Files</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item text-center" v-for="item in deleted['files']" :key="item.cust_file_id">
+                                <i class="fas fa-trash-restore text-success pointer float-left mr-2" title="Restore" v-b-tooltip.hover @click="restore('files', item.cust_file_id)"></i>
+                                <i class="fas fa-trash text-danger pointer float-left" title="Perminately Delete" v-b-tooltip.hover @click="destroy('files', item.cust_file_id)"></i>
+                                {{item.name}}
+                                <span class="float-right text-muted">Deleted: {{item.deleted_at}}</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="text-center mt-2">
                     <link-customer
@@ -77,45 +119,51 @@
             {
                 this.$refs['manage-customer-modal'].hide();
             },
-
-
-
-
-            //  Get all items that have been soft deleted from the customer
+            /**
+             * Get all items that have been soft deleted for the customer
+             */
             getDeletedItems()
             {
-                // this.loading = true;
-                // axios.get(this.route('customers.get-deleted', this.cust_id))
-                //     .then(res => {
-                //         this.deleted = res.data;
-                //         this.loading = false;
-                //     }).catch(error => this.eventHub.$emit('axiosError', error));
+                this.loading = true;
+                axios.get(this.route('customers.get-deleted', this.cust_id))
+                    .then(res => {
+                        this.deleted = res.data;
+                        this.loading = false;
+
+                        console.log(res.data);
+                    }).catch(error => this.eventHub.$emit('axiosError', error));
             },
-
-
-            //  Restore an item that has been deleted
+            /**
+             * Restore an item that was soft deleted
+             */
             restore(type, item)
             {
+                console.log('restore');
                 this.loading = true;
-                // this.$inertia.get(this.route('customers.'+type+'.restore', item));
+                this.$inertia.get(this.route('customers.'+type+'.restore', item));
             },
-            //  Permanently delete an item that was deleted
+            /**
+             * Permanently delete a soft deleted item
+             */
             destroy(type, item)
             {
                 this.$bvModal.msgBoxConfirm('This action cannot be undone', {
-                    title: 'Are You Sure?',
-                    size: 'md',
-                    okVariant: 'danger',
-                    okTitle: 'Yes',
+                    title:       'Are You Sure?',
+                    size:        'md',
+                    okVariant:   'danger',
+                    okTitle:     'Yes',
                     cancelTitle: 'No',
-                    centered: true,
+                    centered:     true,
                 }).then(res => {
                     if(res)
                     {
                         this.loading = true;
-                        // this.$inertia.delete(this.route('customers.'+type+'.force-delete', item), {
-                        //     onFinish: () => { this.$refs['manage-customer-modal'].hide(); }
-                        // });
+                        this.$inertia.delete(this.route('customers.'+type+'.force-delete', item), {
+                            onFinish: () => {
+                                this.$refs['manage-customer-modal'].hide();
+                                this.loading = false;
+                            }
+                        });
                     }
                 });
             },

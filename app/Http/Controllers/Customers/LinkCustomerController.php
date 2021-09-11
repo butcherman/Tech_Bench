@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Models\Customer;
-use App\Events\CustomerLinkedEvent;
+use App\Events\Customers\CustomerLinkedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\LinkCustomerRequest;
 

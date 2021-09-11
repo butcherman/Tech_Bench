@@ -80,10 +80,11 @@
             }
         },
         methods: {
+            /**
+             * Update the selected contact
+             */
             submitForm()
             {
-                console.log(this.form);
-
                 this.submitted = true;
                 this.loading   = true;
                 this.$inertia.put(route('customers.contacts.update', this.details.cont_id), this.form, {
@@ -91,10 +92,12 @@
                         this.$refs['edit-contact-modal'].hide();
                         this.loading   = false;
                         this.submitted = false;
-                    // this.$emit('completed');
                     }
                 });
             },
+            /**
+             * New row for a phone number
+             */
             addRow()
             {
                 this.form.phones.push({
@@ -105,6 +108,9 @@
                     extension:     '',
                 });
             },
+            /**
+             * Remove row for a phone number
+             */
             removeRow(key)
             {
                 this.form.phones.splice(key, 1);

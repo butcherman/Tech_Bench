@@ -41,42 +41,53 @@ class EventServiceProvider extends ServiceProvider
         /**
          * Customer Events
          */
-        'App\Events\NewCustomerCreated' => [
-            'App\Listeners\LogNewCustomerCreated',
+        'App\Events\Customers\NewCustomerCreated' => [
+            'App\Listeners\Customers\LogNewCustomerCreated',
         ],
-        'App\Events\CustomerDetailsUpdated' => [
-            'App\Listeners\LogUpdatedCustomer',
+        'App\Events\Customers\CustomerDetailsUpdated' => [
+            'App\Listeners\Customers\LogUpdatedCustomer',
         ],
-        'App\Events\CustomerLinkedEvent' => [
-            'App\Listeners\LogCustomerLinked',
+        'App\Events\Customers\CustomerLinkedEvent' => [
+            'App\Listeners\Customers\LogCustomerLinked',
         ],
-        'App\Events\CustomerDeactivatedEvent' => [
-            'App\Listeners\LogDeactivatedCustomer',
+        'App\Events\Customers\CustomerDeactivatedEvent' => [
+            'App\Listeners\Customers\LogDeactivatedCustomer',
         ],
         //  Customer Equipment
-        'App\Events\CustomerEquipmentAddedEvent' => [
-            'App\Listeners\LogNewCustomerEquipment',
+        'App\Events\Customers\Equipment\CustomerEquipmentAddedEvent' => [
+            'App\Listeners\Customers\Equipment\LogNewCustomerEquipment',
         ],
-        'App\Events\CustomerEquipmentUpdatedEvent' => [
-            'App\Listeners\LogUpdatedCustomerEquipment',
+        'App\Events\Customers\Equipment\CustomerEquipmentUpdatedEvent' => [
+            'App\Listeners\Customers\Equipment\LogUpdatedCustomerEquipment',
         ],
-        'App\Events\CustomerEquipmentDeletedEvent' => [
-            'App\Listeners\LogDeletedCustomerEquipment',
+        'App\Events\Customers\Equipment\CustomerEquipmentDeletedEvent' => [
+            'App\Listeners\Customers\Equipment\LogDeletedCustomerEquipment',
+        ],
+        'App\Events\Customers\Equipment\CustomerEquipmentForceDeletedEvent' => [
+            'App\Listeners\Customers\Equipment\LogForceDeletedCustomerEquipment',
+        ],
+        'App\Events\Customers\Equipment\CustomerEquipmentRestoredEvent' => [
+            'App\Listeners\Customers\Equipment\LogRestoredCustomerEquipment',
         ],
         //  Customer Contacts
-        'App\Events\Customers\CustomerContactAddedEvent' => [
-            'App\Listeners\Customers\LogAddedCustomerContact'
+        'App\Events\Customers\Contacts\CustomerContactAddedEvent' => [
+            'App\Listeners\Customers\Contacts\LogAddedCustomerContact'
         ],
-        'App\Events\Customers\CustomerContactUpdatedEvent' => [
-            'App\Listeners\Customers\LogUpdatedCustomerContact'
+        'App\Events\Customers\Contacts\CustomerContactUpdatedEvent' => [
+            'App\Listeners\Customers\Contacts\LogUpdatedCustomerContact'
         ],
-        'App\Events\Customers\CustomerContactDeletedEvent' => [
-            'App\Listeners\Customers\LogDeletedContact'
+        'App\Events\Customers\Contacts\CustomerContactDeletedEvent' => [
+            'App\Listeners\Customers\Contacts\LogDeletedContact'
         ],
-        'App\Events\Customers\CustomerContactDownloadedEvent' => [
-            'App\Listeners\Customers\LogDownloadedCustomerContact'
+        'App\Events\Customers\Contacts\CustomerContactDownloadedEvent' => [
+            'App\Listeners\Customers\Contacts\LogDownloadedCustomerContact'
         ],
-
+        'App\Events\Customers\Contacts\CustomerContactForceDeletedEvent' => [
+            'App\Listeners\Customers\Contacts\LogForceDeletedCustomerContact',
+        ],
+        'App\Events\Customers\Contacts\CustomerContactRestoredEvent' => [
+            'App\Listeners\Customers\Contacts\LogRestoredCustomerContact',
+        ],
 
 
 

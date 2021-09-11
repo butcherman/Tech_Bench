@@ -128,19 +128,13 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
+    /**
+     * Soft delete a contact
+     */
     deleteContact: function deleteContact(contact) {
       var _this = this;
 
-      console.log(contact);
       this.$bvModal.msgBoxConfirm('Please confirm you want to delete this contact.', {
         title: 'Are You Sure?',
         size: 'md',
@@ -150,8 +144,6 @@ __webpack_require__.r(__webpack_exports__);
         centered: true
       }).then(function (res) {
         if (res) {
-          console.log('yes');
-
           _this.$inertia["delete"](route('customers.contacts.destroy', contact), {
             onFinish: function onFinish() {
               console.log('done');
@@ -259,10 +251,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    /**
+     * Update the selected contact
+     */
     submitForm: function submitForm() {
       var _this = this;
 
-      console.log(this.form);
       this.submitted = true;
       this.loading = true;
       this.$inertia.put(route('customers.contacts.update', this.details.cont_id), this.form, {
@@ -270,10 +264,14 @@ __webpack_require__.r(__webpack_exports__);
           _this.$refs['edit-contact-modal'].hide();
 
           _this.loading = false;
-          _this.submitted = false; // this.$emit('completed');
+          _this.submitted = false;
         }
       });
     },
+
+    /**
+     * New row for a phone number
+     */
     addRow: function addRow() {
       this.form.phones.push({
         phone_number_type: {
@@ -283,6 +281,10 @@ __webpack_require__.r(__webpack_exports__);
         extension: ''
       });
     },
+
+    /**
+     * Remove row for a phone number
+     */
     removeRow: function removeRow(key) {
       this.form.phones.splice(key, 1);
     }
@@ -393,6 +395,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    /**
+     * Add new contact
+     */
     submitForm: function submitForm() {
       var _this = this;
 
@@ -409,6 +414,10 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+
+    /**
+     * Add new row for phone number
+     */
     addRow: function addRow() {
       this.form.phones.push({
         type: 'Mobile',
@@ -416,9 +425,17 @@ __webpack_require__.r(__webpack_exports__);
         extension: ''
       });
     },
+
+    /**
+     * Remove row for phone number
+     */
     removeRow: function removeRow(key) {
       this.form.phones.splice(key, 1);
     },
+
+    /**
+     * Reset for to default setting
+     */
     resetForm: function resetForm() {
       this.form = {
         cust_id: this.cust_id,
@@ -1187,6 +1204,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1228,21 +1287,37 @@ __webpack_require__.r(__webpack_exports__);
     closeModal: function closeModal() {
       this.$refs['manage-customer-modal'].hide();
     },
-    //  Get all items that have been soft deleted from the customer
-    getDeletedItems: function getDeletedItems() {// this.loading = true;
-      // axios.get(this.route('customers.get-deleted', this.cust_id))
-      //     .then(res => {
-      //         this.deleted = res.data;
-      //         this.loading = false;
-      //     }).catch(error => this.eventHub.$emit('axiosError', error));
-    },
-    //  Restore an item that has been deleted
-    restore: function restore(type, item) {
-      this.loading = true; // this.$inertia.get(this.route('customers.'+type+'.restore', item));
-    },
-    //  Permanently delete an item that was deleted
-    destroy: function destroy(type, item) {
+
+    /**
+     * Get all items that have been soft deleted for the customer
+     */
+    getDeletedItems: function getDeletedItems() {
       var _this = this;
+
+      this.loading = true;
+      axios.get(this.route('customers.get-deleted', this.cust_id)).then(function (res) {
+        _this.deleted = res.data;
+        _this.loading = false;
+        console.log(res.data);
+      })["catch"](function (error) {
+        return _this.eventHub.$emit('axiosError', error);
+      });
+    },
+
+    /**
+     * Restore an item that was soft deleted
+     */
+    restore: function restore(type, item) {
+      console.log('restore');
+      this.loading = true;
+      this.$inertia.get(this.route('customers.' + type + '.restore', item));
+    },
+
+    /**
+     * Permanently delete a soft deleted item
+     */
+    destroy: function destroy(type, item) {
+      var _this2 = this;
 
       this.$bvModal.msgBoxConfirm('This action cannot be undone', {
         title: 'Are You Sure?',
@@ -1253,9 +1328,15 @@ __webpack_require__.r(__webpack_exports__);
         centered: true
       }).then(function (res) {
         if (res) {
-          _this.loading = true; // this.$inertia.delete(this.route('customers.'+type+'.force-delete', item), {
-          //     onFinish: () => { this.$refs['manage-customer-modal'].hide(); }
-          // });
+          _this2.loading = true;
+
+          _this2.$inertia["delete"](_this2.route('customers.' + type + '.force-delete', item), {
+            onFinish: function onFinish() {
+              _this2.$refs['manage-customer-modal'].hide();
+
+              _this2.loading = false;
+            }
+          });
         }
       });
     }
@@ -4668,7 +4749,299 @@ var render = function() {
             },
             [
               _vm._v(" "),
-              _c("div"),
+              _c("div", [
+                _vm.deleted["equipment"] && _vm.deleted["equipment"].length > 0
+                  ? _c("div", { staticClass: "mt-2" }, [
+                      _c("h5", { staticClass: "text-center" }, [
+                        _vm._v("Deleted Equipment")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticClass: "list-group" },
+                        _vm._l(_vm.deleted["equipment"], function(item) {
+                          return _c(
+                            "li",
+                            {
+                              key: item.cust_equip_id,
+                              staticClass: "list-group-item text-center"
+                            },
+                            [
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass:
+                                  "fas fa-trash-restore text-success pointer float-left mr-2",
+                                attrs: { title: "Restore" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.restore(
+                                      "equipment",
+                                      item.cust_equip_id
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass:
+                                  "fas fa-trash text-danger pointer float-left",
+                                attrs: { title: "Perminately Delete" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.destroy(
+                                      "equipment",
+                                      item.cust_equip_id
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(item.name) +
+                                  "\n                            "
+                              ),
+                              _c(
+                                "span",
+                                { staticClass: "float-right text-muted" },
+                                [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.deleted["contacts"] && _vm.deleted["contacts"].length > 0
+                  ? _c("div", { staticClass: "mt-2" }, [
+                      _c("h5", { staticClass: "text-center" }, [
+                        _vm._v("Deleted Contacts")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticClass: "list-group" },
+                        _vm._l(_vm.deleted["contacts"], function(item) {
+                          return _c(
+                            "li",
+                            {
+                              key: item.cont_id,
+                              staticClass: "list-group-item text-center"
+                            },
+                            [
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass:
+                                  "fas fa-trash-restore text-success pointer float-left mr-2",
+                                attrs: { title: "Restore" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.restore("contacts", item.cont_id)
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass:
+                                  "fas fa-trash text-danger pointer float-left",
+                                attrs: { title: "Perminately Delete" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.destroy("contacts", item.cont_id)
+                                  }
+                                }
+                              }),
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(item.name) +
+                                  "\n                            "
+                              ),
+                              _c(
+                                "span",
+                                { staticClass: "float-right text-muted" },
+                                [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.deleted["notes"] && _vm.deleted["notes"].length > 0
+                  ? _c("div", { staticClass: "mt-2" }, [
+                      _c("h5", { staticClass: "text-center" }, [
+                        _vm._v("Deleted Notes")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticClass: "list-group" },
+                        _vm._l(_vm.deleted["notes"], function(item) {
+                          return _c(
+                            "li",
+                            {
+                              key: item.note_id,
+                              staticClass: "list-group-item text-center"
+                            },
+                            [
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass:
+                                  "fas fa-trash-restore text-success pointer float-left mr-2",
+                                attrs: { title: "Restore" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.restore("notes", item.note_id)
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass:
+                                  "fas fa-trash text-danger pointer float-left",
+                                attrs: { title: "Perminately Delete" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.destroy("notes", item.note_id)
+                                  }
+                                }
+                              }),
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(item.subject) +
+                                  "\n                            "
+                              ),
+                              _c(
+                                "span",
+                                { staticClass: "float-right text-muted" },
+                                [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.deleted["files"] && _vm.deleted["files"].length > 0
+                  ? _c("div", { staticClass: "mt-2" }, [
+                      _c("h5", { staticClass: "text-center" }, [
+                        _vm._v("Deleted Files")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticClass: "list-group" },
+                        _vm._l(_vm.deleted["files"], function(item) {
+                          return _c(
+                            "li",
+                            {
+                              key: item.cust_file_id,
+                              staticClass: "list-group-item text-center"
+                            },
+                            [
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass:
+                                  "fas fa-trash-restore text-success pointer float-left mr-2",
+                                attrs: { title: "Restore" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.restore(
+                                      "files",
+                                      item.cust_file_id
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass:
+                                  "fas fa-trash text-danger pointer float-left",
+                                attrs: { title: "Perminately Delete" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.destroy(
+                                      "files",
+                                      item.cust_file_id
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(item.name) +
+                                  "\n                            "
+                              ),
+                              _c(
+                                "span",
+                                { staticClass: "float-right text-muted" },
+                                [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  : _vm._e()
+              ]),
               _vm._v(" "),
               _c(
                 "div",

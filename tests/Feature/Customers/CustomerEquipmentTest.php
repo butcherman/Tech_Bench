@@ -266,4 +266,80 @@ class CustomerEquipmentTest extends TestCase
         $response->assertStatus(302);
         $this->assertSoftDeleted('customer_equipment', $custEquip->only(['cust_id', 'equip_id', 'shared']));
     }
+
+    /*
+    *   Restore Function
+    */
+    public function test_restore_guest()
+    {
+        $customer  = Customer::factory()->create();
+        $equip     = EquipmentType::factory()->create();
+        $equipment = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equip->equip_id, 'shared' => false]);
+        $equipment->delete();
+        $equipment->save();
+
+        $response = $this->get(route('customers.equipment.restore', $equipment->cust_equip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_restore_no_permission()
+    {
+        $customer  = Customer::factory()->create();
+        $equip     = EquipmentType::factory()->create();
+        $equipment = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equip->equip_id, 'shared' => false]);
+        $equipment->delete();
+        $equipment->save();
+
+        $response = $this->actingAs(User::factory()->create())->get(route('customers.equipment.restore', $equipment->cust_equip_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_restore()
+    {
+        $customer  = Customer::factory()->create();
+        $equip     = EquipmentType::factory()->create();
+        $equipment = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equip->equip_id, 'shared' => false]);
+        $equipment->delete();
+        $equipment->save();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('customers.equipment.restore', $equipment->cust_equip_id));
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('customer_equipment', $equipment->only(['cust_equip_id']));
+    }
+
+    /*
+    *   Force Delete Method
+    */
+    public function test_force_delete_guest()
+    {
+        $customer  = Customer::factory()->create();
+        $equip     = EquipmentType::factory()->create();
+        $equipment = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equip->equip_id, 'shared' => false]);
+
+        $response = $this->delete(route('customers.equipment.force-delete', $equipment->cust_equip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+    }
+
+    public function test_force_delete_no_permission()
+    {
+        $customer  = Customer::factory()->create();
+        $equip     = EquipmentType::factory()->create();
+        $equipment = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equip->equip_id, 'shared' => false]);
+
+        $response = $this->actingAs(User::factory()->create())->delete(route('customers.equipment.force-delete', $equipment->cust_equip_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_force_delete()
+    {
+        $customer  = Customer::factory()->create();
+        $equip     = EquipmentType::factory()->create();
+        $equipment = CustomerEquipment::create(['cust_id' => $customer->cust_id, 'equip_id' => $equip->equip_id, 'shared' => false]);
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.equipment.force-delete', $equipment->cust_equip_id));
+        $response->assertStatus(302);
+        $this->assertDatabaseMissing('customer_equipment', $equipment->only(['cust_equip_id']));
+    }
 }

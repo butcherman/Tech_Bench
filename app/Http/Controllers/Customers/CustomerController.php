@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
 
-use App\Events\NewCustomerCreated;
-use App\Events\CustomerDetailsUpdated;
-use App\Events\CustomerDeactivatedEvent;
+use App\Events\Customers\NewCustomerCreated;
+use App\Events\Customers\CustomerDetailsUpdated;
+use App\Events\Customers\CustomerDeactivatedEvent;
 
 use App\Models\Customer;
 use App\Models\EquipmentType;

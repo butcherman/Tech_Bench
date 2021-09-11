@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Events\CustomerEquipmentAddedEvent;
-use App\Events\CustomerEquipmentDeletedEvent;
-use App\Events\CustomerEquipmentUpdatedEvent;
+use App\Events\Customers\Equipment\CustomerEquipmentAddedEvent;
+use App\Events\Customers\Equipment\CustomerEquipmentDeletedEvent;
+use App\Events\Customers\Equipment\CustomerEquipmentRestoredEvent;
+use App\Events\Customers\Equipment\CustomerEquipmentForceDeletedEvent;
+
+use App\Events\Customers\Equipment\CustomerEquipmentUpdatedEvent;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerEquipmentRequest;
+
 use App\Models\Customer;
+use App\Models\DataField;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
-use App\Models\DataField;
 
 class CustomerEquipmentController extends Controller
 {
@@ -95,5 +100,35 @@ class CustomerEquipmentController extends Controller
             'message' => 'Equipment Deleted',
             'type'    => 'warning',
         ]);
+    }
+
+    /*
+    *   Restore a piece of equipment that was deleted
+    */
+    public function restore($id)
+    {
+        $equip = CustomerEquipment::withTrashed()->where('cust_equip_id', $id)->first();
+
+        $this->authorize('restore', $equip);
+        $equip->restore();
+
+        event(new CustomerEquipmentForceDeletedEvent(Customer::find($equip->cust_id), $equip));
+        return back()->with([
+            'message' => 'Equipment Restored',
+            'type'    => 'success',
+        ]);
+    }
+
+    /*
+    *   Completely delete the equipment
+    */
+    public function forceDelete($id)
+    {
+        $equip = CustomerEquipment::withTrashed()->where('cust_equip_id', $id)->first();
+        $this->authorize('forceDelete', $equip);
+        $equip->forceDelete();
+
+        event(new CustomerEquipmentRestoredEvent(Customer::find($equip->cust_id), $equip));
+        return back()->with(['message' => 'Equipment permanently deleted', 'type' => 'danger']);
     }
 }

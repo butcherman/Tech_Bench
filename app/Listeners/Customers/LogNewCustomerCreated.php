@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Customers;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-use App\Events\NewCustomerCreated;
+use App\Events\Customers\NewCustomerCreated;
 
 class LogNewCustomerCreated
 {

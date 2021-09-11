@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Customers\Equipment;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Events\CustomerEquipmentAddedEvent;
+use App\Events\Customers\Equipment\CustomerEquipmentAddedEvent;
 
 class LogNewCustomerEquipment
 {

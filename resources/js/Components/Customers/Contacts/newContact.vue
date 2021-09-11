@@ -90,6 +90,9 @@
             }
         },
         methods: {
+            /**
+             * Add new contact
+             */
             submitForm()
             {
                 this.submitted = true;
@@ -104,6 +107,9 @@
                     }
                 })
             },
+            /**
+             * Add new row for phone number
+             */
             addRow()
             {
                 this.form.phones.push({
@@ -112,10 +118,16 @@
                     extension: '',
                 });
             },
+            /**
+             * Remove row for phone number
+             */
             removeRow(key)
             {
                 this.form.phones.splice(key, 1);
             },
+            /**
+             * Reset for to default setting
+             */
             resetForm()
             {
                 this.form = {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Customers\Equipment;
 
 use Illuminate\Support\Facades\Log;
-use App\Events\CustomerEquipmentDeletedEvent;
 use Illuminate\Support\Facades\Auth;
+use App\Events\Customers\Equipment\CustomerEquipmentDeletedEvent;
 
 class LogDeletedCustomerEquipment
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Customers;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Events\CustomerDeactivatedEvent;
+use App\Events\Customers\CustomerDeactivatedEvent;
 
 class LogDeactivatedCustomer
 {

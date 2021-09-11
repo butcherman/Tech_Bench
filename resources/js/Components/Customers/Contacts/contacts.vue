@@ -119,23 +119,12 @@ import EditContact from './editContact.vue'
                 }
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-            //
-        },
-        computed: {
-            //
-        },
-        watch: {
-            //
-        },
         methods: {
+            /**
+             * Soft delete a contact
+             */
             deleteContact(contact)
             {
-                console.log(contact);
-
                 this.$bvModal.msgBoxConfirm('Please confirm you want to delete this contact.', {
                     title: 'Are You Sure?',
                     size: 'md',
@@ -146,8 +135,6 @@ import EditContact from './editContact.vue'
                 }).then(res => {
                     if(res)
                     {
-                        console.log('yes');
-
                         this.$inertia.delete(route('customers.contacts.destroy', contact), {
                             onFinish: () => {
                                 console.log('done');

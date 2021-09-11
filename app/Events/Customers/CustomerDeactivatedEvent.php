@@ -7,23 +7,20 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
 use App\Models\Customer;
-use App\Models\CustomerContact;
 
-class CustomerContactDeletedEvent
+class CustomerDeactivatedEvent
 {
     use Dispatchable;
-    use SerializesModels;
     use InteractsWithSockets;
+    use SerializesModels;
 
-    public $cust;
-    public $cont;
+    public $custData;
 
     /**
      * Create a new event instance
      */
-    public function __construct(Customer $cust, CustomerContact $cont)
+    public function __construct(Customer $cust)
     {
-        $this->cust = $cust;
-        $this->cont = $cont;
+        $this->custData = $cust;
     }
 }

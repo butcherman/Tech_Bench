@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Customers;
+namespace App\Events\Customers\Contacts;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;

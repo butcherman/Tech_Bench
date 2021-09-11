@@ -1,28 +1,29 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Customers\Equipment;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 
-class CustomerDetailsUpdated
+class CustomerEquipmentRestoredEvent
 {
     use Dispatchable;
     use SerializesModels;
     use InteractsWithSockets;
 
-    public $details;
-    public $cust_id;
+    public $cust;
+    public $equip;
 
     /**
      * Create a new event instance
      */
-    public function __construct(Customer $details, $cust_id)
+    public function __construct(Customer $cust, CustomerEquipment $equip)
     {
-        $this->details = $details;
-        $this->cust_id = $cust_id;
+        $this->cust  = $cust;
+        $this->equip = $equip;
     }
 }

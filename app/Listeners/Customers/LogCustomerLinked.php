@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Customers;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Customer;
-use App\Events\CustomerLinkedEvent;
+use App\Events\Customers\CustomerLinkedEvent;
 
 class LogCustomerLinked
 {
