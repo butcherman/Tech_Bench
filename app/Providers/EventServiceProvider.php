@@ -39,6 +39,13 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         /**
+         * File Events
+         */
+        'App\Events\Home\ImageUploadedEvent' => [
+            'App\Listeners\Home\LogImageUploaded',
+        ],
+
+        /**
          * Customer Events
          */
         'App\Events\Customers\NewCustomerCreated' => [
@@ -87,6 +94,25 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\Customers\Contacts\CustomerContactRestoredEvent' => [
             'App\Listeners\Customers\Contacts\LogRestoredCustomerContact',
+        ],
+        //  Customer Notes
+        'App\Events\Customers\Notes\CustomerNoteAddedEvent' => [
+            'App\Listeners\Customers\Notes\LogAddedCustomerNote'
+        ],
+        'App\Events\Customers\Notes\CustomerNoteUpdatedEvent' => [
+            'App\Listeners\Customers\Notes\LogUpdatedCustomerNote'
+        ],
+        'App\Events\Customers\Notes\CustomerNoteDeletedEvent' => [
+            'App\Listeners\Customers\Notes\LogDeletedNote'
+        ],
+        'App\Events\Customers\Notes\CustomerNoteDownloadedEvent' => [
+            'App\Listeners\Customers\Notes\LogDownloadedCustomerNote'
+        ],
+        'App\Events\Customers\Notes\CustomerNoteForceDeletedEvent' => [
+            'App\Listeners\Customers\Notes\LogForceDeletedCustomerNote',
+        ],
+        'App\Events\Customers\Notes\CustomerNoteRestoredEvent' => [
+            'App\Listeners\Customers\Notes\LogRestoredCustomerNote',
         ],
 
 

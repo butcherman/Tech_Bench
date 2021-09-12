@@ -77,6 +77,28 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            Notes:
+                            <new-note
+                                v-if="user_data.notes.create"
+                                :cust_id="details.cust_id"
+                                :allow_share="allowShare"
+                            ></new-note>
+                        </div>
+                        <notes
+                            :cust_id="details.cust_id"
+                            :notes="details.customer_note"
+                            :permissions="user_data.notes"
+                            :allow_share="allowShare"
+                        ></notes>
+                    </div>
+                </div>
+            </div>
+        </div>
         <b-modal id="linked-customers-modal" :title="'Customers linked to '+details.name" @show="getLinkedCustomers">
             <b-overlay :show="loading">
                 <template #overlay>
@@ -101,6 +123,9 @@
     import Contacts       from '../../Components/Customers/Contacts/contacts.vue';
     import NewContact     from '../../Components/Customers/Contacts/newContact.vue';
 
+    import Notes          from '../../Components/Customers/Notes/notes.vue';
+    import NewNote        from '../../Components/Customers/Notes/newNote.vue';
+
     export default {
         components: {
             editDetails,
@@ -109,6 +134,8 @@
             NewEquipment,
             Contacts,
             NewContact,
+            Notes,
+            NewNote,
         },
         layout: App,
         props: {

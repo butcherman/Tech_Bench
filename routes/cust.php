@@ -12,6 +12,7 @@ use App\Http\Controllers\Customers\DownloadContactController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
+use App\Http\Controllers\Customers\CustomerNoteController;
 
 /**
  * Customer Information Routes
@@ -33,6 +34,7 @@ Route::middleware('auth')->group(function()
         //  Customer Resource Controllers
         Route::resource('equipment', CustomerEquipmentController::class);
         Route::resource('contacts',  CustomerContactsController::class);
+        Route::resource('notes',     CustomerNoteController::class);
 
         //  Additional Methods for Resource Controllers
         Route::prefix('equipment')->name('equipment.')->group(function()
@@ -44,6 +46,11 @@ Route::middleware('auth')->group(function()
         {
             Route::get(   '{id}/restore',      [CustomerContactsController::class, 'restore'])    ->name('restore');
             Route::delete('{id}/force-delete', [CustomerContactsController::class, 'forceDelete'])->name('force-delete');
+        });
+        Route::prefix('notes')->name('notes.')->group(function()
+        {
+            Route::get(   '{id}/restore',      [CustomerNoteController::class, 'restore'])    ->name('restore');
+            Route::delete('{id}/force-delete', [CustomerNoteController::class, 'forceDelete'])->name('force-delete');
         });
     });
 });

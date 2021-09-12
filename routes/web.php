@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
+use App\Http\Controllers\Home\UploadImageController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Controllers\User\ChangePasswordController;
 
@@ -17,4 +18,6 @@ Route::middleware('auth')->group(function()
 
     Route::resource('settings', UserSettingsController::class);
     Route::resource('password', ChangePasswordController::class);
+
+    Route::post('upload-image', UploadImageController::class)->name('upload-image');
 });

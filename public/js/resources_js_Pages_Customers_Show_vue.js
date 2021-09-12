@@ -1071,6 +1071,326 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/editNote.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/editNote.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    cust_id: {
+      type: Number,
+      required: true
+    },
+    note: {
+      type: Object,
+      required: true
+    },
+    allow_share: {
+      type: Boolean,
+      "default": false
+    }
+  },
+  data: function data() {
+    return {
+      loading: false,
+      submitted: false,
+      form: {
+        cust_id: this.note.cust_id,
+        subject: this.note.subject,
+        details: this.note.details,
+        shared: this.note.shared,
+        urgent: this.note.urgent
+      }
+    };
+  },
+  methods: {
+    submitForm: function submitForm() {
+      var _this = this;
+
+      this.submitted = true;
+      this.loading = true;
+      this.$inertia.put(route('customers.notes.update', this.note.note_id), this.form, {
+        onFinish: function onFinish() {
+          _this.$refs['edit-note-modal'].hide();
+
+          _this.$emit('completed');
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/newNote.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/newNote.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    cust_id: {
+      type: Number,
+      required: true
+    },
+    allow_share: {
+      type: Boolean,
+      "default": false
+    }
+  },
+  data: function data() {
+    return {
+      loading: false,
+      submitted: false,
+      form: {
+        cust_id: this.cust_id,
+        subject: '',
+        details: '',
+        shared: false,
+        urgent: false
+      }
+    };
+  },
+  methods: {
+    submitForm: function submitForm() {
+      var _this = this;
+
+      this.loading = true;
+      this.submitted = true;
+      this.$inertia.post(this.route('customers.notes.store'), this.form, {
+        onFinish: function onFinish() {
+          _this.loading = false;
+          _this.submitted = false;
+
+          _this.$refs['new-note-modal'].hide();
+        }
+      });
+    },
+    resetForm: function resetForm() {
+      this.form = {
+        cust_id: this.cust_id,
+        subject: '',
+        details: '',
+        shared: false,
+        urgent: false
+      };
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/notes.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/notes.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _editNote_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editNote.vue */ "./resources/js/Components/Customers/Notes/editNote.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    EditNote: _editNote_vue__WEBPACK_IMPORTED_MODULE_0__.default
+  },
+  props: {
+    cust_id: {
+      type: Number,
+      required: true
+    },
+    notes: {
+      type: Array,
+      required: true
+    },
+    permissions: {
+      type: Object,
+      required: true
+    },
+    allow_share: {
+      type: Boolean,
+      "default": false
+    }
+  },
+  data: function data() {
+    return {
+      loading: false,
+      openedNote: {}
+    };
+  },
+  methods: {
+    openNote: function openNote(note) {
+      this.openedNote = note;
+      this.$refs['note-modal'].show();
+    },
+    deleteNote: function deleteNote(noteId) {
+      var _this = this;
+
+      this.$bvModal.msgBoxConfirm('Please Verify', {
+        title: 'Are you sure?',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      }).then(function (value) {
+        if (value) {
+          _this.loading = true;
+
+          _this.$inertia["delete"](route('customers.notes.destroy', noteId), {
+            onFinish: function onFinish() {
+              _this.$refs['note-modal'].hide();
+
+              _this.loading = false;
+            }
+          });
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/editDetails.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/editDetails.vue?vue&type=script&lang=js& ***!
@@ -1627,6 +1947,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Customers_Equipment_newEquipment_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Components/Customers/Equipment/newEquipment.vue */ "./resources/js/Components/Customers/Equipment/newEquipment.vue");
 /* harmony import */ var _Components_Customers_Contacts_contacts_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Components/Customers/Contacts/contacts.vue */ "./resources/js/Components/Customers/Contacts/contacts.vue");
 /* harmony import */ var _Components_Customers_Contacts_newContact_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Components/Customers/Contacts/newContact.vue */ "./resources/js/Components/Customers/Contacts/newContact.vue");
+/* harmony import */ var _Components_Customers_Notes_notes_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../Components/Customers/Notes/notes.vue */ "./resources/js/Components/Customers/Notes/notes.vue");
+/* harmony import */ var _Components_Customers_Notes_newNote_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../Components/Customers/Notes/newNote.vue */ "./resources/js/Components/Customers/Notes/newNote.vue");
 //
 //
 //
@@ -1719,6 +2041,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -1733,7 +2079,9 @@ __webpack_require__.r(__webpack_exports__);
     Equipment: _Components_Customers_Equipment_equipment_vue__WEBPACK_IMPORTED_MODULE_3__.default,
     NewEquipment: _Components_Customers_Equipment_newEquipment_vue__WEBPACK_IMPORTED_MODULE_4__.default,
     Contacts: _Components_Customers_Contacts_contacts_vue__WEBPACK_IMPORTED_MODULE_5__.default,
-    NewContact: _Components_Customers_Contacts_newContact_vue__WEBPACK_IMPORTED_MODULE_6__.default
+    NewContact: _Components_Customers_Contacts_newContact_vue__WEBPACK_IMPORTED_MODULE_6__.default,
+    Notes: _Components_Customers_Notes_notes_vue__WEBPACK_IMPORTED_MODULE_7__.default,
+    NewNote: _Components_Customers_Notes_newNote_vue__WEBPACK_IMPORTED_MODULE_8__.default
   },
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
   props: {
@@ -2206,6 +2554,123 @@ component.options.__file = "resources/js/Components/Customers/Manage/unlinkCusto
 
 /***/ }),
 
+/***/ "./resources/js/Components/Customers/Notes/editNote.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/editNote.vue ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _editNote_vue_vue_type_template_id_23343b0f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editNote.vue?vue&type=template&id=23343b0f& */ "./resources/js/Components/Customers/Notes/editNote.vue?vue&type=template&id=23343b0f&");
+/* harmony import */ var _editNote_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./editNote.vue?vue&type=script&lang=js& */ "./resources/js/Components/Customers/Notes/editNote.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _editNote_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _editNote_vue_vue_type_template_id_23343b0f___WEBPACK_IMPORTED_MODULE_0__.render,
+  _editNote_vue_vue_type_template_id_23343b0f___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Components/Customers/Notes/editNote.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Notes/newNote.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/newNote.vue ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _newNote_vue_vue_type_template_id_795712e2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./newNote.vue?vue&type=template&id=795712e2& */ "./resources/js/Components/Customers/Notes/newNote.vue?vue&type=template&id=795712e2&");
+/* harmony import */ var _newNote_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./newNote.vue?vue&type=script&lang=js& */ "./resources/js/Components/Customers/Notes/newNote.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _newNote_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _newNote_vue_vue_type_template_id_795712e2___WEBPACK_IMPORTED_MODULE_0__.render,
+  _newNote_vue_vue_type_template_id_795712e2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Components/Customers/Notes/newNote.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Notes/notes.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/notes.vue ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _notes_vue_vue_type_template_id_af249544___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./notes.vue?vue&type=template&id=af249544& */ "./resources/js/Components/Customers/Notes/notes.vue?vue&type=template&id=af249544&");
+/* harmony import */ var _notes_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./notes.vue?vue&type=script&lang=js& */ "./resources/js/Components/Customers/Notes/notes.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _notes_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _notes_vue_vue_type_template_id_af249544___WEBPACK_IMPORTED_MODULE_0__.render,
+  _notes_vue_vue_type_template_id_af249544___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Components/Customers/Notes/notes.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/Components/Customers/editDetails.vue":
 /*!***********************************************************!*\
   !*** ./resources/js/Components/Customers/editDetails.vue ***!
@@ -2561,6 +3026,54 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/Customers/Notes/editNote.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/editNote.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_editNote_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./editNote.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/editNote.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_editNote_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Notes/newNote.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/newNote.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_newNote_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./newNote.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/newNote.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_newNote_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Notes/notes.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/notes.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_notes_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./notes.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/notes.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_notes_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/Components/Customers/editDetails.vue?vue&type=script&lang=js&":
 /*!************************************************************************************!*\
   !*** ./resources/js/Components/Customers/editDetails.vue?vue&type=script&lang=js& ***!
@@ -2807,6 +3320,57 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_unlinkCustomer_vue_vue_type_template_id_3bb190a6___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_unlinkCustomer_vue_vue_type_template_id_3bb190a6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./unlinkCustomer.vue?vue&type=template&id=3bb190a6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Manage/unlinkCustomer.vue?vue&type=template&id=3bb190a6&");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Notes/editNote.vue?vue&type=template&id=23343b0f&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/editNote.vue?vue&type=template&id=23343b0f& ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editNote_vue_vue_type_template_id_23343b0f___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editNote_vue_vue_type_template_id_23343b0f___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editNote_vue_vue_type_template_id_23343b0f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./editNote.vue?vue&type=template&id=23343b0f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/editNote.vue?vue&type=template&id=23343b0f&");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Notes/newNote.vue?vue&type=template&id=795712e2&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/newNote.vue?vue&type=template&id=795712e2& ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_newNote_vue_vue_type_template_id_795712e2___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_newNote_vue_vue_type_template_id_795712e2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_newNote_vue_vue_type_template_id_795712e2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./newNote.vue?vue&type=template&id=795712e2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/newNote.vue?vue&type=template&id=795712e2&");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/Customers/Notes/notes.vue?vue&type=template&id=af249544&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/Components/Customers/Notes/notes.vue?vue&type=template&id=af249544& ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_notes_vue_vue_type_template_id_af249544___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_notes_vue_vue_type_template_id_af249544___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_notes_vue_vue_type_template_id_af249544___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./notes.vue?vue&type=template&id=af249544& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/notes.vue?vue&type=template&id=af249544&");
 
 
 /***/ }),
@@ -4448,6 +5012,608 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/editNote.vue?vue&type=template&id=23343b0f&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/editNote.vue?vue&type=template&id=23343b0f& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "b-button",
+    {
+      directives: [
+        {
+          name: "b-tooltip",
+          rawName: "v-b-tooltip.hover",
+          modifiers: { hover: true }
+        }
+      ],
+      attrs: { variant: "warning", title: "Edit Note" },
+      on: {
+        click: function($event) {
+          return _vm.$refs["edit-note-modal"].show()
+        }
+      }
+    },
+    [
+      _c("i", { staticClass: "fas fa-pencil-alt" }),
+      _vm._v("\n        Edit\n        "),
+      _c(
+        "b-modal",
+        {
+          ref: "edit-note-modal",
+          attrs: {
+            title: "Edit Note",
+            size: "lg",
+            "hide-footer": "",
+            "no-enforce-focus": ""
+          }
+        },
+        [
+          _c(
+            "b-overlay",
+            {
+              attrs: { show: _vm.loading },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("form-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
+            [
+              _vm._v(" "),
+              _c("ValidationObserver", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var handleSubmit = ref.handleSubmit
+                      return [
+                        _c(
+                          "b-form",
+                          {
+                            attrs: { novalidate: "" },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return handleSubmit(_vm.submitForm)
+                              }
+                            }
+                          },
+                          [
+                            _c("text-input", {
+                              attrs: { label: "Subject" },
+                              model: {
+                                value: _vm.form.subject,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "subject", $$v)
+                                },
+                                expression: "form.subject"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "row justify-content-center" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "col-md-8" },
+                                  [
+                                    _c(
+                                      "b-form-checkbox",
+                                      {
+                                        attrs: { switch: "" },
+                                        model: {
+                                          value: _vm.form.urgent,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "urgent", $$v)
+                                          },
+                                          expression: "form.urgent"
+                                        }
+                                      },
+                                      [_vm._v("Mark Note As Important")]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm.allow_share
+                                      ? _c(
+                                          "b-form-checkbox",
+                                          {
+                                            attrs: { switch: "" },
+                                            model: {
+                                              value: _vm.form.shared,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "shared",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.shared"
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "Share Note Across All Sites"
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e()
+                                  ],
+                                  1
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("text-editor", {
+                              attrs: {
+                                placeholder: "Enter Note",
+                                label: "Note Details",
+                                rules: "required"
+                              },
+                              model: {
+                                value: _vm.form.details,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "details", $$v)
+                                },
+                                expression: "form.details"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("submit-button", {
+                              staticClass: "mt-2",
+                              attrs: {
+                                button_text: "Update Note",
+                                submitted: _vm.submitted
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    }
+                  }
+                ])
+              })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/newNote.vue?vue&type=template&id=795712e2&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/newNote.vue?vue&type=template&id=795712e2& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "b-button",
+    {
+      directives: [
+        {
+          name: "b-modal",
+          rawName: "v-b-modal.new-note-modal",
+          modifiers: { "new-note-modal": true }
+        }
+      ],
+      staticClass: "float-right",
+      attrs: { pill: "", variant: "primary", size: "sm" }
+    },
+    [
+      _c("i", { staticClass: "fas fa-plus" }),
+      _vm._v("\n    New\n    "),
+      _c(
+        "b-modal",
+        {
+          ref: "new-note-modal",
+          attrs: {
+            id: "new-note-modal",
+            title: "Add New Note",
+            size: "lg",
+            "hide-footer": "",
+            "no-enforce-focus": ""
+          },
+          on: { hidden: _vm.resetForm }
+        },
+        [
+          _c(
+            "b-overlay",
+            {
+              attrs: { show: _vm.loading },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("form-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
+            [
+              _vm._v(" "),
+              _c("ValidationObserver", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var handleSubmit = ref.handleSubmit
+                      return [
+                        _c(
+                          "b-form",
+                          {
+                            attrs: { novalidate: "" },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return handleSubmit(_vm.submitForm)
+                              }
+                            }
+                          },
+                          [
+                            _c("text-input", {
+                              attrs: { label: "Title", rules: "required" },
+                              model: {
+                                value: _vm.form.subject,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "subject", $$v)
+                                },
+                                expression: "form.subject"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "row justify-content-center" },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "col-md-8" },
+                                  [
+                                    _c(
+                                      "b-form-checkbox",
+                                      {
+                                        attrs: { switch: "" },
+                                        model: {
+                                          value: _vm.form.urgent,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "urgent", $$v)
+                                          },
+                                          expression: "form.urgent"
+                                        }
+                                      },
+                                      [_vm._v("Mark Note As Important")]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm.allow_share
+                                      ? _c(
+                                          "b-form-checkbox",
+                                          {
+                                            attrs: { switch: "" },
+                                            model: {
+                                              value: _vm.form.shared,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "shared",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.shared"
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "Share Note Across All Sites"
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e()
+                                  ],
+                                  1
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("text-editor", {
+                              attrs: {
+                                placeholder: "Enter Note",
+                                label: "Note Details",
+                                rules: "required"
+                              },
+                              model: {
+                                value: _vm.form.details,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "details", $$v)
+                                },
+                                expression: "form.details"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("submit-button", {
+                              staticClass: "mt-2",
+                              attrs: {
+                                button_text: "Add Note",
+                                submitted: _vm.submitted
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    }
+                  }
+                ])
+              })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/notes.vue?vue&type=template&id=af249544&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/Notes/notes.vue?vue&type=template&id=af249544& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm.notes.length == 0
+        ? _c("div", [
+            _c("h4", { staticClass: "text-center" }, [_vm._v("No Notes")])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(_vm.notes, function(note) {
+        return _c(
+          "b-card",
+          {
+            key: note.note_id,
+            staticClass: "pointer grid-margin",
+            on: {
+              click: function($event) {
+                return _vm.openNote(note)
+              }
+            }
+          },
+          [
+            _c("b-card-title", [
+              note.urgent
+                ? _c("i", {
+                    directives: [
+                      {
+                        name: "b-tooltip",
+                        rawName: "v-b-tooltip.hover",
+                        modifiers: { hover: true }
+                      }
+                    ],
+                    staticClass: "fas fa-exclamation-circle text-danger",
+                    attrs: { title: "Important!" }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              note.shared
+                ? _c("i", {
+                    directives: [
+                      {
+                        name: "b-tooltip",
+                        rawName: "v-b-tooltip.hover",
+                        modifiers: { hover: true }
+                      }
+                    ],
+                    staticClass: "fas fa-share",
+                    attrs: { title: "Note Shared Across Sites" }
+                  })
+                : _vm._e(),
+              _vm._v("\n            " + _vm._s(note.subject) + "\n        ")
+            ]),
+            _vm._v(" "),
+            _c("b-card-text", {
+              staticClass: "customer-note-minimized ql-editor",
+              domProps: { innerHTML: _vm._s(note.details) }
+            }),
+            _vm._v(" "),
+            _c("div", [_vm._v("...")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "float-left text-muted" }, [
+              _vm._v("Click to Expand")
+            ]),
+            _vm._v(" "),
+            _c("span", { staticClass: "float-right text-muted" }, [
+              _vm._v("Updated: " + _vm._s(note.updated_at))
+            ])
+          ],
+          1
+        )
+      }),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "note-modal",
+          attrs: {
+            title: _vm.openedNote.subject,
+            size: "xl",
+            centered: "",
+            scrollable: ""
+          },
+          on: {
+            hidden: function($event) {
+              _vm.note = {}
+            }
+          },
+          scopedSlots: _vm._u([
+            {
+              key: "modal-footer",
+              fn: function(ref) {
+                var ok = ref.ok
+                return [
+                  _c("edit-note", {
+                    attrs: {
+                      cust_id: _vm.cust_id,
+                      note: _vm.openedNote,
+                      allow_share: _vm.allow_share
+                    },
+                    on: {
+                      completed: function($event) {
+                        return _vm.$refs["note-modal"].hide()
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.permissions.delete
+                    ? _c(
+                        "b-button",
+                        {
+                          attrs: { variant: "danger" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteNote(_vm.openedNote.note_id)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: { variant: "primary" },
+                      on: {
+                        click: function($event) {
+                          return ok()
+                        }
+                      }
+                    },
+                    [_vm._v("Ok")]
+                  )
+                ]
+              }
+            }
+          ])
+        },
+        [
+          _vm._v(" "),
+          _c(
+            "b-overlay",
+            {
+              attrs: { show: _vm.loading },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("atom-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
+            [
+              _vm._v(" "),
+              _c("div", {
+                staticClass: "ql-editor",
+                domProps: { innerHTML: _vm._s(_vm.openedNote.details) }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-4" }, [
+                _vm.openedNote.updated_author
+                  ? _c("div", { staticClass: "text-muted" }, [
+                      _vm._v(
+                        "\n                    Updated: " +
+                          _vm._s(_vm.openedNote.updated_at) +
+                          " by " +
+                          _vm._s(_vm.openedNote.updated_author) +
+                          "\n                "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "text-muted" }, [
+                  _vm._v(
+                    "\n                    Created: " +
+                      _vm._s(_vm.openedNote.created_at) +
+                      " by " +
+                      _vm._s(_vm.openedNote.author) +
+                      "\n                "
+                  )
+                ])
+              ])
+            ]
+          )
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/editDetails.vue?vue&type=template&id=0586dc3a&":
 /*!*********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Customers/editDetails.vue?vue&type=template&id=0586dc3a& ***!
@@ -5854,6 +7020,47 @@ var render = function() {
                     cust_id: _vm.details.cust_id,
                     contacts: _vm.details.customer_contact,
                     permissions: _vm.user_data.contacts,
+                    allow_share: _vm.allowShare
+                  }
+                })
+              ],
+              1
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-12" }, [
+          _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c(
+                  "div",
+                  { staticClass: "card-title" },
+                  [
+                    _vm._v(
+                      "\n                        Notes:\n                        "
+                    ),
+                    _vm.user_data.notes.create
+                      ? _c("new-note", {
+                          attrs: {
+                            cust_id: _vm.details.cust_id,
+                            allow_share: _vm.allowShare
+                          }
+                        })
+                      : _vm._e()
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("notes", {
+                  attrs: {
+                    cust_id: _vm.details.cust_id,
+                    notes: _vm.details.customer_note,
+                    permissions: _vm.user_data.notes,
                     allow_share: _vm.allowShare
                   }
                 })

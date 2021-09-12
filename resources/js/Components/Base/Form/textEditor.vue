@@ -71,7 +71,7 @@
                         var input = document.createElement('input');
                         input.setAttribute('type', 'file');
                         input.setAttribute('accept', 'image/*');
-                        input.onchange    = function() {
+                        input.onchange = function() {
                             var file   = this.files[0];
                             var reader = new FileReader();
                             reader.readAsDataURL(file);
@@ -90,9 +90,6 @@
 
                 }
             }
-        },
-        mounted() {
-            //  this.displayEditor(true);
         },
         watch: {
             curVal(val)
