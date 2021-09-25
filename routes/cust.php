@@ -12,6 +12,7 @@ use App\Http\Controllers\Customers\DownloadContactController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
+use App\Http\Controllers\Customers\CustomerFileController;
 use App\Http\Controllers\Customers\CustomerNoteController;
 
 /**
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function()
         Route::resource('equipment', CustomerEquipmentController::class);
         Route::resource('contacts',  CustomerContactsController::class);
         Route::resource('notes',     CustomerNoteController::class);
+        Route::resource('files',     CustomerFileController::class);
 
         //  Additional Methods for Resource Controllers
         Route::prefix('equipment')->name('equipment.')->group(function()
@@ -51,6 +53,11 @@ Route::middleware('auth')->group(function()
         {
             Route::get(   '{id}/restore',      [CustomerNoteController::class, 'restore'])    ->name('restore');
             Route::delete('{id}/force-delete', [CustomerNoteController::class, 'forceDelete'])->name('force-delete');
+        });
+        Route::prefix('files')->name('files.')->group(function()
+        {
+            Route::get(   '{id}/restore',      [CustomerFileController::class, 'restore'])    ->name('restore');
+            Route::delete('{id}/force-delete', [CustomerFileController::class, 'forceDelete'])->name('force-delete');
         });
     });
 });

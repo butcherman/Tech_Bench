@@ -1,7 +1,7 @@
 <template>
     <b-button class="float-right" pill variant="primary" size="sm" v-b-modal.new-note-modal>
         <i class="fas fa-plus"></i>
-        New
+        Add
         <b-modal
             id="new-note-modal"
             ref="new-note-modal"

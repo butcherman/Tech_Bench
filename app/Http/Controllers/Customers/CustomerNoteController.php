@@ -103,7 +103,7 @@ class CustomerNoteController extends Controller
         $note->restore();
 
         event(new CustomerNoteRestoredEvent(Customer::find($note->cust_id), $note));
-        return redirect()->back()->with(['message' => 'Customer Note restored', 'type' => 'success']);
+        return back()->with(['message' => 'Customer Note restored', 'type' => 'success']);
     }
 
     /*
@@ -117,6 +117,6 @@ class CustomerNoteController extends Controller
         $note->forceDelete();
 
         event(new CustomerNoteForceDeletedEvent(Customer::find($note->cust_id), $note));
-        return redirect()->back()->with(['message' => 'Note permanently deleted', 'type' => 'danger']);
+        return back()->with(['message' => 'Note permanently deleted', 'type' => 'danger']);
     }
 }

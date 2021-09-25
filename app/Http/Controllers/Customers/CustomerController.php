@@ -91,7 +91,7 @@ class CustomerController extends Controller
         return Inertia::render('Customers/Show', [
             'details'        => $customer,
             'phone_types'    => PhoneNumberType::all(),
-            // 'file_types'     => CustomerFileType::all(),
+            'file_types'     => CustomerFileType::all(),
             //  User Permissions for customers
             'user_data' => [
                 'fav'        => $isFav,                                                  //  Customer is bookmarked by the user
@@ -113,11 +113,11 @@ class CustomerController extends Controller
                     'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
                     'delete' => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
                 ],
-            //     'files'     => [
-            //         'create' => Auth::user()->can('create', CustomerFile::class),        //  If user can add file
-            //         'update' => Auth::user()->can('update', CustomerFile::class),        //  If user can edit file
-            //         'delete' => Auth::user()->can('delete', CustomerFile::class),        //  If user can delete file
-            //     ],
+                'files'     => [
+                    'create' => Auth::user()->can('create', CustomerFile::class),        //  If user can add file
+                    'update' => Auth::user()->can('update', CustomerFile::class),        //  If user can edit file
+                    'delete' => Auth::user()->can('delete', CustomerFile::class),        //  If user can delete file
+                ],
             ],
         ]);
     }

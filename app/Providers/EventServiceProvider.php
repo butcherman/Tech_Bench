@@ -44,6 +44,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Home\ImageUploadedEvent' => [
             'App\Listeners\Home\LogImageUploaded',
         ],
+        'App\Events\Home\UploadedFileEvent' => [
+            'App\Listeners\Home\LogUploadedFile',
+        ],
+        'App\Events\Home\DownloadedFileEvent' => [
+            'App\Listeners\Home\LogDownloadedFile',
+        ],
 
         /**
          * Customer Events
@@ -105,14 +111,30 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Customers\Notes\CustomerNoteDeletedEvent' => [
             'App\Listeners\Customers\Notes\LogDeletedNote'
         ],
-        'App\Events\Customers\Notes\CustomerNoteDownloadedEvent' => [
-            'App\Listeners\Customers\Notes\LogDownloadedCustomerNote'
-        ],
+        // 'App\Events\Customers\Notes\CustomerNoteDownloadedEvent' => [
+        //     'App\Listeners\Customers\Notes\LogDownloadedCustomerNote'
+        // ],
         'App\Events\Customers\Notes\CustomerNoteForceDeletedEvent' => [
             'App\Listeners\Customers\Notes\LogForceDeletedCustomerNote',
         ],
         'App\Events\Customers\Notes\CustomerNoteRestoredEvent' => [
             'App\Listeners\Customers\Notes\LogRestoredCustomerNote',
+        ],
+        //  Customer Files
+        'App\Events\Customers\Files\CustomerFileAddedEvent' => [
+            'App\Listeners\Customers\Files\LogAddedCustomerFile'
+        ],
+        'App\Events\Customers\Files\CustomerFileUpdatedEvent' => [
+            'App\Listeners\Customers\Files\LogUpdatedCustomerFile'
+        ],
+        'App\Events\Customers\Files\CustomerFileDeletedEvent' => [
+            'App\Listeners\Customers\Files\LogDeletedFile'
+        ],
+        'App\Events\Customers\Files\CustomerFileForceDeletedEvent' => [
+            'App\Listeners\Customers\Files\LogForceDeletedCustomerFile',
+        ],
+        'App\Events\Customers\Files\CustomerFileRestoredEvent' => [
+            'App\Listeners\Customers\Files\LogRestoredCustomerFile',
         ],
 
 
