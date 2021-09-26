@@ -88,10 +88,10 @@ class BuildAdminMenu
                     [
                         'name' => 'View Deactivated Customers',
                         'icon' => 'fas fa-ban',
-                        'link' => '#', // route('customers.show-deactivated'),
+                        'link' => route('admin.cust.show-deactivated'),
                     ],
                     [
-                        'name' => 'Customer File Types',
+                        'name' => 'Customer Uploaded File Types',
                         'icon' => 'fas fa-file-alt',
                         'link' => '#'
                     ],

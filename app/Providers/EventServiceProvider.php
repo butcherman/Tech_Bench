@@ -140,7 +140,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Customers\Admin\CustomerIdChangedEvent' => [
             'App\Listeners\Customers\Admin\LogChangedCustomerId',
         ],
-
+        'App\Events\Customers\Admin\CustomerRestoredEvent' => [
+            'App\Listeners\Customers\Admin\LogRestoredCustomer',
+        ],
+        'App\Events\Customers\Admin\CustomerForceDeletedEvent' => [
+            'App\Listeners\Customers\Admin\LogForceDeletedCustomer',
+        ],
 
 
         // 'App\Events\NewUserCreated' => [

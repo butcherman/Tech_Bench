@@ -46,26 +46,18 @@ class CustomerPolicy
     }
 
     /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Auth\Access\Response|bool
+     * Determine whether the user can restore the customer
      */
-    public function restore(User $user, Customer $customer)
+    public function restore(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Deactivate Customer');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Auth\Access\Response|bool
+     * Determine whether the user can permanently delete the customer
      */
-    public function forceDelete(User $user, Customer $customer)
+    public function forceDelete(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Delete Customer');
     }
 }

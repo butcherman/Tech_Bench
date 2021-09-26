@@ -7,7 +7,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Traits\FileTrait;
 use App\Http\Controllers\Controller;
+use App\Events\Customers\Admin\CustomerRestoredEvent;
+use App\Events\Customers\Admin\CustomerForceDeletedEvent;
 
 use App\Events\Customers\NewCustomerCreated;
 use App\Events\Customers\CustomerDetailsUpdated;
@@ -21,9 +24,12 @@ use App\Models\UserCustomerBookmark;
 
 use App\Http\Requests\Customers\NewCustomerRequest;
 use App\Http\Requests\Customers\EditCustomerRequest;
+use App\Models\CustomerFile;
 
 class CustomerController extends Controller
 {
+    use FileTrait;
+
     /**
      * Search page for finding a customer
      */
@@ -101,7 +107,7 @@ class CustomerController extends Controller
                 'equipment'  => [
                     'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
                     'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
-                    'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete eqipment
+                    'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete equipment
                 ],
                 'contacts'   => [
                     'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
@@ -148,5 +154,64 @@ class CustomerController extends Controller
 
         event(new CustomerDeactivatedEvent($cust));
         return redirect(route('customers.index'))->with(['message' => 'Customer '.$cust->name.' deactivated', 'type' => 'danger']);
+    }
+
+    /**
+     * Restore a soft deleted customer
+     */
+    public function restore(Request $idArr)
+    {
+        $this->authorize('restore', Customer::class);
+
+        //  Customer ID's are in an array
+        foreach($idArr->list as $cust)
+        {
+            $cust = Customer::onlyTrashed()->where('cust_id', $cust['cust_id'])->firstOrFail();
+            $cust->restore();
+
+            event(new CustomerRestoredEvent($cust));
+        }
+
+        return back()->with([
+            'message' => 'Customers Restored',
+            'type'    => 'success',
+        ]);
+    }
+
+    /**
+     * Permanently Delete a customer and all associated files and information
+     */
+    public function forceDelete(Request $id)
+    {
+        $this->authorize('forceDelete', Customer::class);
+
+        //  Customer ID's are in an array
+        foreach($id->list as $cust)
+        {
+            $cust     = Customer::onlyTrashed()->where('cust_id', $cust['cust_id'])->firstOrFail();
+            $fileList = [];
+
+            //  Get all of the files that are attached to the customer
+            $files = CustomerFile::where('cust_id', $cust->cust_id)->get();
+            foreach($files as $file)
+            {
+                $fileList[] = $file->file_id;
+            }
+
+            $cust->forceDelete();
+
+            //  Delete the files from the Storage System
+            foreach($fileList as $file)
+            {
+                $this->deleteFile($file);
+            }
+
+            event(new CustomerForceDeletedEvent($cust));
+        }
+
+        return back()->with([
+            'message' => 'Customers Deleted',
+            'type'    => 'danger',
+        ]);
     }
 }
