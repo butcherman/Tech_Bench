@@ -13,11 +13,11 @@ class BuildNavbar
     {
         $this->user = $user;
 
-        $admin   = []; // $this->getAdminNavbar();
+        $admin   = $this->getAdminNavbar();
         $navBar  = $this->getPrimaryNavbar();
         $modules = $this->getModules();
 
-        return array_merge($navBar, $admin, $modules);
+        return array_merge($admin, $navBar, $modules);
     }
 
     /*
@@ -53,7 +53,7 @@ class BuildNavbar
         {
             return [[
                 'name'  => 'Administration',
-                'route' => '#', // route('admin.index'),
+                'route' => route('admin.index'),
                 'icon'  => 'fas fa-user-shield',
             ]];
         }

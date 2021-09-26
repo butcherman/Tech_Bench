@@ -136,6 +136,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Customers\Files\CustomerFileRestoredEvent' => [
             'App\Listeners\Customers\Files\LogRestoredCustomerFile',
         ],
+        //  Customer Administration
+        'App\Events\Customers\Admin\CustomerIdChangedEvent' => [
+            'App\Listeners\Customers\Admin\LogChangedCustomerId',
+        ],
 
 
 
