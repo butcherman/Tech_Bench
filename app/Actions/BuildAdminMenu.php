@@ -93,7 +93,7 @@ class BuildAdminMenu
                     [
                         'name' => 'Customer Uploaded File Types',
                         'icon' => 'fas fa-file-alt',
-                        'link' => '#'
+                        'link' => route('admin.cust.file-types.index'),
                     ],
                 ],
             ];

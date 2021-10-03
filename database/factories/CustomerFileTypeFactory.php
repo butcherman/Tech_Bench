@@ -22,7 +22,7 @@ class CustomerFileTypeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'description' => $this->faker->sentence(4),
         ];
     }
 }

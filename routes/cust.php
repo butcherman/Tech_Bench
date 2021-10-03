@@ -13,6 +13,7 @@ use App\Http\Controllers\Customers\CustomerBookmarkController;
 use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerFileController;
+use App\Http\Controllers\Customers\CustomerFileTypesController;
 use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CustomerNoteController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
@@ -69,6 +70,7 @@ Route::middleware('auth')->group(function()
     //  Customer Administration Routes
     Route::prefix('administration/customers')->name('admin.cust.')->group(function()
     {
+        Route::resource('file-types',           CustomerFileTypesController::class);
         Route::resource('change-id',            CustomerIdController::class);
         Route::get('/deactivated-customers',    DeactivatedCustomerController::class)->name('show-deactivated');
     });

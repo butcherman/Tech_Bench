@@ -146,6 +146,18 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Customers\Admin\CustomerForceDeletedEvent' => [
             'App\Listeners\Customers\Admin\LogForceDeletedCustomer',
         ],
+        'App\Events\Customers\Admin\CustomerFileTypeCreatedEvent' => [
+            'App\Listeners\Customers\Admin\LogFileTypeCreated',
+        ],
+        'App\Events\Customers\Admin\CustomerFileTypeUpdatedEvent' => [
+            'App\Listeners\Customers\Admin\LogFileTypeUpdated',
+        ],
+        'App\Events\Customers\Admin\CustomerFileTypeDeletedEvent' => [
+            'App\Listeners\Customers\Admin\LogFileTypeDeleted',
+        ],
+        'App\Events\Customers\Admin\CustomerFileTypeDeletedErrorEvent' => [
+            'App\Listeners\Customers\Admin\LogFileTypeDeletedError',
+        ]
 
 
         // 'App\Events\NewUserCreated' => [
