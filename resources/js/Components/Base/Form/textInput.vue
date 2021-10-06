@@ -15,6 +15,7 @@
                 :state="state(v)"
                 :list="list"
                 :autofocus="autofocus"
+                :disabled="disabled"
                 v-model="curVal"
                 @blur="emitBlur"
                 @change="emitChange"
@@ -73,6 +74,10 @@
             vid: {
                 type:    String,
                 default: null,
+            },
+            disabled: {
+                type:    Boolean,
+                default: false,
             }
         },
         data() {

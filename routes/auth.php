@@ -9,6 +9,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordSubmitController;
 use App\Http\Controllers\Auth\ForgotPasswordEmailController;
 use App\Http\Controllers\Auth\ForgotPasswordSubmitEmailController;
+use App\Http\Controllers\User\FinishSetupController;
+use App\Http\Controllers\User\InitializeUserController;
 
 /*
 *   Authentication Routes
@@ -28,6 +30,10 @@ Route::middleware('guest')->group(function()
         Route::get( 'reset-password',  ResetPasswordController::class)            ->name('reset');
         Route::post('reset-password',  ResetPasswordSubmitController::class)      ->name('reset-submit');
     });
+
+    //  Initializing a new User
+    Route::get('finish-setup/{token}', InitializeUserController::class)->name('initialize');
+    Route::put('finish-setup/{token}', FinishSetupController::class)->name('finish-setup');
 });
 
 //  Log user out

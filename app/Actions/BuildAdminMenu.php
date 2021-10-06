@@ -34,36 +34,36 @@ class BuildAdminMenu
     protected function buildUserMenu()
     {
         $userBuild = [];
-        // if($this->checkPermission($this->user, 'Manage Users'))
-        // {
-        //     $userBuild = [
-        //         [
-        //             'name' => 'Create New User',
-        //             'icon' => 'fas fa-user-plus',
-        //             'link' => '#', // route('admin.user.create'),
-        //         ],
-        //         [
-        //             'name' => 'Modify User',
-        //             'icon' => 'fas fa-user-edit',
-        //             'link' => '#', // route('admin.user.list'),
-        //         ],
-        //         [
-        //             'name' => 'Show Deactivated Users',
-        //             'icon' => 'fas fa-store-alt-slash',
-        //             'link' => '#', // route('admin.disabled.index'),
-        //         ],
-        //     ];
-        // }
+        if($this->checkPermission($this->user, 'Manage Users'))
+        {
+            $userBuild = [
+                [
+                    'name' => 'Create New User',
+                    'icon' => 'fas fa-user-plus',
+                    'link' => route('admin.user.create'),
+                ],
+                [
+                    'name' => 'Modify User',
+                    'icon' => 'fas fa-user-edit',
+                    'link' => '#', // route('admin.user.list'),
+                ],
+                [
+                    'name' => 'Show Deactivated Users',
+                    'icon' => 'fas fa-store-alt-slash',
+                    'link' => '#', // route('admin.disabled.index'),
+                ],
+            ];
+        }
 
         $roleBuild = [];
-        // if($this->checkPermission($this->user, 'Manage Permissions'))
-        // {
-        //     $roleBuild = [[
-        //         'name' => 'User Roles and Permissions',
-        //         'icon' => 'fas fa-users-cog',
-        //         'link' => '#', // route('admin.user-roles.index'),
-        //     ]];
-        // }
+        if($this->checkPermission($this->user, 'Manage Permissions'))
+        {
+            $roleBuild = [[
+                'name' => 'User Roles and Permissions',
+                'icon' => 'fas fa-users-cog',
+                'link' => '#', // route('admin.user-roles.index'),
+            ]];
+        }
 
         return ['Users' => array_merge($userBuild, $roleBuild)];
     }

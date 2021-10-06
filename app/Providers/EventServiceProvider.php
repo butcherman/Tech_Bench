@@ -37,6 +37,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserPasswordChanged' => [
             'App\Listeners\LogUserPasswordChanged',
         ],
+        'App\Events\UserInitializedEvent' => [
+            'App\Listeners\LogUserInitialized',
+        ],
 
         /**
          * File Events
@@ -157,12 +160,16 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\Customers\Admin\CustomerFileTypeDeletedErrorEvent' => [
             'App\Listeners\Customers\Admin\LogFileTypeDeletedError',
-        ]
+        ],
 
+        /**
+         * User Administration Events
+         */
+        'App\Events\Admin\NewUserCreated' => [
 
-        // 'App\Events\NewUserCreated' => [
-        //     'App\Listeners\NotifyNewUser',
-        // ],
+            'App\Listeners\Notify\NotifyNewUser',
+            'App\Listeners\Admin\LogUserCreated',
+        ],
         // 'App\Events\NewTechTipEvent' => [
         //     'App\Listeners\NotifyOfNewTechTip',
         // ],

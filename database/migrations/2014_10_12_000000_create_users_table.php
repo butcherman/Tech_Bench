@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class CreateUsersTable extends Migration
 {
@@ -23,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->default(Hash::make(strtolower(Str::random(15))));       //  Generate a random password if one is not assigned
             $table->rememberToken();
             $table->timestamp('password_expires')->nullable();
             $table->softDeletes();
