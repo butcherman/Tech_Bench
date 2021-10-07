@@ -44,10 +44,10 @@ class User extends Authenticatable
     /*
     *   Each user is assigned to a role that determines what permissions they are allowed
     */
-    // public function UserRoles()
-    // {
-    //     return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
-    // }
+    public function UserRoles()
+    {
+        return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
+    }
 
     /*
     *   Each user has their own individual settings

@@ -45,7 +45,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Modify User',
                     'icon' => 'fas fa-user-edit',
-                    'link' => '#', // route('admin.user.list'),
+                    'link' => route('admin.user.index'),
                 ],
                 [
                     'name' => 'Show Deactivated Users',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\GetUserRoles;
 use App\Events\Admin\NewUserCreated;
+use App\Events\Admin\UserDeactivatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
@@ -17,13 +18,15 @@ use Inertia\Inertia;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Display a listing of all active users
      */
     public function index()
     {
-        //
+        $this->authorize('create', User::class);
+
+        return Inertia::render('Admin/User/Index', [
+            'users' => User::with('UserRoles')->get(),
+        ]);
     }
 
     /**
@@ -83,6 +86,8 @@ class UserController extends Controller
     public function edit($id)
     {
         //
+
+        return 'working';
     }
 
     /**
@@ -95,16 +100,23 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        return 'submitted';
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Deactivate a user
      */
     public function destroy($id)
     {
-        //
+        $user = User::where('username', $id)->firstOrFail();
+        $this->authorize('create', $user);
+        $user->delete();
+
+        event(new UserDeactivatedEvent($user));
+        return back()->with([
+            'message' => 'User has been deactivated',
+            'type'    => 'danger',
+        ]);
     }
 }

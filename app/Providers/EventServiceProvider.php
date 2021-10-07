@@ -170,6 +170,10 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Notify\NotifyNewUser',
             'App\Listeners\Admin\LogUserCreated',
         ],
+        'App\Events\Admin\UserDeactivatedEvent' => [
+
+            'App\Listeners\Admin\LogUserDeactivated',
+        ],
         // 'App\Events\NewTechTipEvent' => [
         //     'App\Listeners\NotifyOfNewTechTip',
         // ],
