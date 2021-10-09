@@ -61,7 +61,7 @@ class BuildAdminMenu
             $roleBuild = [[
                 'name' => 'User Roles and Permissions',
                 'icon' => 'fas fa-users-cog',
-                'link' => '#', // route('admin.user-roles.index'),
+                'link' => route('admin.user-roles.index'),
             ]];
         }
 

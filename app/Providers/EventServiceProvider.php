@@ -181,6 +181,15 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Admin\UserUpdatedEvent' => [
             'App\Listeners\Admin\LogUserUpdated',
         ],
+        'App\Events\Admin\UserRoleCreatedEvent' => [
+            'App\Listeners\Admin\LogUserRoleCreated',
+        ],
+        'App\Events\Admin\UserRoleUpdatedEvent' => [
+            'App\Listeners\Admin\LogUserRoleUpdated',
+        ],
+        'App\Events\Admin\UserRoleDeletedEvent' => [
+            'App\Listeners\Admin\LogUserRoleDeleted',
+        ],
 
 
 
