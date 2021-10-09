@@ -9,7 +9,7 @@ use App\Http\Controllers\Home\UploadImageController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Controllers\User\ChangePasswordController;
 
-/*
+/**
 *   Standard Routes for users that have been successfully Authenticated
 */
 Route::middleware('auth')->group(function()
@@ -21,10 +21,13 @@ Route::middleware('auth')->group(function()
     Route::resource('password', ChangePasswordController::class);
 
     Route::post('upload-image', UploadImageController::class)->name('upload-image');
-    Route::post('upload-file',  UploadFileController::class) ->name('upload-file');
-
-    Route::get('download/{id}/{name}', function()
-    {
-        return 'download file';
-    })->name('download');
 });
+
+/**
+ * Standard routes for both Authenticated users and guests
+ */
+Route::post('upload-file',  UploadFileController::class) ->name('upload-file');
+Route::get('download/{id}/{name}', function()
+{
+    return 'download file';
+})->name('download');

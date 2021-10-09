@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class UploadImageController extends Controller
 {
     /**
-     * Handle the incoming request
+     * Upload an image that will be used in one of the text areas such as a Tech Tip or Customer Note
      */
     public function __invoke(UploadImageRequest $request)
     {

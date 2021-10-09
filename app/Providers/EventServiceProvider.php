@@ -174,6 +174,10 @@ class EventServiceProvider extends ServiceProvider
 
             'App\Listeners\Admin\LogUserDeactivated',
         ],
+        'App\Events\Admin\UserReactivatedEvent' => [
+
+            'App\Listeners\Admin\LogUserReactivated',
+        ],
         'App\Events\Admin\UserUpdatedEvent' => [
             'App\Listeners\Admin\LogUserUpdated',
         ],

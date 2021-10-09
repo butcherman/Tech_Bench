@@ -50,7 +50,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Show Deactivated Users',
                     'icon' => 'fas fa-store-alt-slash',
-                    'link' => '#', // route('admin.disabled.index'),
+                    'link' => route('admin.deactivated-users'),
                 ],
             ];
         }

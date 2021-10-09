@@ -10,8 +10,13 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
 {
-    use HandlesAuthorization;
     use AllowTrait;
+    use HandlesAuthorization;
+
+    public function manage(User $user)
+    {
+        return $this->checkPermission($user, 'Manage Users');
+    }
 
     /**
      * Determine whether the user can create models
@@ -38,21 +43,5 @@ class UserPolicy
         }
 
         return $user->user_id === $model->user_id;
-    }
-
-    /**
-     * Determine whether the user can delete the model
-     */
-    public function delete(User $user, User $model)
-    {
-        $this->checkPermission($user, 'Manage Users');
-    }
-
-    /**
-     * Determine whether the user can restore the model
-     */
-    public function restore(User $user, User $model)
-    {
-        $this->checkPermission($user, 'Manage Users');
     }
 }

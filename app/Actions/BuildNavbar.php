@@ -69,23 +69,23 @@ class BuildNavbar
         $nav     = [];
         $modules = Module::allEnabled();
 
-        foreach($modules as $module)
-        {
-            $name = $module->getLowerName();
-            $navData = config($name.'.navbar');
+        // foreach($modules as $module)
+        // {
+        //     $name = $module->getLowerName();
+        //     $navData = config($name.'.navbar');
 
-            foreach($navData as $n)
-            {
-                if($n['enable'])
-                {
-                    $nav[] = [
-                        'name'  => $n['name'],
-                        'route' => route($n['route']),
-                        'icon'  => $n['icon'],
-                    ];
-                }
-            }
-        }
+        //     foreach($navData as $n)
+        //     {
+        //         if($n['enable'])
+        //         {
+        //             $nav[] = [
+        //                 'name'  => $n['name'],
+        //                 'route' => route($n['route']),
+        //                 'icon'  => $n['icon'],
+        //             ];
+        //         }
+        //     }
+        // }
 
         return $nav;
     }

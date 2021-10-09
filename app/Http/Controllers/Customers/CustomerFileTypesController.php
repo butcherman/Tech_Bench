@@ -63,7 +63,7 @@ class CustomerFileTypesController extends Controller
     public function destroy($id)
     {
         $fileType = CustomerFileType::find($id);
-        $this->authorize('view', $fileType);
+        $this->authorize('delete', $fileType);
 
         try{
             $fileType->delete();
