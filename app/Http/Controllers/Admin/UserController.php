@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\GetUserRoles;
 use App\Events\Admin\NewUserCreated;
 use App\Events\Admin\UserDeactivatedEvent;
+use App\Events\Admin\UserUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
@@ -67,41 +68,40 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Show form for editing an existing user
      */
     public function edit($id)
     {
-        //
+        $this->authorize('create', User::class);
 
-        return 'working';
+        return Inertia::render('Admin/User/Edit', [
+            'user'  => User::where('username', $id)->firstOrFail()->makeVisible(['user_id', 'role_id']),
+            'roles' => UserRoles::all(),
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update a user's information
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
 
-        return 'submitted';
+        if(Auth::user()->role_id > $user->role_id)
+        {
+            return back()->with([
+                'message' => 'You cannot modify a user with higher permissions than you',
+                'type'    => 'danger'
+            ]);
+        }
+
+        $user->update($request->toArray());
+
+        event(new UserUpdatedEvent($user));
+        return redirect(route('admin.user.index'))->with([
+            'message' => 'User Details Updated',
+            'type'    => 'success'
+        ]);
     }
 
     /**
@@ -112,6 +112,8 @@ class UserController extends Controller
         $user = User::where('username', $id)->firstOrFail();
         $this->authorize('create', $user);
         $user->delete();
+
+        //  TODO - Verify that the user does not have more permissions than the one doing the delete
 
         event(new UserDeactivatedEvent($user));
         return back()->with([
