@@ -38,7 +38,7 @@ class BuildNavbar
             ],
             [
                 'name'  => 'Tech Tips',
-                'route' => '#', // route('tech-tips.index'),
+                'route' => route('tech-tips.index'),
                 'icon'  => 'fas fa-tools',
             ],
         ];

@@ -120,13 +120,25 @@ trait FileTrait
     /**
      * Move a file from one location to another and store new location in database
      */
-    // protected function moveStoredFile($fileData, $newDisk, $newFolder)
-    // {
-    //     $this->disk   = $newDisk;
-    //     $this->folder = $newFolder;
+    protected function moveStoredFile($fileId, $newFolder, $newDisk = null)
+    {
+        $file = FileUploads::find($fileId);
 
+        $this->disk   = $newDisk !== null ? $newDisk : $file->disk;
+        $this->folder = $newFolder;
 
-    // }
+        //  Verify file is not duplicate and move
+        $newName = $this->checkForDuplicate($file->file_name);
+        Storage::disk($this->disk)->move($file->folder.DIRECTORY_SEPARATOR.$file->file_name, $this->folder.DIRECTORY_SEPARATOR.$newName);
+
+        //  Update the database
+        $file->file_name = $newName;
+        $file->folder    = $this->folder;
+        $file->disk      = $this->disk;
+        $file->save();
+
+        return true;
+    }
 
     /**
      * Determine if a file is no longer in use, and then delete it from the filesystem

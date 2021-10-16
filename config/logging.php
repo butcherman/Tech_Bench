@@ -50,6 +50,14 @@ return [
             'days'   => 14,
             'permission' => 0777,
         ],
+        //  All Tech Tip specific logging
+        'tip' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/TechTip/TechTipLog.log'),
+            'level'  => env('LOG_LEVEL', 'info'),
+            'days'   => 14,
+            'permission' => 0777,
+        ],
 
         'stderr' => [
             'driver' => 'monolog',

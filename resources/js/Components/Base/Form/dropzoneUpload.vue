@@ -221,8 +221,8 @@
                     this.sent = sent;
                 }
 
-                var progress = this.sent / this.totalSize * 100;
-                this.$emit('upload-progress', progress);
+                var prog = this.sent / this.totalSize * 100;
+                this.$emit('upload-progress', prog);
             },
         },
     }

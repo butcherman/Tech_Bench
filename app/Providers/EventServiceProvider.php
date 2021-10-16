@@ -163,6 +163,21 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         /**
+         * Tech Tip Events
+         */
+        'App\Events\TechTips\TechTipCreatedEvent' => [
+            'App\Listeners\TechTips\LogTechTipCreated',
+            'App\Listeners\Notify\NotifyNewTechTip',
+        ],
+        'App\Events\TechTips\TechTipUpdatedEvent' => [
+            'App\Listeners\TechTips\LogTechTipUpdated',
+            'App\Listeners\Notify\NotifyUpdatedTechTip',
+        ],
+        'App\Events\TechTips\TechTipDeletedEvent' => [
+            'App\Listeners\TechTips\LogTechTipDeleted',
+        ],
+
+        /**
          * User Administration Events
          */
         'App\Events\Admin\NewUserCreated' => [

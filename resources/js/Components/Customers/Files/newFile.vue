@@ -89,7 +89,7 @@
                 this.submitted = true;
                 this.loading   = true;
                 this.uploading = true;
-                this.$refs['dropzone-upload'].process(this.form);
+                this.$refs['dropzone-upload'].process();
             },
             resetForm()
             {
