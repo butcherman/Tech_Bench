@@ -18,6 +18,7 @@ class CreateUserTechTipBookmarksTable extends Migration
             $table->unsignedBigInteger('tip_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
+            $table->unique(['user_id', 'tip_id']);
             $table->foreign('tip_id')->references('tip_id')->on('tech_tips')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });

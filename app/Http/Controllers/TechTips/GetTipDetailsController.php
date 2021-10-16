@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\TechTips;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\TechTip;
-use App\Models\TechTipBookmark;
 use App\Models\UserTechTipBookmark;
 
 class GetTipDetailsController extends Controller
@@ -16,6 +14,8 @@ class GetTipDetailsController extends Controller
      */
     public function __invoke($tipId)
     {
+        $this->authorize('manage', TechTip::class);
+
         $tip       = TechTip::find($tipId);
         $favorites = UserTechTipBookmark::where('tip_id', $tipId)->count();
 

@@ -8,12 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
-use App\Traits\FileTrait;
+use App\Traits\TechTipTrait;
 
 use App\Models\TechTip;
 use App\Models\TechTipType;
-use App\Models\TechTipFile;
-use App\Models\TechTipEquipment;
 use App\Models\EquipmentCategory;
 use App\Models\UserTechTipBookmark;
 
@@ -25,7 +23,7 @@ use App\Http\Requests\TechTips\UpdateTipRequest;
 
 class TechTipsController extends Controller
 {
-    use FileTrait;
+    use TechTipTrait;
 
     /**
      * Tech Tips search page
@@ -71,28 +69,8 @@ class TechTipsController extends Controller
             'details'     => $request->details,
         ]);
 
-        //  Add the equipment for this Tech Tip
-        foreach($request->equipment as $equip)
-        {
-            TechTipEquipment::create([
-                'tip_id'   => $newTip->tip_id,
-                'equip_id' => $equip['equip_id'],
-            ]);
-        }
-
-        //  If any files were included, move them to the proper folder and attach to tip
-        $fileData = $request->session()->pull('new-file-upload');
-        if($fileData)
-        {
-            foreach($fileData as $file)
-            {
-                $this->moveStoredFile($file->file_id, $newTip->tip_id);
-                TechTipFile::create([
-                    'tip_id'  => $newTip->tip_id,
-                    'file_id' => $file->file_id,
-                ]);
-            }
-        }
+        $this->addEquipment($newTip->tip_id, $request->equipment);
+        $this->processNewFiles($newTip->tip_id, true);
 
         event(new TechTipCreatedEvent($newTip));
         return redirect(route('tech-tips.show', $newTip->slug));
@@ -173,61 +151,9 @@ class TechTipsController extends Controller
             'details'     => $request->details,
         ]);
 
-        //  Update the equipment attached to the Tech Tip
-        $currentEquip = TechTipEquipment::where('tip_id', $id)->get();
-        $newEquip     = [];
-
-        foreach($request->equipment as $equip)
-        {
-            //  If the laravel_through_key value exists, then it was an existing equipment that has stayed in place
-            if(isset($equip['laravel_through_key']))
-            {
-                //  Remove that piece from the current equipment list so it is not updated later
-                $currentEquip = $currentEquip->filter(function($i) use ($equip)
-                {
-                    return $i->equip_id != $equip['equip_id'];
-                });
-            }
-            else
-            {
-                $newEquip[] = $equip;
-            }
-        }
-
-        //  Remove the Equipment left over in the CurrentEquipment array
-        foreach($currentEquip as $cur)
-        {
-            TechTipEquipment::find($cur->tip_equip_id)->delete();
-        }
-
-        //  Add the new equipment
-        foreach($newEquip as $new)
-        {
-            TechTipEquipment::create([
-                'tip_id'   => $id,
-                'equip_id' => $new['equip_id'],
-            ]);
-        }
-
-        //  Remove any files that are no longer needed
-        foreach($request->removedFiles as $file)
-        {
-            TechTipFile::where('tip_id', $tip->tip_id)->where('file_id', $file)->first()->delete();
-            $this->deleteFile($file);
-        }
-
-        //  Add any additional files
-        $fileData = $request->session()->pull('new-file-upload');
-        if($fileData)
-        {
-            foreach($fileData as $file)
-            {
-                TechTipFile::create([
-                    'tip_id'  => $tip->tip_id,
-                    'file_id' => $file->file_id,
-                ]);
-            }
-        }
+        $this->processUpdatedEquipment($tip->tip_id, $request->equipment);
+        $this->removeFiles($tip->tip_id, $request->removedFiles);
+        $this->processNewFiles($tip->tip_id);
 
         event(new TechTipUpdatedEvent($tip));
         return redirect(route('tech-tips.show', $tip->slug))->with([
