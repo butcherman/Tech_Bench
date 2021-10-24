@@ -111,10 +111,10 @@ class TechTipsController extends Controller
                     'edit'      => Auth::user()->can('update', $tip),
                     'delete'    => Auth::user()->can('delete', $tip),
                     'manage'    => Auth::user()->can('manage', TechTip::class),
-                    // 'comment'   => [
-                    //     'create'  => Auth::user()->can('create', TechTipComment::class),
-                    //     'manage'  => Auth::user()->can('manage', TechTipComment::class),
-                    // ],
+                    'comment'   => [
+                        'create'  => Auth::user()->can('create', TechTipComment::class),
+                        'manage'  => Auth::user()->can('manage', TechTipComment::class),
+                    ],
                 ],
             ]
         ]);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\TechTips\GetTipDetailsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 use App\Http\Controllers\TechTips\TechTipBookmarkController;
+use App\Http\Controllers\TechTips\TechTipCommentsController;
 use App\Http\Controllers\TechTips\TechTipsController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,8 @@ Route::middleware('auth')->group(function()
         {
             return 'download tip as pdf';
         })->name('download');
+
+        Route::resource('comments', TechTipCommentsController::class);
     });
 
     Route::resource('tech-tips', TechTipsController::class);

@@ -1,6 +1,221 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_Pages_TechTips_Show_vue"],{
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/TechTips/discussion.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/TechTips/discussion.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    comments: {
+      type: Array,
+      required: true
+    },
+    tip_id: {
+      type: Number,
+      required: true
+    },
+    permissions: {
+      type: Object,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      commentList: this.comments,
+      submitted: false,
+      loading: false,
+      form: {
+        tip_id: this.tip_id,
+        comment: null
+      },
+      updateForm: {
+        comment: null,
+        comment_id: null
+      }
+    };
+  },
+  methods: {
+    getFlaggedClass: function getFlaggedClass(comment) {
+      return comment.flagged ? 'fas text-danger' : 'far pointer text-muted';
+    },
+    canEdit: function canEdit(comment) {
+      return comment.user.username == this.$page.props.app.user.username;
+    },
+    canDelete: function canDelete(comment) {
+      return comment.user.username == this.$page.props.app.user.username || this.permissions.manage;
+    },
+    flagComment: function flagComment(comment) {
+      var _this = this;
+
+      axios.get(route('tips.comments.edit', comment.id)).then(function (res) {
+        _this.commentList = res.data;
+      })["catch"](function (error) {
+        return _this.eventHub.$emit('axiosError', error);
+      });
+    },
+    editComment: function editComment(comment) {
+      this.updateForm.comment = comment.comment;
+      this.updateForm.comment_id = comment.id;
+      this.$refs['edit-comment-modal'].show();
+    },
+    deleteComment: function deleteComment(comment) {
+      var _this2 = this;
+
+      this.$bvModal.msgBoxConfirm('Please confirm you want to delete this comment.', {
+        title: 'Are You Sure?',
+        size: 'md',
+        okVariant: 'danger',
+        okTitle: 'Yes',
+        cancelTitle: 'No',
+        centered: true
+      }).then(function (res) {
+        if (res) {
+          axios["delete"](route('tips.comments.destroy', comment.id)).then(function (res) {
+            _this2.commentList = res.data;
+          })["catch"](function (error) {
+            return _this2.eventHub.$emit('axiosError', error);
+          });
+        }
+      });
+    },
+    submitComment: function submitComment() {
+      var _this3 = this;
+
+      this.submitted = true;
+      axios.post(route('tips.comments.store'), this.form).then(function (res) {
+        _this3.form.comment = null; // this.commentList  = res.data;
+
+        _this3.submitted = false;
+
+        _this3.$refs['validator'].reset();
+
+        console.log(res.data);
+      })["catch"](function (error) {
+        return _this3.eventHub.$emit('axiosError', error);
+      });
+    },
+    updateComment: function updateComment() {
+      var _this4 = this;
+
+      this.loading = true;
+      axios.put(route('tips.comments.update', this.updateForm.comment_id), this.updateForm).then(function (res) {
+        _this4.commentList = res.data;
+
+        _this4.$refs['edit-comment-modal'].hide();
+
+        _this4.loading = false;
+      })["catch"](function (error) {
+        return _this4.eventHub.$emit('axiosError', error);
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/TechTips/manageTip.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/TechTips/manageTip.vue?vue&type=script&lang=js& ***!
@@ -228,8 +443,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Components_TechTips_manageTip_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Components/TechTips/manageTip.vue */ "./resources/js/Components/TechTips/manageTip.vue");
-/* harmony import */ var _Layouts_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Layouts/app */ "./resources/js/Layouts/app.vue");
+/* harmony import */ var _Layouts_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Layouts/app */ "./resources/js/Layouts/app.vue");
+/* harmony import */ var _Components_TechTips_discussion_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Components/TechTips/discussion.vue */ "./resources/js/Components/TechTips/discussion.vue");
+/* harmony import */ var _Components_TechTips_manageTip_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Components/TechTips/manageTip.vue */ "./resources/js/Components/TechTips/manageTip.vue");
 //
 //
 //
@@ -285,13 +501,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    manageTip: _Components_TechTips_manageTip_vue__WEBPACK_IMPORTED_MODULE_0__.default
+    manageTip: _Components_TechTips_manageTip_vue__WEBPACK_IMPORTED_MODULE_2__.default,
+    Discussion: _Components_TechTips_discussion_vue__WEBPACK_IMPORTED_MODULE_1__.default
   },
-  layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_1__.default,
+  layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
   props: {
     tip: {
       type: Object,
@@ -307,10 +526,6 @@ __webpack_require__.r(__webpack_exports__);
       is_fav: this.user_data.fav
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
   computed: {
     bookmark_class: function bookmark_class() {
       return this.is_fav ? 'fas fa-bookmark bookmark-checked' : 'far fa-bookmark bookmark-unchecked';
@@ -318,8 +533,6 @@ __webpack_require__.r(__webpack_exports__);
     bookmark_title: function bookmark_title() {
       return this.is_fav ? 'Remove From Bookmarks' : 'Add to Bookmarks';
     }
-  },
-  watch: {//
   },
   methods: {
     toggleFav: function toggleFav() {
@@ -340,6 +553,44 @@ __webpack_require__.r(__webpack_exports__);
     title: 'Tech Tip Details'
   }
 });
+
+/***/ }),
+
+/***/ "./resources/js/Components/TechTips/discussion.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/Components/TechTips/discussion.vue ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _discussion_vue_vue_type_template_id_0e92f76e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./discussion.vue?vue&type=template&id=0e92f76e& */ "./resources/js/Components/TechTips/discussion.vue?vue&type=template&id=0e92f76e&");
+/* harmony import */ var _discussion_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./discussion.vue?vue&type=script&lang=js& */ "./resources/js/Components/TechTips/discussion.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _discussion_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _discussion_vue_vue_type_template_id_0e92f76e___WEBPACK_IMPORTED_MODULE_0__.render,
+  _discussion_vue_vue_type_template_id_0e92f76e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Components/TechTips/discussion.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
 
@@ -457,6 +708,21 @@ component.options.__file = "resources/js/Pages/TechTips/Show.vue"
 
 /***/ }),
 
+/***/ "./resources/js/Components/TechTips/discussion.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/Components/TechTips/discussion.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_discussion_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./discussion.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/TechTips/discussion.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_discussion_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/Components/TechTips/manageTip.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************!*\
   !*** ./resources/js/Components/TechTips/manageTip.vue?vue&type=script&lang=js& ***!
@@ -499,6 +765,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Pages/TechTips/Show.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/Components/TechTips/discussion.vue?vue&type=template&id=0e92f76e&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/Components/TechTips/discussion.vue?vue&type=template&id=0e92f76e& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_discussion_vue_vue_type_template_id_0e92f76e___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_discussion_vue_vue_type_template_id_0e92f76e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_discussion_vue_vue_type_template_id_0e92f76e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./discussion.vue?vue&type=template&id=0e92f76e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/TechTips/discussion.vue?vue&type=template&id=0e92f76e&");
+
 
 /***/ }),
 
@@ -546,6 +828,383 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_7f2d77c5___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_7f2d77c5___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Show.vue?vue&type=template&id=7f2d77c5& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Pages/TechTips/Show.vue?vue&type=template&id=7f2d77c5&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/TechTips/discussion.vue?vue&type=template&id=0e92f76e&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/TechTips/discussion.vue?vue&type=template&id=0e92f76e& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "row justify-content-center" },
+    [
+      _c("div", { staticClass: "col-md-8 grid-margin" }, [
+        _c("div", { staticClass: "card rounded" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("div", { staticClass: "card-title" }, [
+                _vm._v("\n                    Discussion:\n                ")
+              ]),
+              _vm._v(" "),
+              _vm.commentList.length == 0
+                ? _c("div", [
+                    _c("h5", { staticClass: "text-center" }, [
+                      _vm._v("No Comments Yet")
+                    ])
+                  ])
+                : _c(
+                    "div",
+                    { staticClass: "mb-4" },
+                    _vm._l(_vm.commentList, function(comment) {
+                      return _c(
+                        "div",
+                        {
+                          key: comment.comment_id,
+                          staticClass: "border rounded p-4 mt-2"
+                        },
+                        [
+                          _c("div", { staticClass: "mb-2" }, [
+                            _c("span", { staticClass: "float-right" }, [
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "b-tooltip",
+                                    rawName: "v-b-tooltip.hover",
+                                    modifiers: { hover: true }
+                                  }
+                                ],
+                                staticClass: "fa-flag pl-2",
+                                class: _vm.getFlaggedClass(comment),
+                                attrs: { title: "Flag as Innappropriate" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.flagComment(comment)
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm.canEdit(comment)
+                                ? _c("i", {
+                                    directives: [
+                                      {
+                                        name: "b-tooltip",
+                                        rawName: "v-b-tooltip.hover",
+                                        modifiers: { hover: true }
+                                      }
+                                    ],
+                                    staticClass:
+                                      "fas fa-pencil-alt pointer pl-2 text-muted",
+                                    attrs: { title: "Edit Comment" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.editComment(comment)
+                                      }
+                                    }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.canDelete(comment)
+                                ? _c("i", {
+                                    directives: [
+                                      {
+                                        name: "b-tooltip",
+                                        rawName: "v-b-tooltip.hover",
+                                        modifiers: { hover: true }
+                                      }
+                                    ],
+                                    staticClass:
+                                      "far fa-trash-alt text-danger pointer pl-2",
+                                    attrs: { title: "Delete" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.deleteComment(comment)
+                                      }
+                                    }
+                                  })
+                                : _vm._e()
+                            ]),
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(comment.comment) +
+                                "\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "border-top text-secondary" },
+                            [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(comment.user.full_name) +
+                                  "\n                            "
+                              ),
+                              _c("div", { staticClass: "float-right" }, [
+                                _vm._v(_vm._s(comment.created_at))
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+              _vm._v(" "),
+              _c(
+                "b-overlay",
+                {
+                  attrs: { show: _vm.submitted },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "overlay",
+                      fn: function() {
+                        return [_c("atom-loader")]
+                      },
+                      proxy: true
+                    }
+                  ])
+                },
+                [
+                  _vm._v(" "),
+                  _c("ValidationObserver", {
+                    ref: "validator",
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var handleSubmit = ref.handleSubmit
+                          return [
+                            _vm.permissions.create
+                              ? _c(
+                                  "b-form",
+                                  {
+                                    attrs: { novalidate: "" },
+                                    on: {
+                                      submit: function($event) {
+                                        $event.preventDefault()
+                                        return handleSubmit(_vm.submitComment)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("ValidationProvider", {
+                                      attrs: { rules: "required" },
+                                      scopedSlots: _vm._u(
+                                        [
+                                          {
+                                            key: "default",
+                                            fn: function(v) {
+                                              return [
+                                                _c(
+                                                  "b-form-group",
+                                                  [
+                                                    _c("b-form-textarea", {
+                                                      attrs: {
+                                                        placeholder:
+                                                          "Comment on this Tech Tip...",
+                                                        rows: "3",
+                                                        "max-rows": "6"
+                                                      },
+                                                      model: {
+                                                        value: _vm.form.comment,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.form,
+                                                            "comment",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "form.comment"
+                                                      }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "b-form-invalid-feedback",
+                                                      {
+                                                        attrs: { state: false }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(v.errors[0])
+                                                        )
+                                                      ]
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ]
+                                            }
+                                          }
+                                        ],
+                                        null,
+                                        true
+                                      )
+                                    }),
+                                    _vm._v(" "),
+                                    _c("submit-button", {
+                                      staticClass: "mt-2",
+                                      attrs: {
+                                        button_text: "Add Comment",
+                                        submitted: _vm.submitted
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          ref: "edit-comment-modal",
+          attrs: {
+            id: "edit-comment-modal",
+            title: "Edit Comment",
+            "hide-footer": ""
+          }
+        },
+        [
+          _c(
+            "b-overlay",
+            {
+              attrs: { show: _vm.loading },
+              scopedSlots: _vm._u([
+                {
+                  key: "overlay",
+                  fn: function() {
+                    return [_c("form-loader")]
+                  },
+                  proxy: true
+                }
+              ])
+            },
+            [
+              _vm._v(" "),
+              _c("ValidationObserver", {
+                ref: "validator",
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var handleSubmit = ref.handleSubmit
+                      return [
+                        _c(
+                          "b-form",
+                          {
+                            attrs: { novalidate: "" },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return handleSubmit(_vm.updateComment)
+                              }
+                            }
+                          },
+                          [
+                            _c("ValidationProvider", {
+                              attrs: { rules: "required" },
+                              scopedSlots: _vm._u(
+                                [
+                                  {
+                                    key: "default",
+                                    fn: function(v) {
+                                      return [
+                                        _c(
+                                          "b-form-group",
+                                          [
+                                            _c("b-form-textarea", {
+                                              attrs: {
+                                                rows: "3",
+                                                "max-rows": "6"
+                                              },
+                                              model: {
+                                                value: _vm.updateForm.comment,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.updateForm,
+                                                    "comment",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "updateForm.comment"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c(
+                                              "b-form-invalid-feedback",
+                                              { attrs: { state: false } },
+                                              [_vm._v(_vm._s(v.errors[0]))]
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                true
+                              )
+                            }),
+                            _vm._v(" "),
+                            _c("submit-button", {
+                              staticClass: "mt-2",
+                              attrs: {
+                                button_text: "Update Comment",
+                                submitted: _vm.loading
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    }
+                  }
+                ])
+              })
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
 
 
 /***/ }),
@@ -1003,52 +1662,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-10 grid-margin" }, [
-        _c("h3", [
-          _c("i", {
-            directives: [
-              {
-                name: "b-tooltip",
-                rawName: "v-b-tooltip.hover",
-                modifiers: { hover: true }
-              }
-            ],
-            class: _vm.bookmark_class,
-            attrs: { title: _vm.bookmark_title },
-            on: { click: _vm.toggleFav }
-          }),
-          _vm._v(
-            "\n                " + _vm._s(_vm.tip.subject) + "\n            "
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "tip-details" }, [
-          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
-            _c("strong", [_vm._v("ID: ")]),
-            _vm._v(_vm._s(_vm.tip.tip_id))
-          ]),
-          _vm._v(" "),
-          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
-            _c("strong", [_vm._v("Created: ")]),
-            _vm._v(_vm._s(_vm.tip.created_at))
-          ]),
-          _vm._v(" "),
-          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
-            _c("strong", [_vm._v("Last Updated: ")]),
-            _vm._v(_vm._s(_vm.tip.updated_at))
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-sm-2" },
-        [
-          _c(
-            "b-button",
-            {
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-sm-10 grid-margin" }, [
+          _c("h3", [
+            _c("i", {
               directives: [
                 {
                   name: "b-tooltip",
@@ -1056,107 +1676,158 @@ var render = function() {
                   modifiers: { hover: true }
                 }
               ],
-              attrs: {
-                href: _vm.route("tips.download", _vm.tip.tip_id),
-                variant: "info",
-                size: "sm",
-                block: "",
-                pill: "",
-                title: "Download as PDF"
-              }
-            },
-            [
-              _c("i", { staticClass: "fas fa-download" }),
-              _vm._v("\n                Download Tip\n            ")
-            ]
-          ),
-          _vm._v(" "),
-          _c("manage-tip", {
-            attrs: {
-              tip_id: _vm.tip.tip_id,
-              permissions: _vm.user_data.permissions
-            }
-          })
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "col tip-equipment grid-margin" },
-        [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._l(_vm.tip.equipment_type, function(equip) {
-            return _c(
-              "b-badge",
-              {
-                key: equip.equip_id,
-                staticClass: "ml-1 mb-1",
-                attrs: { pill: "", variant: "info" }
-              },
-              [_vm._v(_vm._s(equip.name))]
+              class: _vm.bookmark_class,
+              attrs: { title: _vm.bookmark_title },
+              on: { click: _vm.toggleFav }
+            }),
+            _vm._v(
+              "\n                " + _vm._s(_vm.tip.subject) + "\n            "
             )
-          })
-        ],
-        2
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row grid-margin justify-content-center" }, [
-      _c("div", { staticClass: "col" }, [
-        _c("div", { staticClass: "card rounded" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "card-title" }, [_vm._v("Details:")]),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "tip-details" }, [
+            _c("span", { staticClass: "d-block d-sm-inline-block" }, [
+              _c("strong", [_vm._v("ID: ")]),
+              _vm._v(_vm._s(_vm.tip.tip_id))
+            ]),
             _vm._v(" "),
-            _c("div", { domProps: { innerHTML: _vm._s(_vm.tip.details) } })
+            _c("span", { staticClass: "d-block d-sm-inline-block" }, [
+              _c("strong", [_vm._v("Created: ")]),
+              _vm._v(_vm._s(_vm.tip.created_at))
+            ]),
+            _vm._v(" "),
+            _c("span", { staticClass: "d-block d-sm-inline-block" }, [
+              _c("strong", [_vm._v("Last Updated: ")]),
+              _vm._v(_vm._s(_vm.tip.updated_at))
+            ])
           ])
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _vm.tip.file_uploads.length >= 1
-      ? _c("div", { staticClass: "row grid-margin justify-content-center" }, [
-          _c("div", { staticClass: "col" }, [
-            _c("div", { staticClass: "card rounded" }, [
-              _c("div", { staticClass: "card-body" }, [
-                _c("div", { staticClass: "card-title" }, [
-                  _vm._v("Attachments:")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "ul",
-                  { staticClass: "list-group px-5" },
-                  _vm._l(_vm.tip.file_uploads, function(file) {
-                    return _c(
-                      "li",
-                      { key: file.file_id, staticClass: "list-group-item" },
-                      [
-                        _c(
-                          "a",
-                          {
-                            attrs: {
-                              href: _vm.route("download", [
-                                file.file_id,
-                                file.file_name
-                              ])
-                            }
-                          },
-                          [_vm._v(_vm._s(file.file_name))]
-                        )
-                      ]
-                    )
-                  }),
-                  0
-                )
-              ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "col-sm-2" },
+          [
+            _c(
+              "b-button",
+              {
+                directives: [
+                  {
+                    name: "b-tooltip",
+                    rawName: "v-b-tooltip.hover",
+                    modifiers: { hover: true }
+                  }
+                ],
+                attrs: {
+                  href: _vm.route("tips.download", _vm.tip.tip_id),
+                  variant: "info",
+                  size: "sm",
+                  block: "",
+                  pill: "",
+                  title: "Download as PDF"
+                }
+              },
+              [
+                _c("i", { staticClass: "fas fa-download" }),
+                _vm._v("\n                Download Tip\n            ")
+              ]
+            ),
+            _vm._v(" "),
+            _c("manage-tip", {
+              attrs: {
+                tip_id: _vm.tip.tip_id,
+                permissions: _vm.user_data.permissions
+              }
+            })
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "col tip-equipment grid-margin" },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._l(_vm.tip.equipment_type, function(equip) {
+              return _c(
+                "b-badge",
+                {
+                  key: equip.equip_id,
+                  staticClass: "ml-1 mb-1",
+                  attrs: { pill: "", variant: "info" }
+                },
+                [_vm._v(_vm._s(equip.name))]
+              )
+            })
+          ],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row grid-margin justify-content-center" }, [
+        _c("div", { staticClass: "col" }, [
+          _c("div", { staticClass: "card rounded" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("div", { staticClass: "card-title" }, [_vm._v("Details:")]),
+              _vm._v(" "),
+              _c("div", { domProps: { innerHTML: _vm._s(_vm.tip.details) } })
             ])
           ])
         ])
-      : _vm._e()
-  ])
+      ]),
+      _vm._v(" "),
+      _vm.tip.file_uploads.length >= 1
+        ? _c("div", { staticClass: "row grid-margin justify-content-center" }, [
+            _c("div", { staticClass: "col" }, [
+              _c("div", { staticClass: "card rounded" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "card-title" }, [
+                    _vm._v("Attachments:")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    { staticClass: "list-group px-5" },
+                    _vm._l(_vm.tip.file_uploads, function(file) {
+                      return _c(
+                        "li",
+                        { key: file.file_id, staticClass: "list-group-item" },
+                        [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                href: _vm.route("download", [
+                                  file.file_id,
+                                  file.file_name
+                                ])
+                              }
+                            },
+                            [_vm._v(_vm._s(file.file_name))]
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ])
+              ])
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("discussion", {
+        attrs: {
+          comments: _vm.tip.tech_tip_comment,
+          tip_id: _vm.tip.tip_id,
+          permissions: _vm.user_data.permissions.comment
+        }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {

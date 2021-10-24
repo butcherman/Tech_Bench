@@ -16,6 +16,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
         /**
          * Authentication Events
          */
@@ -175,6 +176,21 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\TechTips\TechTipDeletedEvent' => [
             'App\Listeners\TechTips\LogTechTipDeleted',
+        ],
+        //  Tech Tip Comments
+        'App\Events\TechTips\TechTipCommentCreatedEvent' => [
+            'App\Listeners\TechTips\LogNewTechTip',
+            'App\Listeners\Notify\NotifyOfNewTechTipComment',
+        ],
+        'App\Events\TechTips\TechTipCommentDeletedEvent' => [
+            'App\Listeners\TechTips\LogDeletedTechTip',
+        ],
+        'App\Events\TechTips\TechTipCommentUpdatedEvent' => [
+            'App\Listeners\TechTips\LogUpdatedTechTip',
+        ],
+        'App\Events\TechTips\TechTipCommentFlaggedEvent' => [
+            'App\Listeners\TechTips\LogFlaggedTechTip',
+            'App\Listeners\Notify\NotifyOfFlaggedComment',
         ],
 
         /**

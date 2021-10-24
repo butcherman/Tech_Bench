@@ -50,15 +50,17 @@
                 </div>
             </div>
         </div>
+        <discussion :comments="tip.tech_tip_comment" :tip_id="tip.tip_id" :permissions="user_data.permissions.comment"></discussion>
     </div>
 </template>
 
 <script>
-    import manageTip from '../../Components/TechTips/manageTip.vue';
-    import App from '../../Layouts/app';
+    import App        from '../../Layouts/app';
+    import Discussion from '../../Components/TechTips/discussion.vue';
+    import manageTip  from '../../Components/TechTips/manageTip.vue';
 
     export default {
-        components: { manageTip },
+        components: { manageTip, Discussion },
         layout: App,
         props: {
             tip: {
@@ -75,12 +77,6 @@
                 is_fav: this.user_data.fav,
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
         computed: {
             bookmark_class()
             {
@@ -90,9 +86,6 @@
             {
                 return this.is_fav ? 'Remove From Bookmarks' : 'Add to Bookmarks'
             },
-        },
-        watch: {
-             //
         },
         methods: {
             toggleFav()
