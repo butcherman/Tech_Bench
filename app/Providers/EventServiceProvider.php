@@ -192,6 +192,16 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\TechTips\LogFlaggedTechTip',
             'App\Listeners\Notify\NotifyOfFlaggedComment',
         ],
+        //  Tech Tip Administration
+        'App\Events\TechTips\Admin\TipTypeCreatedEvent' => [
+            'App\Listeners\TechTips\Admin\LogTipTypeCreated',
+        ],
+        'App\Events\TechTips\Admin\TipTypeUpdatedEvent' => [
+            'App\Listeners\TechTips\Admin\LogTipTypeUpdated',
+        ],
+        'App\Events\TechTips\Admin\TipTypeDeletedEvent' => [
+            'App\Listeners\TechTips\Admin\LogTipTypeDeleted',
+        ],
 
         /**
          * User Administration Events

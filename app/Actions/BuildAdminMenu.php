@@ -24,8 +24,9 @@ class BuildAdminMenu
 
         $userMenu     = $this->buildUserMenu();
         $customerMenu = $this->buildCustomerMenu();
+        $techTipMenu  = $this->buildTechTipMenu();
 
-        return array_merge($userMenu, $customerMenu);
+        return array_merge($userMenu, $customerMenu, $techTipMenu);
     }
 
     /**
@@ -94,6 +95,39 @@ class BuildAdminMenu
                         'name' => 'Customer Uploaded File Types',
                         'icon' => 'fas fa-file-alt',
                         'link' => route('admin.cust.file-types.index'),
+                    ],
+                ],
+            ];
+        }
+
+        return $nav;
+    }
+
+    /**
+     * Build Navigation menu for Tech Tips
+     */
+    protected function buildTechTipMenu()
+    {
+        $nav = [];
+
+        if($this->checkPermission($this->user, 'Manage Tech Tips'))
+        {
+            $nav = [
+                'Manage Tech Tips' => [
+                    [
+                        'name' => 'Tech Tip Types',
+                        'icon' => 'fas fa-file-alt',
+                        'link' => route('admin.tips.tip-types.index'),
+                    ],
+                    [
+                        'name' => 'View Deactivated Tech Tips',
+                        'icon' => 'fas fa-ban',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'View Flagged Comments',
+                        'icon' => 'far fa-flag',
+                        'link' => '#',
                     ],
                 ],
             ];

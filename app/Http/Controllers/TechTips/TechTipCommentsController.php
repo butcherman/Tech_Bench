@@ -33,11 +33,12 @@ class TechTipCommentsController extends Controller
 
     /**
      * Get the comments for a specific Tech Tip
+     * TODO - This method can go away????
      */
-    public function show($id)
-    {
-        return TechTip::where('tip_id', $id)->get();
-    }
+    // public function show($id)
+    // {
+    //     return TechTip::where('tip_id', $id)->get();
+    // }
 
     /**
      * Edit function will flag a Tech Tip as innapropriate
