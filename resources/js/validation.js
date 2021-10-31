@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { required, email, confirmed, min, numeric } from 'vee-validate/dist/rules';
-// import { Validator } from 'vee-validate';
 
 /*
 *   Imported rules

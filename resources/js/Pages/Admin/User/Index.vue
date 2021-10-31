@@ -92,18 +92,6 @@
                 }),
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
             resetPassword(user)
             {
@@ -146,6 +134,9 @@
                     }
                 });
             },
+        },
+        metaInfo: {
+            title: 'Users',
         }
     }
 </script>

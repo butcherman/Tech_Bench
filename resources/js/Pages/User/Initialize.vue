@@ -45,6 +45,9 @@
                 this.submitted = true;
                 this.form.put(route('finish-setup', this.link.token));
             }
+        },
+        metaInfo: {
+            title: 'Finish Setting Up Account',
         }
     }
 </script>

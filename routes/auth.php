@@ -5,12 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Guest\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\User\FinishSetupController;
+use App\Http\Controllers\User\InitializeUserController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordSubmitController;
 use App\Http\Controllers\Auth\ForgotPasswordEmailController;
 use App\Http\Controllers\Auth\ForgotPasswordSubmitEmailController;
-use App\Http\Controllers\User\FinishSetupController;
-use App\Http\Controllers\User\InitializeUserController;
 
 /*
 *   Authentication Routes
@@ -37,4 +37,4 @@ Route::middleware('guest')->group(function()
 });
 
 //  Log user out
-Route::middleware('auth')->post('/logout', LogoutController::class)->name('logout');
+Route::middleware('auth')->post('logout', LogoutController::class)->name('logout');

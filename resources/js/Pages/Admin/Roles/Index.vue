@@ -66,6 +66,9 @@
                     this.$inertia.get(route('admin.user-roles.edit', e.row.role_id));
                 }
             }
+        },
+        metaInfo: {
+            title: 'User Roles',
         }
     }
 </script>

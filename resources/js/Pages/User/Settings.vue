@@ -79,7 +79,7 @@
                 },
                 userSettings: this.settings,
                 submit: {
-                    userData:      false,
+                    userData: false,
                     settings: false,
                 },
             }
@@ -89,21 +89,27 @@
             {
                 this.submit.userData = true;
                 this.eventHub.$emit('clear-alert');
-                this.$inertia.put(route('settings.update', this.user.user_id), this.userData, {onFinish: () => {
+                this.$inertia.put(route('settings.update', this.user.user_id), this.userData, {
+                    onFinish: () => {
                     this.submit.userData = false
-                    if(Object.keys(this.$page.props.errors).length > 0)
-                    {
-                        this.eventHub.$emit('show-alert', {
-                            message: 'Update Settings Failed.  Check form for additional information.',
-                            type:    'danger',
-                        });
+                        if(Object.keys(this.$page.props.errors).length > 0)
+                        {
+                            this.eventHub.$emit('show-alert', {
+                                message: 'Update Settings Failed.  Check form for additional information.',
+                                type:    'danger',
+                            });
+                        }
                     }
-                }});
+                });
             },
             submitSettings()
             {
                 this.submit.settings = true;
-                this.$inertia.post(route('settings.store'), {settingsData: this.userSettings, user_id: this.user.user_id}, {onFinish: () => {this.submit.settings = false}});
+                this.$inertia.post(route('settings.store'), {settingsData: this.userSettings, user_id: this.user.user_id}, {
+                    onFinish: () => {
+                        this.submit.settings = false
+                    }
+                });
             }
         },
         metaInfo: {

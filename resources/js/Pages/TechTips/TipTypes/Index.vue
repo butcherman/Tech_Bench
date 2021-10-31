@@ -140,6 +140,9 @@
                     }
                 });
             }
+        },
+        metaInfo: {
+            title: 'Tech Tip Types',
         }
     }
 </script>

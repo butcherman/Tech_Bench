@@ -143,6 +143,9 @@
                     }
                 });
             }
+        },
+        metaInfo: {
+            title: 'Customer File Types',
         }
     }
 </script>

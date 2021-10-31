@@ -201,17 +201,8 @@
                 ]
             }
         },
-        created() {
-            //
-        },
         mounted() {
              this.search();
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
         },
         methods: {
             search()
@@ -219,9 +210,6 @@
                 this.loading = true;
                 axios.get(this.route('tips.search', this.form))
                     .then(res => {
-
-                        console.log(res.data);
-
                         this.tech_tips     = res.data.data;
                         this.results.total = res.data.total;
                         this.results.low   = res.data.from;
@@ -250,6 +238,9 @@
                 this.form.pagination_perPage = num;
                 this.search();
             }
+        },
+        metaInfo: {
+            title: 'Tech Tips',
         }
     }
 </script>

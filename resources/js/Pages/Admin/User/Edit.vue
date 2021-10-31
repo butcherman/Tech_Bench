@@ -65,6 +65,9 @@
                 this.submitted = true;
                 this.form.put(route('admin.user.update', this.user.user_id));
             }
+        },
+        metaInfo: {
+            title: 'Update User',
         }
     }
 </script>

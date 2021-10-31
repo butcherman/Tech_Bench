@@ -183,12 +183,6 @@
                 equipment: this.details.parent_equipment.concat(this.details.customer_equipment),
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
         computed: {
             map_url()
             {
@@ -216,9 +210,6 @@
             {
                 return this.details.parent_id !== null || this.details.child_count > 0 ? true : false;
             }
-        },
-        watch: {
-             //
         },
         methods: {
             toggleFav()

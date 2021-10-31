@@ -89,9 +89,6 @@
     export default {
         components: {QuickSearch},
         layout: App,
-        props: {
-            //
-        },
         data() {
             return {
                 form: {

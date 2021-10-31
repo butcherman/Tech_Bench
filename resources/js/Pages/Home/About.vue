@@ -35,7 +35,6 @@
     export default {
         layout: App,
         props: {
-            //
             version: {
                 type: String,
                 required: true,
@@ -48,26 +47,6 @@
                 type: String,
                 required: true,
             }
-        },
-        data() {
-            return {
-                //
-            }
-        },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
-        methods: {
-            //
         },
         metaInfo: {
             title: 'About',

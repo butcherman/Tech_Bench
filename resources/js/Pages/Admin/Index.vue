@@ -40,6 +40,9 @@
         },
         metaInfo: {
             title: 'Administration',
+        },
+        metaInfo: {
+            title: 'Administration',
         }
     }
 </script>

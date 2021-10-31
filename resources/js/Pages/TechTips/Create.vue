@@ -124,18 +124,6 @@
                 }),
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
             submitForm()
             {
@@ -166,6 +154,9 @@
             {
                 this.fileProgress = progress;
             },
+        },
+        metaInfo: {
+            title: 'Create New Tech Tip',
         }
     }
 </script>

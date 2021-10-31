@@ -99,6 +99,9 @@
             {
                 this.$inertia.get(route('admin.cust.change-id.edit', cust.slug));
             }
+        },
+        metaInfo: {
+            title: 'Customer ID',
         }
     }
 </script>

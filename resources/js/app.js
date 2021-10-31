@@ -52,14 +52,13 @@ Vue.mixin({ methods: { route }});
 *   Globally Register all Base Components in the Components/Base Folder
 */
 const requireComponent = require.context('./Components/Base', true, /[A-Z]\w+\.(vue|js)$/);
-
-  requireComponent.keys().forEach(fileName => {
+requireComponent.keys().forEach(fileName => {
     const componentConfig = requireComponent(fileName)
     const componentName   = upperFirst(camelCase(fileName.split('/').pop().replace(/\.\w+$/, '')));
 
     // Register component globally
     Vue.component( componentName, componentConfig.default || componentConfig);
-  });
+});
 
 /*
 *   Initialize App

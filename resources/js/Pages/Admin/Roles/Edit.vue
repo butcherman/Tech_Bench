@@ -98,6 +98,9 @@
                     }
                 });
             }
+        },
+        metaInfo: {
+            title: 'Edit Role',
         }
     }
 </script>

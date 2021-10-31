@@ -147,18 +147,6 @@
                 }),
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
             submitForm()
             {
@@ -175,8 +163,6 @@
             },
             updateTip()
             {
-                console.log('update tip');
-
                 this.form.put(route('tech-tips.update', this.data.tip_id));
             },
              //  If a file was canceled during upload, go back to form
@@ -197,6 +183,9 @@
                 this.form.removedFiles.push(this.form.fileList[file].file_id);
                 this.form.fileList.splice(file, 1);
             }
+        },
+        metaInfo: {
+            title: 'Modify Tech Tip',
         }
     }
 </script>

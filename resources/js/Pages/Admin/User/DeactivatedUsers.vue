@@ -68,14 +68,15 @@
         methods: {
             enableUser(user)
             {
-                console.log(user);
-
                 this.$inertia.get(route('admin.reactivate-user', user.username), {
                     onFinish: () => {
                         console.log('done');
                     }
                 });
             }
+        },
+        metaInfo: {
+            title: 'Deactivated Users',
         }
     }
 </script>

@@ -67,6 +67,9 @@
                     }
                 });
             }
+        },
+        metaInfo: {
+            title: 'Create User',
         }
     }
 </script>
