@@ -12,9 +12,9 @@ use App\Models\CustomerContactPhone;
 use App\Http\Requests\Customers\CustomerContactsRequest;
 use App\Events\Customers\Contacts\CustomerContactAddedEvent;
 use App\Events\Customers\Contacts\CustomerContactDeletedEvent;
-use App\Events\Customers\Contacts\CustomerContactForceDeletedEvent;
-use App\Events\Customers\Contacts\CustomerContactRestoredEvent;
 use App\Events\Customers\Contacts\CustomerContactUpdatedEvent;
+use App\Events\Customers\Contacts\CustomerContactRestoredEvent;
+use App\Events\Customers\Contacts\CustomerContactForceDeletedEvent;
 
 class CustomerContactsController extends Controller
 {
@@ -133,7 +133,6 @@ class CustomerContactsController extends Controller
         return back()->with(['message' => 'Contact deleted', 'type' => 'danger']);
     }
 
-
     /**
      * Restore a contact that was soft deleted
      */
@@ -159,10 +158,6 @@ class CustomerContactsController extends Controller
         event(new CustomerContactForceDeletedEvent(Customer::find($cont->cust_id), $cont));
         return back()->with(['message' => 'Contact permanently deleted', 'type' => 'danger']);
     }
-
-
-
-
 
     /*
     *   Clean the phone number to be digits only
