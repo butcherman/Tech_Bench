@@ -203,6 +203,9 @@ __webpack_require__.r(__webpack_exports__);
       this.submitted = true;
       this.$inertia.put(route('admin.cust.change-id.update', this.details.cust_id), this.form);
     }
+  },
+  metaInfo: {
+    title: 'Change Customer ID'
   }
 });
 

@@ -171,7 +171,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
   props: {
-    //
     version: {
       type: String,
       required: true
@@ -184,20 +183,6 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       required: true
     }
-  },
-  data: function data() {
-    return {//
-    };
-  },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
-  methods: {//
   },
   metaInfo: {
     title: 'About'

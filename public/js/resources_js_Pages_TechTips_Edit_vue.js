@@ -288,14 +288,6 @@ __webpack_require__.r(__webpack_exports__);
       })
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
     submitForm: function submitForm() {
       this.submitted = true;
@@ -308,7 +300,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     updateTip: function updateTip() {
-      console.log('update tip');
       this.form.put(route('tech-tips.update', this.data.tip_id));
     },
     //  If a file was canceled during upload, go back to form
@@ -321,10 +312,12 @@ __webpack_require__.r(__webpack_exports__);
       this.fileProgress = progress;
     },
     deleteFile: function deleteFile(file) {
-      console.log(file);
       this.form.removedFiles.push(this.form.fileList[file].file_id);
       this.form.fileList.splice(file, 1);
     }
+  },
+  metaInfo: {
+    title: 'Modify Tech Tip'
   }
 });
 

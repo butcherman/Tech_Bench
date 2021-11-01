@@ -197,13 +197,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     enableUser: function enableUser(user) {
-      console.log(user);
       this.$inertia.get(route('admin.reactivate-user', user.username), {
         onFinish: function onFinish() {
           console.log('done');
         }
       });
     }
+  },
+  metaInfo: {
+    title: 'Deactivated Users'
   }
 });
 

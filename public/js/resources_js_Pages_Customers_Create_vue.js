@@ -366,8 +366,6 @@ __webpack_require__.r(__webpack_exports__);
     QuickSearch: _Components_Customers_quickSearch_vue__WEBPACK_IMPORTED_MODULE_1__.default
   },
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
-  props: {//
-  },
   data: function data() {
     return {
       form: {

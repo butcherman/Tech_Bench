@@ -222,14 +222,6 @@ __webpack_require__.r(__webpack_exports__);
       })
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
     resetPassword: function resetPassword(user) {
       this.form.full_name = user.full_name;
@@ -273,6 +265,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     }
+  },
+  metaInfo: {
+    title: 'Users'
   }
 });
 

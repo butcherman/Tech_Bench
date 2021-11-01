@@ -204,6 +204,9 @@ __webpack_require__.r(__webpack_exports__);
       this.submitted = true;
       this.form.post(route('admin.user-roles.store'));
     }
+  },
+  metaInfo: {
+    title: 'Create New Role'
   }
 });
 

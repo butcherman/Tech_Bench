@@ -177,6 +177,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\TechTips\TechTipDeletedEvent' => [
             'App\Listeners\TechTips\LogTechTipDeleted',
         ],
+        'App\Events\TechTips\TechTipRestoredEvent' => [
+            'App\Listeners\TechTips\LogTechTipRestored',
+        ],
+        'App\Events\TechTips\TechTipForceDeletedEvent' => [
+            'App\Listeners\TechTips\LogTechTipForceDeleted',
+        ],
         //  Tech Tip Comments
         'App\Events\TechTips\TechTipCommentCreatedEvent' => [
             'App\Listeners\TechTips\LogNewTechTip',

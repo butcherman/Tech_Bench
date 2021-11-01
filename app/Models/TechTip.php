@@ -19,6 +19,7 @@ class TechTip extends Model
     protected $casts      = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
+        'deleted_at' => 'datetime:M d, Y',
     ];
 
     public function getSummaryAttribute()

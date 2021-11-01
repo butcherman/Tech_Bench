@@ -2501,10 +2501,6 @@ __webpack_require__.r(__webpack_exports__);
       equipment: this.details.parent_equipment.concat(this.details.customer_equipment)
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
   computed: {
     map_url: function map_url() {
       return 'https://maps.google.com/?q=' + encodeURI(this.details.address + ',' + this.details.city + ',' + this.details.state);
@@ -2525,8 +2521,6 @@ __webpack_require__.r(__webpack_exports__);
     allowShare: function allowShare() {
       return this.details.parent_id !== null || this.details.child_count > 0 ? true : false;
     }
-  },
-  watch: {//
   },
   methods: {
     toggleFav: function toggleFav() {

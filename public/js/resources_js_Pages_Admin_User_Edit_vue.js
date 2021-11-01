@@ -200,6 +200,9 @@ __webpack_require__.r(__webpack_exports__);
       this.submitted = true;
       this.form.put(route('admin.user.update', this.user.user_id));
     }
+  },
+  metaInfo: {
+    title: 'Update User'
   }
 });
 

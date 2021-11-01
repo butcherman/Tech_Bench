@@ -136,6 +136,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Layouts_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Layouts/app */ "./resources/js/Layouts/app.vue");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -166,7 +168,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_defineProperty({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__.default,
   props: {
     links: {
@@ -177,7 +179,9 @@ __webpack_require__.r(__webpack_exports__);
   metaInfo: {
     title: 'Administration'
   }
-});
+}, "metaInfo", {
+  title: 'Administration'
+}));
 
 /***/ }),
 

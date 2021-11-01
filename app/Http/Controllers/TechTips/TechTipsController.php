@@ -17,13 +17,18 @@ use App\Models\UserTechTipBookmark;
 
 use App\Events\TechTips\TechTipCreatedEvent;
 use App\Events\TechTips\TechTipDeletedEvent;
+use App\Events\TechTips\TechTipForceDeletedEvent;
+use App\Events\TechTips\TechTipRestoredEvent;
 use App\Events\TechTips\TechTipUpdatedEvent;
 use App\Http\Requests\TechTips\CreateTipRequest;
 use App\Http\Requests\TechTips\UpdateTipRequest;
+use App\Models\TechTipFile;
+use App\Traits\FileTrait;
 
 class TechTipsController extends Controller
 {
     use TechTipTrait;
+    // use FileTrait;
 
     /**
      * Tech Tips search page
@@ -174,6 +179,47 @@ class TechTipsController extends Controller
         event(new TechTipDeletedEvent($tip));
         return redirect(route('tech-tips.index'))->with([
             'message' => 'Tech Tip Deleted',
+            'type'    => 'danger',
+        ]);
+    }
+
+    /**
+     * Restore a Tech Tip that was Soft Deleted
+     */
+    public function restore($id)
+    {
+        $tip = TechTip::withTrashed()->find($id);
+        $this->authorize('manage', $tip);
+        $tip->restore();
+
+        event(new TechTipRestoredEvent($tip));
+        return redirect(route('tech-tips.show', $tip->slug))->with([
+            'message' => 'Tech Tip Restored',
+            'type'    => 'success',
+        ]);
+    }
+
+    /**
+     * Permanently delete a Tech Tip from the database
+     */
+    public function forceDelete($id)
+    {
+        $tip = TechTip::withTrashed()->find($id);
+        $this->authorize('manage', $tip);
+
+        //  Determine if the Tech Tip has files that need to be deleted
+        $files = TechTipFile::where('tip_id', $tip->tip_id)->get();
+        foreach($files as $file)
+        {
+            $file->delete();
+            $this->deleteFile($file->file_id);
+        }
+
+        $tip->forceDelete();
+
+        event(new TechTipForceDeletedEvent($tip));
+        return redirect(route('admin.tips.deleted'))->with([
+            'message' => 'Tech Tip Permanently Deleted',
             'type'    => 'danger',
         ]);
     }

@@ -196,6 +196,9 @@ __webpack_require__.r(__webpack_exports__);
         this.$inertia.get(route('admin.user-roles.edit', e.row.role_id));
       }
     }
+  },
+  metaInfo: {
+    title: 'User Roles'
   }
 });
 

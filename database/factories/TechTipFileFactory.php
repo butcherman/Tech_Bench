@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\FileUploads;
+use App\Models\TechTip;
 use App\Models\TechTipFile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +24,8 @@ class TechTipFileFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'tip_id'  => TechTip::factory()->create()->tip_id,
+            'file_id' => FileUploads::factory()->create()->file_id,
         ];
     }
 }

@@ -178,8 +178,6 @@
             },
             deleteFile(file)
             {
-                console.log(file);
-
                 this.form.removedFiles.push(this.form.fileList[file].file_id);
                 this.form.fileList.splice(file, 1);
             }

@@ -332,14 +332,8 @@ __webpack_require__.r(__webpack_exports__);
       }]
     };
   },
-  created: function created() {//
-  },
   mounted: function mounted() {
     this.search();
-  },
-  computed: {//
-  },
-  watch: {//
   },
   methods: {
     search: function search() {
@@ -347,7 +341,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       axios.get(this.route('tips.search', this.form)).then(function (res) {
-        console.log(res.data);
         _this.tech_tips = res.data.data;
         _this.results.total = res.data.total;
         _this.results.low = res.data.from;
@@ -375,6 +368,9 @@ __webpack_require__.r(__webpack_exports__);
       this.form.pagination_perPage = num;
       this.search();
     }
+  },
+  metaInfo: {
+    title: 'Tech Tips'
   }
 });
 

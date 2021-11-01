@@ -233,6 +233,9 @@ __webpack_require__.r(__webpack_exports__);
     selectCustomer: function selectCustomer(cust) {
       this.$inertia.get(route('admin.cust.change-id.edit', cust.slug));
     }
+  },
+  metaInfo: {
+    title: 'Customer ID'
   }
 });
 

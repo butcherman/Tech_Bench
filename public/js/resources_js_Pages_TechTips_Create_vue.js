@@ -265,14 +265,6 @@ __webpack_require__.r(__webpack_exports__);
       })
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
     submitForm: function submitForm() {
       this.submitted = true;
@@ -297,6 +289,9 @@ __webpack_require__.r(__webpack_exports__);
     updateProgressbar: function updateProgressbar(progress) {
       this.fileProgress = progress;
     }
+  },
+  metaInfo: {
+    title: 'Create New Tech Tip'
   }
 });
 

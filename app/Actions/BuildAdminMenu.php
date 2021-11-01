@@ -120,9 +120,9 @@ class BuildAdminMenu
                         'link' => route('admin.tips.tip-types.index'),
                     ],
                     [
-                        'name' => 'View Deactivated Tech Tips',
+                        'name' => 'View Deleted Tech Tips',
                         'icon' => 'fas fa-ban',
-                        'link' => '#',
+                        'link' => route('admin.tips.deleted'),
                     ],
                     [
                         'name' => 'View Flagged Comments',
