@@ -13,9 +13,20 @@ use App\Events\TechTips\TechTipCommentFlaggedEvent;
 use App\Events\TechTips\TechTipCommentUpdatedEvent;
 use App\Http\Requests\TechTips\TechTipCommentRequest;
 use App\Http\Requests\TechTips\UpdateCommentRequest;
+use Inertia\Inertia;
 
 class TechTipCommentsController extends Controller
 {
+    /**
+     * Index method will list all comments that have been flagged
+     */
+    public function index()
+    {
+        return Inertia::render('TechTips/Comments/Index', [
+            'flagged' => TechTipComment::where('flagged', true)->with('User')->get(),
+        ]);
+    }
+
     /**
      * Store a newly created Tech Tip Comment
      */
@@ -28,17 +39,26 @@ class TechTipCommentsController extends Controller
         ]);
 
         event(new TechTipCommentCreatedEvent($comment));
-        return TechTipComment::where('tip_id', $request->tip_id)->with('User')->get();
+        return back()->with([
+            'message' => 'Comment Created',
+            'type'    => 'success',
+        ]);
     }
 
     /**
-     * Get the comments for a specific Tech Tip
-     * TODO - This method can go away????
+     * Show Method will un-flag a comment
      */
-    // public function show($id)
-    // {
-    //     return TechTip::where('tip_id', $id)->get();
-    // }
+    public function show($id)
+    {
+        $comment = TechTipComment::findOrFail($id);
+        $this->authorize('manage', TechTip::class);
+        $comment->update(['flagged' => false]);
+
+        return back()->with([
+            'message' => 'Comment has been unflagged',
+            'type'    => 'warning',
+        ]);
+    }
 
     /**
      * Edit function will flag a Tech Tip as innapropriate
@@ -49,7 +69,7 @@ class TechTipCommentsController extends Controller
         $comment->update(['flagged' => true]);
 
         event(new TechTipCommentFlaggedEvent($comment));
-        return TechTipComment::where('tip_id', $comment->tip_id)->with('User')->get();
+        return back();
     }
 
     /**
@@ -62,7 +82,7 @@ class TechTipCommentsController extends Controller
         $comment->save();
 
         event(new TechTipCommentUpdatedEvent($comment));
-        return TechTipComment::where('tip_id', $comment->tip_id)->with('User')->get();
+        return back();
     }
 
     /**
@@ -75,6 +95,9 @@ class TechTipCommentsController extends Controller
         $comment->delete();
 
         event(new TechTipCommentDeletedEvent($comment));
-        return TechTipComment::where('tip_id', $comment->tip_id)->with('User')->get();
+        return back()->with([
+            'message' => 'Comment Deleted',
+            'type'    => 'success',
+        ]);
     }
 }

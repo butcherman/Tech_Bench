@@ -6,11 +6,11 @@
                     <div class="card-title">
                         Discussion:
                     </div>
-                    <div v-if="commentList.length == 0">
+                    <div v-if="comments.length == 0">
                         <h5 class="text-center">No Comments Yet</h5>
                     </div>
                     <div v-else class="mb-4">
-                        <div v-for="comment in commentList" :key="comment.comment_id" class="border rounded p-4 mt-2">
+                        <div v-for="comment in comments" :key="comment.comment_id" class="border rounded p-4 mt-2">
                             <div class="mb-2">
                                 <span class="float-right">
                                     <i class="fa-flag pl-2"
@@ -112,7 +112,7 @@
         },
         data() {
             return {
-                commentList: this.comments,
+                // commentList: this.comments,
                 submitted:   false,
                 loading:     false,
                 form: {
@@ -140,10 +140,9 @@
             },
             flagComment(comment)
             {
-                axios.get(route('tips.comments.edit', comment.id))
-                    .then(res => {
-                        this.commentList = res.data;
-                    }).catch(error => this.eventHub.$emit('axiosError', error));
+                this.$inertia.get(route('tips.comments.edit', comment.id), {
+                    preserveScroll: true,
+                });
             },
             editComment(comment)
             {
@@ -163,36 +162,34 @@
                 }).then(res => {
                     if(res)
                     {
-                        axios.delete(route('tips.comments.destroy', comment.id))
-                            .then(res => {
-                                this.commentList  = res.data;
-                            }).catch(error => this.eventHub.$emit('axiosError', error));
+                        this.$inertia.delete(route('tips.comments.destroy', comment.id), {
+                            preserveScroll: true,
+                        });
                     }
                 });
-
             },
             submitComment()
             {
                 this.submitted = true;
-                axios.post(route('tips.comments.store'), this.form)
-                    .then(res => {
+                this.$inertia.post(route('tips.comments.store'), this.form, {
+                    preserveScroll: true,
+                    onSuccess: ()=> {
                         this.form.comment = null;
-                        // this.commentList  = res.data;
                         this.submitted    = false;
                         this.$refs['validator'].reset();
-
-                        console.log(res.data);
-                    }).catch(error => this.eventHub.$emit('axiosError', error));
+                    }
+                });
             },
             updateComment()
             {
                 this.loading = true;
-                axios.put(route('tips.comments.update', this.updateForm.comment_id), this.updateForm)
-                    .then(res => {
-                        this.commentList  = res.data;
+                this.$inertia.put(route('tips.comments.update', this.updateForm.comment_id), this.updateForm, {
+                    preserveScroll: true,
+                    onSuccess: ()=> {
                         this.$refs['edit-comment-modal'].hide();
                         this.loading = false;
-                    }).catch(error => this.eventHub.$emit('axiosError', error));
+                    }
+                })
             }
         },
     }

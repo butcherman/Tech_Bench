@@ -17,7 +17,7 @@ class NotifyOfFlaggedComment
      */
     public function handle(TechTipCommentFlaggedEvent $event)
     {
-        $userList = User::where('role_id', '>=', 2)->get();
+        $userList = User::where('role_id', '<=', 2)->get();
         Notification::send($userList, new FlaggedTechTipCommentNotification($event->comment, Auth::user()));
     }
 }

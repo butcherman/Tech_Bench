@@ -127,7 +127,7 @@ class BuildAdminMenu
                     [
                         'name' => 'View Flagged Comments',
                         'icon' => 'far fa-flag',
-                        'link' => '#',
+                        'link' => route('tips.comments.index'),
                     ],
                 ],
             ];

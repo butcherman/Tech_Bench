@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      commentList: this.comments,
+      // commentList: this.comments,
       submitted: false,
       loading: false,
       form: {
@@ -148,12 +148,8 @@ __webpack_require__.r(__webpack_exports__);
       return comment.user.username == this.$page.props.app.user.username || this.permissions.manage;
     },
     flagComment: function flagComment(comment) {
-      var _this = this;
-
-      axios.get(route('tips.comments.edit', comment.id)).then(function (res) {
-        _this.commentList = res.data;
-      })["catch"](function (error) {
-        return _this.eventHub.$emit('axiosError', error);
+      this.$inertia.get(route('tips.comments.edit', comment.id), {
+        preserveScroll: true
       });
     },
     editComment: function editComment(comment) {
@@ -162,7 +158,7 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs['edit-comment-modal'].show();
     },
     deleteComment: function deleteComment(comment) {
-      var _this2 = this;
+      var _this = this;
 
       this.$bvModal.msgBoxConfirm('Please confirm you want to delete this comment.', {
         title: 'Are You Sure?',
@@ -173,42 +169,37 @@ __webpack_require__.r(__webpack_exports__);
         centered: true
       }).then(function (res) {
         if (res) {
-          axios["delete"](route('tips.comments.destroy', comment.id)).then(function (res) {
-            _this2.commentList = res.data;
-          })["catch"](function (error) {
-            return _this2.eventHub.$emit('axiosError', error);
+          _this.$inertia["delete"](route('tips.comments.destroy', comment.id), {
+            preserveScroll: true
           });
         }
       });
     },
     submitComment: function submitComment() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.submitted = true;
-      axios.post(route('tips.comments.store'), this.form).then(function (res) {
-        _this3.form.comment = null; // this.commentList  = res.data;
+      this.$inertia.post(route('tips.comments.store'), this.form, {
+        preserveScroll: true,
+        onSuccess: function onSuccess() {
+          _this2.form.comment = null;
+          _this2.submitted = false;
 
-        _this3.submitted = false;
-
-        _this3.$refs['validator'].reset();
-
-        console.log(res.data);
-      })["catch"](function (error) {
-        return _this3.eventHub.$emit('axiosError', error);
+          _this2.$refs['validator'].reset();
+        }
       });
     },
     updateComment: function updateComment() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.loading = true;
-      axios.put(route('tips.comments.update', this.updateForm.comment_id), this.updateForm).then(function (res) {
-        _this4.commentList = res.data;
+      this.$inertia.put(route('tips.comments.update', this.updateForm.comment_id), this.updateForm, {
+        preserveScroll: true,
+        onSuccess: function onSuccess() {
+          _this3.$refs['edit-comment-modal'].hide();
 
-        _this4.$refs['edit-comment-modal'].hide();
-
-        _this4.loading = false;
-      })["catch"](function (error) {
-        return _this4.eventHub.$emit('axiosError', error);
+          _this3.loading = false;
+        }
       });
     }
   }
@@ -861,7 +852,7 @@ var render = function() {
                 _vm._v("\n                    Discussion:\n                ")
               ]),
               _vm._v(" "),
-              _vm.commentList.length == 0
+              _vm.comments.length == 0
                 ? _c("div", [
                     _c("h5", { staticClass: "text-center" }, [
                       _vm._v("No Comments Yet")
@@ -870,7 +861,7 @@ var render = function() {
                 : _c(
                     "div",
                     { staticClass: "mb-4" },
-                    _vm._l(_vm.commentList, function(comment) {
+                    _vm._l(_vm.comments, function(comment) {
                       return _c(
                         "div",
                         {
