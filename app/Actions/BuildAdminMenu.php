@@ -23,10 +23,13 @@ class BuildAdminMenu
     {
 
         $userMenu     = $this->buildUserMenu();
+        $equipMenu    = $this->buildEquipmentMenu();
         $customerMenu = $this->buildCustomerMenu();
         $techTipMenu  = $this->buildTechTipMenu();
+        $settingsMenu = $this->buildSettingsMenu();
+        $maintMenu    = $this->buildMaintenanceMenu();
 
-        return array_merge($userMenu, $customerMenu, $techTipMenu);
+        return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $settingsMenu, $maintMenu);
     }
 
     /**
@@ -53,6 +56,11 @@ class BuildAdminMenu
                     'icon' => 'fas fa-store-alt-slash',
                     'link' => route('admin.deactivated-users'),
                 ],
+                [
+                    'name' => 'Password Policy',
+                    'icon' => 'fas fa-user-lock',
+                    'link' => route('admin.password-policy'),
+                ],
             ];
         }
 
@@ -69,6 +77,38 @@ class BuildAdminMenu
         return ['Users' => array_merge($userBuild, $roleBuild)];
     }
 
+    /**
+     * Get the navigation links for Equipment and Equipment Categories
+     */
+    protected function buildEquipmentMenu()
+    {
+        $nav = [];
+
+        if($this->checkPermission($this->user, 'Manage Equipment'))
+        {
+            $nav = [
+                'Manage Equipment' => [
+                    [
+                        'name' => 'Equipment Categories',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'Equipment Types',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'Equipment Data Types (for customers)',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                ],
+            ];
+        }
+
+        return $nav;
+    }
 
     /**
      * Get the navigation links for customers
@@ -128,6 +168,72 @@ class BuildAdminMenu
                         'name' => 'View Flagged Comments',
                         'icon' => 'far fa-flag',
                         'link' => route('tips.comments.index'),
+                    ],
+                ],
+            ];
+        }
+
+        return $nav;
+    }
+
+    /**
+     * Build navigation menu for Application Settings
+     */
+    protected function buildSettingsMenu()
+    {
+        $nav = [];
+
+        if($this->checkPermission($this->user, 'App Settings'))
+        {
+            $nav = [
+                'Manage Application Settings' => [
+                    [
+                        'name' => 'Application Logo',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'Application Configuration',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'Email Settings',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                ],
+            ];
+        }
+
+        return $nav;
+    }
+
+    /**
+     * Build navigation menu for Application Maintenance
+     */
+    protected function buildMaintenanceMenu()
+    {
+        $nav = [];
+
+        if($this->checkPermission($this->user, 'App Settings'))
+        {
+            $nav = [
+                'Application Maintenance' => [
+                    [
+                        'name' => 'Application Logs',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'Application Backups',
+                        'icon' => '',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'Application Updates',
+                        'icon' => '',
+                        'link' => '#',
                     ],
                 ],
             ];

@@ -51,7 +51,7 @@ class TechTipCommentsTest extends TestCase
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('tips.comments.store'), $data);
-        $response->assertSuccessful();
+        $response->assertStatus(302);
         $this->assertDatabaseHas('tech_tip_comments', $data);
     }
 
@@ -75,7 +75,7 @@ class TechTipCommentsTest extends TestCase
         $result['flagged'] = true;
 
         $response = $this->actingAs(User::factory()->create())->get(route('tips.comments.edit', $comment->id));
-        $response->assertSuccessful();
+        $response->assertStatus(302);
         $this->assertDatabaseHas('tech_tip_comments', $result);
     }
 
@@ -120,7 +120,7 @@ class TechTipCommentsTest extends TestCase
         ];
 
         $response = $this->actingAs($user)->put(route('tips.comments.update', $comment->id), $data);
-        $response->assertSuccessful();
+        $response->assertStatus(302);
         $this->assertDatabaseHas('tech_tip_comments', [
             'id'      => $comment->id,
             'comment' => $data['comment'],
@@ -172,7 +172,7 @@ class TechTipCommentsTest extends TestCase
         $comment = TechTipComment::factory()->create(['user_id' => $user->user_id]);
 
         $response = $this->actingAs($user)->delete(route('tips.comments.destroy', $comment->id));
-        $response->assertSuccessful();
+        $response->assertStatus(302);
         $this->assertDatabaseMissing('tech_tip_comments', $comment->only(['id', 'comment']));
     }
 
@@ -181,7 +181,7 @@ class TechTipCommentsTest extends TestCase
         $comment = TechTipComment::factory()->create();
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('tips.comments.destroy', $comment->id));
-        $response->assertSuccessful();
+        $response->assertStatus(302);
         $this->assertDatabaseMissing('tech_tip_comments', $comment->only(['id', 'comment']));
     }
 }

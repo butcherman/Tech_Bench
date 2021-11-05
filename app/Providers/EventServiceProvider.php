@@ -237,6 +237,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Admin\UserRoleDeletedEvent' => [
             'App\Listeners\Admin\LogUserRoleDeleted',
         ],
+        'App\Events\Admin\PasswordPolicyUpdatedEvent' => [
+            'App\Listeners\Admin\LogPasswordPolicyUpdated',
+            'App\Listeners\Work\UpdateUsersPasswordPolicy',
+        ],
 
 
 
