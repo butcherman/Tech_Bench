@@ -22,6 +22,8 @@ class TechTipCommentsController extends Controller
      */
     public function index()
     {
+        $this->authorize('manage', TechTip::class);
+
         return Inertia::render('TechTips/Comments/Index', [
             'flagged' => TechTipComment::where('flagged', true)->with('User')->get(),
         ]);

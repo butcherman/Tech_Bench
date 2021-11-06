@@ -60,7 +60,7 @@ class TechTipCommentPolicy
      */
     public function update(User $user, TechTipComment $techTipComment)
     {
-        return $user->user_id == $techTipComment->user_id;
+        return $user->user_id == $techTipComment->user_id || $this->checkPermission($user, 'Manage Tech Tips');
     }
 
     /**
