@@ -242,6 +242,28 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Work\UpdateUsersPasswordPolicy',
         ],
 
+        /**
+         * Equipment Administration Events
+         */
+        'App\Events\Equipment\EquipmentCategoryCreatedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentCategoryCreated',
+        ],
+        'App\Events\Equipment\EquipmentCategoryUpdatedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentCategoryUpdated',
+        ],
+        'App\Events\Equipment\EquipmentCategoryDeletedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentCategoryDeleted',
+        ],
+        'App\Events\Equipment\EquipmentTypeCreatedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentTypeCreated',
+        ],
+        'App\Events\Equipment\EquipmentTypeUpdatedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentTypeUpdated',
+        ],
+        'App\Events\Equipment\EquipmentTypeDeletedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentTypeDeleted',
+        ],
+
 
 
         // 'App\Events\NewTechTipEvent' => [

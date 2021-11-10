@@ -19260,3 +19260,10 @@ p.customer-note-minimized {
 .tip-equipment span {
   padding: 3px 5px;
 }
+
+.equipment-list {
+  background-color: #f8f9fa;
+}
+.equipment-list:hover {
+  background-color: #17a2b8;
+}
