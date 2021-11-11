@@ -88,11 +88,6 @@ class BuildAdminMenu
         {
             $nav = [
                 'Manage Equipment' => [
-                    // [
-                    //     'name' => 'Equipment Categories',
-                    //     'icon' => '',
-                    //     'link' => '#',
-                    // ],
                     [
                         'name' => 'Equipment Types & Categories',
                         'icon' => 'fas fa-cogs',
@@ -101,7 +96,7 @@ class BuildAdminMenu
                     [
                         'name' => 'Equipment Data Types (for customers)',
                         'icon' => 'fas fa-database',
-                        'link' => '#',
+                        'link' => route('data-types.index'),
                     ],
                 ],
             ];

@@ -263,6 +263,15 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Equipment\EquipmentTypeDeletedEvent' => [
             'App\Listeners\Equipment\LogEquipmentTypeDeleted',
         ],
+        'App\Events\Equipment\EquipmentDataTypeCreatedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentDataTypeCreated',
+        ],
+        'App\Events\Equipment\EquipmentDataTypeUpdatedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentDataTypeUpdated',
+        ],
+        'App\Events\Equipment\EquipmentDataTypeDeletedEvent' => [
+            'App\Listeners\Equipment\LogEquipmentDataTypeDeleted',
+        ],
 
 
 

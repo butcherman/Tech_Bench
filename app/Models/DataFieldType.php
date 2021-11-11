@@ -12,4 +12,10 @@ class DataFieldType extends Model
     protected $primaryKey = 'type_id';
     protected $fillable   = ['name', 'hidden'];
     protected $hidden     = ['updated_at', 'created_at'];
+    protected $appends    = ['in_use'];
+
+    public function getInUseAttribute()
+    {
+        return DataField::where('type_id', $this->type_id)->count() > 0 ? true : false;
+    }
 }
