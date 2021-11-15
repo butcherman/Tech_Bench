@@ -273,17 +273,15 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Equipment\LogEquipmentDataTypeDeleted',
         ],
 
+        /**
+         * Application Admin Events
+         */
+        'App\Events\Admin\NewLogoUploadedEvent' => [
+            'App\Listeners\Admin\LogNewLogoUploaded',
+        ],
 
 
-        // 'App\Events\NewTechTipEvent' => [
-        //     'App\Listeners\NotifyOfNewTechTip',
-        // ],
-        // 'App\Events\NewTipCommentEvent' => [
-        //     'App\Listeners\NotifyOfNewComment',
-        // ],
-        // 'App\Events\FlaggedTipCommentEvent' => [
-        //     'App\Listeners\NotifyOfFlaggedComment',
-        // ]
+
     ];
 
     /**

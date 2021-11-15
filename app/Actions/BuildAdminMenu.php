@@ -184,8 +184,8 @@ class BuildAdminMenu
                 'Manage Application Settings' => [
                     [
                         'name' => 'Application Logo',
-                        'icon' => '',
-                        'link' => '#',
+                        'icon' => 'fas fa-image',
+                        'link' => route('admin.get-logo'),
                     ],
                     [
                         'name' => 'Application Configuration',
