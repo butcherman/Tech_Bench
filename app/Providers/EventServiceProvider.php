@@ -279,6 +279,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Admin\NewLogoUploadedEvent' => [
             'App\Listeners\Admin\LogNewLogoUploaded',
         ],
+        'App\Events\Admin\GlobalConfigUpdatedEvent' => [
+            'App\Listeners\Admin\LogGlobalConfigUpdated',
+        ],
+        'App\Events\Admin\EmailSettingsUpdatedEvent' => [
+            'App\Listeners\Admin\LogEmailSettingsUpdated',
+        ],
 
 
 

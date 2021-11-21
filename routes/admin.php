@@ -5,8 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserRolesController;
 use App\Http\Controllers\Admin\AdminIndexController;
+use App\Http\Controllers\Admin\Config\GetConfigController;
+use App\Http\Controllers\Admin\Config\SetConfigController;
 use App\Http\Controllers\Admin\ReactivateUserController;
 use App\Http\Controllers\Admin\DeactivatedUserController;
+use App\Http\Controllers\Admin\Email\GetEmailSettingsController;
+use App\Http\Controllers\Admin\Email\SendTestEmailController;
+use App\Http\Controllers\Admin\Email\SetEmailSettingsController;
 use App\Http\Controllers\Admin\GetPasswordPolicyController;
 use App\Http\Controllers\Admin\Logo\GetLogoController;
 use App\Http\Controllers\Admin\Logo\SetLogoController;
@@ -29,6 +34,11 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * Application Administration Routes
      */
-    Route::get('logo',              GetLogoController::class)->name('get-logo');
-    Route::post('logo',             SetLogoController::class)->name('set-logo');
+    Route::get( 'logo',             GetLogoController::class)  ->name('get-logo');
+    Route::post('logo',             SetLogoController::class)  ->name('set-logo');
+    Route::get( 'config',           GetConfigController::class)->name('get-config');
+    Route::post('config',           SetConfigController::class)->name('set-config');
+    Route::get( 'email',            GetEmailSettingsController::class)->name('get-email');
+    Route::post('email',            SetEmailSettingsController::class)->name('set-email');
+    Route::get( 'test-email',       SendTestEmailController::class)->name('test-email');
 });

@@ -7,6 +7,7 @@ require('./bootstrap');
 *   Vue and base libraries
 */
 import Vue                 from 'vue';
+import { Link }            from '@inertiajs/inertia-vue';
 import BootstrapVue        from 'bootstrap-vue';
 import VueMeta             from 'vue-meta';
 import { App, plugin }     from '@inertiajs/inertia-vue';
@@ -27,13 +28,16 @@ require('./tinyMce.js');
 /*
 *   Third party Components
 */
-import VueGoodTablePlugin from 'vue-good-table';
-import draggable          from 'vuedraggable';
-import Editor             from '@tinymce/tinymce-vue';
+import VueGoodTablePlugin   from 'vue-good-table';
+import draggable            from 'vuedraggable';
+import Editor               from '@tinymce/tinymce-vue';
+import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 
 Vue.use(VueGoodTablePlugin);
-Vue.component('draggable', draggable);
-Vue.component('editor', Editor);
+Vue.use(vueFilterPrettyBytes);
+Vue.component('InertiaLink', Link);
+Vue.component('draggable',   draggable);
+Vue.component('editor',      Editor);
 
 /*
 *   Default Layout
