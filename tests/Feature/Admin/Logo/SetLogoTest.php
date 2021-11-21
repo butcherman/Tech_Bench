@@ -19,7 +19,7 @@ class SetLogoTest extends TestCase
         Storage::fake('public');
         $data = ['file' => UploadedFile::fake()->image('testPhoto.png')];
 
-        $response = $this->get(route('admin.set-logo'), $data);
+        $response = $this->post(route('admin.set-logo'), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -30,7 +30,7 @@ class SetLogoTest extends TestCase
         Storage::fake('public');
         $data = ['file' => UploadedFile::fake()->image('testPhoto.png')];
 
-        $response = $this->actingAs(User::factory()->create())->get(route('admin.set-logo'), $data);
+        $response = $this->actingAs(User::factory()->create())->post(route('admin.set-logo'), $data);
         $response->assertStatus(403);
     }
 
@@ -39,10 +39,10 @@ class SetLogoTest extends TestCase
         Storage::fake('public');
         $data = ['file' => UploadedFile::fake()->image('testPhoto.png')];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.set-logo'), $data);
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.set-logo'), $data);
         $response->assertSuccessful();
-        // $this->assertDatabaseHas('app_settings', [
-        //     'key' => 'app.logo'
-        // ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.logo'
+        ]);
     }
 }

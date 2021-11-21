@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Email;
 
 use App\Http\Controllers\Controller;
+use App\Models\AppSettings;
 use App\Notifications\SendTestEmail;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ class SendTestEmailController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         try
         {
             Notification::send(Auth::user(), new SendTestEmail);
