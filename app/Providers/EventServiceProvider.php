@@ -285,9 +285,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Admin\EmailSettingsUpdatedEvent' => [
             'App\Listeners\Admin\LogEmailSettingsUpdated',
         ],
-
-
-
+        'App\Events\Admin\LogSettingsUpdatedEvent' => [
+            'App\Listeners\Admin\LogLogSettingsUpdated',
+        ],
     ];
 
     /**

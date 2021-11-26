@@ -15,7 +15,11 @@ use App\Http\Controllers\Admin\Email\SetEmailSettingsController;
 use App\Http\Controllers\Admin\GetPasswordPolicyController;
 use App\Http\Controllers\Admin\Logo\GetLogoController;
 use App\Http\Controllers\Admin\Logo\SetLogoController;
+use App\Http\Controllers\Admin\Logs\LogFilesController;
 use App\Http\Controllers\Admin\SetPasswordPolicyController;
+use App\Http\Controllers\Admin\Logs\LogSettingsController;
+use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
+use App\Http\Controllers\Admin\Logs\ViewLogController;
 
 Route::middleware('auth')->prefix('administration')->name('admin.')->group(function()
 {
@@ -41,4 +45,13 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::get( 'email',            GetEmailSettingsController::class)->name('get-email');
     Route::post('email',            SetEmailSettingsController::class)->name('set-email');
     Route::get( 'test-email',       SendTestEmailController::class)->name('test-email');
+
+    /**
+     * Application Maintenance Routes
+     */
+    Route::get( 'logs',           LogFilesController::class)->name('logs.index');
+    Route::get( 'logs/settings',  LogSettingsController::class)->name('logs.settings');
+    Route::post('logs/settings',  SetLogSettingsController::class)->name('logs.set-settings');
+    Route::get( 'logs/{channel}', LogFilesController::class)->name('logs.channel');
+    Route::get( 'logs/{channel}/{name}', ViewLogController::class)->name('logs.view');
 });

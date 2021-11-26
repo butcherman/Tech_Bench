@@ -33,34 +33,4 @@ class BuildNavbarTest extends TestCase
             ],
         ]);
     }
-
-    public function test_build_as_admin()
-    {
-        $user      = User::factory()->create(['role_id' => 1]);
-        $navbarObj = new BuildNavbar;
-        $navbar    = $navbarObj->build($user);
-
-        $this->assertEquals($navbar, [
-            [
-                'name'  => 'Dashboard',
-                'route' => route('dashboard'),
-                'icon'  => 'fas fa-tachometer-alt',
-            ],
-            [
-                'name'  => 'Administration',
-                'route' => route('admin.index'),
-                'icon'  => 'fas fa-user-shield',
-            ],
-            [
-                'name'  => 'Customers',
-                'route' => route('customers.index'),
-                'icon'  => 'fas fa-user-tie',
-            ],
-            [
-                'name'  => 'Tech Tips',
-                'route' => route('tech-tips.index'),
-                'icon'  => 'fas fa-tools',
-            ],
-        ]);
-    }
 }

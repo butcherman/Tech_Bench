@@ -217,19 +217,20 @@ class BuildAdminMenu
                 'Application Maintenance' => [
                     [
                         'name' => 'Application Logs',
-                        'icon' => '',
-                        'link' => '#',
+                        'icon' => 'fas fa-bug',
+                        'link' => route('admin.logs.index'),
                     ],
-                    [
-                        'name' => 'Application Backups',
-                        'icon' => '',
-                        'link' => '#',
-                    ],
-                    [
-                        'name' => 'Application Updates',
-                        'icon' => '',
-                        'link' => '#',
-                    ],
+                    //  TODO - Finish me!!!
+                    // [
+                    //     'name' => 'Application Backups',
+                    //     'icon' => '',
+                    //     'link' => '#',
+                    // ],
+                    // [
+                    //     'name' => 'Application Updates',
+                    //     'icon' => '',
+                    //     'link' => '#',
+                    // ],
                 ],
             ];
         }
