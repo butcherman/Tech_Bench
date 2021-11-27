@@ -19,6 +19,8 @@ class ViewLogController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
+        //  TODO - verify that the log level exists
+
         $channel = $this->getChannelDetails($channel);
         $fileArr = $this->getFileToArray($filename, $channel);
 

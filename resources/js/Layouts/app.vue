@@ -23,7 +23,7 @@
                     <b-dropdown-divider></b-dropdown-divider>
                     <inertia-link as="b-dropdown-item" method="post" :href="route('logout')"><i class="fas fa-sign-out-alt"></i> Logout</inertia-link>
                 </b-dropdown>
-                <button class="navbar-toggler d-lg-none" type="button" @click="showNav = !showNav">
+                <button class="navbar-toggler d-xl-none" type="button" @click="showNav = !showNav">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>

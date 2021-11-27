@@ -493,7 +493,7 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "navbar-toggler d-lg-none",
+              staticClass: "navbar-toggler d-xl-none",
               attrs: { type: "button" },
               on: {
                 click: function($event) {
