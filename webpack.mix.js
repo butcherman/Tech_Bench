@@ -16,3 +16,8 @@ const mix = require('laravel-mix');
     .copyDirectory('resources/images', 'public/images')
     .copy('node_modules/tinymce/skins', 'public/js/skins')
     .vue();
+
+if(mix.inProduction())
+{
+    mix.version().disableNotifications();
+}

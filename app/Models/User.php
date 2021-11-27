@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
+use App\Traits\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

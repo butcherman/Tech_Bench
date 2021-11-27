@@ -77,7 +77,7 @@ class TechTipsController extends Controller
         $this->addEquipment($newTip->tip_id, $request->equipment);
         $this->processNewFiles($newTip->tip_id, true);
 
-        event(new TechTipCreatedEvent($newTip));
+        event(new TechTipCreatedEvent($newTip, !$request->noEmail));
         return redirect(route('tech-tips.show', $newTip->slug));
     }
 
@@ -160,7 +160,7 @@ class TechTipsController extends Controller
         $this->removeFiles($tip->tip_id, $request->removedFiles);
         $this->processNewFiles($tip->tip_id);
 
-        event(new TechTipUpdatedEvent($tip));
+        event(new TechTipUpdatedEvent($tip, $request->resendNotif));
         return redirect(route('tech-tips.show', $tip->slug))->with([
             'message' => 'Tech Tip Updated',
             'type'    => 'success',

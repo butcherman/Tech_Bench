@@ -32,7 +32,7 @@ class NewTechTipNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -58,7 +58,10 @@ class NewTechTipNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'subject' => 'New Tech Tip',
+            'data'    => [
+                'tip_data' => $this->techTip,
+            ]
         ];
     }
 }

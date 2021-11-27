@@ -33,7 +33,7 @@ class NewTechTipCommentNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -43,7 +43,7 @@ class NewTechTipCommentNotification extends Notification
     {
         return (new MailMessage)
                     ->greeting('Hello')
-                    ->line('User '.$this->user->full_name.' has commented on Tech Tip - .'.$this->tip->subject)
+                    ->line($this->user->full_name.' has commented on Tech Tip - .'.$this->tip->subject)
                     ->line('The comment is: ')
                     ->line($this->comment->comment)
                     ->action('Click Here to review the comment', url(route('tech-tips.show', $this->tip->slug)));
@@ -55,10 +55,15 @@ class NewTechTipCommentNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    // public function toArray($notifiable)
-    // {
-    //     return [
-    //         //
-    //     ];
-    // }
+    public function toArray($notifiable)
+    {
+        return [
+            'subject' => 'New Tech Tip Comment',
+            'data'    => [
+                'tip'     => $this->tip,
+                'comment' => $this->comment,
+                'user'    => $this->user,
+            ],
+        ];
+    }
 }

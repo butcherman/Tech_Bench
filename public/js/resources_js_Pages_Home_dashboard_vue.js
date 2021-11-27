@@ -142,16 +142,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
-  props: {//
+  props: {
+    notifications: {
+      type: Array,
+      required: true
+    }
   },
   data: function data() {
-    return {//
+    return {
+      notificationList: this.notifications
     };
   },
   created: function created() {//
+    // console.log(this.notifications[0].type.split(/\W+/).pop())
   },
   mounted: function mounted() {//
   },
@@ -159,7 +196,26 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {//
   },
-  methods: {//
+  methods: {
+    markMessage: function markMessage(id) {
+      var _this = this;
+
+      axios.get(route('notifications.edit', id)).then(function (res) {
+        _this.notificationList = res.data;
+      })["catch"](function (error) {
+        return _this.eventHub.$emit('axiosError', error);
+      });
+    },
+    deleteMessage: function deleteMessage(id) {
+      var _this2 = this;
+
+      axios["delete"](route('notifications.destroy', id)).then(function (res) {
+        console.log(res);
+        _this2.notificationList = res.data;
+      })["catch"](function (error) {
+        return _this2.eventHub.$emit('axiosError', error);
+      });
+    }
   },
   metaInfo: {
     title: 'Dashboard'
@@ -614,14 +670,78 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-12 grid-margin" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("div", { staticClass: "card-title" }, [
+                _vm._v("Notifications")
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-table-simple",
+                { attrs: { small: "", responsive: "", striped: "" } },
+                [
+                  _c(
+                    "b-thead",
+                    [
+                      _c(
+                        "b-tr",
+                        [
+                          _c("b-th"),
+                          _vm._v(" "),
+                          _c("b-th", { staticClass: "text-left" }, [
+                            _vm._v("Subject")
+                          ]),
+                          _vm._v(" "),
+                          _c("b-th", [_vm._v("Date")])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-tbody",
+                    _vm._l(_vm.notificationList, function(notification) {
+                      return _c("notification-base", {
+                        key: notification.id,
+                        attrs: { notification: notification },
+                        on: { read: _vm.markMessage, delete: _vm.deleteMessage }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", [_vm._v("Dashboard")])])
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12 grid-margin" }, [
+        _c("h4", { staticClass: "text-center text-md-left" }, [
+          _vm._v("Dashboard")
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true

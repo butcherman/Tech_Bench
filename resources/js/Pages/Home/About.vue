@@ -16,12 +16,12 @@
                         </p>
                         <p class="text-center">{{version}} (Build {{build}})</p>
                         <p class="text-center">Build Date - {{build_date}}</p>
-                        <p class="text-center">
+                        <!-- <p class="text-center">
                             Looking for guidance?
                             <span class="d-inline-block">
                                 <a href="https://tech-bench.readthedocs.io/en/latest/user/index.html" target="_blank">Click here for the Tech Bench User Guide.</a>
                             </span>
-                        </p>
+                        </p> -->
                     </div>
                 </div>
             </div>

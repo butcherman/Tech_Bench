@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
+use App\Http\Controllers\Home\NotificationController;
 use App\Http\Controllers\Home\UploadFileController;
 use App\Http\Controllers\Home\UploadImageController;
 use App\Http\Controllers\User\UserSettingsController;
@@ -17,6 +18,7 @@ Route::middleware('auth')->group(function()
     Route::get('dashboard',     DashboardController::class)->name('dashboard');
     Route::get('about',         AboutController::class)    ->name('about');
 
+    Route::resource('notifications', NotificationController::class);
     Route::resource('settings', UserSettingsController::class);
     Route::resource('password', ChangePasswordController::class);
 

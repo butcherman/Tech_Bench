@@ -32,7 +32,7 @@ class FlaggedTechTipCommentNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -45,16 +45,20 @@ class FlaggedTechTipCommentNotification extends Notification
                     ->line('User '.$this->user->full_name.' has flagged a comment on a Tech Tip as inappropriate.')
                     ->line('The comment is: ')
                     ->line($this->comment->comment)
-                    ->action('Click Here to review the comment and take the appropriate action', url('#'));
+                    ->action('Click Here to review the comment and take the appropriate action', url(route('tips.comments.index')));
     }
 
     /**
      * Get the array representation of the notification
      */
-    // public function toArray($notifiable)
-    // {
-    //     return [
-    //         //
-    //     ];
-    // }
+    public function toArray($notifiable)
+    {
+        return [
+            'subject' => 'Tech Tip Comment Flagged as inappropriate',
+            'data'    => [
+                'user'    => $this->user->full_name,
+                'comment' => $this->comment->comment,
+            ]
+        ];
+    }
 }

@@ -657,9 +657,7 @@ var render = function() {
             _vm._v(" "),
             _c("p", { staticClass: "text-center" }, [
               _vm._v("Build Date - " + _vm._s(_vm.build_date))
-            ]),
-            _vm._v(" "),
-            _vm._m(2)
+            ])
           ])
         ])
       ])
@@ -689,29 +687,6 @@ var staticRenderFns = [
       ),
       _c("span", { staticClass: "d-inline-block" }, [
         _vm._v("Butcherman - All Rights Reserved")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "text-center" }, [
-      _vm._v(
-        "\n                        Looking for guidance?\n                        "
-      ),
-      _c("span", { staticClass: "d-inline-block" }, [
-        _c(
-          "a",
-          {
-            attrs: {
-              href:
-                "https://tech-bench.readthedocs.io/en/latest/user/index.html",
-              target: "_blank"
-            }
-          },
-          [_vm._v("Click here for the Tech Bench User Guide.")]
-        )
       ])
     ])
   }
