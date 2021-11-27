@@ -14,6 +14,6 @@ class LogTipTypeCreated
      */
     public function handle(TipTypeCreatedEvent $event)
     {
-        Log::channel('tips')->info('New Tech Tip Type created by '.Auth::user()->username.'.  Details - ', $event->tipType->toArray());
+        Log::channel('tip')->info('New Tech Tip Type created by '.Auth::user()->username.'.  Details - ', $event->tipType->toArray());
     }
 }

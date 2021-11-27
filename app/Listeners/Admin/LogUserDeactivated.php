@@ -15,6 +15,6 @@ class LogUserDeactivated
      */
     public function handle(UserDeactivatedEvent $event)
     {
-        Log::channel('users')->notice('User '.$event->user->full_name.' has been deactivated by '.Auth::user()->username);
+        Log::channel('user')->notice('User '.$event->user->full_name.' has been deactivated by '.Auth::user()->username);
     }
 }

@@ -14,6 +14,6 @@ class LogTipTypeUpdated
      */
     public function handle(TipTypeUpdatedEvent $event)
     {
-        Log::channel('tips')->info('A Tech Tip Type has been updated by '.Auth::user()->username.'.  Details - ', $event->tipType->toArray());
+        Log::channel('tip')->info('A Tech Tip Type has been updated by '.Auth::user()->username.'.  Details - ', $event->tipType->toArray());
     }
 }

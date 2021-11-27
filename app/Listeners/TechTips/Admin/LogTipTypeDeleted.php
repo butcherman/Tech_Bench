@@ -14,6 +14,6 @@ class LogTipTypeDeleted
      */
     public function handle(TipTypeDeletedEvent $event)
     {
-        Log::channel('tips')->info('A Tech Tip Type has been deleted by '.Auth::user()->username.'.  Details - ', $event->tipType->toArray());
+        Log::channel('tip')->info('A Tech Tip Type has been deleted by '.Auth::user()->username.'.  Details - ', $event->tipType->toArray());
     }
 }

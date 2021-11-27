@@ -14,6 +14,6 @@ class LogTechTipForceDeleted
      */
     public function handle(TechTipForceDeletedEvent $event)
     {
-        Log::channel('tips')->alert('Tech Tip ID '.$event->tip->tip_id.' has been permanently deleted by '.Auth::user()->username.'.  Details - ', $event->tip->toArray());
+        Log::channel('tip')->alert('Tech Tip ID '.$event->tip->tip_id.' has been permanently deleted by '.Auth::user()->username.'.  Details - ', $event->tip->toArray());
     }
 }

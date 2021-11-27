@@ -21,9 +21,10 @@ class LogFilesController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         $props = [];
-
         if(!is_null($channel))
         {
+            //  TODO - Verify that the channel name is valid
+
             $props = [
                 'channel'   => $channel,
                 'log_files' => $this->getChannelStats($channel),

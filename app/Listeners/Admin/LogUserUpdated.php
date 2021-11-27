@@ -15,6 +15,6 @@ class LogUserUpdated
      */
     public function handle(UserUpdatedEvent $event)
     {
-        Log::channel('users')->notice('User '.$event->user->username.' has been updated by '.Auth::user()->username.'.  Details - ', $event->user->toArray());
+        Log::channel('user')->notice('User '.$event->user->username.' has been updated by '.Auth::user()->username.'.  Details - ', $event->user->toArray());
     }
 }

@@ -14,6 +14,6 @@ class LogFlaggedTechTip
      */
     public function handle(TechTipCommentFlaggedEvent $event)
     {
-        Log::channel('tips')->alert('A Tech Tip Comment has been flagged as Innapropriate by '.Auth::user()->username.'.  Details - ', $event->comment->toArray());
+        Log::channel('tip')->alert('A Tech Tip Comment has been flagged as Innapropriate by '.Auth::user()->username.'.  Details - ', $event->comment->toArray());
     }
 }

@@ -14,6 +14,6 @@ class LogUpdatedTechTip
      */
     public function handle(TechTipCommentUpdatedEvent $event)
     {
-        Log::channel('tips')->info('A Comment has been created for Tech Tip ID - '.$event->comment->tip_id.' by '.Auth::user()->username.'.  Details - ', $event->comment->toArray());
+        Log::channel('tip')->info('A Comment has been created for Tech Tip ID - '.$event->comment->tip_id.' by '.Auth::user()->username.'.  Details - ', $event->comment->toArray());
     }
 }

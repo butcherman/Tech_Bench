@@ -14,6 +14,6 @@ class LogTechTipRestored
      */
     public function handle(TechTipRestoredEvent $event)
     {
-        Log::channel('tips')->info('Tech Tip ID '.$event->tip->tip_id.' restored by '.Auth::user()->username.'.  Details - ', $event->tip->toArray());
+        Log::channel('tip')->info('Tech Tip ID '.$event->tip->tip_id.' restored by '.Auth::user()->username.'.  Details - ', $event->tip->toArray());
     }
 }
