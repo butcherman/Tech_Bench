@@ -173,12 +173,60 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
     notifications: {
       type: Array,
+      required: true
+    },
+    bookmarks: {
+      type: Object,
       required: true
     }
   },
@@ -722,6 +770,106 @@ var render = function() {
                 ],
                 1
               )
+            ],
+            1
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-6 grid-margin stretch-card" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("div", { staticClass: "card-title" }, [
+                _vm._v("Customer Bookmarks")
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-list-group",
+                _vm._l(_vm.bookmarks.customers, function(cust) {
+                  return _c(
+                    "b-list-group-item",
+                    { key: cust.cust_id },
+                    [
+                      _c(
+                        "inertia-link",
+                        {
+                          attrs: {
+                            as: "b-button",
+                            href: _vm.route("customers.show", cust.slug),
+                            block: "",
+                            size: "sm",
+                            variant: "info",
+                            pill: ""
+                          }
+                        },
+                        [_vm._v(_vm._s(cust.name))]
+                      )
+                    ],
+                    1
+                  )
+                }),
+                1
+              ),
+              _vm._v(" "),
+              _vm.bookmarks.customers.length == 0
+                ? _c("h4", { staticClass: "text-center" }, [
+                    _vm._v("No Bookmarks")
+                  ])
+                : _vm._e()
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-6 grid-margin stretch-card" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("div", { staticClass: "card-title" }, [
+                _vm._v("Tech Tip Bookmarks")
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-list-group",
+                _vm._l(_vm.bookmarks.tips, function(tip) {
+                  return _c(
+                    "b-list-group-item",
+                    { key: tip.tip_id },
+                    [
+                      _c(
+                        "inertia-link",
+                        {
+                          attrs: {
+                            as: "b-button",
+                            href: _vm.route("tech-tips.show", tip.slug),
+                            block: "",
+                            size: "sm",
+                            variant: "info",
+                            pill: ""
+                          }
+                        },
+                        [_vm._v(_vm._s(tip.subject))]
+                      )
+                    ],
+                    1
+                  )
+                }),
+                1
+              ),
+              _vm._v(" "),
+              _vm.bookmarks.tips.length == 0
+                ? _c("h4", { staticClass: "text-center" }, [
+                    _vm._v("No Bookmarks")
+                  ])
+                : _vm._e()
             ],
             1
           )

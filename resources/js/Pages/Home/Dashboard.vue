@@ -32,6 +32,50 @@
                 </div>
             </div>
         </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Customer Bookmarks</div>
+                        <b-list-group>
+                            <b-list-group-item v-for="cust in bookmarks.customers" :key="cust.cust_id">
+                                <inertia-link as="b-button" :href="route('customers.show', cust.slug)" block size="sm" variant="info" pill>{{cust.name}}</inertia-link>
+                            </b-list-group-item>
+                        </b-list-group>
+                        <h4 v-if="bookmarks.customers.length == 0" class="text-center">No Bookmarks</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Recent Customers</div>
+                        TODO - Make Me
+                    </div>
+                </div>
+            </div> -->
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Tech Tip Bookmarks</div>
+                        <b-list-group>
+                            <b-list-group-item v-for="tip in bookmarks.tips" :key="tip.tip_id">
+                                <inertia-link as="b-button" :href="route('tech-tips.show', tip.slug)" block size="sm" variant="info" pill>{{tip.subject}}</inertia-link>
+                            </b-list-group-item>
+                        </b-list-group>
+                        <h4 v-if="bookmarks.tips.length == 0" class="text-center">No Bookmarks</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Recent Tech Tips</div>
+                        TODO - MAKE ME
+                    </div>
+                </div>
+            </div> -->
+        </div>
     </div>
 </template>
 
@@ -42,7 +86,11 @@
         layout: App,
         props: {
             notifications: {
-                type: Array,
+                type:     Array,
+                required: true,
+            },
+            bookmarks: {
+                type:     Object,
                 required: true,
             }
         },

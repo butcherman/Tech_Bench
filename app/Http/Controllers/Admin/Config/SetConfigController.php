@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin\Config;
 
 use App\Events\Admin\GlobalConfigUpdatedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\admin\SettingsRequest;
-use App\Models\AppSettings;
+use App\Http\Requests\Admin\SettingsRequest;
 use App\Traits\AppSettingsTrait;
 
 class SetConfigController extends Controller
