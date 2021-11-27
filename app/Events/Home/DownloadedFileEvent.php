@@ -2,6 +2,7 @@
 
 namespace App\Events\Home;
 
+use App\Models\FileUploads;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,25 +13,17 @@ use Illuminate\Queue\SerializesModels;
 
 class DownloadedFileEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
+    use InteractsWithSockets;
+
+    public $file;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * Create a new event instance
      */
-    public function __construct()
+    public function __construct(FileUploads $file)
     {
-        //
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
+        $this->file = $file;
     }
 }
