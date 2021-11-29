@@ -86,7 +86,7 @@ new Vue({
                     module = parts[0];
                     if(module)
                     {
-                        return import(`./Modules/${parts[0]}/Pages/${parts[1]}`)
+                        return import(`../../Modules/${module}/Resources/js/Pages/Welcome`)
                             .then(({ default: page }) =>
                             {
                                 if (page.layout === undefined)
@@ -109,6 +109,6 @@ new Vue({
                         return page;
                     });
             }
-    },
-  }),
+        },
+    }),
 }).$mount(el)
