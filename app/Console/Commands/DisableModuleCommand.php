@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Nwidart\Modules\Facades\Module;
+use Illuminate\Support\Facades\Log;
 
 class DisableModuleCommand extends Command
 {
@@ -25,17 +26,20 @@ class DisableModuleCommand extends Command
     public function handle()
     {
         $this->module = Module::find($this->argument('module'));
+        Log::info('Disable Module Command running for '.$this->argument('module'));
 
         //  Verify Module exists
         if(!$this->module)
         {
             $this->error('Unable to find module');
+            Log::critical('Unable to find module '.$this->argument('module'));
             return 1;
         }
 
-        Artisan::call('module:disable '.$this->module->getStudlyName());
+        $this->call('module:disable '.$this->module->getStudlyName());
 
         $this->info('Module has been disabled');
+        Log::notice('Module '.$this->argument('module').' has been disabled');
 
         return Command::SUCCESS;
     }

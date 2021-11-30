@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Nwidart\Modules\Facades\Module;
+use Illuminate\Support\Facades\Log;
 
 class ActivateModuleCommand extends Command
 {
@@ -27,11 +28,13 @@ class ActivateModuleCommand extends Command
     public function handle()
     {
         $this->module = Module::find($this->argument('module'));
+        Log::info('Activate Module Command running for '.$this->argument('module'));
 
         //  Verify Module exists
         if(!$this->module)
         {
             $this->error('Unable to find module');
+            Log::critical('Unable to find module '.$this->argument('module'));
             return 1;
         }
 
@@ -44,17 +47,18 @@ class ActivateModuleCommand extends Command
         }
 
         //  Enable the module
-        Artisan::call('module:enable '.$this->module->getStudlyName());
+        $this->call('module:enable '.$this->module->getStudlyName());
 
         //  Run any migrations
         $this->line('Setting up database');
-        Artisan::call('migrate');
+        $this->call('migrate');
 
         //  Combine the new Javascript files
         $this->line('Creating Javascript files (this may take some time)');
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.' && npm run production');
 
         $this->info('Module has been activated');
+        Log::notice('Module '.$this->argument('module').' has been activated');
 
         return Command::SUCCESS;
     }
