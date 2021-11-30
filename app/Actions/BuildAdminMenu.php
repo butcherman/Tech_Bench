@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use Nwidart\Modules\Facades\Module;
+
 use App\Models\User;
 use App\Traits\AllowTrait;
 
@@ -26,10 +28,11 @@ class BuildAdminMenu
         $equipMenu    = $this->buildEquipmentMenu();
         $customerMenu = $this->buildCustomerMenu();
         $techTipMenu  = $this->buildTechTipMenu();
+        $moduleMenu   = $this->buildModuleMenus();
         $settingsMenu = $this->buildSettingsMenu();
         $maintMenu    = $this->buildMaintenanceMenu();
 
-        return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $settingsMenu, $maintMenu);
+        return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $moduleMenu, $settingsMenu, $maintMenu);
     }
 
     /**
@@ -166,6 +169,39 @@ class BuildAdminMenu
                     ],
                 ],
             ];
+        }
+
+        return $nav;
+    }
+
+    /**
+     * Build Admin menu's for all of the installed Modules
+     */
+    protected function buildModuleMenus()
+    {
+        $nav = [];
+        $modules = Module::allEnabled();
+
+        foreach($modules as $module)
+        {
+            $name    = $module->getLowerName();
+            $navData = config($name.'.admin_nav');
+            $modNav  = [];
+
+            if($navData)
+            {
+                foreach($navData as $n)
+                {
+                    $modNav[] = [
+                        'name' => $n['name'],
+                        'link' => route($n['route']),
+                        'icon' => $n['icon'],
+                    ];
+                }
+            }
+
+            //  Split Camel Case name into normal name
+            $nav[implode(' ',preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
         }
 
         return $nav;

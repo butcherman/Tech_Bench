@@ -76,15 +76,18 @@ class BuildNavbar
             $name = $module->getLowerName();
             $navData = config($name.'.navbar');
 
-            foreach($navData as $n)
+            if($navData)
             {
-                if($n['enable'])
+                foreach($navData as $n)
                 {
-                    $nav[] = [
-                        'name'  => $n['name'],
-                        'route' => route($n['route']),
-                        'icon'  => $n['icon'],
-                    ];
+                    if($n['enable'])
+                    {
+                        $nav[] = [
+                            'name'  => $n['name'],
+                            'route' => route($n['route']),
+                            'icon'  => $n['icon'],
+                        ];
+                    }
                 }
             }
         }

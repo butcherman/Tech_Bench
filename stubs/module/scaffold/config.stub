@@ -19,6 +19,17 @@ return [
         ],
     ],
 
+    /**
+     * If you would rather have a button link on the Dashboard page, use this section
+     */
+//    'dashboard_tool' => [
+//        [
+//            'name'  => 'Testing Module Tool',
+//            'icon'  => 'far fa-smile',
+//            'route' => 'TestingModule.index',
+//        ],
+//    ],
+
     /*
     *   Information for the Administration home page navigation links
     */

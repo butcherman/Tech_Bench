@@ -32,6 +32,23 @@
                 </div>
             </div>
         </div>
+        <div v-if="tools.length > 0" class="row justify-content-center">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Tools</div>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-3" v-for="tool in tools" :key="tool.name">
+                                <inertia-link as="b-button" :href="route(tool.route)" block pill variant="info">
+                                    <i :class="tool.icon"></i>
+                                    {{tool.name}}
+                                </inertia-link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-center">
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
@@ -91,6 +108,10 @@
             },
             bookmarks: {
                 type:     Object,
+                required: true,
+            },
+            tools: {
+                type:     Array,
                 required: true,
             }
         },

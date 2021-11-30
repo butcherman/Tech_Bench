@@ -217,6 +217,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -227,6 +244,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     bookmarks: {
       type: Object,
+      required: true
+    },
+    tools: {
+      type: Array,
       required: true
     }
   },
@@ -776,6 +797,53 @@ var render = function() {
         ])
       ])
     ]),
+    _vm._v(" "),
+    _vm.tools.length > 0
+      ? _c("div", { staticClass: "row justify-content-center" }, [
+          _c("div", { staticClass: "col-12 grid-margin" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "card-title" }, [_vm._v("Tools")]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row justify-content-center" },
+                  _vm._l(_vm.tools, function(tool) {
+                    return _c(
+                      "div",
+                      { key: tool.name, staticClass: "col-lg-3" },
+                      [
+                        _c(
+                          "inertia-link",
+                          {
+                            attrs: {
+                              as: "b-button",
+                              href: _vm.route(tool.route),
+                              block: "",
+                              pill: "",
+                              variant: "info"
+                            }
+                          },
+                          [
+                            _c("i", { class: tool.icon }),
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(tool.name) +
+                                "\n                            "
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  }),
+                  0
+                )
+              ])
+            ])
+          ])
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-6 grid-margin stretch-card" }, [
