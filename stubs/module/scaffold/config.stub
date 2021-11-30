@@ -12,7 +12,7 @@ return [
     */
     'navbar' => [
         [
-            'enable' =>  true,
+//          'perm_name' =>  null,                                   //  Name of a specific permission that will allow this link
             'name'   => '$STUDLY_NAME$',
             'icon'   => 'far fa-smile',
             'route'  => '$STUDLY_NAME$.index',
@@ -35,9 +35,10 @@ return [
     */
     'admin_nav' => [
         [
-            'name'  => '$STUDLY_NAME$',
-            'icon'  => 'fas fa-tools',
-            'route' => '$STUDLY_NAME$.index',
+//          'perm_name' => null,                                    //  Name of a specific Permission that will allow this link
+            'name'      => '$STUDLY_NAME$',
+            'icon'      => 'fas fa-tools',
+            'route'     => '$STUDLY_NAME$.index',
         ],
     ],
 

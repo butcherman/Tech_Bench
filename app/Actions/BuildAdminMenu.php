@@ -77,7 +77,12 @@ class BuildAdminMenu
             ]];
         }
 
-        return ['Users' => array_merge($userBuild, $roleBuild)];
+        if(count($userBuild) > 0 || count($roleBuild) > 0)
+        {
+            return ['Users' => array_merge($userBuild, $roleBuild)];
+        }
+
+        return [];
     }
 
     /**
@@ -192,16 +197,22 @@ class BuildAdminMenu
             {
                 foreach($navData as $n)
                 {
-                    $modNav[] = [
-                        'name' => $n['name'],
-                        'link' => route($n['route']),
-                        'icon' => $n['icon'],
-                    ];
+                    if(!isset($n['perm_name']) || $this->checkPermission($this->user, $n['perm_name']))
+                    {
+                        $modNav[] = [
+                            'name' => $n['name'],
+                            'link' => route($n['route']),
+                            'icon' => $n['icon'],
+                        ];
+                    }
                 }
             }
 
-            //  Split Camel Case name into normal name
-            $nav[implode(' ',preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
+            if(count($modNav) > 0)
+            {
+                //  Split Camel Case name into normal name
+                $nav[implode(' ',preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
+            }
         }
 
         return $nav;
