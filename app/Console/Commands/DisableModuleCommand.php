@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Nwidart\Modules\Facades\Module;
+
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
 class DisableModuleCommand extends Command

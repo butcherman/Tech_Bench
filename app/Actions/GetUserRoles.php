@@ -4,9 +4,6 @@ namespace App\Actions;
 
 use App\Models\User;
 use App\Models\UserRoles;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
 
 class GetUserRoles
 {

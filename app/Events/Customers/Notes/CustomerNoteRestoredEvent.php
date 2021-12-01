@@ -11,8 +11,6 @@ use App\Models\CustomerNote;
 
 class CustomerNoteRestoredEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
     use Dispatchable;
     use SerializesModels;
     use InteractsWithSockets;

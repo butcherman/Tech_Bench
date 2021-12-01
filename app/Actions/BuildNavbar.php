@@ -5,8 +5,12 @@ namespace App\Actions;
 use Nwidart\Modules\Facades\Module;
 use Illuminate\Support\Facades\Gate;
 
+use App\Traits\AllowTrait;
+
 class BuildNavbar
 {
+    use AllowTrait;
+
     protected $user;
 
     public function build($user)
@@ -19,7 +23,6 @@ class BuildNavbar
         array_splice($navBar, 1, 0, $admin);    //  Move the Admin link just under the Dashboard link
 
         return array_merge($navBar, $modules);
-
     }
 
     /*
@@ -73,14 +76,14 @@ class BuildNavbar
 
         foreach($modules as $module)
         {
-            $name = $module->getLowerName();
+            $name    = $module->getLowerName();
             $navData = config($name.'.navbar');
 
             if($navData)
             {
                 foreach($navData as $n)
                 {
-                    if($n['enable'])
+                    if(!isset($n['perm_name']) || $this->checkPermission($this->user, $n['perm_name']))
                     {
                         $nav[] = [
                             'name'  => $n['name'],

@@ -80,13 +80,17 @@ new Vue({
                 //  Determine if this is a primary page, or module page
                 let parts  = name.split('::');
                 let module = false;
+                let page   = false;
                 if(parts.length > 1)
                 {
                     //  If it is a module page, load the module from the correct folder
                     module = parts[0];
+                    page   = parts[1];
+
                     if(module)
                     {
-                        return import(`../../Modules/${module}/Resources/js/Pages/Welcome`)
+                        // return import(`../../Modules/${module}/Resources/js/Pages/${page}`)
+                        return import(`../../Modules/${module}/Resources/js/Pages/${page}.vue`)
                             .then(({ default: page }) =>
                             {
                                 if (page.layout === undefined)

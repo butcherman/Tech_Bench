@@ -2,11 +2,11 @@
 
 namespace App\Events\Customers\Admin;
 
-use App\Models\CustomerFileType;
-
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+
+use App\Models\CustomerFileType;
 
 class CustomerFileTypeDeletedEvent
 {

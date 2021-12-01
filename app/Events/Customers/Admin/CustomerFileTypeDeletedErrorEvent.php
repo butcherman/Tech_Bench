@@ -2,11 +2,12 @@
 
 namespace App\Events\Customers\Admin;
 
-use App\Models\CustomerFileType;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Database\QueryException;
+
+use App\Models\CustomerFileType;
 
 class CustomerFileTypeDeletedErrorEvent
 {

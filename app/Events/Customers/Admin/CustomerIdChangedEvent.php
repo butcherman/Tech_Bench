@@ -2,10 +2,11 @@
 
 namespace App\Events\Customers\Admin;
 
-use App\Models\Customer;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+
+use App\Models\Customer;
 
 class CustomerIdChangedEvent
 {

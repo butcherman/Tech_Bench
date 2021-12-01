@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\GarbageCollectionJob;
-use App\Models\CustomerEquipment;
-use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+
+use App\Jobs\GarbageCollectionJob;
 
 class GarbageCollectionRunCommand extends Command
 {
@@ -27,12 +24,8 @@ class GarbageCollectionRunCommand extends Command
      */
     public function handle()
     {
-        // new GarbageCollectionJob;
-
         GarbageCollectionJob::dispatch();
 
         return Command::SUCCESS;
     }
-
-
 }

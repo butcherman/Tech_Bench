@@ -19,7 +19,11 @@
                                 </b-tr>
                             </b-thead>
                             <b-tbody>
+                                <tr v-if="notificationList.length == 0">
+                                    <td colspan="3" class="text-center">No Notifications</td>
+                                </tr>
                                 <notification-base
+                                    v-else
                                     v-for="notification in notificationList"
                                     :key="notification.id"
                                     :notification="notification"

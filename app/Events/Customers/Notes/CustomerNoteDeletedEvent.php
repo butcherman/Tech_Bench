@@ -19,9 +19,7 @@ class CustomerNoteDeletedEvent
     public $note;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * Create a new event instance
      */
     public function __construct(Customer $cust, CustomerNote $note)
     {

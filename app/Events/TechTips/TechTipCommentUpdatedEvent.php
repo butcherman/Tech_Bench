@@ -17,9 +17,7 @@ class TechTipCommentUpdatedEvent
     public $comment;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * Create a new event instance
      */
     public function __construct(TechTipComment $comment)
     {
