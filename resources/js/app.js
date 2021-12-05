@@ -64,6 +64,18 @@ requireComponent.keys().forEach(fileName => {
     Vue.component( componentName, componentConfig.default || componentConfig);
 });
 
+
+const apps = require.context('../../Modules', true, /register.js$/i)
+apps.keys().map(key => {
+    const name = key.replace('./','').replace('register.js','');
+    // require
+    require('../../Modules/'+name+'register.js');
+})
+
+
+
+
+
 /*
 *   Initialize App
 */
@@ -89,7 +101,6 @@ new Vue({
 
                     if(module)
                     {
-                        // return import(`../../Modules/${module}/Resources/js/Pages/${page}`)
                         return import(`../../Modules/${module}/Resources/js/Pages/${page}.vue`)
                             .then(({ default: page }) =>
                             {

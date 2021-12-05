@@ -148,6 +148,8 @@ trait FileTrait
         $fileData = FileUploads::find($fileID);
         $file     = $fileData->only(['disk', 'folder', 'file_name']);
 
+        Log::debug('Attempting to delete file', $file->toArray());
+
         //  Try to delete the file from the database, if it fails, the file is in use elsewhere
         try
         {

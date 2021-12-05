@@ -11,6 +11,9 @@ const mix = require('laravel-mix');
  |
  */
 
+ require('laravel-mix-merge-manifest');
+ mix.mergeManifest();
+
  mix.js('resources/js/app.js', 'public/js')
     .sass('resources/scss/app.scss', 'public/css')
     .copyDirectory('resources/images', 'public/images')
