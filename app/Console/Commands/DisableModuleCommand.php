@@ -36,7 +36,8 @@ class DisableModuleCommand extends Command
             return 1;
         }
 
-        $this->call('module:disable '.$this->module->getStudlyName());
+        // $this->call('module:disable '.$this->module->getStudlyName());
+        $this->call('module:disable', ['module' => $this->module->getStudyName]);
 
         $this->info('Module has been disabled');
         Log::notice('Module '.$this->argument('module').' has been disabled');

@@ -47,7 +47,7 @@ class ActivateModuleCommand extends Command
         }
 
         //  Enable the module
-        $this->call('module:enable '.$this->module->getStudlyName());
+        $this->call('module:enable', ['module' => $this->module->getStudlyName()]);
 
         //  Run any migrations
         $this->line('Setting up database');
