@@ -11,10 +11,22 @@
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./Modules/**/Tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./Modules/**/Tests/Unit</directory>
+        </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
         <include>
             <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./Modules/**/Http</directory>
+            <directory suffix=".php">./Modules/**/Entities</directory>
+            <directory suffix=".php">./Modules/**/Events</directory>
+            <directory suffix=".php">./Modules/**/Listeners</directory>
+            <directory suffix=".php">./Modules/**/Notifications</directory>
+            <directory suffix=".php">./Modules/**/Policies</directory>
         </include>
         <exclude>
             <file>./app/Http/Middleware/Authenticate.php</file>
