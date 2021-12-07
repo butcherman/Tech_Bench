@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use Nwidart\Modules\Facades\Module;
+use PragmaRX\Version\Package\Version;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ActivateModuleCommand extends Command
 {
@@ -27,34 +29,64 @@ class ActivateModuleCommand extends Command
      */
     public function handle()
     {
-        $this->module = Module::find($this->argument('module'));
-        Log::info('Activate Module Command running for '.$this->argument('module'));
+        $this->newLine(2);
 
-        //  Verify Module exists
-        if(!$this->module)
+        Log::notice('Activate Module Command running for '.$this->argument('module'));
+
+        //  Verify that the module is not already installed
+        $activeModules = Module::allEnabled();
+        foreach($activeModules as $module)
         {
-            $this->error('Unable to find module');
-            Log::critical('Unable to find module '.$this->argument('module'));
+            if($module->getName() === $this->argument('module'));
+            {
+                $this->error('The '.$this->argument('module').' is already active');
+                Log::critical('The '.$this->argument('module').' is already active');
+                return 1;
+            }
+        }
+
+        $this->line('Activating Module '.$this->argument('module'));
+        $this->newLine(2);
+
+        //  Verify that the module exists and is valid
+        $module = $this->findModule($this->argument('module'));
+        if(!$module)
+        {
+            $this->error('Unable to find module - '.$this->argument('module'));
+            $this->error('Please make sure that this is a proper Tech Bench Module and loaded into the Modules directory');
+            Log::critical('Unable to find module - '.$this->argument('module'));
             return 1;
         }
 
-        //  Verify module has config file
-        $this->line('Activating Module '.$this->module);
-        if(!$this->checkForConfig())
+        $this->line('Found Module.  Checking Prerequisites');
+
+        //  Verify that the correct version of Tech Bench is running for this module
+        if(!$this->checkPrerequisites($module->getRequires()))
         {
-            $this->error('Config file is missing');
+            $this->error('Tech Bench does not meet the prerequisites for installing this module');
+            $this->error('Please install the missing requirements and try again');
+            Log::critical('Tech Bench does not meet the prerequisites for installing this module');
+            Log::critical('Please install the missing requirements and try again');
             return 1;
         }
+
+        $this->line('Prerequisites passed.  Activating Module');
 
         //  Enable the module
-        $this->call('module:enable', ['module' => $this->module->getStudlyName()]);
+        $this->call('module:enable', ['module' => $module->getStudlyName()]);
 
         //  Run any migrations
         $this->line('Setting up database');
-        $this->call('migrate');
+        $this->call('module:migrate', ['module' => $module->getStudlyName()]);
+
+        //  Install NPM and Composer packages
+        $this->line('Copying Files');
+        shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && composer install --no-dev --no-interaction --optimize-autoloader');
+        shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && npm install --silent --only=production');
 
         //  Combine the new Javascript files
         $this->line('Creating Javascript files (this may take some time)');
+        shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && npm run production');
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.' && npm run production');
 
         $this->info('Module has been activated');
@@ -63,8 +95,69 @@ class ActivateModuleCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function checkForConfig()
+    /**
+     * Verify that the Module Files are in place and that this is a Tech Bench Module
+     */
+    protected function findModule($name)
     {
-        return file_exists($this->module->getPath().DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.'config.php');
+        $basePath = $name;
+
+        //  Verify that the module files exists
+        $moduleData = Storage::disk('modules')->allFiles($basePath);
+        if(!$moduleData)
+        {
+            Log::critical('No data returned while searching for folder '.$name);
+            return false;
+        }
+
+        $module   = Module::find($name);
+        $require  = $module->getRequires();
+        $config   = Storage::disk('modules')->get($basePath.'/Config/config.php');
+
+        if(!$module || !$config || !isset($require['Tech_Bench']))
+        {
+            Log::critical('Key files missing from the Module Directory', [
+                'module_file' => $module,
+                'config_file' => $config,
+            ]);
+            return false;
+        }
+
+        return $module;
+    }
+
+    /**
+     * Verify the current version of Tech Bench meets the minimum requirements, and any other required modules are installed
+     */
+    protected function checkPrerequisites($requires)
+    {
+        $failed = false;
+
+        //  Verify version
+        $curVersion = (new Version)->compact();
+        if($curVersion < $requires['Tech_Bench'])
+        {
+            $failed = true;
+            $this->error('Tech Bench must be running Version '.$requires['Tech_Bench'].' or higher to use this module');
+            $this->newLine();
+            Log::critical('Tech Bench must be running Version '.$requires['Tech_Bench'].' or higher to use this module');
+        }
+
+        //  Check for other required modules
+        if(isset($requires['Modules']) && count($requires['Modules']) > 0)
+        {
+            foreach($requires['Modules'] as $req)
+            {
+                $found = Module::find($req);
+                if(!$found)
+                {
+                    $failed = true;
+                    $this->error('The '.$req.' module is missing and must be installed to use this module');
+                    Log::critical('The '.$req.'module is missing and must be installed to use this module');
+                }
+            }
+        }
+
+        return !$failed;
     }
 }

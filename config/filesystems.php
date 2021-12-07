@@ -37,16 +37,25 @@ return [
             'root' => storage_path('app'),
         ],
 
+        /**
+         * All Customer information is stored here
+         */
         'customers' => [
             'driver' => 'local',
             'root'   => storage_path('app/customers'),
         ],
 
+        /**
+         * All Tech Tip information is stored here
+         */
         'tips' => [
             'driver' => 'local',
             'root'   => storage_path('app/tips'),
         ],
 
+        /**
+         * Only used for public accessible items such as images
+         */
         'public' => [
             'driver'     => 'local',
             'root'       => storage_path('app/public'),
@@ -54,9 +63,20 @@ return [
             'visibility' => 'public',
         ],
 
+        /**
+         * Application logs
+         */
         'logs' => [
             'driver' => 'local',
             'root'   => storage_path('logs'),
+        ],
+
+        /**
+         * All Tech Bench add on modules are stored here
+         */
+        'modules' => [
+            'driver' => 'local',
+            'root'   => base_path().'/Modules',
         ],
 
 
