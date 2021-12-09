@@ -2,40 +2,32 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use App\Models\CustomerEquipment;
 use Exception;
-use Illuminate\Support\Facades\Artisan;
+use Nwidart\Modules\Facades\Module;
+
+use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+use App\Models\CustomerEquipment;
 
 class GarbageCollectionJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable;
+    use Dispatchable;
+    use SerializesModels;
+    use InteractsWithQueue;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return void
+     * Execute the job
      */
     public function handle()
     {
-        //
         if(config('app.maintenance'))
         {
             Log::notice('Starting Garbage Collection Job');
@@ -44,6 +36,7 @@ class GarbageCollectionJob implements ShouldQueue
             $this->retryQueue();
             $this->checkChunkFolder();
             $this->cleanupCustomerEquipment();
+            $this->moduleGarbageCollection();
 
             Artisan::call('up');
             Log::notice('Garbage Collection Job completed');
@@ -104,6 +97,23 @@ class GarbageCollectionJob implements ShouldQueue
                 $sys->forceDelete();
             }
             Log::info($count.' customer equipment permanently deleted');
+        }
+    }
+
+    /**
+     * Run any Garbage Collection jobs for the attached modules
+     */
+    protected function moduleGarbageCollection()
+    {
+        $modules = Module::allEnabled();
+
+        foreach($modules as $module)
+        {
+            if(class_exists('\\Modules\\'.$module->getName().'\\Jobs\\GarbageCollectionJob'))
+            {
+                $class = '\\Modules\\'.$module->getName().'\\Jobs\\GarbageCollectionJob';
+                $class::dispatch();
+            }
         }
     }
 }
