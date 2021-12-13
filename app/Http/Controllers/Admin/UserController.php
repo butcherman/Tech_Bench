@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Inertia\Inertia;
+
+use Illuminate\Support\Facades\Auth;
+
 use App\Actions\GetUserRoles;
-use App\Events\Admin\NewUserCreated;
-use App\Events\Admin\UserDeactivatedEvent;
-use App\Events\Admin\UserUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
+
 use App\Models\User;
 use App\Models\UserRoles;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
+
+use App\Events\Admin\NewUserCreated;
+use App\Events\Admin\UserUpdatedEvent;
+use App\Events\Admin\UserDeactivatedEvent;
 
 class UserController extends Controller
 {
@@ -38,7 +41,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
 
         return Inertia::render('Admin/User/Create', [
-            'roles' => (new GetUserRoles)->run(Auth::user()),
+            'roles' => (new GetUserRoles)->run(/** @scrutinizer ignore-type */ Auth::user()),
         ]);
     }
 
@@ -113,7 +116,11 @@ class UserController extends Controller
         $this->authorize('create', $user);
         $user->delete();
 
-        //  TODO - Verify that the user does not have more permissions than the one doing the delete
+        // if($user->role_id > Auth::user()->role_id)
+        // {
+        //      TODO - User cannot deactivate a user with higher permissions than themselves
+        //     abort(403, 'You cannot deactivate someone with higher permissions than yourself');
+        // }
 
         event(new UserDeactivatedEvent($user));
         return back()->with([

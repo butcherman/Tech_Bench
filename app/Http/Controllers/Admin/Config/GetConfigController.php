@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
-use App\Http\Controllers\Controller;
-use App\Models\AppSettings;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+
+use App\Models\AppSettings;
+use App\Http\Controllers\Controller;
 
 class GetConfigController extends Controller
 {

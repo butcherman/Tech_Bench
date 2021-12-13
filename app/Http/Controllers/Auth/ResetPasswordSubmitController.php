@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use Carbon\Carbon;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 
-use App\Listeners\LogPasswordReset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ResetTokenRequest;
 
@@ -35,6 +35,8 @@ class ResetPasswordSubmitController extends Controller
                 }
             );
 
+            //  TODO - password reset does not work??  fix it!!!!
+            //  TODO - better logging when a reset fails
         return $status == Password::PASSWORD_RESET
                 ? redirect()->route('login.index')->with([
                     'message' => 'Password Successfully Updated',

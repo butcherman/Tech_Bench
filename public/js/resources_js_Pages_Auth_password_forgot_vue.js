@@ -30,22 +30,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: {//
-  },
-  data: function data() {
-    return {//
-    };
-  },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
-  methods: {//
-  },
   metaInfo: {
     title: 'Welcome'
   }
@@ -65,6 +49,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Layouts_guest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Layouts/guest */ "./resources/js/Layouts/guest.vue");
 /* harmony import */ var _Layouts_Nested_authLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Layouts/Nested/authLayout */ "./resources/js/Layouts/Nested/authLayout.vue");
+//
 //
 //
 //
@@ -268,25 +253,23 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass:
-        "row justify-content-center align-items-center login-form-container"
+      staticClass: "row justify-content-center align-items-center",
+      attrs: { id: "auth-layout-container" }
     },
     [
-      _c("div", { staticClass: "col-lg-8 col-xl-6" }, [
-        _c("div", { staticClass: "row", attrs: { id: "header-title" } }, [
-          _c("div", { staticClass: "col-12" }, [
-            _c("h1", [_vm._v(_vm._s(_vm.$page.props.app.name))])
-          ])
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "row justify-content-center" }, [
+          _c("h1", [_vm._v(_vm._s(_vm.$page.props.app.name))])
         ]),
         _vm._v(" "),
         _c(
           "div",
           {
-            staticClass:
-              "row row-eq-height justify-content-center align-items-center login-form-sub-container"
+            staticClass: "row justify-content-center",
+            attrs: { id: "auth-layout-sub-container" }
           },
           [
-            _c("div", { staticClass: "col-md-6" }, [
+            _c("div", { staticClass: "col col-md-3 col-10" }, [
               _c("img", {
                 attrs: {
                   src: _vm.$page.props.app.logo,
@@ -296,7 +279,12 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-6" }, [_vm._t("default")], 2)
+            _c(
+              "div",
+              { staticClass: "col col-md-3 col-10" },
+              [_vm._t("default")],
+              2
+            )
           ]
         )
       ])
@@ -325,83 +313,87 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h6", { staticClass: "text-center" }, [
-        _vm._v(
-          "Enter your email address for instructions on accessing your account."
-        )
-      ]),
-      _vm._v(" "),
-      _c(
-        "b-alert",
-        {
-          attrs: {
-            variant: "success",
-            show: _vm.$page.props.flash.message ? true : false
-          }
-        },
-        [
-          _c("p", { staticClass: "text-center" }, [
-            _vm._v("Please Check Your Email For Instructions")
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("ValidationObserver", {
-        scopedSlots: _vm._u([
+  return _c("div", { staticClass: "row h-100 align-items-center" }, [
+    _c(
+      "div",
+      { staticClass: "col-12" },
+      [
+        _c("h6", { staticClass: "text-center" }, [
+          _vm._v(
+            "Enter your email address for instructions on accessing your account."
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "b-alert",
           {
-            key: "default",
-            fn: function(ref) {
-              var handleSubmit = ref.handleSubmit
-              return [
-                _c(
-                  "b-form",
-                  {
-                    attrs: { novalidate: "" },
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return handleSubmit(_vm.submitForm)
-                      }
-                    }
-                  },
-                  [
-                    _c("text-input", {
-                      attrs: {
-                        rules: "required|email",
-                        label: "Email Address",
-                        name: "email",
-                        type: "email",
-                        placeholder: "Email Address"
-                      },
-                      model: {
-                        value: _vm.form.email,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "email", $$v)
-                        },
-                        expression: "form.email"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("submit-button", {
-                      attrs: {
-                        button_text: "Send Password Reset Link",
-                        submitted: _vm.submitted
-                      }
-                    })
-                  ],
-                  1
-                )
-              ]
+            attrs: {
+              variant: "success",
+              show: _vm.$page.props.flash.message ? true : false
             }
-          }
-        ])
-      })
-    ],
-    1
-  )
+          },
+          [
+            _c("p", { staticClass: "text-center" }, [
+              _vm._v("Please Check Your Email For Instructions")
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("ValidationObserver", {
+          scopedSlots: _vm._u([
+            {
+              key: "default",
+              fn: function(ref) {
+                var handleSubmit = ref.handleSubmit
+                return [
+                  _c(
+                    "b-form",
+                    {
+                      attrs: { novalidate: "" },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return handleSubmit(_vm.submitForm)
+                        }
+                      }
+                    },
+                    [
+                      _c("text-input", {
+                        attrs: {
+                          rules: "required|email",
+                          label: "Email Address",
+                          name: "email",
+                          type: "email",
+                          placeholder: "Email Address"
+                        },
+                        model: {
+                          value: _vm.form.email,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "email", $$v)
+                          },
+                          expression: "form.email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("submit-button", {
+                        staticClass: "mb-2",
+                        attrs: {
+                          button_text: "Send Password Reset Link",
+                          submitted: _vm.submitted
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ]
+              }
+            }
+          ])
+        })
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

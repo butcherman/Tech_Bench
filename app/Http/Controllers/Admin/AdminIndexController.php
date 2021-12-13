@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 

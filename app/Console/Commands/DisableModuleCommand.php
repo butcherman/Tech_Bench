@@ -12,6 +12,8 @@ class DisableModuleCommand extends Command
     protected $signature  = 'tb_module:disable {module}';
     protected $description = 'Disable, but do not remove a Tech Bench Add On Module';
 
+    protected $module;
+
     /**
      * Create a new command instance
      */

@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+
+use App\Models\User;
+use App\Http\Controllers\Controller;
 
 class GetPasswordPolicyController extends Controller
 {
     /**
      * Show the Password Policy Form
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $this->authorize('manage', User::class);
 

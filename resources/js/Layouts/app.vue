@@ -62,13 +62,11 @@
 </template>
 
 <script>
+    import { Inertia } from '@inertiajs/inertia';
+
     export default {
-        props: {
-            //
-        },
         data() {
             return {
-                //
                 showNav: false,
                 alert: {
                     type:    null,
@@ -77,7 +75,9 @@
             }
         },
         created() {
-            //
+            Inertia.on('navigate', () => {
+                this.showNav = false;
+            });
         },
         mounted() {
             //  Manually trigger alert from Vue Component
@@ -108,14 +108,9 @@
                 return this.$page.props.navBar;
             }
         },
-        watch: {
-             //
-
-
-        },
-        methods: {
-            //
-
+        metaInfo: {
+            title: 'Welcome',
+            titleTemplate: '%s | Tech Bench',
         }
     }
 </script>

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Email;
 
-use App\Events\Admin\EmailSettingsUpdatedEvent;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\EmailSettingsRequest;
 use App\Traits\AppSettingsTrait;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Events\Admin\EmailSettingsUpdatedEvent;
+use App\Http\Requests\Admin\EmailSettingsRequest;
 
 class SetEmailSettingsController extends Controller
 {

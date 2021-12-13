@@ -6,29 +6,6 @@
 
 <script>
     export default {
-        props: {
-            //
-        },
-        data() {
-            return {
-                //
-            }
-        },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
-        methods: {
-            //
-        },
         metaInfo: {
             title: 'Welcome',
             titleTemplate: '%s | Tech Bench',

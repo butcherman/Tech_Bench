@@ -48,7 +48,7 @@ trait LogUtilitiesTrait
      */
     protected function getChannelDetails($channel)
     {
-        return Arr::first($this->logChannels, function($value, $key) use ($channel)
+        return Arr::first($this->logChannels, function($value) use ($channel)
         {
             return $value['name'] == $channel;
         });

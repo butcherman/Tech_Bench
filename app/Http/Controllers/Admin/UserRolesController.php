@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Inertia\Inertia;
+
+use Illuminate\Support\Facades\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserRoleRequest;
+
+use App\Models\User;
+use App\Models\UserRoles;
+use App\Models\UserRolePermissions;
+use App\Models\UserRolePermissionTypes;
+
 use App\Events\Admin\UserRoleCreatedEvent;
 use App\Events\Admin\UserRoleDeletedEvent;
 use App\Events\Admin\UserRoleUpdatedEvent;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UserRoleRequest;
-use App\Models\User;
-use App\Models\UserRolePermissions;
-use App\Models\UserRolePermissionTypes;
-use App\Models\UserRoles;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
 
 class UserRolesController extends Controller
 {
@@ -143,7 +145,7 @@ class UserRolesController extends Controller
 
         $role->delete();
 
-        event(new UserRoleDeletedEvent($role));
+        event(new UserRoleDeletedEvent(/** @scrutinizer ignore-type */ $role));
         return redirect(route('admin.user-roles.index'));
     }
 }

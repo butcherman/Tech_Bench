@@ -20,7 +20,7 @@ class SetLogoController extends Controller
 
         //  Storage Path
         $path     = 'images/logo';
-        $location = '/storage/'.Storage::disk('public')->putFile($path, new File($request->file));
+        $location = '/storage/'./** @scrutinizer ignore-type */ Storage::disk('public')->putFile($path, new File($request->file));
 
         AppSettings::firstOrCreate(
             ['key' => 'app.logo'],

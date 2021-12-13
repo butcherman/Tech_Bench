@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\Admin\PasswordPolicyUpdatedEvent;
 use App\Models\AppSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PasswordPolicyRequest;
+
+use App\Events\Admin\PasswordPolicyUpdatedEvent;
 
 class SetPasswordPolicyController extends Controller
 {
@@ -21,8 +22,6 @@ class SetPasswordPolicyController extends Controller
         )->update([
             'value' => $request->password_expires
         ]);
-
-        //  TODO - Event that sets or clears all users password expiration dates
 
         event(new PasswordPolicyUpdatedEvent($request->password_expires));
         return back()->with([

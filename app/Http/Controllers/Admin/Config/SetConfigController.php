@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
-use App\Events\Admin\GlobalConfigUpdatedEvent;
+use App\Traits\AppSettingsTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SettingsRequest;
-use App\Traits\AppSettingsTrait;
+use App\Events\Admin\GlobalConfigUpdatedEvent;
 
 class SetConfigController extends Controller
 {

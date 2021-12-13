@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
-use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+
 use App\Models\AppSettings;
 use App\Traits\LogUtilitiesTrait;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Http\Controllers\Controller;
 
 class ViewLogController extends Controller
 {
@@ -19,9 +19,12 @@ class ViewLogController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        //  TODO - verify that the log level exists
-
         $channel = $this->getChannelDetails($channel);
+        if(!$channel)
+        {
+            abort(404);
+        }
+
         $fileArr = $this->getFileToArray($filename, $channel);
 
         return Inertia::render('Logs/Show', [

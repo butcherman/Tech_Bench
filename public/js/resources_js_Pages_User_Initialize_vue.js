@@ -30,22 +30,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: {//
-  },
-  data: function data() {
-    return {//
-    };
-  },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
-  methods: {//
-  },
   metaInfo: {
     title: 'Welcome'
   }
@@ -273,25 +257,23 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass:
-        "row justify-content-center align-items-center login-form-container"
+      staticClass: "row justify-content-center align-items-center",
+      attrs: { id: "auth-layout-container" }
     },
     [
-      _c("div", { staticClass: "col-lg-8 col-xl-6" }, [
-        _c("div", { staticClass: "row", attrs: { id: "header-title" } }, [
-          _c("div", { staticClass: "col-12" }, [
-            _c("h1", [_vm._v(_vm._s(_vm.$page.props.app.name))])
-          ])
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "row justify-content-center" }, [
+          _c("h1", [_vm._v(_vm._s(_vm.$page.props.app.name))])
         ]),
         _vm._v(" "),
         _c(
           "div",
           {
-            staticClass:
-              "row row-eq-height justify-content-center align-items-center login-form-sub-container"
+            staticClass: "row justify-content-center",
+            attrs: { id: "auth-layout-sub-container" }
           },
           [
-            _c("div", { staticClass: "col-md-6" }, [
+            _c("div", { staticClass: "col col-md-3 col-10" }, [
               _c("img", {
                 attrs: {
                   src: _vm.$page.props.app.logo,
@@ -301,7 +283,12 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-6" }, [_vm._t("default")], 2)
+            _c(
+              "div",
+              { staticClass: "col col-md-3 col-10" },
+              [_vm._t("default")],
+              2
+            )
           ]
         )
       ])

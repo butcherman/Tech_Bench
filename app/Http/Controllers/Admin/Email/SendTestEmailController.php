@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Email;
 
-use App\Http\Controllers\Controller;
-use App\Models\AppSettings;
-use App\Notifications\SendTestEmail;
 use Exception;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+
+use App\Models\AppSettings;
+use App\Http\Controllers\Controller;
+use App\Notifications\SendTestEmail;
 
 class SendTestEmailController extends Controller
 {

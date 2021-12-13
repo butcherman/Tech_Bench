@@ -31,7 +31,7 @@ class ActivateModuleCommand extends Command
     {
         $this->newLine(2);
 
-        Log::notice('Activate Module Command running for '.$this->argument('module'));
+        Log::notice('Activate Module Command running for './** @scrutinizer ignore-type */$this->argument('module'));
 
         //  Verify that the module is not already installed
         $activeModules = Module::allEnabled();
@@ -104,7 +104,7 @@ class ActivateModuleCommand extends Command
 
         //  Verify that the module files exists
         $moduleData = Storage::disk('modules')->allFiles($basePath);
-        if(!$moduleData)
+        if(empty($moduleData))
         {
             Log::critical('No data returned while searching for folder '.$name);
             return false;

@@ -310,6 +310,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
 //
 //
 //
@@ -373,12 +374,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: {//
-  },
   data: function data() {
     return {
-      //
       showNav: false,
       alert: {
         type: null,
@@ -386,20 +385,25 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  created: function created() {//
+  created: function created() {
+    var _this = this;
+
+    _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__.Inertia.on('navigate', function () {
+      _this.showNav = false;
+    });
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     //  Manually trigger alert from Vue Component
     this.eventHub.$on('show-alert', function (alert) {
-      _this.alert.message = alert.message;
-      _this.alert.type = alert.type;
+      _this2.alert.message = alert.message;
+      _this2.alert.type = alert.type;
     }); //  Manually cancel alert that was triggered
 
     this.eventHub.$on('clear-alert', function () {
-      _this.alert.message = null;
-      _this.alert.type = null;
+      _this2.alert.message = null;
+      _this2.alert.type = null;
     });
   },
   computed: {
@@ -416,9 +420,9 @@ __webpack_require__.r(__webpack_exports__);
       return this.$page.props.navBar;
     }
   },
-  watch: {//
-  },
-  methods: {//
+  metaInfo: {
+    title: 'Welcome',
+    titleTemplate: '%s | Tech Bench'
   }
 });
 

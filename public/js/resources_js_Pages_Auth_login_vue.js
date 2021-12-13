@@ -30,22 +30,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: {//
-  },
-  data: function data() {
-    return {//
-    };
-  },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
-  methods: {//
-  },
   metaInfo: {
     title: 'Welcome'
   }
@@ -65,6 +49,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Layouts_guest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Layouts/guest */ "./resources/js/Layouts/guest.vue");
 /* harmony import */ var _Layouts_Nested_authLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Layouts/Nested/authLayout */ "./resources/js/Layouts/Nested/authLayout.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -276,25 +264,23 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass:
-        "row justify-content-center align-items-center login-form-container"
+      staticClass: "row justify-content-center align-items-center",
+      attrs: { id: "auth-layout-container" }
     },
     [
-      _c("div", { staticClass: "col-lg-8 col-xl-6" }, [
-        _c("div", { staticClass: "row", attrs: { id: "header-title" } }, [
-          _c("div", { staticClass: "col-12" }, [
-            _c("h1", [_vm._v(_vm._s(_vm.$page.props.app.name))])
-          ])
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "row justify-content-center" }, [
+          _c("h1", [_vm._v(_vm._s(_vm.$page.props.app.name))])
         ]),
         _vm._v(" "),
         _c(
           "div",
           {
-            staticClass:
-              "row row-eq-height justify-content-center align-items-center login-form-sub-container"
+            staticClass: "row justify-content-center",
+            attrs: { id: "auth-layout-sub-container" }
           },
           [
-            _c("div", { staticClass: "col-md-6" }, [
+            _c("div", { staticClass: "col col-md-3 col-10" }, [
               _c("img", {
                 attrs: {
                   src: _vm.$page.props.app.logo,
@@ -304,7 +290,12 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-6" }, [_vm._t("default")], 2)
+            _c(
+              "div",
+              { staticClass: "col col-md-3 col-10" },
+              [_vm._t("default")],
+              2
+            )
           ]
         )
       ])
@@ -333,123 +324,138 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("ValidationObserver", {
-    scopedSlots: _vm._u([
-      {
-        key: "default",
-        fn: function(ref) {
-          var handleSubmit = ref.handleSubmit
-          return [
-            _c(
-              "b-alert",
-              {
-                attrs: {
-                  variant: _vm.$page.props.flash.type,
-                  show: _vm.$page.props.flash.message ? true : false
-                }
-              },
-              [
-                _c("p", { staticClass: "text-center" }, [
-                  _vm._v(_vm._s(_vm.$page.props.flash.message))
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "b-form",
-              {
-                attrs: { novalidate: "" },
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return handleSubmit(_vm.submitForm)
-                  }
-                }
-              },
-              [
-                _c("text-input", {
-                  attrs: {
-                    rules: "required",
-                    label: "Username",
-                    name: "username",
-                    placeholder: "Username",
-                    autofocus: ""
-                  },
-                  model: {
-                    value: _vm.form.username,
-                    callback: function($$v) {
-                      _vm.$set(_vm.form, "username", $$v)
+  return _c("div", { staticClass: "row h-100 align-items-center" }, [
+    _c(
+      "div",
+      { staticClass: "col-12" },
+      [
+        _c("ValidationObserver", {
+          scopedSlots: _vm._u([
+            {
+              key: "default",
+              fn: function(ref) {
+                var handleSubmit = ref.handleSubmit
+                return [
+                  _c(
+                    "b-alert",
+                    {
+                      attrs: {
+                        variant: _vm.$page.props.flash.type,
+                        show: _vm.$page.props.flash.message ? true : false
+                      }
                     },
-                    expression: "form.username"
-                  }
-                }),
-                _vm._v(" "),
-                _c("text-input", {
-                  attrs: {
-                    rules: "required",
-                    label: "Password",
-                    name: "password",
-                    type: "password",
-                    placeholder: "Password"
-                  },
-                  model: {
-                    value: _vm.form.password,
-                    callback: function($$v) {
-                      _vm.$set(_vm.form, "password", $$v)
+                    [
+                      _c("p", { staticClass: "text-center" }, [
+                        _vm._v(_vm._s(_vm.$page.props.flash.message))
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-form",
+                    {
+                      attrs: { novalidate: "" },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return handleSubmit(_vm.submitForm)
+                        }
+                      }
                     },
-                    expression: "form.password"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "b-checkbox",
-                  {
-                    staticClass: "no-validate",
-                    attrs: { switch: "", name: "remember" },
-                    model: {
-                      value: _vm.form.remember,
-                      callback: function($$v) {
-                        _vm.$set(_vm.form, "remember", $$v)
-                      },
-                      expression: "form.remember"
-                    }
-                  },
-                  [_vm._v("Remember Me")]
-                ),
-                _vm._v(" "),
-                _c("submit-button", {
-                  attrs: { button_text: "Login", submitted: _vm.submitted }
-                }),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group row justify-content-center mb-0" },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "col-md-8 text-center" },
-                      [
-                        _c(
-                          "inertia-link",
-                          {
-                            staticClass: "btn btn-link text-muted",
-                            attrs: { href: _vm.route("password.forgot") }
+                    [
+                      _c("text-input", {
+                        attrs: {
+                          rules: "required",
+                          label: "Username",
+                          name: "username",
+                          placeholder: "Username",
+                          autofocus: ""
+                        },
+                        model: {
+                          value: _vm.form.username,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "username", $$v)
                           },
-                          [_vm._v("Forgot Your Password?")]
-                        )
-                      ],
-                      1
-                    )
-                  ]
-                )
-              ],
-              1
-            )
-          ]
-        }
-      }
-    ])
-  })
+                          expression: "form.username"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("text-input", {
+                        attrs: {
+                          rules: "required",
+                          label: "Password",
+                          name: "password",
+                          type: "password",
+                          placeholder: "Password"
+                        },
+                        model: {
+                          value: _vm.form.password,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "password", $$v)
+                          },
+                          expression: "form.password"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "b-checkbox",
+                        {
+                          staticClass: "no-validate",
+                          attrs: { switch: "", name: "remember" },
+                          model: {
+                            value: _vm.form.remember,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "remember", $$v)
+                            },
+                            expression: "form.remember"
+                          }
+                        },
+                        [_vm._v("Remember Me")]
+                      ),
+                      _vm._v(" "),
+                      _c("submit-button", {
+                        attrs: {
+                          button_text: "Login",
+                          submitted: _vm.submitted
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "form-group row justify-content-center mb-0"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "col-md-8 text-center" },
+                            [
+                              _c(
+                                "inertia-link",
+                                {
+                                  staticClass: "btn btn-link text-muted",
+                                  attrs: { href: _vm.route("password.forgot") }
+                                },
+                                [_vm._v("Forgot Your Password?")]
+                              )
+                            ],
+                            1
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ]
+              }
+            }
+          ])
+        })
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

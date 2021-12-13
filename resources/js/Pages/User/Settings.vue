@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Account</div>
-                        <ValidationObserver v-slot="{handleSubmit}">
+                        <ValidationObserver v-slot="{handleSubmit}" ref="validation-observer">
                             <b-overlay :show="submit.userData">
                                 <template #overlay>
                                     <form-loader></form-loader>
@@ -91,7 +91,8 @@
                 this.eventHub.$emit('clear-alert');
                 this.$inertia.put(route('settings.update', this.user.user_id), this.userData, {
                     onFinish: () => {
-                    this.submit.userData = false
+                        this.submit.userData = false;
+                        this.$refs['validation-observer'].reset();
                         if(Object.keys(this.$page.props.errors).length > 0)
                         {
                             this.eventHub.$emit('show-alert', {

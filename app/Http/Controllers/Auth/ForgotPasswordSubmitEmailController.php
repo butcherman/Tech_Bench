@@ -20,6 +20,6 @@ class ForgotPasswordSubmitEmailController extends Controller
             back()->with([
                 'message' => $status,
                 'type'    => 'success'
-            ]) : back()->withErrors(['email' => $status]);
+            ]) : back()->withErrors(['email' => 'Your email address does not match anyting in our records']);
     }
 }
