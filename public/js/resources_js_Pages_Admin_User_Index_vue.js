@@ -737,6 +737,7 @@ var render = function() {
               [
                 _c("b-table", {
                   attrs: {
+                    responsive: "",
                     striped: "",
                     items: _vm.users,
                     fields: _vm.table.fields

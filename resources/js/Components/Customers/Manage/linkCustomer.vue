@@ -1,5 +1,6 @@
 <template>
     <b-button
+        class="m-2"
         variant="warning"
         @click="$refs['quick-search'].open()"
     >
@@ -52,6 +53,7 @@
                     }).then(res => {
                         if(res)
                         {
+                            this.$emit('loading');
                             this.$inertia.post(route('customers.link-customer'), {
                                 cust_id:   this.cust_id,
                                 parent_id: cust.cust_id,

@@ -60,7 +60,7 @@
                         <div class="card-title">Customer Bookmarks</div>
                         <b-list-group>
                             <b-list-group-item v-for="cust in bookmarks.customers" :key="cust.cust_id">
-                                <inertia-link as="b-button" :href="route('customers.show', cust.slug)" block size="sm" variant="info" pill>{{cust.name}}</inertia-link>
+                                <inertia-link v-if="cust.name !== null" as="b-button" :href="route('customers.show', cust.slug)" block size="sm" variant="info" pill>{{cust.name}}</inertia-link>
                             </b-list-group-item>
                         </b-list-group>
                         <h4 v-if="bookmarks.customers.length == 0" class="text-center">No Bookmarks</h4>
@@ -81,7 +81,7 @@
                         <div class="card-title">Tech Tip Bookmarks</div>
                         <b-list-group>
                             <b-list-group-item v-for="tip in bookmarks.tips" :key="tip.tip_id">
-                                <inertia-link as="b-button" :href="route('tech-tips.show', tip.slug)" block size="sm" variant="info" pill>{{tip.subject}}</inertia-link>
+                                <inertia-link v-if="tip.subject !== null" as="b-button" :href="route('tech-tips.show', tip.slug)" block size="sm" variant="info" pill>{{tip.subject}}</inertia-link>
                             </b-list-group-item>
                         </b-list-group>
                         <h4 v-if="bookmarks.tips.length == 0" class="text-center">No Bookmarks</h4>

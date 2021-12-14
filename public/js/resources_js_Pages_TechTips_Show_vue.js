@@ -1738,7 +1738,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "row mt-2 mt-md-0" }, [
         _c(
           "div",
           { staticClass: "col tip-equipment grid-margin" },
@@ -1767,7 +1767,10 @@ var render = function() {
             _c("div", { staticClass: "card-body" }, [
               _c("div", { staticClass: "card-title" }, [_vm._v("Details:")]),
               _vm._v(" "),
-              _c("div", { domProps: { innerHTML: _vm._s(_vm.tip.details) } })
+              _c("div", {
+                staticClass: "tip-body",
+                domProps: { innerHTML: _vm._s(_vm.tip.details) }
+              })
             ])
           ])
         ])

@@ -66,6 +66,13 @@
                     automatic_uploads   : true,
                     images_upload_url   : route('upload-image'),
                     file_picker_types   : 'image',
+                    image_dimensions    : false,
+                    image_class_list    : [
+                        {
+                            title: 'Responsive',
+                            value: 'img-fluid'
+                        }
+                    ],
                     file_picker_callback: function(cb, value, meta)
                     {
                         var input = document.createElement('input');
@@ -87,7 +94,6 @@
                         };
                         input.click();
                     }
-
                 }
             }
         },

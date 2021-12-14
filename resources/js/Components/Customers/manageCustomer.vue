@@ -1,5 +1,5 @@
 <template>
-    <b-button class="mt-1" pill variant="danger" size="sm" v-b-modal.manage-customer-modal @click="getDeletedItems()" title="Manage Customer" v-b-tooltip.hover>
+    <b-button class="mt-1" pill block variant="danger" size="sm" v-b-modal.manage-customer-modal @click="getDeletedItems()" title="Manage Customer" v-b-tooltip.hover>
         <i class="fas fa-tasks"></i>
         Manage
         <b-modal
@@ -62,16 +62,19 @@
                     <link-customer
                         v-show="!linked && !is_parent"
                         :cust_id="cust_id"
+                        @loading="loading = true"
                         @completed="closeModal"
                     ></link-customer>
                     <unlink-customer
                         v-show="linked && !is_parent"
                         :cust_id="cust_id"
+                        @loading="loading = true"
                         @completed="closeModal"
                     ></unlink-customer>
                     <deactivate-customer
                         v-show="!linked && !is_parent"
                         :cust_id="cust_id"
+                        @loading="loading = true"
                     ></deactivate-customer>
                 </div>
             </b-overlay>
@@ -118,6 +121,7 @@
             closeModal()
             {
                 this.$refs['manage-customer-modal'].hide();
+                this.loading = false;
             },
             /**
              * Get all items that have been soft deleted for the customer

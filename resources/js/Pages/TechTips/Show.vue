@@ -20,7 +20,7 @@
                 <manage-tip :tip_id="tip.tip_id" :permissions="user_data.permissions"></manage-tip>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-2 mt-md-0">
             <div class="col tip-equipment grid-margin">
                 <div><strong>For Equipment:</strong></div>
                 <b-badge pill variant="info" class="ml-1 mb-1" v-for="equip in tip.equipment_type" :key="equip.equip_id">{{equip.name}}</b-badge>
@@ -31,7 +31,7 @@
                 <div class="card rounded">
                     <div class="card-body">
                         <div class="card-title">Details:</div>
-                        <div v-html="tip.details"></div>
+                        <div v-html="tip.details" class="tip-body"></div>
                     </div>
                 </div>
             </div>

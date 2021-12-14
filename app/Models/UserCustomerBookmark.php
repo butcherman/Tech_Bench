@@ -20,11 +20,11 @@ class UserCustomerBookmark extends Model
 
     public function getNameAttribute()
     {
-        return $this->Customer->name;
+        return isset($this->Customer->name) ? $this->Customer->name : null;
     }
 
     public function getSlugAttribute()
     {
-        return $this->Customer->slug;
+        return isset($this->Customer->slug) ? $this->Customer->slug : null;
     }
 }

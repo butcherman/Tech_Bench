@@ -9,7 +9,7 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <b-table striped :items="users" :fields="table.fields">
+                        <b-table responsive striped :items="users" :fields="table.fields">
                             <template #cell(username)="data">
                                 <inertia-link :href="route('admin.user.edit', data.item.username)">{{data.item.username}}</inertia-link>
                             </template>

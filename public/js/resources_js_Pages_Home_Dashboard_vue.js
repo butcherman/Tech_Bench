@@ -887,20 +887,22 @@ var render = function() {
                     "b-list-group-item",
                     { key: cust.cust_id },
                     [
-                      _c(
-                        "inertia-link",
-                        {
-                          attrs: {
-                            as: "b-button",
-                            href: _vm.route("customers.show", cust.slug),
-                            block: "",
-                            size: "sm",
-                            variant: "info",
-                            pill: ""
-                          }
-                        },
-                        [_vm._v(_vm._s(cust.name))]
-                      )
+                      cust.name !== null
+                        ? _c(
+                            "inertia-link",
+                            {
+                              attrs: {
+                                as: "b-button",
+                                href: _vm.route("customers.show", cust.slug),
+                                block: "",
+                                size: "sm",
+                                variant: "info",
+                                pill: ""
+                              }
+                            },
+                            [_vm._v(_vm._s(cust.name))]
+                          )
+                        : _vm._e()
                     ],
                     1
                   )
@@ -936,20 +938,22 @@ var render = function() {
                     "b-list-group-item",
                     { key: tip.tip_id },
                     [
-                      _c(
-                        "inertia-link",
-                        {
-                          attrs: {
-                            as: "b-button",
-                            href: _vm.route("tech-tips.show", tip.slug),
-                            block: "",
-                            size: "sm",
-                            variant: "info",
-                            pill: ""
-                          }
-                        },
-                        [_vm._v(_vm._s(tip.subject))]
-                      )
+                      tip.subject !== null
+                        ? _c(
+                            "inertia-link",
+                            {
+                              attrs: {
+                                as: "b-button",
+                                href: _vm.route("tech-tips.show", tip.slug),
+                                block: "",
+                                size: "sm",
+                                variant: "info",
+                                pill: ""
+                              }
+                            },
+                            [_vm._v(_vm._s(tip.subject))]
+                          )
+                        : _vm._e()
                     ],
                     1
                   )

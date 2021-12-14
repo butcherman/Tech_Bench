@@ -19,7 +19,7 @@
                                     <text-input v-model="form.description" rules="required" label="Short Description" name="description"></text-input>
                                     <b-form-group label="Role Permissions:">
                                         <div class="row">
-                                            <div class="col-4" v-for="opt in form.user_role_permissions" :key="opt.perm_type_id">
+                                            <div class="col-6 col-lg-4" v-for="opt in form.user_role_permissions" :key="opt.perm_type_id">
                                                 <b-form-checkbox
                                                     v-model="opt.allow"
                                                     value="1"

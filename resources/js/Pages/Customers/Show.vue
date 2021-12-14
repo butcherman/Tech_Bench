@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-2 mt-md-0">
             <div class="col-md-5 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">

@@ -1,5 +1,6 @@
 <template>
     <b-button
+        class="m-2"
         variant="warning"
         @click="breakLink"
     >
@@ -28,6 +29,7 @@
                 }).then(res => {
                     if(res)
                     {
+                        this.$emit('loading');
                         this.loading = true;
                         this.$inertia.post(route('customers.link-customer'), {
                             cust_id:   this.cust_id,

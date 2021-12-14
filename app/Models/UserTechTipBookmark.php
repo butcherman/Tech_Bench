@@ -20,11 +20,11 @@ class UserTechTipBookmark extends Model
 
     public function getSubjectAttribute()
     {
-        return $this->TechTip->subject;
+        return isset($this->TechTip->subject) ? $this->TechTip->subject : null;
     }
 
     public function getSlugAttribute()
     {
-        return $this->TechTip->slug;
+        return isset($this->TechTip->slug) ? $this->TechTip->slug : null;
     }
 }

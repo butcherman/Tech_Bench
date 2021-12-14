@@ -1,5 +1,6 @@
 <template>
     <b-button
+        class="m-2"
         variant="danger"
         @click="deactivate"
     >
@@ -29,6 +30,7 @@
                     if(res)
                     {
                         this.loading = true;
+                        this.$emit('loading');
                         this.$inertia.delete(route('customers.destroy', this.cust_id));
                     }
                 });

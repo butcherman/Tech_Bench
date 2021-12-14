@@ -703,6 +703,7 @@ var render = function() {
                     _c(
                       "inertia-link",
                       {
+                        staticClass: "m-2",
                         attrs: {
                           as: "b-button",
                           href: _vm.route("admin.logs.channel", channel),

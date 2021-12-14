@@ -759,7 +759,7 @@ var render = function() {
                                             "div",
                                             {
                                               key: opt.perm_type_id,
-                                              staticClass: "col-4"
+                                              staticClass: "col-6 col-lg-4"
                                             },
                                             [
                                               _c(

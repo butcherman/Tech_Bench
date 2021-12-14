@@ -1271,6 +1271,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     cust_id: {
@@ -1293,6 +1294,8 @@ __webpack_require__.r(__webpack_exports__);
         if (res) {
           _this.loading = true;
 
+          _this.$emit('loading');
+
           _this.$inertia["delete"](route('customers.destroy', _this.cust_id));
         }
       });
@@ -1314,6 +1317,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _quickSearch_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../quickSearch.vue */ "./resources/js/Components/Customers/quickSearch.vue");
+//
 //
 //
 //
@@ -1365,6 +1369,8 @@ __webpack_require__.r(__webpack_exports__);
           centered: true
         }).then(function (res) {
           if (res) {
+            _this.$emit('loading');
+
             _this.$inertia.post(route('customers.link-customer'), {
               cust_id: _this.cust_id,
               parent_id: cust.cust_id,
@@ -1403,6 +1409,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     cust_id: {
@@ -1423,6 +1430,8 @@ __webpack_require__.r(__webpack_exports__);
         centered: true
       }).then(function (res) {
         if (res) {
+          _this.$emit('loading');
+
           _this.loading = true;
 
           _this.$inertia.post(route('customers.link-customer'), {
@@ -1937,6 +1946,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1977,6 +1989,7 @@ __webpack_require__.r(__webpack_exports__);
      */
     closeModal: function closeModal() {
       this.$refs['manage-customer-modal'].hide();
+      this.loading = false;
     },
 
     /**
@@ -5991,7 +6004,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "b-button",
-    { attrs: { variant: "danger" }, on: { click: _vm.deactivate } },
+    {
+      staticClass: "m-2",
+      attrs: { variant: "danger" },
+      on: { click: _vm.deactivate }
+    },
     [_vm._v("\n    Deactivate Customer\n")]
   )
 }
@@ -6021,6 +6038,7 @@ var render = function() {
   return _c(
     "b-button",
     {
+      staticClass: "m-2",
       attrs: { variant: "warning" },
       on: {
         click: function($event) {
@@ -6064,7 +6082,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "b-button",
-    { attrs: { variant: "warning" }, on: { click: _vm.breakLink } },
+    {
+      staticClass: "m-2",
+      attrs: { variant: "warning" },
+      on: { click: _vm.breakLink }
+    },
     [_vm._v("\n    Break Link to Parent\n")]
   )
 }
@@ -6936,6 +6958,7 @@ var render = function() {
       staticClass: "mt-1",
       attrs: {
         pill: "",
+        block: "",
         variant: "danger",
         size: "sm",
         title: "Manage Customer"
@@ -7286,7 +7309,12 @@ var render = function() {
                       }
                     ],
                     attrs: { cust_id: _vm.cust_id },
-                    on: { completed: _vm.closeModal }
+                    on: {
+                      loading: function($event) {
+                        _vm.loading = true
+                      },
+                      completed: _vm.closeModal
+                    }
                   }),
                   _vm._v(" "),
                   _c("unlink-customer", {
@@ -7299,7 +7327,12 @@ var render = function() {
                       }
                     ],
                     attrs: { cust_id: _vm.cust_id },
-                    on: { completed: _vm.closeModal }
+                    on: {
+                      loading: function($event) {
+                        _vm.loading = true
+                      },
+                      completed: _vm.closeModal
+                    }
                   }),
                   _vm._v(" "),
                   _c("deactivate-customer", {
@@ -7311,7 +7344,12 @@ var render = function() {
                         expression: "!linked && !is_parent"
                       }
                     ],
-                    attrs: { cust_id: _vm.cust_id }
+                    attrs: { cust_id: _vm.cust_id },
+                    on: {
+                      loading: function($event) {
+                        _vm.loading = true
+                      }
+                    }
                   })
                 ],
                 1
@@ -8012,7 +8050,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "row mt-2 mt-md-0" }, [
         _c("div", { staticClass: "col-md-5 grid-margin stretch-card" }, [
           _c("div", { staticClass: "card" }, [
             _c(

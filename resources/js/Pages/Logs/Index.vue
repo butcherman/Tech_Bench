@@ -12,7 +12,7 @@
                         <div class="card-title">Log Channels</div>
                         <div class="row justify-content-center">
                             <div class="col-lg-2" v-for="channel in channels" :key="channel">
-                                <inertia-link as="b-button" :href="route('admin.logs.channel', channel)" variant="info" block pill>{{channel}}</inertia-link>
+                                <inertia-link as="b-button" :href="route('admin.logs.channel', channel)" variant="info" class="m-2" block pill>{{channel}}</inertia-link>
                             </div>
                         </div>
                     </div>

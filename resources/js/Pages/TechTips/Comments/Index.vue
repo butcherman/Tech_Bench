@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">The Following Comments Have Been Flagged</div>
-                        <b-table :fields="fields" :items="flagged" striped empty-text="No Flagged Comments" show-empty>
+                        <b-table responsive :fields="fields" :items="flagged" striped empty-text="No Flagged Comments" show-empty>
                             <template #cell(tip_id)="data">
                                 <inertia-link :href="route('tech-tips.show', data.item.tip_id)" title="Click to See Full Tip" v-b-tooltip.hover>{{data.item.tip_id}}</inertia-link>
                             </template>

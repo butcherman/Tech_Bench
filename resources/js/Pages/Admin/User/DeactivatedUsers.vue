@@ -9,7 +9,7 @@
             <div class="col-8">
                 <div class="card">
                     <div class="card-body">
-                        <b-table striped :items="user_list" :fields="table.fields">
+                        <b-table responsive striped :items="user_list" :fields="table.fields">
                             <template #cell(actions)="data">
                                 <i class="fas fa-unlock-alt pointer" title="Enable User" v-b-tooltip.hover @click="enableUser(data.item)"></i>
                             </template>
