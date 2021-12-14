@@ -15,6 +15,12 @@ class ResetPasswordController extends Controller
      */
     public function __invoke(Request $request)
     {
+        // If the user is trying to visit the page without a token or email address, show 404 error
+        if(empty($request->token) || empty($request->email))
+        {
+            abort(404);
+        }
+
         return Inertia::render('Auth/password/reset', [
             'token' => $request->token,
             'email' => $request->email,

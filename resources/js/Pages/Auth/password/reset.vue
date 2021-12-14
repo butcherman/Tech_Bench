@@ -10,36 +10,6 @@
                     <text-input v-model="form.email" rules="required|email" label="Email" name="email" :value="form.email"></text-input>
                     <text-input v-model="form.password" type="password" rules="required|confirmed:confirmation|min:6" label="New Password" name="password" placeholder="Enter New Password"></text-input>
                     <text-input v-model="form.password_confirmation" type="password" rules="required" vid="confirmation" label="Confirm Password" name="password_confirmation" placeholder="Confirm New Password"></text-input>
-                    <!-- <ValidationProvider v-slot="v" rules="required|confirmed:confirmation|min:6">
-                        <b-form-group
-                            label="Password:"
-                            label-for="password"
-                        >
-                            <b-form-input
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="Enter New Password"
-                                v-model="form.password"
-                            ></b-form-input>
-                            <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
-                        </b-form-group>
-                    </ValidationProvider>
-                    <ValidationProvider v-slot="v" vid="confirmation" rules="required|min:6">
-                        <b-form-group
-                            label="Confirm Password:"
-                            label-for="password_confirmation"
-                        >
-                            <b-form-input
-                                id="password_confirmation"
-                                name="password_confirmation"
-                                type="password"
-                                placeholder="Confirm New Password"
-                                v-model="form.password_confirmation"
-                            ></b-form-input>
-                            <b-form-invalid-feedback :state="false">{{v.errors[0]}}</b-form-invalid-feedback>
-                        </b-form-group>
-                    </ValidationProvider> -->
                     <submit-button button_text="Reset Password" class="mb-2" :submitted="submitted"></submit-button>
                 </b-form>
             </ValidationObserver>

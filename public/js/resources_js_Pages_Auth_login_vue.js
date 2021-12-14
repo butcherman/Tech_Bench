@@ -76,9 +76,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: [_Layouts_guest__WEBPACK_IMPORTED_MODULE_0__["default"], _Layouts_Nested_authLayout__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  props: {
-    errors: Object
-  },
   data: function data() {
     return {
       form: this.$inertia.form({
@@ -94,7 +91,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.submitted = true;
-      this.$inertia.post(route('login.submit'), this.form, {
+      this.form.post(route('login.submit'), {
         onFinish: function onFinish() {
           _this.submitted = false;
         }

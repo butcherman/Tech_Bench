@@ -80,9 +80,20 @@ class PasswordTest extends TestCase
             $user = User::factory()->create();
             $token = Password::broker()->createToken($user);
 
-            $response = $this->get(route('password.reset', $token));
+            $response = $this->get(route('password.reset', ['token' => $token, 'email' => $user->email]));
 
             $response->assertSuccessful();
+        }
+
+        //  Verify the user cannot view the reset form if no token or email address is present
+        public function test_view_password_reset_form_no_token()
+        {
+            $user = User::factory()->create();
+            $token = Password::broker()->createToken($user);
+
+            $response = $this->get(route('password.reset', $token));
+
+            $response->assertStatus(404);
         }
 
         //  Verify the user cannot view the reset form if already logged in

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\FailedResetEmailAttempt;
+use App\Events\SuccessfulResetEmailAttempt;
 use Illuminate\Support\Facades\Password;
 
 use App\Http\Controllers\Controller;
@@ -16,10 +18,16 @@ class ForgotPasswordSubmitEmailController extends Controller
     {
         $status = Password::sendResetLink($request->only('email'));
 
-        return $status === Password::RESET_LINK_SENT ?
-            back()->with([
-                'message' => $status,
+        if($status === Password::RESET_LINK_SENT)
+        {
+            event(new SuccessfulResetEmailAttempt($request->email));
+            return back()->with([
+                'message' => __($status),
                 'type'    => 'success'
-            ]) : back()->withErrors(['email' => 'Your email address does not match anyting in our records']);
+            ]);
+        }
+
+        event(new FailedResetEmailAttempt($request->email));
+        return back()->withErrors(['email' => __($status)]);
     }
 }

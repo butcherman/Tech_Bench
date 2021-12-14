@@ -27,9 +27,6 @@
 
     export default {
         layout: [Guest, Auth],
-        props: {
-            errors: Object,
-        },
         data() {
             return {
                 form: this.$inertia.form({
@@ -44,7 +41,11 @@
             submitForm()
             {
                 this.submitted = true;
-                this.$inertia.post(route('login.submit'), this.form, {onFinish: () => {this.submitted = false}});
+                this.form.post(route('login.submit'), {
+                    onFinish: () => {
+                        this.submitted = false
+                    }
+                });
             }
         },
         metaInfo: {

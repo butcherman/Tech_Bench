@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->job(new GarbageCollectionJob)->daily();
     }
 
