@@ -21,6 +21,8 @@ class LogFilesController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
+        // dd($channel);
+
         $props = [];
         if(!is_null($channel))
         {

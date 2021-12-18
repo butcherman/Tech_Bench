@@ -2,98 +2,36 @@
 
 namespace App\Policies;
 
-use App\Models\EquipmentType;
 use App\Models\User;
 use App\Traits\AllowTrait;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EquipmentTypePolicy
 {
-    use HandlesAuthorization;
     use AllowTrait;
+    use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\EquipmentType  $equipmentType
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function view(User $user, EquipmentType $equipmentType)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     /**
+     * Determine whether the user can create models
      */
     public function create(User $user)
     {
-        //
         return $this->checkPermission($user, 'Manage Equipment');
     }
 
     /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\EquipmentType  $equipmentType
-     * @return \Illuminate\Auth\Access\Response|bool
+     * Determine whether the user can update the model
      */
-    public function update(User $user, EquipmentType $equipmentType)
+    public function update(User $user)
     {
-        //
         return $this->checkPermission($user, 'Manage Equipment');
     }
 
     /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\EquipmentType  $equipmentType
-     * @return \Illuminate\Auth\Access\Response|bool
+     * Determine whether the user can delete the model
      */
-    public function delete(User $user, EquipmentType $equipmentType)
+    public function delete(User $user)
     {
-        //
         return $this->checkPermission($user, 'Manage Equipment');
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\EquipmentType  $equipmentType
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(User $user, EquipmentType $equipmentType)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\EquipmentType  $equipmentType
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, EquipmentType $equipmentType)
-    {
-        //
     }
 }

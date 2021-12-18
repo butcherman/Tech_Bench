@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Customer;
 use App\Traits\AllowTrait;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -32,7 +31,7 @@ class CustomerPolicy
     /**
      * Determine whether the user can update the customer
      */
-    public function update(User $user, Customer $customer)
+    public function update(User $user)
     {
         return $this->checkPermission($user, 'Update Customer');
     }
@@ -40,7 +39,7 @@ class CustomerPolicy
     /**
      * Determine whether the user can delete the customer
      */
-    public function delete(User $user, Customer $customer)
+    public function delete(User $user)
     {
         return $this->checkPermission($user, 'Deactivate Customer');
     }
