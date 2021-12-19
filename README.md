@@ -25,9 +25,9 @@
 )](https://github.com/butcherman/Tech_Bench)&nbsp;
 [![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=master)](https://travis-ci.com/butcherman/Tech_Bench)
 
-[![Development Branch](https://img.shields.io/badge/Development%20%20-dev5-yellow
+[![Development Branch](https://img.shields.io/badge/Development%20%20-dev6-yellow
 )](https://github.com/butcherman/Tech_Bench/tree/dev5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=dev5)](https://travis-ci.com/butcherman/Tech_Bench)
+[![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=dev6)](https://travis-ci.com/butcherman/Tech_Bench)
 
 ## About Tech Bench
 

@@ -57,24 +57,24 @@ Vue.mixin({ methods: { route }});
 */
 const requireComponent = require.context('./Components/Base', true, /[A-Z]\w+\.(vue|js)$/);
 requireComponent.keys().forEach(fileName => {
-    const componentConfig = requireComponent(fileName)
+    const componentConfig = requireComponent(fileName);
     const componentName   = upperFirst(camelCase(fileName.split('/').pop().replace(/\.\w+$/, '')));
 
     // Register component globally
     Vue.component( componentName, componentConfig.default || componentConfig);
 });
 
+/**
+ * Globally Regester all Base Components from the attached Modules
+ */
+const requireModule = require.context('../../Modules', true, /Base\/[A-Z]\w+\/[A-Z]\w+\.vue$/);
+requireModule.keys().forEach(fileName => {
+    const componentConfig = requireModule(fileName);
+    const componentName   = upperFirst(camelCase(fileName.split('/').pop().replace(/\.\w+$/, '')));
 
-const apps = require.context('../../Modules', true, /register.js$/i)
-apps.keys().map(key => {
-    const name = key.replace('./','').replace('register.js','');
-    // require
-    require('../../Modules/'+name+'register.js');
-})
-
-
-
-
+    // Register component globally
+    Vue.component( componentName, componentConfig.default || componentConfig);
+});
 
 /*
 *   Initialize App
