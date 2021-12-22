@@ -17,7 +17,7 @@ class OrderEquipDataTypes
             if($field !== null)
             {
                 //  Determine if this is a new or existing field type
-                $fieldID  = DataFieldType::where('name', $field)->first();
+                $fieldID = DataFieldType::where('name', $field)->first();
                 if(!$fieldID)
                 {
                     $fieldID = DataFieldType::create(['name' => $field]);

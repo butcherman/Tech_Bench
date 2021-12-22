@@ -211,7 +211,7 @@ class BuildAdminMenu
             if(count($modNav) > 0)
             {
                 //  Split Camel Case name into normal name
-                $nav[implode(' ',preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
+                $nav[implode(' ', preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
             }
         }
 

@@ -17,7 +17,7 @@ class SetLogSettingsController extends Controller
      */
     public function __invoke(LogSettingsRequest $request)
     {
-        $this->saveSettings('logging.days',      $request->days);
+        $this->saveSettings('logging.days', $request->days);
         $this->saveSettings('logging.log_level', $request->level);
 
         event(new LogSettingsUpdatedEvent(['days' => $request->days, 'level' => $request->level]));

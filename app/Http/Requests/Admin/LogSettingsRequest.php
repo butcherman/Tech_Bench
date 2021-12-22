@@ -12,7 +12,7 @@ class LogSettingsRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('viewAny', AppSettings::class);;
+        return $this->user()->can('viewAny', AppSettings::class); ;
     }
 
     /**

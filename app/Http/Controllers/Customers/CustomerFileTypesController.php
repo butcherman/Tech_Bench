@@ -65,7 +65,7 @@ class CustomerFileTypesController extends Controller
         $fileType = CustomerFileType::find($id);
         $this->authorize('delete', $fileType);
 
-        try{
+        try {
             $fileType->delete();
         }
         //  The deletion may fail if the file type is currently in use
