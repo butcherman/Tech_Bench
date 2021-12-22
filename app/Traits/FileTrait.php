@@ -35,7 +35,7 @@ trait FileTrait
             $this->folder = $request->folder;
             $filename     = $this->saveFile($save->getFile());
 
-            $status   = [
+            $status = [
                 'percent'  => 100,
                 'complete' => true,
                 'filename' => $filename,
@@ -74,7 +74,7 @@ trait FileTrait
      */
     protected function cleanFilename($name)
     {
-        $newName =  str_replace(' ', '_', preg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name));
+        $newName = str_replace(' ', '_', preg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name));
 
         return $newName;
     }

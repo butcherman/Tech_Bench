@@ -38,8 +38,7 @@ trait TechTipTrait
             if(isset($equip['laravel_through_key']))
             {
                 //  Remove that piece from the current equipment list so it is not updated later
-                $current = $current->filter(function($i) use ($equip)
-                {
+                $current = $current->filter(function($i) use ($equip) {
                     return $i->equip_id != $equip['equip_id'];
                 });
             }

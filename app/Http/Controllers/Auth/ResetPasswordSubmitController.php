@@ -25,8 +25,7 @@ class ResetPasswordSubmitController extends Controller
     public function __invoke(ResetTokenRequest $request)
     {
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'), function($user, $password)
-            {
+            $request->only('email', 'password', 'password_confirmation', 'token'), function($user, $password) {
                 //  Determine the new expiration date
                 $expires = config('auth.passwords.settings.expire') ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
 

@@ -13,8 +13,7 @@ trait AllowTrait
 {
     protected function checkPermission(User $user, $description)
     {
-        $allowed = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function($q) use ($description)
-        {
+        $allowed = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function($q) use ($description) {
             $q->where('description', $description);
         })->first();
 

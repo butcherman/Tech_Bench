@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class DisableModuleCommand extends Command
 {
-    protected $signature  = 'tb_module:disable {module}';
+    protected $signature = 'tb_module:disable {module}';
     protected $description = 'Disable, but do not remove a Tech Bench Add On Module';
 
     protected $module;

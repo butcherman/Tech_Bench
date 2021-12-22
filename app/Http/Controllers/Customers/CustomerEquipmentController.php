@@ -45,7 +45,7 @@ class CustomerEquipmentController extends Controller
         {
             CustomerEquipmentData::create([
                 'cust_equip_id' => $newEquip->cust_equip_id,
-                'field_id'      => DataField::where('equip_id', $request->equip_id)->where('type_id', $field['type_id'])->first()->field_id,//  ???
+                'field_id'      => DataField::where('equip_id', $request->equip_id)->where('type_id', $field['type_id'])->first()->field_id, //  ???
                 'value'         => isset($field['value']) ? $field['value'] : null,
             ]);
         }

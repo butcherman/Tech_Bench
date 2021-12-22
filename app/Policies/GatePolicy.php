@@ -15,8 +15,7 @@ class GatePolicy
      */
     public function adminLink(User $user)
     {
-        $userRole = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function($q)
-        {
+        $userRole = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function($q) {
             $q->whereIsAdminLink(1);
         })->whereAllow(1)->count();
 

@@ -29,8 +29,7 @@ class CustomerSearchController extends Controller
             ($request->city == null &&
              $request->name == null &&
              $request->equipment == null)
-            )
-        {
+            ) {
             return $this->getAllCustomers();
         }
 
@@ -45,25 +44,20 @@ class CustomerSearchController extends Controller
     {
         return Customer::orderBy($this->sortField, $this->sortType)
             //  Search by equipment
-            ->when(isset($params['equipment']), function($q) use ($params)
-            {
-                $q->whereHas('ParentEquipment', function($q2) use ($params)
-                {
+            ->when(isset($params['equipment']), function($q) use ($params) {
+                $q->whereHas('ParentEquipment', function($q2) use ($params) {
                     $q2->where('name', $params['equipment']);
                 })
-                ->orWhereHas('EquipmentType', function($q2) use ($params)
-                {
+                ->orWhereHas('EquipmentType', function($q2) use ($params) {
                     $q2->where('name', $params['equipment']);
                 });
             })
             //  Search by City
-            ->when(isset($params['city']), function($q) use ($params)
-            {
+            ->when(isset($params['city']), function($q) use ($params) {
                 $q->where('city', 'like', '%'.$params['city'].'%');
             })
             //  Search by Name or ID
-            ->when(isset($params['name']), function($q) use ($params)
-            {
+            ->when(isset($params['name']), function($q) use ($params) {
                 $q->where('name', 'like', '%'.$params['name'].'%')
                     ->orWhere('cust_id', 'like', '%'.$params['name'].'%')
                     ->orWhere('dba_name', 'like', '%'.$params['name'].'%');

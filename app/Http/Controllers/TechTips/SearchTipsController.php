@@ -15,9 +15,9 @@ class SearchTipsController extends Controller
     public function __invoke(SearchTipsRequest $request)
     {
         $dirty       = false;
-        $searchText  = isset($request->search_text)     ? explode(' ', $request->search_text) : null;
-        $searchEquip = isset($request->search_equip_id) ? $request->search_equip_id           : null;
-        $searchType  = isset($request->search_type)     ? $request->search_type               : null;
+        $searchText  = isset($request->search_text) ? explode(' ', $request->search_text) : null;
+        $searchEquip = isset($request->search_equip_id) ? $request->search_equip_id : null;
+        $searchType  = isset($request->search_type) ? $request->search_type : null;
 
         //  Determine if any search queries have been entered
         if($searchText || $searchEquip || $searchType)
@@ -36,7 +36,7 @@ class SearchTipsController extends Controller
             ->orderBy('sticky', 'DESC')
             ->orderBy('created_at', 'DESC')
             //  Search text fields
-            ->when($searchText, function ($q) use($searchText)
+            ->when($searchText, function($q) use($searchText)
                 {
                     foreach($searchText as $text)
                     {
@@ -46,15 +46,12 @@ class SearchTipsController extends Controller
                     }
                 })
             //  Search Article Type field
-            ->when($searchType, function($q) use($searchType)
-                {
+            ->when($searchType, function($q) use($searchType) {
                     $q->whereIn('tip_type_id', $searchType);
                 })
             //  Search Equipment Type field
-            ->when($searchEquip, function($q) use($searchEquip)
-                {
-                    $q->whereHas('EquipmentType', function($q2) use ($searchEquip)
-                    {
+            ->when($searchEquip, function($q) use($searchEquip) {
+                    $q->whereHas('EquipmentType', function($q2) use ($searchEquip) {
                         $q2->whereIn('equipment_types.equip_id', $searchEquip);
                     });
                 })

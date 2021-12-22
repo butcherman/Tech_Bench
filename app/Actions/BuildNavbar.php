@@ -20,7 +20,7 @@ class BuildNavbar
         $admin   = $this->getAdminNavbar();
         $navBar  = $this->getPrimaryNavbar();
         $modules = $this->getModules();
-        array_splice($navBar, 1, 0, $admin);    //  Move the Admin link just under the Dashboard link
+        array_splice($navBar, 1, 0, $admin); //  Move the Admin link just under the Dashboard link
 
         return array_merge($navBar, $modules);
     }
