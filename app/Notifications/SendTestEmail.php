@@ -7,25 +7,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SendTestEmail extends Notification implements ShouldQueue
+class SendTestEmail extends Notification
 {
     use Queueable;
 
     /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
+     * Get the notification's delivery channels
      */
     public function via($notifiable)
     {
@@ -33,28 +20,12 @@ class SendTestEmail extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * Get the mail representation of the notification
      */
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello')
+                    ->greeting('Hello '.$notifiable->full_name)
                     ->line('This is a test email from the Tech Bench');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
     }
 }

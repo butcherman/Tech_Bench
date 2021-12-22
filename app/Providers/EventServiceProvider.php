@@ -75,13 +75,16 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\Customers\CustomerDeactivatedEvent' => [
             'App\Listeners\Customers\LogDeactivatedCustomer',
+            'App\Listeners\Work\RemoveCustomerBookmarks',
         ],
         //  Customer Equipment
         'App\Events\Customers\Equipment\CustomerEquipmentAddedEvent' => [
             'App\Listeners\Customers\Equipment\LogNewCustomerEquipment',
+            'App\Listeners\Notify\Customers\NotifyNewCustomerEquipment',
         ],
         'App\Events\Customers\Equipment\CustomerEquipmentUpdatedEvent' => [
             'App\Listeners\Customers\Equipment\LogUpdatedCustomerEquipment',
+            'App\Listeners\Notify\Customers\NotifyUpdatedCustomerEquipment',
         ],
         'App\Events\Customers\Equipment\CustomerEquipmentDeletedEvent' => [
             'App\Listeners\Customers\Equipment\LogDeletedCustomerEquipment',
@@ -94,10 +97,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         //  Customer Contacts
         'App\Events\Customers\Contacts\CustomerContactAddedEvent' => [
-            'App\Listeners\Customers\Contacts\LogAddedCustomerContact'
+            'App\Listeners\Customers\Contacts\LogAddedCustomerContact',
+            'App\Listeners\Notify\Customers\NotifyAddedCustomerContact',
         ],
         'App\Events\Customers\Contacts\CustomerContactUpdatedEvent' => [
-            'App\Listeners\Customers\Contacts\LogUpdatedCustomerContact'
+            'App\Listeners\Customers\Contacts\LogUpdatedCustomerContact',
+            'App\Listeners\Notify\Customers\NotifyUpdatedCustomerContact',
         ],
         'App\Events\Customers\Contacts\CustomerContactDeletedEvent' => [
             'App\Listeners\Customers\Contacts\LogDeletedContact'
@@ -113,10 +118,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         //  Customer Notes
         'App\Events\Customers\Notes\CustomerNoteAddedEvent' => [
-            'App\Listeners\Customers\Notes\LogAddedCustomerNote'
+            'App\Listeners\Customers\Notes\LogAddedCustomerNote',
+            'App\Listeners\Notify\Customers\NotifyAddedCustomerNote',
         ],
         'App\Events\Customers\Notes\CustomerNoteUpdatedEvent' => [
-            'App\Listeners\Customers\Notes\LogUpdatedCustomerNote'
+            'App\Listeners\Customers\Notes\LogUpdatedCustomerNote',
+            'App\Listeners\Notify\Customers\NotifyUpdatedCustomerNote',
         ],
         'App\Events\Customers\Notes\CustomerNoteDeletedEvent' => [
             'App\Listeners\Customers\Notes\LogDeletedNote'
@@ -132,7 +139,8 @@ class EventServiceProvider extends ServiceProvider
         ],
         //  Customer Files
         'App\Events\Customers\Files\CustomerFileAddedEvent' => [
-            'App\Listeners\Customers\Files\LogAddedCustomerFile'
+            'App\Listeners\Customers\Files\LogAddedCustomerFile',
+            'App\Listeners\Notify\Customers\NotifyAddedCustomerFile',
         ],
         'App\Events\Customers\Files\CustomerFileUpdatedEvent' => [
             'App\Listeners\Customers\Files\LogUpdatedCustomerFile'

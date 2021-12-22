@@ -65,7 +65,7 @@ requireComponent.keys().forEach(fileName => {
 });
 
 /**
- * Globally Regester all Base Components from the attached Modules
+ * Globally Register all Base Components from the attached Modules
  */
 const requireModule = require.context('../../Modules', true, /Base\/[A-Z]\w+\/[A-Z]\w+\.vue$/);
 requireModule.keys().forEach(fileName => {

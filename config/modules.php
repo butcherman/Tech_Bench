@@ -33,7 +33,6 @@ return [
             'scaffold/config'             => 'Config/config.php',
             'composer'                    => 'composer.json',
             'assets/js/app'               => 'Resources/js/app.js',
-            'assets/js/register'          => 'Resources/js/register.js',
             // 'assets/js/app/Pages/welcome' => 'Resources/js/Pages/welcome.vue',   //  FIXME - waiting on patch from nWidart Laravel Modules
             'assets/sass/app'             => 'Resources/sass/app.scss',
             'webpack'                     => 'webpack.mix.js',

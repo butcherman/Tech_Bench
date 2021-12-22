@@ -17,6 +17,7 @@ use App\Events\Customers\CustomerDetailsUpdated;
 use App\Events\Customers\CustomerDeactivatedEvent;
 
 use App\Models\Customer;
+use App\Models\CustomerFile;
 use App\Models\EquipmentType;
 use App\Models\PhoneNumberType;
 use App\Models\CustomerFileType;
@@ -24,7 +25,6 @@ use App\Models\UserCustomerBookmark;
 
 use App\Http\Requests\Customers\NewCustomerRequest;
 use App\Http\Requests\Customers\EditCustomerRequest;
-use App\Models\CustomerFile;
 
 class CustomerController extends Controller
 {

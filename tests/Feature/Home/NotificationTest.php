@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Home;
 
-use App\Models\TechTip;
-use App\Models\User;
-use App\Notifications\TechTips\NewTechTipNotification;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
+
+use Illuminate\Support\Facades\Notification;
+
+use App\Models\User;
+use App\Models\TechTip;
+use App\Models\UserSetting;
+use App\Notifications\TechTips\NewTechTipNotification;
 
 class NotificationTest extends TestCase
 {
@@ -20,6 +21,13 @@ class NotificationTest extends TestCase
         //  Create a new Tech Tip to generate a notification with
         $tip  = TechTip::factory()->create();
         $user = User::factory()->create();
+
+        UserSetting::create([
+            'user_id'         => $user->user_id,
+            'setting_type_id' => 1,
+            'value'           => 1,
+        ]);
+
         Notification::send($user, new NewTechTipNotification($tip));
 
         $response = $this->get(route('notifications.edit', $user->notifications()->first()->id));
@@ -33,6 +41,11 @@ class NotificationTest extends TestCase
         //  Create a new Tech Tip to generate a notification with
         $tip  = TechTip::factory()->create();
         $user = User::factory()->create();
+        UserSetting::create([
+            'user_id'         => $user->user_id,
+            'setting_type_id' => 1,
+            'value'           => 1,
+        ]);
         Notification::send($user, new NewTechTipNotification($tip));
 
         $response = $this->actingAs($user)->get(route('notifications.edit', $user->notifications()->first()->id));
@@ -47,6 +60,11 @@ class NotificationTest extends TestCase
         //  Create a new Tech Tip to generate a notification with
         $tip  = TechTip::factory()->create();
         $user = User::factory()->create();
+        UserSetting::create([
+            'user_id'         => $user->user_id,
+            'setting_type_id' => 1,
+            'value'           => 1,
+        ]);
         Notification::send($user, new NewTechTipNotification($tip));
 
         $response = $this->delete(route('notifications.destroy', $user->notifications()->first()->id));
@@ -59,6 +77,11 @@ class NotificationTest extends TestCase
     {
         $tip  = TechTip::factory()->create();
         $user = User::factory()->create();
+        UserSetting::create([
+            'user_id'         => $user->user_id,
+            'setting_type_id' => 1,
+            'value'           => 1,
+        ]);
         Notification::send($user, new NewTechTipNotification($tip));
 
         $response = $this->actingAs($user)->delete(route('notifications.destroy', $user->notifications()->first()->id));

@@ -7,6 +7,7 @@ use App\Models\TechTip;
 use App\Models\TechTipFile;
 use App\Models\User;
 use App\Models\UserRolePermissions;
+use App\Models\UserSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
@@ -88,12 +89,18 @@ class TechTipsTest extends TestCase
 
     public function test_store()
     {
-        $data = TechTip::factory()->make()->only(['subject', 'tip_type_id', 'details', 'noEmail', 'sticky', 'equipment']);
+        $user              = User::factory()->create();
+        $data              = TechTip::factory()->make()->only(['subject', 'tip_type_id', 'details', 'noEmail', 'sticky', 'equipment']);
         $data['noEmail']   = false;
         $data['equipment'] = [EquipmentType::factory()->create()];
-        $slug = Str::slug($data['subject']);
+        $slug              = Str::slug($data['subject']);
+        UserSetting::create([
+            'user_id' => $user->user_id,
+            'setting_type_id' => 1,
+            'value' => 1,
+        ]);
 
-        $response = $this->actingAs(User::factory()->create())->post(route('tech-tips.store'), $data);
+        $response = $this->actingAs($user)->post(route('tech-tips.store'), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('tech-tips.show', $slug));
         $this->assertDatabaseHas('tech_tips', [

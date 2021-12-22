@@ -5,11 +5,11 @@ namespace App\Listeners\Notify;
 use Illuminate\Support\Facades\Notification;
 
 use App\Models\User;
-use App\Models\UserSettingType;
 use App\Events\TechTips\TechTipCreatedEvent;
 use App\Notifications\TechTips\NewTechTipNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotifyNewTechTip
+class NotifyNewTechTip implements ShouldQueue
 {
     /**
      * Handle the event
@@ -18,13 +18,7 @@ class NotifyNewTechTip
     {
         if($event->notify)
         {
-            $notificationType = UserSettingType::where('name', 'Receive Email Notifications')->first();
-            $userList = User::whereHas('UserSetting', function($q) use ($notificationType)
-            {
-                $q->where('setting_type_id', $notificationType->setting_type_id)->where('value', true);
-            })->get();
-
-            Notification::send($userList, new NewTechTipNotification($event->techTip));
+            Notification::send(User::all(), new NewTechTipNotification($event->techTip));
         }
     }
 }

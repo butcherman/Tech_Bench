@@ -5,6 +5,7 @@ namespace App\Notifications;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
+use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -33,7 +34,15 @@ class NewTechTipCommentNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        $settingId = UserSettingType::where('name', 'Receive Email Notifications')->first()->setting_type_id;
+        $allow     = $notifiable->UserSetting->where('setting_type_id', $settingId)->first()->value;
+
+        if($allow)
+        {
+            return ['mail', 'database'];
+        }
+
+        return ['database'];
     }
 
     /**
@@ -42,7 +51,8 @@ class NewTechTipCommentNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello')
+                    ->subject('Someone Commented On A Tech Tip')
+                    ->greeting('Hello '.$notifiable->full_name)
                     ->line($this->user->full_name.' has commented on Tech Tip - .'.$this->tip->subject)
                     ->line('The comment is: ')
                     ->line($this->comment->comment)
@@ -50,10 +60,7 @@ class NewTechTipCommentNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
+     * Get the array representation of the notification
      */
     public function toArray($notifiable)
     {

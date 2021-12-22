@@ -3,6 +3,7 @@
 namespace App\Notifications\TechTips;
 
 use App\Models\TechTip;
+use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -15,9 +16,7 @@ class UpdatedTechTipNotification extends Notification implements ShouldQueue
     protected $techTip;
 
     /**
-     * Create a new notification instance.
-     *
-     * @return void
+     * Create a new notification instance
      */
     public function __construct(TechTip $techTip)
     {
@@ -25,36 +24,36 @@ class UpdatedTechTipNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
+     * Get the notification's delivery channels
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        $settingId = UserSettingType::where('name', 'Receive Email Notifications')->first()->setting_type_id;
+        $allow     = $notifiable->UserSetting->where('setting_type_id', $settingId)->first()->value;
+
+        if($allow)
+        {
+            return ['mail', 'database'];
+        }
+
+        return ['database'];
     }
 
     /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * Get the mail representation of the notification
      */
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Updated Tech Tip')
+                    ->subject('Updated Tech Tip')
+                    ->greeting('Hello '.$notifiable->full_name)
                     ->line('Subject:  '.$this->techTip->subject)
                     ->line('This Tech Tip has been updated with new information')
                     ->action('Click to View the Tech Tip', url(route('tech-tips.show', $this->techTip->slug)));
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
+     * Get the array representation of the notification
      */
     public function toArray($notifiable)
     {

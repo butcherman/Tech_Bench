@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
-class NotifyOfNewTechTipComment
+class NotifyOfNewTechTipComment implements ShouldQueue
 {
     /**
      * Handle the event

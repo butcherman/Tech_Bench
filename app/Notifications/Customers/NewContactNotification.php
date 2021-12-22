@@ -1,26 +1,27 @@
 <?php
 
-namespace App\Notifications\TechTips;
+namespace App\Notifications\Customers;
 
-use App\Models\TechTip;
+use App\Models\Customer;
 use App\Models\UserSettingType;
+
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
-class NewTechTipNotification extends Notification implements ShouldQueue
+class NewContactNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $techTip;
+    protected $cust;
 
     /**
      * Create a new notification instance
      */
-    public function __construct(TechTip $techTip)
+    public function __construct(Customer $cust)
     {
-        $this->techTip = $techTip;
+        $this->cust = $cust;
     }
 
     /**
@@ -45,23 +46,24 @@ class NewTechTipNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('A New Tech Tip Has Been Created')
+                    ->subject('A New Customer Contact Has Been Created')
                     ->greeting('Hello '.$notifiable->full_name)
-                    ->line('A new Tech Tip has recently been created')
-                    ->line('Subject:  '.$this->techTip->subject)
-                    ->action('Click to View the Tech Tip', url(route('tech-tips.show', $this->techTip->slug)));
+                    ->line('A new Customer Contact was just created for '.$this->cust->name)
+                    ->action('Click Here to view the Customer', url(route('customers.show', $this->cust->slug)))
+                    ->line('Note: You are receiving this notification because this customer is Bookmarked as a Favorite');
     }
 
     /**
      * Get the array representation of the notification
      */
-    public function toArray($notifiable)
+    public function toArray()
     {
         return [
-            'subject' => 'New Tech Tip',
+            'subject' => 'A New Customer Contact Has Been Created',
             'data'    => [
-                'tip_data' => $this->techTip,
-            ]
+                'customer' => $this->cust->name,
+                'slug'     => $this->cust->slug,
+            ],
         ];
     }
 }

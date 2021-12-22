@@ -2,12 +2,15 @@
 
 namespace App\Listeners\Work;
 
-use App\Events\Admin\PasswordPolicyUpdatedEvent;
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
-class UpdateUsersPasswordPolicy
+use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+use App\Models\User;
+use App\Events\Admin\PasswordPolicyUpdatedEvent;
+
+class UpdateUsersPasswordPolicy implements ShouldQueue
 {
     /**
      * Handle the event

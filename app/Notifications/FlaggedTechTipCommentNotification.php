@@ -41,7 +41,8 @@ class FlaggedTechTipCommentNotification extends Notification implements ShouldQu
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello')
+                    ->subject('A Tech Tip Comment has been flagged')
+                    ->greeting('Hello '.$notifiable->full_name)
                     ->line('User '.$this->user->full_name.' has flagged a comment on a Tech Tip as inappropriate.')
                     ->line('The comment is: ')
                     ->line($this->comment->comment)
