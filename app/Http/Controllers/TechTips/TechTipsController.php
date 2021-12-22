@@ -2,142 +2,225 @@
 
 namespace App\Http\Controllers\TechTips;
 
+use Inertia\Inertia;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
-use App\Domains\Users\UserFavs;
-use App\Domains\Users\GetUserStats;
-use App\Domains\TechTips\SetTechTips;
-use App\Domains\TechTips\GetTechTips;
-use App\Domains\TechTips\GetTechTipTypes;
-use App\Domains\Equipment\GetEquipmentData;
+use App\Traits\TechTipTrait;
 
-use App\Http\Requests\TechTipNewTipRequest;
-use App\Http\Requests\TechTipSearchRequest;
-use App\Http\Requests\TechTipEditTipRequest;
-use App\Http\Requests\TechTipProcessImageRequest;
+use App\Models\TechTip;
+use App\Models\TechTipType;
+use App\Models\EquipmentCategory;
+use App\Models\UserTechTipBookmark;
+
+use App\Events\TechTips\TechTipCreatedEvent;
+use App\Events\TechTips\TechTipDeletedEvent;
+use App\Events\TechTips\TechTipForceDeletedEvent;
+use App\Events\TechTips\TechTipRestoredEvent;
+use App\Events\TechTips\TechTipUpdatedEvent;
+use App\Http\Requests\TechTips\CreateTipRequest;
+use App\Http\Requests\TechTips\UpdateTipRequest;
+use App\Models\TechTipFile;
+use App\Traits\FileTrait;
 
 class TechTipsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    use TechTipTrait;
+    // use FileTrait;
 
-    //  Tech Tips landing page
-    public function index()
+    /**
+     * Tech Tips search page
+     */
+    public function index(Request $request)
     {
-        return view('tips.index', [
-            'tipTypes' => (new GetTechTipTypes)->execute(true),
-            'sysTypes' => (new GetEquipmentData)->getAllEquipmentWithDataList(),
+        $filterData = [
+            'tip_types'   => TechTipType::all(),
+            'equip_types' => EquipmentCategory::with('EquipmentType')->get(),
+        ];
+
+        return Inertia::render('TechTips/Index', [
+            'filter_data' => $filterData,
+            'create'      => $request->user()->can('create', TechTip::class),
         ]);
     }
 
-    //  Search for an existing tip - If no paramaters, return all tips
-    public function search(TechTipSearchRequest $request)
-    {
-        return (new GetTechTips)->searchTips($request);
-    }
-
-    //  Process an image that is attached to a tech tip
-    public function processImage(TechTipProcessImageRequest $request)
-    {
-        $this->authorize('hasAccess', 'Create Tech Tip');
-
-        $imgLocation = (new SetTechTips)->processTipImage($request);
-        return response()->json(['location' => $imgLocation]);
-
-    }
-
-    //  Create a new Tech Tip form
+    /**
+     * Show the form for creating a new Tech Tip
+     */
     public function create()
     {
-        $this->authorize('hasAccess', 'Create Tech Tip');
+        $this->authorize('create', TechTip::class);
 
-        return view('tips.create', [
-            'tipTypes' => (new GetTechTipTypes)->execute(true),
-            'sysTypes' => (new GetEquipmentData)->getAllEquipmentWithDataList(),
+        return Inertia::render('TechTips/Create', [
+            'tip_types' => TechTipType::all(),
+            'equipment' => EquipmentCategory::with('EquipmentType')->get(),
         ]);
     }
 
-    //  Submit the form to create a new tech tip
-    public function store(TechTipNewTipRequest $request)
+    /**
+     * Store a newly created Tech Tip
+     */
+    public function store(CreateTipRequest $request)
     {
-        $this->authorize('hasAccess', 'Create Tech Tip');
-
-        $tipData = (new SetTechTips)->processNewTip($request);
-        return response()->json(['success' => $tipData]);
-    }
-
-    //  Details controller - will move to the show controller with just the tech tip id
-    public function details($id)
-    {
-        $tipData = (new GetTechTips)->getTipDetails($id);
-
-        if($tipData['details'] === null)
-        {
-            return view('tips.tipNotFound');
-        }
-
-        return view('tips.details', [
-            'details' => $tipData->toJson(),
-            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false', // empty($isFav) ? 'false' : 'true',
+        //  Create the new Tip
+        $newTip = TechTip::create([
+            'user_id'     => $request->user()->user_id,
+            'tip_type_id' => $request->tip_type_id,
+            'sticky'      => $request->sticky,
+            'subject'     => $request->subject,
+            'slug'        => Str::slug($request->subject),
+            'details'     => $request->details,
         ]);
 
+        $this->addEquipment($newTip->tip_id, $request->equipment);
+        $this->processNewFiles($newTip->tip_id, true);
+
+        event(new TechTipCreatedEvent($newTip, !$request->noEmail));
+        return redirect(route('tech-tips.show', $newTip->slug));
     }
 
-    //  Show the details about the tech tip
+    /**
+     * Display the Tech Tip
+     */
     public function show($id)
     {
-        $tipData = (new GetTechTips)->getTipDetails($id);
-
-        return view('tips.details', [
-            'details' => $tipData['data'],
-            'isFav'   => (new GetUserStats)->checkForTechTipFav($id) ? 'true' : 'false', // empty($isFav) ? 'false' : 'true',
-            'files'   => $tipData['files'],
-        ]);
-    }
-
-    //  Add or remove this tip as a favorite of the user
-    public function toggleFav($action, $id)
-    {
-        (new UserFavs)->updateTechTipFav($id);
-        return response()->json(['success' => true]);
-    }
-
-    //  Edit an existing tech tip
-    public function edit($id)
-    {
-        $this->authorize('hasAccess', 'Edit Tech Tip');
-
-        $tipData = (new GetTechTips)->getTipDetails($id);
-        if(!$tipData['details'])
+        //  Check if we are passing the Tech Tip name or number
+        if(is_numeric($id))
         {
-            return view('tips.tipNotFound');
+            //  To keep things uniform, redirect to a link that has the Tech Tip subject rather than the ID
+            $tip = TechTip::findOrFail($id);
+            return redirect(route('tech-tips.show', $tip->slug));
         }
 
-        return view('tips.editTip', [
-            'tipTypes' => (new GetTechTipTypes)->execute(true),
-            'sysTypes' => (new GetEquipmentData)->getAllEquipmentWithDataList(),
-            'tipData'  => $tipData,
+        //  Pull the Tech Tip Information
+        $tip = TechTip::where('slug', $id)
+                ->with('EquipmentType')
+                ->with('FileUploads')
+                ->with('TechTipComment.User')
+                ->firstOrFail()
+                ->makeHidden(['summary', 'sticky']);
+
+        //  Determine if the Tech Tip is bookmarked by the user
+        $isFav = UserTechTipBookmark::where('user_id', Auth::user()->user_id)
+                    ->where('tip_id', $tip->tip_id)
+                    ->count();
+
+        return Inertia::render('TechTips/Show', [
+            'tip' => $tip,
+            //  User Permissions for Tech Tips
+            'user_data' => [
+                'fav' => $isFav,
+                'permissions' => [
+                    'edit'      => Auth::user()->can('update', $tip),
+                    'delete'    => Auth::user()->can('delete', $tip),
+                    'manage'    => Auth::user()->can('manage', TechTip::class),
+                    'comment'   => [
+                        'create'  => Auth::user()->can('create', TechTipComment::class),
+                        'manage'  => Auth::user()->can('manage', TechTipComment::class),
+                    ],
+                ],
+            ]
         ]);
     }
 
-    //  Store the edited Tech Tip
-    public function update(TechTipEditTipRequest $request, $id)
+    /**
+     * Show the form to Edit the Tech Tip
+     */
+    public function edit($id)
     {
-        $this->authorize('hasAccess', 'Edit Tech Tip');
+        $tip = TechTip::with(['EquipmentType', 'FileUploads'])->findOrFail($id)->makeVisible(['tip_type_id']);
+        $this->authorize('update', $tip);
 
-        (new SetTechTips)->processEditTip($request, $id);
-
-        return response()->json(['success' => true]);
+        return Inertia::render('TechTips/Edit', [
+            'data'      => $tip,
+            'tip_types' => TechTipType::all(),
+            'equipment' => EquipmentCategory::with('EquipmentType')->get(),
+        ]);
     }
 
-    //  Soft delet the Tech Tip
+    /**
+     * Update the Tech Tip
+     */
+    public function update(UpdateTipRequest $request, $id)
+    {
+        //  Update the Tech Tip
+        $tip = TechTip::findOrFail($id);
+        $tip->update([
+            'updated_id'  => $request->user()->user_id,
+            'tip_type_id' => $request->tip_type_id,
+            'sticky'      => $request->sticky,
+            'subject'     => $request->subject,
+            'slug'        => Str::slug($request->subject),
+            'details'     => $request->details,
+        ]);
+
+        $this->processUpdatedEquipment($tip->tip_id, $request->equipment);
+        $this->removeFiles($tip->tip_id, $request->removedFiles);
+        $this->processNewFiles($tip->tip_id);
+
+        event(new TechTipUpdatedEvent($tip, $request->resendNotif));
+        return redirect(route('tech-tips.show', $tip->slug))->with([
+            'message' => 'Tech Tip Updated',
+            'type'    => 'success',
+        ]);
+    }
+
+    /**
+     * Soft Delete the Tech Tip
+     */
     public function destroy($id)
     {
-        $this->authorize('hasAccess', 'Delete Tech Tip');
+        $tip = TechTip::findOrFail($id);
+        $this->authorize('delete', $tip);
+        $tip->delete();
 
-        (new SetTechTips)->deleteTip($id);
-        return response()->json(['success' => true]);
+        event(new TechTipDeletedEvent($tip));
+        return redirect(route('tech-tips.index'))->with([
+            'message' => 'Tech Tip Deleted',
+            'type'    => 'danger',
+        ]);
+    }
+
+    /**
+     * Restore a Tech Tip that was Soft Deleted
+     */
+    public function restore($id)
+    {
+        $tip = TechTip::withTrashed()->find($id);
+        $this->authorize('manage', $tip);
+        $tip->restore();
+
+        event(new TechTipRestoredEvent($tip));
+        return redirect(route('tech-tips.show', $tip->slug))->with([
+            'message' => 'Tech Tip Restored',
+            'type'    => 'success',
+        ]);
+    }
+
+    /**
+     * Permanently delete a Tech Tip from the database
+     */
+    public function forceDelete($id)
+    {
+        $tip = TechTip::withTrashed()->find($id);
+        $this->authorize('manage', $tip);
+
+        //  Determine if the Tech Tip has files that need to be deleted
+        $files = TechTipFile::where('tip_id', $tip->tip_id)->get();
+        foreach($files as $file)
+        {
+            $file->delete();
+            $this->deleteFile($file->file_id);
+        }
+
+        $tip->forceDelete();
+
+        event(new TechTipForceDeletedEvent($tip));
+        return redirect(route('admin.tips.deleted'))->with([
+            'message' => 'Tech Tip Permanently Deleted',
+            'type'    => 'danger',
+        ]);
     }
 }

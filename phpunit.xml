@@ -1,37 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
+>
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
-
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./Modules/**/Tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./Modules/**/Tests/Unit</directory>
+        </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+    <coverage processUncoveredFiles="true">
+        <include>
             <directory suffix=".php">./app</directory>
-        </whitelist>
-    </filter>
-    <logging>
-        <log type="coverage-html" target="./tests/_Report/html" />
-        <log type="coverage-clover" target="./tests/_Report/clover/clover.xml" />
-    </logging>
+            <directory suffix=".php">./Modules/**/Http</directory>
+            <directory suffix=".php">./Modules/**/Entities</directory>
+            <directory suffix=".php">./Modules/**/Events</directory>
+            <directory suffix=".php">./Modules/**/Listeners</directory>
+            <directory suffix=".php">./Modules/**/Notifications</directory>
+            <directory suffix=".php">./Modules/**/Policies</directory>
+        </include>
+        <exclude>
+            <file>./app/Http/Middleware/Authenticate.php</file>
+            <file>./app/Http/Middleware/EncryptCookies.php</file>
+            <file>./app/Http/Middleware/PreventRequestsDuringMaintenance.php</file>
+            <file>./app/Http/Middleware/TrimStrings.php</file>
+            <file>./app/Http/Middleware/TrustHosts.php</file>
+            <file>./app/Http/Middleware/TrustProxies.php</file>
+            <file>./app/Http/Middleware/VerifyCsrfToken.php</file>
+            <file>./app/Providers/AppServiceProvider.php</file>
+            <file>./app/Providers/BroadcastServiceProvider.php</file>
+            <file>./app/Providers/EventServiceProvider.php</file>
+            <file>./app/Providers/RouteServiceProvider.php</file>
+        </exclude>
+    </coverage>
     <php>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="CACHE_DRIVER" value="array"/>
-        <server name="MAIL_DRIVER" value="array"/>
+        <!-- <server name="DB_CONNECTION" value="sqlite"/> -->
+        <!-- <server name="DB_DATABASE" value=":memory:"/> -->
+        <server name="MAIL_MAILER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
+        <server name="TELESCOPE_ENABLED" value="false"/>
     </php>
 </phpunit>

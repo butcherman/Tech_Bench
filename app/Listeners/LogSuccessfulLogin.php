@@ -2,21 +2,28 @@
 
 namespace App\Listeners;
 
-use App\UserLogins;
+use App\Models\UserLogins;
+
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 class LogSuccessfulLogin
 {
-    //  Update the datbase to note the successful login
-    public function handle()
+    /**
+     * Handle the event
+     */
+    public function handle(Login $event)
     {
-        $user = UserLogins::create(
+        UserLogins::create(
         [
-            'user_id'    => Auth::user()->user_id,
+            'user_id'    => $event->user->user_id,
             'ip_address' => \Request::ip()
         ]);
 
-        Log::info('User '.Auth::user()->full_name.' logged in from IP Address '.\Request::ip(), $user->toArray());
+        Log::stack(['auth', 'user'])->info('User '.$event->user->full_name.' successfully logged in from IP Address '.\Request::ip(), [
+            'User ID'    => $event->user->user_id,
+            'Username'   => $event->user->username,
+            'IP Address' => \Request::ip()
+        ]);
     }
 }

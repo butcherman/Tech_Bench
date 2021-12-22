@@ -4,74 +4,166 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
 
-use JeroenDesloovere\VCard\VCard;
+use App\Models\Customer;
+use App\Models\PhoneNumberType;
+use App\Models\CustomerContact;
+use App\Models\CustomerContactPhone;
 
-use App\Domains\Customers\GetCustomerContacts;
-use App\Domains\Customers\GetCustomerDetails;
-use App\Domains\Customers\SetCustomerContacts;
-
-use App\Http\Requests\CustomerEditContactRequest;
-use App\Http\Requests\CustomerNewContactRequest;
+use App\Http\Requests\Customers\CustomerContactsRequest;
+use App\Events\Customers\Contacts\CustomerContactAddedEvent;
+use App\Events\Customers\Contacts\CustomerContactDeletedEvent;
+use App\Events\Customers\Contacts\CustomerContactUpdatedEvent;
+use App\Events\Customers\Contacts\CustomerContactRestoredEvent;
+use App\Events\Customers\Contacts\CustomerContactForceDeletedEvent;
 
 class CustomerContactsController extends Controller
 {
-    public function __construct()
+    /**
+     * Store a newly created customer contact
+     */
+    public function store(CustomerContactsRequest $request)
     {
-        $this->middleware('auth');
-    }
+        $cust    = Customer::findOrFail($request->cust_id);
+        $cust_id = $cust->cust_id;
 
-    //  Index funtion will only return the type of phone numbers that can be assigned to a customer
-    public function index()
-    {
-        return (new GetCustomerContacts)->getPhoneNumberTypes(true);
-    }
-
-    //  Store a new customer contact
-    public function store(CustomerNewContactRequest $request)
-    {
-        (new SetCustomerContacts($request->cust_id))->createContact($request);
-        return response()->json(['success' => true]);
-    }
-
-    //  Get the contacts for a customer
-    public function show($id)
-    {
-        return (new GetCustomerContacts($id))->execute();
-    }
-
-    //  Edit function will actually download the contact information in V-Card format
-    public function edit($id)
-    {
-        $contData = (new GetCustomerContacts)->getOneContact($id);
-        $custData = (new GetCustomerDetails)->getDetails($contData['cust_id']);
-
-
-        $vcard = new VCard();
-        $vcard->addName($contData['lastName'], $contData['firstName'], $contData['additional'], $contData['prefix'], $contData['suffix']);
-        $vcard->addCompany(/** @scrutinizer ignore-type */ $custData['name']);
-        $vcard->addEmail($contData['email']);
-        $vcard->addAddress(null, null, $custData['address'], $custData['city'], $custData['state'], $custData['zip'], null);
-        if(!empty($contData['numbers']))
+        //  If the equipment is shared, it must be assigned to the parent site
+        if($request->shared && $cust->parent_id > 0)
         {
-            foreach($contData['numbers'] as $phone)
+            $cust_id = $cust->parent_id;
+        }
+
+        //  Create the contact
+        $newContact = CustomerContact::create([
+            'cust_id' => $cust_id,
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'shared'  => $request->shared,
+            'title'   => $request->title,
+            'note'    => $request->note,
+        ]);
+
+        //  Input the contacts phone numbers
+        foreach($request->phones as $phone)
+        {
+            if(isset($phone['number']))
             {
-                $vcard->addPhoneNumber($phone->phone_number, $phone->description);
+                CustomerContactPhone::create([
+                    'cont_id'       => $newContact->cont_id,
+                    'phone_type_id' => PhoneNumberType::where('description', $phone['type'])->first()->phone_type_id,
+                    'phone_number'  => $this->cleanPhoneNumber($phone['number']),
+                    'extension'     => $phone['extension'],
+                ]);
             }
         }
-        return $vcard->download();
+
+        event(new CustomerContactAddedEvent($cust, $newContact));
+        return back()->with(['message' => 'New Contact Created', 'type' => 'success']);
     }
 
-    //  Update an existing Customer Contact
-    public function update(CustomerEditContactRequest $request, $id)
+    /**
+     * Update an existing contact
+     */
+    public function update(CustomerContactsRequest $request, $id)
     {
-        (new SetCustomerContacts($id))->updateContact($request);
-        return response()->json(['success' => true]);
+        $cust    = Customer::findOrFail($request->cust_id);
+        $cust_id = $cust->cust_id;
+
+        //  If the equipment is shared, it must be assigned to the parent site
+        if($request->shared && $cust->parent_id > 0)
+        {
+            $cust_id = $cust->parent_id;
+        }
+
+        $contact = CustomerContact::find($id);
+        $contact->update([
+            'cust_id' => $cust_id,
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'shared'  => $request->shared,
+            'title'   => $request->title,
+            'note'    => $request->note,
+        ]);
+
+        $updatedNumbers = [];
+        foreach($request->phones as $phone)
+        {
+            //  If the number is an existing number, update it
+            if(isset($phone['id']))
+            {
+                CustomerContactPhone::find($phone['id'])->update([
+                    'phone_type_id' => PhoneNumberType::where('description', $phone['phone_number_type']['description'])->first()->phone_type_id,
+                    'phone_number'  => $this->cleanPhoneNumber($phone['phone_number']),
+                    'extension'     => $phone['extension'],
+                ]);
+                $updatedNumbers[] = $phone['id'];
+            }
+            //  Otherwise enter a new number
+            else
+            {
+                $new = CustomerContactPhone::create([
+                    'cont_id'       => $id,
+                    'phone_type_id' =>PhoneNumberType::where('description', $phone['phone_number_type']['description'])->first()->phone_type_id,
+                    'phone_number'  => $this->cleanPhoneNumber($phone['phone_number']),
+                    'extension'     => $phone['extension'],
+                ]);
+                $updatedNumbers[] = $new->id;
+            }
+        }
+
+        $oldContacts = CustomerContactPhone::where('cont_id', $id)->whereNotIn('id', $updatedNumbers)->get();
+        foreach($oldContacts as $cont)
+        {
+            $cont->delete();
+        }
+
+        event(new CustomerContactUpdatedEvent($cust, $contact));
+        return back()->with(['message' => 'Contact Updated', 'type' => 'success']);
     }
 
-    //  Delete an existing contact
+    /**
+     * Soft Delete a Customer Contact
+     */
     public function destroy($id)
     {
-        (new SetCustomerContacts($id))->deleteContact($id);
-        return response()->json(['success' => true]);
+        $this->authorize('delete', CustomerContact::class);
+        $cont = CustomerContact::find($id);
+        $cont->delete();
+
+        event(new CustomerContactDeletedEvent(Customer::find($cont->cust_id), $cont));
+        return back()->with(['message' => 'Contact deleted', 'type' => 'danger']);
+    }
+
+    /**
+     * Restore a contact that was soft deleted
+     */
+    public function restore($id)
+    {
+        $this->authorize('restore', CustomerContact::class);
+        $cont = CustomerContact::withTrashed()->where('cont_id', $id)->first();
+        $cont->restore();
+
+        event(new CustomerContactRestoredEvent(Customer::find($cont->cust_id), $cont));
+        return back()->with(['message' => 'Contact '.$cont->name.' restored', 'type' => 'success']);
+    }
+
+    /**
+     * Permanently delete a contact
+     */
+    public function forceDelete($id)
+    {
+        $cont = CustomerContact::withTrashed()->where('cont_id', $id)->first();
+        $this->authorize('forceDelete', $cont);
+        $cont->forceDelete();
+
+        event(new CustomerContactForceDeletedEvent(Customer::find($cont->cust_id), $cont));
+        return back()->with(['message' => 'Contact permanently deleted', 'type' => 'danger']);
+    }
+
+    /*
+    *   Clean the phone number to be digits only
+    */
+    protected function cleanPhoneNumber($number)
+    {
+        return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '$1$2$3', $number);
     }
 }

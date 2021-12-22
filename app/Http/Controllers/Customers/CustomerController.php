@@ -2,51 +2,216 @@
 
 namespace App\Http\Controllers\Customers;
 
+use Inertia\Inertia;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use App\Traits\FileTrait;
 use App\Http\Controllers\Controller;
+use App\Events\Customers\Admin\CustomerRestoredEvent;
+use App\Events\Customers\Admin\CustomerForceDeletedEvent;
 
-use App\Http\Requests\CustomerSearchRequest;
+use App\Events\Customers\NewCustomerCreated;
+use App\Events\Customers\CustomerDetailsUpdated;
+use App\Events\Customers\CustomerDeactivatedEvent;
 
-use App\Domains\Users\UserFavs;
-use App\Domains\Customers\CustomerSearch;
-use App\Domains\Equipment\GetEquipmentData;
+use App\Models\Customer;
+use App\Models\CustomerFile;
+use App\Models\EquipmentType;
+use App\Models\PhoneNumberType;
+use App\Models\CustomerFileType;
+use App\Models\UserCustomerBookmark;
+
+use App\Http\Requests\Customers\NewCustomerRequest;
+use App\Http\Requests\Customers\EditCustomerRequest;
 
 class CustomerController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    use FileTrait;
 
-    //  Landing page to search for customer
-    public function index()
+    /**
+     * Search page for finding a customer
+     */
+    public function index(Request $request)
     {
-        return view('customer.index', [
-            'sysTypes' => (new GetEquipmentData)->getAllEquipmentNoCat(true),
+        return Inertia::render('Customers/Index', [
+            'create'      => $request->user()->can('create', Customer::class),
+            'equip_types' => EquipmentType::orderBy('cat_id')->get()->pluck('name')->values(),
         ]);
     }
 
-    //  Search for a customer
-    public function search(CustomerSearchRequest $request)
+    /**
+     * Show the form for creating a new Customer
+     */
+    public function create()
     {
-        return (new CustomerSearch)->searchCustomer($request);
+        $this->authorize('create', Customer::class);
+        return Inertia::render('Customers/Create');
     }
 
-    //  Check to see if a customer ID already exists
-    public function checkID($id)
+    /**
+     * Create a new Customer
+     */
+    public function store(NewCustomerRequest $request)
     {
-        $cust = (new CustomerSearch)->searchCustomerID($id);
+        $cust         = $request->toArray();
+        $cust['slug'] = Str::slug($request->name);
+        $newCust      = Customer::create($cust);
 
-        if($cust === null)
+        event(new NewCustomerCreated($newCust));
+        return redirect(route('customers.show',$newCust->slug))->with(['message' => 'New Customer Created', 'type' => 'success']);
+    }
+
+    /**
+     * Display the Customers Information
+     */
+    public function show($id)
+    {
+        //  Check if we are passing the customer slugged name, or customer ID number
+        if(is_numeric($id))
         {
-            return response()->json(['dup' => false]);
+            //  To keep things uniform, redirect to a link that has the customers name rather than the ID
+            $customer = Customer::findOrFail($id);
+            return redirect(route('customers.show', $customer->slug));
         }
-        return response()->json(['dup' => true, 'name' => $cust->name]);
+
+        //  Pull the customers information
+        $customer = Customer::where('slug', $id)
+                        ->orWhere('cust_id', $id)
+                        ->with('Parent')
+                        ->with('CustomerEquipment.CustomerEquipmentData')
+                        ->with('ParentEquipment.CustomerEquipmentData')
+                        ->with('CustomerContact.CustomerContactPhone.PhoneNumberType')
+                        ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
+                        ->with('CustomerNote')
+                        ->with('ParentNote')
+                        ->with('CustomerFile.FileUpload')
+                        ->with('ParentFile.FileUpload')
+                        ->firstOrFail();
+        //  Determine if the customer is bookmarked by the user
+        $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)
+                        ->where('cust_id', $customer->cust_id)
+                        ->count();
+
+        return Inertia::render('Customers/Show', [
+            'details'        => $customer,
+            'phone_types'    => PhoneNumberType::all(),
+            'file_types'     => CustomerFileType::all(),
+            //  User Permissions for customers
+            'user_data' => [
+                'fav'        => $isFav,                                                  //  Customer is bookmarked by the user
+                'edit'       => Auth::user()->can('update', $customer),                  //  User is allowed to edit the customers basic details
+                'manage'     => Auth::user()->can('manage', $customer),                  //  User can recover deleted items
+                'deactivate' => Auth::user()->can('delete', $customer),                  //  User can deactivate the customer profile
+                'equipment'  => [
+                    'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
+                    'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
+                    'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete equipment
+                ],
+                'contacts'   => [
+                    'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
+                    'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
+                    'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
+                ],
+                'notes'      => [
+                    'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
+                    'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
+                    'delete' => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
+                ],
+                'files'     => [
+                    'create' => Auth::user()->can('create', CustomerFile::class),        //  If user can add file
+                    'update' => Auth::user()->can('update', CustomerFile::class),        //  If user can edit file
+                    'delete' => Auth::user()->can('delete', CustomerFile::class),        //  If user can delete file
+                ],
+            ],
+        ]);
     }
 
-    //  Toggle whether or not the customer is listed as a user favorite
-    public function toggleFav($action, $id)
+    /**
+     * Update the customers basic details
+     */
+    public function update(EditCustomerRequest $request, $id)
     {
-        (new UserFavs)->updateCustomerFav($id);
-        return response()->json(['success' => true]);
+        $cust         = $request->toArray();
+        $cust['slug'] = Str::slug($request->name);
+
+        $data = Customer::findOrFail($id);
+        $data->update($cust);
+        event(new CustomerDetailsUpdated($data, $id));
+
+        return redirect(route('customers.show', $cust['slug']))->with(['message' => 'Customer Details Updated', 'type' => 'success']);
+    }
+
+    /**
+     * Soft Delete a Customer from the database
+     */
+    public function destroy($id)
+    {
+        $cust = Customer::findOrFail($id);
+        $this->authorize('delete', $cust);
+        $cust->delete();
+
+        event(new CustomerDeactivatedEvent($cust));
+        return redirect(route('customers.index'))->with(['message' => 'Customer '.$cust->name.' deactivated', 'type' => 'danger']);
+    }
+
+    /**
+     * Restore a soft deleted customer
+     */
+    public function restore(Request $idArr)
+    {
+        $this->authorize('restore', Customer::class);
+
+        //  Customer ID's are in an array
+        foreach($idArr->list as $cust)
+        {
+            $cust = Customer::onlyTrashed()->where('cust_id', $cust['cust_id'])->firstOrFail();
+            $cust->restore();
+
+            event(new CustomerRestoredEvent($cust));
+        }
+
+        return back()->with([
+            'message' => 'Customers Restored',
+            'type'    => 'success',
+        ]);
+    }
+
+    /**
+     * Permanently Delete a customer and all associated files and information
+     */
+    public function forceDelete(Request $id)
+    {
+        $this->authorize('forceDelete', Customer::class);
+
+        //  Customer ID's are in an array
+        foreach($id->list as $cust)
+        {
+            $cust     = Customer::onlyTrashed()->where('cust_id', $cust['cust_id'])->firstOrFail();
+            $fileList = [];
+
+            //  Get all of the files that are attached to the customer
+            $files = CustomerFile::where('cust_id', $cust->cust_id)->get();
+            foreach($files as $file)
+            {
+                $fileList[] = $file->file_id;
+            }
+
+            $cust->forceDelete();
+
+            //  Delete the files from the Storage System
+            foreach($fileList as $file)
+            {
+                $this->deleteFile($file);
+            }
+
+            event(new CustomerForceDeletedEvent($cust));
+        }
+
+        return back()->with([
+            'message' => 'Customers Deleted',
+            'type'    => 'danger',
+        ]);
     }
 }

@@ -7,19 +7,10 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 class VerifyCsrfToken extends Middleware
 {
     /**
-     * Indicates whether the XSRF-TOKEN cookie should be set on the response.
-     *
-     * @var bool
-     */
-    protected $addHttpCookie = true;
-
-    /**
      * The URIs that should be excluded from CSRF verification.
-     *
-     * @var array
      */
     protected $except = [
-        //  The Ajax call to upload an image to a Tech Tip will bypass the CSRF Token
-        'tip/process-image'
+        //  Route that allows users to upload an image to text fields
+        'upload-image',
     ];
 }

@@ -1,2 +1,3 @@
-app.css
-guest.css
+*
+!app.css
+!.gitignore

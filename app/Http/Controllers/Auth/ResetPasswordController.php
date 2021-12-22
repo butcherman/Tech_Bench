@@ -2,55 +2,28 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
+
+use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class ResetPasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset requests
-    | and uses a simple trait to include this behavior. You're free to
-    | explore this trait and override any methods you wish to tweak.
-    |
-    */
-
-    use ResetsPasswords;
-
     /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
+     *  For users with reset token to allow user to reset their password
      */
-    protected $redirectTo = '/dashboard';
-    protected $email;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function __invoke(Request $request)
     {
-        $this->middleware('guest');
-        $this->email = 'email@em.com';
-    }
+        // If the user is trying to visit the page without a token or email address, show 404 error
+        if(empty($request->token) || empty($request->email))
+        {
+            abort(404);
+        }
 
-    protected function resetPassword($user, $password)
-    {
-        Log::info('User ID - '.$user->user_id.' '.$user->first_name.' '.$user->last_name.' has updated their password.');
-
-        $this->setUserPassword($user, $password);
-        $user->setRememberToken(Str::random(60));
-        $user->save();
-
-        event(new PasswordReset($user));
-        $this->guard()->login($user);
+        return Inertia::render('Auth/password/reset', [
+            'token' => $request->token,
+            'email' => $request->email,
+        ]);
     }
 }

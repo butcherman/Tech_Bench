@@ -2,21 +2,22 @@ mode: increment
 blade-directive: version
 current:
   label: v
-  major: 5
-  minor: 2
-  patch: 1
+  major: 6
+  minor: 0
+  patch: 0
   prerelease: null
   buildmetadata: null
-  commit: 3cd
+  commit: 69a
   timestamp:
-    year: 2020
-    month: 5
-    day: 27
-    hour: 13
-    minute: 50
-    second: 40
-    timezone: America/Los_Angeles
+    year: 2021
+    month: 12
+    day: 22
+    hour: 3
+    minute: 39
+    second: 6
+    timezone: UTC
 commit:
+  mode: git-local
   length: 6
   increment-by: 1
 git:
@@ -25,7 +26,7 @@ git:
     local: 'git rev-parse --verify HEAD'
     remote: 'git ls-remote {$repository}'
   branch: refs/heads/master
-  repository: 'https://github.com/butcherman/Tech_Bench.git'
+  repository: ''
   version:
     local: 'git describe'
     remote: 'git ls-remote {$repository} | grep tags/ | grep -v {} | cut -d / -f 3 | sort --version-sort | tail -1'
@@ -45,10 +46,8 @@ format:
   commit: '{$commit}'
   version: 'Version {$major}.{$minor}.{$patch} (commit {$commit})'
   version-only: 'Version {$major}.{$minor}.{$patch}'
-  version_only: 'Version {$major}.{$minor}.{$patch}'
-  full: '{$version-only}[.?={$prerelease}][+?={$buildmetadata}] (commit {$commit})'
-  compact: 'v{$major}.{$minor}.{$patch}-{$commit}'
-  timestamp-simple: '{$timestamp.month}-{$timestamp.day}-{$timestamp.year}'
+  full: '{$version-only}[.?={$prerelease}][+?={$buildmetadata}]'
+  compact: '{$major}.{$minor}.{$patch}'
   timestamp-year: '{$timestamp.year}'
   timestamp-month: '{$timestamp.month}'
   timestamp-day: '{$timestamp.day}'
@@ -58,3 +57,4 @@ format:
   timestamp-timezone: '{$timestamp.timezone}'
   timestamp-datetime: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second}'
   timestamp-full: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second} {$timestamp.timezone}'
+  build: '{$timestamp.month}-{$timestamp.day}-{$timestamp.year}'

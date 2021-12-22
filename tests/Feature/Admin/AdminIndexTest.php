@@ -3,68 +3,30 @@
 namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
+use App\Models\User;
 
 class AdminIndexTest extends TestCase
 {
-    public function test_visit_admin_index_as_guest()
+    /**
+     * Invoke Method
+     */
+    public function test_invoke_guest()
     {
         $response = $this->get(route('admin.index'));
-
         $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect(route('login.index'));
         $this->assertGuest();
     }
 
-    public function test_visit_admin_index_page_without_permission()
+    public function test_invoke_no_permission()
     {
-        $user = $this->getTech();
-        $response = $this->actingAs($user)->get(route('admin.index'));
-
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.index'));
         $response->assertStatus(403);
     }
 
-    public function test_visit_admin_index_page_with_manage_users()
+    public function test_invoke()
     {
-        $user = $this->userWithPermission('Manage Users');
-        $response = $this->actingAs($user)->get(route('admin.index'));
-
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.index'));
         $response->assertSuccessful();
-        $response->assertViewIs('admin.index');
-    }
-
-    public function test_visit_admin_index_page_with_manage_user_roles()
-    {
-        $user = $this->userWithPermission('Manage User Roles');
-        $response = $this->actingAs($user)->get(route('admin.index'));
-
-        $response->assertSuccessful();
-        $response->assertViewIs('admin.index');
-    }
-
-    public function test_visit_admin_index_page_with_manage_customers()
-    {
-        $user = $this->userWithPermission('Manage Customers');
-        $response = $this->actingAs($user)->get(route('admin.index'));
-
-        $response->assertSuccessful();
-        $response->assertViewIs('admin.index');
-    }
-
-    public function test_visit_admin_index_page_with_manage_equipment()
-    {
-        $user = $this->userWithPermission('Manage Equipment');
-        $response = $this->actingAs($user)->get(route('admin.index'));
-
-        $response->assertSuccessful();
-        $response->assertViewIs('admin.index');
-    }
-
-    public function test_visit_admin_index_page_as_installer()
-    {
-        $user = $this->getInstaller();
-        $response = $this->actingAs($user)->get(route('admin.index'));
-
-        $response->assertSuccessful();
-        $response->assertViewIs('admin.index');
     }
 }
