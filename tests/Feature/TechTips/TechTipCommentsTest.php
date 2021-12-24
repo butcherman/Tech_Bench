@@ -157,7 +157,6 @@ class TechTipCommentsTest extends TestCase
         $this->assertGuest();
     }
 
-    //  TODO - Fix???
     public function test_update_no_permission()
     {
         $user    = User::factory()->create();

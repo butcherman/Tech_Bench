@@ -209,6 +209,14 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function test_destroy_higher_role()
+    {
+        $user = User::factory()->create(['role_id' => 1]);
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))->delete(route('admin.user.destroy', $user->username));
+        $response->assertStatus(403);
+    }
+
     public function test_destroy()
     {
         $user = User::factory()->create();

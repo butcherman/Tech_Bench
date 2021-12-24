@@ -5,6 +5,7 @@
             :value="defaultState"
             @input="setState"
         ></b-form-select>
+        <b-form-invalid-feedback :state="false" v-if="errors && errors[name]">{{errors[name]}}</b-form-invalid-feedback>
     </b-form-group>
 </template>
 
@@ -18,7 +19,6 @@
         },
         data() {
             return {
-                //  TODO - Errors
                 states:
                 [
                     {value: 'AL', text: 'Alabama'},
@@ -77,6 +77,12 @@
         },
         mounted() {
             this.setState(this.defaultState);
+        },
+        computed: {
+            errors()
+            {
+                return this.$page.props.errors;
+            },
         },
         methods: {
             setState(value)

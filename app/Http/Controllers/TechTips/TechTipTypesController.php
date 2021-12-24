@@ -13,6 +13,7 @@ use App\Http\Requests\TechTips\TipTypeRequest;
 use App\Events\TechTips\Admin\TipTypeCreatedEvent;
 use App\Events\TechTips\Admin\TipTypeDeletedEvent;
 use App\Events\TechTips\Admin\TipTypeUpdatedEvent;
+use App\Events\TechTips\Admin\TipTypeDeleteFailedEvent;
 
 class TechTipTypesController extends Controller
 {
@@ -72,7 +73,7 @@ class TechTipTypesController extends Controller
         //  The deletion may fail if the tip type is currently in use
         catch(QueryException $e)
         {
-            // TODO - Event to log what happened
+            event(new TipTypeDeleteFailedEvent($e));
             return back()->with([
                 'message' => 'Unable to delete.  This Tech Tip Type is in use by some Tech Tips.',
                 'type'    => 'danger',
