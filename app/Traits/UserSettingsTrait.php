@@ -13,19 +13,19 @@ trait UserSettingsTrait
         //  Pull the user settings
         $userSettings = UserSetting::where('user_id', $user->user_id)->with('UserSettingType')->get();
 
-        // dd($userSettings);
+        foreach($userSettings as $key => $setting)
+        {
+            //  Determine if this setting is linked to a permission feature (i.e. should not be displayed if the user cannot access the feature)
+            if(!is_null($setting->UserSettingType->perm_type_id))
+            {
+                $allowed = UserRolePermissions::where('role_id', $user->role_id)->where('perm_type_id', $setting->UserSettingType->perm_type_id)->first();
 
-        //  TODO -> Finish this - Filter out any settings that the user is not allowed to adjust
-        // foreach($userSettings as $key => $setting)
-        // {
-        //     $allowed = UserRolePermissions::where('role_id', $user->user_id)->where('perm_type_id', $setting->UserSettingType->perm_type_id)->first(); // ->allow;
-
-        //     dd($allowed);
-        //     if(!$allowed)
-        //     {
-        //         $userSettings->forget($key);
-        //     }
-        // }
+                if(!$allowed->allow)
+                {
+                    $userSettings->forget($key);
+                }
+            }
+        }
 
         return $userSettings;
     }
