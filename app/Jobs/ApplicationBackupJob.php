@@ -2,20 +2,19 @@
 
 namespace App\Jobs;
 
+use Zip;
 use Carbon\Carbon;
+use Nwidart\Modules\Facades\Module;
+use PragmaRX\Version\Package\Version;
+
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use PragmaRX\Version\Package\Version;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Zip;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ApplicationBackupJob implements ShouldQueue
 {
@@ -51,12 +50,13 @@ class ApplicationBackupJob implements ShouldQueue
             'Backup Files'    => $this->files
         ]);
 
-        // $this->openArchive();
-        // $this->backupFiles();
+        $this->openArchive();
+        $this->backupFiles();
         $this->backupDatabase();
+        $this->closeArchive();
+        $this->cleanup();
 
-
-
+        Log::notice('Backup Completed Successfully - file located at '.$this->diskLocal.$this->backupName);
     }
 
     /**
@@ -66,13 +66,24 @@ class ApplicationBackupJob implements ShouldQueue
     {
         //  Create a file that holds the current version of the Tech Bench application
         Storage::disk('backups')->put('version.txt', (new Version)->version_only());
+        //  Create a file that holds all enabled modules
+        Storage::disk('backups')->put('modules.txt', Module::all());
 
         //  Create the backup Zip file
         $this->archive = Zip::create($this->diskLocal.$this->backupName);
-        //  Add the version file
+        //  Add the version and module files
         $this->archive->add($this->diskLocal.'version.txt');
+        $this->archive->add($this->diskLocal.'modules.txt');
         //  Add the .env file that holds local global config
         $this->archive->add(base_path().DIRECTORY_SEPARATOR.'.env');
+    }
+
+    /**
+     * Close and finish the Archive Zip File
+     */
+    protected function closeArchive()
+    {
+        $this->archive->close();
     }
 
     /**
@@ -103,27 +114,17 @@ class ApplicationBackupJob implements ShouldQueue
             return false;
         }
 
-        $processStr = ['mysqldump '.
-            config('database.connections.mysql.database').' -u '.
-            config('database.connections.mysql.username').' -p'.
-            config('database.connections.mysql.password')];
+        Artisan::call('db:masked-dump', ['output' => $this->diskLocal.'backup.sql']);
+        $this->archive->add($this->diskLocal.'backup.sql');
+    }
 
-        $process = new Process($processStr);
-
-        try{
-
-            $process->run();
-        }
-        catch(ProcessFailedException $e)
-        {
-            Log::critical('process failed');
-            report($e);
-        }
-
-        $output = $process->getOutput();
-        Log::critical($output);
-
-        Storage::disk('backups')->put('database.sql', $output);
-        // $this->archive->add($this->diskLocal.'database.sql');
+    /**
+     * Remove any temporary files
+     */
+    protected function cleanup()
+    {
+        Storage::disk('backups')->delete('version.txt');
+        Storage::disk('backups')->delete('backup.sql');
+        Storage::disk('backups')->delete('modules.txt');
     }
 }

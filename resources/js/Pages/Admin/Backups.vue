@@ -53,17 +53,12 @@
             //
             runBackup()
             {
-                console.log('run backup');
                 this.runningBackup = true;
-
-                axios.get(route('admin.backups.show', 'run'))
-                    .then(res => {
-                        console.log(res);
+                this.$inertia.get(route('admin.backups.show', 'run'), {
+                    onFinish: ()=> {
                         this.runningBackup = false;
-                    }).catch(error => {
-                        this.eventHub.$emit('axiosError', error)
-                        this.runningBackup = false;
-                    });
+                    }
+                });
             }
         }
     }

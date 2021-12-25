@@ -189,15 +189,11 @@ __webpack_require__.r(__webpack_exports__);
     runBackup: function runBackup() {
       var _this = this;
 
-      console.log('run backup');
       this.runningBackup = true;
-      axios.get(route('admin.backups.show', 'run')).then(function (res) {
-        console.log(res);
-        _this.runningBackup = false;
-      })["catch"](function (error) {
-        _this.eventHub.$emit('axiosError', error);
-
-        _this.runningBackup = false;
+      this.$inertia.get(route('admin.backups.show', 'run'), {
+        onFinish: function onFinish() {
+          _this.runningBackup = false;
+        }
       });
     }
   }
