@@ -32,7 +32,8 @@
         "pion/laravel-chunk-upload": "^1.4",
         "pragmarx/version": "^1.2",
         "spatie/laravel-cookie-consent": "^2.12",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "zanysoft/laravel-zip": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

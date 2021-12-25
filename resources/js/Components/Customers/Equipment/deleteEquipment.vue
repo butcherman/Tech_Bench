@@ -49,21 +49,9 @@
                     if(value)
                     {
                         this.loading = true;
-
-                        console.log('delete');
-
-
-                        // axios.delete(this.route('customers.equipment.destroy', this.cust_equip_id))
-                        //     .then(res => {
-                        //         this.$refs['edit-equipment-modal'].hide();
-                        //         this.loading   = false;
-                        //         this.submitted = false;
-                        //         this.$emit('completed');
-                        //     }).catch(error => this.eventHub.$emit('axiosError', error));
-
                         this.$inertia.delete(this.route('customers.equipment.destroy', this.cust_equip_id), {
                             onFinish: () => {
-                                console.log('success');
+                                //
                             }
                         })
                     }

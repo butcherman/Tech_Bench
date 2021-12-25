@@ -175,7 +175,6 @@
                 {
                     this.$refs['upload-error-modal'].show();
                     this.errors = message;
-                    // console.log(message);
                 }
                 else
                 {

@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: null
   buildmetadata: null
-  commit: 69f
+  commit: 6a0
   timestamp:
     year: 2021
     month: 12
-    day: 24
-    hour: 23
-    minute: 10
-    second: 21
+    day: 25
+    hour: 0
+    minute: 46
+    second: 22
     timezone: UTC
 commit:
   mode: git-local
@@ -46,6 +46,7 @@ format:
   commit: '{$commit}'
   version: 'Version {$major}.{$minor}.{$patch} (commit {$commit})'
   version-only: 'Version {$major}.{$minor}.{$patch}'
+  version_only: 'Version {$major}.{$minor}.{$patch}'
   full: '{$version-only}[.?={$prerelease}][+?={$buildmetadata}]'
   compact: '{$major}.{$minor}.{$patch}'
   timestamp-year: '{$timestamp.year}'

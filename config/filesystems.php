@@ -72,15 +72,20 @@ return [
         ],
 
         /**
+         * Application Backups
+         */
+        'backups' => [
+            'driver' => 'local',
+            'root'   => storage_path('backups'),
+        ],
+
+        /**
          * All Tech Bench add on modules are stored here
          */
         'modules' => [
             'driver' => 'local',
             'root'   => base_path().'/Modules',
         ],
-
-
-
     ],
 
     /*

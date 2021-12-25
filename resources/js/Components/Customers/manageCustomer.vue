@@ -133,8 +133,6 @@
                     .then(res => {
                         this.deleted = res.data;
                         this.loading = false;
-
-                        console.log(res.data);
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
             /**
@@ -142,7 +140,6 @@
              */
             restore(type, item)
             {
-                console.log('restore');
                 this.loading = true;
                 this.$inertia.get(this.route('customers.'+type+'.restore', item));
             },

@@ -72,7 +72,6 @@
              */
             getEquipData()
             {
-                console.log('triggered');
                 this.form.data = [];
                 this.equip.customer_equipment_data.forEach(el => {
                     this.form.data.push({

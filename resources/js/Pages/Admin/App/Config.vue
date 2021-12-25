@@ -74,12 +74,9 @@
         methods: {
             submitForm()
             {
-                console.log(this.form);
-
                 this.submitted = true;
                 this.form.post(route('admin.set-config'), {
                     onFinish: ()=> {
-                        console.log('done');
                         this.submitted = false;
                     }
                 });

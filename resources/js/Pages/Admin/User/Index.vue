@@ -101,10 +101,6 @@
             },
             disableUser(user)
             {
-                console.log('disable');
-                console.log(user);
-
-
                 this.$bvModal.msgBoxConfirm('Please confirm that you want to deactivate '+user.full_name, {
                     title:          'Please Confirm',
                     size:           'sm',

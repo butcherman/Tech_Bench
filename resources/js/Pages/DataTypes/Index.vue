@@ -104,7 +104,6 @@
                 this.submitted = true;
                 this.editForm.put(route('data-types.update', this.editForm.type_id), {
                     onFinish: ()=> {
-                        console.log('done');
                         this.submitted = false;
                         this.$refs['edit-data-type-modal'].hide();
                     }

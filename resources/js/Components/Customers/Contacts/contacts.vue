@@ -137,7 +137,7 @@ import EditContact from './editContact.vue'
                     {
                         this.$inertia.delete(route('customers.contacts.destroy', contact), {
                             onFinish: () => {
-                                console.log('done');
+                                //
                             }
                         });
                     }
