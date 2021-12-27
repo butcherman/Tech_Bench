@@ -284,6 +284,9 @@ class TbBackupRestoreCommand extends Command
 
             Storage::disk($disk)->put($rename, $data);
         }
+
+        //  Make sure that the symbolic link for the public folder exists
+        $this->callSilently('storage:link');
     }
 
     /**
