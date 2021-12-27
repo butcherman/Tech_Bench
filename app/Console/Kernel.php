@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\ApplicationBackupJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -23,6 +24,12 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->job(new GarbageCollectionJob)->daily();
+
+        //  Nightly backup will only run if the task is enabled
+        if(config('app.backups.enabled'))
+        {
+            $schedule->job(new ApplicationBackupJob(true, true))->dailyAt('02:00');
+        }
     }
 
     /**

@@ -222,6 +222,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\TechTips\Admin\TipTypeDeletedEvent' => [
             'App\Listeners\TechTips\Admin\LogTipTypeDeleted',
         ],
+        'App\Events\TechTips\Admin\TipTypeDeleteFailedEvent' => [
+            'App\Listeners\TechTips\Admin\LogTipTypeDeleteFail',
+        ],
 
         /**
          * User Administration Events

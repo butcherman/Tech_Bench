@@ -4,6 +4,8 @@ namespace App\Listeners\Notify;
 
 use App\Events\TechTips\TechTipCommentFlaggedEvent;
 use App\Models\User;
+use App\Models\UserRolePermissions;
+use App\Models\UserRolePermissionTypes;
 use App\Notifications\FlaggedTechTipCommentNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -17,7 +19,10 @@ class NotifyOfFlaggedComment implements ShouldQueue
      */
     public function handle(TechTipCommentFlaggedEvent $event)
     {
-        $userList = User::where('role_id', '<=', 2)->get();     //  TODO - should be for users who can manage Tech Tips
+        $perm     = UserRolePermissionTypes::where('description', 'Manage Tech Tips')->first();
+        $roles    = UserRolePermissions::where('perm_type_id', $perm->perm_type_id)->where('allow', true)->get()->pluck('role_id');
+        $userList = User::where('role_id', $roles)->get();
+
         Notification::send($userList, new FlaggedTechTipCommentNotification($event->comment, Auth::user()));
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserRolesController;
 use App\Http\Controllers\Admin\AdminIndexController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\Config\GetConfigController;
 use App\Http\Controllers\Admin\Config\SetConfigController;
 use App\Http\Controllers\Admin\ReactivateUserController;
@@ -54,4 +55,6 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::post('logs/settings',  SetLogSettingsController::class)->name('logs.set-settings');
     Route::get( 'logs/{channel}', LogFilesController::class)->name('logs.channel');
     Route::get( 'logs/{channel}/{name}', ViewLogController::class)->name('logs.view');
+
+    Route::resource('backups', BackupController::class);
 });

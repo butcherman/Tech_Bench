@@ -70,7 +70,7 @@
             {
                 this.$inertia.get(route('admin.reactivate-user', user.username), {
                     onFinish: () => {
-                        console.log('done');
+                        //
                     }
                 });
             }

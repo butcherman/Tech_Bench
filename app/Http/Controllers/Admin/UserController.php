@@ -116,11 +116,10 @@ class UserController extends Controller
         $this->authorize('create', $user);
         $user->delete();
 
-        // if($user->role_id > Auth::user()->role_id)
-        // {
-        //      TODO - User cannot deactivate a user with higher permissions than themselves
-        //     abort(403, 'You cannot deactivate someone with higher permissions than yourself');
-        // }
+        if($user->role_id < Auth::user()->role_id)
+        {
+            abort(403, 'You cannot deactivate someone with higher permissions than yourself');
+        }
 
         event(new UserDeactivatedEvent($user));
         return back()->with([

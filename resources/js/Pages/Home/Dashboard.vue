@@ -126,7 +126,6 @@
         },
         created() {
             //
-            // console.log(this.notifications[0].type.split(/\W+/).pop())
         },
         mounted() {
              //
@@ -149,7 +148,6 @@
             {
                 axios.delete(route('notifications.destroy', id))
                     .then(res => {
-                        console.log(res);
                         this.notificationList = res.data;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             }

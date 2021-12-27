@@ -267,12 +267,12 @@ class BuildAdminMenu
                         'icon' => 'fas fa-bug',
                         'link' => route('admin.logs.index'),
                     ],
+                    [
+                        'name' => 'Application Backups',
+                        'icon' => 'far fa-hdd',
+                        'link' => route('admin.backups.index'),
+                    ],
                     //  TODO - Finish me!!!
-                    // [
-                    //     'name' => 'Application Backups',
-                    //     'icon' => '',
-                    //     'link' => '#',
-                    // ],
                     // [
                     //     'name' => 'Application Updates',
                     //     'icon' => '',

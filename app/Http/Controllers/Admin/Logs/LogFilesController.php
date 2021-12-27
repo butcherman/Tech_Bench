@@ -21,12 +21,14 @@ class LogFilesController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        // dd($channel);
-
         $props = [];
         if(!is_null($channel))
         {
-            //  TODO - Verify that the channel name is valid
+            //  If the channel name is invalid, return 404 error
+            if(is_null($this->getChannelDetails($channel)))
+            {
+                abort(404, 'Cannot find the specified Log Channel');
+            }
 
             $props = [
                 'channel'   => $channel,

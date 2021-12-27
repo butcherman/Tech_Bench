@@ -14,6 +14,10 @@ return [
     'key'             => env('APP_KEY'),
     'cipher'          => 'AES-256-CBC',
     'maintenance'     => true,
+    'backups'         => [
+        'enabled' => true,
+        'number'  => 10,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -58,6 +62,7 @@ return [
          * Package Service Providers...
          */
         Barryvdh\DomPDF\ServiceProvider::class,
+        ZanySoft\Zip\ZipServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -121,5 +126,6 @@ return [
         'Validator'    => Illuminate\Support\Facades\Validator::class,
         'View'         => Illuminate\Support\Facades\View::class,
         'PDF'          => Barryvdh\DomPDF\Facade::class,
+        'ZIP'          => ZanySoft\Zip\ZipFacade::class,
     ],
 ];
