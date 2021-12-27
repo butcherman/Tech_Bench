@@ -9,9 +9,12 @@ use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\CustomerNotes;
 use App\Models\DataField;
+use App\Models\FileUploads;
 use App\Models\EquipmentType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerSeeder extends Seeder
 {
@@ -55,9 +58,14 @@ class CustomerSeeder extends Seeder
         $custList = Customer::inRandomOrder()->limit(10)->get();
         foreach($custList as $cust)
         {
+            $file   = FileUploads::factory()->create();
             CustomerFile::factory()->create([
                 'cust_id' => $cust->cust_id,
+                'file_id' => $file->file_id
             ]);
+
+            //  Create a basic image file on the filesystem
+            Storage::disk('customers')->putFileAs($cust->cust_id, UploadedFile::fake()->image($file->file_name), $file->file_name);
         }
     }
 }

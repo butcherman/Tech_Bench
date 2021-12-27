@@ -162,14 +162,107 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
-  props: {//
+  props: {
+    settings: {
+      type: Object,
+      required: true
+    },
+    backups: {
+      type: Array,
+      required: true
+    }
   },
   data: function data() {
     return {
-      runningBackup: false
+      runningBackup: false,
+      submitted: false,
+      showOverlay: false,
+      form: this.$inertia.form({
+        enabled: this.settings.enabled,
+        number: this.settings.number
+      }),
+      table: {
+        columns: [{
+          label: 'File',
+          field: 'name'
+        }, {
+          label: 'Date',
+          field: 'date'
+        }, {
+          label: 'Actions',
+          field: 'actions',
+          sortable: false
+        }]
+      }
     };
   },
   created: function created() {//
@@ -177,7 +270,6 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {//
   },
   computed: {
-    //
     buttonText: function buttonText() {
       return this.runningBackup ? 'Backing Up Now' : 'Run Backup';
     }
@@ -185,7 +277,6 @@ __webpack_require__.r(__webpack_exports__);
   watch: {//
   },
   methods: {
-    //
     runBackup: function runBackup() {
       var _this = this;
 
@@ -193,6 +284,42 @@ __webpack_require__.r(__webpack_exports__);
       this.$inertia.get(route('admin.backups.show', 'run'), {
         onFinish: function onFinish() {
           _this.runningBackup = false;
+        }
+      });
+    },
+    submitForm: function submitForm() {
+      var _this2 = this;
+
+      this.submitted = true;
+      this.form.post(route('admin.backups.store'), {
+        onFinish: function onFinish() {
+          _this2.submitted = false;
+        }
+      });
+    },
+    deleteBackup: function deleteBackup(filename) {
+      var _this3 = this;
+
+      this.$bvModal.msgBoxConfirm('This Cannot Be Undone', {
+        title: 'Are you sure?',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      }).then(function (value) {
+        if (value) {
+          // this.loading = true;
+          _this3.showOverlay = true;
+
+          _this3.$inertia["delete"](route('admin.backups.destroy', filename), {
+            onFinish: function onFinish() {
+              _this3.showOverlay = false;
+            }
+          });
         }
       });
     }
@@ -685,6 +812,243 @@ var render = function() {
                       "\n                    "
                   )
                 ]
+              )
+            ],
+            1
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-6 grid-margin" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("div", { staticClass: "card-title" }, [
+                _vm._v("Automatic Backup Options")
+              ]),
+              _vm._v(" "),
+              _c("ValidationObserver", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function(ref) {
+                      var handleSubmit = ref.handleSubmit
+                      return [
+                        _c(
+                          "b-overlay",
+                          {
+                            attrs: { show: _vm.submitted },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "overlay",
+                                  fn: function() {
+                                    return [
+                                      _c("form-loader", {
+                                        attrs: { text: "Processing..." }
+                                      })
+                                    ]
+                                  },
+                                  proxy: true
+                                }
+                              ],
+                              null,
+                              true
+                            )
+                          },
+                          [
+                            _vm._v(" "),
+                            _c(
+                              "b-form",
+                              {
+                                attrs: { novalidate: "" },
+                                on: {
+                                  submit: function($event) {
+                                    $event.preventDefault()
+                                    return handleSubmit(_vm.submitForm)
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "b-form-checkbox",
+                                  {
+                                    attrs: { switch: "" },
+                                    model: {
+                                      value: _vm.form.enabled,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "enabled", $$v)
+                                      },
+                                      expression: "form.enabled"
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    Enable Nightly Backups\n                                "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-form-group",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: _vm.form.enabled,
+                                        expression: "form.enabled"
+                                      }
+                                    ],
+                                    attrs: {
+                                      label: "Number of Backups to Keep:",
+                                      "label-for": "number"
+                                    }
+                                  },
+                                  [
+                                    _c("span", { staticClass: "small" }, [
+                                      _vm._v(_vm._s(_vm.form.number))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("b-form-input", {
+                                      attrs: {
+                                        id: "number",
+                                        type: "range",
+                                        min: "1",
+                                        max: "365",
+                                        disabled: !_vm.form.enabled,
+                                        required: ""
+                                      },
+                                      model: {
+                                        value: _vm.form.number,
+                                        callback: function($$v) {
+                                          _vm.$set(_vm.form, "number", $$v)
+                                        },
+                                        expression: "form.number"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("b-form-invalid-feedback", [
+                                      _vm._v("This field is required")
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("submit-button", {
+                                  staticClass: "mt-3",
+                                  attrs: {
+                                    button_text: "Update Backup Settings",
+                                    submitted: _vm.submitted
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ]
+                    }
+                  }
+                ])
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-10 grid-margin" }, [
+        _c("div", { staticClass: "card" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("div", { staticClass: "card-title" }, [_vm._v("Backup List")]),
+              _vm._v(" "),
+              _c(
+                "b-overlay",
+                {
+                  attrs: { show: _vm.showOverlay },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "overlay",
+                      fn: function() {
+                        return [_c("atom-loader")]
+                      },
+                      proxy: true
+                    }
+                  ])
+                },
+                [
+                  _vm._v(" "),
+                  _c("vue-good-table", {
+                    attrs: { columns: _vm.table.columns, rows: _vm.backups },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "table-row",
+                        fn: function(data) {
+                          return [
+                            data.column.field === "actions"
+                              ? _c("span", [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "text-muted",
+                                      attrs: {
+                                        href: _vm.route(
+                                          "admin.backups.edit",
+                                          data.row.name
+                                        )
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        directives: [
+                                          {
+                                            name: "b-tooltip",
+                                            rawName: "v-b-tooltip.hover",
+                                            modifiers: { hover: true }
+                                          }
+                                        ],
+                                        staticClass: "fas fa-download",
+                                        attrs: { title: "Download Backup" }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("i", {
+                                    directives: [
+                                      {
+                                        name: "b-tooltip",
+                                        rawName: "v-b-tooltip.hover",
+                                        modifiers: { hover: true }
+                                      }
+                                    ],
+                                    staticClass: "far fa-trash-alt text-danger",
+                                    attrs: { title: "Delete Backup" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.deleteBackup(data.row.name)
+                                      }
+                                    }
+                                  })
+                                ])
+                              : _vm._e()
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
               )
             ],
             1
