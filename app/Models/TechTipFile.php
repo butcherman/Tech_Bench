@@ -12,4 +12,9 @@ class TechTipFile extends Model
     protected $primaryKey = 'tip_file_id';
     protected $guarded    = ['tip_file_id', 'created_at', 'updated_at'];
     protected $hidden     = [];
+
+    public function FileUpload()
+    {
+        return $this->hasOne(FileUploads::class, 'file_id', 'file_id');
+    }
 }
