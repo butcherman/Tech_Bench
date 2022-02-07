@@ -562,7 +562,6 @@ class MigrateDatabaseCommand extends Command
         $oldTips = DB::select('SELECT * FROM `'.$this->database.'_old`.`tech_tips`');
         foreach($oldTips as $tip)
         {
-            //  TODO - Make all images responsive
             $this->line('Adding Tech Tip '.$tip->subject);
             DB::table('tech_tips')->insert([
                 'tip_id'      => $tip->tip_id,
@@ -572,7 +571,7 @@ class MigrateDatabaseCommand extends Command
                 'sticky'      => isset($tip->sticky) ? $tip->sticky : false,
                 'subject'     => $tip->subject,
                 'slug'        => Str::slug($tip->subject),
-                'details'     => str_replace('<img ', '<img class="fluid-img" ', $tip->description),
+                'details'     => str_replace('<img ', '<img class="img-fluid" ', $tip->description),
                 'deleted_at'  => $tip->deleted_at,
                 'created_at'  => $tip->created_at,
                 'updated_at'  => $tip->updated_at,
