@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Home;
 
-use App\Events\Home\ImageUploadedEvent;
 use App\Http\Controllers\Controller;
+use App\Events\Home\ImageUploadedEvent;
 use App\Http\Requests\Home\UploadImageRequest;
+
 use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UploadImageController extends Controller
@@ -22,6 +21,6 @@ class UploadImageController extends Controller
         $location = Storage::disk('public')->putFile($path, new File($request->file));
 
         event(new ImageUploadedEvent($location));
-        return Storage::url($location);
+        return ['location' => Storage::url($location)];
     }
 }
