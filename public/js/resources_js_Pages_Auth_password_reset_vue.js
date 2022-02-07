@@ -287,7 +287,7 @@ var render = function() {
             attrs: { id: "auth-layout-sub-container" }
           },
           [
-            _c("div", { staticClass: "col col-md-3 col-10" }, [
+            _c("div", { staticClass: "col col-lg-3 col-10" }, [
               _c("img", {
                 attrs: {
                   src: _vm.$page.props.app.logo,
@@ -299,7 +299,7 @@ var render = function() {
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "col col-md-3 col-10" },
+              { staticClass: "col col-lg-3 col-10" },
               [_vm._t("default")],
               2
             )

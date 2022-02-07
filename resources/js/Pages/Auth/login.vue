@@ -5,7 +5,7 @@
                 <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? true : false">
                     <p class="text-center">{{$page.props.flash.message}}</p>
                 </b-alert>
-                <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
+                <b-form @submit.prevent="handleSubmit(submitForm)" novalidate class="p-4">
                     <text-input v-model="form.username" rules="required" label="Username" name="username" placeholder="Username" autofocus></text-input>
                     <text-input v-model="form.password" rules="required" label="Password" name="password" type="password" placeholder="Password"></text-input>
                     <b-checkbox switch class="no-validate" name="remember" v-model="form.remember">Remember Me</b-checkbox>

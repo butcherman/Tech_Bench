@@ -33,7 +33,7 @@ class UploadImageTest extends TestCase
         $response = $this->actingAs(User::factory()->create())->post(route('upload-image'), $data);
         $response->assertSuccessful();
 
-        $file = last(explode('/', $response->getContent()));
+        $file = last(explode('/', json_decode($response->getContent())->location));
         Storage::disk('public')->assertExists('images/uploaded/'.$file);
     }
 }

@@ -127,6 +127,12 @@ trait FileTrait
         $this->disk   = $newDisk !== null ? $newDisk : $file->disk;
         $this->folder = $newFolder;
 
+        //  Verify the file actually exists
+        if(!Storage::disk($file->disk)->exists($file->folder.DIRECTORY_SEPARATOR.$file->file_name))
+        {
+            return false;
+        }
+
         //  Verify file is not duplicate and move
         $newName = $this->checkForDuplicate($file->file_name);
         Storage::disk($this->disk)->move($file->folder.DIRECTORY_SEPARATOR.$file->file_name, $this->folder.DIRECTORY_SEPARATOR.$newName);
