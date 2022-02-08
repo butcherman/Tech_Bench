@@ -9,25 +9,15 @@
 
 [![Working Branch](https://img.shields.io/badge/Working%20Branch-master-green
 )](https://github.com/butcherman/Tech_Bench)
-&nbsp; [![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/test5)
+&nbsp; [![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
+<!-- [![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master) -->
 
 [![Development Branch](https://img.shields.io/badge/Development%20-dev6-yellow
 )](https://github.com/butcherman/Tech_Bench/tree/dev6)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 [![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=dev6)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/dev6)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=dev6)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev6)
-[![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=dev6)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev6)
-
-## Travis CI
-
-[![Working Branch](https://img.shields.io/badge/Working%20Branch-Master-green
-)](https://github.com/butcherman/Tech_Bench)&nbsp;
-[![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=master)](https://travis-ci.com/butcherman/Tech_Bench)
-
-[![Development Branch](https://img.shields.io/badge/Development%20%20-dev6-yellow
-)](https://github.com/butcherman/Tech_Bench/tree/dev6)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![Build Status](https://travis-ci.com/butcherman/Tech_Bench.svg?branch=dev6)](https://travis-ci.com/butcherman/Tech_Bench)
+<!-- [![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=dev6)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev6) -->
 
 ## About Tech Bench
 
