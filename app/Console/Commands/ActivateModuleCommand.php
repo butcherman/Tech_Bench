@@ -86,7 +86,7 @@ class ActivateModuleCommand extends Command
 
         //  Combine the new Javascript files
         $this->line('Creating Javascript files (this may take some time)');
-        shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && npm run production');
+        // shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && npm run production');
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.' && npm run production');
 
         $this->info('Module has been activated');

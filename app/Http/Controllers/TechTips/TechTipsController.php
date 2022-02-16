@@ -23,6 +23,7 @@ use App\Events\TechTips\TechTipUpdatedEvent;
 use App\Http\Requests\TechTips\CreateTipRequest;
 use App\Http\Requests\TechTips\UpdateTipRequest;
 use App\Models\TechTipFile;
+use App\Models\UserTechTipRecent;
 use App\Traits\FileTrait;
 
 class TechTipsController extends Controller
@@ -106,6 +107,12 @@ class TechTipsController extends Controller
         $isFav = UserTechTipBookmark::where('user_id', Auth::user()->user_id)
                     ->where('tip_id', $tip->tip_id)
                     ->count();
+
+        //  Add Tech Tip to the users 'recent' table
+        UserTechTipRecent::firstOrCreate([
+            'user_id' => Auth::user()->user_id,
+            'tip_id'  => $tip->tip_id,
+        ])->touch();
 
         return Inertia::render('TechTips/Show', [
             'tip' => $tip,

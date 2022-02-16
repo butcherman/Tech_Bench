@@ -25,6 +25,7 @@ use App\Models\UserCustomerBookmark;
 
 use App\Http\Requests\Customers\NewCustomerRequest;
 use App\Http\Requests\Customers\EditCustomerRequest;
+use App\Models\UserCustomerRecent;
 
 class CustomerController extends Controller
 {
@@ -93,6 +94,12 @@ class CustomerController extends Controller
         $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)
                         ->where('cust_id', $customer->cust_id)
                         ->count();
+
+        //  Add customer to the users 'recent' table
+        UserCustomerRecent::firstOrCreate([
+            'user_id' => Auth::user()->user_id,
+            'cust_id' => $customer->cust_id
+        ])->touch();
 
         return Inertia::render('Customers/Show', [
             'details'        => $customer,
