@@ -44,6 +44,8 @@ class GarbageCollectionJob implements ShouldQueue
             $this->cleanupCustomerFiles();
             $this->moduleGarbageCollection();
 
+            //  TODO - Backup file cleanup
+
             Artisan::call('up');
             Log::notice('Garbage Collection Job completed');
         }

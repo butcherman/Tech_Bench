@@ -34,7 +34,7 @@ class LogFilesTest extends TestCase
 
     public function test_invoke_guest_with_channel()
     {
-        $response = $this->get(route('admin.logs.index', ['User']));
+        $response = $this->get(route('admin.logs.channel', ['User']));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -42,13 +42,19 @@ class LogFilesTest extends TestCase
 
     public function test_invoke_no_permission_with_channel()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('admin.logs.index', ['User']));
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.logs.channel', ['User']));
         $response->assertStatus(403);
+    }
+
+    public function test_invoke_with_invalid_channel()
+    {
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.channel', ['YourMom']));
+        $response->assertStatus(404);
     }
 
     public function test_invoke_with_channel()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.index', ['User']));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.channel', ['User']));
         $response->assertSuccessful();
     }
 }

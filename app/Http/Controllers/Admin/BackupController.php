@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Carbon\Carbon;
+use Inertia\Inertia;
+
+use Illuminate\Support\Facades\Storage;
+
+use App\Models\AppSettings;
+use App\Traits\AppSettingsTrait;
+use App\Jobs\ApplicationBackupJob;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BackupRequest;
-use App\Jobs\ApplicationBackupJob;
-use App\Models\AppSettings;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Traits\AppSettingsTrait;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
 
 class BackupController extends Controller
 {
@@ -47,16 +48,6 @@ class BackupController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Update the automatic backup settings
      */
     public function store(BackupRequest $request)
@@ -75,6 +66,8 @@ class BackupController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         if($id === 'run')
         {
             ApplicationBackupJob::dispatch();
@@ -99,19 +92,6 @@ class BackupController extends Controller
         }
 
         return Storage::disk('backups')->download($id);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-
     }
 
     /**

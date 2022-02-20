@@ -22,10 +22,14 @@ class ViewLogController extends Controller
         $channel = $this->getChannelDetails($channel);
         if(!$channel)
         {
-            abort(404);
+            abort(404, 'Invalid Log Channel supplied');
         }
 
         $fileArr = $this->getFileToArray($filename, $channel);
+        if(!$fileArr)
+        {
+            abort(404, 'Unable to find the log file specified');
+        }
 
         return Inertia::render('Logs/Show', [
             'levels'   => $this->logLevels,

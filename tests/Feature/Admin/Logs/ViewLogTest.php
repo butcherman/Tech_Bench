@@ -34,13 +34,30 @@ class ViewLogTest extends TestCase
         $response->assertStatus(403);
     }
 
-    //  TODO - Fix so that this can pull an acutal file
-    // public function test_invoke()
-    // {
-    //     $date = date('Y-m-d', strtotime(Carbon::now()));
-    //     $filename = 'TechBench-'.$date;
+    public function test_invoke_bad_channel()
+    {
+        $date = date('Y-m-d', strtotime(Carbon::now()));
+        $filename = 'TechBench-'.$date;
 
-    //     $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.view', ['Application', $filename]));
-    //     $response->assertSuccessful();
-    // }
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.view', ['YourMom', $filename]));
+        $response->assertStatus(404);
+    }
+
+    public function test_invoke_bad_file_name()
+    {
+        $date = date('Y-m-d', strtotime(Carbon::now()->addDays(30)));
+        $filename = 'TechBench-'.$date;
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.view', ['YourMom', $filename]));
+        $response->assertStatus(404);
+    }
+
+    public function test_invoke()
+    {
+        $date = date('Y-m-d', strtotime(Carbon::now()));
+        $filename = 'TechBench-'.$date;
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.view', ['Application', $filename]));
+        $response->assertSuccessful();
+    }
 }
