@@ -19,7 +19,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "barryvdh/laravel-dompdf": "^0.9.0",
-        "beyondcode/laravel-masked-db-dump": "^1.0",
+        "beyondcode/laravel-masked-db-dump": "dev-main",
         "doctrine/dbal": "^3.1",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -38,7 +38,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
-        "butcherman/artisan-dev-commands": "^0.0.3",
+        "butcherman/artisan-dev-commands": "dev-dev",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
