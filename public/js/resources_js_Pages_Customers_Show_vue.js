@@ -4086,7 +4086,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -4097,12 +4097,12 @@ var render = function() {
       fields: _vm.cont.fields,
       "empty-text": "No Contacts",
       responsive: "",
-      "show-empty": ""
+      "show-empty": "",
     },
     scopedSlots: _vm._u([
       {
         key: "row-details",
-        fn: function(data) {
+        fn: function (data) {
           return [
             _c(
               "b-table-simple",
@@ -4118,10 +4118,10 @@ var render = function() {
                         _vm._v(" "),
                         _c("b-th", [_vm._v("Phones")]),
                         _vm._v(" "),
-                        _c("b-th", [_vm._v("Note:")])
+                        _c("b-th", [_vm._v("Note:")]),
                       ],
                       1
-                    )
+                    ),
                   ],
                   1
                 ),
@@ -4140,84 +4140,86 @@ var render = function() {
                                 {
                                   name: "b-tooltip",
                                   rawName: "v-b-tooltip.hover",
-                                  modifiers: { hover: true }
-                                }
+                                  modifiers: { hover: true },
+                                },
                               ],
                               attrs: {
                                 href: "mailto:" + data.item.email,
-                                title: "Click to Send Email"
-                              }
+                                title: "Click to Send Email",
+                              },
                             },
                             [_vm._v(_vm._s(data.item.email))]
-                          )
+                          ),
                         ]),
                         _vm._v(" "),
                         _c(
                           "b-td",
-                          _vm._l(data.item.customer_contact_phone, function(
-                            phone
-                          ) {
-                            return _c("div", { key: phone.id }, [
-                              _c(
-                                "a",
-                                {
-                                  directives: [
-                                    {
-                                      name: "b-tooltip",
-                                      rawName: "v-b-tooltip.hover",
-                                      modifiers: { hover: true }
-                                    }
-                                  ],
-                                  attrs: {
-                                    href:
-                                      "tel:" +
-                                      phone.phone_number +
-                                      "," +
-                                      phone.extension,
-                                    title: phone.phone_number_type.description
-                                  }
-                                },
-                                [
-                                  _c("i", {
-                                    class: phone.phone_number_type.icon_class
-                                  }),
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(phone.formatted) +
-                                      "\n                                "
-                                  ),
-                                  phone.extension
-                                    ? _c("span", [
-                                        _vm._v(
-                                          "\n                                    Ext. " +
-                                            _vm._s(phone.extension) +
-                                            "\n                                "
-                                        )
-                                      ])
-                                    : _vm._e()
-                                ]
-                              )
-                            ])
-                          }),
+                          _vm._l(
+                            data.item.customer_contact_phone,
+                            function (phone) {
+                              return _c("div", { key: phone.id }, [
+                                _c(
+                                  "a",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "b-tooltip",
+                                        rawName: "v-b-tooltip.hover",
+                                        modifiers: { hover: true },
+                                      },
+                                    ],
+                                    attrs: {
+                                      href:
+                                        "tel:" +
+                                        phone.phone_number +
+                                        "," +
+                                        phone.extension,
+                                      title:
+                                        phone.phone_number_type.description,
+                                    },
+                                  },
+                                  [
+                                    _c("i", {
+                                      class: phone.phone_number_type.icon_class,
+                                    }),
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(phone.formatted) +
+                                        "\n                                "
+                                    ),
+                                    phone.extension
+                                      ? _c("span", [
+                                          _vm._v(
+                                            "\n                                    Ext. " +
+                                              _vm._s(phone.extension) +
+                                              "\n                                "
+                                          ),
+                                        ])
+                                      : _vm._e(),
+                                  ]
+                                ),
+                              ])
+                            }
+                          ),
                           0
                         ),
                         _vm._v(" "),
-                        _c("b-td", [_vm._v(_vm._s(data.item.note))])
+                        _c("b-td", [_vm._v(_vm._s(data.item.note))]),
                       ],
                       1
-                    )
+                    ),
                   ],
                   1
-                )
+                ),
               ],
               1
-            )
+            ),
           ]
-        }
+        },
       },
       {
         key: "cell(name)",
-        fn: function(data) {
+        fn: function (data) {
           return [
             data.item.shared
               ? _c("i", {
@@ -4225,26 +4227,26 @@ var render = function() {
                     {
                       name: "b-tooltip",
                       rawName: "v-b-tooltip.hover",
-                      modifiers: { hover: true }
-                    }
+                      modifiers: { hover: true },
+                    },
                   ],
                   staticClass: "fas fa-share",
-                  attrs: { title: "Contact Shared Across Sites" }
+                  attrs: { title: "Contact Shared Across Sites" },
                 })
               : _vm._e(),
-            _vm._v("\n        " + _vm._s(data.item.name) + "\n    ")
+            _vm._v("\n        " + _vm._s(data.item.name) + "\n    "),
           ]
-        }
+        },
       },
       {
         key: "cell(details)",
-        fn: function(data) {
+        fn: function (data) {
           return [
             _c(
               "b-button",
               {
                 attrs: { variant: "info", size: "sm", pill: "" },
-                on: { click: data.toggleDetails }
+                on: { click: data.toggleDetails },
               },
               [
                 _c("i", {
@@ -4252,23 +4254,25 @@ var render = function() {
                     {
                       name: "b-tooltip",
                       rawName: "v-b-tooltip.hover",
-                      modifiers: { hover: true }
-                    }
+                      modifiers: { hover: true },
+                    },
                   ],
                   staticClass: "fas",
                   class: data.detailsShowing ? "fa-eye-slash" : "fa-eye",
                   attrs: {
-                    title: data.detailsShowing ? "Hide Details" : "Show Details"
-                  }
-                })
+                    title: data.detailsShowing
+                      ? "Hide Details"
+                      : "Show Details",
+                  },
+                }),
               ]
-            )
+            ),
           ]
-        }
+        },
       },
       {
         key: "cell(actions)",
-        fn: function(data) {
+        fn: function (data) {
           return [
             _c(
               "b-button",
@@ -4277,8 +4281,8 @@ var render = function() {
                   {
                     name: "b-tooltip",
                     rawName: "v-b-tooltip.hover",
-                    modifiers: { hover: true }
-                  }
+                    modifiers: { hover: true },
+                  },
                 ],
                 attrs: {
                   href: _vm.route(
@@ -4288,15 +4292,15 @@ var render = function() {
                   size: "sm",
                   variant: "light",
                   title: "Download Contact",
-                  pill: ""
-                }
+                  pill: "",
+                },
               },
               [_c("i", { staticClass: "far fa-address-card" })]
             ),
             _vm._v(" "),
             _vm.permissions.update
               ? _c("edit-contact", {
-                  attrs: { details: data.item, allow_share: _vm.allow_share }
+                  attrs: { details: data.item, allow_share: _vm.allow_share },
                 })
               : _vm._e(),
             _vm._v(" "),
@@ -4308,28 +4312,28 @@ var render = function() {
                       {
                         name: "b-tooltip",
                         rawName: "v-b-tooltip.hover",
-                        modifiers: { hover: true }
-                      }
+                        modifiers: { hover: true },
+                      },
                     ],
                     attrs: {
                       size: "sm",
                       variant: "light",
                       title: "Delete Contact",
-                      pill: ""
+                      pill: "",
                     },
                     on: {
-                      click: function($event) {
+                      click: function ($event) {
                         return _vm.deleteContact(data.item.cont_id)
-                      }
-                    }
+                      },
+                    },
                   },
                   [_c("i", { staticClass: "far fa-trash-alt" })]
                 )
-              : _vm._e()
+              : _vm._e(),
           ]
-        }
-      }
-    ])
+        },
+      },
+    ]),
   })
 }
 var staticRenderFns = []
@@ -4351,7 +4355,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -4362,15 +4366,15 @@ var render = function() {
         {
           name: "b-tooltip",
           rawName: "v-b-tooltip.hover",
-          modifiers: { hover: true }
-        }
+          modifiers: { hover: true },
+        },
       ],
       attrs: { pill: "", variant: "light", size: "sm", title: "Edit Contact" },
       on: {
-        click: function($event) {
+        click: function ($event) {
           return _vm.$refs["edit-contact-modal"].show()
-        }
-      }
+        },
+      },
     },
     [
       _c("i", { staticClass: "fas fa-pencil-alt" }),
@@ -4379,7 +4383,7 @@ var render = function() {
         "b-modal",
         {
           ref: "edit-contact-modal",
-          attrs: { title: "Edit Contact", "hide-footer": "" }
+          attrs: { title: "Edit Contact", "hide-footer": "" },
         },
         [
           _c(
@@ -4389,12 +4393,12 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("form-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -4402,7 +4406,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -4410,66 +4414,66 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("text-input", {
                               attrs: {
                                 label: "Contact Name",
                                 name: "name",
-                                rules: "required"
+                                rules: "required",
                               },
                               model: {
                                 value: _vm.form.name,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "name", $$v)
                                 },
-                                expression: "form.name"
-                              }
+                                expression: "form.name",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
                               attrs: { label: "Title", name: "title" },
                               model: {
                                 value: _vm.form.title,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "title", $$v)
                                 },
-                                expression: "form.title"
-                              }
+                                expression: "form.title",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
                               attrs: {
                                 label: "Email Address",
                                 name: "email",
-                                rules: "email"
+                                rules: "email",
                               },
                               model: {
                                 value: _vm.form.email,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "email", $$v)
                                 },
-                                expression: "form.email"
-                              }
+                                expression: "form.email",
+                              },
                             }),
                             _vm._v(" "),
                             _c("b-form-textarea", {
                               attrs: {
                                 placeholder: "Notes about this contact...",
-                                rows: "3"
+                                rows: "3",
                               },
                               model: {
                                 value: _vm.form.note,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "note", $$v)
                                 },
-                                expression: "form.note"
-                              }
+                                expression: "form.note",
+                              },
                             }),
                             _vm._v(" "),
                             _c(
@@ -4480,18 +4484,18 @@ var render = function() {
                                     name: "show",
                                     rawName: "v-show",
                                     value: _vm.allow_share,
-                                    expression: "allow_share"
-                                  }
+                                    expression: "allow_share",
+                                  },
                                 ],
                                 staticClass: "text-center",
                                 attrs: { switch: "" },
                                 model: {
                                   value: _vm.form.shared,
-                                  callback: function($$v) {
+                                  callback: function ($$v) {
                                     _vm.$set(_vm.form, "shared", $$v)
                                   },
-                                  expression: "form.shared"
-                                }
+                                  expression: "form.shared",
+                                },
                               },
                               [_vm._v("Share Contact Across All Sites")]
                             ),
@@ -4502,10 +4506,10 @@ var render = function() {
                                 staticClass: "mt-2",
                                 attrs: {
                                   label: "Phone Numbers",
-                                  "label-for": "numbers"
-                                }
+                                  "label-for": "numbers",
+                                },
                               },
-                              _vm._l(_vm.form.phones, function(data, key) {
+                              _vm._l(_vm.form.phones, function (data, key) {
                                 return _c(
                                   "div",
                                   { key: key, staticClass: "row mt-2" },
@@ -4518,13 +4522,13 @@ var render = function() {
                                           attrs: {
                                             options: _vm.phone_types,
                                             "value-field": "description",
-                                            "text-field": "description"
+                                            "text-field": "description",
                                           },
                                           model: {
                                             value:
                                               data.phone_number_type
                                                 .description,
-                                            callback: function($$v) {
+                                            callback: function ($$v) {
                                               _vm.$set(
                                                 data.phone_number_type,
                                                 "description",
@@ -4532,9 +4536,9 @@ var render = function() {
                                               )
                                             },
                                             expression:
-                                              "data.phone_number_type.description"
-                                          }
-                                        })
+                                              "data.phone_number_type.description",
+                                          },
+                                        }),
                                       ],
                                       1
                                     ),
@@ -4547,22 +4551,22 @@ var render = function() {
                                           attrs: { "no-country-selector": "" },
                                           model: {
                                             value: data.phone_number,
-                                            callback: function($$v) {
+                                            callback: function ($$v) {
                                               _vm.$set(
                                                 data,
                                                 "phone_number",
                                                 $$v
                                               )
                                             },
-                                            expression: "data.phone_number"
-                                          }
+                                            expression: "data.phone_number",
+                                          },
                                         }),
                                         _vm._v(" "),
                                         _c("b-form-invalid-feedback", [
                                           _vm._v(
                                             "Please use a valid phone number format"
-                                          )
-                                        ])
+                                          ),
+                                        ]),
                                       ],
                                       1
                                     ),
@@ -4574,16 +4578,16 @@ var render = function() {
                                         _c("b-form-input", {
                                           attrs: {
                                             type: "text",
-                                            placeholder: "Ext"
+                                            placeholder: "Ext",
                                           },
                                           model: {
                                             value: data.extension,
-                                            callback: function($$v) {
+                                            callback: function ($$v) {
                                               _vm.$set(data, "extension", $$v)
                                             },
-                                            expression: "data.extension"
-                                          }
-                                        })
+                                            expression: "data.extension",
+                                          },
+                                        }),
                                       ],
                                       1
                                     ),
@@ -4599,30 +4603,30 @@ var render = function() {
                                               {
                                                 name: "b-tooltip",
                                                 rawName: "v-b-tooltip.hover",
-                                                modifiers: { hover: true }
-                                              }
+                                                modifiers: { hover: true },
+                                              },
                                             ],
                                             attrs: {
                                               variant: "danger",
                                               title: "Remove Number",
                                               size: "sm",
-                                              pill: ""
+                                              pill: "",
                                             },
                                             on: {
-                                              click: function($event) {
+                                              click: function ($event) {
                                                 return _vm.removeRow(key)
-                                              }
-                                            }
+                                              },
+                                            },
                                           },
                                           [
                                             _c("i", {
-                                              staticClass: "fas fa-phone-slash"
-                                            })
+                                              staticClass: "fas fa-phone-slash",
+                                            }),
                                           ]
-                                        )
+                                        ),
                                       ],
                                       1
-                                    )
+                                    ),
                                   ]
                                 )
                               }),
@@ -4636,39 +4640,39 @@ var render = function() {
                                 attrs: {
                                   size: "sm",
                                   variant: "primary",
-                                  pill: ""
+                                  pill: "",
                                 },
-                                on: { click: _vm.addRow }
+                                on: { click: _vm.addRow },
                               },
                               [
                                 _c("i", {
                                   staticClass: "fas fa-plus d-none d-sm-inline",
-                                  attrs: { "aria-hidden": "true" }
+                                  attrs: { "aria-hidden": "true" },
                                 }),
-                                _vm._v(" Add Row")
+                                _vm._v(" Add Row"),
                               ]
                             ),
                             _vm._v(" "),
                             _c("submit-button", {
                               attrs: {
                                 button_text: "Update Contact",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -4692,7 +4696,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -4703,11 +4707,11 @@ var render = function() {
         {
           name: "b-modal",
           rawName: "v-b-modal.new-contact-modal",
-          modifiers: { "new-contact-modal": true }
-        }
+          modifiers: { "new-contact-modal": true },
+        },
       ],
       staticClass: "float-right",
-      attrs: { pill: "", variant: "primary", size: "sm" }
+      attrs: { pill: "", variant: "primary", size: "sm" },
     },
     [
       _c("i", { staticClass: "fas fa-plus" }),
@@ -4719,9 +4723,9 @@ var render = function() {
           attrs: {
             id: "new-contact-modal",
             title: "New Contact",
-            "hide-footer": ""
+            "hide-footer": "",
           },
-          on: { hidden: _vm.resetForm }
+          on: { hidden: _vm.resetForm },
         },
         [
           _c(
@@ -4731,14 +4735,14 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [
-                      _vm.submitted ? _c("form-loader") : _c("atom-loader")
+                      _vm.submitted ? _c("form-loader") : _c("atom-loader"),
                     ]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -4746,7 +4750,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -4754,66 +4758,66 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("text-input", {
                               attrs: {
                                 label: "Contact Name",
                                 name: "name",
-                                rules: "required"
+                                rules: "required",
                               },
                               model: {
                                 value: _vm.form.name,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "name", $$v)
                                 },
-                                expression: "form.name"
-                              }
+                                expression: "form.name",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
                               attrs: { label: "Title", name: "title" },
                               model: {
                                 value: _vm.form.title,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "title", $$v)
                                 },
-                                expression: "form.title"
-                              }
+                                expression: "form.title",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
                               attrs: {
                                 label: "Email Address",
                                 name: "email",
-                                rules: "email"
+                                rules: "email",
                               },
                               model: {
                                 value: _vm.form.email,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "email", $$v)
                                 },
-                                expression: "form.email"
-                              }
+                                expression: "form.email",
+                              },
                             }),
                             _vm._v(" "),
                             _c("b-form-textarea", {
                               attrs: {
                                 placeholder: "Notes about this contact...",
-                                rows: "3"
+                                rows: "3",
                               },
                               model: {
                                 value: _vm.form.note,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "note", $$v)
                                 },
-                                expression: "form.note"
-                              }
+                                expression: "form.note",
+                              },
                             }),
                             _vm._v(" "),
                             _c(
@@ -4824,18 +4828,18 @@ var render = function() {
                                     name: "show",
                                     rawName: "v-show",
                                     value: _vm.allow_share,
-                                    expression: "allow_share"
-                                  }
+                                    expression: "allow_share",
+                                  },
                                 ],
                                 staticClass: "text-center",
                                 attrs: { switch: "" },
                                 model: {
                                   value: _vm.form.shared,
-                                  callback: function($$v) {
+                                  callback: function ($$v) {
                                     _vm.$set(_vm.form, "shared", $$v)
                                   },
-                                  expression: "form.shared"
-                                }
+                                  expression: "form.shared",
+                                },
                               },
                               [_vm._v("Share Contact Across All Sites")]
                             ),
@@ -4846,10 +4850,10 @@ var render = function() {
                                 staticClass: "mt-2",
                                 attrs: {
                                   label: "Phone Numbers",
-                                  "label-for": "numbers"
-                                }
+                                  "label-for": "numbers",
+                                },
                               },
-                              _vm._l(_vm.form.phones, function(data, key) {
+                              _vm._l(_vm.form.phones, function (data, key) {
                                 return _c(
                                   "div",
                                   { key: key, staticClass: "row mt-2" },
@@ -4862,16 +4866,16 @@ var render = function() {
                                           attrs: {
                                             options: _vm.phone_types,
                                             "value-field": "description",
-                                            "text-field": "description"
+                                            "text-field": "description",
                                           },
                                           model: {
                                             value: data.type,
-                                            callback: function($$v) {
+                                            callback: function ($$v) {
                                               _vm.$set(data, "type", $$v)
                                             },
-                                            expression: "data.type"
-                                          }
-                                        })
+                                            expression: "data.type",
+                                          },
+                                        }),
                                       ],
                                       1
                                     ),
@@ -4884,18 +4888,18 @@ var render = function() {
                                           attrs: { "no-country-selector": "" },
                                           model: {
                                             value: data.number,
-                                            callback: function($$v) {
+                                            callback: function ($$v) {
                                               _vm.$set(data, "number", $$v)
                                             },
-                                            expression: "data.number"
-                                          }
+                                            expression: "data.number",
+                                          },
                                         }),
                                         _vm._v(" "),
                                         _c("b-form-invalid-feedback", [
                                           _vm._v(
                                             "Please use a valid phone number format"
-                                          )
-                                        ])
+                                          ),
+                                        ]),
                                       ],
                                       1
                                     ),
@@ -4907,16 +4911,16 @@ var render = function() {
                                         _c("b-form-input", {
                                           attrs: {
                                             type: "text",
-                                            placeholder: "Ext"
+                                            placeholder: "Ext",
                                           },
                                           model: {
                                             value: data.extension,
-                                            callback: function($$v) {
+                                            callback: function ($$v) {
                                               _vm.$set(data, "extension", $$v)
                                             },
-                                            expression: "data.extension"
-                                          }
-                                        })
+                                            expression: "data.extension",
+                                          },
+                                        }),
                                       ],
                                       1
                                     ),
@@ -4932,30 +4936,30 @@ var render = function() {
                                               {
                                                 name: "b-tooltip",
                                                 rawName: "v-b-tooltip.hover",
-                                                modifiers: { hover: true }
-                                              }
+                                                modifiers: { hover: true },
+                                              },
                                             ],
                                             attrs: {
                                               variant: "danger",
                                               title: "Remove Number",
                                               size: "sm",
-                                              pill: ""
+                                              pill: "",
                                             },
                                             on: {
-                                              click: function($event) {
+                                              click: function ($event) {
                                                 return _vm.removeRow(key)
-                                              }
-                                            }
+                                              },
+                                            },
                                           },
                                           [
                                             _c("i", {
-                                              staticClass: "fas fa-phone-slash"
-                                            })
+                                              staticClass: "fas fa-phone-slash",
+                                            }),
                                           ]
-                                        )
+                                        ),
                                       ],
                                       1
-                                    )
+                                    ),
                                   ]
                                 )
                               }),
@@ -4969,39 +4973,39 @@ var render = function() {
                                 attrs: {
                                   size: "sm",
                                   variant: "primary",
-                                  pill: ""
+                                  pill: "",
                                 },
-                                on: { click: _vm.addRow }
+                                on: { click: _vm.addRow },
                               },
                               [
                                 _c("i", {
                                   staticClass: "fas fa-plus d-none d-sm-inline",
-                                  attrs: { "aria-hidden": "true" }
+                                  attrs: { "aria-hidden": "true" },
                                 }),
-                                _vm._v(" Add Row")
+                                _vm._v(" Add Row"),
                               ]
                             ),
                             _vm._v(" "),
                             _c("submit-button", {
                               attrs: {
                                 button_text: "Add Contact",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -5025,7 +5029,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -5033,11 +5037,11 @@ var render = function() {
     "b-button",
     {
       attrs: { variant: "danger", size: "sm", pill: "" },
-      on: { click: _vm.deleteEquip }
+      on: { click: _vm.deleteEquip },
     },
     [
       _c("i", { staticClass: "fas fa-trash-alt" }),
-      _vm._v("\n    Delete Equipment\n")
+      _vm._v("\n    Delete Equipment\n"),
     ]
   )
 }
@@ -5060,7 +5064,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -5069,10 +5073,10 @@ var render = function() {
     {
       attrs: { pill: "", variant: "warning", size: "sm" },
       on: {
-        click: function($event) {
+        click: function ($event) {
           return _vm.$refs["edit-equipment-modal"].show()
-        }
-      }
+        },
+      },
     },
     [
       _c("i", { staticClass: "fas fa-pencil-alt" }),
@@ -5082,7 +5086,7 @@ var render = function() {
         {
           ref: "edit-equipment-modal",
           attrs: { title: "Edit Equipment", "hide-footer": "" },
-          on: { show: _vm.getEquipData }
+          on: { show: _vm.getEquipData },
         },
         [
           _c(
@@ -5092,12 +5096,12 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("form-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -5105,7 +5109,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -5113,15 +5117,15 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("h4", { staticClass: "text-center" }, [
-                              _vm._v(_vm._s(_vm.equip.name))
+                              _vm._v(_vm._s(_vm.equip.name)),
                             ]),
                             _vm._v(" "),
                             _vm.allow_share
@@ -5132,50 +5136,50 @@ var render = function() {
                                     attrs: { switch: "" },
                                     model: {
                                       value: _vm.form.shared,
-                                      callback: function($$v) {
+                                      callback: function ($$v) {
                                         _vm.$set(_vm.form, "shared", $$v)
                                       },
-                                      expression: "form.shared"
-                                    }
+                                      expression: "form.shared",
+                                    },
                                   },
                                   [_vm._v("Share Equipment Across All Sites")]
                                 )
                               : _vm._e(),
                             _vm._v(" "),
-                            _vm._l(_vm.form.data, function(d, index) {
+                            _vm._l(_vm.form.data, function (d, index) {
                               return _c("text-input", {
                                 key: index,
                                 attrs: { label: d.field_name },
                                 model: {
                                   value: _vm.form.data[index].value,
-                                  callback: function($$v) {
+                                  callback: function ($$v) {
                                     _vm.$set(_vm.form.data[index], "value", $$v)
                                   },
-                                  expression: "form.data[index].value"
-                                }
+                                  expression: "form.data[index].value",
+                                },
                               })
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
                               attrs: {
                                 button_text: "Update Equipment",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           2
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -5199,7 +5203,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -5207,7 +5211,7 @@ var render = function() {
     _vm.equipment.length > 0
       ? _c(
           "div",
-          _vm._l(_vm.equipment, function(equip, index) {
+          _vm._l(_vm.equipment, function (equip, index) {
             return _c(
               "div",
               { key: index },
@@ -5223,10 +5227,10 @@ var render = function() {
                             name: "b-toggle",
                             rawName: "v-b-toggle",
                             value: "equip-" + index,
-                            expression: "'equip-'+index"
-                          }
+                            expression: "'equip-'+index",
+                          },
                         ],
-                        attrs: { block: "", variant: "info" }
+                        attrs: { block: "", variant: "info" },
                       },
                       [
                         equip.shared
@@ -5235,20 +5239,20 @@ var render = function() {
                                 {
                                   name: "b-tooltip",
                                   rawName: "v-b-tooltip.hover",
-                                  modifiers: { hover: true }
-                                }
+                                  modifiers: { hover: true },
+                                },
                               ],
                               staticClass: "fas fa-share",
-                              attrs: { title: "Equipment Shared Across Sites" }
+                              attrs: { title: "Equipment Shared Across Sites" },
                             })
                           : _vm._e(),
                         _vm._v(
                           "\n                    " +
                             _vm._s(equip.name) +
                             "\n                "
-                        )
+                        ),
                       ]
-                    )
+                    ),
                   ],
                   1
                 ),
@@ -5259,8 +5263,8 @@ var render = function() {
                     attrs: {
                       id: "equip-" + index,
                       accordion: "equipment-accordion",
-                      visible: index === 0 ? true : false
-                    }
+                      visible: index === 0 ? true : false,
+                    },
                   },
                   [
                     _c(
@@ -5272,8 +5276,8 @@ var render = function() {
                             small: "",
                             items: _vm.getEquipData(
                               equip.customer_equipment_data
-                            )
-                          }
+                            ),
+                          },
                         }),
                         _vm._v(" "),
                         _c(
@@ -5285,25 +5289,25 @@ var render = function() {
                                   attrs: {
                                     cust_id: _vm.cust_id,
                                     equip: equip,
-                                    allow_share: _vm.allow_share
-                                  }
+                                    allow_share: _vm.allow_share,
+                                  },
                                 })
                               : _vm._e(),
                             _vm._v(" "),
                             _vm.permissions.delete
                               ? _c("delete-equipment", {
-                                  attrs: { cust_equip_id: equip.cust_equip_id }
+                                  attrs: { cust_equip_id: equip.cust_equip_id },
                                 })
-                              : _vm._e()
+                              : _vm._e(),
                           ],
                           1
-                        )
+                        ),
                       ],
                       1
-                    )
+                    ),
                   ],
                   1
-                )
+                ),
               ],
               1
             )
@@ -5312,9 +5316,9 @@ var render = function() {
         )
       : _c("div", [
           _c("h5", { staticClass: "text-center" }, [
-            _vm._v("No Equipment Has Been Assigned")
-          ])
-        ])
+            _vm._v("No Equipment Has Been Assigned"),
+          ]),
+        ]),
   ])
 }
 var staticRenderFns = []
@@ -5336,7 +5340,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -5347,11 +5351,11 @@ var render = function() {
         {
           name: "b-modal",
           rawName: "v-b-modal.new-equipment-modal",
-          modifiers: { "new-equipment-modal": true }
-        }
+          modifiers: { "new-equipment-modal": true },
+        },
       ],
       staticClass: "float-right",
-      attrs: { pill: "", variant: "primary", size: "sm" }
+      attrs: { pill: "", variant: "primary", size: "sm" },
     },
     [
       _c("i", { staticClass: "fas fa-plus" }),
@@ -5363,9 +5367,9 @@ var render = function() {
           attrs: {
             id: "new-equipment-modal",
             title: "Add Equipment",
-            "hide-footer": ""
+            "hide-footer": "",
           },
-          on: { show: _vm.getEquipList, hidden: _vm.resetForm }
+          on: { show: _vm.getEquipList, hidden: _vm.resetForm },
         },
         [
           _c(
@@ -5375,14 +5379,14 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [
-                      _vm.submitted ? _c("form-loader") : _c("atom-loader")
+                      _vm.submitted ? _c("form-loader") : _c("atom-loader"),
                     ]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -5390,7 +5394,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -5398,11 +5402,11 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c(
@@ -5410,47 +5414,51 @@ var render = function() {
                               {
                                 attrs: {
                                   rules: "required",
-                                  label: "Select Equipment Type"
+                                  label: "Select Equipment Type",
                                 },
                                 on: { change: _vm.populateForm },
                                 model: {
                                   value: _vm.form.equip_id,
-                                  callback: function($$v) {
+                                  callback: function ($$v) {
                                     _vm.$set(_vm.form, "equip_id", $$v)
                                   },
-                                  expression: "form.equip_id"
-                                }
+                                  expression: "form.equip_id",
+                                },
                               },
                               [
                                 _c("option", { domProps: { value: null } }, [
-                                  _vm._v("Select An Equipment Type")
+                                  _vm._v("Select An Equipment Type"),
                                 ]),
                                 _vm._v(" "),
-                                _vm._l(_vm.equipList, function(cat) {
+                                _vm._l(_vm.equipList, function (cat) {
                                   return _c(
                                     "optgroup",
                                     {
                                       key: cat.cat_id,
-                                      attrs: { label: cat.name }
+                                      attrs: { label: cat.name },
                                     },
-                                    _vm._l(cat.equipment_type, function(equip) {
-                                      return _c(
-                                        "option",
-                                        {
-                                          key: equip.equip_id,
-                                          attrs: {
-                                            disabled: _vm.existing_equip.includes(
-                                              equip.equip_id
-                                            )
+                                    _vm._l(
+                                      cat.equipment_type,
+                                      function (equip) {
+                                        return _c(
+                                          "option",
+                                          {
+                                            key: equip.equip_id,
+                                            attrs: {
+                                              disabled:
+                                                _vm.existing_equip.includes(
+                                                  equip.equip_id
+                                                ),
+                                            },
+                                            domProps: { value: equip.equip_id },
                                           },
-                                          domProps: { value: equip.equip_id }
-                                        },
-                                        [_vm._v(_vm._s(equip.name))]
-                                      )
-                                    }),
+                                          [_vm._v(_vm._s(equip.name))]
+                                        )
+                                      }
+                                    ),
                                     0
                                   )
-                                })
+                                }),
                               ],
                               2
                             ),
@@ -5463,56 +5471,56 @@ var render = function() {
                                     name: "show",
                                     rawName: "v-show",
                                     value: _vm.allow_share,
-                                    expression: "allow_share"
-                                  }
+                                    expression: "allow_share",
+                                  },
                                 ],
                                 staticClass: "text-center",
                                 attrs: { switch: "" },
                                 model: {
                                   value: _vm.form.shared,
-                                  callback: function($$v) {
+                                  callback: function ($$v) {
                                     _vm.$set(_vm.form, "shared", $$v)
                                   },
-                                  expression: "form.shared"
-                                }
+                                  expression: "form.shared",
+                                },
                               },
                               [_vm._v("Share Equipment Across All Sites")]
                             ),
                             _vm._v(" "),
-                            _vm._l(_vm.form.data, function(d, index) {
+                            _vm._l(_vm.form.data, function (d, index) {
                               return _c("text-input", {
                                 key: index,
                                 attrs: { label: d.name },
                                 model: {
                                   value: _vm.form.data[index].value,
-                                  callback: function($$v) {
+                                  callback: function ($$v) {
                                     _vm.$set(_vm.form.data[index], "value", $$v)
                                   },
-                                  expression: "form.data[index].value"
-                                }
+                                  expression: "form.data[index].value",
+                                },
                               })
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
                               attrs: {
                                 button_text: "Add Equipment",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           2
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -5536,7 +5544,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -5547,15 +5555,15 @@ var render = function() {
         {
           name: "b-tooltip",
           rawName: "v-b-tooltip.hover",
-          modifiers: { hover: true }
-        }
+          modifiers: { hover: true },
+        },
       ],
       attrs: { pill: "", variant: "light", size: "sm", title: "Edit File" },
       on: {
-        click: function($event) {
+        click: function ($event) {
           return _vm.$refs["edit-file-modal"].show()
-        }
-      }
+        },
+      },
     },
     [
       _c("i", { staticClass: "fas fa-pencil-alt" }),
@@ -5564,7 +5572,7 @@ var render = function() {
         "b-modal",
         {
           ref: "edit-file-modal",
-          attrs: { title: "Edit File", "hide-footer": "" }
+          attrs: { title: "Edit File", "hide-footer": "" },
         },
         [
           _c(
@@ -5574,12 +5582,12 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("form-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -5587,7 +5595,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -5595,11 +5603,11 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("text-input", {
@@ -5607,15 +5615,15 @@ var render = function() {
                                 label: "Name",
                                 name: "name",
                                 rules: "required",
-                                placeholder: "Enter a Descriptive Name"
+                                placeholder: "Enter a Descriptive Name",
                               },
                               model: {
                                 value: _vm.form.name,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "name", $$v)
                                 },
-                                expression: "form.name"
-                              }
+                                expression: "form.name",
+                              },
                             }),
                             _vm._v(" "),
                             _c("dropdown-input", {
@@ -5626,38 +5634,38 @@ var render = function() {
                                 options: _vm.file_types,
                                 "value-field": "description",
                                 "text-field": "description",
-                                placeholder: "What Type of File Is This?"
+                                placeholder: "What Type of File Is This?",
                               },
                               model: {
                                 value: _vm.form.type,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "type", $$v)
                                 },
-                                expression: "form.type"
-                              }
+                                expression: "form.type",
+                              },
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
                               staticClass: "mt-2",
                               attrs: {
                                 button_text: "Update File",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -5681,14 +5689,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
     _vm.files.length == 0
       ? _c("div", [
-          _c("h4", { staticClass: "text-center" }, [_vm._v("No Files")])
+          _c("h4", { staticClass: "text-center" }, [_vm._v("No Files")]),
         ])
       : _c(
           "div",
@@ -5701,19 +5709,19 @@ var render = function() {
                 "empty-text": "No Files",
                 busy: _vm.loading,
                 responsive: "",
-                "show-empty": ""
+                "show-empty": "",
               },
               scopedSlots: _vm._u([
                 {
                   key: "table-busy",
-                  fn: function() {
+                  fn: function () {
                     return [_c("atom-loader")]
                   },
-                  proxy: true
+                  proxy: true,
                 },
                 {
                   key: "cell(name)",
-                  fn: function(row) {
+                  fn: function (row) {
                     return [
                       row.item.shared
                         ? _c("i", {
@@ -5721,11 +5729,11 @@ var render = function() {
                               {
                                 name: "b-tooltip",
                                 rawName: "v-b-tooltip.hover",
-                                modifiers: { hover: true }
-                              }
+                                modifiers: { hover: true },
+                              },
                             ],
                             staticClass: "fas fa-share",
-                            attrs: { title: "File Shared Across Sites" }
+                            attrs: { title: "File Shared Across Sites" },
                           })
                         : _vm._e(),
                       _vm._v(" "),
@@ -5736,32 +5744,32 @@ var render = function() {
                             {
                               name: "b-tooltip",
                               rawName: "v-b-tooltip.hover",
-                              modifiers: { hover: true }
-                            }
+                              modifiers: { hover: true },
+                            },
                           ],
                           attrs: {
                             href: _vm.route("download", [
                               row.item.file_upload.file_id,
-                              row.item.file_upload.file_name
+                              row.item.file_upload.file_name,
                             ]),
-                            title: "Click to Download"
-                          }
+                            title: "Click to Download",
+                          },
                         },
                         [_vm._v(_vm._s(row.item.name))]
-                      )
+                      ),
                     ]
-                  }
+                  },
                 },
                 {
                   key: "cell(actions)",
-                  fn: function(data) {
+                  fn: function (data) {
                     return [
                       _c("edit-file", {
                         attrs: {
                           cust_id: _vm.cust_id,
                           file: data.item,
-                          allow_share: _vm.allow_share
-                        }
+                          allow_share: _vm.allow_share,
+                        },
                       }),
                       _vm._v(" "),
                       _vm.permissions.delete
@@ -5772,36 +5780,36 @@ var render = function() {
                                 {
                                   name: "b-tooltip",
                                   rawName: "v-b-tooltip.hover",
-                                  modifiers: { hover: true }
-                                }
+                                  modifiers: { hover: true },
+                                },
                               ],
                               attrs: {
                                 pill: "",
                                 size: "sm",
                                 variant: "light",
-                                title: "Delete File"
+                                title: "Delete File",
                               },
                               on: {
-                                click: function($event) {
+                                click: function ($event) {
                                   return _vm.deleteFile(data.item.cust_file_id)
-                                }
-                              }
+                                },
+                              },
                             },
                             [
                               _c("i", {
-                                staticClass: "far fa-trash-alt text-danger"
-                              })
+                                staticClass: "far fa-trash-alt text-danger",
+                              }),
                             ]
                           )
-                        : _vm._e()
+                        : _vm._e(),
                     ]
-                  }
-                }
-              ])
-            })
+                  },
+                },
+              ]),
+            }),
           ],
           1
-        )
+        ),
   ])
 }
 var staticRenderFns = []
@@ -5823,7 +5831,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -5834,11 +5842,11 @@ var render = function() {
         {
           name: "b-modal",
           rawName: "v-b-modal.new-file-modal",
-          modifiers: { "new-file-modal": true }
-        }
+          modifiers: { "new-file-modal": true },
+        },
       ],
       staticClass: "float-right",
-      attrs: { pill: "", variant: "primary", size: "sm" }
+      attrs: { pill: "", variant: "primary", size: "sm" },
     },
     [
       _c("i", { staticClass: "fas fa-plus" }),
@@ -5850,9 +5858,9 @@ var render = function() {
           attrs: {
             id: "new-file-modal",
             title: "Add New File",
-            "hide-footer": ""
+            "hide-footer": "",
           },
-          on: { hide: _vm.checkForUpload, hidden: _vm.resetForm }
+          on: { hide: _vm.checkForUpload, hidden: _vm.resetForm },
         },
         [
           _c(
@@ -5862,18 +5870,18 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [
                       _vm.uploading
                         ? _c("progress-bar", {
-                            attrs: { "percent-done": _vm.fileProgress }
+                            attrs: { "percent-done": _vm.fileProgress },
                           })
-                        : _c("form-loader")
+                        : _c("form-loader"),
                     ]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -5881,7 +5889,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -5889,11 +5897,11 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("text-input", {
@@ -5901,15 +5909,15 @@ var render = function() {
                                 label: "Name",
                                 name: "name",
                                 rules: "required",
-                                placeholder: "Enter a Descriptive Name"
+                                placeholder: "Enter a Descriptive Name",
                               },
                               model: {
                                 value: _vm.form.name,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "name", $$v)
                                 },
-                                expression: "form.name"
-                              }
+                                expression: "form.name",
+                              },
                             }),
                             _vm._v(" "),
                             _c("dropdown-input", {
@@ -5920,15 +5928,15 @@ var render = function() {
                                 options: _vm.file_types,
                                 "value-field": "description",
                                 "text-field": "description",
-                                placeholder: "What Type of File Is This?"
+                                placeholder: "What Type of File Is This?",
                               },
                               model: {
                                 value: _vm.form.type,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "type", $$v)
                                 },
-                                expression: "form.type"
-                              }
+                                expression: "form.type",
+                              },
                             }),
                             _vm._v(" "),
                             _c("dropzone-upload", {
@@ -5939,30 +5947,30 @@ var render = function() {
                                 "upload-canceled": _vm.canceled,
                                 "upload-progress": _vm.updateProgressbar,
                                 completed: _vm.uploadDone,
-                                "validation-error": _vm.canceled
-                              }
+                                "validation-error": _vm.canceled,
+                              },
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
                               attrs: {
                                 button_text: "Upload File",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -5986,7 +5994,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -5995,7 +6003,7 @@ var render = function() {
     {
       staticClass: "m-2",
       attrs: { variant: "danger" },
-      on: { click: _vm.deactivate }
+      on: { click: _vm.deactivate },
     },
     [_vm._v("\n    Deactivate Customer\n")]
   )
@@ -6019,7 +6027,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -6029,18 +6037,18 @@ var render = function() {
       staticClass: "m-2",
       attrs: { variant: "warning" },
       on: {
-        click: function($event) {
+        click: function ($event) {
           return _vm.$refs["quick-search"].open()
-        }
-      }
+        },
+      },
     },
     [
       _vm._v("\n    Link to Parent Customer\n    "),
       _c("quick-search", {
         ref: "quick-search",
         attrs: { "modal-title": "Select Parent Customer" },
-        on: { "selected-customer": _vm.linkCustomer }
-      })
+        on: { "selected-customer": _vm.linkCustomer },
+      }),
     ],
     1
   )
@@ -6064,7 +6072,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -6073,7 +6081,7 @@ var render = function() {
     {
       staticClass: "m-2",
       attrs: { variant: "warning" },
-      on: { click: _vm.breakLink }
+      on: { click: _vm.breakLink },
     },
     [_vm._v("\n    Break Link to Parent\n")]
   )
@@ -6097,7 +6105,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -6108,15 +6116,15 @@ var render = function() {
         {
           name: "b-tooltip",
           rawName: "v-b-tooltip.hover",
-          modifiers: { hover: true }
-        }
+          modifiers: { hover: true },
+        },
       ],
       attrs: { variant: "warning", title: "Edit Note" },
       on: {
-        click: function($event) {
+        click: function ($event) {
           return _vm.$refs["edit-note-modal"].show()
-        }
-      }
+        },
+      },
     },
     [
       _c("i", { staticClass: "fas fa-pencil-alt" }),
@@ -6129,8 +6137,8 @@ var render = function() {
             title: "Edit Note",
             size: "lg",
             "hide-footer": "",
-            "no-enforce-focus": ""
-          }
+            "no-enforce-focus": "",
+          },
         },
         [
           _c(
@@ -6140,12 +6148,12 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("form-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -6153,7 +6161,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -6161,22 +6169,22 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("text-input", {
                               attrs: { label: "Subject" },
                               model: {
                                 value: _vm.form.subject,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "subject", $$v)
                                 },
-                                expression: "form.subject"
-                              }
+                                expression: "form.subject",
+                              },
                             }),
                             _vm._v(" "),
                             _c(
@@ -6193,11 +6201,11 @@ var render = function() {
                                         attrs: { switch: "" },
                                         model: {
                                           value: _vm.form.urgent,
-                                          callback: function($$v) {
+                                          callback: function ($$v) {
                                             _vm.$set(_vm.form, "urgent", $$v)
                                           },
-                                          expression: "form.urgent"
-                                        }
+                                          expression: "form.urgent",
+                                        },
                                       },
                                       [_vm._v("Mark Note As Important")]
                                     ),
@@ -6209,26 +6217,26 @@ var render = function() {
                                             attrs: { switch: "" },
                                             model: {
                                               value: _vm.form.shared,
-                                              callback: function($$v) {
+                                              callback: function ($$v) {
                                                 _vm.$set(
                                                   _vm.form,
                                                   "shared",
                                                   $$v
                                                 )
                                               },
-                                              expression: "form.shared"
-                                            }
+                                              expression: "form.shared",
+                                            },
                                           },
                                           [
                                             _vm._v(
                                               "Share Note Across All Sites"
-                                            )
+                                            ),
                                           ]
                                         )
-                                      : _vm._e()
+                                      : _vm._e(),
                                   ],
                                   1
-                                )
+                                ),
                               ]
                             ),
                             _vm._v(" "),
@@ -6236,38 +6244,38 @@ var render = function() {
                               attrs: {
                                 placeholder: "Enter Note",
                                 label: "Note Details",
-                                rules: "required"
+                                rules: "required",
                               },
                               model: {
                                 value: _vm.form.details,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "details", $$v)
                                 },
-                                expression: "form.details"
-                              }
+                                expression: "form.details",
+                              },
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
                               staticClass: "mt-2",
                               attrs: {
                                 button_text: "Update Note",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -6291,7 +6299,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -6302,11 +6310,11 @@ var render = function() {
         {
           name: "b-modal",
           rawName: "v-b-modal.new-note-modal",
-          modifiers: { "new-note-modal": true }
-        }
+          modifiers: { "new-note-modal": true },
+        },
       ],
       staticClass: "float-right",
-      attrs: { pill: "", variant: "primary", size: "sm" }
+      attrs: { pill: "", variant: "primary", size: "sm" },
     },
     [
       _c("i", { staticClass: "fas fa-plus" }),
@@ -6320,9 +6328,9 @@ var render = function() {
             title: "Add New Note",
             size: "lg",
             "hide-footer": "",
-            "no-enforce-focus": ""
+            "no-enforce-focus": "",
           },
-          on: { hidden: _vm.resetForm }
+          on: { hidden: _vm.resetForm },
         },
         [
           _c(
@@ -6332,12 +6340,12 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("form-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -6345,7 +6353,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -6353,22 +6361,22 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("text-input", {
                               attrs: { label: "Title", rules: "required" },
                               model: {
                                 value: _vm.form.subject,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "subject", $$v)
                                 },
-                                expression: "form.subject"
-                              }
+                                expression: "form.subject",
+                              },
                             }),
                             _vm._v(" "),
                             _c(
@@ -6385,11 +6393,11 @@ var render = function() {
                                         attrs: { switch: "" },
                                         model: {
                                           value: _vm.form.urgent,
-                                          callback: function($$v) {
+                                          callback: function ($$v) {
                                             _vm.$set(_vm.form, "urgent", $$v)
                                           },
-                                          expression: "form.urgent"
-                                        }
+                                          expression: "form.urgent",
+                                        },
                                       },
                                       [_vm._v("Mark Note As Important")]
                                     ),
@@ -6401,26 +6409,26 @@ var render = function() {
                                             attrs: { switch: "" },
                                             model: {
                                               value: _vm.form.shared,
-                                              callback: function($$v) {
+                                              callback: function ($$v) {
                                                 _vm.$set(
                                                   _vm.form,
                                                   "shared",
                                                   $$v
                                                 )
                                               },
-                                              expression: "form.shared"
-                                            }
+                                              expression: "form.shared",
+                                            },
                                           },
                                           [
                                             _vm._v(
                                               "Share Note Across All Sites"
-                                            )
+                                            ),
                                           ]
                                         )
-                                      : _vm._e()
+                                      : _vm._e(),
                                   ],
                                   1
-                                )
+                                ),
                               ]
                             ),
                             _vm._v(" "),
@@ -6428,38 +6436,38 @@ var render = function() {
                               attrs: {
                                 placeholder: "Enter Note",
                                 label: "Note Details",
-                                rules: "required"
+                                rules: "required",
                               },
                               model: {
                                 value: _vm.form.details,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "details", $$v)
                                 },
-                                expression: "form.details"
-                              }
+                                expression: "form.details",
+                              },
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
                               staticClass: "mt-2",
                               attrs: {
                                 button_text: "Add Note",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -6483,7 +6491,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -6492,21 +6500,21 @@ var render = function() {
     [
       _vm.notes.length == 0
         ? _c("div", [
-            _c("h4", { staticClass: "text-center" }, [_vm._v("No Notes")])
+            _c("h4", { staticClass: "text-center" }, [_vm._v("No Notes")]),
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._l(_vm.notes, function(note) {
+      _vm._l(_vm.notes, function (note) {
         return _c(
           "b-card",
           {
             key: note.note_id,
             staticClass: "pointer grid-margin",
             on: {
-              click: function($event) {
+              click: function ($event) {
                 return _vm.openNote(note)
-              }
-            }
+              },
+            },
           },
           [
             _c("b-card-title", [
@@ -6516,11 +6524,11 @@ var render = function() {
                       {
                         name: "b-tooltip",
                         rawName: "v-b-tooltip.hover",
-                        modifiers: { hover: true }
-                      }
+                        modifiers: { hover: true },
+                      },
                     ],
                     staticClass: "fas fa-exclamation-circle text-danger",
-                    attrs: { title: "Important!" }
+                    attrs: { title: "Important!" },
                   })
                 : _vm._e(),
               _vm._v(" "),
@@ -6530,30 +6538,30 @@ var render = function() {
                       {
                         name: "b-tooltip",
                         rawName: "v-b-tooltip.hover",
-                        modifiers: { hover: true }
-                      }
+                        modifiers: { hover: true },
+                      },
                     ],
                     staticClass: "fas fa-share",
-                    attrs: { title: "Note Shared Across Sites" }
+                    attrs: { title: "Note Shared Across Sites" },
                   })
                 : _vm._e(),
-              _vm._v("\n            " + _vm._s(note.subject) + "\n        ")
+              _vm._v("\n            " + _vm._s(note.subject) + "\n        "),
             ]),
             _vm._v(" "),
             _c("b-card-text", {
               staticClass: "customer-note-minimized ql-editor",
-              domProps: { innerHTML: _vm._s(note.details) }
+              domProps: { innerHTML: _vm._s(note.details) },
             }),
             _vm._v(" "),
             _c("div", [_vm._v("...")]),
             _vm._v(" "),
             _c("span", { staticClass: "float-left text-muted" }, [
-              _vm._v("Click to Expand")
+              _vm._v("Click to Expand"),
             ]),
             _vm._v(" "),
             _c("span", { staticClass: "float-right text-muted" }, [
-              _vm._v("Updated: " + _vm._s(note.updated_at))
-            ])
+              _vm._v("Updated: " + _vm._s(note.updated_at)),
+            ]),
           ],
           1
         )
@@ -6567,30 +6575,30 @@ var render = function() {
             title: _vm.openedNote.subject,
             size: "xl",
             centered: "",
-            scrollable: ""
+            scrollable: "",
           },
           on: {
-            hidden: function($event) {
+            hidden: function ($event) {
               _vm.note = {}
-            }
+            },
           },
           scopedSlots: _vm._u([
             {
               key: "modal-footer",
-              fn: function(ref) {
+              fn: function (ref) {
                 var ok = ref.ok
                 return [
                   _c("edit-note", {
                     attrs: {
                       cust_id: _vm.cust_id,
                       note: _vm.openedNote,
-                      allow_share: _vm.allow_share
+                      allow_share: _vm.allow_share,
                     },
                     on: {
-                      completed: function($event) {
+                      completed: function ($event) {
                         return _vm.$refs["note-modal"].hide()
-                      }
-                    }
+                      },
+                    },
                   }),
                   _vm._v(" "),
                   _vm.permissions.delete
@@ -6599,10 +6607,10 @@ var render = function() {
                         {
                           attrs: { variant: "danger" },
                           on: {
-                            click: function($event) {
+                            click: function ($event) {
                               return _vm.deleteNote(_vm.openedNote.note_id)
-                            }
-                          }
+                            },
+                          },
                         },
                         [_vm._v("Delete")]
                       )
@@ -6613,17 +6621,17 @@ var render = function() {
                     {
                       attrs: { variant: "primary" },
                       on: {
-                        click: function($event) {
+                        click: function ($event) {
                           return ok()
-                        }
-                      }
+                        },
+                      },
                     },
                     [_vm._v("Ok")]
-                  )
+                  ),
                 ]
-              }
-            }
-          ])
+              },
+            },
+          ]),
         },
         [
           _vm._v(" "),
@@ -6634,18 +6642,18 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("atom-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
               _c("div", {
                 staticClass: "ql-editor",
-                domProps: { innerHTML: _vm._s(_vm.openedNote.details) }
+                domProps: { innerHTML: _vm._s(_vm.openedNote.details) },
               }),
               _vm._v(" "),
               _c("div", { staticClass: "mt-4" }, [
@@ -6657,7 +6665,7 @@ var render = function() {
                           " by " +
                           _vm._s(_vm.openedNote.updated_author) +
                           "\n                "
-                      )
+                      ),
                     ])
                   : _vm._e(),
                 _vm._v(" "),
@@ -6668,14 +6676,14 @@ var render = function() {
                       " by " +
                       _vm._s(_vm.openedNote.author) +
                       "\n                "
-                  )
-                ])
-              ])
+                  ),
+                ]),
+              ]),
             ]
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     2
   )
@@ -6699,7 +6707,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -6710,21 +6718,21 @@ var render = function() {
         {
           name: "b-tooltip",
           rawName: "v-b-tooltip.hover",
-          modifiers: { hover: true }
+          modifiers: { hover: true },
         },
         {
           name: "b-modal",
           rawName: "v-b-modal.edit-customer-modal",
-          modifiers: { "edit-customer-modal": true }
-        }
+          modifiers: { "edit-customer-modal": true },
+        },
       ],
       attrs: {
         variant: "warning",
         block: "",
         pill: "",
         size: "sm",
-        title: "Edit Customer Details"
-      }
+        title: "Edit Customer Details",
+      },
     },
     [
       _c("i", { staticClass: "fas fa-pencil-alt" }),
@@ -6736,8 +6744,8 @@ var render = function() {
           attrs: {
             title: "Edit Customer Details",
             id: "edit-customer-modal",
-            "hide-footer": ""
-          }
+            "hide-footer": "",
+          },
         },
         [
           _c(
@@ -6747,12 +6755,12 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("form-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -6760,7 +6768,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -6768,11 +6776,11 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("text-input", {
@@ -6780,60 +6788,60 @@ var render = function() {
                                 label: "Customer Name",
                                 name: "name",
                                 placeholder: "Enter Customer Name",
-                                rules: "required"
+                                rules: "required",
                               },
                               model: {
                                 value: _vm.form.name,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "name", $$v)
                                 },
-                                expression: "form.name"
-                              }
+                                expression: "form.name",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
                               attrs: {
                                 label: "DBA Name",
                                 name: "dba_name",
-                                placeholder: "Customer secondary name/AKA name"
+                                placeholder: "Customer secondary name/AKA name",
                               },
                               model: {
                                 value: _vm.form.dba_name,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "dba_name", $$v)
                                 },
-                                expression: "form.dba_name"
-                              }
+                                expression: "form.dba_name",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
                               attrs: {
                                 label: "Customer Address",
                                 name: "address",
-                                rules: "required"
+                                rules: "required",
                               },
                               model: {
                                 value: _vm.form.address,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "address", $$v)
                                 },
-                                expression: "form.address"
-                              }
+                                expression: "form.address",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
                               attrs: {
                                 label: "City",
                                 name: "city",
-                                rules: "required"
+                                rules: "required",
                               },
                               model: {
                                 value: _vm.form.city,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "city", $$v)
                                 },
-                                expression: "form.city"
-                              }
+                                expression: "form.city",
+                              },
                             }),
                             _vm._v(" "),
                             _c(
@@ -6846,12 +6854,12 @@ var render = function() {
                                     _c("all-states", {
                                       model: {
                                         value: _vm.form.state,
-                                        callback: function($$v) {
+                                        callback: function ($$v) {
                                           _vm.$set(_vm.form, "state", $$v)
                                         },
-                                        expression: "form.state"
-                                      }
-                                    })
+                                        expression: "form.state",
+                                      },
+                                    }),
                                   ],
                                   1
                                 ),
@@ -6864,19 +6872,19 @@ var render = function() {
                                       attrs: {
                                         label: "Zip Code",
                                         name: "zip",
-                                        rules: "required|numeric"
+                                        rules: "required|numeric",
                                       },
                                       model: {
                                         value: _vm.form.zip,
-                                        callback: function($$v) {
+                                        callback: function ($$v) {
                                           _vm.$set(_vm.form, "zip", $$v)
                                         },
-                                        expression: "form.zip"
-                                      }
-                                    })
+                                        expression: "form.zip",
+                                      },
+                                    }),
                                   ],
                                   1
-                                )
+                                ),
                               ],
                               1
                             ),
@@ -6884,23 +6892,23 @@ var render = function() {
                             _c("submit-button", {
                               attrs: {
                                 button_text: "Update Customer Details",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -6924,7 +6932,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -6935,13 +6943,13 @@ var render = function() {
         {
           name: "b-modal",
           rawName: "v-b-modal.manage-customer-modal",
-          modifiers: { "manage-customer-modal": true }
+          modifiers: { "manage-customer-modal": true },
         },
         {
           name: "b-tooltip",
           rawName: "v-b-tooltip.hover",
-          modifiers: { hover: true }
-        }
+          modifiers: { hover: true },
+        },
       ],
       staticClass: "mt-1",
       attrs: {
@@ -6949,13 +6957,13 @@ var render = function() {
         block: "",
         variant: "danger",
         size: "sm",
-        title: "Manage Customer"
+        title: "Manage Customer",
       },
       on: {
-        click: function($event) {
+        click: function ($event) {
           return _vm.getDeletedItems()
-        }
-      }
+        },
+      },
     },
     [
       _c("i", { staticClass: "fas fa-tasks" }),
@@ -6967,8 +6975,8 @@ var render = function() {
           attrs: {
             id: "manage-customer-modal",
             title: "Manage Customer",
-            "hide-footer": ""
-          }
+            "hide-footer": "",
+          },
         },
         [
           _c(
@@ -6978,14 +6986,14 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [
-                      _c("atom-loader", { attrs: { text: "Loading Data..." } })
+                      _c("atom-loader", { attrs: { text: "Loading Data..." } }),
                     ]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -6993,18 +7001,18 @@ var render = function() {
                 _vm.deleted["equipment"] && _vm.deleted["equipment"].length > 0
                   ? _c("div", { staticClass: "mt-2" }, [
                       _c("h5", { staticClass: "text-center" }, [
-                        _vm._v("Deleted Equipment")
+                        _vm._v("Deleted Equipment"),
                       ]),
                       _vm._v(" "),
                       _c(
                         "ul",
                         { staticClass: "list-group" },
-                        _vm._l(_vm.deleted["equipment"], function(item) {
+                        _vm._l(_vm.deleted["equipment"], function (item) {
                           return _c(
                             "li",
                             {
                               key: item.cust_equip_id,
-                              staticClass: "list-group-item text-center"
+                              staticClass: "list-group-item text-center",
                             },
                             [
                               _c("i", {
@@ -7012,20 +7020,20 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass:
                                   "fas fa-trash-restore text-success pointer float-left mr-2",
                                 attrs: { title: "Restore" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.restore(
                                       "equipment",
                                       item.cust_equip_id
                                     )
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(" "),
                               _c("i", {
@@ -7033,20 +7041,20 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass:
                                   "fas fa-trash text-danger pointer float-left",
                                 attrs: { title: "Perminately Delete" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.destroy(
                                       "equipment",
                                       item.cust_equip_id
                                     )
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(
                                 "\n                            " +
@@ -7057,30 +7065,30 @@ var render = function() {
                                 "span",
                                 { staticClass: "float-right text-muted" },
                                 [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
-                              )
+                              ),
                             ]
                           )
                         }),
                         0
-                      )
+                      ),
                     ])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.deleted["contacts"] && _vm.deleted["contacts"].length > 0
                   ? _c("div", { staticClass: "mt-2" }, [
                       _c("h5", { staticClass: "text-center" }, [
-                        _vm._v("Deleted Contacts")
+                        _vm._v("Deleted Contacts"),
                       ]),
                       _vm._v(" "),
                       _c(
                         "ul",
                         { staticClass: "list-group" },
-                        _vm._l(_vm.deleted["contacts"], function(item) {
+                        _vm._l(_vm.deleted["contacts"], function (item) {
                           return _c(
                             "li",
                             {
                               key: item.cont_id,
-                              staticClass: "list-group-item text-center"
+                              staticClass: "list-group-item text-center",
                             },
                             [
                               _c("i", {
@@ -7088,17 +7096,17 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass:
                                   "fas fa-trash-restore text-success pointer float-left mr-2",
                                 attrs: { title: "Restore" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.restore("contacts", item.cont_id)
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(" "),
                               _c("i", {
@@ -7106,17 +7114,17 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass:
                                   "fas fa-trash text-danger pointer float-left",
                                 attrs: { title: "Perminately Delete" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.destroy("contacts", item.cont_id)
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(
                                 "\n                            " +
@@ -7127,30 +7135,30 @@ var render = function() {
                                 "span",
                                 { staticClass: "float-right text-muted" },
                                 [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
-                              )
+                              ),
                             ]
                           )
                         }),
                         0
-                      )
+                      ),
                     ])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.deleted["notes"] && _vm.deleted["notes"].length > 0
                   ? _c("div", { staticClass: "mt-2" }, [
                       _c("h5", { staticClass: "text-center" }, [
-                        _vm._v("Deleted Notes")
+                        _vm._v("Deleted Notes"),
                       ]),
                       _vm._v(" "),
                       _c(
                         "ul",
                         { staticClass: "list-group" },
-                        _vm._l(_vm.deleted["notes"], function(item) {
+                        _vm._l(_vm.deleted["notes"], function (item) {
                           return _c(
                             "li",
                             {
                               key: item.note_id,
-                              staticClass: "list-group-item text-center"
+                              staticClass: "list-group-item text-center",
                             },
                             [
                               _c("i", {
@@ -7158,17 +7166,17 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass:
                                   "fas fa-trash-restore text-success pointer float-left mr-2",
                                 attrs: { title: "Restore" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.restore("notes", item.note_id)
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(" "),
                               _c("i", {
@@ -7176,17 +7184,17 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass:
                                   "fas fa-trash text-danger pointer float-left",
                                 attrs: { title: "Perminately Delete" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.destroy("notes", item.note_id)
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(
                                 "\n                            " +
@@ -7197,30 +7205,30 @@ var render = function() {
                                 "span",
                                 { staticClass: "float-right text-muted" },
                                 [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
-                              )
+                              ),
                             ]
                           )
                         }),
                         0
-                      )
+                      ),
                     ])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.deleted["files"] && _vm.deleted["files"].length > 0
                   ? _c("div", { staticClass: "mt-2" }, [
                       _c("h5", { staticClass: "text-center" }, [
-                        _vm._v("Deleted Files")
+                        _vm._v("Deleted Files"),
                       ]),
                       _vm._v(" "),
                       _c(
                         "ul",
                         { staticClass: "list-group" },
-                        _vm._l(_vm.deleted["files"], function(item) {
+                        _vm._l(_vm.deleted["files"], function (item) {
                           return _c(
                             "li",
                             {
                               key: item.cust_file_id,
-                              staticClass: "list-group-item text-center"
+                              staticClass: "list-group-item text-center",
                             },
                             [
                               _c("i", {
@@ -7228,20 +7236,20 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass:
                                   "fas fa-trash-restore text-success pointer float-left mr-2",
                                 attrs: { title: "Restore" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.restore(
                                       "files",
                                       item.cust_file_id
                                     )
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(" "),
                               _c("i", {
@@ -7249,20 +7257,20 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass:
                                   "fas fa-trash text-danger pointer float-left",
                                 attrs: { title: "Perminately Delete" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.destroy(
                                       "files",
                                       item.cust_file_id
                                     )
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(
                                 "\n                            " +
@@ -7273,14 +7281,14 @@ var render = function() {
                                 "span",
                                 { staticClass: "float-right text-muted" },
                                 [_vm._v("Deleted: " + _vm._s(item.deleted_at))]
-                              )
+                              ),
                             ]
                           )
                         }),
                         0
-                      )
+                      ),
                     ])
-                  : _vm._e()
+                  : _vm._e(),
               ]),
               _vm._v(" "),
               _c(
@@ -7293,16 +7301,16 @@ var render = function() {
                         name: "show",
                         rawName: "v-show",
                         value: !_vm.linked && !_vm.is_parent,
-                        expression: "!linked && !is_parent"
-                      }
+                        expression: "!linked && !is_parent",
+                      },
                     ],
                     attrs: { cust_id: _vm.cust_id },
                     on: {
-                      loading: function($event) {
+                      loading: function ($event) {
                         _vm.loading = true
                       },
-                      completed: _vm.closeModal
-                    }
+                      completed: _vm.closeModal,
+                    },
                   }),
                   _vm._v(" "),
                   _c("unlink-customer", {
@@ -7311,16 +7319,16 @@ var render = function() {
                         name: "show",
                         rawName: "v-show",
                         value: _vm.linked && !_vm.is_parent,
-                        expression: "linked && !is_parent"
-                      }
+                        expression: "linked && !is_parent",
+                      },
                     ],
                     attrs: { cust_id: _vm.cust_id },
                     on: {
-                      loading: function($event) {
+                      loading: function ($event) {
                         _vm.loading = true
                       },
-                      completed: _vm.closeModal
-                    }
+                      completed: _vm.closeModal,
+                    },
                   }),
                   _vm._v(" "),
                   _c("deactivate-customer", {
@@ -7329,24 +7337,24 @@ var render = function() {
                         name: "show",
                         rawName: "v-show",
                         value: !_vm.linked && !_vm.is_parent,
-                        expression: "!linked && !is_parent"
-                      }
+                        expression: "!linked && !is_parent",
+                      },
                     ],
                     attrs: { cust_id: _vm.cust_id },
                     on: {
-                      loading: function($event) {
+                      loading: function ($event) {
                         _vm.loading = true
-                      }
-                    }
-                  })
+                      },
+                    },
+                  }),
                 ],
                 1
-              )
+              ),
             ]
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -7370,7 +7378,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -7383,9 +7391,9 @@ var render = function() {
         scrollable: "",
         "hide-footer": "",
         visible: _vm.showModal,
-        title: _vm.modalTitle
+        title: _vm.modalTitle,
       },
-      on: { close: _vm.close, cancel: _vm.close, hide: _vm.close }
+      on: { close: _vm.close, cancel: _vm.close, hide: _vm.close },
     },
     [
       _c(
@@ -7395,14 +7403,14 @@ var render = function() {
           scopedSlots: _vm._u([
             {
               key: "overlay",
-              fn: function() {
+              fn: function () {
                 return [
-                  _c("atom-loader", { attrs: { text: "Loading Data..." } })
+                  _c("atom-loader", { attrs: { text: "Loading Data..." } }),
                 ]
               },
-              proxy: true
-            }
-          ])
+              proxy: true,
+            },
+          ]),
         },
         [
           _vm._v(" "),
@@ -7410,7 +7418,7 @@ var render = function() {
             scopedSlots: _vm._u([
               {
                 key: "default",
-                fn: function(ref) {
+                fn: function (ref) {
                   var handleSubmit = ref.handleSubmit
                   return [
                     _c(
@@ -7418,11 +7426,11 @@ var render = function() {
                       {
                         attrs: { novalidate: "" },
                         on: {
-                          submit: function($event) {
+                          submit: function ($event) {
                             $event.preventDefault()
                             return handleSubmit(_vm.search)
-                          }
-                        }
+                          },
+                        },
                       },
                       [
                         _c(
@@ -7436,16 +7444,16 @@ var render = function() {
                                   attrs: {
                                     name: "name",
                                     placeholder:
-                                      "Search Customer Name or ID Number"
+                                      "Search Customer Name or ID Number",
                                   },
                                   model: {
                                     value: _vm.searchParam.name,
-                                    callback: function($$v) {
+                                    callback: function ($$v) {
                                       _vm.$set(_vm.searchParam, "name", $$v)
                                     },
-                                    expression: "searchParam.name"
-                                  }
-                                })
+                                    expression: "searchParam.name",
+                                  },
+                                }),
                               ],
                               1
                             ),
@@ -7458,22 +7466,22 @@ var render = function() {
                                   staticClass: "mt-auto",
                                   attrs: {
                                     button_text: "Search",
-                                    submitted: _vm.loading
-                                  }
-                                })
+                                    submitted: _vm.loading,
+                                  },
+                                }),
                               ],
                               1
-                            )
+                            ),
                           ],
                           1
-                        )
+                        ),
                       ],
                       1
-                    )
+                    ),
                   ]
-                }
-              }
-            ])
+                },
+              },
+            ]),
           }),
           _vm._v(" "),
           _c(
@@ -7482,17 +7490,17 @@ var render = function() {
               _c(
                 "b-list-group",
                 [
-                  _vm._l(_vm.results, function(cust, index) {
+                  _vm._l(_vm.results, function (cust, index) {
                     return _c(
                       "b-list-group-item",
                       {
                         key: index,
                         staticClass: "pointer",
                         on: {
-                          click: function($event) {
+                          click: function ($event) {
                             return _vm.selectCustomer(cust)
-                          }
-                        }
+                          },
+                        },
                       },
                       [_vm._v(_vm._s(cust.name))]
                     )
@@ -7513,23 +7521,23 @@ var render = function() {
                                       {
                                         staticClass: "pointer",
                                         on: {
-                                          click: function($event) {
+                                          click: function ($event) {
                                             _vm.searchParam.page--
                                             _vm.search()
-                                          }
-                                        }
+                                          },
+                                        },
                                       },
                                       [
                                         _c("span", {
                                           staticClass:
-                                            "fas fa-angle-double-left"
+                                            "fas fa-angle-double-left",
                                         }),
                                         _vm._v(
                                           "\n                                Previous\n                            "
-                                        )
+                                        ),
                                       ]
                                     )
-                                  : _vm._e()
+                                  : _vm._e(),
                               ]),
                               _vm._v(" "),
                               _c("b-col", { staticClass: "text-center" }, [
@@ -7541,7 +7549,7 @@ var render = function() {
                                     " of " +
                                     _vm._s(_vm.meta.total) +
                                     "\n                        "
-                                )
+                                ),
                               ]),
                               _vm._v(" "),
                               _c("b-col", { staticClass: "text-right" }, [
@@ -7551,11 +7559,11 @@ var render = function() {
                                       {
                                         staticClass: "pointer",
                                         on: {
-                                          click: function($event) {
+                                          click: function ($event) {
                                             _vm.searchParam.page++
                                             _vm.search()
-                                          }
-                                        }
+                                          },
+                                        },
                                       },
                                       [
                                         _vm._v(
@@ -7563,28 +7571,28 @@ var render = function() {
                                         ),
                                         _c("span", {
                                           staticClass:
-                                            "fas fa-angle-double-right"
-                                        })
+                                            "fas fa-angle-double-right",
+                                        }),
                                       ]
                                     )
-                                  : _vm._e()
-                              ])
+                                  : _vm._e(),
+                              ]),
                             ],
                             1
-                          )
+                          ),
                         ],
                         1
                       )
-                    : _vm._e()
+                    : _vm._e(),
                 ],
                 2
-              )
+              ),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -7608,7 +7616,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -7622,21 +7630,21 @@ var render = function() {
             "inertia-link",
             {
               staticClass: "navbar-logo",
-              attrs: { href: _vm.route("dashboard") }
+              attrs: { href: _vm.route("dashboard") },
             },
             [
               _c("img", {
                 staticClass: "mr-2",
-                attrs: { src: _vm.app.logo, alt: _vm.app.name }
-              })
+                attrs: { src: _vm.app.logo, alt: _vm.app.name },
+              }),
             ]
-          )
+          ),
         ],
         1
       ),
       _vm._v(" "),
       _c("div", { staticClass: "navbar-brand d-none d-md-flex" }, [
-        _c("h2", [_vm._v(_vm._s(_vm.app.name))])
+        _c("h2", [_vm._v(_vm._s(_vm.app.name))]),
       ]),
       _vm._v(" "),
       _c(
@@ -7650,14 +7658,14 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               staticClass: "text-muted",
               attrs: {
                 href: _vm.route("about"),
-                title: "About " + _vm.app.name
-              }
+                title: "About " + _vm.app.name,
+              },
             },
             [_c("i", { staticClass: "fas fa-info-circle" })]
           ),
@@ -7669,26 +7677,26 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               attrs: { variant: "link", title: "Account" },
               scopedSlots: _vm._u([
                 {
                   key: "button-content",
-                  fn: function() {
+                  fn: function () {
                     return [
                       _c("b-avatar", {
                         attrs: {
                           variant: "warning",
-                          text: _vm.app.user.initials
-                        }
-                      })
+                          text: _vm.app.user.initials,
+                        },
+                      }),
                     ]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -7697,8 +7705,8 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("settings.index")
-                  }
+                    href: _vm.route("settings.index"),
+                  },
                 },
                 [_c("i", { staticClass: "fas fa-cog" }), _vm._v(" Settings")]
               ),
@@ -7708,12 +7716,12 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("password.index")
-                  }
+                    href: _vm.route("password.index"),
+                  },
                 },
                 [
                   _c("i", { staticClass: "fas fa-key" }),
-                  _vm._v(" Change Password")
+                  _vm._v(" Change Password"),
                 ]
               ),
               _vm._v(" "),
@@ -7725,14 +7733,14 @@ var render = function() {
                   attrs: {
                     as: "b-dropdown-item",
                     method: "post",
-                    href: _vm.route("logout")
-                  }
+                    href: _vm.route("logout"),
+                  },
                 },
                 [
                   _c("i", { staticClass: "fas fa-sign-out-alt" }),
-                  _vm._v(" Logout")
+                  _vm._v(" Logout"),
                 ]
-              )
+              ),
             ],
             1
           ),
@@ -7743,16 +7751,16 @@ var render = function() {
               staticClass: "navbar-toggler d-xl-none",
               attrs: { type: "button" },
               on: {
-                click: function($event) {
+                click: function ($event) {
                   _vm.showNav = !_vm.showNav
-                }
-              }
+                },
+              },
             },
             [_c("i", { staticClass: "fas fa-bars" })]
-          )
+          ),
         ],
         1
-      )
+      ),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "container-fluid page-body-wrapper" }, [
@@ -7761,13 +7769,13 @@ var render = function() {
         {
           staticClass: "sidebar sidebar-nav",
           class: _vm.navbarActive,
-          attrs: { id: "side-nav" }
+          attrs: { id: "side-nav" },
         },
         [
           _c(
             "ul",
             { staticClass: "nav" },
-            _vm._l(_vm.navbar, function(l) {
+            _vm._l(_vm.navbar, function (l) {
               return _c(
                 "li",
                 { key: l.name, staticClass: "nav-item" },
@@ -7779,16 +7787,16 @@ var render = function() {
                       _c("i", { staticClass: "menu-icon", class: l.icon }),
                       _vm._v(" "),
                       _c("span", { staticClass: "menu-title" }, [
-                        _vm._v(_vm._s(l.name))
-                      ])
+                        _vm._v(_vm._s(l.name)),
+                      ]),
                     ]
-                  )
+                  ),
                 ],
                 1
               )
             }),
             0
-          )
+          ),
         ]
       ),
       _vm._v(" "),
@@ -7805,13 +7813,13 @@ var render = function() {
                 {
                   attrs: {
                     variant: _vm.$page.props.flash.type,
-                    show: _vm.$page.props.flash.message ? 30 : false
-                  }
+                    show: _vm.$page.props.flash.message ? 30 : false,
+                  },
                 },
                 [
                   _c("p", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.$page.props.flash.message))
-                  ])
+                    _vm._v(_vm._s(_vm.$page.props.flash.message)),
+                  ]),
                 ]
               ),
               _vm._v(" "),
@@ -7820,17 +7828,17 @@ var render = function() {
                 {
                   attrs: {
                     variant: _vm.alert.type,
-                    show: _vm.alert.message ? 30 : false
-                  }
+                    show: _vm.alert.message ? 30 : false,
+                  },
                 },
                 [
                   _c("p", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.alert.message))
-                  ])
+                    _vm._v(_vm._s(_vm.alert.message)),
+                  ]),
                 ]
               ),
               _vm._v(" "),
-              _vm._t("default")
+              _vm._t("default"),
             ],
             2
           ),
@@ -7842,7 +7850,7 @@ var render = function() {
               "div",
               {
                 staticClass:
-                  "d-sm-flex justify-content-center justify-content-sm-between"
+                  "d-sm-flex justify-content-center justify-content-sm-between",
               },
               [
                 _vm._m(0),
@@ -7851,21 +7859,21 @@ var render = function() {
                   "span",
                   {
                     staticClass:
-                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center",
                   },
                   [_vm._v(_vm._s(_vm.app.version))]
-                )
+                ),
               ]
-            )
-          ])
+            ),
+          ]),
         ],
         1
-      )
-    ])
+      ),
+    ]),
   ])
 }
 var staticRenderFns = [
-  function() {
+  function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
@@ -7873,16 +7881,16 @@ var staticRenderFns = [
       "span",
       {
         staticClass:
-          "text-muted text-center text-sm-left d-block d-sm-inline-block"
+          "text-muted text-center text-sm-left d-block d-sm-inline-block",
       },
       [
         _vm._v("Copyright © 2016-2021"),
         _c("span", { staticClass: "d-none d-md-inline" }, [
-          _vm._v(" Butcherman - All rights reserved.")
-        ])
+          _vm._v(" Butcherman - All rights reserved."),
+        ]),
       ]
     )
-  }
+  },
 ]
 render._withStripped = true
 
@@ -7902,7 +7910,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -7917,12 +7925,12 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               class: _vm.bookmark_class,
               attrs: { title: _vm.bookmark_title },
-              on: { click: _vm.toggleFav }
+              on: { click: _vm.toggleFav },
             }),
             _vm._v(
               "\n                " +
@@ -7936,19 +7944,19 @@ var render = function() {
                       {
                         name: "b-tooltip",
                         rawName: "v-b-tooltip.hover",
-                        modifiers: { hover: true }
+                        modifiers: { hover: true },
                       },
                       {
                         name: "b-modal",
                         rawName: "v-b-modal.linked-customers-modal",
-                        modifiers: { "linked-customers-modal": true }
-                      }
+                        modifiers: { "linked-customers-modal": true },
+                      },
                     ],
                     staticClass: "fas fa-link pointer text-secondary",
-                    attrs: { title: "Show Linked Customers" }
+                    attrs: { title: "Show Linked Customers" },
                   })
-                : _vm._e()
-            ])
+                : _vm._e(),
+            ]),
           ]),
           _vm._v(" "),
           _vm.details.dba_name
@@ -7967,11 +7975,11 @@ var render = function() {
                         href: _vm.route(
                           "customers.show",
                           _vm.details.parent.slug
-                        )
-                      }
+                        ),
+                      },
                     },
                     [_vm._v(_vm._s(_vm.details.parent.name))]
-                  )
+                  ),
                 ],
                 1
               )
@@ -7987,16 +7995,16 @@ var render = function() {
                   {
                     name: "b-tooltip",
                     rawName: "v-b-tooltip.hover",
-                    modifiers: { hover: true }
-                  }
+                    modifiers: { hover: true },
+                  },
                 ],
                 staticClass: "float-left ml-2",
                 attrs: {
                   href: _vm.map_url,
                   target: "_blank",
                   id: "addr-span",
-                  title: "Click for Google Maps"
-                }
+                  title: "Click for Google Maps",
+                },
               },
               [
                 _vm._v("\n                    " + _vm._s(_vm.details.address)),
@@ -8009,10 +8017,10 @@ var render = function() {
                     "  " +
                     _vm._s(_vm.details.zip) +
                     "\n                "
-                )
+                ),
               ]
-            )
-          ])
+            ),
+          ]),
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-md-4 mt-md-0 mt-4" }, [
@@ -8028,14 +8036,14 @@ var render = function() {
                       cust_id: _vm.details.cust_id,
                       can_deactivate: _vm.user_data.deactivate,
                       linked: _vm.details.parent_id > 0 ? true : false,
-                      is_parent: _vm.details.child_count > 0 ? true : false
-                    }
+                      is_parent: _vm.details.child_count > 0 ? true : false,
+                    },
                   })
-                : _vm._e()
+                : _vm._e(),
             ],
             1
-          )
-        ])
+          ),
+        ]),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row mt-2 mt-md-0" }, [
@@ -8057,10 +8065,10 @@ var render = function() {
                           attrs: {
                             cust_id: _vm.details.cust_id,
                             existing_equip: _vm.equipIdList,
-                            allow_share: _vm.allowShare
-                          }
+                            allow_share: _vm.allowShare,
+                          },
                         })
-                      : _vm._e()
+                      : _vm._e(),
                   ],
                   1
                 ),
@@ -8070,13 +8078,13 @@ var render = function() {
                     cust_id: _vm.details.cust_id,
                     equipment: _vm.details.customer_equipment,
                     permissions: _vm.user_data.equipment,
-                    allow_share: _vm.allowShare
-                  }
-                })
+                    allow_share: _vm.allowShare,
+                  },
+                }),
               ],
               1
-            )
-          ])
+            ),
+          ]),
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-md-7 grid-margin stretch-card" }, [
@@ -8096,10 +8104,10 @@ var render = function() {
                       ? _c("new-contact", {
                           attrs: {
                             cust_id: _vm.details.cust_id,
-                            allow_share: _vm.allowShare
-                          }
+                            allow_share: _vm.allowShare,
+                          },
                         })
-                      : _vm._e()
+                      : _vm._e(),
                   ],
                   1
                 ),
@@ -8109,14 +8117,14 @@ var render = function() {
                     cust_id: _vm.details.cust_id,
                     contacts: _vm.details.customer_contact,
                     permissions: _vm.user_data.contacts,
-                    allow_share: _vm.allowShare
-                  }
-                })
+                    allow_share: _vm.allowShare,
+                  },
+                }),
               ],
               1
-            )
-          ])
-        ])
+            ),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
@@ -8137,10 +8145,10 @@ var render = function() {
                       ? _c("new-note", {
                           attrs: {
                             cust_id: _vm.details.cust_id,
-                            allow_share: _vm.allowShare
-                          }
+                            allow_share: _vm.allowShare,
+                          },
                         })
-                      : _vm._e()
+                      : _vm._e(),
                   ],
                   1
                 ),
@@ -8150,14 +8158,14 @@ var render = function() {
                     cust_id: _vm.details.cust_id,
                     notes: _vm.details.customer_note,
                     permissions: _vm.user_data.notes,
-                    allow_share: _vm.allowShare
-                  }
-                })
+                    allow_share: _vm.allowShare,
+                  },
+                }),
               ],
               1
-            )
-          ])
-        ])
+            ),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
@@ -8178,10 +8186,10 @@ var render = function() {
                       ? _c("new-file", {
                           attrs: {
                             cust_id: _vm.details.cust_id,
-                            allow_share: _vm.allowShare
-                          }
+                            allow_share: _vm.allowShare,
+                          },
                         })
-                      : _vm._e()
+                      : _vm._e(),
                   ],
                   1
                 ),
@@ -8191,14 +8199,14 @@ var render = function() {
                     cust_id: _vm.details.cust_id,
                     files: _vm.details.customer_file,
                     permissions: _vm.user_data.files,
-                    allow_share: _vm.allowShare
-                  }
-                })
+                    allow_share: _vm.allowShare,
+                  },
+                }),
               ],
               1
-            )
-          ])
-        ])
+            ),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
       _c(
@@ -8206,9 +8214,9 @@ var render = function() {
         {
           attrs: {
             id: "linked-customers-modal",
-            title: "Customers linked to " + _vm.details.name
+            title: "Customers linked to " + _vm.details.name,
           },
-          on: { show: _vm.getLinkedCustomers }
+          on: { show: _vm.getLinkedCustomers },
         },
         [
           _c(
@@ -8218,18 +8226,18 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("atom-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
               _c(
                 "b-list-group",
-                _vm._l(_vm.linked, function(l) {
+                _vm._l(_vm.linked, function (l) {
                   return _c(
                     "b-list-group-item",
                     { key: l.cust_id, staticClass: "text-center" },
@@ -8237,35 +8245,35 @@ var render = function() {
                       _c(
                         "inertia-link",
                         {
-                          attrs: { href: _vm.route("customers.show", l.slug) }
+                          attrs: { href: _vm.route("customers.show", l.slug) },
                         },
                         [_vm._v(_vm._s(l.name))]
-                      )
+                      ),
                     ],
                     1
                   )
                 }),
                 1
-              )
+              ),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
 }
 var staticRenderFns = [
-  function() {
+  function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "float-left" }, [
-      _c("i", { staticClass: "fas fa-map-marked-alt text-muted" })
+      _c("i", { staticClass: "fas fa-map-marked-alt text-muted" }),
     ])
-  }
+  },
 ]
 render._withStripped = true
 

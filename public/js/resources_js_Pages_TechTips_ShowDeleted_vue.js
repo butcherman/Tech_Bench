@@ -414,7 +414,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -428,21 +428,21 @@ var render = function() {
             "inertia-link",
             {
               staticClass: "navbar-logo",
-              attrs: { href: _vm.route("dashboard") }
+              attrs: { href: _vm.route("dashboard") },
             },
             [
               _c("img", {
                 staticClass: "mr-2",
-                attrs: { src: _vm.app.logo, alt: _vm.app.name }
-              })
+                attrs: { src: _vm.app.logo, alt: _vm.app.name },
+              }),
             ]
-          )
+          ),
         ],
         1
       ),
       _vm._v(" "),
       _c("div", { staticClass: "navbar-brand d-none d-md-flex" }, [
-        _c("h2", [_vm._v(_vm._s(_vm.app.name))])
+        _c("h2", [_vm._v(_vm._s(_vm.app.name))]),
       ]),
       _vm._v(" "),
       _c(
@@ -456,14 +456,14 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               staticClass: "text-muted",
               attrs: {
                 href: _vm.route("about"),
-                title: "About " + _vm.app.name
-              }
+                title: "About " + _vm.app.name,
+              },
             },
             [_c("i", { staticClass: "fas fa-info-circle" })]
           ),
@@ -475,26 +475,26 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               attrs: { variant: "link", title: "Account" },
               scopedSlots: _vm._u([
                 {
                   key: "button-content",
-                  fn: function() {
+                  fn: function () {
                     return [
                       _c("b-avatar", {
                         attrs: {
                           variant: "warning",
-                          text: _vm.app.user.initials
-                        }
-                      })
+                          text: _vm.app.user.initials,
+                        },
+                      }),
                     ]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -503,8 +503,8 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("settings.index")
-                  }
+                    href: _vm.route("settings.index"),
+                  },
                 },
                 [_c("i", { staticClass: "fas fa-cog" }), _vm._v(" Settings")]
               ),
@@ -514,12 +514,12 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("password.index")
-                  }
+                    href: _vm.route("password.index"),
+                  },
                 },
                 [
                   _c("i", { staticClass: "fas fa-key" }),
-                  _vm._v(" Change Password")
+                  _vm._v(" Change Password"),
                 ]
               ),
               _vm._v(" "),
@@ -531,14 +531,14 @@ var render = function() {
                   attrs: {
                     as: "b-dropdown-item",
                     method: "post",
-                    href: _vm.route("logout")
-                  }
+                    href: _vm.route("logout"),
+                  },
                 },
                 [
                   _c("i", { staticClass: "fas fa-sign-out-alt" }),
-                  _vm._v(" Logout")
+                  _vm._v(" Logout"),
                 ]
-              )
+              ),
             ],
             1
           ),
@@ -549,16 +549,16 @@ var render = function() {
               staticClass: "navbar-toggler d-xl-none",
               attrs: { type: "button" },
               on: {
-                click: function($event) {
+                click: function ($event) {
                   _vm.showNav = !_vm.showNav
-                }
-              }
+                },
+              },
             },
             [_c("i", { staticClass: "fas fa-bars" })]
-          )
+          ),
         ],
         1
-      )
+      ),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "container-fluid page-body-wrapper" }, [
@@ -567,13 +567,13 @@ var render = function() {
         {
           staticClass: "sidebar sidebar-nav",
           class: _vm.navbarActive,
-          attrs: { id: "side-nav" }
+          attrs: { id: "side-nav" },
         },
         [
           _c(
             "ul",
             { staticClass: "nav" },
-            _vm._l(_vm.navbar, function(l) {
+            _vm._l(_vm.navbar, function (l) {
               return _c(
                 "li",
                 { key: l.name, staticClass: "nav-item" },
@@ -585,16 +585,16 @@ var render = function() {
                       _c("i", { staticClass: "menu-icon", class: l.icon }),
                       _vm._v(" "),
                       _c("span", { staticClass: "menu-title" }, [
-                        _vm._v(_vm._s(l.name))
-                      ])
+                        _vm._v(_vm._s(l.name)),
+                      ]),
                     ]
-                  )
+                  ),
                 ],
                 1
               )
             }),
             0
-          )
+          ),
         ]
       ),
       _vm._v(" "),
@@ -611,13 +611,13 @@ var render = function() {
                 {
                   attrs: {
                     variant: _vm.$page.props.flash.type,
-                    show: _vm.$page.props.flash.message ? 30 : false
-                  }
+                    show: _vm.$page.props.flash.message ? 30 : false,
+                  },
                 },
                 [
                   _c("p", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.$page.props.flash.message))
-                  ])
+                    _vm._v(_vm._s(_vm.$page.props.flash.message)),
+                  ]),
                 ]
               ),
               _vm._v(" "),
@@ -626,17 +626,17 @@ var render = function() {
                 {
                   attrs: {
                     variant: _vm.alert.type,
-                    show: _vm.alert.message ? 30 : false
-                  }
+                    show: _vm.alert.message ? 30 : false,
+                  },
                 },
                 [
                   _c("p", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.alert.message))
-                  ])
+                    _vm._v(_vm._s(_vm.alert.message)),
+                  ]),
                 ]
               ),
               _vm._v(" "),
-              _vm._t("default")
+              _vm._t("default"),
             ],
             2
           ),
@@ -648,7 +648,7 @@ var render = function() {
               "div",
               {
                 staticClass:
-                  "d-sm-flex justify-content-center justify-content-sm-between"
+                  "d-sm-flex justify-content-center justify-content-sm-between",
               },
               [
                 _vm._m(0),
@@ -657,21 +657,21 @@ var render = function() {
                   "span",
                   {
                     staticClass:
-                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center",
                   },
                   [_vm._v(_vm._s(_vm.app.version))]
-                )
+                ),
               ]
-            )
-          ])
+            ),
+          ]),
         ],
         1
-      )
-    ])
+      ),
+    ]),
   ])
 }
 var staticRenderFns = [
-  function() {
+  function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
@@ -679,16 +679,16 @@ var staticRenderFns = [
       "span",
       {
         staticClass:
-          "text-muted text-center text-sm-left d-block d-sm-inline-block"
+          "text-muted text-center text-sm-left d-block d-sm-inline-block",
       },
       [
         _vm._v("Copyright © 2016-2021"),
         _c("span", { staticClass: "d-none d-md-inline" }, [
-          _vm._v(" Butcherman - All rights reserved.")
-        ])
+          _vm._v(" Butcherman - All rights reserved."),
+        ]),
       ]
     )
-  }
+  },
 ]
 render._withStripped = true
 
@@ -707,7 +707,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -726,7 +726,7 @@ var render = function() {
                   "b-button",
                   {
                     attrs: { variant: "warning" },
-                    on: { click: _vm.restoreTip }
+                    on: { click: _vm.restoreTip },
                   },
                   [_vm._v("Restore Tip")]
                 ),
@@ -735,16 +735,16 @@ var render = function() {
                   "b-button",
                   {
                     attrs: { variant: "danger" },
-                    on: { click: _vm.destroyTip }
+                    on: { click: _vm.destroyTip },
                   },
                   [_vm._v("Permanently Delete Tip")]
-                )
+                ),
               ],
               1
-            )
-          ])
-        ])
-      ])
+            ),
+          ]),
+        ]),
+      ]),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
@@ -752,26 +752,26 @@ var render = function() {
         _c("h3", [
           _vm._v(
             "\n                " + _vm._s(_vm.tip.subject) + "\n            "
-          )
+          ),
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "tip-details" }, [
           _c("span", { staticClass: "d-block d-sm-inline-block" }, [
             _c("strong", [_vm._v("ID: ")]),
-            _vm._v(_vm._s(_vm.tip.tip_id))
+            _vm._v(_vm._s(_vm.tip.tip_id)),
           ]),
           _vm._v(" "),
           _c("span", { staticClass: "d-block d-sm-inline-block" }, [
             _c("strong", [_vm._v("Created: ")]),
-            _vm._v(_vm._s(_vm.tip.created_at))
+            _vm._v(_vm._s(_vm.tip.created_at)),
           ]),
           _vm._v(" "),
           _c("span", { staticClass: "d-block d-sm-inline-block" }, [
             _c("strong", [_vm._v("Last Updated: ")]),
-            _vm._v(_vm._s(_vm.tip.updated_at))
-          ])
-        ])
-      ])
+            _vm._v(_vm._s(_vm.tip.updated_at)),
+          ]),
+        ]),
+      ]),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
@@ -781,20 +781,20 @@ var render = function() {
         [
           _vm._m(0),
           _vm._v(" "),
-          _vm._l(_vm.tip.equipment_type, function(equip) {
+          _vm._l(_vm.tip.equipment_type, function (equip) {
             return _c(
               "b-badge",
               {
                 key: equip.equip_id,
                 staticClass: "ml-1 mb-1",
-                attrs: { pill: "", variant: "info" }
+                attrs: { pill: "", variant: "info" },
               },
               [_vm._v(_vm._s(equip.name))]
             )
-          })
+          }),
         ],
         2
-      )
+      ),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row grid-margin justify-content-center" }, [
@@ -803,10 +803,10 @@ var render = function() {
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "card-title" }, [_vm._v("Details:")]),
             _vm._v(" "),
-            _c("div", { domProps: { innerHTML: _vm._s(_vm.tip.details) } })
-          ])
-        ])
-      ])
+            _c("div", { domProps: { innerHTML: _vm._s(_vm.tip.details) } }),
+          ]),
+        ]),
+      ]),
     ]),
     _vm._v(" "),
     _vm.tip.file_uploads.length >= 1
@@ -815,13 +815,13 @@ var render = function() {
             _c("div", { staticClass: "card rounded" }, [
               _c("div", { staticClass: "card-body" }, [
                 _c("div", { staticClass: "card-title" }, [
-                  _vm._v("Attachments:")
+                  _vm._v("Attachments:"),
                 ]),
                 _vm._v(" "),
                 _c(
                   "ul",
                   { staticClass: "list-group px-5" },
-                  _vm._l(_vm.tip.file_uploads, function(file) {
+                  _vm._l(_vm.tip.file_uploads, function (file) {
                     return _c(
                       "li",
                       { key: file.file_id, staticClass: "list-group-item" },
@@ -832,31 +832,31 @@ var render = function() {
                             attrs: {
                               href: _vm.route("download", [
                                 file.file_id,
-                                file.file_name
-                              ])
-                            }
+                                file.file_name,
+                              ]),
+                            },
                           },
                           [_vm._v(_vm._s(file.file_name))]
-                        )
+                        ),
                       ]
                     )
                   }),
                   0
-                )
-              ])
-            ])
-          ])
+                ),
+              ]),
+            ]),
+          ]),
         ])
-      : _vm._e()
+      : _vm._e(),
   ])
 }
 var staticRenderFns = [
-  function() {
+  function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [_c("strong", [_vm._v("For Equipment:")])])
-  }
+  },
 ]
 render._withStripped = true
 

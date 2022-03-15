@@ -348,7 +348,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -362,21 +362,21 @@ var render = function() {
             "inertia-link",
             {
               staticClass: "navbar-logo",
-              attrs: { href: _vm.route("dashboard") }
+              attrs: { href: _vm.route("dashboard") },
             },
             [
               _c("img", {
                 staticClass: "mr-2",
-                attrs: { src: _vm.app.logo, alt: _vm.app.name }
-              })
+                attrs: { src: _vm.app.logo, alt: _vm.app.name },
+              }),
             ]
-          )
+          ),
         ],
         1
       ),
       _vm._v(" "),
       _c("div", { staticClass: "navbar-brand d-none d-md-flex" }, [
-        _c("h2", [_vm._v(_vm._s(_vm.app.name))])
+        _c("h2", [_vm._v(_vm._s(_vm.app.name))]),
       ]),
       _vm._v(" "),
       _c(
@@ -390,14 +390,14 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               staticClass: "text-muted",
               attrs: {
                 href: _vm.route("about"),
-                title: "About " + _vm.app.name
-              }
+                title: "About " + _vm.app.name,
+              },
             },
             [_c("i", { staticClass: "fas fa-info-circle" })]
           ),
@@ -409,26 +409,26 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               attrs: { variant: "link", title: "Account" },
               scopedSlots: _vm._u([
                 {
                   key: "button-content",
-                  fn: function() {
+                  fn: function () {
                     return [
                       _c("b-avatar", {
                         attrs: {
                           variant: "warning",
-                          text: _vm.app.user.initials
-                        }
-                      })
+                          text: _vm.app.user.initials,
+                        },
+                      }),
                     ]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -437,8 +437,8 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("settings.index")
-                  }
+                    href: _vm.route("settings.index"),
+                  },
                 },
                 [_c("i", { staticClass: "fas fa-cog" }), _vm._v(" Settings")]
               ),
@@ -448,12 +448,12 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("password.index")
-                  }
+                    href: _vm.route("password.index"),
+                  },
                 },
                 [
                   _c("i", { staticClass: "fas fa-key" }),
-                  _vm._v(" Change Password")
+                  _vm._v(" Change Password"),
                 ]
               ),
               _vm._v(" "),
@@ -465,14 +465,14 @@ var render = function() {
                   attrs: {
                     as: "b-dropdown-item",
                     method: "post",
-                    href: _vm.route("logout")
-                  }
+                    href: _vm.route("logout"),
+                  },
                 },
                 [
                   _c("i", { staticClass: "fas fa-sign-out-alt" }),
-                  _vm._v(" Logout")
+                  _vm._v(" Logout"),
                 ]
-              )
+              ),
             ],
             1
           ),
@@ -483,16 +483,16 @@ var render = function() {
               staticClass: "navbar-toggler d-xl-none",
               attrs: { type: "button" },
               on: {
-                click: function($event) {
+                click: function ($event) {
                   _vm.showNav = !_vm.showNav
-                }
-              }
+                },
+              },
             },
             [_c("i", { staticClass: "fas fa-bars" })]
-          )
+          ),
         ],
         1
-      )
+      ),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "container-fluid page-body-wrapper" }, [
@@ -501,13 +501,13 @@ var render = function() {
         {
           staticClass: "sidebar sidebar-nav",
           class: _vm.navbarActive,
-          attrs: { id: "side-nav" }
+          attrs: { id: "side-nav" },
         },
         [
           _c(
             "ul",
             { staticClass: "nav" },
-            _vm._l(_vm.navbar, function(l) {
+            _vm._l(_vm.navbar, function (l) {
               return _c(
                 "li",
                 { key: l.name, staticClass: "nav-item" },
@@ -519,16 +519,16 @@ var render = function() {
                       _c("i", { staticClass: "menu-icon", class: l.icon }),
                       _vm._v(" "),
                       _c("span", { staticClass: "menu-title" }, [
-                        _vm._v(_vm._s(l.name))
-                      ])
+                        _vm._v(_vm._s(l.name)),
+                      ]),
                     ]
-                  )
+                  ),
                 ],
                 1
               )
             }),
             0
-          )
+          ),
         ]
       ),
       _vm._v(" "),
@@ -545,13 +545,13 @@ var render = function() {
                 {
                   attrs: {
                     variant: _vm.$page.props.flash.type,
-                    show: _vm.$page.props.flash.message ? 30 : false
-                  }
+                    show: _vm.$page.props.flash.message ? 30 : false,
+                  },
                 },
                 [
                   _c("p", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.$page.props.flash.message))
-                  ])
+                    _vm._v(_vm._s(_vm.$page.props.flash.message)),
+                  ]),
                 ]
               ),
               _vm._v(" "),
@@ -560,17 +560,17 @@ var render = function() {
                 {
                   attrs: {
                     variant: _vm.alert.type,
-                    show: _vm.alert.message ? 30 : false
-                  }
+                    show: _vm.alert.message ? 30 : false,
+                  },
                 },
                 [
                   _c("p", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.alert.message))
-                  ])
+                    _vm._v(_vm._s(_vm.alert.message)),
+                  ]),
                 ]
               ),
               _vm._v(" "),
-              _vm._t("default")
+              _vm._t("default"),
             ],
             2
           ),
@@ -582,7 +582,7 @@ var render = function() {
               "div",
               {
                 staticClass:
-                  "d-sm-flex justify-content-center justify-content-sm-between"
+                  "d-sm-flex justify-content-center justify-content-sm-between",
               },
               [
                 _vm._m(0),
@@ -591,21 +591,21 @@ var render = function() {
                   "span",
                   {
                     staticClass:
-                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center",
                   },
                   [_vm._v(_vm._s(_vm.app.version))]
-                )
+                ),
               ]
-            )
-          ])
+            ),
+          ]),
         ],
         1
-      )
-    ])
+      ),
+    ]),
   ])
 }
 var staticRenderFns = [
-  function() {
+  function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
@@ -613,16 +613,16 @@ var staticRenderFns = [
       "span",
       {
         staticClass:
-          "text-muted text-center text-sm-left d-block d-sm-inline-block"
+          "text-muted text-center text-sm-left d-block d-sm-inline-block",
       },
       [
         _vm._v("Copyright © 2016-2021"),
         _c("span", { staticClass: "d-none d-md-inline" }, [
-          _vm._v(" Butcherman - All rights reserved.")
-        ])
+          _vm._v(" Butcherman - All rights reserved."),
+        ]),
       ]
     )
-  }
+  },
 ]
 render._withStripped = true
 
@@ -641,7 +641,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -656,14 +656,14 @@ var render = function() {
             { staticClass: "card-body" },
             [
               _c("div", { staticClass: "card-title" }, [
-                _vm._v("Please Enter New Password")
+                _vm._v("Please Enter New Password"),
               ]),
               _vm._v(" "),
               _c("ValidationObserver", {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -671,11 +671,11 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.submitForm)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("text-input", {
@@ -685,15 +685,15 @@ var render = function() {
                                 label: "Current Password",
                                 name: "current_password",
                                 placeholder: "Enter Current Password",
-                                autofocus: ""
+                                autofocus: "",
                               },
                               model: {
                                 value: _vm.form.current_password,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "current_password", $$v)
                                 },
-                                expression: "form.current_password"
-                              }
+                                expression: "form.current_password",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
@@ -702,15 +702,15 @@ var render = function() {
                                 rules: "required|confirmed:confirmation|min:6",
                                 label: "New Password",
                                 name: "password",
-                                placeholder: "Enter New Password"
+                                placeholder: "Enter New Password",
                               },
                               model: {
                                 value: _vm.form.password,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(_vm.form, "password", $$v)
                                 },
-                                expression: "form.password"
-                              }
+                                expression: "form.password",
+                              },
                             }),
                             _vm._v(" "),
                             _c("text-input", {
@@ -720,56 +720,56 @@ var render = function() {
                                 vid: "confirmation",
                                 label: "Confirm Password",
                                 name: "password_confirmation",
-                                placeholder: "Confirm New Password"
+                                placeholder: "Confirm New Password",
                               },
                               model: {
                                 value: _vm.form.password_confirmation,
-                                callback: function($$v) {
+                                callback: function ($$v) {
                                   _vm.$set(
                                     _vm.form,
                                     "password_confirmation",
                                     $$v
                                   )
                                 },
-                                expression: "form.password_confirmation"
-                              }
+                                expression: "form.password_confirmation",
+                              },
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
                               attrs: {
                                 button_text: "Reset Password",
-                                submitted: _vm.submitted
-                              }
-                            })
+                                submitted: _vm.submitted,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
-        ])
-      ])
-    ])
+          ),
+        ]),
+      ]),
+    ]),
   ])
 }
 var staticRenderFns = [
-  function() {
+  function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12 grid-margin" }, [
         _c("h4", { staticClass: "text-center text-md-left" }, [
-          _vm._v("Change Password")
-        ])
-      ])
+          _vm._v("Change Password"),
+        ]),
+      ]),
     ])
-  }
+  },
 ]
 render._withStripped = true
 
