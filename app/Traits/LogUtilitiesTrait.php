@@ -140,6 +140,11 @@ trait LogUtilitiesTrait
      */
     protected function getFileToArray($file, $channel)
     {
+        if(!Storage::disk('logs')->exists($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log'))
+        {
+            return false;
+        }
+
         return file(Storage::disk('logs')->path($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log'));
     }
 

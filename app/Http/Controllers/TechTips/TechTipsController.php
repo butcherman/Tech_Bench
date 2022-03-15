@@ -23,7 +23,9 @@ use App\Events\TechTips\TechTipUpdatedEvent;
 use App\Http\Requests\TechTips\CreateTipRequest;
 use App\Http\Requests\TechTips\UpdateTipRequest;
 use App\Models\TechTipFile;
+use App\Models\UserTechTipRecent;
 use App\Traits\FileTrait;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TechTipsController extends Controller
 {
@@ -95,17 +97,31 @@ class TechTipsController extends Controller
         }
 
         //  Pull the Tech Tip Information
-        $tip = TechTip::where('slug', $id)
-                ->with('EquipmentType')
-                ->with('FileUploads')
-                ->with('TechTipComment.User')
-                ->firstOrFail()
-                ->makeHidden(['summary', 'sticky']);
+        try
+        {
+            $tip = TechTip::where('slug', $id)
+                    ->with('EquipmentType')
+                    ->with('FileUploads')
+                    ->with('TechTipComment.User')
+                    ->firstOrFail()
+                    ->makeHidden(['summary', 'sticky']);
+        }
+        catch(ModelNotFoundException $e)
+        {
+            report($e);
+            abort(404, 'The Tech Tip you are looking for cannot be found');
+        }
 
         //  Determine if the Tech Tip is bookmarked by the user
         $isFav = UserTechTipBookmark::where('user_id', Auth::user()->user_id)
                     ->where('tip_id', $tip->tip_id)
                     ->count();
+
+        //  Add Tech Tip to the users 'recent' table
+        UserTechTipRecent::firstOrCreate([
+            'user_id' => Auth::user()->user_id,
+            'tip_id'  => $tip->tip_id,
+        ])->touch();
 
         return Inertia::render('TechTips/Show', [
             'tip' => $tip,

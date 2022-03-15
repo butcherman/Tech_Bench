@@ -5,16 +5,16 @@ current:
   major: 6
   minor: 0
   patch: 0
-  prerelease: null
+  prerelease: dev
   buildmetadata: null
-  commit: 6a9
+  commit: 6ad
   timestamp:
     year: 2022
     month: 2
-    day: 7
-    hour: 2
-    minute: 21
-    second: 3
+    day: 20
+    hour: 21
+    minute: 45
+    second: 51
     timezone: UTC
 commit:
   mode: git-local

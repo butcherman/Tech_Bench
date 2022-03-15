@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-6 grid-margin stretch-card">
+            <div class="col-xl-3 col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Customer Bookmarks</div>
@@ -67,15 +67,20 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="col-md-3 grid-margin stretch-card">
+            <div class="col-xl-3 col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Recent Customers</div>
-                        TODO - Make Me
+                        <b-list-group>
+                            <b-list-group-item v-for="cust in recents.customers" :key="cust.cust_id">
+                                <inertia-link v-if="cust.name !== null" as="b-button" :href="route('customers.show', cust.slug)" block size="sm" variant="info" pill>{{cust.name}}</inertia-link>
+                            </b-list-group-item>
+                        </b-list-group>
+                        <h4 v-if="recents.customers.length == 0" class="text-center">No Recent Customers</h4>
                     </div>
                 </div>
-            </div> -->
-            <div class="col-md-6 grid-margin stretch-card">
+            </div>
+            <div class="col-xl-3 col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Tech Tip Bookmarks</div>
@@ -88,14 +93,19 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="col-md-3 grid-margin stretch-card">
+            <div class="col-xl-3 col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Recent Tech Tips</div>
-                        TODO - MAKE ME
+                        <b-list-group>
+                            <b-list-group-item v-for="tip in recents.tips" :key="tip.tip_id">
+                                <inertia-link v-if="tip.subject !== null" as="b-button" :href="route('tech-tips.show', tip.slug)" block size="sm" variant="info" pill>{{tip.subject}}</inertia-link>
+                            </b-list-group-item>
+                        </b-list-group>
+                        <h4 v-if="recents.tips.length == 0" class="text-center">No Recent Tech Tips</h4>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
@@ -111,6 +121,10 @@
                 required: true,
             },
             bookmarks: {
+                type:     Object,
+                required: true,
+            },
+            recents: {
                 type:     Object,
                 required: true,
             },

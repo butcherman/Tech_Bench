@@ -838,7 +838,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -853,24 +853,24 @@ var render = function() {
             { staticClass: "card-body" },
             [
               _c("div", { staticClass: "card-title" }, [
-                _vm._v("\n                    Discussion:\n                ")
+                _vm._v("\n                    Discussion:\n                "),
               ]),
               _vm._v(" "),
               _vm.comments.length == 0
                 ? _c("div", [
                     _c("h5", { staticClass: "text-center" }, [
-                      _vm._v("No Comments Yet")
-                    ])
+                      _vm._v("No Comments Yet"),
+                    ]),
                   ])
                 : _c(
                     "div",
                     { staticClass: "mb-4" },
-                    _vm._l(_vm.comments, function(comment) {
+                    _vm._l(_vm.comments, function (comment) {
                       return _c(
                         "div",
                         {
                           key: comment.comment_id,
-                          staticClass: "border rounded p-4 mt-2"
+                          staticClass: "border rounded p-4 mt-2",
                         },
                         [
                           _c("div", { staticClass: "mb-2" }, [
@@ -880,17 +880,17 @@ var render = function() {
                                   {
                                     name: "b-tooltip",
                                     rawName: "v-b-tooltip.hover",
-                                    modifiers: { hover: true }
-                                  }
+                                    modifiers: { hover: true },
+                                  },
                                 ],
                                 staticClass: "fa-flag pl-2",
                                 class: _vm.getFlaggedClass(comment),
                                 attrs: { title: "Flag as Innappropriate" },
                                 on: {
-                                  click: function($event) {
+                                  click: function ($event) {
                                     return _vm.flagComment(comment)
-                                  }
-                                }
+                                  },
+                                },
                               }),
                               _vm._v(" "),
                               _vm.canEdit(comment)
@@ -899,17 +899,17 @@ var render = function() {
                                       {
                                         name: "b-tooltip",
                                         rawName: "v-b-tooltip.hover",
-                                        modifiers: { hover: true }
-                                      }
+                                        modifiers: { hover: true },
+                                      },
                                     ],
                                     staticClass:
                                       "fas fa-pencil-alt pointer pl-2 text-muted",
                                     attrs: { title: "Edit Comment" },
                                     on: {
-                                      click: function($event) {
+                                      click: function ($event) {
                                         return _vm.editComment(comment)
-                                      }
-                                    }
+                                      },
+                                    },
                                   })
                                 : _vm._e(),
                               _vm._v(" "),
@@ -919,25 +919,25 @@ var render = function() {
                                       {
                                         name: "b-tooltip",
                                         rawName: "v-b-tooltip.hover",
-                                        modifiers: { hover: true }
-                                      }
+                                        modifiers: { hover: true },
+                                      },
                                     ],
                                     staticClass:
                                       "far fa-trash-alt text-danger pointer pl-2",
                                     attrs: { title: "Delete" },
                                     on: {
-                                      click: function($event) {
+                                      click: function ($event) {
                                         return _vm.deleteComment(comment)
-                                      }
-                                    }
+                                      },
+                                    },
                                   })
-                                : _vm._e()
+                                : _vm._e(),
                             ]),
                             _vm._v(
                               "\n                            " +
                                 _vm._s(comment.comment) +
                                 "\n                        "
-                            )
+                            ),
                           ]),
                           _vm._v(" "),
                           _c(
@@ -950,10 +950,10 @@ var render = function() {
                                   "\n                            "
                               ),
                               _c("div", { staticClass: "float-right" }, [
-                                _vm._v(_vm._s(comment.created_at))
-                              ])
+                                _vm._v(_vm._s(comment.created_at)),
+                              ]),
                             ]
-                          )
+                          ),
                         ]
                       )
                     }),
@@ -967,12 +967,12 @@ var render = function() {
                   scopedSlots: _vm._u([
                     {
                       key: "overlay",
-                      fn: function() {
+                      fn: function () {
                         return [_c("atom-loader")]
                       },
-                      proxy: true
-                    }
-                  ])
+                      proxy: true,
+                    },
+                  ]),
                 },
                 [
                   _vm._v(" "),
@@ -981,7 +981,7 @@ var render = function() {
                     scopedSlots: _vm._u([
                       {
                         key: "default",
-                        fn: function(ref) {
+                        fn: function (ref) {
                           var handleSubmit = ref.handleSubmit
                           return [
                             _vm.permissions.create
@@ -990,11 +990,11 @@ var render = function() {
                                   {
                                     attrs: { novalidate: "" },
                                     on: {
-                                      submit: function($event) {
+                                      submit: function ($event) {
                                         $event.preventDefault()
                                         return handleSubmit(_vm.submitComment)
-                                      }
-                                    }
+                                      },
+                                    },
                                   },
                                   [
                                     _c("ValidationProvider", {
@@ -1003,7 +1003,7 @@ var render = function() {
                                         [
                                           {
                                             key: "default",
-                                            fn: function(v) {
+                                            fn: function (v) {
                                               return [
                                                 _c(
                                                   "b-form-group",
@@ -1013,11 +1013,11 @@ var render = function() {
                                                         placeholder:
                                                           "Comment on this Tech Tip...",
                                                         rows: "3",
-                                                        "max-rows": "6"
+                                                        "max-rows": "6",
                                                       },
                                                       model: {
                                                         value: _vm.form.comment,
-                                                        callback: function(
+                                                        callback: function (
                                                           $$v
                                                         ) {
                                                           _vm.$set(
@@ -1027,56 +1027,56 @@ var render = function() {
                                                           )
                                                         },
                                                         expression:
-                                                          "form.comment"
-                                                      }
+                                                          "form.comment",
+                                                      },
                                                     }),
                                                     _vm._v(" "),
                                                     _c(
                                                       "b-form-invalid-feedback",
                                                       {
-                                                        attrs: { state: false }
+                                                        attrs: { state: false },
                                                       },
                                                       [
                                                         _vm._v(
                                                           _vm._s(v.errors[0])
-                                                        )
+                                                        ),
                                                       ]
-                                                    )
+                                                    ),
                                                   ],
                                                   1
-                                                )
+                                                ),
                                               ]
-                                            }
-                                          }
+                                            },
+                                          },
                                         ],
                                         null,
                                         true
-                                      )
+                                      ),
                                     }),
                                     _vm._v(" "),
                                     _c("submit-button", {
                                       staticClass: "mt-2",
                                       attrs: {
                                         button_text: "Add Comment",
-                                        submitted: _vm.submitted
-                                      }
-                                    })
+                                        submitted: _vm.submitted,
+                                      },
+                                    }),
                                   ],
                                   1
                                 )
-                              : _vm._e()
+                              : _vm._e(),
                           ]
-                        }
-                      }
-                    ])
-                  })
+                        },
+                      },
+                    ]),
+                  }),
                 ],
                 1
-              )
+              ),
             ],
             1
-          )
-        ])
+          ),
+        ]),
       ]),
       _vm._v(" "),
       _c(
@@ -1086,8 +1086,8 @@ var render = function() {
           attrs: {
             id: "edit-comment-modal",
             title: "Edit Comment",
-            "hide-footer": ""
-          }
+            "hide-footer": "",
+          },
         },
         [
           _c(
@@ -1097,12 +1097,12 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("form-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -1111,7 +1111,7 @@ var render = function() {
                 scopedSlots: _vm._u([
                   {
                     key: "default",
-                    fn: function(ref) {
+                    fn: function (ref) {
                       var handleSubmit = ref.handleSubmit
                       return [
                         _c(
@@ -1119,11 +1119,11 @@ var render = function() {
                           {
                             attrs: { novalidate: "" },
                             on: {
-                              submit: function($event) {
+                              submit: function ($event) {
                                 $event.preventDefault()
                                 return handleSubmit(_vm.updateComment)
-                              }
-                            }
+                              },
+                            },
                           },
                           [
                             _c("ValidationProvider", {
@@ -1132,7 +1132,7 @@ var render = function() {
                                 [
                                   {
                                     key: "default",
-                                    fn: function(v) {
+                                    fn: function (v) {
                                       return [
                                         _c(
                                           "b-form-group",
@@ -1140,59 +1140,60 @@ var render = function() {
                                             _c("b-form-textarea", {
                                               attrs: {
                                                 rows: "3",
-                                                "max-rows": "6"
+                                                "max-rows": "6",
                                               },
                                               model: {
                                                 value: _vm.updateForm.comment,
-                                                callback: function($$v) {
+                                                callback: function ($$v) {
                                                   _vm.$set(
                                                     _vm.updateForm,
                                                     "comment",
                                                     $$v
                                                   )
                                                 },
-                                                expression: "updateForm.comment"
-                                              }
+                                                expression:
+                                                  "updateForm.comment",
+                                              },
                                             }),
                                             _vm._v(" "),
                                             _c(
                                               "b-form-invalid-feedback",
                                               { attrs: { state: false } },
                                               [_vm._v(_vm._s(v.errors[0]))]
-                                            )
+                                            ),
                                           ],
                                           1
-                                        )
+                                        ),
                                       ]
-                                    }
-                                  }
+                                    },
+                                  },
                                 ],
                                 null,
                                 true
-                              )
+                              ),
                             }),
                             _vm._v(" "),
                             _c("submit-button", {
                               staticClass: "mt-2",
                               attrs: {
                                 button_text: "Update Comment",
-                                submitted: _vm.loading
-                              }
-                            })
+                                submitted: _vm.loading,
+                              },
+                            }),
                           ],
                           1
-                        )
+                        ),
                       ]
-                    }
-                  }
-                ])
-              })
+                    },
+                  },
+                ]),
+              }),
             ],
             1
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -1215,7 +1216,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -1226,13 +1227,13 @@ var render = function() {
         {
           name: "b-tooltip",
           rawName: "v-b-tooltip.hover",
-          modifiers: { hover: true }
+          modifiers: { hover: true },
         },
         {
           name: "b-modal",
           rawName: "v-b-modal.manage-tip-modal",
-          modifiers: { "manage-tip-modal": true }
-        }
+          modifiers: { "manage-tip-modal": true },
+        },
       ],
       staticClass: "mt-1",
       attrs: {
@@ -1240,8 +1241,8 @@ var render = function() {
         block: "",
         variant: "danger",
         size: "sm",
-        title: "Manage Tech Tip"
-      }
+        title: "Manage Tech Tip",
+      },
     },
     [
       _c("i", { staticClass: "fas fa-tasks" }),
@@ -1252,9 +1253,9 @@ var render = function() {
           attrs: {
             id: "manage-tip-modal",
             title: "Manage Tech Tip",
-            "hide-footer": ""
+            "hide-footer": "",
           },
-          on: { show: _vm.getDetails }
+          on: { show: _vm.getDetails },
         },
         [
           _c(
@@ -1264,12 +1265,12 @@ var render = function() {
               scopedSlots: _vm._u([
                 {
                   key: "overlay",
-                  fn: function() {
+                  fn: function () {
                     return [_c("atom-loader")]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -1280,16 +1281,16 @@ var render = function() {
                       { staticClass: "col-md-10" },
                       [
                         _c("h4", { staticClass: "text-center" }, [
-                          _vm._v("Details")
+                          _vm._v("Details"),
                         ]),
                         _vm._v(" "),
                         _c("b-table", {
-                          attrs: { stacked: "", items: _vm.items }
-                        })
+                          attrs: { stacked: "", items: _vm.items },
+                        }),
                       ],
                       1
                     )
-                  : _vm._e()
+                  : _vm._e(),
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "row justify-content-center" }, [
@@ -1305,11 +1306,11 @@ var render = function() {
                               as: "b-button",
                               href: _vm.route("tech-tips.edit", _vm.tip_id),
                               block: "",
-                              variant: "warning"
-                            }
+                              variant: "warning",
+                            },
                           },
                           [_vm._v("Edit Tip")]
-                        )
+                        ),
                       ],
                       1
                     )
@@ -1324,20 +1325,20 @@ var render = function() {
                           "b-button",
                           {
                             attrs: { block: "", variant: "danger" },
-                            on: { click: _vm.deleteTip }
+                            on: { click: _vm.deleteTip },
                           },
                           [_vm._v("Delete Tip")]
-                        )
+                        ),
                       ],
                       1
                     )
-                  : _vm._e()
-              ])
+                  : _vm._e(),
+              ]),
             ]
-          )
+          ),
         ],
         1
-      )
+      ),
     ],
     1
   )
@@ -1360,7 +1361,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -1374,21 +1375,21 @@ var render = function() {
             "inertia-link",
             {
               staticClass: "navbar-logo",
-              attrs: { href: _vm.route("dashboard") }
+              attrs: { href: _vm.route("dashboard") },
             },
             [
               _c("img", {
                 staticClass: "mr-2",
-                attrs: { src: _vm.app.logo, alt: _vm.app.name }
-              })
+                attrs: { src: _vm.app.logo, alt: _vm.app.name },
+              }),
             ]
-          )
+          ),
         ],
         1
       ),
       _vm._v(" "),
       _c("div", { staticClass: "navbar-brand d-none d-md-flex" }, [
-        _c("h2", [_vm._v(_vm._s(_vm.app.name))])
+        _c("h2", [_vm._v(_vm._s(_vm.app.name))]),
       ]),
       _vm._v(" "),
       _c(
@@ -1402,14 +1403,14 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               staticClass: "text-muted",
               attrs: {
                 href: _vm.route("about"),
-                title: "About " + _vm.app.name
-              }
+                title: "About " + _vm.app.name,
+              },
             },
             [_c("i", { staticClass: "fas fa-info-circle" })]
           ),
@@ -1421,26 +1422,26 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               attrs: { variant: "link", title: "Account" },
               scopedSlots: _vm._u([
                 {
                   key: "button-content",
-                  fn: function() {
+                  fn: function () {
                     return [
                       _c("b-avatar", {
                         attrs: {
                           variant: "warning",
-                          text: _vm.app.user.initials
-                        }
-                      })
+                          text: _vm.app.user.initials,
+                        },
+                      }),
                     ]
                   },
-                  proxy: true
-                }
-              ])
+                  proxy: true,
+                },
+              ]),
             },
             [
               _vm._v(" "),
@@ -1449,8 +1450,8 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("settings.index")
-                  }
+                    href: _vm.route("settings.index"),
+                  },
                 },
                 [_c("i", { staticClass: "fas fa-cog" }), _vm._v(" Settings")]
               ),
@@ -1460,12 +1461,12 @@ var render = function() {
                 {
                   attrs: {
                     as: "b-dropdown-item",
-                    href: _vm.route("password.index")
-                  }
+                    href: _vm.route("password.index"),
+                  },
                 },
                 [
                   _c("i", { staticClass: "fas fa-key" }),
-                  _vm._v(" Change Password")
+                  _vm._v(" Change Password"),
                 ]
               ),
               _vm._v(" "),
@@ -1477,14 +1478,14 @@ var render = function() {
                   attrs: {
                     as: "b-dropdown-item",
                     method: "post",
-                    href: _vm.route("logout")
-                  }
+                    href: _vm.route("logout"),
+                  },
                 },
                 [
                   _c("i", { staticClass: "fas fa-sign-out-alt" }),
-                  _vm._v(" Logout")
+                  _vm._v(" Logout"),
                 ]
-              )
+              ),
             ],
             1
           ),
@@ -1495,16 +1496,16 @@ var render = function() {
               staticClass: "navbar-toggler d-xl-none",
               attrs: { type: "button" },
               on: {
-                click: function($event) {
+                click: function ($event) {
                   _vm.showNav = !_vm.showNav
-                }
-              }
+                },
+              },
             },
             [_c("i", { staticClass: "fas fa-bars" })]
-          )
+          ),
         ],
         1
-      )
+      ),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "container-fluid page-body-wrapper" }, [
@@ -1513,13 +1514,13 @@ var render = function() {
         {
           staticClass: "sidebar sidebar-nav",
           class: _vm.navbarActive,
-          attrs: { id: "side-nav" }
+          attrs: { id: "side-nav" },
         },
         [
           _c(
             "ul",
             { staticClass: "nav" },
-            _vm._l(_vm.navbar, function(l) {
+            _vm._l(_vm.navbar, function (l) {
               return _c(
                 "li",
                 { key: l.name, staticClass: "nav-item" },
@@ -1531,16 +1532,16 @@ var render = function() {
                       _c("i", { staticClass: "menu-icon", class: l.icon }),
                       _vm._v(" "),
                       _c("span", { staticClass: "menu-title" }, [
-                        _vm._v(_vm._s(l.name))
-                      ])
+                        _vm._v(_vm._s(l.name)),
+                      ]),
                     ]
-                  )
+                  ),
                 ],
                 1
               )
             }),
             0
-          )
+          ),
         ]
       ),
       _vm._v(" "),
@@ -1557,13 +1558,13 @@ var render = function() {
                 {
                   attrs: {
                     variant: _vm.$page.props.flash.type,
-                    show: _vm.$page.props.flash.message ? 30 : false
-                  }
+                    show: _vm.$page.props.flash.message ? 30 : false,
+                  },
                 },
                 [
                   _c("p", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.$page.props.flash.message))
-                  ])
+                    _vm._v(_vm._s(_vm.$page.props.flash.message)),
+                  ]),
                 ]
               ),
               _vm._v(" "),
@@ -1572,17 +1573,17 @@ var render = function() {
                 {
                   attrs: {
                     variant: _vm.alert.type,
-                    show: _vm.alert.message ? 30 : false
-                  }
+                    show: _vm.alert.message ? 30 : false,
+                  },
                 },
                 [
                   _c("p", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.alert.message))
-                  ])
+                    _vm._v(_vm._s(_vm.alert.message)),
+                  ]),
                 ]
               ),
               _vm._v(" "),
-              _vm._t("default")
+              _vm._t("default"),
             ],
             2
           ),
@@ -1594,7 +1595,7 @@ var render = function() {
               "div",
               {
                 staticClass:
-                  "d-sm-flex justify-content-center justify-content-sm-between"
+                  "d-sm-flex justify-content-center justify-content-sm-between",
               },
               [
                 _vm._m(0),
@@ -1603,21 +1604,21 @@ var render = function() {
                   "span",
                   {
                     staticClass:
-                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+                      "text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center",
                   },
                   [_vm._v(_vm._s(_vm.app.version))]
-                )
+                ),
               ]
-            )
-          ])
+            ),
+          ]),
         ],
         1
-      )
-    ])
+      ),
+    ]),
   ])
 }
 var staticRenderFns = [
-  function() {
+  function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
@@ -1625,16 +1626,16 @@ var staticRenderFns = [
       "span",
       {
         staticClass:
-          "text-muted text-center text-sm-left d-block d-sm-inline-block"
+          "text-muted text-center text-sm-left d-block d-sm-inline-block",
       },
       [
         _vm._v("Copyright © 2016-2021"),
         _c("span", { staticClass: "d-none d-md-inline" }, [
-          _vm._v(" Butcherman - All rights reserved.")
-        ])
+          _vm._v(" Butcherman - All rights reserved."),
+        ]),
       ]
     )
-  }
+  },
 ]
 render._withStripped = true
 
@@ -1653,7 +1654,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -1668,34 +1669,34 @@ var render = function() {
                 {
                   name: "b-tooltip",
                   rawName: "v-b-tooltip.hover",
-                  modifiers: { hover: true }
-                }
+                  modifiers: { hover: true },
+                },
               ],
               class: _vm.bookmark_class,
               attrs: { title: _vm.bookmark_title },
-              on: { click: _vm.toggleFav }
+              on: { click: _vm.toggleFav },
             }),
             _vm._v(
               "\n                " + _vm._s(_vm.tip.subject) + "\n            "
-            )
+            ),
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "tip-details" }, [
             _c("span", { staticClass: "d-block d-sm-inline-block" }, [
               _c("strong", [_vm._v("ID: ")]),
-              _vm._v(_vm._s(_vm.tip.tip_id))
+              _vm._v(_vm._s(_vm.tip.tip_id)),
             ]),
             _vm._v(" "),
             _c("span", { staticClass: "d-block d-sm-inline-block" }, [
               _c("strong", [_vm._v("Created: ")]),
-              _vm._v(_vm._s(_vm.tip.created_at))
+              _vm._v(_vm._s(_vm.tip.created_at)),
             ]),
             _vm._v(" "),
             _c("span", { staticClass: "d-block d-sm-inline-block" }, [
               _c("strong", [_vm._v("Last Updated: ")]),
-              _vm._v(_vm._s(_vm.tip.updated_at))
-            ])
-          ])
+              _vm._v(_vm._s(_vm.tip.updated_at)),
+            ]),
+          ]),
         ]),
         _vm._v(" "),
         _c(
@@ -1709,8 +1710,8 @@ var render = function() {
                   {
                     name: "b-tooltip",
                     rawName: "v-b-tooltip.hover",
-                    modifiers: { hover: true }
-                  }
+                    modifiers: { hover: true },
+                  },
                 ],
                 attrs: {
                   href: _vm.route("tips.download", _vm.tip.tip_id),
@@ -1718,24 +1719,24 @@ var render = function() {
                   size: "sm",
                   block: "",
                   pill: "",
-                  title: "Download as PDF"
-                }
+                  title: "Download as PDF",
+                },
               },
               [
                 _c("i", { staticClass: "fas fa-download" }),
-                _vm._v("\n                Download Tip\n            ")
+                _vm._v("\n                Download Tip\n            "),
               ]
             ),
             _vm._v(" "),
             _c("manage-tip", {
               attrs: {
                 tip_id: _vm.tip.tip_id,
-                permissions: _vm.user_data.permissions
-              }
-            })
+                permissions: _vm.user_data.permissions,
+              },
+            }),
           ],
           1
-        )
+        ),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row mt-2 mt-md-0" }, [
@@ -1745,20 +1746,20 @@ var render = function() {
           [
             _vm._m(0),
             _vm._v(" "),
-            _vm._l(_vm.tip.equipment_type, function(equip) {
+            _vm._l(_vm.tip.equipment_type, function (equip) {
               return _c(
                 "b-badge",
                 {
                   key: equip.equip_id,
                   staticClass: "ml-1 mb-1",
-                  attrs: { pill: "", variant: "info" }
+                  attrs: { pill: "", variant: "info" },
                 },
                 [_vm._v(_vm._s(equip.name))]
               )
-            })
+            }),
           ],
           2
-        )
+        ),
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row grid-margin justify-content-center" }, [
@@ -1769,11 +1770,11 @@ var render = function() {
               _vm._v(" "),
               _c("div", {
                 staticClass: "tip-body",
-                domProps: { innerHTML: _vm._s(_vm.tip.details) }
-              })
-            ])
-          ])
-        ])
+                domProps: { innerHTML: _vm._s(_vm.tip.details) },
+              }),
+            ]),
+          ]),
+        ]),
       ]),
       _vm._v(" "),
       _vm.tip.file_uploads.length >= 1
@@ -1782,13 +1783,13 @@ var render = function() {
               _c("div", { staticClass: "card rounded" }, [
                 _c("div", { staticClass: "card-body" }, [
                   _c("div", { staticClass: "card-title" }, [
-                    _vm._v("Attachments:")
+                    _vm._v("Attachments:"),
                   ]),
                   _vm._v(" "),
                   _c(
                     "ul",
                     { staticClass: "list-group px-5" },
-                    _vm._l(_vm.tip.file_uploads, function(file) {
+                    _vm._l(_vm.tip.file_uploads, function (file) {
                       return _c(
                         "li",
                         { key: file.file_id, staticClass: "list-group-item" },
@@ -1799,20 +1800,20 @@ var render = function() {
                               attrs: {
                                 href: _vm.route("download", [
                                   file.file_id,
-                                  file.file_name
-                                ])
-                              }
+                                  file.file_name,
+                                ]),
+                              },
                             },
                             [_vm._v(_vm._s(file.file_name))]
-                          )
+                          ),
                         ]
                       )
                     }),
                     0
-                  )
-                ])
-              ])
-            ])
+                  ),
+                ]),
+              ]),
+            ]),
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -1820,20 +1821,20 @@ var render = function() {
         attrs: {
           comments: _vm.tip.tech_tip_comment,
           tip_id: _vm.tip.tip_id,
-          permissions: _vm.user_data.permissions.comment
-        }
-      })
+          permissions: _vm.user_data.permissions.comment,
+        },
+      }),
     ],
     1
   )
 }
 var staticRenderFns = [
-  function() {
+  function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [_c("strong", [_vm._v("For Equipment:")])])
-  }
+  },
 ]
 render._withStripped = true
 

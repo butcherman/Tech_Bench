@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Traits\FileTrait;
 use App\Http\Controllers\Controller;
@@ -21,6 +22,7 @@ use App\Models\CustomerFile;
 use App\Models\EquipmentType;
 use App\Models\PhoneNumberType;
 use App\Models\CustomerFileType;
+use App\Models\UserCustomerRecent;
 use App\Models\UserCustomerBookmark;
 
 use App\Http\Requests\Customers\NewCustomerRequest;
@@ -77,7 +79,9 @@ class CustomerController extends Controller
         }
 
         //  Pull the customers information
-        $customer = Customer::where('slug', $id)
+        try
+        {
+            $customer = Customer::where('slug', $id)
                         ->orWhere('cust_id', $id)
                         ->with('Parent')
                         ->with('CustomerEquipment.CustomerEquipmentData')
@@ -89,10 +93,23 @@ class CustomerController extends Controller
                         ->with('CustomerFile.FileUpload')
                         ->with('ParentFile.FileUpload')
                         ->firstOrFail();
+        }
+        catch(ModelNotFoundException $e)
+        {
+            report($e);
+            abort(404, 'The Customer you are looking for cannot be found');
+        }
+
         //  Determine if the customer is bookmarked by the user
         $isFav    = UserCustomerBookmark::where('user_id', Auth::user()->user_id)
                         ->where('cust_id', $customer->cust_id)
                         ->count();
+
+        //  Add customer to the users 'recent' table
+        UserCustomerRecent::firstOrCreate([
+            'user_id' => Auth::user()->user_id,
+            'cust_id' => $customer->cust_id
+        ])->touch();
 
         return Inertia::render('Customers/Show', [
             'details'        => $customer,

@@ -250,7 +250,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -258,19 +258,19 @@ var render = function() {
     "div",
     {
       staticClass: "row justify-content-center align-items-center",
-      attrs: { id: "auth-layout-container" }
+      attrs: { id: "auth-layout-container" },
     },
     [
       _c("div", { staticClass: "col" }, [
         _c("div", { staticClass: "row justify-content-center" }, [
-          _c("h1", [_vm._v(_vm._s(_vm.$page.props.app.name))])
+          _c("h1", [_vm._v(_vm._s(_vm.$page.props.app.name))]),
         ]),
         _vm._v(" "),
         _c(
           "div",
           {
             staticClass: "row justify-content-center",
-            attrs: { id: "auth-layout-sub-container" }
+            attrs: { id: "auth-layout-sub-container" },
           },
           [
             _c("div", { staticClass: "col col-lg-3 col-10" }, [
@@ -278,9 +278,9 @@ var render = function() {
                 attrs: {
                   src: _vm.$page.props.app.logo,
                   alt: "Company Logo",
-                  id: "header-logo"
-                }
-              })
+                  id: "header-logo",
+                },
+              }),
             ]),
             _vm._v(" "),
             _c(
@@ -288,10 +288,10 @@ var render = function() {
               { staticClass: "col col-lg-3 col-10" },
               [_vm._t("default")],
               2
-            )
+            ),
           ]
-        )
-      ])
+        ),
+      ]),
     ]
   )
 }
@@ -313,7 +313,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function() {
+var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
@@ -321,18 +321,18 @@ var render = function() {
     "div",
     [
       _c("h5", { staticClass: "text-center text-dark" }, [
-        _vm._v("Welcome " + _vm._s(_vm.name))
+        _vm._v("Welcome " + _vm._s(_vm.name)),
       ]),
       _vm._v(" "),
       _c("h6", { staticClass: "text-center" }, [
-        _vm._v("Create a password to finish setting up your account")
+        _vm._v("Create a password to finish setting up your account"),
       ]),
       _vm._v(" "),
       _c("ValidationObserver", {
         scopedSlots: _vm._u([
           {
             key: "default",
-            fn: function(ref) {
+            fn: function (ref) {
               var handleSubmit = ref.handleSubmit
               return [
                 _c(
@@ -340,11 +340,11 @@ var render = function() {
                   {
                     attrs: { novalidate: "" },
                     on: {
-                      submit: function($event) {
+                      submit: function ($event) {
                         $event.preventDefault()
                         return handleSubmit(_vm.submitForm)
-                      }
-                    }
+                      },
+                    },
                   },
                   [
                     _c("text-input", {
@@ -353,15 +353,15 @@ var render = function() {
                         label: "Username",
                         name: "username",
                         value: _vm.form.username,
-                        disabled: ""
+                        disabled: "",
                       },
                       model: {
                         value: _vm.form.username,
-                        callback: function($$v) {
+                        callback: function ($$v) {
                           _vm.$set(_vm.form, "username", $$v)
                         },
-                        expression: "form.username"
-                      }
+                        expression: "form.username",
+                      },
                     }),
                     _vm._v(" "),
                     _c("text-input", {
@@ -370,15 +370,15 @@ var render = function() {
                         rules: "required|confirmed:confirmation|min:6",
                         label: "New Password",
                         name: "password",
-                        placeholder: "Enter New Password"
+                        placeholder: "Enter New Password",
                       },
                       model: {
                         value: _vm.form.password,
-                        callback: function($$v) {
+                        callback: function ($$v) {
                           _vm.$set(_vm.form, "password", $$v)
                         },
-                        expression: "form.password"
-                      }
+                        expression: "form.password",
+                      },
                     }),
                     _vm._v(" "),
                     _c("text-input", {
@@ -388,31 +388,31 @@ var render = function() {
                         vid: "confirmation",
                         label: "Confirm Password",
                         name: "password_confirmation",
-                        placeholder: "Confirm New Password"
+                        placeholder: "Confirm New Password",
                       },
                       model: {
                         value: _vm.form.password_confirmation,
-                        callback: function($$v) {
+                        callback: function ($$v) {
                           _vm.$set(_vm.form, "password_confirmation", $$v)
                         },
-                        expression: "form.password_confirmation"
-                      }
+                        expression: "form.password_confirmation",
+                      },
                     }),
                     _vm._v(" "),
                     _c("submit-button", {
                       attrs: {
                         button_text: "Finish Setup",
-                        submitted: _vm.submitted
-                      }
-                    })
+                        submitted: _vm.submitted,
+                      },
+                    }),
                   ],
                   1
-                )
+                ),
               ]
-            }
-          }
-        ])
-      })
+            },
+          },
+        ]),
+      }),
     ],
     1
   )

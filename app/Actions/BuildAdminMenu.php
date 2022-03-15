@@ -272,12 +272,6 @@ class BuildAdminMenu
                         'icon' => 'far fa-hdd',
                         'link' => route('admin.backups.index'),
                     ],
-                    //  TODO - Finish me!!!
-                    // [
-                    //     'name' => 'Application Updates',
-                    //     'icon' => '',
-                    //     'link' => '#',
-                    // ],
                 ],
             ];
         }

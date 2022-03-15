@@ -15,6 +15,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\Models\CustomerEquipment;
+use App\Models\CustomerFile;
+use App\Traits\FileTrait;
+use Carbon\Carbon;
 
 class GarbageCollectionJob implements ShouldQueue
 {
@@ -22,6 +25,8 @@ class GarbageCollectionJob implements ShouldQueue
     use Dispatchable;
     use SerializesModels;
     use InteractsWithQueue;
+
+    use FileTrait;
 
     /**
      * Execute the job
@@ -36,7 +41,10 @@ class GarbageCollectionJob implements ShouldQueue
             $this->retryQueue();
             $this->checkChunkFolder();
             $this->cleanupCustomerEquipment();
+            $this->cleanupCustomerFiles();
             $this->moduleGarbageCollection();
+
+            //  TODO - Backup file cleanup
 
             Artisan::call('up');
             Log::notice('Garbage Collection Job completed');
@@ -97,6 +105,22 @@ class GarbageCollectionJob implements ShouldQueue
                 $sys->forceDelete();
             }
             Log::info($count.' customer equipment permanently deleted');
+        }
+    }
+
+    /**
+     * Remove any customer files that have been soft deleted more than 48 hours ago
+     */
+    protected function cleanupCustomerFiles()
+    {
+        $fileList = CustomerFile::onlyTrashed()->whereDate('deleted_at', '<', now()->subDays(2))->get();
+
+        foreach($fileList as $file)
+        {
+            $file->forceDelete();
+            $this->deleteFile($file->file_id);
+
+            Log::info('Deleted Customer File ID '.$file->cust_file_id.' for Customer ID '.$file->cust_id, $file->toArray());
         }
     }
 
