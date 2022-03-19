@@ -34,6 +34,8 @@ class SetEmailSettingsController extends Controller
         //  Submit the settings
         $this->saveArray($mailSettings);
 
+        //  TODO - Restart worker queues
+
         event(new EmailSettingsUpdatedEvent($request));
         return back()->with([
             'message' => 'Email Settings Updated',

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -13,16 +14,23 @@ class AppSettingsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        /*
-        *   All App Settings that can be adjusted are stored in the database - retrieve them here and assign to the config
-        */
-        if(Schema::hasTable('app_settings'))
+        try
         {
-            $settings = DB::table('app_settings')->get();
-            foreach($settings as $setting)
+            /*
+            *   All App Settings that can be adjusted are stored in the database - retrieve them here and assign to the config
+            */
+            if(Schema::hasTable('app_settings'))
             {
-                config([$setting->key => $setting->value]);
+                $settings = DB::table('app_settings')->get();
+                foreach($settings as $setting)
+                {
+                    config([$setting->key => $setting->value]);
+                }
             }
+        }
+        catch(Exception $e)
+        {
+            report($e);
         }
     }
 
