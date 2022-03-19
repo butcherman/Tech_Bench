@@ -123,6 +123,9 @@ class TechTipsController extends Controller
             'tip_id'  => $tip->tip_id,
         ])->touch();
 
+        //  Increment the tech tip view count
+        $tip->increment('views');
+
         return Inertia::render('TechTips/Show', [
             'tip' => $tip,
             //  User Permissions for Tech Tips
@@ -191,6 +194,11 @@ class TechTipsController extends Controller
         $tip = TechTip::findOrFail($id);
         $this->authorize('delete', $tip);
         $tip->delete();
+
+        //  Remove the tip from any users 'recent' list
+        UserTechTipRecent::where('tip_id', $tip->tip_id)->delete();
+        //  Remove the tip from any users 'bookmark' list
+        UserTechTipBookmark::where('tip_id', $tip->tip_id)->delete();
 
         event(new TechTipDeletedEvent($tip));
         return redirect(route('tech-tips.index'))->with([
