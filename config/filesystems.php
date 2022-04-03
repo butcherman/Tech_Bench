@@ -87,6 +87,14 @@ return [
             'driver' => 'local',
             'root'   => base_path().'/Modules',
         ],
+
+        /**
+         * Downloaded Update files will be stored here
+         */
+        'updates' => [
+            'driver' => 'local',
+            'root'   => storage_path('updates'),
+        ],
     ],
 
     /*
