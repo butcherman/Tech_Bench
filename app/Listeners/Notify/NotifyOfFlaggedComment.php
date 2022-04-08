@@ -10,6 +10,7 @@ use App\Notifications\FlaggedTechTipCommentNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class NotifyOfFlaggedComment implements ShouldQueue
@@ -21,7 +22,7 @@ class NotifyOfFlaggedComment implements ShouldQueue
     {
         $perm     = UserRolePermissionTypes::where('description', 'Manage Tech Tips')->first();
         $roles    = UserRolePermissions::where('perm_type_id', $perm->perm_type_id)->where('allow', true)->get()->pluck('role_id');
-        $userList = User::where('role_id', $roles)->get();
+        $userList = User::whereIn('role_id', $roles)->get();
 
         Notification::send($userList, new FlaggedTechTipCommentNotification($event->comment, Auth::user()));
     }
