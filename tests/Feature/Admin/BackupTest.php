@@ -25,13 +25,13 @@ class BackupTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('admin.index'));
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.backups.index'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.index'));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.backups.index'));
         $response->assertSuccessful();
     }
 

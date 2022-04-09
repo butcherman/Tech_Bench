@@ -5,20 +5,6 @@
 [![Documentation Status](https://readthedocs.org/projects/tech-bench/badge/?version=latest)](https://tech-bench.readthedocs.io/en/latest/?badge=latest)
 [![GitHub issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
 
-## Scrutinizer CI
-
-[![Working Branch](https://img.shields.io/badge/Working%20Branch-master-green
-)](https://github.com/butcherman/Tech_Bench)
-&nbsp; [![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master)
-<!-- [![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=master) -->
-
-[![Development Branch](https://img.shields.io/badge/Development%20-dev6-yellow
-)](https://github.com/butcherman/Tech_Bench/tree/dev6)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![Build Status](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/build.png?b=dev6)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/build-status/dev6)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/quality-score.png?b=dev6)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev6)
-<!-- [![Code Coverage](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/badges/coverage.png?b=dev6)](https://scrutinizer-ci.com/g/butcherman/Tech_Bench/?branch=dev6) -->
-
 ## About Tech Bench
 
 Tech Bench is a custom Content Management System (CMS) built to aid service technicians by allowing them to store and share information about their customers and equipment they install and maintain.
@@ -45,7 +31,7 @@ Whenever a new Tech Tip is created, an email is sent to all registered users not
 
 ## Installing Tech Bench
 
-Tech Bench is built to be installed on a dedicated web server.  For installation instructions, visit https://tech-bench.readthedocs.io/en/latest/installer/install.html and select the option that fits your environment best.
+Tech Bench is designed to run in a cluster of Docker containers.  To download the images and get the Docker-Compose file for building the cluster, visit the Tech Bench Installer repository at <https://github.com/butcherman/Tech_Bench_Installer>
 
 ## Copyright © 2016-2022 Ron Butcher
 
