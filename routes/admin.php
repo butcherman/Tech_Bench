@@ -21,6 +21,9 @@ use App\Http\Controllers\Admin\SetPasswordPolicyController;
 use App\Http\Controllers\Admin\Logs\LogSettingsController;
 use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
 use App\Http\Controllers\Admin\Logs\ViewLogController;
+use App\Http\Controllers\Admin\Modules\DownloadModuleController;
+use App\Http\Controllers\Admin\Modules\GetModulesOnlineController;
+use App\Http\Controllers\Admin\Modules\ModuleIndexController;
 
 Route::middleware('auth')->prefix('administration')->name('admin.')->group(function()
 {
@@ -46,6 +49,16 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::get( 'email',            GetEmailSettingsController::class)->name('get-email');
     Route::post('email',            SetEmailSettingsController::class)->name('set-email');
     Route::get( 'test-email',       SendTestEmailController::class)->name('test-email');
+
+    /**
+     * Add On Module Administration Routes
+     */
+    // Route::prefix('modules')->name('modules.')->group(function()
+    // {
+    //     Route::get('/',             ModuleIndexController::class)->name('index');
+    //     Route::get('get-online',    GetModulesOnlineController::class)->name('get-online');
+    //     Route::post('download',     DownloadModuleController::class)->name('download');
+    // });
 
     /**
      * Application Maintenance Routes

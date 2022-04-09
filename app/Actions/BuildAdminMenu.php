@@ -244,6 +244,11 @@ class BuildAdminMenu
                         'icon' => 'fas fa-envelope',
                         'link' => route('admin.get-email'),
                     ],
+                    // [
+                    //     'name' => 'Add On Modules',
+                    //     'icon' => 'fas fa-cubes',
+                    //     'link' => route('admin.modules.index'),
+                    // ],
                 ],
             ];
         }
