@@ -66,7 +66,7 @@ class BuildNavbar
         return [];
     }
 
-    /*
+    /**
     *   If any add-on modules have been installed, add those to the navigation bar
     */
     protected function getModules()
