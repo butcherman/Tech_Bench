@@ -31,7 +31,7 @@ class ActivateModuleCommand extends Command
     {
         $this->newLine(2);
 
-        Log::notice('Activate Module Command running for './** @scrutinizer ignore-type */$this->argument('module'));
+        Log::notice('Activate Module Command running for '.$this->argument('module'));
 
         //  Verify that the module is not already installed
         $activeModules = Module::allEnabled();
@@ -59,6 +59,7 @@ class ActivateModuleCommand extends Command
         }
 
         $this->line('Found Module.  Checking Prerequisites');
+        Log::info('Found Module.  Checking Prerequisites');
 
         //  Verify that the correct version of Tech Bench is running for this module
         if(!$this->checkPrerequisites($module->getRequires()))
@@ -71,22 +72,24 @@ class ActivateModuleCommand extends Command
         }
 
         $this->line('Prerequisites passed.  Activating Module');
+        Log::info('Prerequisites passed.  Activating Module');
 
         //  Enable the module
         $this->call('module:enable', ['module' => $module->getStudlyName()]);
 
         //  Run any migrations
         $this->line('Setting up database');
+        Log::info('Setting Up Database for Module');
         $this->call('module:migrate', ['module' => $module->getStudlyName()]);
 
         //  Install NPM and Composer packages
         $this->line('Copying Files');
+        Log::info('Copying Files for Module');
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && composer install --no-dev --no-interaction --optimize-autoloader');
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && npm install --silent --only=production');
 
         //  Combine the new Javascript files
         $this->line('Creating Javascript files (this may take some time)');
-        // shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && npm run production');
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.' && npm run production');
 
         $this->info('Module has been activated');

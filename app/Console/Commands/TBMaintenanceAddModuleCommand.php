@@ -76,6 +76,9 @@ class TBMaintenanceAddModuleCommand extends Command
         $this->info('Activating Module');
         Artisan::call('tb_module:activate '.$moduleData['alias']);
 
+        $output = Artisan::output();
+        $this->info($output);
+
         //  Remove temporary files
         $this->info('Cleaning Up');
 
