@@ -186,23 +186,6 @@
             {
                 this.$emit('upload-canceled');
             },
-            //  File was uploaded successfully
-            // successfullUpload(file, response)
-            // {
-            //     if(this.maxFiles == 1)
-            //     {
-            //         this.$emit('upload-progress', 100);
-            //         this.$emit('completed', response);
-            //         this.resetDropzone();
-            //     }
-            // },
-            //  Multiple files were uploaded successfully
-            // successfullUploadMulti(file, response)
-            // {
-            //     this.$emit('upload-progress', 100);
-            //     this.$emit('completed', response);
-            //     this.resetDropzone();
-            // },
             //  All files are completed
             queueComplete()
             {
@@ -221,6 +204,12 @@
                 }
 
                 var prog = this.sent / this.totalSize * 100;
+                if(prog > 100)
+                {
+                    //  Progress should not be above 100%
+                    prog = 100;
+                }
+
                 this.$emit('upload-progress', prog);
             },
         },
