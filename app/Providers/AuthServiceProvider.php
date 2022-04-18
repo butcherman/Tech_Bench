@@ -24,5 +24,7 @@ class AuthServiceProvider extends ServiceProvider
 
         //  Gate to determine if the Administration link should show up on the navigation menu
         Gate::define('admin-link', [GatePolicy::class, 'adminLink']);
+        //  Gate to determine if the Reports link should show up on the navigation menu
+        Gate::define('reports-link', [GatePolicy::class, 'reportsLink']);
     }
 }

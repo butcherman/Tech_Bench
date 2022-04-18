@@ -54,16 +54,29 @@ class BuildNavbar
     */
     protected function getAdminNavbar()
     {
+        $nav = [];
+
+        //  Should Admin link show?
         if(Gate::allows('admin-link', $this->user))
         {
-            return [[
+            $nav[] = [
                 'name'  => 'Administration',
                 'route' => route('admin.index'),
                 'icon'  => 'fas fa-user-shield',
-            ]];
+            ];
         }
 
-        return [];
+        //  Should Reports link show
+        if(Gate::allows('reports-link', $this->user))
+        {
+            $nav[] = [
+                'name'  => 'Reports',
+                'route' => route('reports.index'),
+                'icon'  => 'fas fa-chart-bar',
+            ];
+        }
+
+        return $nav;
     }
 
     /**
