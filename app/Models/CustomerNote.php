@@ -28,7 +28,7 @@ class CustomerNote extends Model
     */
     public function getAuthorAttribute()
     {
-        return User::find($this->created_by)->full_name;
+        return User::withTrashed()->find($this->created_by)->full_name;
     }
 
     /*
@@ -36,7 +36,7 @@ class CustomerNote extends Model
     */
     public function getUpdatedAuthorAttribute()
     {
-        $user = User::find($this->updated_by);
+        $user = User::withTrashed()->find($this->updated_by);
         return $user ? $user->full_name : null;
     }
 }

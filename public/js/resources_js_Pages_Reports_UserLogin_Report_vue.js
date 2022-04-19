@@ -198,21 +198,6 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       required: true
     }
-  },
-  data: function data() {
-    return {//
-    };
-  },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-    //  console.log(this.data);
-  },
-  computed: {//
-  },
-  watch: {//
-  },
-  methods: {//
   }
 });
 
@@ -685,9 +670,14 @@ var render = function () {
                         "h4",
                         [
                           _vm._v(_vm._s(name)),
-                          _c("b-badge", { staticClass: "float-right" }, [
-                            _vm._v("Logins - " + _vm._s(user.totals)),
-                          ]),
+                          _c(
+                            "b-badge",
+                            {
+                              staticClass: "float-right",
+                              attrs: { variant: "info" },
+                            },
+                            [_vm._v("Logins - " + _vm._s(user.totals))]
+                          ),
                         ],
                         1
                       ),
@@ -731,8 +721,8 @@ var render = function () {
                                       _vm._v(" "),
                                       _c(
                                         "b-td",
-                                        _vm._l(d, function (t) {
-                                          return _c("div", { key: t }, [
+                                        _vm._l(d, function (t, i) {
+                                          return _c("div", { key: i }, [
                                             _vm._v(
                                               "\n                                                " +
                                                 _vm._s(t.time) +
@@ -745,8 +735,8 @@ var render = function () {
                                       _vm._v(" "),
                                       _c(
                                         "b-td",
-                                        _vm._l(d, function (i) {
-                                          return _c("div", { key: i }, [
+                                        _vm._l(d, function (i, k) {
+                                          return _c("div", { key: k }, [
                                             _vm._v(
                                               "\n                                                " +
                                                 _vm._s(i.ip) +

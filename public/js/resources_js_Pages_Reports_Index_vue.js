@@ -680,7 +680,7 @@ var render = function () {
                         {
                           attrs: { as: "b-button", block: "", variant: "info" },
                         },
-                        [_vm._v("User Activity Reports")]
+                        [_vm._v("User Contributions Report")]
                       ),
                     ],
                     1

@@ -8076,7 +8076,9 @@ var render = function () {
                 _c("equipment", {
                   attrs: {
                     cust_id: _vm.details.cust_id,
-                    equipment: _vm.details.customer_equipment,
+                    equipment: _vm.details.parent_equipment.concat(
+                      _vm.details.customer_equipment
+                    ),
                     permissions: _vm.user_data.equipment,
                     allow_share: _vm.allowShare,
                   },
@@ -8115,7 +8117,9 @@ var render = function () {
                 _c("contacts", {
                   attrs: {
                     cust_id: _vm.details.cust_id,
-                    contacts: _vm.details.customer_contact,
+                    contacts: _vm.details.parent_contact.concat(
+                      _vm.details.customer_contact
+                    ),
                     permissions: _vm.user_data.contacts,
                     allow_share: _vm.allowShare,
                   },
@@ -8156,7 +8160,9 @@ var render = function () {
                 _c("notes", {
                   attrs: {
                     cust_id: _vm.details.cust_id,
-                    notes: _vm.details.customer_note,
+                    notes: _vm.details.parent_note.concat(
+                      _vm.details.customer_note
+                    ),
                     permissions: _vm.user_data.notes,
                     allow_share: _vm.allowShare,
                   },
@@ -8197,7 +8203,9 @@ var render = function () {
                 _c("file", {
                   attrs: {
                     cust_id: _vm.details.cust_id,
-                    files: _vm.details.customer_file,
+                    files: _vm.details.parent_file.concat(
+                      _vm.details.customer_file
+                    ),
                     permissions: _vm.user_data.files,
                     allow_share: _vm.allowShare,
                   },

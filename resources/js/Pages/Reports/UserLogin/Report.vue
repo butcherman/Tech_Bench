@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <b-list-group>
                             <b-list-group-item v-for="user, name in data" :key="name">
-                                <h4>{{name}}<b-badge class="float-right">Logins - {{user.totals}}</b-badge></h4>
+                                <h4>{{name}}<b-badge class="float-right" variant="info">Logins - {{user.totals}}</b-badge></h4>
                                 <div v-if="user.totals == 0">
                                     <h5 class="text-center">No Data</h5>
                                 </div>
@@ -27,12 +27,12 @@
                                         <b-tr v-for="(d, date) in user.data" :key="date">
                                             <b-td>{{date}}</b-td>
                                             <b-td>
-                                                <div v-for="t in d" :key="t">
+                                                <div v-for="(t, i) in d" :key="i">
                                                     {{t.time}}
                                                 </div>
                                             </b-td>
                                             <b-td>
-                                                <div v-for="i in d" :key="i">
+                                                <div v-for="(i, k) in d" :key="k">
                                                     {{i.ip}}
                                                 </div>
                                             </b-td>
@@ -59,27 +59,5 @@
                 required: true,
             }
         },
-        data() {
-            return {
-                //
-
-            }
-        },
-        created() {
-            //
-        },
-        mounted() {
-             //
-            //  console.log(this.data);
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
-        methods: {
-            //
-        }
     }
 </script>

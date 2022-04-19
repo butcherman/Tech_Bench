@@ -36,7 +36,9 @@ class CustomerFile extends Model
     */
     public function getUploadedByAttribute()
     {
-        return User::find($this->user_id)->full_name;
+        return User::withTrashed()->find($this->user_id)->full_name;
+        // return User::withTrashed()->where('user_id', $this->user_id)->first()->full_name;
+        // return '';
     }
 
     /*

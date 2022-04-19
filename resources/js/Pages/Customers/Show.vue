@@ -49,7 +49,7 @@
                         </div>
                         <equipment
                             :cust_id="details.cust_id"
-                            :equipment="details.customer_equipment"
+                            :equipment="details.parent_equipment.concat(details.customer_equipment)"
                             :permissions="user_data.equipment"
                             :allow_share="allowShare"
                         ></equipment>
@@ -69,7 +69,7 @@
                         </div>
                         <contacts
                             :cust_id="details.cust_id"
-                            :contacts="details.customer_contact"
+                            :contacts="details.parent_contact.concat(details.customer_contact)"
                             :permissions="user_data.contacts"
                             :allow_share="allowShare"
                         ></contacts>
@@ -91,7 +91,7 @@
                         </div>
                         <notes
                             :cust_id="details.cust_id"
-                            :notes="details.customer_note"
+                            :notes="details.parent_note.concat(details.customer_note)"
                             :permissions="user_data.notes"
                             :allow_share="allowShare"
                         ></notes>
@@ -112,11 +112,11 @@
                             ></new-file>
                         </div>
                         <file
-                                :cust_id="details.cust_id"
-                                :files="details.customer_file"
-                                :permissions="user_data.files"
-                                :allow_share="allowShare"
-                            ></file>
+                            :cust_id="details.cust_id"
+                            :files="details.parent_file.concat(details.customer_file)"
+                            :permissions="user_data.files"
+                            :allow_share="allowShare"
+                        ></file>
                     </div>
                 </div>
             </div>
