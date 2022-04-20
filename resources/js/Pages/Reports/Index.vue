@@ -14,9 +14,9 @@
                             <b-list-group-item>
                                 <inertia-link as="b-button" :href="route('reports.user-login-report.index')" block variant="info">User Login Summary Reports</inertia-link>
                             </b-list-group-item>
-                            <b-list-group-item>
+                            <!-- <b-list-group-item>
                                 <inertia-link as="b-button" block variant="info">User Contributions Report</inertia-link>
-                            </b-list-group-item>
+                            </b-list-group-item> -->
                         </b-list-group>
                     </div>
                 </div>

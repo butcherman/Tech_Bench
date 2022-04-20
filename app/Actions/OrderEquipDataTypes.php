@@ -2,14 +2,20 @@
 
 namespace App\Actions;
 
+use App\Jobs\UpdateCustomerDataFieldsJob;
 use App\Models\DataField;
 use App\Models\DataFieldType;
 
 class OrderEquipDataTypes
 {
+    /**
+     * Cycle through a list of data field types (for customers) to see what options have been added
+     * to an equipment type and what options have been removed
+     */
     public function run($dataList, $equipId)
     {
-        $order = 0;
+        $order   = 0;
+        $fieldList = [];
 
         //  Input the customer information
         foreach($dataList as $field)
@@ -24,7 +30,7 @@ class OrderEquipDataTypes
                 }
 
                 //  Attach the field to the equipment type
-                DataField::updateOrCreate(
+                $dataField = DataField::updateOrCreate(
                 [
                     'equip_id' => $equipId,
                     'type_id'  => $fieldID->type_id,
@@ -33,9 +39,15 @@ class OrderEquipDataTypes
                     'order'    => $order,
                 ]);
 
+                //  Put together a full list of the data fields to compare to customer fields later
+                $fieldList[] = $dataField->field_id;
+
                 $order++;
             }
         }
+
+        //  Dispatch a new job to update all customers to add any missing fields
+        dispatch(new UpdateCustomerDataFieldsJob($equipId, $fieldList));
     }
 
     public function delOptions($delArray, $equipId)

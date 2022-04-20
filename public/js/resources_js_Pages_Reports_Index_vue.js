@@ -671,20 +671,6 @@ var render = function () {
                     ],
                     1
                   ),
-                  _vm._v(" "),
-                  _c(
-                    "b-list-group-item",
-                    [
-                      _c(
-                        "inertia-link",
-                        {
-                          attrs: { as: "b-button", block: "", variant: "info" },
-                        },
-                        [_vm._v("User Contributions Report")]
-                      ),
-                    ],
-                    1
-                  ),
                 ],
                 1
               ),
