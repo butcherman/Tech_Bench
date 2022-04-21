@@ -2515,6 +2515,9 @@ __webpack_require__.r(__webpack_exports__);
       return this.details.parent_id !== null || this.details.child_count > 0 ? true : false;
     }
   },
+  mounted: function mounted() {
+    this.reorderEquipmentData();
+  },
   methods: {
     toggleFav: function toggleFav() {
       var _this = this;
@@ -2541,6 +2544,13 @@ __webpack_require__.r(__webpack_exports__);
           return _this2.eventHub.$emit('axiosError', error);
         });
       }
+    },
+    reorderEquipmentData: function reorderEquipmentData() {
+      this.equipment.forEach(function (item) {
+        item.customer_equipment_data.sort(function (a, b) {
+          return a.order > b.order ? 1 : -1;
+        });
+      });
     }
   },
   metaInfo: {
@@ -8064,9 +8074,7 @@ var render = function () {
                 _c("equipment", {
                   attrs: {
                     cust_id: _vm.details.cust_id,
-                    equipment: _vm.details.parent_equipment.concat(
-                      _vm.details.customer_equipment
-                    ),
+                    equipment: _vm.equipment,
                     permissions: _vm.user_data.equipment,
                     allow_share: _vm.allowShare,
                   },

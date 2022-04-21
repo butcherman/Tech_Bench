@@ -49,7 +49,7 @@
                         </div>
                         <equipment
                             :cust_id="details.cust_id"
-                            :equipment="details.parent_equipment.concat(details.customer_equipment)"
+                            :equipment="equipment"
                             :permissions="user_data.equipment"
                             :allow_share="allowShare"
                         ></equipment>
@@ -211,6 +211,9 @@
                 return this.details.parent_id !== null || this.details.child_count > 0 ? true : false;
             }
         },
+        mounted() {
+            this.reorderEquipmentData();
+        },
         methods: {
             toggleFav()
             {
@@ -235,6 +238,13 @@
                             this.loading = false;
                         }).catch(error => this.eventHub.$emit('axiosError', error));
                 }
+            },
+            reorderEquipmentData()
+            {
+                this.equipment.forEach((item) =>
+                {
+                    item.customer_equipment_data.sort((a, b) => (a.order > b.order) ? 1 : -1);
+                });
             }
         },
         metaInfo: {

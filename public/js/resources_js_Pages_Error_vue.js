@@ -45,10 +45,10 @@ __webpack_require__.r(__webpack_exports__);
       }[this.status];
     },
     description: function description() {
-      if (this.message !== null) {
-        return this.message;
-      }
-
+      // if(this.message !== null)
+      // {
+      //     return this.message;
+      // }
       return {
         503: 'Sorry, we are doing some maintenance behind the curtain. Please check back soon.',
         500: 'Whoops, something bad happened.  Our minions are hard at work to determine what went wrong',
