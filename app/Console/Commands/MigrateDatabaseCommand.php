@@ -103,6 +103,7 @@ class MigrateDatabaseCommand extends Command
             $this->error('Please check that database user has permissions to create a new Schema');
             $this->newLine();
             $this->error('Message - '.$e);
+            return 0;
         }
 
         $this->info('Moving data to a temporary database');
@@ -110,7 +111,7 @@ class MigrateDatabaseCommand extends Command
 
         //  Create a default database
         $this->info('Building Default Database');
-        Artisan::call('migrate:fresh');
+        Artisan::call('migrate:fresh --force');
         $this->newLine();
 
         //  Migrate Data
@@ -635,19 +636,61 @@ class MigrateDatabaseCommand extends Command
         $customerFiles = CustomerFile::all();
         foreach($customerFiles as $file)
         {
-            if(!$this->moveStoredFile($file->file_id, $file->cust_id, 'customers'))
+            $curPath = str_replace('//', '/', $file->FileUpload->folder.DIRECTORY_SEPARATOR.$file->FileUpload->file_name);
+
+            //  Verify that the file actually exists
+            if(!Storage::disk('local')->exists($curPath))
             {
-                $this->error('FILE MISSING ON DISK '.$file->disk.' - '.$file->FileUpload->folder.DIRECTORY_SEPARATOR.$file->FileUpload->file_name);
+                $this->error('FILE MISSING - '.$curPath);
+                continue;
             }
+
+            //  check for duplicates in the new location
+            $this->disk   = 'customers';
+            $this->folder = $file->cust_id;
+            $newName      = $this->checkForDuplicate($file->FileUpload->file_name);
+
+            //  Move File
+            $newPath = 'customers'.DIRECTORY_SEPARATOR.$this->folder.DIRECTORY_SEPARATOR.$newName;
+            Storage::disk('local')->move($curPath, $newPath);
+
+            //  Update database to reflect new location
+            $file->FileUpload->file_name = $newName;
+            $file->FileUpload->folder    = $this->folder;
+            $file->FileUpload->disk      = 'customers';
+            $file->FileUpload->save();
+
+            $this->info('Moved '.$newPath);
         }
 
         $techTipFiles = TechTipFile::all();
         foreach($techTipFiles as $file)
         {
-            if(!$this->moveStoredFile($file->file_id, $file->cust_id, 'tips'))
+            $curPath = str_replace('//', '/', $file->FileUpload->folder.DIRECTORY_SEPARATOR.$file->FileUpload->file_name);
+
+            //  Verify that the file actually exists
+            if(!Storage::disk('local')->exists($curPath))
             {
-                $this->error('FILE MISSING ON DISK '.$file->disk.' - '.$file->FileUpload->folder.DIRECTORY_SEPARATOR.$file->FileUpload->file_name);
+                $this->error('FILE MISSING - '.$curPath);
+                continue;
             }
+
+            //  check for duplicates in the new location
+            $this->disk   = 'tips';
+            $this->folder = $file->tip_id;
+            $newName      = $this->checkForDuplicate($file->FileUpload->file_name);
+
+            //  Move File
+            $newPath = 'tips'.DIRECTORY_SEPARATOR.$this->folder.DIRECTORY_SEPARATOR.$newName;
+            Storage::disk('local')->move($curPath, $newPath);
+
+            //  Update database to reflect new location
+            $file->FileUpload->file_name = $newName;
+            $file->FileUpload->folder    = $this->folder;
+            $file->FileUpload->disk      = 'tips';
+            $file->FileUpload->save();
+
+            $this->info('Moved '.$newPath);
         }
 
         $this->newLine();
