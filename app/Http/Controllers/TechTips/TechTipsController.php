@@ -22,6 +22,7 @@ use App\Events\TechTips\TechTipRestoredEvent;
 use App\Events\TechTips\TechTipUpdatedEvent;
 use App\Http\Requests\TechTips\CreateTipRequest;
 use App\Http\Requests\TechTips\UpdateTipRequest;
+use App\Jobs\TechTipsRemoveBookmarksJob;
 use App\Models\TechTipFile;
 use App\Models\UserTechTipRecent;
 use App\Traits\FileTrait;
@@ -195,10 +196,7 @@ class TechTipsController extends Controller
         $this->authorize('delete', $tip);
         $tip->delete();
 
-        //  Remove the tip from any users 'recent' list
-        UserTechTipRecent::where('tip_id', $tip->tip_id)->delete();
-        //  Remove the tip from any users 'bookmark' list
-        UserTechTipBookmark::where('tip_id', $tip->tip_id)->delete();
+        dispatch(new TechTipsRemoveBookmarksJob($tip));
 
         event(new TechTipDeletedEvent($tip));
         return redirect(route('tech-tips.index'))->with([

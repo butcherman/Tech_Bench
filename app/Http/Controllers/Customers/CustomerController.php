@@ -27,6 +27,7 @@ use App\Models\UserCustomerBookmark;
 
 use App\Http\Requests\Customers\NewCustomerRequest;
 use App\Http\Requests\Customers\EditCustomerRequest;
+use App\Jobs\CustomerRemoveBookmarksJob;
 
 class CustomerController extends Controller
 {
@@ -169,10 +170,7 @@ class CustomerController extends Controller
         $this->authorize('delete', $cust);
         $cust->delete();
 
-        //  Remove the customer from users 'recent' list
-        UserCustomerRecent::where('cust_id', $cust->cust_id)->delete();
-        //  Remove the customer from users 'bookmarks' list
-        UserCustomerBookmark::where('cust_id', $cust->cust_id)->delete();
+        dispatch(new CustomerRemoveBookmarksJob($cust));
 
         event(new CustomerDeactivatedEvent($cust));
         return redirect(route('customers.index'))->with(['message' => 'Customer '.$cust->name.' deactivated', 'type' => 'danger']);
