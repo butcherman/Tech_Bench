@@ -1,3 +1,18 @@
+<!--
+    Text area using TinyMCE library
+
+    IMPORTANT NOTE:  If the editor is inside a BootstrapVue Modal, be sure to set the "no-enforce-focus" property
+
+    Props:
+        value: for v-model binding (required)
+        rules:       array of VeeValidate rules
+        label:       String for label field
+        name:        String for name field of input
+        placeholder: String for placeholder
+        mode:        rule processing mode
+        allow_image: Boolean to determine if an image can be added to the text
+-->
+
 <template>
     <ValidationProvider v-slot="v" :rules="rules" :mode="mode">
         <b-form-group

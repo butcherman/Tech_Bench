@@ -1,3 +1,20 @@
+<!--
+    Text Input
+
+    Props:
+        value: for v-model binding (required)
+        rules:       array of VeeValidate rules
+        label:       String for label field
+        type:        Input type - Standard HTML input type
+        name:        String for name field of input
+        placeholder: String for placeholder
+        hideState:   Hide whether or not field has been modified
+        mode:        rule processing mode
+        list:        allows to use list prop in text box
+        disabled:    Boolean to disable input
+        VID:         VID identifer for ValidationProvider
+-->
+
 <template>
     <ValidationProvider v-slot="v" :rules="rules" :mode="mode" :vid="vid">
         <b-form-group

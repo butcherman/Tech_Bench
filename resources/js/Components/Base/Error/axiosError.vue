@@ -1,3 +1,10 @@
+<!--
+    When making an Axios call, errors can be presented to user with this component
+    A simple Modal with Error code and message will show
+
+    Props: none
+-->
+
 <template>
     <b-modal ref="axios-error-modal" size="xl" centered title="ERROR" ok-only header-text-variant="danger" title-class="text-center w-100">
         <h4 class="text-center">{{header}}</h4>
@@ -15,9 +22,6 @@
 
 <script>
     export default {
-        props: {
-            //
-        },
         data() {
             return {
                 header:      null,
@@ -25,9 +29,6 @@
                 details:     null,
                 showDetails: false,
             }
-        },
-        created() {
-            //
         },
         mounted() {
             this.eventHub.$on('axiosError', err => {
@@ -40,9 +41,6 @@
             {
                 return this.showDetails ? 'Hide' : 'Show';
             }
-        },
-        watch: {
-            //
         },
         methods: {
             assignError(err)

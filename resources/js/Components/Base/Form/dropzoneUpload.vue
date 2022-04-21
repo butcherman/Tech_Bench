@@ -1,3 +1,14 @@
+<!--
+    dropzoneUpload component provides a boundry box that will allow user to drag and rop a file for upload
+
+    Props:
+        maxFiles: Maximum number of files allowed to be uploaded at once.  Default - 1
+        required: If a file is required for the form to be submitted
+        disk:     Laravel disk that file will be loaded to
+        folder:   Folder within disk to save file
+        public:   If the file is to be listed as public or not
+-->
+
 <template>
     <div class="my-2">
         <vue-dropzone
