@@ -33,10 +33,10 @@ export default {
             }[this.status]
         },
         description() {
-            if(this.message !== null)
-            {
-                return this.message;
-            }
+            // if(this.message !== null)
+            // {
+            //     return this.message;
+            // }
 
             return {
                 503: 'Sorry, we are doing some maintenance behind the curtain. Please check back soon.',
