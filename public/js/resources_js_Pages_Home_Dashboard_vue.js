@@ -252,6 +252,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -275,7 +286,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      notificationList: this.notifications
+      notificationList: this.notifications,
+      checkedList: []
     };
   },
   created: function created() {//
@@ -290,20 +302,51 @@ __webpack_require__.r(__webpack_exports__);
     markMessage: function markMessage(id) {
       var _this = this;
 
-      axios.get(route('notifications.edit', id)).then(function (res) {
-        _this.notificationList = res.data;
-      })["catch"](function (error) {
-        return _this.eventHub.$emit('axiosError', error);
-      });
+      if (Array.isArray(id)) {
+        id.forEach(function (item) {
+          axios.get(route('notifications.edit', item)).then(function (res) {
+            _this.notificationList = res.data;
+          })["catch"](function (error) {
+            return _this.eventHub.$emit('axiosError', error);
+          });
+        });
+      } else {
+        axios.get(route('notifications.edit', id)).then(function (res) {
+          _this.notificationList = res.data;
+        })["catch"](function (error) {
+          return _this.eventHub.$emit('axiosError', error);
+        });
+      }
+
+      this.checkedList = [];
     },
     deleteMessage: function deleteMessage(id) {
       var _this2 = this;
 
-      axios["delete"](route('notifications.destroy', id)).then(function (res) {
-        _this2.notificationList = res.data;
-      })["catch"](function (error) {
-        return _this2.eventHub.$emit('axiosError', error);
-      });
+      if (Array.isArray(id)) {
+        id.forEach(function (item) {
+          axios["delete"](route('notifications.destroy', item)).then(function (res) {
+            _this2.notificationList = res.data;
+          })["catch"](function (error) {
+            return _this2.eventHub.$emit('axiosError', error);
+          });
+        });
+      } else {
+        axios["delete"](route('notifications.destroy', id)).then(function (res) {
+          _this2.notificationList = res.data;
+        })["catch"](function (error) {
+          return _this2.eventHub.$emit('axiosError', error);
+        });
+      }
+
+      this.checkedList = [];
+    },
+    checkedMessage: function checkedMessage(checked, id) {
+      if (checked) {
+        this.checkedList.push(id);
+      } else {
+        this.checkedList.splice(this.checkedList.indexOf(id), 1);
+      }
     }
   },
   metaInfo: {
@@ -775,21 +818,28 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "b-table-simple",
-                { attrs: { small: "", responsive: "", striped: "" } },
+                { attrs: { small: "", "responsive-sm": "", striped: "" } },
                 [
                   _c(
                     "b-thead",
                     [
                       _c(
                         "b-tr",
+                        { staticClass: "row" },
                         [
-                          _c("b-th"),
+                          _c("b-th", { staticClass: "col-1" }, [_vm._v(" ")]),
                           _vm._v(" "),
-                          _c("b-th", { staticClass: "text-left" }, [
-                            _vm._v("Subject"),
-                          ]),
+                          _c(
+                            "b-th",
+                            { staticClass: "text-left col-11 col-sm-7" },
+                            [_vm._v("Subject")]
+                          ),
                           _vm._v(" "),
-                          _c("b-th", [_vm._v("Date")]),
+                          _c(
+                            "b-th",
+                            { staticClass: "col-sm-4 d-none d-sm-flex" },
+                            [_vm._v("Date")]
+                          ),
                         ],
                         1
                       ),
@@ -814,15 +864,83 @@ var render = function () {
                         : _vm._l(_vm.notificationList, function (notification) {
                             return _c("notification-base", {
                               key: notification.id,
-                              attrs: { notification: notification },
+                              attrs: {
+                                notification: notification,
+                                reset_watch: _vm.checkedList.length
+                                  ? false
+                                  : true,
+                              },
                               on: {
                                 read: _vm.markMessage,
                                 delete: _vm.deleteMessage,
+                                checked: _vm.checkedMessage,
                               },
                             })
                           }),
                     ],
                     2
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-tfoot",
+                    [
+                      _vm.checkedList.length
+                        ? _c(
+                            "b-tr",
+                            { staticClass: "row" },
+                            [
+                              _c(
+                                "b-td",
+                                { staticClass: "text-left col-4 col-sm-1" },
+                                [
+                                  _c(
+                                    "b-button",
+                                    {
+                                      attrs: {
+                                        size: "sm",
+                                        block: "",
+                                        variant: "info",
+                                      },
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.markMessage(
+                                            _vm.checkedList
+                                          )
+                                        },
+                                      },
+                                    },
+                                    [_vm._v("Mark Read")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-button",
+                                    {
+                                      attrs: {
+                                        size: "sm",
+                                        block: "",
+                                        variant: "danger",
+                                      },
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.deleteMessage(
+                                            _vm.checkedList
+                                          )
+                                        },
+                                      },
+                                    },
+                                    [_vm._v("Delete")]
+                                  ),
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("b-td", { attrs: { colspan: "2" } }),
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                    ],
+                    1
                   ),
                 ],
                 1

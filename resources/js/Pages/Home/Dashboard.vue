@@ -10,12 +10,12 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Notifications</div>
-                        <b-table-simple small responsive striped>
+                        <b-table-simple small responsive-sm striped>
                             <b-thead>
-                                <b-tr>
-                                    <b-th></b-th>
-                                    <b-th class="text-left">Subject</b-th>
-                                    <b-th>Date</b-th>
+                                <b-tr class="row">
+                                    <b-th class="col-1">&nbsp;</b-th>
+                                    <b-th class="text-left col-11 col-sm-7">Subject</b-th>
+                                    <b-th class="col-sm-4 d-none d-sm-flex">Date</b-th>
                                 </b-tr>
                             </b-thead>
                             <b-tbody>
@@ -27,10 +27,21 @@
                                     v-for="notification in notificationList"
                                     :key="notification.id"
                                     :notification="notification"
+                                    :reset_watch="checkedList.length ? false : true"
                                     @read="markMessage"
                                     @delete="deleteMessage"
+                                    @checked="checkedMessage"
                                 ></notification-base>
                             </b-tbody>
+                            <b-tfoot>
+                                <b-tr v-if="checkedList.length" class="row">
+                                    <b-td class="text-left col-4 col-sm-1">
+                                        <b-button size="sm" block variant="info" @click="markMessage(checkedList)">Mark Read</b-button>
+                                        <b-button size="sm" block variant="danger" @click="deleteMessage(checkedList)">Delete</b-button>
+                                    </b-td>
+                                    <b-td colspan="2"></b-td>
+                                </b-tr>
+                            </b-tfoot>
                         </b-table-simple>
                     </div>
                 </div>
@@ -136,6 +147,7 @@
         data() {
             return {
                 notificationList: this.notifications,
+                checkedList: [],
             }
         },
         created() {
@@ -153,17 +165,58 @@
         methods: {
             markMessage(id)
             {
-                axios.get(route('notifications.edit', id))
-                    .then(res => {
-                        this.notificationList = res.data;
-                    }).catch(error => this.eventHub.$emit('axiosError', error));
+                if(Array.isArray(id))
+                {
+                    id.forEach((item) =>
+                    {
+                        axios.get(route('notifications.edit', item))
+                            .then(res => {
+                                this.notificationList = res.data;
+                            }).catch(error => this.eventHub.$emit('axiosError', error));
+                    });
+                }
+                else
+                {
+                    axios.get(route('notifications.edit', id))
+                        .then(res => {
+                            this.notificationList = res.data;
+                        }).catch(error => this.eventHub.$emit('axiosError', error));
+                }
+
+                this.checkedList = [];
             },
             deleteMessage(id)
             {
-                axios.delete(route('notifications.destroy', id))
-                    .then(res => {
-                        this.notificationList = res.data;
-                    }).catch(error => this.eventHub.$emit('axiosError', error));
+                if(Array.isArray(id))
+                {
+                    id.forEach((item) =>
+                    {
+                        axios.delete(route('notifications.destroy', item))
+                            .then(res => {
+                                this.notificationList = res.data;
+                            }).catch(error => this.eventHub.$emit('axiosError', error));
+                    });
+                }
+                else
+                {
+                    axios.delete(route('notifications.destroy', id))
+                        .then(res => {
+                            this.notificationList = res.data;
+                        }).catch(error => this.eventHub.$emit('axiosError', error));
+                }
+
+                this.checkedList = [];
+            },
+            checkedMessage(checked, id)
+            {
+                if(checked)
+                {
+                    this.checkedList.push(id);
+                }
+                else
+                {
+                    this.checkedList.splice(this.checkedList.indexOf(id), 1);
+                }
             }
         },
         metaInfo: {

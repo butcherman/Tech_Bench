@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
@@ -14,7 +15,7 @@ class NotificationController extends Controller
     public function edit($id)
     {
         Auth::user()->notifications()->where('id', $id)->first()->markAsRead();
-
+        Log::debug('Marked message ID '.$id.' as read');
         return Auth::user()->notifications;
     }
 
@@ -24,7 +25,7 @@ class NotificationController extends Controller
     public function destroy($id)
     {
         Auth::user()->notifications()->where('id', $id)->first()->delete();
-
+        Log::debug('Deleted message ID '.$id);
         return Auth::user()->notifications;
     }
 }
