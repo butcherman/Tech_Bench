@@ -25,10 +25,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
+    /**
+     * status message number - i.e. 200, 404, etc
+     */
     status: {
       type: Number,
       required: true
     },
+
+    /**
+     * custom message sent with error
+     */
     message: {
       type: String,
       required: false,
@@ -36,6 +43,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    /**
+     * return name of error based on the server error number
+     */
     title: function title() {
       return {
         503: '503 | Service Unavailable',
@@ -44,11 +54,11 @@ __webpack_require__.r(__webpack_exports__);
         403: '403 | Forbidden'
       }[this.status];
     },
+
+    /**
+     * return generic message based on the server error
+     */
     description: function description() {
-      // if(this.message !== null)
-      // {
-      //     return this.message;
-      // }
       return {
         503: 'Sorry, we are doing some maintenance behind the curtain. Please check back soon.',
         500: 'Whoops, something bad happened.  Our minions are hard at work to determine what went wrong',

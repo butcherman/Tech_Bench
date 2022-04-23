@@ -146,7 +146,7 @@
         },
         data() {
             return {
-                notificationList: this.notifications,
+                notificationList: this.$page.props.app.user.notifications,
                 checkedList: [],
             }
         },
@@ -163,6 +163,9 @@
              //
         },
         methods: {
+            /**
+             * Mark an unread message as read
+             */
             markMessage(id)
             {
                 if(Array.isArray(id))
@@ -171,7 +174,8 @@
                     {
                         axios.get(route('notifications.edit', item))
                             .then(res => {
-                                this.notificationList = res.data;
+                                this.notificationList = res.data.list;
+                                this.eventHub.$emit('update-unread', res.data.unread);
                             }).catch(error => this.eventHub.$emit('axiosError', error));
                     });
                 }
@@ -179,34 +183,45 @@
                 {
                     axios.get(route('notifications.edit', id))
                         .then(res => {
-                            this.notificationList = res.data;
+                            this.notificationList = res.data.list;
+                            this.eventHub.$emit('update-unread', res.data.unread);
                         }).catch(error => this.eventHub.$emit('axiosError', error));
                 }
 
                 this.checkedList = [];
             },
+            /**
+             * Delete a notification
+             */
             deleteMessage(id)
             {
+                //  Delete multiple messages
                 if(Array.isArray(id))
                 {
                     id.forEach((item) =>
                     {
                         axios.delete(route('notifications.destroy', item))
                             .then(res => {
-                                this.notificationList = res.data;
+                                this.notificationList = res.data.list;
+                                this.eventHub.$emit('update-unread', res.data.unread);
                             }).catch(error => this.eventHub.$emit('axiosError', error));
                     });
                 }
+                //  Delete only one message
                 else
                 {
                     axios.delete(route('notifications.destroy', id))
                         .then(res => {
-                            this.notificationList = res.data;
+                            this.notificationList = res.data.list;
+                            this.eventHub.$emit('update-unread', res.data.unread);
                         }).catch(error => this.eventHub.$emit('axiosError', error));
                 }
 
                 this.checkedList = [];
             },
+            /**
+             * Add message to array of checked messages
+             */
             checkedMessage(checked, id)
             {
                 if(checked)

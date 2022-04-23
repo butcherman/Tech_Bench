@@ -69,10 +69,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: [_Layouts_guest__WEBPACK_IMPORTED_MODULE_0__["default"], _Layouts_Nested_authLayout__WEBPACK_IMPORTED_MODULE_1__["default"]],
   props: {
+    /**
+     * Object from /app/Models/UserInitialize
+     */
     link: {
       type: Object,
       required: true
     },
+
+    /**
+     * String - users first and last name
+     */
     name: {
       type: String,
       required: true

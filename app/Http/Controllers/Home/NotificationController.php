@@ -16,7 +16,11 @@ class NotificationController extends Controller
     {
         Auth::user()->notifications()->where('id', $id)->first()->markAsRead();
         Log::debug('Marked message ID '.$id.' as read');
-        return Auth::user()->notifications;
+
+        return [
+            'list'   => Auth::user()->notifications,
+            'unread' => Auth::user()->unreadNotifications->count(),
+        ];
     }
 
     /**
@@ -26,6 +30,10 @@ class NotificationController extends Controller
     {
         Auth::user()->notifications()->where('id', $id)->first()->delete();
         Log::debug('Deleted message ID '.$id);
-        return Auth::user()->notifications;
+
+        return [
+            'list'   => Auth::user()->notifications,
+            'unread' => Auth::user()->unreadNotifications->count(),
+        ];
     }
 }

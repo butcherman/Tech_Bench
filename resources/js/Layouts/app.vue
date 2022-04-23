@@ -14,6 +14,10 @@
                 <inertia-link :href="route('about')" class="text-muted" :title="'About '+app.name" v-b-tooltip.hover>
                     <i class="fas fa-info-circle"></i>
                 </inertia-link>
+                <inertia-link as="b-button" :href="route('dashboard')" size="sm" pill variant="info">
+                    <i class="fas fa-bell"></i>
+                    <b-badge pill variant="warning">{{notifCount}}</b-badge>
+                </inertia-link>
                 <b-dropdown variant="link" title="Account" v-b-tooltip.hover>
                     <template #button-content>
                         <b-avatar variant="warning" :text="app.user.initials"></b-avatar>
@@ -67,7 +71,8 @@
     export default {
         data() {
             return {
-                showNav: false,
+                showNav:    false,
+                notifCount: this.$page.props.app.notifCount,
                 alert: {
                     type:    null,
                     message: null,
@@ -89,6 +94,10 @@
             this.eventHub.$on('clear-alert', () => {
                 this.alert.message = null;
                 this.alert.type    = null;
+            });
+            //  Update the notification bell with unread message count
+            this.eventHub.$on('update-unread', unread => {
+                this.notifCount = unread;
             });
         },
         computed: {

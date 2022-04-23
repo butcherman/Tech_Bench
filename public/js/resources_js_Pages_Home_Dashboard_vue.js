@@ -75,11 +75,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       showNav: false,
+      notifCount: this.$page.props.app.notifCount,
       alert: {
         type: null,
         message: null
@@ -105,6 +110,10 @@ __webpack_require__.r(__webpack_exports__);
     this.eventHub.$on('clear-alert', function () {
       _this2.alert.message = null;
       _this2.alert.type = null;
+    }); //  Update the notification bell with unread message count
+
+    this.eventHub.$on('update-unread', function (unread) {
+      _this2.notifCount = unread;
     });
   },
   computed: {
@@ -286,7 +295,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      notificationList: this.notifications,
+      notificationList: this.$page.props.app.user.notifications,
       checkedList: []
     };
   },
@@ -299,20 +308,27 @@ __webpack_require__.r(__webpack_exports__);
   watch: {//
   },
   methods: {
+    /**
+     * Mark an unread message as read
+     */
     markMessage: function markMessage(id) {
       var _this = this;
 
       if (Array.isArray(id)) {
         id.forEach(function (item) {
           axios.get(route('notifications.edit', item)).then(function (res) {
-            _this.notificationList = res.data;
+            _this.notificationList = res.data.list;
+
+            _this.eventHub.$emit('update-unread', res.data.unread);
           })["catch"](function (error) {
             return _this.eventHub.$emit('axiosError', error);
           });
         });
       } else {
         axios.get(route('notifications.edit', id)).then(function (res) {
-          _this.notificationList = res.data;
+          _this.notificationList = res.data.list;
+
+          _this.eventHub.$emit('update-unread', res.data.unread);
         })["catch"](function (error) {
           return _this.eventHub.$emit('axiosError', error);
         });
@@ -320,20 +336,30 @@ __webpack_require__.r(__webpack_exports__);
 
       this.checkedList = [];
     },
+
+    /**
+     * Delete a notification
+     */
     deleteMessage: function deleteMessage(id) {
       var _this2 = this;
 
+      //  Delete multiple messages
       if (Array.isArray(id)) {
         id.forEach(function (item) {
           axios["delete"](route('notifications.destroy', item)).then(function (res) {
-            _this2.notificationList = res.data;
+            _this2.notificationList = res.data.list;
+
+            _this2.eventHub.$emit('update-unread', res.data.unread);
           })["catch"](function (error) {
             return _this2.eventHub.$emit('axiosError', error);
           });
         });
-      } else {
+      } //  Delete only one message
+      else {
         axios["delete"](route('notifications.destroy', id)).then(function (res) {
-          _this2.notificationList = res.data;
+          _this2.notificationList = res.data.list;
+
+          _this2.eventHub.$emit('update-unread', res.data.unread);
         })["catch"](function (error) {
           return _this2.eventHub.$emit('axiosError', error);
         });
@@ -341,6 +367,10 @@ __webpack_require__.r(__webpack_exports__);
 
       this.checkedList = [];
     },
+
+    /**
+     * Add message to array of checked messages
+     */
     checkedMessage: function checkedMessage(checked, id) {
       if (checked) {
         this.checkedList.push(id);
@@ -557,6 +587,27 @@ var render = function () {
               },
             },
             [_c("i", { staticClass: "fas fa-info-circle" })]
+          ),
+          _vm._v(" "),
+          _c(
+            "inertia-link",
+            {
+              attrs: {
+                as: "b-button",
+                href: _vm.route("dashboard"),
+                size: "sm",
+                pill: "",
+                variant: "info",
+              },
+            },
+            [
+              _c("i", { staticClass: "fas fa-bell" }),
+              _vm._v(" "),
+              _c("b-badge", { attrs: { pill: "", variant: "warning" } }, [
+                _vm._v(_vm._s(_vm.notifCount)),
+              ]),
+            ],
+            1
           ),
           _vm._v(" "),
           _c(

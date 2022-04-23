@@ -75,11 +75,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       showNav: false,
+      notifCount: this.$page.props.app.notifCount,
       alert: {
         type: null,
         message: null
@@ -105,6 +110,10 @@ __webpack_require__.r(__webpack_exports__);
     this.eventHub.$on('clear-alert', function () {
       _this2.alert.message = null;
       _this2.alert.type = null;
+    }); //  Update the notification bell with unread message count
+
+    this.eventHub.$on('update-unread', function (unread) {
+      _this2.notifCount = unread;
     });
   },
   computed: {
@@ -204,24 +213,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * object from /app/Models/TechTip
+     */
     tip: {
       type: Object,
       required: true
     }
   },
-  data: function data() {
-    return {//
-    };
-  },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
+    /**
+     * Remove Soft Deleted timestamp
+     */
     restoreTip: function restoreTip() {
       var _this = this;
 
@@ -241,6 +244,11 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+
+    /**
+     * Tip and all associated files will be destroyed
+     * Cannot undo this operation
+     */
     destroyTip: function destroyTip() {
       var _this2 = this;
 
@@ -466,6 +474,27 @@ var render = function () {
               },
             },
             [_c("i", { staticClass: "fas fa-info-circle" })]
+          ),
+          _vm._v(" "),
+          _c(
+            "inertia-link",
+            {
+              attrs: {
+                as: "b-button",
+                href: _vm.route("dashboard"),
+                size: "sm",
+                pill: "",
+                variant: "info",
+              },
+            },
+            [
+              _c("i", { staticClass: "fas fa-bell" }),
+              _vm._v(" "),
+              _c("b-badge", { attrs: { pill: "", variant: "warning" } }, [
+                _vm._v(_vm._s(_vm.notifCount)),
+              ]),
+            ],
+            1
           ),
           _vm._v(" "),
           _c(
