@@ -127,18 +127,34 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Database Notifications for user
+             */
             notifications: {
                 type:     Array,
                 required: true,
             },
+            /**
+             * Array of objects from two models -
+             *      app/Models/UserCustomerBookmark
+             *      app/Models/UserTechTipBoookmark
+             */
             bookmarks: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * Array of objects from two models
+             *      app/Models/UserCustomerRecent
+             *      app/Models/UserTechTipRecent
+             */
             recents: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * If any modules are installed, any tool icons will be listed here
+             */
             tools: {
                 type:     Array,
                 required: true,
@@ -220,7 +236,7 @@
                 this.checkedList = [];
             },
             /**
-             * Add message to array of checked messages
+             * Add or remove message to array of checked messages
              */
             checkedMessage(checked, id)
             {

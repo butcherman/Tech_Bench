@@ -276,18 +276,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * Database Notifications for user
+     */
     notifications: {
       type: Array,
       required: true
     },
+
+    /**
+     * Array of objects from two models -
+     *      app/Models/UserCustomerBookmark
+     *      app/Models/UserTechTipBoookmark
+     */
     bookmarks: {
       type: Object,
       required: true
     },
+
+    /**
+     * Array of objects from two models
+     *      app/Models/UserCustomerRecent
+     *      app/Models/UserTechTipRecent
+     */
     recents: {
       type: Object,
       required: true
     },
+
+    /**
+     * If any modules are installed, any tool icons will be listed here
+     */
     tools: {
       type: Array,
       required: true
@@ -369,7 +388,7 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**
-     * Add message to array of checked messages
+     * Add or remove message to array of checked messages
      */
     checkedMessage: function checkedMessage(checked, id) {
       if (checked) {

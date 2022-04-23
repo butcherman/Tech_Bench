@@ -183,14 +183,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * Current log level
+     */
     log_level: {
       type: String,
       required: true
     },
+
+    /**
+     * Number of days to keep logs
+     */
     days: {
       type: Number | String,
       required: true
     },
+
+    /**
+     * Array of all possible log levels
+     */
     types: {
       type: Array,
       required: true

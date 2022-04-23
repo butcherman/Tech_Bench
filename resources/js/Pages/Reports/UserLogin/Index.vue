@@ -57,6 +57,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of objects from /app/Models/User
+             */
             user_list: {
                 type:     Array,
                 required: true,

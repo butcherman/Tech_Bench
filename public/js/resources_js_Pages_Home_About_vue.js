@@ -184,14 +184,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * Tech Bench Version
+     */
     version: {
       type: String,
       required: true
     },
+
+    /**
+     * Build ID Number (generated with each commit)
+     */
     build: {
       type: String,
       required: true
     },
+
+    /**
+     * Date code was committed to GitHub
+     */
     build_date: {
       type: String,
       required: true

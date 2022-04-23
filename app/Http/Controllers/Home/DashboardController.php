@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Home;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
-
+use Nwidart\Modules\Facades\Module;
 use App\Http\Controllers\Controller;
-use App\Models\UserCustomerBookmark;
+
+use App\Models\UserTechTipRecent;
 use App\Models\UserCustomerRecent;
 use App\Models\UserTechTipBookmark;
-use App\Models\UserTechTipRecent;
-use Illuminate\Support\Facades\Auth;
-use Nwidart\Modules\Facades\Module;
+use App\Models\UserCustomerBookmark;
 
 class DashboardController extends Controller
 {

@@ -206,6 +206,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * Array of objects from /app/Models/User
+     */
     user_list: {
       type: Array,
       required: true

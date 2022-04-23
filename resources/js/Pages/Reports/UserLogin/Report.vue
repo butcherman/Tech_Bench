@@ -54,6 +54,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * User login report data - see /app/Http/Controllers/UserLoginReportController for layout
+             */
             data: {
                 type:     Object,
                 required: true,

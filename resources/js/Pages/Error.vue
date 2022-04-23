@@ -53,5 +53,8 @@ export default {
             }[this.status]
         }
     },
+    metaInfo: {
+            title: 'ERROR',
+        }
 }
 </script>

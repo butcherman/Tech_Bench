@@ -51,22 +51,37 @@
     export default {
         layout: App,
         props: {
+            /**
+             * List of available log levels
+             */
             levels: {
                 type:     Array,
                 required: true,
             },
+            /**
+             * Selected log channel
+             */
             channel: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * Selected filename of log file
+             */
             filename: {
                 type:     String,
                 required: true,
             },
+            /**
+             * Array of statistics for each occurance of log level type
+             */
             stats: {
                 type:     Array,
                 required: true,
             },
+            /**
+             * Array version of log file, each line is an array item
+             */
             log_file: {
                 type:     Array,
                 required: true,
@@ -98,14 +113,7 @@
                 ]
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
         computed: {
-             //
             statFields()
             {
                 var fieldArr = [
@@ -133,11 +141,5 @@
             },
 
         },
-        watch: {
-             //
-        },
-        methods: {
-            //
-        }
     }
 </script>

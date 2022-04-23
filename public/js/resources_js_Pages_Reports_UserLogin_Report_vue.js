@@ -203,6 +203,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * User login report data - see /app/Http/Controllers/UserLoginReportController for layout
+     */
     data: {
       type: Object,
       required: true

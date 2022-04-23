@@ -66,6 +66,9 @@ __webpack_require__.r(__webpack_exports__);
         403: 'Sorry, you do not appear to belong here'
       }[this.status];
     }
+  },
+  metaInfo: {
+    title: 'ERROR'
   }
 });
 

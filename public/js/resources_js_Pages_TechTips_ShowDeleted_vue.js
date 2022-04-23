@@ -268,6 +268,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     }
+  },
+  metaInfo: {
+    title: 'Deleted Tech Tip'
   }
 });
 
@@ -741,6 +744,33 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-10 grid-margin" }, [
+        _c("h3", [
+          _vm._v(
+            "\n                " + _vm._s(_vm.tip.subject) + "\n            "
+          ),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tip-details" }, [
+          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
+            _c("strong", [_vm._v("ID: ")]),
+            _vm._v(_vm._s(_vm.tip.tip_id)),
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
+            _c("strong", [_vm._v("Created: ")]),
+            _vm._v(_vm._s(_vm.tip.created_at)),
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
+            _c("strong", [_vm._v("Last Updated: ")]),
+            _vm._v(_vm._s(_vm.tip.updated_at)),
+          ]),
+        ]),
+      ]),
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "row justify-content-center mb-4" }, [
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card" }, [
@@ -771,33 +801,6 @@ var render = function () {
               ],
               1
             ),
-          ]),
-        ]),
-      ]),
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-10 grid-margin" }, [
-        _c("h3", [
-          _vm._v(
-            "\n                " + _vm._s(_vm.tip.subject) + "\n            "
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "tip-details" }, [
-          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
-            _c("strong", [_vm._v("ID: ")]),
-            _vm._v(_vm._s(_vm.tip.tip_id)),
-          ]),
-          _vm._v(" "),
-          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
-            _c("strong", [_vm._v("Created: ")]),
-            _vm._v(_vm._s(_vm.tip.created_at)),
-          ]),
-          _vm._v(" "),
-          _c("span", { staticClass: "d-block d-sm-inline-block" }, [
-            _c("strong", [_vm._v("Last Updated: ")]),
-            _vm._v(_vm._s(_vm.tip.updated_at)),
           ]),
         ]),
       ]),

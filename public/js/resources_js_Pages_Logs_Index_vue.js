@@ -201,18 +201,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * List of all possible log channels
+     */
     channels: {
       type: Array,
       required: true
     },
+
+    /**
+     * Array list of log files available for the selected channel
+     */
     log_files: {
       type: Array,
       "default": null
     },
+
+    /**
+     * List of all possible log levels
+     */
     levels: {
       type: Array,
       "default": null
     },
+
+    /**
+     * Selected log channel
+     */
     channel: {
       type: String,
       "default": null
