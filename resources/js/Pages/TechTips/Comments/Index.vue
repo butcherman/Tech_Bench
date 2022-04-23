@@ -32,6 +32,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of objects from /app/Models/TechTipComment where the 'flagged' column is set to true
+             */
             flagged: {
                 type:     Array,
                 required: true,
@@ -64,10 +67,16 @@
             }
         },
         methods: {
+            /**
+             * Set 'flagged' column to false
+             */
             removeFlag(comment)
             {
                 this.$inertia.get(route('tips.comments.show', comment.id));
             },
+            /**
+             * Delete the comment from the database
+             */
             deleteComment(comment)
             {
                 this.$inertia.delete(route('tips.comments.destroy', comment.id));

@@ -117,14 +117,23 @@
         layout: App,
         components: { Multiselect },
         props: {
+            /**
+             * Object from /app/Models/TechTip
+             */
             data: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * Array of objects from /app/Models/TechTipType
+             */
             tip_types: {
                 type:     Array,
                 required: true,
             },
+            /**
+             * Array of objects from /app/Models/EquipmentType
+             */
             equipment: {
                 type:     Array,
                 required: true,
@@ -151,6 +160,7 @@
             submitForm()
             {
                 this.submitted = true;
+                //  If a file is included in the edit, upload the file first, then submit the tip
                 if(this.$refs['dropzone-upload'].getFileCount() > 0)
                 {
                     this.uploading = true;
@@ -161,21 +171,31 @@
                     this.updateTip();
                 }
             },
+            /**
+             * Submit the edited tip
+             */
             updateTip()
             {
                 this.form.put(route('tech-tips.update', this.data.tip_id));
             },
-             //  If a file was canceled during upload, go back to form
+            /**
+             * If a file was canceled during the upload, go back to the form
+             */
             canceled()
             {
                 this.submitted = false;
                 this.loading   = false;
             },
-            //  Update the overlay's progress bar
+            /**
+             *  Update the overlay's progress bar
+             */
             updateProgressbar(progress)
             {
                 this.fileProgress = progress;
             },
+            /**
+             * Create array of file ID's that need to be removed from the Tech Tip
+             */
             deleteFile(file)
             {
                 this.form.removedFiles.push(this.form.fileList[file].file_id);

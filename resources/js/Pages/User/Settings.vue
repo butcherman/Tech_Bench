@@ -61,10 +61,16 @@
     export default {
         layout: App,
         props: {
+            /**
+             * user object - collection from /app/models/user
+             */
             user: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * filtered array from the /app/traits/usersettingstrait
+             */
             settings: {
                 type:     Array,
                 required: true,
@@ -85,6 +91,9 @@
             }
         },
         methods: {
+            /**
+             * submit the user information form
+             */
             submitUserData()
             {
                 this.submit.userData = true;
@@ -103,6 +112,9 @@
                     }
                 });
             },
+            /**
+             * submit the user settings form
+             */
             submitSettings()
             {
                 this.submit.settings = true;

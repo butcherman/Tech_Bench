@@ -36,9 +36,9 @@ class TechTipsRemoveBookmarksJob implements ShouldQueue
     public function handle()
     {
         //  Remove the tip from any users 'recent' list
-        UserTechTipRecent::where('tip_id', $tip->tip_id)->delete();
+        UserTechTipRecent::where('tip_id', $this->tip->tip_id)->delete();
         //  Remove the tip from any users 'bookmark' list
-        UserTechTipBookmark::where('tip_id', $tip->tip_id)->delete();
+        UserTechTipBookmark::where('tip_id', $this->tip->tip_id)->delete();
 
         Log::debug('Remove Tech Tip - '.$this->tip->subject.' from all users bookmarks and recent list');
     }

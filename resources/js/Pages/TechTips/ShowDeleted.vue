@@ -64,29 +64,18 @@
     export default {
         layout: App,
         props: {
+            /**
+             * object from /app/Models/TechTip
+             */
             tip: {
                 type:     Object,
                 required: true,
             }
         },
-        data() {
-            return {
-                //
-            }
-        },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
+            /**
+             * Remove Soft Deleted timestamp
+             */
             restoreTip()
             {
                 this.$bvModal.msgBoxConfirm('This will make the Tech Tip accessable again',
@@ -107,6 +96,10 @@
                         }
                     });
             },
+            /**
+             * Tip and all associated files will be destroyed
+             * Cannot undo this operation
+             */
             destroyTip()
             {
                 this.$bvModal.msgBoxConfirm('This will remove the Tech Tip and all associated files',

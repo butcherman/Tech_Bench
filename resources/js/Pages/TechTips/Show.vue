@@ -63,10 +63,16 @@
         components: { manageTip, Discussion },
         layout: App,
         props: {
+            /**
+             * object from /app/models/techtip
+             */
             tip: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * object from /app/models/user
+             */
             user_data: {
                 type:     Object,
                 required: true,
@@ -88,6 +94,9 @@
             },
         },
         methods: {
+            /**
+             * Ajax call to add or remove tip_id from user_tech_tip_bookmarks table
+             */
             toggleFav()
             {
                 var form = {
