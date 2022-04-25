@@ -45,6 +45,7 @@
             </nav>
             <div class="content">
                 <div class="content-wrapper">
+                    <b-breadcrumb v-if="breadcrumbs.length" :items="breadcrumbs"></b-breadcrumb>
                     <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? 30 : false">
                         <p class="text-center">{{$page.props.flash.message}}</p>
                     </b-alert>
@@ -115,6 +116,21 @@
             navbar()
             {
                 return this.$page.props.navBar;
+            },
+            //  Dynamically built Breadcrumbs
+            breadcrumbs()
+            {
+                var crumbs = [];
+                this.$page.props.breadcrumbs.forEach(function(item)
+                {
+                    crumbs.push({
+                        text: item.title,
+                        href: item.url,
+                        active: item.is_current_page,
+                    });
+                });
+
+                return crumbs;
             }
         },
         metaInfo: {

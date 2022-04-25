@@ -79,6 +79,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -128,6 +129,18 @@ __webpack_require__.r(__webpack_exports__);
     //  Dynamically built navbar
     navbar: function navbar() {
       return this.$page.props.navBar;
+    },
+    //  Dynamically built Breadcrumbs
+    breadcrumbs: function breadcrumbs() {
+      var crumbs = [];
+      this.$page.props.breadcrumbs.forEach(function (item) {
+        crumbs.push({
+          text: item.title,
+          href: item.url,
+          active: item.is_current_page
+        });
+      });
+      return crumbs;
     }
   },
   metaInfo: {
@@ -561,6 +574,10 @@ var render = function () {
             "div",
             { staticClass: "content-wrapper" },
             [
+              _vm.breadcrumbs.length
+                ? _c("b-breadcrumb", { attrs: { items: _vm.breadcrumbs } })
+                : _vm._e(),
+              _vm._v(" "),
               _c(
                 "b-alert",
                 {

@@ -31,7 +31,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class TechTipsController extends Controller
 {
     use TechTipTrait;
-    // use FileTrait;
 
     /**
      * Tech Tips search page

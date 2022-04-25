@@ -1,10 +1,5 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-12 grid-margin">
-                <h4 class="text-center text-md-left">Dashboard</h4>
-            </div>
-        </div>
         <div class="row justify-content-center">
             <div class="col-12 grid-margin">
                 <div class="card">

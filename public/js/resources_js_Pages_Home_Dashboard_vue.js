@@ -79,6 +79,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -128,6 +129,18 @@ __webpack_require__.r(__webpack_exports__);
     //  Dynamically built navbar
     navbar: function navbar() {
       return this.$page.props.navBar;
+    },
+    //  Dynamically built Breadcrumbs
+    breadcrumbs: function breadcrumbs() {
+      var crumbs = [];
+      this.$page.props.breadcrumbs.forEach(function (item) {
+        crumbs.push({
+          text: item.title,
+          href: item.url,
+          active: item.is_current_page
+        });
+      });
+      return crumbs;
     }
   },
   metaInfo: {
@@ -149,11 +162,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Layouts_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Layouts/app */ "./resources/js/Layouts/app.vue");
-//
-//
-//
-//
-//
 //
 //
 //
@@ -767,6 +775,10 @@ var render = function () {
             "div",
             { staticClass: "content-wrapper" },
             [
+              _vm.breadcrumbs.length
+                ? _c("b-breadcrumb", { attrs: { items: _vm.breadcrumbs } })
+                : _vm._e(),
+              _vm._v(" "),
               _c(
                 "b-alert",
                 {
@@ -873,8 +885,6 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-12 grid-margin" }, [
         _c("div", { staticClass: "card" }, [
@@ -1276,20 +1286,7 @@ var render = function () {
     ]),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12 grid-margin" }, [
-        _c("h4", { staticClass: "text-center text-md-left" }, [
-          _vm._v("Dashboard"),
-        ]),
-      ]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

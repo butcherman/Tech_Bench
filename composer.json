@@ -23,6 +23,7 @@
         "doctrine/dbal": "^3.3",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^3.0",
+        "glhd/gretel": "^1.5",
         "guzzlehttp/guzzle": "^7.4",
         "inertiajs/inertia-laravel": "^0.5.4",
         "jackiedo/timezonelist": "^5.1",
