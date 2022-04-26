@@ -2,33 +2,18 @@
 
 namespace App\Listeners\Home;
 
-use App\Events\Home\DownloadedFileEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Events\Home\DownloadedFileEvent;
 
 class LogDownloadedFile
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Handle the event.
-     *
-     * @param  DownloadedFileEvent  $event
-     * @return void
+     * Handle the event
      */
     public function handle(DownloadedFileEvent $event)
     {
-        //
-        Log::info('File has been download by '.Auth::user()->username, $event->file->toArray());
+        $user = Auth::check() ? Auth::user()->username : \Request::ip();
+        Log::info('File has been download by '.$user, $event->file->toArray());
     }
 }
