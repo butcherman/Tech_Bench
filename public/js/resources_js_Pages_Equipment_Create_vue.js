@@ -237,14 +237,26 @@ __webpack_require__.r(__webpack_exports__);
     Draggable: (vuedraggable__WEBPACK_IMPORTED_MODULE_1___default())
   },
   props: {
+    /**
+     * Category in which the add equipment button was pressed
+     */
     category: {
       type: String,
       required: true
     },
+
+    /**
+     * Array of objects from /app/Models/EquipmentCategory
+     */
     cat_list: {
       type: Array,
       required: true
     },
+
+    /**
+     * Current equipment data types that are listed in the database
+     * to autofill the text input datalist
+     */
     data_list: {
       type: Array,
       required: true
@@ -266,6 +278,10 @@ __webpack_require__.r(__webpack_exports__);
       this.submitted = true;
       this.form.post(route('equipment.store'));
     },
+
+    /**
+     * Remove an option from the data type list
+     */
     delOption: function delOption(index) {
       this.form.data_fields.splice(index, 1);
       this.fields--;

@@ -233,6 +233,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * Array of Objects from /app/Models/DataField
+     */
     data_list: {
       type: Array,
       required: true
@@ -251,14 +254,25 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    /**
+     * Modify the name of an existing data type
+     */
     editDataType: function editDataType(field) {
       this.editForm.name = field.name;
       this.editForm.type_id = field.type_id;
       this.$refs['edit-data-type-modal'].show();
     },
+
+    /**
+     * When the Edit Modal is closed, the form is reset to be blank
+     */
     resetEditForm: function resetEditForm() {
       this.editForm.reset();
     },
+
+    /**
+     * Update the selected existing data type
+     */
     submitEditForm: function submitEditForm() {
       var _this = this;
 
@@ -271,6 +285,10 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+
+    /**
+     * Create a new data type
+     */
     submitCreateForm: function submitCreateForm() {
       var _this2 = this;
 
@@ -285,6 +303,11 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+
+    /**
+     * Delete an existing data type
+     * Note:  this option is not available if the data type is in use
+     */
     delDataType: function delDataType(field) {
       var _this3 = this;
 

@@ -33,6 +33,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Single collection from /app/Models/EquipmentCategory
+             */
             category: {
                 type:     Object,
                 required: true,

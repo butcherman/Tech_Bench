@@ -220,6 +220,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * Array of objectes from /app/Models/EquipmentCategory
+     */
     categories: {
       type: Array,
       required: true
@@ -231,19 +234,19 @@ __webpack_require__.r(__webpack_exports__);
       selected_category: null
     };
   },
-  created: function created() {//
-  },
-  mounted: function mounted() {//
-  },
-  computed: {//
-  },
-  watch: {//
-  },
   methods: {
+    /**
+     * List all of the existing equipment assigned to the selected category
+     */
     populateEquipment: function populateEquipment(category) {
       this.equipment = category.equipment_type;
       this.selected_category = category.cat_id;
     },
+
+    /**
+     * Completely remove a category from the DB
+     * Note - this option is only availble if no equipment is assigned to the category
+     */
     destroyCategory: function destroyCategory() {
       var _this = this;
 

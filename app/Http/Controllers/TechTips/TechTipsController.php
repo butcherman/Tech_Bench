@@ -72,7 +72,7 @@ class TechTipsController extends Controller
             'tip_type_id' => $request->tip_type_id,
             'sticky'      => $request->sticky,
             'subject'     => $request->subject,
-            'slug'        => Str::slug($request->subject),
+            'slug'        => $this->checkSlug(Str::slug($request->subject)),
             'details'     => $request->details,
         ]);
 
@@ -171,7 +171,7 @@ class TechTipsController extends Controller
             'tip_type_id' => $request->tip_type_id,
             'sticky'      => $request->sticky,
             'subject'     => $request->subject,
-            'slug'        => Str::slug($request->subject),
+            'slug'        => $this->checkSlug(Str::slug($request->subject), $id),
             'details'     => $request->details,
         ]);
 
@@ -243,5 +243,20 @@ class TechTipsController extends Controller
             'message' => 'Tech Tip Permanently Deleted',
             'type'    => 'danger',
         ]);
+    }
+
+    /**
+     * Check the database to see if the Tech Tip slug already exists
+     */
+    protected function checkSlug($slug, $ignore = null)
+    {
+        $index   = 0;
+        $newSlug = $slug;
+        while(TechTip::where('slug', $newSlug)->where('tip_id', '!=', $ignore)->first())
+        {
+            $newSlug = Str::slug($slug.'-'.++$index);
+        }
+
+        return $newSlug;
     }
 }

@@ -48,6 +48,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * collection from /app/Models/Customer
+             */
             details: {
                 type:     Object,
                 required: true,

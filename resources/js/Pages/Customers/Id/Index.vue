@@ -77,7 +77,9 @@
             }
         },
         methods: {
-            //  Search for the customer
+            /**
+             * Search for the customer
+             */
             search()
             {
                 this.loading = true;
@@ -94,7 +96,9 @@
                         this.loading = false;
                     });
             },
-            //  When a customer is selected, close modal and emit that customer as an event
+            /**
+             * When a customer is selected, close modal and emit that customer as an event
+             */
             selectCustomer(cust)
             {
                 this.$inertia.get(route('admin.cust.change-id.edit', cust.slug));

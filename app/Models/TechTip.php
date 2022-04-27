@@ -20,6 +20,7 @@ class TechTip extends Model
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
+        'sticky'     => 'boolean',
     ];
 
     public function getSummaryAttribute()

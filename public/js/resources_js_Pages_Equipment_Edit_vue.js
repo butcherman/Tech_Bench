@@ -236,18 +236,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   layout: _Layouts_app__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
+    /**
+     * Simple array with list of names of Equipment Categories
+     */
     cat_list: {
       type: Array,
       required: true
     },
+
+    /**
+     * Current equipment data types that are listed in the database
+     * to autofill the text input datalist
+     */
     dataList: {
       type: Array,
       required: true
     },
+
+    /**
+     * Object collection from /app/Models/EquipmentType
+     */
     equipment: {
       type: Object,
       required: true
     },
+
+    /**
+     * Boolean value noting if any customers or Tech Tips are currently tied to this equipment ID
+     */
     in_use: {
       type: Boolean,
       required: true
@@ -273,6 +289,10 @@ __webpack_require__.r(__webpack_exports__);
       this.submitted = true;
       this.form.put(route('equipment.update', this.equipment.equip_id));
     },
+
+    /**
+     * Remove an existing Data type
+     */
     delOption: function delOption(name, index) {
       var _this = this;
 
@@ -307,26 +327,47 @@ __webpack_require__.r(__webpack_exports__);
         this.form.data_fields.splice(name, 1);
       }
     },
+
+    /**
+     * Since the equipment data fiels may be modified, set them to a variable so that we are not trying to modify the prop directly
+     */
     setValues: function setValues() {
       for (var i = 0; i < this.equipment.data_field_type.length; i++) {
         this.form.data_fields.push(this.equipment.data_field_type[i].name);
         this.data_list = this.arrayRemove(this.data_list, this.equipment.data_field_type[i].name);
       }
     },
+
+    /**
+     * Remove a value from an array.  duh!
+     */
     arrayRemove: function arrayRemove(arr, value) {
       return arr.filter(function (el) {
         return el != value;
       });
     },
+
+    /**
+     * Determine if the data field is something brand new that needs to be entered into the database, or an existing fielsd
+     */
     isNewOption: function isNewOption(opt) {
       var index = this.equipment.data_field_type.find(function (el) {
         return el.name === opt;
       });
       return index ? true : false;
     },
+
+    /**
+     * Add a blank row to the data type list that can be assigned as a data type
+     */
     addRow: function addRow() {
       this.form.data_fields.push(null);
     },
+
+    /**
+     * Delete the equipment being edited.
+     * Note:  this option is hidden if the equipment is in use
+     */
     deleteEquipment: function deleteEquipment() {
       var _this2 = this;
 

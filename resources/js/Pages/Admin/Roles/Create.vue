@@ -48,6 +48,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of objects from /app/Models/UserRolePermissionType
+             */
             permissions: {
                 type:     Array,
                 required: true,

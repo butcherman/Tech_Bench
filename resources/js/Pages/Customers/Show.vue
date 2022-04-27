@@ -166,10 +166,16 @@
         },
         layout: App,
         props: {
+            /**
+             * Collection from /app/Models/Customer with all relations included
+             */
             details: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * List of permissions that the user can and cannot access
+             */
             user_data: {
                 type:    Object,
                 required: true,
@@ -212,9 +218,16 @@
             }
         },
         mounted() {
+            /**
+             * Sort the equipment data list by the 'order' attribute
+             * Not able to do this in Eloquent since it is an attribute not a db column
+             */
             this.reorderEquipmentData();
         },
         methods: {
+            /**
+             * Ajax call to enable/disable the customer as a user bookmark
+             */
             toggleFav()
             {
                 var form = {
@@ -227,6 +240,9 @@
                         this.is_fav = !this.is_fav;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
+            /**
+             * If this customer is linked to other customers, get the list of linked customers
+             */
             getLinkedCustomers()
             {
                 if(this.linked.length == 0)
@@ -239,6 +255,10 @@
                         }).catch(error => this.eventHub.$emit('axiosError', error));
                 }
             },
+            /**
+             * Sort the equipment data list by the 'order' attribute
+             * Not able to do this in Eloquent since it is an attribute not a db column
+             */
             reorderEquipmentData()
             {
                 this.equipment.forEach((item) =>

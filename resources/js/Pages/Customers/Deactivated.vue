@@ -48,6 +48,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of soft deleted objects from /app/Models/Customer
+             */
             list: {
                 type:     Array,
                 required: true,
@@ -87,10 +90,16 @@
             }
         },
         methods: {
+            /**
+             * Checkbox control for the table
+             */
             updateSelected(items)
             {
                 this.selected = items;
             },
+            /**
+             * Remove the soft deleted status from the customer
+             */
             restore()
             {
                 this.loading  = true;
@@ -100,6 +109,9 @@
                     }
                 });
             },
+            /**
+             * Delete the customer and all associated information
+             */
             deleteCust()
             {
                 this.$bvModal.msgBoxConfirm('All Customer Data and Files will be deleted',

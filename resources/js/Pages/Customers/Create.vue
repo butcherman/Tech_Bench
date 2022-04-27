@@ -113,6 +113,9 @@
                 this.submitted = true;
                 this.$inertia.post(route('customers.store'), this.form);
             },
+            /**
+             * Bring up the search for customer modal or remove the parent id from the form
+             */
             checkParent(e)
             {
                 if(this.form.parent_name === null || this.form.parent_name === '' && e.type !== 'click')
@@ -124,6 +127,9 @@
                     this.$refs['quick-search'].open(this.form.parent_name);
                 }
             },
+            /**
+             * When selecting a parent customer, the ID and name are both populated
+             */
             selectedParent(parent)
             {
                 this.form.parent_name = parent.name;

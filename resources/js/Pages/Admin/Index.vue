@@ -33,6 +33,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Action generates all admin links based on users permission levels
+             */
             links: {
                 type:     Object,
                 required: true,
@@ -41,8 +44,5 @@
         metaInfo: {
             title: 'Administration',
         },
-        metaInfo: {
-            title: 'Administration',
-        }
     }
 </script>

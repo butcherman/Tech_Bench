@@ -57,6 +57,10 @@
     export default {
         layout: App,
         props: {
+            /**
+             * All of the current role settings for the selected role
+             * from /app/Models/UserRolePermission
+             */
             role_data: {
                 type:     Object,
                 required: true,

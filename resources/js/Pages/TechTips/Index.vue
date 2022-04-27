@@ -182,7 +182,7 @@
                     search_text:        null,
                     search_type:        [],
                     search_equip_id:    [],
-                    pagination_perPage: 10,
+                    pagination_perPage: 25,
                     page:               1,
                 },
                 fields: [
@@ -237,7 +237,7 @@
                     search_text:        null,
                     search_type:        [],
                     search_equip_id:    [],
-                    pagination_perPage: 10,
+                    pagination_perPage: 25,
                     page:               1,
                 }
                 this.search();

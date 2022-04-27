@@ -345,7 +345,7 @@ __webpack_require__.r(__webpack_exports__);
         search_text: null,
         search_type: [],
         search_equip_id: [],
-        pagination_perPage: 10,
+        pagination_perPage: 25,
         page: 1
       },
       fields: [{
@@ -397,7 +397,7 @@ __webpack_require__.r(__webpack_exports__);
         search_text: null,
         search_type: [],
         search_equip_id: [],
-        pagination_perPage: 10,
+        pagination_perPage: 25,
         page: 1
       };
       this.search();

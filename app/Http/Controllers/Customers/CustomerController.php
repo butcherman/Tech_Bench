@@ -59,7 +59,8 @@ class CustomerController extends Controller
     public function store(NewCustomerRequest $request)
     {
         $cust         = $request->toArray();
-        $cust['slug'] = Str::slug($request->name);
+        $cust['slug'] = $this->checkSlug(Str::slug($request->name), $request->city);
+
         $newCust      = Customer::create($cust);
 
         event(new NewCustomerCreated($newCust));
@@ -152,7 +153,7 @@ class CustomerController extends Controller
     public function update(EditCustomerRequest $request, $id)
     {
         $cust         = $request->toArray();
-        $cust['slug'] = Str::slug($request->name);
+        $cust['slug'] = $this->checkSlug(Str::slug($request->name), $request->city, $id);
 
         $data = Customer::findOrFail($id);
         $data->update($cust);
@@ -233,5 +234,28 @@ class CustomerController extends Controller
             'message' => 'Customers Deleted',
             'type'    => 'danger',
         ]);
+    }
+
+    /**
+     * Check the database to see if the supplied customer slug already exists
+     */
+    protected function checkSlug($slug, $appends = null, $ignore = null)
+    {
+        $index   = 0;
+        $newSlug = $slug;
+        while(Customer::where('slug', $newSlug)->where('cust_id', '!=', $ignore)->first())
+        {
+            if($index == 0 && !is_null($appends))
+            {
+                $newSlug = Str::slug($slug.'-'.$appends);
+                $index++;
+            }
+            else
+            {
+                $newSlug = Str::slug($slug.'-'.++$index);
+            }
+        }
+
+        return $newSlug;
     }
 }

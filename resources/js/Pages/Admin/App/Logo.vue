@@ -48,6 +48,9 @@
             vueDropzone: vue2Dropzone
         },
         props: {
+            /**
+             * URL of current logo
+             */
             logo: {
                 type: String,
                 required: true,
