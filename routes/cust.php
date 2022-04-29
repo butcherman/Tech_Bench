@@ -27,13 +27,13 @@ Route::middleware('auth')->group(function()
     {
         Route::get('/',                        [CustomerController::class, 'index'])               ->name('index') ->breadcrumb('Customers');
         Route::get('create',                   [CustomerController::class, 'create'])              ->name('create')->breadcrumb('New Customer', '.index');
-        Route::post('create',                  [CustomerController::class, 'store'])               ->name('store');
+        Route::post('/',                       [CustomerController::class, 'store'])               ->name('store');
         Route::get('{customer}',               [CustomerController::class, 'show'])                ->name('show')  ->breadcrumb('Details', '.index');
-        Route::put('{customer}/edit',          [CustomerController::class, 'update'])              ->name('update');
-        Route::delete('{customer',             [CustomerController::class, 'destroy'])             ->name('destroy');
-
+        Route::put('{customer}',               [CustomerController::class, 'update'])              ->name('update');
+        Route::delete('{customer}',            [CustomerController::class, 'destroy'])             ->name('destroy');
         Route::post('force-delete',            [CustomerController::class, 'forceDelete'])         ->name('force-delete');
         Route::post('restore',                 [CustomerController::class, 'restore'])             ->name('restore');
+
         Route::post('search',                   CustomerSearchController::class)                   ->name('search');
         Route::post('check-id',                 CheckIdController::class)                          ->name('check-id');
         Route::post('bookmark',                 CustomerBookmarkController::class)                 ->name('bookmark');
@@ -78,16 +78,16 @@ Route::middleware('auth')->group(function()
         Route::prefix('file-types')->name('file-types.')->group(function()
         {
             Route::get(   '/',                [CustomerFileTypesController::class, 'index'])  ->name('index')->breadcrumb('Customer File Types', 'admin.index');
-            Route::post(  'create',           [CustomerFileTypesController::class, 'store'])  ->name('store');
-            Route::put(   '{file-type}/edit', [CustomerFileTypesController::class, 'update']) ->name('update');
-            Route::delete('{file-type}',      [CustomerFileTypesController::class, 'destroy'])->name('destroy');
+            Route::post(  '/',                [CustomerFileTypesController::class, 'store'])  ->name('store');
+            Route::put(   '{type}',           [CustomerFileTypesController::class, 'update']) ->name('update');
+            Route::delete('{type}',           [CustomerFileTypesController::class, 'destroy'])->name('destroy');
         });
 
         Route::prefix('change-id')->name('change-id.')->group(function()
         {
-            Route::get('/',               [CustomerIdController::class, 'index']) ->name('index')->breadcrumb('Select Customer', 'admin.index');
-            Route::get('{customer}/edit', [CustomerIdController::class, 'edit'])  ->name('edit') ->breadcrumb('Change ID', '.index');
-            Route::put('{customer}/edit', [CustomerIdController::class, 'update'])->name('update');
+            Route::get('/',                   [CustomerIdController::class, 'index']) ->name('index')->breadcrumb('Select Customer', 'admin.index');
+            Route::get('{customer}/edit',     [CustomerIdController::class, 'edit'])  ->name('edit') ->breadcrumb('Change ID', '.index');
+            Route::put('{customer}',          [CustomerIdController::class, 'update'])->name('update');
         });
 
         Route::get('deactivated-customers',     DeactivatedCustomerController::class)              ->name('show-deactivated')->breadcrumb('Deactivated Customers', 'admin.index');
