@@ -38,10 +38,16 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Collection from /app/Models/User
+             */
             user: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * Array of objects from /app/Models/UserRole
+             */
             roles: {
                 type:     Array,
                 required: true,

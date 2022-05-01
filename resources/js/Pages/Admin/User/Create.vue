@@ -38,6 +38,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * List of objects from /app/Models/UserRole
+             */
             roles: {
                 type:     Array,
                 required: true,

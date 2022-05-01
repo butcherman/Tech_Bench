@@ -33,6 +33,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Current password policy expriation
+             */
             password_expires: {
                 type:     Number|String,
                 required: true,

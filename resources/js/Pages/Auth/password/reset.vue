@@ -24,14 +24,23 @@
     export default {
         layout: [Guest, Auth],
         props: {
+            /**
+             * Users email address
+             */
             email: {
                 type: String,
                 required: true,
             },
+            /**
+             * reference token used from teh password_resets table
+             */
             token: {
                 type: String,
                 required: true,
             },
+            /**
+             * validation errors from the server
+             */
             errors: {
                 type: Object,
             }

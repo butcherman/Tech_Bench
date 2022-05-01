@@ -22,6 +22,7 @@ use App\Events\TechTips\TechTipRestoredEvent;
 use App\Events\TechTips\TechTipUpdatedEvent;
 use App\Http\Requests\TechTips\CreateTipRequest;
 use App\Http\Requests\TechTips\UpdateTipRequest;
+use App\Jobs\TechTipsRemoveBookmarksJob;
 use App\Models\TechTipFile;
 use App\Models\UserTechTipRecent;
 use App\Traits\FileTrait;
@@ -30,7 +31,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class TechTipsController extends Controller
 {
     use TechTipTrait;
-    // use FileTrait;
 
     /**
      * Tech Tips search page
@@ -72,7 +72,7 @@ class TechTipsController extends Controller
             'tip_type_id' => $request->tip_type_id,
             'sticky'      => $request->sticky,
             'subject'     => $request->subject,
-            'slug'        => Str::slug($request->subject),
+            'slug'        => $this->checkSlug(Str::slug($request->subject)),
             'details'     => $request->details,
         ]);
 
@@ -171,7 +171,7 @@ class TechTipsController extends Controller
             'tip_type_id' => $request->tip_type_id,
             'sticky'      => $request->sticky,
             'subject'     => $request->subject,
-            'slug'        => Str::slug($request->subject),
+            'slug'        => $this->checkSlug(Str::slug($request->subject), $id),
             'details'     => $request->details,
         ]);
 
@@ -195,10 +195,7 @@ class TechTipsController extends Controller
         $this->authorize('delete', $tip);
         $tip->delete();
 
-        //  Remove the tip from any users 'recent' list
-        UserTechTipRecent::where('tip_id', $tip->tip_id)->delete();
-        //  Remove the tip from any users 'bookmark' list
-        UserTechTipBookmark::where('tip_id', $tip->tip_id)->delete();
+        dispatch(new TechTipsRemoveBookmarksJob($tip));
 
         event(new TechTipDeletedEvent($tip));
         return redirect(route('tech-tips.index'))->with([
@@ -246,5 +243,20 @@ class TechTipsController extends Controller
             'message' => 'Tech Tip Permanently Deleted',
             'type'    => 'danger',
         ]);
+    }
+
+    /**
+     * Check the database to see if the Tech Tip slug already exists
+     */
+    protected function checkSlug($slug, $ignore = null)
+    {
+        $index   = 0;
+        $newSlug = $slug;
+        while(TechTip::where('slug', $newSlug)->where('tip_id', '!=', $ignore)->first())
+        {
+            $newSlug = Str::slug($slug.'-'.++$index);
+        }
+
+        return $newSlug;
     }
 }

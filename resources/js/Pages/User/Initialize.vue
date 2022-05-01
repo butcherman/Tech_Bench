@@ -20,10 +20,16 @@
     export default {
         layout: [Guest, Auth],
         props: {
+            /**
+             * Object from /app/Models/UserInitialize
+             */
             link: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * String - users first and last name
+             */
             name: {
                 type:     String,
                 required: true,

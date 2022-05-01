@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use Inertia\Inertia;
+
+use App\Http\Controllers\Controller;
+
+use App\Models\EquipmentCategory;
 use App\Events\Equipment\EquipmentCategoryCreatedEvent;
 use App\Events\Equipment\EquipmentCategoryDeletedEvent;
 use App\Events\Equipment\EquipmentCategoryUpdatedEvent;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentCategoryRequest;
-use App\Models\EquipmentCategory;
-use Inertia\Inertia;
 
 class EquipmentCategoryController extends Controller
 {

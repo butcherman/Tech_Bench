@@ -92,10 +92,16 @@
     export default {
         layout: App,
         props: {
+            /**
+             * List of backup settings for the edit settings form
+             */
             settings: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * Current list of available backups
+             */
             backups: {
                 type:     Array,
                 required: true,
@@ -145,6 +151,9 @@
              //
         },
         methods: {
+            /**
+             * Run a backup as a background job
+             */
             runBackup()
             {
                 this.runningBackup = true;
@@ -163,6 +172,9 @@
                     }
                 });
             },
+            /**
+             * Remove a backup from the storage location
+             */
             deleteBackup(filename)
             {
                 this.$bvModal.msgBoxConfirm('This Cannot Be Undone',

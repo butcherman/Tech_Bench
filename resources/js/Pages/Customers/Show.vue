@@ -49,7 +49,7 @@
                         </div>
                         <equipment
                             :cust_id="details.cust_id"
-                            :equipment="details.customer_equipment"
+                            :equipment="equipment"
                             :permissions="user_data.equipment"
                             :allow_share="allowShare"
                         ></equipment>
@@ -69,7 +69,7 @@
                         </div>
                         <contacts
                             :cust_id="details.cust_id"
-                            :contacts="details.customer_contact"
+                            :contacts="details.parent_contact.concat(details.customer_contact)"
                             :permissions="user_data.contacts"
                             :allow_share="allowShare"
                         ></contacts>
@@ -91,7 +91,7 @@
                         </div>
                         <notes
                             :cust_id="details.cust_id"
-                            :notes="details.customer_note"
+                            :notes="details.parent_note.concat(details.customer_note)"
                             :permissions="user_data.notes"
                             :allow_share="allowShare"
                         ></notes>
@@ -112,11 +112,11 @@
                             ></new-file>
                         </div>
                         <file
-                                :cust_id="details.cust_id"
-                                :files="details.customer_file"
-                                :permissions="user_data.files"
-                                :allow_share="allowShare"
-                            ></file>
+                            :cust_id="details.cust_id"
+                            :files="details.parent_file.concat(details.customer_file)"
+                            :permissions="user_data.files"
+                            :allow_share="allowShare"
+                        ></file>
                     </div>
                 </div>
             </div>
@@ -166,10 +166,16 @@
         },
         layout: App,
         props: {
+            /**
+             * Collection from /app/Models/Customer with all relations included
+             */
             details: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * List of permissions that the user can and cannot access
+             */
             user_data: {
                 type:    Object,
                 required: true,
@@ -211,7 +217,17 @@
                 return this.details.parent_id !== null || this.details.child_count > 0 ? true : false;
             }
         },
+        mounted() {
+            /**
+             * Sort the equipment data list by the 'order' attribute
+             * Not able to do this in Eloquent since it is an attribute not a db column
+             */
+            this.reorderEquipmentData();
+        },
         methods: {
+            /**
+             * Ajax call to enable/disable the customer as a user bookmark
+             */
             toggleFav()
             {
                 var form = {
@@ -224,6 +240,9 @@
                         this.is_fav = !this.is_fav;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
+            /**
+             * If this customer is linked to other customers, get the list of linked customers
+             */
             getLinkedCustomers()
             {
                 if(this.linked.length == 0)
@@ -235,6 +254,17 @@
                             this.loading = false;
                         }).catch(error => this.eventHub.$emit('axiosError', error));
                 }
+            },
+            /**
+             * Sort the equipment data list by the 'order' attribute
+             * Not able to do this in Eloquent since it is an attribute not a db column
+             */
+            reorderEquipmentData()
+            {
+                this.equipment.forEach((item) =>
+                {
+                    item.customer_equipment_data.sort((a, b) => (a.order > b.order) ? 1 : -1);
+                });
             }
         },
         metaInfo: {

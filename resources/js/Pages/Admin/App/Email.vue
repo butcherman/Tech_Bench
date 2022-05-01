@@ -56,6 +56,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Current Email Settings
+             */
             settings: {
                 type:     Object,
                 required: true,

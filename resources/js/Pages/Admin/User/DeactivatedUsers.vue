@@ -27,6 +27,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of soft deleted objects from /app/Models/User
+             */
             user_list: {
                 type:     Array,
                 required: true,

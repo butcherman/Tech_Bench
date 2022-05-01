@@ -100,10 +100,16 @@
         layout: App,
         components: { Multiselect },
         props: {
+            /**
+             * Array of objects from app/Models/TipType
+             */
             tip_types: {
                 type:     Array,
                 required: true,
             },
+            /**
+             * Array of objects from app/Models/EquipmentType
+             */
             equipment: {
                 type:     Array,
                 required: true,
@@ -128,6 +134,7 @@
             submitForm()
             {
                 this.submitted = true;
+                //  If a file is included with the new Tech Tip, upload first before creating the Tip
                 if(this.$refs['dropzone-upload'].getFileCount() > 0)
                 {
                     this.uploading = true;
@@ -138,18 +145,25 @@
                     this.createTip();
                 }
             },
+            /**
+             * Submit the new Tip
+             */
             createTip()
             {
                 this.uploading = false;
                 this.form.post(route('tech-tips.store'));
             },
-             //  If a file was canceled during upload, go back to form
+             /**
+              * If a file was canceled during upload, go back to form
+              */
             canceled()
             {
                 this.submitted = false;
                 this.loading   = false;
             },
-            //  Update the overlay's progress bar
+            /**
+             * Update the overlay's progress bar
+             */
             updateProgressbar(progress)
             {
                 this.fileProgress = progress;

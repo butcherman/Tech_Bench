@@ -34,14 +34,23 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Current log level
+             */
             log_level: {
                 type:     String,
                 required: true,
             },
+            /**
+             * Number of days to keep logs
+             */
             days: {
                 type:     Number|String,
                 required: true,
             },
+            /**
+             * Array of all possible log levels
+             */
             types: {
                 type:     Array,
                 required: true,

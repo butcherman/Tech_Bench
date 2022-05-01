@@ -74,18 +74,31 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Simple array with list of names of Equipment Categories
+             */
             cat_list: {
                 type:     Array,
                 required: true,
             },
+            /**
+             * Current equipment data types that are listed in the database
+             * to autofill the text input datalist
+             */
             dataList: {
                 type:     Array,
                 required: true,
             },
+            /**
+             * Object collection from /app/Models/EquipmentType
+             */
             equipment: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * Boolean value noting if any customers or Tech Tips are currently tied to this equipment ID
+             */
             in_use: {
                 type:     Boolean,
                 required: true,
@@ -112,6 +125,9 @@
                 this.submitted = true;
                 this.form.put(route('equipment.update', this.equipment.equip_id));
             },
+            /**
+             * Remove an existing Data type
+             */
             delOption(name, index)
             {
                 if(name)
@@ -149,6 +165,9 @@
                     this.form.data_fields.splice(name, 1);
                 }
             },
+            /**
+             * Since the equipment data fiels may be modified, set them to a variable so that we are not trying to modify the prop directly
+             */
             setValues()
             {
                 for(var i=0; i < this.equipment.data_field_type.length; i++)
@@ -158,6 +177,9 @@
 
                 }
             },
+            /**
+             * Remove a value from an array.  duh!
+             */
             arrayRemove(arr, value)
             {
                 return arr.filter(function(el)
@@ -165,15 +187,25 @@
                     return el != value;
                 });
             },
+            /**
+             * Determine if the data field is something brand new that needs to be entered into the database, or an existing fielsd
+             */
             isNewOption(opt)
             {
                 var index = this.equipment.data_field_type.find(el => el.name === opt);
                 return index ? true : false;
             },
+            /**
+             * Add a blank row to the data type list that can be assigned as a data type
+             */
             addRow()
             {
                 this.form.data_fields.push(null);
             },
+            /**
+             * Delete the equipment being edited.
+             * Note:  this option is hidden if the equipment is in use
+             */
             deleteEquipment()
             {
                 this.$bvModal.msgBoxConfirm('Are you sure you want to delete this Equipment?', {

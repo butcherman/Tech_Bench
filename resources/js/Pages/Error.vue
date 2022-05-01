@@ -13,10 +13,16 @@
 <script>
 export default {
     props: {
+        /**
+         * status message number - i.e. 200, 404, etc
+         */
         status: {
             type:     Number,
             required: true,
         },
+        /**
+         * custom message sent with error
+         */
         message: {
             type:     String,
             required: false,
@@ -24,6 +30,9 @@ export default {
         }
     },
     computed: {
+        /**
+         * return name of error based on the server error number
+         */
         title() {
             return {
                 503: '503 | Service Unavailable',
@@ -32,12 +41,10 @@ export default {
                 403: '403 | Forbidden',
             }[this.status]
         },
+        /**
+         * return generic message based on the server error
+         */
         description() {
-            if(this.message !== null)
-            {
-                return this.message;
-            }
-
             return {
                 503: 'Sorry, we are doing some maintenance behind the curtain. Please check back soon.',
                 500: 'Whoops, something bad happened.  Our minions are hard at work to determine what went wrong',
@@ -46,5 +53,8 @@ export default {
             }[this.status]
         }
     },
+    metaInfo: {
+            title: 'ERROR',
+        }
 }
 </script>

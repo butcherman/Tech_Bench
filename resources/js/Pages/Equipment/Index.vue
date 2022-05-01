@@ -58,6 +58,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of objectes from /app/Models/EquipmentCategory
+             */
             categories: {
                 type:     Array,
                 required: true,
@@ -69,24 +72,19 @@
                 selected_category: null,
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
+            /**
+             * List all of the existing equipment assigned to the selected category
+             */
             populateEquipment(category)
             {
                 this.equipment         = category.equipment_type;
                 this.selected_category = category.cat_id;
             },
+            /**
+             * Completely remove a category from the DB
+             * Note - this option is only availble if no equipment is assigned to the category
+             */
             destroyCategory()
             {
                 this.$bvModal.msgBoxConfirm('Please Verify',

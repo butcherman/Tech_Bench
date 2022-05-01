@@ -71,6 +71,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of Objects from /app/Models/DataField
+             */
             data_list: {
                 type: Array,
                 required: true,
@@ -89,16 +92,25 @@
             }
         },
         methods: {
+            /**
+             * Modify the name of an existing data type
+             */
             editDataType(field)
             {
                 this.editForm.name    = field.name;
                 this.editForm.type_id = field.type_id
                 this.$refs['edit-data-type-modal'].show();
             },
+            /**
+             * When the Edit Modal is closed, the form is reset to be blank
+             */
             resetEditForm()
             {
                 this.editForm.reset();
             },
+            /**
+             * Update the selected existing data type
+             */
             submitEditForm()
             {
                 this.submitted = true;
@@ -109,6 +121,9 @@
                     }
                 })
             },
+            /**
+             * Create a new data type
+             */
             submitCreateForm()
             {
                 this.submitted = true;
@@ -120,6 +135,10 @@
                     }
                 });
             },
+            /**
+             * Delete an existing data type
+             * Note:  this option is not available if the data type is in use
+             */
             delDataType(field)
             {
                 this.$bvModal.msgBoxConfirm('Please Verify',

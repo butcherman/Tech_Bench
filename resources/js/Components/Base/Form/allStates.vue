@@ -1,3 +1,11 @@
+<!--
+    allStates Component is a dropdown box with all 52 US States listed
+    The default state selected is CA, this can be changed by passing the 'defaultState' prop
+
+    Props:
+        defaultState - abbreviated state value (example CA)
+-->
+
 <template>
     <b-form-group label="State:" label-for="cust-state">
         <b-form-select

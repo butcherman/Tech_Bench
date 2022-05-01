@@ -61,6 +61,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of objects from /app/Models/TechTipType
+             */
             types: {
                 type:     Array,
                 required: true,
@@ -81,6 +84,10 @@
             }
         },
         methods: {
+            /**
+             * Remove a Tech Tip Type
+             * NOTE:  this operation will fail if the Tip Type is currently in use
+             */
             deleteType(type)
             {
                 this.$bvModal.msgBoxConfirm('Please Confirm',
@@ -107,12 +114,18 @@
                         }
                     });
             },
+            /**
+             * Edit the description of a Tech Tip type
+             */
             editType(type)
             {
                 this.editForm.description = type.description;
                 this.editForm.tip_type_id = type.tip_type_id;
                 this.$refs['edit-type-modal'].show();
             },
+            /**
+             * Create New type
+             */
             submitNewForm()
             {
                 this.submittedNew = true;
@@ -128,6 +141,9 @@
                     }
                 });
             },
+            /**
+             * Update existing type
+             */
             submitEditForm()
             {
                 this.submitted = true;

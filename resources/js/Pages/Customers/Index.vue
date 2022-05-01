@@ -65,10 +65,16 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Boolean permission if the user is allowed to create a new customer or not
+             */
             create: {
                 type:    Boolean,
                 default: false,
             },
+            /**
+             * Array of objects from /app/Models/EquipmentType
+             */
             equip_types: {
                 type:     Array,
                 required: true,
@@ -128,7 +134,6 @@
              this.search();
         },
         methods: {
-            //  Submit Search Query
             search()
             {
                 this.table.loading = true;
@@ -138,7 +143,9 @@
                         this.pagination.meta.total = res.data.total;
                     });
             },
-            //  Include search parameters to filter search
+            /**
+             * Include search parameters to filter search
+             */
             filterSearch(data)
             {
                 this.searchParam.page      = 1;
@@ -147,20 +154,26 @@
                 this.searchParam.equipment = data.columnFilters.equipment;
                 this.search();
             },
-            //  Increase or decrease the current page
+            /**
+             * Increase or decrease the current page
+             */
             newPage(data)
             {
                 this.searchParam.page = data.currentPage;
                 this.search();
             },
-            //  Change the order of items listed
+            /**
+             * Change the order of items listed
+             */
             reSort(data)
             {
                 this.searchParam.sortField = data[0].field;
                 this.searchParam.sortType  = data[0].type;
                 this.search();
             },
-            //  Change how many rows are shown per page
+            /**
+             * Change how many rows are shown per page
+             */
             perPageUpdate(data)
             {
                 this.searchParam.perPage = data.currentPerPage;

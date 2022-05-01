@@ -145,7 +145,7 @@ class UserRolesController extends Controller
 
         $role->delete();
 
-        event(new UserRoleDeletedEvent(/** @scrutinizer ignore-type */ $role));
+        event(new UserRoleDeletedEvent($role));
         return redirect(route('admin.user-roles.index'));
     }
 }

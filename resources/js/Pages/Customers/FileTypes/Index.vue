@@ -61,6 +61,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of objects from /app/Model/CustomerFileType
+             */
             file_types: {
                 type: Array,
                 required: true,
@@ -81,12 +84,19 @@
             }
         },
         methods: {
+            /**
+             * Open modal with the edit form
+             */
             editType(type)
             {
                 this.editForm.file_type_id = type.file_type_id;
                 this.editForm.description  = type.description;
                 this.$refs['edit-type-modal'].show();
             },
+            /**
+             * Remove a file type from the database
+             * note - this will fail if the type is in use
+             */
             deleteType(type)
             {
                 this.$bvModal.msgBoxConfirm('Please Confirm',
@@ -113,6 +123,9 @@
                         }
                     });
             },
+            /**
+             * Submit the edit form to the server
+             */
             submitEditForm()
             {
                 this.loading = true;
@@ -131,6 +144,9 @@
                     }
                 })
             },
+            /**
+             * Submit the new form to the server
+             */
             submitNewForm()
             {
                 this.loading      = true;

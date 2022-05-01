@@ -149,10 +149,18 @@
     export default {
         layout: App,
         props: {
+            /**
+             * List of filter options including:
+             *  * Tech Tip Types
+             *  * Equipment Types
+             */
             filter_data: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * Boolean value on if user has permission to create a new tip
+             */
             create: {
                 type:     Boolean,
                 default:  false,
@@ -174,7 +182,7 @@
                     search_text:        null,
                     search_type:        [],
                     search_equip_id:    [],
-                    pagination_perPage: 10,
+                    pagination_perPage: 25,
                     page:               1,
                 },
                 fields: [
@@ -205,6 +213,9 @@
              this.search();
         },
         methods: {
+            /**
+             * Submit search query
+             */
             search()
             {
                 this.loading = true;
@@ -217,22 +228,31 @@
                         this.loading       = false;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
             },
+            /**
+             * Remove all filters and set empty search
+             */
             resetFilters()
             {
                 this.form = {
                     search_text:        null,
                     search_type:        [],
                     search_equip_id:    [],
-                    pagination_perPage: 10,
+                    pagination_perPage: 25,
                     page:               1,
                 }
                 this.search();
             },
+            /**
+             * Move to next or previous pagination list
+             */
             updatePage(newPage)
             {
                 this.form.page = newPage;
                 this.search();
             },
+            /**
+             * Change number of results per pagination query
+             */
             updatePerPage(num)
             {
                 this.form.pagination_perPage = num;

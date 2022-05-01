@@ -28,6 +28,7 @@ class EquipmentController extends Controller
             'categories' => EquipmentCategory::with('EquipmentType')->get(),
         ]);
     }
+
     /**
      * Store a newly created Equipment Type
      */
@@ -89,8 +90,8 @@ class EquipmentController extends Controller
         ]);
 
         $dataTypeObj = new OrderEquipDataTypes;
-        $dataTypeObj->run($request->data_fields, $equip->equip_id);
         $dataTypeObj->delOptions($request->del_fields, $equip->equip_id);
+        $dataTypeObj->run($request->data_fields, $equip->equip_id);
 
         event(new EquipmentTypeUpdatedEvent($equip));
         return redirect(route('equipment.index'))->with([

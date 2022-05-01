@@ -16,7 +16,7 @@ class LogDebugVisits
     //  These items should never be logged
     protected $ignore = ['_token', 'token'];
     //  These items are logged with masked input to show that they did exist during the session
-    protected $redact = ['password', 'password_confirmation'];
+    protected $redact = ['password', 'password_confirmation', 'current_password'];
 
 
     /**

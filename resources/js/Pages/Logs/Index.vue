@@ -52,18 +52,30 @@
     export default {
         layout: App,
         props: {
+            /**
+             * List of all possible log channels
+             */
             channels: {
                 type:     Array,
                 required: true,
             },
+            /**
+             * Array list of log files available for the selected channel
+             */
             log_files: {
                 type:     Array,
                 default:  null,
             },
+            /**
+             * List of all possible log levels
+             */
             levels: {
                 type:     Array,
                 default:  null,
             },
+            /**
+             * Selected log channel
+             */
             channel: {
                 type:     String,
                 default:  null,

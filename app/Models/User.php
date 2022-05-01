@@ -57,6 +57,14 @@ class User extends Authenticatable
         return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
     }
 
+    /**
+     * List of login times and locations for each user
+     */
+    public function UserLogins()
+    {
+        return $this->hasMany(UserLogins::class, 'user_id', 'user_id');
+    }
+
     // public function TechTipBookmark()
     // {
     //     return $this->hasOne(TechTipBookmark::class, 'user_id', 'user_id');

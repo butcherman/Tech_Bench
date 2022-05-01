@@ -47,6 +47,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of objects from /app/Models/User
+             */
             users: {
                 type:     Array,
                 required: true,
@@ -93,12 +96,18 @@
             }
         },
         methods: {
+            /**
+             * Open the reset password Modal
+             */
             resetPassword(user)
             {
                 this.form.full_name = user.full_name;
                 this.form.username  = user.username;
                 this.$refs['password-modal'].show();
             },
+            /**
+             * Soft delete the user
+             */
             disableUser(user)
             {
                 this.$bvModal.msgBoxConfirm('Please confirm that you want to deactivate '+user.full_name, {

@@ -1,3 +1,20 @@
+<!--
+    datePicker Component shows a text box with calendar entry for date and time when selected
+    Note:  component uses VeeValidate and form must be wrapped in Validation Observer
+
+    Props:
+        value:       for v-model binding (required)
+        rules:       array of VeeValidate rules
+        label:       String for label field
+        name:        String for name field of input
+        type:        String for input type
+        placeholder: String for placeholder
+        hideState:   Hide whether or not field has been modified
+        mode:        rule processing mode
+        list:        allows to use list prop in text box
+        autofocus:   autofocus
+-->
+
 <template>
     <ValidationProvider v-slot="v" :rules="rules" :mode="mode">
         <b-form-group
@@ -30,7 +47,7 @@
     export default {
         props: {
             value: {
-                type:    [String, Number],
+                type:    [String, Number, Date],
                 default: '',
             },
             rules: {

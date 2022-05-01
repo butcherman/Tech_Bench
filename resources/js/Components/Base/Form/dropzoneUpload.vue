@@ -1,3 +1,14 @@
+<!--
+    dropzoneUpload component provides a boundry box that will allow user to drag and rop a file for upload
+
+    Props:
+        maxFiles: Maximum number of files allowed to be uploaded at once.  Default - 1
+        required: If a file is required for the form to be submitted
+        disk:     Laravel disk that file will be loaded to
+        folder:   Folder within disk to save file
+        public:   If the file is to be listed as public or not
+-->
+
 <template>
     <div class="my-2">
         <vue-dropzone
@@ -186,23 +197,6 @@
             {
                 this.$emit('upload-canceled');
             },
-            //  File was uploaded successfully
-            // successfullUpload(file, response)
-            // {
-            //     if(this.maxFiles == 1)
-            //     {
-            //         this.$emit('upload-progress', 100);
-            //         this.$emit('completed', response);
-            //         this.resetDropzone();
-            //     }
-            // },
-            //  Multiple files were uploaded successfully
-            // successfullUploadMulti(file, response)
-            // {
-            //     this.$emit('upload-progress', 100);
-            //     this.$emit('completed', response);
-            //     this.resetDropzone();
-            // },
             //  All files are completed
             queueComplete()
             {
@@ -221,6 +215,12 @@
                 }
 
                 var prog = this.sent / this.totalSize * 100;
+                if(prog > 100)
+                {
+                    //  Progress should not be above 100%
+                    prog = 100;
+                }
+
                 this.$emit('upload-progress', prog);
             },
         },

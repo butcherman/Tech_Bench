@@ -56,23 +56,6 @@
                 default:  false,
             }
         },
-        data() {
-            return {
-                //
-            }
-        },
-        created() {
-            //
-        },
-        mounted() {
-            //
-        },
-        computed: {
-            //
-        },
-        watch: {
-            //
-        },
         methods: {
             getEquipData(data)
             {

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use Inertia\Inertia;
+
+use App\Models\EquipmentType;
+use App\Models\DataFieldType;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\DataTypeRequest;
 use App\Events\Equipment\EquipmentDataTypeCreatedEvent;
 use App\Events\Equipment\EquipmentDataTypeDeletedEvent;
 use App\Events\Equipment\EquipmentDataTypeUpdatedEvent;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Equipment\DataTypeRequest;
-use App\Models\DataFieldType;
-use App\Models\EquipmentType;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class DataTypesController extends Controller
 {

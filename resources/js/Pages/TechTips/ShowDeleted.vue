@@ -1,5 +1,17 @@
 <template>
     <div>
+        <div class="row">
+            <div class="col-sm-10 grid-margin">
+                <h3>
+                    {{tip.subject}}
+                </h3>
+                <div class="tip-details">
+                    <span class="d-block d-sm-inline-block"><strong>ID: </strong>{{tip.tip_id}}</span>
+                    <span class="d-block d-sm-inline-block"><strong>Created: </strong>{{tip.created_at}}</span>
+                    <span class="d-block d-sm-inline-block"><strong>Last Updated: </strong>{{tip.updated_at}}</span>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-center mb-4">
             <div class="col-md-8">
                 <div class="card">
@@ -10,18 +22,6 @@
                             <b-button variant="danger" @click="destroyTip">Permanently Delete Tip</b-button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-10 grid-margin">
-                <h3>
-                    {{tip.subject}}
-                </h3>
-                <div class="tip-details">
-                    <span class="d-block d-sm-inline-block"><strong>ID: </strong>{{tip.tip_id}}</span>
-                    <span class="d-block d-sm-inline-block"><strong>Created: </strong>{{tip.created_at}}</span>
-                    <span class="d-block d-sm-inline-block"><strong>Last Updated: </strong>{{tip.updated_at}}</span>
                 </div>
             </div>
         </div>
@@ -64,29 +64,18 @@
     export default {
         layout: App,
         props: {
+            /**
+             * object from /app/Models/TechTip
+             */
             tip: {
                 type:     Object,
                 required: true,
             }
         },
-        data() {
-            return {
-                //
-            }
-        },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
         methods: {
+            /**
+             * Remove Soft Deleted timestamp
+             */
             restoreTip()
             {
                 this.$bvModal.msgBoxConfirm('This will make the Tech Tip accessable again',
@@ -107,6 +96,10 @@
                         }
                     });
             },
+            /**
+             * Tip and all associated files will be destroyed
+             * Cannot undo this operation
+             */
             destroyTip()
             {
                 this.$bvModal.msgBoxConfirm('This will remove the Tech Tip and all associated files',
@@ -127,6 +120,9 @@
                         }
                     });
             }
+        },
+        metaInfo: {
+            title: 'Deleted Tech Tip',
         }
     }
 </script>

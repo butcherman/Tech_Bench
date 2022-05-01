@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *          Note for all routes:
+ *              Some Resource Routes have been broken out into their individual routes.  This is
+ *              because the Gretel Breadcrumb package relies on Route Model Binding which we are not
+ *              doing at this time.
+ *              This may be changed later.
+ */
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Home\AboutController;
@@ -16,8 +24,8 @@ use App\Http\Controllers\User\ChangePasswordController;
 */
 Route::middleware('auth')->group(function()
 {
-    Route::get('dashboard',          DashboardController::class)->name('dashboard');
-    Route::get('about',              AboutController::class)    ->name('about');
+    Route::get('dashboard',          DashboardController::class)->name('dashboard')->breadcrumb('Dashboard');
+    Route::get('about',              AboutController::class)    ->name('about')    ->breadcrumb('About', 'dashboard');
 
     Route::resource('notifications', NotificationController::class);
     Route::resource('settings',      UserSettingsController::class);

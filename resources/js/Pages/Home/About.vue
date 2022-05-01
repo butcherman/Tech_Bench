@@ -35,14 +35,23 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Tech Bench Version
+             */
             version: {
                 type: String,
                 required: true,
             },
+            /**
+             * Build ID Number (generated with each commit)
+             */
             build: {
                 type: String,
                 required: true,
             },
+            /**
+             * Date code was committed to GitHub
+             */
             build_date: {
                 type: String,
                 required: true,

@@ -47,6 +47,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of Objects - Soft Deleted Tech Tips from /app/Models/TechTip
+             */
             list: {
                 type:     Array,
                 required: true,
@@ -79,20 +82,5 @@
                 ]
             }
         },
-        created() {
-            //
-        },
-        mounted() {
-             //
-        },
-        computed: {
-             //
-        },
-        watch: {
-             //
-        },
-        methods: {
-            //
-        }
     }
 </script>

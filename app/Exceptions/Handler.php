@@ -8,22 +8,19 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Request;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that are not reported.
-     *
-     * @var array
+     * A list of the exception types that are not reported
      */
     protected $dontReport = [
         //
     ];
 
     /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array
+     * A list of the inputs that are never flashed for validation exceptions
      */
     protected $dontFlash = [
         'current_password',
@@ -32,9 +29,8 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Register the exception handling callbacks for the application.
+     * Register the exception handling callbacks for the application598
      *
-     * @return void
      */
     public function register()
     {
@@ -53,6 +49,7 @@ class Handler extends ExceptionHandler
         if(!app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403]))
         {
             Log::notice('Server Error - '.$response->status().' occured.  Message - '.$response->exception->getMessage(), [
+                'url'      => Request::fullUrl(),
                 'auth'     => Auth::check() ? true : false,
                 'user_id'  => Auth::check() ? Auth::user()->user_id : null,
                 'username' => Auth::check() ? Auth::user()->username : null,

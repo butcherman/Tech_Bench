@@ -52,10 +52,16 @@
     export default {
         layout: App,
         props: {
+            /**
+             * List of all available time zones
+             */
             tz_list: {
                 type:     Object,
                 required: true,
             },
+            /**
+             * Current application settings
+             */
             settings: {
                 type:     Object,
                 required: true,

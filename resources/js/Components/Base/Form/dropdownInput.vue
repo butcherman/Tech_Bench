@@ -1,3 +1,29 @@
+<!--
+    dropdownInput is a standard dropdown box
+    Note:  component uses VeeValidate and form must be wrapped in Validation Observer
+
+    Props:
+        value:       for v-model binding (required)
+        rules:       array of VeeValidate rules
+        label:       String for label field
+        name:        String for name field of input
+        placeholder: String for placeholder
+        textField:   String to identify array key with text
+        valueField:  String to identify array key with value
+        options:     Array of options that will be in the list
+                     Example:
+                        [
+                            {
+                                text:  'option 1',
+                                value: 'opt1',
+                            },
+                            {
+                                text:  'option 2',
+                                value: 'opt2',
+                            }
+                        ]
+-->
+
 <template>
     <ValidationProvider v-slot="v" :rules="rules">
         <b-form-group
