@@ -3,7 +3,8 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Nwidart\Modules\Facades\Module;
 use PragmaRX\Version\Package\Version;
 
@@ -55,6 +56,31 @@ trait ModuleTrait
     }
 
     /**
+     * Rollback the migrations for a sepcifiec=d module
+     */
+    protected function rollbackMigrations($module)
+    {
+        Artisan::call('module:migrate-rollback', ['module' => $module->getStudlyName(), '--force' => true]);
+    }
+
+    /**
+     * Delete a disk associated with a Module
+     */
+    protected function destroyModuleDisk($module)
+    {
+        $disks = config($module->getLowerName().'.disks');
+
+        if(is_array($disks))
+        {
+            foreach($disks as $disk)
+            {
+                Log::debug('Deleting Disk for Module '.$module->getName(), $disk);
+                File::deleteDirectory($disk['root']);
+            }
+        }
+    }
+
+    /**
      * Install all dependency packages for Composer and NPM
      */
     protected function installDependencies($module)
@@ -63,6 +89,14 @@ trait ModuleTrait
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && composer install --no-dev --no-interaction --optimize-autoloader');
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.'Modules'.DIRECTORY_SEPARATOR.$module->getStudlyName().' && npm install --silent --only=production');
 
+        $this->runProduction();
+    }
+
+    /**
+     * Run the NPM run production command to build all Javascript files
+     */
+    protected function runProduction()
+    {
         //  Combine the new Javascript files
         shell_exec('cd '.base_path().DIRECTORY_SEPARATOR.' && npm run production');
     }
