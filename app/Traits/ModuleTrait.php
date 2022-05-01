@@ -151,39 +151,38 @@ trait ModuleTrait
      */
     protected function getAvailableModules()
     {
-        // $response = Http::get('https://raw.githubusercontent.com/butcherman/Tech_Bench_Modules/main/module_list.json')->collect();
-        // return $response;
+        $response = Http::get('https://raw.githubusercontent.com/butcherman/Tech_Bench_Modules/main/module_list.json')->collect();
+        return $response;
+    }
 
-        return [
-            "FileLinkModule" => [
-                "module_name"     => "File Link Module",
-                "alias"           => "FileLinkModule",
-                "module_version"  => 1.0,
-                "min_tb_version"  => 6.0,
-                "max_tb_version"  => null,
-                "download_link"   => "https://github.com/butcherman/FileLinkModule/archive/refs/tags/1.0.0.zip",
-                "description"     => "This module is an extension to the Tech Bench application. It allows users to create file links that will allow guests to either upload files for the user to access, or download files that the user has loaded to the link. Each link has a unique URL to access it, as well as a set expiration date. Once that date has passed, the files in the link are no longer accessible by guest access.  \n By using this feature, users can securely pass files to customers that may be too large for emailing or other means."
-            ],
-            "TestModule1" => [
-                "module_name"     => "TestModule1",
-                "alias"           => "TestModule1",
-                "module_version"  => 1.0,
-                "min_tb_version"  => 5.0,
-                "max_tb_version"  => 5.9,
-                "download_link"   => "https://github.com/butcherman/FileLinkModule/archive/refs/tags/1.0.0.zip",
-                "description"     => "This module is for testing purposes only"
-            ],
-            "TestModule2" => [
-                "module_name"     => "TestModule2",
-                "alias"           => "TestModule2",
-                "module_version"  => 1.0,
-                "min_tb_version"  => 6.3,
-                "max_tb_version"  => null,
-                "download_link"   => "https://github.com/butcherman/FileLinkModule/archive/refs/tags/1.0.0.zip",
-                "description"     => "This module is for testing purposes only",
-                "modules"         => ['FileLinkModule']
-            ]
-        ];
+    /**
+     * Compare versions to see which modules can be updated to a newer version
+     */
+    protected function checkForUpdates($activeModules)
+    {
+        $moduleList = $this->getAvailableModules();
+        $updateList = [];
+
+        foreach($activeModules as $module)
+        {
+            $findModule = $moduleList[$module->getName()];
+            if(empty($findModule))
+            {
+                Log::notice('Module '.$module['module_name'].' is active but not on the Tech Bench Modules Repository');
+                continue;
+            }
+
+            $updateList[] = [
+                'module_name'   => $findModule['module_name'],
+                'alias'         => $module->getName(),
+                'current_ver'   => config($module->getLowerName().'.ver'),
+                'available_ver' => $findModule['module_version'],
+                'download_link' => $findModule['download_link'],
+                'can_update'    => version_compare($findModule['module_version'], config($module->getLowerName().'.ver')) < 1 ? false : true,
+            ];
+        }
+
+        return collect($updateList);
     }
 
     /**
@@ -228,6 +227,12 @@ trait ModuleTrait
         foreach($fileList as $file)
         {
             $rename = str_replace($directoryName, '', $file);
+
+            //  If the file already exists, delete it so we can place the new file there
+            if(Storage::disk('modules')->exists($moduleData['alias'].DIRECTORY_SEPARATOR.$rename))
+            {
+                Storage::disk('modules')->delete($moduleData['alias'].DIRECTORY_SEPARATOR.$rename);
+            }
 
             Storage::disk('modules')->move($file, $moduleData['alias'].DIRECTORY_SEPARATOR.$rename);
         }
