@@ -136,6 +136,7 @@ class TbModuleUpdateCommand extends Command
         $module->enable();
         $this->runMigrations($module);
         $this->installDependencies($module);
+        $this->updateCache();
 
         //  Cleanup leftover files
         $this->cleanupPackage($package);
