@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -235,6 +236,22 @@ trait ModuleTrait
             }
 
             Storage::disk('modules')->move($file, $moduleData['alias'].DIRECTORY_SEPARATOR.$rename);
+        }
+    }
+
+    /**
+     * Updated all cached data
+     */
+    protected function updateCache()
+    {
+        //  We will only cache if running in production
+        if(App::environment(['production']))
+        {
+            Artisan::call('config:cache');
+            Artisan::call('route:clear');
+            Artisan::call('breadcrumbs:cache');
+            Artisan::call('route:cache');
+            Artisan::call('view:cache');
         }
     }
 }

@@ -76,6 +76,7 @@ class TbModuleDeleteCommand extends Command
 
         //  Rebuild javascript files
         $this->runProduction();
+        $this->updateCache();
 
         $this->info('Module has been deleted');
 

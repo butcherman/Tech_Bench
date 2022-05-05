@@ -81,6 +81,7 @@ class TbModuleEnableCommand extends Command
         $module->enable();
         $this->runMigrations($module);
         $this->installDependencies($module);
+        $this->updateCache();
 
         $this->newLine(2);
         $this->info('Module Installed');
