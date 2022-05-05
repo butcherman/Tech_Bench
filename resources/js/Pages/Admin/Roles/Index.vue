@@ -13,7 +13,7 @@
                         <vue-good-table
                             :columns="fields"
                             :rows="roles"
-                            :row-style-class="rowStyleClassFn"
+                            row-style-class="pointer"
                             @on-row-click="editRow"
                         >
                             <template #table-actions-bottom>
@@ -35,6 +35,9 @@
     export default {
         layout: App,
         props: {
+            /**
+             * Array of Objects from /app/Models/UserRoles
+             */
             roles: {
                 type:     Array,
                 required: true,
@@ -55,16 +58,9 @@
             }
         },
         methods: {
-            rowStyleClassFn(row)
-            {
-                return row.allow_edit ? 'pointer' : 'nope';
-            },
             editRow(e)
             {
-                if(e.row.allow_edit)
-                {
-                    this.$inertia.get(route('admin.user-roles.edit', e.row.role_id));
-                }
+                this.$inertia.get(route('admin.user-roles.edit', e.row.role_id));
             }
         },
         metaInfo: {

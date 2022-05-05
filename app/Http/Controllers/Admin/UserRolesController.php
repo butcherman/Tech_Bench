@@ -74,7 +74,7 @@ class UserRolesController extends Controller
      */
     public function edit($id)
     {
-        $role = UserRoles::with('UserRolePermissions.UserRolePermissionTypes')->where('role_id', $id)->firstOrFail();
+        $role = UserRoles::with('UserRolePermissions.UserRolePermissionTypes')->where('role_id', $id)->firstOrFail()->makeVisible('allow_edit');
         $this->authorize('update', $role);
 
         return Inertia::render('Admin/Roles/Edit', [
