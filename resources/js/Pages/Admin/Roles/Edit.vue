@@ -9,7 +9,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <h4 v-if="!role_data.can_edit" class="text-center text-danger">You Cannot Edit A Default Role</h4>
+                        <h4 v-if="!role_data.allow_edit" class="text-center text-danger">You Cannot Edit A Default Role</h4>
                         <ValidationObserver v-slot="{handleSubmit}">
                             <b-overlay :show="submitted">
                                 <template #overlay>
@@ -66,7 +66,7 @@
             role_data: {
                 type:     Object,
                 required: true,
-            }
+            },
         },
         data() {
             return {

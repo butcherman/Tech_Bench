@@ -54,7 +54,7 @@
             permissions: {
                 type:     Array,
                 required: true,
-            }
+            },
         },
         data() {
             return {

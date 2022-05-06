@@ -57,12 +57,12 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
      */
     Route::prefix('user-roles')->name('user-roles.')->group(function()
     {
-        Route::get('/',           [UserRolesController::class, 'index'])  ->name('index') ->breadcrumb('Roles', 'admin.index');
-        Route::get('create',      [UserRolesController::class, 'create']) ->name('create')->breadcrumb('New Role', '.index');
-        Route::get('{role}/edit', [UserRolesController::class, 'edit'])   ->name('edit')  ->breadcrumb('Edit Role', '.index');
-        Route::put('{role}/edit', [UserRolesController::class, 'update']) ->name('update');
-        Route::post('store',      [UserRolesController::class, 'store'])   ->name('store');
-        Route::delete('{role}',   [UserRolesController::class, 'destroy'])->name('destroy');
+        Route::get('/',                  [UserRolesController::class, 'index'])  ->name('index') ->breadcrumb('Roles', 'admin.index');
+        Route::get('create/{baseline?}', [UserRolesController::class, 'create']) ->name('create')->breadcrumb('New Role', '.index');
+        Route::get('{role}/edit',        [UserRolesController::class, 'edit'])   ->name('edit')  ->breadcrumb('Edit Role', '.index');
+        Route::put('{role}/edit',        [UserRolesController::class, 'update']) ->name('update');
+        Route::post('store',             [UserRolesController::class, 'store'])   ->name('store');
+        Route::delete('{role}',          [UserRolesController::class, 'destroy'])->name('destroy');
     });
 
     /**

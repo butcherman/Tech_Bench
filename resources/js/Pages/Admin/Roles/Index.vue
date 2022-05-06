@@ -18,7 +18,7 @@
                         >
                             <template #table-actions-bottom>
                                 <div class="text-center m-3">
-                                    <inertia-link as="b-button" :href="route('admin.user-roles.create')" class="ml-auto" variant="success">Create New Role</inertia-link>
+                                    <b-button class="ml-auto" variant="success" v-b-modal.create-role-modal>Create New Role</b-button>
                                 </div>
                             </template>
                         </vue-good-table>
@@ -26,6 +26,17 @@
                 </div>
             </div>
         </div>
+        <b-modal id="create-role-modal" title="Select Baseline Role to Copy Permissions From">
+            <b-overlay :show="loading">
+                <template #overlay>
+                    <atom-loader></atom-loader>
+                </template>
+                <b-list-group>
+                    <b-list-group-item><inertia-link as="b-button" :href="route('admin.user-roles.create')" block variant="info">None (All Options Off)</inertia-link></b-list-group-item>
+                    <b-list-group-item v-for="role in roles" :key="role.role_id"><inertia-link as="b-button" :href="route('admin.user-roles.create', role.name)" block variant="info">{{role.name}}</inertia-link></b-list-group-item>
+                </b-list-group>
+            </b-overlay>
+        </b-modal>
     </div>
 </template>
 
@@ -45,6 +56,7 @@
         },
         data() {
             return {
+                loading: false,
                 fields: [
                     {
                         field: 'name',

@@ -17,6 +17,7 @@ use App\Models\UserRolePermissionTypes;
 use App\Events\Admin\UserRoleCreatedEvent;
 use App\Events\Admin\UserRoleDeletedEvent;
 use App\Events\Admin\UserRoleUpdatedEvent;
+use Illuminate\Support\Facades\Request;
 
 class UserRolesController extends Controller
 {
@@ -35,12 +36,32 @@ class UserRolesController extends Controller
     /**
      * Show the form to create a new Role
      */
-    public function create()
+    public function create($baseline = null)
     {
         $this->authorize('create', UserRoles::class);
+        // $baselinePermissions = null;
+        $permissions = UserRolePermissionTypes::all();
+
+        /**
+         * Copy the permissions from another role
+         */
+        if(!is_null($baseline))
+        {
+            $roleId              = UserRoles::where('name', $baseline)->firstOrFail()->role_id;
+            $baselinePermissions = UserRolePermissions::where('role_id', $roleId)->get();
+
+            $permissions->transform(function($item, $key) use ($baselinePermissions)
+            {
+                return collect([
+                    'perm_type_id' => $item->perm_type_id,
+                    'description'  => $item->description,
+                    'allow'        => $baselinePermissions->firstWhere('perm_type_id', $item->perm_type_id)->allow,
+                ]);
+            });
+        }
 
         return Inertia::render('Admin/Roles/Create', [
-            'permissions' => UserRolePermissionTypes::all(),
+            'permissions' => $permissions
         ]);
     }
 
