@@ -33,6 +33,12 @@ Whenever a new Tech Tip is created, an email is sent to all registered users not
 
 Tech Bench is designed to run in a cluster of Docker containers.  To download the images and get the Docker-Compose file for building the cluster, visit the Tech Bench Installer repository at <https://github.com/butcherman/Tech_Bench_Installer>
 
+##  SSL Certificates
+
+By default the Tech Bench uses a Self Signed SSL Certificate for https requests.  It is recommended to upload a valid SSL certificate to the server.  When the Tech Bench application is created, a folder called "StorageData" is created to store all file data.  Inside this directory is a "keystore" sub directory.  Name the SSL Certificate `server.crt` and the key file to `server.key`.  Place the server.crt file in the keystore directory, and place the server.key inside the keystore\private directory overwriting the existing files.  Reboot the NGINX Docker container.
+
+To remove a custom certificate, simply delete the existing server.crt and server.key files and reboot the NGINX Docker container.  A new self signed SSL Certificate will be created.
+
 ## Copyright © 2016-2022 Ron Butcher
 
 This program is free software:  you can redistribute it and/or modify it under the terms of the GNU
