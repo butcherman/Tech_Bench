@@ -39,7 +39,6 @@ class UserRolesController extends Controller
     public function create($baseline = null)
     {
         $this->authorize('create', UserRoles::class);
-        // $baselinePermissions = null;
         $permissions = UserRolePermissionTypes::all();
 
         /**
@@ -50,18 +49,19 @@ class UserRolesController extends Controller
             $roleId              = UserRoles::where('name', $baseline)->firstOrFail()->role_id;
             $baselinePermissions = UserRolePermissions::where('role_id', $roleId)->get();
 
-            $permissions->transform(function($item, $key) use ($baselinePermissions)
+            $permissions->transform(function($item) use ($baselinePermissions)
             {
                 return collect([
                     'perm_type_id' => $item->perm_type_id,
                     'description'  => $item->description,
+                    'group'        => $item->group,
                     'allow'        => $baselinePermissions->firstWhere('perm_type_id', $item->perm_type_id)->allow,
                 ]);
             });
         }
 
         return Inertia::render('Admin/Roles/Create', [
-            'permissions' => $permissions
+            'permissions' => $permissions->groupBy('group'),
         ]);
     }
 
@@ -74,13 +74,16 @@ class UserRolesController extends Controller
         $newRole = UserRoles::create($request->only(['name', 'description']));
 
         //  Insert the permissions for the role
-        foreach($request->user_role_permissions as $perm)
+        foreach($request->user_role_permissions as $group)
         {
-            UserRolePermissions::create([
-                'role_id'      => $newRole->role_id,
-                'perm_type_id' => $perm['perm_type_id'],
-                'allow'        => isset($perm['allow']) ? $perm['allow'] : false,
-            ]);
+            foreach($group as $perm)
+            {
+                UserRolePermissions::create([
+                    'role_id'      => $newRole->role_id,
+                    'perm_type_id' => $perm['perm_type_id'],
+                    'allow'        => isset($perm['allow']) ? $perm['allow'] : false,
+                ]);
+            }
         }
 
         event(new UserRoleCreatedEvent($newRole));
@@ -95,11 +98,13 @@ class UserRolesController extends Controller
      */
     public function edit($id)
     {
-        $role = UserRoles::with('UserRolePermissions.UserRolePermissionTypes')->where('role_id', $id)->firstOrFail()->makeVisible('allow_edit');
+        $role        = UserRoles::where('role_id', $id)->firstOrFail()->makeVisible('allow_edit');
+        $permissions = UserRolePermissions::with('UserRolePermissionTypes')->where('role_id', $role->role_id)->get();
         $this->authorize('update', $role);
 
         return Inertia::render('Admin/Roles/Edit', [
-            'role_data' => $role,
+            'role_data'   => $role,
+            'permissions' => $permissions->groupBy('UserRolePermissionTypes.group'),
         ]);
     }
 
@@ -120,12 +125,15 @@ class UserRolesController extends Controller
         $role->update($request->only(['name', 'description']));
 
         //  Update the role permissions
-        foreach($request->user_role_permissions as $perm)
-        {
-            UserRolePermissions::where(['role_id' => $perm['role_id'], 'perm_type_id' => $perm['perm_type_id']])->update([
-                'allow' => $perm['allow']
-            ]);
-        }
+         foreach($request->user_role_permissions as $group)
+         {
+             foreach($group as $perm)
+             {
+                UserRolePermissions::where(['role_id' => $perm['role_id'], 'perm_type_id' => $perm['perm_type_id']])->update([
+                    'allow' => $perm['allow']
+                ]);
+             }
+         }
 
         event(new UserRoleUpdatedEvent($role));
         return redirect(route('admin.user-roles.index'))->with([

@@ -65,17 +65,22 @@ class UserRolesTest extends TestCase
             'name'        => 'New Role',
             'description' => 'This is for testing purposes only',
             'user_role_permissions' => [
-                ['perm_type_id' => 1,  'allow' => false],
-                ['perm_type_id' => 2,  'allow' => false],
-                ['perm_type_id' => 3,  'allow' => false],
-                ['perm_type_id' => 4,  'allow' => false],
-                ['perm_type_id' => 5,  'allow' => false],
-                ['perm_type_id' => 6,  'allow' => true],
-                ['perm_type_id' => 7,  'allow' => true],
-                ['perm_type_id' => 8,  'allow' => false],
-                ['perm_type_id' => 9,  'allow' => false],
-                ['perm_type_id' => 10, 'allow' => true],
-                ['perm_type_id' => 11, 'allow' => false],
+                ['Administration' =>
+
+                    ['perm_type_id' => 1,  'allow' => false],
+                    ['perm_type_id' => 2,  'allow' => false],
+                    ['perm_type_id' => 3,  'allow' => false],
+                    ['perm_type_id' => 4,  'allow' => false],
+                    ['perm_type_id' => 5,  'allow' => false],
+                ],
+                ['Customers' =>
+                    ['perm_type_id' => 6,  'allow' => true],
+                    ['perm_type_id' => 7,  'allow' => true],
+                    ['perm_type_id' => 8,  'allow' => false],
+                    ['perm_type_id' => 9,  'allow' => false],
+                    ['perm_type_id' => 10, 'allow' => true],
+                    ['perm_type_id' => 11, 'allow' => false],
+                ]
             ],
         ];
 
@@ -91,18 +96,23 @@ class UserRolesTest extends TestCase
             'name'        => 'New Role',
             'description' => 'This is for testing purposes only',
             'user_role_permissions' => [
-                ['perm_type_id' => 1,  'allow' => false],
-                ['perm_type_id' => 2,  'allow' => false],
-                ['perm_type_id' => 3,  'allow' => false],
-                ['perm_type_id' => 4,  'allow' => false],
-                ['perm_type_id' => 5,  'allow' => false],
-                ['perm_type_id' => 6,  'allow' => true],
-                ['perm_type_id' => 7,  'allow' => true],
-                ['perm_type_id' => 8,  'allow' => false],
-                ['perm_type_id' => 9,  'allow' => false],
-                ['perm_type_id' => 10, 'allow' => true],
-                ['perm_type_id' => 11, 'allow' => false],
-            ],
+                ['Administration' =>
+
+                    ['perm_type_id' => 1,  'allow' => false],
+                    ['perm_type_id' => 2,  'allow' => false],
+                    ['perm_type_id' => 3,  'allow' => false],
+                    ['perm_type_id' => 4,  'allow' => false],
+                    ['perm_type_id' => 5,  'allow' => false],
+                ],
+                ['Customers' =>
+                    ['perm_type_id' => 6,  'allow' => true],
+                    ['perm_type_id' => 7,  'allow' => true],
+                    ['perm_type_id' => 8,  'allow' => false],
+                    ['perm_type_id' => 9,  'allow' => false],
+                    ['perm_type_id' => 10, 'allow' => true],
+                    ['perm_type_id' => 11, 'allow' => false],
+                ],
+            ]
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('admin.user-roles.store'), $form);
@@ -115,18 +125,23 @@ class UserRolesTest extends TestCase
             'name'        => 'New Role',
             'description' => 'This is for testing purposes only',
             'user_role_permissions' => [
-                ['perm_type_id' => 1,  'allow' => false],
-                ['perm_type_id' => 2,  'allow' => false],
-                ['perm_type_id' => 3,  'allow' => false],
-                ['perm_type_id' => 4,  'allow' => false],
-                ['perm_type_id' => 5,  'allow' => false],
-                ['perm_type_id' => 6,  'allow' => true],
-                ['perm_type_id' => 7,  'allow' => true],
-                ['perm_type_id' => 8,  'allow' => false],
-                ['perm_type_id' => 9,  'allow' => false],
-                ['perm_type_id' => 10, 'allow' => true],
-                ['perm_type_id' => 11, 'allow' => false],
-            ],
+                ['Administration' =>
+
+                    ['perm_type_id' => 1,  'allow' => false],
+                    ['perm_type_id' => 2,  'allow' => false],
+                    ['perm_type_id' => 3,  'allow' => false],
+                    ['perm_type_id' => 4,  'allow' => false],
+                    ['perm_type_id' => 5,  'allow' => false],
+                ],
+                ['Customers' =>
+                    ['perm_type_id' => 6,  'allow' => true],
+                    ['perm_type_id' => 7,  'allow' => true],
+                    ['perm_type_id' => 8,  'allow' => false],
+                    ['perm_type_id' => 9,  'allow' => false],
+                    ['perm_type_id' => 10, 'allow' => true],
+                    ['perm_type_id' => 11, 'allow' => false],
+                ],
+            ]
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.user-roles.store'), $form);
@@ -173,18 +188,24 @@ class UserRolesTest extends TestCase
             'name'        => 'New Role',
             'description' => 'This is for testing purposes only',
             'user_role_permissions' => [
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 1,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 2,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 3,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 4,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 5,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 6,  'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 7,  'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 8,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 9,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 10, 'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 11, 'allow' => false],
-            ],
+                ['Administration' =>
+
+                    ['perm_type_id' => 1, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 2, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 3, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 4, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 5, 'role_id' => $testRole->role_id,  'allow' => false],
+                ],
+                ['Customers' =>
+                    ['perm_type_id' => 6, 'role_id' => $testRole->role_id,  'allow' => true],
+                    ['perm_type_id' => 7, 'role_id' => $testRole->role_id,  'allow' => true],
+                    ['perm_type_id' => 8, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 9, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 10, 'role_id' => $testRole->role_id, 'allow' => true],
+                    ['perm_type_id' => 11, 'role_id' => $testRole->role_id, 'allow' => false],
+                ],
+            ]
+            ]
         ];
 
         $response = $this->put(route('admin.user-roles.update', $testRole->role_id), $form);
@@ -200,18 +221,23 @@ class UserRolesTest extends TestCase
             'name'        => 'New Role',
             'description' => 'This is for testing purposes only',
             'user_role_permissions' => [
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 1,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 2,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 3,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 4,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 5,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 6,  'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 7,  'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 8,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 9,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 10, 'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 11, 'allow' => false],
-            ],
+                ['Administration' =>
+
+                    ['perm_type_id' => 1, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 2, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 3, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 4, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 5, 'role_id' => $testRole->role_id,  'allow' => false],
+                ],
+                ['Customers' =>
+                    ['perm_type_id' => 6, 'role_id' => $testRole->role_id,  'allow' => true],
+                    ['perm_type_id' => 7, 'role_id' => $testRole->role_id,  'allow' => true],
+                    ['perm_type_id' => 8, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 9, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 10, 'role_id' => $testRole->role_id, 'allow' => true],
+                    ['perm_type_id' => 11, 'role_id' => $testRole->role_id, 'allow' => false],
+                ],
+            ]
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('admin.user-roles.update', $testRole->role_id), $form);
@@ -225,18 +251,23 @@ class UserRolesTest extends TestCase
             'name'        => 'New Role',
             'description' => 'This is for testing purposes only',
             'user_role_permissions' => [
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 1,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 2,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 3,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 4,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 5,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 6,  'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 7,  'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 8,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 9,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 10, 'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 11, 'allow' => false],
-            ],
+                ['Administration' =>
+
+                    ['perm_type_id' => 1, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 2, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 3, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 4, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 5, 'role_id' => $testRole->role_id,  'allow' => false],
+                ],
+                ['Customers' =>
+                    ['perm_type_id' => 6, 'role_id' => $testRole->role_id,  'allow' => true],
+                    ['perm_type_id' => 7, 'role_id' => $testRole->role_id,  'allow' => true],
+                    ['perm_type_id' => 8, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 9, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 10, 'role_id' => $testRole->role_id, 'allow' => true],
+                    ['perm_type_id' => 11, 'role_id' => $testRole->role_id, 'allow' => false],
+                ],
+            ]
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.user-roles.update', $testRole->role_id), $form);
@@ -252,18 +283,23 @@ class UserRolesTest extends TestCase
             'name'        => 'New Role',
             'description' => 'This is for testing purposes only',
             'user_role_permissions' => [
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 1,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 2,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 3,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 4,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 5,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 6,  'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 7,  'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 8,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 9,  'allow' => false],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 10, 'allow' => true],
-                ['role_id' => $testRole->role_id, 'perm_type_id' => 11, 'allow' => false],
-            ],
+                ['Administration' =>
+
+                    ['perm_type_id' => 1, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 2, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 3, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 4, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 5, 'role_id' => $testRole->role_id,  'allow' => false],
+                ],
+                ['Customers' =>
+                    ['perm_type_id' => 6, 'role_id' => $testRole->role_id,  'allow' => true],
+                    ['perm_type_id' => 7, 'role_id' => $testRole->role_id,  'allow' => true],
+                    ['perm_type_id' => 8, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 9, 'role_id' => $testRole->role_id,  'allow' => false],
+                    ['perm_type_id' => 10, 'role_id' => $testRole->role_id, 'allow' => true],
+                    ['perm_type_id' => 11, 'role_id' => $testRole->role_id, 'allow' => false],
+                ],
+            ]
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.user-roles.update', 1), $form);

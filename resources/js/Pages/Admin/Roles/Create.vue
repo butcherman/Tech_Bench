@@ -18,8 +18,9 @@
                                     <text-input v-model="form.name" rules="required" label="Role Name" name="name"></text-input>
                                     <text-input v-model="form.description" rules="required" label="Short Description" name="description"></text-input>
                                     <b-form-group label="Role Permissions:">
-                                        <div class="row">
-                                            <div class="col-6 col-lg-4" v-for="opt in form.user_role_permissions" :key="opt.perm_type_id">
+                                        <div class="row" v-for="(group, name) in form.user_role_permissions" :key="name">
+                                            <h4 class="w-100">{{name.length ? name : 'Misc'}}</h4>
+                                            <div class="col-6 col-lg-4" v-for="opt in group" :key="opt.perm_type_id">
                                                 <b-form-checkbox
                                                     v-model="opt.allow"
                                                     value="1"
@@ -50,9 +51,10 @@
         props: {
             /**
              * Array of objects from /app/Models/UserRolePermissionType
+             * Grouped by Role Category - identified as group
              */
             permissions: {
-                type:     Array,
+                type:     Object,
                 required: true,
             },
         },
