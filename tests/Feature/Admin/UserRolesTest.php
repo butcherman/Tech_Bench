@@ -204,8 +204,7 @@ class UserRolesTest extends TestCase
                     ['perm_type_id' => 10, 'role_id' => $testRole->role_id, 'allow' => true],
                     ['perm_type_id' => 11, 'role_id' => $testRole->role_id, 'allow' => false],
                 ],
-            ]
-            ]
+            ],
         ];
 
         $response = $this->put(route('admin.user-roles.update', $testRole->role_id), $form);
