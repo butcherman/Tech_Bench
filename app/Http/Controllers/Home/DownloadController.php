@@ -32,6 +32,32 @@ class DownloadController extends Controller
         }
 
         event(new DownloadedFileEvent($file));
-        return Storage::disk($file->disk)->download($file->folder.DIRECTORY_SEPARATOR.$file->file_name);
+        // return Storage::disk($file->disk)->download($file->folder.DIRECTORY_SEPARATOR.$file->file_name);
+
+
+        //  Download the file
+        $path     = Storage::disk($file->disk)->path($file->folder.DIRECTORY_SEPARATOR.$file->file_name);
+        $fileName = basename($path);
+
+        //  Prepare header information for file download
+        header('Content-Description:  File Transfer');
+        // header('Content-Type:  '.$fileData->mime_type);
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename='.basename($fileName));
+        header('Content-Transfer-Encoding:  binary');
+        header('Expires:  0');
+        header('Cache-Control:  must-revalidate, post-check=0, pre-check=0');
+        header('Pragma:  public');
+        header('Content-Length:  '.filesize($path));
+
+        //  Begin the file download.  File is broken into sections to better be handled by browser
+        set_time_limit(0);
+        $file = fopen($path, "rb");
+        while(!feof($file))
+        {
+            print(@fread($file, 1024 * 8));
+            ob_flush();
+            flush();
+        }
     }
 }
