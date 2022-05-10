@@ -32,8 +32,6 @@ class DownloadController extends Controller
         }
 
         event(new DownloadedFileEvent($file));
-        // return Storage::disk($file->disk)->download($file->folder.DIRECTORY_SEPARATOR.$file->file_name);
-
 
         //  Download the file
         $path     = Storage::disk($file->disk)->path($file->folder.DIRECTORY_SEPARATOR.$file->file_name);
@@ -41,7 +39,6 @@ class DownloadController extends Controller
 
         //  Prepare header information for file download
         header('Content-Description:  File Transfer');
-        // header('Content-Type:  '.$fileData->mime_type);
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename='.basename($fileName));
         header('Content-Transfer-Encoding:  binary');
