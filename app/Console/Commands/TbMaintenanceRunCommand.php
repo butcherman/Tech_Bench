@@ -2,20 +2,23 @@
 
 namespace App\Console\Commands;
 
-use App\Models\CustomerFile;
-use App\Models\FileUploads;
-use App\Models\TechTipFile;
-use App\Models\User;
-use App\Models\UserInitialize;
-use App\Models\UserRolePermissions;
-use App\Models\UserRolePermissionTypes;
-use App\Models\UserSetting;
-use App\Models\UserSettingType;
+use App\Models\CustomerEquipment;
+use App\Models\CustomerEquipmentData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+
+use App\Models\User;
+use App\Models\FileUploads;
+use App\Models\UserSetting;
+use App\Models\TechTipFile;
+use App\Models\CustomerFile;
+use App\Models\DataField;
+use App\Models\UserInitialize;
+use App\Models\UserSettingType;
+use App\Models\UserRolePermissions;
+use App\Models\UserRolePermissionTypes;
 
 class TbMaintenanceRunCommand extends Command
 {
@@ -24,11 +27,9 @@ class TbMaintenanceRunCommand extends Command
                                         {--r|report : Create a downloadable report}';
     protected $description = 'Check for missing data keys in DB and missing/rogue files in filesystem';
 
-    //  Report Data
     protected $fix        = false;
     protected $rep        = false;
     protected $reportData = [];
-    // protected $fileArr;
 
     /**
      * Create a new command instance.
@@ -66,8 +67,11 @@ class TbMaintenanceRunCommand extends Command
          */
         $this->userCheck();
 
+        /**
+         * Run DB Check for customers
+         */
+        $this->customerCheck();
 
-        //  TODO - Check all customer equipment to make sure all data fileds are there
         //  TODO - Make a report on what happened
 
 
@@ -75,7 +79,6 @@ class TbMaintenanceRunCommand extends Command
          * Run DB Check for file system
          */
         $this->fileSystemCheck();
-
 
         $this->info('Database Maintenance completed');
         $this->call('up');
@@ -266,6 +269,85 @@ class TbMaintenanceRunCommand extends Command
 
 /*****************************************************************************************************************************
  *                                                                                                                           *
+ *                                              Customer System Functions                                                    *
+ *                                                                                                                           *
+ *****************************************************************************************************************************/
+
+    /**
+     * All functions related to checking customers
+    */
+    protected function customerCheck()
+    {
+        $this->line('Checking Customer Equipment for data type entries');
+        $missingEquipData = $this->checkCustomerEquipment();
+        if($missingEquipData)
+        {
+            $this->line('Some Customer Equipment Data is missing');
+            $this->table(
+                ['cust_equip_id', 'missing_field_id'],
+                $missingEquipData
+            );
+
+            if($this->fix)
+            {
+                foreach($missingEquipData as $mis)
+                {
+                    foreach($mis['missing_field'] as $field)
+                    {
+                        CustomerEquipmentData::create([
+                            'cust_equip_id' => $mis['cust_equip_id'],
+                            'field_id'      => $field,
+                        ]);
+                    }
+                }
+                $this->line('Missing Equipment Data fixed');
+            }
+        }
+        else
+        {
+            $this->line('No missing Customer Equipiment Data');
+        }
+
+        //  Fill out report data for this function
+        $this->reportData['customer_equipment']['missing_data_fields'] = $missingEquipData;
+    }
+
+    /**
+     * Cycle through all customer equipment and make sure that they have all of the proper data fields
+     */
+    protected function checkCustomerEquipment()
+    {
+        //  Get the data fields for all equipment types
+        $missing    = [];
+        $dataFields = DataField::get()->groupBy('equip_id');
+        foreach($dataFields as $group)
+        {
+            $fieldList    = $group->pluck('field_id');
+            $customerList = CustomerEquipment::where('equip_id', $group[0]->equip_id)->with('CustomerEquipmentData')->get();
+
+            foreach($customerList as $cust)
+            {
+
+                $equipData  = $cust->CustomerEquipmentData;
+                $custFields = $equipData->pluck('field_id');
+                $diff       = array_diff($fieldList->toArray(), $custFields->toArray());
+
+                if($diff)
+                {
+                    $missing[] = [
+                        'cust_equip_id' => $cust->cust_equip_id,
+                        'missing_field' => collect($diff),
+                    ];
+                }
+            }
+        }
+
+        return $missing;
+    }
+
+
+/*****************************************************************************************************************************
+ *                                                                                                                           *
  *                                              File System Functions                                                        *
  *                                                                                                                           *
  *****************************************************************************************************************************/
@@ -380,6 +462,13 @@ class TbMaintenanceRunCommand extends Command
         {
             $this->info('No files without Database Pointers');
         }
+
+        //  Fill out report data for this function
+        $this->reportData['filesystem']['available_space']   = ['size' => $totalSpace, 'free' => $freeSpace];
+        $this->reportData['filesystem']['empty_directories'] = $emptyDir;
+        $this->reportData['filesystem']['missing_files']     = $fileData['missing'];
+        $this->reportData['filesystem']['extra_files']       = $fileData['extra'];
+        $this->reportData['filesystem']['leftover_files']    = $leftOvers;
     }
 
     /**
