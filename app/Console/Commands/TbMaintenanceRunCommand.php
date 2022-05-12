@@ -407,7 +407,8 @@ class TbMaintenanceRunCommand extends Command
         $this->newLine();
 
         //  Find missing and extra files
-        $fileData = $this->runFileMaintenance();
+        $fileData  = $this->runFileMaintenance();
+        $leftOvers = [];
         if($fileData['missing'])
         {
             $this->error('The following files are missing from the file system');
@@ -513,6 +514,9 @@ class TbMaintenanceRunCommand extends Command
 
         //  Remove the .gitignore file from the file list
         if(($key = array_search('.gitignore', $fileList)) !== false) unset($fileList[$key]);
+        //  Remove the files that are in the public directory
+        $publicFiles = preg_grep('/^public\//i', $fileList);
+        $fileList = array_diff_key($fileList, $publicFiles);
 
         foreach($dbList as $file)
         {
@@ -535,6 +539,12 @@ class TbMaintenanceRunCommand extends Command
                 if(($key = array_search($localPath, $fileList)) !== false) unset($fileList[$key]);
             }
         }
+
+        // //  cycle through the remaining fileList and remove anything from the 'public' disk
+        // foreach($fileList as $f)
+        // {
+        //     $publicFiles = Storage::disk('public')->allFiles();
+        // }
 
         return [
             'missing' => $missing,

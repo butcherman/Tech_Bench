@@ -92,7 +92,6 @@ trait FileTrait
             $base  = $parts['filename'];
             $number = 0;
 
-
             do
             {
                 $name = $base.'('.++$number.')'.$ext;
