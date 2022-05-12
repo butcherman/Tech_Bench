@@ -714,7 +714,7 @@ class MigrateDatabaseCommand extends Command
         }
 
         $this->line('Found File Link Module');
-        Artisan::call('tb_module:activate FileLinkModule -q');
+        Artisan::call('tb_module:enable FileLinkModule -q');
 
         $oldFileLinks = DB::select('SELECT * FROM `'.$this->database.'_old`.`file_links`');
         foreach($oldFileLinks as $link)

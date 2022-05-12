@@ -45,7 +45,14 @@
             </nav>
             <div class="content">
                 <div class="content-wrapper">
-                    <b-breadcrumb v-if="breadcrumbs.length" :items="breadcrumbs"></b-breadcrumb>
+                    <nav v-if="breadcrumbs.length">
+                        <ol class="breadcrumb">
+                            <li v-for="crumb in breadcrumbs" :key="crumb.text" class="breadcrumb-item" :class="crumb.active ? 'active' : ''">
+                                <inertia-link v-if="!crumb.active" :href="crumb.href">{{crumb.text}}</inertia-link>
+                                <span v-else>{{crumb.text}}</span>
+                            </li>
+                        </ol>
+                    </nav>
                     <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? 30 : false">
                         <p class="text-center">{{$page.props.flash.message}}</p>
                     </b-alert>

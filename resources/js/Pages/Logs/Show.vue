@@ -19,7 +19,10 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">{{filename}}</div>
+                        <div class="card-title">
+                            {{filename}}
+                            <b-badge class="float-right" :href="route('admin.logs.download', [channel.name, filename])" pill variant="info" title="Download Log" v-b-tooltip.hover><i class="fas fa-download"></i></b-badge>
+                        </div>
                         <b-table striped responsive :fields="logFields" :items="log_file" empty-text="Log File Not Found" show-empty>
                             <template #cell(data)="data">
                                 <b-button v-if="data.item.details && data.item.details.length > 0" @click="data.toggleDetails" variant="info" size="sm" pill>

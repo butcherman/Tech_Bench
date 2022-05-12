@@ -9,29 +9,32 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
+                        <h4 v-if="!role_data.allow_edit" class="text-center text-danger">You Cannot Edit A Default Role</h4>
                         <ValidationObserver v-slot="{handleSubmit}">
                             <b-overlay :show="submitted">
                                 <template #overlay>
                                     <form-loader text="Updating Role..."></form-loader>
                                 </template>
                                 <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-                                    <text-input v-model="form.name" rules="required" label="Role Name" name="name"></text-input>
-                                    <text-input v-model="form.description" rules="required" label="Short Description" name="description"></text-input>
+                                    <text-input v-model="form.name" rules="required" label="Role Name" name="name" :disabled="!role_data.allow_edit"></text-input>
+                                    <text-input v-model="form.description" rules="required" label="Short Description" name="description" :disabled="!role_data.allow_edit"></text-input>
                                     <b-form-group label="Role Permissions:">
-                                        <div class="row">
-                                            <div class="col-4" v-for="opt in form.user_role_permissions" :key="opt.perm_type_id">
+                                        <div class="row" v-for="(group, name) in form.user_role_permissions" :key="name">
+                                            <h4 class="w-100">{{name.length ? name : 'Misc'}}</h4>
+                                            <div class="col-4" v-for="opt in group" :key="opt.perm_type_id">
                                                 <b-form-checkbox
                                                     v-model="opt.allow"
                                                     value="1"
                                                     unchecked-value="0"
                                                     switch
+                                                    :disabled="!role_data.allow_edit"
                                                 >
                                                     {{opt.user_role_permission_types.description}}
                                                 </b-form-checkbox>
                                             </div>
                                         </div>
                                     </b-form-group>
-                                    <submit-button button_text="Update Role" :submitted="submitted" class="mt-3" />
+                                    <submit-button v-if="role_data.allow_edit" button_text="Update Role" :submitted="submitted" class="mt-3" />
                                 </b-form>
                             </b-overlay>
                         </ValidationObserver>
@@ -39,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center grid-margins">
+        <div v-if="role_data.allow_edit" class="row justify-content-center grid-margins">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body text-center">
@@ -58,13 +61,20 @@
         layout: App,
         props: {
             /**
-             * All of the current role settings for the selected role
-             * from /app/Models/UserRolePermission
+             * Object from /app/Models/UserRoles
              */
             role_data: {
                 type:     Object,
                 required: true,
-            }
+            },
+            /**
+             * Array of objects from /app/Models/UserRolePermissionType
+             * Grouped by Role Category - identified as group
+             */
+            permissions: {
+                type:     Object,
+                required: true,
+            },
         },
         data() {
             return {
@@ -72,7 +82,7 @@
                 form: this.$inertia.form({
                     name:                  this.role_data.name,
                     description:           this.role_data.description,
-                    user_role_permissions: this.role_data.user_role_permissions,
+                    user_role_permissions: this.permissions,
                 }),
             }
         },
@@ -98,7 +108,11 @@
                     if(value)
                     {
                         this.submitted = true;
-                        this.$inertia.delete(this.route('admin.user-roles.destroy', this.role_data.role_id));
+                        this.$inertia.delete(this.route('admin.user-roles.destroy', this.role_data.role_id), {
+                            onFinish: () => {
+                                this.submitted = false;
+                            }
+                        });
                     }
                 });
             }

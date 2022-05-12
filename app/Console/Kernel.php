@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->job(new GarbageCollectionJob)->daily();
+        $schedule->command('telescope:prune')->daily();
 
         //  Nightly backup will only run if the task is enabled
         if(config('app.backups.enabled'))
