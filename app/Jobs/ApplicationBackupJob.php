@@ -65,16 +65,21 @@ class ApplicationBackupJob implements ShouldQueue
     protected function openArchive()
     {
         //  Create a file that holds the current version of the Tech Bench application
+        Log::debug('Writing version file');
         Storage::disk('backups')->put('version.txt', (new Version)->version_only());
         //  Create a file that holds all enabled modules
+        Log::debug('Writing modules file');
         Storage::disk('backups')->put('modules.txt', Module::all());
 
         //  Create the backup Zip file
+        Log::debug('Creating archive file - '.$this->diskLocal.$this->backupName);
         $this->archive = Zip::create($this->diskLocal.$this->backupName);
         //  Add the version and module files
+        Log::debug('Adding version and modules file to archive');
         $this->archive->add($this->diskLocal.'version.txt');
         $this->archive->add($this->diskLocal.'modules.txt');
         //  Add the .env file that holds local global config
+        Log::debug('Adding env file to archive');
         $this->archive->add(base_path().DIRECTORY_SEPARATOR.'.env');
     }
 
@@ -83,6 +88,7 @@ class ApplicationBackupJob implements ShouldQueue
      */
     protected function closeArchive()
     {
+        Log::debug('Closing archive');
         $this->archive->close();
     }
 
@@ -93,14 +99,18 @@ class ApplicationBackupJob implements ShouldQueue
     {
         if(!$this->files)
         {
+            Log::debug('Skipping file system backup');
             return false;
         }
 
         //  All uploaded files
+        Log::debug('Adding Local Disk to archive');
         $this->archive->add(config('filesystems.disks.local.root'));
         //  All public uploaded files (images for Tech Tips and Logos)
+        Log::debug('Adding Public Disk to archive');
         $this->archive->add(config('filesystems.disks.public.root'));
         //  All application logs
+        Log::debug('Adding all log files to archive');
         $this->archive->add(config('filesystems.disks.logs.root'));
     }
 
@@ -111,9 +121,11 @@ class ApplicationBackupJob implements ShouldQueue
     {
         if(!$this->database)
         {
+            Log::debug('Skipping Database backup');
             return false;
         }
 
+        Log::Debug('Adding Database to archive');
         Artisan::call('db:masked-dump', ['output' => $this->diskLocal.'backup.sql']);
         $this->archive->add($this->diskLocal.'backup.sql');
     }
@@ -123,6 +135,7 @@ class ApplicationBackupJob implements ShouldQueue
      */
     protected function cleanup()
     {
+        Log::debug('Cleaning Up');
         Storage::disk('backups')->delete('version.txt');
         Storage::disk('backups')->delete('backup.sql');
         Storage::disk('backups')->delete('modules.txt');
