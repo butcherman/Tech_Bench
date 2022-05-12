@@ -49,10 +49,12 @@ class Handler extends ExceptionHandler
         if(!app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403]))
         {
             Log::notice('Server Error - '.$response->status().' occured.  Message - '.$response->exception->getMessage(), [
-                'url'      => Request::fullUrl(),
-                'auth'     => Auth::check() ? true : false,
-                'user_id'  => Auth::check() ? Auth::user()->user_id : null,
-                'username' => Auth::check() ? Auth::user()->username : null,
+                'url'        => $request->fullUrl(),
+                'auth'       => Auth::check() ? true : false,
+                'user_id'    => Auth::check() ? Auth::user()->user_id : null,
+                'username'   => Auth::check() ? Auth::user()->username : null,
+                'method'     => $request->getMethod(),
+                'ip_address' => $request->ip(),
             ]);
 
             $message = $response->exception->getMessage();

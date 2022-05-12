@@ -512,6 +512,17 @@ class TbMaintenanceRunCommand extends Command
         $dbList   = FileUploads::all();
         $missing  = [];
 
+        //  Remove any leading or trailing / from the folder column (only if the fix flag is enabled)
+        if($this->fix)
+        {
+            foreach($dbList as $file)
+            {
+                $trim = trim(rtrim($file->folder, '/'), '/');
+                $file->folder = $trim;
+                $file->save();
+            }
+        }
+
         //  Remove the .gitignore file from the file list
         if(($key = array_search('.gitignore', $fileList)) !== false) unset($fileList[$key]);
         //  Remove the files that are in the public directory
