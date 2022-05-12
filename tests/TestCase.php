@@ -17,4 +17,12 @@ abstract class TestCase extends BaseTestCase
         //  Cleanup memory leak caused by Faker
         gc_collect_cycles();
     }
+
+    public function tearDown(): void
+    {
+        Parent::tearDown();
+
+        //  Cleanup memory leak caused by Faker
+        gc_collect_cycles();
+    }
 }

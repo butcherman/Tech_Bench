@@ -23,7 +23,7 @@ use App\Http\Controllers\Admin\Email\SetEmailSettingsController;
 
 use App\Http\Controllers\Admin\Logo\GetLogoController;
 use App\Http\Controllers\Admin\Logo\SetLogoController;
-
+use App\Http\Controllers\Admin\Logs\DownloadLogController;
 use App\Http\Controllers\Admin\Logs\ViewLogController;
 use App\Http\Controllers\Admin\Logs\LogFilesController;
 use App\Http\Controllers\Admin\Logs\LogSettingsController;
@@ -89,11 +89,12 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * Application Maintenance Routes
      */
-    Route::get( 'logs',           LogFilesController::class)      ->name('logs.index')   ->breadcrumb('Logs', 'admin.index');
-    Route::get( 'logs/settings',  LogSettingsController::class)   ->name('logs.settings')->breadcrumb('Settings', 'admin.logs.index');
-    Route::post('logs/settings',  SetLogSettingsController::class)->name('logs.set-settings');
-    Route::get( 'logs/{channel}', LogFilesController::class)      ->name('logs.channel') ->breadcrumb(fn($channel) => $channel, 'admin.logs.index');
-    Route::get( 'logs/{channel}/{name}', ViewLogController::class)->name('logs.view')    ->breadcrumb('View Log', 'admin.logs.channel');
+    Route::get( 'logs',                          LogFilesController::class)      ->name('logs.index')   ->breadcrumb('Logs', 'admin.index');
+    Route::get( 'logs/settings',                 LogSettingsController::class)   ->name('logs.settings')->breadcrumb('Settings', 'admin.logs.index');
+    Route::post('logs/settings',                 SetLogSettingsController::class)->name('logs.set-settings');
+    Route::get('logs/download/{channel}/{file}', DownloadLogController::class)->name('logs.download');
+    Route::get( 'logs/{channel}',                LogFilesController::class)      ->name('logs.channel') ->breadcrumb(fn($channel) => $channel, 'admin.logs.index');
+    Route::get( 'logs/{channel}/{name}',         ViewLogController::class)->name('logs.view')    ->breadcrumb('View Log', 'admin.logs.channel');
 
     Route::resource('backups', BackupController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
     {
