@@ -20,6 +20,7 @@
                                 <notification-base
                                     v-else
                                     v-for="notification in notificationList"
+                                    :ref="'notifBase'+notification.id"
                                     :key="notification.id"
                                     :notification="notification"
                                     :reset_watch="checkedList.length ? false : true"
@@ -198,6 +199,7 @@
                         .then(res => {
                             this.notificationList = res.data.list;
                             this.eventHub.$emit('update-unread', res.data.unread);
+                            // this.$refs['notifBase'+id].clearLoading();
                         }).catch(error => this.eventHub.$emit('axiosError', error));
                 }
 

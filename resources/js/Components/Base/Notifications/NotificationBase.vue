@@ -5,8 +5,10 @@
             <i v-else class="far fa-square"></i>
         </b-td>
         <b-td class="pointer col-7" @click="openModal">
-            <i v-if="notification.read_at === null" class="fas fa-envelope"></i>
-            <i v-else class="fas fa-envelope-open-text"></i>
+            <i v-if="deleting" class="fas fa-spinner fa-spin"></i>
+            <i v-else-if="notification.read_at !== null" class="fas fa-envelope-open-text"></i>
+            <i v-else-if="loading" class="fas fa-spinner fa-spin"></i>
+            <i v-else class="fas fa-envelope"></i>
             {{notification.data.subject}}
         </b-td>
         <b-td class="col-sm-4 d-none d-sm-flex">{{notification.created_at}}</b-td>
@@ -35,6 +37,8 @@
         data() {
             return {
                 checked: false,
+                loading: false,
+                deleting: false,
             }
         },
         created() {
@@ -53,7 +57,7 @@
                 {
                     this.checked = false;
                 }
-            }
+            },
         },
         methods: {
             openModal()
@@ -62,10 +66,12 @@
             },
             markMessage()
             {
+                this.loading = true;
                 this.$emit('read', this.notification.id);
             },
             deleteMessage()
             {
+                this.deleting = true;
                 this.$emit('delete', this.notification.id);
                 this.$refs['message-modal'].hide();
             },
@@ -74,6 +80,10 @@
                 this.checked = !this.checked;
                 this.$emit('checked', this.checked, this.notification.id);
             },
+            clearLoading()
+            {
+                this.loading = false;
+            }
         },
     }
 </script>
