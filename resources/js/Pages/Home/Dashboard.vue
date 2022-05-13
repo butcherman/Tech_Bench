@@ -165,7 +165,9 @@
             //
         },
         mounted() {
-             //
+             //  sort the bookmarks by name
+            this.bookmarks.customers.sort((a, b) => a.name.localeCompare(b.name));
+            this.bookmarks.tips.sort((a, b) => a.subject.localeCompare(b.subject));
         },
         computed: {
              //
