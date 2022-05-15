@@ -65,9 +65,9 @@ requireComponent.keys().forEach(fileName => {
 });
 
 /**
- * Globally Register all Base Components from the attached Modules
+ * Globally Register all Page Components from the attached Modules
  */
-const requireModule = require.context('../../Modules', true, /Base\/[A-Z]\w+\/[A-Z]\w+\.vue$/);
+const requireModule = require.context('../../Modules', true, /Base\/Resources\/js\/Pages\/[A-Z]\w+\/[A-Z]\w+\.vue$/);
 requireModule.keys().forEach(fileName => {
     const componentConfig = requireModule(fileName);
     const componentName   = upperFirst(camelCase(fileName.split('/').pop().replace(/\.\w+$/, '')));
@@ -75,6 +75,18 @@ requireModule.keys().forEach(fileName => {
     // Register component globally
     Vue.component( componentName, componentConfig.default || componentConfig);
 });
+
+/**
+ * Globally Register all Notification Components from the attached Modules
+ */
+ const requireNotif = require.context('../../Modules', true, /Base\/Resources\/js\/Notifications\/[A-Z]\w+\/[A-Z]\w+\.vue$/);
+ requireNotif.keys().forEach(fileName => {
+     const componentConfig = requireModule(fileName);
+     const componentName   = upperFirst(camelCase(fileName.split('/').pop().replace(/\.\w+$/, '')));
+
+     // Register component globally
+     Vue.component( componentName, componentConfig.default || componentConfig);
+ });
 
 /*
 *   Initialize App
