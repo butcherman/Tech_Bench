@@ -19,7 +19,6 @@
     "require": {
         "php": "^8.0",
         "barryvdh/laravel-dompdf": "^1.0",
-        "beyondcode/laravel-masked-db-dump": "dev-main",
         "doctrine/dbal": "^3.3",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^3.0",
