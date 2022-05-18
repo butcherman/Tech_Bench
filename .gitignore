@@ -5,6 +5,7 @@
 /vendor
 /tests/_report
 /keystore
+/packages
 .vscode/
 .env
 .env.backup
