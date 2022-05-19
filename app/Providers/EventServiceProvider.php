@@ -305,6 +305,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Admin\LogSettingsUpdatedEvent' => [
             'App\Listeners\Admin\LogLogSettingsUpdated',
         ],
+        'Spatie\Backup\Events\BackupManifestWasCreated' => [
+            'App\Listeners\Admin\AddVersionToBackup',
+        ],
     ];
 
     /**

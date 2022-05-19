@@ -17,3 +17,4 @@ npm-debug.log
 yarn-error.log
 modules_statuses.json
 public/mix-manifest.json
+version.txt
