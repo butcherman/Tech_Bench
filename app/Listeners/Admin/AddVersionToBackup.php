@@ -11,9 +11,7 @@ use PragmaRX\Version\Package\Version;
 class AddVersionToBackup
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
+     * Create the event listener
      */
     public function __construct()
     {
@@ -21,20 +19,11 @@ class AddVersionToBackup
     }
 
     /**
-     * Handle the event.
-     *
-     * @param  object  $event
-     * @return void
+     * Create a file called 'version.txt' and put the Tech Bench's current working version in it
+     * Attache to backup
      */
     public function handle($event)
     {
-        //
-        // Storage::disk('backups')->put('version.txt', (new Version)->version_only());
-
-        // Storage::disk('backups')->put('backup-temp/version.txt', (new Version)->version_only());
-        // $event->manifest->addFiles([storage_path('backups/backup-temp').'/version.txt']);
-        // $event->manifest->addFiles([Storage::disk('backups')->get('backup-temp/version.txt')]);
-
         File::put(base_path().DIRECTORY_SEPARATOR.'version.txt', (new Version)->version_only());
         $event->manifest->addFiles([base_path().DIRECTORY_SEPARATOR.'version.txt']);
     }
