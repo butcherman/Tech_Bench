@@ -308,6 +308,12 @@ class EventServiceProvider extends ServiceProvider
         'Spatie\Backup\Events\BackupManifestWasCreated' => [
             'App\Listeners\Admin\AddVersionToBackup',
         ],
+        'Spatie\Backup\Events\BackupWasSuccessful' => [
+            'App\Listeners\Admin\LogSuccessfulBackup',
+        ],
+        'Spatie\Backup\Events\BackupHasFailed' => [
+            'App\Listeners\Admin\LogFailedBackup',
+        ],
     ];
 
     /**

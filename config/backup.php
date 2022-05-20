@@ -131,7 +131,7 @@ return [
     'monitor_backups' => [
         [
             'name' => env('APP_NAME', 'tech-bench-backup'),
-            'disks' => ['local'],
+            'disks' => ['backups'],
             'health_checks' => [
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
@@ -172,7 +172,7 @@ return [
             /*
              * The number of days for which daily backups must be kept.
              */
-            'keep_daily_backups_for_days' => 16,
+            'keep_daily_backups_for_days' => 14,
 
             /*
              * The number of weeks for which one weekly backup must be kept.
