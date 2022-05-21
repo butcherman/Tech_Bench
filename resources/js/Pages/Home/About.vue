@@ -11,17 +11,11 @@
                     <div class="card-body">
                         <img src="/images/TechBenchLogo.png" class="mx-auto d-block img-fluid" alt="Tech Bench"/>
                         <p class="text-center">
-                            Tech Bench &copy; 2016-2021
+                            Tech Bench &copy; {{copyright}}
                             <span class="d-inline-block">Butcherman - All Rights Reserved</span>
                         </p>
                         <p class="text-center">{{version}} (Build {{build}})</p>
                         <p class="text-center">Build Date - {{build_date}}</p>
-                        <!-- <p class="text-center">
-                            Looking for guidance?
-                            <span class="d-inline-block">
-                                <a href="https://tech-bench.readthedocs.io/en/latest/user/index.html" target="_blank">Click here for the Tech Bench User Guide.</a>
-                            </span>
-                        </p> -->
                     </div>
                 </div>
             </div>
@@ -39,6 +33,13 @@
              * Tech Bench Version
              */
             version: {
+                type: String,
+                required: true,
+            },
+            /**
+             * Copyright notice
+             */
+            copyright: {
                 type: String,
                 required: true,
             },

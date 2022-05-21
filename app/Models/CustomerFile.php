@@ -22,26 +22,27 @@ class CustomerFile extends Model
         'shared'     => 'boolean',
     ];
 
+    /**
+     * Each file is attached to a specific file entry
+     */
+    // public function FileUpload()
+    // {
+    //     return $this->hasOne(FileUploads::class, 'file_id', 'file_id');
+    // }
 
-    /*
-    *   Each file is attached to a specific file entry
-    */
-    public function FileUpload()
-    {
-        return $this->hasOne(FileUploads::class, 'file_id', 'file_id');
-    }
-
-    /*
-    *   Full name of the user that uploaded the file
-    */
+    /**
+     * Full name of the user that uploaded the file
+     * @codeCoverageIgnore
+     */
     public function getUploadedByAttribute()
     {
         return User::withTrashed()->find($this->user_id)->full_name;
     }
 
-    /*
-    *   Type of file that was uploaded (i.e. Backup, Site Map, etc)
-    */
+    /**
+     * Type of file that was uploaded (i.e. Backup, Site Map, etc)
+     * @codeCoverageIgnore
+     */
     public function getFileTypeAttribute()
     {
         return CustomerFileType::find($this->file_type_id)->description;

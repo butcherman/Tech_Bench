@@ -20,19 +20,19 @@ class CustomerEquipment extends Model
         'deleted_at' => 'datetime:M d, Y',
     ];
 
-    /*
-    *   Get the name of the equipment without attaching the entire equipment object
-    */
+    /**
+     * Get the name of the equipment without attaching the entire equipment object
+     */
     public function getNameAttribute()
     {
         return EquipmentType::find($this->equip_id)->name;
     }
 
-    /*
-    *   Site specific information for the selected piece of equipment
-    */
-    public function CustomerEquipmentData()
-    {
-        return $this->hasMany('App\Models\CustomerEquipmentData', 'cust_equip_id', 'cust_equip_id');
-    }
+    /**
+     * Site specific information for the selected piece of equipment
+     */
+    // public function CustomerEquipmentData()
+    // {
+    //     return $this->hasMany('App\Models\CustomerEquipmentData', 'cust_equip_id', 'cust_equip_id');
+    // }
 }

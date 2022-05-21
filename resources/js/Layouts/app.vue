@@ -64,7 +64,7 @@
                 <axios-error></axios-error>
                 <footer class=" footer page-footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; 2016-2022<span class="d-none d-md-inline"> Butcherman - All rights reserved.</span></span>
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; {{$page.props.app.copyright}}<span class="d-none d-md-inline"> Butcherman - All rights reserved.</span></span>
                         <span class="text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center">{{app.version}}</span>
                     </div>
                 </footer>

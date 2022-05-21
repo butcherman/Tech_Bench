@@ -18,9 +18,9 @@ class CustomerContact extends Model
         'deleted_at' => 'datetime:M d, Y',
     ];
 
-    /*
-    *   Each customer contact can have several phone numbers attached
-    */
+    /**
+     * Each customer contact can have several phone numbers attached
+     */
     public function CustomerContactPhone()
     {
         return $this->hasMany(CustomerContactPhone::class, 'cont_id', 'cont_id');

@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
                 'name'       => config('app.name'),
                 'logo'       => config('app.logo'),
                 'version'    => (new Version)->full(),
+                'copyright'  => (new Version)->copyright(),
                 //  Current logged in user
                 'user'       => fn() => $request->user() ? $request->user() : null,
                 'notifCount' => fn() => $request->user() ? $request->user()->unreadNotifications->count() : null,

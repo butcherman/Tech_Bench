@@ -23,17 +23,19 @@ class CustomerNote extends Model
         'shared'     => 'boolean',
     ];
 
-    /*
-    *   Name of the user who created the note
-    */
+    /**
+     * Name of the user who created the note
+     * @codeCoverageIgnore
+     */
     public function getAuthorAttribute()
     {
         return User::withTrashed()->find($this->created_by)->full_name;
     }
 
-    /*
-    *   Name of the user who most recently updated the note
-    */
+    /**
+     * Name of the user who most recently updated the note
+     * @codeCoverageIgnore
+     */
     public function getUpdatedAuthorAttribute()
     {
         $user = User::withTrashed()->find($this->updated_by);

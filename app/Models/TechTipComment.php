@@ -16,8 +16,11 @@ class TechTipComment extends Model
         'updated_at' => 'datetime:M d, Y',
     ];
 
-    public function User()
-    {
-        return $this->hasOne(User::class, 'user_id', 'user_id');
-    }
+    /**
+     * Each comment is created by a user
+     */
+    // public function User()
+    // {
+    //     return $this->hasOne(User::class, 'user_id', 'user_id');
+    // }
 }

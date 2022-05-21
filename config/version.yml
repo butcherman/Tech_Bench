@@ -59,3 +59,4 @@ format:
   timestamp-datetime: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second}'
   timestamp-full: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second} {$timestamp.timezone}'
   build: '{$timestamp.month}-{$timestamp.day}-{$timestamp.year}'
+  copyright: '2016-2022'
