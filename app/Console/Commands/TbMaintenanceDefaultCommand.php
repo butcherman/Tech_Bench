@@ -5,18 +5,12 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class TbBackupDefaultCommand extends Command
+class TbMaintenanceDefaultCommand extends Command
 {
-    protected $signature   = 'tb_backup:default {--confirmed} {--demo}';
+    protected $signature   = 'tb_backup:default
+                                    {--confirmed : Run command without verification}
+                                    {--demo      : Populate the database with random data for demonstration purpose}';
     protected $description = 'Completely wipe all Tech Bench data and start from scratch';
-
-    /**
-     * Create a new command instance
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command
@@ -36,6 +30,8 @@ class TbBackupDefaultCommand extends Command
             return 0;
         }
 
+        $this->warn('Defaulting Tech Bench');
+        $this->warn('Please wait...');
         $this->call('down');
         $this->callSilently('migrate:fresh');
         $this->wipeFiles();
@@ -47,6 +43,7 @@ class TbBackupDefaultCommand extends Command
         $this->callSilently('storage:link');
 
         $this->info('Operation complete');
+        $this->info('You can log into the Tech Bench with the default username `admin` and default password `password`');
         $this->call('up');
         return 0;
     }
