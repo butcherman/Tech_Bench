@@ -29,6 +29,7 @@ class SendTestEmailController extends Controller
                 'success' => true,
             ];
         }
+        // @codeCoverageIgnoreStart
         catch(Exception $e)
         {
             return [
@@ -36,5 +37,6 @@ class SendTestEmailController extends Controller
                 'message' => $e->getMessage(),
             ];
         }
+        // @codeCoverageIgnoreEnd
     }
 }

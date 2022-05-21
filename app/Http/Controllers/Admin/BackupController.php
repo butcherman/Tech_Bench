@@ -85,6 +85,8 @@ class BackupController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         //  Verify that the backup file exists
         if(!Storage::disk('backups')->exists($id))
         {
@@ -99,6 +101,8 @@ class BackupController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         //  Verify that the backup file exists
         if(!Storage::disk('backups')->exists($id))
         {
