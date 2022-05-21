@@ -3,7 +3,7 @@
 return [
 
     'backup' => [
-        'name' => env('APP_NAME', 'tech-bench-backup'),
+        'name' => '',
         'source' => [
             'files' => [
                 /*
@@ -42,7 +42,7 @@ return [
                 'mysql',
             ],
         ],
-        'database_dump_compressor' => Spatie\DbDumper\Compressors\GzipCompressor::class,
+        'database_dump_compressor' => null,
         'database_dump_file_extension' => 'sql',
         'destination' => [
             /*
@@ -130,7 +130,7 @@ return [
      */
     'monitor_backups' => [
         [
-            'name' => env('APP_NAME', 'tech-bench-backup'),
+            'name' => '', // env('APP_NAME', 'tech-bench-backup'),
             'disks' => ['backups'],
             'health_checks' => [
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,

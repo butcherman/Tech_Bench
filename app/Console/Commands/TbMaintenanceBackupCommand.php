@@ -31,6 +31,8 @@ class TbMaintenanceBackupCommand extends Command
         if($percentage > 70)
         {
             Log::critical('Unable to backup file system, more than 70% of the available storage space in use');
+            $this->error('More than 70% of the file system is in use.  Unable to backup file system at this time');
+            $this->error('Only backing up database                                                              ');
             $this->call('backup:run', ['--only-db' => true]);
             return 0;
         }
