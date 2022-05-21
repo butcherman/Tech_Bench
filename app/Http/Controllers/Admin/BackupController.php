@@ -68,14 +68,14 @@ class BackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        // if($id === 'run')
-        // {
-        //     ApplicationBackupJob::dispatch();
-        //     return back()->with([
-        //         'message' => 'Backup Started Successfully - currently running in background',
-        //         'type'    => 'success',
-        //     ]);
-        // }
+        if($id === 'run')
+        {
+            ApplicationBackupJob::dispatch();
+            return back()->with([
+                'message' => 'Backup Started Successfully - currently running in background',
+                'type'    => 'success',
+            ]);
+        }
 
         return abort(404);
     }
