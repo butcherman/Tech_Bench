@@ -23,7 +23,7 @@
             </div>
             <div class="col-md-4 mt-md-0 mt-4">
                 <div class="float-md-right">
-                    <edit-details :details="details"></edit-details>
+                    <edit-details v-if="user_data.edit" :details="details"></edit-details>
                     <manage-customer
                         v-if="user_data.manage"
                         :cust_id="details.cust_id"

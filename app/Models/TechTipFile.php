@@ -15,9 +15,10 @@ class TechTipFile extends Model
 
     /**
      * Each Tech Tip file is attached to a file upload id
+     * @codeCoverageIgnore
      */
-    // public function FileUpload()
-    // {
-    //     return $this->hasOne(FileUploads::class, 'file_id', 'file_id');
-    // }
+    public function FileUpload()
+    {
+        return $this->hasOne(FileUploads::class, 'file_id', 'file_id');
+    }
 }

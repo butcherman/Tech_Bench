@@ -299,8 +299,7 @@ class TbMaintenanceRestoreCommand extends Command
         {
             $data    = Storage::disk('backups')->get($file);
             //  Trim the file path to the correct new path
-            //  If this is a Windows server, the directory separator will be incorrect
-            $rename = str_replace(str_replace('\\', '/', $this->basename).$folder, '', $file);
+            $rename = str_replace($this->basename.'app'.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR, '', $file);
 
             Storage::disk($disk)->put($rename, $data);
         }

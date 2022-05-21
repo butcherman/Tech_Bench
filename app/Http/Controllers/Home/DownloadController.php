@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FileUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -25,12 +26,26 @@ class DownloadController extends Controller
         //  If file is not being downloaded by user, verify file is public accessable
         if(!Auth::check() && !$file->public)
         {
+            Log::alert('Someone is trying to download a file that they do not have permission to download', [
+                'file_name' => $filename,
+                'file_id'   => $fileId,
+                'authorized' => Auth::check() ? Auth::user()->username : false,
+                'ip_address' => \Request::ip(),
+            ]);
             abort(403, 'You do not have permission to download this file');
         }
 
         //  Verify that the file is in place
         if(!Storage::disk($file->disk)->exists($file->folder.DIRECTORY_SEPARATOR.$file->file_name))
         {
+            Log::alert('Unable to find a file that a user is trying to download', [
+                'file_name' => $filename,
+                'path'      => $file->folder.DIRECTORY_SEPARATOR.$file->file_name,
+                'disk'      => $file->disk,
+                'file_id'   => $fileId,
+                'authorized' => Auth::check() ? Auth::user()->username : false,
+                'ip_address' => \Request::ip(),
+            ]);
             abort(404, 'Unable to find the file specified');
         }
 

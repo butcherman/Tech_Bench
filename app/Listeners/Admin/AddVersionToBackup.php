@@ -27,6 +27,10 @@ class AddVersionToBackup
     public function handle($event)
     {
         File::put(base_path().DIRECTORY_SEPARATOR.'version.txt', (new Version)->version_only());
+        if(File::missing(base_path().DIRECTORY_SEPARATOR.'modules_statuses.json'))
+        {
+            File::put(base_path().DIRECTORY_SEPARATOR.'modules_statuses.json', '[]');
+        }
 
         $event->manifest->addFiles([
             base_path().DIRECTORY_SEPARATOR.'version.txt',
