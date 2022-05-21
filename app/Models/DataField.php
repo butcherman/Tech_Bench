@@ -16,8 +16,8 @@ class DataField extends Model
     /**
      * Name of the data field that is attached to this equipment type
      */
-    // public function DataFieldType()
-    // {
-    //     return $this->hasOne('App\Models\DataFieldType', 'type_id', 'type_id');
-    // }
+    public function DataFieldType()
+    {
+        return $this->hasOne('App\Models\DataFieldType', 'type_id', 'type_id');
+    }
 }

@@ -31,8 +31,8 @@ class CustomerEquipment extends Model
     /**
      * Site specific information for the selected piece of equipment
      */
-    // public function CustomerEquipmentData()
-    // {
-    //     return $this->hasMany('App\Models\CustomerEquipmentData', 'cust_equip_id', 'cust_equip_id');
-    // }
+    public function CustomerEquipmentData()
+    {
+        return $this->hasMany('App\Models\CustomerEquipmentData', 'cust_equip_id', 'cust_equip_id');
+    }
 }

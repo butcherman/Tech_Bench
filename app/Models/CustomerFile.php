@@ -25,10 +25,10 @@ class CustomerFile extends Model
     /**
      * Each file is attached to a specific file entry
      */
-    // public function FileUpload()
-    // {
-    //     return $this->hasOne(FileUploads::class, 'file_id', 'file_id');
-    // }
+    public function FileUpload()
+    {
+        return $this->hasOne(FileUploads::class, 'file_id', 'file_id');
+    }
 
     /**
      * Full name of the user that uploaded the file

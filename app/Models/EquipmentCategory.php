@@ -18,6 +18,6 @@ class EquipmentCategory extends Model
      */
     public function EquipmentType()
     {
-        return $this->hasMany('App\Models\EquipmentType', 'cat_id', 'cat_id');
+        return $this->hasMany('App\Models\EquipmentType', 'cat_id', 'cat_id')->orderBy('name');
     }
 }

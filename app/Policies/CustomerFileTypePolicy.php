@@ -30,10 +30,10 @@ class CustomerFileTypePolicy
     /**
      * Determine whether the user can update the model
      */
-    public function update(User $user)
-    {
-        return $this->checkPermission($user, 'Manage Customers');
-    }
+    // public function update(User $user)
+    // {
+    //     return $this->checkPermission($user, 'Manage Customers');
+    // }
 
     /**
      * Determine whether the user can delete the model
