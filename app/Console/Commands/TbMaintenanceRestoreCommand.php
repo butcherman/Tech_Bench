@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Nwidart\Modules\Facades\Module;
 use PragmaRX\Version\Package\Version;
 use ZanySoft\Zip\Zip;
 
@@ -63,6 +64,12 @@ class TbMaintenanceRestoreCommand extends Command
         }
 
         if(!$this->checkVersion())
+        {
+            $this->cleanup();
+            return 0;
+        }
+
+        if(!$this->checkForModules())
         {
             $this->cleanup();
             return 0;
@@ -163,8 +170,6 @@ class TbMaintenanceRestoreCommand extends Command
         $archive->extract(config('filesystems.disks.backups.root').DIRECTORY_SEPARATOR.$this->basename);
         $archive->close();
 
-        $this->line($this->basename.'app'.DIRECTORY_SEPARATOR.'.env');
-
         //  Make sure that the version, .env, and module files are there
         if(Storage::disk('backups')->missing($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'.env')
                     || Storage::disk('backups')->missing($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'modules_statuses.json')
@@ -223,6 +228,44 @@ class TbMaintenanceRestoreCommand extends Command
             return false;
         }
 
+        return true;
+    }
+
+    /**
+     * Check to see if the backup file contained any module data and verify if those modules are installed or not
+     */
+    protected function checkForModules()
+    {
+        $moduleFile = json_decode(Storage::disk('backups')->get($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'modules_statuses.json'));
+        $missing    = [];
+
+        foreach($moduleFile as $module => $enabled)
+        {
+            $isInstalled = Module::find($module);
+            if(!$isInstalled && $enabled)
+            {
+                $missing[] = $module;
+            }
+        }
+
+        if($missing)
+        {
+            $this->warn('There is one or more Modules as part of the backup that have not been installed on this Tech Bench');
+            $this->warn('If you plan to use these Modules, it is highly recommended to install them before applying the backup');
+            $this->warn('The missing Modules are');
+            $this->newLine();
+            $this->line($missing);
+            // $continue = $this->confirm('Do you with to continue?');
+
+            if($this->confirm('Do you wish to continue?'))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // dd($missing);
         return true;
     }
 
