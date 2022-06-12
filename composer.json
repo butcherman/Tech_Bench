@@ -47,7 +47,6 @@
         "zanysoft/laravel-zip": "^2.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.6",
         "butcherman/artisan-dev-commands": "0.0.4",
         "fakerphp/faker": "^1.19",
         "mockery/mockery": "^1.5",
