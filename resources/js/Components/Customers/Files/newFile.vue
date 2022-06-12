@@ -34,6 +34,7 @@
                             text-field="description"
                             placeholder="What Type of File Is This?"
                         />
+                        <b-form-checkbox v-show="allow_share" v-model="form.shared" class="text-center" switch>Share File Across All Sites</b-form-checkbox>
                         <dropzone-upload
                             ref="dropzone-upload"
                             disk="customers"

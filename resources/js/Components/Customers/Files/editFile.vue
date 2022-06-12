@@ -29,6 +29,7 @@
                                 text-field="description"
                                 placeholder="What Type of File Is This?"
                             />
+                            <b-form-checkbox v-show="allow_share" v-model="form.shared" class="text-center" switch>Share File Across All Sites</b-form-checkbox>
                             <submit-button class="mt-2" button_text="Update File" :submitted="submitted"></submit-button>
                         </b-form>
                     </ValidationObserver>

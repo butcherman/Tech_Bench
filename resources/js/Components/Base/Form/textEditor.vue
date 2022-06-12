@@ -35,7 +35,7 @@
 
 <script>
     /*
-    *   If the editor is inside a BootstrapVue Modal, be sure to set the "no-enforce-focus" property
+    *   If the editor is inside a BootstrapVue Modal, be sure to set the "no-enforce-focus" property on the Modal
     */
     export default {
         props: {
@@ -73,21 +73,21 @@
             return {
                 curVal: this.value,
                 editorInit: {
-                    plugins             : 'autolink advlist lists link image table spellchecker fullscreen preview',
+                    plugins             : 'autolink advlist lists link image table fullscreen preview',
                     height              : 500,
                     browser_spellcheck  : true,
-                    toolbar             : 'formatselect spellchecker | bold italic strikethrough forecolor | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | table | fullscreen preview link image',
+                    toolbar             : 'formatselect | bold italic strikethrough forecolor | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | table | fullscreen preview link image',
                     relative_urls       : false,
                     automatic_uploads   : true,
-                    images_upload_url   : route('upload-image'),
-                    file_picker_types   : 'image',
-                    image_dimensions    : false,
-                    image_class_list    : [
+                    images_upload_url   : this.allow_image ? route('upload-image') : null,
+                    file_picker_types   : this.allow_image ? 'image' : null,
+                    image_dimensions    : this.allow_image ? false : null,
+                    image_class_list    : this.allow_image ? [
                         {
                             title: 'Responsive',
                             value: 'img-fluid'
                         }
-                    ],
+                    ] : null,
                     file_picker_callback: function(cb, value, meta)
                     {
                         var input = document.createElement('input');
