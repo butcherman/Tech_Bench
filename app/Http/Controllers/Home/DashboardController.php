@@ -39,7 +39,7 @@ class DashboardController extends Controller
         // @codeCoverageIgnoreEnd
 
         return Inertia::render('Home/Dashboard', [
-            'notifications' => $request->user()->notifications,
+            // 'notifications' => $request->user()->notifications,
             'bookmarks'     => [
                 'customers' => UserCustomerBookmark::where('user_id', $request->user()->user_id)->get(),
                 'tips'      => UserTechTipBookmark::where('user_id', $request->user()->user_id)->get(),

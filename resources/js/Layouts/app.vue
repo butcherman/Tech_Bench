@@ -2,7 +2,12 @@
     <div class="app-layout">
         <nav class="navbar top-navbar fixed-top">
             <div class="navbar-logo-wrapper d-flex">
-                <inertia-link class="navbar-logo" :href="route('dashboard')"><img :src="app.logo" class="mr-2" :alt="app.name"/></inertia-link>
+                <inertia-link
+                    :href="route('dashboard')"
+                    class="navbar-logo"
+                >
+                    <img :src="app.logo" class="mr-2" :alt="app.name"/>
+                </inertia-link>
             </div>
             <div class="navbar-brand d-none d-md-flex">
                 <h2>{{app.name}}</h2>
@@ -11,45 +16,101 @@
                 <!-- <inertia-link href="#" class="text-muted" title="Help" v-b-tooltip.hover>
                     <i class="far fa-question-circle"></i>
                 </inertia-link> -->
-                <inertia-link :href="route('about')" class="text-muted" :title="'About '+app.name" v-b-tooltip.hover>
-                    <i class="fas fa-info-circle"></i>
+                <inertia-link
+                    :href="route('about')"
+                    :title="`About ${app.name}`"
+                    class="text-muted"
+                    v-b-tooltip.hover
+                >
+                    <i class="fas fa-info-circle" />
                 </inertia-link>
-                <inertia-link as="b-button" :href="route('dashboard')" size="sm" pill variant="info">
-                    <i class="fas fa-bell"></i>
-                    <b-badge pill variant="warning">{{notifCount}}</b-badge>
+
+<!-- ///////////////////////// -->
+
+                <inertia-link
+                    :href="route('dashboard')"
+                    size="sm"
+                    as="b-button"
+                    variant="info"
+                    pill
+                >
+                    <i class="fas fa-bell" />
+                    <b-badge pill variant="warning">
+                        {{notifCount}}
+                    </b-badge>
                 </inertia-link>
+
+<!-- ///////////////////////// -->
+
+
+
                 <b-dropdown variant="link" title="Account" v-b-tooltip.hover>
                     <template #button-content>
-                        <b-avatar variant="warning" :text="app.user.initials"></b-avatar>
+                        <b-avatar variant="warning" :text="app.user.initials" />
                     </template>
-                    <inertia-link as="b-dropdown-item" :href="route('settings.index')"><i class="fas fa-cog"></i> Settings</inertia-link>
-                    <inertia-link as="b-dropdown-item" :href="route('password.index')"><i class="fas fa-key"></i> Change Password</inertia-link>
-                    <b-dropdown-divider></b-dropdown-divider>
-                    <inertia-link as="b-dropdown-item" method="post" :href="route('logout')"><i class="fas fa-sign-out-alt"></i> Logout</inertia-link>
+                    <inertia-link
+                        :href="route('settings.index')"
+                        as="b-dropdown-item"
+                    >
+                        <i class="fas fa-cog" />
+                        Settings
+                    </inertia-link>
+                    <inertia-link
+                        :href="route('password.index')"
+                        as="b-dropdown-item"
+                    >
+                        <i class="fas fa-key" />
+                        Change Password
+                    </inertia-link>
+                    <b-dropdown-divider />
+                    <inertia-link
+                        :href="route('logout')"
+                        method="post"
+                        as="b-dropdown-item"
+                    >
+                        <i class="fas fa-sign-out-alt" />
+                        Logout
+                    </inertia-link>
                 </b-dropdown>
-                <button class="navbar-toggler d-xl-none" type="button" @click="showNav = !showNav">
-                    <i class="fas fa-bars"></i>
+                <button
+                    class="navbar-toggler d-xl-none"
+                    type="button"
+                    @click="showNav = !showNav"
+                >
+                    <i class="fas fa-bars" />
                 </button>
             </div>
         </nav>
         <div class="container-fluid page-body-wrapper">
-            <nav class="sidebar sidebar-nav" :class="navbarActive" id="side-nav">
+            <nav id="side-nav" class="sidebar sidebar-nav" :class="navbarActive">
                 <ul class="nav">
-                    <li class="nav-item" v-for="l in navbar" :key="l.name">
-                        <inertia-link class="nav-link" :href="l.route">
-                            <i class="menu-icon" :class="l.icon"></i>
-                            <span class="menu-title">{{l.name}}</span>
+                    <li class="nav-item" v-for="link in navbar" :key="link.name">
+                        <inertia-link class="nav-link" :href="link.route">
+                            <i class="menu-icon" :class="link.icon" />
+                            <span class="menu-title">{{link.name}}</span>
                         </inertia-link>
                     </li>
                 </ul>
             </nav>
-            <div class="content">
+            <div id="content" class="content">
                 <div class="content-wrapper">
                     <nav v-if="breadcrumbs.length">
                         <ol class="breadcrumb">
-                            <li v-for="crumb in breadcrumbs" :key="crumb.text" class="breadcrumb-item" :class="crumb.active ? 'active' : ''">
-                                <inertia-link v-if="!crumb.active" :href="crumb.href">{{crumb.text}}</inertia-link>
-                                <span v-else>{{crumb.text}}</span>
+                            <li
+                                v-for="crumb in breadcrumbs"
+                                :key="crumb.text"
+                                :class="crumb.active ? 'active' : ''"
+                                class="breadcrumb-item"
+                            >
+                                <inertia-link
+                                    v-if="!crumb.active"
+                                    :href="crumb.href"
+                                >
+                                    {{crumb.text}}
+                                </inertia-link>
+                                <span v-else>
+                                    {{crumb.text}}
+                                </span>
                             </li>
                         </ol>
                     </nav>
@@ -64,8 +125,14 @@
                 <axios-error></axios-error>
                 <footer class=" footer page-footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; {{$page.props.app.copyright}}<span class="d-none d-md-inline"> Butcherman - All rights reserved.</span></span>
-                        <span class="text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center">{{app.version}}</span>
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
+                            Copyright &copy;
+                            {{$page.props.app.copyright}}
+                            <span class="d-none d-md-inline"> Butcherman - All rights reserved.</span>
+                        </span>
+                        <span class="text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
+                            {{app.version}}
+                        </span>
                     </div>
                 </footer>
             </div>
@@ -77,6 +144,16 @@
     import { Inertia } from '@inertiajs/inertia';
 
     export default {
+        props: {
+            app: {
+                type: Object,
+                required: true,
+            },
+            navbar: {
+                type: Array,
+                required: true,
+            }
+        },
         data() {
             return {
                 showNav:    false,
@@ -109,20 +186,10 @@
             });
         },
         computed: {
-            //  All application information
-            app()
-            {
-                return this.$page.props.app;
-            },
             //  If the navbar is open or closed
             navbarActive()
             {
                 return this.showNav ? 'active' : '';
-            },
-            //  Dynamically built navbar
-            navbar()
-            {
-                return this.$page.props.navBar;
             },
             //  Dynamically built Breadcrumbs
             breadcrumbs()

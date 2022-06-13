@@ -2,7 +2,8 @@
     <div>
         <div class="row justify-content-center">
             <div class="col-12 grid-margin">
-                <div class="card">
+                <notifications />
+                <!-- <div class="card">
                     <div class="card-body">
                         <div class="card-title">Notifications</div>
                         <b-table-simple small responsive-sm striped>
@@ -40,7 +41,7 @@
                             </b-tfoot>
                         </b-table-simple>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div v-if="tools.length > 0" class="row justify-content-center">
@@ -62,74 +63,46 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-xl-3 col-md-6 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Customer Bookmarks</div>
-                        <b-list-group>
-                            <b-list-group-item v-for="cust in bookmarks.customers" :key="cust.cust_id">
-                                <inertia-link v-if="cust.name !== null" as="b-button" :href="route('customers.show', cust.slug)" block size="sm" variant="info" pill>{{cust.name}}</inertia-link>
-                            </b-list-group-item>
-                        </b-list-group>
-                        <h4 v-if="bookmarks.customers.length == 0" class="text-center">No Bookmarks</h4>
-                    </div>
-                </div>
+                <quick-links
+                    title="Customer Bookmarks"
+                    listType="cust"
+                    :listData="bookmarks.customers"
+                ></quick-links>
             </div>
             <div class="col-xl-3 col-md-6 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Recent Customers</div>
-                        <b-list-group>
-                            <b-list-group-item v-for="cust in recents.customers" :key="cust.cust_id">
-                                <inertia-link v-if="cust.name !== null" as="b-button" :href="route('customers.show', cust.slug)" block size="sm" variant="info" pill>{{cust.name}}</inertia-link>
-                            </b-list-group-item>
-                        </b-list-group>
-                        <h4 v-if="recents.customers.length == 0" class="text-center">No Recent Customers</h4>
-                    </div>
-                </div>
+                <quick-links
+                    title="Recent Customers"
+                    listType="cust"
+                    :listData="recents.customers"
+                ></quick-links>
             </div>
             <div class="col-xl-3 col-md-6 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Tech Tip Bookmarks</div>
-                        <b-list-group>
-                            <b-list-group-item v-for="tip in bookmarks.tips" :key="tip.tip_id">
-                                <inertia-link v-if="tip.subject !== null" as="b-button" :href="route('tech-tips.show', tip.slug)" block size="sm" variant="info" pill>{{tip.subject}}</inertia-link>
-                            </b-list-group-item>
-                        </b-list-group>
-                        <h4 v-if="bookmarks.tips.length == 0" class="text-center">No Bookmarks</h4>
-                    </div>
-                </div>
+                <quick-links
+                    title="Tech Tip Bookmarks"
+                    listType="tips"
+                    :listData="bookmarks.tips"
+                ></quick-links>
             </div>
             <div class="col-xl-3 col-md-6 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Recent Tech Tips</div>
-                        <b-list-group>
-                            <b-list-group-item v-for="tip in recents.tips" :key="tip.tip_id">
-                                <inertia-link v-if="tip.subject !== null" as="b-button" :href="route('tech-tips.show', tip.slug)" block size="sm" variant="info" pill>{{tip.subject}}</inertia-link>
-                            </b-list-group-item>
-                        </b-list-group>
-                        <h4 v-if="recents.tips.length == 0" class="text-center">No Recent Tech Tips</h4>
-                    </div>
-                </div>
+                <quick-links
+                    title="Recent Tech Tips"
+                    listType="tips"
+                    :listData="recents.tips"
+                ></quick-links>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import App from '../../Layouts/app';
+    import App           from '../../Layouts/app';
+    import QuickLinks    from '../../Components/Home/quickLinks.vue';
+    import Notifications from '../../Components/Home/notifications.vue';
 
     export default {
         layout: App,
+        components: { Notifications, QuickLinks },
         props: {
-            /**
-             * Database Notifications for user
-             */
-            notifications: {
-                type:     Array,
-                required: true,
-            },
             /**
              * Array of objects from two models -
              *      app/Models/UserCustomerBookmark
@@ -158,7 +131,7 @@
         },
         data() {
             return {
-                notificationList: this.$page.props.app.user.notifications,
+                // notificationList: this.$page.props.app.user.notifications,
                 checkedList: [],
             }
         },

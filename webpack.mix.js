@@ -28,8 +28,15 @@ let modules = dirs('./Modules');
 
 [...modules].forEach((module) => {
     let path = './Modules/' + module + '/Resources';
-    mix.js(path + '/js/app.js', 'public/js/' + module.toLowerCase() + '.js').vue()
-    mix.sass(path + '/sass/app.scss', 'public/css/' + module.toLowerCase() + '.css')
+
+    fs.exists(path, (exists) => {
+        if(exists)
+        {
+            mix.sass(path + '/sass/app.scss', 'public/css/' + module.toLowerCase() + '.css')
+            mix.js(path + '/js/app.js', 'public/js/' + module.toLowerCase() + '.js').vue()
+        }
+    });
+
 });
 
 // mix.webpackConfig({

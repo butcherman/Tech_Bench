@@ -19,8 +19,8 @@ class UserSetting extends Model
     /**
      * Each setting is tied to a setting type id
      */
-    // public function UserSettingType()
-    // {
-    //     return $this->hasOne(UserSettingType::class, 'setting_type_id', 'setting_type_id');
-    // }
+    public function UserSettingType()
+    {
+        return $this->hasOne(UserSettingType::class, 'setting_type_id', 'setting_type_id');
+    }
 }
