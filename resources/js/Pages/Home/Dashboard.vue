@@ -2,7 +2,7 @@
     <div>
         <div class="row justify-content-center">
             <div class="col-12 grid-margin">
-                <notifications />
+                <notifications :notifications="notifications" />
                 <!-- <div class="card">
                     <div class="card-body">
                         <div class="card-title">Notifications</div>
@@ -99,6 +99,7 @@
     import QuickLinks    from '../../Components/Home/quickLinks.vue';
     import Notifications from '../../Components/Home/notifications.vue';
 
+
     export default {
         layout: App,
         components: { Notifications, QuickLinks },
@@ -127,6 +128,10 @@
             tools: {
                 type:     Array,
                 required: true,
+            },
+            notifications: {
+                type: Object,
+                required: true,
             }
         },
         data() {
@@ -142,9 +147,15 @@
              //  sort the bookmarks by name
             this.bookmarks.customers.sort((a, b) => a.name.localeCompare(b.name));
             this.bookmarks.tips.sort((a, b) => a.subject.localeCompare(b.subject));
+
+
+            // this.notificationStore.name = 'Billy';
+
+            // console.log(this.notificationStore.isAdmin);
         },
         computed: {
              //
+            //  ...mapStores(useNotificationStore),
         },
         watch: {
              //

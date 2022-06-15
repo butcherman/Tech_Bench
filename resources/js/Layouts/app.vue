@@ -36,7 +36,7 @@
                 >
                     <i class="fas fa-bell" />
                     <b-badge pill variant="warning">
-                        {{notifCount}}
+                        {{notificationStore.newCount}}
                     </b-badge>
                 </inertia-link>
 
@@ -141,7 +141,10 @@
 </template>
 
 <script>
-    import { Inertia } from '@inertiajs/inertia';
+    import { Inertia }              from '@inertiajs/inertia';
+
+    import { useNotificationStore } from '../Stores/notificationStore';
+    import { mapStores } from 'pinia';
 
     export default {
         props: {
@@ -152,12 +155,15 @@
             navbar: {
                 type: Array,
                 required: true,
+            },
+            notifications: {
+                type: Object,
+                required: true,
             }
         },
         data() {
             return {
                 showNav:    false,
-                notifCount: this.$page.props.app.notifCount,
                 alert: {
                     type:    null,
                     message: null,
@@ -168,6 +174,8 @@
             Inertia.on('navigate', () => {
                 this.showNav = false;
             });
+            //  Push all of the notifications into the NotificationStore
+            this.notificationStore.importNotifications(this.notifications);
         },
         mounted() {
             //  Manually trigger alert from Vue Component
@@ -205,7 +213,9 @@
                 });
 
                 return crumbs;
-            }
+            },
+            // Notification Store
+            ...mapStores(useNotificationStore),
         },
         metaInfo: {
             title: 'Welcome',

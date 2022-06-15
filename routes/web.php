@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function()
     Route::get('dashboard',          DashboardController::class)->name('dashboard')->breadcrumb('Dashboard');
     Route::get('about',              AboutController::class)    ->name('about')    ->breadcrumb('About', 'dashboard');
 
-    Route::resource('notifications', NotificationController::class);
+    Route::post('notifications',     NotificationController::class)->name('notifications');
     Route::resource('settings',      UserSettingsController::class);
     Route::resource('password',      ChangePasswordController::class);
 
