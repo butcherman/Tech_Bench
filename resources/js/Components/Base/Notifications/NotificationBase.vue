@@ -21,29 +21,9 @@
                 required: true,
             },
         },
-        data() {
-            return {
-                checked: false,
-                loading: false,
-                deleting: false,
-            }
-        },
-        created() {
-            //
-        },
-        mounted() {
-            //
-        },
-        computed: {
-            //
-        },
-        watch: {
-            //
-        },
         methods: {
             openModal()
             {
-                console.log('show modal');
                 this.$refs['message-modal'].show();
             },
             markMessage()

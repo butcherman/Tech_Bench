@@ -2,7 +2,13 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">Notifications</div>
-            <b-table-simple small responsive-sm striped sticky-header class="p-4">
+            <b-table-simple
+                class="p-4"
+                small
+                striped
+                sticky-header
+                responsive-sm
+            >
                 <b-thead>
                     <b-tr class="row">
                         <b-th class="col-1">
@@ -14,13 +20,23 @@
                 </b-thead>
                 <b-tbody>
                     <b-tr v-if="!notificationList.length">
-                        <b-td colspan="3" class="text-center">No Notifications</b-td>
+                        <b-td colspan="3" class="text-center">
+                            No Notifications
+                        </b-td>
                     </b-tr>
-                    <tr v-else v-for="(notif, index) in notificationList" :key="index" class="row">
+                    <tr
+                        v-else
+                        v-for="(notif, index) in notificationList"
+                        class="row"
+                        :key="index"
+                    >
                         <b-td>
                             <b-form-checkbox v-model="notif.checked" />
                         </b-td>
-                        <b-td class="col-7 text-left pointer" @click="openMessage(notif)">
+                        <b-td
+                            class="col-7 text-left pointer"
+                            @click="openMessage(notif)"
+                        >
                             <i v-if="notif.loading" class="fas fa-spinner fa-spin" />
                             <i v-else-if="notif.read" class="fas fa-envelope-open-text" />
                             <i v-else class="fas fa-envelope" />
@@ -33,11 +49,19 @@
                 </b-tbody>
             </b-table-simple>
             <div v-if="hasCheckedValue">
-                 <b-button class="w-md-25 w-sm-50 m-1" variant="warning" @click="markChecked('read')">
+                    <b-button
+                    class="w-md-25 w-sm-50 m-1"
+                    variant="warning"
+                    @click="markChecked('read')"
+                >
                     <i class="fas fa-check" />
                     Mark Read
                 </b-button>
-                <b-button class="w-md-25 w-sm-50 m-1" variant="danger" @click="markChecked('delete')">
+                <b-button
+                    class="w-md-25 w-sm-50 m-1"
+                    variant="danger"
+                    @click="markChecked('delete')"
+                >
                     <i class="far fa-trash-alt" />
                     Delete
                 </b-button>
@@ -56,24 +80,14 @@
     import { mapStores } from 'pinia';
 
     export default {
-        props: {
-            notifications: {
-                type: Object,
-                required: true,
-            }
-        },
         data() {
             return {
                 notificationList: [],
                 openNotification: {},
             }
         },
-        created() {
-            //
-        },
         mounted() {
             this.parseNotifications();
-            console.log(this.notificationStore.notificationList)
         },
         computed: {
             hasCheckedValue()
@@ -90,9 +104,6 @@
                 return checked;
             },
             ...mapStores(useNotificationStore),
-        },
-        watch: {
-            //
         },
         methods: {
             parseNotifications()

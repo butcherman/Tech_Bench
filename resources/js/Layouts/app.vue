@@ -24,9 +24,7 @@
                 >
                     <i class="fas fa-info-circle" />
                 </inertia-link>
-
 <!-- ///////////////////////// -->
-
                 <inertia-link
                     :href="route('dashboard')"
                     size="sm"
@@ -39,11 +37,7 @@
                         {{notificationStore.newCount}}
                     </b-badge>
                 </inertia-link>
-
 <!-- ///////////////////////// -->
-
-
-
                 <b-dropdown variant="link" title="Account" v-b-tooltip.hover>
                     <template #button-content>
                         <b-avatar variant="warning" :text="app.user.initials" />

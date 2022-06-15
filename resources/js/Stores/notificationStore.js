@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia';
 
+/**
+ * Notification Store holds all of the messages/notifications for
+ * the logged in user
+ */
 export const useNotificationStore = defineStore('notification', {
     state: () => {
         return {
