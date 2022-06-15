@@ -14,6 +14,8 @@ import { App, plugin }     from '@inertiajs/inertia-vue';
 import { InertiaProgress } from '@inertiajs/progress';
 import upperFirst          from 'lodash/upperFirst';
 import camelCase           from 'lodash/camelCase';
+import { createPinia, PiniaVuePlugin } from 'pinia';
+import VueCompositionApi from '@vue/composition-api';
 
 /*
 *   Vee-Validate and all validation rules
@@ -51,6 +53,8 @@ Vue.use(plugin);
 Vue.use(VueMeta, { refreshOnceOnNavigation: true });
 Vue.use(BootstrapVue);
 Vue.mixin({ methods: { route }});
+Vue.use(PiniaVuePlugin);
+Vue.use(VueCompositionApi);
 
 /*
 *   Globally Register all Base Components in the Components/Base Folder
@@ -81,10 +85,12 @@ requireComponent.keys().forEach(fileName => {
 *   Initialize App
 */
 const el = document.getElementById('app');
+const pinia = createPinia();
 InertiaProgress.init();
 Vue.prototype.eventHub = new Vue();
 
 new Vue({
+    pinia,
     render: h => h(App, {
         props: {
             initialPage: JSON.parse(el.dataset.page),

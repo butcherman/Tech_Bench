@@ -50,6 +50,10 @@ class HandleInertiaRequests extends Middleware
                     'token'     => csrf_token(),
                 ],
             ],
+            'notifications' => [
+                'list' => fn() => $request->user() ? $request->user()->notifications : null,
+                'new'  => fn() => $request->user() ? $request->user()->unreadNotifications->count() : null,
+            ],
             //  Dynamically built navigation menu
             'navbar' => fn() => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
         ]);
