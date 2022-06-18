@@ -9,40 +9,39 @@
 </template>
 
 <script>
+    import { useCustomerStore } from '../../../../Stores/customerStore';
+    import { mapStores }        from 'pinia';
+
     export default {
-        props: {
-            cust_id: {
-                type:     Number,
-                required: true,
-            }
+        computed: {
+            ...mapStores(useCustomerStore),
         },
         methods: {
             breakLink()
             {
                 this.$bvModal.msgBoxConfirm('Breaking the link will remove any shared data', {
-                    title:       'Are You Sure?',
-                    size:        'md',
-                    okVariant:   'danger',
-                    okTitle:     'Yes',
+                    title      : 'Are You Sure?',
+                    size       : 'md',
+                    okVariant  : 'danger',
+                    okTitle    : 'Yes',
                     cancelTitle: 'No',
-                    centered:     true,
+                    centered   : true,
                 }).then(res => {
                     if(res)
                     {
                         this.$emit('loading');
-                        this.loading = true;
                         this.$inertia.post(route('customers.link-customer'), {
-                            cust_id:   this.cust_id,
+                            cust_id  : this.customerStore.custDetails.cust_id,
                             parent_id: null,
-                            add:       false,
+                            add      : false,
                         }, {
-                            onFinish: () => {
-                                this.$emit('completed');
-                            }
+                            only    : ['details', 'flash', 'errors'],
+                            onFinish: ()    => this.$emit('completed'),
+                            onError : (err) => this.eventHub.$emit('validation-error', err),
                         });
                     }
                 });
-            },
+            }
         },
     }
 </script>

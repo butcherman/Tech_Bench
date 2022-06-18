@@ -119,6 +119,7 @@
                     <slot />
                 </div>
                 <axios-error></axios-error>
+                <validation-error></validation-error>
                 <footer class=" footer page-footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
@@ -155,6 +156,10 @@
             notifications: {
                 type: Object,
                 required: true,
+            },
+            flash: {
+                // type:
+                required: false,
             }
         },
         data() {
@@ -211,23 +216,17 @@
 
                 return crumbs;
             },
-            //  Build Flash Message Array
-            hasFlashMessage()
-            {
-                let hasMessage = this.$page.props.flash.type !== null ? true : false;
-
-                if(hasMessage)
-                {
-                    this.flashMessage.push({
-                        type: this.$page.props.flash.type,
-                        message: this.$page.props.flash.message,
-                    });
-                }
-
-                return hasMessage
-            },
             // Notification Store
             ...mapStores(useNotificationStore),
+        },
+        watch: {
+            flash()
+            {
+                 this.flashMessage.push({
+                    type: this.$page.props.flash.type,
+                    message: this.$page.props.flash.message,
+                });
+            }
         },
         metaInfo: {
             title: 'Welcome',
