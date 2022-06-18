@@ -108,9 +108,11 @@
                             </li>
                         </ol>
                     </nav>
-                    <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? 30 : false">
-                        <p class="text-center">{{$page.props.flash.message}}</p>
-                    </b-alert>
+                    <div v-for="(message, index) in flashMessage" :key="index">
+                        <b-alert :variant="message.type" :show="30">
+                            <p class="text-center">{{message.message}}</p>
+                        </b-alert>
+                    </div>
                     <b-alert :variant="alert.type" :show="alert.message ? 30 : false">
                         <p class="text-center">{{alert.message}}</p>
                     </b-alert>
@@ -162,6 +164,7 @@
                     type:    null,
                     message: null,
                 },
+                flashMessage: [],
             }
         },
         created() {
@@ -207,6 +210,21 @@
                 });
 
                 return crumbs;
+            },
+            //  Build Flash Message Array
+            hasFlashMessage()
+            {
+                let hasMessage = this.$page.props.flash.type !== null ? true : false;
+
+                if(hasMessage)
+                {
+                    this.flashMessage.push({
+                        type: this.$page.props.flash.type,
+                        message: this.$page.props.flash.message,
+                    });
+                }
+
+                return hasMessage
             },
             // Notification Store
             ...mapStores(useNotificationStore),
