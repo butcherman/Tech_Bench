@@ -15,6 +15,7 @@ class CustomerEquipment extends Model
     protected $guarded    = ['cust_equip_id', 'updated_at', 'created_at'];
     protected $hidden     = ['created_at', 'updated_at', 'deleted_at', 'cust_id'];
     protected $appends    = ['name'];
+    protected $with       = ['CustomerEquipmentData'];
     protected $casts      = [
         'shared'     => 'boolean',
         'deleted_at' => 'datetime:M d, Y',

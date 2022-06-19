@@ -25,6 +25,11 @@
                 this.message = err;
                 this.$refs['validation-error-modal'].show();
             });
+
+            this.eventHub.$on('validation-error', err => {
+                this.message = err;
+                this.$refs['validation-error-modal'].show();
+            });
         },
     }
 </script>

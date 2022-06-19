@@ -11,6 +11,11 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-2 mt-md-0">
+            <div class="col-md-5 grid-margin stretch-card">
+                <equipment />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -71,7 +76,6 @@
             }
         },
         created() {
-            //
             this.customerStore.custDetails = this.details;
             this.customerStore.equipment   = this.equipment;
 
@@ -85,7 +89,6 @@
             //
         },
         computed: {
-            //
             ...mapStores(useCustomerStore),
         },
         watch: {

@@ -113,12 +113,6 @@ class CustomerController extends Controller
             'cust_id' => $customer->cust_id
         ])->touch();
 
-
-
-
-        // session()->flash('message', 'Customer Details Updated');
-        // session()->flash('type', 'success');
-
         return Inertia::render('Customers/Show', [
             'isFav'          => (bool) $isFav,
             'details'        => fn() => $customer,
@@ -132,16 +126,18 @@ class CustomerController extends Controller
 
             // 'phone_types'    => PhoneNumberType::all(),
             // 'file_types'     => CustomerFileType::all(),
+
+
             //  User Permissions for customers
             'user_data' => [
                 'edit'       => Auth::user()->can('update', $customer),                  //  User is allowed to edit the customers basic details
                 'manage'     => Auth::user()->can('manage', $customer),                  //  User can recover deleted items
                 'deactivate' => Auth::user()->can('delete', $customer),                  //  User can deactivate the customer profile
-                // 'equipment'  => [
-                //     'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
-                //     'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
-                //     'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete equipment
-                // ],
+                'equipment'  => [
+                    'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
+                    'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
+                    'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete equipment
+                ],
                 // 'contacts'   => [
                 //     'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
                 //     'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact

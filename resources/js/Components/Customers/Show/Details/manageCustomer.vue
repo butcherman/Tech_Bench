@@ -23,9 +23,35 @@
                 <template #overlay>
                     <atom-loader text="Loading Data..." />
                 </template>
-                <div v-for="(item, index) in deleted" :key="index">
-                    <div v-if="item.length">
+                <div v-for="(group, index) in deleted" :key="index">
+                    <div v-if="group.length">
                         <h5 class="text-center">Deleted {{index}}</h5>
+                        <ul class="list-group">
+                            <li
+                                v-for="item in group"
+                                class="list-group-item text-center"
+                                :key="item.item_id"
+                            >
+                                <i
+                                    class="fas fa-trash-restore text-success pointer float-left mr-2"
+                                    title="Restore"
+                                    v-b-tooltip.hover
+                                    @click="restoreDeletedItem(index, item.item_id)"
+                                />
+                                <i
+                                    class="fas fa-trash text-danger pointer float-left"
+                                    title="Perminately Delete"
+                                    v-b-tooltip.hover
+                                    @click="destroyDeletedItem(index, item.item_id)"
+                                />
+                                {{item.item_name}}
+                                <span
+                                    class="float-right text-muted"
+                                >
+                                    Deleted: {{item.item_deleted}}
+                                </span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="text-center mt-2">
@@ -54,20 +80,11 @@
     import { mapStores }        from 'pinia';
 
     export default {
-        props: {
-            //
-        },
         data() {
             return {
                 loading: false,
                 deleted: [],
             }
-        },
-        created() {
-            //
-        },
-        mounted() {
-            //
         },
         computed: {
             ...mapStores(useCustomerStore),
@@ -91,9 +108,6 @@
                 return false;
             }
         },
-        watch: {
-            //
-        },
         methods: {
             /**
              * Get all items that have been soft deleted for the customer
@@ -106,6 +120,38 @@
                         this.deleted = res.data;
                         this.loading = false;
                     }).catch(error => this.eventHub.$emit('axiosError', error));
+            },
+            restoreDeletedItem(group, itemId)
+            {
+                this.loading = true;
+                this.$inertia.get(this.route(`customers.${group}.restore`, itemId), {
+                    only     : ['equipment', 'flash', 'errors'],
+                    onSuccess: ()      => this.$refs['manage-customer-modal'].hide(),
+                    onError  : (error) => this.eventHub.$emit('validationError', error),
+                    onFinish : ()      => this.loading = false,
+                });
+            },
+            destroyDeletedItem(group, itemId)
+            {
+                this.$bvModal.msgBoxConfirm('This action cannot be undone', {
+                    title      : 'Are You Sure?',
+                    size       : 'md',
+                    okVariant  : 'danger',
+                    okTitle    : 'Yes',
+                    cancelTitle: 'No',
+                    centered   : true,
+                }).then(res => {
+                    if(res)
+                    {
+                        this.loading = true;
+                        this.$inertia.delete(this.route(`customers.${group}.force-delete`, itemId), {
+                            only     : ['equipment', 'flash', 'errors'],
+                            onSuccess: ()      => this.$refs['manage-customer-modal'].hide(),
+                            onError  : (error) => this.eventHub.$emit('validationError', error),
+                            onFinish : ()      => this.loading = false,
+                        });
+                    }
+                });
             },
             closeModal()
             {
