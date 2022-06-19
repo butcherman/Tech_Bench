@@ -19,6 +19,11 @@
                 <contacts />
             </div>
         </div>
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <notes />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -66,6 +71,13 @@
                 required: true,
             },
             /**
+             * Array of collections from /app/Models/CustomerNote
+             */
+            notes: {
+                type    : Array,
+                required: true,
+            },
+            /**
              * List of permissions that the user can and cannot access
              */
             user_data: {
@@ -89,6 +101,7 @@
             this.customerStore.custDetails = this.details;
             this.customerStore.equipment   = this.equipment;
             this.customerStore.contacts    = this.contacts;
+            this.customerStore.notes       = this.notes;
 
 
 
@@ -114,6 +127,10 @@
             contacts()
             {
                 this.customerStore.contacts = this.contacts;
+            },
+            notes()
+            {
+                this.customerStore.notes = this.notes;
             }
         },
         methods: {

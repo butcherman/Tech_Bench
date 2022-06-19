@@ -86,10 +86,6 @@ class CustomerController extends Controller
             $customer = Customer::where('slug', $id)
                         ->orWhere('cust_id', $id)
                         ->with('Parent')
-                        // ->with('CustomerEquipment.CustomerEquipmentData')
-                        // ->with('ParentEquipment.CustomerEquipmentData')
-                        // ->with('CustomerContact.CustomerContactPhone.PhoneNumberType')
-                        // ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
                         // ->with('CustomerNote')
                         // ->with('ParentNote')
                         // ->with('CustomerFile.FileUpload')
@@ -118,6 +114,7 @@ class CustomerController extends Controller
             'details'        => fn() => $customer,
             'equipment'      => fn() => $customer->ParentEquipment->merge($customer->CustomerEquipment),
             'contacts'       => fn() => $customer->ParentContact->merge($customer->CustomerContact),
+            'notes'          => fn() => $customer->ParentNote->merge($customer->CustomerNote),
 
 
 
@@ -144,11 +141,11 @@ class CustomerController extends Controller
                     'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
                     'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
                 ],
-                // 'notes'      => [
-                //     'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
-                //     'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
-                //     'delete' => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
-                // ],
+                'notes'      => [
+                    'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
+                    'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
+                    'delete' => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
+                ],
                 // 'files'     => [
                 //     'create' => Auth::user()->can('create', CustomerFile::class),        //  If user can add file
                 //     'update' => Auth::user()->can('update', CustomerFile::class),        //  If user can edit file

@@ -53,6 +53,14 @@ class GetDeletedItemsController extends Controller
                 'item_deleted' => $item->deleted_at->toFormattedDateString(),
             ];
         });
+        $deleted['notes']->transform(function($item)
+        {
+            return [
+                'item_id'      => $item->note_id,
+                'item_name'    => $item->subject,
+                'item_deleted' => $item->deleted_at->toFormattedDateString(),
+            ];
+        });
 
         return $deleted;
     }

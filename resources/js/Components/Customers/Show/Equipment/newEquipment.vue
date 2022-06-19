@@ -135,9 +135,9 @@
             },
             submitForm()
             {
-                this.submitted = true;
-
+                this.submitted    = true;
                 this.form.cust_id = this.customerStore.cust_id;
+
                 this.form.post(route('customers.equipment.store'), {
                     only     : ['equipment', 'flash', 'errors'],
                     onSuccess: ()      => {
