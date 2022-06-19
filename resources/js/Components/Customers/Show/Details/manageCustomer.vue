@@ -125,7 +125,6 @@
             {
                 this.loading = true;
                 this.$inertia.get(this.route(`customers.${group}.restore`, itemId), {
-                    only     : ['equipment', 'flash', 'errors'],
                     onSuccess: ()      => this.$refs['manage-customer-modal'].hide(),
                     onError  : (error) => this.eventHub.$emit('validationError', error),
                     onFinish : ()      => this.loading = false,
@@ -145,7 +144,6 @@
                     {
                         this.loading = true;
                         this.$inertia.delete(this.route(`customers.${group}.force-delete`, itemId), {
-                            only     : ['equipment', 'flash', 'errors'],
                             onSuccess: ()      => this.$refs['manage-customer-modal'].hide(),
                             onError  : (error) => this.eventHub.$emit('validationError', error),
                             onFinish : ()      => this.loading = false,

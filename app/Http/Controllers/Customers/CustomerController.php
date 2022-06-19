@@ -117,6 +117,7 @@ class CustomerController extends Controller
             'isFav'          => (bool) $isFav,
             'details'        => fn() => $customer,
             'equipment'      => fn() => $customer->ParentEquipment->merge($customer->CustomerEquipment),
+            'contacts'       => fn() => $customer->ParentContact->merge($customer->CustomerContact),
 
 
 
@@ -124,7 +125,7 @@ class CustomerController extends Controller
 
 
 
-            // 'phone_types'    => PhoneNumberType::all(),
+            'phone_types'    => PhoneNumberType::all(),
             // 'file_types'     => CustomerFileType::all(),
 
 
@@ -138,11 +139,11 @@ class CustomerController extends Controller
                     'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
                     'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete equipment
                 ],
-                // 'contacts'   => [
-                //     'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
-                //     'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
-                //     'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
-                // ],
+                'contacts'   => [
+                    'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
+                    'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
+                    'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
+                ],
                 // 'notes'      => [
                 //     'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
                 //     'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note

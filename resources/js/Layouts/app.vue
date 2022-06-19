@@ -223,7 +223,7 @@
             flash()
             {
                  this.flashMessage.push({
-                    type: this.$page.props.flash.type,
+                    type   : this.$page.props.flash.type,
                     message: this.$page.props.flash.message,
                 });
             }

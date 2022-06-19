@@ -8,6 +8,7 @@ export const useCustomerStore = defineStore('customer', {
         return {
             custDetails: {},
             equipment  : [],
+            contacts   : [],
 
 
             userPerm   : {},
@@ -30,6 +31,9 @@ export const useCustomerStore = defineStore('customer', {
         }
     },
     actions: {
-        //
+        allowPermission(type, action)
+        {
+            return this.userPerm[type][action];
+        }
     }
 });

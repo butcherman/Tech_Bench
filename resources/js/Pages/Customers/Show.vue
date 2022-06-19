@@ -15,6 +15,9 @@
             <div class="col-md-5 grid-margin stretch-card">
                 <equipment />
             </div>
+            <div class="col-md-7 grid-margin stretch-card">
+                <contacts />
+            </div>
         </div>
     </div>
 </template>
@@ -56,6 +59,13 @@
                 required: true,
             },
             /**
+             * Array of Collections from /app/Models/CustomerContact
+             */
+            contacts: {
+                type    : Array,
+                required: true,
+            },
+            /**
              * List of permissions that the user can and cannot access
              */
             user_data: {
@@ -78,6 +88,7 @@
         created() {
             this.customerStore.custDetails = this.details;
             this.customerStore.equipment   = this.equipment;
+            this.customerStore.contacts    = this.contacts;
 
 
 
@@ -99,6 +110,10 @@
             equipment()
             {
                 this.customerStore.equipment = this.equipment;
+            },
+            contacts()
+            {
+                this.customerStore.contacts = this.contacts;
             }
         },
         methods: {

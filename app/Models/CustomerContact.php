@@ -14,6 +14,7 @@ class CustomerContact extends Model
     protected $primaryKey = 'cont_id';
     protected $guarded    = ['cont_id', 'created_at', 'updated_at'];
     protected $hidden     = ['created_at', 'updated_at', 'deleted_at'];
+    protected $with       = ['CustomerContactPhone'];
     protected $casts      = [
         'deleted_at' => 'datetime:M d, Y',
     ];
