@@ -1,274 +1,153 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-md-8 grid-margin stretch-card">
-                <h3>
-                    <i :class="bookmark_class" :title="bookmark_title" v-b-tooltip.hover @click="toggleFav"></i>
-                    {{details.name}}
-                    <small>
-                        <i v-if="details.child_count > 0" class="fas fa-link pointer text-secondary" title="Show Linked Customers" v-b-tooltip.hover v-b-modal.linked-customers-modal></i>
-                    </small>
-                </h3>
-                <h5 v-if="details.dba_name">AKA - {{details.dba_name}}</h5>
-                <h5 v-if="details.parent_id">Child Site of - <inertia-link :href="route('customers.show', details.parent.slug)">{{details.parent.name}}</inertia-link></h5>
-                <address>
-                    <div class="float-left">
-                        <i class="fas fa-map-marked-alt text-muted"></i>
-                    </div>
-                    <a :href="map_url" target="_blank" id="addr-span" class="float-left ml-2" title="Click for Google Maps" v-b-tooltip.hover>
-                        {{details.address}}<br />
-                        {{details.city}}, {{details.state}} &nbsp;{{details.zip}}
-                    </a>
-                </address>
+        <div class="row grid-margin">
+            <div class="col-md-8">
+                <customer-details />
             </div>
-            <div class="col-md-4 mt-md-0 mt-4">
+            <div class="col-md-4 col-6 mt-md-0 mt-4">
                 <div class="float-md-right">
-                    <edit-details v-if="user_data.edit" :details="details"></edit-details>
-                    <manage-customer
-                        v-if="user_data.manage"
-                        :cust_id="details.cust_id"
-                        :can_deactivate="user_data.deactivate"
-                        :linked="details.parent_id > 0 ? true : false"
-                        :is_parent="details.child_count > 0 ? true : false"
-                    ></manage-customer>
+                    <edit-details />
+                    <manage-customer />
                 </div>
             </div>
         </div>
         <div class="row mt-2 mt-md-0">
             <div class="col-md-5 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            Equipment:
-                            <new-equipment
-                                v-if="user_data.equipment.create"
-                                :cust_id="details.cust_id"
-                                :existing_equip="equipIdList"
-                                :allow_share="allowShare"
-                            ></new-equipment>
-                        </div>
-                        <equipment
-                            :cust_id="details.cust_id"
-                            :equipment="equipment"
-                            :permissions="user_data.equipment"
-                            :allow_share="allowShare"
-                        ></equipment>
-                    </div>
-                </div>
+                <equipment />
             </div>
             <div class="col-md-7 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            Contacts:
-                            <new-contact
-                                v-if="user_data.contacts.create"
-                                :cust_id="details.cust_id"
-                                :allow_share="allowShare"
-                            ></new-contact>
-                        </div>
-                        <contacts
-                            :cust_id="details.cust_id"
-                            :contacts="details.parent_contact.concat(details.customer_contact)"
-                            :permissions="user_data.contacts"
-                            :allow_share="allowShare"
-                        ></contacts>
-                    </div>
-                </div>
+                <contacts />
             </div>
         </div>
         <div class="row">
             <div class="col-12 grid-margin">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            Notes:
-                            <new-note
-                                v-if="user_data.notes.create"
-                                :cust_id="details.cust_id"
-                                :allow_share="allowShare"
-                            ></new-note>
-                        </div>
-                        <notes
-                            :cust_id="details.cust_id"
-                            :notes="details.parent_note.concat(details.customer_note)"
-                            :permissions="user_data.notes"
-                            :allow_share="allowShare"
-                        ></notes>
-                    </div>
-                </div>
+                <notes />
             </div>
         </div>
         <div class="row">
             <div class="col-12 grid-margin">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            Files:
-                            <new-file
-                                v-if="user_data.files.create"
-                                :cust_id="details.cust_id"
-                                :allow_share="allowShare"
-                            ></new-file>
-                        </div>
-                        <file
-                            :cust_id="details.cust_id"
-                            :files="details.parent_file.concat(details.customer_file)"
-                            :permissions="user_data.files"
-                            :allow_share="allowShare"
-                        ></file>
-                    </div>
-                </div>
+                <files />
             </div>
         </div>
-        <b-modal id="linked-customers-modal" :title="'Customers linked to '+details.name" @show="getLinkedCustomers">
-            <b-overlay :show="loading">
-                <template #overlay>
-                    <atom-loader></atom-loader>
-                </template>
-                <b-list-group>
-                    <b-list-group-item v-for="l in linked" :key="l.cust_id" class="text-center"><inertia-link :href="route('customers.show', l.slug)">{{l.name}}</inertia-link></b-list-group-item>
-                </b-list-group>
-            </b-overlay>
-        </b-modal>
     </div>
 </template>
 
 <script>
-    import App            from '../../Layouts/app';
-    import editDetails    from '../../Components/Customers/editDetails.vue';
-    import ManageCustomer from '../../Components/Customers/manageCustomer.vue';
+    import Vue                  from 'vue';
+    import upperFirst           from 'lodash/upperFirst';
+    import camelCase            from 'lodash/camelCase';
+    import App                  from '../../Layouts/app';
+    import { useCustomerStore } from '../../Stores/customerStore';
+    import { mapStores }        from 'pinia';
 
-    import Equipment      from '../../Components/Customers/Equipment/equipment.vue';
-    import NewEquipment   from '../../Components/Customers/Equipment/newEquipment.vue';
+    /**
+     * Register all of the components for the Customer Page
+     */
+    const requireComponent = require.context('../../Components/Customers/Show', true, /[A-Za-z-0-9]\/[A-Za-z-0-9]\w+\.vue$/);
+    requireComponent.keys().forEach(fileName => {
+        const componentConfig = requireComponent(fileName);
+        const componentName   = upperFirst(camelCase(fileName.split('/').pop().replace(/\.\w+$/, '')));
 
-    import Contacts       from '../../Components/Customers/Contacts/contacts.vue';
-    import NewContact     from '../../Components/Customers/Contacts/newContact.vue';
-
-    import Notes          from '../../Components/Customers/Notes/notes.vue';
-    import NewNote        from '../../Components/Customers/Notes/newNote.vue';
-
-    import NewFile        from '../../Components/Customers/Files/newFile.vue';
-    import File           from '../../Components/Customers/Files/file.vue';
+        Vue.component( componentName, componentConfig.default || componentConfig);
+    });
 
     export default {
-        components: {
-            editDetails,
-            ManageCustomer,
-            Equipment,
-            NewEquipment,
-            Contacts,
-            NewContact,
-            Notes,
-            NewNote,
-            NewFile,
-            File,
-        },
         layout: App,
         props: {
             /**
-             * Collection from /app/Models/Customer with all relations included
+             * Collection from /app/Models/Customer
              */
             details: {
-                type:     Object,
+                type    : Object,
+                required: true,
+            },
+            /**
+             * Array of Collections from /app/Models/CustomerEquipment
+             */
+            equipment: {
+                type    : Array,
+                required: true,
+            },
+            /**
+             * Array of Collections from /app/Models/CustomerContact
+             */
+            contacts: {
+                type    : Array,
+                required: true,
+            },
+            /**
+             * Array of collections from /app/Models/CustomerNote
+             */
+            notes: {
+                type    : Array,
+                required: true,
+            },
+            /**
+             * Array of collections from /app/Models/CustomerFile
+             */
+            files: {
+                type    : Array,
                 required: true,
             },
             /**
              * List of permissions that the user can and cannot access
              */
             user_data: {
-                type:    Object,
+                type    : Object,
+                required: true,
+            },
+            /**
+             * Notes if the customer is listed as a bookmark for the user
+             */
+            isFav: {
+                type    : Boolean,
                 required: true,
             }
         },
         data() {
             return {
-                is_fav:    this.user_data.fav,
-                linked:    [],
-                loading:   false,
-                equipment: this.details.parent_equipment.concat(this.details.customer_equipment),
+                //
             }
         },
-        computed: {
-            map_url()
-            {
-                return 'https://maps.google.com/?q='+encodeURI(this.details.address+','+this.details.city+','+this.details.state);
-            },
-            bookmark_class()
-            {
-                return this.is_fav ? 'fas fa-bookmark bookmark-checked' : 'far fa-bookmark bookmark-unchecked';
-            },
-            bookmark_title()
-            {
-                return this.is_fav ? 'Remove From Bookmarks' : 'Add to Bookmarks'
-            },
-            equipIdList()
-            {
-                var list = [];
-                this.equipment.forEach(function(item)
-                {
-                    list.push(item.equip_id);
-                });
-
-                return list;
-            },
-            allowShare()
-            {
-                return this.details.parent_id !== null || this.details.child_count > 0 ? true : false;
-            }
+        created() {
+            this.customerStore.custDetails = this.details;
+            this.customerStore.equipment   = this.equipment;
+            this.customerStore.contacts    = this.contacts;
+            this.customerStore.notes       = this.notes;
+            this.customerStore.files       = this.files;
+            this.customerStore.userPerm    = this.user_data;
+            this.customerStore.isFav       = this.isFav;
         },
         mounted() {
-            /**
-             * Sort the equipment data list by the 'order' attribute
-             * Not able to do this in Eloquent since it is an attribute not a db column
-             */
-            this.reorderEquipmentData();
+            //
         },
-        methods: {
-            /**
-             * Ajax call to enable/disable the customer as a user bookmark
-             */
-            toggleFav()
+        computed: {
+            ...mapStores(useCustomerStore),
+        },
+        watch: {
+            details()
             {
-                var form = {
-                    cust_id: this.details.cust_id,
-                    state:   !this.is_fav,
-                }
-
-                axios.post(this.route('customers.bookmark'), form)
-                    .then(res => {
-                        this.is_fav = !this.is_fav;
-                    }).catch(error => this.eventHub.$emit('axiosError', error));
+                this.customerStore.custDetails = this.details;
             },
-            /**
-             * If this customer is linked to other customers, get the list of linked customers
-             */
-            getLinkedCustomers()
+            equipment()
             {
-                if(this.linked.length == 0)
-                {
-                    this.loading = true;
-                    axios.get(this.route('customers.get-linked', this.details.cust_id))
-                        .then(res => {
-                            this.linked  = res.data;
-                            this.loading = false;
-                        }).catch(error => this.eventHub.$emit('axiosError', error));
-                }
+                this.customerStore.equipment = this.equipment;
             },
-            /**
-             * Sort the equipment data list by the 'order' attribute
-             * Not able to do this in Eloquent since it is an attribute not a db column
-             */
-            reorderEquipmentData()
+            contacts()
             {
-                this.equipment.forEach((item) =>
-                {
-                    item.customer_equipment_data.sort((a, b) => (a.order > b.order) ? 1 : -1);
-                });
+                this.customerStore.contacts = this.contacts;
+            },
+            notes()
+            {
+                this.customerStore.notes = this.notes;
+            },
+            files()
+            {
+                this.customerStore.files = this.files;
             }
         },
-        metaInfo: {
-            title: 'Customer Details',
-        }
+        methods: {
+            //
+        },
     }
 </script>

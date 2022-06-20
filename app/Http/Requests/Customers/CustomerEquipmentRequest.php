@@ -26,10 +26,10 @@ class CustomerEquipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'cust_id'  => 'required|exists:customers',
-            'equip_id' => 'required|exists:equipment_types',
-            'data'     => 'required|array',
-            'shared'   => 'required|boolean',
+            'cust_id'    => 'required|exists:customers',
+            'equip_id'   => 'required|exists:equipment_types',
+            'equip_data' => 'required|array',
+            'shared'     => 'required|boolean',
         ];
     }
 }

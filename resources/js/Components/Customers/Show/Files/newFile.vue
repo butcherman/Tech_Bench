@@ -1,51 +1,74 @@
 <template>
-    <b-button class="float-right" pill variant="primary" size="sm" v-b-modal.new-file-modal>
-        <i class="fas fa-plus"></i>
-        Add
+    <b-button
+        size="sm"
+        variant="primary"
+        class="float-right"
+        pill
+        v-b-modal.new-file-modal
+    >
+        <i class="fas fa-plus" />
+        New
         <b-modal
             id="new-file-modal"
             ref="new-file-modal"
             title="Add New File"
+            size="lg"
             hide-footer
             @hide="checkForUpload"
-            @hidden="resetForm"
+            @hidden="form.reset()"
         >
-            <b-overlay :show="loading" no-center>
+            <b-overlay :show="submitted" no-center>
                 <template #overlay>
-                    <progress-bar v-if="uploading" :percent-done="fileProgress" />
+                    <progress-bar
+                        v-if="uploading"
+                        :percent-done="fileProgress"
+                    />
                     <form-loader v-else />
                 </template>
                 <ValidationObserver v-slot="{handleSubmit}">
-                    <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
+                    <b-form
+                        @submit.prevent="handleSubmit(submitForm)"
+                        novalidate
+                    >
                         <text-input
-                            label="Name"
-                            name="name"
                             v-model="form.name"
+                            name="name"
+                            label="Name"
                             rules="required"
                             placeholder="Enter a Descriptive Name"
                         />
                         <dropdown-input
-                            label="File Type"
-                            name="type"
                             v-model="form.type"
-                            rules="required"
                             :options="file_types"
+                            name="type"
+                            rules="required"
+                            label="File Type"
                             value-field="description"
                             text-field="description"
                             placeholder="What Type of File Is This?"
                         />
-                        <b-form-checkbox v-show="allow_share" v-model="form.shared" class="text-center" switch>Share File Across All Sites</b-form-checkbox>
+                        <b-form-checkbox
+                            v-model="form.shared"
+                            v-if="customerStore.allowShare"
+                            class="text-center"
+                            switch
+                        >
+                            Share File Across All Sites
+                        </b-form-checkbox>
                         <dropzone-upload
                             ref="dropzone-upload"
                             disk="customers"
-                            :folder="cust_id"
+                            :folder="customerStore.cust_id"
                             @file-added="checkName"
                             @upload-canceled="canceled"
                             @upload-progress="updateProgressbar"
                             @completed="uploadDone"
                             @validation-error="canceled"
                         />
-                        <submit-button button_text="Upload File" :submitted="submitted"/>
+                        <submit-button
+                            button_text="Upload File"
+                            :submitted="submitted"
+                        />
                     </b-form>
                 </ValidationObserver>
             </b-overlay>
@@ -54,32 +77,25 @@
 </template>
 
 <script>
+    import { useCustomerStore } from '../../../../Stores/customerStore';
+    import { mapStores }        from 'pinia';
+
     export default {
-        props: {
-            cust_id: {
-                type:     Number,
-                required: true,
-            },
-            allow_share: {
-                type:     Boolean,
-                default:  false,
-            }
-        },
         data() {
             return {
-                loading:      false,
-                submitted:    false,
-                uploading:    false,
+                submitted: false,
+                uploading: false,
                 fileProgress: 0,
-                form: {
-                    cust_id: this.cust_id,
-                    name:    '',
-                    type:    null,
-                    shared:  false,
-                },
+                form     : this.$inertia.form({
+                    cust_id: null,
+                    name   : '',
+                    type   : null,
+                    shared : false,
+                }),
             }
         },
         computed: {
+            ...mapStores(useCustomerStore),
             file_types() {
                 return this.$page.props.file_types;
             }
@@ -87,20 +103,11 @@
         methods: {
             submitForm()
             {
-                this.submitted = true;
-                this.loading   = true;
-                this.uploading = true;
+                this.form.cust_id = this.customerStore.cust_id;
+                this.submitted    = true;
+                this.uploading    = true;
+
                 this.$refs['dropzone-upload'].process();
-            },
-            resetForm()
-            {
-                this.form = {
-                    cust_id: this.cust_id,
-                    name:    '',
-                    type:    null,
-                    shared:  false,
-                };
-                this.fileProgress = 0;
             },
             //  If the name field is empty, we will populate it with the name of the file
             checkName(name)
@@ -114,7 +121,6 @@
             canceled()
             {
                 this.submitted = false;
-                this.loading   = false;
             },
             //  Update the overlay's progress bar
             updateProgressbar(progress)
@@ -125,20 +131,25 @@
             uploadDone()
             {
                 this.uploading = false;
-                this.$inertia.post(route('customers.files.store'), this.form, {
-                    onFinish: () =>
-                    {
-                        this.loading   = false;
+                this.form.post(route('customers.files.store'), {
+                    only     : ['files', 'flash', 'errors'],
+                    onFinish : ()      => this.submitted = false,
+                    onSuccess: ()      => {
                         this.submitted = false;
                         this.$refs['new-file-modal'].hide();
-                        this.resetForm();
-                    }
+                    },
+                    onError  : (error) => this.eventHub.$emit('validation-error', error),
                 });
             },
+            /**
+             * If someone tries to navigate away from the upload modal, we need to check it is not
+             * in the proces sof uploading a file before continuing
+             */
             checkForUpload(e)
             {
                 if(this.submitted)
                 {
+                    e.preventDefault();
                     alert('File Upload In Progress.  Please wait until completed, or cancel upload');
                 }
             }

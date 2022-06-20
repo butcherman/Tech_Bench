@@ -12,6 +12,7 @@ class CustomerContactPhone extends Model
     protected $guarded = ['id', 'updated_at', 'created_at'];
     protected $hidden  = ['created_at', 'updated_at', 'phone_type_id'];
     protected $appends = ['formatted'];
+    protected $with    = ['PhoneNumberType'];
 
     /**
      * Mobile Work, Home, etc

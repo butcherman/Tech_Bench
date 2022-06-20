@@ -41,7 +41,7 @@ class CustomerEquipmentController extends Controller
         ]);
 
         //  Input the equipment data
-        foreach($request->data as $field)
+        foreach($request->equip_data as $field)
         {
             CustomerEquipmentData::create([
                 'cust_equip_id' => $newEquip->cust_equip_id,
@@ -74,7 +74,7 @@ class CustomerEquipmentController extends Controller
         $equip->update(['cust_id' => $request->cust_id, 'shared' => $request->shared]);
 
         //  Insert the data for the equipment into the database
-        foreach($request->data as $field)
+        foreach($request->equip_data as $field)
         {
             CustomerEquipmentData::where('id', $field['id'])->where('cust_equip_id', $id)->update([
                 'value' => $field['value'],
