@@ -70,7 +70,7 @@ class CustomerNoteController extends Controller
             'details'    => $request->details,
         ]);
 
-        event(new CustomerNoteUpdatedEvent($cust, $note));
+        // event(new CustomerNoteUpdatedEvent($cust, $note));
         return back()->with([
             'message' => 'Note Updated',
             'type'    => 'success',

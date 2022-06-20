@@ -12,13 +12,13 @@ class ModuleIndexController extends Controller
     /**
      * Allow Administrators to add and remove Modules
      */
-    public function __invoke(Request $request)
-    {
-        $this->authorize('viewAny', AppSettings::class);
+    // public function __invoke(Request $request)
+    // {
+    //     $this->authorize('viewAny', AppSettings::class);
 
-        $moduleList = Module::all();
+    //     $moduleList = Module::all();
 
 
-        return Inertia::render('Admin/Modules/Index');
-    }
+    //     return Inertia::render('Admin/Modules/Index');
+    // }
 }

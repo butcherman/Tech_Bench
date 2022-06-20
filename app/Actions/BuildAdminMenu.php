@@ -82,7 +82,9 @@ class BuildAdminMenu
             return ['Users' => array_merge($userBuild, $roleBuild)];
         }
 
+        // @codeCoverageIgnoreStart
         return [];
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -181,6 +183,7 @@ class BuildAdminMenu
 
     /**
      * Build Admin menu's for all of the installed Modules
+     * @codeCoverageIgnore
      */
     protected function buildModuleMenus()
     {

@@ -80,7 +80,8 @@ class BuildNavbar
     }
 
     /**
-    *   If any add-on modules have been installed, add those to the navigation bar
+    * If any add-on modules have been installed, add those to the navigation bar
+    * @codeCoverageIgnore
     */
     protected function getModules()
     {

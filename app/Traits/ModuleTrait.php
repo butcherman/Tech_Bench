@@ -14,6 +14,7 @@ use ZanySoft\Zip\Zip;
 
 /**
  *  ModuleTrait holds all function for interacting with the Tech Bench Modules
+ * @codeCoverageIgnore
  */
 trait ModuleTrait
 {

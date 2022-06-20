@@ -20,6 +20,7 @@ class DashboardController extends Controller
     public function __invoke(Request $request)
     {
         //  Determine if there are any Dashboard Tools that need to be loaded
+        // @codeCoverageIgnoreStart
         $modules = Module::allEnabled();
         $tools   = [];
         foreach($modules as $module)
@@ -35,9 +36,10 @@ class DashboardController extends Controller
                 }
             }
         }
+        // @codeCoverageIgnoreEnd
 
         return Inertia::render('Home/Dashboard', [
-            'notifications' => $request->user()->notifications,
+            // 'notifications' => $request->user()->notifications,
             'bookmarks'     => [
                 'customers' => UserCustomerBookmark::where('user_id', $request->user()->user_id)->get(),
                 'tips'      => UserTechTipBookmark::where('user_id', $request->user()->user_id)->get(),

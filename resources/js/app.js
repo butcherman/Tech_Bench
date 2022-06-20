@@ -14,6 +14,8 @@ import { App, plugin }     from '@inertiajs/inertia-vue';
 import { InertiaProgress } from '@inertiajs/progress';
 import upperFirst          from 'lodash/upperFirst';
 import camelCase           from 'lodash/camelCase';
+import { createPinia, PiniaVuePlugin } from 'pinia';
+import VueCompositionApi from '@vue/composition-api';
 
 /*
 *   Vee-Validate and all validation rules
@@ -51,6 +53,8 @@ Vue.use(plugin);
 Vue.use(VueMeta, { refreshOnceOnNavigation: true });
 Vue.use(BootstrapVue);
 Vue.mixin({ methods: { route }});
+Vue.use(PiniaVuePlugin);
+Vue.use(VueCompositionApi);
 
 /*
 *   Globally Register all Base Components in the Components/Base Folder
@@ -65,25 +69,28 @@ requireComponent.keys().forEach(fileName => {
 });
 
 /**
- * Globally Register all Base Components from the attached Modules
+ * Globally Register all Notification Components from the attached Modules
  */
-const requireModule = require.context('../../Modules', true, /Base\/[A-Z]\w+\/[A-Z]\w+\.vue$/);
-requireModule.keys().forEach(fileName => {
-    const componentConfig = requireModule(fileName);
-    const componentName   = upperFirst(camelCase(fileName.split('/').pop().replace(/\.\w+$/, '')));
+ const requireNotif = require.context('../../Modules', true, /Base\/Resources\/js\/Notifications\/[A-Z]\w+\/[A-Z]\w+\.vue$/);
+ requireNotif.keys().forEach(fileName => {
+     const componentConfig = requireModule(fileName);
+     const componentName   = upperFirst(camelCase(fileName.split('/').pop().replace(/\.\w+$/, '')));
 
-    // Register component globally
-    Vue.component( componentName, componentConfig.default || componentConfig);
-});
+     // Register component globally
+     Vue.component( componentName, componentConfig.default || componentConfig);
+ });
+
 
 /*
 *   Initialize App
 */
 const el = document.getElementById('app');
+const pinia = createPinia();
 InertiaProgress.init();
 Vue.prototype.eventHub = new Vue();
 
 new Vue({
+    pinia,
     render: h => h(App, {
         props: {
             initialPage: JSON.parse(el.dataset.page),

@@ -29,6 +29,7 @@
             <directory suffix=".php">./Modules/**/Policies</directory>
         </include>
         <exclude>
+            <file>./app/Exceptions/Handler.php</file>
             <file>./app/Http/Middleware/Authenticate.php</file>
             <file>./app/Http/Middleware/EncryptCookies.php</file>
             <file>./app/Http/Middleware/PreventRequestsDuringMaintenance.php</file>

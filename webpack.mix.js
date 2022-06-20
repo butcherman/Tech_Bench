@@ -1,4 +1,8 @@
 const mix = require('laravel-mix');
+const fs = require('fs');
+const path = require('path');
+
+require('laravel-mix-merge-manifest');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,14 +15,35 @@ const mix = require('laravel-mix');
  |
  */
 
- require('laravel-mix-merge-manifest');
- mix.mergeManifest();
-
- mix.js('resources/js/app.js', 'public/js')
+//  Compile primary app scripts
+mix.js('resources/js/app.js', 'public/js')
     .sass('resources/scss/app.scss', 'public/css')
     .copyDirectory('resources/images', 'public/images')
     .copy('node_modules/tinymce/skins', 'public/js/skins')
-    .vue();
+    .vue().mergeManifest();
+
+//  Compile all app.js files in Module folders
+const dirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.resolve(p, f)).isDirectory())
+let modules = dirs('./Modules');
+
+[...modules].forEach((module) => {
+    let path = './Modules/' + module + '/Resources';
+
+    fs.exists(path, (exists) => {
+        if(exists)
+        {
+            mix.sass(path + '/sass/app.scss', 'public/css/' + module.toLowerCase() + '.css')
+            mix.js(path + '/js/app.js', 'public/js/' + module.toLowerCase() + '.js').vue()
+        }
+    });
+
+});
+
+// mix.webpackConfig({
+//     stats: {
+//         children: true,
+//     },
+// });
 
 if(mix.inProduction())
 {

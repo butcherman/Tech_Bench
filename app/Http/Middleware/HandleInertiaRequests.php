@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
                 'name'       => config('app.name'),
                 'logo'       => config('app.logo'),
                 'version'    => (new Version)->full(),
+                'copyright'  => (new Version)->copyright(),
                 //  Current logged in user
                 'user'       => fn() => $request->user() ? $request->user() : null,
                 'notifCount' => fn() => $request->user() ? $request->user()->unreadNotifications->count() : null,
@@ -49,8 +50,12 @@ class HandleInertiaRequests extends Middleware
                     'token'     => csrf_token(),
                 ],
             ],
+            'notifications' => [
+                'list' => fn() => $request->user() ? $request->user()->notifications : null,
+                'new'  => fn() => $request->user() ? $request->user()->unreadNotifications->count() : null,
+            ],
             //  Dynamically built navigation menu
-            'navBar' => fn() => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
+            'navbar' => fn() => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
         ]);
     }
 }

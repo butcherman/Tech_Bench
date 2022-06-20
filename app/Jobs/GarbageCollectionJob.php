@@ -16,6 +16,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
+use App\Models\User;
+use App\Models\UserCustomerRecent;
+use App\Models\UserTechTipRecent;
 use App\Traits\FileTrait;
 use Carbon\Carbon;
 
@@ -42,9 +45,11 @@ class GarbageCollectionJob implements ShouldQueue
             $this->checkChunkFolder();
             $this->cleanupCustomerEquipment();
             $this->cleanupCustomerFiles();
+            $this->cleanupRecentLists();
             $this->moduleGarbageCollection();
 
-            //  TODO - Backup file cleanup
+            //  Cleanup backups
+            Artisan::call('backup:clean');
 
             Artisan::call('up');
             Log::notice('Garbage Collection Job completed');
@@ -121,6 +126,24 @@ class GarbageCollectionJob implements ShouldQueue
             $this->deleteFile($file->file_id);
 
             Log::info('Deleted Customer File ID '.$file->cust_file_id.' for Customer ID '.$file->cust_id, $file->toArray());
+        }
+    }
+
+    /**
+     * Cleanup Recent Customer and Tech Tip lists by removing all but the last 10 entries
+     */
+    protected function cleanupRecentLists()
+    {
+        $userList = User::all();
+
+        //  Cycle through the users and delete their last 10 entries for both recents tables
+        foreach($userList as $user)
+        {
+            $keepCustId = UserCustomerRecent::where('user_id', $user->user_id)->latest()->take(10)->get()->pluck('id');
+            $keepTipsId = UserTechTipRecent::where('user_id', $user->user_id)->latest()->take(10)->get()->pluck('id');
+
+            UserCustomerRecent::where('user_id', $user->user_id)->whereNotIn('id', $keepCustId)->delete();
+            UserTechTipRecent::where('user_id', $user->user_id)->whereNotIn('id', $keepTipsId)->delete();
         }
     }
 

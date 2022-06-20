@@ -16,6 +16,9 @@ class UserSetting extends Model
         'value' => 'boolean',
     ];
 
+    /**
+     * Each setting is tied to a setting type id
+     */
     public function UserSettingType()
     {
         return $this->hasOne(UserSettingType::class, 'setting_type_id', 'setting_type_id');

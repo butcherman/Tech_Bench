@@ -32,6 +32,7 @@ class TechTipFactory extends Factory
             'subject'     => $subject = $this->faker->realText(25),
             'slug'        => Str::slug($subject),
             'details'     => $this->faker->paragraph(5),
+            'updated_id'  => User::inRandomOrder()->first()->user_id,
         ];
     }
 }

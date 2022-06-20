@@ -56,6 +56,12 @@ class UserRolesTest extends TestCase
         $response->assertSuccessful();
     }
 
+    public function test_create_with_baseline()
+    {
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.user-roles.create', 'Administrator'));
+        $response->assertSuccessful();
+    }
+
     /**
      * Store Method
      */

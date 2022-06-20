@@ -13,9 +13,10 @@ class CustomerEquipmentData extends Model
     protected $hidden  = ['cust_equip_id', 'field_id', 'created_at', 'updated_at'];
     protected $appends = ['field_name', 'order'];
 
-    /*
-    *   The name of the field this value data belongs to
-    */
+    /**
+     * The name of the field this value data belongs to
+     * @codeCoverageIgnore
+     */
     public function getFieldNameAttribute()
     {
         return DataField::with('DataFieldType')->find($this->field_id)->DataFieldType->name;
@@ -23,6 +24,7 @@ class CustomerEquipmentData extends Model
 
     /**
      * The order that the data field should be in
+     * @codeCoverageIgnore
      */
     public function getOrderAttribute()
     {

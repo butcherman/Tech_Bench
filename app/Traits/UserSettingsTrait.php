@@ -8,6 +8,9 @@ use App\Models\UserRolePermissions;
 
 trait UserSettingsTrait
 {
+    /**
+     * @codeCoverageIgnore
+     */
     protected function filterUserSettings(User $user)
     {
         //  Pull the user settings

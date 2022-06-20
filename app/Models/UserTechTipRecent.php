@@ -13,18 +13,32 @@ class UserTechTipRecent extends Model
     protected $hidden  = ['id', 'user_id', 'created_at', 'TechTip'];
     protected $appends = ['subject', 'slug'];
 
+    /**
+     * Each Recent is tied to a Tech tip ID
+     * @codeCoverageIgnore
+     */
     public function TechTip()
     {
         return $this->belongsTo(TechTip::class, 'tip_id', 'tip_id');
     }
 
+    /**
+     * Get the subject of the Tech Tip
+     * @codeCoverageIgnore
+     */
     public function getSubjectAttribute()
     {
-        return isset($this->TechTip->subject) ? $this->TechTip->subject : null;
+        // return isset($this->TechTip->subject) ? $this->TechTip->subject : null;
+        return $this->TechTip->subject;
     }
 
+    /**
+     * Get the Slug for the link to the Tech Tip
+     * @codeCoverageIgnore
+     */
     public function getSlugAttribute()
     {
-        return isset($this->TechTip->slug) ? $this->TechTip->slug : null;
+        // return isset($this->TechTip->slug) ? $this->TechTip->slug : null;
+        return $this->TechTip->slug;
     }
 }

@@ -9,6 +9,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\Events\Home\UploadedFileEvent;
 
+/**
+ * @codeCoverageIgnore
+ */
 class LogUploadedFile
 {
     /**

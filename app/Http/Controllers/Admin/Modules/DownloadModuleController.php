@@ -12,13 +12,13 @@ class DownloadModuleController extends Controller
     /**
      * Download and Stage a module for installation
      */
-    public function __invoke(Request $request)
-    {
-        $url = $request->download_link;
+    // public function __invoke(Request $request)
+    // {
+    //     $url = $request->download_link;
 
-        $response = Http::get($url);
-        Storage::disk('modules')->put($request->alias.'.zip', $response);
+    //     $response = Http::get($url);
+    //     Storage::disk('modules')->put($request->alias.'.zip', $response);
 
-        return 'downloaded';
-    }
+    //     return 'downloaded';
+    // }
 }

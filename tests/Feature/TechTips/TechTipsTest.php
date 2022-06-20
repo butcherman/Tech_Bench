@@ -132,6 +132,14 @@ class TechTipsTest extends TestCase
         $response->assertSuccessful();
     }
 
+    public function test_show_bad_tip()
+    {
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())->get(route('tech-tips.show', 'wrong-tip-information'));
+        $response->assertStatus(404);
+    }
+
     public function test_show_with_tip_id()
     {
         $tip = TechTip::factory()->create();

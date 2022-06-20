@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * File Trait assists with processing uploading and moving files
+ * @codeCoverageIgnore
  */
 trait FileTrait
 {

@@ -19,6 +19,7 @@ class AboutController extends Controller
             'version'    => $version->full(),
             'build'      => $version->commit(),
             'build_date' => $version->build(),
+            'copyright'  => $version->copyright(),
         ]);
     }
 }

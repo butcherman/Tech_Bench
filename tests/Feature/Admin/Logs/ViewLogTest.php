@@ -48,7 +48,7 @@ class ViewLogTest extends TestCase
         $date = date('Y-m-d', strtotime(Carbon::now()->addDays(30)));
         $filename = 'TechBench-'.$date;
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.view', ['YourMom', $filename]));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.logs.view', ['Application', 'yourmom.com']));
         $response->assertStatus(404);
     }
 

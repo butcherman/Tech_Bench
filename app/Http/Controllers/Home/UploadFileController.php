@@ -8,6 +8,9 @@ use App\Models\FileUploads;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Home\UploadedFileRequest;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UploadFileController extends Controller
 {
     use FileTrait;

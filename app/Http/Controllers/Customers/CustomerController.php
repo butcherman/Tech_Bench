@@ -86,14 +86,10 @@ class CustomerController extends Controller
             $customer = Customer::where('slug', $id)
                         ->orWhere('cust_id', $id)
                         ->with('Parent')
-                        ->with('CustomerEquipment.CustomerEquipmentData')
-                        ->with('ParentEquipment.CustomerEquipmentData')
-                        ->with('CustomerContact.CustomerContactPhone.PhoneNumberType')
-                        ->with('ParentContact.CustomerContactPhone.PhoneNumberType')
-                        ->with('CustomerNote')
-                        ->with('ParentNote')
-                        ->with('CustomerFile.FileUpload')
-                        ->with('ParentFile.FileUpload')
+                        // ->with('CustomerNote')
+                        // ->with('ParentNote')
+                        // ->with('CustomerFile.FileUpload')
+                        // ->with('ParentFile.FileUpload')
                         ->firstOrFail();
         }
         catch(ModelNotFoundException $e)
@@ -114,34 +110,38 @@ class CustomerController extends Controller
         ])->touch();
 
         return Inertia::render('Customers/Show', [
-            'details'        => $customer,
-            'phone_types'    => PhoneNumberType::all(),
-            'file_types'     => CustomerFileType::all(),
+            'isFav'          => (bool) $isFav,
+            'details'        => fn() => $customer,
+            'equipment'      => fn() => $customer->ParentEquipment->merge($customer->CustomerEquipment),
+            'contacts'       => fn() => $customer->ParentContact  ->merge($customer->CustomerContact),
+            'notes'          => fn() => $customer->ParentNote     ->merge($customer->CustomerNote),
+            'files'          => fn() => $customer->ParentFile     ->merge($customer->CustomerFile),
+            'phone_types'    => fn() => PhoneNumberType::all(),
+            'file_types'     => fn() => CustomerFileType::all(),
             //  User Permissions for customers
             'user_data' => [
-                'fav'        => $isFav,                                                  //  Customer is bookmarked by the user
-                'edit'       => Auth::user()->can('update', $customer),                  //  User is allowed to edit the customers basic details
-                'manage'     => Auth::user()->can('manage', $customer),                  //  User can recover deleted items
-                'deactivate' => Auth::user()->can('delete', $customer),                  //  User can deactivate the customer profile
+                'edit'       => fn() => Auth::user()->can('update', $customer),                  //  User is allowed to edit the customers basic details
+                'manage'     => fn() => Auth::user()->can('manage', $customer),                  //  User can recover deleted items
+                'deactivate' => fn() => Auth::user()->can('delete', $customer),                  //  User can deactivate the customer profile
                 'equipment'  => [
-                    'create' => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
-                    'update' => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
-                    'delete' => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete equipment
+                    'create' => fn() => Auth::user()->can('create', CustomerEquipment::class),   //  If user can add equipment
+                    'update' => fn() => Auth::user()->can('update', CustomerEquipment::class),   //  If user can edit equipment
+                    'delete' => fn() => Auth::user()->can('delete', CustomerEquipment::class),   //  If user can delete equipment
                 ],
                 'contacts'   => [
-                    'create' => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
-                    'update' => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
-                    'delete' => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
+                    'create' => fn() => Auth::user()->can('create', CustomerContact::class),     //  If user can add contact
+                    'update' => fn() => Auth::user()->can('update', CustomerContact::class),     //  If user can edit contact
+                    'delete' => fn() => Auth::user()->can('delete', CustomerContact::class),     //  If user can delete contact
                 ],
                 'notes'      => [
-                    'create' => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
-                    'update' => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
-                    'delete' => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
+                    'create' => fn() => Auth::user()->can('create', CustomerNote::class),        //  If user can add note
+                    'update' => fn() => Auth::user()->can('update', CustomerNote::class),        //  If user can edit note
+                    'delete' => fn() => Auth::user()->can('delete', CustomerNote::class),        //  If user can delete note
                 ],
                 'files'     => [
-                    'create' => Auth::user()->can('create', CustomerFile::class),        //  If user can add file
-                    'update' => Auth::user()->can('update', CustomerFile::class),        //  If user can edit file
-                    'delete' => Auth::user()->can('delete', CustomerFile::class),        //  If user can delete file
+                    'create' => fn() => Auth::user()->can('create', CustomerFile::class),        //  If user can add file
+                    'update' => fn() => Auth::user()->can('update', CustomerFile::class),        //  If user can edit file
+                    'delete' => fn() => Auth::user()->can('delete', CustomerFile::class),        //  If user can delete file
                 ],
             ],
         ]);
@@ -159,7 +159,8 @@ class CustomerController extends Controller
         $data->update($cust);
         event(new CustomerDetailsUpdated($data, $id));
 
-        return redirect(route('customers.show', $cust['slug']))->with(['message' => 'Customer Details Updated', 'type' => 'success']);
+        return redirect(route('customers.show', $cust['slug']))
+            ->with(['message' => 'Customer Details Updated', 'type' => 'success']);
     }
 
     /**

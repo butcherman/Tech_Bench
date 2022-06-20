@@ -8,6 +8,9 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 
 use App\Models\FileUploads;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DownloadedFileEvent
 {
     use Dispatchable;

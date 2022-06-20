@@ -23,6 +23,10 @@
             defaultState: {
                 required: false,
                 default: 'CA',
+            },
+            name: {
+                type:    String,
+                default: 'allStates',
             }
         },
         data() {

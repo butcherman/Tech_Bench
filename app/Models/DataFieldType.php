@@ -14,6 +14,10 @@ class DataFieldType extends Model
     protected $hidden     = ['updated_at', 'created_at'];
     protected $appends    = ['in_use'];
 
+    /**
+     * Shows if this field is being used by any equipment
+     * @codeCoverageIgnore
+     */
     public function getInUseAttribute()
     {
         return DataField::where('type_id', $this->type_id)->count() > 0 ? true : false;

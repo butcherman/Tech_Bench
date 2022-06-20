@@ -13,11 +13,11 @@ class EquipmentCategory extends Model
     protected $fillable   = ['name'];
     protected $hidden     = ['updated_at', 'created_at'];
 
-    /*
-    *   Each Equipment Category can have several types of equipment assigned to it
-    */
+    /**
+     * Each Equipment Category can have several types of equipment assigned to it
+     */
     public function EquipmentType()
     {
-        return $this->hasMany('App\Models\EquipmentType', 'cat_id', 'cat_id');
+        return $this->hasMany('App\Models\EquipmentType', 'cat_id', 'cat_id')->orderBy('name');
     }
 }

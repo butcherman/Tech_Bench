@@ -25,33 +25,35 @@ class User extends Authenticatable
         'deleted_at' => 'datetime:M d, Y'
     ];
 
-    /*
-    *   Users First and Last name combined
-    */
+    /**
+     * Users First and Last name combined
+     * @codeCoverageIgnore
+     */
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
-    /*
-    *   User Initials
-    */
+    /**
+     * User Initials
+     * @codeCoverageIgnore
+     */
     public function getInitialsAttribute()
     {
         return "{$this->first_name[0]}{$this->last_name[0]}";
     }
 
-    /*
-    *   Each user is assigned to a role that determines what permissions they are allowed
-    */
+    /**
+     * Each user is assigned to a role that determines what permissions they are allowed
+     */
     public function UserRoles()
     {
         return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
     }
 
-    /*
-    *   Each user has their own individual settings
-    */
+    /**
+     * Each user has their own individual settings
+     */
     public function UserSetting()
     {
         return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
@@ -60,13 +62,8 @@ class User extends Authenticatable
     /**
      * List of login times and locations for each user
      */
-    public function UserLogins()
-    {
-        return $this->hasMany(UserLogins::class, 'user_id', 'user_id');
-    }
-
-    // public function TechTipBookmark()
+    // public function UserLogins()
     // {
-    //     return $this->hasOne(TechTipBookmark::class, 'user_id', 'user_id');
+    //     return $this->hasMany(UserLogins::class, 'user_id', 'user_id');
     // }
 }

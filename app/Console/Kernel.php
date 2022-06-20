@@ -26,10 +26,10 @@ class Kernel extends ConsoleKernel
         $schedule->job(new GarbageCollectionJob)->daily();
         $schedule->command('telescope:prune')->daily();
 
-        //  Nightly backup will only run if the task is enabled
+        //  Nightly backup will only run if the task is
         if(config('app.backups.enabled'))
         {
-            $schedule->job(new ApplicationBackupJob(true, true))->dailyAt('02:00');
+            $schedule->command('tb_maintenance:backup')->dailyAt('03:00');
         }
     }
 

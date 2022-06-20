@@ -99,6 +99,19 @@ class CustomerTest extends TestCase
         $this->assertDatabaseHas('customers', $data);
     }
 
+    public function test_store_duplicate_slug()
+    {
+        $existing = Customer::factory()->create();
+        $data     = Customer::factory()->make()->only(['address', 'city', 'state', 'zip']);
+        $data['name'] = $existing['name'];
+        $slug     = Str::slug($data['name'].' '.$data['city']);
+
+        $response = $this->ActingAs(User::factory()->create())->post(route('customers.store'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('customers.show', $slug));
+        $this->assertDatabaseHas('customers', $data);
+    }
+
     /**
      * Show Method
      */

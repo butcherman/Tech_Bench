@@ -32,14 +32,14 @@
                         <ValidationObserver v-slot="{handleSubmit}" ref="newValidator">
                             <b-form @submit.prevent="handleSubmit(submitNewForm)" novalidate>
                                 <text-input label="Description" name="description" v-model="newForm.description" rules="required"></text-input>
-                                <submit-button button_text="Create File Type" :submitted="submittedNew"></submit-button>
+                                <submit-button button_text="Create Tech Tip Type" :submitted="submittedNew"></submit-button>
                             </b-form>
                         </ValidationObserver>
                     </div>
                 </div>
             </div>
         </div>
-        <b-modal ref="edit-type-modal" title="Edit File Type" hide-footer>
+        <b-modal ref="edit-type-modal" title="Edit Tech Tip Type" hide-footer>
             <b-overlay :show="loading">
                 <template #overlay>
                     <form-loader></form-loader>

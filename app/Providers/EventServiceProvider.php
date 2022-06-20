@@ -7,6 +7,9 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
+/**
+ * @codeCoverageIgnore
+ */
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -304,6 +307,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\Admin\LogSettingsUpdatedEvent' => [
             'App\Listeners\Admin\LogLogSettingsUpdated',
+        ],
+        'Spatie\Backup\Events\BackupManifestWasCreated' => [
+            'App\Listeners\Admin\AddVersionToBackup',
+        ],
+        'Spatie\Backup\Events\BackupWasSuccessful' => [
+            'App\Listeners\Admin\LogSuccessfulBackup',
+        ],
+        'Spatie\Backup\Events\BackupHasFailed' => [
+            'App\Listeners\Admin\LogFailedBackup',
         ],
     ];
 

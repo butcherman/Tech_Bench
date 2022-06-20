@@ -23,6 +23,8 @@ trait AllowTrait
             return $allowed->allow;
         }
 
+        // @codeCoverageIgnoreStart
         return false;
+        // @codeCoverageIgnoreEnd
     }
 }

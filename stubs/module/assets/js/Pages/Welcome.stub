@@ -1,14 +1,15 @@
 <template>
-    <div class="guest-layout">
-        <div class="row justify-content-center align-items-center login-form-container">
-            <div class="col-lg-8 col-xl-6">
-                <div class="row" id="header-title">
-                    <div class="col-12"><h1>{{$page.props.app.name}}</h1></div>
-                </div>
-                <div class="row row-eq-height justify-content-center align-items-center login-form-sub-container">
-                    <div class="col-6">
-                        <h1 class="text-center">Welcome!!</h1>
-                        <p class="text-center">This is the default page for a brand new Tech Bench Module</p>
+    <div>
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <h4 class="text-center text-md-left">Welcome!!!</h4>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="text-center">This is the landing page for a brand new module</p>
                     </div>
                 </div>
             </div>

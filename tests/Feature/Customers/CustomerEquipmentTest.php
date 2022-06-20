@@ -36,7 +36,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id'  => $cust->cust_id,
             'equip_id' => $equipment->equip_id,
             'shared'   => false,
-            'data'     => [
+            'equip_data' => [
                 ['type_id' => 1, 'value' => 'something'],
                 ['type_id' => 2, 'value' => 'something 2'],
                 ['type_id' => 3, 'value' => 'something 3'],
@@ -68,7 +68,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id'  => $cust->cust_id,
             'equip_id' => $equipment->equip_id,
             'shared'   => false,
-            'data'     => [
+            'equip_data' => [
                 ['type_id' => 1, 'value' => 'something'],
                 ['type_id' => 2, 'value' => 'something 2'],
                 ['type_id' => 3, 'value' => 'something 3'],
@@ -98,10 +98,10 @@ class CustomerEquipmentTest extends TestCase
         }
 
         $data = [
-            'cust_id'  => $cust->cust_id,
-            'equip_id' => $equipment->equip_id,
-            'shared'   => false,
-            'data'     => [
+            'cust_id'    => $cust->cust_id,
+            'equip_id'   => $equipment->equip_id,
+            'shared'     => false,
+            'equip_data' => [
                 ['type_id' => 1, 'value' => 'something'],
                 ['type_id' => 2, 'value' => 'something 2'],
                 ['type_id' => 3, 'value' => 'something 3'],
@@ -139,7 +139,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id'  => $cust->cust_id,
             'equip_id' => $equipment->equip_id,
             'shared'   => true,
-            'data'     => [
+            'equip_data' => [
                 ['type_id' => 1, 'value' => 'something'],
                 ['type_id' => 2, 'value' => 'something 2'],
                 ['type_id' => 3, 'value' => 'something 3'],
@@ -171,7 +171,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id'  => $customer->cust_id,
             'equip_id' => $equipment->equip_id,
             'shared'   => false,
-            'data'     => [
+            'equip_data' => [
                 ['id' => $dataField->id, 'value' => 'New Value', 'field_name' => $field->name],
             ]
         ];
@@ -194,7 +194,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id'  => $customer->cust_id,
             'equip_id' => $equipment->equip_id,
             'shared'   => false,
-            'data'     => [
+            'equip_data' => [
                 ['id' => $dataField->id, 'value' => 'New Value', 'field_name' => 'IP Address'],
             ]
         ];
@@ -216,7 +216,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id'  => $customer->cust_id,
             'equip_id' => $equipment->equip_id,
             'shared'   => true,
-            'data'     => [
+            'equip_data' => [
                 ['id' => $dataField->id, 'value' => 'New Value', 'field_name' => 'IP Address'],
             ]
         ];
