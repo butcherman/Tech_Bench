@@ -24,6 +24,11 @@
                 <notes />
             </div>
         </div>
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <files />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -78,6 +83,13 @@
                 required: true,
             },
             /**
+             * Array of collections from /app/Models/CustomerFile
+             */
+            files: {
+                type    : Array,
+                required: true,
+            },
+            /**
              * List of permissions that the user can and cannot access
              */
             user_data: {
@@ -102,10 +114,7 @@
             this.customerStore.equipment   = this.equipment;
             this.customerStore.contacts    = this.contacts;
             this.customerStore.notes       = this.notes;
-
-
-
-
+            this.customerStore.files       = this.files;
             this.customerStore.userPerm    = this.user_data;
             this.customerStore.isFav       = this.isFav;
         },
@@ -131,6 +140,10 @@
             notes()
             {
                 this.customerStore.notes = this.notes;
+            },
+            files()
+            {
+                this.customerStore.files = this.files;
             }
         },
         methods: {

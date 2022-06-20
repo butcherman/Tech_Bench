@@ -10,7 +10,7 @@ export const useCustomerStore = defineStore('customer', {
             equipment  : [],
             contacts   : [],
             notes      : [],
-
+            files      : [],
             userPerm   : {},
             isFav      : false,
         }

@@ -18,17 +18,6 @@ class GetDeletedItemsController extends Controller
     public function __invoke($id)
     {
         $this->authorize('manage', Customer::class);
-        // $deleted = [];
-
-        // //  Get deleted Equipment
-        // $deleted['equipment'] = CustomerEquipment::where('cust_id', $id)->onlyTrashed()->get()->makeVisible('deleted_at');
-        // //  Get deleted Contacts
-        // $deleted['contacts'] = CustomerContact::where('cust_id', $id)->onlyTrashed()->get()->makeVisible('deleted_at');
-        // //  Get deleted Notes
-        // $deleted['notes'] = CustomerNote::where('cust_id', $id)->onlyTrashed()->get()->makeVisible('deleted_at');
-        // //  Get deleted files
-        // $deleted['files'] = CustomerFile::where('cust_id', $id)->onlyTrashed()->get()->makeVisible('deleted_at');
-
 
         $deleted = [
             'equipment' => CustomerEquipment::where('cust_id', $id)->onlyTrashed()->get(),
@@ -58,6 +47,14 @@ class GetDeletedItemsController extends Controller
             return [
                 'item_id'      => $item->note_id,
                 'item_name'    => $item->subject,
+                'item_deleted' => $item->deleted_at->toFormattedDateString(),
+            ];
+        });
+        $deleted['files']->transform(function($item)
+        {
+            return [
+                'item_id'      => $item->cust_file_id,
+                'item_name'    => $item->name,
                 'item_deleted' => $item->deleted_at->toFormattedDateString(),
             ];
         });

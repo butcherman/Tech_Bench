@@ -15,6 +15,7 @@ class CustomerFile extends Model
     protected $guarded    = ['cust_file_id', 'created_at', 'updated_at'];
     protected $hidden     = ['cust_id', 'file_type_id', 'created_at', 'user_id', 'deleted_at'];
     protected $appends    = ['uploaded_by', 'file_type'];
+    protected $with       = ['FileUpload'];
     protected $casts      = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
