@@ -4,17 +4,17 @@ current:
   label: v
   major: 6
   minor: 3
-  patch: 0
+  patch: 1
   prerelease: null
   buildmetadata: null
-  commit: 6ae
+  commit: 6af
   timestamp:
     year: 2022
     month: 6
-    day: 20
-    hour: 3
-    minute: 35
-    second: 34
+    day: 23
+    hour: 1
+    minute: 36
+    second: 36
     timezone: UTC
 commit:
   mode: git-local
