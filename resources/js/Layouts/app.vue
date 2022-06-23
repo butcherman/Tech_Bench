@@ -222,10 +222,13 @@
         watch: {
             flash()
             {
-                 this.flashMessage.push({
-                    type   : this.$page.props.flash.type,
-                    message: this.$page.props.flash.message,
-                });
+                if(this.$page.props.flash.message !== null)
+                {
+                    this.flashMessage.push({
+                        type   : this.$page.props.flash.type,
+                        message: this.$page.props.flash.message,
+                    });
+                }
             }
         },
         metaInfo: {

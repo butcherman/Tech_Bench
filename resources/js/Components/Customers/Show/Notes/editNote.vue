@@ -59,6 +59,9 @@
 </template>
 
 <script>
+    import { useCustomerStore } from '../../../../Stores/customerStore';
+    import { mapStores }        from 'pinia';
+
     export default {
         props: {
             note: {
@@ -78,13 +81,19 @@
                 }),
             }
         },
+        computed: {
+            ...mapStores(useCustomerStore),
+        },
         methods: {
             submitForm()
             {
                 this.submitted = true;
                 this.form.put(route('customers.notes.update', this.note.note_id), {
                     only     : ['notes', 'flash', 'errors'],
-                    onSuccess: ()      => this.$refs['edit-note-modal'].hide(),
+                    onSuccess: ()      => {
+                        this.$refs['edit-note-modal'].hide();
+                        this.$emit('completed');
+                    },
                     onError  : (error) => this.eventHub.$emit('validation-error', error),
                     onFinish : ()      => this.submitted = false,
                 });

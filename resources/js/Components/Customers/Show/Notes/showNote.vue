@@ -12,6 +12,7 @@
             <edit-note
                 v-if="customerStore.allowPermission('notes', 'update')"
                 :note="note"
+                @completed="$refs['note-modal'].hide()"
             />
             <delete-note
                 v-if="customerStore.allowPermission('notes', 'delete')"
