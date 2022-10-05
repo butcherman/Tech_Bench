@@ -1,6 +1,7 @@
 body div.guest-layout {
 
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
 
     & {
         background: #090321;
@@ -11,7 +12,4 @@ body div.guest-layout {
         min-height: 100vh;
     }
 
-    h1, h2, h3, h4, h5 {
-        color: #FFFFFF;
-    }
 }

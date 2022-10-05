@@ -4,11 +4,6 @@
     </div>
 </template>
 
-<script>
-    export default {
-        metaInfo: {
-            title: 'Welcome',
-            titleTemplate: '%s | Tech Bench',
-        }
-    }
-</script>
+<style scoped lang="scss">
+    @import "../../scss/Layouts/guest.scss";
+</style>

@@ -1,20 +1,42 @@
 /*
-*   Application styles
+*   Reset all styles to my liking
+*/
+@import 'Layouts/reset';
+
+/*
+*   Bootstrap and add-ons for Bootstrap
 */
 @import 'bootstrap';
-@import 'Layouts/guest';
-@import 'Layouts/app';
 
 /*
-*   Third party styles
+*   Override Bootstrap's default breakpoints
 */
-@import '~vue-good-table/dist/vue-good-table.css';
-@import '~vue-phone-number-input/dist/vue-phone-number-input.css';
+$grid-breakpoints: (
+    xs: 0,
+    sm: 600px,
+    md: 1000px,
+    lg: 1200px,
+    xl: 1280px
+);
+
+$brk-xs: map-get($grid-breakpoints, xs);
+$brk-sm: map-get($grid-breakpoints, sm);
+$brk-md: map-get($grid-breakpoints, md);
+$brk-lg: map-get($grid-breakpoints, lg);
+$brk-xl: map-get($grid-breakpoints, xl);
 
 /*
-*   Individual page styles
+*   Custom styles used throughout app
 */
-@import 'Pages/login';
-@import 'Pages/customers';
-@import 'Pages/techTips.scss';
-@import 'Pages/equipment.scss';
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.nope {
+    cursor: not-allowed !important;
+}

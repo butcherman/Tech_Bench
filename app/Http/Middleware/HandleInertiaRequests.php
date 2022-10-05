@@ -10,9 +10,6 @@ use App\Actions\BuildNavbar;
 
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that's loaded on the first page visit.
-     */
     protected $rootView = 'app';
 
     /**
@@ -31,8 +28,12 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => [
-                'message' => fn() => $request->session()->get('message'),
-                'type'    => fn() => $request->session()->get('type'),
+                // 'message' => fn() => $request->session()->get('message'),
+                // 'type'    => fn() => $request->session()->get('type'),
+
+                'success' => fn() => $request->session()->get('success'),
+                'warning' => fn() => $request->session()->get('warning'),
+                // 'error'   => fn() =>
             ],
             //  App information that is shared and used on all pages
             'app' => [

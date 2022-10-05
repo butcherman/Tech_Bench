@@ -1,57 +1,47 @@
 <template>
-    <div class="row h-100 align-items-center">
-        <div class="col-12">
-            <ValidationObserver v-slot="{handleSubmit}">
-                <b-alert :variant="$page.props.flash.type" :show="$page.props.flash.message ? true : false">
-                    <p class="text-center">{{$page.props.flash.message}}</p>
-                </b-alert>
-                <b-form @submit.prevent="handleSubmit(submitForm)" novalidate class="p-4">
-                    <text-input v-model="form.username" rules="required" label="Username" name="username" placeholder="Username" autofocus></text-input>
-                    <text-input v-model="form.password" rules="required" label="Password" name="password" type="password" placeholder="Password"></text-input>
-                    <b-checkbox switch class="no-validate" name="remember" v-model="form.remember">Remember Me</b-checkbox>
-                    <submit-button button_text="Login" :submitted="submitted"></submit-button>
-                    <div class="form-group row justify-content-center mb-0">
-                        <div class="col-md-8 text-center">
-                            <inertia-link class="btn btn-link text-muted" :href="route('password.forgot')">Forgot Your Password?</inertia-link>
-                        </div>
+    <Head title="Login" />
+    <AuthLayout>
+        <div class="row align-items-center h-100">
+            <div class="col">
+                <div v-if="errors.username" class="alert alert-danger text-center">{{ errors.username }}</div>
+                <form @submit.prevent="onSubmit">
+                    <TextInput id="username" label="Username" name="username" />
+                    <TextInput id="passsword" label="Password" name="password" type="password" />
+                    <SubmitButton :submitted="isSubmitting" />
+                </form>
+                <div class="form-group row justify-content-center mb-0">
+                    <div class="col-md-8 text-center">
+                        <Link class="btn btn-link text-muted" :href="route('password.forgot')">Forgot Your Password?</Link>
                     </div>
-                </b-form>
-            </ValidationObserver>
+                </div>
+            </div>
         </div>
-    </div>
+    </AuthLayout>
 </template>
 
-<script>
-    import Guest from '../../Layouts/guest';
-    import Auth  from '../../Layouts/Nested/authLayout';
+<script setup lang="ts">
+    import AuthLayout                 from '@/Layouts/authLayout.vue';
+    import TextInput                  from '@/Components/Base/Input/TextInput.vue';
+    import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
+    import { useForm }                from '@inertiajs/inertia-vue3';
+    import { useForm as useVeeForm }  from 'vee-validate';
+    import * as yup                   from 'yup';
 
-    export default {
-        layout: [Guest, Auth],
-        data() {
-            return {
-                form: this.$inertia.form({
-                    username: null,
-                    password: null,
-                    remember: false,
-                }),
-                submitted: false,
-            }
-        },
-        methods: {
-            submitForm()
-            {
-                this.submitted = true;
-                this.form.post(route('login.submit'), {
-                    onFinish: () => {
-                        this.submitted = false
-                    }
-                });
-            }
-        },
-        metaInfo: {
-            title: 'Login',
+    defineProps<{
+        errors: { username: string },
+    }>();
+
+    const { handleSubmit, isSubmitting } = useVeeForm({
+        validationSchema: {
+            username: yup.string().required('You must enter a username'),
+            password: yup.string().required('You must enter a password'),
         }
-    }
+    });
+
+    const onSubmit = handleSubmit(form => {
+        const loginForm = useForm(form);
+        loginForm.post(route('login.submit'), {
+            onFinish: () => console.log('done'),
+        });
+    });
 </script>
-
-
