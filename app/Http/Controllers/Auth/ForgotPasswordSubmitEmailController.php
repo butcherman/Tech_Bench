@@ -21,10 +21,7 @@ class ForgotPasswordSubmitEmailController extends Controller
         if($status === Password::RESET_LINK_SENT)
         {
             event(new SuccessfulResetEmailAttempt($request->email));
-            return back()->with([
-                'message' => __($status),
-                'type'    => 'success'
-            ]);
+            return back()->with('warning', __($status));
         }
 
         event(new FailedResetEmailAttempt($request->email));

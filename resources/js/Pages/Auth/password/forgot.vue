@@ -1,43 +1,53 @@
 <template>
-    <div class="row h-100 align-items-center">
-        <div class="col-12">
-            <h6 class="text-center">Enter your email address for instructions on accessing your account.</h6>
-            <b-alert variant="success" :show="$page.props.flash.message ? true : false">
-                <p class="text-center">Please Check Your Email For Instructions</p>
-            </b-alert>
-            <ValidationObserver v-slot="{handleSubmit}">
-                <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-                    <text-input v-model="form.email" rules="required|email" label="Email Address" name="email" type="email" placeholder="Email Address"></text-input>
-                    <submit-button button_text="Send Password Reset Link" class="mb-2" :submitted="submitted"></submit-button>
-                </b-form>
-            </ValidationObserver>
+    <Head title="Forgot Password" />
+    <AuthLayout>
+        <div class="row align-items-center h-100">
+            <div class="col">
+                <div v-if="errors.email" class="alert alert-danger text-center">
+                    {{ errors.email }}
+                </div>
+                <div v-if="flash.warning" class="alert alert-warning text-center">
+                    {{ flash.warning }}
+                </div>
+                <h6 class="text-center">
+                    Enter your email address for instructions on accessing your account.
+                </h6>
+                <form @submit="onSubmit" novalidate>
+                    <TextInput id="email-address" type="email" label="Email Address" name="email" />
+                    <SubmitButton :submitted="isSubmitting" />
+                </form>
+            </div>
         </div>
-    </div>
+    </AuthLayout>
 </template>
 
-<script>
-    import Guest from '../../../Layouts/guest';
-    import Auth  from '../../../Layouts/Nested/authLayout';
+<script setup lang="ts">
+    import AuthLayout                 from '@/Layouts/authLayout.vue';
+    import TextInput                  from '@/Components/Base/Input/TextInput.vue';
+    import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
+    import { ref }                    from 'vue';
+    import { useForm }                from '@inertiajs/inertia-vue3';
+    import { useForm as useVeeForm }  from 'vee-validate';
+    import * as yup                   from 'yup';
 
-    export default {
-        layout: [Guest, Auth],
-        data() {
-            return {
-                form: {
-                    email: '',
-                },
-                submitted: false,
-            }
-        },
-        methods: {
-            submitForm()
-            {
-                this.submitted = true;
-                this.$inertia.post(route('password.submit-email'), this.form, {onFinish: () => {this.submitted = false}});
-            }
-        },
-        metaInfo: {
-            title: 'Forgot Password',
+    defineProps<{
+        errors: { email: string },
+        flash : { warning: string }
+    }>();
+
+    const isSubmitting     = ref(false);
+    const { handleSubmit } = useVeeForm({
+        validationSchema: {
+            email: yup.string().email().required('You must enter an email address'),
         }
-    }
+    });
+
+    const onSubmit = handleSubmit(form => {
+        isSubmitting.value = true;
+        const loginForm    = useForm(form);
+
+        loginForm.post(route('password.submit-email'), {
+            onFinish: () => isSubmitting.value = false,
+        });
+    });
 </script>
