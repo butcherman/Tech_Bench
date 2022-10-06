@@ -40,9 +40,6 @@ class ResetPasswordSubmitController extends Controller
         );
 
         return $status == Password::PASSWORD_RESET
-                ? redirect()->route('login.index')->with([
-                    'message' => 'Password Successfully Updated',
-                    'type'    => 'success'
-                ]) : back()->withErrors(['email' => [__($status)]]);
+                ? redirect()->route('login.index')->with('success', 'Password Successfully Updated') : back()->withErrors(['email' => [__($status)]]);
     }
 }

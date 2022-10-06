@@ -1,5 +1,5 @@
 <template>
-    <button type="submit" class="btn btn-primary w-100">
+    <button type="submit" class="btn btn-primary w-100" :disabled="submitted">
         <span v-if="submitted" class="spinner-border spinner-border-sm" />
         {{ text ? text : 'Submit' }}
     </button>

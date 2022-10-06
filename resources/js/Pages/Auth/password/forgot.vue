@@ -1,23 +1,13 @@
 <template>
     <Head title="Forgot Password" />
     <AuthLayout>
-        <div class="row align-items-center h-100">
-            <div class="col">
-                <div v-if="errors.email" class="alert alert-danger text-center">
-                    {{ errors.email }}
-                </div>
-                <div v-if="flash.warning" class="alert alert-warning text-center">
-                    {{ flash.warning }}
-                </div>
-                <h6 class="text-center">
-                    Enter your email address for instructions on accessing your account.
-                </h6>
-                <form @submit="onSubmit" novalidate>
-                    <TextInput id="email-address" type="email" label="Email Address" name="email" />
-                    <SubmitButton :submitted="isSubmitting" />
-                </form>
-            </div>
-        </div>
+        <h6 class="text-center">
+            Enter your email address for instructions on accessing your account.
+        </h6>
+        <form @submit="onSubmit" novalidate>
+            <TextInput id="email-address" type="email" label="Email Address" name="email" />
+            <SubmitButton :submitted="isSubmitting" />
+        </form>
     </AuthLayout>
 </template>
 
@@ -29,11 +19,6 @@
     import { useForm }                from '@inertiajs/inertia-vue3';
     import { useForm as useVeeForm }  from 'vee-validate';
     import * as yup                   from 'yup';
-
-    defineProps<{
-        errors: { email: string },
-        flash : { warning: string }
-    }>();
 
     const isSubmitting     = ref(false);
     const { handleSubmit } = useVeeForm({
