@@ -41,14 +41,6 @@ class EventServiceProvider extends ServiceProvider
 
 
 
-
-
-        'App\Events\FailedResetEmailAttempt' => [
-            'App\Listeners\LogFailedResetEmailAttempt',
-        ],
-        'App\Events\SuccessfulResetEmailAttempt' => [
-            'App\Listeners\LogSuccessfulResetEmailAttempt',
-        ],
         'App\Events\UserPasswordChanged' => [
             'App\Listeners\LogUserPasswordChanged',
         ],

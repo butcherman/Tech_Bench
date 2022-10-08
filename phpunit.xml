@@ -39,7 +39,7 @@
             <file>./app/Http/Middleware/VerifyCsrfToken.php</file>
             <file>./app/Providers/AppServiceProvider.php</file>
             <file>./app/Providers/BroadcastServiceProvider.php</file>
-            <file>./app/Providers/EventServiceProvider.php</file>
+            <!-- <file>./app/Providers/EventServiceProvider.php</file> -->
             <file>./app/Providers/RouteServiceProvider.php</file>
             <file>./app/Excptions/Handler.php</file>
         </exclude>
