@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use Inertia\Inertia;
-
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
 
 class ResetPasswordController extends Controller
 {
+    public function __construct()
+    {
+        //  To help prevent bots, we will not allow more than 50 login attempts within a two hour period
+        $this->middleware('throttle:50,120');
+    }
+
     /**
      *  For users with reset token to allow user to reset their password
      */
@@ -21,7 +25,7 @@ class ResetPasswordController extends Controller
             abort(404);
         }
 
-        return Inertia::render('Auth/password/reset', [
+        return Inertia::render('Auth/ResetPassword', [
             'token' => $request->token,
             'email' => $request->email,
         ]);

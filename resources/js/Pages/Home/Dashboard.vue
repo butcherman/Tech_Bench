@@ -1,5 +1,7 @@
 <template>
-    <h1 class="text-center">Logged In</h1>
+    <Layout>
+        <h1 class="text-center">Logged In</h1>
+    </Layout>
     <!-- <div>
         <div class="row justify-content-center">
             <div class="col-12 grid-margin">
@@ -66,7 +68,8 @@
     </div> -->
 </template>
 
-<script>
+<script setup lang="ts">
+    import Layout from '@/Layouts/app.vue';
     // import App           from '../../Layouts/app';
     // import QuickLinks    from '../../Components/Home/quickLinks.vue';
     // import Notifications from '../../Components/Home/notifications.vue';

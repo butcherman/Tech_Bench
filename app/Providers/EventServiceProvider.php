@@ -38,6 +38,11 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\PasswordReset' => [
             'App\Listeners\LogPasswordReset',
         ],
+
+
+
+
+
         'App\Events\FailedResetEmailAttempt' => [
             'App\Listeners\LogFailedResetEmailAttempt',
         ],

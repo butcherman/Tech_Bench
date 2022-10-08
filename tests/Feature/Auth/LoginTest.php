@@ -34,9 +34,11 @@ class LoginTest extends TestCase
             'username' => $user->username,
             'password' => 'somethingElse'
         ]);
+
+        // dd($response->getSession());
         $response->assertStatus(302);
         $response->assertRedirect(route('home'));
-        $response->assertSessionHasErrors(['username' => 'Your username or password does not match our records']);
+        $response->assertSessionHasErrors(['email' => __('auth.failed')]);
         $this->assertGuest();
     }
 
@@ -54,7 +56,7 @@ class LoginTest extends TestCase
         ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('home'));
-        $response->assertSessionHasErrors(['username' => 'Your username or password does not match our records']);
+        $response->assertSessionHasErrors(['email' => __('auth.failed')]);
         $this->assertGuest();
     }
 
@@ -104,7 +106,7 @@ class LoginTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertRedirect(route('home'));
-        $response->assertSessionHasErrors(['username' => 'You have attempted to log in too many times.  Please wait 10 minutes before trying again.']);
+        $response->assertSessionHasErrors(['email']);
         $this->assertGuest();
 
         //  After more than 10 minutes, user should be able to try again
@@ -116,7 +118,7 @@ class LoginTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertRedirect(route('home'));
-        $response->assertSessionHasErrors(['username' => 'Your username or password does not match our records']);
+        $response->assertSessionHasErrors(['email' => __('auth.failed')]);
         $this->assertGuest();
     }
 
@@ -128,10 +130,7 @@ class LoginTest extends TestCase
         $response = $this->actingAs($user)->get(route('home'));
         $response->assertStatus(302);
         $response->assertRedirect(route('password.index'));
-        $response->assertSessionHas([
-            'message' => 'Your Password Has Expired.  You must change your password to continue',
-            'type'    => 'warning',
-        ]);
+        $response->assertSessionHas('warning', 'Your Password Has Expired.  You must change your password to continue');
     }
 
     //  TODO - Test Remember Me Token

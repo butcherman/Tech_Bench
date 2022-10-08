@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\FailedResetEmailAttempt;
-use App\Events\SuccessfulResetEmailAttempt;
-use Illuminate\Support\Facades\Password;
-
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use App\Http\Requests\Auth\ForgotPasswordEmailRequest;
 
 class ForgotPasswordSubmitEmailController extends Controller
 {
+    public function __construct()
+    {
+        //  To help prevent bots, we will not allow more than 50 login attempts within a two hour period
+        $this->middleware('throttle:50,120');
+    }
+
     /**
      *  Send the user an email with a link to reset their password
      */
@@ -20,11 +24,14 @@ class ForgotPasswordSubmitEmailController extends Controller
 
         if($status === Password::RESET_LINK_SENT)
         {
-            event(new SuccessfulResetEmailAttempt($request->email));
+            Log::channel('auth')->notice('A password reset email has been sent to '.$request->email);
             return back()->with('success', __($status));
         }
 
-        event(new FailedResetEmailAttempt($request->email));
+        Log::channel('auth')->warning('Someone has failed to enter a proper email address to request a Password Reset link', [
+            'Email'      => $request->email,
+            'IP Address' => \Request::ip(),
+        ]);
         return back()->withErrors(['email' => __($status)]);
     }
 }

@@ -27,7 +27,8 @@ class ResetPasswordSubmitController extends Controller
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'), function($user, $password) {
                 //  Determine the new expiration date
-                $expires = config('auth.passwords.settings.expire') ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+                $expires = config('auth.passwords.settings.expire') ?
+                                Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
 
                 $user->forceFill([
                     'password'         => Hash::make($password),
@@ -39,7 +40,8 @@ class ResetPasswordSubmitController extends Controller
             }
         );
 
-        return $status == Password::PASSWORD_RESET
-                ? redirect()->route('login.index')->with('success', 'Password Successfully Updated') : back()->withErrors(['email' => [__($status)]]);
+        return $status == Password::PASSWORD_RESET ?
+                        redirect()->route('login.index')->with('success', 'Password Successfully Updated') :
+                        back()->withErrors(['email' => [__($status)]]);
     }
 }

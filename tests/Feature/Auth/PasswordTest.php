@@ -45,7 +45,7 @@ class PasswordTest extends TestCase
             ]);
 
             $response->assertStatus(302);
-            $response->assertSessionHas('message');
+            $response->assertSessionHas('success', 'We have emailed your password reset link!');
             $this->assertNotNull($token = DB::table('password_resets')->first());
         }
 
@@ -57,8 +57,6 @@ class PasswordTest extends TestCase
             $response = $this->post(route('password.submit-email'), [
                 'email' => 'randomEmail@em.com',
             ]);
-
-            // dd($response->getSession());
 
             $response->assertStatus(302);
             $response->assertRedirect(route('home'));
@@ -189,93 +187,4 @@ class PasswordTest extends TestCase
             $this->assertTrue(Hash::check('old-password', $user->fresh()->password));
             $this->assertGuest();
         }
-
-
-        /******************************************************************* */
-
-        //  Test a guest cannot see the change password page
-        // public function test_view_settings_password_guest()
-        // {
-        //     $response = $this->get(route('password.edit', 'change'));
-
-        //     $response->assertStatus(302);
-        //     $response->assertRedirect(route('login.index'));
-        // }
-
-        //  Test visiting the password change page while logged in
-        // public function test_view_settings_password()
-        // {
-        //     $response = $this->actingAs(User::factory()->create())->get(route('password.edit', 'change'));
-
-        //     $response->assertSuccessful();
-        // }
-
-        //  Test trying to change password as a guest
-        // public function test_change_password_as_guest()
-        // {
-        //     $user = User::factory()->create();
-        //     $form = [
-        //         'password' => 'newPass',
-        //         'password_confirmation' => 'newPass',
-        //     ];
-
-        //     $response = $this->put(route('password.update', $user->username), $form);
-        //     $response->assertStatus(302);
-        //     $response->assertRedirect(route('login.index'));
-        // }
-
-        //  Test trying to change password
-        // public function test_change_password()
-        // {
-        //     $user = User::factory()->create();
-        //     $form = [
-        //         'password' => 'newPass',
-        //         'password_confirmation' => 'newPass',
-        //     ];
-
-        //     $response = $this->actingAs($user)->put(route('password.update', $user->username), $form);
-        //     $response->assertStatus(302);
-        //     $response->assertSessionHas(['message' => 'Password Successfully Updated']);
-        // }
-
-        //  Test trying to change password using same password
-        // public function test_change_password_same_password()
-        // {
-        //     $user = User::factory()->create(['password' => Hash::make('newPass')]);
-        //     $form = [
-        //         'password' => 'newPass',
-        //         'password_confirmation' => 'newPass',
-        //     ];
-
-        //     $response = $this->actingAs($user)->put(route('password.update', $user->username), $form);
-        //     $response->assertStatus(302);
-        //     $response->assertSessionHas(['message' => 'You cannot use the same password']);
-        // }
-
-        //  Test trying to change someone elses password
-        // public function test_change_another_password()
-        // {
-        //     $user = User::factory()->create();
-        //     $form = [
-        //         'password' => 'newPass',
-        //         'password_confirmation' => 'newPass',
-        //     ];
-
-        //     $response = $this->actingAs(User::factory()->create())->put(route('password.update', $user->username), $form);
-        //     $response->assertStatus(403);
-        // }
-
-        //  Test trying to change someone elses password as admin
-        // public function test_change_another_password_as_admin()
-        // {
-        //     $user = User::factory()->create();
-        //     $form = [
-        //         'password' => 'newPass',
-        //         'password_confirmation' => 'newPass',
-        //     ];
-
-        //     $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('password.update', $user->username), $form);
-        //     $response->assertStatus(302);
-        //     $response->assertSessionHas(['message' => 'Password Successfully Updated']);
-        // }
 }

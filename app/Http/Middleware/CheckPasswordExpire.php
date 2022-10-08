@@ -26,17 +26,16 @@ class CheckPasswordExpire
      */
     public function handle(Request $request, Closure $next)
     {
-        //  TODO - turn this back on!!!!!!!
         //  Check to see if we are logged in
-        // if($request->user() && !in_array(Route::current()->getName(), $this->bypassRoutes))
-        // {
-        //     //  check to see if the password is expired
-        //     if($request->user()->password_expires && $request->user()->password_expires < Carbon::now())
-        //     {
-        //         Log::stack(['auth', 'user'])->notice('User '.$request->user()->full_name.' is being forced to change their password');
-        //         return redirect()->route('password.index')->with(['message' => 'Your Password Has Expired.  You must change your password to continue', 'type' => 'warning']);
-        //     }
-        // }
+        if($request->user() && !in_array(Route::current()->getName(), $this->bypassRoutes))
+        {
+            //  check to see if the password is expired
+            if($request->user()->password_expires && $request->user()->password_expires < Carbon::now())
+            {
+                Log::stack(['auth', 'user'])->notice('User '.$request->user()->full_name.' is being forced to change their password');
+                return redirect()->route('password.index')->with('warning', 'Your Password Has Expired.  You must change your password to continue');
+            }
+        }
 
         return $next($request);
     }

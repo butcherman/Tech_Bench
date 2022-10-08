@@ -4,11 +4,9 @@ namespace App\Exceptions;
 
 use Throwable;
 use Inertia\Inertia;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Request;
 
 class Handler extends ExceptionHandler
 {
@@ -46,9 +44,27 @@ class Handler extends ExceptionHandler
     {
         $response = parent::render($request, $e);
 
-        if(!app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403]))
+        if(!app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403, 429]))
         {
-            Log::notice('Server Error - '.$response->status().' occured.  Message - '.$response->exception->getMessage(), [
+            switch($response->status())
+            {
+                case 500:
+                case 503:
+                    $level = 'critical';
+                    break;
+                case 404:
+                case 429:
+                    $level = 'warning';
+                    break;
+                case 403:
+                    $level = 'alert';
+                    break;
+                default:
+                    $level = 'notice';
+            }
+
+            Log::$level('Server Error - '.$response->status().' occured.', [
+                'message'    => $response->exception->getMessage(),
                 'url'        => $request->fullUrl(),
                 'auth'       => Auth::check() ? true : false,
                 'user_id'    => Auth::check() ? Auth::user()->user_id : null,
@@ -57,26 +73,15 @@ class Handler extends ExceptionHandler
                 'ip_address' => $request->ip(),
             ]);
 
-            $message = $response->exception->getMessage();
-
-            if($message == "" || Str::startsWith($message, 'No query results'))
-            {
-                $message = null;
-            }
-
             return Inertia::render('Error', [
                     'status'  => $response->status(),
-                    'message' => $message,
                 ])
                 ->toResponse($request)
                 ->setStatusCode($response->status());
         }
         else if ($response->status() === 419)
         {
-            return back()->with([
-                'message' => 'The page expired, please try again.',
-                'type'    => 'danger',
-            ]);
+            return back()->withErrors('The page expired.  Please Refresh and try again');
         }
 
         return $response;
