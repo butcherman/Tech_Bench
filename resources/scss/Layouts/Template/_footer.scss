@@ -3,10 +3,10 @@
 */
 .footer {
     background-color: $footer-background;
-    border-top: $soft-border;
-    bottom: 0;
-    position: absolute;
-    width: 100%;
+    border-top      : $soft-border;
+    bottom          : 0;
+    position        : absolute;
+    width           : 100%;
     @media(min-width: $brk-md) {
         padding: 25px;
     }

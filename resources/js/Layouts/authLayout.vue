@@ -38,9 +38,11 @@
     import { computed } from 'vue';
     import { usePage }  from '@inertiajs/inertia-vue3';
 
-    const appName = computed(() => usePage().props.value.app.name);
-    const appLogo = computed(() => usePage().props.value.app.logo);
-    const errors  = computed(() => usePage().props.value.errors);
-    const warning = computed(() => usePage().props.value.flash.warning);
-    const success = computed(() => usePage().props.value.flash.success);
+    import type { pageInterface } from '@/Types';
+
+    const appName = computed(() => usePage<pageInterface>().props.value.app.name);
+    const appLogo = computed(() => usePage<pageInterface>().props.value.app.logo);
+    const errors  = computed(() => usePage<pageInterface>().props.value.errors);
+    const warning = computed(() => usePage<pageInterface>().props.value.flash.warning);
+    const success = computed(() => usePage<pageInterface>().props.value.flash.success);
 </script>
