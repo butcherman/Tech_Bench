@@ -1,4 +1,3 @@
-import { Router } from '@inertiajs/inertia/types/router';
 import type { Route } from 'ziggy-js';
 
 export {};

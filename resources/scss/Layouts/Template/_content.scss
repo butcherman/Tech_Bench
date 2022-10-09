@@ -3,24 +3,22 @@
 */
 .content {
     background-color: $content-background;
-    position: absolute;
-    top: $header-height;
-    z-index: 1;
-    padding: 0;
-    margin: 0;
-    min-height: calc(100vh - #{$header-height});
-    // width: 100%;
-    // left: 0;
+    position        : absolute;
+    top             : $header-height;
+    z-index         : 1;
+    padding         : 0;
+    margin          : 0;
+    min-height      : calc(100vh - #{$header-height});
     @media(min-width: $brk-lg) {
-        left: $navbar-width;
+        left : $navbar-width;
         width: calc(100% - #{$navbar-width});
     }
     @media(max-width: $brk-lg) {
-        left: 0;
+        left : 0;
         width: 100%;
     }
     .content-wrapper {
-        padding: 25px;
+        padding      : 25px;
         margin-bottom: 75px;
     }
 }
@@ -28,67 +26,67 @@
 /*
 *   Application Primary Content Styles
 */
-.grid-margin {
-    margin-bottom: 1.875rem;
-    flex-grow: 1;
-}
+// .grid-margin {
+//     margin-bottom: 1.875rem;
+//     flex-grow: 1;
+// }
 
-.card {
-    height: 100%;
-    box-shadow: 4px 8px 9px -2px #c7c5d8;
-    .card-title {
-        color: #787878;
-        font-size: .875rem;
-        font-weight: 500;
-        margin-bottom: 1.2rem;
-        padding-bottom: 0.5rem;
-        text-transform: uppercase;
-        border-bottom: 1px solid rgba(0,0,0,.06);
-    }
-}
+// .card {
+//     height: 100%;
+//     box-shadow: 4px 8px 9px -2px #c7c5d8;
+//     .card-title {
+//         color: #787878;
+//         font-size: .875rem;
+//         font-weight: 500;
+//         margin-bottom: 1.2rem;
+//         padding-bottom: 0.5rem;
+//         text-transform: uppercase;
+//         border-bottom: 1px solid rgba(0,0,0,.06);
+//     }
+// }
 
-.bookmark-card {
-    background: #668cff;
-    border: none;
-    -webkit-box-shadow: 5px 5px #bceef6;
-       -moz-box-shadow: 5px 5px #bceef6;
-            box-shadow: 5px 5px #bceef6;
-    .card-body {
-        .card-body-icon {
-            position: absolute;
-            z-index: 0;
-            top: -25px;
-            right: -25px;
-            font-size: 5rem;
-            -webkit-transform: rotate(15deg);
-                -ms-transform: rotate(15deg);
-                    transform: rotate(15deg);
-        }
-    }
-}
+// .bookmark-card {
+//     background: #668cff;
+//     border: none;
+//     -webkit-box-shadow: 5px 5px #bceef6;
+//        -moz-box-shadow: 5px 5px #bceef6;
+//             box-shadow: 5px 5px #bceef6;
+//     .card-body {
+//         .card-body-icon {
+//             position: absolute;
+//             z-index: 0;
+//             top: -25px;
+//             right: -25px;
+//             font-size: 5rem;
+//             -webkit-transform: rotate(15deg);
+//                 -ms-transform: rotate(15deg);
+//                     transform: rotate(15deg);
+//         }
+//     }
+// }
 
-.bookmark-unchecked {
-    color: #C4C4C4;
-    @extend .pointer;
-}
+// .bookmark-unchecked {
+//     color: #C4C4C4;
+//     @extend .pointer;
+// }
 
-.bookmark-checked {
-    color: #D46E70;
-    @extend .pointer;
-}
+// .bookmark-checked {
+//     color: #D46E70;
+//     @extend .pointer;
+// }
 
-.pointer {
-    cursor: pointer;
-}
+// .pointer {
+//     cursor: pointer;
+// }
 
-ul.no-bullet {
-    list-style-type: none;
-}
+// ul.no-bullet {
+//     list-style-type: none;
+// }
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
-}
+// .fade-enter-active, .fade-leave-active {
+//     transition: opacity .5s;
+// }
 
-.fade-enter, .fade-leave-to {
-    opacity: 0;
-}
+// .fade-enter, .fade-leave-to {
+//     opacity: 0;
+// }

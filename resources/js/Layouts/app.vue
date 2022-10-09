@@ -87,8 +87,7 @@
                         <button
                             type="button"
                             class="navbar-toggler"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#navbar-content"
+                            @click="navbarActive = !navbarActive"
                         >
                             <span class="navbar-toggler-icon" />
                         </button>
@@ -96,8 +95,21 @@
                 </ul>
             </div>
         </nav>
-        <div class="container-fluid page-body-wrapper">
-            <nav id="side-nav" class="sidebar sidebar-nav">
+        <div class="container-fluid">
+            <nav id="side-nav" class="sidebar" :class="{ 'active' : navbarActive }">
+                <ul class="nav">
+                    <li class="nav-item" v-for="link in navBar" :key="link.name">
+                        <Link class="nav-link" :href="link.route">
+                            <fa-icon :icon="link.icon" />
+                            <span class="menu-title">{{ link.name }}</span>
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
+
+
+
+            <!-- <nav id="side-nav" class="sidebar sidebar-nav collapse navbar-collapse">
                 <ul class="nav">
                     <li class="nav-item" v-for="link in navBar" :key="link.name">
                         <Link class="nav-link" :href="link.route">
@@ -106,7 +118,11 @@
                         </Link>
                     </li>
                 </ul>
-            </nav>
+            </nav> -->
+
+
+
+
             <div id="content" class="content">
                 <div class="content-wrapper">
                     <!-- <nav v-if="breadcrumbs.length">
@@ -166,8 +182,9 @@
 
     import type { pageInterface } from '@/Types';
 
-    import { computed } from 'vue';
+    import { computed, ref, onMounted } from 'vue';
     import { usePage } from '@inertiajs/inertia-vue3';
+    import { Inertia } from '@inertiajs/inertia';
 
     const app     = computed(() => usePage<pageInterface>().props.value.app);
     const navBar  = computed(() => usePage<pageInterface>().props.value.navbar);
@@ -176,10 +193,9 @@
     const warning = computed(() => usePage<pageInterface>().props.value.flash.warning);
     const success = computed(() => usePage<pageInterface>().props.value.flash.success);
 
+    const navbarActive = ref(false);
 
-
-
-    // const navbarActive = null;
+    Inertia.on('navigate', () => navbarActive.value = false);
 
 
 
