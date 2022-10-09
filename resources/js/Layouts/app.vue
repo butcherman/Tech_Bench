@@ -40,45 +40,60 @@
                             </span>
                         </Link>
                     </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <button
+                                type="button"
+                                class="btn btn-primary dropdown-toggle btn-pill"
+                                data-bs-toggle="dropdown"
+                            >
+                                AC
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <Link
+                                        :href="route('settings.index')"
+                                        class="dropdown-item"
+                                    >
+                                        <fa-icon icon="fa-cog" />
+                                        Settings
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        :href="route('password.index')"
+                                        class="dropdown-item"
+                                    >
+                                        <fa-icon icon="fa-key" />
+                                        Change Password
+                                    </Link>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <Link
+                                        as="button"
+                                        :href="route('logout')"
+                                        class="dropdown-item"
+                                        method="POST"
+                                    >
+                                        <fa-icon icon="fa-sign-out-alt" />
+                                        Logout
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <button
+                            type="button"
+                            class="navbar-toggler"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbar-content"
+                        >
+                            <span class="navbar-toggler-icon" />
+                        </button>
+                    </li>
                 </ul>
-
-
-<!-- ///////////////////////// -->
-                <!-- <b-dropdown variant="link" title="Account" v-b-tooltip.hover>
-                    <template #button-content>
-                        <b-avatar variant="warning" :text="app.user.initials" />
-                    </template>
-                    <inertia-link
-                        :href="route('settings.index')"
-                        as="b-dropdown-item"
-                    >
-                        <i class="fas fa-cog" />
-                        Settings
-                    </inertia-link>
-                    <inertia-link
-                        :href="route('password.index')"
-                        as="b-dropdown-item"
-                    >
-                        <i class="fas fa-key" />
-                        Change Password
-                    </inertia-link>
-                    <b-dropdown-divider />
-                    <inertia-link
-                        :href="route('logout')"
-                        method="post"
-                        as="b-dropdown-item"
-                    >
-                        <i class="fas fa-sign-out-alt" />
-                        Logout
-                    </inertia-link>
-                </b-dropdown> -->
-                <!-- <button
-                    class="navbar-toggler d-xl-none"
-                    type="button"
-                    @click="showNav = !showNav"
-                >
-                    <i class="fas fa-bars" />
-                </button> -->
             </div>
         </nav>
         <!-- <div class="container-fluid page-body-wrapper">
@@ -256,4 +271,7 @@
 
 <style scoped lang="scss">
     @import "../../scss/Layouts/appLayout.scss";
+    .dropdown-menu {
+        margin: 0 !important;
+    }
 </style>

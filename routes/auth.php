@@ -35,9 +35,3 @@ Route::middleware('guest')->group(function()
 
 //  Log user out
 Route::middleware('auth')->post('logout', LogoutController::class)->name('logout');
-
-
-
-
-//  TMP for testing
-Route::middleware('auth')->get('logout', LogoutController::class);
