@@ -5,5 +5,5 @@
 </template>
 
 <style scoped lang="scss">
-    @import "../../scss/Layouts/guest.scss";
+    @import "../../scss/Layouts/guestLayout.scss";
 </style>

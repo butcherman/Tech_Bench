@@ -1,4 +1,5 @@
 <template>
+    <Head title="Dashboard" />
     <Layout>
         <h1 class="text-center">Logged In</h1>
     </Layout>

@@ -6,38 +6,43 @@
                     :href="route('dashboard')"
                     class="navbar-logo"
                 >
-                    <img :src="$page.props.app.logo" class="mr-2" :alt="$page.props.app.name"/>
+                    <img :src="app.logo" class="mr-2" :alt="app.name"/>
                 </Link>
             </div>
             <div class="navbar-brand d-none d-md-flex">
-                <h2>{{ $page.props.app.name }}</h2>
+                <h2>{{ app.name }}</h2>
             </div>
             <div class="navbar-data">
-                <!-- <inertia-link href="#" class="text-muted" title="Help" v-b-tooltip.hover>
-                    <i class="far fa-question-circle"></i>
-                </inertia-link> -->
+                <ul class="nav">
+                    <li class="nav-item">
+                        <Link
+                            :href="route('about')"
+                            :title="`About ${app.name}`"
+                            class="text-muted"
+                            v-tooltip
+                        >
+                            <fa-icon icon="fa-circle-info" />
+                        </Link>
+                    </li>
+                    <li class="nav-item">
+                        <Link
+                            :href="route('dashboard')"
+                            as="button"
+                            title="Notifications"
+                            class="btn btn-pill btn-primary position-relative"
+                            v-tooltip
+                        >
+                            <fa-icon icon="fa-bell" />
+                            <span
+                                class="badge bg-warning position-absolute top-0 start-100 translate-middle rounded-pill"
+                            >
+                                {{ app.notifCount }}
+                            </span>
+                        </Link>
+                    </li>
+                </ul>
 
-                <Link
-                    :href="route('about')"
-                    :title="`About ${$page.props.app.name}`"
-                    class="text-muted"
-                >
-                    <!-- <i class="fas fa-info-circle" /> -->
-                    about
-                </Link>
 
-                <!-- <inertia-link
-                    :href="route('dashboard')"
-                    size="sm"
-                    as="b-button"
-                    variant="info"
-                    pill
-                >
-                    <i class="fas fa-bell" />
-                    <b-badge pill variant="warning">
-                        {{notificationStore.newCount}}
-                    </b-badge>
-                </inertia-link> -->
 <!-- ///////////////////////// -->
                 <!-- <b-dropdown variant="link" title="Account" v-b-tooltip.hover>
                     <template #button-content>
@@ -138,11 +143,21 @@
     </div>
 </template>
 
-<script>
+<script setup lang="ts">
     // import { Inertia }              from '@inertiajs/inertia';
 
     // import { useNotificationStore } from '../Stores/notificationStore';
     // import { mapStores } from 'pinia';
+
+    import { computed } from 'vue';
+    import { usePage } from '@inertiajs/inertia-vue3';
+
+    const app     = computed(() => usePage().props.value.app);
+    const errors  = computed(() => usePage().props.value.errors);
+    const warning = computed(() => usePage().props.value.flash.warning);
+    const success = computed(() => usePage().props.value.flash.success);
+
+
 
     // export default {
     //     props: {
@@ -240,5 +255,5 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../../scss/Layouts/app.scss";
+    @import "../../scss/Layouts/appLayout.scss";
 </style>

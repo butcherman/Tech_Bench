@@ -6,6 +6,7 @@
             :type="type ? type : 'text'"
             :placeholder="label"
             class="form-control order-2"
+            v-focus="focus"
         >
         <label :for="id">{{ label }}</label>
         <span class="text-danger">{{ errorMessage }}</span>
@@ -22,9 +23,10 @@
         name  : string;
         type ?: string;
         label : string;
+        focus?: boolean;
     }>();
 
-    const nameRef                 = toRef(props, 'name');
+    const nameRef = toRef(props, 'name');
     const { errorMessage, value }:
           { errorMessage:Ref<string>, value:Ref<string>} = useField(nameRef);
 </script>

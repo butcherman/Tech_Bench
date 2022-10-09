@@ -2,7 +2,7 @@
     <Head title="Login" />
     <AuthLayout>
         <form @submit="onSubmit" novalidate>
-            <TextInput id="username" label="Username" name="username" />
+            <TextInput id="username" label="Username" name="username" focus />
             <TextInput id="passsword" label="Password" name="password" type="password" />
             <SubmitButton :submitted="isSubmitting" />
         </form>
