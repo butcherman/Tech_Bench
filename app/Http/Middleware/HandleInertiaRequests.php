@@ -28,12 +28,8 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => [
-                // 'message' => fn() => $request->session()->get('message'),
-                // 'type'    => fn() => $request->session()->get('type'),
-
                 'success' => fn() => $request->session()->get('success'),
                 'warning' => fn() => $request->session()->get('warning'),
-                // 'error'   => fn() =>
             ],
             //  App information that is shared and used on all pages
             'app' => [
@@ -43,7 +39,6 @@ class HandleInertiaRequests extends Middleware
                 'copyright'  => (new Version)->copyright(),
                 //  Current logged in user
                 'user'       => fn() => $request->user() ? $request->user() : null,
-                'notifCount' => fn() => $request->user() ? $request->user()->unreadNotifications->count() : null,
                 //  File information
                 'fileData' => [
                     'maxSize'   => config('filesystems.max_filesize'),

@@ -36,7 +36,7 @@
                             <span
                                 class="badge bg-warning position-absolute top-0 start-100 translate-middle rounded-pill"
                             >
-                                {{ app.notifCount }}
+                                {{ notif.new }}
                             </span>
                         </Link>
                     </li>
@@ -96,20 +96,20 @@
                 </ul>
             </div>
         </nav>
-        <!-- <div class="container-fluid page-body-wrapper">
-            <nav id="side-nav" class="sidebar sidebar-nav" :class="navbarActive">
+        <div class="container-fluid page-body-wrapper">
+            <nav id="side-nav" class="sidebar sidebar-nav">
                 <ul class="nav">
-                    <li class="nav-item" v-for="link in navbar" :key="link.name">
-                        <inertia-link class="nav-link" :href="link.route">
-                            <i class="menu-icon" :class="link.icon" />
+                    <li class="nav-item" v-for="link in navBar" :key="link.name">
+                        <Link class="nav-link" :href="link.route">
+                            <fa-icon :icon="link.icon" />
                             <span class="menu-title">{{link.name}}</span>
-                        </inertia-link>
+                        </Link>
                     </li>
                 </ul>
             </nav>
             <div id="content" class="content">
                 <div class="content-wrapper">
-                    <nav v-if="breadcrumbs.length">
+                    <!-- <nav v-if="breadcrumbs.length">
                         <ol class="breadcrumb">
                             <li
                                 v-for="crumb in breadcrumbs"
@@ -128,18 +128,18 @@
                                 </span>
                             </li>
                         </ol>
-                    </nav>
-                    <div v-for="(message, index) in flashMessage" :key="index">
+                    </nav> -->
+                    <!-- <div v-for="(message, index) in flashMessage" :key="index">
                         <b-alert :variant="message.type" :show="30">
                             <p class="text-center">{{message.message}}</p>
                         </b-alert>
                     </div>
                     <b-alert :variant="alert.type" :show="alert.message ? 30 : false">
                         <p class="text-center">{{alert.message}}</p>
-                    </b-alert>
+                    </b-alert> -->
                     <slot />
                 </div>
-                <axios-error></axios-error>
+                <!-- <axios-error></axios-error>
                 <validation-error></validation-error>
                 <footer class=" footer page-footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
@@ -152,9 +152,9 @@
                             {{app.version}}
                         </span>
                     </div>
-                </footer>
+                </footer> -->
             </div>
-        </div> -->
+        </div>
     </div>
 </template>
 
@@ -164,13 +164,25 @@
     // import { useNotificationStore } from '../Stores/notificationStore';
     // import { mapStores } from 'pinia';
 
+    import type { pageInterface } from '@/Types';
+
     import { computed } from 'vue';
     import { usePage } from '@inertiajs/inertia-vue3';
 
-    const app     = computed(() => usePage().props.value.app);
-    const errors  = computed(() => usePage().props.value.errors);
-    const warning = computed(() => usePage().props.value.flash.warning);
-    const success = computed(() => usePage().props.value.flash.success);
+    const app     = computed(() => usePage<pageInterface>().props.value.app);
+    const navBar  = computed(() => usePage<pageInterface>().props.value.navbar);
+    const notif   = computed(() => usePage<pageInterface>().props.value.notifications);
+    const errors  = computed(() => usePage<pageInterface>().props.value.errors);
+    const warning = computed(() => usePage<pageInterface>().props.value.flash.warning);
+    const success = computed(() => usePage<pageInterface>().props.value.flash.success);
+
+
+
+
+    // const navbarActive = null;
+
+
+
 
 
 

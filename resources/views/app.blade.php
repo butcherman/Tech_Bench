@@ -13,7 +13,7 @@
     @endif
 @endforeach --}}
         @routes
-        @vite('resources/js/app.js')
+        @vite('resources/js/app.ts')
         @inertiaHead
     </head>
     <body>

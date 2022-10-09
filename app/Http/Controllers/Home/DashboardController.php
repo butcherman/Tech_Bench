@@ -40,15 +40,15 @@ class DashboardController extends Controller
 
         return Inertia::render('Home/Dashboard', [
             // 'notifications' => $request->user()->notifications,
-            'bookmarks'     => [
-                'customers' => UserCustomerBookmark::where('user_id', $request->user()->user_id)->get(),
-                'tips'      => UserTechTipBookmark::where('user_id', $request->user()->user_id)->get(),
-            ],
-            'recents'       => [
-                'customers' => UserCustomerRecent::where('user_id', $request->user()->user_id)->orderBy('updated_at', 'DESC')->get()->take(10),
-                'tips'      => UserTechTipRecent::where('user_id', $request->user()->user_id)->orderBy('updated_at', 'DESC')->get()->take(10),
-            ],
-            'tools'         => $tools,
+            // 'bookmarks'     => [
+            //     'customers' => UserCustomerBookmark::where('user_id', $request->user()->user_id)->get(),
+            //     'tips'      => UserTechTipBookmark::where('user_id', $request->user()->user_id)->get(),
+            // ],
+            // 'recents'       => [
+            //     'customers' => UserCustomerRecent::where('user_id', $request->user()->user_id)->orderBy('updated_at', 'DESC')->get()->take(10),
+            //     'tips'      => UserTechTipRecent::where('user_id', $request->user()->user_id)->orderBy('updated_at', 'DESC')->get()->take(10),
+            // ],
+            // 'tools'         => $tools,
         ]);
     }
 }
