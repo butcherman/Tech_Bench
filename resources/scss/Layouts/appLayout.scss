@@ -8,10 +8,10 @@ $soft-border       : 1px solid rgba(0,0,0,.15);
 $header-height     : 70px;
 $header-background : #ffffff;
 $navbar-width      : 237px;
-$navbar-background : #ffffff;
+$navbar-background : $header-background;
 $navbar-link-color : #5f5f5f;
 $content-background: #dddce1;
-$footer-background : #dddce1;
+$footer-background : $content-background;
 
 /*
 *   Primary Section Styles

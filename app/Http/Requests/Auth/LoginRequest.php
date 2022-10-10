@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Log;
 
 class LoginRequest extends FormRequest
 {

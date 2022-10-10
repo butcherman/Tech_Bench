@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use Carbon\Carbon;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
@@ -35,10 +34,7 @@ class ChangePasswordController extends Controller
         $user->save();
 
         event(new UserPasswordChanged($user));
-        return redirect(route('dashboard'))->with([
-            'message' => 'Password successfully updated',
-            'type'    => 'success',
-        ]);
+        return redirect(route('dashboard'))->with('success', __('user.password_changed'));
     }
 
     /**
@@ -53,9 +49,6 @@ class ChangePasswordController extends Controller
         $user->save();
 
         event(new UserPasswordChanged($user));
-        return back()->with([
-            'message' => 'Password successfully updated',
-            'type'    => 'success',
-        ]);
+        return back()->with('success', __('user.password_updated'));
     }
 }

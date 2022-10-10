@@ -14,7 +14,7 @@ interface appProps {
     logo     : string;
     version  : string;
     copyright: string;
-    user     : userType;
+    user     : userType | null;
     fileData : fileDataType;
 }
 
