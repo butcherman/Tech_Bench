@@ -1,10 +1,6 @@
 <template>
     <App>
-        <div class="row">
-            <div class="col-12 grid-margin">
-                <h4 class="text-center text-md-left">Change Password</h4>
-            </div>
-        </div>
+        <h4 class="text-center text-md-start">Change Password</h4>
         <div class="row justify-content-center">
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
@@ -39,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-    import App from '@/Layouts/app.vue';
+    import App                        from '@/Layouts/app.vue';
     import TextInput                  from '@/Components/Base/Input/TextInput.vue';
     import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
     import { ref }                    from 'vue';

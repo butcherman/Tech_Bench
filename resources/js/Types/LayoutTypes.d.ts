@@ -40,13 +40,14 @@ interface breadcrumbsType {
     is_current_page: boolean;
 }
 
-interface userType {
+export interface userType {
     email     : string;
     first_name: string;
     full_name : string;
     initials  : string;
     last_name : string;
     username  : string;
+    user_id  ?: number;
 }
 
 interface fileDataType {
