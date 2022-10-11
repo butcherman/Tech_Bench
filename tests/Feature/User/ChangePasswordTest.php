@@ -54,10 +54,7 @@ class ChangePasswordTest extends TestCase
         $response = $this->actingAs($user)->post(route('password.store'), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));
-        $response->assertSessionHas([
-            'message' => 'Password successfully updated',
-            'type'    => 'success',
-        ]);
+        $response->assertSessionHas('success', __('user.password_changed'));
     }
 
     /**
@@ -105,9 +102,6 @@ class ChangePasswordTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('password.update', $user->username), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas([
-            'message' => 'Password successfully updated',
-            'type'    => 'success',
-        ]);
+        $response->assertSessionHas('success', __('user.password_updated'));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Traits\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -57,6 +58,12 @@ class User extends Authenticatable
     public function UserSetting()
     {
         return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
+    }
+
+    public function getNewExpireTime()
+    {
+        return config('auth.passwords.settings.expire') ?
+                    Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
     }
 
     /**

@@ -4,10 +4,11 @@ namespace App\Http\Controllers\User;
 
 use Carbon\Carbon;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
-use App\Events\UserPasswordChanged;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Requests\User\ChangeUserPasswordRequest;
@@ -28,12 +29,12 @@ class ChangePasswordController extends Controller
     public function store(ChangePasswordRequest $request)
     {
         $user    = User::find($request->user()->user_id);
-        $expires = config('auth.passwords.settings.expire') ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+        $expires = $user->getNewExpireTime();
 
         $user->forceFill(['password' => Hash::make($request->password), 'password_expires' => $expires]);
         $user->save();
 
-        event(new UserPasswordChanged($user));
+        Log::channel('user')->info('User '.$request->user()->username.' has updated their password');
         return redirect(route('dashboard'))->with('success', __('user.password_changed'));
     }
 
@@ -42,13 +43,13 @@ class ChangePasswordController extends Controller
      */
     public function update(ChangeUserPasswordRequest $request, $id)
     {
-        $expires = config('auth.passwords.settings.expire') ? Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
         $user    = User::where('username', $id)->firstOrFail();
+        $expires = $user->getNewExpireTime();
 
         $user->forceFill(['password' => Hash::make($request->password), 'password_expires' => $expires]);
         $user->save();
 
-        event(new UserPasswordChanged($user));
+        Log::channel('user')->info('Password for User '.$request->user()->username.' has been updated by '.Auth::user()->username);
         return back()->with('success', __('user.password_updated'));
     }
 }
