@@ -50,6 +50,15 @@ export interface userType {
     user_id  ?: number;
 }
 
+export interface settingsType {
+    setting_type_id  : number;
+    value            : boolean;
+    user_setting_type: {
+        name        : string;
+        perm_type_id: number | null;
+    }
+}
+
 interface fileDataType {
     chunkSize: number;
     maxSize  : number;

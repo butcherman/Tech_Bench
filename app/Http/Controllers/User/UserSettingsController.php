@@ -35,12 +35,12 @@ class UserSettingsController extends Controller
      */
     public function store(UserNotificationsRequest $request)
     {
-        foreach($request->settingsData as $setting)
+        foreach($request->settingsData as $key => $value)
         {
             UserSetting::where('user_id', $request->user_id)
-                       ->where('setting_type_id', $setting['setting_type_id'])
+                       ->where('setting_type_id', str_replace('type_id_', '', $key))
                        ->update([
-                'value' => $setting['value'],
+                'value' => $value,
             ]);
         }
 

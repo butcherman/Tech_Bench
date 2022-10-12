@@ -47,7 +47,7 @@
                                 class="btn btn-primary dropdown-toggle btn-pill"
                                 data-bs-toggle="dropdown"
                             >
-                                {{ app.user.initials }}
+                                {{ app.user?.initials }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
@@ -61,7 +61,7 @@
                                 </li>
                                 <li>
                                     <Link
-                                        :href="route('password.index')"
+                                        :href="(route('password.index'))"
                                         class="dropdown-item"
                                     >
                                         <fa-icon icon="fa-key" />
@@ -148,7 +148,7 @@
                             {{ app.copyright }}
                             <span class="d-none d-md-inline"> Butcherman - All rights reserved.</span>
                         </span>
-                        <span class="text-muted float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
+                        <span class="text-muted float-none float-sm-end d-block mt-1 mt-sm-0 text-center">
                             {{ app.version }}
                         </span>
                     </div>
@@ -165,13 +165,13 @@
 
     import type { pageInterface } from '@/Types';
 
-    const app         = computed(() => usePage<pageInterface>().props.value.app);
-    const navBar      = computed(() => usePage<pageInterface>().props.value.navbar);
-    const notif       = computed(() => usePage<pageInterface>().props.value.notifications);
-    const breadcrumbs = computed(() => usePage<pageInterface>().props.value.breadcrumbs);
-    const errors      = computed(() => usePage<pageInterface>().props.value.errors);
-    const warning     = computed(() => usePage<pageInterface>().props.value.flash.warning);
-    const success     = computed(() => usePage<pageInterface>().props.value.flash.success);
+    const app          = computed(() => usePage<pageInterface>().props.value.app);
+    const navBar       = computed(() => usePage<pageInterface>().props.value.navbar);
+    const notif        = computed(() => usePage<pageInterface>().props.value.notifications);
+    const breadcrumbs  = computed(() => usePage<pageInterface>().props.value.breadcrumbs);
+    const errors       = computed(() => usePage<pageInterface>().props.value.errors);
+    const warning      = computed(() => usePage<pageInterface>().props.value.flash.warning);
+    const success      = computed(() => usePage<pageInterface>().props.value.flash.success);
 
     const navbarActive = ref(false);
 

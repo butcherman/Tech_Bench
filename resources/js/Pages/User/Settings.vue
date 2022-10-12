@@ -35,27 +35,24 @@
             </div>
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column">
                         <div class="card-title">Notifications</div>
-                        <!-- <ValidationObserver v-slot="{handleSubmit}">
-                            <b-overlay :show="submit.settings" class="h-100">
-                                <template #overlay>
-                                    <form-loader></form-loader>
-                                </template>
-                                <b-form @submit.prevent="handleSubmit(submitSettings)" novalidate class="h-100 d-flex flex-column">
-                                    <div class="card-title">Settings</div>
-                                    <b-form-checkbox
-                                        v-for="(item, key) in settings"
-                                        :key="key"
-                                        v-model="userSettings[key].value"
-                                        switch
-                                    >
-                                        {{item.user_setting_type.name}}
-                                    </b-form-checkbox>
-                                    <submit-button class="mt-auto" button_text="Update Notifications" :submitted="submit.settings" />
-                                </b-form>
-                            </b-overlay>
-                        </ValidationObserver> -->
+                        <VueForm
+                            :validation-schema="{}"
+                            :initial-values="notifications.initialValues"
+                            submit-text="Update"
+                            ref="notifForm"
+                            class="d-flex flex-column flex-grow-1"
+                            @submit="updateNotifications"
+                        >
+                            <div v-for="(item, key) in settings">
+                                <CheckboxSwitch
+                                    :id="`notif-${key}`"
+                                    :name="`type_id_${item.setting_type_id}`"
+                                    :label="item.user_setting_type.name"
+                                />
+                            </div>
+                        </VueForm>
                     </div>
                 </div>
             </div>
@@ -64,20 +61,25 @@
 </template>
 
 <script setup lang="ts">
-    import App from '@/Layouts/app.vue';
-    import VueForm from '@/Components/Base/VueForm.vue';
-    import TextInput from '@/Components/Base/Input/TextInput.vue';
+    import App               from '@/Layouts/app.vue';
+    import VueForm           from '@/Components/Base/VueForm.vue';
+    import TextInput         from '@/Components/Base/Input/TextInput.vue';
+    import CheckboxSwitch    from '@/Components/Base/Input/CheckboxSwitch.vue';
     import { ref, reactive } from 'vue';
-    import { useForm } from '@inertiajs/inertia-vue3';
-    import * as yup from 'yup';
+    import { useForm }       from '@inertiajs/inertia-vue3';
+    import * as yup          from 'yup';
 
-    import type { userType } from '@/Types';
+    import type { userType, settingsType } from '@/Types';
 
     const props = defineProps<{
-        user: userType;
+        user    : userType;
+        settings: settingsType[];
     }>();
 
-    const accountForm = ref(null);
+    /**
+     * User Account Settings Section
+     */
+    const accountForm = ref<InstanceType<typeof VueForm> | null>(null);
     const userAccount = reactive({
         initialValues: {
             first_name: props.user.first_name,
@@ -97,89 +99,47 @@
         email     : string;
     }
 
-    function updateAccount(form:userAccountForm):void
+    const updateAccount = (form:userAccountForm):void =>
     {
-        console.log('update account', form);
-
         const accForm = useForm(form);
         accForm.put(route('settings.update', props.user.user_id), {
-            onFinish: () => accountForm.value.endSubmit(),
+            onFinish: () => accountForm.value?.endSubmit(),
         });
     }
 
+    /**
+     * User Notification Settings Section
+     */
+    //  notification form is dynamically created
+    interface notificationForm {
+        [key: string]: boolean | undefined;
+    }
 
+    //  Reorganize settings to provide the initial values for the form
+    const objectifyNotifications = () => {
+        let initValue:notificationForm = {};
+        props.settings.forEach(item => {
+            initValue[`type_id_${item.setting_type_id}`] = item.value;
+        });
 
-    // import App from '../../Layouts/app';
+        return initValue;
+    }
 
-    // export default {
-    //     layout: App,
-    //     props: {
-    //         /**
-    //          * user object - collection from /app/models/user
-    //          */
-    //         user: {
-    //             type:     Object,
-    //             required: true,
-    //         },
-    //         /**
-    //          * filtered array from the /app/traits/usersettingstrait
-    //          */
-    //         settings: {
-    //             type:     Array,
-    //             required: true,
-    //         }
-    //     },
-    //     data() {
-    //         return {
-    //             userData: {
-    //                 first_name: this.user.first_name,
-    //                 last_name:  this.user.last_name,
-    //                 email:      this.user.email,
-    //             },
-    //             userSettings: this.settings,
-    //             submit: {
-    //                 userData: false,
-    //                 settings: false,
-    //             },
-    //         }
-    //     },
-    //     methods: {
-    //         /**
-    //          * submit the user information form
-    //          */
-    //         submitUserData()
-    //         {
-    //             this.submit.userData = true;
-    //             this.eventHub.$emit('clear-alert');
-    //             this.$inertia.put(route('settings.update', this.user.user_id), this.userData, {
-    //                 onFinish: () => {
-    //                     this.submit.userData = false;
-    //                     this.$refs['validation-observer'].reset();
-    //                     if(Object.keys(this.$page.props.errors).length > 0)
-    //                     {
-    //                         this.eventHub.$emit('show-alert', {
-    //                             message: 'Update Settings Failed.  Check form for additional information.',
-    //                             type:    'danger',
-    //                         });
-    //                     }
-    //                 }
-    //             });
-    //         },
-    //         /**
-    //          * submit the user settings form
-    //          */
-    //         submitSettings()
-    //         {
-    //             this.submit.settings = true;
-    //             this.$inertia.post(route('settings.store'), {settingsData: this.userSettings, user_id: this.user.user_id}, {
-    //                 onFinish: () => {
-    //                     this.submit.settings = false
-    //                 }
-    //             });
-    //         }
-    //     },
-    //     metaInfo: {
-    //         title: 'User Settings',
-    //     }
-    // }
+    const notifForm     = ref<InstanceType<typeof VueForm> | null>(null);
+    const notifications = reactive({
+        initialValues   : objectifyNotifications(),
+    });
+
+    const updateNotifications = (form:notificationForm):void =>
+    {
+        const notifciationForm = useForm({
+            user_id     : props.user.user_id,
+            settingsData: form,
+        });
+
+        notifciationForm.user_id = props.user.user_id;
+        notifciationForm.post(route('settings.store'), {
+            onFinish: () => notifForm.value?.endSubmit(),
+        });
+    }
 </script>

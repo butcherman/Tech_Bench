@@ -11,7 +11,6 @@
         "module": "ES2020",
         "strict": true,
         "types": ["vite/client"],
-        "typeRoots": ["./resources/js/Types/"]
-    },
-    "exclude": ["node_modules", "public"]
+        "typeRoots": ["./resources/js/Types/", "./node_modules/@types"]
+    }
 }

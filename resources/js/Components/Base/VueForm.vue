@@ -1,11 +1,17 @@
 <template>
+    <!-- <div class="h-100"> -->
     <form class="vld-parent" @submit="onSubmit" novalidate>
         <Loading :active="isSubmitting" :is-full-page="false" />
         <slot />
         <slot name="submit">
-            <SubmitButton :submitted="isSubmitting" :text="submitText ? submitText : 'Submit'" />
+            <SubmitButton
+                :submitted="isSubmitting"
+                :text="submitText ? submitText : 'Submit'"
+                class="mt-auto"
+            />
         </slot>
     </form>
+    <!-- </div> -->
 </template>
 
 <script setup lang="ts">

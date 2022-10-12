@@ -31,7 +31,6 @@ createInertiaApp({
     setup({ el, app, props, plugin }) {
         const inertiaApp = createApp({ render: () => h(app, props) })
             .use(plugin)
-            // .use(createPinia())
             .component('Link', Link)                            //  Inertial Link
             .component('Head', Head)                            //  Head title
             .component('fa-icon', FontAwesomeIcon)              //  Font Awesome
