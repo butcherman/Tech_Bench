@@ -1,48 +1,38 @@
 <template>
-    <div>
-        <div class="row">
-            <div class="col-md-12 grid-margin">
-                <h4>Administration</h4>
-            </div>
-        </div>
+    <Head title="Administration" />
+    <App>
         <div v-for="(options, key) in links" :key="key" class="row justify-content-center">
-            <div class="col-md-8 grid-margin">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">
                             {{key}}:
                         </div>
-                        <ul>
+                        <ul class="list-unstyled">
                             <li v-for="(opt, key2) in options" :key="key2">
-                                <inertia-link :href="opt.link" class="text-secondary">
-                                    <i :class="opt.icon"></i>
+                                <Link :href="opt.link" class="text-secondary text-decoration-none">
+                                    <fa-icon :icon="opt.icon" />
                                     {{opt.name}}
-                                </inertia-link>
+                                </Link>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </App>
 </template>
 
-<script>
-    import App from '../../Layouts/app';
+<script setup lang="ts">
+    import App from '@/Layouts/app.vue';
 
-    export default {
-        layout: App,
-        props: {
-            /**
-             * Action generates all admin links based on users permission levels
-             */
-            links: {
-                type:     Object,
-                required: true,
-            }
-        },
-        metaInfo: {
-            title: 'Administration',
-        },
-    }
+    defineProps<{
+        links: {
+            [key: string]: {
+                icon: string;
+                link: string;
+                name: string;
+            }[];
+        };
+    }>();
 </script>

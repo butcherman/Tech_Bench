@@ -47,7 +47,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
 
     Route::resource('user', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
     {
-        $breadcrumbs->index('Users', 'admin.index');
+        $breadcrumbs->index('Select User', 'admin.index');
         $breadcrumbs->create('New User', '.index');
         $breadcrumbs->edit('Edit User', '.index');
     });

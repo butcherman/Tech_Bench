@@ -62,3 +62,7 @@ $brk-xxl: map-get($grid-breakpoints, xxl);
         }
     }
 }
+
+.row {
+    padding: 1rem;
+}

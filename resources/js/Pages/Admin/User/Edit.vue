@@ -1,79 +1,84 @@
 <template>
-    <div>
-        <div class="row">
-            <div class="col-12 grid-margin">
-                <h4 class="text-center text-md-left">Update User</h4>
-            </div>
-        </div>
+    <App>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Edit User Information</div>
-                        <b-overlay :show="submitted">
-                            <template #overlay>
-                                <form-loader text="Updating User..."></form-loader>
-                            </template>
-                            <ValidationObserver v-slot="{handleSubmit}" ref="validator">
-                                <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-                                    <text-input v-model="form.username" rules="required" label="Username" name="username"></text-input>
-                                    <text-input v-model="form.first_name" rules="required" label="First Name" name="first_name"></text-input>
-                                    <text-input v-model="form.last_name" rules="required" label="Last Name" name="last_name"></text-input>
-                                    <text-input v-model="form.email" rules="required|email" label="Email Address" name="email"></text-input>
-                                    <b-form-select v-model="form.role_id" :options="roles" text-field="name" value-field="role_id"></b-form-select>
-                                    <submit-button button_text="Update User" :submitted="submitted" class="mt-3" />
-                                </b-form>
-                            </ValidationObserver>
-                        </b-overlay>
+                        <VueForm
+                            ref="userForm"
+                            :validation-schema="formData.validationSchema"
+                            :initial-values="formData.initialValues"
+                            @submit="onSubmit"
+                        >
+                            <TextInput id="username" name="username" label="Username" />
+                            <TextInput id="first-name" name="first_name" label="First Name" />
+                            <TextInput id="last-name" name="last_name" label="Last Name" />
+                            <TextInput id="email" name="email" type="email" label="Email Address" />
+                            <SelectInput id="role" name="role_id" label="Role" :optionList="roleTypes"/>
+                        </VueForm>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </App>
 </template>
 
-<script>
-    import App from '../../../Layouts/app';
+<script setup lang="ts">
+    import App                         from '@/Layouts/app.vue';
+    import VueForm                     from '@/Components/Base/VueForm.vue';
+    import TextInput                   from '@/Components/Base/Input/TextInput.vue';
+    import SelectInput                 from '@/Components/Base/Input/SelectInput.vue';
+    import { ref, reactive, computed } from 'vue';
+    import { useForm }                 from '@inertiajs/inertia-vue3';
+    import * as yup                    from 'yup';
+    import type { userAuthType,
+                  userRoleType,
+                  optionListObject,
+                  userFormType }       from '@/Types';
 
-    export default {
-        layout: App,
-        props: {
-            /**
-             * Collection from /app/Models/User
-             */
-            user: {
-                type:     Object,
-                required: true,
-            },
-            /**
-             * Array of objects from /app/Models/UserRole
-             */
-            roles: {
-                type:     Array,
-                required: true,
-            },
+    const props = defineProps<{
+        user : userAuthType;
+        roles: userRoleType[];
+    }>();
+
+    const userForm  = ref<InstanceType<typeof VueForm> | null>(null);
+    const roleTypes = computed<optionListObject[]>(() => {
+        const roleArr = <optionListObject[]>[];
+        props.roles.forEach(role => {
+            roleArr.push({
+                text : role.name,
+                value: role.role_id,
+            });
+        });
+
+        return roleArr;
+    });
+
+    const formData = reactive({
+        initialValues: {
+            username  : props.user.username,
+            first_name: props.user.first_name,
+            last_name : props.user.last_name,
+            email     : props.user.email,
+            role_id   : props.user.role_id,
         },
-        data() {
-            return {
-                submitted: false,
-                form: this.$inertia.form({
-                    username:   this.user.username,
-                    first_name: this.user.first_name,
-                    last_name:  this.user.last_name,
-                    email:      this.user.email,
-                    role_id:    this.user.role_id,
-                }),
-            }
+        validationSchema: {
+            username  : yup.string().required('You must enter a Username'),
+            first_name: yup.string().required('First Name is required'),
+            last_name : yup.string().required('Last Name is required'),
+            email     : yup.string().email().required('Email Address is required'),
+            role_id   : yup.number().required('You must select a Role'),
         },
-        methods: {
-            submitForm()
-            {
-                this.submitted = true;
-                this.form.put(route('admin.user.update', this.user.user_id));
-            }
-        },
-        metaInfo: {
-            title: 'Update User',
-        }
+    });
+
+    const onSubmit = (form:userFormType) => {
+        // const role_id = props.roles.find(role => role.role_id === props.user.role_id)?.role_id;
+        // form.role_id = role_id;
+
+        const submitForm = useForm(form);
+        submitForm.put(route('admin.user.update', props.user.user_id), {
+            onFinish: () => userForm.value?.endSubmit(),
+        });
     }
 </script>

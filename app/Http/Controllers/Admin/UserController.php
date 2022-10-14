@@ -5,16 +5,15 @@ namespace App\Http\Controllers\Admin;
 use Inertia\Inertia;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 use App\Actions\GetUserRoles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
-
 use App\Models\User;
 use App\Models\UserRoles;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
-
 use App\Events\Admin\NewUserCreated;
 use App\Events\Admin\UserUpdatedEvent;
 use App\Events\Admin\UserDeactivatedEvent;
@@ -100,11 +99,9 @@ class UserController extends Controller
 
         $user->update($request->toArray());
 
-        event(new UserUpdatedEvent($user));
-        return redirect(route('admin.user.index'))->with([
-            'message' => 'User Details Updated',
-            'type'    => 'success'
-        ]);
+        // event(new UserUpdatedEvent($user));
+        Log::channel('user')->notice('User '.$event->user->username.' has been updated by '.Auth::user()->username.'.  Details - ', $event->user->toArray());
+        return redirect(route('admin.user.index'))->with('success', __('admin.user.updated'));
     }
 
     /**

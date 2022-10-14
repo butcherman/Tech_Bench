@@ -43,7 +43,6 @@
     import { useForm as useVeeForm }  from 'vee-validate';
     import * as yup                   from 'yup';
 
-
     const isSubmitting     = ref(false);
     const { handleSubmit } = useVeeForm({
         validationSchema: {

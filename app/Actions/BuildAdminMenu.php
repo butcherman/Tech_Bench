@@ -23,7 +23,6 @@ class BuildAdminMenu
      */
     public function execute()
     {
-
         $userMenu     = $this->buildUserMenu();
         $equipMenu    = $this->buildEquipmentMenu();
         $customerMenu = $this->buildCustomerMenu();
@@ -171,7 +170,7 @@ class BuildAdminMenu
                     ],
                     [
                         'name' => 'View Flagged Comments',
-                        'icon' => 'far fa-flag',
+                        'icon' => 'fa-flag',
                         'link' => route('tips.comments.index'),
                     ],
                 ],
@@ -277,7 +276,7 @@ class BuildAdminMenu
                     ],
                     [
                         'name' => 'Application Backups',
-                        'icon' => 'far fa-hdd',
+                        'icon' => 'fa-hdd',
                         'link' => route('admin.backups.index'),
                     ],
                 ],

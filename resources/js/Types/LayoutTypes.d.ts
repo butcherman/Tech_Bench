@@ -1,3 +1,4 @@
+import type { userType } from '@/Types';
 import type { Page, PageProps } from '@inertiajs/inertia';
 
 export interface pageInterface extends Page<PageProps> {
@@ -38,25 +39,6 @@ interface breadcrumbsType {
     title          : string;
     url            : string;
     is_current_page: boolean;
-}
-
-export interface userType {
-    email     : string;
-    first_name: string;
-    full_name : string;
-    initials  : string;
-    last_name : string;
-    username  : string;
-    user_id  ?: number;
-}
-
-export interface settingsType {
-    setting_type_id  : number;
-    value            : boolean;
-    user_setting_type: {
-        name        : string;
-        perm_type_id: number | null;
-    }
 }
 
 interface fileDataType {
