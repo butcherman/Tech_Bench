@@ -25,17 +25,21 @@ use App\Http\Controllers\User\ChangePasswordController;
 Route::middleware('auth')->group(function()
 {
     Route::get('dashboard',          DashboardController::class)->name('dashboard')->breadcrumb('Dashboard');
-    Route::get('about',              AboutController::class)    ->name('about')    ->breadcrumb('About', 'dashboard');
+    // Route::get('about',              AboutController::class)    ->name('about')    ->breadcrumb('About', 'dashboard');
+    Route::get('about', function()
+    {
+        return 'working';
+    })->name('about');
 
-    Route::post('notifications',     NotificationController::class)->name('notifications');
+    // Route::post('notifications',     NotificationController::class)->name('notifications');
     Route::resource('settings',      UserSettingsController::class);
     Route::resource('password',      ChangePasswordController::class);
 
-    Route::post('upload-image',      UploadImageController::class)->name('upload-image');
+    // Route::post('upload-image',      UploadImageController::class)->name('upload-image');
 });
 
 /**
  * Standard routes for both Authenticated users and guests
  */
-Route::post('upload-file',            UploadFileController::class) ->name('upload-file');
-Route::get('download/{id}/{name}',    DownloadController::class)->name('download');
+// Route::post('upload-file',            UploadFileController::class) ->name('upload-file');
+// Route::get('download/{id}/{name}',    DownloadController::class)->name('download');

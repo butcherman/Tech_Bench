@@ -40,10 +40,10 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
      * User Admin Routes
      */
     Route::get('/',                 AdminIndexController::class)     ->name('index')                ->breadcrumb('Administration');
-    Route::get('deactivated-users', DeactivatedUserController::class)->name('deactivated-users')    ->breadcrumb('Disabled Users', '.index');
-    Route::get('{user}/activate',   ReactivateUserController::class) ->name('reactivate-user')      ->breadcrumb('Active Users', '.index');
-    Route::get('password-policy',   GetPasswordPolicyController::class)->name('password-policy')    ->breadcrumb('Password Policy', '.index');
-    Route::put('password-policy',   SetPasswordPolicyController::class)->name('set-password-policy');
+    // Route::get('deactivated-users', DeactivatedUserController::class)->name('deactivated-users')    ->breadcrumb('Disabled Users', '.index');
+    // Route::get('{user}/activate',   ReactivateUserController::class) ->name('reactivate-user')      ->breadcrumb('Active Users', '.index');
+    // Route::get('password-policy',   GetPasswordPolicyController::class)->name('password-policy')    ->breadcrumb('Password Policy', '.index');
+    // Route::put('password-policy',   SetPasswordPolicyController::class)->name('set-password-policy');
 
     Route::resource('user', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
     {
@@ -55,26 +55,26 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * User Roles and Permission Routes
      */
-    Route::prefix('user-roles')->name('user-roles.')->group(function()
-    {
-        Route::get('/',                  [UserRolesController::class, 'index'])  ->name('index') ->breadcrumb('Roles', 'admin.index');
-        Route::get('create/{baseline?}', [UserRolesController::class, 'create']) ->name('create')->breadcrumb('New Role', '.index');
-        Route::get('{role}/edit',        [UserRolesController::class, 'edit'])   ->name('edit')  ->breadcrumb('Edit Role', '.index');
-        Route::put('{role}/edit',        [UserRolesController::class, 'update']) ->name('update');
-        Route::post('store',             [UserRolesController::class, 'store'])   ->name('store');
-        Route::delete('{role}',          [UserRolesController::class, 'destroy'])->name('destroy');
-    });
+    // Route::prefix('user-roles')->name('user-roles.')->group(function()
+    // {
+    //     Route::get('/',                  [UserRolesController::class, 'index'])  ->name('index') ->breadcrumb('Roles', 'admin.index');
+    //     Route::get('create/{baseline?}', [UserRolesController::class, 'create']) ->name('create')->breadcrumb('New Role', '.index');
+    //     Route::get('{role}/edit',        [UserRolesController::class, 'edit'])   ->name('edit')  ->breadcrumb('Edit Role', '.index');
+    //     Route::put('{role}/edit',        [UserRolesController::class, 'update']) ->name('update');
+    //     Route::post('store',             [UserRolesController::class, 'store'])   ->name('store');
+    //     Route::delete('{role}',          [UserRolesController::class, 'destroy'])->name('destroy');
+    // });
 
     /**
      * Application Administration Routes
      */
-    Route::get( 'logo',             GetLogoController::class)         ->name('get-logo')  ->breadcrumb('App Logo', '.index');
-    Route::post('logo',             SetLogoController::class)         ->name('set-logo');
-    Route::get( 'config',           GetConfigController::class)       ->name('get-config')->breadcrumb('App Configuration', '.index');
-    Route::post('config',           SetConfigController::class)       ->name('set-config');
-    Route::get( 'email',            GetEmailSettingsController::class)->name('get-email') ->breadcrumb('Email Settings', '.index');
-    Route::post('email',            SetEmailSettingsController::class)->name('set-email');
-    Route::get( 'test-email',       SendTestEmailController::class)   ->name('test-email');
+    // Route::get( 'logo',             GetLogoController::class)         ->name('get-logo')  ->breadcrumb('App Logo', '.index');
+    // Route::post('logo',             SetLogoController::class)         ->name('set-logo');
+    // Route::get( 'config',           GetConfigController::class)       ->name('get-config')->breadcrumb('App Configuration', '.index');
+    // Route::post('config',           SetConfigController::class)       ->name('set-config');
+    // Route::get( 'email',            GetEmailSettingsController::class)->name('get-email') ->breadcrumb('Email Settings', '.index');
+    // Route::post('email',            SetEmailSettingsController::class)->name('set-email');
+    // Route::get( 'test-email',       SendTestEmailController::class)   ->name('test-email');
 
     /**
      * Add On Module Administration Routes
@@ -89,15 +89,15 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * Application Maintenance Routes
      */
-    Route::get( 'logs',                          LogFilesController::class)      ->name('logs.index')   ->breadcrumb('Logs', 'admin.index');
-    Route::get( 'logs/settings',                 LogSettingsController::class)   ->name('logs.settings')->breadcrumb('Settings', 'admin.logs.index');
-    Route::post('logs/settings',                 SetLogSettingsController::class)->name('logs.set-settings');
-    Route::get('logs/download/{channel}/{file}', DownloadLogController::class)->name('logs.download');
-    Route::get( 'logs/{channel}',                LogFilesController::class)      ->name('logs.channel') ->breadcrumb(fn($channel) => $channel, 'admin.logs.index');
-    Route::get( 'logs/{channel}/{name}',         ViewLogController::class)->name('logs.view')    ->breadcrumb('View Log', 'admin.logs.channel');
+    // Route::get( 'logs',                          LogFilesController::class)      ->name('logs.index')   ->breadcrumb('Logs', 'admin.index');
+    // Route::get( 'logs/settings',                 LogSettingsController::class)   ->name('logs.settings')->breadcrumb('Settings', 'admin.logs.index');
+    // Route::post('logs/settings',                 SetLogSettingsController::class)->name('logs.set-settings');
+    // Route::get('logs/download/{channel}/{file}', DownloadLogController::class)->name('logs.download');
+    // Route::get( 'logs/{channel}',                LogFilesController::class)      ->name('logs.channel') ->breadcrumb(fn($channel) => $channel, 'admin.logs.index');
+    // Route::get( 'logs/{channel}/{name}',         ViewLogController::class)->name('logs.view')    ->breadcrumb('View Log', 'admin.logs.channel');
 
-    Route::resource('backups', BackupController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-    {
-        $breadcrumbs->index('Backups', 'admin.index');
-    });
+    // Route::resource('backups', BackupController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
+    // {
+    //     $breadcrumbs->index('Backups', 'admin.index');
+    // });
 });

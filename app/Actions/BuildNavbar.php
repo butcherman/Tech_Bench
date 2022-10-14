@@ -36,16 +36,16 @@ class BuildNavbar
                 'route' => route('dashboard'),
                 'icon'  => 'fas fa-tachometer-alt',
             ],
-            [
-                'name'  => 'Customers',
-                'route' => route('customers.index'),
-                'icon'  => 'fas fa-user-tie',
-            ],
-            [
-                'name'  => 'Tech Tips',
-                'route' => route('tech-tips.index'),
-                'icon'  => 'fas fa-tools',
-            ],
+            // [
+            //     'name'  => 'Customers',
+            //     'route' => route('customers.index'),
+            //     'icon'  => 'fas fa-user-tie',
+            // ],
+            // [
+            //     'name'  => 'Tech Tips',
+            //     'route' => route('tech-tips.index'),
+            //     'icon'  => 'fas fa-tools',
+            // ],
         ];
     }
 
@@ -67,14 +67,14 @@ class BuildNavbar
         }
 
         //  Should Reports link show
-        if(Gate::allows('reports-link', $this->user))
-        {
-            $nav[] = [
-                'name'  => 'Reports',
-                'route' => route('reports.index'),
-                'icon'  => 'fas fa-chart-bar',
-            ];
-        }
+        // if(Gate::allows('reports-link', $this->user))
+        // {
+        //     $nav[] = [
+        //         'name'  => 'Reports',
+        //         'route' => route('reports.index'),
+        //         'icon'  => 'fas fa-chart-bar',
+        //     ];
+        // }
 
         return $nav;
     }
@@ -86,28 +86,28 @@ class BuildNavbar
     protected function getModules()
     {
         $nav     = [];
-        $modules = Module::allEnabled();
+        // $modules = Module::allEnabled();
 
-        foreach($modules as $module)
-        {
-            $name    = $module->getLowerName();
-            $navData = config($name.'.navbar');
+        // foreach($modules as $module)
+        // {
+        //     $name    = $module->getLowerName();
+        //     $navData = config($name.'.navbar');
 
-            if($navData)
-            {
-                foreach($navData as $n)
-                {
-                    if(!isset($n['perm_name']) || $this->checkPermission($this->user, $n['perm_name']))
-                    {
-                        $nav[] = [
-                            'name'  => $n['name'],
-                            'route' => route($n['route']),
-                            'icon'  => $n['icon'],
-                        ];
-                    }
-                }
-            }
-        }
+        //     if($navData)
+        //     {
+        //         foreach($navData as $n)
+        //         {
+        //             if(!isset($n['perm_name']) || $this->checkPermission($this->user, $n['perm_name']))
+        //             {
+        //                 $nav[] = [
+        //                     'name'  => $n['name'],
+        //                     'route' => route($n['route']),
+        //                     'icon'  => $n['icon'],
+        //                 ];
+        //             }
+        //         }
+        //     }
+        // }
 
         return $nav;
     }

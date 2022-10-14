@@ -29,8 +29,8 @@ Route::middleware('guest')->group(function()
     });
 
     //  Initializing a new User
-    Route::get('finish-setup/{token}', InitializeUserController::class)->name('initialize');
-    Route::put('finish-setup/{token}', FinishSetupController::class)->name('finish-setup');
+    // Route::get('finish-setup/{token}', InitializeUserController::class)->name('initialize');
+    // Route::put('finish-setup/{token}', FinishSetupController::class)->name('finish-setup');
 });
 
 //  Log user out
