@@ -1,7 +1,6 @@
 <template>
     <Head title="User Settings" />
     <App>
-        <h4 class="text-center text-md-start">User Settings</h4>
         <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">

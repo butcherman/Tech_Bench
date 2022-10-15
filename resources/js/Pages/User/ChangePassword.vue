@@ -1,6 +1,6 @@
 <template>
+    <Head title="Change Password" />
     <App>
-        <h4 class="text-center text-md-start">Change Password</h4>
         <div class="row justify-content-center">
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">

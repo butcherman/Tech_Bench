@@ -15,7 +15,6 @@ use App\Models\UserRoles;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 use App\Events\Admin\NewUserCreated;
-use App\Events\Admin\UserUpdatedEvent;
 use App\Events\Admin\UserDeactivatedEvent;
 
 class UserController extends Controller
@@ -40,7 +39,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
 
         return Inertia::render('Admin/User/Create', [
-            'roles' => (new GetUserRoles)->run(/** @scrutinizer ignore-type */ Auth::user()),
+            'roles' => (new GetUserRoles)->run(Auth::user()),
         ]);
     }
 
@@ -77,7 +76,9 @@ class UserController extends Controller
         $this->authorize('create', User::class);
 
         return Inertia::render('Admin/User/Edit', [
-            'user'  => User::where('username', $id)->firstOrFail()->makeVisible(['user_id', 'role_id']),
+            'user'  => User::where('username', $id)
+                        ->firstOrFail()
+                        ->makeVisible(['user_id', 'role_id']),
             'roles' => UserRoles::all(),
         ]);
     }
@@ -99,8 +100,7 @@ class UserController extends Controller
 
         $user->update($request->toArray());
 
-        // event(new UserUpdatedEvent($user));
-        Log::channel('user')->notice('User '.$event->user->username.' has been updated by '.Auth::user()->username.'.  Details - ', $event->user->toArray());
+        Log::channel('user')->notice('User '.$user->username.' has been updated by '.Auth::user()->username.'.  Details - ', $user->toArray());
         return redirect(route('admin.user.index'))->with('success', __('admin.user.updated'));
     }
 

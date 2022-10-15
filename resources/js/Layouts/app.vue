@@ -108,26 +108,29 @@
             </nav>
             <div id="content" class="content">
                 <div class="content-wrapper">
-                    <nav v-if="breadcrumbs.length">
-                        <ol class="breadcrumb">
-                            <li
-                                v-for="crumb in breadcrumbs"
-                                :key="crumb.title"
-                                :class="{ 'active' : crumb.is_current_page }"
-                                class="breadcrumb-item"
-                            >
-                                <Link
-                                    v-if="!crumb.is_current_page"
-                                    :href="crumb.url"
+                    <div class="breadcrumbs-wrapper alert alert-info">
+                        <nav v-if="breadcrumbs.length">
+                            <ol class="breadcrumb">
+                                <li
+                                    v-for="crumb in breadcrumbs"
+                                    :key="crumb.title"
+                                    :class="{ 'active' : crumb.is_current_page }"
+                                    class="breadcrumb-item"
                                 >
-                                    {{ crumb.title }}
-                                </Link>
-                                <span v-else>
-                                    {{ crumb.title }}
-                                </span>
-                            </li>
-                        </ol>
-                    </nav>
+                                    <Link
+                                        v-if="!crumb.is_current_page"
+                                        class="text-muted"
+                                        :href="crumb.url"
+                                    >
+                                        {{ crumb.title }}
+                                    </Link>
+                                    <span v-else class="text-muted">
+                                        {{ crumb.title }}
+                                    </span>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
                     <div v-if="Object.keys(errors).length > 0" class="alert alert-danger text-center">
                         <div v-for="error in errors">
                             {{ error }}
@@ -180,6 +183,21 @@
 
 <style scoped lang="scss">
     @import "../../scss/Layouts/appLayout.scss";
+
+    .breadcrumbs-wrapper {
+        margin : 0;
+        padding: 5px;
+        nav {
+            margin-bottom: 0 !important;
+            .breadcrumb {
+                margin : 0 !important;
+                padding: 3px;
+                a {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
     .dropdown-menu {
         margin: 0 !important;
     }
