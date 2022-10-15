@@ -60,17 +60,12 @@ class User extends Authenticatable
         return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
     }
 
+    /**
+     * Determine the new expire date for an updated password
+     */
     public function getNewExpireTime()
     {
         return config('auth.passwords.settings.expire') ?
                     Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
     }
-
-    /**
-     * List of login times and locations for each user
-     */
-    // public function UserLogins()
-    // {
-    //     return $this->hasMany(UserLogins::class, 'user_id', 'user_id');
-    // }
 }

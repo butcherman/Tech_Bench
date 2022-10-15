@@ -53,28 +53,28 @@ class BuildAdminMenu
                     'icon' => 'fas fa-user-edit',
                     'link' => route('admin.user.index'),
                 ],
-                [
-                    'name' => 'Show Deactivated Users',
-                    'icon' => 'fas fa-store-alt-slash',
-                    'link' => route('admin.deactivated-users'),
-                ],
-                [
-                    'name' => 'Password Policy',
-                    'icon' => 'fas fa-user-lock',
-                    'link' => route('admin.password-policy'),
-                ],
+                // [
+                //     'name' => 'Show Deactivated Users',
+                //     'icon' => 'fas fa-store-alt-slash',
+                //     'link' => route('admin.deactivated-users'),
+                // ],
+                // [
+                //     'name' => 'Password Policy',
+                //     'icon' => 'fas fa-user-lock',
+                //     'link' => route('admin.password-policy'),
+                // ],
             ];
         }
 
         $roleBuild = [];
-        if($this->checkPermission($this->user, 'Manage Permissions'))
-        {
-            $roleBuild = [[
-                'name' => 'User Roles and Permissions',
-                'icon' => 'fas fa-users-cog',
-                'link' => route('admin.user-roles.index'),
-            ]];
-        }
+        // if($this->checkPermission($this->user, 'Manage Permissions'))
+        // {
+        //     $roleBuild = [[
+        //         'name' => 'User Roles and Permissions',
+        //         'icon' => 'fas fa-users-cog',
+        //         'link' => route('admin.user-roles.index'),
+        //     ]];
+        // }
 
         if(count($userBuild) > 0 || count($roleBuild) > 0)
         {
@@ -93,23 +93,23 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'Manage Equipment'))
-        {
-            $nav = [
-                'Manage Equipment' => [
-                    [
-                        'name' => 'Equipment Types & Categories',
-                        'icon' => 'fas fa-cogs',
-                        'link' => route('equipment.index'),
-                    ],
-                    [
-                        'name' => 'Equipment Data Types (for customers)',
-                        'icon' => 'fas fa-database',
-                        'link' => route('data-types.index'),
-                    ],
-                ],
-            ];
-        }
+        // if($this->checkPermission($this->user, 'Manage Equipment'))
+        // {
+        //     $nav = [
+        //         'Manage Equipment' => [
+        //             [
+        //                 'name' => 'Equipment Types & Categories',
+        //                 'icon' => 'fas fa-cogs',
+        //                 'link' => route('equipment.index'),
+        //             ],
+        //             [
+        //                 'name' => 'Equipment Data Types (for customers)',
+        //                 'icon' => 'fas fa-database',
+        //                 'link' => route('data-types.index'),
+        //             ],
+        //         ],
+        //     ];
+        // }
 
         return $nav;
     }
@@ -121,28 +121,28 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'Manage Customers'))
-        {
-            $nav = [
-                'Manage Customers' => [
-                    [
-                        'name' => 'Change Customer ID Number',
-                        'icon' => 'fas fa-fingerprint',
-                        'link' => route('admin.cust.change-id.index'),
-                    ],
-                    [
-                        'name' => 'View Deactivated Customers',
-                        'icon' => 'fas fa-ban',
-                        'link' => route('admin.cust.show-deactivated'),
-                    ],
-                    [
-                        'name' => 'Customer Uploaded File Types',
-                        'icon' => 'fas fa-file-alt',
-                        'link' => route('admin.cust.file-types.index'),
-                    ],
-                ],
-            ];
-        }
+        // if($this->checkPermission($this->user, 'Manage Customers'))
+        // {
+        //     $nav = [
+        //         'Manage Customers' => [
+        //             [
+        //                 'name' => 'Change Customer ID Number',
+        //                 'icon' => 'fas fa-fingerprint',
+        //                 'link' => route('admin.cust.change-id.index'),
+        //             ],
+        //             [
+        //                 'name' => 'View Deactivated Customers',
+        //                 'icon' => 'fas fa-ban',
+        //                 'link' => route('admin.cust.show-deactivated'),
+        //             ],
+        //             [
+        //                 'name' => 'Customer Uploaded File Types',
+        //                 'icon' => 'fas fa-file-alt',
+        //                 'link' => route('admin.cust.file-types.index'),
+        //             ],
+        //         ],
+        //     ];
+        // }
 
         return $nav;
     }
@@ -154,28 +154,28 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'Manage Tech Tips'))
-        {
-            $nav = [
-                'Manage Tech Tips' => [
-                    [
-                        'name' => 'Tech Tip Types',
-                        'icon' => 'fas fa-file-alt',
-                        'link' => route('admin.tips.tip-types.index'),
-                    ],
-                    [
-                        'name' => 'View Deleted Tech Tips',
-                        'icon' => 'fas fa-ban',
-                        'link' => route('admin.tips.deleted'),
-                    ],
-                    [
-                        'name' => 'View Flagged Comments',
-                        'icon' => 'fa-flag',
-                        'link' => route('tips.comments.index'),
-                    ],
-                ],
-            ];
-        }
+        // if($this->checkPermission($this->user, 'Manage Tech Tips'))
+        // {
+        //     $nav = [
+        //         'Manage Tech Tips' => [
+        //             [
+        //                 'name' => 'Tech Tip Types',
+        //                 'icon' => 'fas fa-file-alt',
+        //                 'link' => route('admin.tips.tip-types.index'),
+        //             ],
+        //             [
+        //                 'name' => 'View Deleted Tech Tips',
+        //                 'icon' => 'fas fa-ban',
+        //                 'link' => route('admin.tips.deleted'),
+        //             ],
+        //             [
+        //                 'name' => 'View Flagged Comments',
+        //                 'icon' => 'fa-flag',
+        //                 'link' => route('tips.comments.index'),
+        //             ],
+        //         ],
+        //     ];
+        // }
 
         return $nav;
     }
@@ -189,33 +189,33 @@ class BuildAdminMenu
         $nav = [];
         $modules = Module::allEnabled();
 
-        foreach($modules as $module)
-        {
-            $name    = $module->getLowerName();
-            $navData = config($name.'.admin_nav');
-            $modNav  = [];
+        // foreach($modules as $module)
+        // {
+        //     $name    = $module->getLowerName();
+        //     $navData = config($name.'.admin_nav');
+        //     $modNav  = [];
 
-            if($navData)
-            {
-                foreach($navData as $n)
-                {
-                    if(!isset($n['perm_name']) || $this->checkPermission($this->user, $n['perm_name']))
-                    {
-                        $modNav[] = [
-                            'name' => $n['name'],
-                            'link' => route($n['route']),
-                            'icon' => $n['icon'],
-                        ];
-                    }
-                }
-            }
+        //     if($navData)
+        //     {
+        //         foreach($navData as $n)
+        //         {
+        //             if(!isset($n['perm_name']) || $this->checkPermission($this->user, $n['perm_name']))
+        //             {
+        //                 $modNav[] = [
+        //                     'name' => $n['name'],
+        //                     'link' => route($n['route']),
+        //                     'icon' => $n['icon'],
+        //                 ];
+        //             }
+        //         }
+        //     }
 
-            if(count($modNav) > 0)
-            {
-                //  Split Camel Case name into normal name
-                $nav[implode(' ', preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
-            }
-        }
+        //     if(count($modNav) > 0)
+        //     {
+        //         //  Split Camel Case name into normal name
+        //         $nav[implode(' ', preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
+        //     }
+        // }
 
         return $nav;
     }
@@ -227,33 +227,33 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'App Settings'))
-        {
-            $nav = [
-                'Manage Application Settings' => [
-                    [
-                        'name' => 'Application Logo',
-                        'icon' => 'fas fa-image',
-                        'link' => route('admin.get-logo'),
-                    ],
-                    [
-                        'name' => 'Application Configuration',
-                        'icon' => 'fas fa-server',
-                        'link' => route('admin.get-config'),
-                    ],
-                    [
-                        'name' => 'Email Settings',
-                        'icon' => 'fas fa-envelope',
-                        'link' => route('admin.get-email'),
-                    ],
-                    // [
-                    //     'name' => 'Add On Modules',
-                    //     'icon' => 'fas fa-cubes',
-                    //     'link' => route('admin.modules.index'),
-                    // ],
-                ],
-            ];
-        }
+        // if($this->checkPermission($this->user, 'App Settings'))
+        // {
+        //     $nav = [
+        //         'Manage Application Settings' => [
+        //             [
+        //                 'name' => 'Application Logo',
+        //                 'icon' => 'fas fa-image',
+        //                 'link' => route('admin.get-logo'),
+        //             ],
+        //             [
+        //                 'name' => 'Application Configuration',
+        //                 'icon' => 'fas fa-server',
+        //                 'link' => route('admin.get-config'),
+        //             ],
+        //             [
+        //                 'name' => 'Email Settings',
+        //                 'icon' => 'fas fa-envelope',
+        //                 'link' => route('admin.get-email'),
+        //             ],
+        //             // [
+        //             //     'name' => 'Add On Modules',
+        //             //     'icon' => 'fas fa-cubes',
+        //             //     'link' => route('admin.modules.index'),
+        //             // ],
+        //         ],
+        //     ];
+        // }
 
         return $nav;
     }
@@ -265,23 +265,23 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'App Settings'))
-        {
-            $nav = [
-                'Application Maintenance' => [
-                    [
-                        'name' => 'Application Logs',
-                        'icon' => 'fas fa-bug',
-                        'link' => route('admin.logs.index'),
-                    ],
-                    [
-                        'name' => 'Application Backups',
-                        'icon' => 'fa-hdd',
-                        'link' => route('admin.backups.index'),
-                    ],
-                ],
-            ];
-        }
+        // if($this->checkPermission($this->user, 'App Settings'))
+        // {
+        //     $nav = [
+        //         'Application Maintenance' => [
+        //             [
+        //                 'name' => 'Application Logs',
+        //                 'icon' => 'fas fa-bug',
+        //                 'link' => route('admin.logs.index'),
+        //             ],
+        //             [
+        //                 'name' => 'Application Backups',
+        //                 'icon' => 'fa-hdd',
+        //                 'link' => route('admin.backups.index'),
+        //             ],
+        //         ],
+        //     ];
+        // }
 
         return $nav;
     }

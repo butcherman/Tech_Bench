@@ -1,11 +1,24 @@
 <template>
     <Head title="Login" />
     <AuthLayout>
-        <form @submit="onSubmit" novalidate>
-            <TextInput id="username" label="Username" name="username" focus />
-            <TextInput id="passsword" label="Password" name="password" type="password" />
-            <SubmitButton :submitted="isSubmitting" />
-        </form>
+        <VueForm
+            ref="loginForm"
+            :validation-schema="validationSchema"
+            @submit="onSubmit"
+        >
+            <TextInput
+                id="username"
+                label="Username"
+                name="username"
+                focus
+            />
+            <TextInput
+                id="passsword"
+                label="Password"
+                name="password"
+                type="password"
+            />
+        </VueForm>
         <div class="form-group row justify-content-center mb-0">
             <div class="col-md-8 text-center">
                 <Link
@@ -20,28 +33,28 @@
 </template>
 
 <script setup lang="ts">
-    import AuthLayout                 from '@/Layouts/authLayout.vue';
-    import TextInput                  from '@/Components/Base/Input/TextInput.vue';
-    import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
-    import { ref }                    from 'vue';
-    import { useForm }                from '@inertiajs/inertia-vue3';
-    import { useForm as useVeeForm }  from 'vee-validate';
-    import * as yup                   from 'yup';
+    import AuthLayout  from '@/Layouts/authLayout.vue';
+    import VueForm     from '@/Components/Base/VueForm.vue'
+    import TextInput   from '@/Components/Base/Input/TextInput.vue';
+    import { ref }     from 'vue';
+    import { useForm } from '@inertiajs/inertia-vue3';
+    import * as yup    from 'yup';
 
-    const isSubmitting     = ref(false);
-    const { handleSubmit } = useVeeForm({
-        validationSchema: {
-            username: yup.string().required('You must enter a username'),
-            password: yup.string().required('You must enter a password'),
-        }
-    });
+    const loginForm        = ref<InstanceType<typeof VueForm> | null>(null);
+    const validationSchema =  {
+        username: yup.string().required('You must enter a username'),
+        password: yup.string().required('You must enter a password'),
+    }
 
-    const onSubmit = handleSubmit(form => {
-        isSubmitting.value = true;
-        const loginForm    = useForm(form);
+    interface loginFormType {
+        username: string;
+        password: string;
+    }
 
-        loginForm.post(route('login.submit'), {
-            onFinish: () => isSubmitting.value = false,
+    const onSubmit = (form:loginFormType) => {
+        const submittedData = useForm(form);
+        submittedData.post(route('login.submit'), {
+            onFinish: () => loginForm.value?.endSubmit(),
         });
-    });
+    }
 </script>

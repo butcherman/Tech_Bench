@@ -27,8 +27,7 @@ class ResetPasswordSubmitController extends Controller
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'), function($user, $password) {
                 //  Determine the new expiration date
-                $expires = config('auth.passwords.settings.expire') ?
-                                Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+                $expires = $user->getNewExpireTime();
 
                 $user->forceFill([
                     'password'         => Hash::make($password),

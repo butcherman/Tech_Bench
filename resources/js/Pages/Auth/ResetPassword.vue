@@ -2,49 +2,69 @@
     <Head title="Reset Password" />
     <AuthLayout>
         <h6 class="text-center">Reset Password</h6>
-        <form @submit="onSubmit" novalidate>
-            <TextInput id="email" label="Email Address" name="email" />
-            <TextInput id="password" type="password" label="New Password" name="password" />
-            <TextInput id="password-confirmation" type="password" label="Confirm Password" name="password_confirmation" />
-            <SubmitButton :submitted="isSubmitting" />
-        </form>
+        <VueForm ref="resetForm"
+            :validation-schema="formData.validationSchema"
+            :initial-values="formData.initialValues"
+            @submit="onSubmit"
+        >
+            <TextInput
+                id="email"
+                label="Email Address"
+                name="email"
+            />
+            <TextInput
+                id="password"
+                type="password"
+                label="New Password"
+                name="password"
+            />
+            <TextInput
+                id="password-confirmation"
+                type="password"
+                label="Confirm Password"
+                name="password_confirmation"
+            />
+        </VueForm>
     </AuthLayout>
 </template>
 
 <script setup lang="ts">
-    import AuthLayout                 from '@/Layouts/authLayout.vue';
-    import TextInput                  from '@/Components/Base/Input/TextInput.vue';
-    import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
-    import { ref }                    from 'vue';
-    import { useForm }                from '@inertiajs/inertia-vue3';
-    import { useForm as useVeeForm }  from 'vee-validate';
-    import * as yup                   from 'yup';
+    import AuthLayout  from '@/Layouts/authLayout.vue';
+    import VueForm     from '@/Components/Base/VueForm.vue';
+    import TextInput   from '@/Components/Base/Input/TextInput.vue';
+    import { ref }     from 'vue';
+    import { useForm } from '@inertiajs/inertia-vue3';
+    import * as yup    from 'yup';
 
     const props = defineProps<{
         email : string;
         token : string;
     }>();
 
-    const isSubmitting     = ref(false);
-    const { handleSubmit } = useVeeForm({
+    const resetForm = ref<InstanceType<typeof VueForm> | null>(null);
+    const formData = {
         validationSchema: {
             email                : yup.string().email().required('You must enter an email address'),
             password             : yup.string().required('You must enter a password'),
             password_confirmation: yup.string().required('Enter password again')
-                                    //   .oneOf([yup.ref('password')], 'Passwords do not match'),
         },
         initialValues: {
             token: props.token,
             email: props.email,
         }
-    });
+    }
 
-    const onSubmit = handleSubmit(form => {
-        isSubmitting.value = true;
-        const resetForm    = useForm(form);
+    interface resetFormType {
+        email                : string;
+        password             : string;
+        password_confirmation: string;
+    }
 
-        resetForm.post(route('password.reset-submit'), {
-            onFinish: () => isSubmitting.value = false,
+    const onSubmit = (form:resetFormType) => {
+        const myForm = useForm(form);
+
+        myForm.post(route('password.reset-submit'), {
+            onFinish: () => resetForm.value?.endSubmit,
         });
-    });
+    };
 </script>

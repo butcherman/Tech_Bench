@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-    import { defineProps, toRef, computed } from 'vue';
+    import { toRef, computed } from 'vue';
     import { useField }           from 'vee-validate';
 
     import type { Ref }           from 'vue';
