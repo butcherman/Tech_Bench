@@ -1,4 +1,5 @@
 <template>
+    <Head title="User List" />
     <App>
         <div class="row">
             <div class="col-12 grid-margin">

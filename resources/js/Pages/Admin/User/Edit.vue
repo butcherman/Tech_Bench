@@ -1,4 +1,5 @@
 <template>
+    <Head title="Edit User" />
     <App>
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -73,11 +74,8 @@
     });
 
     const onSubmit = (form:userFormType) => {
-        // const role_id = props.roles.find(role => role.role_id === props.user.role_id)?.role_id;
-        // form.role_id = role_id;
-
-        const submitForm = useForm(form);
-        submitForm.put(route('admin.user.update', props.user.user_id), {
+        const formData = useForm(form);
+        formData.put(route('admin.user.update', props.user.user_id), {
             onFinish: () => userForm.value?.endSubmit(),
         });
     }
