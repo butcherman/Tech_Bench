@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Traits\AllowTrait;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -36,6 +37,9 @@ class UserPolicy
             //  If they user has permission to Manage Users, they cannot manage anyone with a higher role than themselves
             if($user->role_id > $model->role_id)
             {
+                Log::stack('user', 'daily')->alert('User '.$user->username.' is blocked from updating '.
+                                                    $model->username.'.  Reason - '.$model->username.
+                                                    ' has a higher Role Level');
                 return Response::deny('You cannot modify a user with higher permissions than yourself');
             }
 

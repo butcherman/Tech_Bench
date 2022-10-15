@@ -12,7 +12,7 @@ class ChangeUserPasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('create', User::class);
+        return $this->user()->can('update', $this->user);
     }
 
     /**
@@ -21,8 +21,6 @@ class ChangeUserPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'  => 'required|exists:users',
-            'full_name' => 'required|string',
             'password'  => 'required|min:6|confirmed',
         ];
     }

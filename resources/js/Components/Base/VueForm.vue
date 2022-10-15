@@ -1,7 +1,7 @@
 <template>
     <!-- <div class="h-100"> -->
-    <form class="vld-parent" @submit="onSubmit" novalidate>
-        <Loading :active="isSubmitting" :is-full-page="false" />
+    <form  @submit="onSubmit" novalidate>
+        <Overlay :loading="isSubmitting" />
         <slot />
         <slot name="submit">
             <SubmitButton
@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
     import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
-    import Loading                    from 'vue3-loading-overlay';
+    import Overlay                    from '@/Components/Base/Overlay.vue';
     import { ref }                    from 'vue';
     import { useForm as useVeeForm }  from 'vee-validate';
 

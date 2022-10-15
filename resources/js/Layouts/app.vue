@@ -186,6 +186,7 @@
 
     .breadcrumbs-wrapper {
         margin : 0;
+        margin-bottom: 15px;
         padding: 5px;
         nav {
             margin-bottom: 0 !important;

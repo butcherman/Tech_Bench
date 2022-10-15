@@ -18,10 +18,9 @@ class AdminIndexController extends Controller
     public function __invoke(Request $request)
     {
         Gate::authorize('admin-link', $request->user());
-        $menuObj = new BuildAdminMenu($request->user());
 
         return Inertia::render('Admin/Index', [
-            'links' => $menuObj->execute(),
+            'links' => (new BuildAdminMenu($request->user()))->execute(),
         ]);
     }
 }

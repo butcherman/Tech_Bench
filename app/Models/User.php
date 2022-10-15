@@ -26,6 +26,11 @@ class User extends Authenticatable
         'deleted_at' => 'datetime:M d, Y'
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
     /**
      * Users First and Last name combined
      * @codeCoverageIgnore

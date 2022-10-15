@@ -48,37 +48,35 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $newUser = User::create($request->toArray());
+        // $newUser = User::create($request->toArray());
 
-        //  Add the users settings data
-        $settings = UserSettingType::all();
-        foreach($settings as $setting)
-        {
-            UserSetting::create([
-                'user_id'         => $newUser->user_id,
-                'setting_type_id' => $setting->setting_type_id,
-                'value'           => true,
-            ]);
-        }
+        // //  Add the users settings data
+        // $settings = UserSettingType::all();
+        // foreach($settings as $setting)
+        // {
+        //     UserSetting::create([
+        //         'user_id'         => $newUser->user_id,
+        //         'setting_type_id' => $setting->setting_type_id,
+        //         'value'           => true,
+        //     ]);
+        // }
 
-        event(new NewUserCreated($newUser));
-        return back()->with([
-            'message' => 'New User Created',
-            'type'    => 'success',
-        ]);
+        // event(new NewUserCreated($newUser));
+        // return back()->with([
+        //     'message' => 'New User Created',
+        //     'type'    => 'success',
+        // ]);
     }
 
     /**
      * Show form for editing an existing user
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        $this->authorize('create', User::class);
+        $this->authorize('update', $user);
 
         return Inertia::render('Admin/User/Edit', [
-            'user'  => User::where('username', $id)
-                        ->firstOrFail()
-                        ->makeVisible(['user_id', 'role_id']),
+            'user'  => $user->makeVisible(['user_id', 'role_id']),
             'roles' => UserRoles::all(),
         ]);
     }
@@ -86,18 +84,8 @@ class UserController extends Controller
     /**
      * Update a user's information
      */
-    public function update(UserRequest $request, $id)
+    public function update(UserRequest $request, User $user)
     {
-        $user = User::findOrFail($id);
-
-        if(Auth::user()->role_id > $user->role_id)
-        {
-            return back()->with([
-                'message' => 'You cannot modify a user with higher permissions than you',
-                'type'    => 'danger'
-            ]);
-        }
-
         $user->update($request->toArray());
 
         Log::channel('user')->notice('User '.$user->username.' has been updated by '.Auth::user()->username.'.  Details - ', $user->toArray());
@@ -107,21 +95,12 @@ class UserController extends Controller
     /**
      * Deactivate a user
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::where('username', $id)->firstOrFail();
         $this->authorize('create', $user);
         $user->delete();
 
-        if($user->role_id < Auth::user()->role_id)
-        {
-            abort(403, 'You cannot deactivate someone with higher permissions than yourself');
-        }
-
-        event(new UserDeactivatedEvent($user));
-        return back()->with([
-            'message' => 'User has been deactivated',
-            'type'    => 'danger',
-        ]);
+        Log::channel('user')->notice('User '.$user->full_name.' has been deactivated by '.Auth::user()->username);
+        return back()->with('success', __('user.deactivated'));
     }
 }

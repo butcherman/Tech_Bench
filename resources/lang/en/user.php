@@ -5,4 +5,5 @@ return [
     'password_updated'     => 'Password successfully updated',
     'account_updated'      => 'Account Settings successfully updated',
     'notification_updated' => 'Notification Settings successfully updated',
+    'deactivated'          => 'User has been deactivated',
 ];

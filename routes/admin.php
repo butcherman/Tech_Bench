@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
 use App\Http\Controllers\Admin\Modules\ModuleIndexController;
 use App\Http\Controllers\Admin\Modules\DownloadModuleController;
 use App\Http\Controllers\Admin\Modules\GetModulesOnlineController;
+use App\Http\Controllers\Admin\UserPasswordController;
 use App\Models\UserRoles;
 
 Route::middleware('auth')->prefix('administration')->name('admin.')->group(function()
@@ -39,7 +40,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * User Admin Routes
      */
-    Route::get('/',                 AdminIndexController::class)     ->name('index')                ->breadcrumb('Administration');
+    Route::get('/', AdminIndexController::class)->name('index')->breadcrumb('Administration');
     // Route::get('deactivated-users', DeactivatedUserController::class)->name('deactivated-users')    ->breadcrumb('Disabled Users', '.index');
     // Route::get('{user}/activate',   ReactivateUserController::class) ->name('reactivate-user')      ->breadcrumb('Active Users', '.index');
     // Route::get('password-policy',   GetPasswordPolicyController::class)->name('password-policy')    ->breadcrumb('Password Policy', '.index');
@@ -51,6 +52,9 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         $breadcrumbs->create('New User', '.index');
         $breadcrumbs->edit('Edit User', '.index');
     });
+
+    Route::get('user/{user}/reset-password', [UserPasswordController::class, 'edit'])->name('reset-password.edit')->breadcrumb('Reset Password', 'admin.user.index');
+    Route::put('user/{user}/reset-password', [UserPasswordController::class, 'update'])->name('reset-password.update');
 
     /**
      * User Roles and Permission Routes
