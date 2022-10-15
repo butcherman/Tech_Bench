@@ -58,6 +58,16 @@
                                 </tbody>
                             </table>
                         </Overlay>
+                        <div class="text-center">
+                            <Link
+                                as="button"
+                                :href="route('admin.user.create')"
+                                type="button"
+                                class="btn btn-primary w-50"
+                            >
+                                Create New User
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

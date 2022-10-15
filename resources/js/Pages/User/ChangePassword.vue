@@ -6,7 +6,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Please Enter New Password</h5>
-                        <form @submit="onSubmit" novalidate>
+                        <VueForm ref="resetForm" :validation-schema="validationSchema" @submit="onSubmit">
                             <TextInput
                                 id="current-password"
                                 name="current_password"
@@ -25,8 +25,7 @@
                                 label="Confirm Password"
                                 type="password"
                             />
-                            <SubmitButton :submitted="isSubmitting" />
-                        </form>
+                        </VueForm>
                     </div>
                 </div>
             </div>
@@ -35,29 +34,31 @@
 </template>
 
 <script setup lang="ts">
-    import App                        from '@/Layouts/app.vue';
-    import TextInput                  from '@/Components/Base/Input/TextInput.vue';
-    import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
-    import { ref }                    from 'vue';
-    import { useForm }                from '@inertiajs/inertia-vue3';
-    import { useForm as useVeeForm }  from 'vee-validate';
-    import * as yup                   from 'yup';
+    import App         from '@/Layouts/app.vue';
+    import TextInput   from '@/Components/Base/Input/TextInput.vue';
+    import VueForm     from '@/Components/Base/VueForm.vue';
+    import { ref }     from 'vue';
+    import { useForm } from '@inertiajs/inertia-vue3';
+    import * as yup    from 'yup';
 
-    const isSubmitting     = ref(false);
-    const { handleSubmit } = useVeeForm({
-        validationSchema: {
-            current_password     : yup.string().required('Please enter your current password'),
-            password             : yup.string().required('You must enter a password'),
-            password_confirmation: yup.string().required('Enter password again'),
-        }
-    });
+    const resetForm = ref<InstanceType<typeof VueForm> | null>(null);
+    const validationSchema = {
+        current_password     : yup.string().required('Please enter your current password'),
+        password             : yup.string().required('You must enter a password'),
+        password_confirmation: yup.string().required('Enter password again'),
+    }
 
-    const onSubmit = handleSubmit(form => {
-        isSubmitting.value = true;
-        const loginForm    = useForm(form);
+    interface passwordFormType {
+        current_password     : string;
+        password             : string;
+        password_confirmation: string;
+    }
 
-        loginForm.post(route('password.store'), {
-            onFinish: () => isSubmitting.value = false,
+    const onSubmit = (form:passwordFormType) => {
+        const formData = useForm(form);
+
+        formData.post(route('password.store'), {
+            onFinish: () => resetForm.value?.endSubmit(),
         });
-    });
+    };
 </script>
