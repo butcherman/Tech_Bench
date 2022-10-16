@@ -3,20 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
 use App\Actions\GetUserRoles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use App\Models\UserRoles;
-use App\Models\UserSetting;
-use App\Models\UserSettingType;
-use App\Events\Admin\NewUserCreated;
 use App\Events\Admin\UserCreatedEvent;
-use App\Events\Admin\UserDeactivatedEvent;
 
 class UserController extends Controller
 {

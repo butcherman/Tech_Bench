@@ -2,13 +2,12 @@
 
 namespace App\Listeners\Notify;
 
-use App\Events\Admin\UserCreatedEvent;
-use App\Models\UserInitialize;
-use App\Notifications\User\SendWelcomeEmail;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Notification;
+use App\Models\UserInitialize;
+use App\Events\Admin\UserCreatedEvent;
+use App\Notifications\User\SendWelcomeEmail;
 
 class NotifyNewUser implements ShouldQueue
 {

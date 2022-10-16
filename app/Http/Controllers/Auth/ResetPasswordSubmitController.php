@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Carbon\Carbon;
-
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ResetTokenRequest;
 

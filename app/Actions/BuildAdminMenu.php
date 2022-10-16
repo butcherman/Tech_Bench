@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use Nwidart\Modules\Facades\Module;
-
 use App\Models\User;
 use App\Traits\AllowTrait;
 

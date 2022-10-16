@@ -44,6 +44,7 @@ class Handler extends ExceptionHandler
     {
         $response = parent::render($request, $e);
 
+        //  We will only trigger the custom Inertia response in a production envrionment
         if(!app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403, 429]))
         {
             switch($response->status())

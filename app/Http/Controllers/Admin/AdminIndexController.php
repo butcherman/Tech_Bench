@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-
 use App\Actions\BuildAdminMenu;
 use App\Http\Controllers\Controller;
 

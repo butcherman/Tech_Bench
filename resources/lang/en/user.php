@@ -8,4 +8,5 @@ return [
     'notification_updated' => 'Notification Settings successfully updated',
     'deactivated'          => 'User has been deactivated',
     'created'              => 'New user created',
+    'setup_completed'      => 'Your account is setup',
 ];

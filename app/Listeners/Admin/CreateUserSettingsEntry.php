@@ -2,11 +2,10 @@
 
 namespace App\Listeners\Admin;
 
-use App\Events\Admin\UserCreatedEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Events\Admin\UserCreatedEvent;
 
 class CreateUserSettingsEntry implements ShouldQueue
 {

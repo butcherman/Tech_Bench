@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
+use Illuminate\Support\Facades\Log;
+use App\Models\UserSetting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserNotificationsRequest;
-use App\Models\User;
-use App\Models\UserSetting;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class UpdateNotificationsController extends Controller
 {

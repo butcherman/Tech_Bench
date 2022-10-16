@@ -4,14 +4,14 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChangeUserPasswordRequest extends FormRequest
+class FinishSetupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request
      */
     public function authorize()
     {
-        return $this->user()->can('update', $this->user);
+        return $this->initLink !== null;
     }
 
     /**
@@ -20,7 +20,7 @@ class ChangeUserPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'password'  => 'required|min:6|confirmed',
+            'password' => 'required|min:6|confirmed',
         ];
     }
 }

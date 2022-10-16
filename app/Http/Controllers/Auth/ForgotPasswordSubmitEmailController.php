@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ForgotPasswordEmailRequest;
 
 class ForgotPasswordSubmitEmailController extends Controller
