@@ -60,7 +60,7 @@
     const onSubmit = (form:resetFormType) => {
         const formData    = useForm(form);
 
-        formData.put(route('admin.reset-password.update', props.user.username), {
+        formData.put(route('admin.user.reset-password.update', props.user.username), {
             onFinish: () => passwordForm.value?.endSubmit(),
         });
     };

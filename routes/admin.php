@@ -37,24 +37,48 @@ use App\Models\UserRoles;
 
 Route::middleware('auth')->prefix('administration')->name('admin.')->group(function()
 {
+    Route::get('/', AdminIndexController::class)
+        ->name('index')
+        ->breadcrumb('Administration');
+
     /**
      * User Admin Routes
      */
-    Route::get('/', AdminIndexController::class)->name('index')->breadcrumb('Administration');
+    Route::prefix('users')->name('user.')->group(function()
+    {
+        Route::get('/', [UserController::class, 'index'])
+            ->name('index')
+            ->breadcrumb('Users', 'admin.index');
+        Route::get('create', [UserController::class, 'create'])
+            ->name('create')
+            ->breadcrumb('New User', 'admin.index');
+        Route::get('{user}/edit', [UserController::class, 'edit'])
+            ->name('edit')
+            ->breadcrumb('Edit User', 'admin.user.index');
+
+        Route::post('create',     [UserController::class, 'store']) ->name('store');
+        Route::put('{user}/edit', [UserController::class, 'update'])->name('update');
+        Route::delete('{user}',   [UserController::class, 'destroy'])->name('destroy');
+
+        Route::get('user/{user}/password', [UserPasswordController::class, 'edit'])->name('reset-password.edit')->breadcrumb('Reset Password', 'admin.user.index');
+        Route::put('user/{user}/password', [UserPasswordController::class, 'update'])->name('reset-password.update');
+    });
+
+
     // Route::get('deactivated-users', DeactivatedUserController::class)->name('deactivated-users')    ->breadcrumb('Disabled Users', '.index');
     // Route::get('{user}/activate',   ReactivateUserController::class) ->name('reactivate-user')      ->breadcrumb('Active Users', '.index');
     // Route::get('password-policy',   GetPasswordPolicyController::class)->name('password-policy')    ->breadcrumb('Password Policy', '.index');
     // Route::put('password-policy',   SetPasswordPolicyController::class)->name('set-password-policy');
 
-    Route::resource('user', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-    {
-        $breadcrumbs->index('Users', 'admin.index');
-        $breadcrumbs->create('New User', '.index');
-        $breadcrumbs->edit('Edit User', '.index');
-    });
+    // Route::resource('user', UserController::class)
+    //     ->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
+    //     {
+    //         $breadcrumbs->index('Users', 'admin.index');
+    //         $breadcrumbs->create('New User', '.index');
+    //         $breadcrumbs->edit('Edit User', '.index');
+    //     });
 
-    Route::get('user/{user}/reset-password', [UserPasswordController::class, 'edit'])->name('reset-password.edit')->breadcrumb('Reset Password', 'admin.user.index');
-    Route::put('user/{user}/reset-password', [UserPasswordController::class, 'update'])->name('reset-password.update');
+
 
     /**
      * User Roles and Permission Routes

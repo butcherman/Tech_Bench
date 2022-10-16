@@ -97,7 +97,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $this->authorize('create', $user);
+        $this->authorize('destroy', $user);
         $user->delete();
 
         Log::channel('user')->notice('User '.$user->full_name.' has been deactivated by '.Auth::user()->username);

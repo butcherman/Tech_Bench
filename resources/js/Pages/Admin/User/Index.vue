@@ -34,7 +34,7 @@
                                                 />
                                             </Link>
                                             <Link
-                                                :href="route('admin.reset-password.edit', user.username)"
+                                                :href="route('admin.user.reset-password.edit', user.username)"
                                                 title="Reset Password"
                                                 v-tooltip
                                             >

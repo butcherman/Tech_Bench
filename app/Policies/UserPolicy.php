@@ -39,4 +39,12 @@ class UserPolicy
 
         return $user->user_id === $model->user_id;
     }
+
+    /**
+     * Determine if the user can deactivate a user profile
+     */
+    public function destroy(User $user, User $model)
+    {
+        return $this->checkPermission($user, 'Manage Users') && $user->role_id <= $model->role_id;
+    }
 }
