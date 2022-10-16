@@ -15,6 +15,7 @@ use App\Models\UserRoles;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 use App\Events\Admin\NewUserCreated;
+use App\Events\Admin\UserCreatedEvent;
 use App\Events\Admin\UserDeactivatedEvent;
 
 class UserController extends Controller
@@ -48,24 +49,12 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        // $newUser = User::create($request->toArray());
+        $newUser = User::create($request->toArray());
 
-        // //  Add the users settings data
-        // $settings = UserSettingType::all();
-        // foreach($settings as $setting)
-        // {
-        //     UserSetting::create([
-        //         'user_id'         => $newUser->user_id,
-        //         'setting_type_id' => $setting->setting_type_id,
-        //         'value'           => true,
-        //     ]);
-        // }
-
-        // event(new NewUserCreated($newUser));
-        // return back()->with([
-        //     'message' => 'New User Created',
-        //     'type'    => 'success',
-        // ]);
+        event(new UserCreatedEvent($newUser));
+        Log::channel('user')->notice('New User created by '.$request->user()->username.
+                                     '.  Details - ', $newUser->makeVisible('user_id')->toArray());
+        return redirect(route('admin.user.index'))->with('success', __('user.created'));
     }
 
     /**

@@ -5,21 +5,39 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Enter New User Information</div>
-                        <!-- <b-overlay :show="submitted">
-                            <template #overlay>
-                                <form-loader text="Creating User..."></form-loader>
-                            </template>
-                            <ValidationObserver v-slot="{handleSubmit}" ref="validator">
-                                <b-form @submit.prevent="handleSubmit(submitForm)" novalidate>
-                                    <text-input v-model="form.username" rules="required" label="Username" name="username"></text-input>
-                                    <text-input v-model="form.first_name" rules="required" label="First Name" name="first_name"></text-input>
-                                    <text-input v-model="form.last_name" rules="required" label="Last Name" name="last_name"></text-input>
-                                    <text-input v-model="form.email" rules="required|email" label="Email Address" name="email"></text-input>
-                                    <b-form-select v-model="form.role_id" :options="roles" text-field="name" value-field="role_id"></b-form-select>
-                                    <submit-button button_text="Create User" :submitted="submitted" class="mt-3" />
-                                </b-form>
-                            </ValidationObserver>
-                        </b-overlay> -->
+                        <VueForm
+                            ref="userForm"
+                            :validation-schema="validationSchema"
+                            @submit="onSubmit"
+                        >
+                            <TextInput
+                                id="username"
+                                name="username"
+                                label="Username"
+                            />
+                            <TextInput
+                                id="first-name"
+                                name="first_name"
+                                label="First Name"
+                            />
+                            <TextInput
+                                id="last-name"
+                                name="last_name"
+                                label="Last Name"
+                            />
+                            <TextInput
+                                id="email"
+                                name="email"
+                                type="email"
+                                label="Email Address"
+                            />
+                            <SelectInput
+                                id="role"
+                                name="role_id"
+                                label="Role"
+                                :optionList="roleTypes"
+                            />
+                        </VueForm>
                     </div>
                 </div>
             </div>
@@ -28,7 +46,51 @@
 </template>
 
 <script setup lang="ts">
-    import App from '@/Layouts/app.vue';
+    import App                       from '@/Layouts/app.vue';
+    import VueForm                   from '@/Components/Base/VueForm.vue';
+    import TextInput                 from '@/Components/Base/Input/TextInput.vue';
+    import SelectInput               from '@/Components/Base/Input/SelectInput.vue';
+    import { ref, computed }         from 'vue';
+    import { useForm }               from '@inertiajs/inertia-vue3';
+    import * as yup                  from 'yup';
+    import type { userRoleType,
+                  userFormType,
+                  optionListObject } from '@/Types';
+
+    const props = defineProps<{
+        roles: userRoleType[];
+    }>();
+
+    const userForm  = ref<InstanceType<typeof VueForm> | null>(null);
+    const roleTypes = computed<optionListObject[]>(() => {
+        const roleArr = <optionListObject[]>[];
+        props.roles.forEach(role => {
+            roleArr.push({
+                text : role.name,
+                value: role.role_id,
+            });
+        });
+
+        return roleArr;
+    });
+
+    const validationSchema = {
+        username  : yup.string().required('You must enter a Username'),
+        first_name: yup.string().required('First Name is required'),
+        last_name : yup.string().required('Last Name is required'),
+        email     : yup.string().email().required('Email Address is required'),
+        role_id   : yup.number().required('You must select a Role'),
+    }
+
+    const onSubmit = (form:userFormType) => {
+        console.log(form);
+
+        const formData = useForm(form);
+        formData.post(route('admin.user.store'), {
+            onFinish: () => userForm.value.endSubmit(),
+        })
+
+    }
     // import App from '../../../Layouts/app';
 
     // export default {

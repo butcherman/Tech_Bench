@@ -75,18 +75,15 @@ class UserTest extends TestCase
         $response->assertStatus(403);
     }
 
-    // public function test_store()
-    // {
-    //     $data = User::factory()->make()->only(['username', 'first_name', 'last_name', 'email', 'role_id']);
+    public function test_store()
+    {
+        $data = User::factory()->make()->only(['username', 'first_name', 'last_name', 'email', 'role_id']);
 
-    //     $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.user.store'), $data);
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas([
-    //         'message' => 'New User Created',
-    //         'type'    => 'success',
-    //     ]);
-    //     $this->assertDatabaseHas('users', $data);
-    // }
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.user.store'), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('user.created'));
+        $this->assertDatabaseHas('users', $data);
+    }
 
     /**
      * Edit Method

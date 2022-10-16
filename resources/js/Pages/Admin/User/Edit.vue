@@ -12,11 +12,33 @@
                             :initial-values="formData.initialValues"
                             @submit="onSubmit"
                         >
-                            <TextInput id="username" name="username" label="Username" />
-                            <TextInput id="first-name" name="first_name" label="First Name" />
-                            <TextInput id="last-name" name="last_name" label="Last Name" />
-                            <TextInput id="email" name="email" type="email" label="Email Address" />
-                            <SelectInput id="role" name="role_id" label="Role" :optionList="roleTypes"/>
+                            <TextInput
+                                id="username"
+                                name="username"
+                                label="Username"
+                            />
+                            <TextInput
+                                id="first-name"
+                                name="first_name"
+                                label="First Name"
+                            />
+                            <TextInput
+                                id="last-name"
+                                name="last_name"
+                                label="Last Name"
+                            />
+                            <TextInput
+                                id="email"
+                                name="email"
+                                type="email"
+                                label="Email Address"
+                            />
+                            <SelectInput
+                                id="role"
+                                name="role_id"
+                                label="Role"
+                                :optionList="roleTypes"
+                            />
                         </VueForm>
                     </div>
                 </div>
