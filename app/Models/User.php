@@ -60,10 +60,10 @@ class User extends Authenticatable
     /**
      * Each user has their own individual settings
      */
-    public function UserSetting()
-    {
-        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
-    }
+    // public function UserSetting()
+    // {
+    //     return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
+    // }
 
     /**
      * Determine the new expire date for an updated password

@@ -2,9 +2,15 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Events\Admin\UserCreatedEvent;
+use App\Listeners\Notify\NotifyNewUser;
 use Tests\TestCase;
 
 use App\Models\User;
+use App\Notifications\User\SendWelcomeEmail;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 
 class UserTest extends TestCase
 {
@@ -83,6 +89,33 @@ class UserTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('user.created'));
         $this->assertDatabaseHas('users', $data);
+
+        //  Assert the event's are firing
+        Event::fake();
+        //  TODO - Assert notification sent
+        Event::assertListening(
+            UserCreatedEvent::class,
+            NotifyNewUser::class
+        );
+        Event::assertListening(
+            UserCreatedEvent::class,
+            NotifyNewUser::class
+        );
+
+        //  Assert settings model created
+        $newUser = User::where('username', $data['username'])->first();
+        $this->assertDatabaseHas('user_settings', [
+            'user_id'         => $newUser->user_id,
+            'setting_type_id' => 1,
+            'value'           => 1,
+        ]);
+        $this->assertDatabaseHas('user_settings', [
+            'user_id'         => $newUser->user_id,
+            'setting_type_id' => 2,
+            'value'           => 1,
+        ]);
+
+
     }
 
     /**

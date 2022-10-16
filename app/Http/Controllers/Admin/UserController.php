@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         $newUser = User::create($request->toArray());
 
-        event(new UserCreatedEvent($newUser));
+        UserCreatedEvent::dispatch($newUser);
         Log::channel('user')->notice('New User created by '.$request->user()->username.
                                      '.  Details - ', $newUser->makeVisible('user_id')->toArray());
         return redirect(route('admin.user.index'))->with('success', __('user.created'));
