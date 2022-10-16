@@ -57,7 +57,7 @@
     const onSubmit = (form:passwordFormType) => {
         const formData = useForm(form);
 
-        formData.post(route('password.store'), {
+        formData.post(route('settings.password.store'), {
             onFinish: () => resetForm.value?.endSubmit(),
         });
     };

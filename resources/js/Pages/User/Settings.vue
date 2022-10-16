@@ -106,8 +106,8 @@
     const updateAccount = (form:userAccountForm):void =>
     {
         loading.value = true;
-        const accForm = useForm(form);
-        accForm.put(route('settings.update', props.user.user_id), {
+        const formData = useForm(form);
+        formData.post(route('settings.update', props.user.username), {
             onFinish: () => {
                 accountForm.value?.endSubmit()
                 loading.value = false
@@ -141,13 +141,12 @@
     const updateNotifications = (form:notificationForm):void =>
     {
         loading.value = true;
-        const notifciationForm = useForm({
+        const formData = useForm({
             user_id     : props.user.user_id,
             settingsData: form,
         });
 
-        notifciationForm.user_id = props.user.user_id;
-        notifciationForm.post(route('settings.store'), {
+        formData.post(route('settings.notifications'), {
             onFinish: () => {
                 notifForm.value?.endSubmit()
                 loading.value = false;

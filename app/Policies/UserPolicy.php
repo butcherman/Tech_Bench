@@ -32,18 +32,9 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        if($this->checkPermission($user, 'Manage Users'))
+        if($user->user_id !== $model->user_id)
         {
-            //  If they user has permission to Manage Users, they cannot manage anyone with a higher role than themselves
-            if($user->role_id > $model->role_id)
-            {
-                Log::stack('user', 'daily')->alert('User '.$user->username.' is blocked from updating '.
-                                                    $model->username.'.  Reason - '.$model->username.
-                                                    ' has a higher Role Level');
-                return Response::deny('You cannot modify a user with higher permissions than yourself');
-            }
-
-            return true;
+            return $this->checkPermission($user, 'Manage Users') && $user->role_id <= $model->role_id;
         }
 
         return $user->user_id === $model->user_id;

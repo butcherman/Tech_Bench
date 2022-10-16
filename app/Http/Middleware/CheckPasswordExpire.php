@@ -16,8 +16,8 @@ class CheckPasswordExpire
 {
     //  Routes that are not affected by the password expiring
     protected $bypassRoutes = [
-        'password.index',
-        'password.store',
+        'settings.password.index',
+        'settings.password.store',
         'logout',
     ];
 
@@ -32,8 +32,11 @@ class CheckPasswordExpire
             //  check to see if the password is expired
             if($request->user()->password_expires && $request->user()->password_expires < Carbon::now())
             {
-                Log::stack(['auth', 'user'])->notice('User '.$request->user()->full_name.' is being forced to change their password');
-                return redirect()->route('password.index')->with('warning', 'Your Password Has Expired.  You must change your password to continue');
+                Log::stack(['auth', 'user'])
+                    ->notice('User '.$request->user()->full_name.' is being forced to change their password');
+                return redirect()
+                    ->route('settings.password.index')
+                    ->with('warning', __('user.password_expired'));
             }
         }
 

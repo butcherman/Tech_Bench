@@ -14,7 +14,9 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('update', User::find($this->route('setting')));
+        // return $this->user()->can('update', User::find($this->route('setting')));
+        // dd($this->user);
+        return $this->user()->can('update', $this->user);
     }
 
     /**

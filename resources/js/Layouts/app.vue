@@ -61,7 +61,7 @@
                                 </li>
                                 <li>
                                     <Link
-                                        :href="(route('password.index'))"
+                                        :href="route('settings.password.index')"
                                         class="dropdown-item"
                                     >
                                         <fa-icon icon="fa-key" />

@@ -18,6 +18,8 @@ use App\Http\Controllers\Home\UploadFileController;
 use App\Http\Controllers\Home\UploadImageController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Controllers\User\ChangePasswordController;
+use App\Http\Controllers\User\UpdateAccountController;
+use App\Http\Controllers\User\UpdateNotificationsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
 /**
@@ -25,17 +27,25 @@ use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 */
 Route::middleware('auth')->group(function()
 {
-    Route::get('dashboard',          DashboardController::class)->name('dashboard')->breadcrumb('Dashboard');
-    Route::get('about',              AboutController::class)    ->name('about')    ->breadcrumb('About Tech Bench', 'dashboard');
+    Route::get('dashboard', DashboardController::class)
+        ->name('dashboard')
+        ->breadcrumb('Dashboard');
+    Route::get('about', AboutController::class)
+        ->name('about')
+        ->breadcrumb('About Tech Bench', 'dashboard');
 
-    // Route::post('notifications',     NotificationController::class)->name('notifications');
-    Route::resource('settings',      UserSettingsController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
+    Route::prefix('settings')->name('settings.')->group(function()
     {
-        $breadcrumbs->index('User Settings');
-    });
-    Route::resource('password',      ChangePasswordController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-    {
-        $breadcrumbs->index('Change Password', 'settings.index');
+        Route::get('/', UserSettingsController::class)
+            ->name('index')
+            ->breadcrumb('Settings', 'dashboard');
+        Route::inertia('password', 'User/ChangePassword')
+            ->name('password.index')
+            ->breadcrumb('Change Password', 'settings.index');
+
+        Route::post('notifications',  UpdateNotificationsController::class)->name('notifications');
+        Route::post('/{user}/update', UpdateAccountController::class)      ->name('update');
+        Route::post('password',       ChangePasswordController::class)     ->name('password.store');
     });
 
     // Route::post('upload-image',      UploadImageController::class)->name('upload-image');
