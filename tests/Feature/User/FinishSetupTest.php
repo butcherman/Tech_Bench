@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 
 class FinishSetupTest extends TestCase
 {
+    protected $password = 'ChangeMe$secure1';
+
     /**
      * Invoke Method
      */
@@ -22,8 +24,8 @@ class FinishSetupTest extends TestCase
             'token'    => $token = Str::uuid(),
         ]);
         $data = [
-            'password'              => $password = 'superSecretPass',
-            'password_confirmation' => $password,
+            'password'              => $this->password,
+            'password_confirmation' => $this->password,
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('finish-setup', $token), $data);
@@ -40,8 +42,8 @@ class FinishSetupTest extends TestCase
         ]);
         $token = Str::uuid();
         $data = [
-            'password'              => $password = 'superSecretPass',
-            'password_confirmation' => $password,
+            'password'              => $this->password,
+            'password_confirmation' => $this->password,
         ];
 
         $response = $this->put(route('finish-setup', $token), $data);
@@ -56,8 +58,8 @@ class FinishSetupTest extends TestCase
             'token'    => $token = Str::uuid(),
         ]);
         $data = [
-            'password'              => $password = 'superSecretPass',
-            'password_confirmation' => $password,
+            'password'              => $this->password,
+            'password_confirmation' => $this->password,
         ];
 
         $response = $this->put(route('finish-setup', $token), $data);

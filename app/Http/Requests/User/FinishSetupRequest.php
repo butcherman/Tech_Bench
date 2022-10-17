@@ -3,6 +3,10 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ContainsNumber;
+use App\Rules\ContainsLowerCase;
+use App\Rules\ContainsUpperCase;
+use App\Rules\ContainsSpecialChar;
 
 class FinishSetupRequest extends FormRequest
 {
@@ -20,7 +24,16 @@ class FinishSetupRequest extends FormRequest
     public function rules()
     {
         return [
-            'password' => 'required|min:6|confirmed',
+            'password' => [
+                'required',
+                'min:'.config('auth.passwords.settings.min_length'),
+                'confirmed',
+                'different:current_password',
+                new ContainsLowerCase,
+                new ContainsUpperCase,
+                new ContainsNumber,
+                new ContainsSpecialChar,
+            ]
         ];
     }
 }

@@ -3,6 +3,10 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ContainsNumber;
+use App\Rules\ContainsLowerCase;
+use App\Rules\ContainsUpperCase;
+use App\Rules\ContainsSpecialChar;
 
 class ChangePasswordRequest extends FormRequest
 {
@@ -21,7 +25,16 @@ class ChangePasswordRequest extends FormRequest
     {
         return [
             'current_password' => 'required|current_password',
-            'password'         => 'required|confirmed|min:6|different:current_password',
+            'password' => [
+                'required',
+                'min:'.config('auth.passwords.settings.min_length'),
+                'confirmed',
+                'different:current_password',
+                new ContainsLowerCase,
+                new ContainsUpperCase,
+                new ContainsNumber,
+                new ContainsSpecialChar,
+            ]
         ];
     }
 }

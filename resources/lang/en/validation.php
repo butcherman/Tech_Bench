@@ -132,8 +132,11 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'password_validation' => [
+            'contains_lowercase' => 'Your password must contain at least one lowercase character',
+            'contains_uppercase' => 'Your password must contain at least one uppercase character',
+            'contains_number'    => 'Your password must contain at least one number',
+            'contains_special'   => 'Your password must contain at least one special character (!@#$%^&*)',
         ],
     ],
 

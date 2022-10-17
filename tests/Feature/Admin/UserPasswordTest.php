@@ -8,6 +8,8 @@ use App\Models\User;
 
 class UserPasswordTest extends TestCase
 {
+    protected $password = 'ChangeMe$secure1';
+
     /**
      * Edit Method
      */
@@ -44,8 +46,8 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'password'              => 'blahblah',
-            'password_confirmation' => 'blahblah',
+            'password'              => $this->password,
+            'password_confirmation' => $this->password,
         ];
 
         $response = $this->put(route('admin.users.reset-password.edit', $user->username), $data);
@@ -58,8 +60,8 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'password'              => 'blahblah',
-            'password_confirmation' => 'blahblah',
+            'password'              => $this->password,
+            'password_confirmation' => $this->password,
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('admin.users.reset-password.edit', $user->username), $data);
@@ -70,8 +72,8 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'password'              => 'blahblah',
-            'password_confirmation' => 'blahblah',
+            'password'              => $this->password,
+            'password_confirmation' => $this->password,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.users.reset-password.edit', $user->username), $data);
