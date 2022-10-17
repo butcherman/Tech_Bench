@@ -45,23 +45,23 @@ class BuildAdminMenu
                 [
                     'name' => 'Create New User',
                     'icon' => 'fas fa-user-plus',
-                    'link' => route('admin.user.create'),
+                    'link' => route('admin.users.create'),
                 ],
                 [
                     'name' => 'Modify User',
                     'icon' => 'fas fa-user-edit',
-                    'link' => route('admin.user.index'),
+                    'link' => route('admin.users.index'),
                 ],
-                // [
-                //     'name' => 'Show Deactivated Users',
-                //     'icon' => 'fas fa-store-alt-slash',
-                //     'link' => route('admin.deactivated-users'),
-                // ],
-                // [
-                //     'name' => 'Password Policy',
-                //     'icon' => 'fas fa-user-lock',
-                //     'link' => route('admin.password-policy'),
-                // ],
+                [
+                    'name' => 'Show Disabled Users',
+                    'icon' => 'fas fa-store-alt-slash',
+                    'link' => route('admin.users.disabled'),
+                ],
+                [
+                    'name' => 'Password Policy',
+                    'icon' => 'fas fa-user-lock',
+                    'link' => '#', // route('admin.password-policy'),
+                ],
             ];
         }
 

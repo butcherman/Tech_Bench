@@ -34,6 +34,6 @@ class UserPasswordController extends Controller
         ]);
 
         Log::channel('user')->info('Password for '.$user->username.' has been changed by '.$request->user()->username);
-        return redirect(route('admin.user.index'))->with('success', __('user.password_updated'));
+        return redirect(route('admin.users.index'))->with('success', __('user.password_updated'));
     }
 }

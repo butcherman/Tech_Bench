@@ -62,5 +62,12 @@ class UserSeeder extends Seeder
                 ]);
             }
         }
+
+        //  Create 10 users and disable them
+        $disabledUsers = User::factory()->count(5)->create();
+        foreach($disabledUsers as $user)
+        {
+            $user->delete();
+        }
     }
 }

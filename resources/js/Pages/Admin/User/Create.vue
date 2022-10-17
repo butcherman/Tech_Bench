@@ -83,54 +83,9 @@
     }
 
     const onSubmit = (form:userFormType) => {
-        console.log(form);
-
         const formData = useForm(form);
-        formData.post(route('admin.user.store'), {
-            onFinish: () => userForm.value.endSubmit(),
+        formData.post(route('admin.users.store'), {
+            onFinish: () => userForm.value?.endSubmit(),
         })
-
     }
-    // import App from '../../../Layouts/app';
-
-    // export default {
-    //     layout: App,
-    //     props: {
-    //         /**
-    //          * List of objects from /app/Models/UserRole
-    //          */
-    //         roles: {
-    //             type:     Array,
-    //             required: true,
-    //         }
-    //     },
-    //     data() {
-    //         return {
-    //             submitted: false,
-    //             form: this.$inertia.form({
-    //                 username:   '',
-    //                 first_name: '',
-    //                 last_name:  '',
-    //                 email:      '',
-    //                 role_id:    4,
-    //             })
-    //         }
-    //     },
-    //     methods: {
-    //         submitForm()
-    //         {
-    //             this.submitted = true;
-    //             this.form.post(route('admin.user.store'), {
-    //                 onSuccess: () => {
-    //                     this.form.reset();
-    //                     this.$refs['validator'].reset();
-    //                     this.submitted = false;
-    //                 }
-    //             });
-    //         }
-    //     },
-    //     metaInfo: {
-    //         title: 'Create User',
-    //     }
-    // }
 </script>

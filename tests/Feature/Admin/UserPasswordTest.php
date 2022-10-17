@@ -15,7 +15,7 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->get(route('admin.user.reset-password.edit', $user->username));
+        $response = $this->get(route('admin.users.reset-password.edit', $user->username));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -25,7 +25,7 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())->get(route('admin.user.reset-password.edit', $user->username));
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.users.reset-password.edit', $user->username));
         $response->assertStatus(403);
     }
 
@@ -33,7 +33,7 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.user.reset-password.edit', $user->username));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.users.reset-password.edit', $user->username));
         $response->assertSuccessful();
     }
 
@@ -48,7 +48,7 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => 'blahblah',
         ];
 
-        $response = $this->put(route('admin.user.reset-password.edit', $user->username), $data);
+        $response = $this->put(route('admin.users.reset-password.edit', $user->username), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -62,7 +62,7 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => 'blahblah',
         ];
 
-        $response = $this->actingAs(User::factory()->create())->put(route('admin.user.reset-password.edit', $user->username), $data);
+        $response = $this->actingAs(User::factory()->create())->put(route('admin.users.reset-password.edit', $user->username), $data);
         $response->assertStatus(403);
     }
 
@@ -74,7 +74,7 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => 'blahblah',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.user.reset-password.edit', $user->username), $data);
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.users.reset-password.edit', $user->username), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('user.password_updated'));
         $this->assertTrue(Hash::check($data['password'], User::find($user->user_id)->password));

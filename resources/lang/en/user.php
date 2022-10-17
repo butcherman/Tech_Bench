@@ -7,6 +7,7 @@ return [
     'account_updated'      => 'Account Settings successfully updated',
     'notification_updated' => 'Notification Settings successfully updated',
     'deactivated'          => 'User has been deactivated',
+    'reactivated'          => 'User has been reactivated',
     'created'              => 'New user created',
     'setup_completed'      => 'Your account is setup',
 ];

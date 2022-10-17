@@ -19,7 +19,7 @@ class UserTest extends TestCase
      */
     public function test_index_guest()
     {
-        $response = $this->get(route('admin.user.index'));
+        $response = $this->get(route('admin.users.index'));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -27,13 +27,13 @@ class UserTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('admin.user.index'));
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.users.index'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.user.index'));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.users.index'));
         $response->assertSuccessful();
     }
 
@@ -42,7 +42,7 @@ class UserTest extends TestCase
      */
     public function test_create_guest()
     {
-        $response = $this->get(route('admin.user.create'));
+        $response = $this->get(route('admin.users.create'));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -50,13 +50,13 @@ class UserTest extends TestCase
 
     public function test_create_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('admin.user.create'));
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.users.create'));
         $response->assertStatus(403);
     }
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.user.create'));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.users.create'));
         $response->assertSuccessful();
     }
 
@@ -67,7 +67,7 @@ class UserTest extends TestCase
     {
         $data = User::factory()->make()->only(['username', 'first_name', 'last_name', 'email', 'role_id']);
 
-        $response = $this->post(route('admin.user.store'), $data);
+        $response = $this->post(route('admin.users.store'), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -77,7 +77,7 @@ class UserTest extends TestCase
     {
         $data = User::factory()->make()->only(['username', 'first_name', 'last_name', 'email', 'role_id']);
 
-        $response = $this->actingAs(User::factory()->create())->post(route('admin.user.store'), $data);
+        $response = $this->actingAs(User::factory()->create())->post(route('admin.users.store'), $data);
         $response->assertStatus(403);
     }
 
@@ -85,7 +85,7 @@ class UserTest extends TestCase
     {
         $data = User::factory()->make()->only(['username', 'first_name', 'last_name', 'email', 'role_id']);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.user.store'), $data);
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.users.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('user.created'));
         $this->assertDatabaseHas('users', $data);
@@ -114,8 +114,6 @@ class UserTest extends TestCase
             'setting_type_id' => 2,
             'value'           => 1,
         ]);
-
-
     }
 
     /**
@@ -125,7 +123,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->get(route('admin.user.edit', $user->username));
+        $response = $this->get(route('admin.users.edit', $user->username));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -135,7 +133,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())->get(route('admin.user.edit', $user->username));
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.users.edit', $user->username));
         $response->assertStatus(403);
     }
 
@@ -143,7 +141,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.user.edit', $user->username));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.users.edit', $user->username));
         $response->assertSuccessful();
     }
 
@@ -161,7 +159,7 @@ class UserTest extends TestCase
             'role_id'    => 3,
         ];
 
-        $response = $this->put(route('admin.user.update', $user->username), $data);
+        $response = $this->put(route('admin.users.update', $user->username), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -178,7 +176,7 @@ class UserTest extends TestCase
             'role_id'    => 3,
         ];
 
-        $response = $this->actingAs(User::factory()->create())->put(route('admin.user.update', $user->username), $data);
+        $response = $this->actingAs(User::factory()->create())->put(route('admin.users.update', $user->username), $data);
         $response->assertStatus(403);
     }
 
@@ -193,7 +191,7 @@ class UserTest extends TestCase
             'role_id'    => 3,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))->put(route('admin.user.update', $user->username), $data);
+        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))->put(route('admin.users.update', $user->username), $data);
         $response->assertStatus(403);
         $this->assertDatabaseHas('users', $user->only(['user_id', 'username', 'first_name', 'last_name', 'email', 'role_id']));
     }
@@ -209,7 +207,7 @@ class UserTest extends TestCase
             'role_id'    => 3,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.user.update', $user->username), $data);
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.users.update', $user->username), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user.updated'));
         $this->assertDatabaseHas('users', $data);
@@ -222,7 +220,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->delete(route('admin.user.destroy', $user->username));
+        $response = $this->delete(route('admin.users.destroy', $user->username));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -232,7 +230,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())->delete(route('admin.user.destroy', $user->username));
+        $response = $this->actingAs(User::factory()->create())->delete(route('admin.users.destroy', $user->username));
         $response->assertStatus(403);
     }
 
@@ -240,7 +238,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create(['role_id' => 1]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))->delete(route('admin.user.destroy', $user->username));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))->delete(route('admin.users.destroy', $user->username));
         $response->assertStatus(403);
     }
 
@@ -248,8 +246,41 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('admin.user.destroy', $user->username));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('admin.users.destroy', $user->username));
         $response->assertStatus(302);
         $this->assertSoftDeleted('users', $user->only(['user_id', 'username']));
+    }
+
+    /**
+     * Enable Method
+     */
+    public function test_enable_guest()
+    {
+        $user = User::factory()->create();
+        $user->delete();
+
+        $response = $this->get(route('admin.users.enable', $user->username));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+        $this->assertGuest();
+    }
+
+    public function test_enable_no_permission()
+    {
+        $user = User::factory()->create();
+        $user->delete();
+
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.users.enable', $user->username));
+        $response->assertStatus(403);
+    }
+
+    public function test_enable()
+    {
+        $user = User::factory()->create();
+        $user->delete();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.users.enable', $user->username));
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('users', $user->only(['user_id', 'username', 'first_name', 'last_name']));
     }
 }

@@ -97,7 +97,7 @@
 
     const onSubmit = (form:userFormType) => {
         const formData = useForm(form);
-        formData.put(route('admin.user.update', props.user.username), {
+        formData.put(route('admin.users.update', props.user.username), {
             onFinish: () => userForm.value?.endSubmit(),
         });
     }

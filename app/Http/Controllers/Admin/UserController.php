@@ -38,6 +38,11 @@ class UserController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        //
+    }
+
     /**
      * Store a newly created user
      */
@@ -48,7 +53,7 @@ class UserController extends Controller
         UserCreatedEvent::dispatch($newUser);
         Log::channel('user')->notice('New User created by '.$request->user()->username.
                                      '.  Details - ', $newUser->makeVisible('user_id')->toArray());
-        return redirect(route('admin.user.index'))->with('success', __('user.created'));
+        return redirect(route('admin.users.index'))->with('success', __('user.created'));
     }
 
     /**
@@ -72,7 +77,7 @@ class UserController extends Controller
         $user->update($request->toArray());
 
         Log::channel('user')->notice('User '.$user->username.' has been updated by '.Auth::user()->username.'.  Details - ', $user->toArray());
-        return redirect(route('admin.user.index'))->with('success', __('admin.user.updated'));
+        return redirect(route('admin.users.index'))->with('success', __('admin.user.updated'));
     }
 
     /**
@@ -85,5 +90,17 @@ class UserController extends Controller
 
         Log::channel('user')->notice('User '.$user->full_name.' has been deactivated by '.Auth::user()->username);
         return back()->with('success', __('user.deactivated'));
+    }
+
+    /**
+     * Enable a soft deleted user
+     */
+    public function enable(User $user)
+    {
+        $this->authorize('manage', $user);
+
+        $user->restore();
+        Log::channel('user')->notice('User '.$user->full_name.' has been reactivated by '.Auth::user()->username);
+        return redirect(route('admin.users.index'))->with('success', __('user.reactivated'));
     }
 }

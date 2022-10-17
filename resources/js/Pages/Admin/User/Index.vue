@@ -24,7 +24,7 @@
                                         <td>{{ user.user_roles.name }}</td>
                                         <td>
                                             <Link
-                                                :href="route('admin.user.edit', user.username)"
+                                                :href="route('admin.users.edit', user.username)"
                                                 title="Edit User"
                                                 v-tooltip
                                             >
@@ -34,7 +34,7 @@
                                                 />
                                             </Link>
                                             <Link
-                                                :href="route('admin.user.reset-password.edit', user.username)"
+                                                :href="route('admin.users.reset-password.edit', user.username)"
                                                 title="Reset Password"
                                                 v-tooltip
                                             >
@@ -61,7 +61,7 @@
                         <div class="text-center">
                             <Link
                                 as="button"
-                                :href="route('admin.user.create')"
+                                :href="route('admin.users.create')"
                                 type="button"
                                 class="btn btn-primary w-50"
                             >
@@ -102,7 +102,7 @@
             if(res)
             {
                 loading.value = true;
-                Inertia.delete(route('admin.user.destroy', user.username), {
+                Inertia.delete(route('admin.users.destroy', user.username), {
                     onFinish: () => loading.value = false,
                 });
             }

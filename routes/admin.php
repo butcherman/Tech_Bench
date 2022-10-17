@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
 use App\Http\Controllers\Admin\Modules\ModuleIndexController;
 use App\Http\Controllers\Admin\Modules\DownloadModuleController;
 use App\Http\Controllers\Admin\Modules\GetModulesOnlineController;
+use App\Http\Controllers\Admin\UserDisabledController;
 use App\Http\Controllers\Admin\UserPasswordController;
 use App\Models\UserRoles;
 
@@ -44,24 +45,26 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * User Admin Routes
      */
-    Route::prefix('users')->name('user.')->group(function()
+    Route::prefix('users')->name('users.')->group(function()
     {
-        Route::get('/', [UserController::class, 'index'])
-            ->name('index')
-            ->breadcrumb('Users', 'admin.index');
-        Route::get('create', [UserController::class, 'create'])
-            ->name('create')
-            ->breadcrumb('New User', 'admin.index');
-        Route::get('{user}/edit', [UserController::class, 'edit'])
-            ->name('edit')
-            ->breadcrumb('Edit User', 'admin.user.index');
+        Route::get('{user}/enable',   [UserController::class, 'enable'])
+            ->name('enable')
+            ->withTrashed();
+        Route::put('{user}/password', [UserPasswordController::class, 'update'])
+            ->name('reset-password.update');
+        Route::get('{user}/password', [UserPasswordController::class, 'edit'])
+            ->name('reset-password.edit')
+            ->breadcrumb('Reset Password', 'admin.users.index');
 
-        Route::post('create',     [UserController::class, 'store']) ->name('store');
-        Route::put('{user}/edit', [UserController::class, 'update'])->name('update');
-        Route::delete('{user}',   [UserController::class, 'destroy'])->name('destroy');
-
-        Route::get('user/{user}/password', [UserPasswordController::class, 'edit'])->name('reset-password.edit')->breadcrumb('Reset Password', 'admin.user.index');
-        Route::put('user/{user}/password', [UserPasswordController::class, 'update'])->name('reset-password.update');
+        Route::get('disabled-users', UserDisabledController::class)
+            ->name('disabled')
+            ->breadcrumb('Disabled Users', 'admin.users.index');
+    });
+    Route::resource('users', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
+    {
+        $breadcrumbs->index('Select User', 'admin.index');
+        $breadcrumbs->create('New User', 'admin.users.index');
+        $breadcrumbs->edit('Edit User', 'admin.users.index');
     });
 
 
