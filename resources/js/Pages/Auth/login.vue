@@ -18,6 +18,7 @@
                 name="password"
                 type="password"
             />
+            <CheckboxSwitch id="remember-me" name="remember" label="Remember Me" />
         </VueForm>
         <div class="form-group row justify-content-center mb-0">
             <div class="col-md-8 text-center">
@@ -36,6 +37,7 @@
     import AuthLayout  from '@/Layouts/authLayout.vue';
     import VueForm     from '@/Components/Base/VueForm.vue'
     import TextInput   from '@/Components/Base/Input/TextInput.vue';
+    import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
     import { ref }     from 'vue';
     import { useForm } from '@inertiajs/inertia-vue3';
     import * as yup    from 'yup';
