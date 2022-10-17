@@ -52,7 +52,12 @@ return [
             'throttle' => 60,
         ],
         'settings' => [
-            'expire' => 30,
+            'expire'             => 30,         //  In days
+            'min_length'         => 4,          //  Minimum password length
+            'contains_uppercase' => true,
+            'contains_lowercase' => true,
+            'contains_number'    => true,
+            'contains_special'   => true,
         ]
     ],
 
@@ -68,5 +73,4 @@ return [
     */
 
     'password_timeout' => 10800,
-
 ];

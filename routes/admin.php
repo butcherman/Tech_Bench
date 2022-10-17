@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\Modules\DownloadModuleController;
 use App\Http\Controllers\Admin\Modules\GetModulesOnlineController;
 use App\Http\Controllers\Admin\UserDisabledController;
 use App\Http\Controllers\Admin\UserPasswordController;
+use App\Http\Controllers\Admin\UserPasswordPolicyController;
 use App\Models\UserRoles;
 
 Route::middleware('auth')->prefix('administration')->name('admin.')->group(function()
@@ -59,6 +60,11 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         Route::get('disabled-users', UserDisabledController::class)
             ->name('disabled')
             ->breadcrumb('Disabled Users', 'admin.users.index');
+
+        Route::resource('password-policy', UserPasswordPolicyController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
+        {
+            $breadcrumbs->index('Password Policy', 'admin.users.index');
+        });
     });
     Route::resource('users', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
     {
