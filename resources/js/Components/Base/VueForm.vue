@@ -1,6 +1,8 @@
 <template>
     <form class="vld-parent" @submit="onSubmit" novalidate>
-        <Loading :active="isSubmitting" :is-full-page="false" />
+        <Loading :active="isSubmitting" :is-full-page="false">
+            <HalfCircleLoader />
+        </Loading>
         <slot />
         <slot name="submit">
             <SubmitButton
@@ -15,6 +17,7 @@
 <script setup lang="ts">
     import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
     import Loading                    from 'vue3-loading-overlay';
+    import HalfCircleLoader           from '@/Components/Base/Loader/HalfCircleLoader.vue';
     import { ref }                    from 'vue';
     import { useForm as useVeeForm }  from 'vee-validate';
 

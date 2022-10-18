@@ -2,6 +2,8 @@
     <Head title="Dashboard" />
     <Layout>
         <h1 class="text-center">Logged In</h1>
+        <AtomLoader />
+        <HalfCircleLoader />
     </Layout>
     <!-- <div>
         <div class="row justify-content-center">
@@ -71,6 +73,8 @@
 
 <script setup lang="ts">
     import Layout from '@/Layouts/app.vue';
+    import AtomLoader from '@/Components/Base/Loader/AtomLoader.vue';
+    import HalfCircleLoader from '@/Components/Base/Loader/HalfCircleLoader.vue';
     // import App           from '../../Layouts/app';
     // import QuickLinks    from '../../Components/Home/quickLinks.vue';
     // import Notifications from '../../Components/Home/notifications.vue';
