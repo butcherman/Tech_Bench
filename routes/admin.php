@@ -65,6 +65,13 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         {
             $breadcrumbs->index('Password Policy', 'admin.users.index');
         });
+
+        Route::resource('roles', UserRolesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
+        {
+            $breadcrumbs->index('Roles', 'admin.users.index');
+            $breadcrumbs->create('New Role', 'admin.users.roles.index');
+            $breadcrumbs->edit('Edit Role', 'admin.users.roles.index');
+        });
     });
     Route::resource('users', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
     {

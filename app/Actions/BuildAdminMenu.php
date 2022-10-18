@@ -66,14 +66,14 @@ class BuildAdminMenu
         }
 
         $roleBuild = [];
-        // if($this->checkPermission($this->user, 'Manage Permissions'))
-        // {
-        //     $roleBuild = [[
-        //         'name' => 'User Roles and Permissions',
-        //         'icon' => 'fas fa-users-cog',
-        //         'link' => route('admin.user-roles.index'),
-        //     ]];
-        // }
+        if($this->checkPermission($this->user, 'Manage Permissions'))
+        {
+            $roleBuild = [[
+                'name' => 'User Roles and Permissions',
+                'icon' => 'fas fa-users-cog',
+                'link' => route('admin.users.roles.index'),
+            ]];
+        }
 
         if(count($userBuild) > 0 || count($roleBuild) > 0)
         {
