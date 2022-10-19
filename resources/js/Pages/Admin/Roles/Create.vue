@@ -21,12 +21,16 @@
                                 name="description"
                                 label="Enter A Short Description"
                             />
-                            <div class="row" v-for="(group, name) in permissions" :key="name">
+                            <div
+                                v-for="(group, name) in permissions"
+                                :key="name"
+                                class="row"
+                            >
                                 <h6>{{ name }}</h6>
                                 <div
-                                    class="col-6 col-lg-4"
                                     v-for="opt in group"
                                     :key="opt.perm_type_id"
+                                    class="col-6 col-lg-4"
                                 >
                                     <CheckboxSwitch
                                         :id="`type-${opt.perm_type_id}`"

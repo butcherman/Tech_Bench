@@ -58,8 +58,11 @@ class UserRolesController extends Controller
         $this->authorize('view', $role);
 
         return Inertia::render('Admin/Roles/Show', [
-            'role'        => $role,
-            'permissions' => UserRolePermissions::where('role_id', $role->role_id)->get()->groupBy('group'),
+            'role'        => $role->makeVisible('allow_edit'),
+            'permissions' => UserRolePermissions::with('UserRolePermissionTypes')
+                                ->where('role_id', $role->role_id)
+                                ->get()
+                                ->groupBy('UserRolePermissionTypes.group'),
         ]);
     }
 

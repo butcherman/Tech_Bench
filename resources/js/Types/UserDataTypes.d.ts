@@ -17,6 +17,19 @@ export interface userRoleType {
     name         : string;
     description  : string;
     perm_type_id?: number;
+    allow_edit  ?: boolean;
+}
+
+export interface userRolePermissionsType {
+    allow                     : boolean;
+    perm_type_id              : number,
+    role_id                   : number,
+    user_role_permission_types: {
+        description : string;
+        group       : string;
+        perm_type_id: number;
+        role_cat_id : number
+    }
 }
 
 export interface settingsType {
