@@ -47,10 +47,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Notify\NotifyNewUser',
             'App\Listeners\Admin\CreateUserSettingsEntry',
         ],
-        // 'App\Events\Admin\PasswordPolicyUpdatedEvent' => [
-        //     'App\Listeners\Admin\LogPasswordPolicyUpdated',
-        //     'App\Listeners\Work\UpdateUsersPasswordPolicy',
-        // ],
+        'App\Events\Admin\UserRoleCreatedEvent' => [
+            'App\Listeners\Admin\CreateRolePermissions',
+        ],
     ];
 
     /**

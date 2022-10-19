@@ -17,6 +17,14 @@ class UserRoles extends Model
     ];
 
     /**
+     * Key for Route/Model binding
+     */
+    public function getRouteKeyName()
+    {
+        return 'role_id';
+    }
+
+    /**
      * Each User Role is assigned several allow or deny permissions to control user access
      */
     // public function UserRolePermissions()

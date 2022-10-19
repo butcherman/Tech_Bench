@@ -8,3 +8,12 @@ export interface userFormType {
     email     : string;
     role_id   : number;
 }
+
+export type BaseRoleFormType = {
+    name       : string;
+    description: string;
+}
+
+export type RoleFormType = {
+    [key:string]: boolean | string;
+} & BaseRoleFormType;

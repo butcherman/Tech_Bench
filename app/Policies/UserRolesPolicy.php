@@ -23,10 +23,10 @@ class UserRolesPolicy
     /**
      * Determine whether the user can view the model
      */
-    // public function view(User $user)
-    // {
-    //     return $this->checkPermission($user, 'Manage Permissions');
-    // }
+    public function view(User $user)
+    {
+        return $this->checkPermission($user, 'Manage Permissions');
+    }
 
     /**
      * Determine whether the user can create models

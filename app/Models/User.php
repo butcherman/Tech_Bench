@@ -26,6 +26,9 @@ class User extends Authenticatable
         'deleted_at' => 'datetime:M d, Y'
     ];
 
+    /**
+     * Key for Route/Model binding
+     */
     public function getRouteKeyName()
     {
         return 'username';

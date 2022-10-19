@@ -21,9 +21,8 @@ class UserRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                  => 'required|string',
+            'name'                  => 'required|string|unique:user_roles',
             'description'           => 'required|string',
-            'user_role_permissions' => 'required|array',
         ];
     }
 }

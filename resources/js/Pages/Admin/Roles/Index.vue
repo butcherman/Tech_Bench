@@ -51,6 +51,6 @@
     }>();
 
     const gotoRole = (role:userRoleType) => {
-        Inertia.get(route('admin.users.roles.edit', role.name));
+        Inertia.get(route('admin.users.roles.show', role.role_id));
     }
 </script>

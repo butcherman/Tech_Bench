@@ -13,9 +13,10 @@ export interface userAuthType extends userType {
 }
 
 export interface userRoleType {
-    role_id    : number;
-    name       : string;
-    description: string;
+    role_id      : number;
+    name         : string;
+    description  : string;
+    perm_type_id?: number;
 }
 
 export interface settingsType {
