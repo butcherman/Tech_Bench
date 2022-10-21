@@ -41,6 +41,20 @@ class UserRolesController extends Controller
     }
 
     /**
+     * Copy an existing role to a new role
+     */
+    public function copy(UserRoles $role)
+    {
+        return Inertia::render('Admin/Roles/Copy', [
+            'description' => 'Copy of '.$role->name,
+            'permissions' => UserRolePermissions::with('UserRolePermissionTypes')
+                                ->where('role_id', $role->role_id)
+                                ->get()
+                                ->groupBy('UserRolePermissionTypes.group'),
+        ]);
+    }
+
+    /**
      * Store a newly created role
      */
     public function store(UserRoleRequest $request)

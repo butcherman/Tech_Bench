@@ -66,6 +66,9 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
             $breadcrumbs->index('Password Policy', 'admin.users.index');
         });
 
+        Route::get('{role}/copy', [UserRolesController::class, 'copy'])
+                ->name('roles.copy')
+                ->breadcrumb('New Role', 'admin.users.roles.index');
         Route::resource('roles', UserRolesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
         {
             $breadcrumbs->index('Roles', 'admin.users.index');

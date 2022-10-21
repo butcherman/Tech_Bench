@@ -40,6 +40,16 @@
                             </Link>
                         </div>
                         <div class="text-center">
+                            <Link
+                                as="button"
+                                :href="route('admin.users.roles.copy', role.role_id)"
+                                type="button"
+                                class="btn btn-primary w-50 m-1"
+                            >
+                                Copy Role
+                            </Link>
+                        </div>
+                        <div class="text-center">
                             <button
                                 type="button"
                                 class="btn btn-danger w-50 m-1"
