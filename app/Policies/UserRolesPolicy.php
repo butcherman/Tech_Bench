@@ -39,16 +39,26 @@ class UserRolesPolicy
     /**
      * Determine whether the user can update the model
      */
-    public function update(User $user)
+    public function update(User $user, UserRoles $role)
     {
+        if(!$role->allow_edit)
+        {
+            return false;
+        }
+
         return $this->checkPermission($user, 'Manage Permissions');
     }
 
     /**
      * Determine whether the user can delete the model
      */
-    public function delete(User $user)
+    public function delete(User $user, UserRoles $role)
     {
+        if(!$role->allow_edit)
+        {
+            return false;
+        }
+
         return $this->checkPermission($user, 'Manage Permissions');
     }
 

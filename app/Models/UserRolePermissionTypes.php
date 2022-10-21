@@ -25,14 +25,6 @@ class UserRolePermissionTypes extends Model
     }
 
     /**
-     * User Role Permission Types define what permission is being allowed or denied by the user role
-     */
-    // public function UserRolePermissions()
-    // {
-    //     return $this->belongsTo('App\Models\UserRolePermissions', 'perm_type_id', 'perm_type_id');
-    // }
-
-    /**
      * User Role Categories allow for grouping of the permission types
      */
     public function UserRolePermissionCategory()

@@ -23,12 +23,4 @@ class UserRoles extends Model
     {
         return 'role_id';
     }
-
-    /**
-     * Each User Role is assigned several allow or deny permissions to control user access
-     */
-    // public function UserRolePermissions()
-    // {
-    //     return $this->hasMany('App\Models\UserRolePermissions', 'role_id', 'role_id');
-    // }
 }

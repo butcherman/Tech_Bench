@@ -45,6 +45,8 @@ class UserRolesController extends Controller
      */
     public function copy(UserRoles $role)
     {
+        $this->authorize('create', $role);
+
         return Inertia::render('Admin/Roles/Copy', [
             'description' => 'Copy of '.$role->name,
             'permissions' => UserRolePermissions::with('UserRolePermissionTypes')
@@ -87,6 +89,8 @@ class UserRolesController extends Controller
      */
     public function edit(UserRoles $role)
     {
+        $this->authorize('update', $role);
+
         return Inertia::render('Admin/Roles/Edit', [
             'role'        => $role,
             'permissions' => UserRolePermissions::with('UserRolePermissionTypes')
@@ -130,8 +134,10 @@ class UserRolesController extends Controller
                 ]);
             }
 
+            // @codeCoverageIgnoreStart
             Log::stack(['daily', 'user'])->error('Error when trying to delete Role '.$role->name, $e->errorInfo);
             return back()->withErrors(['error' => __('admin.user.delete_failed')]);
+            // @codeCoverageIgnoreEnd
         }
 
         Log::stack(['daily', 'user'])->notice('Role '.$role->name.' has been deleted by '.Auth::user()->username);

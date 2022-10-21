@@ -18,6 +18,7 @@ class UserSetting extends Model
 
     /**
      * Each setting is tied to a setting type id
+     * @codeCoverageIgnore
      */
     public function UserSettingType()
     {
