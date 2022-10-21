@@ -131,9 +131,17 @@
                             </ol>
                         </nav>
                     </div>
-                    <div v-if="Object.keys(errors).length > 0" class="alert alert-danger text-center">
-                        <div v-for="error in errors">
-                            {{ error }}
+                    <div
+                        v-if="Object.keys(errors).length > 0"
+                        class="alert alert-danger text-center"
+                    >
+                        <div v-for="(err, name) in errors">
+                            <span v-if="name == 'link'">
+                                <Link :href="err">More Information</Link>
+                            </span>
+                            <span v-else>
+                                {{ err }}
+                            </span>
                         </div>
                     </div>
                     <div v-if="warning" class="alert alert-warning text-center">
@@ -168,11 +176,15 @@
 
     import type { pageInterface } from '@/Types';
 
+    interface errorType {
+        [key:string]: string;
+    }
+
     const app          = computed(() => usePage<pageInterface>().props.value.app);
     const navBar       = computed(() => usePage<pageInterface>().props.value.navbar);
     const notif        = computed(() => usePage<pageInterface>().props.value.notifications);
     const breadcrumbs  = computed(() => usePage<pageInterface>().props.value.breadcrumbs);
-    const errors       = computed(() => usePage<pageInterface>().props.value.errors);
+    const errors       = computed<errorType>(() => usePage<pageInterface>().props.value.errors);
     const warning      = computed(() => usePage<pageInterface>().props.value.flash.warning);
     const success      = computed(() => usePage<pageInterface>().props.value.flash.success);
 

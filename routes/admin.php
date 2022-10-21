@@ -71,7 +71,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
             $breadcrumbs->index('Roles', 'admin.users.index');
             $breadcrumbs->create('New Role', 'admin.users.roles.index');
             $breadcrumbs->show('View Role', 'admin.users.roles.index');
-            $breadcrumbs->edit('Edit Role', 'admin.users.roles.index');
+            $breadcrumbs->edit('Edit Role', 'admin.users.roles.show');
         });
     });
     Route::resource('users', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)

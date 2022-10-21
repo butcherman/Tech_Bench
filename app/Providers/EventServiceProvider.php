@@ -43,12 +43,14 @@ class EventServiceProvider extends ServiceProvider
          * User Administration Events
          */
         'App\Events\Admin\UserCreatedEvent' => [
-
             'App\Listeners\Notify\NotifyNewUser',
             'App\Listeners\Admin\CreateUserSettingsEntry',
         ],
         'App\Events\Admin\UserRoleCreatedEvent' => [
             'App\Listeners\Admin\CreateRolePermissions',
+        ],
+        'App\Events\Admin\UserRoleUpdatedEvent' => [
+            'App\Listeners\Admin\UpdateRolePermissions',
         ],
     ];
 

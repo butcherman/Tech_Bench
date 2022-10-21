@@ -1,4 +1,5 @@
 <template>
+    <Head title="View Role" />
     <App>
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -32,11 +33,21 @@
                                 as="button"
                                 :href="route('admin.users.roles.edit', role.role_id)"
                                 type="button"
-                                class="btn btn-primary w-50"
+                                class="btn btn-primary w-50 m-1"
                                 :disabled="!role.allow_edit"
                             >
                                 {{ !role.allow_edit ? 'Cannot Edit A Default Role' : 'Edit Role' }}
                             </Link>
+                        </div>
+                        <div class="text-center">
+                            <button
+                                type="button"
+                                class="btn btn-danger w-50 m-1"
+                                :disabled="!role.allow_edit"
+                                @click="verifyDelete"
+                            >
+                            {{ !role.allow_edit ? 'Cannot Delete A Default Role' : 'Delete Role' }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -47,13 +58,26 @@
 
 <script setup lang="ts">
     import App                             from '@/Layouts/app.vue';
+    import { verifyModal }                 from '@/Modules/verifyModal.module';
+    import { Inertia }                     from '@inertiajs/inertia';
     import type { userRolePermissionsType,
                   userRoleType }           from '@/Types';
 
-    defineProps<{
-        role: userRoleType;
+    const props = defineProps<{
+        role       : userRoleType;
         permissions: {
             [key:string]:userRolePermissionsType[];
         }
     }>();
+
+    const verifyDelete = () => {
+        verifyModal('This cannot be undone').then(res => {
+            if(res)
+            {
+                Inertia.delete(route('admin.users.roles.destroy', props.role.role_id), {
+                    onFinish: () => console.log('all done'),
+                });
+            }
+        });
+    }
 </script>

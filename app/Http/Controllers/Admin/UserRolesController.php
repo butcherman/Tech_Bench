@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\Admin\UserRoleCreatedEvent;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRoleRequest;
+use App\Events\Admin\UserRoleCreatedEvent;
+use App\Events\Admin\UserRoleUpdatedEvent;
+use App\Models\UserRoles;
 use App\Models\UserRolePermissions;
 use App\Models\UserRolePermissionTypes;
-use App\Models\UserRoles;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
+use Illuminate\Database\QueryException;
 
 class UserRolesController extends Controller
 {
@@ -69,31 +71,56 @@ class UserRolesController extends Controller
     /**
      * Show the form for editing the specified role
      */
-    public function edit($id)
+    public function edit(UserRoles $role)
     {
-        return Inertia::render('Admin/Roles/Edit');
+        return Inertia::render('Admin/Roles/Edit', [
+            'role'        => $role,
+            'permissions' => UserRolePermissions::with('UserRolePermissionTypes')
+                                ->where('role_id', $role->role_id)
+                                ->get()
+                                ->groupBy('UserRolePermissionTypes.group'),
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update the specified role
      */
-    public function update(Request $request, $id)
+    public function update(UserRoleRequest $request, UserRoles $role)
     {
-        //
+        $role->update($request->only(['name', 'description']));
+        Log::stack(['daily', 'user'])->info('Role - '.$role->name.' has been updated by '.$request->user()->username);
+
+        UserRoleUpdatedEvent::dispatch($role, $request->except(['name', 'description']));
+        return redirect(route('admin.users.roles.show', $role->role_id))->with('success', __('admin.user.role_updated'));
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Remove the specified role
      */
-    public function destroy($id)
+    public function destroy(UserRoles $role)
     {
-        //
+        $this->authorize('delete', $role);
+
+        try
+        {
+            $role->delete();
+        }
+        catch(QueryException $e)
+        {
+            if($e->errorInfo[1] === 19)
+            {
+                Log::stack(['daily', 'user'])->error('Unable to delete Role '.$role->name.'.  It is currently in use');
+                return back()->withErrors([
+                    'error' => __('admin.user.role_in_use'),
+                    // 'link'  => '<a html="#">More Info</a>',
+                ]);
+            }
+
+            Log::stack(['daily', 'user'])->error('Error when trying to delete Role '.$role->name, $e->errorInfo);
+            return back()->withErrors(['error' => __('admin.user.delete_failed')]);
+        }
+
+        Log::stack(['daily', 'user'])->notice('Role '.$role->name.' has been deleted by '.Auth::user()->username);
+        return redirect(route('admin.users.roles.index'))->with('success', __('admin.user.role_deleted'));
     }
 }

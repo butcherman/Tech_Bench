@@ -10,7 +10,10 @@ class UserRolePermissions extends Model
     use HasFactory;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    protected $hidden  = ['created_at', 'updated_at', 'id'];
+    protected $hidden  = ['role_id', 'created_at', 'updated_at', 'id'];
+    protected $casts   = [
+        'allow' => 'boolean',
+    ];
 
     /**
      * User Role Permissions explain what a permission type id is for

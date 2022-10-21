@@ -47,10 +47,10 @@ class UserRolesPolicy
     /**
      * Determine whether the user can delete the model
      */
-    // public function delete(User $user)
-    // {
-    //     return $this->checkPermission($user, 'Manage Permissions');
-    // }
+    public function delete(User $user)
+    {
+        return $this->checkPermission($user, 'Manage Permissions');
+    }
 
     /**
      * Determine whether the user can restore the model
@@ -63,8 +63,8 @@ class UserRolesPolicy
     /**
      * Determine whether the user can permanently delete the model
      */
-    public function forceDelete(User $user)
-    {
-        return $this->checkPermission($user, 'Manage Permissions');
-    }
+    // public function forceDelete(User $user)
+    // {
+    //     return $this->checkPermission($user, 'Manage Permissions');
+    // }
 }

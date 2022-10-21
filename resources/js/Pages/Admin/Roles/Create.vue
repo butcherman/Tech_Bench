@@ -1,4 +1,5 @@
 <template>
+    <Head title="Create Role" />
     <App>
         <div class="row justify-content-center">
             <div class="col-md-8">
