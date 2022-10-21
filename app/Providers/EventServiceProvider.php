@@ -40,6 +40,13 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         /**
+         * Office 365 Authentication Events
+         */
+        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+            \SocialiteProviders\Microsoft\MicrosoftExtendSocialite::class.'@handle',
+        ],
+
+        /**
          * User Administration Events
          */
         'App\Events\Admin\UserCreatedEvent' => [

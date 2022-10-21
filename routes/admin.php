@@ -37,8 +37,7 @@ use App\Http\Controllers\Admin\UserPasswordController;
 use App\Http\Controllers\Admin\UserPasswordPolicyController;
 use App\Models\UserRoles;
 
-Route::middleware('auth')->prefix('administration')->name('admin.')->group(function()
-{
+Route::middleware('auth')->prefix('administration')->name('admin.')->group(function() {
     Route::get('/', AdminIndexController::class)
         ->name('index')
         ->breadcrumb('Administration');
@@ -46,8 +45,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * User Admin Routes
      */
-    Route::prefix('users')->name('users.')->group(function()
-    {
+    Route::prefix('users')->name('users.')->group(function()     {
         Route::get('{user}/enable',   [UserController::class, 'enable'])
             ->name('enable')
             ->withTrashed();
@@ -61,24 +59,21 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
             ->name('disabled')
             ->breadcrumb('Disabled Users', 'admin.users.index');
 
-        Route::resource('password-policy', UserPasswordPolicyController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-        {
+        Route::resource('password-policy', UserPasswordPolicyController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Password Policy', 'admin.users.index');
         });
 
         Route::get('{role}/copy', [UserRolesController::class, 'copy'])
                 ->name('roles.copy')
                 ->breadcrumb('New Role', 'admin.users.roles.index');
-        Route::resource('roles', UserRolesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-        {
+        Route::resource('roles', UserRolesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Roles', 'admin.users.index');
             $breadcrumbs->create('New Role', 'admin.users.roles.index');
             $breadcrumbs->show('View Role', 'admin.users.roles.index');
             $breadcrumbs->edit('Edit Role', 'admin.users.roles.show');
         });
     });
-    Route::resource('users', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-    {
+    Route::resource('users', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->index('Select User', 'admin.index');
         $breadcrumbs->create('New User', 'admin.users.index');
         $breadcrumbs->edit('Edit User', 'admin.users.index');

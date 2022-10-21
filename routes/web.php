@@ -9,6 +9,7 @@
  */
 
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
@@ -23,10 +24,22 @@ use App\Http\Controllers\User\UpdateNotificationsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
 /**
+ * Socialite Routes
+ */
+Route::get('auth/redirect', function() {
+    return Socialite::driver('microsoft')->redirect();
+});
+
+Route::get('auth/callback', function() {
+    $user = Socialite::driver('microsoft')->user();
+
+    dd($user);
+});
+
+/**
 *   Standard Routes for users that have been successfully Authenticated
 */
-Route::middleware('auth')->group(function()
-{
+Route::middleware('auth')->group(function() {
     Route::get('dashboard', DashboardController::class)
         ->name('dashboard')
         ->breadcrumb('Dashboard');
@@ -34,8 +47,7 @@ Route::middleware('auth')->group(function()
         ->name('about')
         ->breadcrumb('About Tech Bench', 'dashboard');
 
-    Route::prefix('settings')->name('settings.')->group(function()
-    {
+    Route::prefix('settings')->name('settings.')->group(function()     {
         Route::get('/', UserSettingsController::class)
             ->name('index')
             ->breadcrumb('Settings', 'dashboard');
