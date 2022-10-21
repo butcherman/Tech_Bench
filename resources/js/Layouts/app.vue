@@ -174,19 +174,17 @@
     import { usePage }       from '@inertiajs/inertia-vue3';
     import { Inertia }       from '@inertiajs/inertia';
 
-    import type { pageInterface } from '@/Types';
+    import { pageInterface, appProps, navBarProps, notifciationProps, breadcrumbsType, errorType, flashProps } from '@/Types';
 
-    interface errorType {
-        [key:string]: string;
-    }
 
-    const app          = computed(() => usePage<pageInterface>().props.value.app);
-    const navBar       = computed(() => usePage<pageInterface>().props.value.navbar);
-    const notif        = computed(() => usePage<pageInterface>().props.value.notifications);
-    const breadcrumbs  = computed(() => usePage<pageInterface>().props.value.breadcrumbs);
-    const errors       = computed<errorType>(() => usePage<pageInterface>().props.value.errors);
-    const warning      = computed(() => usePage<pageInterface>().props.value.flash.warning);
-    const success      = computed(() => usePage<pageInterface>().props.value.flash.success);
+
+    const app          = computed<appProps>         (() => usePage<pageInterface>().props.value.app);
+    const navBar       = computed<navBarProps[]>    (() => usePage<pageInterface>().props.value.navbar);
+    const notif        = computed<notifciationProps>(() => usePage<pageInterface>().props.value.notifications);
+    const breadcrumbs  = computed<breadcrumbsType[]>(() => usePage<pageInterface>().props.value.breadcrumbs);
+    const errors       = computed<errorType>        (() => usePage<pageInterface>().props.value.errors);
+    const warning      = computed<string | null>    (() => usePage<pageInterface>().props.value.flash.warning);
+    const success      = computed<string | null>    (() => usePage<pageInterface>().props.value.flash.success);
 
     const navbarActive = ref(false);
 

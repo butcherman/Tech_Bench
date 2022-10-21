@@ -46,3 +46,7 @@ interface fileDataType {
     maxSize  : number;
     token    : string;
 }
+
+interface errorType {
+    [key:string]: string;
+}
