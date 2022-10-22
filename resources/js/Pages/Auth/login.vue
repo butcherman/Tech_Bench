@@ -28,6 +28,7 @@
                 >
                     Forgot Your Password?
                 </Link>
+                <a :href="route('azure-login')">Office 365 Login</a>
             </div>
         </div>
     </AuthLayout>

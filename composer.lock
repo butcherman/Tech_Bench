@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72b3bff1ec8d0735961dd6c26d29a208",
+    "content-hash": "69d231857cd1d59dd9ebfb75d6bfcb65",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -4601,28 +4601,28 @@
             "time": "2022-09-02T10:20:10+00:00"
         },
         {
-            "name": "socialiteproviders/microsoft",
-            "version": "4.2.0",
+            "name": "socialiteproviders/microsoft-azure",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/SocialiteProviders/Microsoft.git",
-                "reference": "a29ead01978fbfc10e6e6acac03467bb4eb27944"
+                "url": "https://github.com/SocialiteProviders/Microsoft-Azure.git",
+                "reference": "7522b27cd8518706b50e03b40a396fb0a6891feb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SocialiteProviders/Microsoft/zipball/a29ead01978fbfc10e6e6acac03467bb4eb27944",
-                "reference": "a29ead01978fbfc10e6e6acac03467bb4eb27944",
+                "url": "https://api.github.com/repos/SocialiteProviders/Microsoft-Azure/zipball/7522b27cd8518706b50e03b40a396fb0a6891feb",
+                "reference": "7522b27cd8518706b50e03b40a396fb0a6891feb",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.4 || ^8.0",
+                "php": "^7.2 || ^8.0",
                 "socialiteproviders/manager": "~4.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "SocialiteProviders\\Microsoft\\": ""
+                    "SocialiteProviders\\Azure\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4631,12 +4631,13 @@
             ],
             "authors": [
                 {
-                    "name": "Brian Faust",
-                    "email": "hello@brianfaust.de"
+                    "name": "Chris Hemmings",
+                    "email": "chris@hemmin.gs"
                 }
             ],
-            "description": "Microsoft OAuth2 Provider for Laravel Socialite",
+            "description": "Microsoft Azure OAuth2 Provider for Laravel Socialite",
             "keywords": [
+                "azure",
                 "laravel",
                 "microsoft",
                 "oauth",
@@ -4644,11 +4645,11 @@
                 "socialite"
             ],
             "support": {
-                "docs": "https://socialiteproviders.com/microsoft",
+                "docs": "https://socialiteproviders.com/microsoft-azure",
                 "issues": "https://github.com/socialiteproviders/providers/issues",
                 "source": "https://github.com/socialiteproviders/providers"
             },
-            "time": "2022-09-02T10:07:27+00:00"
+            "time": "2022-03-15T21:17:43+00:00"
         },
         {
             "name": "spatie/db-dumper",

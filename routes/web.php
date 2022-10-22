@@ -27,11 +27,11 @@ use Glhd\Gretel\Routing\ResourceBreadcrumbs;
  * Socialite Routes
  */
 Route::get('auth/redirect', function() {
-    return Socialite::driver('microsoft')->redirect();
-});
+    return Socialite::driver('azure')->redirect();
+})->name('azure-login');
 
-Route::get('auth/callback', function() {
-    $user = Socialite::driver('microsoft')->user();
+Route::get('auth/callback2', function() {
+    $user = Socialite::driver('azure')->user();
 
     dd($user);
 });
