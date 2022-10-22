@@ -30,18 +30,17 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    // 'microsoft' => [
-    //     'client_id'     => env('MICROSOFT_CLIENT_ID'),
-    //     'client_secret' => env('MICROSOFT_CLIENT_SECRET'),
-    //     'redirect'      => env('MICROSOFT_REDIRECT_URI')
-    //   ],
-
+    /**
+     * Office 365/Microsoft Azure Login
+     */
     'azure' => [
-        'client_id' => env('AZURE_CLIENT_ID'),
-        'client_secret' => env('AZURE_CLIENT_SECRET'),
-        'redirect' => env('AZURE_REDIRECT_URI'),
-        'tenant' => env('AZURE_TENANT_ID'),
-        'proxy' => env('PROXY')  // optionally
+        'allow_login'     => env('AZURE_ALLOW_LOGIN', false),
+        'allow_register'  => env('AZURE_ALLOW_REGISTER', false),
+        'default_role_id' => env('AZURE_DEFAULT_ROLE_ID', 4),
+        'client_id'       => env('AZURE_CLIENT_ID'),
+        'client_secret'   => env('AZURE_CLIENT_SECRET'),
+        'redirect'        => env('AZURE_REDIRECT_URI'),
+        'tenant'          => env('AZURE_TENANT_ID'),
     ],
 
 ];

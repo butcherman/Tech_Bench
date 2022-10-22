@@ -8,6 +8,7 @@
  *              This may be changed later.
  */
 
+use App\Http\Controllers\Auth\SocialiteController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -22,19 +23,6 @@ use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\UpdateAccountController;
 use App\Http\Controllers\User\UpdateNotificationsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
-
-/**
- * Socialite Routes
- */
-Route::get('auth/redirect', function() {
-    return Socialite::driver('azure')->redirect();
-})->name('azure-login');
-
-Route::get('auth/callback2', function() {
-    $user = Socialite::driver('azure')->user();
-
-    dd($user);
-});
 
 /**
 *   Standard Routes for users that have been successfully Authenticated

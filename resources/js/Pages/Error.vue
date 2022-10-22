@@ -26,7 +26,8 @@
     import { ref, computed } from 'vue';
 
     const props = defineProps<{
-        status: number;
+        status : number;
+        message: string;
     }>();
 
     const title = computed(() => {
@@ -44,7 +45,8 @@
             500: 'Whoops, something bad happened.  Our minions are hard at work to determine what went wrong',
             503: 'We are working behind the curtain to make things better.  Please try again later',
             404: 'Well this is embarrassing.  I cannot seem to find the page you are looking for',
-            403: 'Looks like you are trying to access an area you do not have permissions for',
+            403: props.message ? props.message
+                    : 'Looks like you are trying to access an area you do not have permissions for',
             429: 'Too many requests have been made.  You must wait at least 2 hours to try again',
         }[props.status];
     });
