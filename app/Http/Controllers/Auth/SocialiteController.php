@@ -17,7 +17,12 @@ class SocialiteController extends Controller
      */
     public function redirectAuth()
     {
-        return Socialite::driver('azure')->redirect();
+        if(config('services.azure.allow_login'))
+        {
+            return Socialite::driver('azure')->redirect();
+        }
+
+        return abort(404);
     }
 
     /**
@@ -25,6 +30,11 @@ class SocialiteController extends Controller
      */
     public function callback()
     {
+        if(!config('services.azure.allow_login'))
+        {
+            return abort(404);
+        }
+
         $socUser   = Socialite::driver('azure')->user();
         $socialite = new SocialiteAuthorization;
         $user      = $socialite->processUser($socUser);
