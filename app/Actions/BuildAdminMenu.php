@@ -226,33 +226,33 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        // if($this->checkPermission($this->user, 'App Settings'))
-        // {
-        //     $nav = [
-        //         'Manage Application Settings' => [
-        //             [
-        //                 'name' => 'Application Logo',
-        //                 'icon' => 'fas fa-image',
-        //                 'link' => route('admin.get-logo'),
-        //             ],
-        //             [
-        //                 'name' => 'Application Configuration',
-        //                 'icon' => 'fas fa-server',
-        //                 'link' => route('admin.get-config'),
-        //             ],
-        //             [
-        //                 'name' => 'Email Settings',
-        //                 'icon' => 'fas fa-envelope',
-        //                 'link' => route('admin.get-email'),
-        //             ],
-        //             // [
-        //             //     'name' => 'Add On Modules',
-        //             //     'icon' => 'fas fa-cubes',
-        //             //     'link' => route('admin.modules.index'),
-        //             // ],
-        //         ],
-        //     ];
-        // }
+        if($this->checkPermission($this->user, 'App Settings'))
+        {
+            $nav = [
+                'Manage Application Settings' => [
+                    [
+                        'name' => 'Application Logo',
+                        'icon' => 'fas fa-image',
+                        'link' => '#', // route('admin.get-logo'),
+                    ],
+                    [
+                        'name' => 'Application Configuration',
+                        'icon' => 'fas fa-server',
+                        'link' => route('admin.get-config'),
+                    ],
+                    [
+                        'name' => 'Email Settings',
+                        'icon' => 'fas fa-envelope',
+                        'link' => '#', // route('admin.get-email'),
+                    ],
+                    // [
+                    //     'name' => 'Add On Modules',
+                    //     'icon' => 'fas fa-cubes',
+                    //     'link' => route('admin.modules.index'),
+                    // ],
+                ],
+            ];
+        }
 
         return $nav;
     }

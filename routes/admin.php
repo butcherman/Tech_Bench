@@ -4,14 +4,17 @@ use Illuminate\Support\Facades\Route;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
 use App\Http\Controllers\Admin\AdminIndexController;
+//  User Controllers
+use App\Http\Controllers\Admin\User\UserController;
+use App\Http\Controllers\Admin\User\UserRolesController;
+use App\Http\Controllers\Admin\User\UserDisabledController;
+use App\Http\Controllers\Admin\User\UserPasswordController;
+use App\Http\Controllers\Admin\User\UserPasswordPolicyController;
+
+
+
 
 use App\Http\Controllers\Admin\BackupController;
-
-use App\Http\Controllers\Admin\GetPasswordPolicyController;
-use App\Http\Controllers\Admin\SetPasswordPolicyController;
-
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\UserRolesController;
 use App\Http\Controllers\Admin\ReactivateUserController;
 use App\Http\Controllers\Admin\DeactivatedUserController;
 
@@ -32,13 +35,9 @@ use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
 use App\Http\Controllers\Admin\Modules\ModuleIndexController;
 use App\Http\Controllers\Admin\Modules\DownloadModuleController;
 use App\Http\Controllers\Admin\Modules\GetModulesOnlineController;
-use App\Http\Controllers\Admin\UserDisabledController;
-use App\Http\Controllers\Admin\UserPasswordController;
-use App\Http\Controllers\Admin\UserPasswordPolicyController;
-use App\Models\UserRoles;
 
-Route::middleware('auth')->prefix('administration')->name('admin.')->group(function()
-{
+
+Route::middleware('auth')->prefix('administration')->name('admin.')->group(function() {
     Route::get('/', AdminIndexController::class)
         ->name('index')
         ->breadcrumb('Administration');
@@ -46,8 +45,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * User Admin Routes
      */
-    Route::prefix('users')->name('users.')->group(function()
-    {
+    Route::prefix('users')->name('users.')->group(function()     {
         Route::get('{user}/enable',   [UserController::class, 'enable'])
             ->name('enable')
             ->withTrashed();
@@ -61,65 +59,33 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
             ->name('disabled')
             ->breadcrumb('Disabled Users', 'admin.users.index');
 
-        Route::resource('password-policy', UserPasswordPolicyController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-        {
+        Route::resource('password-policy', UserPasswordPolicyController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Password Policy', 'admin.users.index');
         });
 
         Route::get('{role}/copy', [UserRolesController::class, 'copy'])
                 ->name('roles.copy')
                 ->breadcrumb('New Role', 'admin.users.roles.index');
-        Route::resource('roles', UserRolesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-        {
+        Route::resource('roles', UserRolesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Roles', 'admin.users.index');
             $breadcrumbs->create('New Role', 'admin.users.roles.index');
             $breadcrumbs->show('View Role', 'admin.users.roles.index');
             $breadcrumbs->edit('Edit Role', 'admin.users.roles.show');
         });
     });
-    Route::resource('users', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-    {
+    Route::resource('users', UserController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->index('Select User', 'admin.index');
         $breadcrumbs->create('New User', 'admin.users.index');
         $breadcrumbs->edit('Edit User', 'admin.users.index');
     });
-
-
-    // Route::get('deactivated-users', DeactivatedUserController::class)->name('deactivated-users')    ->breadcrumb('Disabled Users', '.index');
-    // Route::get('{user}/activate',   ReactivateUserController::class) ->name('reactivate-user')      ->breadcrumb('Active Users', '.index');
-    // Route::get('password-policy',   GetPasswordPolicyController::class)->name('password-policy')    ->breadcrumb('Password Policy', '.index');
-    // Route::put('password-policy',   SetPasswordPolicyController::class)->name('set-password-policy');
-
-    // Route::resource('user', UserController::class)
-    //     ->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-    //     {
-    //         $breadcrumbs->index('Users', 'admin.index');
-    //         $breadcrumbs->create('New User', '.index');
-    //         $breadcrumbs->edit('Edit User', '.index');
-    //     });
-
-
-
-    /**
-     * User Roles and Permission Routes
-     */
-    // Route::prefix('user-roles')->name('user-roles.')->group(function()
-    // {
-    //     Route::get('/',                  [UserRolesController::class, 'index'])  ->name('index') ->breadcrumb('Roles', 'admin.index');
-    //     Route::get('create/{baseline?}', [UserRolesController::class, 'create']) ->name('create')->breadcrumb('New Role', '.index');
-    //     Route::get('{role}/edit',        [UserRolesController::class, 'edit'])   ->name('edit')  ->breadcrumb('Edit Role', '.index');
-    //     Route::put('{role}/edit',        [UserRolesController::class, 'update']) ->name('update');
-    //     Route::post('store',             [UserRolesController::class, 'store'])   ->name('store');
-    //     Route::delete('{role}',          [UserRolesController::class, 'destroy'])->name('destroy');
-    // });
 
     /**
      * Application Administration Routes
      */
     // Route::get( 'logo',             GetLogoController::class)         ->name('get-logo')  ->breadcrumb('App Logo', '.index');
     // Route::post('logo',             SetLogoController::class)         ->name('set-logo');
-    // Route::get( 'config',           GetConfigController::class)       ->name('get-config')->breadcrumb('App Configuration', '.index');
-    // Route::post('config',           SetConfigController::class)       ->name('set-config');
+    Route::get( 'config', GetConfigController::class)->name('get-config')->breadcrumb('App Configuration', '.index');
+    Route::post('config', SetConfigController::class)->name('set-config');
     // Route::get( 'email',            GetEmailSettingsController::class)->name('get-email') ->breadcrumb('Email Settings', '.index');
     // Route::post('email',            SetEmailSettingsController::class)->name('set-email');
     // Route::get( 'test-email',       SendTestEmailController::class)   ->name('test-email');

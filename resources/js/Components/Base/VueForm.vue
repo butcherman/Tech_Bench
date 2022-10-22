@@ -29,7 +29,7 @@
     }>();
 
     const isSubmitting     = ref(false);
-    const { handleSubmit } = useVeeForm({
+    const { handleSubmit, setFieldValue } = useVeeForm({
         validationSchema: props.validationSchema,
         initialValues   : props.initialValues ? props.initialValues : {},
     });
@@ -44,7 +44,7 @@
         isSubmitting.value = false;
     }
 
-    defineExpose({ endSubmit : _endSubmit });
+    defineExpose({ endSubmit : _endSubmit, setFieldValue : setFieldValue });
 </script>
 
 <style scoped lang="scss">

@@ -63,6 +63,7 @@ return [
          */
         Barryvdh\DomPDF\ServiceProvider::class,
         ZanySoft\Zip\ZipServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
 
         /*
          * Application Service Providers...

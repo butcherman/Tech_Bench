@@ -12,13 +12,9 @@
 </template>
 
 <script setup lang="ts">
-    import { toRef, computed } from 'vue';
-    import { useField }           from 'vee-validate';
-
-    import type { Ref }           from 'vue';
+    import { toRef }                 from 'vue';
+    import { useField }              from 'vee-validate';
     import type { optionListObject } from '@/Types';
-
-
 
     const props = defineProps<{
         id        : string;
@@ -44,6 +40,5 @@
     }
 
     const nameRef                 = toRef(props, 'name');
-    const { errorMessage, value }:
-          { errorMessage:Ref<string>, value:Ref<string>} = useField(nameRef);
+    const { errorMessage, value } = useField(nameRef);
 </script>
