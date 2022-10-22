@@ -238,7 +238,7 @@ class BuildAdminMenu
                     [
                         'name' => 'Application Configuration',
                         'icon' => 'fas fa-server',
-                        'link' => '#', // route('admin.get-config'),
+                        'link' => route('admin.get-config'),
                     ],
                     [
                         'name' => 'Email Settings',
