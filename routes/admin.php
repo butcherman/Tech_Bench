@@ -4,12 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
 use App\Http\Controllers\Admin\AdminIndexController;
-
-use App\Http\Controllers\Admin\BackupController;
-
-// use App\Http\Controllers\Admin\GetPasswordPolicyController;
-// use App\Http\Controllers\Admin\SetPasswordPolicyController;
-
+//  User Controllers
 use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\User\UserRolesController;
 use App\Http\Controllers\Admin\User\UserDisabledController;
@@ -17,6 +12,9 @@ use App\Http\Controllers\Admin\User\UserPasswordController;
 use App\Http\Controllers\Admin\User\UserPasswordPolicyController;
 
 
+
+
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\ReactivateUserController;
 use App\Http\Controllers\Admin\DeactivatedUserController;
 
@@ -86,8 +84,8 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
      */
     // Route::get( 'logo',             GetLogoController::class)         ->name('get-logo')  ->breadcrumb('App Logo', '.index');
     // Route::post('logo',             SetLogoController::class)         ->name('set-logo');
-    Route::get( 'config',           GetConfigController::class)       ->name('get-config')->breadcrumb('App Configuration', '.index');
-    // Route::post('config',           SetConfigController::class)       ->name('set-config');
+    Route::get( 'config', GetConfigController::class)->name('get-config')->breadcrumb('App Configuration', '.index');
+    Route::post('config', SetConfigController::class)->name('set-config');
     // Route::get( 'email',            GetEmailSettingsController::class)->name('get-email') ->breadcrumb('Email Settings', '.index');
     // Route::post('email',            SetEmailSettingsController::class)->name('set-email');
     // Route::get( 'test-email',       SendTestEmailController::class)   ->name('test-email');

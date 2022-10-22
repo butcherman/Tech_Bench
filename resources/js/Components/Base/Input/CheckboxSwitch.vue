@@ -18,7 +18,6 @@
 <script setup lang="ts">
     import { toRef } from 'vue';
     import { useField }           from 'vee-validate';
-    import type { Ref }           from 'vue';
 
     const props = defineProps<{
         id    : string;

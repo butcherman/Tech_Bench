@@ -10,4 +10,5 @@ return [
         'delete_failed' => 'Unable to delete, please check logs for more details',
     ],
     'password_policy' => 'Password Policy updated',
+    'config_updated'  => 'Application Configuration updated successfully',
 ];
