@@ -8,7 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Laravel\Socialite\Facades\Socialite;
 
 /**
- * codeCoverageIgnore
+ * @codeCoverageIgnore
  */
 class SocialiteController extends Controller
 {
