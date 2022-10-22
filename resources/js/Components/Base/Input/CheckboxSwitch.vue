@@ -9,7 +9,9 @@
             :unchecked-value="false"
         />
         <label :for="id" class="form-check-label">
-            {{ label }}
+            <slot name="label">
+                {{ label }}
+            </slot>
         </label>
         <span class="text-danger">{{ errorMessage }}</span>
     </div>

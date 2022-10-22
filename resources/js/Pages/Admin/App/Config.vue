@@ -24,14 +24,25 @@
                                 :option-list="tz_list"
                             />
                             <div class="row justify-content-center">
-                                <div class="col-md-5">
+                                <div class="col-md-7">
                                     <CheckboxSwitch
                                         id="oath-login"
                                         name="allowOath"
+                                        class="d-inline-block"
                                         label="Allow Office 365 Login"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#oath-form-data"
-                                    />
+                                    >
+                                    </CheckboxSwitch>
+                                    &nbsp;
+                                    <span
+                                        title="What is this?"
+                                        class="pointer pl-2 text-primary"
+                                        @click.prevent="showHelp('allowOath')"
+                                        v-tooltip
+                                    >
+                                        <fa-icon icon="fa-circle-question" />
+                                    </span>
                                 </div>
                             </div>
                             <div class="row justify-content-center">
@@ -45,8 +56,18 @@
                                             <CheckboxSwitch
                                                 id="oath-register"
                                                 name="allowRegister"
+                                                class="d-inline-block"
                                                 label="Allow anyone in my organization to login"
                                             />
+                                            &nbsp;
+                                            <span
+                                                title="What is this?"
+                                                class="pointer pl-2 text-primary"
+                                                @click.prevent="showHelp('allowRegister')"
+                                                v-tooltip
+                                            >
+                                                <fa-icon icon="fa-circle-question" />
+                                            </span>
                                         </div>
                                     </div>
                                     <TextInput
@@ -99,6 +120,7 @@
     import RangeInput             from '@/Components/Base/Input/RangeInput.vue';
     import { ref }                from 'vue';
     import { useForm }            from '@inertiajs/inertia-vue3';
+    import { helpModal }          from '@/Modules/helpModal.module';
     import * as yup               from 'yup';
 
     interface settingsType {
@@ -159,5 +181,28 @@
 
     const updateRedirectUri = (newUri:string) => {
         configForm.value?.setFieldValue('redirectUri', `${newUri}/auth/callback`);
+    }
+
+    const showHelp = (type:string) => {
+        helpModal(getHelpMsg(type), {
+            title: 'What is this?',
+        });
+    }
+
+    const getHelpMsg = (type:string):string => {
+        let msg = '';
+
+        switch(type)
+        {
+            case 'allowOath':
+                msg = 'Allow users to use their Microsoft Office 365 credentials to log into the Tech Bench';
+                break;
+            case 'allowRegister':
+                msg = 'When set, any user in your orginazition can log in using their Microsoft Office 365 '+
+                      'Credentials.  With this option turned off, only users you manually create can use their '+
+                      'Microsoft Office 365 Credentials to login';
+        }
+
+        return msg;
     }
 </script>
