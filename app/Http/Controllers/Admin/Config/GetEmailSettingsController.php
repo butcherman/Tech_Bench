@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\AppSettings;
 
 class GetEmailSettingsController extends Controller
 {
@@ -13,6 +14,8 @@ class GetEmailSettingsController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         return Inertia::render('Admin/App/Email', [
             'settings' => [
                 'host'         => config('mail.mailers.smtp.host'),

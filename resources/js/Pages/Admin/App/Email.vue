@@ -80,6 +80,7 @@
                                 <span v-if="testEmailDisable" class="spinner-border spinner-border-sm" />
                                 Send Test Email
                             </Link>
+                            <p><strong>Note:</strong> You must save the email settings before sending a test email</p>
                         </div>
                     </div>
                 </div>
