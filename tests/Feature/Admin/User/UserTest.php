@@ -1,16 +1,12 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature\Admin\User;
 
+use Tests\TestCase;
+use Illuminate\Support\Facades\Event;
 use App\Events\Admin\UserCreatedEvent;
 use App\Listeners\Notify\NotifyNewUser;
-use Tests\TestCase;
-
 use App\Models\User;
-use App\Notifications\User\SendWelcomeEmail;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Queue;
 
 class UserTest extends TestCase
 {
