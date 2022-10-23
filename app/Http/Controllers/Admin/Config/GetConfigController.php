@@ -24,8 +24,7 @@ class GetConfigController extends Controller
                 'allowRegister' => (bool) config('services.azure.allow_register'),
                 'tenantId'      => config('services.azure.tenant'),
                 'clientId'      => config('services.azure.client_id'),
-                'clientSecret'  => config('services.azure.client_secret') ?
-                                        'This Is A Really Long String To Confuse You' : '',
+                'clientSecret'  => config('services.azure.client_secret') ? __('admin.fake_password') : '',
                 'redirectUri'   => config('app.url').'/auth/callback',
             ],
             'tz_list' => \Timezonelist::toArray(),

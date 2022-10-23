@@ -12,10 +12,13 @@ trait AppSettingsTrait
     //  Save an individual setting into the database so that it can be modified from the hard coded setting
     protected function saveSettings($key, $value)
     {
-        AppSettings::firstOrCreate(
-            ['key'   => $key],
-            ['value' => $value]
-        )->update(['value' => $value]);
+        if($value !== __('admin.fake_password'))
+        {
+            AppSettings::firstOrCreate(
+                ['key'   => $key],
+                ['value' => $value]
+            )->update(['value' => $value]);
+        }
     }
 
     //  Array must be in the form of ['key' => 'value] in order to be properly updated

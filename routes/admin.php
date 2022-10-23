@@ -10,19 +10,22 @@ use App\Http\Controllers\Admin\User\UserRolesController;
 use App\Http\Controllers\Admin\User\UserDisabledController;
 use App\Http\Controllers\Admin\User\UserPasswordController;
 use App\Http\Controllers\Admin\User\UserPasswordPolicyController;
-
-
+//  App Configuration Controllers
+use App\Http\Controllers\Admin\Config\GetConfigController;
+use App\Http\Controllers\Admin\Config\SetConfigController;
+use App\Http\Controllers\Admin\Config\GetEmailSettingsController;
+use App\Http\Controllers\Admin\Config\SetEmailSettingsController;
+use App\Http\Controllers\Admin\Config\SendTestEmailController;
 
 
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\ReactivateUserController;
 use App\Http\Controllers\Admin\DeactivatedUserController;
 
-use App\Http\Controllers\Admin\Config\GetConfigController;
-use App\Http\Controllers\Admin\Config\SetConfigController;
-use App\Http\Controllers\Admin\Email\SendTestEmailController;
-use App\Http\Controllers\Admin\Email\GetEmailSettingsController;
-use App\Http\Controllers\Admin\Email\SetEmailSettingsController;
+
+
+
+
 
 use App\Http\Controllers\Admin\Logo\GetLogoController;
 use App\Http\Controllers\Admin\Logo\SetLogoController;
@@ -84,11 +87,16 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
      */
     // Route::get( 'logo',             GetLogoController::class)         ->name('get-logo')  ->breadcrumb('App Logo', '.index');
     // Route::post('logo',             SetLogoController::class)         ->name('set-logo');
-    Route::get( 'config', GetConfigController::class)->name('get-config')->breadcrumb('App Configuration', '.index');
-    Route::post('config', SetConfigController::class)->name('set-config');
-    // Route::get( 'email',            GetEmailSettingsController::class)->name('get-email') ->breadcrumb('Email Settings', '.index');
-    // Route::post('email',            SetEmailSettingsController::class)->name('set-email');
-    // Route::get( 'test-email',       SendTestEmailController::class)   ->name('test-email');
+    Route::get( 'config',     GetConfigController::class)->name('get-config')->breadcrumb('App Configuration', '.index');
+    Route::post('config',     SetConfigController::class)->name('set-config');
+    Route::get('email',       GetEmailSettingsController::class)->name('get-email')->breadcrumb('Email Settings', '.get-config');
+    Route::post('email',      SetEmailSettingsController::class)->name('set-email');
+    Route::get( 'test-email', SendTestEmailController::class)   ->name('test-email');
+
+
+
+
+
 
     /**
      * Add On Module Administration Routes

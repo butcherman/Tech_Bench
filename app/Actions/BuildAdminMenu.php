@@ -243,7 +243,7 @@ class BuildAdminMenu
                     [
                         'name' => 'Email Settings',
                         'icon' => 'fas fa-envelope',
-                        'link' => '#', // route('admin.get-email'),
+                        'link' => route('admin.get-email'),
                     ],
                     // [
                     //     'name' => 'Add On Modules',

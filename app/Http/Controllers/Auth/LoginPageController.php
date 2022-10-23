@@ -14,7 +14,7 @@ class LoginPageController extends Controller
     public function __invoke(Request $request)
     {
         return Inertia::render('Auth/Login', [
-            'allow_oath' => config('services.azure.allow_login'),
+            'allow_oath' => (bool) config('services.azure.allow_login'),
         ]);
     }
 }

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Application Settings" />
     <App>
         <div class="row justify-content-center">
             <div class="col-md-6">
