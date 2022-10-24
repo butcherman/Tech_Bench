@@ -13,7 +13,10 @@
                 <fa-icon icon="fa-cloud-arrow-up" />
                 {{  label ? label : 'Drag file here or click to select files' }}
             </p>
-            <p v-for="file in fileList" class="text-success text-center w-100">
+            <p
+                v-for="file in fileList"
+                class="text-success text-center w-100"
+            >
                 {{ file.name }}
                 <span
                     class="text-danger pointer"
@@ -23,8 +26,14 @@
                     <fa-icon icon="fa-xmark" />
                 </span>
             </p>
-            <p v-for="file in errorList" class="text-danger border border-danger p-2 w-100 text-center">
-                {{ file.file }} <br />
+            <p
+                v-for="file in errorList"
+                class="text-danger border border-danger p-2 w-100 text-center"
+            >
+                {{ file.file.name }} <br />
+                <span v-for="f in file.errors">
+                    {{ f?.message }}
+                </span>
                 <span class="text-danger pointer" title="Remove File" @click.stop="removeError(file)">
                     <fa-icon icon="fa-xmark" />
                 </span>
@@ -34,9 +43,10 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted, toRef } from 'vue';
-    import { FileRejectReason, useDropzone } from 'vue3-dropzone';
-    import { useField }           from 'vee-validate';
+    import { ref, toRef }            from 'vue';
+    import { useDropzone }           from 'vue3-dropzone';
+    import { useField }              from 'vee-validate';
+    import type { FileRejectReason } from 'vue3-dropzone'
 
     const props = defineProps<{
         name      : string;
@@ -65,10 +75,8 @@
      * Accepted file list
      */
     const fileList = ref<fileListType[]>([]);
-    //  Push additional files to input
     const addFiles = (newFiles:fileListType[]) => {
         newFiles.forEach((file:fileListType) => fileList.value.push(file));
-
         setValue(fileList.value);
     }
     //  Remove specific file from input
@@ -85,22 +93,14 @@
     const addErrors = (newErr:FileRejectReason[]) => {
         newErr.forEach((err:FileRejectReason) => errorList.value.push(err));
     }
-    const removeError = (err) => {
+    //  Remove an error from the list
+    const removeError = (err:FileRejectReason) => {
         let index = errorList.value.findIndex(e => e === err);
         errorList.value.splice(index, 1);
     }
 
-
-
-
-
-
-
-
-    const nameRef = toRef(props, 'name');
-    const { errorMessage, value, setErrors, setValue } = useField(nameRef);
-
-
+    const nameRef      = toRef(props, 'name');
+    const { setValue } = useField(nameRef);
 
     interface fileListType {
         path: string;
@@ -108,11 +108,6 @@
         size: number;
         type: string;
     }
-
-    type fileErrorType = {
-        file: fileListType;
-    } & FileRejectReason;
-
 </script>
 
 <style scoped lang="scss">

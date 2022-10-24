@@ -19,7 +19,7 @@
                         <VueForm
                             ref="logoForm"
                             class="h-100"
-                            :validation-schema="{}"
+                            :validation-schema="validationSchema"
                             @submit="onSubmit"
                         >
                             <DropzoneInput
@@ -27,6 +27,7 @@
                                 input-text="Drag New Logo Here"
                                 file-types="image/*"
                                 :multiple="false"
+                                :max-files="1"
                             />
                         </VueForm>
                     </div>
@@ -37,32 +38,36 @@
 </template>
 
 <script setup lang="ts">
-    import App from '@/Layouts/app.vue';
-    import VueForm from '@/Components/Base/VueForm.vue';
+    import App           from '@/Layouts/app.vue';
+    import VueForm       from '@/Components/Base/VueForm.vue';
     import DropzoneInput from '@/Components/Base/Input/DropzoneInput.vue';
-    import { ref, reactive, onMounted } from 'vue';
-    import { useForm } from '@inertiajs/inertia-vue3';
+    import { ref }       from 'vue';
+    import { useForm }   from '@inertiajs/inertia-vue3';
+    import * as yup      from 'yup';
 
     defineProps<{
         logo: string;
     }>();
-    const logoForm = ref<InstanceType<typeof VueForm> | null>(null);
-    const showForm = ref(true);
-
-
-    // const filesDroped => (files) => {
-    //     console.log(files);
-    // }
-
-
-    const onSubmit = (form) => {
-        const formData = useForm({logo: form.logo[0]});
-        formData.post(route('admin.set-logo'), {
-            onFinish: () => {
-                logoForm.value?.endSubmit();
-                showForm.value = false;
-            },
-        })
+    const logoForm         = ref<InstanceType<typeof VueForm> | null>(null);
+    const showForm         = ref(true);
+    const validationSchema = {
+        logo: yup.array().required(),
     }
 
+    interface logoFormType {
+        logo: {
+            path: string;
+            name: string;
+            size: number;
+            type: string;
+        }[]
+    }
+
+    const onSubmit = (form:logoFormType) => {
+        const formData = useForm({logo: form.logo[0]});
+        formData.post(route('admin.set-logo'), {
+            onFinish : () => logoForm.value?.endSubmit(),
+            onSuccess: () => showForm.value = false
+        })
+    }
 </script>
