@@ -66,3 +66,32 @@ $brk-xxl: map-get($grid-breakpoints, xxl);
 .row {
     padding: 1rem;
 }
+
+/**
+*   Transition/Animation Styles
+*/
+.slide-in-move,
+.slide-in-enter-active,
+.slide-in-leave-active {
+    transition: all 0.5s ease;
+}
+
+.slide-in-enter-from,
+.slide-in-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.slide-in-leave-active {
+    position: absolute;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

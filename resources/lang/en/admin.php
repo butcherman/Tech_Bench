@@ -15,4 +15,5 @@ return [
     'fake_password'      => 'This Is A Really Long String to Make You Think You Can Get A Password',
     'test_email_success' => 'Test Email sent successfully.  Check your inbox',
     'test_email_failure' => 'Test Email Failed',
+    'logo_success'       => 'Logo has been successfully changed',
 ];

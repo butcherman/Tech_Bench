@@ -233,7 +233,7 @@ class BuildAdminMenu
                     [
                         'name' => 'Application Logo',
                         'icon' => 'fas fa-image',
-                        'link' => '#', // route('admin.get-logo'),
+                        'link' => route('admin.get-logo'),
                     ],
                     [
                         'name' => 'Application Configuration',

@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\User\UserDisabledController;
 use App\Http\Controllers\Admin\User\UserPasswordController;
 use App\Http\Controllers\Admin\User\UserPasswordPolicyController;
 //  App Configuration Controllers
+use App\Http\Controllers\Admin\Config\GetLogoController;
+use App\Http\Controllers\Admin\Config\SetLogoController;
 use App\Http\Controllers\Admin\Config\GetConfigController;
 use App\Http\Controllers\Admin\Config\SetConfigController;
 use App\Http\Controllers\Admin\Config\GetEmailSettingsController;
@@ -18,17 +20,13 @@ use App\Http\Controllers\Admin\Config\SetEmailSettingsController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
 
 
+
+
+
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\ReactivateUserController;
 use App\Http\Controllers\Admin\DeactivatedUserController;
 
-
-
-
-
-
-use App\Http\Controllers\Admin\Logo\GetLogoController;
-use App\Http\Controllers\Admin\Logo\SetLogoController;
 use App\Http\Controllers\Admin\Logs\DownloadLogController;
 use App\Http\Controllers\Admin\Logs\ViewLogController;
 use App\Http\Controllers\Admin\Logs\LogFilesController;
@@ -85,8 +83,8 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * Application Administration Routes
      */
-    // Route::get( 'logo',             GetLogoController::class)         ->name('get-logo')  ->breadcrumb('App Logo', '.index');
-    // Route::post('logo',             SetLogoController::class)         ->name('set-logo');
+    Route::get( 'logo',             GetLogoController::class)->name('get-logo')->breadcrumb('App Logo', '.index');
+    Route::post('logo',             SetLogoController::class)->name('set-logo');
     Route::get( 'config',     GetConfigController::class)->name('get-config')->breadcrumb('App Configuration', '.index');
     Route::post('config',     SetConfigController::class)->name('set-config');
     Route::get('email',       GetEmailSettingsController::class)->name('get-email')->breadcrumb('Email Settings', '.get-config');

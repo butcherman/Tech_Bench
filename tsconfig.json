@@ -11,6 +11,10 @@
         "module": "ES2020",
         "strict": true,
         "types": ["vite/client"],
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "importHelpers": true,
         "typeRoots": ["./resources/js/Types/", "./node_modules/@types"]
     }
 }
