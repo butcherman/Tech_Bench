@@ -44,6 +44,19 @@ trait LogUtilitiesTrait
     ];
 
     /**
+     * Check that the selected channel is actually valid
+     */
+    protected function validateChannel($channel)
+    {
+        if(is_null($this->getChannelDetails($channel)))
+        {
+            return abort(404, 'Unable to find the selected Log Channel');
+        }
+
+        return true;
+    }
+
+    /**
      * Get the full details of a channel based on the name
      */
     protected function getChannelDetails($channel)
@@ -71,7 +84,7 @@ trait LogUtilitiesTrait
             }
         }
 
-        return $sorted;
+        return array_reverse($sorted);
     }
 
     /**
@@ -142,7 +155,7 @@ trait LogUtilitiesTrait
     {
         if(!Storage::disk('logs')->exists($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log'))
         {
-            return false;
+            abort(404, 'Unable to find the log file specified');
         }
 
         return file(Storage::disk('logs')->path($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log'));
@@ -209,7 +222,7 @@ trait LogUtilitiesTrait
                 'env'     => $data[3],
                 'level'   => $data[4],
                 'message' => $data[5],
-                'details' => isset($data[6]) ? [json_decode($data[6])] : null,
+                'details' => isset($data[6]) ? json_decode($data[6]) : null,
             ];
         }
 

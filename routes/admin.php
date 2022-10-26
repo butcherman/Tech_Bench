@@ -18,24 +18,25 @@ use App\Http\Controllers\Admin\Config\SetConfigController;
 use App\Http\Controllers\Admin\Config\GetEmailSettingsController;
 use App\Http\Controllers\Admin\Config\SetEmailSettingsController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
-
-
-
-
-
-use App\Http\Controllers\Admin\BackupController;
-use App\Http\Controllers\Admin\ReactivateUserController;
-use App\Http\Controllers\Admin\DeactivatedUserController;
-
-use App\Http\Controllers\Admin\Logs\DownloadLogController;
+//  App Maintenance Controllers
+use App\Http\Controllers\Admin\Logs\LogsController;
 use App\Http\Controllers\Admin\Logs\ViewLogController;
-use App\Http\Controllers\Admin\Logs\LogFilesController;
-use App\Http\Controllers\Admin\Logs\LogSettingsController;
-use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
+use App\Http\Controllers\Admin\Logs\LogChannelsController;
+use App\Http\Controllers\Admin\Logs\DownloadLogController;
 
-use App\Http\Controllers\Admin\Modules\ModuleIndexController;
-use App\Http\Controllers\Admin\Modules\DownloadModuleController;
-use App\Http\Controllers\Admin\Modules\GetModulesOnlineController;
+// use App\Http\Controllers\Admin\BackupController;
+// use App\Http\Controllers\Admin\ReactivateUserController;
+// use App\Http\Controllers\Admin\DeactivatedUserController;
+
+// use App\Http\Controllers\Admin\Logs\DownloadLogController;
+// use App\Http\Controllers\Admin\Logs\ViewLogController;
+// use App\Http\Controllers\Admin\Logs\LogFilesController;
+// use App\Http\Controllers\Admin\Logs\LogSettingsController;
+// use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
+
+// use App\Http\Controllers\Admin\Modules\ModuleIndexController;
+// use App\Http\Controllers\Admin\Modules\DownloadModuleController;
+// use App\Http\Controllers\Admin\Modules\GetModulesOnlineController;
 
 
 Route::middleware('auth')->prefix('administration')->name('admin.')->group(function() {
@@ -83,13 +84,30 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * Application Administration Routes
      */
-    Route::get( 'logo',             GetLogoController::class)->name('get-logo')->breadcrumb('App Logo', '.index');
-    Route::post('logo',             SetLogoController::class)->name('set-logo');
-    Route::get( 'config',     GetConfigController::class)->name('get-config')->breadcrumb('App Configuration', '.index');
-    Route::post('config',     SetConfigController::class)->name('set-config');
-    Route::get('email',       GetEmailSettingsController::class)->name('get-email')->breadcrumb('Email Settings', '.get-config');
-    Route::post('email',      SetEmailSettingsController::class)->name('set-email');
-    Route::get( 'test-email', SendTestEmailController::class)   ->name('test-email');
+    Route::get( 'logo',       GetLogoController::class)
+        ->name('get-logo')
+        ->breadcrumb('App Logo', '.index');
+    Route::post('logo',       SetLogoController::class)
+        ->name('set-logo');
+    Route::get( 'config',     GetConfigController::class)
+        ->name('get-config')
+        ->breadcrumb('App Configuration', '.index');
+    Route::post('config',     SetConfigController::class)
+        ->name('set-config');
+    Route::get('email',       GetEmailSettingsController::class)
+        ->name('get-email')
+        ->breadcrumb('Email Settings', '.get-config');
+    Route::post('email',      SetEmailSettingsController::class)
+        ->name('set-email');
+    Route::get( 'test-email', SendTestEmailController::class)
+        ->name('test-email');
+
+    Route::prefix('logs')->name('logs.')->group(function() {
+        Route::get('download/{channel}/{file}',  DownloadLogController::class)->name('download');
+        Route::get('{channel}/{file}',           ViewLogController::class)->name('show')->breadcrumb('View Log', '.channels');
+        Route::get('{channel}',                  LogChannelsController::class)->name('channels')->breadcrumb('File List', '.index');
+        Route::get('/',                          LogsController::class)->name('index')->breadcrumb('Logs', 'admin.index');
+    });
 
 
 

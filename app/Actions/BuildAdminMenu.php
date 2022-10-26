@@ -44,17 +44,17 @@ class BuildAdminMenu
             $userBuild = [
                 [
                     'name' => 'Create New User',
-                    'icon' => 'fas fa-user-plus',
+                    'icon' => 'fa-user-plus',
                     'link' => route('admin.users.create'),
                 ],
                 [
                     'name' => 'Modify User',
-                    'icon' => 'fas fa-user-edit',
+                    'icon' => 'fa-user-edit',
                     'link' => route('admin.users.index'),
                 ],
                 [
                     'name' => 'Show Disabled Users',
-                    'icon' => 'fas fa-store-alt-slash',
+                    'icon' => 'fa-store-alt-slash',
                     'link' => route('admin.users.disabled'),
                 ],
                 [
@@ -70,7 +70,7 @@ class BuildAdminMenu
         {
             $roleBuild = [[
                 'name' => 'User Roles and Permissions',
-                'icon' => 'fas fa-users-cog',
+                'icon' => 'fa-users-cog',
                 'link' => route('admin.users.roles.index'),
             ]];
         }
@@ -232,12 +232,12 @@ class BuildAdminMenu
                 'Manage Application Settings' => [
                     [
                         'name' => 'Application Logo',
-                        'icon' => 'fas fa-image',
+                        'icon' => 'fa-image',
                         'link' => route('admin.get-logo'),
                     ],
                     [
                         'name' => 'Application Configuration',
-                        'icon' => 'fas fa-server',
+                        'icon' => 'fa-server',
                         'link' => route('admin.get-config'),
                     ],
                     [
@@ -264,23 +264,28 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        // if($this->checkPermission($this->user, 'App Settings'))
-        // {
-        //     $nav = [
-        //         'Application Maintenance' => [
-        //             [
-        //                 'name' => 'Application Logs',
-        //                 'icon' => 'fas fa-bug',
-        //                 'link' => route('admin.logs.index'),
-        //             ],
-        //             [
-        //                 'name' => 'Application Backups',
-        //                 'icon' => 'fa-hdd',
-        //                 'link' => route('admin.backups.index'),
-        //             ],
-        //         ],
-        //     ];
-        // }
+        if($this->checkPermission($this->user, 'App Settings'))
+        {
+            $nav = [
+                'Application Maintenance' => [
+                    [
+                        'name' => 'Application Logs',
+                        'icon' => 'fa-bug',
+                        'link' => route('admin.logs.index'),
+                    ],
+                    [
+                        'name' => 'Log Settings',
+                        'icon' => 'fa-sliders',
+                        'link' => '#',
+                    ],
+                    [
+                        'name' => 'Application Backups',
+                        'icon' => 'fa-hdd',
+                        'link' => '#', // route('admin.backups.index'),
+                    ],
+                ],
+            ];
+        }
 
         return $nav;
     }

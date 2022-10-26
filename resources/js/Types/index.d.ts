@@ -20,3 +20,4 @@ export * from './LayoutTypes';
 export * from './UserDataTypes';
 export * from './FormTypes';
 export * from './InputTypes';
+export * from './LogDataTypes';
