@@ -36,14 +36,14 @@
                     <div class="card-body">
                         <div class="card-title">
                             Log Details
-                            <Link
+                            <a
                                 :href="route('admin.logs.download', [props.channel, props.filename])"
                                 class="float-end text-primary"
                                 title="Download Log File"
                                 v-tooltip
                             >
                                 <fa-icon icon="fa-download" />
-                            </Link>
+                            </a>
                         </div>
                         <div id="table-wrapper" class="table-responsive">
                             <table class="table">

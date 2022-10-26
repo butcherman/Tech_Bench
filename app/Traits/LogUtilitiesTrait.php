@@ -149,14 +149,24 @@ trait LogUtilitiesTrait
     }
 
     /**
-     * Take a log file and convert each line into an array item
+     * Validate that the log file exists
      */
-    protected function getFileToArray($file, $channel)
+    protected function validateLogFile($file, $channel)
     {
         if(!Storage::disk('logs')->exists($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log'))
         {
             abort(404, 'Unable to find the log file specified');
         }
+
+        return true;
+    }
+
+    /**
+     * Take a log file and convert each line into an array item
+     */
+    protected function getFileToArray($file, $channel)
+    {
+        $this->validateLogFile($file, $channel);
 
         return file(Storage::disk('logs')->path($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log'));
     }

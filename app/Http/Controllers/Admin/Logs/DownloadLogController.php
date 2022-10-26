@@ -2,20 +2,30 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Traits\LogUtilitiesTrait;
+use App\Models\AppSettings;
 
 class DownloadLogController extends Controller
 {
+    use LogUtilitiesTrait;
+
     /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Download a log file
      */
-    public function __invoke(Request $request)
+    public function __invoke($channel, $file)
     {
-        //
-        return 'download log';
+        $this->authorize('viewAny', AppSettings::class);
+        $this->validateChannel($channel);
+        $this->validateLogFile($file, $this->getChannelDetails($channel));
+
+        Log::info('User '.Auth::user()->username.' downloaded log file', [
+            'channel' => $channel,
+            'file'    => $file,
+        ]);
+        return Storage::disk('logs')->download($channel.DIRECTORY_SEPARATOR.$file.'.log');
     }
 }
