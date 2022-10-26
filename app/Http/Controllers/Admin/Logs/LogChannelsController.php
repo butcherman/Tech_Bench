@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
-use App\Http\Controllers\Controller;
-use App\Traits\LogUtilitiesTrait;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Arr;
+use App\Http\Controllers\Controller;
+use App\Traits\LogUtilitiesTrait;
+use App\Models\AppSettings;
 
 class LogChannelsController extends Controller
 {
@@ -17,6 +17,7 @@ class LogChannelsController extends Controller
      */
     public function __invoke($channel)
     {
+        $this->authorize('viewAny', AppSettings::class);
         $this->validateChannel($channel);
 
         return Inertia::render('Admin/Logs/Index', [

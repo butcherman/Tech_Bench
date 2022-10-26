@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
-use App\Http\Controllers\Controller;
-use App\Models\AppSettings;
-use App\Traits\LogUtilitiesTrait;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Controllers\Controller;
+use App\Traits\LogUtilitiesTrait;
+use App\Models\AppSettings;
 
 class ViewLogController extends Controller
 {
