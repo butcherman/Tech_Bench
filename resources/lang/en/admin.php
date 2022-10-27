@@ -16,4 +16,5 @@ return [
     'test_email_success' => 'Test Email sent successfully.  Check your inbox',
     'test_email_failure' => 'Test Email Failed',
     'logo_success'       => 'Logo has been successfully changed',
+    'log_settings_updated' => 'Log Settings have been successfully updated',
 ];

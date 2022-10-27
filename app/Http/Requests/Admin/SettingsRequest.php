@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Models\AppSettings;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\AppSettings;
 
 class SettingsRequest extends FormRequest
 {

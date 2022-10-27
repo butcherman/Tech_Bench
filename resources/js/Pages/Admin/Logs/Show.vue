@@ -111,7 +111,7 @@
                                                 <dl class="row">
                                                     <template v-for="(data, key) in row.details">
                                                         <dt class="col-4 text-end border">{{ key }}:</dt>
-                                                        <dt class="col-8">{{ data }}</dt>
+                                                        <dt class="col-8 border">{{ data }}</dt>
                                                     </template>
                                                 </dl>
                                             </td>

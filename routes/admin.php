@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\Logs\LogsController;
 use App\Http\Controllers\Admin\Logs\ViewLogController;
 use App\Http\Controllers\Admin\Logs\LogChannelsController;
 use App\Http\Controllers\Admin\Logs\DownloadLogController;
+use App\Http\Controllers\Admin\Logs\GetLogSettingsController;
+use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
 
 // use App\Http\Controllers\Admin\BackupController;
 // use App\Http\Controllers\Admin\ReactivateUserController;
@@ -102,7 +104,12 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     Route::get( 'test-email', SendTestEmailController::class)
         ->name('test-email');
 
+    /**
+     * Application Logs controllers
+     */
     Route::prefix('logs')->name('logs.')->group(function() {
+        Route::post('settings',                  SetLogSettingsController::class)->name('set-settings');
+        Route::get('settings',                   GetLogSettingsController::class)->name('settings')->breadcrumb('Log Settings', '.index');
         Route::get('download/{channel}/{file}',  DownloadLogController::class)->name('download');
         Route::get('{channel}/{file}',           ViewLogController::class)->name('show')->breadcrumb('View Log', '.channels');
         Route::get('{channel}',                  LogChannelsController::class)->name('channels')->breadcrumb('File List', '.index');
@@ -127,13 +134,6 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * Application Maintenance Routes
      */
-    // Route::get( 'logs',                          LogFilesController::class)      ->name('logs.index')   ->breadcrumb('Logs', 'admin.index');
-    // Route::get( 'logs/settings',                 LogSettingsController::class)   ->name('logs.settings')->breadcrumb('Settings', 'admin.logs.index');
-    // Route::post('logs/settings',                 SetLogSettingsController::class)->name('logs.set-settings');
-    // Route::get('logs/download/{channel}/{file}', DownloadLogController::class)->name('logs.download');
-    // Route::get( 'logs/{channel}',                LogFilesController::class)      ->name('logs.channel') ->breadcrumb(fn($channel) => $channel, 'admin.logs.index');
-    // Route::get( 'logs/{channel}/{name}',         ViewLogController::class)->name('logs.view')    ->breadcrumb('View Log', 'admin.logs.channel');
-
     // Route::resource('backups', BackupController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
     // {
     //     $breadcrumbs->index('Backups', 'admin.index');

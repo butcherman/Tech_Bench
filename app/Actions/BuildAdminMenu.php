@@ -276,7 +276,7 @@ class BuildAdminMenu
                     [
                         'name' => 'Log Settings',
                         'icon' => 'fa-sliders',
-                        'link' => '#',
+                        'link' => route('admin.logs.settings'),
                     ],
                     [
                         'name' => 'Application Backups',
