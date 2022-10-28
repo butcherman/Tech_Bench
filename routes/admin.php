@@ -25,16 +25,8 @@ use App\Http\Controllers\Admin\Logs\LogChannelsController;
 use App\Http\Controllers\Admin\Logs\DownloadLogController;
 use App\Http\Controllers\Admin\Logs\GetLogSettingsController;
 use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
-
-// use App\Http\Controllers\Admin\BackupController;
-// use App\Http\Controllers\Admin\ReactivateUserController;
-// use App\Http\Controllers\Admin\DeactivatedUserController;
-
-// use App\Http\Controllers\Admin\Logs\DownloadLogController;
-// use App\Http\Controllers\Admin\Logs\ViewLogController;
-// use App\Http\Controllers\Admin\Logs\LogFilesController;
-// use App\Http\Controllers\Admin\Logs\LogSettingsController;
-// use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
+use App\Http\Controllers\Admin\Backups\BackupIndexController;
+use App\Http\Controllers\Admin\Backups\BackupSettingsController;
 
 // use App\Http\Controllers\Admin\Modules\ModuleIndexController;
 // use App\Http\Controllers\Admin\Modules\DownloadModuleController;
@@ -115,6 +107,15 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         Route::get('{channel}',                  LogChannelsController::class)->name('channels')->breadcrumb('File List', '.index');
         Route::get('/',                          LogsController::class)->name('index')->breadcrumb('Logs', 'admin.index');
     });
+
+    /**
+     * Application Backups
+     */
+    Route::prefix('backups')->name('backups.')->group(function() {
+        Route::get('/', BackupIndexController::class)->name('index')->breadcrumb('Backups', 'admin.index');
+        Route::post('/', BackupSettingsController::class)->name('store');
+    });
+    // Route::resource('backups', BackupController::class);
 
 
 

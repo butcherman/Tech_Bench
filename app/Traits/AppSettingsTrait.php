@@ -3,6 +3,8 @@
 namespace App\Traits;
 
 use App\Models\AppSettings;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 
 /**
  *  AllowTrait only has one function to check permission for the policies
@@ -18,6 +20,16 @@ trait AppSettingsTrait
                 ['key'   => $key],
                 ['value' => $value]
             )->update(['value' => $value]);
+        }
+    }
+
+    //  Clear a setting from the database
+    protected function clearSetting($key)
+    {
+        $data = AppSettings::where('key', $key)->first();
+        if($data)
+        {
+            $data->delete();
         }
     }
 

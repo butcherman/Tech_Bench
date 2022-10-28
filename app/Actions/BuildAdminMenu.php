@@ -279,9 +279,9 @@ class BuildAdminMenu
                         'link' => route('admin.logs.settings'),
                     ],
                     [
-                        'name' => 'Application Backups',
+                        'name' => 'Backup Settings',
                         'icon' => 'fa-hdd',
-                        'link' => '#', // route('admin.backups.index'),
+                        'link' => route('admin.backups.index'),
                     ],
                 ],
             ];

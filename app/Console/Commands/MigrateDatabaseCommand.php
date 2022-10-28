@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Schema;
 use App\Traits\FileTrait;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @codeCoverageIgnore
+ */
 class MigrateDatabaseCommand extends Command
 {
     use FileTrait;
