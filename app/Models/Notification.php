@@ -9,6 +9,9 @@ use DateTimeInterface;
 
 class Notification extends DatabaseNotification
 {
+    /**
+     * @codeCoverageIgnore
+     */
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('M d, Y');

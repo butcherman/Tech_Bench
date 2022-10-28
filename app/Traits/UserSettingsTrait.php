@@ -16,6 +16,7 @@ trait UserSettingsTrait
         foreach($userSettings as $key => $setting)
         {
             //  Determine if this setting is linked to a permission feature (i.e. should not be displayed if the user cannot access the feature)
+            // @codeCoverageIgnoreStart
             if(!is_null($setting->UserSettingType->perm_type_id))
             {
                 $allowed = UserRolePermissions::where('role_id', $user->role_id)->where('perm_type_id', $setting->UserSettingType->perm_type_id)->first();
@@ -25,6 +26,7 @@ trait UserSettingsTrait
                     $userSettings->forget($key);
                 }
             }
+            // @codeCoverageIgnoreEnd
         }
 
         return $userSettings;
