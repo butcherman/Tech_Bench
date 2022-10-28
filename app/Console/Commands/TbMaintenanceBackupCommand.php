@@ -23,8 +23,8 @@ class TbMaintenanceBackupCommand extends Command
         Log::info('Starting Application Backup');
 
         //  Verify that no more than 70% of the HDD storage space has been used
-        $freeSpace  = disk_free_space('/app');
-        $totalSpace = disk_total_space('/app');
+        $freeSpace  = disk_free_space(storage_path());
+        $totalSpace = disk_total_space(storage_path());
         $usedSpace  = $totalSpace - $freeSpace;
         $percentage = round(($usedSpace / $totalSpace * 100), 2);
 
