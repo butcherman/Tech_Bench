@@ -7,6 +7,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbModuleEnableCommand extends Command
 {
     use ModuleTrait;

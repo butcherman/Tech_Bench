@@ -6,6 +6,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbModuleInstallDependenciesCommand extends Command
 {
     protected $signature   = 'tb_module:dependencies {moduleName?}';

@@ -5,6 +5,9 @@ namespace App\Console\Commands;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Console\Command;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbMaintenanceTelescopeOffCommand extends Command
 {
     use AppSettingsTrait;

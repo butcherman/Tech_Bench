@@ -6,6 +6,9 @@ use App\Traits\ModuleTrait;
 use Illuminate\Console\Command;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbModuleUpdateCommand extends Command
 {
     use ModuleTrait;

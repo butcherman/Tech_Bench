@@ -8,6 +8,9 @@ use Nwidart\Modules\Facades\Module;
 
 use App\Traits\ModuleTrait;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbModuleDeleteCommand extends Command
 {
     use ModuleTrait;

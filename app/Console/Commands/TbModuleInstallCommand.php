@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbModuleInstallCommand extends Command
 {
     use ModuleTrait;

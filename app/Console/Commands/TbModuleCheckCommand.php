@@ -5,6 +5,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbModuleCheckCommand extends Command
 {
     protected $signature   = 'tb_module:check';

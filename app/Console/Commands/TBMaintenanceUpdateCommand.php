@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Storage;
 use PragmaRX\Version\Package\Version;
 use ZanySoft\Zip\Zip;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TBMaintenanceUpdateCommand extends Command
 {
     protected $signature   = 'tb_maintenance:update {--y|yes}';

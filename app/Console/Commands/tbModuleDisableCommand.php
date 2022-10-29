@@ -6,6 +6,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * @codeCoverageIgnore
+ */
 class tbModuleDisableCommand extends Command
 {
     protected $signature   = 'tb_module:disable {module} {--y|yes}';

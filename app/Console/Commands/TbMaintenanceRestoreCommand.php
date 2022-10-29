@@ -12,6 +12,9 @@ use Nwidart\Modules\Facades\Module;
 use PragmaRX\Version\Package\Version;
 use ZanySoft\Zip\Zip;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbMaintenanceRestoreCommand extends Command
 {
     protected $signature   = 'tb_maintenance:restore
