@@ -25,13 +25,6 @@ use App\Http\Controllers\Admin\Logs\LogChannelsController;
 use App\Http\Controllers\Admin\Logs\DownloadLogController;
 use App\Http\Controllers\Admin\Logs\GetLogSettingsController;
 use App\Http\Controllers\Admin\Logs\SetLogSettingsController;
-use App\Http\Controllers\Admin\Backups\BackupIndexController;
-use App\Http\Controllers\Admin\Backups\BackupSettingsController;
-
-// use App\Http\Controllers\Admin\Modules\ModuleIndexController;
-// use App\Http\Controllers\Admin\Modules\DownloadModuleController;
-// use App\Http\Controllers\Admin\Modules\GetModulesOnlineController;
-
 
 Route::middleware('auth')->prefix('administration')->name('admin.')->group(function() {
     Route::get('/', AdminIndexController::class)
@@ -107,36 +100,4 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         Route::get('{channel}',                  LogChannelsController::class)->name('channels')->breadcrumb('File List', '.index');
         Route::get('/',                          LogsController::class)->name('index')->breadcrumb('Logs', 'admin.index');
     });
-
-    /**
-     * Application Backups
-     */
-    Route::prefix('backups')->name('backups.')->group(function() {
-        Route::get('/', BackupIndexController::class)->name('index')->breadcrumb('Backups', 'admin.index');
-        Route::post('/', BackupSettingsController::class)->name('store');
-    });
-    // Route::resource('backups', BackupController::class);
-
-
-
-
-
-
-    /**
-     * Add On Module Administration Routes
-     */
-    // Route::prefix('modules')->name('modules.')->group(function()
-    // {
-    //     Route::get('/',             ModuleIndexController::class)->name('index');
-    //     Route::get('get-online',    GetModulesOnlineController::class)->name('get-online');
-    //     Route::post('download',     DownloadModuleController::class)->name('download');
-    // });
-
-    /**
-     * Application Maintenance Routes
-     */
-    // Route::resource('backups', BackupController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs)
-    // {
-    //     $breadcrumbs->index('Backups', 'admin.index');
-    // });
 });

@@ -278,11 +278,16 @@ class BuildAdminMenu
                         'icon' => 'fa-sliders',
                         'link' => route('admin.logs.settings'),
                     ],
-                    [
-                        'name' => 'Backup Settings',
-                        'icon' => 'fa-hdd',
-                        'link' => route('admin.backups.index'),
-                    ],
+                    // [
+                    //     'name' => 'Backups',
+                    //     'icon' => 'fa-hdd',
+                    //     'link' => route('admin.backups.show'),
+                    // ],
+                    // [
+                    //     'name' => 'Backup Settings',
+                    //     'icon' => 'fa-hdd',
+                    //     'link' => route('admin.backups.index'),
+                    // ],
                 ],
             ];
         }

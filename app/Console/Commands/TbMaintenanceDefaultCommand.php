@@ -5,6 +5,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbMaintenanceDefaultCommand extends Command
 {
     protected $signature   = 'tb_backup:default

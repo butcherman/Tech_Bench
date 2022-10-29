@@ -20,6 +20,9 @@ use App\Models\UserSettingType;
 use App\Models\UserRolePermissions;
 use App\Models\UserRolePermissionTypes;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TbMaintenanceRunCommand extends Command
 {
     protected $signature = 'tb_maintenance:run

@@ -6,6 +6,9 @@ use Illuminate\Console\Command;
 
 use App\Jobs\GarbageCollectionJob;
 
+/**
+ * @codeCoverageIgnore
+ */
 class GarbageCollectionRunCommand extends Command
 {
     protected $signature   = 'garbagecollection:run';

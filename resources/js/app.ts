@@ -34,7 +34,6 @@ createInertiaApp({
             .component('Link', Link)                            //  Inertial Link
             .component('Head', Head)                            //  Head title
             .component('fa-icon', FontAwesomeIcon)              //  Font Awesome
-            // .component('Modal', Modal)                          //  Pop-up Modal
             .directive('focus', vFocusDirective)
             .directive('tooltip', vTooltipDirective)
 
