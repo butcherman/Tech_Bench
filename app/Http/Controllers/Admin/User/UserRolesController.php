@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRoleRequest;
 use App\Events\Admin\UserRoleCreatedEvent;
@@ -12,7 +13,6 @@ use App\Events\Admin\UserRoleUpdatedEvent;
 use App\Models\UserRoles;
 use App\Models\UserRolePermissions;
 use App\Models\UserRolePermissionTypes;
-use Illuminate\Database\QueryException;
 
 class UserRolesController extends Controller
 {

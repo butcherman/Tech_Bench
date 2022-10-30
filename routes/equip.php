@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
 use App\Http\Controllers\Equipment\EquipmentController;
 use App\Http\Controllers\Equipment\DataTypesController;
@@ -10,8 +11,16 @@ use App\Http\Controllers\Equipment\EquipmentCategoryController;
 /**
  * Equipment Routes
  */
-// Route::middleware('auth')->group(function()
-// {
+Route::middleware('auth')->group(function()
+{
+    Route::resource('equipment', EquipmentController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+        $breadcrumbs->index('Equipment Categories & Types', 'admin.index');
+    });
+
+    Route::resource('equipment-categories', EquipmentCategoryController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+        $breadcrumbs->create('Create Category', 'equipment.index');
+        // $breadcrumbs->edit('Modify Category', 'admin.index');    FIXME - Whydoes this give error?
+    });
 //     Route::get('equipment-list',            ListEquipmentController::class)->name('list-equipment');
 
 //     Route::prefix('equipment')->name('equipment.')->group(function()
@@ -40,4 +49,4 @@ use App\Http\Controllers\Equipment\EquipmentCategoryController;
 //         Route::put(   '{category}/edit', [EquipmentCategoryController::class, 'update']) ->name('update');
 //         Route::delete('{category}',      [EquipmentCategoryController::class, 'destroy'])->name('destroy');
 //     });
-// });
+});

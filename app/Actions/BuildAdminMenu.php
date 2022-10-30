@@ -92,23 +92,23 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        // if($this->checkPermission($this->user, 'Manage Equipment'))
-        // {
-        //     $nav = [
-        //         'Manage Equipment' => [
-        //             [
-        //                 'name' => 'Equipment Types & Categories',
-        //                 'icon' => 'fas fa-cogs',
-        //                 'link' => route('equipment.index'),
-        //             ],
-        //             [
-        //                 'name' => 'Equipment Data Types (for customers)',
-        //                 'icon' => 'fas fa-database',
-        //                 'link' => route('data-types.index'),
-        //             ],
-        //         ],
-        //     ];
-        // }
+        if($this->checkPermission($this->user, 'Manage Equipment'))
+        {
+            $nav = [
+                'Manage Equipment' => [
+                    [
+                        'name' => 'Equipment Categories & Types',
+                        'icon' => 'fas fa-cogs',
+                        'link' => route('equipment.index'),
+                    ],
+                    [
+                        'name' => 'Equipment Data Types (for customers)',
+                        'icon' => 'fas fa-database',
+                        'link' => '#', // route('data-types.index'),
+                    ],
+                ],
+            ];
+        }
 
         return $nav;
     }

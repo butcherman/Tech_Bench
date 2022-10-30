@@ -14,6 +14,14 @@ class EquipmentCategory extends Model
     protected $hidden     = ['updated_at', 'created_at'];
 
     /**
+     * Key for Route/Model binding
+     */
+    public function getRouteKeyName()
+    {
+        return 'cat_id';
+    }
+
+    /**
      * Each Equipment Category can have several types of equipment assigned to it
      */
     public function EquipmentType()
