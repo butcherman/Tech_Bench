@@ -17,3 +17,9 @@ export type BaseRoleFormType = {
 export type RoleFormType = {
     [key:string]: boolean | string;
 } & BaseRoleFormType;
+
+export interface equipmentFormType {
+    category: string;
+    name    : string;
+    custData: string[];
+}

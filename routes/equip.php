@@ -15,7 +15,11 @@ Route::middleware('auth')->group(function()
 {
     Route::resource('equipment', EquipmentController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->index('Equipment Categories & Types', 'admin.index');
-    });
+    })->except(['create']);
+    //  Override the resource create method
+    Route::get('equipment/create/{equipmentCategory:name}', [EquipmentController::class, 'create'])
+        ->name('equipment.create')
+        ->breadcrumb('New Equipment', 'equipment.index');
 
     Route::resource('equipment-categories', EquipmentCategoryController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->create('Create Category', 'equipment.index');

@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Actions\OrderEquipDataTypes;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\EquipmentTypeRequest;
+use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
+use App\Models\EquipmentType;
+use Illuminate\Support\Facades\Log;
 
 class EquipmentController extends Controller
 {
@@ -20,25 +25,31 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new Equipment type
      */
-    public function create()
+    public function create(EquipmentCategory $equipmentCategory)
     {
-        //
-        return 'create';
+        $this->authorize('create', EquipmentType::class);
+
+        return Inertia::render('Equipment/Create', [
+            'category'  => $equipmentCategory,
+            'data-list' => DataFieldType::all()->pluck('name'),
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Store a newly created Equipment Type
      */
-    public function store(Request $request)
+    public function store(EquipmentTypeRequest $request)
     {
-        //
+        $equipment         = new EquipmentType($request->only(['name']));
+        $equipment->cat_id = EquipmentCategory::where('name', $request->category)->first()->cat_id;
+        $equipment->save();
+
+        (new OrderEquipDataTypes)->build($request->custData, $equipment->equip_id);
+        Log::info('New Equipiment Type created by '.$request->user()->username, $request->toArray());
+
+        return redirect(route('equipment.index'))->with('success', __('equip.created'));
     }
 
     /**

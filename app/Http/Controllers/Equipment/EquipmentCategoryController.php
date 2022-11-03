@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use Inertia\Inertia;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentCategoryRequest;
 use App\Models\EquipmentCategory;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
 
 class EquipmentCategoryController extends Controller
 {

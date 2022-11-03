@@ -50,7 +50,7 @@
                                 No equipment has been created for this Category
                                 <p class="mt-2">
                                     <Link
-                                        :href="route('equipment.create')"
+                                        :href="route('equipment.create', activeCatName)"
                                         class="btn btn-primary w-75 m-2"
                                     >
                                         Add Equipment Type
@@ -68,20 +68,28 @@
                                 <li
                                     v-for="equip in equipTypes"
                                     :key="equip?.equip_id"
-                                    class="list-group-item text-center list-group-item-action pointer"
+                                    class="list-group-item text-center list-group-item-action"
                                 >
                                     {{ equip?.name }}
                                     <Link
                                         :href="route('equipment.edit',equip?.equip_id)"
-                                        class="float-end text-warning"
+                                        class="float-end text-warning mx-1"
                                         :title="`Edit ${equip?.name}`"
                                         v-tooltip
                                     >
                                         <fa-icon icon="fa-edit" />
                                     </Link>
+                                    <!-- <Link      TODO - Add References
+                                        href="#"
+                                        class="float-end text-primary mx-1"
+                                        title="References"
+                                        v-tooltip
+                                    >
+                                        <fa-icon icon="fa-asterisk" />
+                                    </Link> -->
                                 </li>
                                 <li class="list-group-item text-center" key="whatsLeft">
-                                    <Link :href="route('equipment.create')" class="btn btn-primary w-50">
+                                    <Link :href="route('equipment.create', activeCatName)" class="btn btn-primary w-50">
                                         Add Equipment Type
                                     </Link>
                                 </li>
@@ -106,11 +114,14 @@
     }>();
 
     const activeCatId   = ref<number>();
+    const activeCatName = ref<string>();
     const equipTypes    = ref<equipType[] | null[] | null>(null);
 
     const populateTypes = (category:categoryList) => {
-        activeCatId.value = category.cat_id;
-        equipTypes.value  = category.equipment_type;
+        console.log(category);
+        activeCatId.value   = category.cat_id;
+        activeCatName.value = category.name;
+        equipTypes.value    = category.equipment_type.length ? category.equipment_type : [];
     }
 
     const verifyDeleteCat = () => {

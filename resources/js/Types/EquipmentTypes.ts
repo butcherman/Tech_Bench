@@ -9,3 +9,10 @@ export interface equipType {
     equip_id: number;
     name    : string;
 }
+
+export interface dataListType {
+    type_id: number;
+    name   : string;
+    hidden : boolean;
+    in_use : boolean;
+}

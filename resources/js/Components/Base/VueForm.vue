@@ -19,7 +19,7 @@
     import Loading                    from 'vue3-loading-overlay';
     import HalfCircleLoader           from '@/Components/Base/Loader/HalfCircleLoader.vue';
     import { ref }                    from 'vue';
-    import { useForm as useVeeForm }  from 'vee-validate';
+    import { useForm, useFieldArray } from 'vee-validate';
 
     const emit  = defineEmits(['submit']);
     const props = defineProps<{
@@ -29,7 +29,7 @@
     }>();
 
     const isSubmitting     = ref(false);
-    const { handleSubmit, setFieldValue } = useVeeForm({
+    const { handleSubmit, setFieldValue } = useForm({
         validationSchema: props.validationSchema,
         initialValues   : props.initialValues ? props.initialValues : {},
     });
@@ -44,7 +44,7 @@
         isSubmitting.value = false;
     }
 
-    defineExpose({ endSubmit : _endSubmit, setFieldValue : setFieldValue });
+    defineExpose({ endSubmit : _endSubmit, setFieldValue, useFieldArray });
 </script>
 
 <style scoped lang="scss">

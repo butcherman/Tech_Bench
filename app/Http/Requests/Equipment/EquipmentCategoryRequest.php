@@ -15,9 +15,9 @@ class EquipmentCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->cat_id)
+        if($this->equipmentCategory)
         {
-            return $this->user()->can('update', EquipmentCategory::find($this->cat_id));
+            return $this->user()->can('update', EquipmentCategory::find($this->equipmentCategory));
         }
 
         return $this->user()->can('create', EquipmentCategory::class);
