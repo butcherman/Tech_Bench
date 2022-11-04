@@ -78,6 +78,15 @@
                                 class="mt-auto"
                             />
                         </form>
+                        <div class="mt-2">
+                            <button
+                                type="button"
+                                class="btn btn-danger w-100"
+                                @click="verifyDelete"
+                            >
+                                Delete Equipment
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,7 +110,8 @@
              useIsFormTouched,
              useFieldArray }          from 'vee-validate';
     import type { equipWithDataType } from '@/Types';
-import { verifyModal } from '@/Modules/verifyModal.module';
+    import { verifyModal } from '@/Modules/verifyModal.module';
+import { Inertia } from '@inertiajs/inertia';
 
     const props = defineProps<{
         equipment: equipWithDataType;
@@ -151,6 +161,21 @@ import { verifyModal } from '@/Modules/verifyModal.module';
                 remove(index);
             }
         })
+    }
+
+    /**
+     * Verify that we want to delete this equipment
+     */
+    const verifyDelete = () => {
+        verifyModal('This action cannot be undone').then(res => {
+            if(res)
+            {
+                isSubmitting.value = true;
+                Inertia.delete(route('equipment.destroy', props.equipment.equip_id), {
+                    onFinish: () => isSubmitting.value = false,
+                });
+            }
+        });
     }
 </script>
 

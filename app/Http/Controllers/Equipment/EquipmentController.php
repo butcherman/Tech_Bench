@@ -10,6 +10,8 @@ use App\Http\Requests\Equipment\EquipmentTypeRequest;
 use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class EquipmentController extends Controller
@@ -53,6 +55,14 @@ class EquipmentController extends Controller
     }
 
     /**
+     * Show all references that a piece of equipment has
+     */
+    public function show(EquipmentType $equipment)
+    {
+        return 'show';
+    }
+
+    /**
      * Show the form for editing the Equipment
      */
     public function edit(EquipmentType $equipment)
@@ -81,13 +91,34 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Remove the specified equipment from the DB
      */
-    public function destroy($id)
+    public function destroy(EquipmentType $equipment)
     {
-        //
+        $this->authorize('delete', $equipment);
+
+        try
+        {
+            $equipment->delete();
+        }
+        catch(QueryException $e)
+        {
+            if($e->errorInfo[1] === 19)
+            {
+                Log::error('Unable to delete Equipment '.$equipment->name.'.  It is currently in use');
+                return back()->withErrors([
+                    'error' => __('equip.in_use'),
+                    // 'link'  => '<a html="#">More Info</a>',
+                ]);
+            }
+
+            // @codeCoverageIgnoreStart
+            Log::error('Error when trying to delete Equipment '.$equipment->name, $e->errorInfo);
+            return back()->withErrors(['error' => __('equip.del_failed')]);
+            // @codeCoverageIgnoreEnd
+        }
+
+        Log::notice('Equipment '.$equipment->name.' has been deleted by '.Auth::user()->username);
+        return redirect(route('equipment.index'))->with('success', __('equip.destroyed'));
     }
 }
