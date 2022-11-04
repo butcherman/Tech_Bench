@@ -21,6 +21,8 @@ class EquipmentController extends Controller
      */
     public function index()
     {
+        $this->authorize('create', EquipmentType::class);
+
         return Inertia::render('Equipment/Index', [
             'cat-list' => EquipmentCategory::with('EquipmentType')->get(),
         ]);

@@ -11,9 +11,9 @@ class EquipmentTypePolicy
     use AllowTrait;
     use HandlesAuthorization;
 
-        /**
-         * Determine whether the user can create models
-         */
+    /**
+     * Determine whether the user can create models
+     */
     public function create(User $user)
     {
         return $this->checkPermission($user, 'Manage Equipment');
