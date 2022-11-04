@@ -96,10 +96,10 @@
     import { ref }                  from 'vue';
     import { useForm }              from '@inertiajs/inertia-vue3';
     import { array_move }           from '@/Modules/helpers.module';
+    import { equipmentValidator }   from '@/Modules/Validation/equipment.module';
     import { useForm as useVeeForm,
              useIsFormTouched,
              useFieldArray }        from 'vee-validate';
-    import * as yup                 from 'yup';
     import type { categoryList }    from '@/Types';
 
     const props = defineProps<{
@@ -115,28 +115,7 @@
             name    : '',
             custData: ['', ''],
         },
-        validationSchema: {
-            category: yup.string().required(),
-            name    : yup.string().required('Please enter a name for the Equipment'),
-            custData: yup.array().test('min-one', 'You must provide information to gather for customers', function(value) {
-                if(value && value.length)
-                {
-                    let passed = false;
-                    value.forEach((elem:string) => { if(elem.length) passed = true});
-
-                    return passed;
-                }
-
-                return false;
-            }).of(yup.string().test('no-duplicates', 'Duplicate entries are not allowed', function(value) {
-                let valCount = 0;
-                this.parent.forEach((elem:string) => {
-                    if(elem.length > 0 && elem === value) valCount++;
-                });
-
-                return valCount <= 1;
-            })),
-        }
+        validationSchema: equipmentValidator,
     });
 
     const { remove, push, fields } = useFieldArray('custData');

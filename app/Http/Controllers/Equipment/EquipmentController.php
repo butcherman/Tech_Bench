@@ -53,39 +53,31 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Show the form for editing the Equipment
      */
-    public function show($id)
+    public function edit(EquipmentType $equipment)
     {
-        //
-        return 'show';
+        $this->authorize('update', $equipment);
+
+        return Inertia::render('Equipment/Edit', [
+            'equipment' => $equipment->load(['EquipmentCategory', 'DataFieldType']),
+            'data-list' => DataFieldType::all()->pluck('name'),
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update the specified equipment
      */
-    public function edit($id)
+    public function update(EquipmentTypeRequest $request, EquipmentType $equipment)
     {
-        //
-        return 'edit';
-    }
+        $equipment->name = $request->name;
+        $equipment->save();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        (new OrderEquipDataTypes)->build($request->custData, $equipment->equip_id);
+
+
+
+        return redirect(route('equipment.index'))->with('success', __('equip.updated'));
     }
 
     /**

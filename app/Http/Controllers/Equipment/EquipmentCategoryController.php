@@ -36,12 +36,12 @@ class EquipmentCategoryController extends Controller
     /**
      * Show the form for editing the category
      */
-    public function edit(EquipmentCategory $equipmentCategory)
+    public function edit(EquipmentCategory $equipment_category)
     {
-        $this->authorize('update', $equipmentCategory);
+        $this->authorize('update', $equipment_category);
 
         return Inertia::render('Equipment/Category/Edit', [
-            'category' => $equipmentCategory,
+            'category' => $equipment_category,
         ]);
     }
 

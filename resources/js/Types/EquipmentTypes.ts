@@ -10,6 +10,14 @@ export interface equipType {
     name    : string;
 }
 
+export type equipWithDataType = {
+    equipment_category: {
+        cat_id: number;
+        name  : string;
+    }
+    data_field_type: dataListType[];
+} & equipType;
+
 export interface dataListType {
     type_id: number;
     name   : string;

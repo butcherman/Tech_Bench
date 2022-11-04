@@ -15,6 +15,7 @@ Route::middleware('auth')->group(function()
 {
     Route::resource('equipment', EquipmentController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->index('Equipment Categories & Types', 'admin.index');
+        $breadcrumbs->edit('Edit Equipment', '.index');
     })->except(['create']);
     //  Override the resource create method
     Route::get('equipment/create/{equipmentCategory:name}', [EquipmentController::class, 'create'])
@@ -23,7 +24,7 @@ Route::middleware('auth')->group(function()
 
     Route::resource('equipment-categories', EquipmentCategoryController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->create('Create Category', 'equipment.index');
-        // $breadcrumbs->edit('Modify Category', 'admin.index');    FIXME - Whydoes this give error?
+        // $breadcrumbs->edit('Modify Category', 'equipment.index');  TODO - why does this trigger error?
     });
 //     Route::get('equipment-list',            ListEquipmentController::class)->name('list-equipment');
 

@@ -14,6 +14,14 @@ class EquipmentType extends Model
     protected $hidden     = ['updated_at', 'created_at'];
 
     /**
+     * Key for Route/Model binding
+     */
+    public function getRouteKeyName()
+    {
+        return 'equip_id';
+    }
+
+    /**
      * Each Equipment Type must belong to a category
      */
     public function EquipmentCategory()

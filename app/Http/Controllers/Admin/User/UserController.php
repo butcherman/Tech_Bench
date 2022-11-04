@@ -38,11 +38,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function show($id)
-    {
-        //
-    }
-
     /**
      * Store a newly created user
      */
