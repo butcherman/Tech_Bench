@@ -30,6 +30,8 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn() => $request->session()->get('success'),
                 'warning' => fn() => $request->session()->get('warning'),
+                'danger'  => fn() => $request->session()->get('danger'),
+                'info'    => fn() => $request->session()->get('info'),
             ],
             //  App information that is shared and used on all pages
             'app' => [

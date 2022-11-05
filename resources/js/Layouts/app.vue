@@ -166,17 +166,21 @@
                 </footer>
             </div>
         </div>
+        <div class="toast-container position-absolute top-0 start-50 translate-middle p-3">
+            <template v-for="msg in flashMessage">
+                <AlertToast :background="msg.type" :message="msg.message" />
+            </template>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { computed, ref } from 'vue';
+    import AlertToast from '@/Components/Base/AlertToast.vue';
+    import { computed, ref, watch } from 'vue';
     import { usePage }       from '@inertiajs/inertia-vue3';
     import { Inertia }       from '@inertiajs/inertia';
 
     import { pageInterface, appProps, navBarProps, notifciationProps, breadcrumbsType, errorType, flashProps } from '@/Types';
-
-
 
     const app          = computed<appProps>         (() => usePage<pageInterface>().props.value.app);
     const navBar       = computed<navBarProps[]>    (() => usePage<pageInterface>().props.value.navbar);
@@ -187,6 +191,10 @@
     const success      = computed<string | null>    (() => usePage<pageInterface>().props.value.flash.success);
 
     const navbarActive = ref(false);
+    const flashMessage = ref([{
+        type   : 'success',
+        message: 'a notification message',
+    }]);
 
     Inertia.on('navigate', () => navbarActive.value = false);
 </script>
@@ -211,5 +219,9 @@
     }
     .dropdown-menu {
         margin: 0 !important;
+    }
+
+    .toast-container {
+        margin-top: 3rem;
     }
 </style>

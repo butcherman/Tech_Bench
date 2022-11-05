@@ -20,8 +20,10 @@ interface appProps {
 }
 
 interface flashProps {
-    warning: string | null;
     success: string | null;
+    warning: string | null;
+    danger : string | null;
+    info   : string | null;
 }
 
 interface notifciationProps {
