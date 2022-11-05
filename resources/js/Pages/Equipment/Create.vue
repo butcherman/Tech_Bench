@@ -1,5 +1,5 @@
 <template>
-    <App>
+    <div>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -82,7 +82,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -139,6 +139,10 @@
     const onDragEnd = (e:dragEvent) => {
         array_move(values.custData, e.oldIndex, e.newIndex);
     }
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>
 
 <style scoped lang="scss">

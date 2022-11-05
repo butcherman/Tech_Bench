@@ -1,6 +1,6 @@
 <template>
     <Head title="View Role" />
-    <App>
+    <div>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -90,4 +90,8 @@
             }
         });
     }
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>

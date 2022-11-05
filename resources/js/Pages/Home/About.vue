@@ -1,6 +1,6 @@
 <template>
     <Head title="About" />
-    <App>
+    <div>
         <div class="row justify-content-center">
             <div class="col-md-8 grid-margin stretch-card">
                 <div class="card">
@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -28,4 +28,8 @@
         build     : string;
         build_date: string;
     }>();
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>

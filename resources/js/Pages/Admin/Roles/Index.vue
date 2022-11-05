@@ -1,6 +1,6 @@
 <template>
     <Head title="User Roles" />
-    <App>
+    <div>
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -54,4 +54,8 @@
     const gotoRole = (role:userRoleType) => {
         Inertia.get(route('admin.users.roles.show', role.role_id));
     }
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>

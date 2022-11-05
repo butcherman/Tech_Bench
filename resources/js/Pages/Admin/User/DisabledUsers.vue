@@ -1,6 +1,6 @@
 <template>
     <Head title="Disabled Users" />
-    <App>
+    <div>
         <div class="row justify-content-center">
             <div class="col-8">
                 <div class="card">
@@ -38,7 +38,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -53,4 +53,8 @@
     defineProps<{
         userList: disabledUserType[];
     }>();
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>

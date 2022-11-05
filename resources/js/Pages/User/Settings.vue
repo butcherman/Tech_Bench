@@ -1,8 +1,7 @@
 <template>
     <Head title="User Settings" />
-    <App>
+    <div>
         <Overlay :loading="loading">
-
             <div class="row">
                 <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
@@ -59,7 +58,7 @@
                 </div>
             </div>
         </Overlay>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -153,4 +152,8 @@
             },
         });
     }
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>

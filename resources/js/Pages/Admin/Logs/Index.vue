@@ -1,6 +1,6 @@
 <template>
     <Head title="Logs" />
-    <App>
+    <div>
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -80,4 +80,8 @@
     const goToRow = (logData:logFilesType) => {
         Inertia.get(route('admin.logs.show', [route().params.channel, logData.filename]));
     }
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <Head title="Change Password" />
-    <App>
+    <div>
         <div class="row justify-content-center">
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -61,4 +61,8 @@
             onFinish: () => resetForm.value?.endSubmit(),
         });
     };
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>

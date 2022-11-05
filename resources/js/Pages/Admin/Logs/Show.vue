@@ -1,5 +1,5 @@
 <template>
-    <App>
+    <div>
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -124,7 +124,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -140,4 +140,8 @@
         stats   : logFilesType;
         logFile : logDetailsType;
     }>();
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>

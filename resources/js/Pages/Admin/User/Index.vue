@@ -1,6 +1,6 @@
 <template>
     <Head title="User List" />
-    <App>
+    <div>
         <div class="row">
             <div class="col-12 grid-margin">
                 <div class="card">
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -108,4 +108,8 @@
             }
         });
     }
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>
