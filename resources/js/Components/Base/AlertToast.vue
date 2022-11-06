@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted } from 'vue';
-    import { Toast } from 'bootstrap';
+    import { ref, onMounted } from 'vue';
+    import { Toast }          from 'bootstrap';
 
-    const props = defineProps<{
+    defineProps<{
         background: string;
         message: string;
     }>();

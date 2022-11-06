@@ -144,12 +144,6 @@
                             </span>
                         </div>
                     </div>
-                    <div v-if="warning" class="alert alert-warning text-center">
-                        {{ warning }}
-                    </div>
-                    <div v-if="success" class="alert alert-success text-center">
-                        {{ success }}
-                    </div>
                     <slot />
                 </div>
                 <footer class=" footer page-footer">
@@ -175,28 +169,50 @@
 </template>
 
 <script setup lang="ts">
-    import AlertToast from '@/Components/Base/AlertToast.vue';
-    import { computed, ref, watch } from 'vue';
-    import { usePage }       from '@inertiajs/inertia-vue3';
-    import { Inertia }       from '@inertiajs/inertia';
+    import AlertToast  from '@/Components/Base/AlertToast.vue';
+    import { usePage } from '@inertiajs/inertia-vue3';
+    import { Inertia } from '@inertiajs/inertia';
+    import { computed,
+             ref,
+             watch,
+             onMounted } from 'vue';
 
-    import { pageInterface, appProps, navBarProps, notifciationProps, breadcrumbsType, errorType, flashProps } from '@/Types';
+    import { appProps,
+             errorType,
+             flashProps,
+             navBarProps,
+             pageInterface,
+             breadcrumbsType,
+             flashMessageType,
+             notifciationProps, } from '@/Types';
 
     const app          = computed<appProps>         (() => usePage<pageInterface>().props.value.app);
     const navBar       = computed<navBarProps[]>    (() => usePage<pageInterface>().props.value.navbar);
     const notif        = computed<notifciationProps>(() => usePage<pageInterface>().props.value.notifications);
     const breadcrumbs  = computed<breadcrumbsType[]>(() => usePage<pageInterface>().props.value.breadcrumbs);
     const errors       = computed<errorType>        (() => usePage<pageInterface>().props.value.errors);
-    const warning      = computed<string | null>    (() => usePage<pageInterface>().props.value.flash.warning);
-    const success      = computed<string | null>    (() => usePage<pageInterface>().props.value.flash.success);
+    const flash        = computed<flashProps>       (() => usePage<pageInterface>().props.value.flash);
 
-    const navbarActive = ref(false);
-    const flashMessage = ref([{
-        type   : 'success',
-        message: 'a notification message',
-    }]);
+    const navbarActive = ref<boolean>(false);
+    const flashMessage = ref<flashMessageType[]>([]);
 
     Inertia.on('navigate', () => navbarActive.value = false);
+
+    watch(flash, () => checkFlashMessages());
+    onMounted(   () => checkFlashMessages());
+
+    const checkFlashMessages = () => {
+        let flashKeys = Object.keys(flash.value);
+        flashKeys.forEach(key => {
+            if(flash.value[key as keyof flashProps] !== null)
+            {
+                flashMessage.value.push({
+                    type: key,
+                    message: flash.value[key as keyof flashProps],
+                });
+            }
+        })
+    }
 </script>
 
 <style scoped lang="scss">

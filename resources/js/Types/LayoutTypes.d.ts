@@ -26,6 +26,11 @@ interface flashProps {
     info   : string | null;
 }
 
+export interface flashMessageType {
+    type   : string;
+    message: string | null;
+}
+
 interface notifciationProps {
     list: object[];     //  TODO - type this
     new : number;
