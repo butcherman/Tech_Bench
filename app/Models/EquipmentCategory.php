@@ -23,6 +23,7 @@ class EquipmentCategory extends Model
 
     /**
      * Each Equipment Category can have several types of equipment assigned to it
+     * @codeCoverageIgnore
      */
     public function EquipmentType()
     {

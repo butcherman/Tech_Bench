@@ -12,6 +12,8 @@ use App\Http\Controllers\TechTips\TechTipBookmarkController;
 use App\Http\Controllers\TechTips\DeletedTechTipsController;
 use App\Http\Controllers\TechTips\TechTipCommentsController;
 
+Route::get('{tip}', function() { return 'tech tips'; })->name('tech-tips.show');
+
 /**
  * Tech Tips routes
  */

@@ -18,6 +18,8 @@ use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerFileTypesController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
 
+Route::get('{cust}/show', function() { return 'customers'; })->name('customers.show');
+
 /**
  * Customer Information Routes
  */

@@ -1,4 +1,3 @@
-import type { Link } from '@inertiajs/inertia-vue3';
 import type { Route, RouteParam, RouteParamsWithQueryOverload, Config } from 'ziggy-js';
 
 export {};
@@ -16,13 +15,11 @@ declare global {
     ): string;
 }
 
-export interface genericListType {
-    [key:string]: string;
-}
-
 export * from './LayoutTypes';
 export * from './UserDataTypes';
 export * from './FormTypes';
 export * from './InputTypes';
 export * from './LogDataTypes';
 export * from './EquipmentTypes';
+export * from './CustomerTypes';
+export * from './TechTipTypes';

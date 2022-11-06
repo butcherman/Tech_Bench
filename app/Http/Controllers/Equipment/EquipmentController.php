@@ -7,9 +7,12 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentTypeRequest;
+use App\Models\Customer;
 use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use App\Models\TechTip;
+use App\Models\TechTipEquipment;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -61,7 +64,17 @@ class EquipmentController extends Controller
      */
     public function show(EquipmentType $equipment)
     {
-        // return 'show';
+        $this->authorize('update', $equipment);
+
+        return Inertia::render('Equipment/Show', [
+            'equipment' => $equipment,
+            'customers' => Customer::whereHas('CustomerEquipment', function($q) use ($equipment) {
+                                $q->where('equip_id', $equipment->equip_id);
+                            })->get(),
+            'tech-tip'  => TechTip::with('EquipmentType')->whereHas('EquipmentType', function($q) use ($equipment) {
+                                $q->where('equipment_types.equip_id', $equipment->equip_id);
+                            })->get(),
+        ]);
     }
 
     /**
@@ -86,8 +99,7 @@ class EquipmentController extends Controller
         $equipment->save();
 
         (new OrderEquipDataTypes)->build($request->custData, $equipment->equip_id);
-
-
+        Log::info('Equipment Type '.$request->name.' has been updated by '.$request->user()->username);
 
         return redirect(route('equipment.index'))->with('success', __('equip.updated'));
     }
@@ -110,7 +122,7 @@ class EquipmentController extends Controller
                 Log::error('Unable to delete Equipment '.$equipment->name.'.  It is currently in use');
                 return back()->withErrors([
                     'error' => __('equip.in_use'),
-                    // 'link'  => '<a html="#">More Info</a>',
+                    'link'  => route('equipment.show', $equipment->equip_id),
                 ]);
             }
 

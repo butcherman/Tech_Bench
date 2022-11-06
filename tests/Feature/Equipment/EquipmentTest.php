@@ -7,6 +7,7 @@ use App\Models\CustomerEquipment;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\DataField;
+use App\Models\DataFieldType;
 use App\Models\EquipmentType;
 use App\Models\EquipmentCategory;
 
@@ -131,6 +132,35 @@ class EquipmentTest extends TestCase
     }
 
     /**
+     * Show Method
+     */
+    public function test_show_guest()
+    {
+        $equip = EquipmentType::factory()->create();
+
+        $response = $this->get(route('equipment.show', $equip->equip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+        $this->assertGuest();
+    }
+
+    public function test_show_user()
+    {
+        $equip = EquipmentType::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())->get(route('equipment.show', $equip->equip_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_show()
+    {
+        $equip = EquipmentType::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('equipment.show', $equip->equip_id));
+        $response->assertSuccessful();
+    }
+
+    /**
      * Edit Method
      */
     public function test_edit_guest()
@@ -228,6 +258,46 @@ class EquipmentTest extends TestCase
         $this->assertDatabaseHas('equipment_types',  ['equip_id' => $existing->equip_id, 'cat_id' => $existing->cat_id, 'name' => $form['name']]);
         $this->assertDatabaseHas('data_field_types', ['name' => 'IP Address']);
         $this->assertDatabaseHas('data_field_types', ['name' => 'Gateway']);
+    }
+
+    public function test_update_remove_field()
+    {
+        $existing  = EquipmentType::factory()->create();
+        $equip     = EquipmentType::factory()->make();
+        $dataField = DataFieldType::factory()->create();
+
+        $equipField = DataField::create([
+            'equip_id' => $existing->equip_id,
+            'type_id'  => $dataField->type_id,
+            'order'    => 0,
+        ]);
+
+        //  Assign this equipment to a customer to see if the customers fields are updated as well
+        $customer  = Customer::factory()->create();
+        $custEquip = CustomerEquipment::create([
+            'cust_id' => $customer->cust_id,
+            'equip_id' => $existing->equip_id,
+            'shared'   => false,
+        ]);
+
+        $form  = [
+            'category' => EquipmentCategory::find($existing->cat_id)->name,
+            'name'     => $equip->name,
+            'custData' => [
+                'IP Address',
+                'Gateway',
+                'New Field',
+            ],
+        ];
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('equipment.update', $existing->equip_id), $form);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('equipment.index'));
+        $response->assertSessionHas('success', __('equip.updated'));
+        $this->assertDatabaseHas('equipment_types',  ['equip_id' => $existing->equip_id, 'cat_id' => $existing->cat_id, 'name' => $form['name']]);
+        $this->assertDatabaseHas('data_field_types', ['name' => 'IP Address']);
+        $this->assertDatabaseMissing('data_fields', ['equip_id' => $equip->equip_id, 'type_id' => $dataField->type_id]);
+        $this->assertDatabaseMissing('customer_equipment_data', ['cust_equip_id' => $custEquip->cust_equip_id, 'field_id' => $equipField->field_id]);
     }
 
     /**
