@@ -6,6 +6,7 @@ use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use App\Http\Controllers\Equipment\EquipmentController;
 use App\Http\Controllers\Equipment\DataTypesController;
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
+use App\Models\EquipmentCategory;
 
 /**
  * Equipment Routes
@@ -21,13 +22,13 @@ Route::middleware('auth')->group(function()
         ->name('equipment.create')
         ->breadcrumb('New Equipment', 'equipment.index');
 
-    Route::resource('equipment-categories', EquipmentCategoryController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
-        $breadcrumbs->create('Create Category', 'equipment.index');
-        // $breadcrumbs->edit('Modify Category', 'equipment.index');  TODO - why does this trigger error?
+    Route::resource('equipment_categories', EquipmentCategoryController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+        $breadcrumbs->create('Create Category', 'equipment.index')
+                    ->edit('Edit Category', 'equipment.index');
     });
 
-    Route::resource('data-types', DataTypesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
-        $breadcrumbs->index('Equipment Data Types', 'equipment.index');
-        // $breadcrumbs->show('References', 'equipment.index');   //  TODO - Why does this trigger error???
+    Route::resource('data_types', DataTypesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+        $breadcrumbs->index('Equipment Data Types', 'equipment.index')
+                    ->show('References', 'equipment.index');
     });
 });

@@ -13,7 +13,7 @@
                             >
                                 {{ cat.name }}
                                 <Link
-                                    :href="route('equipment-categories.edit', cat.cat_id)"
+                                    :href="route('equipment_categories.edit', cat.cat_id)"
                                     class="float-end text-warning"
                                     :title="`Edit ${cat.name}`"
                                     v-tooltip
@@ -22,7 +22,7 @@
                                 </Link>
                             </li>
                             <li class="list-group-item text-center">
-                                <Link :href="route('equipment-categories.create')" class="btn btn-primary w-50">
+                                <Link :href="route('equipment_categories.create')" class="btn btn-primary w-50">
                                     Add Category
                                 </Link>
                             </li>
@@ -128,7 +128,7 @@
         verifyModal('This cannot be undone').then(res => {
             if(res)
             {
-                Inertia.delete(route('equipment-categories.destroy', activeCatId.value), {
+                Inertia.delete(route('equipment_categories.destroy', activeCatId.value), {
                     onFinish: () => equipTypes.value = null,
                 });
             }

@@ -32,7 +32,7 @@
                                         </span>
                                         <Link
                                             v-else
-                                            :href="route('data-types.show', data.type_id)"
+                                            :href="route('data_types.show', data.type_id)"
                                             class="text-info pointer mx-1"
                                             title="Show References"
                                             v-tooltip
@@ -118,7 +118,7 @@
         verifyModal('Are you sure?').then(res => {
             if(res)
             {
-                Inertia.delete(route('data-types.destroy', data.type_id));
+                Inertia.delete(route('data_types.destroy', data.type_id));
             }
         })
     }
@@ -133,7 +133,7 @@
 
     const onNewSubmit = (form:dataFormType) => {
         const formData = useForm(form);
-        formData.post(route('data-types.store'), {
+        formData.post(route('data_types.store'), {
             onFinish: () => newTypeForm.value?.endSubmit(),
         });
     }
@@ -153,7 +153,7 @@
 
     const onEditSubmit = (form:dataFormType) => {
         const formData = useForm(form);
-        formData.put(route('data-types.update', editId.value), {
+        formData.put(route('data_types.update', editId.value), {
             onFinish: () => {
                 editTypeForm.value?.endSubmit();
                 editTypeModal.value?.hide();

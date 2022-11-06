@@ -48,30 +48,30 @@ class EquipmentCategoryController extends Controller
     /**
      * Update the specified Category
      */
-    public function update(EquipmentCategoryRequest $request, EquipmentCategory $equipmentCategory)
+    public function update(EquipmentCategoryRequest $request, EquipmentCategory $equipment_category)
     {
-        $equipmentCategory->update($request->only(['name']));
+        $equipment_category->update($request->only(['name']));
 
-        Log::info('Equimpent ID '.$equipmentCategory->equip_id.' has been updated by '.$request->user()->username);
+        Log::info('Equimpent ID '.$equipment_category->equip_id.' has been updated by '.$request->user()->username);
         return redirect(route('equipment.index'))->with('success', __('equip.category.updated'));
     }
 
     /**
      * Remove the a category
      */
-    public function destroy(EquipmentCategory $equipmentCategory)
+    public function destroy(EquipmentCategory $equipment_category)
     {
-        $this->authorize('delete', $equipmentCategory);
+        $this->authorize('delete', $equipment_category);
 
         try
         {
-            $equipmentCategory->delete();
+            $equipment_category->delete();
         }
         catch(QueryException $e)
         {
             if($e->errorInfo[1] === 19)
             {
-                Log::error('Unable to delete Equipment Category '.$equipmentCategory->name.'.  It is currently in use');
+                Log::error('Unable to delete Equipment Category '.$equipment_category->name.'.  It is currently in use');
                 return back()->withErrors([
                     'error' => __('equip.category.in_use'),
                     // 'link'  => '<a html="#">More Info</a>',
@@ -79,12 +79,12 @@ class EquipmentCategoryController extends Controller
             }
 
             // @codeCoverageIgnoreStart
-            Log::error('Error when trying to delete Equipment Category '.$equipmentCategory->name, $e->errorInfo);
+            Log::error('Error when trying to delete Equipment Category '.$equipment_category->name, $e->errorInfo);
             return back()->withErrors(['error' => __('equip.category.del_failed')]);
             // @codeCoverageIgnoreEnd
         }
 
-        Log::notice('Equipment Category '.$equipmentCategory->name.' has been deleted by '.Auth::user()->username);
+        Log::notice('Equipment Category '.$equipment_category->name.' has been deleted by '.Auth::user()->username);
         return redirect(route('equipment.index'))->with('success', __('equip.category.destroyed'));
     }
 }

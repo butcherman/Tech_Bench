@@ -49,7 +49,7 @@
     }
     const onSubmit         = (form:catFormType) => {
         const formData = useForm(form);
-        formData.put(route('equipment-categories.update', props.category.cat_id), {
+        formData.put(route('equipment_categories.update', props.category.cat_id), {
             onFinish: () => categoryForm.value?.endSubmit(),
         });
     }

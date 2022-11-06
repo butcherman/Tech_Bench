@@ -104,7 +104,7 @@ class BuildAdminMenu
                     [
                         'name' => 'Equipment Data Types (for customers)',
                         'icon' => 'fas fa-database',
-                        'link' => route('data-types.index'),
+                        'link' => route('data_types.index'),
                     ],
                 ],
             ];

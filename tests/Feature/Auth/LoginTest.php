@@ -132,6 +132,4 @@ class LoginTest extends TestCase
         $response->assertRedirect(route('settings.password.index'));
         $response->assertSessionHas('warning', __('user.password_expired'));
     }
-
-    //  TODO - Test Remember Me Token
 }

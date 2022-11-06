@@ -16,7 +16,7 @@ class EquipmentCategoryTest extends TestCase
      */
     public function test_create_guest()
     {
-        $response = $this->get(route('equipment-categories.create'));
+        $response = $this->get(route('equipment_categories.create'));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -24,13 +24,13 @@ class EquipmentCategoryTest extends TestCase
 
     public function test_create_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('equipment-categories.create'));
+        $response = $this->actingAs(User::factory()->create())->get(route('equipment_categories.create'));
         $response->assertStatus(403);
     }
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('equipment-categories.create'));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('equipment_categories.create'));
         $response->assertSuccessful();
     }
 
@@ -42,7 +42,7 @@ class EquipmentCategoryTest extends TestCase
         $form = [
             'name' => 'New Category Name',
         ];
-        $response = $this->post(route('equipment-categories.store'), $form);
+        $response = $this->post(route('equipment_categories.store'), $form);
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -53,7 +53,7 @@ class EquipmentCategoryTest extends TestCase
         $form = [
             'name' => 'New Category Name',
         ];
-        $response = $this->actingAs(User::factory()->create())->post(route('equipment-categories.store'), $form);
+        $response = $this->actingAs(User::factory()->create())->post(route('equipment_categories.store'), $form);
         $response->assertStatus(403);
     }
 
@@ -62,7 +62,7 @@ class EquipmentCategoryTest extends TestCase
         $form = [
             'name' => 'New Category Name',
         ];
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('equipment-categories.store'), $form);
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('equipment_categories.store'), $form);
         $response->assertStatus(302);
         $response->assertRedirect(route('equipment.index'));
         $response->assertSessionHas('success', __('equip.category.created'));
@@ -76,7 +76,7 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->get(route('equipment-categories.edit', $cat->cat_id));
+        $response = $this->get(route('equipment_categories.edit', $cat->cat_id));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -86,7 +86,7 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())->get(route('equipment-categories.edit', $cat->cat_id));
+        $response = $this->actingAs(User::factory()->create())->get(route('equipment_categories.edit', $cat->cat_id));
         $response->assertStatus(403);
     }
 
@@ -94,7 +94,7 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('equipment-categories.edit', $cat->cat_id));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('equipment_categories.edit', $cat->cat_id));
         $response->assertSuccessful();
     }
 
@@ -108,7 +108,7 @@ class EquipmentCategoryTest extends TestCase
             'name' => 'New Equipment Name',
         ];
 
-        $response = $this->put(route('equipment-categories.update', $cat->cat_id), $form);
+        $response = $this->put(route('equipment_categories.update', $cat->cat_id), $form);
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -121,7 +121,7 @@ class EquipmentCategoryTest extends TestCase
             'name' => 'New Equipment Name',
         ];
 
-        $response = $this->actingAs(User::factory()->create())->put(route('equipment-categories.update', $cat->cat_id), $form);
+        $response = $this->actingAs(User::factory()->create())->put(route('equipment_categories.update', $cat->cat_id), $form);
         $response->assertStatus(403);
     }
 
@@ -132,7 +132,7 @@ class EquipmentCategoryTest extends TestCase
             'name' => 'New Equipment Name',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('equipment-categories.update', $cat->cat_id), $form);
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('equipment_categories.update', $cat->cat_id), $form);
         $response->assertStatus(302);
         $response->assertRedirect(route('equipment.index'));
         $response->assertSessionHas('success', __('equip.category.updated'));
@@ -146,7 +146,7 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->delete(route('equipment-categories.destroy', $cat->cat_id));
+        $response = $this->delete(route('equipment_categories.destroy', $cat->cat_id));
         $response->assertStatus(302);
         $response->assertRedirect(route('login.index'));
         $this->assertGuest();
@@ -156,7 +156,7 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())->delete(route('equipment-categories.destroy', $cat->cat_id));
+        $response = $this->actingAs(User::factory()->create())->delete(route('equipment_categories.destroy', $cat->cat_id));
         $response->assertStatus(403);
     }
 
@@ -165,7 +165,7 @@ class EquipmentCategoryTest extends TestCase
         $cat = EquipmentCategory::factory()->create();
         EquipmentType::factory()->create(['cat_id' => $cat->cat_id]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('equipment-categories.destroy', $cat->cat_id));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('equipment_categories.destroy', $cat->cat_id));
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['error' => __('equip.category.in_use')]);
         $this->assertDatabaseHas('equipment_categories', ['cat_id' => $cat->cat_id, 'name' => $cat->name]);
@@ -175,7 +175,7 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('equipment-categories.destroy', $cat->cat_id));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('equipment_categories.destroy', $cat->cat_id));
         $response->assertStatus(302);
         $response->assertRedirect(route('equipment.index'));
         $response->assertSessionHas('success', __('equip.category.destroyed'));

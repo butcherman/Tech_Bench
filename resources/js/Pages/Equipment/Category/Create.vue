@@ -37,7 +37,7 @@
     }
     const onSubmit         = (form:catFormType) => {
         const formData = useForm(form);
-        formData.post(route('equipment-categories.store'), {
+        formData.post(route('equipment_categories.store'), {
             onFinish: () => categoryForm.value?.endSubmit(),
         });
     }
