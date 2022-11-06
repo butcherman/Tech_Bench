@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Equipment;
 
-use App\Models\DataField;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\DataFieldType;
-use App\Models\EquipmentType;
 
 class DataTypesTest extends TestCase
 {
@@ -68,6 +66,35 @@ class DataTypesTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('equip.data_type.created'));
         $this->assertDatabaseHas('data_field_types', $data);
+    }
+
+    /**
+     * Show Method
+     */
+    public function test_show_guest()
+    {
+        $type = DataFieldType::factory()->create();
+
+        $response = $this->get(route('data-types.show', $type->type_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+        $this->assertGuest();
+    }
+
+    public function test_show_no_permission()
+    {
+        $type = DataFieldType::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())->get(route('data-types.show', $type->type_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_show()
+    {
+        $type = DataFieldType::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('data-types.show', $type->type_id));
+        $response->assertSuccessful();
     }
 
     /**

@@ -16,6 +16,10 @@ declare global {
     ): string;
 }
 
+export interface genericListType {
+    [key:string]: string;
+}
+
 export * from './LayoutTypes';
 export * from './UserDataTypes';
 export * from './FormTypes';

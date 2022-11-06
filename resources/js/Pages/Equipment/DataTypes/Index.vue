@@ -30,6 +30,15 @@
                                         >
                                             <fa-icon icon="trash-can" />
                                         </span>
+                                        <Link
+                                            v-else
+                                            :href="route('data-types.show', data.type_id)"
+                                            class="text-info pointer mx-1"
+                                            title="Show References"
+                                            v-tooltip
+                                        >
+                                            <fa-icon icon="fa-brands fa-searchengin" />
+                                        </Link>
                                         <span
                                             class="text-info pointer mx-1"
                                             title="Edit"

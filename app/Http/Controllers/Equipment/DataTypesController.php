@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\DataTypeRequest;
+use App\Models\DataField;
 use App\Models\DataFieldType;
+use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 
 class DataTypesController extends Controller
@@ -37,14 +39,19 @@ class DataTypesController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Display all references to the noted Data Type
      */
-    public function show($id)
+    public function show(DataFieldType $data_type)
     {
-        //
+        $this->authorize('viewAny', EquipmentType::class);
+
+        return Inertia::render('Equipment/DataTypes/Show', [
+            'data-type' => $data_type,
+            'equipment' => EquipmentType::with('EquipmentCategory')->
+                           whereHas('DataFieldType', function($q) use ($data_type) {
+                                $q->where('data_fields.type_id', $data_type->type_id);
+                            })->get()->groupBy('EquipmentCategory.name'),
+        ]);
     }
 
     /**

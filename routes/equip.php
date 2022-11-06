@@ -5,7 +5,6 @@ use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
 use App\Http\Controllers\Equipment\EquipmentController;
 use App\Http\Controllers\Equipment\DataTypesController;
-use App\Http\Controllers\Equipment\ListEquipmentController;
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
 
 /**
@@ -29,22 +28,6 @@ Route::middleware('auth')->group(function()
 
     Route::resource('data-types', DataTypesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->index('Equipment Data Types', 'equipment.index');
+        // $breadcrumbs->show('References', 'equipment.index');   //  TODO - Why does this trigger error???
     });
-
-//     Route::prefix('data-types')->name('data-types.')->group(function()
-//     {
-//         Route::get(   '/',                [DataTypesController::class, 'index'])  ->name('index')->breadcrumb('Equipment Data Types', 'equipment.index');
-//         Route::post(  '/',                [DataTypesController::class, 'store'])  ->name('store');
-//         Route::put(   '{type}',           [DataTypesController::class, 'update']) ->name('update');
-//         Route::delete('{type}',           [DataTypesController::class, 'destroy'])->name('destroy');
-//     });
-
-//     Route::prefix('equipment-categories')->name('equipment-categories.')->group(function()
-//     {
-//         Route::get(   'create',          [EquipmentCategoryController::class, 'create']) ->name('create')->breadcrumb('New Category', 'equipment.index');
-//         Route::post(  '/',               [EquipmentCategoryController::class, 'store'])  ->name('store');
-//         Route::get(   '{category}/edit', [EquipmentCategoryController::class, 'edit'])   ->name('edit')  ->breadcrumb('Edit Category', 'equipment.index');
-//         Route::put(   '{category}/edit', [EquipmentCategoryController::class, 'update']) ->name('update');
-//         Route::delete('{category}',      [EquipmentCategoryController::class, 'destroy'])->name('destroy');
-//     });
 });
