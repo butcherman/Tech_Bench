@@ -1,5 +1,5 @@
 <template>
-    <App>
+    <div>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-    </App>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -53,4 +53,8 @@
             onFinish: () => categoryForm.value?.endSubmit(),
         });
     }
+</script>
+
+<script lang="ts">
+    export default { layout: App }
 </script>
