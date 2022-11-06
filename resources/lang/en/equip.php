@@ -9,6 +9,13 @@ return [
         'del_failed' => 'An error occured while trying to delete Equipment Category',
     ],
 
+    'data_type'  => [
+        'created'   => 'New Customer Data Type created successfully',
+        'updated'   => 'Customer Data Type updated',
+        'destroyed' => 'Customer Data Type deleted',
+        'in_use'    => 'Cannot delete Customer Data Type, it is currently in use',
+    ],
+
     'created'    => 'New Equipment created',
     'updated'    => 'Equipment Updated',
     'destroyed'  => 'Equipment Deleted',

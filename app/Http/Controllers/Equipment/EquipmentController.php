@@ -61,7 +61,7 @@ class EquipmentController extends Controller
      */
     public function show(EquipmentType $equipment)
     {
-        return 'show';
+        // return 'show';
     }
 
     /**

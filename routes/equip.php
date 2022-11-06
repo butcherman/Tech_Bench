@@ -26,17 +26,10 @@ Route::middleware('auth')->group(function()
         $breadcrumbs->create('Create Category', 'equipment.index');
         // $breadcrumbs->edit('Modify Category', 'equipment.index');  TODO - why does this trigger error?
     });
-//     Route::get('equipment-list',            ListEquipmentController::class)->name('list-equipment');
 
-//     Route::prefix('equipment')->name('equipment.')->group(function()
-//     {
-//         Route::get(   '/',                [EquipmentController::class, 'index'])  ->name('index')->breadcrumb('Equipment', 'admin.index');
-//         Route::post(  '/',                [EquipmentController::class, 'store'])  ->name('store');
-//         Route::get(   '{equipment}',      [EquipmentController::class, 'show'])   ->name('show')->breadcrumb('New Equipment', '.index');
-//         Route::get(   '{equipment}/edit', [EquipmentController::class, 'edit'])   ->name('edit')->breadcrumb('Edit Equipment', '.index');
-//         Route::put(   '{equipment}/edit', [EquipmentController::class, 'update']) ->name('update');
-//         Route::delete('{equipment}',      [EquipmentController::class, 'destroy'])->name('destroy');
-//     });
+    Route::resource('data-types', DataTypesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+        $breadcrumbs->index('Equipment Data Types', 'equipment.index');
+    });
 
 //     Route::prefix('data-types')->name('data-types.')->group(function()
 //     {

@@ -12,6 +12,14 @@ class EquipmentTypePolicy
     use HandlesAuthorization;
 
     /**
+     * Determine if the user can view the index page
+     */
+    public function viewAny(User $user)
+    {
+        return $this->checkPermission($user, 'Manage Equipment');
+    }
+
+    /**
      * Determine whether the user can create models
      */
     public function create(User $user)
