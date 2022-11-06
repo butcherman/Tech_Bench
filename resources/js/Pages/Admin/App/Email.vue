@@ -125,11 +125,11 @@
         username    : yup.string().when('requireAuth', {
             is  : true,
             then: yup.string().required('Username field is required'),
-        }),
+        }).nullable(),
         password    : yup.string().when('requireAuth', {
             is  : true,
             then: yup.string().required('Password field is required'),
-        })
+        }).nullable(),
     });
     const encryptionTypes  = [ 'NONE', 'TLS', 'SSL' ];
 

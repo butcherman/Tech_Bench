@@ -157,19 +157,19 @@
         allowRegister: yup.boolean().when('allowOath', {
             is  : true,
             then: yup.boolean().required(),
-        }),
+        }).nullable(),
         tenantId     : yup.string().when('allowOath', {
             is  : true,
             then: yup.string().required('Please enter the Azure Tenant ID'),
-        }),
+        }).nullable(),
         clientId     : yup.string().when('allowOath', {
             is  : true,
             then: yup.string().required('Please enter the Azure Client ID'),
-        }),
+        }).nullable(),
         clientSecret : yup.string().when('allowOath', {
             is  : true,
             then: yup.string().required('Please enter the Azure Client Secret'),
-        }),
+        }).nullable(),
         redirectUri  : yup.string().required(),
     });
 
