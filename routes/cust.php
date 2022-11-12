@@ -17,8 +17,13 @@ use App\Http\Controllers\Customers\CustomerContactsController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerFileTypesController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
+use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
 Route::get('{cust}/show', function() { return 'customers'; })->name('customers.show');
+
+Route::resource('customers', CustomerController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+    $breadcrumbs->index('Customers');
+});
 
 /**
  * Customer Information Routes
