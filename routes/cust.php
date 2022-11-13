@@ -1,28 +1,32 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Customers\CheckIdController;
-use App\Http\Controllers\Customers\CustomerController;
-use App\Http\Controllers\Customers\GetLinkedController;
-use App\Http\Controllers\Customers\CustomerIdController;
-use App\Http\Controllers\Customers\CustomerNoteController;
-use App\Http\Controllers\Customers\LinkCustomerController;
-use App\Http\Controllers\Customers\CustomerFileController;
-use App\Http\Controllers\Customers\CustomerSearchController;
-use App\Http\Controllers\Customers\GetDeletedItemsController;
-use App\Http\Controllers\Customers\DownloadContactController;
-use App\Http\Controllers\Customers\CustomerBookmarkController;
-use App\Http\Controllers\Customers\CustomerContactsController;
-use App\Http\Controllers\Customers\CustomerEquipmentController;
-use App\Http\Controllers\Customers\CustomerFileTypesController;
-use App\Http\Controllers\Customers\DeactivatedCustomerController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
-Route::get('{cust}/show', function() { return 'customers'; })->name('customers.show');
+use App\Http\Controllers\Customers\CustomerController;
+use App\Http\Controllers\Customers\CustomerSearchController;
+// use App\Http\Controllers\Customers\CheckIdController;
+// use App\Http\Controllers\Customers\GetLinkedController;
+// use App\Http\Controllers\Customers\CustomerIdController;
+// use App\Http\Controllers\Customers\CustomerNoteController;
+// use App\Http\Controllers\Customers\LinkCustomerController;
+// use App\Http\Controllers\Customers\CustomerFileController;
+// use App\Http\Controllers\Customers\GetDeletedItemsController;
+// use App\Http\Controllers\Customers\DownloadContactController;
+// use App\Http\Controllers\Customers\CustomerBookmarkController;
+// use App\Http\Controllers\Customers\CustomerContactsController;
+// use App\Http\Controllers\Customers\CustomerEquipmentController;
+// use App\Http\Controllers\Customers\CustomerFileTypesController;
+// use App\Http\Controllers\Customers\DeactivatedCustomerController;
 
-Route::resource('customers', CustomerController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
-    $breadcrumbs->index('Customers');
+Route::middleware('auth')->group(function() {
+    Route::resource('customers', CustomerController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+        $breadcrumbs->index('Customers');
+    });
+
+    Route::prefix('customers')->name('customers.')->group(function() {
+        Route::post('search', CustomerSearchController::class)->name('search');
+    });
 });
 
 /**

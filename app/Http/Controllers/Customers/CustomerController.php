@@ -17,8 +17,10 @@ class CustomerController extends Controller
     public function index()
     {
         return Inertia::render('Customers/Index', [
-            'permissions' => [],
-            'equipment'   => (new EquipmentOptionList)->build(),
+            'per-page'       => 25,
+            'pagination-arr' => [25, 50, 100],
+            'permissions'    => [],
+            'equipment'      => (new EquipmentOptionList)->build(),
         ]);
     }
 

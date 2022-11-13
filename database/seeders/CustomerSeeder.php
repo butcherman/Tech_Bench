@@ -19,11 +19,11 @@ use Illuminate\Support\Facades\Storage;
 class CustomerSeeder extends Seeder
 {
     /**
-     *  Create 50 random customers
+     *  Create 150 random customers
      */
     public function run()
     {
-        Customer::factory()->count(50)->create();
+        Customer::factory()->count(150)->create();
 
         //  Assign equipment to 40 of those customers
         $custList = Customer::inRandomOrder()->limit(40)->get();
