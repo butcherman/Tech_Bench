@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <div class="clearfix mb-2">
+                            <div v-if="permissions.create" class="clearfix mb-2">
                                 <Link
                                     as="button"
                                     :href="route('customers.create')"
@@ -231,16 +231,16 @@
     import App                          from '@/Layouts/app.vue';
     import Overlay                      from '@/Components/Base/Overlay.vue';
     import { ref, reactive, onMounted } from 'vue';
+    import { okModal }                  from '@/Modules/okModal.module';
     import { customerPaginationType,
              customerPermissionType,
              customerSearchParamType,
              customerType }             from '@/Types';
-import { okModal } from '@/Modules/okModal.module';
 
     const props = defineProps<{
         perPage      : number;
         paginationArr: number[];
-        permissions  : customerPermissionType[];
+        permissions  : customerPermissionType;
         equipment    : {
             [key:string]:string[];
         };

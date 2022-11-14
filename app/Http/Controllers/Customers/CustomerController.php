@@ -2,37 +2,35 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Actions\EquipmentOptionList;
-use App\Http\Controllers\Controller;
-use App\Models\EquipmentCategory;
-use App\Models\EquipmentType;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Actions\EquipmentOptionList;
+use App\Models\Customer;
 
 class CustomerController extends Controller
 {
     /**
      * Search page for customers
      */
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('Customers/Index', [
             'per-page'       => 25,
             'pagination-arr' => [25, 50, 100],
-            'permissions'    => [],
+            'permissions'    => ['create' => $request->user()->can('create', Customer::class)],
             'equipment'      => (new EquipmentOptionList)->build(),
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new customer
      */
     public function create()
     {
-        //
-        return 'create';
+        $this->authorize('create', Customer::class);
+
+        return Inertia::render('Customers/Create');
     }
 
     /**

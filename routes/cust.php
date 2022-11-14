@@ -21,7 +21,8 @@ use App\Http\Controllers\Customers\CustomerSearchController;
 
 Route::middleware('auth')->group(function() {
     Route::resource('customers', CustomerController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
-        $breadcrumbs->index('Customers');
+        $breadcrumbs->index('Customers')
+            ->create('New Customer');
     });
 
     Route::prefix('customers')->name('customers.')->group(function() {

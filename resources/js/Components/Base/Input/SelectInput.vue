@@ -20,7 +20,7 @@
         id        : string;
         label?    : string;
         name      : string;
-        optionList: string[] | number[] | optionListObject;
+        optionList: string[] | number[] | optionListObject[];
     }>();
 
     const getValue = (opt:optionListObject | string | number) => {
