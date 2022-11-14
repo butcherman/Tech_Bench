@@ -45,37 +45,80 @@
                                                 />
                                             </td>
                                             <td>
-                                                <select
-                                                    id="cust-equip"
-                                                    v-model="searchParam.equip"
-                                                    class="form-select"
-                                                    @change="onSearch"
-                                                >
-                                                    <option value="null" disabled selected hidden>Search by Equipment</option>
-                                                    <optgroup
-                                                        v-for="(equipList, cat) in equipment"
-                                                        :key="cat"
-                                                        :label="cat.toString()"
+                                                <div class="input-group flex-nowrap">
+                                                    <select
+                                                        id="cust-equip"
+                                                        v-model="searchParam.equip"
+                                                        class="form-select"
+                                                        @change="onSearch"
                                                     >
-                                                        <option v-for="equip in equipList">
-                                                            {{ equip }}
+                                                        <option
+                                                            value="null"
+                                                            disabled
+                                                            selected
+                                                            hidden
+                                                        >
+                                                            Search by Equipment
                                                         </option>
-                                                    </optgroup>
-                                                </select>
+                                                        <optgroup
+                                                            v-for="(equipList, cat) in equipment"
+                                                            :key="cat"
+                                                            :label="cat.toString()"
+                                                        >
+                                                            <option v-for="equip in equipList">
+                                                                {{ equip }}
+                                                            </option>
+                                                        </optgroup>
+                                                    </select>
+                                                    <span
+                                                        class="input-group-text pointer"
+                                                        title="Search"
+                                                        v-tooltip
+                                                        @click="onSearch"
+                                                    >
+                                                        <fa-icon icon="fa-brands fa-searchengin" />
+                                                    </span>
+                                                    <span
+                                                        class="input-group-text pointer"
+                                                        title="Clear Search"
+                                                        v-tooltip
+                                                        @click="resetSearch"
+                                                    >
+                                                        <fa-icon icon="fa-xmark" />
+                                                    </span>
+                                                </div>
                                             </td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-if="searchResults.length === 0">
-                                            <td colspan="3" class="text-center">
-                                                No Results Found
-                                            </td>
-                                        </tr>
-                                        <template
-                                            v-for="customer in searchResults"
+                                        <template v-if="loading">
+                                            <tr v-for="i in searchParam.perPage" :key="i">
+                                                <td class="placeholder-glow">
+                                                    <span class="placeholder" :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`" />
+                                                </td>
+                                                <td class="placeholder-glow">
+                                                    <span class="placeholder" :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`" />
+                                                </td>
+                                                <td class="placeholder-glow">
+                                                    <span class="placeholder" :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`" />
+                                                </td>
+                                            </tr>
+                                        </template>
+                                        <template v-else-if="searchResults.length === 0">
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    No Results Found
+                                                </td>
+                                            </tr>
+                                        </template>
+                                        <template v-else>
+                                            <Link
+                                                as="tr"
+                                                v-for="customer in searchResults"
                                             :key="customer.cust_id"
-                                        >
-                                            <Link as="tr" :href="route('customers.show', customer.slug)" class="pointer">
+                                                :href="route('customers.show', customer.slug)"
+                                                class="pointer"
+                                            >
                                                 <td>
                                                     {{ customer.name }}
                                                     <span v-if="customer.dba_name">
@@ -192,6 +235,7 @@
              customerPermissionType,
              customerSearchParamType,
              customerType }             from '@/Types';
+import { okModal } from '@/Modules/okModal.module';
 
     const props = defineProps<{
         perPage      : number;
@@ -233,8 +277,6 @@
         loading.value = true;
 
         axios.post(route('customers.search'), searchParam).then(res => {
-            console.log(res.data);
-
             searchResults.value        = res.data.data;
             paginationData.listFrom    = res.data.from;
             paginationData.listTo      = res.data.to;
@@ -244,7 +286,19 @@
             paginationData.pageArr     = buildPageArr(res.data.current_page, res.data.last_page);
 
             loading.value              = false;
+        }).catch(() => {
+            okModal('Unable to process request at this time.  Please try again later');
         });
+    }
+
+    /**
+     * Clear the search paramaters
+     */
+    const resetSearch = () => {
+        searchParam.name  = '';
+        searchParam.city  = '';
+        searchParam.equip = null;
+        onSearch();
     }
 
     /**
