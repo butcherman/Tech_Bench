@@ -94,13 +94,22 @@
                                         <template v-if="loading">
                                             <tr v-for="i in searchParam.perPage" :key="i">
                                                 <td class="placeholder-glow">
-                                                    <span class="placeholder" :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`" />
+                                                    <span
+                                                        class="placeholder"
+                                                        :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`"
+                                                    />
                                                 </td>
                                                 <td class="placeholder-glow">
-                                                    <span class="placeholder" :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`" />
+                                                    <span
+                                                        class="placeholder"
+                                                        :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`"
+                                                    />
                                                 </td>
                                                 <td class="placeholder-glow">
-                                                    <span class="placeholder" :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`" />
+                                                    <span
+                                                        class="placeholder"
+                                                        :class="`col-${Math.floor(Math.random() * (10 - 3 + 1) + 3)}`"
+                                                    />
                                                 </td>
                                             </tr>
                                         </template>
@@ -112,34 +121,49 @@
                                             </tr>
                                         </template>
                                         <template v-else>
-                                            <Link
-                                                as="tr"
+                                            <tr
                                                 v-for="customer in searchResults"
-                                            :key="customer.cust_id"
-                                                :href="route('customers.show', customer.slug)"
+                                                :key="customer.cust_id"
                                                 class="pointer"
                                             >
                                                 <td>
-                                                    {{ customer.name }}
-                                                    <span v-if="customer.dba_name">
-                                                        {{ customer.dba_name }}
-                                                    </span>
+                                                    <Link
+                                                        :href="route('customers.show', customer.slug)"
+                                                        class="d-block text-decoration-none text-muted"
+                                                    >
+                                                        {{ customer.name }}
+                                                        <span v-if="customer.dba_name">
+                                                            {{ customer.dba_name }}
+                                                        </span>
+                                                    </Link>
                                                 </td>
-                                                <td>{{ customer.city }}</td>
                                                 <td>
-                                                    <template v-if="customer.customer_equipment.length > 0">
-                                                        <div v-for="equip in customer.customer_equipment">
-                                                            {{ equip.name }}
-                                                        </div>
-                                                    </template>
-                                                    <template v-if="customer.parent_equipment.length > 0">
-                                                        <div v-for="equip in customer.parent_equipment">
-                                                            <fa-icon icon="share" />
-                                                            {{ equip.name }}
-                                                        </div>
-                                                    </template>
+                                                    <Link
+                                                        :href="route('customers.show', customer.slug)"
+                                                        class="d-block text-decoration-none text-muted"
+                                                    >
+                                                        {{ customer.city }}
+                                                    </Link>
                                                 </td>
-                                            </Link>
+                                                <td>
+                                                    <Link
+                                                        :href="route('customers.show', customer.slug)"
+                                                        class="d-block text-decoration-none text-muted"
+                                                    >
+                                                        <template v-if="customer.customer_equipment.length > 0">
+                                                            <div v-for="equip in customer.customer_equipment">
+                                                                {{ equip.name }}
+                                                            </div>
+                                                        </template>
+                                                        <template v-if="customer.parent_equipment.length > 0">
+                                                            <div v-for="equip in customer.parent_equipment">
+                                                                <fa-icon icon="share" />
+                                                                {{ equip.name }}
+                                                            </div>
+                                                        </template>
+                                                    </Link>
+                                                </td>
+                                            </tr>
                                         </template>
                                     </tbody>
                                     <tfoot>
@@ -231,12 +255,11 @@
     import App                          from '@/Layouts/app.vue';
     import Overlay                      from '@/Components/Base/Overlay.vue';
     import { ref, reactive, onMounted } from 'vue';
-    import { okModal }                  from '@/Modules/okModal.module';
+    import { performCustomerSearch }    from '@/Modules/Customers/customers.module';
     import { customerPaginationType,
              customerPermissionType,
              customerSearchParamType,
              customerType }             from '@/Types';
-import { performCustomerSearch } from '@/Modules/Customers/customers.module';
 
     const props = defineProps<{
         perPage      : number;
