@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customers\CheckCustIdController;
 use Illuminate\Support\Facades\Route;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function() {
 
     Route::prefix('customers')->name('customers.')->group(function() {
         Route::post('search', CustomerSearchController::class)->name('search');
+        Route::get('{id}/check-id', CheckCustIdController::class)->name('check-id');
     });
 });
 

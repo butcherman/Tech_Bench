@@ -6,7 +6,9 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Actions\EquipmentOptionList;
+use App\Http\Requests\Customers\CustomerRequest;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -30,31 +32,32 @@ class CustomerController extends Controller
     {
         $this->authorize('create', Customer::class);
 
-        return Inertia::render('Customers/Create');
+        return Inertia::render('Customers/Create', [
+            'select-id'     => config('customer.select_id'),
+            'default-state' => config('customer.default_state'),
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Store a newly created Customer
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
-        //
-        return 'store';
+        $request->setSlug();
+        $newCust = Customer::create($request->only([
+            'cust_id', 'parent_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip', 'slug'
+        ]));
+
+        Log::stack(['daily', 'cust', 'user'])->info('New Customer create by '.$request->user()->username, $newCust->toArray());
+        return redirect(route('customers.show', $newCust->slug));
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Display the specified Customer
      */
     public function show($id)
     {
-        //
-        return 'show';
+        return Inertia::render('Customers/Show');
     }
 
     /**

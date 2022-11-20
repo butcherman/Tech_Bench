@@ -1,6 +1,6 @@
 export interface customerPermissionType {
-    create?: boolean;
-    update?: boolean;
+    create ?: boolean;
+    update ?: boolean;
     disable?: boolean;
 }
 
@@ -27,6 +27,16 @@ export interface customerSearchParamType {
     perPage  : number;
     sortField: string;
     sortType : 'asc' | 'desc';
+}
+
+export interface customerSearchType {
+    data       : customerType[],
+    currentPage: number,
+    numPages   : number,
+    listFrom   : number,
+    listTo     : number,
+    listTotal  : number,
+    pageArr    : number[],
 }
 
 export interface customerPaginationType {

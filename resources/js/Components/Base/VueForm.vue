@@ -29,7 +29,7 @@
     }>();
 
     const isSubmitting     = ref(false);
-    const { handleSubmit, setFieldValue } = useForm({
+    const { handleSubmit, setFieldValue, setFieldError, values } = useForm({
         validationSchema: props.validationSchema,
         initialValues   : props.initialValues ? props.initialValues : {},
     });
@@ -39,12 +39,23 @@
         emit('submit', form);
     });
 
+    const getFieldValue = (field:string) => {
+        return values[field];
+    }
+
     function _endSubmit()
     {
         isSubmitting.value = false;
     }
 
-    defineExpose({ endSubmit : _endSubmit, setFieldValue, useFieldArray });
+    defineExpose({
+        endSubmit : _endSubmit,
+        getFieldValue,
+        setFieldValue,
+        useFieldArray,
+        setFieldError,
+        onSubmit,
+    });
 </script>
 
 <style scoped lang="scss">

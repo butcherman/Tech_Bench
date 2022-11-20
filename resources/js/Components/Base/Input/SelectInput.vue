@@ -1,18 +1,22 @@
 <template>
     <div class="mb-3">
         <label v-if="label" :for="id"><strong>{{ label }}:</strong></label>
-        <select class="form-select form-select-lg" v-model="value">
+        <select
+            class="form-select form-select-lg"
+            :class="{ 'is-valid' : isValid, 'is-invalid' : isInvalid }"
+            v-model="value"
+        >
             <option
                 v-for="opt in optionList"
                 :value="getValue(opt)"
             >{{ getText(opt) }}</option>
         </select>
-        <span class="text-danger">{{ errorMessage }}</span>
+        <span v-if="errorMessage && (meta.dirty || meta.touched)" class="text-danger">{{ errorMessage }}</span>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { toRef }                 from 'vue';
+    import { toRef, computed }       from 'vue';
     import { useField }              from 'vee-validate';
     import type { optionListObject } from '@/Types';
 
@@ -22,6 +26,14 @@
         name      : string;
         optionList: string[] | number[] | optionListObject[];
     }>();
+
+    const isValid = computed(() => {
+        return meta.valid && meta.validated && !meta.pending;
+    });
+
+    const isInvalid = computed(() => {
+        return !meta.valid && meta.validated && !meta.pending
+    });
 
     const getValue = (opt:optionListObject | string | number) => {
         if(typeof opt === 'object') {
@@ -39,6 +51,6 @@
         return opt;
     }
 
-    const nameRef                 = toRef(props, 'name');
-    const { errorMessage, value } = useField(nameRef);
+    const nameRef = toRef(props, 'name');
+    const { errorMessage, value, meta } = useField(nameRef);
 </script>

@@ -7,17 +7,18 @@
             :placeholder="label"
             :disabled="disabled"
             class="form-control order-2"
+            :class="{ 'is-valid' : isValid, 'is-invalid' : isInvalid }"
             v-focus="focus"
             @change="$emit('change', value)"
         >
         <label :for="id">{{ label }}</label>
-        <span class="text-danger">{{ errorMessage }}</span>
+        <span v-if="errorMessage && (meta.dirty || meta.touched)" class="text-danger">{{ errorMessage }}</span>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { toRef } from 'vue';
-    import { useField }           from 'vee-validate';
+    import { toRef, computed } from 'vue';
+    import { useField }        from 'vee-validate';
 
     defineEmits(['change']);
 
@@ -30,6 +31,14 @@
         disabled?: boolean;
     }>();
 
+    const isValid = computed(() => {
+        return meta.valid && meta.validated && !meta.pending;
+    });
+
+    const isInvalid = computed(() => {
+        return !meta.valid && meta.validated && !meta.pending
+    });
+
     const nameRef = toRef(props, 'name');
-    const { errorMessage, value } = useField(nameRef);
+    const { errorMessage, value, meta } = useField(nameRef);
 </script>

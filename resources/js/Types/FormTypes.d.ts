@@ -23,3 +23,14 @@ export interface equipmentFormType {
     name    : string;
     custData: string[];
 }
+
+export interface customerFormType {
+    cust_id  : number;
+    parent_id: string;
+    name     : string;
+    dbaName  : string;
+    address  : string;
+    city     : string;
+    state    : string;
+    zip      : number;
+}

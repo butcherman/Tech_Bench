@@ -236,6 +236,7 @@
              customerPermissionType,
              customerSearchParamType,
              customerType }             from '@/Types';
+import { performCustomerSearch } from '@/Modules/Customers/customers.module';
 
     const props = defineProps<{
         perPage      : number;
@@ -273,22 +274,20 @@
     /**
      * Search for a customer or group of customers
      */
-    const onSearch = () => {
+    const onSearch = async () => {
         loading.value = true;
 
-        axios.post(route('customers.search'), searchParam).then(res => {
-            searchResults.value        = res.data.data;
-            paginationData.listFrom    = res.data.from;
-            paginationData.listTo      = res.data.to;
-            paginationData.listTotal   = res.data.total;
-            paginationData.numPages    = res.data.last_page;
-            paginationData.currentPage = res.data.current_page;
-            paginationData.pageArr     = buildPageArr(res.data.current_page, res.data.last_page);
+        const results = await performCustomerSearch(searchParam);
 
-            loading.value              = false;
-        }).catch(() => {
-            okModal('Unable to process request at this time.  Please try again later');
-        });
+        searchResults.value        = results.data;
+        paginationData.listFrom    = results.listFrom;
+        paginationData.listTo      = results.listTo;
+        paginationData.listTotal   = results.listTotal;
+        paginationData.numPages    = results.numPages;
+        paginationData.currentPage = results.currentPage;
+        paginationData.pageArr     = results.pageArr;
+
+        loading.value = false;
     }
 
     /**
@@ -307,41 +306,6 @@
     const onGoToPage = (page:number) => {
         searchParam.page = page;
         onSearch();
-    }
-
-    /**
-     * Build the pagination links for the bottom of the table
-     * We want a total of five pages showing, the active page should be in the
-     * middle unless it is toward the front of end of the line
-     */
-    const buildPageArr = (curPage:number, totalPages:number):number[] => {
-        let pageArr = [];
-        let start   = totalPages > 5 ? curPage - 2 : 1;
-
-        //  If start was going to be a negative number, we change it to 1
-        if(start <= 0)
-        {
-            start = 1;
-        }
-
-        let end     = totalPages > 5 ? start + 4 : totalPages;
-        //  If end was going to be a higher number than the last page, we modify it
-        if(end > totalPages)
-        {
-            end = totalPages;
-            //  Try to still get five links in the array
-            if(totalPages > 5)
-            {
-                start = totalPages - 4;
-            }
-        }
-
-        for(let i = start; i <= end; i++)
-        {
-            pageArr.push(i);
-        }
-
-        return pageArr;
     }
 </script>
 
