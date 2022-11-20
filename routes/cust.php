@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Customers\CheckCustIdController;
 use Illuminate\Support\Facades\Route;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 
 use App\Http\Controllers\Customers\CustomerController;
+use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 // use App\Http\Controllers\Customers\CheckIdController;
 // use App\Http\Controllers\Customers\GetLinkedController;
@@ -23,7 +23,8 @@ use App\Http\Controllers\Customers\CustomerSearchController;
 Route::middleware('auth')->group(function() {
     Route::resource('customers', CustomerController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->index('Customers')
-            ->create('New Customer');
+            ->create('New Customer')
+            ->show('Customer Details');
     });
 
     Route::prefix('customers')->name('customers.')->group(function() {

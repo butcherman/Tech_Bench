@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Actions\EquipmentOptionList;
 use App\Http\Requests\Customers\CustomerRequest;
 use App\Models\Customer;
+use App\Models\UserCustomerBookmark;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
@@ -55,9 +57,12 @@ class CustomerController extends Controller
     /**
      * Display the specified Customer
      */
-    public function show($id)
+    public function show(Customer $customer)
     {
-        return Inertia::render('Customers/Show');
+        return Inertia::render('Customers/Show', [
+            'is-fav'   => (bool) true, //  UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $customer->cust_id)->count(),
+            'customer' => $customer,
+        ]);
     }
 
     /**

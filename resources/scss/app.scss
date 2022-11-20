@@ -68,6 +68,17 @@ $brk-xxl: map-get($grid-breakpoints, xxl);
 }
 
 /**
+*   Bookmark Styles
+*/
+.bookmark-checked {
+    color: #D46E70;
+}
+
+.bookmark-unchecked {
+    color: #C4C4C4;
+}
+
+/**
 *   Transition/Animation Styles
 */
 .slide-in-move,

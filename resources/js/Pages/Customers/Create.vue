@@ -140,5 +140,5 @@
 </script>
 
 <script lang="ts">
-    export default { layout: App, components: { SelectInput } }
+    export default { layout: App }
 </script>

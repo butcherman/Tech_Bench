@@ -22,6 +22,14 @@ class Customer extends Model
     ];
 
     /**
+     * Key for Route/Model binding
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
      * If a customer is part of a multi-site customer, each site can be listed separately yet still be linked to the main site
      */
     public function Parent()
