@@ -23,14 +23,13 @@
     /**
      * Bookmark Data
      */
-    // const isBookmark     = ref<boolean>(props.isFav);
-    // const toggleBookmark = () => {
-    //     console.log('toggle');
-
-    //     isBookmark.value = !isBookmark.value;
-
-    //     console.log(isBookmark.value);
-    // }
+    const isBookmark     = ref(props.isFav);
+    const toggleBookmark = () => {
+        console.log('toggle');
+        isBookmark.value = !isBookmark.value;
+        console.log(isBookmark.value);
+    }
+    provide('bookmark', { isBookmark, toggleBookmark });
 
 
     /**

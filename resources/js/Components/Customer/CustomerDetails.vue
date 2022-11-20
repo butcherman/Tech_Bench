@@ -21,12 +21,14 @@
 <script setup lang="ts">
     import { customerType } from '@/Types';
     import { ref, reactive, onMounted, inject, computed } from 'vue';
-    import type { isFavKey } from '@/Types';
 
-    const isBookmark = ref(false);
-    const toggleBookmark = () => { console.log('toggle') }
-    // const { isBookmark, toggleBookmark } = inject('isFav');
+
+    const { isBookmark, toggleBookmark } = inject('bookmark');
     const customer = inject<customerType>('customer');
+
+
+
+
 
     /**
      * Customer Bookmark Section
