@@ -60,8 +60,8 @@ class CustomerController extends Controller
     public function show(Customer $customer)
     {
         return Inertia::render('Customers/Show', [
-            'is-fav'   => (bool) true, //  UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $customer->cust_id)->count(),
-            'customer' => $customer,
+            'is-fav'   => (bool) UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $customer->cust_id)->count(),
+            'customer' => fn() => $customer,
         ]);
     }
 

@@ -2,6 +2,11 @@
     <div>
         <h3>
             <span
+                v-if="bookmarkLoading"
+                class="spinner-grow spinner-grow-sm my-2"
+            />
+            <span
+                v-else
                 class="pointer"
                 :class="bookmarkClass"
                 :title="bookmarkTitle"
@@ -10,25 +15,25 @@
             >
                 <fa-icon :icon="bookmarkIcon" />
             </span>
-            {{customer?.name}}
+            {{ customer?.name }}
             <small>
-
+                <!-- linked -->
             </small>
         </h3>
+        <h5 v-if="customer?.dba_name">
+            AKA - {{ customer.dba_name }}
+        </h5>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { customerType } from '@/Types';
+    import { customerBookmarkInjection, customerType } from '@/Types';
     import { ref, reactive, onMounted, inject, computed } from 'vue';
 
-
-    const { isBookmark, toggleBookmark } = inject('bookmark');
-    const customer = inject<customerType>('customer');
-
-
-
-
+    const { isBookmark,
+            bookmarkLoading,
+            toggleBookmark } = inject('bookmark') as customerBookmarkInjection;
+    const customer           = inject<customerType>('customer');
 
     /**
      * Customer Bookmark Section

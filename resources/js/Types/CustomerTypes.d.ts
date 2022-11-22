@@ -1,3 +1,5 @@
+import type { Ref } from "vue";
+
 export interface customerPermissionType {
     create ?: boolean;
     update ?: boolean;
@@ -46,4 +48,14 @@ export interface customerPaginationType {
     listTo     : number;
     listTotal  : number;
     pageArr    : number[]
+}
+
+
+/**
+ * Provide/Inject Types
+ */
+export interface customerBookmarkInjection {
+    isBookmark     : Ref<boolean>;
+    bookmarkLoading: Ref<boolean>
+    toggleBookmark : () => void;
 }

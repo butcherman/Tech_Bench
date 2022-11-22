@@ -11,9 +11,9 @@
 <script setup lang="ts">
     import App from '@/Layouts/app.vue';
     import CustomerDetails from '@/Components/Customer/CustomerDetails.vue';
+    import axios from 'axios';
     import { ref, reactive, onMounted, provide, InjectionKey } from 'vue';
     import { customerType } from '@/Types';
-
 
     const props = defineProps<{
         isFav   : boolean;
@@ -23,29 +23,28 @@
     /**
      * Bookmark Data
      */
-    const isBookmark     = ref(props.isFav);
-    const toggleBookmark = () => {
-        console.log('toggle');
-        isBookmark.value = !isBookmark.value;
-        console.log(isBookmark.value);
+    const isBookmark      = ref<boolean>(props.isFav);
+    const bookmarkLoading = ref<boolean>(false);
+    const toggleBookmark  = () => {
+        bookmarkLoading.value = true;
+        axios.post(route('customers.bookmark'), {
+            cust_id: props.customer.cust_id,
+            state: !isBookmark.value
+        }).then(res => {
+            bookmarkLoading.value = false;
+            isBookmark.value = !isBookmark.value;
+        });
     }
-    provide('bookmark', { isBookmark, toggleBookmark });
-
+    provide('bookmark', { isBookmark, bookmarkLoading, toggleBookmark });
 
     /**
-     * Customer Detailed Information
+     * Customer Detail Data
      */
     provide('customer', props.customer);
 
 
 
 
-
-    // /**
-    //  * List of state provides for other components
-    //  */
-    // provide(isFav, { isBookmark, toggleBookmark });
-    // provide('customer', props.customer);
 </script>
 
 <script lang="ts">
