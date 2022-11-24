@@ -45,6 +45,8 @@
         size ?: 'sm' | 'lg' | 'xl';
     }>();
 
+    const emit = defineEmits(['hide', 'hidden']);
+
     const myModal = ref<InstanceType<typeof Modal> | null>(null);
     let thisModalObj:Modal;
 
@@ -60,6 +62,7 @@
     function _hide():void
     {
         thisModalObj.hide();
+        emit('hide');
     }
 
     defineExpose({ show: _show, hide: _hide });

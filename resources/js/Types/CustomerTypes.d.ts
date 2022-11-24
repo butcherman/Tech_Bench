@@ -14,6 +14,7 @@ export interface customerType {
     dba_name           : string | null;
     name               : string;
     parent_id          : number | null;
+    parent             : customerType | null;
     slug               : string;
     state              : string;
     zip                : number;

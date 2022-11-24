@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Customers;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Actions\EquipmentOptionList;
 use App\Http\Requests\Customers\CustomerRequest;
 use App\Models\Customer;
 use App\Models\UserCustomerBookmark;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {

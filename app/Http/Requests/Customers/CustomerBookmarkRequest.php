@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Customers;
 
-use App\Models\UserCustomerBookmark;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
+use App\Models\UserCustomerBookmark;
 
 class CustomerBookmarkRequest extends FormRequest
 {

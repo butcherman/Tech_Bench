@@ -7,6 +7,8 @@ use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
 use App\Http\Controllers\Customers\CustomerSearchController;
+use App\Http\Controllers\Customers\GetLinkedCustomerController;
+
 // use App\Http\Controllers\Customers\CheckIdController;
 // use App\Http\Controllers\Customers\GetLinkedController;
 // use App\Http\Controllers\Customers\CustomerIdController;
@@ -32,6 +34,7 @@ Route::middleware('auth')->group(function() {
         Route::post('search', CustomerSearchController::class)->name('search');
         Route::post('bookmark', CustomerBookmarkController::class)->name('bookmark');
         Route::get('{id}/check-id', CheckCustIdController::class)->name('check-id');
+        Route::get('{customer}/get-linked', GetLinkedCustomerController::class)->name('linked');
     });
 });
 

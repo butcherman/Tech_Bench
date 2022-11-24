@@ -15,6 +15,7 @@ class Customer extends Model
     protected $guarded    = ['updated_at', 'created_at', 'deleted_at'];
     protected $hidden     = ['updated_at', 'created_at', 'deleted_at'];
     protected $appends    = ['child_count'];
+    protected $with       = ['Parent'];
     protected $casts      = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
