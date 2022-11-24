@@ -4,6 +4,12 @@
             <div class="col-md-8">
                 <CustomerDetails />
             </div>
+            <div class="col-md-4 col-12 mt-md-0 mt-4">
+                <div class="float-md-end text-center">
+                    <EditCustomer v-if="permissions.details.update" />
+                    <button class="btn btn-info btn-pill w-75 my-1">something</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -11,13 +17,15 @@
 <script setup lang="ts">
     import App from '@/Layouts/app.vue';
     import CustomerDetails from '@/Components/Customer/CustomerDetails.vue';
+    import EditCustomer from '@/Components/Customer/EditCustomer.vue';
     import axios from 'axios';
-    import { ref, reactive, onMounted, provide, InjectionKey } from 'vue';
-    import { customerType } from '@/Types';
+    import { ref, reactive, onMounted, provide, InjectionKey, watch } from 'vue';
+    import { customerPermissionType, customerType } from '@/Types';
 
     const props = defineProps<{
-        isFav   : boolean;
-        customer: customerType;
+        permissions: customerPermissionType;
+        isFav      : boolean;
+        customer   : customerType;
     }>();
 
     /**
@@ -40,7 +48,9 @@
     /**
      * Customer Detail Data
      */
-    provide('customer', props.customer);
+    const custData = ref(props.customer);
+    watch(() => props.customer, (newCust) => custData.value = newCust);
+    provide('customer', custData);
 
 
 

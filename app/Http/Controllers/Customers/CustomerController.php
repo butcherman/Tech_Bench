@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Actions\BuildCustomerPermissions;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class CustomerController extends Controller
         return Inertia::render('Customers/Index', [
             'per-page'       => 25,
             'pagination-arr' => [25, 50, 100],
-            'permissions'    => ['create' => $request->user()->can('create', Customer::class)],
+            'permissions'    => (new BuildCustomerPermissions)->execute(Customer::class, $request->user()),
             'equipment'      => (new EquipmentOptionList)->build(),
         ]);
     }
@@ -50,8 +51,11 @@ class CustomerController extends Controller
             'cust_id', 'parent_id', 'name', 'dba_name', 'address', 'city', 'state', 'zip', 'slug'
         ]));
 
-        Log::stack(['daily', 'cust', 'user'])->info('New Customer create by '.$request->user()->username, $newCust->toArray());
-        return redirect(route('customers.show', $newCust->slug));
+        Log::stack(['daily', 'cust', 'user'])->info(
+            'New Customer create by '.$request->user()->username, $newCust->toArray()
+        );
+        return redirect(route('customers.show', $newCust->slug))
+                ->with('success', 'Customer Created');
     }
 
     /**
@@ -60,34 +64,26 @@ class CustomerController extends Controller
     public function show(Customer $customer)
     {
         return Inertia::render('Customers/Show', [
-            'is-fav'   => (bool) UserCustomerBookmark::where('user_id', Auth::user()->user_id)->where('cust_id', $customer->cust_id)->count(),
+            'permissions' => (new BuildCustomerPermissions)->execute($customer, Auth::user()),
+            'is-fav'   => (bool) UserCustomerBookmark::where('user_id', Auth::user()->user_id)
+                                    ->where('cust_id', $customer->cust_id)->count(),
             'customer' => fn() => $customer,
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update the specified customers details
      */
-    public function edit($id)
+    public function update(CustomerRequest $request, Customer $customer)
     {
-        //
-        return 'edit';
-    }
+        $request->setSlug();
+        $customer->update($request->only(['name', 'dba_name', 'address', 'city', 'state', 'zip', 'slug']));
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-        return 'update';
+        Log::stack(['daily', 'cust', 'user'])->info(
+            'Customer ID '.$customer->cust_id.' updated by '.$request->user()->username, $customer->toArray()
+        );
+        return redirect(route('customers.show', $customer->slug))
+                    ->with('success', 'Customer Updated');
     }
 
     /**

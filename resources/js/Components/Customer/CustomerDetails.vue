@@ -59,9 +59,10 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted, inject, computed } from 'vue';
-    import { linkedCustomers } from '@/Modules/linkedCustomers.module';
-    import { customerBookmarkInjection, customerType } from '@/Types';
+    import { inject, computed }         from 'vue';
+    import { linkedCustomers }          from '@/Modules/linkedCustomers.module';
+    import { customerBookmarkInjection,
+             customerType }             from '@/Types';
 
     const { isBookmark,
             bookmarkLoading,

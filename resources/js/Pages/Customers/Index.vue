@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <div v-if="permissions.create" class="clearfix mb-2">
+                            <div v-if="permissions.details.create" class="clearfix mb-2">
                                 <Link
                                     as="button"
                                     :href="route('customers.create')"
