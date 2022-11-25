@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Customers;
 
-use App\Actions\BuildCustomerPermissions;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Actions\EquipmentOptionList;
+use App\Actions\BuildCustomerPermissions;
 use App\Http\Requests\Customers\CustomerRequest;
 use App\Models\Customer;
 use App\Models\UserCustomerBookmark;
@@ -87,14 +87,14 @@ class CustomerController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Soft Delete a customer
      */
-    public function destroy($id)
+    public function destroy(Customer $customer)
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $customer);
+        $customer->delete();
+
+        Log::stack(['daily', 'cust'])->notice('Customer '.$customer->name.' has been deactivated by '.Auth::user()->username);
+        return redirect(route('customers.index'))->with('warning', 'Customer Deactivated');
     }
 }

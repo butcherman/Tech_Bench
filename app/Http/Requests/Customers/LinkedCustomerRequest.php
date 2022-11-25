@@ -54,8 +54,16 @@ class LinkedCustomerRequest extends FormRequest
         return ['type' => 'success', 'message' => 'Customer Successfully Linked'];
     }
 
-    protected function removeLink()
+    /**
+     * Remove the link to a parent customer site
+     */
+    protected function removeLink(Customer $cust)
     {
-        return 'remvoe link';
+        $cust->update([
+            'parent_id' => null,
+        ]);
+
+        Log::channel(['daily', 'cust'])->info('Customer '.$cust->name.' link to parent site has been removed by '.Auth::user()->username);
+        return ['type' => 'warning', 'message' => 'Customer Link Removed'];;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\LinkedCustomerRequest;
-use Illuminate\Http\Request;
 
 class SetLinkedCustomerController extends Controller
 {
