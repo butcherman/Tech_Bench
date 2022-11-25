@@ -251,7 +251,6 @@
 </template>
 
 <script setup lang="ts">
-    import axios                        from 'axios';
     import App                          from '@/Layouts/app.vue';
     import Overlay                      from '@/Components/Base/Overlay.vue';
     import { ref, reactive, onMounted } from 'vue';
@@ -299,7 +298,6 @@
      */
     const onSearch = async () => {
         loading.value = true;
-
         const results = await performCustomerSearch(searchParam);
 
         searchResults.value        = results.data;

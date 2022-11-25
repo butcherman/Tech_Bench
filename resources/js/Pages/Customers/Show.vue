@@ -5,9 +5,9 @@
                 <CustomerDetails />
             </div>
             <div class="col-md-4 col-12 mt-md-0 mt-4">
-                <div class="float-md-end text-center">
+                <div class="float-md-end text-center w-50">
                     <EditCustomer v-if="permissions.details.update" />
-                    <button class="btn btn-info btn-pill w-75 my-1">something</button>
+                    <ManageCustomer v-if="permissions.details.manage" />
                 </div>
             </div>
         </div>
@@ -18,6 +18,7 @@
     import App from '@/Layouts/app.vue';
     import CustomerDetails from '@/Components/Customer/CustomerDetails.vue';
     import EditCustomer from '@/Components/Customer/EditCustomer.vue';
+    import ManageCustomer from '@/Components/Customer/ManageCustomer.vue';
     import axios from 'axios';
     import { ref, reactive, onMounted, provide, InjectionKey, watch } from 'vue';
     import { customerPermissionType, customerType } from '@/Types';

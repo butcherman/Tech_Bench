@@ -58,10 +58,10 @@
 </template>
 
 <script setup lang="ts">
-    import Modal                    from '../Base/Modal/Modal.vue';
-    import VueForm                  from '../Base/VueForm.vue';
-    import TextInput                from '../Base/Input/TextInput.vue';
-    import SelectInput              from '../Base/Input/SelectInput.vue';
+    import Modal                    from '@/Components/Base/Modal/Modal.vue';
+    import VueForm                  from '@/Components/Base/VueForm.vue';
+    import TextInput                from '@/Components/Base/Input/TextInput.vue';
+    import SelectInput              from '@/Components/Base/Input/SelectInput.vue';
     import { ref, inject }          from 'vue';
     import { useForm }              from '@inertiajs/inertia-vue3';
     import { allStates }            from '@/Modules/allStates.module';

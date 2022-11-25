@@ -2,9 +2,10 @@ import type { Ref } from "vue";
 
 export interface customerPermissionType {
     details: {
-        create?: boolean;
-        update?: boolean;
-        delete?: boolean;
+        create: boolean;
+        update: boolean;
+        delete: boolean;
+        manage: boolean;
     }
 }
 
