@@ -2,12 +2,10 @@
 
 namespace Tests\Feature\Customers;
 
-use App\Models\Customer;
-use App\Models\User;
-use App\Models\UserCustomerBookmark;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Customer;
+use App\Models\UserCustomerBookmark;
 
 class CustomerBookmarkTest extends TestCase
 {

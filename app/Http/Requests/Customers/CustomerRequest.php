@@ -55,7 +55,7 @@ class CustomerRequest extends FormRequest
             }
             else
             {
-                $slug = Str::slug($this->name.'-'.$index);
+                $slug = Str::slug($this->name.'-'.$this->city.'-'.$index);
             }
 
             $index++;
