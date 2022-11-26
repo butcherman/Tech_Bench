@@ -6,6 +6,7 @@ use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
+use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Customers\GetCustomerSettingsController;
 use App\Http\Controllers\Customers\GetLinkedCustomerController;
@@ -48,6 +49,10 @@ Route::middleware('auth')->group(function() {
         Route::get('settings', GetCustomerSettingsController::class)->name('settings')
             ->breadcrumb('Customer Settings', 'admin.index');
         Route::post('settings', SetCustomerSettingsController::class)->name('set-settings');
+        Route::resource('change_id', CustomerIdController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Find Customer', 'admin.cust.settings')
+                        ->show('Change ID');
+        });
     });
 });
 
@@ -62,11 +67,6 @@ Route::middleware('auth')->group(function() {
 //         Route::post('force-delete',            [CustomerController::class, 'forceDelete'])         ->name('force-delete');
 //         Route::post('restore',                 [CustomerController::class, 'restore'])             ->name('restore');
 
-//         Route::post('search',                   CustomerSearchController::class)                   ->name('search');
-//         Route::post('check-id',                 CheckIdController::class)                          ->name('check-id');
-//         Route::post('bookmark',                 CustomerBookmarkController::class)                 ->name('bookmark');
-//         Route::post('link-customer',            LinkCustomerController::class)                     ->name('link-customer');
-//         Route::get( '{id}/get-linked',          GetLinkedController::class)                        ->name('get-linked');
 //         Route::get( '{id}/get-deleted',         GetDeletedItemsController::class)                  ->name('get-deleted');
 //         Route::get( '{id}/download-contact',    DownloadContactController::class)                  ->name('contacts.download');
 

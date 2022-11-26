@@ -132,7 +132,7 @@ class BuildAdminMenu
                     [
                         'name' => 'Change Customer ID Number',
                         'icon' => 'fas fa-fingerprint',
-                        'link' => '#', // route('admin.cust.change-id.index'),
+                        'link' => route('admin.cust.change_id.index'),
                     ],
                     [
                         'name' => 'View Deactivated Customers',
