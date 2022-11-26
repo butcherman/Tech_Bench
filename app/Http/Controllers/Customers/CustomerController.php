@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Actions\EquipmentOptionList;
 use App\Actions\BuildCustomerPermissions;
 use App\Http\Requests\Customers\CustomerRequest;
+use App\Jobs\CustomerRemoveBookmarksJob;
 use App\Models\Customer;
 use App\Models\UserCustomerBookmark;
 
@@ -99,6 +100,9 @@ class CustomerController extends Controller
     {
         $this->authorize('delete', $customer);
         $customer->delete();
+
+        //  Remove all bookmarks to avoid errors
+        CustomerRemoveBookmarksJob::dispatch($customer);
 
         Log::stack(['daily', 'cust'])->notice('Customer '.$customer->name.' has been deactivated by '.Auth::user()->username);
         return redirect(route('customers.index'))->with('warning', 'Customer Deactivated');
