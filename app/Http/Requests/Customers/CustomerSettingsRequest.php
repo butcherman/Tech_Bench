@@ -40,7 +40,7 @@ class CustomerSettingsRequest extends FormRequest
                 $key = 'customer.select_id';
                 break;
             case 'updateSlug':
-                $key = 'customer.update-slug';
+                $key = 'customer.update_slug';
                 break;
             case 'defaultState':
                 $key = 'customer.default_state';
