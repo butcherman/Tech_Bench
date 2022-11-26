@@ -76,8 +76,14 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, Customer $customer)
     {
-        $request->setSlug();
-        $customer->update($request->only(['name', 'dba_name', 'address', 'city', 'state', 'zip', 'slug']));
+        //  We will only update the customer Slug if it is allowed
+        if(config('customer.update_slug'))
+        {
+            $request->setSlug();
+            $customer->update($request->only(['slug']));
+        }
+
+        $customer->update($request->only(['name', 'dba_name', 'address', 'city', 'state', 'zip']));
 
         Log::stack(['daily', 'cust', 'user'])->info(
             'Customer ID '.$customer->cust_id.' updated by '.$request->user()->username, $customer->toArray()

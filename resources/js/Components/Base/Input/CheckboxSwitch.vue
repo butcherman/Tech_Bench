@@ -24,7 +24,7 @@
     const props = defineProps<{
         id    : string;
         name  : string;
-        label : string;
+        label?: string;
     }>();
 
     const nameRef = toRef(props, 'name');

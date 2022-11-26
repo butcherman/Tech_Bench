@@ -7,7 +7,9 @@ use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
 use App\Http\Controllers\Customers\CustomerSearchController;
+use App\Http\Controllers\Customers\GetCustomerSettingsController;
 use App\Http\Controllers\Customers\GetLinkedCustomerController;
+use App\Http\Controllers\Customers\SetCustomerSettingsController;
 use App\Http\Controllers\Customers\SetLinkedCustomerController;
 
 // use App\Http\Controllers\Customers\CheckIdController;
@@ -38,6 +40,15 @@ Route::middleware('auth')->group(function() {
         Route::get('{id}/check-id', CheckCustIdController::class)->name('check-id');
         Route::get('{customer}/get-linked', GetLinkedCustomerController::class)->name('linked');
     });
+
+    /**
+     * Customer Administration Routes
+     */
+    Route::prefix('administration/customers')->name('admin.cust.')->group(function() {
+        Route::get('settings', GetCustomerSettingsController::class)->name('settings')
+            ->breadcrumb('Customer Settings', 'admin.index');
+        Route::post('settings', SetCustomerSettingsController::class)->name('set-settings');
+    });
 });
 
 /**
@@ -47,12 +58,7 @@ Route::middleware('auth')->group(function() {
 // {
 //     Route::prefix('customers')->name('customers.')->group(function()
 //     {
-//         Route::get('/',                        [CustomerController::class, 'index'])               ->name('index') ->breadcrumb('Customers');
-//         Route::get('create',                   [CustomerController::class, 'create'])              ->name('create')->breadcrumb('New Customer', '.index');
-//         Route::post('/',                       [CustomerController::class, 'store'])               ->name('store');
-//         Route::get('{customer}',               [CustomerController::class, 'show'])                ->name('show')  ->breadcrumb('Details', '.index');
-//         Route::put('{customer}',               [CustomerController::class, 'update'])              ->name('update');
-//         Route::delete('{customer}',            [CustomerController::class, 'destroy'])             ->name('destroy');
+//
 //         Route::post('force-delete',            [CustomerController::class, 'forceDelete'])         ->name('force-delete');
 //         Route::post('restore',                 [CustomerController::class, 'restore'])             ->name('restore');
 

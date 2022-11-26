@@ -120,28 +120,33 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        // if($this->checkPermission($this->user, 'Manage Customers'))
-        // {
-        //     $nav = [
-        //         'Manage Customers' => [
-        //             [
-        //                 'name' => 'Change Customer ID Number',
-        //                 'icon' => 'fas fa-fingerprint',
-        //                 'link' => route('admin.cust.change-id.index'),
-        //             ],
-        //             [
-        //                 'name' => 'View Deactivated Customers',
-        //                 'icon' => 'fas fa-ban',
-        //                 'link' => route('admin.cust.show-deactivated'),
-        //             ],
-        //             [
-        //                 'name' => 'Customer Uploaded File Types',
-        //                 'icon' => 'fas fa-file-alt',
-        //                 'link' => route('admin.cust.file-types.index'),
-        //             ],
-        //         ],
-        //     ];
-        // }
+        if($this->checkPermission($this->user, 'Manage Customers'))
+        {
+            $nav = [
+                'Manage Customers' => [
+                    [
+                        'name' => 'Customer Settings',
+                        'icon' => 'fa-gears',
+                        'link' => route('admin.cust.settings'),
+                    ],
+                    [
+                        'name' => 'Change Customer ID Number',
+                        'icon' => 'fas fa-fingerprint',
+                        'link' => '#', // route('admin.cust.change-id.index'),
+                    ],
+                    [
+                        'name' => 'View Deactivated Customers',
+                        'icon' => 'fas fa-ban',
+                        'link' => '#', // route('admin.cust.show-deactivated'),
+                    ],
+                    [
+                        'name' => 'Customer Uploaded File Types',
+                        'icon' => 'fas fa-file-alt',
+                        'link' => '#', // route('admin.cust.file-types.index'),
+                    ],
+                ],
+            ];
+        }
 
         return $nav;
     }

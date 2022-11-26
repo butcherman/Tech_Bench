@@ -1,3 +1,4 @@
+import { vPopoverDirective } from './Directives/Popover';
 /**
  * Stylesheets
  */
@@ -31,11 +32,12 @@ createInertiaApp({
     setup({ el, app, props, plugin }) {
         const inertiaApp = createApp({ render: () => h(app, props) })
             .use(plugin)
-            .component('Link', Link)                            //  Inertial Link
-            .component('Head', Head)                            //  Head title
+            .component('Link',    Link)                         //  Inertial Link
+            .component('Head',    Head)                         //  Head title
             .component('fa-icon', FontAwesomeIcon)              //  Font Awesome
-            .directive('focus', vFocusDirective)
+            .directive('focus',   vFocusDirective)
             .directive('tooltip', vTooltipDirective)
+            .directive('popover', vPopoverDirective)
 
         inertiaApp.config.globalProperties.route = window.route;      //  Ziggy Route Provider
         inertiaApp.mount(el);
