@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Actions\EquipmentOptionList;
 use App\Actions\BuildCustomerPermissions;
 use App\Http\Requests\Customers\CustomerRequest;
+use App\Http\Requests\Customers\SoftDeletedRequest;
 use App\Jobs\CustomerRemoveBookmarksJob;
 use App\Models\Customer;
 use App\Models\UserCustomerBookmark;
@@ -56,7 +57,7 @@ class CustomerController extends Controller
             'New Customer create by '.$request->user()->username, $newCust->toArray()
         );
         return redirect(route('customers.show', $newCust->slug))
-                ->with('success', 'Customer Created');
+                ->with('success', __('cust.created'));
     }
 
     /**
@@ -90,7 +91,7 @@ class CustomerController extends Controller
             'Customer ID '.$customer->cust_id.' updated by '.$request->user()->username, $customer->toArray()
         );
         return redirect(route('customers.show', $customer->slug))
-                    ->with('success', 'Customer Updated');
+                    ->with('success', __('cust.updated'));
     }
 
     /**
@@ -105,6 +106,24 @@ class CustomerController extends Controller
         CustomerRemoveBookmarksJob::dispatch($customer);
 
         Log::stack(['daily', 'cust'])->notice('Customer '.$customer->name.' has been deactivated by '.Auth::user()->username);
-        return redirect(route('customers.index'))->with('warning', 'Customer Deactivated');
+        return redirect(route('customers.index'))->with('warning', __('cust.destroy'));
+    }
+
+    /**
+     * Restore a group of previously soft deleted customers
+     */
+    public function restore(SoftDeletedRequest $request)
+    {
+        $request->restore();
+        return back()->with('success', __('cust.restore'));
+    }
+
+    /**
+     * Completely delete a group of soft deleted customers
+     */
+    public function forceDelete(SoftDeletedRequest $request)
+    {
+        $request->destroy();
+        return back()->with('warning', __('cust.delete'));
     }
 }

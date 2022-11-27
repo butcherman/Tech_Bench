@@ -1,0 +1,33 @@
+<template>
+    <div>
+        <strong>New Component</strong>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: {
+            //
+        },
+        data() {
+            return {
+                //
+            }
+        },
+        created() {
+            //
+        },
+        mounted() {
+             //
+        },
+        computed: {
+             //
+        },
+        watch: {
+             //
+        },
+        methods: {
+            //
+        }
+    }
+</script>

@@ -21,6 +21,9 @@ export interface customerType {
     slug               : string;
     state              : string;
     zip                : number;
+    created_at        ?: string;
+    updated_at        ?: string;
+    deleted_at        ?: string;
     customer_equipment?: any; //  FIXME - type this
     parent_equipment  ?: any; //  FIXME - type this
 }

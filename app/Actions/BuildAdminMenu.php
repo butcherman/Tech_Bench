@@ -137,7 +137,7 @@ class BuildAdminMenu
                     [
                         'name' => 'View Deactivated Customers',
                         'icon' => 'fas fa-ban',
-                        'link' => '#', // route('admin.cust.show-deactivated'),
+                        'link' => route('admin.cust.deactivated'),
                     ],
                     [
                         'name' => 'Customer Uploaded File Types',

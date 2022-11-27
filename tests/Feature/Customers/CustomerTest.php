@@ -4,8 +4,10 @@ namespace Tests\Feature\Customers;
 
 use Tests\TestCase;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\CustomerFile;
 use App\Models\UserRolePermissions;
 
 class CustomerTest extends TestCase
@@ -91,6 +93,7 @@ class CustomerTest extends TestCase
 
         $response = $this->ActingAs(User::factory()->create())->post(route('customers.store'), $data);
         $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.created'));
         $response->assertRedirect(route('customers.show', $slug));
         $this->assertDatabaseHas('customers', $data);
     }
@@ -104,6 +107,7 @@ class CustomerTest extends TestCase
 
         $response = $this->ActingAs(User::factory()->create())->post(route('customers.store'), $data);
         $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.created'));
         $response->assertRedirect(route('customers.show', $slug));
         $this->assertDatabaseHas('customers', $data);
     }
@@ -120,6 +124,7 @@ class CustomerTest extends TestCase
 
         $response = $this->ActingAs(User::factory()->create())->post(route('customers.store'), $data);
         $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.created'));
         $response->assertRedirect(route('customers.show', $slug));
         $this->assertDatabaseHas('customers', $data);
     }
@@ -185,6 +190,7 @@ class CustomerTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.update', $customer->slug), $updated->only(['name', 'address', 'city', 'state', 'zip']));
         $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.updated'));
         $response->assertRedirect(route('customers.show', $updated->slug));
         $this->assertDatabaseHas('customers', [
             'cust_id' => $customer->cust_id,
@@ -221,6 +227,7 @@ class CustomerTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.destroy', $cust->slug));
         $response->assertStatus(302);
+        $response->assertSessionHas('warning', __('cust.destroy'));
         $response->assertRedirect(route('customers.index'));
         $this->assertSoftDeleted('customers', $cust->only(['cust_id']));
     }
@@ -228,108 +235,111 @@ class CustomerTest extends TestCase
     /*
     *   Restore Method
     */
-    // public function test_restore_guest()
-    // {
-    //     $cust = Customer::factory()->create();
-    //     $cust->delete();
-    //     $cust->save();
-    //     $data = [
-    //         'list' => [ $cust->toArray() ],
-    //     ];
+    public function test_restore_guest()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+        $data = [
+            'cust_list' => [ $cust->toArray() ],
+        ];
 
-    //     $response = $this->post(route('customers.restore'), $data);
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login.index'));
-    //     $this->assertGuest();
-    // }
+        $response = $this->post(route('customers.restore'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+        $this->assertGuest();
+    }
 
-    // public function test_restore_no_permission()
-    // {
-    //     $cust = Customer::factory()->create();
-    //     $cust->delete();
-    //     $cust->save();
-    //     $data = [
-    //         'list' => [ $cust->toArray() ],
-    //     ];
+    public function test_restore_no_permission()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+        $data = [
+            'cust_list' => [ $cust->toArray() ],
+        ];
 
-    //     $response = $this->actingAs(User::factory()->create())->post(route('customers.restore'), $data);
-    //     $response->assertStatus(403);
-    // }
+        $response = $this->actingAs(User::factory()->create())->post(route('customers.restore'), $data);
+        $response->assertStatus(403);
+    }
 
-    // public function test_restore()
-    // {
-    //     $cust = Customer::factory()->create();
-    //     $cust->delete();
-    //     $cust->save();
-    //     $data = [
-    //         'list' => [ $cust->toArray() ],
-    //     ];
+    public function test_restore()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+        $data = [
+            'cust_list' => [ $cust->cust_id ],
+        ];
 
-    //     $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.restore'), $data);
-    //     $response->assertStatus(302);
-    //     $this->assertDatabaseHas('customers', ['cust_id' => $cust->cust_id, 'deleted_at' => null]);
-    // }
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.restore'), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.restore'));
+        $this->assertDatabaseHas('customers', ['cust_id' => $cust->cust_id, 'deleted_at' => null]);
+    }
 
     /*
     *   Force Delete Method
     */
-    // public function test_force_delete_guest()
-    // {
-    //     $cust = Customer::factory()->create();
-    //     $cust->delete();
-    //     $cust->save();
-    //     $data = [
-    //         'list' => [ $cust->toArray() ],
-    //     ];
+    public function test_force_delete_guest()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+        $data = [
+            'cust_list' => [ $cust->cust_id ],
+        ];
 
-    //     $response = $this->post(route('customers.force-delete'), $data);
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login.index'));
-    //     $this->assertGuest();
-    // }
+        $response = $this->delete(route('customers.force-delete'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login.index'));
+        $this->assertGuest();
+    }
 
-    // public function test_force_delete_no_permission()
-    // {
-    //     $cust = Customer::factory()->create();
-    //     $cust->delete();
-    //     $cust->save();
-    //     $data = [
-    //         'list' => [ $cust->toArray() ],
-    //     ];
+    public function test_force_delete_no_permission()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+        $data = [
+            'cust_list' => [ $cust->cust_id ],
+        ];
 
-    //     $response = $this->actingAs(User::factory()->create())->post(route('customers.force-delete'), $data);
-    //     $response->assertStatus(403);
-    // }
+        $response = $this->actingAs(User::factory()->create())->delete(route('customers.force-delete'), $data);
+        $response->assertStatus(403);
+    }
 
-    // public function test_force_delete()
-    // {
-    //     $cust = Customer::factory()->create();
-    //     $cust->delete();
-    //     $cust->save();
-    //     $data = [
-    //         'list' => [ $cust->toArray() ],
-    //     ];
+    public function test_force_delete()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+        $cust->save();
+        $data = [
+            'cust_list' => [ $cust->cust_id ],
+        ];
 
-    //     $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.force-delete'), $data);
-    //     $response->assertStatus(302);
-    //     $this->assertDatabaseMissing('customers', $cust->only(['cust_id']));
-    // }
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.force-delete'), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', __('cust.delete'));
+        $this->assertDatabaseMissing('customers', $cust->only(['cust_id']));
+    }
 
-    // public function test_force_delete_with_file()
-    // {
-    //     Storage::fake('default');
+    public function test_force_delete_with_file()
+    {
+        Storage::fake('default');
 
-    //     $cust = Customer::factory()->create();
-    //     $file = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
-    //     $cust->delete();
-    //     $cust->save();
-    //     $data = [
-    //         'list' => [ $cust->toArray() ],
-    //     ];
+        $cust = Customer::factory()->create();
+        $file = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
+        $cust->delete();
+        $cust->save();
+        $data = [
+            'cust_list' => [ $cust->cust_id ],
+        ];
 
-    //     $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.force-delete'), $data);
-    //     $response->assertStatus(302);
-    //     $this->assertDatabaseMissing('customers', $cust->only(['cust_id']));
-    //     $this->assertDatabaseMissing('file_uploads', $file->only(['file_id']));
-    // }
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.force-delete'), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', __('cust.delete'));
+        $this->assertDatabaseMissing('customers', $cust->only(['cust_id']));
+        $this->assertDatabaseMissing('file_uploads', $file->only(['file_id']));
+    }
 }
