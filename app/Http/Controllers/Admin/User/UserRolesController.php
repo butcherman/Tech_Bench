@@ -136,7 +136,7 @@ class UserRolesController extends Controller
 
             // @codeCoverageIgnoreStart
             Log::stack(['daily', 'user'])->error('Error when trying to delete Role '.$role->name, $e->errorInfo);
-            return back()->withErrors(['error' => __('admin.user.delete_failed')]);
+            return back()->withErrors(['error' => 'This File Type is in use and cannot be deleted at this time']);
             // @codeCoverageIgnoreEnd
         }
 

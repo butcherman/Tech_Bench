@@ -8,6 +8,7 @@ use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
+use App\Http\Controllers\Customers\CustomerFileTypeController;
 use App\Http\Controllers\Customers\GetLinkedCustomerController;
 use App\Http\Controllers\Customers\SetLinkedCustomerController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
@@ -33,19 +34,20 @@ Route::middleware('auth')->group(function() {
 
     Route::prefix('customers')->name('customers.')->group(function() {
         Route::delete('force-delete',      [CustomerController::class, 'forceDelete'])->name('force-delete');
-        Route::post('restore',             [CustomerController::class, 'restore'])->name('restore');
-        Route::post('search',               CustomerSearchController::class)->name('search');
-        Route::post('bookmark',             CustomerBookmarkController::class)->name('bookmark');
-        Route::post('linked',               SetLinkedCustomerController::class)->name('set-link');
-        Route::get('{id}/check-id',         CheckCustIdController::class)->name('check-id');
-        Route::get('{customer}/get-linked', GetLinkedCustomerController::class)->name('linked');
+        Route::post('restore',             [CustomerController::class, 'restore'])    ->name('restore');
+        Route::post('search',               CustomerSearchController::class)          ->name('search');
+        Route::post('bookmark',             CustomerBookmarkController::class)        ->name('bookmark');
+        Route::post('linked',               SetLinkedCustomerController::class)       ->name('set-link');
+        Route::get('{id}/check-id',         CheckCustIdController::class)             ->name('check-id');
+        Route::get('{customer}/get-linked', GetLinkedCustomerController::class)       ->name('linked');
     });
 
-    Route::resource('customers', CustomerController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
-        $breadcrumbs->index('Customers')
-            ->create('New Customer')
-            ->show('Customer Details');
-    });
+    Route::resource('customers', CustomerController::class)
+        ->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Customers')
+                ->create('New Customer')
+                ->show('Customer Details');
+        });
 
     /**
      * Customer Administration Routes
@@ -56,13 +58,18 @@ Route::middleware('auth')->group(function() {
             ->breadcrumb('Customer Settings', 'admin.index');
         Route::post('settings', SetCustomerSettingsController::class)
             ->name('set-settings');
-        Route::resource('change_id', CustomerIdController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
-            $breadcrumbs->index('Find Customer', 'admin.cust.settings')
-                        ->show('Change ID');
-        });
         Route::get('deactivated-customers', DeactivatedCustomerController::class)
             ->name('deactivated')
             ->breadcrumb('Deactivated Customers', 'admin.cust.settings');
+        Route::resource('change_id', CustomerIdController::class)
+            ->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Find Customer', 'admin.cust.settings')
+                            ->show('Change ID');
+            });
+        Route::resource('file-types', CustomerFileTypeController::class)
+            ->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Customer File Types', 'admin.cust.settings');
+            });
     });
 });
 
@@ -73,9 +80,6 @@ Route::middleware('auth')->group(function() {
 // {
 //     Route::prefix('customers')->name('customers.')->group(function()
 //     {
-//
-//         Route::post('force-delete',            [CustomerController::class, 'forceDelete'])         ->name('force-delete');
-//         Route::post('restore',                 [CustomerController::class, 'restore'])             ->name('restore');
 
 //         Route::get( '{id}/get-deleted',         GetDeletedItemsController::class)                  ->name('get-deleted');
 //         Route::get( '{id}/download-contact',    DownloadContactController::class)                  ->name('contacts.download');
@@ -107,19 +111,5 @@ Route::middleware('auth')->group(function() {
 //             Route::get(   '{id}/restore',      [CustomerFileController::class, 'restore'])         ->name('restore');
 //             Route::delete('{id}/force-delete', [CustomerFileController::class, 'forceDelete'])     ->name('force-delete');
 //         });
-//     });
-
-//     //  Customer Administration Routes
-//     Route::prefix('administration/customers')->name('admin.cust.')->group(function()
-//     {
-//         // Route::resource('file-types',           CustomerFileTypesController::class);
-//         Route::prefix('file-types')->name('file-types.')->group(function()
-//         {
-//             Route::get(   '/',                [CustomerFileTypesController::class, 'index'])  ->name('index')->breadcrumb('Customer File Types', 'admin.index');
-//             Route::post(  '/',                [CustomerFileTypesController::class, 'store'])  ->name('store');
-//             Route::put(   '{type}',           [CustomerFileTypesController::class, 'update']) ->name('update');
-//             Route::delete('{type}',           [CustomerFileTypesController::class, 'destroy'])->name('destroy');
-//         });
-
 //     });
 // });

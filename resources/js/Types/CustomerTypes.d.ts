@@ -9,6 +9,11 @@ export interface customerPermissionType {
     }
 }
 
+export interface customerFileType {
+    description  : string;
+    file_type_id?: number;
+}
+
 export interface customerType {
     address            : string;
     child_count        : number;
