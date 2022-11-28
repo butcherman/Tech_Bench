@@ -22,7 +22,6 @@
     import type { customerType } from '@/Types';
 
     const selectCust = (cust:customerType) => {
-        console.log(cust);
         Inertia.visit(route('admin.cust.change_id.show', cust.slug));
     }
 </script>

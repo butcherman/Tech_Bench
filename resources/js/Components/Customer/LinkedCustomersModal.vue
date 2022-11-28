@@ -38,9 +38,8 @@
     const getCustList = () => {
         loading.value = true;
         axios.get(route('customers.linked', props.slug)).then(res => {
-            console.log(res);
             custList.value = res.data;
-            loading.value = false;
+            loading.value  = false;
         });
     }
 </script>

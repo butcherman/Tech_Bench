@@ -84,9 +84,7 @@
         verifyModal('This cannot be undone').then(res => {
             if(res)
             {
-                Inertia.delete(route('admin.users.roles.destroy', props.role.role_id), {
-                    onFinish: () => console.log('all done'),
-                });
+                Inertia.delete(route('admin.users.roles.destroy', props.role.role_id));
             }
         });
     }

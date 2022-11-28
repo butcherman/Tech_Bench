@@ -97,9 +97,6 @@ import { useForm } from '@inertiajs/inertia-vue3';
     }
 
     const onSubmit = (form) => {
-        console.log(form);
-
-        // customerSettingsForm.value?.endSubmit();
         const formData = useForm(form);
         formData.post(route('admin.cust.set-settings'), {
             onFinish: () => customerSettingsForm.value?.endSubmit(),

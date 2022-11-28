@@ -85,8 +85,6 @@
     });
 
     const onSubmit = (form:passwordPolicyType) => {
-        console.log(form);
-
         const formData = useForm(form);
         formData.post(route('admin.users.password-policy.store'), {
             onFinish: () => passwordPolicyForm.value?.endSubmit(),

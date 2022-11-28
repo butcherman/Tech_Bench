@@ -65,10 +65,8 @@
      * If there is an initial value passed to the search box, we will immediatly perform search
      */
     onMounted(() => {
-        console.log('mounted');
         if(props.initialSearch && props.initialSearch.length)
         {
-            console.log('search now');
             customerSearchForm.value?.onSubmit({ search: props.initialSearch });
         }
     });

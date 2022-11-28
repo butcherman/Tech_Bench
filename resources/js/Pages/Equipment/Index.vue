@@ -118,7 +118,6 @@
     const equipTypes    = ref<equipType[] | null[] | null>(null);
 
     const populateTypes = (category:categoryList) => {
-        console.log(category);
         activeCatId.value   = category.cat_id;
         activeCatName.value = category.name;
         equipTypes.value    = category.equipment_type.length ? category.equipment_type : [];

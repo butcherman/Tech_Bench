@@ -132,7 +132,6 @@ import { Inertia } from '@inertiajs/inertia';
     const { remove, push, fields } = useFieldArray('custData');
 
     const onSubmit = handleSubmit(form => {
-        console.log(form);
         isSubmitting.value = true;
         const formData     = useForm(form);
         formData.put(route('equipment.update', props.equipment.equip_id), {

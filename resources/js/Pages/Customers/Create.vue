@@ -123,7 +123,6 @@
      */
     const openCustSearch = () => {
         customerSearchBox(newCustomerForm.value?.getFieldValue('parent_name')).then((res:customerType) => {
-            console.log(res);
             newCustomerForm.value?.setFieldValue('parent_name' as never, res.name as never);
             newCustomerForm.value?.setFieldValue('parent_id' as never, res.cust_id as never);
         });
