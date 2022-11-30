@@ -67,9 +67,10 @@ class CustomerController extends Controller
     {
         return Inertia::render('Customers/Show', [
             'permissions' => (new BuildCustomerPermissions)->execute($customer, Auth::user()),
-            'is-fav'   => (bool) UserCustomerBookmark::where('user_id', Auth::user()->user_id)
+            'is-fav'    => (bool) UserCustomerBookmark::where('user_id', Auth::user()->user_id)
                                     ->where('cust_id', $customer->cust_id)->count(),
-            'customer' => fn() => $customer,
+            'customer'  => fn() => $customer,
+            'equipment' => fn() => $customer->ParentEquipment->merge($customer->CustomerEquipment),
         ]);
     }
 

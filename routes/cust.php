@@ -8,6 +8,7 @@ use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
+use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerFileTypeController;
 use App\Http\Controllers\Customers\GetLinkedCustomerController;
 use App\Http\Controllers\Customers\SetLinkedCustomerController;
@@ -40,6 +41,8 @@ Route::middleware('auth')->group(function() {
         Route::post('linked',               SetLinkedCustomerController::class)       ->name('set-link');
         Route::get('{id}/check-id',         CheckCustIdController::class)             ->name('check-id');
         Route::get('{customer}/get-linked', GetLinkedCustomerController::class)       ->name('linked');
+
+        Route::resource('equipment', CustomerEquipmentController::class);
     });
 
     Route::resource('customers', CustomerController::class)

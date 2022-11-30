@@ -18,6 +18,16 @@ export type equipWithDataType = {
     data_field_type: dataListType[];
 } & equipType;
 
+export type customerEquipmentType = {
+    cust_equip_id: number;
+    shared       : boolean;
+    customer_equipment_data: customerEquipmentDataType[];
+} & equipType;
+
+export interface customerEquipmentDataType {
+    [key:string]: string | boolean;
+}
+
 export interface dataListType {
     type_id: number;
     name   : string;

@@ -11,6 +11,18 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-5">
+                <Equipment />
+            </div>
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Contacts:</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -19,14 +31,16 @@
     import CustomerDetails from '@/Components/Customer/CustomerDetails.vue';
     import EditCustomer from '@/Components/Customer/EditCustomer.vue';
     import ManageCustomer from '@/Components/Customer/ManageCustomer.vue';
+    import Equipment from '@/Components/Customer/Equipment/Equipment.vue';
     import axios from 'axios';
-    import { ref, reactive, onMounted, provide, InjectionKey, watch } from 'vue';
-    import { customerPermissionType, customerType } from '@/Types';
+    import { ref, reactive, onMounted, provide, InjectionKey, watch, computed } from 'vue';
+    import { customerPermissionType, customerType, customerEquipmentType } from '@/Types';
 
     const props = defineProps<{
         permissions: customerPermissionType;
         isFav      : boolean;
         customer   : customerType;
+        equipment  : customerEquipmentType[];
     }>();
 
     /**
@@ -53,9 +67,17 @@
     watch(() => props.customer, (newCust) => custData.value = newCust);
     provide('customer', custData);
 
+    const allowShare = computed(() => {
+        return custData.value.child_count > 0 || custData.value.parent_id !== null;
+    });
+    provide('allowShare', allowShare);
 
-
-
+    /**
+     * Customer Equipment Data
+     */
+    const custEquip = ref(props.equipment);
+    watch(() => props.equipment, (newEquip) => custEquip.value = newEquip);
+    provide('equipment', custEquip);
 </script>
 
 <script lang="ts">
