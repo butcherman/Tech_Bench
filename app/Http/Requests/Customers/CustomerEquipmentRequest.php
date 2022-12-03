@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests\Customers;
 
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 
 class CustomerEquipmentRequest extends FormRequest
 {
@@ -20,7 +21,7 @@ class CustomerEquipmentRequest extends FormRequest
             return $this->user()->can('update', $this->equipment);
         }
 
-        return false;
+        return $this->user()->can('create', CustomerEquipment::class);
     }
 
     /**
@@ -29,8 +30,35 @@ class CustomerEquipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'shared' => 'nullable|boolean',
+            'cust_id'  => Rule::requiredIf(fn() => !$this->equipment),
+            'equip_id' => Rule::requiredIf(fn() => !$this->equipment),
+            'shared'   => 'nullable|boolean',
         ];
+    }
+
+    /**
+     * Build the individial data fields for the equipment
+     */
+    public function buildEquipData(CustomerEquipment $equipment)
+    {
+        $this->updateShared($equipment);
+        $equipData = $this->except(['shared', 'type', 'cust_id', 'equip_id']);
+
+        foreach($equipData as $key => $value)
+        {
+            $equipId = str_replace('fieldId-', '', $key);
+            CustomerEquipmentData::create([
+                'cust_equip_id' => $equipment->cust_equip_id,
+                'field_id'      => $equipId,
+                'value'         => $value
+            ]);
+            Log::stack(['daily', 'cust'])->debug('Customer Equip Field ID '.$equipId.' created as '.$value);
+        }
+
+        Log::stack(['daily', 'cust'])->info('Customer Equipment Data for Customer ID '.
+                                            $equipment->cust_id.' and Equipment ID '.
+                                            $equipment->cust_equip_id.' created by '.
+                                            $this->user()->username, $this->toArray());
     }
 
     /**

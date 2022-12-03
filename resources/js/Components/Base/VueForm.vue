@@ -29,7 +29,7 @@
     }>();
 
     const isSubmitting     = ref(false);
-    const { handleSubmit, setFieldValue, setFieldError, values } = useForm({
+    const { handleSubmit, setFieldValue, setFieldError, values, resetForm } = useForm({
         validationSchema: props.validationSchema,
         initialValues   : props.initialValues ? props.initialValues : {},
     });
@@ -40,7 +40,7 @@
     });
 
     const getFieldValue = (field:string) => {
-        return values[field];
+        return values[field as keyof typeof values];
     }
 
     function _endSubmit()
@@ -55,6 +55,7 @@
         useFieldArray,
         setFieldError,
         onSubmit,
+        resetForm,
     });
 </script>
 

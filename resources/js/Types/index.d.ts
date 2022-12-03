@@ -15,6 +15,8 @@ declare global {
     ): string;
 }
 
+export type voidFunctionType = () => void;
+
 export * from './LayoutTypes';
 export * from './UserDataTypes';
 export * from './FormTypes';

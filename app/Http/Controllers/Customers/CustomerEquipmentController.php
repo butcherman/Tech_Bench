@@ -2,66 +2,31 @@
 
 namespace App\Http\Controllers\Customers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerEquipmentRequest;
 use App\Models\CustomerEquipment;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class CustomerEquipmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Redirecting back to customer page will refresh the equipment list
      */
     public function index()
     {
-        //
+        return back();
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Store a newly created customer equipment type
      */
-    public function create()
+    public function store(CustomerEquipmentRequest $request)
     {
-        //
-    }
+        $newEquipment = CustomerEquipment::create($request->only(['cust_id', 'equip_id', 'shared']));
+        $request->buildEquipData($newEquipment);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return back()->with('success', 'created');
     }
 
     /**

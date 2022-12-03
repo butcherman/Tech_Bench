@@ -6,7 +6,7 @@ use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use App\Http\Controllers\Equipment\EquipmentController;
 use App\Http\Controllers\Equipment\DataTypesController;
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
-use App\Models\EquipmentCategory;
+use App\Http\Controllers\Equipment\GetEquipmentController;
 
 /**
  * Equipment Routes
@@ -31,4 +31,6 @@ Route::middleware('auth')->group(function()
         $breadcrumbs->index('Equipment Data Types', 'equipment.index')
                     ->show('References', 'equipment.index');
     });
+
+    Route::get('get-equipment', GetEquipmentController::class)->name('equipment.get-all');
 });

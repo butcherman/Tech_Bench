@@ -1,5 +1,6 @@
 <template>
     <button
+        v-if="permission?.equipment.update"
         class="btn btn-warning mx-1 float-end"
         @click="editEquipmentModal?.show()"
     >
@@ -30,7 +31,7 @@
                 <TextInput
                     :id="`field-id-${field.id}`"
                     :name="`fieldId-${field.id}`"
-                    :label="field.field_name as string"
+                    :label="field.field_name.toString()"
                 />
             </template>
         </VueForm>
@@ -44,10 +45,14 @@
     import CheckboxSwitch                     from '@/Components/Base/Input/CheckboxSwitch.vue';
     import { ref, computed, inject }          from 'vue';
     import { useForm }                        from '@inertiajs/inertia-vue3';
-    import type { customerEquipmentType,
-                  customerEquipmentDataType } from '@/Types';
+    import type { voidFunctionType,
+                  customerEquipmentType,
+                  customerEquipmentDataType,
+                  customerPermissionType}     from '@/Types';
 
     const allowShare = inject('allowShare');
+    const toggleLoad = inject<voidFunctionType>('toggleLoad', () => {});
+    const permission = inject<customerPermissionType>('permission');
     const props      = defineProps<{
         equipData: customerEquipmentType;
     }>();
@@ -67,12 +72,16 @@
     });
 
     const onSubmit = (form:customerEquipmentDataType) => {
+        toggleLoad();
         const formData = useForm(form);
         formData.put(route('customers.equipment.update', props.equipData.cust_equip_id), {
             preserveScroll: true,
             only          : ['equipment', 'flash'],
-            onFinish      : () => editEquipmentForm.value?.endSubmit(),
             onSuccess     : () => editEquipmentModal.value?.hide(),
+            onFinish      : () => {
+                editEquipmentForm.value?.endSubmit();
+                toggleLoad();
+            },
         });
     }
 </script>

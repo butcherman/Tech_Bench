@@ -44,6 +44,11 @@
     }>();
 
     /**
+     * User Permissions
+     */
+    provide('permission', props.permissions);
+
+    /**
      * Bookmark Data
      */
     const isBookmark      = ref<boolean>(props.isFav);

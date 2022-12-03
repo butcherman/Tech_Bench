@@ -1,4 +1,11 @@
-import type { Ref } from "vue";
+import type { Ref }              from "vue";
+import { customerEquipmentType } from '@/Types';
+
+interface basicPermissionsType {
+    create: boolean;
+    update: boolean;
+    delete: boolean;
+}
 
 export interface customerPermissionType {
     details: {
@@ -7,6 +14,7 @@ export interface customerPermissionType {
         delete: boolean;
         manage: boolean;
     }
+    equipment: basicPermissionsType;
 }
 
 export interface customerFileType {
@@ -29,8 +37,8 @@ export interface customerType {
     created_at        ?: string;
     updated_at        ?: string;
     deleted_at        ?: string;
-    customer_equipment?: any; //  FIXME - type this
-    parent_equipment  ?: any; //  FIXME - type this
+    customer_equipment?: customerEquipmentType;
+    parent_equipment  ?: customerEquipmentType;
 }
 
 export interface customerSearchParamType {
@@ -61,7 +69,6 @@ export interface customerPaginationType {
     listTotal  : number;
     pageArr    : number[]
 }
-
 
 /**
  * Provide/Inject Types
