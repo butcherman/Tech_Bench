@@ -15,6 +15,13 @@ return [
         'type_updated' => 'File Type Updated',
         'type_deleted' => 'File Type Deleted',
     ],
+    'equipment' => [
+        'created' => 'New Equipment Created',
+        'updated' => 'Equipment Updated',
+        'deleted' => 'Equipment Deleted',
+        'restored' => 'Equipment Restored',
+        'force_deleted' => 'Equipment Destroyed',
+    ],
     'admin'   => [
         'change_id' => 'Customer ID Updated',
     ]

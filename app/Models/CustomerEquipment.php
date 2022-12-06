@@ -36,4 +36,23 @@ class CustomerEquipment extends Model
     {
         return $this->hasMany('App\Models\CustomerEquipmentData', 'cust_equip_id', 'cust_equip_id');
     }
+
+    /**
+     * Return the soft deleted items re-formatted to match other models
+     */
+    public static function getTrashed(Customer $customer)
+    {
+        $data = self::where('cust_id', $customer->cust_id)
+                      ->onlyTrashed()
+                      ->get()
+                      ->map(function($item) {
+            return [
+                'item_id'      => $item->cust_equip_id,
+                'item_name'    => $item->name,
+                'item_deleted' => $item->deleted_at->toFormattedDateString(),
+            ];
+        });
+
+        return $data;
+    }
 }

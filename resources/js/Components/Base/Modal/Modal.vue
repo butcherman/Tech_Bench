@@ -5,8 +5,6 @@
             id="myModal"
             class="modal fade"
             tabindex="-1"
-            aria-labelledby=""
-            aria-hidden="true"
         >
             <div
                 class="modal-dialog"
@@ -45,7 +43,7 @@
         size ?: 'sm' | 'lg' | 'xl';
     }>();
 
-    const emit = defineEmits(['hide', 'hidden']);
+    const emit = defineEmits(['hide', 'hidden', 'show', 'shown']);
 
     const myModal = ref<InstanceType<typeof Modal> | null>(null);
     let thisModalObj:Modal;
@@ -57,6 +55,7 @@
     function _show():void
     {
         thisModalObj.show();
+        emit('show');
     }
 
     function _hide():void

@@ -26,7 +26,7 @@ class CustomerEquipmentController extends Controller
         $newEquipment = CustomerEquipment::create($request->only(['cust_id', 'equip_id', 'shared']));
         $request->buildEquipData($newEquipment);
 
-        return back()->with('success', 'created');
+        return back()->with('success', __('cust.equipment.created'));
     }
 
     /**
@@ -36,7 +36,7 @@ class CustomerEquipmentController extends Controller
     {
         $request->updateEquipData($equipment);
 
-        return back()->with('success', 'done');
+        return back()->with('success', __('cust.equipment.updated'));
     }
 
     /**
@@ -48,6 +48,30 @@ class CustomerEquipmentController extends Controller
 
         $equipment->delete();
         Log::stack(['daily', 'cust'])->info('Equipment '.$equipment->name.' deleted for Customer ID '.$equipment->cust_id.' by '.Auth::user()->username);
-        return back()->with('success', 'deleted');
+        return back()->with('success', __('cust.equipment.deleted'));
+    }
+
+    /**
+     * Restore a soft deleted item
+     */
+    public function restore(CustomerEquipment $equipment)
+    {
+        $this->authorize('restore', $equipment);
+
+        $equipment->restore();
+        Log::stack(['daily', 'cust'])->info('Equipment '.$equipment->name.' has been restored for customer '.$equipment->cust_id.' by '.Auth::user()->username);
+        return back()->with('success', __('cust.equipment.restored'));
+    }
+
+    /**
+     * Force delete equipment forever
+     */
+    public function forceDelete(CustomerEquipment $equipment)
+    {
+        $this->authorize('forceDelete', $equipment);
+
+        $equipment->forceDelete();
+        Log::stack(['daily', 'cust'])->notice('Equipment '.$equipment->name.' has been force deleted for customer ID '.$equipment->cust_id.' by '.Auth::user()->username);
+        return back()->with('danger', __('cust.equipment.force_deleted'));
     }
 }

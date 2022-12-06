@@ -14,6 +14,7 @@ use App\Http\Controllers\Customers\GetLinkedCustomerController;
 use App\Http\Controllers\Customers\SetLinkedCustomerController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
 use App\Http\Controllers\Customers\GetCustomerSettingsController;
+use App\Http\Controllers\Customers\GetDeletedItemsController;
 use App\Http\Controllers\Customers\SetCustomerSettingsController;
 
 // use App\Http\Controllers\Customers\CheckIdController;
@@ -32,17 +33,28 @@ use App\Http\Controllers\Customers\SetCustomerSettingsController;
 
 Route::middleware('auth')->group(function() {
 
-
     Route::prefix('customers')->name('customers.')->group(function() {
-        Route::delete('force-delete',      [CustomerController::class, 'forceDelete'])->name('force-delete');
-        Route::post('restore',             [CustomerController::class, 'restore'])    ->name('restore');
-        Route::post('search',               CustomerSearchController::class)          ->name('search');
-        Route::post('bookmark',             CustomerBookmarkController::class)        ->name('bookmark');
-        Route::post('linked',               SetLinkedCustomerController::class)       ->name('set-link');
-        Route::get('{id}/check-id',         CheckCustIdController::class)             ->name('check-id');
-        Route::get('{customer}/get-linked', GetLinkedCustomerController::class)       ->name('linked');
+        Route::delete('force-delete',         [CustomerController::class, 'forceDelete'])->name('force-delete');
+        Route::post('restore',                [CustomerController::class, 'restore'])    ->name('restore');
+        Route::post('search',                  CustomerSearchController::class)          ->name('search');
+        Route::post('bookmark',                CustomerBookmarkController::class)        ->name('bookmark');
+        Route::post('linked',                  SetLinkedCustomerController::class)       ->name('set-link');
+        Route::get('{id}/check-id',            CheckCustIdController::class)             ->name('check-id');
+        Route::get('{customer}/get-linked',    GetLinkedCustomerController::class)       ->name('linked');
+        Route::get('{customer}/deleted-items', GetDeletedItemsController::class)         ->name('deleted-items');
 
+        /**
+         * Equipment
+         */
         Route::resource('equipment', CustomerEquipmentController::class);
+        Route::prefix('equipment')->name('equipment.')->group(function() {
+            Route::get('{equipment}/restore', [CustomerEquipmentController::class, 'restore'])
+                ->name('restore')
+                ->withTrashed();
+            Route::delete('{equipment}/force-delete', [CustomerEquipmentController::class, 'forceDelete'])
+                ->name('force-delete')
+                ->withTrashed();
+        });
     });
 
     Route::resource('customers', CustomerController::class)
