@@ -28,7 +28,7 @@ interface flashProps {
 
 export interface flashMessageType {
     type   : string;
-    message: string | null;
+    message: string;
 }
 
 interface notifciationProps {

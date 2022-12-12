@@ -7,7 +7,12 @@
                     <div class="card-body">
                         <div class="card-title">Current Logo</div>
                         <Transition name="fade" mode="out-in">
-                            <img :src="logo" alt="Tech Bench Logo" class="img-fluid" :key="logo" />
+                            <img
+                                :src="logo"
+                                alt="Tech Bench Logo"
+                                class="img-fluid"
+                                :key="logo"
+                            />
                         </Transition>
                     </div>
                 </div>

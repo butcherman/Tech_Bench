@@ -1,13 +1,13 @@
 <template>
-    <Head :title="`Error ${status}`" />
+    <Head :title="`Error ${ status }`" />
     <Guest>
         <div class="container h-100">
             <div class="row justify-content-center align-items-center h-100">
                 <div class="col-md-10">
                     <div class="card">
                         <div class="card-body">
-                            <h1 class="text-center">{{title}}</h1>
-                            <h4 class="text-center mt-4">{{description}}</h4>
+                            <h1 class="text-center">{{ title }}</h1>
+                            <h4 class="text-center mt-4">{{ description }}</h4>
                             <div class="text-center mt-4">
                                 <Link as="button" class="btn btn-primary w-25" href="/">
                                     Return Home

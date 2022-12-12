@@ -1,6 +1,8 @@
 <template>
     <div class="mb-3">
-        <label v-if="label" :for="id"><strong>{{ label }}:</strong></label>
+        <label v-if="label" :for="id">
+            <strong>{{ label }}:</strong>
+        </label>
         <select
             class="form-select form-select-lg"
             :class="{ 'is-valid' : isValid, 'is-invalid' : isInvalid }"
@@ -11,7 +13,12 @@
                 :value="getValue(opt)"
             >{{ getText(opt) }}</option>
         </select>
-        <span v-if="errorMessage && (meta.dirty || meta.touched)" class="text-danger">{{ errorMessage }}</span>
+        <span
+            v-if="errorMessage && (meta.dirty || meta.touched)"
+            class="text-danger"
+        >
+            {{ errorMessage }}
+        </span>
     </div>
 </template>
 

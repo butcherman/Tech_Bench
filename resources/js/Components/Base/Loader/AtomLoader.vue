@@ -17,9 +17,6 @@
      * Note:  Atom Spinner code compliments of Epic Spinners
      * https://epic-spinners.epicmax.co/
      */
-    import { ref, reactive, onMounted } from 'vue';
-
-    // const props = defineProps<{}>();
 </script>
 
 <style scoped>

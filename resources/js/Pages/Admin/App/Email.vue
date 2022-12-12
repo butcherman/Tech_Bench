@@ -70,17 +70,24 @@
                         <div class="text-center">
                             <Link
                                 as="button"
-                                :href="route('admin.test-email')"
+                                :href="$route('admin.test-email')"
                                 type="button"
                                 class="btn btn-warning mt-2 w-100"
                                 :disabled="testEmailDisable"
                                 @click="testEmailDisable = true"
                                 @finish="testEmailDisable = false"
                             >
-                                <span v-if="testEmailDisable" class="spinner-border spinner-border-sm" />
+                                <span
+                                    v-if="testEmailDisable"
+                                    class="spinner-border spinner-border-sm"
+                                />
                                 Send Test Email
                             </Link>
-                            <p><strong>Note:</strong> You must save the email settings before sending a test email</p>
+                            <p>
+                                <strong>Note:</strong>
+                                You must save the email settings before sending
+                                a test email
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -110,7 +117,8 @@
         requireAuth : boolean;
     }
 
-    const props = defineProps<{
+    const $route = route;
+    const props  = defineProps<{
         settings:emSettingsType;
     }>();
 

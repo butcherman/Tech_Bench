@@ -8,7 +8,7 @@
                             <div v-if="permissions.details.create" class="clearfix mb-2">
                                 <Link
                                     as="button"
-                                    :href="route('customers.create')"
+                                    :href="$route('customers.create')"
                                     class="btn btn-pill btn-info float-end"
                                 >
                                     <fa-icon icon="plus" />
@@ -128,7 +128,7 @@
                                             >
                                                 <td>
                                                     <Link
-                                                        :href="route('customers.show', customer.slug)"
+                                                        :href="$route('customers.show', customer.slug)"
                                                         class="d-block text-decoration-none text-muted"
                                                     >
                                                         {{ customer.name }}
@@ -139,7 +139,7 @@
                                                 </td>
                                                 <td>
                                                     <Link
-                                                        :href="route('customers.show', customer.slug)"
+                                                        :href="$route('customers.show', customer.slug)"
                                                         class="d-block text-decoration-none text-muted"
                                                     >
                                                         {{ customer.city }}
@@ -147,7 +147,7 @@
                                                 </td>
                                                 <td>
                                                     <Link
-                                                        :href="route('customers.show', customer.slug)"
+                                                        :href="$route('customers.show', customer.slug)"
                                                         class="d-block text-decoration-none text-muted"
                                                     >
                                                         <template v-if="customer.customer_equipment.length > 0">
@@ -260,6 +260,7 @@
              customerSearchParamType,
              customerType }             from '@/Types';
 
+    const $route = route;
     const props = defineProps<{
         perPage      : number;
         paginationArr: number[];

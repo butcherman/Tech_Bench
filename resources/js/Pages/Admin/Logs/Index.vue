@@ -13,7 +13,7 @@
                                 class="col-lg-2"
                             >
                                 <Link
-                                    :href="route('admin.logs.channels', channel)"
+                                    :href="$route('admin.logs.channels', channel)"
                                     type="button"
                                     class="btn btn-primary w-100 btn-pill"
                                 >
@@ -30,8 +30,12 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Log Files</div>
-                        <p v-if="logFiles === undefined" class="text-center">Select A Log Channel to View the Logs</p>
-                        <p v-else-if="logFiles.length === 0" class="text-center">No Logs Available for this Channel</p>
+                        <p v-if="logFiles === undefined" class="text-center">
+                            Select A Log Channel to View the Logs
+                        </p>
+                        <p v-else-if="logFiles.length === 0" class="text-center">
+                            No Logs Available for this Channel
+                        </p>
                         <div v-else>
                             <table class="table table-striped table-hover">
                                 <thead>
@@ -77,6 +81,7 @@
         logFiles?: logFilesType[];
     }>();
 
+    const $route  = route;
     const goToRow = (logData:logFilesType) => {
         Inertia.get(route('admin.logs.show', [route().params.channel, logData.filename]));
     }

@@ -5,8 +5,14 @@
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Please Enter New Password</h5>
-                        <VueForm ref="resetForm" :validation-schema="validationSchema" @submit="onSubmit">
+                        <h5 class="card-title">
+                            Please Enter New Password
+                        </h5>
+                        <VueForm
+                            ref="resetForm"
+                            :validation-schema="validationSchema"
+                            @submit="onSubmit"
+                        >
                             <TextInput
                                 id="current-password"
                                 name="current_password"

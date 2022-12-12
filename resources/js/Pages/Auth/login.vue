@@ -24,7 +24,7 @@
             <div class="col-md-8 text-center">
                 <Link
                     class="btn btn-link text-muted"
-                    :href="route('password.forgot')"
+                    :href="$route('password.forgot')"
                 >
                     Forgot Your Password?
                 </Link>
@@ -32,7 +32,7 @@
             <div v-if="allow_oath" class="col-md-8 text-center">
                 <a
                     class="btn btn-link text-muted"
-                    :href="route('azure-login')"
+                    :href="$route('azure-login')"
                 >
                     Login with Office 365
                 </a>
@@ -53,6 +53,7 @@
     const props            = defineProps<{
         allow_oath: boolean;
     }>();
+    const $route = route;
     const loginForm        = ref<InstanceType<typeof VueForm> | null>(null);
     const validationSchema =  {
         username: yup.string().required('You must enter a username'),

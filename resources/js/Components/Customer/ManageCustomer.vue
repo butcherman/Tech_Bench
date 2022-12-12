@@ -165,7 +165,7 @@
         customerSearchBox().then((res) => {
             const formData = useForm({
                 cust_id  : customer?.value.cust_id,
-                parent_id: res.cust_id,
+                parent_id: (res as customerType).cust_id,
                 add      : true,
             });
 

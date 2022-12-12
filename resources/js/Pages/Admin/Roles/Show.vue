@@ -31,7 +31,7 @@
                         <div class="text-center">
                             <Link
                                 as="button"
-                                :href="route('admin.users.roles.edit', role.role_id)"
+                                :href="$route('admin.users.roles.edit', role.role_id)"
                                 type="button"
                                 class="btn btn-primary w-50 m-1"
                                 :disabled="!role.allow_edit"
@@ -42,7 +42,7 @@
                         <div class="text-center">
                             <Link
                                 as="button"
-                                :href="route('admin.users.roles.copy', role.role_id)"
+                                :href="$route('admin.users.roles.copy', role.role_id)"
                                 type="button"
                                 class="btn btn-primary w-50 m-1"
                             >
@@ -73,7 +73,8 @@
     import type { userRolePermissionsType,
                   userRoleType }           from '@/Types';
 
-    const props = defineProps<{
+    const $route = route;
+    const props  = defineProps<{
         role       : userRoleType;
         permissions: {
             [key:string]:userRolePermissionsType[];

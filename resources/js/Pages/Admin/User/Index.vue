@@ -24,7 +24,7 @@
                                         <td>{{ user.user_roles.name }}</td>
                                         <td>
                                             <Link
-                                                :href="route('admin.users.edit', user.username)"
+                                                :href="$route('admin.users.edit', user.username)"
                                                 title="Edit User"
                                                 v-tooltip
                                             >
@@ -34,7 +34,7 @@
                                                 />
                                             </Link>
                                             <Link
-                                                :href="route('admin.users.reset-password.edit', user.username)"
+                                                :href="$route('admin.users.reset-password.edit', user.username)"
                                                 title="Reset Password"
                                                 v-tooltip
                                             >
@@ -61,7 +61,7 @@
                         <div class="text-center">
                             <Link
                                 as="button"
-                                :href="route('admin.users.create')"
+                                :href="$route('admin.users.create')"
                                 type="button"
                                 class="btn btn-primary w-50"
                             >
@@ -96,6 +96,7 @@
         users: userWithRole[];
     }>();
 
+    const $route = route;
     const loading = ref(false);
     const disableUser = (user:userType) => {
         verifyModal('This user will be immediately disabled').then(res => {

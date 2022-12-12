@@ -19,8 +19,8 @@
 </template>
 
 <script setup lang="ts">
-    import { toRef }                 from 'vue';
-    import { useField }              from 'vee-validate';
+    import { toRef }    from 'vue';
+    import { useField } from 'vee-validate';
 
     const props = defineProps<{
         id        : string;

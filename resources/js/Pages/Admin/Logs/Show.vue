@@ -37,7 +37,7 @@
                         <div class="card-title">
                             Log Details
                             <a
-                                :href="route('admin.logs.download', [props.channel, props.filename])"
+                                :href="$route('admin.logs.download', [props.channel, props.filename])"
                                 class="float-end text-primary"
                                 title="Download Log File"
                                 v-tooltip
@@ -133,7 +133,8 @@
         logFilesType,
         logDetailsType } from '@/Types';
 
-    const props = defineProps<{
+    const $route = route;
+    const props  = defineProps<{
         channel : string;
         levels  : levelsType[];
         filename: string;

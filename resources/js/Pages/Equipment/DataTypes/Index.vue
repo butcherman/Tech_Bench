@@ -32,7 +32,7 @@
                                         </span>
                                         <Link
                                             v-else
-                                            :href="route('data_types.show', data.type_id)"
+                                            :href="$route('data_types.show', data.type_id)"
                                             class="text-info pointer mx-1"
                                             title="Show References"
                                             v-tooltip
@@ -111,6 +111,8 @@
         dataList: dataListType[];
     }>();
 
+    const $route = route;
+
     /**
      * Destroy Data
      */
@@ -120,7 +122,7 @@
             {
                 Inertia.delete(route('data_types.destroy', data.type_id));
             }
-        })
+        });
     }
 
     /**
@@ -147,7 +149,7 @@
 
     const onEditClick   = (data:dataListType) => {
         editTypeModal.value?.show();
-        editTypeForm.value?.setFieldValue('name' as never, data.name as never);
+        editTypeForm.value?.setFieldValue('name', data.name as never);
         editId.value = data.type_id;
     }
 

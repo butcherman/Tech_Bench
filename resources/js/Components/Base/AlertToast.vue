@@ -13,7 +13,7 @@
 
     defineProps<{
         background: string;
-        message: string;
+        message   : string;
     }>();
     const toastAlert = ref<InstanceType<typeof Toast> | null>(null);
 

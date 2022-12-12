@@ -1,6 +1,8 @@
 <template>
     <div class="mb-3">
-        <label :for="id" class="form-label">{{ label }}: {{ formatValue }}</label>
+        <label :for="id" class="form-label">
+            {{ label }}: {{ formatValue }}
+        </label>
         <input
             v-model="value"
             :id="id"
@@ -9,7 +11,9 @@
             :min="min"
             :max="max"
         >
-        <span class="text-danger">{{ errorMessage }}</span>
+        <span class="text-danger">
+            {{ errorMessage }}
+        </span>
     </div>
 </template>
 
@@ -39,6 +43,4 @@
 
     const nameRef = toRef(props, 'name');
     const { errorMessage, value } = useField(nameRef);
-
-
 </script>

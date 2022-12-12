@@ -8,7 +8,7 @@
                         <div v-if="customers.length === 0" class="text-center">No Customer References</div>
                         <ul v-else class="list-group">
                             <li v-for="cust in customers" class="list-group-item">
-                                <Link :href="route('customers.show', cust.slug)">{{ cust.name }}</Link>
+                                <Link :href="$route('customers.show', cust.slug)">{{ cust.name }}</Link>
                             </li>
                         </ul>
                     </div>
@@ -21,7 +21,7 @@
                         <div v-if="techTip.length === 0" class="text-center">No Tech Tip References</div>
                         <ul v-else class="list-group">
                             <li v-for="tip in techTip" class="list-group-item">
-                                <Link :href="route('tech-tips.show', tip.slug)">{{ tip.subject }}</Link>
+                                <Link :href="$route('tech-tips.show', tip.slug)">{{ tip.subject }}</Link>
                             </li>
                         </ul>
                     </div>
@@ -36,6 +36,7 @@
     import { customerType, equipType, techTipWithEquipment } from '@/Types';
     import { ref, reactive, onMounted } from 'vue';
 
+    const $route = route;
     const props = defineProps<{
         equipment: equipType;
         customers: customerType[];

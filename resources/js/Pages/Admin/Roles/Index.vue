@@ -28,7 +28,7 @@
                         <div class="text-center">
                             <Link
                                 as="button"
-                                :href="route('admin.users.roles.create')"
+                                :href="$route('admin.users.roles.create')"
                                 type="button"
                                 class="btn btn-primary w-50"
                             >
@@ -51,6 +51,7 @@
         roles: userRoleType[];
     }>();
 
+    const $route   = route;
     const gotoRole = (role:userRoleType) => {
         Inertia.get(route('admin.users.roles.show', role.role_id));
     }

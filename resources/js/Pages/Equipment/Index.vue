@@ -13,7 +13,7 @@
                             >
                                 {{ cat.name }}
                                 <Link
-                                    :href="route('equipment_categories.edit', cat.cat_id)"
+                                    :href="$route('equipment_categories.edit', cat.cat_id)"
                                     class="float-end text-warning"
                                     :title="`Edit ${cat.name}`"
                                     v-tooltip
@@ -22,7 +22,7 @@
                                 </Link>
                             </li>
                             <li class="list-group-item text-center">
-                                <Link :href="route('equipment_categories.create')" class="btn btn-primary w-50">
+                                <Link :href="$route('equipment_categories.create')" class="btn btn-primary w-50">
                                     Add Category
                                 </Link>
                             </li>
@@ -50,7 +50,7 @@
                                 No equipment has been created for this Category
                                 <p class="mt-2">
                                     <Link
-                                        :href="route('equipment.create', activeCatName)"
+                                        :href="$route('equipment.create', activeCatName)"
                                         class="btn btn-primary w-75 m-2"
                                     >
                                         Add Equipment Type
@@ -72,7 +72,7 @@
                                 >
                                     {{ equip?.name }}
                                     <Link
-                                        :href="route('equipment.edit',equip?.equip_id)"
+                                        :href="$route('equipment.edit',equip?.equip_id)"
                                         class="float-end text-warning mx-1"
                                         :title="`Edit ${equip?.name}`"
                                         v-tooltip
@@ -89,7 +89,7 @@
                                     </Link> -->
                                 </li>
                                 <li class="list-group-item text-center" key="whatsLeft">
-                                    <Link :href="route('equipment.create', activeCatName)" class="btn btn-primary w-50">
+                                    <Link :href="$route('equipment.create', activeCatName)" class="btn btn-primary w-50">
                                         Add Equipment Type
                                     </Link>
                                 </li>
@@ -113,6 +113,7 @@
         catList: categoryList[];
     }>();
 
+    const $route = route;
     const activeCatId   = ref<number>();
     const activeCatName = ref<string>();
     const equipTypes    = ref<equipType[] | null[] | null>(null);

@@ -70,7 +70,6 @@
     import { ref, reactive } from 'vue';
     import { useForm }       from '@inertiajs/inertia-vue3';
     import * as yup          from 'yup';
-
     import type { settingsType, userAuthType } from '@/Types';
 
     const loading = ref(false);

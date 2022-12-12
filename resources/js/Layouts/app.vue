@@ -3,7 +3,7 @@
         <nav class="navbar top-navbar fixed-top">
             <div class="navbar-logo-wrapper d-flex">
                 <Link
-                    :href="route('dashboard')"
+                    :href="$route('dashboard')"
                     class="navbar-logo"
                 >
                     <img :src="app.logo" class="mr-2" :alt="app.name"/>
@@ -16,7 +16,7 @@
                 <ul class="nav">
                     <li class="nav-item">
                         <Link
-                            :href="route('about')"
+                            :href="$route('about')"
                             :title="`About ${app.name}`"
                             class="text-muted"
                             v-tooltip
@@ -26,7 +26,7 @@
                     </li>
                     <li class="nav-item">
                         <Link
-                            :href="route('dashboard')"
+                            :href="$route('dashboard')"
                             as="button"
                             title="Notifications"
                             class="btn btn-pill btn-primary position-relative"
@@ -52,7 +52,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
                                     <Link
-                                        :href="route('settings.index')"
+                                        :href="$route('settings.index')"
                                         class="dropdown-item"
                                     >
                                         <fa-icon icon="fa-cog" />
@@ -61,7 +61,7 @@
                                 </li>
                                 <li>
                                     <Link
-                                        :href="route('settings.password.index')"
+                                        :href="$route('settings.password.index')"
                                         class="dropdown-item"
                                     >
                                         <fa-icon icon="fa-key" />
@@ -72,7 +72,7 @@
                                 <li>
                                     <Link
                                         as="button"
-                                        :href="route('logout')"
+                                        :href="$route('logout')"
                                         class="dropdown-item"
                                         method="POST"
                                     >
@@ -186,6 +186,7 @@
              flashMessageType,
              notifciationProps, } from '@/Types';
 
+    const $route       = route;
     const app          = computed<appProps>         (() => usePage<pageInterface>().props.value.app);
     const navBar       = computed<navBarProps[]>    (() => usePage<pageInterface>().props.value.navbar);
     const notif        = computed<notifciationProps>(() => usePage<pageInterface>().props.value.notifications);
@@ -202,16 +203,16 @@
     onMounted(   () => checkFlashMessages());
 
     const checkFlashMessages = () => {
-        let flashKeys = Object.keys(flash.value);
-        flashKeys.forEach(key => {
-            if(flash.value[key as keyof flashProps] !== null)
+        for(const [type, message] of Object.entries(flash.value))
+        {
+            if(message !== null)
             {
                 flashMessage.value.push({
-                    type: key,
-                    message: flash.value[key as keyof flashProps],
+                    type,
+                    message,
                 });
             }
-        })
+        }
     }
 </script>
 

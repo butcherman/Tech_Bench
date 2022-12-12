@@ -23,7 +23,7 @@
                                     <td>{{ user.deleted_at }}</td>
                                     <td>
                                         <Link
-                                            :href="route('admin.users.enable', user.username)"
+                                            :href="$route('admin.users.enable', user.username)"
                                             class="pointer text-muted"
                                             title="Enable User"
                                             v-tooltip
@@ -53,6 +53,8 @@
     defineProps<{
         userList: disabledUserType[];
     }>();
+
+    const $route = route;
 </script>
 
 <script lang="ts">

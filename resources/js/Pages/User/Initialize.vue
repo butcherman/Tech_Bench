@@ -26,13 +26,12 @@
 </template>
 
 <script setup lang="ts">
-    // import App from '@/Layouts/app.vue';
-    import AuthLayout from '@/Layouts/authLayout.vue';
-    import VueForm from '@/Components/Base/VueForm.vue';
-    import TextInput from '@/Components/Base/Input/TextInput.vue';
-    import { ref } from 'vue';
-    import { useForm } from '@inertiajs/inertia-vue3';
-    import * as yup from 'yup';
+    import AuthLayout        from '@/Layouts/authLayout.vue';
+    import VueForm           from '@/Components/Base/VueForm.vue';
+    import TextInput         from '@/Components/Base/Input/TextInput.vue';
+    import { ref }           from 'vue';
+    import { useForm }       from '@inertiajs/inertia-vue3';
+    import * as yup          from 'yup';
     import type { userType } from '@/Types';
 
     const props = defineProps<{
@@ -43,7 +42,7 @@
         user: userType;
     }>();
 
-    const setPasswordForm = ref<InstanceType<typeof VueForm> | null>(null);
+    const setPasswordForm  = ref<InstanceType<typeof VueForm> | null>(null);
     const validationSchema = {
         password             : yup.string().required('You must enter a password'),
         password_confirmation: yup.string().required('Enter password again'),

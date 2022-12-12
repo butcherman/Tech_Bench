@@ -69,14 +69,14 @@
 </template>
 
 <script setup lang="ts">
-    import App from '@/Layouts/app.vue';
-    import VueForm from '@/Components/Base/VueForm.vue';
-    import SelectInput from '@/Components/Base/Input/SelectInput.vue';
+    import App            from '@/Layouts/app.vue';
+    import VueForm        from '@/Components/Base/VueForm.vue';
+    import SelectInput    from '@/Components/Base/Input/SelectInput.vue';
     import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
-    import { ref, reactive, onMounted } from 'vue';
-    import { allStates }            from '@/Modules/allStates.module';
-    import * as yup from 'yup';
-import { useForm } from '@inertiajs/inertia-vue3';
+    import { ref }        from 'vue';
+    import { allStates }  from '@/Modules/allStates.module';
+    import { useForm }    from '@inertiajs/inertia-vue3';
+    import * as yup       from 'yup';
 
     const props = defineProps<{
         selectId    : boolean;

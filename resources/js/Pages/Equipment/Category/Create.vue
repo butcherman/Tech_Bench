@@ -10,7 +10,11 @@
                             :validation-schema="validationSchema"
                             @submit="onSubmit"
                         >
-                            <TextInput id="cat-name" name="name" label="Category Name" />
+                            <TextInput
+                                id="cat-name"
+                                name="name"
+                                label="Category Name"
+                            />
                         </VueForm>
                     </div>
                 </div>
