@@ -15,6 +15,7 @@ export interface customerPermissionType {
         manage: boolean;
     }
     equipment: basicPermissionsType;
+    contact  : basicPermissionsType;
 }
 
 export interface customerFileType {
@@ -37,8 +38,8 @@ export interface customerType {
     created_at        ?: string;
     updated_at        ?: string;
     deleted_at        ?: string;
-    customer_equipment?: customerEquipmentType;
-    parent_equipment  ?: customerEquipmentType;
+    customer_equipment : customerEquipmentType[];
+    parent_equipment   : customerEquipmentType[];
 }
 
 export interface customerSearchParamType {

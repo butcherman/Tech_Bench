@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Models\CustomerContact;
 use App\Models\CustomerEquipment;
 
 class BuildCustomerPermissions
@@ -9,7 +10,7 @@ class BuildCustomerPermissions
     public function execute($customer, $user)
     {
         return [
-            'details' => [
+            'details'   => [
                 'create' => $user->can('create', $customer),
                 'update' => $user->can('update', $customer),
                 'manage' => $user->can('manage', $customer),
@@ -19,7 +20,12 @@ class BuildCustomerPermissions
                 'create' => $user->can('create', CustomerEquipment::class),
                 'update' => $user->can('update', CustomerEquipment::class),
                 'delete' => $user->can('delete', CustomerEquipment::class),
-            ]
+            ],
+            'contact'   => [
+                'create' => $user->can('create', CustomerContact::class),
+                'update' => $user->can('update', CustomerContact::class),
+                'delete' => $user->can('delete', CustomerContact::class),
+            ],
         ];
     }
 }

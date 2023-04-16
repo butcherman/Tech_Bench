@@ -16,11 +16,7 @@
                 <Equipment />
             </div>
             <div class="col-md-7">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Contacts:</div>
-                    </div>
-                </div>
+                <Contacts />
             </div>
         </div>
     </div>
@@ -32,6 +28,7 @@
     import EditCustomer from '@/Components/Customer/EditCustomer.vue';
     import ManageCustomer from '@/Components/Customer/ManageCustomer.vue';
     import Equipment from '@/Components/Customer/Equipment/Equipment.vue';
+    import Contacts from '@/Components/Customer/Contacts/Contacts.vue';
     import axios from 'axios';
     import { ref, reactive, onMounted, provide, InjectionKey, watch, computed } from 'vue';
     import { customerPermissionType, customerType, customerEquipmentType } from '@/Types';

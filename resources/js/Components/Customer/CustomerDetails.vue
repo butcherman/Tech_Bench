@@ -32,7 +32,7 @@
         <h6 v-if="customer?.parent_id">
             Child Site of -
             <Link
-                :href="route('customers.show', customer?.parent?.slug)"
+                :href="$route('customers.show', customer?.parent?.slug)"
             >
                 {{ customer?.parent?.name }}
             </Link>
@@ -68,6 +68,7 @@
             bookmarkLoading,
             toggleBookmark } = inject('bookmark') as customerBookmarkInjection;
     const customer           = inject<customerType>('customer');
+    const $route             = route;
 
     /**
      * Customer Bookmark Section
