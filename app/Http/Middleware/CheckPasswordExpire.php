@@ -36,7 +36,7 @@ class CheckPasswordExpire
                     ->notice('User '.$request->user()->full_name.' is being forced to change their password');
                 return redirect()
                     ->route('settings.password.index')
-                    ->with('warning', __('user.password_expired'));
+                    ->withErrors(__('user.password_expired'));
             }
         }
 
