@@ -78,6 +78,19 @@ $brk-xxl: map-get($grid-breakpoints, xxl);
     color: #C4C4C4;
 }
 
+.no-label {
+    > label {
+        display: none;
+    }
+    > .form-control {
+        // border-top: none;
+        // border-left: none;
+        // border-right: none;
+        border: none;
+        border-bottom: 1px solid #ced4da
+    }
+}
+
 /**
 *   Transition/Animation Styles
 */

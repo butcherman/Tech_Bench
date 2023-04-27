@@ -5,24 +5,31 @@
         <VueForm ref="resetForm"
             :validation-schema="formData.validationSchema"
             :initial-values="formData.initialValues"
+            submit-text="Reset Password"
             @submit="onSubmit"
         >
             <TextInput
                 id="email"
                 label="Email Address"
                 name="email"
+                placeholder="Email Address"
+                class="no-label"
             />
             <TextInput
                 id="password"
                 type="password"
                 label="New Password"
                 name="password"
+                placeholder="New Password"
+                class="no-label"
             />
             <TextInput
                 id="password-confirmation"
                 type="password"
                 label="Confirm Password"
                 name="password_confirmation"
+                placeholder="Confirm Password"
+                class="no-label"
             />
         </VueForm>
     </AuthLayout>
@@ -54,7 +61,7 @@
         }
     }
 
-    interface resetFormType {
+    type resetFormType = {
         email                : string;
         password             : string;
         password_confirmation: string;
@@ -64,7 +71,7 @@
         const myForm = useForm(form);
 
         myForm.post(route('password.reset-submit'), {
-            onFinish: () => resetForm.value?.endSubmit,
+            onFinish: () => { resetForm.value?.endSubmit(); console.log('done');},
         });
     };
 </script>

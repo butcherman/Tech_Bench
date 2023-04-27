@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Controllers\Controller;
 
 class LoginPageController extends Controller
 {
     /**
      * Login page for user authentication
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
-        return Inertia::render('Auth/Login', [
+        return Inertia::render('Auth/UserLogin', [
             'allow_oath' => (bool) config('services.azure.allow_login'),
         ]);
     }

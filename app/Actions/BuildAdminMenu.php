@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use Nwidart\Modules\Facades\Module;
+// use Nwidart\Modules\Facades\Module;
 use App\Models\User;
 use App\Traits\AllowTrait;
 
@@ -26,11 +26,11 @@ class BuildAdminMenu
         $equipMenu    = $this->buildEquipmentMenu();
         $customerMenu = $this->buildCustomerMenu();
         $techTipMenu  = $this->buildTechTipMenu();
-        $moduleMenu   = $this->buildModuleMenus();
+        // $moduleMenu   = $this->buildModuleMenus();
         $settingsMenu = $this->buildSettingsMenu();
         $maintMenu    = $this->buildMaintenanceMenu();
 
-        return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $moduleMenu, $settingsMenu, $maintMenu);
+        return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $settingsMenu, $maintMenu);
     }
 
     /**
@@ -191,7 +191,7 @@ class BuildAdminMenu
     protected function buildModuleMenus()
     {
         $nav = [];
-        $modules = Module::allEnabled();
+        // $modules = Module::allEnabled();
 
         // foreach($modules as $module)
         // {

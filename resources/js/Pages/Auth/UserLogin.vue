@@ -4,31 +4,28 @@
         <VueForm
             ref="loginForm"
             :validation-schema="validationSchema"
+            submit-text="Login"
             @submit="onSubmit"
         >
             <TextInput
                 id="username"
                 label="Username"
                 name="username"
+                placeholder="Username"
+                class="no-label"
                 focus
             />
             <TextInput
                 id="passsword"
                 label="Password"
                 name="password"
+                placeholder="Password"
+                class="no-label"
                 type="password"
             />
             <CheckboxSwitch id="remember-me" name="remember" label="Remember Me" />
         </VueForm>
         <div class="form-group row justify-content-center mb-0">
-            <div class="col-md-8 text-center">
-                <Link
-                    class="btn btn-link text-muted"
-                    :href="$route('password.forgot')"
-                >
-                    Forgot Your Password?
-                </Link>
-            </div>
             <div v-if="allow_oath" class="col-md-8 text-center">
                 <a
                     class="btn btn-link text-muted"
@@ -37,20 +34,28 @@
                     Login with Office 365
                 </a>
             </div>
+            <div class="col-md-8 text-center">
+                <Link
+                    class="btn btn-link text-muted"
+                    :href="$route('password.forgot')"
+                >
+                    Forgot Your Password?
+                </Link>
+            </div>
         </div>
     </AuthLayout>
 </template>
 
 <script setup lang="ts">
-    import AuthLayout  from '@/Layouts/authLayout.vue';
-    import VueForm     from '@/Components/Base/VueForm.vue'
-    import TextInput   from '@/Components/Base/Input/TextInput.vue';
+    import AuthLayout     from '@/Layouts/authLayout.vue';
+    import VueForm        from '@/Components/Base/VueForm.vue'
+    import TextInput      from '@/Components/Base/Input/TextInput.vue';
     import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
-    import { ref }     from 'vue';
-    import { useForm } from '@inertiajs/vue3';
-    import * as yup    from 'yup';
+    import { ref }        from 'vue';
+    import { useForm }    from '@inertiajs/vue3';
+    import * as yup       from 'yup';
 
-    const props            = defineProps<{
+    defineProps<{
         allow_oath: boolean;
     }>();
     const $route = route;
@@ -60,7 +65,7 @@
         password: yup.string().required('You must enter a password'),
     }
 
-    interface loginFormType {
+    type loginFormType = {
         username: string;
         password: string;
     }

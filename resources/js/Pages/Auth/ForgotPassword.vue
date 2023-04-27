@@ -7,13 +7,16 @@
         <VueForm
             ref="forgotForm"
             :validation-schema="validationSchema"
+            submit-text="Send Email"
             @submit="onSubmit"
         >
             <TextInput
                 id="email-address"
                 type="email"
                 label="Email Address"
+                placeholder="Email Address"
                 name="email"
+                class="no-label"
                 focus
             />
         </VueForm>
@@ -33,12 +36,12 @@
         email: yup.string().email().required('You must enter an email address'),
     }
 
-    interface forgotFormType {
+    type forgotFormType = {
         email: string;
     }
 
     const onSubmit = (form:forgotFormType) => {
-        const loginForm    = useForm(form);
+        const loginForm = useForm(form);
 
         loginForm.post(route('password.submit-email'), {
             onFinish: () => forgotForm.value?.endSubmit(),
