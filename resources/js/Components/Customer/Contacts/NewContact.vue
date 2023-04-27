@@ -48,7 +48,7 @@
     import CheckboxSwitch  from '@/Components/Base/Input/CheckboxSwitch.vue';
     import TextInput       from '@/Components/Base/Input/TextInput.vue';
     import { ref, inject } from 'vue';
-    import { useForm }     from '@inertiajs/inertia-vue3';
+    import { useForm }     from '@inertiajs/vue3';
     import * as yup        from 'yup';
     import type { Ref }    from 'vue';
     import type {

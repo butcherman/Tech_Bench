@@ -80,7 +80,7 @@
     import Overlay           from '@/Components/Base/Overlay.vue';
     import { ref }           from 'vue';
     import { verifyModal }   from '@/Modules/verifyModal.module';
-    import { Inertia }       from '@inertiajs/inertia'
+    import { router }       from '@inertiajs/vue3'
     import type { userType } from '@/Types';
 
     interface userWithRole extends userType {
@@ -103,7 +103,7 @@
             if(res)
             {
                 loading.value = true;
-                Inertia.delete(route('admin.users.destroy', user.username), {
+                router.delete(route('admin.users.destroy', user.username), {
                     onFinish: () => loading.value = false,
                 });
             }

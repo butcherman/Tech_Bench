@@ -1,5 +1,5 @@
 import type { userType } from '@/Types';
-import type { Page, PageProps } from '@inertiajs/inertia';
+import type { Page, PageProps } from '@inertiajs/vue3';
 
 export interface pageInterface extends Page<PageProps> {
     app          : appProps;

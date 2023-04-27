@@ -120,7 +120,7 @@
     import CheckboxSwitch         from '@/Components/Base/Input/CheckboxSwitch.vue';
     import RangeInput             from '@/Components/Base/Input/RangeInput.vue';
     import { ref }                from 'vue';
-    import { useForm }            from '@inertiajs/inertia-vue3';
+    import { useForm }            from '@inertiajs/vue3';
     import { helpModal }          from '@/Modules/helpModal.module';
     import * as yup               from 'yup';
 

@@ -47,7 +47,7 @@
     import TextInput   from '@/Components/Base/Input/TextInput.vue';
     import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
     import { ref }     from 'vue';
-    import { useForm } from '@inertiajs/inertia-vue3';
+    import { useForm } from '@inertiajs/vue3';
     import * as yup    from 'yup';
 
     const props            = defineProps<{

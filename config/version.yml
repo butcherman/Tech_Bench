@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: dev
   buildmetadata: null
-  commit: 71e
+  commit: '722'
   timestamp:
     year: 2023
     month: 4
-    day: 26
-    hour: 3
-    minute: 26
-    second: 29
+    day: 27
+    hour: 0
+    minute: 47
+    second: 22
     timezone: UTC
 commit:
   mode: git-local
@@ -47,7 +47,7 @@ format:
   version: 'Version {$major}.{$minor}.{$patch} (commit {$commit})'
   version-only: 'Version {$major}.{$minor}.{$patch}'
   version_only: 'Version {$major}.{$minor}.{$patch}'
-  full: '{$version-only}[.?={$prerelease}][+?={$buildmetadata}]'
+  full: '{$version-only}[-?={$prerelease}][+?={$buildmetadata}]'
   compact: '{$major}.{$minor}.{$patch}'
   timestamp-year: '{$timestamp.year}'
   timestamp-month: '{$timestamp.month}'
@@ -59,4 +59,4 @@ format:
   timestamp-datetime: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second}'
   timestamp-full: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second} {$timestamp.timezone}'
   build: '{$timestamp.month}-{$timestamp.day}-{$timestamp.year}'
-  copyright: 2016-2022
+  copyright: 2016-2023

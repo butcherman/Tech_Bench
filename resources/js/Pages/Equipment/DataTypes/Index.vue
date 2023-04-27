@@ -97,9 +97,9 @@
     import VueForm               from '@/Components/Base/VueForm.vue';
     import TextInput             from '@/Components/Base/Input/TextInput.vue';
     import { ref }               from 'vue';
-    import { useForm }           from '@inertiajs/inertia-vue3';
+    import { useForm }           from '@inertiajs/vue3';
     import { verifyModal }       from '@/Modules/verifyModal.module';
-    import { Inertia }           from '@inertiajs/inertia';
+    import { router }           from '@inertiajs/vue3';
     import * as yup              from 'yup';
     import type { dataListType } from '@/Types';
 
@@ -120,7 +120,7 @@
         verifyModal('Are you sure?').then(res => {
             if(res)
             {
-                Inertia.delete(route('data_types.destroy', data.type_id));
+                router.delete(route('data_types.destroy', data.type_id));
             }
         });
     }

@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
     import App                   from '@/Layouts/app.vue';
-    import { Inertia }           from '@inertiajs/inertia';
+    import { router }           from '@inertiajs/vue3';
     import type { userRoleType } from '@/Types';
 
     defineProps<{
@@ -53,7 +53,7 @@
 
     const $route   = route;
     const gotoRole = (role:userRoleType) => {
-        Inertia.get(route('admin.users.roles.show', role.role_id));
+        router.get(route('admin.users.roles.show', role.role_id));
     }
 </script>
 

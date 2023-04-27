@@ -103,7 +103,7 @@
     import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
     import SelectInput    from '@/Components/Base/Input/SelectInput.vue';
     import { ref }        from 'vue';
-    import { useForm }    from '@inertiajs/inertia-vue3';
+    import { useForm }    from '@inertiajs/vue3';
     import { toLower }    from 'lodash';
     import * as yup       from 'yup';
 

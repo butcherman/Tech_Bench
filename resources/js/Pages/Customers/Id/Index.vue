@@ -18,11 +18,11 @@
 <script setup lang="ts">
     import App                   from '@/Layouts/app.vue';
     import CustomerBasicSearch   from '@/Components/Customer/CustomerBasicSearch.vue';
-    import { Inertia }           from '@inertiajs/inertia';
+    import { router }           from '@inertiajs/vue3';
     import type { customerType } from '@/Types';
 
     const selectCust = (cust:customerType) => {
-        Inertia.visit(route('admin.cust.change_id.show', cust.slug));
+        router.visit(route('admin.cust.change_id.show', cust.slug));
     }
 </script>
 

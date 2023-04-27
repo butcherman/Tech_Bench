@@ -170,8 +170,8 @@
 
 <script setup lang="ts">
     import AlertToast  from '@/Components/Base/AlertToast.vue';
-    import { usePage } from '@inertiajs/inertia-vue3';
-    import { Inertia } from '@inertiajs/inertia';
+    import { usePage } from '@inertiajs/vue3';
+    import { router } from '@inertiajs/vue3';
     import { computed,
              ref,
              watch,
@@ -187,17 +187,17 @@
              notifciationProps, } from '@/Types';
 
     const $route       = route;
-    const app          = computed<appProps>         (() => usePage<pageInterface>().props.value.app);
-    const navBar       = computed<navBarProps[]>    (() => usePage<pageInterface>().props.value.navbar);
-    const notif        = computed<notifciationProps>(() => usePage<pageInterface>().props.value.notifications);
-    const breadcrumbs  = computed<breadcrumbsType[]>(() => usePage<pageInterface>().props.value.breadcrumbs);
-    const errors       = computed<errorType>        (() => usePage<pageInterface>().props.value.errors);
-    const flash        = computed<flashProps>       (() => usePage<pageInterface>().props.value.flash);
+    const app          = computed<appProps>         (() => usePage<pageInterface>().props.app);
+    const navBar       = computed<navBarProps[]>    (() => usePage<pageInterface>().props.navbar);
+    const notif        = computed<notifciationProps>(() => usePage<pageInterface>().props.notifications);
+    const breadcrumbs  = computed<breadcrumbsType[]>(() => usePage<pageInterface>().props.breadcrumbs);
+    const errors       = computed<errorType>        (() => usePage<pageInterface>().props.errors);
+    const flash        = computed<flashProps>       (() => usePage<pageInterface>().props.flash);
 
     const navbarActive = ref<boolean>(false);
     const flashMessage = ref<flashMessageType[]>([]);
 
-    Inertia.on('navigate', () => navbarActive.value = false);
+    router.on('navigate', () => navbarActive.value = false);
 
     watch(flash, () => checkFlashMessages());
     onMounted(   () => checkFlashMessages());

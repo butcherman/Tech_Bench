@@ -34,7 +34,7 @@
     import TextInput             from '@/Components/Base/Input/TextInput.vue';
     import App                   from '@/Layouts/app.vue';
     import { ref }               from 'vue';
-    import { useForm }           from '@inertiajs/inertia-vue3';
+    import { useForm }           from '@inertiajs/vue3';
     import type { customerType } from '@/Types';
     import * as yup              from 'yup';
 

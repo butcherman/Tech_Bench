@@ -44,7 +44,7 @@
     import TextInput   from '@/Components/Base/Input/TextInput.vue';
     import VueForm     from '@/Components/Base/VueForm.vue';
     import { ref }     from 'vue';
-    import { useForm } from '@inertiajs/inertia-vue3';
+    import { useForm } from '@inertiajs/vue3';
     import * as yup    from 'yup';
 
     const resetForm = ref<InstanceType<typeof VueForm> | null>(null);

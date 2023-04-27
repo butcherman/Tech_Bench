@@ -7,8 +7,8 @@ import '../scss/app.scss';
 *   Vue and base libraries
 */
 import { createApp, h }                 from 'vue';
-import { createInertiaApp, Link, Head } from '@inertiajs/inertia-vue3';
-import { InertiaProgress }              from '@inertiajs/progress';
+import { createInertiaApp, Link, Head } from '@inertiajs/vue3';
+// import { InertiaProgress }              from '@inertiajs/progress';
 import { resolvePageComponent }         from 'laravel-vite-plugin/inertia-helpers';
 import { FontAwesomeIcon }              from '@fortawesome/vue-fontawesome';
 //  Custom Directives
@@ -29,8 +29,11 @@ const appName:string = 'Tech Bench';
 createInertiaApp({
     title  : (title:string):string => `${title} - ${appName}`,
     resolve: (name:string) => resolvePageComponent<any>(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
-    setup({ el, app, props, plugin }) {
-        const inertiaApp = createApp({ render: () => h(app, props) })
+    progress: {
+        color: '#4B5563',
+    },
+    setup({ el, App, props, plugin }) {
+        const inertiaApp = createApp({ render: () => h(App, props) })
             .use(plugin)
             .component('Link',    Link)                         //  Inertial Link
             .component('Head',    Head)                         //  Head title
@@ -44,4 +47,4 @@ createInertiaApp({
       },
 });
 
-InertiaProgress.init({ color: '#4B5563' });
+// InertiaProgress.init({ color: '#4B5563' });

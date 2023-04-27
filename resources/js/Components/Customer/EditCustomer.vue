@@ -63,7 +63,7 @@
     import TextInput                from '@/Components/Base/Input/TextInput.vue';
     import SelectInput              from '@/Components/Base/Input/SelectInput.vue';
     import { ref, inject }          from 'vue';
-    import { useForm }              from '@inertiajs/inertia-vue3';
+    import { useForm }              from '@inertiajs/vue3';
     import { allStates }            from '@/Modules/allStates.module';
     import { customerValidation }   from '@/Modules/Validation/customerValidation.module';
     import type { Ref }             from 'vue';

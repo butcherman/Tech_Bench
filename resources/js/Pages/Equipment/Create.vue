@@ -94,7 +94,7 @@
     import HalfCircleLoader         from '@/Components/Base/Loader/HalfCircleLoader.vue';
     import draggable                from 'vuedraggable';
     import { ref }                  from 'vue';
-    import { useForm }              from '@inertiajs/inertia-vue3';
+    import { useForm }              from '@inertiajs/vue3';
     import { array_move }           from '@/Modules/helpers.module';
     import { equipmentValidator }   from '@/Modules/Validation/equipment.module';
     import { useForm as useVeeForm,

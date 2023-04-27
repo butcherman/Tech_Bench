@@ -63,7 +63,7 @@
     import RangeInput          from '@/Components/Base/Input/RangeInput.vue';
     import CheckboxSwitch      from '@/Components/Base/Input/CheckboxSwitch.vue';
     import { ref, reactive }   from 'vue';
-    import { useForm }         from '@inertiajs/inertia-vue3';
+    import { useForm }         from '@inertiajs/vue3';
 
     interface passwordPolicyType {
         expire            : number,
