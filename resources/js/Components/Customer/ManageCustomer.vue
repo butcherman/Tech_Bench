@@ -79,11 +79,11 @@
     import Overlay                   from '@/Components/Base/Overlay.vue';
     import axios                     from 'axios';
     import { ref, inject, computed } from 'vue';
-    import { Inertia }               from '@inertiajs/inertia';
-    import { useForm }               from '@inertiajs/inertia-vue3';
+    import { router }               from '@inertiajs/vue3';
+    import { useForm }               from '@inertiajs/vue3';
     import { verifyModal }           from '@/Modules/verifyModal.module';
     import { customerSearchBox }     from '@/Modules/customerSearchBox.module';
-    import type { InertiaForm }      from '@inertiajs/inertia-vue3';
+    import type { InertiaForm }      from '@inertiajs/vue3';
     import type { customerType }     from '@/Types';
     import type { Ref }              from 'vue';
 
@@ -136,7 +136,7 @@
     const restoreItem = async (group:string, item:deletedItemType) => {
         manageCustomerModal.value?.hide();
 
-        Inertia.get(route(`customers.${group}.restore`, item.item_id), {
+        router.get(route(`customers.${group}.restore`, item.item_id), {
             only     : ['equipment', 'flash']
         });
     }

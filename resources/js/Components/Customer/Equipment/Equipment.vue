@@ -25,7 +25,7 @@
     import NewEquipment                    from '@/Components/Customer/Equipment/NewEquipment.vue';
     import ShowEquipment                   from '@/Components/Customer/Equipment/ShowEquipment.vue';
     import { ref, provide, inject }        from 'vue';
-    import { Inertia }                     from '@inertiajs/inertia';
+    import { router }                     from '@inertiajs/vue3';
     import type { customerPermissionType } from '@/Types';
 
     const permission = inject<customerPermissionType>('permission');
@@ -36,7 +36,7 @@
 
     const refreshEquipment = () => {
         toggleLoad();
-        Inertia.get(route('customers.equipment.index'), {
+        router.get(route('customers.equipment.index'), {
             only: (['flash', 'equipment']),
         });
     }

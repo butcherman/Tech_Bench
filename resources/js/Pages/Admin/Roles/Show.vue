@@ -69,7 +69,7 @@
 <script setup lang="ts">
     import App                             from '@/Layouts/app.vue';
     import { verifyModal }                 from '@/Modules/verifyModal.module';
-    import { Inertia }                     from '@inertiajs/inertia';
+    import { router }                     from '@inertiajs/vue3';
     import type { userRolePermissionsType,
                   userRoleType }           from '@/Types';
 
@@ -85,7 +85,7 @@
         verifyModal('This cannot be undone').then(res => {
             if(res)
             {
-                Inertia.delete(route('admin.users.roles.destroy', props.role.role_id));
+                router.delete(route('admin.users.roles.destroy', props.role.role_id));
             }
         });
     }

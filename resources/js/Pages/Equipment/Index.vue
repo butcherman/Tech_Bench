@@ -106,7 +106,7 @@
     import App                              from '@/Layouts/app.vue';
     import { ref }                          from 'vue';
     import { verifyModal }                  from '@/Modules/verifyModal.module';
-    import { Inertia }                      from '@inertiajs/inertia';
+    import { router }                      from '@inertiajs/vue3';
     import type { categoryList, equipType } from '@/Types';
 
     defineProps<{
@@ -128,7 +128,7 @@
         verifyModal('This cannot be undone').then(res => {
             if(res)
             {
-                Inertia.delete(route('equipment_categories.destroy', activeCatId.value), {
+                router.delete(route('equipment_categories.destroy', activeCatId.value), {
                     onFinish: () => equipTypes.value = null,
                 });
             }

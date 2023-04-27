@@ -17,7 +17,7 @@
     import Modal                 from '../Base/Modal/Modal.vue';
     import Overlay               from '../Base/Overlay.vue';
     import axios                 from 'axios';
-    import { Link }              from '@inertiajs/inertia-vue3';
+    import { Link }              from '@inertiajs/vue3';
     import { ref, onMounted }    from 'vue';
     import type { customerType } from '@/Types';
 

@@ -76,7 +76,7 @@
     import EditEquipment                   from '@/Components/Customer/Equipment/EditEquipment.vue';
     import { ref, inject }                 from 'vue';
     import { verifyModal }                 from '@/Modules/verifyModal.module';
-    import { Inertia }                     from '@inertiajs/inertia';
+    import { router }                     from '@inertiajs/vue3';
     import type { customerEquipmentType,
                   customerPermissionType } from '@/Types';
 
@@ -96,7 +96,7 @@
             if(res)
             {
                 toggleLoad();
-                Inertia.delete(route('customers.equipment.destroy', equip.cust_equip_id), {
+                router.delete(route('customers.equipment.destroy', equip.cust_equip_id), {
                     only          : ['flash', 'equipment'],
                     preserveScroll: true,
                     onFinish      : () => {

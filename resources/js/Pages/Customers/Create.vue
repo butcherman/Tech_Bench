@@ -91,7 +91,7 @@
     import SelectInput               from '@/Components/Base/Input/SelectInput.vue';
     import axios                     from 'axios';
     import { ref }                   from 'vue';
-    import { useForm }               from '@inertiajs/inertia-vue3';
+    import { useForm }               from '@inertiajs/vue3';
     import { allStates }             from '@/Modules/allStates.module';
     import { customerValidation }    from '@/Modules/Validation/customerValidation.module';
     import { customerSearchBox }     from '@/Modules/customerSearchBox.module';

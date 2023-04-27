@@ -37,7 +37,7 @@
     import TextInput   from '@/Components/Base/Input/TextInput.vue';
     import SelectInput from '@/Components/Base/Input/SelectInput.vue';
     import { ref }     from 'vue';
-    import { useForm } from '@inertiajs/inertia-vue3';
+    import { useForm } from '@inertiajs/vue3';
 
     const props = defineProps<{
         logLevel: string;

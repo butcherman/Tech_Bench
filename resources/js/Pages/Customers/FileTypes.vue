@@ -86,8 +86,8 @@
     import TextInput                 from '@/Components/Base/Input/TextInput.vue';
     import Modal                     from '@/Components/Base/Modal/Modal.vue';
     import { ref }                   from 'vue';
-    import { useForm }               from '@inertiajs/inertia-vue3';
-    import { Inertia }               from '@inertiajs/inertia';
+    import { useForm }               from '@inertiajs/vue3';
+    import { router }               from '@inertiajs/vue3';
     import { verifyModal }           from '@/Modules/verifyModal.module';
     import type { customerFileType } from '@/Types';
     import * as yup                  from 'yup';
@@ -139,7 +139,7 @@
             if(res)
             {
                 loading.value = true;
-                Inertia.delete(route('admin.cust.file-types.destroy', type.file_type_id), {
+                router.delete(route('admin.cust.file-types.destroy', type.file_type_id), {
                     onFinish: () => loading.value = false,
                 });
             }

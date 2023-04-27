@@ -33,7 +33,7 @@
     import VueForm     from '@/Components/Base/VueForm.vue';
     import TextInput   from '@/Components/Base/Input/TextInput.vue';
     import { ref }     from 'vue';
-    import { useForm } from '@inertiajs/inertia-vue3';
+    import { useForm } from '@inertiajs/vue3';
     import * as yup    from 'yup';
 
     const props = defineProps<{

@@ -76,7 +76,7 @@
     import App                   from '@/Layouts/app.vue';
     import Overlay               from '@/Components/Base/Overlay.vue';
     import { ref }               from 'vue';
-    import { useForm }           from '@inertiajs/inertia-vue3';
+    import { useForm }           from '@inertiajs/vue3';
     import { verifyModal }       from '@/Modules/verifyModal.module';
     import type { customerType } from '@/Types';
 

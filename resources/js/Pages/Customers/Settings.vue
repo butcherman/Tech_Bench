@@ -75,7 +75,7 @@
     import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
     import { ref }        from 'vue';
     import { allStates }  from '@/Modules/allStates.module';
-    import { useForm }    from '@inertiajs/inertia-vue3';
+    import { useForm }    from '@inertiajs/vue3';
     import * as yup       from 'yup';
 
     const props = defineProps<{

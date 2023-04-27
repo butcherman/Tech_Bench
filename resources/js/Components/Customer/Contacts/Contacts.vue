@@ -24,7 +24,7 @@
     import Overlay                         from '@/Components/Base/Overlay.vue';
     import NewContact                      from './NewContact.vue';
     import { ref, provide, inject }        from 'vue';
-    import { Inertia }                     from '@inertiajs/inertia';
+    import { router }                     from '@inertiajs/vue3';
     import type { customerPermissionType } from '@/Types';
 
     const permission = inject<customerPermissionType>('permission');
@@ -35,7 +35,7 @@
 
     const refreshContacts = () => {
         toggleLoad();
-        Inertia.get(route('customers.contacts.index'), {
+        router.get(route('customers.contacts.index'), {
             only: (['flash', 'contacts']),
         });
     }

@@ -69,7 +69,7 @@
     import axios           from 'axios';
     import { ref, inject } from 'vue';
     import { Field }       from 'vee-validate';
-    import { useForm }     from '@inertiajs/inertia-vue3';
+    import { useForm }     from '@inertiajs/vue3';
     import * as yup        from 'yup';
     import type { Ref }    from 'vue';
     import type { categoryList,

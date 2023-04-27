@@ -36,13 +36,13 @@
 <script setup lang="ts">
     import Guest        from './guest.vue';
     import { computed } from 'vue';
-    import { usePage }  from '@inertiajs/inertia-vue3';
+    import { usePage }  from '@inertiajs/vue3';
 
-    import type { pageInterface } from '@/Types';
+    import type { pageInterface, PageProps } from '@/Types';
 
-    const appName = computed(() => usePage<pageInterface>().props.value.app.name);
-    const appLogo = computed(() => usePage<pageInterface>().props.value.app.logo);
-    const errors  = computed(() => usePage<pageInterface>().props.value.errors);
-    const warning = computed(() => usePage<pageInterface>().props.value.flash.warning);
-    const success = computed(() => usePage<pageInterface>().props.value.flash.success);
+    const appName = computed(() => usePage<pageInterface>().props.app.name);
+    const appLogo = computed(() => usePage<PageProps>().props.app.logo);
+    const errors  = computed(() => usePage<PageProps>().props.errors);
+    const warning = computed(() => usePage<PageProps>().props.flash.warning);
+    const success = computed(() => usePage<PageProps>().props.flash.success);
 </script>

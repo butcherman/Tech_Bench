@@ -68,7 +68,7 @@
     import CheckboxSwitch    from '@/Components/Base/Input/CheckboxSwitch.vue';
     import Overlay           from '@/Components/Base/Overlay.vue';
     import { ref, reactive } from 'vue';
-    import { useForm }       from '@inertiajs/inertia-vue3';
+    import { useForm }       from '@inertiajs/vue3';
     import * as yup          from 'yup';
     import type { settingsType, userAuthType } from '@/Types';
 

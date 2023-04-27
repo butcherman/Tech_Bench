@@ -51,7 +51,7 @@
     import TextInput                 from '@/Components/Base/Input/TextInput.vue';
     import SelectInput               from '@/Components/Base/Input/SelectInput.vue';
     import { ref, computed }         from 'vue';
-    import { useForm }               from '@inertiajs/inertia-vue3';
+    import { useForm }               from '@inertiajs/vue3';
     import * as yup                  from 'yup';
     import type { userRoleType,
                   userFormType,

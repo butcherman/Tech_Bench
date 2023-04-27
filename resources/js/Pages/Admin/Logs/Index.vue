@@ -72,7 +72,7 @@
 
 <script setup lang="ts">
     import App                               from '@/Layouts/app.vue';
-    import { Inertia }                       from '@inertiajs/inertia';
+    import { router }                       from '@inertiajs/vue3';
     import type { levelsType, logFilesType } from '@/Types';
 
     defineProps<{
@@ -83,7 +83,7 @@
 
     const $route  = route;
     const goToRow = (logData:logFilesType) => {
-        Inertia.get(route('admin.logs.show', [route().params.channel, logData.filename]));
+        router.get(route('admin.logs.show', [route().params.channel, logData.filename]));
     }
 </script>
 

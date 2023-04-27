@@ -47,7 +47,7 @@
     import VueForm       from '@/Components/Base/VueForm.vue';
     import DropzoneInput from '@/Components/Base/Input/DropzoneInput.vue';
     import { ref }       from 'vue';
-    import { useForm }   from '@inertiajs/inertia-vue3';
+    import { useForm }   from '@inertiajs/vue3';
     import * as yup      from 'yup';
 
     defineProps<{
