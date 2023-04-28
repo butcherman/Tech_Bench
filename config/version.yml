@@ -3,18 +3,18 @@ blade-directive: version
 current:
   label: v
   major: 6
-  minor: 3
-  patch: 1
+  minor: 4
+  patch: 0
   prerelease: null
   buildmetadata: null
-  commit: 6af
+  commit: 6b3
   timestamp:
-    year: 2022
-    month: 6
-    day: 23
-    hour: 1
-    minute: 36
-    second: 36
+    year: 2023
+    month: 4
+    day: 28
+    hour: 22
+    minute: 58
+    second: 32
     timezone: UTC
 commit:
   mode: git-local
@@ -59,4 +59,4 @@ format:
   timestamp-datetime: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second}'
   timestamp-full: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second} {$timestamp.timezone}'
   build: '{$timestamp.month}-{$timestamp.day}-{$timestamp.year}'
-  copyright: 2016-2022
+  copyright: 2016-2023

@@ -48,9 +48,6 @@ class GarbageCollectionJob implements ShouldQueue
             $this->cleanupRecentLists();
             $this->moduleGarbageCollection();
 
-            //  Cleanup backups
-            Artisan::call('backup:clean');
-
             Artisan::call('up');
             Log::notice('Garbage Collection Job completed');
         }
