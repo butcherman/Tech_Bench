@@ -39,7 +39,7 @@ By default the Tech Bench uses a Self Signed SSL Certificate for https requests.
 
 To remove a custom certificate, simply delete the existing server.crt and server.key files and reboot the NGINX Docker container.  A new self signed SSL Certificate will be created.
 
-## Copyright © 2016-2022 Ron Butcher
+## Copyright © 2016-2023 Ron Butcher
 
 This program is free software:  you can redistribute it and/or modify it under the terms of the GNU
 General Public License as published by the Free Software Foundation, either version 2 of the License,

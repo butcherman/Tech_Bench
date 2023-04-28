@@ -111,7 +111,7 @@
         },
         created() {
             this.customerStore.custDetails = this.details;
-            this.customerStore.equipment   = this.equipment;
+            this.customerStore.equipment   = this.sortEquipmentData();
             this.customerStore.contacts    = this.contacts;
             this.customerStore.notes       = this.notes;
             this.customerStore.files       = this.files;
@@ -147,7 +147,16 @@
             }
         },
         methods: {
-            //
+            sortEquipmentData()
+            {
+                let equipData = this.equipment;
+
+                equipData.forEach(equip => {
+                    equip.customer_equipment_data.sort((a, b) => a.order - b.order);
+                });
+
+                return equipData;
+            }
         },
     }
 </script>
