@@ -36,6 +36,25 @@
                 </div>
             </div>
         </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Password Rules:
+                        </h5>
+                        <ul>
+                            <li
+                                v-for="rule in password_rules"
+                                class="mx-2"
+                            >
+                                {{ rule }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -47,6 +66,10 @@
     import { useForm } from '@inertiajs/vue3';
     import * as yup    from 'yup';
 
+    defineProps<{
+        password_rules: string[];
+    }>();
+
     const resetForm = ref<InstanceType<typeof VueForm> | null>(null);
     const validationSchema = {
         current_password     : yup.string().required('Please enter your current password'),
@@ -54,7 +77,7 @@
         password_confirmation: yup.string().required('Enter password again'),
     }
 
-    interface passwordFormType {
+    type passwordFormType = {
         current_password     : string;
         password             : string;
         password_confirmation: string;

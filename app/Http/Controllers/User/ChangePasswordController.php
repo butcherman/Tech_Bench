@@ -7,13 +7,25 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\ChangePasswordRequest;
+use Inertia\Inertia;
+use App\Actions\BuildPasswordRules;
 
 class ChangePasswordController extends Controller
 {
     /**
+     * Change password page
+     */
+    public function get()
+    {
+        return Inertia::render('User/ChangePassword', [
+            'password_rules' => (new BuildPasswordRules)->build(),
+        ]);
+    }
+
+    /**
      * Change the password for the currently logged in user
      */
-    public function __invoke(ChangePasswordRequest $request)
+    public function set(ChangePasswordRequest $request)
     {
         $user = User::find($request->user()->user_id);
         $user->update([

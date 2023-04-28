@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
-        $schedule->job(new GarbageCollectionJob)->daily();
+        // $schedule->job(new GarbageCollectionJob)->daily();
         $schedule->command('telescope:prune')->daily();
 
         //  Nightly backup will only run if the task is

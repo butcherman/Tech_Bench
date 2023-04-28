@@ -39,13 +39,13 @@ Route::middleware('auth')->group(function() {
         Route::get('/', UserSettingsController::class)
             ->name('index')
             ->breadcrumb('Settings', 'dashboard');
-        Route::inertia('password', 'User/ChangePassword')
+        Route::get('password', [ChangePasswordController::class, 'get'])
             ->name('password.index')
             ->breadcrumb('Change Password', 'settings.index');
 
-        Route::post('notifications',  UpdateNotificationsController::class)->name('notifications');
-        Route::post('/{user}/update', UpdateAccountController::class)      ->name('update');
-        Route::post('password',       ChangePasswordController::class)     ->name('password.store');
+        Route::post('notifications',  UpdateNotificationsController::class)   ->name('notifications');
+        Route::post('/{user}/update', UpdateAccountController::class)         ->name('update');
+        Route::post('password',      [ChangePasswordController::class, 'set'])->name('password.store');
     });
 
     // Route::post('upload-image',      UploadImageController::class)->name('upload-image');

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateAppSettingsTable extends Migration
@@ -19,6 +20,9 @@ class CreateAppSettingsTable extends Migration
             $table->text('value');
             $table->timestamps();
         });
+
+        $firstTimeInit = [['key' => 'app.first_time_setup', 'value' => true]];
+        DB::table('app_settings')->insert($firstTimeInit);
     }
 
     /**

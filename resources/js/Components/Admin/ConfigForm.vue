@@ -1,21 +1,35 @@
 <template>
-    <Head title="Application Settings" />
-    <div>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Configuration</div>
-                        <ConfigForm :settings="settings" :tz_list="tz_list" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <VueForm
+        ref="configForm"
+        :validation-schema="validationSchema"
+        :initial-values="initialValues"
+        @submit="onSubmit"
+    >
+        <TextInput
+            id="url"
+            name="url"
+            label="Site URL"
+            help="This is the URL that will be used to access the Tech Bench"
+            @change="updateRedirectUri"
+        />
+        <SelectOptionGroupInput
+            id="timezone"
+            name="timezone"
+            label="Timezone"
+            :option-list="tz_list"
+        />
+        <RangeInput
+            id="file-size"
+            name="filesize"
+            label="Max Uploaded File Size"
+            :min="5000"
+            :max="10737418240"
+            format="prettybytes"
+        />
+    </VueForm>
 </template>
 
 <script setup lang="ts">
-    import App                    from '@/Layouts/app.vue';
     import VueForm                from '@/Components/Base/VueForm.vue';
     import TextInput              from '@/Components/Base/Input/TextInput.vue';
     import SelectOptionGroupInput from '@/Components/Base/Input/SelectOptionGroup.vue';
@@ -25,8 +39,6 @@
     import { useForm }            from '@inertiajs/vue3';
     import { helpModal }          from '@/Modules/helpModal.module';
     import * as yup               from 'yup';
-
-    import ConfigForm from '@/Components/Admin/ConfigForm.vue';
 
     interface settingsType {
         url          : string;
@@ -57,24 +69,6 @@
         url          : yup.string().url().required('You must have a Fully Qualified Domain Name for this application to work properly'),
         timezone     : yup.string().required(),
         filesize     : yup.number().required(),
-        allowOath    : yup.boolean().required(),
-        allowRegister: yup.boolean().when('allowOath', {
-            is  : true,
-            then: yup.boolean().required(),
-        }).nullable(),
-        tenantId     : yup.string().when('allowOath', {
-            is  : true,
-            then: yup.string().required('Please enter the Azure Tenant ID'),
-        }).nullable(),
-        clientId     : yup.string().when('allowOath', {
-            is  : true,
-            then: yup.string().required('Please enter the Azure Client ID'),
-        }).nullable(),
-        clientSecret : yup.string().when('allowOath', {
-            is  : true,
-            then: yup.string().required('Please enter the Azure Client Secret'),
-        }).nullable(),
-        redirectUri  : yup.string().required(),
     });
 
     const onSubmit = (form:settingsType) => {
@@ -88,11 +82,7 @@
         configForm.value?.setFieldValue('redirectUri', `${newUri}/auth/callback`);
     }
 
-    const showHelp = (type:string) => {
-        helpModal(getHelpMsg(type), {
-            title: 'What is this?',
-        });
-    }
+
 
     const getHelpMsg = (type:string):string => {
         let msg = '';
@@ -110,8 +100,4 @@
 
         return msg;
     }
-</script>
-
-<script lang="ts">
-    export default { layout: App }
 </script>

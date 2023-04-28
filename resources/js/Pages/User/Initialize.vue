@@ -48,7 +48,7 @@
         password_confirmation: yup.string().required('Enter password again'),
     }
 
-    interface passwordFormType {
+    type passwordFormType = {
         password             : string;
         password_confirmation: string;
     }
