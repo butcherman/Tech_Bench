@@ -8,7 +8,6 @@ import '../scss/app.scss';
 */
 import { createApp, h }                 from 'vue';
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3';
-// import { InertiaProgress }              from '@inertiajs/progress';
 import { resolvePageComponent }         from 'laravel-vite-plugin/inertia-helpers';
 import { FontAwesomeIcon }              from '@fortawesome/vue-fontawesome';
 //  Custom Directives

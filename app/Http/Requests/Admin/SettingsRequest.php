@@ -24,12 +24,6 @@ class SettingsRequest extends FormRequest
             'url' => 'required|string',
             'timezone' => 'required|string',
             'filesize' => 'required|numeric',
-            'allowOath' => 'required|boolean',
-            'allowRegister' => 'nullable|boolean',
-            'tenantId' => 'nullable|string',
-            'clientId' => 'nullable|string',
-            'clientSecret' => 'nullable|string',
-            'redirectUri' => 'required|string',
         ];
     }
 
@@ -49,21 +43,6 @@ class SettingsRequest extends FormRequest
                 break;
             case 'filesize':
                 $key = 'filesystems.max_filesize';
-                break;
-            case 'allowOath':
-                $key = 'services.azure.allow_login';
-                break;
-            case 'allowRegister':
-                $key = 'services.azure.allow_register';
-                break;
-            case 'tenantId':
-                $key = 'services.azure.tenant';
-                break;
-            case 'clientId':
-                $key = 'services.azure.client_id';
-                break;
-            case 'clientSecret':
-                $key = 'services.azure.client_secret';
                 break;
             case 'redirectUri':
                 $key = 'services.azure.redirect';

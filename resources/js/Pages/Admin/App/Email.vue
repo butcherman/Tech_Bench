@@ -6,7 +6,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Email Settings</div>
-                        <VueForm
+                        <!-- <VueForm
                             ref="emailForm"
                             :validation-schema="validationSchema"
                             :initial-values="initialValues"
@@ -88,7 +88,7 @@
                                 You must save the email settings before sending
                                 a test email
                             </p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

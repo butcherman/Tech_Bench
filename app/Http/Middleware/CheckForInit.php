@@ -19,6 +19,9 @@ class CheckForInit
         'init.step-3',
         'init.step-4',
         'init.step-5',
+        'admin.set-config',
+        'admin.set-email',
+        'admin.test-email',
     ];
 
     /**

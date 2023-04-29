@@ -24,11 +24,7 @@
 </template>
 
 <script setup lang="ts">
-    import App from '@/Layouts/app.vue';
-    import { ref, reactive, onMounted } from 'vue';
-    // import { Layout } from './Layout.vue';
     import InitLayout from './InitLayout.vue';
 
     const $route = route;
-    const props = defineProps<{}>();
 </script>

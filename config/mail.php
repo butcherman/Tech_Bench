@@ -42,7 +42,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'tech_bench@noem.com'),
+        'address' => env('MAIL_FROM_ADDRESS', null),
         'name' => env('MAIL_FROM_NAME', 'Tech Bench'),
     ],
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Init;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class StepThree extends Controller
 {
@@ -12,6 +13,16 @@ class StepThree extends Controller
      */
     public function __invoke(Request $request)
     {
-        //
+        return Inertia::render('Init/StepThree', [
+            'settings' => [
+                'host' => config('mail.mailers.smtp.host'),
+                'port' => config('mail.mailers.smtp.port'),
+                'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
+                'username' => config('mail.mailers.smtp.username'),
+                'password' => config('mail.mailers.smtp.password') ? __('admin.fake_password') : '',
+                'from_address' => config('mail.from.address'),
+                'requireAuth' => (bool) config('mail.mailers.smtp.require_auth'),
+            ],
+        ]);
     }
 }
