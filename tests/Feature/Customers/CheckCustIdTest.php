@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Customers;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Customer;
+use App\Models\User;
+use Tests\TestCase;
 
 class CheckCustIdTest extends TestCase
 {

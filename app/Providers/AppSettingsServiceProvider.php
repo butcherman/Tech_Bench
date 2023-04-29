@@ -17,22 +17,17 @@ class AppSettingsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        try
-        {
+        try {
             /*
             *   All App Settings that can be adjusted are stored in the database - retrieve them here and assign to the config
             */
-            if(Schema::hasTable('app_settings'))
-            {
+            if (Schema::hasTable('app_settings')) {
                 $settings = DB::table('app_settings')->get();
-                foreach($settings as $setting)
-                {
+                foreach ($settings as $setting) {
                     config([$setting->key => $setting->value]);
                 }
             }
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             report($e);
         }
     }

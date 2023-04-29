@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Support\Facades\Log;
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UpdateAccountController extends Controller
 {

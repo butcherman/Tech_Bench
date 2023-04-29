@@ -2,25 +2,25 @@
 
 return [
     'defaults' => [
-        'guard'     => 'web',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
     'guards' => [
         'web' => [
-            'driver'   => 'session',
+            'driver' => 'session',
             'provider' => 'users',
         ],
 
         'api' => [
-            'driver'   => 'token',
+            'driver' => 'token',
             'provider' => 'users',
-            'hash'     => false,
+            'hash' => false,
         ],
     ],
     'providers' => [
-        'users'   => [
+        'users' => [
             'driver' => 'eloquent',
-            'model'  => App\Models\User::class,
+            'model' => App\Models\User::class,
         ],
 
         // 'users' => [
@@ -47,18 +47,18 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table'    => 'password_resets',
-            'expire'   => 60,
+            'table' => 'password_resets',
+            'expire' => 60,
             'throttle' => 60,
         ],
         'settings' => [
-            'expire'             => 30,         //  In days
-            'min_length'         => 4,          //  Minimum password length
+            'expire' => 30,         //  In days
+            'min_length' => 4,          //  Minimum password length
             'contains_uppercase' => true,
             'contains_lowercase' => true,
-            'contains_number'    => true,
-            'contains_special'   => true,
-        ]
+            'contains_number' => true,
+            'contains_special' => true,
+        ],
     ],
 
     /*

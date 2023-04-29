@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\AppSettings;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\AppSettings;
 
 class LogoRequest extends FormRequest
 {
@@ -33,7 +33,7 @@ class LogoRequest extends FormRequest
      */
     public function saveLogo(UploadedFile $file)
     {
-        $path     = 'images/logo';
+        $path = 'images/logo';
         $location = '/storage/'.Storage::disk('public')->putFile($path, new File($file));
 
         return $location;

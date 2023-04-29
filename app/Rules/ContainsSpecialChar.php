@@ -12,8 +12,7 @@ class ContainsSpecialChar implements Rule
     public function passes($attribute, $value)
     {
         //  The configuration allows for this rule to be skipped
-        if(!config('auth.passwords.settings.contains_special'))
-        {
+        if (! config('auth.passwords.settings.contains_special')) {
             return true;
         }
 

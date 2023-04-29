@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Support\Facades\Log;
-use App\Models\UserSetting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserNotificationsRequest;
+use App\Models\UserSetting;
+use Illuminate\Support\Facades\Log;
 
 class UpdateNotificationsController extends Controller
 {
@@ -14,13 +14,12 @@ class UpdateNotificationsController extends Controller
      */
     public function __invoke(UserNotificationsRequest $request)
     {
-        foreach($request->settingsData as $key => $value)
-        {
+        foreach ($request->settingsData as $key => $value) {
             UserSetting::where('user_id', $request->user_id)
-                       ->where('setting_type_id', str_replace('type_id_', '', $key))
-                       ->update([
-                            'value' => $value,
-                        ]);
+                ->where('setting_type_id', str_replace('type_id_', '', $key))
+                ->update([
+                    'value' => $value,
+                ]);
         }
 
         Log::stack(['auth', 'user'])

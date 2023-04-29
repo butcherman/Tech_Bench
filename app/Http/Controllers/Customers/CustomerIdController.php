@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Customers;
 
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerIdRequest;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class CustomerIdController extends Controller
 {
@@ -40,6 +40,7 @@ class CustomerIdController extends Controller
         $change_id->update($request->only(['cust_id']));
 
         Log::stack(['daily', 'cust'])->notice('Customer ID for '.$change_id->name.' has been updated to '.$change_id->cust_id.' by '.$request->user()->username);
+
         return redirect(route('customers.show', $change_id->slug))->with('success', __('cust.admin.change_id'));
     }
 }

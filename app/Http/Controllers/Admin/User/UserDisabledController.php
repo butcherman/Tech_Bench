@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Inertia\Inertia;
 
 class UserDisabledController extends Controller
 {

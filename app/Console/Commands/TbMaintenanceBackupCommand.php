@@ -14,6 +14,7 @@ class TbMaintenanceBackupCommand extends Command
                                         {--databaseOnly : Only backup the configuration database}
                                         {--filesOnly    : Only backup the file system}
                                         {--force        : Bypass the 70% max diskspace requirement}';
+
     protected $description = 'Generate a backup of the Tech Bench application';
 
     /**
@@ -27,32 +28,27 @@ class TbMaintenanceBackupCommand extends Command
         Log::info('Starting Application Backup');
 
         //  Verify that no more than 70% of the HDD storage space has been used
-        $freeSpace  = disk_free_space(storage_path('backups'));
+        $freeSpace = disk_free_space(storage_path('backups'));
         $totalSpace = disk_total_space(storage_path('backups'));
-        $usedSpace  = $totalSpace - $freeSpace;
+        $usedSpace = $totalSpace - $freeSpace;
         $percentage = round(($usedSpace / $totalSpace * 100), 2);
 
-        if($percentage > 70 && !$this->option('force'))
-        {
+        if ($percentage > 70 && ! $this->option('force')) {
             // @codeCoverageIgnoreStart
             Log::critical('Unable to backup file system, more than 70% of the available storage space in use');
             $this->error('More than 70% of the file system is in use.  Unable to backup file system at this time');
             $this->error('Only backing up database                                                              ');
             $this->call('backup:run', ['--only-db' => true]);
+
             return Command::SUCCESS;
             // @codeCoverageIgnoreEnd
         }
 
-        if($this->option('databaseOnly'))
-        {
+        if ($this->option('databaseOnly')) {
             $this->call('backup:run', ['--only-db' => true]);
-        }
-        elseif($this->option('filesOnly'))
-        {
+        } elseif ($this->option('filesOnly')) {
             $this->call('backup:run', ['--only-files' => true]);
-        }
-        else
-        {
+        } else {
             $this->call('backup:run');
         }
 

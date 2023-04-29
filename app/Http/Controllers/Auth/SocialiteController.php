@@ -17,8 +17,7 @@ class SocialiteController extends Controller
      */
     public function redirectAuth()
     {
-        if(config('services.azure.allow_login'))
-        {
+        if (config('services.azure.allow_login')) {
             return Socialite::driver('azure')->redirect();
         }
 
@@ -30,17 +29,15 @@ class SocialiteController extends Controller
      */
     public function callback()
     {
-        if(!config('services.azure.allow_login'))
-        {
+        if (! config('services.azure.allow_login')) {
             return abort(404);
         }
 
-        $socUser   = Socialite::driver('azure')->user();
+        $socUser = Socialite::driver('azure')->user();
         $socialite = new SocialiteAuthorization;
-        $user      = $socialite->processUser($socUser);
+        $user = $socialite->processUser($socUser);
 
-        if(!$user)
-        {
+        if (! $user) {
             return abort(403, __('auth.failed_oath'));
         }
 

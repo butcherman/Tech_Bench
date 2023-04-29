@@ -24,9 +24,9 @@ class CustomerContactFactory extends Factory
     {
         return [
             'cust_id' => Customer::factory()->create()->cust_id,
-            'shared'  => $this->faker->boolean(),
-            'name'    => $this->faker->name(),
-            'email'   => $this->faker->email(),
+            'shared' => $this->faker->boolean(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->email(),
         ];
     }
 }

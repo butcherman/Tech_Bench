@@ -14,6 +14,7 @@ use ZanySoft\Zip\Zip;
 
 /**
  *  ModuleTrait holds all function for interacting with the Tech Bench Modules
+ *
  * @codeCoverageIgnore
  */
 trait ModuleTrait
@@ -23,27 +24,23 @@ trait ModuleTrait
      */
     protected function checkRequirements($module)
     {
-        $tbVersion    = (new Version)->compact();
+        $tbVersion = (new Version)->compact();
         $requirements = $module->getRequires();
-        $failed       = false;
+        $failed = false;
 
         //  Determine if the Tech Bench is running the correct version
-        if(version_compare($tbVersion, $requirements['Tech_Bench']) < 0)
-        {
+        if (version_compare($tbVersion, $requirements['Tech_Bench']) < 0) {
             $failed['version'] = [
                 'tb_version' => $tbVersion,
-                'requires'   => $requirements['Tech_Bench'],
+                'requires' => $requirements['Tech_Bench'],
             ];
         }
 
         //  Determine if there are other modules that also have to be loaded
-        if(isset($requirements['Modules']) && count($requirements['Modules']) > 0)
-        {
-            foreach($requirements['Modules'] as $req)
-            {
+        if (isset($requirements['Modules']) && count($requirements['Modules']) > 0) {
+            foreach ($requirements['Modules'] as $req) {
                 $found = Module::find($req);
-                if(!$found)
-                {
+                if (! $found) {
                     $failed['modules'][] = $req;
                 }
             }
@@ -57,35 +54,30 @@ trait ModuleTrait
      */
     protected function checkJsonRequirements($moduleData)
     {
-        $tbVersion    = (new Version)->compact();
-        $failed       = false;
+        $tbVersion = (new Version)->compact();
+        $failed = false;
 
-         //  Determine if the Tech Bench is running the correct version
-         if(version_compare($tbVersion, $moduleData['min_tb_version']) < 0)
-         {
-             $failed['version'] = [
-                 'tb_version' => $tbVersion,
-                 'requires'   => $moduleData['min_tb_version'],
-             ];
-         }
-
-         //  Determine if the Tech Bench is running a newer version that cannot handle the module
-         if(!is_null($moduleData['max_tb_version']) && version_compare($moduleData['max_tb_version'], $tbVersion) < 1)
-         {
-             $failed['max_version'] = [
+        //  Determine if the Tech Bench is running the correct version
+        if (version_compare($tbVersion, $moduleData['min_tb_version']) < 0) {
+            $failed['version'] = [
                 'tb_version' => $tbVersion,
-                'requires'   => $moduleData['max_tb_version'],
+                'requires' => $moduleData['min_tb_version'],
             ];
-         }
+        }
 
-         //  Determine if there are other modules that also have to be loaded
-        if(isset($moduleData['modules']) && count($moduleData['modules']) > 0)
-        {
-            foreach($moduleData['modules'] as $req)
-            {
+        //  Determine if the Tech Bench is running a newer version that cannot handle the module
+        if (! is_null($moduleData['max_tb_version']) && version_compare($moduleData['max_tb_version'], $tbVersion) < 1) {
+            $failed['max_version'] = [
+                'tb_version' => $tbVersion,
+                'requires' => $moduleData['max_tb_version'],
+            ];
+        }
+
+        //  Determine if there are other modules that also have to be loaded
+        if (isset($moduleData['modules']) && count($moduleData['modules']) > 0) {
+            foreach ($moduleData['modules'] as $req) {
                 $found = Module::find($req);
-                if(!$found)
-                {
+                if (! $found) {
                     $failed['modules'][] = $req;
                 }
             }
@@ -117,10 +109,8 @@ trait ModuleTrait
     {
         $disks = config($module->getLowerName().'.disks');
 
-        if(is_array($disks))
-        {
-            foreach($disks as $disk)
-            {
+        if (is_array($disks)) {
+            foreach ($disks as $disk) {
                 Log::debug('Deleting Disk for Module '.$module->getName(), $disk);
                 File::deleteDirectory($disk['root']);
             }
@@ -154,6 +144,7 @@ trait ModuleTrait
     protected function getAvailableModules()
     {
         $response = Http::get('https://raw.githubusercontent.com/butcherman/Tech_Bench_Modules/main/module_list.json')->collect();
+
         return $response;
     }
 
@@ -165,22 +156,21 @@ trait ModuleTrait
         $moduleList = $this->getAvailableModules();
         $updateList = [];
 
-        foreach($activeModules as $module)
-        {
+        foreach ($activeModules as $module) {
             $findModule = $moduleList[$module->getName()];
-            if(empty($findModule))
-            {
+            if (empty($findModule)) {
                 Log::notice('Module '.$module['module_name'].' is active but not on the Tech Bench Modules Repository');
+
                 continue;
             }
 
             $updateList[] = [
-                'module_name'   => $findModule['module_name'],
-                'alias'         => $module->getName(),
-                'current_ver'   => config($module->getLowerName().'.ver'),
+                'module_name' => $findModule['module_name'],
+                'alias' => $module->getName(),
+                'current_ver' => config($module->getLowerName().'.ver'),
                 'available_ver' => $findModule['module_version'],
                 'download_link' => $findModule['download_link'],
-                'can_update'    => version_compare($findModule['module_version'], config($module->getLowerName().'.ver')) < 1 ? false : true,
+                'can_update' => version_compare($findModule['module_version'], config($module->getLowerName().'.ver')) < 1 ? false : true,
             ];
         }
 
@@ -224,15 +214,13 @@ trait ModuleTrait
     protected function installModule($moduleData)
     {
         $directoryName = Storage::disk('modules')->directories('tmp')[0];
-        $fileList      = Storage::disk('modules')->allFiles($directoryName);
+        $fileList = Storage::disk('modules')->allFiles($directoryName);
 
-        foreach($fileList as $file)
-        {
+        foreach ($fileList as $file) {
             $rename = str_replace($directoryName, '', $file);
 
             //  If the file already exists, delete it so we can place the new file there
-            if(Storage::disk('modules')->exists($moduleData['alias'].DIRECTORY_SEPARATOR.$rename))
-            {
+            if (Storage::disk('modules')->exists($moduleData['alias'].DIRECTORY_SEPARATOR.$rename)) {
                 Storage::disk('modules')->delete($moduleData['alias'].DIRECTORY_SEPARATOR.$rename);
             }
 
@@ -246,8 +234,7 @@ trait ModuleTrait
     protected function updateCache()
     {
         //  We will only cache if running in production
-        if(App::environment(['production']))
-        {
+        if (App::environment(['production'])) {
             Artisan::call('config:cache');
             Artisan::call('route:clear');
             Artisan::call('breadcrumbs:cache');

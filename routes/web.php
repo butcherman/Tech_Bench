@@ -8,26 +8,21 @@
  *              This may be changed later.
  */
 
-use App\Http\Controllers\Auth\SocialiteController;
-use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
-
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Home\DownloadController;
-use App\Http\Controllers\Home\NotificationController;
 use App\Http\Controllers\Home\UploadFileController;
 use App\Http\Controllers\Home\UploadImageController;
-use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\UpdateAccountController;
 use App\Http\Controllers\User\UpdateNotificationsController;
-use Glhd\Gretel\Routing\ResourceBreadcrumbs;
+use App\Http\Controllers\User\UserSettingsController;
+use Illuminate\Support\Facades\Route;
 
 /**
-*   Standard Routes for users that have been successfully Authenticated
-*/
-Route::middleware('auth')->group(function() {
+ *   Standard Routes for users that have been successfully Authenticated
+ */
+Route::middleware('auth')->group(function () {
     Route::get('dashboard', DashboardController::class)
         ->name('dashboard')
         ->breadcrumb('Dashboard');
@@ -35,7 +30,7 @@ Route::middleware('auth')->group(function() {
         ->name('about')
         ->breadcrumb('About Tech Bench', 'dashboard');
 
-    Route::prefix('settings')->name('settings.')->group(function()     {
+    Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', UserSettingsController::class)
             ->name('index')
             ->breadcrumb('Settings', 'dashboard');
@@ -43,9 +38,9 @@ Route::middleware('auth')->group(function() {
             ->name('password.index')
             ->breadcrumb('Change Password', 'settings.index');
 
-        Route::post('notifications',  UpdateNotificationsController::class)   ->name('notifications');
-        Route::post('/{user}/update', UpdateAccountController::class)         ->name('update');
-        Route::post('password',      [ChangePasswordController::class, 'set'])->name('password.store');
+        Route::post('notifications', UpdateNotificationsController::class)->name('notifications');
+        Route::post('/{user}/update', UpdateAccountController::class)->name('update');
+        Route::post('password', [ChangePasswordController::class, 'set'])->name('password.store');
     });
 
     // Route::post('upload-image',      UploadImageController::class)->name('upload-image');

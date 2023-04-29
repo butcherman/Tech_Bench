@@ -12,12 +12,11 @@ class CreateRolePermissions
      */
     public function handle(UserRoleCreatedEvent $event)
     {
-        foreach($event->permissions as $perm => $value)
-        {
+        foreach ($event->permissions as $perm => $value) {
             UserRolePermissions::create([
-                'role_id'      => $event->role->role_id,
+                'role_id' => $event->role->role_id,
                 'perm_type_id' => str_replace('type-', '', $perm),
-                'allow'        => $value,
+                'allow' => $value,
             ]);
         }
     }

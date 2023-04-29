@@ -10,5 +10,6 @@ class UserInitialize extends Model
     use HasFactory;
 
     protected $fillable = ['username', 'token'];
-    protected $hidden   = ['id', 'created_at', 'updated_at'];
+
+    protected $hidden = ['id', 'created_at', 'updated_at'];
 }

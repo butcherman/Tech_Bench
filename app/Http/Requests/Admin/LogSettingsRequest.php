@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\AppSettings;
+use Illuminate\Foundation\Http\FormRequest;
 
 class LogSettingsRequest extends FormRequest
 {
@@ -21,7 +21,7 @@ class LogSettingsRequest extends FormRequest
     public function rules()
     {
         return [
-            'days'  => 'required|numeric',
+            'days' => 'required|numeric',
             'level' => 'required|string',
         ];
     }
@@ -30,8 +30,7 @@ class LogSettingsRequest extends FormRequest
     {
         $key = '';
 
-        switch($field)
-        {
+        switch ($field) {
             case 'days':
                 $key = 'logging.days';
                 break;

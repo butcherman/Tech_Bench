@@ -21,12 +21,12 @@ class PasswordPolicyRequest extends FormRequest
     public function rules()
     {
         return [
-            'expire'             => 'required|numeric',
-            'min_length'         => 'required|numeric',
+            'expire' => 'required|numeric',
+            'min_length' => 'required|numeric',
             'contains_uppercase' => 'required|boolean',
             'contains_lowercase' => 'required|boolean',
-            'contains_number'    => 'required|boolean',
-            'contains_special'   => 'required|boolean',
+            'contains_number' => 'required|boolean',
+            'contains_special' => 'required|boolean',
         ];
     }
 }

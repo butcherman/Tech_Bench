@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CustomerFile extends Model
 {
@@ -12,15 +12,20 @@ class CustomerFile extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'cust_file_id';
-    protected $guarded    = ['cust_file_id', 'created_at', 'updated_at'];
-    protected $hidden     = ['cust_id', 'file_type_id', 'created_at', 'user_id', 'deleted_at'];
-    protected $appends    = ['uploaded_by', 'file_type'];
-    protected $with       = ['FileUpload'];
-    protected $casts      = [
+
+    protected $guarded = ['cust_file_id', 'created_at', 'updated_at'];
+
+    protected $hidden = ['cust_id', 'file_type_id', 'created_at', 'user_id', 'deleted_at'];
+
+    protected $appends = ['uploaded_by', 'file_type'];
+
+    protected $with = ['FileUpload'];
+
+    protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
-        'shared'     => 'boolean',
+        'shared' => 'boolean',
     ];
 
     /**
@@ -33,6 +38,7 @@ class CustomerFile extends Model
 
     /**
      * Full name of the user that uploaded the file
+     *
      * @codeCoverageIgnore
      */
     public function getUploadedByAttribute()
@@ -42,6 +48,7 @@ class CustomerFile extends Model
 
     /**
      * Type of file that was uploaded (i.e. Backup, Site Map, etc)
+     *
      * @codeCoverageIgnore
      */
     public function getFileTypeAttribute()

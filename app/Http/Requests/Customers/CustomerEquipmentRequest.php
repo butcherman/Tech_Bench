@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Customers;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class CustomerEquipmentRequest extends FormRequest
 {
@@ -16,8 +16,7 @@ class CustomerEquipmentRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->equipment)
-        {
+        if ($this->equipment) {
             return $this->user()->can('update', $this->equipment);
         }
 
@@ -30,9 +29,9 @@ class CustomerEquipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'cust_id'  => Rule::requiredIf(fn() => !$this->equipment),
-            'equip_id' => Rule::requiredIf(fn() => !$this->equipment),
-            'shared'   => 'nullable|boolean',
+            'cust_id' => Rule::requiredIf(fn () => ! $this->equipment),
+            'equip_id' => Rule::requiredIf(fn () => ! $this->equipment),
+            'shared' => 'nullable|boolean',
         ];
     }
 
@@ -44,13 +43,12 @@ class CustomerEquipmentRequest extends FormRequest
         $this->updateShared($equipment);
         $equipData = $this->except(['shared', 'type', 'cust_id', 'equip_id']);
 
-        foreach($equipData as $key => $value)
-        {
+        foreach ($equipData as $key => $value) {
             $equipId = str_replace('fieldId-', '', $key);
             CustomerEquipmentData::create([
                 'cust_equip_id' => $equipment->cust_equip_id,
-                'field_id'      => $equipId,
-                'value'         => $value
+                'field_id' => $equipId,
+                'value' => $value,
             ]);
             Log::stack(['daily', 'cust'])->debug('Customer Equip Field ID '.$equipId.' created as '.$value);
         }
@@ -69,9 +67,8 @@ class CustomerEquipmentRequest extends FormRequest
         $this->updateShared($equipment);
         $equipData = $this->except(['shared']);
 
-        foreach($equipData as $key => $value)
-        {
-            $equipId    = str_replace('fieldId-', '', $key);
+        foreach ($equipData as $key => $value) {
+            $equipId = str_replace('fieldId-', '', $key);
             $equipField = CustomerEquipmentData::find($equipId);
             $equipField->update(['value' => $value]);
             Log::stack(['daily', 'cust'])->debug('Customer Equip Field ID '.$equipId.' updated to '.$value);
@@ -90,11 +87,9 @@ class CustomerEquipmentRequest extends FormRequest
     {
         $equipment->update($this->only(['shared']));
         //  Determine if the equipment should be moved to the parent site
-        if($this->shared)
-        {
+        if ($this->shared) {
             $cust = Customer::find($equipment->cust_id);
-            if($cust->parent_id)
-            {
+            if ($cust->parent_id) {
                 $equipment->update(['cust_id' => $cust->parent_id]);
             }
         }

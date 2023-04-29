@@ -2,25 +2,22 @@
 
 namespace App\Jobs;
 
-use Exception;
-use Nwidart\Modules\Facades\Module;
-
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
 use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
 use App\Models\User;
 use App\Models\UserCustomerRecent;
 use App\Models\UserTechTipRecent;
 use App\Traits\FileTrait;
-use Carbon\Carbon;
+use Exception;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Nwidart\Modules\Facades\Module;
 
 class GarbageCollectionJob implements ShouldQueue
 {
@@ -28,7 +25,6 @@ class GarbageCollectionJob implements ShouldQueue
     use Dispatchable;
     use SerializesModels;
     use InteractsWithQueue;
-
     use FileTrait;
 
     /**
@@ -36,8 +32,7 @@ class GarbageCollectionJob implements ShouldQueue
      */
     public function handle()
     {
-        if(config('app.maintenance'))
-        {
+        if (config('app.maintenance')) {
             Log::notice('Starting Garbage Collection Job');
             Artisan::call('down');
 
@@ -61,13 +56,10 @@ class GarbageCollectionJob implements ShouldQueue
      */
     protected function retryQueue()
     {
-        try
-        {
+        try {
             Log::info('Retrying failed jobs');
             Artisan::call('queue:retry', ['id' => 'all']);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             report($e);
         }
     }
@@ -79,16 +71,12 @@ class GarbageCollectionJob implements ShouldQueue
     {
         $files = Storage::files('chunks');
 
-        if(count($files) > 0)
-        {
-            try
-            {
+        if (count($files) > 0) {
+            try {
                 Log::info('Found partial files in the "chunks" folder');
-                Log::info('File List - ', array($files));
+                Log::info('File List - ', [$files]);
                 Storage::deleteDirectory('chunks');
-            }
-            catch(Exception $e)
-            {
+            } catch (Exception $e) {
                 report($e);
             }
         }
@@ -101,12 +89,10 @@ class GarbageCollectionJob implements ShouldQueue
     {
         $equipList = CustomerEquipment::onlyTrashed()->get();
 
-        if($equipList->count() > 0)
-        {
+        if ($equipList->count() > 0) {
             Log::info('Cleaning up Customer Systems', $equipList->toArray());
             $count = $equipList->count();
-            foreach($equipList as $sys)
-            {
+            foreach ($equipList as $sys) {
                 $sys->forceDelete();
             }
             Log::info($count.' customer equipment permanently deleted');
@@ -120,8 +106,7 @@ class GarbageCollectionJob implements ShouldQueue
     {
         $fileList = CustomerFile::onlyTrashed()->whereDate('deleted_at', '<', now()->subDays(2))->get();
 
-        foreach($fileList as $file)
-        {
+        foreach ($fileList as $file) {
             $file->forceDelete();
             $this->deleteFile($file->file_id);
 
@@ -137,8 +122,7 @@ class GarbageCollectionJob implements ShouldQueue
         $userList = User::all();
 
         //  Cycle through the users and delete their last 10 entries for both recents tables
-        foreach($userList as $user)
-        {
+        foreach ($userList as $user) {
             $keepCustId = UserCustomerRecent::where('user_id', $user->user_id)->latest()->take(10)->get()->pluck('id');
             $keepTipsId = UserTechTipRecent::where('user_id', $user->user_id)->latest()->take(10)->get()->pluck('id');
 
@@ -154,10 +138,8 @@ class GarbageCollectionJob implements ShouldQueue
     {
         $modules = Module::allEnabled();
 
-        foreach($modules as $module)
-        {
-            if(class_exists('\\Modules\\'.$module->getName().'\\Jobs\\GarbageCollectionJob'))
-            {
+        foreach ($modules as $module) {
+            if (class_exists('\\Modules\\'.$module->getName().'\\Jobs\\GarbageCollectionJob')) {
                 $class = '\\Modules\\'.$module->getName().'\\Jobs\\GarbageCollectionJob';
                 $class::dispatch();
             }

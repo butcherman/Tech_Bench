@@ -10,7 +10,8 @@ use Nwidart\Modules\Facades\Module;
  */
 class TbModuleCheckCommand extends Command
 {
-    protected $signature   = 'tb_module:check';
+    protected $signature = 'tb_module:check';
+
     protected $description = 'Output the version and status of all installed modules';
 
     /**
@@ -29,10 +30,9 @@ class TbModuleCheckCommand extends Command
         $this->line('Checking Module Status');
 
         $moduleData = Module::all();
-        $tableData  = [];
+        $tableData = [];
 
-        foreach($moduleData as $module)
-        {
+        foreach ($moduleData as $module) {
             $tableData[] = [
                 $module->getName(),
                 config($module->getLowerName().'.ver'),

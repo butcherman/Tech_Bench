@@ -42,7 +42,7 @@
         "barryvdh/laravel-debugbar": "^3.8",
         "butcherman/artisan-dev-commands": "^0.0.7",
         "fakerphp/faker": "^1.9.1",
-        "laravel/pint": "^1.0",
+        "laravel/pint": "^1.10",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.1",

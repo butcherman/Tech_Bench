@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Storage;
  */
 class TbMaintenanceDefaultCommand extends Command
 {
-    protected $signature   = 'tb_backup:default
+    protected $signature = 'tb_backup:default
                                     {--confirmed : Run command without verification}
                                     {--demo      : Populate the database with random data for demonstration purpose}';
+
     protected $description = 'Completely wipe all Tech Bench data and start from scratch';
 
     /**
@@ -27,9 +28,9 @@ class TbMaintenanceDefaultCommand extends Command
         $this->warn('|___________________________________________________________________|');
         $this->warn('                                                                     ');
 
-        if(!$this->option('confirmed') && !$this->confirm('Are you sure?'))
-        {
+        if (! $this->option('confirmed') && ! $this->confirm('Are you sure?')) {
             $this->line('Operation Canceled');
+
             return 0;
         }
 
@@ -38,8 +39,7 @@ class TbMaintenanceDefaultCommand extends Command
         $this->call('down');
         $this->callSilently('migrate:fresh');
         $this->wipeFiles();
-        if($this->option('demo'))
-        {
+        if ($this->option('demo')) {
             $this->line('Creating demo data');
             $this->callSilently('db:seed');
         }
@@ -48,6 +48,7 @@ class TbMaintenanceDefaultCommand extends Command
         $this->info('Operation complete');
         $this->info('You can log into the Tech Bench with the default username `admin` and default password `password`');
         $this->call('up');
+
         return 0;
     }
 
@@ -58,18 +59,15 @@ class TbMaintenanceDefaultCommand extends Command
         //  Clear all files from the disk
         $files = Storage::disk($disk)->allFiles();
 
-        foreach($files as $file)
-        {
-            if($file != '.gitignore')
-            {
+        foreach ($files as $file) {
+            if ($file != '.gitignore') {
                 Storage::disk($disk)->delete($file);
             }
         }
 
         //  Clear all sub directories from the disk
         $folders = Storage::disk($disk)->directories();
-        foreach($folders as $folder)
-        {
+        foreach ($folders as $folder) {
             Storage::disk($disk)->deleteDirectory($folder);
         }
 

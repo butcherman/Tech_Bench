@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Rules;
 
-use Tests\TestCase;
 use App\Rules\ContainsLowerCase;
+use Tests\TestCase;
 
 class ContainsLowerCaseTest extends TestCase
 {

@@ -37,8 +37,7 @@ class CreateCustomerNotesTable extends Migration
      */
     public function down()
     {
-        Schema::table('customer_notes', function(Blueprint $table)
-        {
+        Schema::table('customer_notes', function (Blueprint $table) {
             $table->dropForeign(['cust_id', 'created_by', 'updated_by']);
         });
         Schema::dropIfExists('customer_notes');

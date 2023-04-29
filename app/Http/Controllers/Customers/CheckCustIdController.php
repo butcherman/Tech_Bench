@@ -15,11 +15,10 @@ class CheckCustIdController extends Controller
     {
         $cust = Customer::find($custId);
 
-        if($cust)
-        {
+        if ($cust) {
             return response()->json([
                 'valid' => false,
-                'name'  => $cust->name,
+                'name' => $cust->name,
             ]);
         }
 

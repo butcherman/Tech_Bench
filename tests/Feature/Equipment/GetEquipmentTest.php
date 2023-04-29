@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Equipment;
 
-use Tests\TestCase;
-use Database\Seeders\EquipmentSeeder;
 use App\Models\User;
+use Database\Seeders\EquipmentSeeder;
+use Tests\TestCase;
 
 class GetEquipmentTest extends TestCase
 {

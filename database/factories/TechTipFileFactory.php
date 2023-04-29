@@ -24,7 +24,7 @@ class TechTipFileFactory extends Factory
     public function definition()
     {
         return [
-            'tip_id'  => TechTip::factory()->create()->tip_id,
+            'tip_id' => TechTip::factory()->create()->tip_id,
             'file_id' => FileUploads::factory()->create()->file_id,
         ];
     }

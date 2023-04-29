@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Customers;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Customer;
+use App\Models\User;
 use App\Models\UserCustomerBookmark;
+use Tests\TestCase;
 
 class CustomerBookmarkTest extends TestCase
 {
@@ -24,7 +24,7 @@ class CustomerBookmarkTest extends TestCase
     public function test_invoke_add()
     {
         $customer = Customer::factory()->create();
-        $user     = User::factory()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post(route('customers.bookmark'), ['cust_id' => $customer->cust_id, 'state' => true]);
         $response->assertSuccessful();
@@ -35,7 +35,7 @@ class CustomerBookmarkTest extends TestCase
     public function test_invoke_remove()
     {
         $customer = Customer::factory()->create();
-        $user     = User::factory()->create();
+        $user = User::factory()->create();
         UserCustomerBookmark::create([
             'cust_id' => $customer->cust_id,
             'user_id' => $user->user_id,
@@ -50,7 +50,7 @@ class CustomerBookmarkTest extends TestCase
     public function test_invoke_add_when_already_there()
     {
         $customer = Customer::factory()->create();
-        $user     = User::factory()->create();
+        $user = User::factory()->create();
         UserCustomerBookmark::create([
             'cust_id' => $customer->cust_id,
             'user_id' => $user->user_id,

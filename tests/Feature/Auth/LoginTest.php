@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Tests\TestCase;
-
-use App\Models\User;
 
 class LoginTest extends TestCase
 {
@@ -13,12 +12,12 @@ class LoginTest extends TestCase
     public function test_valid_login()
     {
         $user = User::factory()->create([
-            'password' => bcrypt($password = 'randomPassword')
+            'password' => bcrypt($password = 'randomPassword'),
         ]);
 
         $response = $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => $password
+            'password' => $password,
         ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));
@@ -32,7 +31,7 @@ class LoginTest extends TestCase
 
         $response = $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => 'somethingElse'
+            'password' => 'somethingElse',
         ]);
 
         // dd($response->getSession());
@@ -46,13 +45,13 @@ class LoginTest extends TestCase
     public function test_login_as_disabled_user()
     {
         $user = User::factory()->create([
-            'password'   => bcrypt($password = 'randomPassword'),
+            'password' => bcrypt($password = 'randomPassword'),
             'deleted_at' => Carbon::yesterday(),
         ]);
 
         $response = $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => $password
+            'password' => $password,
         ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('home'));
@@ -79,29 +78,29 @@ class LoginTest extends TestCase
         //  Attempt five failed attempts
         $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => 'somethingElse'
+            'password' => 'somethingElse',
         ]);
         $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => 'somethingElse'
+            'password' => 'somethingElse',
         ]);
         $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => 'somethingElse'
+            'password' => 'somethingElse',
         ]);
         $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => 'somethingElse'
+            'password' => 'somethingElse',
         ]);
         $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => 'somethingElse'
+            'password' => 'somethingElse',
         ]);
 
         //  Sixth attempt should fail
         $response = $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => 'somethingElse'
+            'password' => 'somethingElse',
         ]);
 
         $response->assertStatus(302);
@@ -113,7 +112,7 @@ class LoginTest extends TestCase
         Carbon::setTestNow(Carbon::now()->addMinutes(15));
         $response = $this->post(route('login.submit'), [
             'username' => $user->username,
-            'password' => 'somethingElse'
+            'password' => 'somethingElse',
         ]);
 
         $response->assertStatus(302);

@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateUserRolePermissionTypesTable extends Migration
 {
@@ -14,7 +14,7 @@ class CreateUserRolePermissionTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_role_permission_types', function(Blueprint $table) {
+        Schema::create('user_role_permission_types', function (Blueprint $table) {
             $table->id('perm_type_id');
             $table->text('description');
             $table->boolean('is_admin_link')->default(0);

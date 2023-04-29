@@ -14,7 +14,7 @@ class CreatePhoneNumberTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('phone_number_types', function(Blueprint $table) {
+        Schema::create('phone_number_types', function (Blueprint $table) {
             $table->id('phone_type_id');
             $table->text('description');
             $table->text('icon_class');

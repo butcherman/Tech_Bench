@@ -3,8 +3,6 @@
 namespace Tests\Feature\User;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UpdateNotificationsTest extends TestCase
@@ -13,8 +11,8 @@ class UpdateNotificationsTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'user_id'      => $user->user_id,
-            'settingsData' => [ 'type_id_1' => false, 'type_id_2' => true ],
+            'user_id' => $user->user_id,
+            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->post(route('settings.notifications'), $data);
@@ -27,8 +25,8 @@ class UpdateNotificationsTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'user_id'      => $user->user_id,
-            'settingsData' => [ 'type_id_1' => false, 'type_id_2' => true ],
+            'user_id' => $user->user_id,
+            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->actingAs($user)->post(route('settings.notifications'), $data);
@@ -40,8 +38,8 @@ class UpdateNotificationsTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'user_id'      => $user->user_id,
-            'settingsData' => [ 'type_id_1' => false, 'type_id_2' => true ],
+            'user_id' => $user->user_id,
+            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('settings.notifications'), $data);
@@ -53,8 +51,8 @@ class UpdateNotificationsTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'user_id'      => $user->user_id,
-            'settingsData' => [ 'type_id_1' => false, 'type_id_2' => true ],
+            'user_id' => $user->user_id,
+            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('settings.notifications'), $data);
@@ -65,8 +63,8 @@ class UpdateNotificationsTest extends TestCase
     {
         $user = User::factory()->create(['role_id' => 1]);
         $data = [
-            'user_id'      => $user->user_id,
-            'settingsData' => [ 'type_id_1' => false, 'type_id_2' => true ],
+            'user_id' => $user->user_id,
+            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 2]))->post(route('settings.notifications'), $data);

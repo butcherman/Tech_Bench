@@ -7,23 +7,23 @@ return [
             'driver' => 'sync',
         ],
         'database' => [
-            'driver'      => 'database',
-            'table'       => 'jobs',
-            'queue'       => 'default',
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'default',
             'retry_after' => 90,
         ],
         'redis' => [
-            'driver'      => 'redis',
-            'connection'  => 'default',
-            'queue'       => env('REDIS_QUEUE', 'default'),
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
-            'block_for'   => null,
+            'block_for' => null,
         ],
     ],
     'failed' => [
-        'driver'   => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
+        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
         'database' => env('DB_CONNECTION', 'mysql'),
-        'table'    => 'failed_jobs',
+        'table' => 'failed_jobs',
     ],
 
 ];

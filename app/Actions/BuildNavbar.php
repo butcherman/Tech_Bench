@@ -2,10 +2,9 @@
 
 namespace App\Actions;
 
-use Nwidart\Modules\Facades\Module;
-use Illuminate\Support\Facades\Gate;
-
 use App\Traits\AllowTrait;
+use Illuminate\Support\Facades\Gate;
+use Nwidart\Modules\Facades\Module;
 
 class BuildNavbar
 {
@@ -17,8 +16,8 @@ class BuildNavbar
     {
         $this->user = $user;
 
-        $admin   = $this->getAdminNavbar();
-        $navBar  = $this->getPrimaryNavbar();
+        $admin = $this->getAdminNavbar();
+        $navBar = $this->getPrimaryNavbar();
         $modules = $this->getModules();
         array_splice($navBar, 1, 0, $admin); //  Move the Admin link just under the Dashboard link
 
@@ -32,14 +31,14 @@ class BuildNavbar
     {
         return [
             [
-                'name'  => 'Dashboard',
+                'name' => 'Dashboard',
                 'route' => route('dashboard'),
-                'icon'  => 'fas fa-tachometer-alt',
+                'icon' => 'fas fa-tachometer-alt',
             ],
             [
-                'name'  => 'Customers',
+                'name' => 'Customers',
                 'route' => route('customers.index'),
-                'icon'  => 'fas fa-user-tie',
+                'icon' => 'fas fa-user-tie',
             ],
             // [
             //     'name'  => 'Tech Tips',
@@ -57,12 +56,11 @@ class BuildNavbar
         $nav = [];
 
         //  Should Admin link show?
-        if(Gate::allows('admin-link', $this->user))
-        {
+        if (Gate::allows('admin-link', $this->user)) {
             $nav[] = [
-                'name'  => 'Administration',
+                'name' => 'Administration',
                 'route' => route('admin.index'),
-                'icon'  => 'fas fa-user-shield',
+                'icon' => 'fas fa-user-shield',
             ];
         }
 
@@ -80,12 +78,13 @@ class BuildNavbar
     }
 
     /**
-    * If any add-on modules have been installed, add those to the navigation bar
-    * @codeCoverageIgnore
-    */
+     * If any add-on modules have been installed, add those to the navigation bar
+     *
+     * @codeCoverageIgnore
+     */
     protected function getModules()
     {
-        $nav     = [];
+        $nav = [];
         // $modules = Module::allEnabled();
 
         // foreach($modules as $module)

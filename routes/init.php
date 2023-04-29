@@ -5,9 +5,9 @@ use App\Http\Controllers\Init\StepTwo;
 use Illuminate\Support\Facades\Route;
 
 /**
-*   Tech Bench Initialization Routes for first time setup
-*/
-Route::middleware('auth')->name('init.')->group(function() {
+ *   Tech Bench Initialization Routes for first time setup
+ */
+Route::middleware('auth')->name('init.')->group(function () {
     Route::inertia('first-time-setup', 'Init/StepOne')
         ->name('step-1')
         ->breadcrumb('Welcome to the Tech Bench');

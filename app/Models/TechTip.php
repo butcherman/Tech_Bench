@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class TechTip extends Model
 {
@@ -13,18 +13,23 @@ class TechTip extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'tip_id';
-    protected $guarded    = ['tip_id', 'created_at', 'updated_at'];
-    protected $hidden     = ['deleted_at', 'tip_type_id', 'updated_id', 'user_id'];
-    protected $appends    = ['summary'];
-    protected $casts      = [
+
+    protected $guarded = ['tip_id', 'created_at', 'updated_at'];
+
+    protected $hidden = ['deleted_at', 'tip_type_id', 'updated_id', 'user_id'];
+
+    protected $appends = ['summary'];
+
+    protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
-        'sticky'     => 'boolean',
+        'sticky' => 'boolean',
     ];
 
     /**
      * Shortened version of the details column for a brief view
+     *
      * @codeCoverageIgnore
      */
     public function getSummaryAttribute()

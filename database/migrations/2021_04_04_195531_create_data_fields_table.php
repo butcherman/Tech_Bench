@@ -31,8 +31,7 @@ class CreateDataFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::table('data_fields', function(Blueprint $table)
-        {
+        Schema::table('data_fields', function (Blueprint $table) {
             $table->dropForeign(['equip_id', 'type_id']);
         });
         Schema::dropIfExists('data_fields');

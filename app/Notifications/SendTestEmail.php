@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -25,7 +24,7 @@ class SendTestEmail extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello '.$notifiable->full_name)
-                    ->line('This is a test email from the Tech Bench');
+            ->greeting('Hello '.$notifiable->full_name)
+            ->line('This is a test email from the Tech Bench');
     }
 }

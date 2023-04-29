@@ -4,10 +4,8 @@ namespace Tests\Feature\User;
 
 use App\Models\User;
 use App\Models\UserInitialize;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class InitializeUserTest extends TestCase
 {
@@ -19,7 +17,7 @@ class InitializeUserTest extends TestCase
         $user = User::factory()->create();
         UserInitialize::create([
             'username' => $user->username,
-            'token'    => $token = Str::uuid(),
+            'token' => $token = Str::uuid(),
         ]);
 
         $response = $this->actingAs(User::factory()->create())->get(route('initialize', $token));
@@ -29,11 +27,11 @@ class InitializeUserTest extends TestCase
 
     public function test_invoke_invalid_token()
     {
-        $user  = User::factory()->create();
+        $user = User::factory()->create();
         $token = Str::uuid();
         UserInitialize::create([
             'username' => $user->username,
-            'token'    => Str::uuid(),
+            'token' => Str::uuid(),
         ]);
 
         $response = $this->get(route('initialize', $token));
@@ -45,7 +43,7 @@ class InitializeUserTest extends TestCase
         $user = User::factory()->create();
         UserInitialize::create([
             'username' => $user->username,
-            'token'    => $token = Str::uuid(),
+            'token' => $token = Str::uuid(),
         ]);
 
         $response = $this->get(route('initialize', $token));

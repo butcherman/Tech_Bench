@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Equipment;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\DataFieldType;
+use App\Models\User;
+use Tests\TestCase;
 
 class DataTypesTest extends TestCase
 {
@@ -105,7 +105,7 @@ class DataTypesTest extends TestCase
         $type = DataFieldType::factory()->create();
 
         $data = [
-            'name'    => 'Something Random',
+            'name' => 'Something Random',
         ];
 
         $response = $this->put(route('data_types.update', $type->type_id), $data);
@@ -119,7 +119,7 @@ class DataTypesTest extends TestCase
         $type = DataFieldType::factory()->create();
 
         $data = [
-            'name'    => 'Something Random',
+            'name' => 'Something Random',
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('data_types.update', $type->type_id), $data);
@@ -131,7 +131,7 @@ class DataTypesTest extends TestCase
         $type = DataFieldType::factory()->create();
 
         $data = [
-            'name'    => 'Something Random',
+            'name' => 'Something Random',
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('data_types.update', $type->type_id), $data);

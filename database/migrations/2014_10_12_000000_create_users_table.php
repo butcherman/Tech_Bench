@@ -1,12 +1,11 @@
 <?php
 
 use App\Models\User;
-
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class CreateUsersTable extends Migration
@@ -18,7 +17,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function(Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id('user_id');
             $table->bigInteger('role_id')->unsigned();
             $table->string('username')->unique;
@@ -35,13 +34,13 @@ class CreateUsersTable extends Migration
 
         //  Create the initial default user
         $default = [
-            'user_id'          => 1,
-            'role_id'          => 1,
-            'username'         => 'admin',
-            'first_name'       => 'System',
-            'last_name'        => 'Administrator',
-            'email'            => 'admin@em.com',
-            'password'         => bcrypt('password'),
+            'user_id' => 1,
+            'role_id' => 1,
+            'username' => 'admin',
+            'first_name' => 'System',
+            'last_name' => 'Administrator',
+            'email' => 'admin@em.com',
+            'password' => bcrypt('password'),
             'password_expires' => '2000-01-01 00:00:00',
         ];
 
@@ -55,8 +54,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function(Blueprint $table)
-        {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
         });
         Schema::dropIfExists('users');

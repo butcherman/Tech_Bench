@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Admin\User;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
 use App\Models\UserRoles;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class UserRolesTest extends TestCase
 {
@@ -93,19 +92,19 @@ class UserRolesTest extends TestCase
     public function test_store_guest()
     {
         $form = [
-            'name'        => 'New Role',
+            'name' => 'New Role',
             'description' => 'This is for testing purposes only',
-            'type-1'      => $this->faker->boolean(),
-            'type-2'      => $this->faker->boolean(),
-            'type-3'      => $this->faker->boolean(),
-            'type-4'      => $this->faker->boolean(),
-            'type-5'      => $this->faker->boolean(),
-            'type-6'      => $this->faker->boolean(),
-            'type-7'      => $this->faker->boolean(),
-            'type-8'      => $this->faker->boolean(),
-            'type-9'      => $this->faker->boolean(),
-            'type-10'     => $this->faker->boolean(),
-            'type-11'     => $this->faker->boolean(),
+            'type-1' => $this->faker->boolean(),
+            'type-2' => $this->faker->boolean(),
+            'type-3' => $this->faker->boolean(),
+            'type-4' => $this->faker->boolean(),
+            'type-5' => $this->faker->boolean(),
+            'type-6' => $this->faker->boolean(),
+            'type-7' => $this->faker->boolean(),
+            'type-8' => $this->faker->boolean(),
+            'type-9' => $this->faker->boolean(),
+            'type-10' => $this->faker->boolean(),
+            'type-11' => $this->faker->boolean(),
         ];
 
         $response = $this->post(route('admin.users.roles.store'), $form);
@@ -117,19 +116,19 @@ class UserRolesTest extends TestCase
     public function test_store_no_permission()
     {
         $form = [
-            'name'        => 'New Role',
+            'name' => 'New Role',
             'description' => 'This is for testing purposes only',
-            'type-1'      => $this->faker->boolean(),
-            'type-2'      => $this->faker->boolean(),
-            'type-3'      => $this->faker->boolean(),
-            'type-4'      => $this->faker->boolean(),
-            'type-5'      => $this->faker->boolean(),
-            'type-6'      => $this->faker->boolean(),
-            'type-7'      => $this->faker->boolean(),
-            'type-8'      => $this->faker->boolean(),
-            'type-9'      => $this->faker->boolean(),
-            'type-10'     => $this->faker->boolean(),
-            'type-11'     => $this->faker->boolean(),
+            'type-1' => $this->faker->boolean(),
+            'type-2' => $this->faker->boolean(),
+            'type-3' => $this->faker->boolean(),
+            'type-4' => $this->faker->boolean(),
+            'type-5' => $this->faker->boolean(),
+            'type-6' => $this->faker->boolean(),
+            'type-7' => $this->faker->boolean(),
+            'type-8' => $this->faker->boolean(),
+            'type-9' => $this->faker->boolean(),
+            'type-10' => $this->faker->boolean(),
+            'type-11' => $this->faker->boolean(),
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('admin.users.roles.store'), $form);
@@ -139,19 +138,19 @@ class UserRolesTest extends TestCase
     public function test_store()
     {
         $form = [
-            'name'        => 'New Role',
+            'name' => 'New Role',
             'description' => 'This is for testing purposes only',
-            'type-1'      => $this->faker->boolean(),
-            'type-2'      => $this->faker->boolean(),
-            'type-3'      => $this->faker->boolean(),
-            'type-4'      => $this->faker->boolean(),
-            'type-5'      => $this->faker->boolean(),
-            'type-6'      => $this->faker->boolean(),
-            'type-7'      => $this->faker->boolean(),
-            'type-8'      => $this->faker->boolean(),
-            'type-9'      => $this->faker->boolean(),
-            'type-10'     => $this->faker->boolean(),
-            'type-11'     => $this->faker->boolean(),
+            'type-1' => $this->faker->boolean(),
+            'type-2' => $this->faker->boolean(),
+            'type-3' => $this->faker->boolean(),
+            'type-4' => $this->faker->boolean(),
+            'type-5' => $this->faker->boolean(),
+            'type-6' => $this->faker->boolean(),
+            'type-7' => $this->faker->boolean(),
+            'type-8' => $this->faker->boolean(),
+            'type-9' => $this->faker->boolean(),
+            'type-10' => $this->faker->boolean(),
+            'type-11' => $this->faker->boolean(),
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.users.roles.store'), $form);
@@ -225,19 +224,19 @@ class UserRolesTest extends TestCase
     {
         $testRole = UserRoles::factory()->create();
         $form = [
-            'name'        => 'New Role',
+            'name' => 'New Role',
             'description' => 'This is for testing purposes only',
-            'type-1'      => $this->faker->boolean(),
-            'type-2'      => $this->faker->boolean(),
-            'type-3'      => $this->faker->boolean(),
-            'type-4'      => $this->faker->boolean(),
-            'type-5'      => $this->faker->boolean(),
-            'type-6'      => $this->faker->boolean(),
-            'type-7'      => $this->faker->boolean(),
-            'type-8'      => $this->faker->boolean(),
-            'type-9'      => $this->faker->boolean(),
-            'type-10'     => $this->faker->boolean(),
-            'type-11'     => $this->faker->boolean(),
+            'type-1' => $this->faker->boolean(),
+            'type-2' => $this->faker->boolean(),
+            'type-3' => $this->faker->boolean(),
+            'type-4' => $this->faker->boolean(),
+            'type-5' => $this->faker->boolean(),
+            'type-6' => $this->faker->boolean(),
+            'type-7' => $this->faker->boolean(),
+            'type-8' => $this->faker->boolean(),
+            'type-9' => $this->faker->boolean(),
+            'type-10' => $this->faker->boolean(),
+            'type-11' => $this->faker->boolean(),
         ];
 
         $response = $this->put(route('admin.users.roles.update', $testRole->role_id), $form);
@@ -250,19 +249,19 @@ class UserRolesTest extends TestCase
     {
         $testRole = UserRoles::factory()->create();
         $form = [
-            'name'        => 'New Role',
+            'name' => 'New Role',
             'description' => 'This is for testing purposes only',
-            'type-1'      => $this->faker->boolean(),
-            'type-2'      => $this->faker->boolean(),
-            'type-3'      => $this->faker->boolean(),
-            'type-4'      => $this->faker->boolean(),
-            'type-5'      => $this->faker->boolean(),
-            'type-6'      => $this->faker->boolean(),
-            'type-7'      => $this->faker->boolean(),
-            'type-8'      => $this->faker->boolean(),
-            'type-9'      => $this->faker->boolean(),
-            'type-10'     => $this->faker->boolean(),
-            'type-11'     => $this->faker->boolean(),
+            'type-1' => $this->faker->boolean(),
+            'type-2' => $this->faker->boolean(),
+            'type-3' => $this->faker->boolean(),
+            'type-4' => $this->faker->boolean(),
+            'type-5' => $this->faker->boolean(),
+            'type-6' => $this->faker->boolean(),
+            'type-7' => $this->faker->boolean(),
+            'type-8' => $this->faker->boolean(),
+            'type-9' => $this->faker->boolean(),
+            'type-10' => $this->faker->boolean(),
+            'type-11' => $this->faker->boolean(),
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('admin.users.roles.update', $testRole->role_id), $form);
@@ -273,19 +272,19 @@ class UserRolesTest extends TestCase
     {
         $testRole = UserRoles::factory()->create();
         $form = [
-            'name'        => 'New Role',
+            'name' => 'New Role',
             'description' => 'This is for testing purposes only',
-            'type-1'      => $this->faker->boolean(),
-            'type-2'      => $this->faker->boolean(),
-            'type-3'      => $this->faker->boolean(),
-            'type-4'      => $this->faker->boolean(),
-            'type-5'      => $this->faker->boolean(),
-            'type-6'      => $this->faker->boolean(),
-            'type-7'      => $this->faker->boolean(),
-            'type-8'      => $this->faker->boolean(),
-            'type-9'      => $this->faker->boolean(),
-            'type-10'     => $this->faker->boolean(),
-            'type-11'     => $this->faker->boolean(),
+            'type-1' => $this->faker->boolean(),
+            'type-2' => $this->faker->boolean(),
+            'type-3' => $this->faker->boolean(),
+            'type-4' => $this->faker->boolean(),
+            'type-5' => $this->faker->boolean(),
+            'type-6' => $this->faker->boolean(),
+            'type-7' => $this->faker->boolean(),
+            'type-8' => $this->faker->boolean(),
+            'type-9' => $this->faker->boolean(),
+            'type-10' => $this->faker->boolean(),
+            'type-11' => $this->faker->boolean(),
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.users.roles.update', $testRole->role_id), $form);
@@ -298,19 +297,19 @@ class UserRolesTest extends TestCase
     {
         $testRole = UserRoles::factory()->create();
         $form = [
-            'name'        => 'New Role',
+            'name' => 'New Role',
             'description' => 'This is for testing purposes only',
-            'type-1'      => $this->faker->boolean(),
-            'type-2'      => $this->faker->boolean(),
-            'type-3'      => $this->faker->boolean(),
-            'type-4'      => $this->faker->boolean(),
-            'type-5'      => $this->faker->boolean(),
-            'type-6'      => $this->faker->boolean(),
-            'type-7'      => $this->faker->boolean(),
-            'type-8'      => $this->faker->boolean(),
-            'type-9'      => $this->faker->boolean(),
-            'type-10'     => $this->faker->boolean(),
-            'type-11'     => $this->faker->boolean(),
+            'type-1' => $this->faker->boolean(),
+            'type-2' => $this->faker->boolean(),
+            'type-3' => $this->faker->boolean(),
+            'type-4' => $this->faker->boolean(),
+            'type-5' => $this->faker->boolean(),
+            'type-6' => $this->faker->boolean(),
+            'type-7' => $this->faker->boolean(),
+            'type-8' => $this->faker->boolean(),
+            'type-9' => $this->faker->boolean(),
+            'type-10' => $this->faker->boolean(),
+            'type-11' => $this->faker->boolean(),
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.users.roles.update', 1), $form);

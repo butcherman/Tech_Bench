@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admin\Config;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -42,7 +40,7 @@ class SetLogoTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.set-logo'), $data);
         $response->assertStatus(302);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'app.logo'
+            'key' => 'app.logo',
         ]);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Customers;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use Inertia\Inertia;
 
 class GetCustomerSettingsController extends Controller
 {
@@ -16,8 +16,8 @@ class GetCustomerSettingsController extends Controller
         $this->authorize('manage', Customer::class);
 
         return Inertia::render('Customers/Settings', [
-            'select-id'     => config('customer.select_id'),
-            'update-slug'   => config('customer.update_slug'),
+            'select-id' => config('customer.select_id'),
+            'update-slug' => config('customer.update_slug'),
             'default-state' => config('customer.default_state'),
         ]);
     }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Customers;
 
-use Illuminate\Support\Str;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Customer;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class CustomerRequest extends FormRequest
 {
@@ -13,8 +13,7 @@ class CustomerRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->customer)
-        {
+        if ($this->customer) {
             return $this->user()->can('update', $this->customer);
         }
 
@@ -27,15 +26,15 @@ class CustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'cust_id'     => 'nullable|numeric|unique:customers',
-            'parent_id'   => 'nullable|numeric|exists:customers,cust_id',
+            'cust_id' => 'nullable|numeric|unique:customers',
+            'parent_id' => 'nullable|numeric|exists:customers,cust_id',
             'parent_name' => 'nullable|string',
-            'name'        => 'required|string',
-            'dba_name'    => 'nullable|string',
-            'address'     => 'required|string',
-            'city'        => 'required|string',
-            'state'       => 'required|string',
-            'zip'         => 'required|numeric',
+            'name' => 'required|string',
+            'dba_name' => 'nullable|string',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'zip' => 'required|numeric',
         ];
     }
 
@@ -45,16 +44,12 @@ class CustomerRequest extends FormRequest
     public function setSlug()
     {
         $index = 0;
-        $slug  = Str::slug($this->name);
+        $slug = Str::slug($this->name);
 
-        while(Customer::where('slug', $slug)->first())
-        {
-            if($index === 0)
-            {
+        while (Customer::where('slug', $slug)->first()) {
+            if ($index === 0) {
                 $slug = Str::slug($slug.'-'.$this->city);
-            }
-            else
-            {
+            } else {
                 $slug = Str::slug($this->name.'-'.$this->city.'-'.$index);
             }
 

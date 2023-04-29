@@ -24,10 +24,10 @@ class CustomerContactPhoneFactory extends Factory
     public function definition()
     {
         return [
-            'cont_id'       => CustomerContact::factory()->create()->cont_id,
+            'cont_id' => CustomerContact::factory()->create()->cont_id,
             'phone_type_id' => PhoneNumberType::inRandomOrder()->first()->phone_type_id,
-            'phone_number'  => $this->faker->phoneNumber(),
-            'extension'     => null
+            'phone_number' => $this->faker->phoneNumber(),
+            'extension' => null,
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Customers;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\CustomerFile;
 use App\Models\CustomerFileType;
+use App\Models\User;
+use Tests\TestCase;
 
 class CustomerFileTypeTest extends TestCase
 {
@@ -77,7 +77,7 @@ class CustomerFileTypeTest extends TestCase
     public function test_update_guest()
     {
         $fileType = CustomerFileType::Factory()->create();
-        $data     = [
+        $data = [
             'description' => 'Updated Name',
         ];
 
@@ -91,7 +91,7 @@ class CustomerFileTypeTest extends TestCase
     public function test_update_no_permission()
     {
         $fileType = CustomerFileType::Factory()->create();
-        $data     = [
+        $data = [
             'description' => 'Updated Name',
         ];
 
@@ -103,7 +103,7 @@ class CustomerFileTypeTest extends TestCase
     public function test_update()
     {
         $fileType = CustomerFileType::Factory()->create();
-        $data     = [
+        $data = [
             'description' => 'Updated Name',
         ];
 

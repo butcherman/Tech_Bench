@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Home;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
 use PragmaRX\Version\Package\Version;
 
 class AboutController extends Controller
@@ -16,10 +16,10 @@ class AboutController extends Controller
         $version = new Version;
 
         return Inertia::render('Home/About', [
-            'version'    => $version->full(),
-            'build'      => $version->commit(),
+            'version' => $version->full(),
+            'build' => $version->commit(),
             'build_date' => $version->build(),
-            'copyright'  => $version->copyright(),
+            'copyright' => $version->copyright(),
         ]);
     }
 }

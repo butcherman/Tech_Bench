@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Customer extends Model
 {
@@ -12,11 +12,16 @@ class Customer extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'cust_id';
-    protected $guarded    = ['updated_at', 'created_at', 'deleted_at'];
-    protected $hidden     = ['updated_at', 'created_at', 'deleted_at'];
-    protected $appends    = ['child_count'];
-    protected $with       = ['Parent'];
-    protected $casts      = [
+
+    protected $guarded = ['updated_at', 'created_at', 'deleted_at'];
+
+    protected $hidden = ['updated_at', 'created_at', 'deleted_at'];
+
+    protected $appends = ['child_count'];
+
+    protected $with = ['Parent'];
+
+    protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
@@ -40,6 +45,7 @@ class Customer extends Model
 
     /**
      * If a customer is the parent and has children below it, they will be counted
+     *
      * @codeCoverageIgnore
      */
     public function getChildCountAttribute()

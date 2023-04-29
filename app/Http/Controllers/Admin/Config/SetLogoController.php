@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
-use Illuminate\Support\Facades\Log;
-use App\Traits\AppSettingsTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LogoRequest;
+use App\Traits\AppSettingsTrait;
+use Illuminate\Support\Facades\Log;
 
 class SetLogoController extends Controller
 {
@@ -22,6 +22,7 @@ class SetLogoController extends Controller
         Log::notice('New logo has been uploaded by '.$request->user()->username, [
             'file' => $location,
         ]);
+
         return back()->with('success', __('admin.logo_success'));
     }
 }

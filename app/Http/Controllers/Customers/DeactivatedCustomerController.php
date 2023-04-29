@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Customers;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use Inertia\Inertia;
 
 class DeactivatedCustomerController extends Controller
 {

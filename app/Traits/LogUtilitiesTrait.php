@@ -14,7 +14,9 @@ trait LogUtilitiesTrait
      * Regex data for log file
      */
     protected $logEntryPattern = '/^\[(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})\] (?:.*?(\w+)\.)(?:.*?(\w+)\:) (.*?)(\{.*?\})? .?$/i';
+
     protected $logErrorPattern = '/^\[(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})\] (?:.*?(\w+)\.)(?:.*?(\w+)\:) (.*)?$/i';
+
     protected $logLevelPattern = '/\.(.*?): /i';
 
     /**
@@ -48,8 +50,7 @@ trait LogUtilitiesTrait
      */
     protected function validateChannel($channel)
     {
-        if(is_null($this->getChannelDetails($channel)))
-        {
+        if (is_null($this->getChannelDetails($channel))) {
             return abort(404, 'Unable to find the selected Log Channel');
         }
 
@@ -61,8 +62,7 @@ trait LogUtilitiesTrait
      */
     protected function getChannelDetails($channel)
     {
-        return Arr::first($this->logChannels, function($value) use ($channel)
-        {
+        return Arr::first($this->logChannels, function ($value) use ($channel) {
             return $value['name'] == $channel;
         });
     }
@@ -72,14 +72,12 @@ trait LogUtilitiesTrait
      */
     protected function getFileList($channel)
     {
-        $list   = Storage::disk('logs')->files($channel['folder']);
+        $list = Storage::disk('logs')->files($channel['folder']);
         $sorted = [];
 
-        foreach($list as $file)
-        {
+        foreach ($list as $file) {
             $pathInfo = pathinfo($file);
-            if($pathInfo['extension'] === 'log')
-            {
+            if ($pathInfo['extension'] === 'log') {
                 $sorted[] = $pathInfo['filename'];
             }
         }
@@ -92,14 +90,13 @@ trait LogUtilitiesTrait
      */
     protected function getChannelStats($channel)
     {
-        $channel  = $this->getChannelDetails($channel);
+        $channel = $this->getChannelDetails($channel);
         $fileList = $this->getFileList($channel);
         $statList = [];
 
         //  Cycle through all log files
-        foreach($fileList as $file)
-        {
-            $fileArr    = $this->getFileToArray($file, $channel);
+        foreach ($fileList as $file) {
+            $fileArr = $this->getFileToArray($file, $channel);
             $statList[] = $this->getFileStats($fileArr, $file);
         }
 
@@ -111,17 +108,14 @@ trait LogUtilitiesTrait
      */
     protected function getFileStats($fileArr, $filename)
     {
-        $stats   = $this->resetStats($filename);
+        $stats = $this->resetStats($filename);
 
         //  Cycle through each line of the file
-        foreach($fileArr as $line)
-        {
+        foreach ($fileArr as $line) {
             $level = $this->getLineLevel($line);
-            if($level)
-            {
+            if ($level) {
                 //  We only increment the level data if it is a valid log line and not part of a multiline stack trace
-                if(isset($stats[strtolower($level)]))
-                {
+                if (isset($stats[strtolower($level)])) {
                     $stats[strtolower($level)]++;
                     $stats['total']++;
                 }
@@ -137,13 +131,12 @@ trait LogUtilitiesTrait
     protected function resetStats($filename)
     {
         $statList = [];
-        foreach($this->logLevels as $level)
-        {
+        foreach ($this->logLevels as $level) {
             $statList[strtolower($level['name'])] = 0;
         }
 
         $statList['filename'] = $filename;
-        $statList['total']    = 0;
+        $statList['total'] = 0;
 
         return $statList;
     }
@@ -153,8 +146,7 @@ trait LogUtilitiesTrait
      */
     protected function validateLogFile($file, $channel)
     {
-        if(!Storage::disk('logs')->exists($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log'))
-        {
+        if (! Storage::disk('logs')->exists($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log')) {
             abort(404, 'Unable to find the log file specified');
         }
 
@@ -176,8 +168,7 @@ trait LogUtilitiesTrait
      */
     protected function getLineLevel($line)
     {
-        if(preg_match($this->logLevelPattern, $line, $data))
-        {
+        if (preg_match($this->logLevelPattern, $line, $data)) {
             return $data[1];
         }
 
@@ -189,28 +180,21 @@ trait LogUtilitiesTrait
      */
     protected function parseFile($fileArr)
     {
-        $parsed   = [];
+        $parsed = [];
         $errorKey = null;
 
         //  Go through each line of the file
-        foreach($fileArr as $line)
-        {
+        foreach ($fileArr as $line) {
             $parse = $this->parseLine($line);
-            if(!$parse)
-            {
+            if (! $parse) {
                 $parse = $this->parseErrorLine($line);
-                if($parse)
-                {
+                if ($parse) {
                     $parsed[] = $parse;
                     $errorKey = array_key_last($parsed);
-                }
-                else
-                {
+                } else {
                     $parsed[$errorKey]['stack_trace'][] = $line;
                 }
-            }
-            else
-            {
+            } else {
                 $parsed[] = $parse;
             }
         }
@@ -224,13 +208,12 @@ trait LogUtilitiesTrait
     protected function parseLine($line)
     {
         //  If it is a standard log line, we return standard data
-        if(preg_match($this->logEntryPattern, $line, $data))
-        {
+        if (preg_match($this->logEntryPattern, $line, $data)) {
             return [
-                'date'    => $data[1],
-                'time'    => $data[2],
-                'env'     => $data[3],
-                'level'   => $data[4],
+                'date' => $data[1],
+                'time' => $data[2],
+                'env' => $data[3],
+                'level' => $data[4],
                 'message' => $data[5],
                 'details' => isset($data[6]) ? json_decode($data[6]) : null,
             ];
@@ -245,13 +228,12 @@ trait LogUtilitiesTrait
      */
     protected function parseErrorLine($line)
     {
-        if(preg_match($this->logErrorPattern, $line, $data))
-        {
+        if (preg_match($this->logErrorPattern, $line, $data)) {
             return [
-                'date'    => $data[1],
-                'time'    => $data[2],
-                'env'     => $data[3],
-                'level'   => $data[4],
+                'date' => $data[1],
+                'time' => $data[2],
+                'env' => $data[3],
+                'level' => $data[4],
                 'message' => $data[5],
                 'details' => [],
             ];

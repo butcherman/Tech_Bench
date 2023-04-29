@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Traits\LogUtilitiesTrait;
 use App\Models\AppSettings;
+use App\Traits\LogUtilitiesTrait;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DownloadLogController extends Controller
 {
@@ -24,8 +24,9 @@ class DownloadLogController extends Controller
 
         Log::info('User '.Auth::user()->username.' downloaded log file', [
             'channel' => $channel,
-            'file'    => $file,
+            'file' => $file,
         ]);
+
         return Storage::disk('logs')->download($channel.DIRECTORY_SEPARATOR.$file.'.log');
     }
 }

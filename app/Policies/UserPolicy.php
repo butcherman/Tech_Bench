@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Models\User;
 use App\Traits\AllowTrait;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
 {
@@ -29,8 +29,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        if($user->user_id !== $model->user_id)
-        {
+        if ($user->user_id !== $model->user_id) {
             return $this->checkPermission($user, 'Manage Users') && $user->role_id <= $model->role_id;
         }
 

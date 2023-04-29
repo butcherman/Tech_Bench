@@ -20,8 +20,8 @@ class ResetTokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'token'    => 'required',
-            'email'    => 'required|email',
+            'token' => 'required',
+            'email' => 'required|email',
             'password' => 'required|string|min:6|confirmed',
         ];
     }

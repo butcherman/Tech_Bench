@@ -32,8 +32,7 @@ class CreateTechTipCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('tech_tip_comments', function(Blueprint $table)
-        {
+        Schema::table('tech_tip_comments', function (Blueprint $table) {
             $table->dropForeign(['tip_id']);
             $table->dropForeign(['user_id']);
         });

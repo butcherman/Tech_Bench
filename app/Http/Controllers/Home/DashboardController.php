@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Home;
 
-use Inertia\Inertia;
-use Illuminate\Http\Request;
-use Nwidart\Modules\Facades\Module;
 use App\Http\Controllers\Controller;
-
-use App\Models\UserTechTipRecent;
+use App\Models\UserCustomerBookmark;
 use App\Models\UserCustomerRecent;
 use App\Models\UserTechTipBookmark;
-use App\Models\UserCustomerBookmark;
+use App\Models\UserTechTipRecent;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Nwidart\Modules\Facades\Module;
 
 class DashboardController extends Controller
 {
@@ -39,13 +38,13 @@ class DashboardController extends Controller
         // @codeCoverageIgnoreEnd
 
         return Inertia::render('Home/Dashboard', [
-            'bookmarks'     => [
+            'bookmarks' => [
                 'customers' => UserCustomerBookmark::where('user_id', $request->user()->user_id)->get(),
-                'tips'      => UserTechTipBookmark::where('user_id', $request->user()->user_id)->get(),
+                'tips' => UserTechTipBookmark::where('user_id', $request->user()->user_id)->get(),
             ],
-            'recents'       => [
+            'recents' => [
                 'customers' => UserCustomerRecent::where('user_id', $request->user()->user_id)->orderBy('updated_at', 'DESC')->get()->take(10),
-                'tips'      => UserTechTipRecent::where('user_id', $request->user()->user_id)->orderBy('updated_at', 'DESC')->get()->take(10),
+                'tips' => UserTechTipRecent::where('user_id', $request->user()->user_id)->orderBy('updated_at', 'DESC')->get()->take(10),
             ],
             // 'tools'         => $tools,
         ]);

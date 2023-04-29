@@ -34,29 +34,25 @@ class EquipmentSeeder extends Seeder
         ]);
 
         //  Create the sample equipment
-        foreach($equip as $cat => $sys)
-        {
+        foreach ($equip as $cat => $sys) {
             $catID = EquipmentCategory::create(['name' => $cat])->cat_id;
-            foreach($sys as $s)
-            {
+            foreach ($sys as $s) {
                 EquipmentType::create([
                     'cat_id' => $catID,
-                    'name'   => $s,
+                    'name' => $s,
                 ]);
             }
         }
 
         // Create the information to gather when adding a syste mto a customer
         $equipList = EquipmentType::all();
-        foreach($equipList as $e)
-        {
-            for($i = 1; $i < 7; $i++)
-            {
+        foreach ($equipList as $e) {
+            for ($i = 1; $i < 7; $i++) {
 
                 DataField::create([
                     'equip_id' => $e->equip_id,
-                    'type_id'  => $i,
-                    'order'    => $i - 1,
+                    'type_id' => $i,
+                    'order' => $i - 1,
                 ]);
             }
         }

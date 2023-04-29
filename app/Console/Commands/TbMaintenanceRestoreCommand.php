@@ -17,12 +17,14 @@ use ZanySoft\Zip\Zip;
  */
 class TbMaintenanceRestoreCommand extends Command
 {
-    protected $signature   = 'tb_maintenance:restore
+    protected $signature = 'tb_maintenance:restore
                                     {filename?   : Name of backup file}
                                     {--confirmed : Bypass confirmation prompt}';
+
     protected $description = 'Restore the Tech Bench from a previously saved backup';
 
     protected $filename;
+
     protected $basename;
 
     /**
@@ -35,52 +37,47 @@ class TbMaintenanceRestoreCommand extends Command
         Log::notice('Backup Restore Command called');
 
         //  If there was not a filename supplied, give the choice of what file to restore
-        if(is_null($this->argument('filename')))
-        {
-            if(!$this->assignBackupFile())
-            {
+        if (is_null($this->argument('filename'))) {
+            if (! $this->assignBackupFile()) {
                 return 0;
             }
-        }
-        else
-        {
+        } else {
             $this->filename = $this->argument('filename');
             Log::debug('Log file given as argument - '.$this->argument('filename'));
         }
 
         //  Verify that the backup file exists
-        if(!Storage::disk('backups')->exists($this->filename))
-        {
+        if (! Storage::disk('backups')->exists($this->filename)) {
             $this->error('     The filename entered does not exist                                           ');
             $this->error('                  Exiting...                                                       ');
             Log::error('Backup specified to restore does not exist.  Looking for '.$this->filename);
+
             return 0;
         }
 
         //  Verify a proper backup file
-        if(!$this->validateFile())
-        {
+        if (! $this->validateFile()) {
             $this->error('     The backup file specified is not a Tech Bench Backup                          ');
             $this->error('                  Exiting...                                                       ');
             $this->cleanup();
+
             return 0;
         }
 
-        if(!$this->checkVersion())
-        {
+        if (! $this->checkVersion()) {
             $this->cleanup();
+
             return 0;
         }
 
-        if(!$this->checkForModules())
-        {
+        if (! $this->checkForModules()) {
             $this->cleanup();
+
             return 0;
         }
 
         //  Verify that the user wants to run this process
-        if(!$this->option('confirmed'))
-        {
+        if (! $this->option('confirmed')) {
             $this->warn(' ___________________________________________________________________ ');
             $this->warn('|                      IMPORTANT NOTE:                              |');
             $this->warn('|   ALL EXISTING DATA WILL BE ERASED AND REPLACED WITH THE BACKUP   |');
@@ -88,11 +85,11 @@ class TbMaintenanceRestoreCommand extends Command
             $this->warn('                                                                     ');
         }
 
-        if(!$this->option('confirmed') && !$this->confirm('Are you sure?'))
-        {
+        if (! $this->option('confirmed') && ! $this->confirm('Are you sure?')) {
             $this->cleanup();
             $this->line('Operation Canceled');
             Log::info('Backup Restore operation canceled');
+
             return 0;
         }
 
@@ -103,13 +100,13 @@ class TbMaintenanceRestoreCommand extends Command
 
         $this->call('down');
         $this->newLine();
-        if(!$this->loadDatabase())
-        {
+        if (! $this->loadDatabase()) {
             $this->error('     Unable to modify database structure                                             ');
             $this->error('     Please verify that the database user in the .env file has write permissions     ');
             $this->error('     Exiting....                                                                     ');
             $this->cleanup();
             $this->call('up');
+
             return 0;
         }
         $this->loadFiles();
@@ -118,6 +115,7 @@ class TbMaintenanceRestoreCommand extends Command
         $this->newLine();
         $this->info('Tech Bench has been restored');
         $this->call('up');
+
         return 0;
     }
 
@@ -127,12 +125,10 @@ class TbMaintenanceRestoreCommand extends Command
     protected function assignBackupFile()
     {
         $backupList = Storage::disk('backups')->files();
-        $backups    = ['Cancel'];
-        foreach($backupList as $b)
-        {
+        $backups = ['Cancel'];
+        foreach ($backupList as $b) {
             $parts = pathinfo($b);
-            if($parts['extension'] === 'zip')
-            {
+            if ($parts['extension'] === 'zip') {
                 $backups[] = $b; // parts['filename'];
             }
         }
@@ -140,14 +136,15 @@ class TbMaintenanceRestoreCommand extends Command
         $this->line('Please select which backup file to restore');
         $choice = $this->choice('Select Number:', $backups);
 
-        if($choice === 'Cancel')
-        {
+        if ($choice === 'Cancel') {
             $this->line('Canceling...');
+
             return false;
         }
 
         $this->filename = $choice;
         Log::info('Backup Filename selected for restore - '.$choice);
+
         return true;
     }
 
@@ -162,9 +159,9 @@ class TbMaintenanceRestoreCommand extends Command
         $fileParts = pathinfo($this->filename);
         $this->basename = $fileParts['filename'].DIRECTORY_SEPARATOR;
 
-        if($fileParts['extension'] !== 'zip')
-        {
+        if ($fileParts['extension'] !== 'zip') {
             Log::alert('Trying to restore a file that is not a zip file', $fileParts);
+
             return false;
         }
 
@@ -174,23 +171,23 @@ class TbMaintenanceRestoreCommand extends Command
         $archive->close();
 
         //  Make sure that the version, .env, and module files are there
-        if(Storage::disk('backups')->missing($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'.env')
+        if (Storage::disk('backups')->missing($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'.env')
                     || Storage::disk('backups')->missing($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'modules_statuses.json')
-                    || Storage::disk('backups')->missing($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'version.txt'))
-        {
+                    || Storage::disk('backups')->missing($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'version.txt')) {
 
             Log::alert('Selected backup is missing one or more esential files', [
-                '.env'                  => Storage::disk('backups')->exists($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'.env'),
+                '.env' => Storage::disk('backups')->exists($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'.env'),
                 'modules_statuses.json' => Storage::disk('backups')->exists($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'modules_statuses.json'),
-                'version.txt'           => Storage::disk('backups')->exists($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'version.txt')
+                'version.txt' => Storage::disk('backups')->exists($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'version.txt'),
             ]);
+
             return false;
         }
 
         //  Verify that the .env file is writeable
-        if(!is_writable(base_path().DIRECTORY_SEPARATOR.'.env'))
-        {
+        if (! is_writable(base_path().DIRECTORY_SEPARATOR.'.env')) {
             Log::alert('The Tech Bench base path is not writable.  Unable to restore backup');
+
             return false;
         }
 
@@ -214,20 +211,20 @@ class TbMaintenanceRestoreCommand extends Command
     {
         //  Backup file version
         $verText = Storage::disk('backups')->get($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'version.txt');
-        $verArr  = explode(' ', $verText);
-        $bkVer   = floatval($verArr[1]);
+        $verArr = explode(' ', $verText);
+        $bkVer = floatval($verArr[1]);
         //  Tech Bench Application version
         $verObj = new Version;
         $appVer = floatval($verObj->major().'.'.$verObj->minor());
 
-        if($appVer < $bkVer)
-        {
+        if ($appVer < $bkVer) {
             $this->newLine();
             $this->error('|     This Backup is from a newer version of Tech Bench                              |');
             $this->error('|     Please install the version '.$bkVer.' before trying to restore this backup            |');
             $this->error('|     Exiting...                                                                     |');
             $this->newLine();
             Log::alert('Backup selected to restore is from Tech Bench version '.$bkVer.'.  Unable to complete restore process');
+
             return false;
         }
 
@@ -240,19 +237,16 @@ class TbMaintenanceRestoreCommand extends Command
     protected function checkForModules()
     {
         $moduleFile = json_decode(Storage::disk('backups')->get($this->basename.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'modules_statuses.json'));
-        $missing    = [];
+        $missing = [];
 
-        foreach($moduleFile as $module => $enabled)
-        {
+        foreach ($moduleFile as $module => $enabled) {
             $isInstalled = Module::find($module);
-            if(!$isInstalled && $enabled)
-            {
+            if (! $isInstalled && $enabled) {
                 $missing[] = $module;
             }
         }
 
-        if($missing)
-        {
+        if ($missing) {
             $this->warn('There is one or more Modules as part of the backup that have not been installed on this Tech Bench');
             $this->warn('If you plan to use these Modules, it is highly recommended to install them before applying the backup');
             $this->warn('The missing Modules are');
@@ -260,8 +254,7 @@ class TbMaintenanceRestoreCommand extends Command
             $this->line($missing);
             // $continue = $this->confirm('Do you with to continue?');
 
-            if($this->confirm('Do you wish to continue?'))
-            {
+            if ($this->confirm('Do you wish to continue?')) {
                 return true;
             }
 
@@ -283,8 +276,7 @@ class TbMaintenanceRestoreCommand extends Command
         Log::debug('Restored .env file');
 
         //  Load application files if they are part of the backup
-        if(Storage::disk('backups')->exists($this->basename.'app'.DIRECTORY_SEPARATOR.'storage'))
-        {
+        if (Storage::disk('backups')->exists($this->basename.'app'.DIRECTORY_SEPARATOR.'storage')) {
             $this->line('Restoring files');
             Log::debug('Restoring file system');
             $this->wipeDisk('local');
@@ -298,23 +290,20 @@ class TbMaintenanceRestoreCommand extends Command
      */
     protected function loadDatabase()
     {
-        if(Storage::disk('backups')->exists($this->basename.'db-dumps'.DIRECTORY_SEPARATOR.'mysql-tech-bench.sql'))
-        {
+        if (Storage::disk('backups')->exists($this->basename.'db-dumps'.DIRECTORY_SEPARATOR.'mysql-tech-bench.sql')) {
             $this->line('Restoring database');
             Log::debug('Restoring database');
 
-            try
-            {
+            try {
 
                 DB::connection(DB::getDefaultConnection())
                     ->getSchemaBuilder()
                     ->dropAllTables();
                 DB::reconnect();
-            }
-            catch(QueryException $e)
-            {
+            } catch (QueryException $e) {
                 report($e);
                 Log::critical($e);
+
                 return false;
             }
 
@@ -339,11 +328,10 @@ class TbMaintenanceRestoreCommand extends Command
     {
         //  Get the root folder name
         $folder = config('filesystems.disks.'.$disk.'.base_folder');
-        $files  = Storage::disk('backups')->allFiles($this->basename.$folder.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'app');
+        $files = Storage::disk('backups')->allFiles($this->basename.$folder.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'app');
 
-        foreach($files as $file)
-        {
-            $data    = Storage::disk('backups')->get($file);
+        foreach ($files as $file) {
+            $data = Storage::disk('backups')->get($file);
             //  Trim the file path to the correct new path
             $rename = str_replace($this->basename.'app'.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR, '', $file);
 
@@ -362,10 +350,8 @@ class TbMaintenanceRestoreCommand extends Command
         //  Clear all files from the disk
         $files = Storage::disk($disk)->allFiles();
 
-        foreach($files as $file)
-        {
-            if($file != '.gitignore')
-            {
+        foreach ($files as $file) {
+            if ($file != '.gitignore') {
                 Storage::disk($disk)->delete($file);
                 Log::debug('Deleted file '.$file.' from disk - '.$disk);
             }
@@ -373,8 +359,7 @@ class TbMaintenanceRestoreCommand extends Command
 
         //  Clear all sub directories from the disk
         $folders = Storage::disk($disk)->directories();
-        foreach($folders as $folder)
-        {
+        foreach ($folders as $folder) {
             Storage::disk($disk)->deleteDirectory($folder);
             Log::debug('Deleted Directory - '.$folder.' from disk - '.$disk);
         }

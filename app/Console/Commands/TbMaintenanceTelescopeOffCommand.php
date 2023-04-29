@@ -13,6 +13,7 @@ class TbMaintenanceTelescopeOffCommand extends Command
     use AppSettingsTrait;
 
     protected $signature = 'tb_maintenance:telescope_off';
+
     protected $description = 'Command description';
 
     /**

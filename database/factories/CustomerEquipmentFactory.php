@@ -24,9 +24,9 @@ class CustomerEquipmentFactory extends Factory
     public function definition()
     {
         return [
-            'cust_id'  => Customer::factory()->create()->cust_id,
+            'cust_id' => Customer::factory()->create()->cust_id,
             'equip_id' => EquipmentType::factory()->create()->equip_id,
-            'shared'   => $this->faker->boolean(),
+            'shared' => $this->faker->boolean(),
         ];
     }
 }

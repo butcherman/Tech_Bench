@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Customers;
 
-use Tests\TestCase;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
-use App\Models\User;
 use App\Models\Customer;
 use App\Models\CustomerFile;
+use App\Models\User;
 use App\Models\UserRolePermissions;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
@@ -101,9 +101,9 @@ class CustomerTest extends TestCase
     public function test_store_duplicate_slug()
     {
         $existing = Customer::factory()->create();
-        $data     = Customer::factory()->make()->only(['address', 'city', 'state', 'zip']);
+        $data = Customer::factory()->make()->only(['address', 'city', 'state', 'zip']);
         $data['name'] = $existing['name'];
-        $slug     = Str::slug($data['name'].' '.$data['city']);
+        $slug = Str::slug($data['name'].' '.$data['city']);
 
         $response = $this->ActingAs(User::factory()->create())->post(route('customers.store'), $data);
         $response->assertStatus(302);
@@ -117,10 +117,10 @@ class CustomerTest extends TestCase
         $existing1 = Customer::factory()->create();
         $existing2 = Customer::factory()->create(['name' => $existing1->name, 'slug' => Str::slug($existing1->slug.'-'.$existing1->city)]);
 
-        $data     = Customer::factory()->make()->only(['address', 'city', 'state', 'zip']);
+        $data = Customer::factory()->make()->only(['address', 'city', 'state', 'zip']);
         $data['name'] = $existing1->name;
         $data['city'] = $existing1->city;
-        $slug     = Str::slug($data['name'].' '.$data['city'].'-1');
+        $slug = Str::slug($data['name'].' '.$data['city'].'-1');
 
         $response = $this->ActingAs(User::factory()->create())->post(route('customers.store'), $data);
         $response->assertStatus(302);
@@ -162,7 +162,7 @@ class CustomerTest extends TestCase
     public function test_update_guest()
     {
         $customer = Customer::factory()->create();
-        $updated  = Customer::factory()->make();
+        $updated = Customer::factory()->make();
 
         $response = $this->put(route('customers.update', $customer->slug), $updated->only(['name', 'address', 'city', 'state', 'zip']));
         $response->assertStatus(302);
@@ -177,7 +177,7 @@ class CustomerTest extends TestCase
             'allow' => false,
         ]);
         $customer = Customer::factory()->create();
-        $updated  = Customer::factory()->make();
+        $updated = Customer::factory()->make();
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.update', $customer->slug), $updated->only(['name', 'address', 'city', 'state', 'zip']));
         $response->assertStatus(403);
@@ -186,7 +186,7 @@ class CustomerTest extends TestCase
     public function test_update()
     {
         $customer = Customer::factory()->create();
-        $updated  = Customer::factory()->make();
+        $updated = Customer::factory()->make();
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.update', $customer->slug), $updated->only(['name', 'address', 'city', 'state', 'zip']));
         $response->assertStatus(302);
@@ -194,7 +194,7 @@ class CustomerTest extends TestCase
         $response->assertRedirect(route('customers.show', $updated->slug));
         $this->assertDatabaseHas('customers', [
             'cust_id' => $customer->cust_id,
-            'name'    => $updated->name,
+            'name' => $updated->name,
             'address' => $updated->address,
         ]);
     }
@@ -241,7 +241,7 @@ class CustomerTest extends TestCase
         $cust->delete();
         $cust->save();
         $data = [
-            'cust_list' => [ $cust->toArray() ],
+            'cust_list' => [$cust->toArray()],
         ];
 
         $response = $this->post(route('customers.restore'), $data);
@@ -256,7 +256,7 @@ class CustomerTest extends TestCase
         $cust->delete();
         $cust->save();
         $data = [
-            'cust_list' => [ $cust->toArray() ],
+            'cust_list' => [$cust->toArray()],
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('customers.restore'), $data);
@@ -269,7 +269,7 @@ class CustomerTest extends TestCase
         $cust->delete();
         $cust->save();
         $data = [
-            'cust_list' => [ $cust->cust_id ],
+            'cust_list' => [$cust->cust_id],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.restore'), $data);
@@ -287,7 +287,7 @@ class CustomerTest extends TestCase
         $cust->delete();
         $cust->save();
         $data = [
-            'cust_list' => [ $cust->cust_id ],
+            'cust_list' => [$cust->cust_id],
         ];
 
         $response = $this->delete(route('customers.force-delete'), $data);
@@ -302,7 +302,7 @@ class CustomerTest extends TestCase
         $cust->delete();
         $cust->save();
         $data = [
-            'cust_list' => [ $cust->cust_id ],
+            'cust_list' => [$cust->cust_id],
         ];
 
         $response = $this->actingAs(User::factory()->create())->delete(route('customers.force-delete'), $data);
@@ -315,7 +315,7 @@ class CustomerTest extends TestCase
         $cust->delete();
         $cust->save();
         $data = [
-            'cust_list' => [ $cust->cust_id ],
+            'cust_list' => [$cust->cust_id],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.force-delete'), $data);
@@ -333,7 +333,7 @@ class CustomerTest extends TestCase
         $cust->delete();
         $cust->save();
         $data = [
-            'cust_list' => [ $cust->cust_id ],
+            'cust_list' => [$cust->cust_id],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.force-delete'), $data);

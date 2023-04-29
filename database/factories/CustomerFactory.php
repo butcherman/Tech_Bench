@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Customer;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class CustomerFactory extends Factory
 {
@@ -24,13 +24,13 @@ class CustomerFactory extends Factory
     {
         return [
             'parent_id' => null,
-            'name'      => $name = $this->faker->company(),
-            'dba_name'  => null,
-            'slug'      => Str::slug($name),
-            'address'   => $this->faker->streetAddress(),
-            'city'      => $this->faker->city(),
-            'state'     => $this->faker->stateAbbr(),
-            'zip'       => rand(20000, 99999),
+            'name' => $name = $this->faker->company(),
+            'dba_name' => null,
+            'slug' => Str::slug($name),
+            'address' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'state' => $this->faker->stateAbbr(),
+            'zip' => rand(20000, 99999),
         ];
     }
 }

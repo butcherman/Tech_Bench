@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Support\Str;
 use App\Models\FileUploads;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class FileUploadsFactory extends Factory
 {
@@ -23,10 +23,10 @@ class FileUploadsFactory extends Factory
     public function definition()
     {
         return [
-            'disk'      => 'default',
-            'folder'    => 'randomFolder',
+            'disk' => 'default',
+            'folder' => 'randomFolder',
             'file_name' => Str::random(5).'.jpg',
-            'public'    => $this->faker->boolean(),
+            'public' => $this->faker->boolean(),
         ];
     }
 }

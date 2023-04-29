@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\User;
 
-use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\UserRoles;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRoleRequest extends FormRequest
 {
@@ -13,10 +13,10 @@ class UserRoleRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->role)
-        {
+        if ($this->role) {
             return $this->user()->can('update', $this->role);
         }
+
         return $this->user()->can('create', UserRoles::class);
     }
 
@@ -26,7 +26,7 @@ class UserRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => [
+            'name' => [
                 'required',
                 'string',
                 Rule::unique('user_roles')->ignore($this->role),

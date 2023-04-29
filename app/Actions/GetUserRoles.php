@@ -11,8 +11,7 @@ class GetUserRoles
     {
         $userRole = $user->role_id;
 
-        switch($userRole)
-        {
+        switch ($userRole) {
             case 1:
                 $roles = UserRoles::all();
                 break;

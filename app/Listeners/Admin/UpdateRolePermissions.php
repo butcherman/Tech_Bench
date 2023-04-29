@@ -12,8 +12,7 @@ class UpdateRolePermissions
      */
     public function handle(UserRoleUpdatedEvent $event)
     {
-        foreach($event->permissions as $perm => $value)
-        {
+        foreach ($event->permissions as $perm => $value) {
             UserRolePermissions::where('role_id', $event->role->role_id)
                 ->where('perm_type_id', str_replace('type-', '', $perm))
                 ->update([

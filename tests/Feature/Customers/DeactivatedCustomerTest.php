@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Customers;
 
-use Tests\TestCase;
 use App\Models\User;
+use Tests\TestCase;
 
 class DeactivatedCustomerTest extends TestCase
 {

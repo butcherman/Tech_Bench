@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Customers;
 
-use Illuminate\Support\Facades\Log;
-use App\Traits\AppSettingsTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerSettingsRequest;
+use App\Traits\AppSettingsTrait;
+use Illuminate\Support\Facades\Log;
 
 class SetCustomerSettingsController extends Controller
 {
@@ -16,12 +16,12 @@ class SetCustomerSettingsController extends Controller
      */
     public function __invoke(CustomerSettingsRequest $request)
     {
-        foreach($request->all() as $key => $value)
-        {
+        foreach ($request->all() as $key => $value) {
             $this->saveSettings($request->getConfigKey($key), $value);
         }
 
         Log::notice('Customer Default Settings have been updated by '.$request->user()->username);
+
         return back()->with('success', __('admin.config_updated'));
     }
 }

@@ -13,7 +13,8 @@ class TbModuleUpdateCommand extends Command
 {
     use ModuleTrait;
 
-    protected $signature   = 'tb_module:update';
+    protected $signature = 'tb_module:update';
+
     protected $description = 'Check for Module Updates';
 
     /**
@@ -31,8 +32,7 @@ class TbModuleUpdateCommand extends Command
     {
         //  If there are no active modules, there is no need to run this command
         $activeModules = Module::allEnabled();
-        if($activeModules == [])
-        {
+        if ($activeModules == []) {
             $this->error('You have not loaded any modules.');
             $this->error('Exiting');
 
@@ -44,11 +44,10 @@ class TbModuleUpdateCommand extends Command
 
         //  Check to see which modules can be udpated
         $updateList = $this->checkForUpdates($activeModules);
-        $available  = $updateList->whereIn('can_update', true);
+        $available = $updateList->whereIn('can_update', true);
 
         //  If no updates are availabe, exit
-        if($available->isEmpty())
-        {
+        if ($available->isEmpty()) {
             $this->info('No Module upates are available');
             $this->line('Exiting.');
 
@@ -59,27 +58,20 @@ class TbModuleUpdateCommand extends Command
         $this->info('You have updates available');
         $selected = $this->choice('Please select which Module to update', array_merge(['All'], $available->pluck('module_name')->toArray(), ['Exit']));
 
-        if($selected === 'Exit')
-        {
+        if ($selected === 'Exit') {
             $this->line('Exiting');
+
             return 0;
-        }
-        elseif($selected === 'All')
-        {
+        } elseif ($selected === 'All') {
             //  Update all modules
-            foreach($available as $updateMe)
-            {
-                if($this->updateModule($updateMe))
-                {
+            foreach ($available as $updateMe) {
+                if ($this->updateModule($updateMe)) {
                     $this->info('Successfully Updated '.$updateMe['module_name']);
                 }
             }
-        }
-        else
-        {
+        } else {
             //  Update the selected module
-            if($this->updateModule($available->whereIn('module_name', $selected)->first()))
-            {
+            if ($this->updateModule($available->whereIn('module_name', $selected)->first())) {
                 $this->info('Successfully updated '.$selected);
             }
         }
@@ -93,31 +85,26 @@ class TbModuleUpdateCommand extends Command
 
         //  Get the requirements for the module to make sure they are met
         $moduleList = $this->getAvailableModules();
-        $myModule   = $moduleList[$moduleData['alias']];
+        $myModule = $moduleList[$moduleData['alias']];
 
         // $failed = $this->checkJsonRequirements($myModule);
-        if($failed = $this->checkJsonRequirements($myModule))
-        {
+        if ($failed = $this->checkJsonRequirements($myModule)) {
             $this->error('Prerequisite check failed!!');
             $this->error('Unable to continue until the following conditions are met');
             $this->newLine();
 
-            if(isset($failed['max_version']))
-            {
+            if (isset($failed['max_version'])) {
                 $this->error('Tech Bench must be at Version '.$failed['max_version']['requires'].' or lower.');
                 $this->error('Current Tech Bench Version - '.$failed['max_version']['tb_version']);
             }
 
-            if(isset($failed['version']))
-            {
+            if (isset($failed['version'])) {
                 $this->error('Tech Bench must be at Version '.$failed['version']['requires'].' or higher.');
                 $this->error('Current Tech Bench Version - '.$failed['version']['tb_version']);
             }
 
-            if(isset($failed['modules']))
-            {
-                foreach($failed['modules'] as $need)
-                {
+            if (isset($failed['modules'])) {
+                foreach ($failed['modules'] as $need) {
                     $this->error('The '.$need.' Module must be installed');
                 }
             }

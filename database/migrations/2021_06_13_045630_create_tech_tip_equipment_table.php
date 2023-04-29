@@ -30,8 +30,7 @@ class CreateTechTipEquipmentTable extends Migration
      */
     public function down()
     {
-        Schema::table('tech_tip_equipment', function(Blueprint $table)
-        {
+        Schema::table('tech_tip_equipment', function (Blueprint $table) {
             $table->dropForeign(['tip_id']);
             $table->dropForeign(['equip_id']);
         });

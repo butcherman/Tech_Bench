@@ -30,8 +30,7 @@ class CreateUserCustomerRecentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_customer_recents', function(Blueprint $table)
-        {
+        Schema::table('user_customer_recents', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['cust_id']);
         });

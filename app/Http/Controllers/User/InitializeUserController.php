@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserInitialize;
+use Inertia\Inertia;
 
 class InitializeUserController extends Controller
 {

@@ -11,7 +11,8 @@ use Nwidart\Modules\Facades\Module;
  */
 class tbModuleDisableCommand extends Command
 {
-    protected $signature   = 'tb_module:disable {module} {--y|yes}';
+    protected $signature = 'tb_module:disable {module} {--y|yes}';
+
     protected $description = 'Disable a previously installed module';
 
     /**
@@ -32,27 +33,24 @@ class tbModuleDisableCommand extends Command
         $module = Module::find($this->argument('module'));
 
         //  Verify that the module files actually exist
-        if(!$module)
-        {
+        if (! $module) {
             $this->error('Unable to find module specified.');
             $this->error('Please make sure that the files are loaded and the name is spelled correctly');
+
             return 0;
         }
 
         //  Have user verify that they want to disable the module
-        if($this->option('yes'))
-        {
+        if ($this->option('yes')) {
             $confirm = true;
-        }
-        else
-        {
+        } else {
             $this->line('You are about to disable Module '.$module->getName());
             $confirm = $this->confirm('Are you sure?');
         }
 
-        if(!$confirm)
-        {
+        if (! $confirm) {
             $this->info('Exiting');
+
             return 0;
         }
 

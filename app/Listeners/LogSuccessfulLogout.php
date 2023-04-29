@@ -13,9 +13,9 @@ class LogSuccessfulLogout
     public function handle(Logout $event)
     {
         Log::info('User '.$event->user->full_name.' logged out', [
-            'User ID'    => $event->user->user_id,
-            'Username'   => $event->user->username,
-            'IP Address' => \Request::ip()
+            'User ID' => $event->user->user_id,
+            'Username' => $event->user->username,
+            'IP Address' => \Request::ip(),
         ]);
     }
 }

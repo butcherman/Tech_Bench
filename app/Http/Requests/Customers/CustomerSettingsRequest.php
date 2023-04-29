@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Customers;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Customer;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerSettingsRequest extends FormRequest
 {
@@ -21,8 +21,8 @@ class CustomerSettingsRequest extends FormRequest
     public function rules()
     {
         return [
-            'selectId'     => 'required|boolean',
-            'updateSlug'   => 'required|boolean',
+            'selectId' => 'required|boolean',
+            'updateSlug' => 'required|boolean',
             'defaultState' => 'required|string',
         ];
     }
@@ -34,8 +34,7 @@ class CustomerSettingsRequest extends FormRequest
     {
         $key = '';
 
-        switch($field)
-        {
+        switch ($field) {
             case 'selectId':
                 $key = 'customer.select_id';
                 break;

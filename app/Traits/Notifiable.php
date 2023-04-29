@@ -14,6 +14,6 @@ trait Notifiable
      */
     public function notifications()
     {
-        return $this->morphMany(Notification::class, 'notifiable')->orderBy('created_at', 'desc'); ;
+        return $this->morphMany(Notification::class, 'notifiable')->orderBy('created_at', 'desc');
     }
 }

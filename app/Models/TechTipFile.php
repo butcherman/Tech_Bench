@@ -10,11 +10,14 @@ class TechTipFile extends Model
     use HasFactory;
 
     protected $primaryKey = 'tip_file_id';
-    protected $guarded    = ['tip_file_id', 'created_at', 'updated_at'];
-    protected $hidden     = [];
+
+    protected $guarded = ['tip_file_id', 'created_at', 'updated_at'];
+
+    protected $hidden = [];
 
     /**
      * Each Tech Tip file is attached to a file upload id
+     *
      * @codeCoverageIgnore
      */
     public function FileUpload()

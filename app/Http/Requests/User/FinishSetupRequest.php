@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\ContainsNumber;
 use App\Rules\ContainsLowerCase;
-use App\Rules\ContainsUpperCase;
+use App\Rules\ContainsNumber;
 use App\Rules\ContainsSpecialChar;
+use App\Rules\ContainsUpperCase;
+use Illuminate\Foundation\Http\FormRequest;
 
 class FinishSetupRequest extends FormRequest
 {
@@ -33,7 +33,7 @@ class FinishSetupRequest extends FormRequest
                 new ContainsUpperCase,
                 new ContainsNumber,
                 new ContainsSpecialChar,
-            ]
+            ],
         ];
     }
 }

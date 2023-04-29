@@ -11,7 +11,8 @@ use Nwidart\Modules\Facades\Module;
  */
 class TbModuleInstallDependenciesCommand extends Command
 {
-    protected $signature   = 'tb_module:dependencies {moduleName?}';
+    protected $signature = 'tb_module:dependencies {moduleName?}';
+
     protected $description = 'Command description';
 
     /**
@@ -28,24 +29,20 @@ class TbModuleInstallDependenciesCommand extends Command
     public function handle()
     {
         $this->line('Installing Module Dependencies');
-        if($this->argument('moduleName'))
-        {
+        if ($this->argument('moduleName')) {
             $module = Module::find($this->argument('moduleName'));
 
-            if(!$module)
-            {
+            if (! $module) {
                 $this->error('Unable to find module '.$this->argument('moduleName'));
+
                 return 0;
             }
 
             $this->install($module);
-        }
-        else
-        {
+        } else {
             $activeModules = Module::allEnabled();
 
-            foreach($activeModules as $module)
-            {
+            foreach ($activeModules as $module) {
                 $this->install($module);
             }
         }
@@ -61,10 +58,8 @@ class TbModuleInstallDependenciesCommand extends Command
         $this->line('Installing NPM dependencies for '.$module->getName());
         $requires = $module->getRequires();
 
-        if(Arr::exists($requires, 'npm'))
-        {
-            foreach($requires['npm'] as $r)
-            {
+        if (Arr::exists($requires, 'npm')) {
+            foreach ($requires['npm'] as $r) {
                 shell_exec('cd '.base_path().' && npm install '.$r);
             }
         }

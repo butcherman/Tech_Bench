@@ -4,25 +4,25 @@ return [
     'default' => env('MAIL_MAILER', 'smtp'),
     'mailers' => [
         'smtp' => [
-            'transport'  => 'smtp',
+            'transport' => 'smtp',
             'require_auth' => env('MAIL_AUTH', false),
-            'host'         => env('MAIL_HOST', null),
-            'port'         => env('MAIL_PORT', 587),
-            'encryption'   => env('MAIL_ENCRYPTION', 'tls'),
-            'username'     => env('MAIL_USERNAME'),
-            'password'     => env('MAIL_PASSWORD'),
-            'timeout'      => null,
-            'auth_mode'    => null,
+            'host' => env('MAIL_HOST', null),
+            'port' => env('MAIL_PORT', 587),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'username' => env('MAIL_USERNAME'),
+            'password' => env('MAIL_PASSWORD'),
+            'timeout' => null,
+            'auth_mode' => null,
         ],
 
         'sendmail' => [
             'transport' => 'sendmail',
-            'path'      => '/usr/sbin/sendmail -bs',
+            'path' => '/usr/sbin/sendmail -bs',
         ],
 
         'log' => [
             'transport' => 'log',
-            'channel'   => env('MAIL_LOG_CHANNEL'),
+            'channel' => env('MAIL_LOG_CHANNEL'),
         ],
 
         'array' => [
@@ -43,7 +43,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'tech_bench@noem.com'),
-        'name'    => env('MAIL_FROM_NAME', 'Tech Bench'),
+        'name' => env('MAIL_FROM_NAME', 'Tech Bench'),
     ],
 
     /*

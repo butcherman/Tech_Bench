@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'default'      => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DRIVER', 'local'),
     'max_filesize' => env('MAX_UPLOAD', 2000000000), //  2000000000 Bytes = 2GB
-    'chunk_size'   => 500000,                       //  500000 Bytes = 4 MB
+    'chunk_size' => 500000,                       //  500000 Bytes = 4 MB
 
     /*
     |--------------------------------------------------------------------------
@@ -34,18 +34,18 @@ return [
 
         'local' => [
             'base_folder' => 'app',
-            'driver'      => 'local',
-            'root'        => storage_path('app'),
+            'driver' => 'local',
+            'root' => storage_path('app'),
             'permissions' => [
                 'file' => [
-                    'public'  => 0644,
+                    'public' => 0644,
                     'private' => 0644,
                 ],
                 'dir' => [
-                    'public'  => 0755,
+                    'public' => 0755,
                     'private' => 0755,
-                ]
-            ]
+                ],
+            ],
         ],
 
         /**
@@ -53,7 +53,7 @@ return [
          */
         'customers' => [
             'driver' => 'local',
-            'root'   => storage_path('app/customers'),
+            'root' => storage_path('app/customers'),
         ],
 
         /**
@@ -61,16 +61,16 @@ return [
          */
         'tips' => [
             'driver' => 'local',
-            'root'   => storage_path('app/tips'),
+            'root' => storage_path('app/tips'),
         ],
 
         /**
          * Only used for public accessible items such as images
          */
         'public' => [
-            'driver'     => 'local',
-            'root'       => storage_path('app/public'),
-            'url'        => env('APP_URL').'/storage',
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
 
@@ -79,7 +79,7 @@ return [
          */
         'logs' => [
             'driver' => 'local',
-            'root'   => storage_path('logs'),
+            'root' => storage_path('logs'),
         ],
 
         /**
@@ -87,7 +87,7 @@ return [
          */
         'backups' => [
             'driver' => 'local',
-            'root'   => storage_path('backups'),
+            'root' => storage_path('backups'),
         ],
 
         /**
@@ -95,7 +95,7 @@ return [
          */
         'modules' => [
             'driver' => 'local',
-            'root'   => base_path().'/Modules',
+            'root' => base_path().'/Modules',
         ],
 
         /**
@@ -103,7 +103,7 @@ return [
          */
         'updates' => [
             'driver' => 'local',
-            'root'   => storage_path('updates'),
+            'root' => storage_path('updates'),
         ],
     ],
 

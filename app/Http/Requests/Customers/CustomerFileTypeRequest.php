@@ -13,8 +13,7 @@ class CustomerFileTypeRequest extends FormRequest
     public function authorize()
     {
         // return false;
-        if($this->file_type)
-        {
+        if ($this->file_type) {
             return $this->user()->can('update', $this->file_type);
         }
 

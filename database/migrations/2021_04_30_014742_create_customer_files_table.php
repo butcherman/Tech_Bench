@@ -37,8 +37,7 @@ class CreateCustomerFilesTable extends Migration
      */
     public function down()
     {
-        Schema::table('customer_files', function(Blueprint $table)
-        {
+        Schema::table('customer_files', function (Blueprint $table) {
             $table->dropForeign(['file_id', 'file_type_id', 'cust_id', 'user_id']);
         });
         Schema::dropIfExists('customer_files');

@@ -10,11 +10,14 @@ class UserCustomerRecent extends Model
     use HasFactory;
 
     protected $guarded = ['id', 'updated_at', 'created_at'];
-    protected $hidden  = ['id', 'user_id', 'created_at', 'Customer'];
+
+    protected $hidden = ['id', 'user_id', 'created_at', 'Customer'];
+
     protected $appends = ['name', 'slug'];
 
     /**
      * Each recent is linked to a customer ID
+     *
      * @codeCoverageIgnore
      */
     public function Customer()
@@ -24,6 +27,7 @@ class UserCustomerRecent extends Model
 
     /**
      * Get the name of the customer bookmarked
+     *
      * @codeCoverageIgnore
      */
     public function getNameAttribute()
@@ -34,6 +38,7 @@ class UserCustomerRecent extends Model
 
     /**
      * Get the slug for the link
+     *
      * @codeCoverageIgnore
      */
     public function getSlugAttribute()

@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Admin\User;
 
-use Tests\TestCase;
-use Illuminate\Support\Facades\Event;
 use App\Events\Admin\UserCreatedEvent;
 use App\Listeners\Notify\NotifyNewUser;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
 class UserTest extends TestCase
 {
@@ -101,14 +101,14 @@ class UserTest extends TestCase
         //  Assert settings model created
         $newUser = User::where('username', $data['username'])->first();
         $this->assertDatabaseHas('user_settings', [
-            'user_id'         => $newUser->user_id,
+            'user_id' => $newUser->user_id,
             'setting_type_id' => 1,
-            'value'           => 1,
+            'value' => 1,
         ]);
         $this->assertDatabaseHas('user_settings', [
-            'user_id'         => $newUser->user_id,
+            'user_id' => $newUser->user_id,
             'setting_type_id' => 2,
-            'value'           => 1,
+            'value' => 1,
         ]);
     }
 
@@ -148,11 +148,11 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'username'   => 'newUserName',
+            'username' => 'newUserName',
             'first_name' => 'Billy',
-            'last_name'  => 'Bob',
-            'email'      => 'bbob@noem.com',
-            'role_id'    => 3,
+            'last_name' => 'Bob',
+            'email' => 'bbob@noem.com',
+            'role_id' => 3,
         ];
 
         $response = $this->put(route('admin.users.update', $user->username), $data);
@@ -165,11 +165,11 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'username'   => 'newUserName',
+            'username' => 'newUserName',
             'first_name' => 'Billy',
-            'last_name'  => 'Bob',
-            'email'      => 'bbob@noem.com',
-            'role_id'    => 3,
+            'last_name' => 'Bob',
+            'email' => 'bbob@noem.com',
+            'role_id' => 3,
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('admin.users.update', $user->username), $data);
@@ -180,11 +180,11 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create(['role_id' => 1]);
         $data = [
-            'username'   => 'newUserName',
+            'username' => 'newUserName',
             'first_name' => 'Billy',
-            'last_name'  => 'Bob',
-            'email'      => 'bbob@noem.com',
-            'role_id'    => 3,
+            'last_name' => 'Bob',
+            'email' => 'bbob@noem.com',
+            'role_id' => 3,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 2]))->put(route('admin.users.update', $user->username), $data);
@@ -196,11 +196,11 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'username'   => 'newUserName',
+            'username' => 'newUserName',
             'first_name' => 'Billy',
-            'last_name'  => 'Bob',
-            'email'      => 'bbob@noem.com',
-            'role_id'    => 3,
+            'last_name' => 'Bob',
+            'email' => 'bbob@noem.com',
+            'role_id' => 3,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.users.update', $user->username), $data);

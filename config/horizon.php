@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
-
 return [
     'domain' => null,
     'path' => 'administration/horizon',
@@ -103,23 +101,23 @@ return [
 
     'defaults' => [
         'supervisor-1' => [
-            'connection'   => 'redis',
-            'queue'        => ['default'],
-            'balance'      => 'auto',
+            'connection' => 'redis',
+            'queue' => ['default'],
+            'balance' => 'auto',
             'maxProcesses' => 1,
-            'maxTime'      => 0,
-            'maxJobs'      => 0,
-            'memory'       => 128,
-            'tries'        => 1,
-            'timeout'      => 60,
-            'nice'         => 0,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 60,
+            'nice' => 0,
         ],
     ],
 
     'environments' => [
         'production' => [
             'supervisor-1' => [
-                'maxProcesses'    => 10,
+                'maxProcesses' => 10,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],

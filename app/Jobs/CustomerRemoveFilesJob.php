@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Traits\FileTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -33,8 +32,7 @@ class CustomerRemoveFilesJob implements ShouldQueue
      */
     public function handle()
     {
-        foreach($this->fileList as $file)
-        {
+        foreach ($this->fileList as $file) {
             $this->deleteFile($file);
         }
     }

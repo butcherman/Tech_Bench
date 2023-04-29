@@ -2,10 +2,10 @@
 
 namespace App\Events\Admin;
 
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Broadcasting\InteractsWithSockets;
 use App\Models\UserRoles;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class UserRoleCreatedEvent
 {
@@ -14,6 +14,7 @@ class UserRoleCreatedEvent
     use InteractsWithSockets;
 
     public $role;
+
     public $permissions;
 
     /**
@@ -21,7 +22,7 @@ class UserRoleCreatedEvent
      */
     public function __construct(UserRoles $role, array $permissions)
     {
-        $this->role        = $role;
+        $this->role = $role;
         $this->permissions = $permissions;
     }
 }

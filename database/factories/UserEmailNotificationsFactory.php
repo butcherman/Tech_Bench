@@ -23,11 +23,11 @@ class UserEmailNotificationsFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'         => User::factory()->create(),
-            'em_tech_tip'     => 1,
-            'em_file_link'    => 1,
+            'user_id' => User::factory()->create(),
+            'em_tech_tip' => 1,
+            'em_file_link' => 1,
             'em_notification' => 1,
-            'auto_del_link'   => 1,
+            'auto_del_link' => 1,
         ];
     }
 }

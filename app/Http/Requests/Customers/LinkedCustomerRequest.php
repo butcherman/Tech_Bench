@@ -23,9 +23,9 @@ class LinkedCustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'cust_id'   => 'required|exists:customers',
+            'cust_id' => 'required|exists:customers',
             'parent_id' => 'nullable|exists:customers,cust_id|different:cust_id',
-            'add'       => 'required|boolean',
+            'add' => 'required|boolean',
         ];
     }
 
@@ -51,6 +51,7 @@ class LinkedCustomerRequest extends FormRequest
         ]);
 
         Log::channel(['daily', 'cust'])->info('Customer '.$cust->name.' has been linked to '.$parent->name.' by '.Auth::user()->username);
+
         return ['type' => 'success', 'message' => __('cust.linked.set')];
     }
 
@@ -64,6 +65,7 @@ class LinkedCustomerRequest extends FormRequest
         ]);
 
         Log::channel(['daily', 'cust'])->info('Customer '.$cust->name.' link to parent site has been removed by '.Auth::user()->username);
-        return ['type' => 'warning', 'message' => __('cust.linked.removed')];;
+
+        return ['type' => 'warning', 'message' => __('cust.linked.removed')];
     }
 }

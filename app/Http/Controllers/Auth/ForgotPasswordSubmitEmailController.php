@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ForgotPasswordEmailRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordSubmitEmailController extends Controller
 {
@@ -22,16 +22,17 @@ class ForgotPasswordSubmitEmailController extends Controller
     {
         $status = Password::sendResetLink($request->only('email'));
 
-        if($status === Password::RESET_LINK_SENT)
-        {
+        if ($status === Password::RESET_LINK_SENT) {
             Log::channel('auth')->notice('A password reset email has been sent to '.$request->email);
+
             return back()->with('success', __($status));
         }
 
         Log::channel('auth')->warning('Someone has failed to enter a proper email address to request a Password Reset link', [
-            'Email'      => $request->email,
+            'Email' => $request->email,
             'IP Address' => \Request::ip(),
         ]);
+
         return back()->withErrors(['email' => __($status)]);
     }
 }

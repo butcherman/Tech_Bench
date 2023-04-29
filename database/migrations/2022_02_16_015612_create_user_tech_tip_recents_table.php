@@ -30,8 +30,7 @@ class CreateUserTechTipRecentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_tech_tip_recents', function(Blueprint $table)
-        {
+        Schema::table('user_tech_tip_recents', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['tip_id']);
         });

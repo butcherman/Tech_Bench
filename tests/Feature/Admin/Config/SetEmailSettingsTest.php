@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Admin\Config;
 
-use Tests\TestCase;
 use App\Models\User;
+use Tests\TestCase;
 
 class SetEmailSettingsTest extends TestCase
 {
@@ -13,13 +13,13 @@ class SetEmailSettingsTest extends TestCase
     public function test_invoke_guest()
     {
         $data = [
-            'from_address'   => 'test@test.com',
-            'username'       => 'someUsername',
-            'password'       => 'somePassword',
-            'host'           => 'smtp://somehost.blah',
-            'port'           => '2525',
-            'encryption'     => 'TLS',
-            'requireAuth'    => true,
+            'from_address' => 'test@test.com',
+            'username' => 'someUsername',
+            'password' => 'somePassword',
+            'host' => 'smtp://somehost.blah',
+            'port' => '2525',
+            'encryption' => 'TLS',
+            'requireAuth' => true,
         ];
 
         $response = $this->post(route('admin.set-email'), $data);
@@ -31,13 +31,13 @@ class SetEmailSettingsTest extends TestCase
     public function test_invoke_no_permission()
     {
         $data = [
-            'from_address'   => 'test@test.com',
-            'username'       => 'someUsername',
-            'password'       => 'somePassword',
-            'host'           => 'smtp://somehost.blah',
-            'port'           => '2525',
-            'encryption'     => 'TLS',
-            'requireAuth'    => true,
+            'from_address' => 'test@test.com',
+            'username' => 'someUsername',
+            'password' => 'somePassword',
+            'host' => 'smtp://somehost.blah',
+            'port' => '2525',
+            'encryption' => 'TLS',
+            'requireAuth' => true,
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('admin.set-email'), $data);
@@ -47,13 +47,13 @@ class SetEmailSettingsTest extends TestCase
     public function test_invoke()
     {
         $data = [
-            'from_address'   => 'test@test.com',
-            'username'       => 'someUsername',
-            'password'       => 'somePassword',
-            'host'           => 'smtp://somehost.blah',
-            'port'           => '2525',
-            'encryption'     => 'TLS',
-            'requireAuth'    => true,
+            'from_address' => 'test@test.com',
+            'username' => 'someUsername',
+            'password' => 'somePassword',
+            'host' => 'smtp://somehost.blah',
+            'port' => '2525',
+            'encryption' => 'TLS',
+            'requireAuth' => true,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.set-email'), $data);

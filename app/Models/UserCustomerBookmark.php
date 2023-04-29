@@ -9,12 +9,15 @@ class UserCustomerBookmark extends Model
 {
     use HasFactory;
 
-    protected $guarded      = ['updated_at', 'created_at'];
-    protected $hidden       = ['updated_at', 'created_at', 'Customer', 'id', 'user_id'];
-    protected $appends      = ['name', 'slug'];
+    protected $guarded = ['updated_at', 'created_at'];
+
+    protected $hidden = ['updated_at', 'created_at', 'Customer', 'id', 'user_id'];
+
+    protected $appends = ['name', 'slug'];
 
     /**
      * Each bookmark is tied to a customer ID
+     *
      * @codeCoverageIgnore
      */
     public function Customer()
@@ -24,6 +27,7 @@ class UserCustomerBookmark extends Model
 
     /**
      * Get the name of the customer bookmarked
+     *
      * @codeCoverageIgnore
      */
     public function getNameAttribute()
@@ -33,6 +37,7 @@ class UserCustomerBookmark extends Model
 
     /**
      * Get the slug for the link
+     *
      * @codeCoverageIgnore
      */
     public function getSlugAttribute()

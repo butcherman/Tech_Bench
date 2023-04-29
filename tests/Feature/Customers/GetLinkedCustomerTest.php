@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Customers;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Customer;
+use App\Models\User;
+use Tests\TestCase;
 
 class GetLinkedCustomerTest extends TestCase
 {
@@ -13,7 +13,7 @@ class GetLinkedCustomerTest extends TestCase
      */
     public function test_invoke_guest()
     {
-        $cust     = Customer::factory()->create();
+        $cust = Customer::factory()->create();
         $children = Customer::factory()->count(5)->create([
             'parent_id' => $cust->cust_id,
         ]);
@@ -26,7 +26,7 @@ class GetLinkedCustomerTest extends TestCase
 
     public function test_invoke()
     {
-        $cust     = Customer::factory()->create();
+        $cust = Customer::factory()->create();
         $children = Customer::factory()->count(5)->create([
             'parent_id' => $cust->cust_id,
         ]);

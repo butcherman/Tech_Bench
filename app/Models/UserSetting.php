@@ -10,14 +10,18 @@ class UserSetting extends Model
     use HasFactory;
 
     protected $primaryKey = 'setting_id';
-    protected $guarded    = ['setting_id', 'created_at', 'updated_at'];
-    protected $hidden     = ['setting_id', 'user_id', 'created_at', 'updated_at'];
-    protected $casts      = [
+
+    protected $guarded = ['setting_id', 'created_at', 'updated_at'];
+
+    protected $hidden = ['setting_id', 'user_id', 'created_at', 'updated_at'];
+
+    protected $casts = [
         'value' => 'boolean',
     ];
 
     /**
      * Each setting is tied to a setting type id
+     *
      * @codeCoverageIgnore
      */
     public function UserSettingType()

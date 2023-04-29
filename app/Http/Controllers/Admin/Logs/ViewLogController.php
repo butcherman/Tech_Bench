@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
-use App\Traits\LogUtilitiesTrait;
 use App\Models\AppSettings;
+use App\Traits\LogUtilitiesTrait;
+use Inertia\Inertia;
 
 class ViewLogController extends Controller
 {
@@ -22,10 +22,10 @@ class ViewLogController extends Controller
         $fileArr = $this->getFileToArray($file, $this->getChannelDetails($channel));
 
         return Inertia::render('Admin/Logs/Show', [
-            'levels'   => $this->logLevels,
-            'channel'  => $channel,
+            'levels' => $this->logLevels,
+            'channel' => $channel,
             'filename' => $file,
-            'stats'    => $this->getFileStats($fileArr, $file),
+            'stats' => $this->getFileStats($fileArr, $file),
             'log-file' => $this->parseFile($fileArr),
         ]);
     }

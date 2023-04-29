@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Admin\Logs;
 
-use Tests\TestCase;
 use App\Models\User;
+use Tests\TestCase;
 
 class LogsTest extends TestCase
 {

@@ -12,7 +12,8 @@ class TbMaintenanceTelescopeOnCommand extends Command
 {
     use AppSettingsTrait;
 
-    protected $signature   = 'tb_maintenance:telescope_on';
+    protected $signature = 'tb_maintenance:telescope_on';
+
     protected $description = 'Enable the Telescope advanced data collection service';
 
     /**

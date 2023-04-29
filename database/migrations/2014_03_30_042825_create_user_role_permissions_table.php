@@ -14,7 +14,7 @@ class CreateUserRolePermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_role_permissions', function(Blueprint $table) {
+        Schema::create('user_role_permissions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('perm_type_id');
@@ -27,15 +27,15 @@ class CreateUserRolePermissionsTable extends Migration
         //  Setup the default role permissions
         $defaults = [
             1 => [
-                1  => 1,
-                2  => 1,
-                3  => 1,
-                4  => 1,
-                5  => 1,
-                6  => 1,
-                7  => 1,
-                8  => 1,
-                9  => 1,
+                1 => 1,
+                2 => 1,
+                3 => 1,
+                4 => 1,
+                5 => 1,
+                6 => 1,
+                7 => 1,
+                8 => 1,
+                9 => 1,
                 10 => 1,
                 11 => 1,
                 12 => 1,
@@ -56,15 +56,15 @@ class CreateUserRolePermissionsTable extends Migration
                 27 => 1,
             ],
             2 => [
-                1  => 0,
-                2  => 1,
-                3  => 1,
-                4  => 1,
-                5  => 1,
-                6  => 1,
-                7  => 1,
-                8  => 1,
-                9  => 1,
+                1 => 0,
+                2 => 1,
+                3 => 1,
+                4 => 1,
+                5 => 1,
+                6 => 1,
+                7 => 1,
+                8 => 1,
+                9 => 1,
                 10 => 1,
                 11 => 1,
                 12 => 1,
@@ -85,15 +85,15 @@ class CreateUserRolePermissionsTable extends Migration
                 27 => 1,
             ],
             3 => [
-                1  => 0,
-                2  => 0,
-                3  => 0,
-                4  => 1,
-                5  => 0,
-                6  => 0,
-                7  => 1,
-                8  => 1,
-                9  => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 1,
+                5 => 0,
+                6 => 0,
+                7 => 1,
+                8 => 1,
+                9 => 0,
                 10 => 0,
                 11 => 1,
                 12 => 1,
@@ -114,15 +114,15 @@ class CreateUserRolePermissionsTable extends Migration
                 27 => 1,
             ],
             4 => [
-                1  => 0,
-                2  => 0,
-                3  => 0,
-                4  => 0,
-                5  => 0,
-                6  => 0,
-                7  => 1,
-                8  => 1,
-                9  => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0,
+                5 => 0,
+                6 => 0,
+                7 => 1,
+                8 => 1,
+                9 => 0,
                 10 => 0,
                 11 => 1,
                 12 => 1,
@@ -144,16 +144,14 @@ class CreateUserRolePermissionsTable extends Migration
             ],
         ];
 
-        foreach($defaults as $role_id => $perms)
-        {
-            foreach($perms as $perm_type_id => $allow)
-            {
+        foreach ($defaults as $role_id => $perms) {
+            foreach ($perms as $perm_type_id => $allow) {
                 DB::table('user_role_permissions')->insert([
-                    'role_id'      => $role_id,
+                    'role_id' => $role_id,
                     'perm_type_id' => $perm_type_id,
-                    'allow'        => $allow,
-                    'created_at'   => NOW(),
-                    'updated_at'   => NOW(),
+                    'allow' => $allow,
+                    'created_at' => NOW(),
+                    'updated_at' => NOW(),
                 ]);
             }
         }
@@ -166,8 +164,7 @@ class CreateUserRolePermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_role_permissions', function(Blueprint $table)
-        {
+        Schema::table('user_role_permissions', function (Blueprint $table) {
             $table->dropForeign(['role_id', 'perm_type_id']);
         });
         Schema::dropIfExists('user_role_permissions');

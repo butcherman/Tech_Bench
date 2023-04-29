@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Equipment;
 
 use App\Actions\OrderEquipDataTypes;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentTypeRequest;
 use App\Models\Customer;
@@ -12,10 +10,10 @@ use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\TechTip;
-use App\Models\TechTipEquipment;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class EquipmentController extends Controller
 {
@@ -39,7 +37,7 @@ class EquipmentController extends Controller
         $this->authorize('create', EquipmentType::class);
 
         return Inertia::render('Equipment/Create', [
-            'category'  => $equipmentCategory,
+            'category' => $equipmentCategory,
             'data-list' => DataFieldType::all()->pluck('name'),
         ]);
     }
@@ -49,7 +47,7 @@ class EquipmentController extends Controller
      */
     public function store(EquipmentTypeRequest $request)
     {
-        $equipment         = new EquipmentType($request->only(['name']));
+        $equipment = new EquipmentType($request->only(['name']));
         $equipment->cat_id = EquipmentCategory::where('name', $request->category)->first()->cat_id;
         $equipment->save();
 
@@ -68,12 +66,12 @@ class EquipmentController extends Controller
 
         return Inertia::render('Equipment/Show', [
             'equipment' => $equipment,
-            'customers' => Customer::whereHas('CustomerEquipment', function($q) use ($equipment) {
-                                $q->where('equip_id', $equipment->equip_id);
-                            })->get(),
-            'tech-tip'  => TechTip::with('EquipmentType')->whereHas('EquipmentType', function($q) use ($equipment) {
-                                $q->where('equipment_types.equip_id', $equipment->equip_id);
-                            })->get(),
+            'customers' => Customer::whereHas('CustomerEquipment', function ($q) use ($equipment) {
+                $q->where('equip_id', $equipment->equip_id);
+            })->get(),
+            'tech-tip' => TechTip::with('EquipmentType')->whereHas('EquipmentType', function ($q) use ($equipment) {
+                $q->where('equipment_types.equip_id', $equipment->equip_id);
+            })->get(),
         ]);
     }
 
@@ -111,28 +109,27 @@ class EquipmentController extends Controller
     {
         $this->authorize('delete', $equipment);
 
-        try
-        {
+        try {
             $equipment->delete();
-        }
-        catch(QueryException $e)
-        {
-            if($e->errorInfo[1] === 19)
-            {
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] === 19) {
                 Log::error('Unable to delete Equipment '.$equipment->name.'.  It is currently in use');
+
                 return back()->withErrors([
                     'error' => __('equip.in_use'),
-                    'link'  => route('equipment.show', $equipment->equip_id),
+                    'link' => route('equipment.show', $equipment->equip_id),
                 ]);
             }
 
             // @codeCoverageIgnoreStart
             Log::error('Error when trying to delete Equipment '.$equipment->name, $e->errorInfo);
+
             return back()->withErrors(['error' => __('equip.del_failed')]);
             // @codeCoverageIgnoreEnd
         }
 
         Log::notice('Equipment '.$equipment->name.' has been deleted by '.Auth::user()->username);
+
         return redirect(route('equipment.index'))->with('success', __('equip.destroyed'));
     }
 }

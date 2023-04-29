@@ -10,28 +10,28 @@ class GetUserRolesTest extends TestCase
 {
     public function test_run_as_installer()
     {
-        $user     = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->create(['role_id' => 1]);
         $roleList = (new GetUserRoles)->run($user);
 
         $this->assertEquals($roleList->toArray(), [
             [
-                'role_id'     => 1,
-                'name'        => 'Installer',
+                'role_id' => 1,
+                'name' => 'Installer',
                 'description' => 'All Access Administrator',
             ],
             [
-                'role_id'     => 2,
-                'name'        => 'Administrator',
+                'role_id' => 2,
+                'name' => 'Administrator',
                 'description' => 'System Administrator',
             ],
             [
-                'role_id'     => 3,
-                'name'        => 'Reports',
+                'role_id' => 3,
+                'name' => 'Reports',
                 'description' => 'User who can run reports',
             ],
             [
-                'role_id'     => 4,
-                'name'        => 'Tech',
+                'role_id' => 4,
+                'name' => 'Tech',
                 'description' => 'Standard User',
             ],
         ]);
@@ -39,23 +39,23 @@ class GetUserRolesTest extends TestCase
 
     public function test_run_as_admin()
     {
-        $user     = User::factory()->create(['role_id' => 2]);
+        $user = User::factory()->create(['role_id' => 2]);
         $roleList = (new GetUserRoles)->run($user);
 
         $this->assertEquals($roleList->toArray(), [
             [
-                'role_id'     => 2,
-                'name'        => 'Administrator',
+                'role_id' => 2,
+                'name' => 'Administrator',
                 'description' => 'System Administrator',
             ],
             [
-                'role_id'     => 3,
-                'name'        => 'Reports',
+                'role_id' => 3,
+                'name' => 'Reports',
                 'description' => 'User who can run reports',
             ],
             [
-                'role_id'     => 4,
-                'name'        => 'Tech',
+                'role_id' => 4,
+                'name' => 'Tech',
                 'description' => 'Standard User',
             ],
         ]);
@@ -63,18 +63,18 @@ class GetUserRolesTest extends TestCase
 
     public function test_run_default()
     {
-        $user     = User::factory()->create(['role_id' => 3]);
+        $user = User::factory()->create(['role_id' => 3]);
         $roleList = (new GetUserRoles)->run($user);
 
         $this->assertEquals($roleList->toArray(), [
             [
-                'role_id'     => 3,
-                'name'        => 'Reports',
+                'role_id' => 3,
+                'name' => 'Reports',
                 'description' => 'User who can run reports',
             ],
             [
-                'role_id'     => 4,
-                'name'        => 'Tech',
+                'role_id' => 4,
+                'name' => 'Tech',
                 'description' => 'Standard User',
             ],
         ]);

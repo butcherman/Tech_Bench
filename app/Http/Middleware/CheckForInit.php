@@ -26,10 +26,9 @@ class CheckForInit
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()
+        if ($request->user()
             && config('app.first_time_setup')
-            && !in_array(Route::current()->getName(), $this->bypassRoutes))
-        {
+            && ! in_array(Route::current()->getName(), $this->bypassRoutes)) {
             return redirect(route('init.step-1'));
         }
 

@@ -3,7 +3,6 @@
 namespace App\Notifications\User;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -35,11 +34,11 @@ class SendWelcomeEmail extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Welcome to the '.config('app.name'))
-                    ->greeting('Hello '.$notifiable->full_name)
-                    ->line('A new '.config('app.name').' account has been created for you.')
-                    ->line('Your new username is:  **'.$notifiable->username.'**')
-                    ->line('You can click the link below to finish setting up your account.')
-                    ->action('Setup Account', url(route('initialize', $this->token)));
+            ->subject('Welcome to the '.config('app.name'))
+            ->greeting('Hello '.$notifiable->full_name)
+            ->line('A new '.config('app.name').' account has been created for you.')
+            ->line('Your new username is:  **'.$notifiable->username.'**')
+            ->line('You can click the link below to finish setting up your account.')
+            ->action('Setup Account', url(route('initialize', $this->token)));
     }
 }

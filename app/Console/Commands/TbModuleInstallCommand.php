@@ -16,7 +16,8 @@ class TbModuleInstallCommand extends Command
 {
     use ModuleTrait;
 
-    protected $signature   = 'tb_module:install';
+    protected $signature = 'tb_module:install';
+
     protected $description = 'Download an approved Module from the Tech Bench Modules Repository';
 
     /**
@@ -41,48 +42,42 @@ class TbModuleInstallCommand extends Command
 
         //  Have user select which module to install
         $install = $this->choice('Select which Module to install', array_merge(['Exit'], $modName));
-        if($install === 'Exit')
-        {
+        if ($install === 'Exit') {
             $this->line('Exiting');
+
             return 0;
         }
 
         $moduleData = $modList[Str::studly($install)];
 
-
         //  Check to see if the module is already installed
         $alreadyInstalled = Module::find($moduleData['alias']);
-        if($alreadyInstalled)
-        {
+        if ($alreadyInstalled) {
             $this->line('The '.$moduleData['module_name'].' is already installed');
             $this->line('If the module is currently disabled, run the "tb_module:enable '.$moduleData['alias'].'" command');
             $this->line('Exiting.');
+
             return 0;
         }
 
         //  Check to make sure that the Tech Bench can handle the Module
-        if($failed = $this->checkJsonRequirements($moduleData))
-        {
+        if ($failed = $this->checkJsonRequirements($moduleData)) {
             $this->error('Prerequisite check failed!!');
             $this->error('Unable to continue until the following conditions are met');
             $this->newLine();
 
-            if(isset($failed['max_version']))
-            {
+            if (isset($failed['max_version'])) {
                 $this->error('Tech Bench must be at Version '.$failed['max_version']['requires'].' or lower.');
                 $this->error('Current Tech Bench Version - '.$failed['max_version']['tb_version']);
             }
 
-            if(isset($failed['version']))
-            {
+            if (isset($failed['version'])) {
                 $this->error('Tech Bench must be at Version '.$failed['version']['requires'].' or higher.');
                 $this->error('Current Tech Bench Version - '.$failed['version']['tb_version']);
             }
 
-            if(isset($failed['modules']))
-            {
-                foreach($failed['modules'] as $need)
-                {
+            if (isset($failed['modules'])) {
+                foreach ($failed['modules'] as $need) {
                     $this->error('The '.$need.' Module must be installed');
                 }
             }

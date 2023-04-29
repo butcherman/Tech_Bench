@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admin\User;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UserPasswordPolicyTest extends TestCase
@@ -38,12 +36,12 @@ class UserPasswordPolicyTest extends TestCase
     public function test_store_guest()
     {
         $data = [
-            'expire'             => '60',
-            'min_length'         => '12',
+            'expire' => '60',
+            'min_length' => '12',
             'contains_uppercase' => 'false',
             'contains_lowercase' => 'false',
-            'contains_number'    => 'false',
-            'contains_special'   => 'false',
+            'contains_number' => 'false',
+            'contains_special' => 'false',
         ];
 
         $response = $this->post(route('admin.users.password-policy.store'), $data);
@@ -55,12 +53,12 @@ class UserPasswordPolicyTest extends TestCase
     public function test_store_no_permission()
     {
         $data = [
-            'expire'             => '60',
-            'min_length'         => '12',
+            'expire' => '60',
+            'min_length' => '12',
             'contains_uppercase' => 'false',
             'contains_lowercase' => 'false',
-            'contains_number'    => 'false',
-            'contains_special'   => 'false',
+            'contains_number' => 'false',
+            'contains_special' => 'false',
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('admin.users.password-policy.store'), $data);
@@ -70,12 +68,12 @@ class UserPasswordPolicyTest extends TestCase
     public function test_store()
     {
         $data = [
-            'expire'             => '60',
-            'min_length'         => '12',
+            'expire' => '60',
+            'min_length' => '12',
             'contains_uppercase' => false,
             'contains_lowercase' => false,
-            'contains_number'    => false,
-            'contains_special'   => false,
+            'contains_number' => false,
+            'contains_special' => false,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.users.password-policy.store'), $data);

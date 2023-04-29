@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Customers;
 
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerFileTypeRequest;
 use App\Models\CustomerFileType;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class CustomerFileTypeController extends Controller
 {
@@ -31,6 +31,7 @@ class CustomerFileTypeController extends Controller
     {
         $newType = CustomerFileType::create($request->only(['description']));
         Log::stack(['daily', 'cust'])->info('New Customer File Type created by '.$request->user()->username, $newType->toArray());
+
         return back()->with('success', __('cust.files.type_created'));
     }
 
@@ -41,6 +42,7 @@ class CustomerFileTypeController extends Controller
     {
         $file_type->update($request->only(['description']));
         Log::stack(['daily', 'cust'])->info('Customer File Type updated by '.$request->user()->username, $file_type->toArray());
+
         return back()->with('success', __('cust.files.type_updated'));
     }
 
@@ -51,17 +53,16 @@ class CustomerFileTypeController extends Controller
     {
         $this->authorize('delete', $file_type);
 
-        try
-        {
+        try {
             $file_type->delete();
-        }
-        catch(QueryException $e)
-        {
+        } catch (QueryException $e) {
             Log::stack(['daily', 'cust'])->alert('Unable to delete File Type '.$file_type->description.'.  It is still in use');
+
             return back()->withErrors(['error' => 'This File Type is in use and cannot be deleted at this time']);
         }
 
         Log::stack(['daily', 'cust'])->info('Customer File Type '.$file_type->description.' deleted by '.Auth::user()->username);
+
         return back()->with('success', __('cust.files.type_deleted'));
     }
 }

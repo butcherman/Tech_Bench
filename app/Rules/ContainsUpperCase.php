@@ -12,8 +12,7 @@ class ContainsUpperCase implements Rule
     public function passes($attribute, $value)
     {
         //  The configuration allows for this rule to be skipped
-        if(!config('auth.passwords.settings.contains_uppercase'))
-        {
+        if (! config('auth.passwords.settings.contains_uppercase')) {
             return true;
         }
 

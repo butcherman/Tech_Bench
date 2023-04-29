@@ -11,7 +11,6 @@ class CustomerEquipmentPolicy
     use AllowTrait;
     use HandlesAuthorization;
 
-
     /**
      *  Determine if the user can create new equipment for the customer
      */

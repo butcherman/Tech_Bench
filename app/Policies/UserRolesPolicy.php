@@ -41,8 +41,7 @@ class UserRolesPolicy
      */
     public function update(User $user, UserRoles $role)
     {
-        if(!$role->allow_edit)
-        {
+        if (! $role->allow_edit) {
             return false;
         }
 
@@ -54,8 +53,7 @@ class UserRolesPolicy
      */
     public function delete(User $user, UserRoles $role)
     {
-        if(!$role->allow_edit)
-        {
+        if (! $role->allow_edit) {
             return false;
         }
 

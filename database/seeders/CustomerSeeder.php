@@ -7,11 +7,9 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
-use App\Models\CustomerNotes;
 use App\Models\DataField;
-use App\Models\FileUploads;
 use App\Models\EquipmentType;
-use App\Models\User;
+use App\Models\FileUploads;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -27,41 +25,37 @@ class CustomerSeeder extends Seeder
 
         //  Assign equipment to 40 of those customers
         $custList = Customer::inRandomOrder()->limit(40)->get();
-        foreach($custList as $cust)
-        {
+        foreach ($custList as $cust) {
             $newEquip = CustomerEquipment::create([
-                'cust_id'  => $cust->cust_id,
+                'cust_id' => $cust->cust_id,
                 'equip_id' => EquipmentType::inRandomOrder()->first()->equip_id,
-                'shared'   => false,
+                'shared' => false,
             ]);
 
             $equipFields = DataField::where('equip_id', $newEquip->equip_id)->orderBy('order')->get();
-            foreach($equipFields as $field)
-            {
+            foreach ($equipFields as $field) {
                 CustomerEquipmentData::factory()->create([
                     'cust_equip_id' => $newEquip->cust_equip_id,
-                    'field_id'      => $field->field_id,
+                    'field_id' => $field->field_id,
                 ]);
             }
         }
 
         //  Assign notes to 20 of those customers
         $custList = Customer::inRandomOrder()->limit(20)->get();
-        foreach($custList as $cust)
-        {
+        foreach ($custList as $cust) {
             CustomerNote::factory()->create([
-                'cust_id'    => $cust->cust_id,
+                'cust_id' => $cust->cust_id,
             ]);
         }
 
         //  Assign files to 10 of the customers
         $custList = Customer::inRandomOrder()->limit(10)->get();
-        foreach($custList as $cust)
-        {
-            $file   = FileUploads::factory()->create();
+        foreach ($custList as $cust) {
+            $file = FileUploads::factory()->create();
             CustomerFile::factory()->create([
                 'cust_id' => $cust->cust_id,
-                'file_id' => $file->file_id
+                'file_id' => $file->file_id,
             ]);
 
             //  Create a basic image file on the filesystem

@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admin\Logs;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class SetLogSettingsTest extends TestCase
@@ -15,7 +13,7 @@ class SetLogSettingsTest extends TestCase
     public function test_invoke_guest()
     {
         $data = [
-            'days'  => 30,
+            'days' => 30,
             'level' => 'debug',
         ];
 
@@ -28,7 +26,7 @@ class SetLogSettingsTest extends TestCase
     public function test_invoke_no_permission()
     {
         $data = [
-            'days'  => 30,
+            'days' => 30,
             'level' => 'debug',
         ];
 
@@ -39,7 +37,7 @@ class SetLogSettingsTest extends TestCase
     public function test_invoke()
     {
         $data = [
-            'days'  => 30,
+            'days' => 30,
             'level' => 'debug',
         ];
 

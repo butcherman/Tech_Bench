@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PasswordPolicyRequest;
 use App\Models\User;
 use App\Traits\AppSettingsTrait;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -24,13 +22,13 @@ class UserPasswordPolicyController extends Controller
 
         return Inertia::render('Admin/User/PasswordPolicy', [
             'policy' => [
-                'expire'             => config('auth.passwords.settings.expire'),
-                'min_length'         => config('auth.passwords.settings.min_length'),
+                'expire' => config('auth.passwords.settings.expire'),
+                'min_length' => config('auth.passwords.settings.min_length'),
                 'contains_uppercase' => (bool) config('auth.passwords.settings.contains_uppercase'),
                 'contains_lowercase' => (bool) config('auth.passwords.settings.contains_lowercase'),
-                'contains_number'    => (bool) config('auth.passwords.settings.contains_number'),
-                'contains_special'   => (bool) config('auth.passwords.settings.contains_special'),
-            ]
+                'contains_number' => (bool) config('auth.passwords.settings.contains_number'),
+                'contains_special' => (bool) config('auth.passwords.settings.contains_special'),
+            ],
         ]);
     }
 
@@ -39,8 +37,7 @@ class UserPasswordPolicyController extends Controller
      */
     public function store(PasswordPolicyRequest $request)
     {
-        foreach($request->all() as $settingKey => $settingValue)
-        {
+        foreach ($request->all() as $settingKey => $settingValue) {
             $this->saveSettings('auth.passwords.settings.'.$settingKey, $settingValue);
         }
         Log::notice('Password policy has been updated by '.$request->user()->username, $request->toArray());

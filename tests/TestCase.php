@@ -12,7 +12,7 @@ abstract class TestCase extends BaseTestCase
 
     public function setUp(): void
     {
-        Parent::setup();
+        parent::setup();
 
         //  Cleanup memory leak caused by Faker
         gc_collect_cycles();
@@ -20,7 +20,7 @@ abstract class TestCase extends BaseTestCase
 
     public function tearDown(): void
     {
-        Parent::tearDown();
+        parent::tearDown();
 
         //  Cleanup memory leak caused by Faker
         gc_collect_cycles();

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Admin\Config;
 
-use Tests\TestCase;
 use App\Models\User;
+use Tests\TestCase;
 
 class SetConfigTest extends TestCase
 {
@@ -13,15 +13,15 @@ class SetConfigTest extends TestCase
     public function test_invoke_guest()
     {
         $data = [
-            'timezone'      => 'Pacific/Pitcairn',
-            'filesize'      => 123456,
-            'url'           => 'https://test_link.com',
-            'allowOath'     => true,
+            'timezone' => 'Pacific/Pitcairn',
+            'filesize' => 123456,
+            'url' => 'https://test_link.com',
+            'allowOath' => true,
             'allowRegister' => true,
-            'tenantId'      => 'somethingRandom',
-            'clientId'      => 'anotherRandom',
-            'clientSecret'  => 'shhDontTell',
-            'redirectUri'   => 'localhost/redirect/',
+            'tenantId' => 'somethingRandom',
+            'clientId' => 'anotherRandom',
+            'clientSecret' => 'shhDontTell',
+            'redirectUri' => 'localhost/redirect/',
         ];
 
         $response = $this->post(route('admin.set-config'), $data);
@@ -33,15 +33,15 @@ class SetConfigTest extends TestCase
     public function test_invoke_no_permission()
     {
         $data = [
-            'timezone'      => 'Pacific/Pitcairn',
-            'filesize'      => 123456,
-            'url'           => 'https://test_link.com',
-            'allowOath'     => true,
+            'timezone' => 'Pacific/Pitcairn',
+            'filesize' => 123456,
+            'url' => 'https://test_link.com',
+            'allowOath' => true,
             'allowRegister' => true,
-            'tenantId'      => 'somethingRandom',
-            'clientId'      => 'anotherRandom',
-            'clientSecret'  => 'shhDontTell',
-            'redirectUri'   => 'localhost/redirect/',
+            'tenantId' => 'somethingRandom',
+            'clientId' => 'anotherRandom',
+            'clientSecret' => 'shhDontTell',
+            'redirectUri' => 'localhost/redirect/',
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('admin.set-config'), $data);
@@ -51,15 +51,15 @@ class SetConfigTest extends TestCase
     public function test_invoke()
     {
         $data = [
-            'timezone'      => 'Pacific/Pitcairn',
-            'filesize'      => 123456,
-            'url'           => 'https://test_link.com',
-            'allowOath'     => true,
+            'timezone' => 'Pacific/Pitcairn',
+            'filesize' => 123456,
+            'url' => 'https://test_link.com',
+            'allowOath' => true,
             'allowRegister' => true,
-            'tenantId'      => 'somethingRandom',
-            'clientId'      => 'anotherRandom',
-            'clientSecret'  => 'shhDontTell',
-            'redirectUri'   => 'localhost/redirect/',
+            'tenantId' => 'somethingRandom',
+            'clientId' => 'anotherRandom',
+            'clientSecret' => 'shhDontTell',
+            'redirectUri' => 'localhost/redirect/',
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.set-config'), $data);

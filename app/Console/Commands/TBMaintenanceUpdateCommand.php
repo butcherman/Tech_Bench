@@ -14,7 +14,8 @@ use ZanySoft\Zip\Zip;
  */
 class TBMaintenanceUpdateCommand extends Command
 {
-    protected $signature   = 'tb_maintenance:update {--y|yes}';
+    protected $signature = 'tb_maintenance:update {--y|yes}';
+
     protected $description = 'Check for a newer Tech Bench version';
 
     /**
@@ -32,35 +33,32 @@ class TBMaintenanceUpdateCommand extends Command
     {
         $this->info('Checking for Updates');
 
-        $verData        = $this->getVersionData();
+        $verData = $this->getVersionData();
         $releaseVersion = $verData['tag_name'];
         $currentVersion = (new Version())->compact();
 
         //  Determine if the new version is higher than installed version
         $compare = version_compare($releaseVersion, $currentVersion);
 
-        if($compare < 1)
-        {
+        if ($compare < 1) {
             $this->info('You are running the most current version of Tech Bench');
             $this->info('No update necessary');
+
             return 0;
         }
 
         //  New version available - check to install
         $this->info('There is a newer version of Tech Bench available');
 
-        if($this->option('yes'))
-        {
+        if ($this->option('yes')) {
             $confirm = true;
-        }
-        else
-        {
+        } else {
             $confirm = $this->confirm('Would you like to install it?');
         }
 
-        if(!$confirm)
-        {
+        if (! $confirm) {
             $this->info('Exiting...');
+
             return 0;
         }
 
@@ -79,7 +77,7 @@ class TBMaintenanceUpdateCommand extends Command
      */
     protected function getVersionData()
     {
-        $url      = 'https://api.github.com/repos/butcherman/tech_bench/releases/latest';
+        $url = 'https://api.github.com/repos/butcherman/tech_bench/releases/latest';
         $response = Http::get($url);
 
         return $response;
@@ -112,9 +110,9 @@ class TBMaintenanceUpdateCommand extends Command
         $this->info('Extracting Release');
 
         //  Verify the staging folder is empty and writable
-        if(!is_writable('/staging'))
-        {
+        if (! is_writable('/staging')) {
             $this->error('Please add Write permissions to the /staging folder');
+
             return false;
         }
         $this->wipeStaging();
@@ -127,16 +125,14 @@ class TBMaintenanceUpdateCommand extends Command
 
         //  Move files to staging folder
         $directoryName = Storage::disk('updates')->directories('tmp')[0];
-        $fileList      = Storage::disk('updates')->allFiles($directoryName);
+        $fileList = Storage::disk('updates')->allFiles($directoryName);
 
         $this->info('Staging Release');
-        foreach($fileList as $file)
-        {
+        foreach ($fileList as $file) {
             $rename = str_replace($directoryName, '', $file);
 
             $info = pathinfo($rename);
-            if(!File::isDirectory('/staging/'.$info['dirname']))
-            {
+            if (! File::isDirectory('/staging/'.$info['dirname'])) {
                 File::makeDirectory('/staging/'.$info['dirname'], 0755, true);
             }
 
@@ -154,8 +150,7 @@ class TBMaintenanceUpdateCommand extends Command
     protected function wipeStaging()
     {
         $fileList = File::allFiles('/staging');
-        foreach($fileList as $file)
-        {
+        foreach ($fileList as $file) {
             File::delete($file);
         }
     }

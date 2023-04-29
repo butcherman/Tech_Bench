@@ -3,10 +3,10 @@
 namespace App\Http\Requests\Customers;
 
 use App\Jobs\CustomerRemoveFilesJob;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Customer;
 use App\Models\CustomerFile;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class SoftDeletedRequest extends FormRequest
 {
@@ -15,8 +15,7 @@ class SoftDeletedRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->isMethod('POST'))
-        {
+        if ($this->isMethod('POST')) {
             return $this->user()->can('restore', Customer::class);
         }
 
@@ -38,8 +37,7 @@ class SoftDeletedRequest extends FormRequest
      */
     public function restore()
     {
-        foreach($this->cust_list as $custId)
-        {
+        foreach ($this->cust_list as $custId) {
             $cust = Customer::onlyTrashed()->where('cust_id', $custId)->first();
             $cust->restore();
             Log::stack(['daily', 'cust'])->info('Customer '.$cust->name.' has been restored by '.$this->user()->username);
@@ -53,14 +51,12 @@ class SoftDeletedRequest extends FormRequest
     {
         $fileList = [];
 
-        foreach($this->cust_list as $custId)
-        {
-            $cust     = Customer::onlyTrashed()->where('cust_id', $custId)->first();
+        foreach ($this->cust_list as $custId) {
+            $cust = Customer::onlyTrashed()->where('cust_id', $custId)->first();
 
             //  Get a list of the customers files to destroy later
             $custFiles = CustomerFile::where('cust_id', $custId)->get();
-            foreach($custFiles as $file)
-            {
+            foreach ($custFiles as $file) {
                 $fileList[] = $file->file_id;
             }
 

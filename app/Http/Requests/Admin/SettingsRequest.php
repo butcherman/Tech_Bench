@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\AppSettings;
+use Illuminate\Foundation\Http\FormRequest;
 
 class SettingsRequest extends FormRequest
 {
@@ -21,15 +21,15 @@ class SettingsRequest extends FormRequest
     public function rules()
     {
         return [
-            'url'           => 'required|string',
-            'timezone'      => 'required|string',
-            'filesize'      => 'required|numeric',
-            'allowOath'     => 'required|boolean',
+            'url' => 'required|string',
+            'timezone' => 'required|string',
+            'filesize' => 'required|numeric',
+            'allowOath' => 'required|boolean',
             'allowRegister' => 'nullable|boolean',
-            'tenantId'      => 'nullable|string',
-            'clientId'      => 'nullable|string',
-            'clientSecret'  => 'nullable|string',
-            'redirectUri'   => 'required|string',
+            'tenantId' => 'nullable|string',
+            'clientId' => 'nullable|string',
+            'clientSecret' => 'nullable|string',
+            'redirectUri' => 'required|string',
         ];
     }
 
@@ -40,8 +40,7 @@ class SettingsRequest extends FormRequest
     {
         $key = '';
 
-        switch($field)
-        {
+        switch ($field) {
             case 'url':
                 $key = 'app.url';
                 break;

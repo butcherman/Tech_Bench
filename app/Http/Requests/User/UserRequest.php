@@ -3,8 +3,8 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -13,8 +13,7 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->user)
-        {
+        if ($this->user) {
             return $this->user()->can('update', $this->user);
         }
 
@@ -27,18 +26,18 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'   => [
+            'username' => [
                 'required',
                 Rule::unique('users')->ignore($this->route('user'), 'user_id'),
             ],
             'first_name' => 'required|string',
-            'last_name'  => 'required|string',
-            'email'      => [
+            'last_name' => 'required|string',
+            'email' => [
                 'required',
                 'email',
                 Rule::unique('users')->ignore($this->route('user'), 'user_id'),
             ],
-            'role_id'    => 'required|exists:user_roles',
+            'role_id' => 'required|exists:user_roles',
         ];
     }
 }

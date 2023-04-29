@@ -4,21 +4,20 @@ namespace App\Console\Commands;
 
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
+use App\Models\CustomerFile;
+use App\Models\DataField;
+use App\Models\FileUploads;
+use App\Models\TechTipFile;
+use App\Models\User;
+use App\Models\UserInitialize;
+use App\Models\UserRolePermissions;
+use App\Models\UserRolePermissionTypes;
+use App\Models\UserSetting;
+use App\Models\UserSettingType;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
-
-use App\Models\User;
-use App\Models\FileUploads;
-use App\Models\UserSetting;
-use App\Models\TechTipFile;
-use App\Models\CustomerFile;
-use App\Models\DataField;
-use App\Models\UserInitialize;
-use App\Models\UserSettingType;
-use App\Models\UserRolePermissions;
-use App\Models\UserRolePermissionTypes;
 
 /**
  * @codeCoverageIgnore
@@ -28,10 +27,13 @@ class TbMaintenanceRunCommand extends Command
     protected $signature = 'tb_maintenance:run
                                         {--f|fix : Automatically fix any issues}
                                         {--r|report : Create a downloadable report}';
+
     protected $description = 'Check for missing data keys in DB and missing/rogue files in filesystem';
 
-    protected $fix        = false;
-    protected $rep        = false;
+    protected $fix = false;
+
+    protected $rep = false;
+
     protected $reportData = [];
 
     /**
@@ -49,7 +51,7 @@ class TbMaintenanceRunCommand extends Command
     {
         $this->fix = $this->option('fix');
         $this->rep = $this->option('report');
-        $today     = Carbon::now();
+        $today = Carbon::now();
 
         $this->info('Running Maintenance Command');
         $this->info('Taking Tech Bench offline for Maintenance');
@@ -59,7 +61,7 @@ class TbMaintenanceRunCommand extends Command
         ini_set('max_execution_time', 1200); //  1200 seconds = 20 minutes
 
         //  Initialize Report Data
-        $this->repData  = "***********************************************************\n";
+        $this->repData = "***********************************************************\n";
         $this->repData .= "*                                                         *\n";
         $this->repData .= "*               Database Report $today->year-$today->month-$today->day                *\n";
         $this->repData .= "*                                                         *\n";
@@ -76,7 +78,6 @@ class TbMaintenanceRunCommand extends Command
         $this->customerCheck();
 
         //  TODO - Make a report on what happened
-
 
         /**
          * Run DB Check for file system
@@ -114,8 +115,7 @@ class TbMaintenanceRunCommand extends Command
 
         // Verify all users have the correct settings
         $settingsData = $this->validateUserSettings();
-        if($settingsData)
-        {
+        if ($settingsData) {
             $this->error('User Settings Data Missing:');
             $this->table(
                 ['User ID', 'User Name', 'Missing Setting ID'],
@@ -123,30 +123,25 @@ class TbMaintenanceRunCommand extends Command
             );
 
             //  If the Fix option was enabled, correct the issues
-            if($this->fix)
-            {
+            if ($this->fix) {
                 $this->fixUserSettings($settingsData);
             }
             $this->newLine();
-        }
-        else
-        {
+        } else {
             $this->info('User Settings OK');
             $this->newLine();
         }
 
         //  Check for old initialization links
         $openLinks = $this->checkInitializeLinks();
-        if($openLinks)
-        {
+        if ($openLinks) {
             $this->error('Users who have not finished setting up their accounts');
             $this->table(
                 ['Username', 'Age of Link (in days)', '> 3 days old'],
                 $openLinks
             );
 
-            if($this->fix)
-            {
+            if ($this->fix) {
                 // purge user initialization links older than 72 hours
                 UserInitialize::where('created_at', '<', Carbon::now()->subDays(3))->delete();
             }
@@ -157,7 +152,7 @@ class TbMaintenanceRunCommand extends Command
         //  Fill out report data for this function
         $this->reportData['users']['admin_list'] = $adminList;
         $this->reportData['users']['user_count'] = $userData;
-        $this->reportData['users']['settings']   = $settingsData;
+        $this->reportData['users']['settings'] = $settingsData;
         $this->reportData['users']['init_links'] = $openLinks;
     }
 
@@ -176,7 +171,7 @@ class TbMaintenanceRunCommand extends Command
         $adminPermissions = UserRolePermissionTypes::where('is_admin_link', true)->get();
         //  Get all of the roles that allow at least one of these permissions
         $rolePermList = UserRolePermissions::where('allow', true)->whereIn('perm_type_id', $adminPermissions->pluck('perm_type_id'))->get()->pluck('role_id')->unique();
-        $userList     = User::whereIn('role_id', $rolePermList)->get(['user_id', 'first_name', 'last_name'])->makeVisible('user_id')->makeHidden(['full_name', 'initials'])->toArray();
+        $userList = User::whereIn('role_id', $rolePermList)->get(['user_id', 'first_name', 'last_name'])->makeVisible('user_id')->makeHidden(['full_name', 'initials'])->toArray();
 
         return $userList;
     }
@@ -205,16 +200,14 @@ class TbMaintenanceRunCommand extends Command
         $userSettings = User::withTrashed()->with('UserSetting')->get();
 
         //  Compare the settings to make sure that they are all there
-        foreach($userSettings as $user)
-        {
+        foreach ($userSettings as $user) {
             $settingsObj = $user->UserSetting->pluck('setting_type_id');
-            $missing     = $settings->diff($settingsObj);
+            $missing = $settings->diff($settingsObj);
 
-            if($missing->isNotEmpty())
-            {
+            if ($missing->isNotEmpty()) {
                 $failed[] = [
-                    'user_id'         => $user->user_id,
-                    'full_name'       => $user->full_name,
+                    'user_id' => $user->user_id,
+                    'full_name' => $user->full_name,
                     'setting_type_id' => $missing->flatten(),
                 ];
             }
@@ -230,14 +223,12 @@ class TbMaintenanceRunCommand extends Command
     {
         $this->line('Fixing User Settings');
 
-        foreach($missingData as $user)
-        {
-            foreach($user['setting_type_id'] as $m)
-            {
+        foreach ($missingData as $user) {
+            foreach ($user['setting_type_id'] as $m) {
                 UserSetting::create([
-                    'user_id'         => $user['user_id'],
+                    'user_id' => $user['user_id'],
                     'setting_type_id' => $m,
-                    'value'           => true,
+                    'value' => true,
                 ]);
             }
         }
@@ -252,15 +243,13 @@ class TbMaintenanceRunCommand extends Command
     {
         $initLinks = UserInitialize::all();
 
-        if($initLinks->isNotEmpty())
-        {
+        if ($initLinks->isNotEmpty()) {
             $openLinks = [];
-            foreach($initLinks as $link)
-            {
+            foreach ($initLinks as $link) {
                 $openLinks[] = [
                     'username' => $link->username,
-                    'age'      => $link->created_at->diffInDays(Carbon::now()),
-                    'expired'  => $link->created_at->diffInHours(Carbon::now()) > 72 ? 'yes' : 'no',
+                    'age' => $link->created_at->diffInDays(Carbon::now()),
+                    'expired' => $link->created_at->diffInHours(Carbon::now()) > 72 ? 'yes' : 'no',
                 ];
             }
 
@@ -278,36 +267,30 @@ class TbMaintenanceRunCommand extends Command
 
     /**
      * All functions related to checking customers
-    */
+     */
     protected function customerCheck()
     {
         $this->line('Checking Customer Equipment for data type entries');
         $missingEquipData = $this->checkCustomerEquipment();
-        if($missingEquipData)
-        {
+        if ($missingEquipData) {
             $this->line('Some Customer Equipment Data is missing');
             $this->table(
                 ['cust_equip_id', 'missing_field_id'],
                 $missingEquipData
             );
 
-            if($this->fix)
-            {
-                foreach($missingEquipData as $mis)
-                {
-                    foreach($mis['missing_field'] as $field)
-                    {
+            if ($this->fix) {
+                foreach ($missingEquipData as $mis) {
+                    foreach ($mis['missing_field'] as $field) {
                         CustomerEquipmentData::create([
                             'cust_equip_id' => $mis['cust_equip_id'],
-                            'field_id'      => $field,
+                            'field_id' => $field,
                         ]);
                     }
                 }
                 $this->line('Missing Equipment Data fixed');
             }
-        }
-        else
-        {
+        } else {
             $this->line('No missing Customer Equipiment Data');
         }
 
@@ -321,22 +304,19 @@ class TbMaintenanceRunCommand extends Command
     protected function checkCustomerEquipment()
     {
         //  Get the data fields for all equipment types
-        $missing    = [];
+        $missing = [];
         $dataFields = DataField::get()->groupBy('equip_id');
-        foreach($dataFields as $group)
-        {
-            $fieldList    = $group->pluck('field_id');
+        foreach ($dataFields as $group) {
+            $fieldList = $group->pluck('field_id');
             $customerList = CustomerEquipment::where('equip_id', $group[0]->equip_id)->with('CustomerEquipmentData')->get();
 
-            foreach($customerList as $cust)
-            {
+            foreach ($customerList as $cust) {
 
-                $equipData  = $cust->CustomerEquipmentData;
+                $equipData = $cust->CustomerEquipmentData;
                 $custFields = $equipData->pluck('field_id');
-                $diff       = array_diff($fieldList->toArray(), $custFields->toArray());
+                $diff = array_diff($fieldList->toArray(), $custFields->toArray());
 
-                if($diff)
-                {
+                if ($diff) {
                     $missing[] = [
                         'cust_equip_id' => $cust->cust_equip_id,
                         'missing_field' => collect($diff),
@@ -347,7 +327,6 @@ class TbMaintenanceRunCommand extends Command
 
         return $missing;
     }
-
 
 /*****************************************************************************************************************************
  *                                                                                                                           *
@@ -361,18 +340,20 @@ class TbMaintenanceRunCommand extends Command
     protected function fileSystemCheck()
     {
         //  Simple function to convert the bytes into a readable file size
-        function readableFilesize($bytes, $decimals = 2){
-            $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+        function readableFilesize($bytes, $decimals = 2)
+        {
+            $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
             $factor = floor((strlen($bytes) - 1) / 3);
-            return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+
+            return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).@$size[$factor];
         }
 
         $this->line('Checking Filesystem');
         $this->newLine();
 
-        $freeSpace  = disk_free_space('/app');
+        $freeSpace = disk_free_space('/app');
         $totalSpace = disk_total_space('/app');
-        $usedSpace  = $totalSpace - $freeSpace;
+        $usedSpace = $totalSpace - $freeSpace;
 
         $this->line('Available HDD Space');
         $this->table(
@@ -383,96 +364,78 @@ class TbMaintenanceRunCommand extends Command
                     readableFilesize($freeSpace),
                     readableFilesize($usedSpace),
                     round(($usedSpace / $totalSpace * 100), 2).'%',
-                ]
+                ],
             ]
         );
 
         //  Find directories in the disk that have no files inside
         $emptyDir = $this->findEmptyDirectories();
-        if($emptyDir)
-        {
+        if ($emptyDir) {
             $this->error('The following directories are empty and can be deleted');
-            foreach($emptyDir as $dir)
-            {
+            foreach ($emptyDir as $dir) {
                 $this->line('     '.config('filesystems.disks.local.root').DIRECTORY_SEPARATOR.$dir);
             }
 
-            if($this->fix)
-            {
+            if ($this->fix) {
                 $this->fixEmptyDirectories($emptyDir);
                 $this->info('Deleted empty directories');
             }
-        }
-        else
-        {
+        } else {
             $this->info('No empty directories found');
         }
         $this->newLine();
 
         //  Find missing and extra files
-        $fileData  = $this->runFileMaintenance();
+        $fileData = $this->runFileMaintenance();
         $leftOvers = [];
-        if($fileData['missing'])
-        {
+        if ($fileData['missing']) {
             $this->error('The following files are missing from the file system');
             $this->table(
                 ['file_id', 'disk', 'file_name'],
                 $fileData['missing']
             );
 
-            if($this->fix)
-            {
+            if ($this->fix) {
                 $leftOvers = $this->removeMissingPointers($fileData['missing']);
-                if($leftOvers)
-                {
+                if ($leftOvers) {
                     $this->error('There are file pointers that may be in use by modules');
                     $this->error('You will need to run maintenance for the modules to completely remove these pointers');
                     $this->table(
                         ['file_id', 'disk', 'file_name'],
                         $leftOvers
                     );
-                }
-                else
-                {
+                } else {
                     $this->info('Missing file pointers deleted');
                 }
             }
-        }
-        else
-        {
+        } else {
             $this->info('No missing files');
         }
 
         $this->newLine();
-        if($fileData['extra'])
-        {
+        if ($fileData['extra']) {
             $this->error('The following files do not have database pointers and can be deleted');
-            foreach($fileData['extra'] as $file)
-            {
+            foreach ($fileData['extra'] as $file) {
                 $this->line('     '.$file);
             }
 
-            if($this->fix)
-            {
+            if ($this->fix) {
                 $this->line('Deleting extra files');
-                foreach($fileData['extra'] as $file)
-                {
+                foreach ($fileData['extra'] as $file) {
                     Storage::delete($file);
                 }
                 $this->line('Extra files deleted');
             }
-        }
-        else
-        {
+        } else {
             $this->info('No files without Database Pointers');
         }
 
         //  Fill out report data for this function
-        $this->reportData['filesystem']['available_space']   = ['size' => $totalSpace, 'free' => $freeSpace];
+        $this->reportData['filesystem']['available_space'] = ['size' => $totalSpace, 'free' => $freeSpace];
         $this->reportData['filesystem']['empty_directories'] = $emptyDir;
-        $this->reportData['filesystem']['missing_files']     = $fileData['missing'];
-        $this->reportData['filesystem']['extra_files']       = $fileData['extra'];
-        $this->reportData['filesystem']['leftover_files']    = $leftOvers;
+        $this->reportData['filesystem']['missing_files'] = $fileData['missing'];
+        $this->reportData['filesystem']['extra_files'] = $fileData['extra'];
+        $this->reportData['filesystem']['leftover_files'] = $leftOvers;
     }
 
     /**
@@ -483,10 +446,8 @@ class TbMaintenanceRunCommand extends Command
         $emptyDir = [];
 
         $directoryList = Storage::allDirectories();
-        foreach($directoryList as $dir)
-        {
-            if(count(Storage::files($dir)) == 0 && count(Storage::directories($dir)) == 0 && $dir !== 'chunks')
-            {
+        foreach ($directoryList as $dir) {
+            if (count(Storage::files($dir)) == 0 && count(Storage::directories($dir)) == 0 && $dir !== 'chunks') {
                 $emptyDir[] = $dir;
             }
         }
@@ -499,8 +460,7 @@ class TbMaintenanceRunCommand extends Command
      */
     protected function fixEmptyDirectories($dirList)
     {
-        foreach($dirList as $dir)
-        {
+        foreach ($dirList as $dir) {
             Storage::deleteDirectory($dir);
         }
     }
@@ -512,14 +472,12 @@ class TbMaintenanceRunCommand extends Command
     protected function runFileMaintenance()
     {
         $fileList = Storage::disk('local')->allFiles();
-        $dbList   = FileUploads::all();
-        $missing  = [];
+        $dbList = FileUploads::all();
+        $missing = [];
 
         //  Remove any leading or trailing / from the folder column (only if the fix flag is enabled)
-        if($this->fix)
-        {
-            foreach($dbList as $file)
-            {
+        if ($this->fix) {
+            foreach ($dbList as $file) {
                 $trim = trim(rtrim($file->folder, '/'), '/');
                 $file->folder = $trim;
                 $file->save();
@@ -527,30 +485,30 @@ class TbMaintenanceRunCommand extends Command
         }
 
         //  Remove the .gitignore file from the file list
-        if(($key = array_search('.gitignore', $fileList)) !== false) unset($fileList[$key]);
+        if (($key = array_search('.gitignore', $fileList)) !== false) {
+            unset($fileList[$key]);
+        }
         //  Remove the files that are in the public directory
         $publicFiles = preg_grep('/^public\//i', $fileList);
         $fileList = array_diff_key($fileList, $publicFiles);
 
-        foreach($dbList as $file)
-        {
+        foreach ($dbList as $file) {
             $disk = $file->disk === 'default' ? 'local' : $file->disk;
 
-            if(Storage::disk($disk)->missing($file->folder.DIRECTORY_SEPARATOR.$file->file_name))
-            {
+            if (Storage::disk($disk)->missing($file->folder.DIRECTORY_SEPARATOR.$file->file_name)) {
                 $missing[] = [
                     'file_id' => $file->file_id,
-                    'disk'    => $disk,
-                    'path'    => Storage::disk($disk)->path($file->folder.DIRECTORY_SEPARATOR.$file->file_name),
+                    'disk' => $disk,
+                    'path' => Storage::disk($disk)->path($file->folder.DIRECTORY_SEPARATOR.$file->file_name),
                 ];
-            }
-            else
-            {
+            } else {
                 $absolutePath = Storage::disk($disk)->path($file->folder.DIRECTORY_SEPARATOR.$file->file_name);
-                $localPath    = str_replace(storage_path('app').DIRECTORY_SEPARATOR, '', $absolutePath);
+                $localPath = str_replace(storage_path('app').DIRECTORY_SEPARATOR, '', $absolutePath);
 
                 //  Remove the file from the file list
-                if(($key = array_search($localPath, $fileList)) !== false) unset($fileList[$key]);
+                if (($key = array_search($localPath, $fileList)) !== false) {
+                    unset($fileList[$key]);
+                }
             }
         }
 
@@ -562,7 +520,7 @@ class TbMaintenanceRunCommand extends Command
 
         return [
             'missing' => $missing,
-            'extra'   => $fileList,
+            'extra' => $fileList,
         ];
     }
 
@@ -572,21 +530,21 @@ class TbMaintenanceRunCommand extends Command
     protected function removeMissingPointers($pointerList)
     {
         $leftOvers = [];
-        foreach($pointerList as $file)
-        {
+        foreach ($pointerList as $file) {
             //  Make sure that the file pointer is not in use by customers or tech tips
             $cFile = CustomerFile::withTrashed()->where('file_id', $file['file_id'])->first();
             $tFile = TechTipFile::where('file_id', $file['file_id'])->first();
 
-            if($cFile) $cFile->forceDelete();
-            if($tFile) $tFile->delete();
-
-            try
-            {
-                FileUploads::find($file['file_id'])->delete();
+            if ($cFile) {
+                $cFile->forceDelete();
             }
-            catch(QueryException $e)
-            {
+            if ($tFile) {
+                $tFile->delete();
+            }
+
+            try {
+                FileUploads::find($file['file_id'])->delete();
+            } catch (QueryException $e) {
                 $leftOvers[] = $file;
             }
         }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use Inertia\Middleware;
-use Illuminate\Http\Request;
-use PragmaRX\Version\Package\Version;
-
 use App\Actions\BuildNavbar;
+use Illuminate\Http\Request;
+use Inertia\Middleware;
+use PragmaRX\Version\Package\Version;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -28,32 +27,32 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => [
-                'success' => fn() => $request->session()->get('success'),
-                'warning' => fn() => $request->session()->get('warning'),
-                'danger'  => fn() => $request->session()->get('danger'),
-                'info'    => fn() => $request->session()->get('info'),
+                'success' => fn () => $request->session()->get('success'),
+                'warning' => fn () => $request->session()->get('warning'),
+                'danger' => fn () => $request->session()->get('danger'),
+                'info' => fn () => $request->session()->get('info'),
             ],
             //  App information that is shared and used on all pages
             'app' => [
-                'name'       => config('app.name'),
-                'logo'       => config('app.logo'),
-                'version'    => (new Version)->full(),
-                'copyright'  => (new Version)->copyright(),
+                'name' => config('app.name'),
+                'logo' => config('app.logo'),
+                'version' => (new Version)->full(),
+                'copyright' => (new Version)->copyright(),
                 //  Current logged in user
-                'user'       => fn() => $request->user() ? $request->user() : null,
+                'user' => fn () => $request->user() ? $request->user() : null,
                 //  File information
                 'fileData' => [
-                    'maxSize'   => config('filesystems.max_filesize'),
+                    'maxSize' => config('filesystems.max_filesize'),
                     'chunkSize' => config('filesystems.chunk_size'),
-                    'token'     => csrf_token(),
+                    'token' => csrf_token(),
                 ],
             ],
             'notifications' => [
-                'list' => fn() => $request->user() ? $request->user()->notifications : null,
-                'new'  => fn() => $request->user() ? $request->user()->unreadNotifications->count() : null,
+                'list' => fn () => $request->user() ? $request->user()->notifications : null,
+                'new' => fn () => $request->user() ? $request->user()->unreadNotifications->count() : null,
             ],
             //  Dynamically built navigation menu
-            'navbar' => fn() => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
+            'navbar' => fn () => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
         ]);
     }
 }

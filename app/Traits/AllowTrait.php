@@ -13,13 +13,12 @@ trait AllowTrait
 {
     protected function checkPermission(User $user, $description)
     {
-        $allowed = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function($q) use ($description) {
+        $allowed = UserRolePermissions::whereRoleId($user->role_id)->whereHas('UserRolePermissionTypes', function ($q) use ($description) {
             $q->where('description', $description);
         })->first();
 
         Log::channel('auth')->debug('User '.$user->username.' is trying to get permission for '.$description.'.  Result - '.$allowed);
-        if($allowed)
-        {
+        if ($allowed) {
             return $allowed->allow;
         }
 

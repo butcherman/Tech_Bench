@@ -15,20 +15,20 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-         //  Make it so that the admin password is not expired
-         User::find(1)->update([
+        //  Make it so that the admin password is not expired
+        User::find(1)->update([
             'password_expires' => null,
         ]);
 
         //  Create a Tech User that has restricted access
         User::create([
-            'user_id'          => 2,
-            'role_id'          => 4,
-            'username'         => 'tech',
-            'first_name'       => 'Tech',
-            'last_name'        => 'User',
-            'email'            => 'tech@em.com',
-            'password'         => bcrypt('password'),
+            'user_id' => 2,
+            'role_id' => 4,
+            'username' => 'tech',
+            'first_name' => 'Tech',
+            'last_name' => 'User',
+            'email' => 'tech@em.com',
+            'password' => bcrypt('password'),
             'password_expires' => null,
         ]);
 
@@ -42,31 +42,27 @@ class UserSeeder extends Seeder
         //  Create the user settings for each of the new users
         $settingData = UserSettingType::all();
 
-        foreach($settingData as $setting)
-        {
+        foreach ($settingData as $setting) {
             UserSetting::create([
-                'user_id'         => 2,
+                'user_id' => 2,
                 'setting_type_id' => $setting->setting_type_id,
-                'value'           => true,
+                'value' => true,
             ]);
         }
 
-        foreach($newUsers as $user)
-        {
-            foreach($settingData as $setting)
-            {
+        foreach ($newUsers as $user) {
+            foreach ($settingData as $setting) {
                 UserSetting::create([
-                    'user_id'         => $user->user_id,
+                    'user_id' => $user->user_id,
                     'setting_type_id' => $setting->setting_type_id,
-                    'value'           => false,
+                    'value' => false,
                 ]);
             }
         }
 
         //  Create 10 users and disable them
         $disabledUsers = User::factory()->count(5)->create();
-        foreach($disabledUsers as $user)
-        {
+        foreach ($disabledUsers as $user) {
             $user->delete();
         }
     }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use App\Traits\AppSettingsTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LogSettingsRequest;
+use App\Traits\AppSettingsTrait;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SetLogSettingsController extends Controller
 {
@@ -17,8 +17,7 @@ class SetLogSettingsController extends Controller
      */
     public function __invoke(LogSettingsRequest $request)
     {
-        foreach($request->all() as $key => $setting)
-        {
+        foreach ($request->all() as $key => $setting) {
             $this->saveSettings($request->getConfigkey($key), $setting);
         }
 

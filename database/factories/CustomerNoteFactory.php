@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use App\Models\Customer;
 use App\Models\CustomerNote;
-
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerNoteFactory extends Factory
@@ -25,12 +24,12 @@ class CustomerNoteFactory extends Factory
     public function definition()
     {
         return [
-            'cust_id'    => Customer::factory()->create()->cust_id,
+            'cust_id' => Customer::factory()->create()->cust_id,
             'created_by' => User::inRandomOrder()->first()->user_id,
-            'urgent'     => $this->faker->boolean(),
-            'shared'     => $this->faker->boolean(),
-            'subject'    => $this->faker->sentence(4),
-            'details'    => $this->faker->paragraph()
+            'urgent' => $this->faker->boolean(),
+            'shared' => $this->faker->boolean(),
+            'subject' => $this->faker->sentence(4),
+            'details' => $this->faker->paragraph(),
         ];
     }
 }

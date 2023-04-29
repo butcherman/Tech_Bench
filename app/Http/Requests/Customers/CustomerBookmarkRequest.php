@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Customers;
 
+use App\Models\UserCustomerBookmark;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
-use App\Models\UserCustomerBookmark;
 
 class CustomerBookmarkRequest extends FormRequest
 {
@@ -24,7 +24,7 @@ class CustomerBookmarkRequest extends FormRequest
     {
         return [
             'cust_id' => 'required|numeric|exists:customers',
-            'state'   => 'required|boolean',
+            'state' => 'required|boolean',
         ];
     }
 
@@ -33,12 +33,9 @@ class CustomerBookmarkRequest extends FormRequest
      */
     public function toggleBookmark()
     {
-        if($this->state)
-        {
+        if ($this->state) {
             $this->addBookmark();
-        }
-        else
-        {
+        } else {
             $this->removeBookmark();
         }
     }
@@ -54,10 +51,10 @@ class CustomerBookmarkRequest extends FormRequest
                 'cust_id' => $this->cust_id,
             ]);
             Log::stack(['daily', 'user'])->debug('User '.$this->user()->user_id.' has added Customer ID '.$this->cust_id.' to their bookmarks');
-        } catch(QueryException $e) {
+        } catch (QueryException $e) {
             Log::critical('User '.$this->user()->username.' is trying to add a bookmark that already exists', [
                 'cust_id' => $this->cust_id,
-                'state'   => $this->state,
+                'state' => $this->state,
                 'user_id' => $this->user()->user_id,
             ]);
             abort(409, 'Bookmark Already Exists');

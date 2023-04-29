@@ -2,11 +2,9 @@
 
 namespace App\Console;
 
-use App\Jobs\ApplicationBackupJob;
+use App\Jobs\GarbageCollectionJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-
-use App\Jobs\GarbageCollectionJob;
 
 class Kernel extends ConsoleKernel
 {
@@ -27,8 +25,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('telescope:prune')->daily();
 
         //  Nightly backup will only run if the task is
-        if(config('app.backups.enabled'))
-        {
+        if (config('app.backups.enabled')) {
             $schedule->command('tb_maintenance:backup')->dailyAt('03:00');
         }
     }

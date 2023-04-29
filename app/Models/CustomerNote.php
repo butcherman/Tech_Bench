@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CustomerNote extends Model
 {
@@ -12,19 +12,24 @@ class CustomerNote extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'note_id';
-    protected $guarded    = ['updated_at', 'created_at'];
-    protected $appends    = ['author', 'updated_author'];
-    protected $hidden     = ['created_by', 'updated_by', 'deleted_at'];
-    protected $casts      = [
+
+    protected $guarded = ['updated_at', 'created_at'];
+
+    protected $appends = ['author', 'updated_author'];
+
+    protected $hidden = ['created_by', 'updated_by', 'deleted_at'];
+
+    protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
-        'urgent'     => 'boolean',
-        'shared'     => 'boolean',
+        'urgent' => 'boolean',
+        'shared' => 'boolean',
     ];
 
     /**
      * Name of the user who created the note
+     *
      * @codeCoverageIgnore
      */
     public function getAuthorAttribute()
@@ -34,11 +39,13 @@ class CustomerNote extends Model
 
     /**
      * Name of the user who most recently updated the note
+     *
      * @codeCoverageIgnore
      */
     public function getUpdatedAuthorAttribute()
     {
         $user = User::withTrashed()->find($this->updated_by);
+
         return $user ? $user->full_name : null;
     }
 }

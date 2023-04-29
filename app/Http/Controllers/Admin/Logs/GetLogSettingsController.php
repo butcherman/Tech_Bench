@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
-use Inertia\Inertia;
-use Illuminate\Support\Arr;
 use App\Http\Controllers\Controller;
-use App\Traits\LogUtilitiesTrait;
 use App\Models\AppSettings;
+use App\Traits\LogUtilitiesTrait;
+use Illuminate\Support\Arr;
+use Inertia\Inertia;
 
 class GetLogSettingsController extends Controller
 {
@@ -21,8 +21,8 @@ class GetLogSettingsController extends Controller
 
         return Inertia::render('Admin/Logs/Settings', [
             'log-level' => config('logging.log_level'),
-            'days'      => config('logging.days'),
-            'types'     => array_map('strtolower', Arr::pluck($this->logLevels, 'name')),
+            'days' => config('logging.days'),
+            'types' => array_map('strtolower', Arr::pluck($this->logLevels, 'name')),
         ]);
     }
 }

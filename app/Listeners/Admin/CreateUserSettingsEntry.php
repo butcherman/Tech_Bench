@@ -2,10 +2,10 @@
 
 namespace App\Listeners\Admin;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Events\Admin\UserCreatedEvent;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
-use App\Events\Admin\UserCreatedEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class CreateUserSettingsEntry implements ShouldQueue
 {
@@ -15,12 +15,11 @@ class CreateUserSettingsEntry implements ShouldQueue
     public function handle(UserCreatedEvent $event)
     {
         $settings = UserSettingType::all();
-        foreach($settings as $setting)
-        {
+        foreach ($settings as $setting) {
             UserSetting::create([
-                'user_id'         => $event->user->user_id,
+                'user_id' => $event->user->user_id,
                 'setting_type_id' => $setting->setting_type_id,
-                'value'           => true,
+                'value' => true,
             ]);
         }
     }

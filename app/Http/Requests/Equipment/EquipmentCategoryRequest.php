@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Equipment;
 
-use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\EquipmentCategory;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class EquipmentCategoryRequest extends FormRequest
 {
@@ -13,8 +13,7 @@ class EquipmentCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->equipment_category)
-        {
+        if ($this->equipment_category) {
             return $this->user()->can('update', $this->equipment_category);
         }
 
@@ -29,8 +28,8 @@ class EquipmentCategoryRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('equipment_categories')->ignore($this->equipment_category, 'cat_id')
-            ]
+                Rule::unique('equipment_categories')->ignore($this->equipment_category, 'cat_id'),
+            ],
         ];
     }
 }

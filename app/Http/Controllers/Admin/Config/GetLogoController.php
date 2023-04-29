@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
-use Inertia\Inertia;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class GetLogoController extends Controller
 {

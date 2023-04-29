@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Customers;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
-use Illuminate\Http\Request;
 
 class GetDeletedItemsController extends Controller
 {

@@ -2,9 +2,8 @@
 
 namespace Tests\Unit\Rules;
 
-use Tests\TestCase;
 use App\Rules\ContainsNumber;
-
+use Tests\TestCase;
 
 class ContainsNumberTest extends TestCase
 {

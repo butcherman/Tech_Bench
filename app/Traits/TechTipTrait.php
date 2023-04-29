@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use App\Models\TechTipFile;
 use App\Models\TechTipEquipment;
+use App\Models\TechTipFile;
 
 trait TechTipTrait
 {
@@ -14,10 +14,9 @@ trait TechTipTrait
      */
     protected function addEquipment($tipId, $equipList)
     {
-        foreach($equipList as $equip)
-        {
+        foreach ($equipList as $equip) {
             TechTipEquipment::create([
-                'tip_id'   => $tipId,
+                'tip_id' => $tipId,
                 'equip_id' => $equip['equip_id'],
             ]);
         }
@@ -29,21 +28,17 @@ trait TechTipTrait
     protected function processUpdatedEquipment($tipId, $equipList)
     {
         $current = TechTipEquipment::where('tip_id', $tipId)->get();
-        $new     = [];
+        $new = [];
 
         //  Determine if the equipment is new or existing
-        foreach($equipList as $equip)
-        {
+        foreach ($equipList as $equip) {
             //  If the laravel_through_key value exists, then it was an existing equipment that has stayed in place
-            if(isset($equip['laravel_through_key']))
-            {
+            if (isset($equip['laravel_through_key'])) {
                 //  Remove that piece from the current equipment list so it is not updated later
-                $current = $current->filter(function($i) use ($equip) {
+                $current = $current->filter(function ($i) use ($equip) {
                     return $i->equip_id != $equip['equip_id'];
                 });
-            }
-            else
-            {
+            } else {
                 $new[] = $equip;
             }
         }
@@ -57,8 +52,7 @@ trait TechTipTrait
      */
     protected function processRemovedEquipment($removeList)
     {
-        foreach($removeList as $equip)
-        {
+        foreach ($removeList as $equip) {
             TechTipEquipment::find($equip->tip_equip_id)->delete();
         }
     }
@@ -69,16 +63,13 @@ trait TechTipTrait
     protected function processNewFiles($tipId, $move = false)
     {
         $fileData = session()->pull('new-file-upload');
-        if($fileData)
-        {
-            foreach($fileData as $file)
-            {
-                if($move)
-                {
+        if ($fileData) {
+            foreach ($fileData as $file) {
+                if ($move) {
                     $this->moveStoredFile($file->file_id, $tipId);
                 }
                 TechTipFile::create([
-                    'tip_id'  => $tipId,
+                    'tip_id' => $tipId,
                     'file_id' => $file->file_id,
                 ]);
             }
@@ -90,8 +81,7 @@ trait TechTipTrait
      */
     protected function removeFiles($tipId, $fileList)
     {
-        foreach($fileList as $file)
-        {
+        foreach ($fileList as $file) {
             TechTipFile::where('tip_id', $tipId)->where('file_id', $file)->first()->delete();
             $this->deleteFile($file);
         }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
 
 class LoginPageController extends Controller
 {

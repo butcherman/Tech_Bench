@@ -1,7 +1,7 @@
 <?php
 
-use Nwidart\Modules\Commands;
 use Nwidart\Modules\Activators\FileActivator;
+use Nwidart\Modules\Commands;
 
 return [
 
@@ -27,27 +27,27 @@ return [
 
     'stubs' => [
         'enabled' => true,
-        'path'    => base_path().'/stubs/module',
-        'files'   => [
-            'routes/web'                  => 'Routes/web.php',
-            'routes/api'                  => 'Routes/api.php',
-            'scaffold/config'             => 'Config/config.php',
-            'composer'                    => 'composer.json',
-            'assets/js/app'               => 'Resources/js/app.js',
-            'assets/js/Pages/Welcome'     => 'Resources/js/Pages/Welcome.vue',   //  FIXME - waiting on patch from nWidart Laravel Modules
-            'assets/sass/app'             => 'Resources/sass/app.scss',
-            'webpack'                     => 'webpack.mix.js',
-            'package'                     => 'package.json',
+        'path' => base_path().'/stubs/module',
+        'files' => [
+            'routes/web' => 'Routes/web.php',
+            'routes/api' => 'Routes/api.php',
+            'scaffold/config' => 'Config/config.php',
+            'composer' => 'composer.json',
+            'assets/js/app' => 'Resources/js/app.js',
+            'assets/js/Pages/Welcome' => 'Resources/js/Pages/Welcome.vue',   //  FIXME - waiting on patch from nWidart Laravel Modules
+            'assets/sass/app' => 'Resources/sass/app.scss',
+            'webpack' => 'webpack.mix.js',
+            'package' => 'package.json',
         ],
         'replacements' => [
-            'routes/web'      => ['LOWER_NAME', 'STUDLY_NAME'],
-            'routes/api'      => ['LOWER_NAME'],
-            'webpack'         => ['LOWER_NAME'],
-            'json'            => ['LOWER_NAME', 'STUDLY_NAME', 'MODULE_NAMESPACE', 'PROVIDER_NAMESPACE'],
+            'routes/web' => ['LOWER_NAME', 'STUDLY_NAME'],
+            'routes/api' => ['LOWER_NAME'],
+            'webpack' => ['LOWER_NAME'],
+            'json' => ['LOWER_NAME', 'STUDLY_NAME', 'MODULE_NAMESPACE', 'PROVIDER_NAMESPACE'],
             // 'views/index'     => ['LOWER_NAME'],
             // 'views/master'    => ['LOWER_NAME', 'STUDLY_NAME'],
             'scaffold/config' => ['STUDLY_NAME'],
-            'composer'        => [
+            'composer' => [
                 'LOWER_NAME',
                 'STUDLY_NAME',
                 'VENDOR',
@@ -100,35 +100,35 @@ return [
         | Set the generate key to false to not generate that folder
         */
         'generator' => [
-            'config'           => ['path' => 'Config',                     'generate' => true],
-            'command'          => ['path' => 'Console',                    'generate' => true],
-            'migration'        => ['path' => 'Database/Migrations',        'generate' => true],
-            'seeder'           => ['path' => 'Database/Seeders',           'generate' => true],
-            'factory'          => ['path' => 'Database/factories',         'generate' => true],
-            'model'            => ['path' => 'Entities',                   'generate' => true],
-            'routes'           => ['path' => 'Routes',                     'generate' => true],
-            'controller'       => ['path' => 'Http/Controllers',           'generate' => true],
-            'filter'           => ['path' => 'Http/Middleware',            'generate' => true],
-            'request'          => ['path' => 'Http/Requests',              'generate' => true],
-            'provider'         => ['path' => 'Providers',                  'generate' => true],
-            'assets'           => ['path' => 'Resources',                  'generate' => true],
-            'lang'             => ['path' => 'Resources/lang',             'generate' => true],
+            'config' => ['path' => 'Config',                     'generate' => true],
+            'command' => ['path' => 'Console',                    'generate' => true],
+            'migration' => ['path' => 'Database/Migrations',        'generate' => true],
+            'seeder' => ['path' => 'Database/Seeders',           'generate' => true],
+            'factory' => ['path' => 'Database/factories',         'generate' => true],
+            'model' => ['path' => 'Entities',                   'generate' => true],
+            'routes' => ['path' => 'Routes',                     'generate' => true],
+            'controller' => ['path' => 'Http/Controllers',           'generate' => true],
+            'filter' => ['path' => 'Http/Middleware',            'generate' => true],
+            'request' => ['path' => 'Http/Requests',              'generate' => true],
+            'provider' => ['path' => 'Providers',                  'generate' => true],
+            'assets' => ['path' => 'Resources',                  'generate' => true],
+            'lang' => ['path' => 'Resources/lang',             'generate' => true],
             // 'views'           => ['path' => 'Resources/views',            'generate' => false],
-            'pages'            => ['path' => 'Resources/js/Pages',         'generate' => true],
+            'pages' => ['path' => 'Resources/js/Pages',         'generate' => true],
             'js=notifications' => ['path' => 'Resources/js/Notifications', 'generate' => true],
-            'test'             => ['path' => 'Tests/Unit',                 'generate' => true],
-            'test-feature'     => ['path' => 'Tests/Feature',              'generate' => true],
-            'repository'       => ['path' => 'Repositories',               'generate' => false],
-            'event'            => ['path' => 'Events',                     'generate' => false],
-            'listener'         => ['path' => 'Listeners',                  'generate' => false],
-            'policies'         => ['path' => 'Policies',                   'generate' => false],
-            'rules'            => ['path' => 'Rules',                      'generate' => false],
-            'jobs'             => ['path' => 'Jobs',                       'generate' => false],
-            'emails'           => ['path' => 'Emails',                     'generate' => false],
-            'notifications'    => ['path' => 'Notifications',              'generate' => false],
-            'resource'         => ['path' => 'Transformers',               'generate' => false],
-            'component-view'   => ['path' => 'Resources/views/components', 'generate' => false],
-            'component-class'  => ['path' => 'View/Component',             'generate' => false],
+            'test' => ['path' => 'Tests/Unit',                 'generate' => true],
+            'test-feature' => ['path' => 'Tests/Feature',              'generate' => true],
+            'repository' => ['path' => 'Repositories',               'generate' => false],
+            'event' => ['path' => 'Events',                     'generate' => false],
+            'listener' => ['path' => 'Listeners',                  'generate' => false],
+            'policies' => ['path' => 'Policies',                   'generate' => false],
+            'rules' => ['path' => 'Rules',                      'generate' => false],
+            'jobs' => ['path' => 'Jobs',                       'generate' => false],
+            'emails' => ['path' => 'Emails',                     'generate' => false],
+            'notifications' => ['path' => 'Notifications',              'generate' => false],
+            'resource' => ['path' => 'Transformers',               'generate' => false],
+            'component-view' => ['path' => 'Resources/views/components', 'generate' => false],
+            'component-class' => ['path' => 'View/Component',             'generate' => false],
         ],
     ],
 
@@ -200,7 +200,7 @@ return [
 
     'scan' => [
         'enabled' => false,
-        'paths'   => [
+        'paths' => [
             base_path('vendor/*/*'),
             base_path('Modules/*'),
         ],
@@ -217,7 +217,7 @@ return [
     'composer' => [
         'vendor' => 'butcherman',
         'author' => [
-            'name'  => 'Butcherman',
+            'name' => 'Butcherman',
             'email' => 'ronbutcher@att.net',
         ],
     ],
@@ -233,8 +233,8 @@ return [
     |
     */
     'cache' => [
-        'enabled'  => false,
-        'key'      => 'tech-bench-modules',
+        'enabled' => false,
+        'key' => 'tech-bench-modules',
         'lifetime' => 60,
     ],
     /*
@@ -267,9 +267,9 @@ return [
     */
     'activators' => [
         'file' => [
-            'class'          => FileActivator::class,
-            'statuses-file'  => base_path('modules_statuses.json'),
-            'cache-key'      => 'activator.installed',
+            'class' => FileActivator::class,
+            'statuses-file' => base_path('modules_statuses.json'),
+            'cache-key' => 'activator.installed',
             'cache-lifetime' => 604800,
         ],
     ],

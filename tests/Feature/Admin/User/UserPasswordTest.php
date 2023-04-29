@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Admin\User;
 
-use Tests\TestCase;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
 class UserPasswordTest extends TestCase
 {
@@ -46,7 +46,7 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'password'              => $this->password,
+            'password' => $this->password,
             'password_confirmation' => $this->password,
         ];
 
@@ -60,7 +60,7 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'password'              => $this->password,
+            'password' => $this->password,
             'password_confirmation' => $this->password,
         ];
 
@@ -72,7 +72,7 @@ class UserPasswordTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'password'              => $this->password,
+            'password' => $this->password,
             'password_confirmation' => $this->password,
         ];
 

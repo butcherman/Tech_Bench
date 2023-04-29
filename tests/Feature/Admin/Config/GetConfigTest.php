@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Admin\Config;
 
-use Tests\TestCase;
 use App\Models\User;
+use Tests\TestCase;
 
 class GetConfigTest extends TestCase
 {

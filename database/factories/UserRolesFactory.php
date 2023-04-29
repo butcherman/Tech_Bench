@@ -24,22 +24,20 @@ class UserRolesFactory extends Factory
     public function definition()
     {
         return [
-            'name'        => $this->faker->word(2),
+            'name' => $this->faker->word(2),
             'description' => 'New test role',
         ];
     }
 
     public function configure()
     {
-        return $this->afterCreating(function($role)
-        {
+        return $this->afterCreating(function ($role) {
             $permissions = UserRolePermissionTypes::all();
-            foreach($permissions as $perm)
-            {
+            foreach ($permissions as $perm) {
                 UserRolePermissions::create([
-                    'role_id'      => $role->role_id,
+                    'role_id' => $role->role_id,
                     'perm_type_id' => $perm->perm_type_id,
-                    'allow'        => $this->faker->boolean(),
+                    'allow' => $this->faker->boolean(),
                 ]);
             }
         });

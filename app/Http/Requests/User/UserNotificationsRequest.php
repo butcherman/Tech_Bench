@@ -3,7 +3,6 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User;
-
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserNotificationsRequest extends FormRequest
@@ -23,7 +22,7 @@ class UserNotificationsRequest extends FormRequest
     {
         return [
             'settingsData' => 'required|array',
-            'user_id'      => 'required|exists:users',
+            'user_id' => 'required|exists:users',
         ];
     }
 }

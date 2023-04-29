@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Logs;
 
-use Inertia\Inertia;
-use Illuminate\Support\Arr;
 use App\Http\Controllers\Controller;
-use App\Traits\LogUtilitiesTrait;
 use App\Models\AppSettings;
+use App\Traits\LogUtilitiesTrait;
+use Illuminate\Support\Arr;
+use Inertia\Inertia;
 
 class LogsController extends Controller
 {

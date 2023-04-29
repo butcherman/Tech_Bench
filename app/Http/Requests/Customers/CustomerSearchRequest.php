@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Customers;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Customer;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class CustomerSearchRequest extends FormRequest
 {
@@ -22,12 +22,12 @@ class CustomerSearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'page'      => 'nullable|numeric',
-            'perPage'   => 'required|numeric',
+            'page' => 'nullable|numeric',
+            'perPage' => 'required|numeric',
             'sortField' => 'required|string',
-            'sortType'  => 'required|string',
-            'name'      => 'nullable|string',
-            'city'      => 'nullable|string',
+            'sortType' => 'required|string',
+            'name' => 'nullable|string',
+            'city' => 'nullable|string',
             'equipment' => 'nullable|string',
         ];
     }
@@ -37,8 +37,7 @@ class CustomerSearchRequest extends FormRequest
      */
     public function checkSearch()
     {
-        if($this->filled('name') || $this->filled('city') || $this->filled('equip'))
-        {
+        if ($this->filled('name') || $this->filled('city') || $this->filled('equip')) {
             return $this->search();
         }
 
@@ -51,12 +50,13 @@ class CustomerSearchRequest extends FormRequest
     protected function getAllCustomers()
     {
         Log::debug('Getting all customers');
-        $custList =  Customer::orderBy($this->sortField, $this->sortType)
+        $custList = Customer::orderBy($this->sortField, $this->sortType)
             ->with('CustomerEquipment')
             ->with('ParentEquipment')
             ->paginate($this->perPage);
 
         Log::debug('Customer List', $custList->toArray());
+
         return $custList;
     }
 
@@ -66,25 +66,25 @@ class CustomerSearchRequest extends FormRequest
     protected function search()
     {
         $equip = $this->equip;
-        $city  = $this->city;
-        $name  = $this->name;
+        $city = $this->city;
+        $name = $this->name;
 
         $custList = Customer::orderBy($this->sortField, $this->sortType)
             //  Search by equipment
-            ->when($this->filled('equip'), function($q) use ($equip) {
-                $q->whereHas('ParentEquipment', function($q2) use ($equip) {
+            ->when($this->filled('equip'), function ($q) use ($equip) {
+                $q->whereHas('ParentEquipment', function ($q2) use ($equip) {
                     $q2->where('name', $equip);
                 })
-                ->orWhereHas('EquipmentType', function($q2) use ($equip) {
-                    $q2->where('name', $equip);
-                });
+                    ->orWhereHas('EquipmentType', function ($q2) use ($equip) {
+                        $q2->where('name', $equip);
+                    });
             })
             //  Search by City
-            ->when($this->filled('city'), function($q) use ($city) {
+            ->when($this->filled('city'), function ($q) use ($city) {
                 $q->where('city', 'like', '%'.$city.'%');
             })
             //  Search by Name or ID
-            ->when($this->filled('name'), function($q) use ($name) {
+            ->when($this->filled('name'), function ($q) use ($name) {
                 $q->where('name', 'like', '%'.$name.'%')
                     ->orWhere('cust_id', 'like', '%'.$name.'%')
                     ->orWhere('dba_name', 'like', '%'.$name.'%');
@@ -94,6 +94,7 @@ class CustomerSearchRequest extends FormRequest
             ->paginate($this->perPage);
 
         Log::debug('Customer Search Results', $custList->toArray());
+
         return $custList;
     }
 }

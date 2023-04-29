@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Customers;
 
-use Tests\TestCase;
 use App\Models\User;
+use Tests\TestCase;
 
 class SetCustomerSettingsTest extends TestCase
 {
@@ -13,8 +13,8 @@ class SetCustomerSettingsTest extends TestCase
     public function test_invoke_guest()
     {
         $data = [
-            'selectId'     => false,
-            'updateSlug'   => false,
+            'selectId' => false,
+            'updateSlug' => false,
             'defaultState' => 'CA',
         ];
 
@@ -28,8 +28,8 @@ class SetCustomerSettingsTest extends TestCase
     public function test_invoke_no_permission()
     {
         $data = [
-            'selectId'     => false,
-            'updateSlug'   => false,
+            'selectId' => false,
+            'updateSlug' => false,
             'defaultState' => 'CA',
         ];
 
@@ -41,8 +41,8 @@ class SetCustomerSettingsTest extends TestCase
     public function test_invoke()
     {
         $data = [
-            'selectId'     => false,
-            'updateSlug'   => false,
+            'selectId' => false,
+            'updateSlug' => false,
             'defaultState' => 'CA',
         ];
 

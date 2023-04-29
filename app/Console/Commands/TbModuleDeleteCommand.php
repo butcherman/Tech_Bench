@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Traits\ModuleTrait;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Nwidart\Modules\Facades\Module;
-
-use App\Traits\ModuleTrait;
 
 /**
  * @codeCoverageIgnore
@@ -15,7 +14,8 @@ class TbModuleDeleteCommand extends Command
 {
     use ModuleTrait;
 
-    protected $signature   = 'tb_module:delete {module} {--y|yes}';
+    protected $signature = 'tb_module:delete {module} {--y|yes}';
+
     protected $description = 'Completely remove a Module from the Tech Bench';
 
     /**
@@ -36,28 +36,25 @@ class TbModuleDeleteCommand extends Command
         $module = Module::find($this->argument('module'));
 
         //  Verify that the module files actually exist
-        if(!$module)
-        {
+        if (! $module) {
             $this->error('Unable to find module specified.');
             $this->error('Please make sure that the files are loaded and the name is spelled correctly');
+
             return 0;
         }
 
         //  Have user verify that they want to disable the module
-        if($this->option('yes'))
-        {
+        if ($this->option('yes')) {
             $confirm = true;
-        }
-        else
-        {
+        } else {
             $this->line('You are about to delete Module '.$module->getName());
             $this->line('IMPORTANT:  THIS CANNOT BE UNDONE');
             $confirm = $this->confirm('Are you sure?');
         }
 
-        if(!$confirm)
-        {
+        if (! $confirm) {
             $this->info('Exiting');
+
             return 0;
         }
 
@@ -65,8 +62,7 @@ class TbModuleDeleteCommand extends Command
         $this->line('Please Wait');
 
         //  If the module was disabled, we need to enable it to access its configuration
-        if($module->isDisabled())
-        {
+        if ($module->isDisabled()) {
             $module->enable();
         }
 

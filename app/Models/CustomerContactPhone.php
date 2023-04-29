@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class CustomerContactPhone extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id', 'updated_at', 'created_at'];
-    protected $hidden  = ['created_at', 'updated_at', 'phone_type_id'];
+
+    protected $hidden = ['created_at', 'updated_at', 'phone_type_id'];
+
     protected $appends = ['formatted'];
-    protected $with    = ['PhoneNumberType'];
+
+    protected $with = ['PhoneNumberType'];
 
     /**
      * Mobile Work, Home, etc
+     *
      * @codeCoverageIgnore
      */
     public function PhoneNumberType()
@@ -25,6 +29,7 @@ class CustomerContactPhone extends Model
 
     /**
      * Get a readable number in a familiar NA format
+     *
      * @codeCoverageIgnore
      */
     public function getFormattedAttribute()

@@ -19,6 +19,7 @@ class UpdateCustomerDataFieldsJob implements ShouldQueue
     use InteractsWithQueue;
 
     protected $equipId;
+
     protected $fieldList;
 
     /**
@@ -27,7 +28,7 @@ class UpdateCustomerDataFieldsJob implements ShouldQueue
      */
     public function __construct($equipId, $fieldList)
     {
-        $this->equipId   = $equipId;
+        $this->equipId = $equipId;
         $this->fieldList = $fieldList;
     }
 
@@ -40,20 +41,18 @@ class UpdateCustomerDataFieldsJob implements ShouldQueue
         //  Get the list of customers with the equipment
         $customerList = CustomerEquipment::where('equip_id', $this->equipId)->get();
 
-        foreach($customerList as $cust)
-        {
+        foreach ($customerList as $cust) {
             Log::debug('Checking Customer Equipment for Customer Equipment ID '.$cust->cust_equip_id);
             //  Get the customers data fields
             $dataFields = CustomerEquipmentData::where('cust_equip_id', $cust->cust_equip_id)->get()->pluck('field_id');
             $difference = array_diff($this->fieldList, $dataFields->toArray());
 
             //  For each difference in the arrays, add the missing data field to the customer equipment type
-            foreach($difference as $dif)
-            {
+            foreach ($difference as $dif) {
                 CustomerEquipmentData::create([
                     'cust_equip_id' => $cust->cust_equip_id,
-                    'field_id'      => $dif,
-                    'value'         => null,
+                    'field_id' => $dif,
+                    'value' => null,
                 ]);
 
                 Log::debug('Added New Field ID '.$dif.' to Customer Equipment ID '.$this->equipId);

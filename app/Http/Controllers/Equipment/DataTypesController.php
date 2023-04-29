@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\Equipment;
 
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\DataTypeRequest;
-use App\Models\DataField;
 use App\Models\DataFieldType;
-use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class DataTypesController extends Controller
 {
@@ -35,6 +32,7 @@ class DataTypesController extends Controller
         DataFieldType::create($request->only('name'));
 
         Log::info('New Customer Data Type '.$request->name.' has been created by '.$request->user()->username);
+
         return back()->with('success', __('equip.data_type.created'));
     }
 
@@ -48,9 +46,9 @@ class DataTypesController extends Controller
         return Inertia::render('Equipment/DataTypes/Show', [
             'data-type' => $data_type,
             'equipment' => EquipmentType::with('EquipmentCategory')->
-                           whereHas('DataFieldType', function($q) use ($data_type) {
-                                $q->where('data_fields.type_id', $data_type->type_id);
-                            })->get()->groupBy('EquipmentCategory.name'),
+                           whereHas('DataFieldType', function ($q) use ($data_type) {
+                               $q->where('data_fields.type_id', $data_type->type_id);
+                           })->get()->groupBy('EquipmentCategory.name'),
         ]);
     }
 
@@ -74,6 +72,7 @@ class DataTypesController extends Controller
         $data_type->delete();
 
         Log::notice('Customer Data Type '.$data_type->name.' has been deleted by '.Auth::user()->username);
+
         return back()->with('success', __('equip.data_type.destroyed'));
     }
 }

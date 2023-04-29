@@ -2,9 +2,8 @@
 
 namespace Tests\Feature\User;
 
-use Tests\TestCase;
-
 use App\Models\User;
+use Tests\TestCase;
 
 class ChangePasswordTest extends TestCase
 {
@@ -33,8 +32,8 @@ class ChangePasswordTest extends TestCase
     public function test_invoke_guest()
     {
         $data = [
-            'current_password'      => 'password',
-            'password'              => $this->password,
+            'current_password' => 'password',
+            'password' => $this->password,
             'password_confirmation' => $this->password,
         ];
 
@@ -48,8 +47,8 @@ class ChangePasswordTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'current_password'      => 'password',
-            'password'              => $this->password,
+            'current_password' => 'password',
+            'password' => $this->password,
             'password_confirmation' => $this->password,
         ];
 

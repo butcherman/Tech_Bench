@@ -4,10 +4,8 @@ namespace Tests\Feature\User;
 
 use App\Models\User;
 use App\Models\UserInitialize;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class FinishSetupTest extends TestCase
 {
@@ -21,10 +19,10 @@ class FinishSetupTest extends TestCase
         $user = User::factory()->create();
         $link = UserInitialize::create([
             'username' => $user->username,
-            'token'    => $token = Str::uuid(),
+            'token' => $token = Str::uuid(),
         ]);
         $data = [
-            'password'              => $this->password,
+            'password' => $this->password,
             'password_confirmation' => $this->password,
         ];
 
@@ -38,11 +36,11 @@ class FinishSetupTest extends TestCase
         $user = User::factory()->create();
         $link = UserInitialize::create([
             'username' => $user->username,
-            'token'    => Str::uuid(),
+            'token' => Str::uuid(),
         ]);
         $token = Str::uuid();
         $data = [
-            'password'              => $this->password,
+            'password' => $this->password,
             'password_confirmation' => $this->password,
         ];
 
@@ -55,10 +53,10 @@ class FinishSetupTest extends TestCase
         $user = User::factory()->create();
         $link = UserInitialize::create([
             'username' => $user->username,
-            'token'    => $token = Str::uuid(),
+            'token' => $token = Str::uuid(),
         ]);
         $data = [
-            'password'              => $this->password,
+            'password' => $this->password,
             'password_confirmation' => $this->password,
         ];
 

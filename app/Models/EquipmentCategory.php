@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class EquipmentCategory extends Model
 {
     use HasFactory;
 
     protected $primaryKey = 'cat_id';
-    protected $fillable   = ['name'];
-    protected $hidden     = ['updated_at', 'created_at'];
+
+    protected $fillable = ['name'];
+
+    protected $hidden = ['updated_at', 'created_at'];
 
     /**
      * Key for Route/Model binding
@@ -23,6 +25,7 @@ class EquipmentCategory extends Model
 
     /**
      * Each Equipment Category can have several types of equipment assigned to it
+     *
      * @codeCoverageIgnore
      */
     public function EquipmentType()

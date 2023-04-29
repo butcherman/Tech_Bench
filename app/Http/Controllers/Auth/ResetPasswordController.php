@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Inertia\Inertia;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ResetPasswordController extends Controller
 {
@@ -20,8 +20,7 @@ class ResetPasswordController extends Controller
     public function __invoke(Request $request)
     {
         // If the user is trying to visit the page without a token or email address, show 404 error
-        if(empty($request->token) || empty($request->email))
-        {
+        if (empty($request->token) || empty($request->email)) {
             abort(404);
         }
 

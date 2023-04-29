@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Traits\AllowTrait;
-
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CustomerPolicy

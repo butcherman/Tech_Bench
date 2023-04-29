@@ -6,7 +6,6 @@ use App\Models\TechTip;
 use App\Models\UserTechTipBookmark;
 use App\Models\UserTechTipRecent;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;

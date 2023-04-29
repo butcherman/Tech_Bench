@@ -6,14 +6,13 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ContainsLowerCase implements Rule
 {
-   /**
+    /**
      * Determine if the validation rule passes
      */
     public function passes($attribute, $value)
     {
         //  The configuration allows for this rule to be skipped
-        if(!config('auth.passwords.settings.contains_lowercase'))
-        {
+        if (! config('auth.passwords.settings.contains_lowercase')) {
             return true;
         }
 

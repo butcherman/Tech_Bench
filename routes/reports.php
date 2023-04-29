@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Glhd\Gretel\Routing\ResourceBreadcrumbs;
-
 use App\Http\Controllers\Reports\ReportsIndexController;
 use App\Http\Controllers\Reports\UserLoginReportController;
 use App\Http\Controllers\Reports\UserPermissionsReportController;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Routes for running any system reports

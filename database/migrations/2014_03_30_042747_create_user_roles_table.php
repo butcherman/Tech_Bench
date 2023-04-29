@@ -14,7 +14,7 @@ class CreateUserRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_roles', function(Blueprint $table) {
+        Schema::create('user_roles', function (Blueprint $table) {
             $table->id('role_id');
             $table->text('name');
             $table->text('description');

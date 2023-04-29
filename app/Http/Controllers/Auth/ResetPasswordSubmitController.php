@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ResetTokenRequest;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class ResetPasswordSubmitController extends Controller
 {
@@ -22,12 +22,12 @@ class ResetPasswordSubmitController extends Controller
     public function __invoke(ResetTokenRequest $request)
     {
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'), function($user, $password) {
+            $request->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
                 //  Determine the new expiration date
                 $expires = $user->getNewExpireTime();
 
                 $user->forceFill([
-                    'password'         => Hash::make($password),
+                    'password' => Hash::make($password),
                     'password_expires' => $expires,
                 ]);
 

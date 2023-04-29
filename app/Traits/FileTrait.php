@@ -2,23 +2,24 @@
 
 namespace App\Traits;
 
+use App\Models\FileUploads;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 
-use App\Models\FileUploads;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-
 /**
  * File Trait assists with processing uploading and moving files
+ *
  * @codeCoverageIgnore
  */
 trait FileTrait
 {
     protected $disk;
+
     protected $folder;
 
     /**
@@ -27,34 +28,35 @@ trait FileTrait
     protected function getChunk($request)
     {
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
-        $save     = $receiver->receive();
+        $save = $receiver->receive();
 
         //  Save a completed upload
-        if($save->isFinished())
-        {
-            $this->disk   = $request->disk;
+        if ($save->isFinished()) {
+            $this->disk = $request->disk;
             $this->folder = $request->folder;
-            $filename     = $this->saveFile($save->getFile());
+            $filename = $this->saveFile($save->getFile());
 
             $status = [
-                'percent'  => 100,
+                'percent' => 100,
                 'complete' => true,
                 'filename' => $filename,
-                'disk'     => $request->disk,
-                'folder'   => $request->folder,
+                'disk' => $request->disk,
+                'folder' => $request->folder,
             ];
 
             Log::debug('File Upload Completed.  Details - ', $status);
+
             return $status;
         }
 
         $handler = $save->handler();
-        $status  = [
-            'percent'  => $handler->getPercentageDone(),
+        $status = [
+            'percent' => $handler->getPercentageDone(),
             'complete' => false,
         ];
 
         Log::debug('File upload in progress.  Details - ', $status);
+
         return $status;
     }
 
@@ -64,9 +66,10 @@ trait FileTrait
     protected function saveFile(UploadedFile $file)
     {
         $properName = $this->cleanFilename($file->getClientOriginalName());
-        $fileName   = $this->checkForDuplicate($properName);
+        $fileName = $this->checkForDuplicate($properName);
 
         $file->storeAs($this->folder, $fileName, $this->disk);
+
         return $fileName;
     }
 
@@ -86,17 +89,15 @@ trait FileTrait
     protected function checkForDuplicate($name)
     {
 
-        if(Storage::disk($this->disk)->exists($this->folder.DIRECTORY_SEPARATOR.$name))
-        {
+        if (Storage::disk($this->disk)->exists($this->folder.DIRECTORY_SEPARATOR.$name)) {
             $parts = pathinfo($name);
-            $ext   = isset($parts['extension']) ? ('.'.$parts['extension']) : '';
-            $base  = $parts['filename'];
+            $ext = isset($parts['extension']) ? ('.'.$parts['extension']) : '';
+            $base = $parts['filename'];
             $number = 0;
 
-            do
-            {
+            do {
                 $name = $base.'('.++$number.')'.$ext;
-            } while(Storage::disk($this->disk)->exists($this->folder.DIRECTORY_SEPARATOR.$name));
+            } while (Storage::disk($this->disk)->exists($this->folder.DIRECTORY_SEPARATOR.$name));
         }
 
         return $name;
@@ -107,11 +108,10 @@ trait FileTrait
      */
     protected function checkForFile()
     {
-        if(!session()->has('new-file-upload'))
-        {
+        if (! session()->has('new-file-upload')) {
             Log::critical('File upload information missing', [
                 'route' => \Request::route()->getName(),
-                'user'  => Auth::check() ? Auth::user()->username : \Request::ip(),
+                'user' => Auth::check() ? Auth::user()->username : \Request::ip(),
             ]);
             abort(500, 'Uploaded File Data Missing');
         }
@@ -124,12 +124,11 @@ trait FileTrait
     {
         $file = FileUploads::find($fileId);
 
-        $this->disk   = $newDisk !== null ? $newDisk : $file->disk;
+        $this->disk = $newDisk !== null ? $newDisk : $file->disk;
         $this->folder = $newFolder;
 
         //  Verify the file actually exists
-        if(!Storage::disk($file->disk)->exists($file->folder.DIRECTORY_SEPARATOR.$file->file_name))
-        {
+        if (! Storage::disk($file->disk)->exists($file->folder.DIRECTORY_SEPARATOR.$file->file_name)) {
             return false;
         }
 
@@ -139,8 +138,8 @@ trait FileTrait
 
         //  Update the database
         $file->file_name = $newName;
-        $file->folder    = $this->folder;
-        $file->disk      = $this->disk;
+        $file->folder = $this->folder;
+        $file->disk = $this->disk;
         $file->save();
 
         return true;
@@ -152,18 +151,16 @@ trait FileTrait
     protected function deleteFile($fileID)
     {
         $fileData = FileUploads::find($fileID);
-        $file     = $fileData->only(['disk', 'folder', 'file_name']);
+        $file = $fileData->only(['disk', 'folder', 'file_name']);
 
         Log::debug('Attempting to delete file', $fileData->toArray());
 
         //  Try to delete the file from the database, if it fails, the file is in use elsewhere
-        try
-        {
+        try {
             $fileData->delete();
-        }
-        catch(QueryException $e)
-        {
+        } catch (QueryException $e) {
             Log::debug('File ID '.$fileID.' is still in use and cannot be deleted');
+
             return false;
         }
 

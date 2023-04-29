@@ -21,9 +21,9 @@ return [
                     storage_path('debugbar'),
                     storage_path('framework'),
                 ],
-                'follow_links'                  => false,
+                'follow_links' => false,
                 'ignore_unreadable_directories' => false,
-                'relative_path'                 => null,
+                'relative_path' => null,
             ],
             'mysql' => [
                 'dump' => [
@@ -64,7 +64,7 @@ return [
          * The password to be used for archive encryption.
          * Set to `null` to disable encryption.
          */
-        'password'   => env('BACKUP_ARCHIVE_PASSWORD'),
+        'password' => env('BACKUP_ARCHIVE_PASSWORD'),
         'encryption' => 'default',
     ],
 

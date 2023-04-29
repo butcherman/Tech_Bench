@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Admin\Logs;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Tests\TestCase;
-use App\Models\User;
 
 class ViewLogTest extends TestCase
 {

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Customers;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Customer;
+use App\Models\User;
+use Tests\TestCase;
 
 class CustomerIdTest extends TestCase
 {
@@ -67,7 +67,7 @@ class CustomerIdTest extends TestCase
     {
         $cust = Customer::factory()->create(['cust_id' => 33]);
         $data = [
-            'cust_id'    => 99,
+            'cust_id' => 99,
         ];
 
         $response = $this->put(route('admin.cust.change_id.update', $cust->cust_id), $data);
@@ -80,7 +80,7 @@ class CustomerIdTest extends TestCase
     {
         $cust = Customer::factory()->create(['cust_id' => 33]);
         $data = [
-            'cust_id'    => 99,
+            'cust_id' => 99,
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('admin.cust.change_id.update', $cust->slug), $data);
@@ -91,7 +91,7 @@ class CustomerIdTest extends TestCase
     {
         $cust = Customer::factory()->create(['cust_id' => 33]);
         $data = [
-            'cust_id'    => 99,
+            'cust_id' => 99,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.cust.change_id.update', $cust->slug), $data);

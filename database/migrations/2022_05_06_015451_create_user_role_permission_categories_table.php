@@ -19,8 +19,7 @@ class CreateUserRolePermissionCategoriesTable extends Migration
         });
 
         //  Add the category column to user role permision types
-        Schema::table('user_role_permission_types', function(Blueprint $table)
-        {
+        Schema::table('user_role_permission_types', function (Blueprint $table) {
             $table->unsignedBigInteger('role_cat_id')->after('perm_type_id')->nullable();
             $table->foreign('role_cat_id')->references('role_cat_id')->on('user_role_permission_categories')->onUpdate('cascade');
         });
@@ -65,8 +64,7 @@ class CreateUserRolePermissionCategoriesTable extends Migration
             ['perm_type_id' => 26, 'role_cat_id' => 3],
             ['perm_type_id' => 27, 'role_cat_id' => 3],
         ];
-        foreach($defaultPermissions as $perm)
-        {
+        foreach ($defaultPermissions as $perm) {
             UserRolePermissionTypes::where('perm_type_id', $perm['perm_type_id'])->update(['role_cat_id' => $perm['role_cat_id']]);
         }
     }
@@ -76,8 +74,7 @@ class CreateUserRolePermissionCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_role_permission_types', function(Blueprint $table)
-        {
+        Schema::table('user_role_permission_types', function (Blueprint $table) {
             $table->dropForeign(['role_cat_id']);
             $table->dropColumn('role_cat_id');
         });

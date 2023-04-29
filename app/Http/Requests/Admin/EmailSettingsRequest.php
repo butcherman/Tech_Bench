@@ -21,13 +21,13 @@ class EmailSettingsRequest extends FormRequest
     public function rules()
     {
         return [
-            'from_address'   => 'required|email',
-            'username'       => 'nullable|string',
-            'password'       => 'nullable|string',
-            'host'           => 'required|string',
-            'port'           => 'required|numeric',
-            'encryption'     => 'required|string',
-            'requireAuth'    => 'required|boolean',
+            'from_address' => 'required|email',
+            'username' => 'nullable|string',
+            'password' => 'nullable|string',
+            'host' => 'required|string',
+            'port' => 'required|numeric',
+            'encryption' => 'required|string',
+            'requireAuth' => 'required|boolean',
         ];
     }
 
@@ -38,8 +38,7 @@ class EmailSettingsRequest extends FormRequest
     {
         $key = '';
 
-        switch($field)
-        {
+        switch ($field) {
             case 'from_address':
                 $key = 'mail.from.address';
                 break;

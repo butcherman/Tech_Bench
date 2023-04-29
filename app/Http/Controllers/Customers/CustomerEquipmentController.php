@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Customers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerEquipmentRequest;
 use App\Models\CustomerEquipment;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CustomerEquipmentController extends Controller
 {
@@ -48,6 +48,7 @@ class CustomerEquipmentController extends Controller
 
         $equipment->delete();
         Log::stack(['daily', 'cust'])->info('Equipment '.$equipment->name.' deleted for Customer ID '.$equipment->cust_id.' by '.Auth::user()->username);
+
         return back()->with('success', __('cust.equipment.deleted'));
     }
 
@@ -60,6 +61,7 @@ class CustomerEquipmentController extends Controller
 
         $equipment->restore();
         Log::stack(['daily', 'cust'])->info('Equipment '.$equipment->name.' has been restored for customer '.$equipment->cust_id.' by '.Auth::user()->username);
+
         return back()->with('success', __('cust.equipment.restored'));
     }
 
@@ -72,6 +74,7 @@ class CustomerEquipmentController extends Controller
 
         $equipment->forceDelete();
         Log::stack(['daily', 'cust'])->notice('Equipment '.$equipment->name.' has been force deleted for customer ID '.$equipment->cust_id.' by '.Auth::user()->username);
+
         return back()->with('danger', __('cust.equipment.force_deleted'));
     }
 }

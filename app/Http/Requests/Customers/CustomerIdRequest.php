@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Customers;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Customer;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerIdRequest extends FormRequest
 {

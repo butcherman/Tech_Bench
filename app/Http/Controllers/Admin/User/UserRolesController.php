@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\QueryException;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UserRoleRequest;
 use App\Events\Admin\UserRoleCreatedEvent;
 use App\Events\Admin\UserRoleUpdatedEvent;
-use App\Models\UserRoles;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserRoleRequest;
 use App\Models\UserRolePermissions;
 use App\Models\UserRolePermissionTypes;
+use App\Models\UserRoles;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class UserRolesController extends Controller
 {
@@ -50,9 +50,9 @@ class UserRolesController extends Controller
         return Inertia::render('Admin/Roles/Copy', [
             'description' => 'Copy of '.$role->name,
             'permissions' => UserRolePermissions::with('UserRolePermissionTypes')
-                                ->where('role_id', $role->role_id)
-                                ->get()
-                                ->groupBy('UserRolePermissionTypes.group'),
+                ->where('role_id', $role->role_id)
+                ->get()
+                ->groupBy('UserRolePermissionTypes.group'),
         ]);
     }
 
@@ -65,6 +65,7 @@ class UserRolesController extends Controller
         Log::stack(['daily', 'user'])->info('New Role - '.$newRole->name.' create by '.$request->user()->username);
 
         UserRoleCreatedEvent::dispatch($newRole, $request->except(['name', 'description']));
+
         return redirect(route('admin.users.roles.index'))->with('success', __('admin.user.role_created'));
     }
 
@@ -76,11 +77,11 @@ class UserRolesController extends Controller
         $this->authorize('view', $role);
 
         return Inertia::render('Admin/Roles/Show', [
-            'role'        => $role->makeVisible('allow_edit'),
+            'role' => $role->makeVisible('allow_edit'),
             'permissions' => UserRolePermissions::with('UserRolePermissionTypes')
-                                ->where('role_id', $role->role_id)
-                                ->get()
-                                ->groupBy('UserRolePermissionTypes.group'),
+                ->where('role_id', $role->role_id)
+                ->get()
+                ->groupBy('UserRolePermissionTypes.group'),
         ]);
     }
 
@@ -92,11 +93,11 @@ class UserRolesController extends Controller
         $this->authorize('update', $role);
 
         return Inertia::render('Admin/Roles/Edit', [
-            'role'        => $role,
+            'role' => $role,
             'permissions' => UserRolePermissions::with('UserRolePermissionTypes')
-                                ->where('role_id', $role->role_id)
-                                ->get()
-                                ->groupBy('UserRolePermissionTypes.group'),
+                ->where('role_id', $role->role_id)
+                ->get()
+                ->groupBy('UserRolePermissionTypes.group'),
         ]);
     }
 
@@ -109,6 +110,7 @@ class UserRolesController extends Controller
         Log::stack(['daily', 'user'])->info('Role - '.$role->name.' has been updated by '.$request->user()->username);
 
         UserRoleUpdatedEvent::dispatch($role, $request->except(['name', 'description']));
+
         return redirect(route('admin.users.roles.show', $role->role_id))->with('success', __('admin.user.role_updated'));
     }
 
@@ -119,15 +121,12 @@ class UserRolesController extends Controller
     {
         $this->authorize('delete', $role);
 
-        try
-        {
+        try {
             $role->delete();
-        }
-        catch(QueryException $e)
-        {
-            if($e->errorInfo[1] === 19)
-            {
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] === 19) {
                 Log::stack(['daily', 'user'])->error('Unable to delete Role '.$role->name.'.  It is currently in use');
+
                 return back()->withErrors([
                     'error' => __('admin.user.role_in_use'),
                     // 'link'  => '<a html="#">More Info</a>',
@@ -136,11 +135,13 @@ class UserRolesController extends Controller
 
             // @codeCoverageIgnoreStart
             Log::stack(['daily', 'user'])->error('Error when trying to delete Role '.$role->name, $e->errorInfo);
+
             return back()->withErrors(['error' => 'This File Type is in use and cannot be deleted at this time']);
             // @codeCoverageIgnoreEnd
         }
 
         Log::stack(['daily', 'user'])->notice('Role '.$role->name.' has been deleted by '.Auth::user()->username);
+
         return redirect(route('admin.users.roles.index'))->with('success', __('admin.user.role_deleted'));
     }
 }

@@ -1,18 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\TechTips\TechTipsController;
-use App\Http\Controllers\TechTips\SearchTipsController;
+use App\Http\Controllers\TechTips\DeletedTechTipsController;
 use App\Http\Controllers\TechTips\DownloadTipController;
-use App\Http\Controllers\TechTips\TechTipTypesController;
 use App\Http\Controllers\TechTips\GetTipDetailsController;
+use App\Http\Controllers\TechTips\SearchTipsController;
 use App\Http\Controllers\TechTips\ShowDeletedTipController;
 use App\Http\Controllers\TechTips\TechTipBookmarkController;
-use App\Http\Controllers\TechTips\DeletedTechTipsController;
 use App\Http\Controllers\TechTips\TechTipCommentsController;
+use App\Http\Controllers\TechTips\TechTipsController;
+use App\Http\Controllers\TechTips\TechTipTypesController;
+use Illuminate\Support\Facades\Route;
 
-Route::get('{tip}', function() { return 'tech tips'; })->name('tech-tips.show');
+Route::get('{tip}', function () {
+    return 'tech tips';
+})->name('tech-tips.show');
 
 /**
  * Tech Tips routes

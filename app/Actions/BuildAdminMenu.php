@@ -22,13 +22,13 @@ class BuildAdminMenu
      */
     public function execute()
     {
-        $userMenu     = $this->buildUserMenu();
-        $equipMenu    = $this->buildEquipmentMenu();
+        $userMenu = $this->buildUserMenu();
+        $equipMenu = $this->buildEquipmentMenu();
         $customerMenu = $this->buildCustomerMenu();
-        $techTipMenu  = $this->buildTechTipMenu();
+        $techTipMenu = $this->buildTechTipMenu();
         // $moduleMenu   = $this->buildModuleMenus();
         $settingsMenu = $this->buildSettingsMenu();
-        $maintMenu    = $this->buildMaintenanceMenu();
+        $maintMenu = $this->buildMaintenanceMenu();
 
         return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $settingsMenu, $maintMenu);
     }
@@ -39,8 +39,7 @@ class BuildAdminMenu
     protected function buildUserMenu()
     {
         $userBuild = [];
-        if($this->checkPermission($this->user, 'Manage Users'))
-        {
+        if ($this->checkPermission($this->user, 'Manage Users')) {
             $userBuild = [
                 [
                     'name' => 'Create New User',
@@ -66,8 +65,7 @@ class BuildAdminMenu
         }
 
         $roleBuild = [];
-        if($this->checkPermission($this->user, 'Manage Permissions'))
-        {
+        if ($this->checkPermission($this->user, 'Manage Permissions')) {
             $roleBuild = [[
                 'name' => 'User Roles and Permissions',
                 'icon' => 'fa-users-cog',
@@ -75,8 +73,7 @@ class BuildAdminMenu
             ]];
         }
 
-        if(count($userBuild) > 0 || count($roleBuild) > 0)
-        {
+        if (count($userBuild) > 0 || count($roleBuild) > 0) {
             return ['Users' => array_merge($userBuild, $roleBuild)];
         }
 
@@ -92,8 +89,7 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'Manage Equipment'))
-        {
+        if ($this->checkPermission($this->user, 'Manage Equipment')) {
             $nav = [
                 'Manage Equipment' => [
                     [
@@ -120,8 +116,7 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'Manage Customers'))
-        {
+        if ($this->checkPermission($this->user, 'Manage Customers')) {
             $nav = [
                 'Manage Customers' => [
                     [
@@ -186,6 +181,7 @@ class BuildAdminMenu
 
     /**
      * Build Admin menu's for all of the installed Modules
+     *
      * @codeCoverageIgnore
      */
     protected function buildModuleMenus()
@@ -231,8 +227,7 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'App Settings'))
-        {
+        if ($this->checkPermission($this->user, 'App Settings')) {
             $nav = [
                 'Manage Application Settings' => [
                     [
@@ -269,8 +264,7 @@ class BuildAdminMenu
     {
         $nav = [];
 
-        if($this->checkPermission($this->user, 'App Settings'))
-        {
+        if ($this->checkPermission($this->user, 'App Settings')) {
             $nav = [
                 'Application Maintenance' => [
                     [

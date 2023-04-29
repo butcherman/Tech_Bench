@@ -2,16 +2,16 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-
 use App\Jobs\GarbageCollectionJob;
+use Illuminate\Console\Command;
 
 /**
  * @codeCoverageIgnore
  */
 class GarbageCollectionRunCommand extends Command
 {
-    protected $signature   = 'garbagecollection:run';
+    protected $signature = 'garbagecollection:run';
+
     protected $description = 'Basic maintenance script to wipe temporary and deleted data';
 
     /**
