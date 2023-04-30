@@ -91,14 +91,14 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted } from 'vue';
+    import { ref } from 'vue';
     import VueForm from '@/Components/Base/VueForm.vue';
     import TextInput from '../Base/Input/TextInput.vue';
     import SelectInput from '../Base/Input/SelectInput.vue';
     import CheckboxSwitch from '../Base/Input/CheckboxSwitch.vue';
     import { object, string, number, boolean } from 'yup';
     import { useForm } from '@inertiajs/vue3';
-    import { _ } from 'lodash';
+    import { toLower } from 'lodash';
 
     type emSettingsType = {
         host        : string;
@@ -146,7 +146,7 @@
         }
 
         //  Convert encryption string to lower
-        form.encryption = _.toLower(form.encryption);
+        form.encryption = toLower(form.encryption);
 
         const formData = useForm(form);
         formData.post(route('admin.set-email'), {

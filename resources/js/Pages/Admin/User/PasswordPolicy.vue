@@ -6,7 +6,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Update Password Policy</div>
-                        <VueForm
+                        <!-- <VueForm
                             ref="passwordPolicyForm"
                             :validation-schema="policy.validationSchema"
                             :initial-values="policy.initialValues"
@@ -48,7 +48,7 @@
                                     />
                                 </div>
                             </fieldset>
-                        </VueForm>
+                        </VueForm> -->
                     </div>
                 </div>
             </div>

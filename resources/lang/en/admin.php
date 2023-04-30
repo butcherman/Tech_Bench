@@ -9,7 +9,7 @@ return [
         'role_in_use' => 'Unable to delete this Role.  It is currently assigned to users',
         'delete_failed' => 'Unable to delete, please check logs for more details',
     ],
-    'password_policy' => 'Password Policy updated',
+    'password_policy' => 'User Settings updated',
     'config_updated' => 'Application Configuration updated successfully',
     'email_updated' => 'Email Settings updated successfully',
     'fake_password' => 'This Is A Really Long String to Make You Think You Can Get A Password',

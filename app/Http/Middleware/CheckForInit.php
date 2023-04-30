@@ -22,6 +22,7 @@ class CheckForInit
         'admin.set-config',
         'admin.set-email',
         'admin.test-email',
+        'admin.users.password-policy.store',
     ];
 
     /**

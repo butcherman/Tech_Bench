@@ -32,8 +32,7 @@
         redirectUri  : string;
     }
 
-    const $route = route;
-    const props = defineProps<{
+    defineProps<{
         settings: settingsType;
         tz_list: timezoneType;
     }>();

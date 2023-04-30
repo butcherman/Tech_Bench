@@ -41,9 +41,6 @@ createInertiaApp({
             .directive('tooltip', vTooltipDirective)
             .directive('popover', vPopoverDirective)
 
-        // inertiaApp.config.globalProperties.route = window.route;      //  Ziggy Route Provider
         inertiaApp.mount(el);
       },
 });
-
-// InertiaProgress.init({ color: '#4B5563' });

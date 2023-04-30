@@ -42,6 +42,12 @@ class UserPasswordPolicyController extends Controller
         }
         Log::notice('Password policy has been updated by '.$request->user()->username, $request->toArray());
 
+        //  If the first time setup flag is set, we will disable it
+        if(config('app.first_time_setup'))
+        {
+            $this->clearSetting('app.first_time_setup');
+        }
+
         return back()->with('success', __('admin.password_policy'));
     }
 }

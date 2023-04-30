@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Init;
 
-use App\Http\Controllers\Controller;
-use App\Models\AppSettings;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\AppSettings;
+use App\Http\Controllers\Controller;
 
 class StepTwo extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Basic App settings for first time setup
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $this->authorize('viewAny', AppSettings::class);
 

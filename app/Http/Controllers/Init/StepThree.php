@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Init;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Controllers\Controller;
 
 class StepThree extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Email settings for first time setup
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         return Inertia::render('Init/StepThree', [
             'settings' => [

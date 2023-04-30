@@ -5,11 +5,14 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
+use App\Traits\AppSettingsTrait;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
+    use AppSettingsTrait;
+
     /**
      *  Create 10 random users with different roles
      */
@@ -19,6 +22,9 @@ class UserSeeder extends Seeder
         User::find(1)->update([
             'password_expires' => null,
         ]);
+
+        //  Turn off the "first time setup" flag
+        $this->clearSetting('app.first_time_setup');
 
         //  Create a Tech User that has restricted access
         User::create([

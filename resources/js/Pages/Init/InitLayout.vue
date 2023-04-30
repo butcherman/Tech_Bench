@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
     import App from '@/Layouts/app.vue';
-    import { ref, reactive, onMounted } from 'vue';
+    import { ref } from 'vue';
     import StepNavigation from '@/Components/Base/StepNavigation.vue';
 
     const props = defineProps<{
@@ -49,6 +49,12 @@
             name: 'User Settings',
             icon: 'fa-users-cog',
             active: props.stepId === 4 ? true : false,
+        },
+        {
+            id: 5,
+            name: 'Finish',
+            icon: 'fa-check',
+            active: props.stepId === 5 ? true : false,
         }
     ]);
 </script>

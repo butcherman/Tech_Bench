@@ -33,11 +33,11 @@
 <script setup lang="ts">
     import VueForm                from '@/Components/Base/VueForm.vue';
     import TextInput              from '@/Components/Base/Input/TextInput.vue';
-    import SelectOptionGroupInput from '@/Components/Base/Input/SelectOptionGroup.vue';
     import RangeInput             from '@/Components/Base/Input/RangeInput.vue';
+    import SelectOptionGroupInput from '@/Components/Base/Input/SelectOptionGroup.vue';
     import { ref }                from 'vue';
     import { useForm }            from '@inertiajs/vue3';
-    import * as yup               from 'yup';
+    import { object, string, number }               from 'yup';
 
     type settingsType = {
         url          : string;
@@ -60,10 +60,10 @@
 
     const configForm       = ref<InstanceType<typeof VueForm> | null>(null);
     const initialValues    = props.settings;
-    const validationSchema = yup.object().shape({
-        url          : yup.string().url().required('You must have a Fully Qualified Domain Name for this application to work properly'),
-        timezone     : yup.string().required(),
-        filesize     : yup.number().required(),
+    const validationSchema = object().shape({
+        url          : string().url().required('You must have a Fully Qualified Domain Name for this application to work properly'),
+        timezone     : string().required(),
+        filesize     : number().required(),
     });
 
     const onSubmit = (form:settingsType) => {
