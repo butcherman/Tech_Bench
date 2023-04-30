@@ -4,6 +4,7 @@
 /storage/*.key
 /vendor
 /tests/_report
+/tests/_Report
 /keystore
 /packages
 .vscode/

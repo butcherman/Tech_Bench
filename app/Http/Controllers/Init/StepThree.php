@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Init;
 
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
+use App\Models\AppSettings;
 
 class StepThree extends Controller
 {
@@ -12,6 +13,8 @@ class StepThree extends Controller
      */
     public function __invoke()
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         return Inertia::render('Init/StepThree', [
             'settings' => [
                 'host' => config('mail.mailers.smtp.host'),

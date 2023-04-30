@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Init;
 
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
+use App\Models\AppSettings;
 
 class StepFour extends Controller
 {
@@ -12,6 +13,8 @@ class StepFour extends Controller
      */
     public function __invoke()
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         return Inertia::render('Init/StepFour', [
             'policy' => [
                 'expire' => config('auth.passwords.settings.expire'),

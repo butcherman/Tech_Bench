@@ -73,7 +73,6 @@ class EquipmentCategoryController extends Controller
 
                 return back()->withErrors([
                     'error' => __('equip.category.in_use'),
-                    // 'link'  => '<a html="#">More Info</a>',
                 ]);
             }
 
