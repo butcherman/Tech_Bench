@@ -32,6 +32,25 @@
                 class="no-label"
             />
         </VueForm>
+        <div class="row justify-content-center">
+            <div class="col grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Password Rules:
+                        </h5>
+                        <ul>
+                            <li
+                                v-for="rule in password_rules"
+                                class="mx-2"
+                            >
+                                {{ rule }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </AuthLayout>
 </template>
 
@@ -46,6 +65,7 @@
     const props = defineProps<{
         email : string;
         token : string;
+        password_rules: string[];
     }>();
 
     const resetForm = ref<InstanceType<typeof VueForm> | null>(null);

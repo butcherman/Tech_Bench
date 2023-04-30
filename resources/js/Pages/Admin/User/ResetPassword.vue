@@ -52,7 +52,7 @@
         password_confirmation: yup.string().required('Enter password again'),
     }
 
-    interface resetFormType {
+    type resetFormType = {
         password             : string;
         password_confirmation: string;
     }

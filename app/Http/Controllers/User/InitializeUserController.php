@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\BuildPasswordRules;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserInitialize;
@@ -17,6 +18,7 @@ class InitializeUserController extends Controller
         return Inertia::render('User/Initialize', [
             'link' => $initLink,
             'user' => User::where('username', $initLink->username)->first(),
+            'password_rules' => (new BuildPasswordRules)->build(),
         ]);
     }
 }

@@ -16,16 +16,6 @@
 
 <script setup lang="ts">
     import App                    from '@/Layouts/app.vue';
-    import VueForm                from '@/Components/Base/VueForm.vue';
-    import TextInput              from '@/Components/Base/Input/TextInput.vue';
-    import SelectOptionGroupInput from '@/Components/Base/Input/SelectOptionGroup.vue';
-    import CheckboxSwitch         from '@/Components/Base/Input/CheckboxSwitch.vue';
-    import RangeInput             from '@/Components/Base/Input/RangeInput.vue';
-    import { ref }                from 'vue';
-    import { useForm }            from '@inertiajs/vue3';
-    import { helpModal }          from '@/Modules/helpModal.module';
-    import * as yup               from 'yup';
-
     import ConfigForm from '@/Components/Admin/ConfigForm.vue';
 
     interface settingsType {
@@ -46,70 +36,10 @@
         }
     }
 
-    const props = defineProps<{
+    defineProps<{
         settings: settingsType;
         tz_list : timezoneType;
     }>();
-
-    const configForm       = ref<InstanceType<typeof VueForm> | null>(null);
-    const initialValues    = props.settings;
-    const validationSchema = yup.object().shape({
-        url          : yup.string().url().required('You must have a Fully Qualified Domain Name for this application to work properly'),
-        timezone     : yup.string().required(),
-        filesize     : yup.number().required(),
-        allowOath    : yup.boolean().required(),
-        allowRegister: yup.boolean().when('allowOath', {
-            is  : true,
-            then: yup.boolean().required(),
-        }).nullable(),
-        tenantId     : yup.string().when('allowOath', {
-            is  : true,
-            then: yup.string().required('Please enter the Azure Tenant ID'),
-        }).nullable(),
-        clientId     : yup.string().when('allowOath', {
-            is  : true,
-            then: yup.string().required('Please enter the Azure Client ID'),
-        }).nullable(),
-        clientSecret : yup.string().when('allowOath', {
-            is  : true,
-            then: yup.string().required('Please enter the Azure Client Secret'),
-        }).nullable(),
-        redirectUri  : yup.string().required(),
-    });
-
-    const onSubmit = (form:settingsType) => {
-        const formData = useForm(form);
-        formData.post(route('admin.set-config'), {
-            onFinish: () => configForm.value?.endSubmit(),
-        });
-    }
-
-    const updateRedirectUri = (newUri:string) => {
-        configForm.value?.setFieldValue('redirectUri', `${newUri}/auth/callback`);
-    }
-
-    const showHelp = (type:string) => {
-        helpModal(getHelpMsg(type), {
-            title: 'What is this?',
-        });
-    }
-
-    const getHelpMsg = (type:string):string => {
-        let msg = '';
-
-        switch(type)
-        {
-            case 'allowOath':
-                msg = 'Allow users to use their Microsoft Office 365 credentials to log into the Tech Bench';
-                break;
-            case 'allowRegister':
-                msg = 'When set, any user in your orginazition can log in using their Microsoft Office 365 '+
-                      'Credentials.  With this option turned off, only users you manually create can use their '+
-                      'Microsoft Office 365 Credentials to login';
-        }
-
-        return msg;
-    }
 </script>
 
 <script lang="ts">
