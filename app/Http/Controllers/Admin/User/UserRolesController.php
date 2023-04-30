@@ -124,19 +124,18 @@ class UserRolesController extends Controller
         try {
             $role->delete();
         } catch (QueryException $e) {
-            if ($e->errorInfo[1] === 19) {
+            if ($e->errorInfo[1] === 19 || $e->errorInfo[1] === 1451) {
                 Log::stack(['daily', 'user'])->error('Unable to delete Role '.$role->name.'.  It is currently in use');
 
                 return back()->withErrors([
                     'error' => __('admin.user.role_in_use'),
-                    // 'link'  => '<a html="#">More Info</a>',
                 ]);
             }
 
             // @codeCoverageIgnoreStart
             Log::stack(['daily', 'user'])->error('Error when trying to delete Role '.$role->name, $e->errorInfo);
 
-            return back()->withErrors(['error' => 'This File Type is in use and cannot be deleted at this time']);
+            return back()->withErrors(['error' => 'Error when trying to delete Role '.$role->name.' Please see log for details']);
             // @codeCoverageIgnoreEnd
         }
 

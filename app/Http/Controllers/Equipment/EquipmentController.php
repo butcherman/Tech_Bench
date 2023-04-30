@@ -112,7 +112,7 @@ class EquipmentController extends Controller
         try {
             $equipment->delete();
         } catch (QueryException $e) {
-            if ($e->errorInfo[1] === 19) {
+            if ($e->errorInfo[1] === 19 || $e->errorInfo[1] === 1451) {
                 Log::error('Unable to delete Equipment '.$equipment->name.'.  It is currently in use');
 
                 return back()->withErrors([

@@ -34,7 +34,7 @@ class CheckPasswordExpire
 
                 return redirect()
                     ->route('settings.password.index')
-                    ->withErrors(__('user.password_expired'));
+                    ->withErrors(['password' => __('user.password_expired')]);
             }
         }
 

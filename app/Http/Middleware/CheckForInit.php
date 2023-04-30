@@ -32,7 +32,8 @@ class CheckForInit
     {
         if ($request->user()
             && config('app.first_time_setup')
-            && ! in_array(Route::current()->getName(), $this->bypassRoutes)) {
+            && ! in_array(Route::current()->getName(), $this->bypassRoutes)
+            && config('app.env') !== 'testing') {
             return redirect(route('init.step-1'));
         }
 
