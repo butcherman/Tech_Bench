@@ -1,10 +1,9 @@
 import { createApp, h } from "vue";
 import { vFocusDirective } from "@/Directives/Focus";
-import CustomerSearchModal from "@/Components/Customer/CustomerSearchModal.vue";
 import { customerType } from "@/Types";
-import { FontAwesomeIcon }              from '@fortawesome/vue-fontawesome';
-import { vTooltipDirective }            from '@/Directives/Tooltip';
-
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { vTooltipDirective } from "@/Directives/Tooltip";
+import CustomerSearchModal from "@/Components/Customer/CustomerSearchModal.vue";
 
 export function customerSearchBox(
     nameParam: string = ""
@@ -19,10 +18,10 @@ export function customerSearchBox(
                         onSelected: (cust) => resolve(cust),
                     });
             },
-        }).component('fa-icon', FontAwesomeIcon)
-        .directive('tooltip', vTooltipDirective);
-
-        newComp.directive("focus", vFocusDirective);
+        })
+            .component("fa-icon", FontAwesomeIcon)
+            .directive("tooltip", vTooltipDirective)
+            .directive("focus", vFocusDirective);
 
         /**
          * Mount and show the new OK Modal

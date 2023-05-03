@@ -23,7 +23,7 @@ class CustomerBookmarkRequest extends FormRequest
     public function rules()
     {
         return [
-            'cust_id' => 'required|numeric|exists:customers',
+            'model_id' => 'required|numeric|exists:customers,cust_id',
             'state' => 'required|boolean',
         ];
     }
@@ -48,12 +48,12 @@ class CustomerBookmarkRequest extends FormRequest
         try {
             UserCustomerBookmark::create([
                 'user_id' => $this->user()->user_id,
-                'cust_id' => $this->cust_id,
+                'cust_id' => $this->model_id,
             ]);
             Log::stack(['daily', 'user'])->debug('User '.$this->user()->user_id.' has added Customer ID '.$this->cust_id.' to their bookmarks');
         } catch (QueryException $e) {
             Log::critical('User '.$this->user()->username.' is trying to add a bookmark that already exists', [
-                'cust_id' => $this->cust_id,
+                'cust_id' => $this->model_id,
                 'state' => $this->state,
                 'user_id' => $this->user()->user_id,
             ]);
@@ -66,7 +66,7 @@ class CustomerBookmarkRequest extends FormRequest
      */
     protected function removeBookmark()
     {
-        UserCustomerBookmark::where('user_id', $this->user()->user_id)->where('cust_id', $this->cust_id)->first()->delete();
-        Log::stack(['daily', 'user'])->debug('User '.$this->user()->username.' has removed Customer ID '.$this->cust_id.' from their bookmarks');
+        UserCustomerBookmark::where('user_id', $this->user()->user_id)->where('cust_id', $this->model_id)->first()->delete();
+        Log::stack(['daily', 'user'])->debug('User '.$this->user()->username.' has removed Customer ID '.$this->model_id.' from their bookmarks');
     }
 }

@@ -1,20 +1,11 @@
 <template>
     <div>
         <h3>
-            <span
-                v-if="bookmarkLoading"
-                class="spinner-grow spinner-grow-sm my-2"
+            <BookmarkItem
+                :is-fav="isFav"
+                :toggle-route="$route('customers.bookmark')"
+                :model-id="customer.cust_id"
             />
-            <span
-                v-else
-                class="pointer"
-                :class="bookmarkClass"
-                :title="bookmarkTitle"
-                v-tooltip
-                @click="toggleBookmark"
-            >
-                <fa-icon :icon="bookmarkIcon" />
-            </span>
             {{ customer?.name }}
             <small
                 v-if="
@@ -58,29 +49,14 @@
 </template>
 
 <script setup lang="ts">
+import BookmarkItem from "@/Components/Base/BookmarkItem.vue";
 import { inject, computed } from "vue";
 import { linkedCustomers } from "@/Modules/linkedCustomers.module";
-import { customerBookmarkInjection, customerType } from "@/Types";
-import type { Ref } from "vue";
+import type { customerType } from "@/Types";
 
-const { isBookmark, bookmarkLoading, toggleBookmark } = inject(
-    "bookmark"
-) as customerBookmarkInjection;
-const customer = inject<Ref<customerType>>("customer");
 const $route = route;
-
-/**
- * Customer Bookmark Section
- */
-const bookmarkIcon = computed<string>(() => {
-    return isBookmark.value ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark";
-});
-const bookmarkClass = computed<string>(() => {
-    return isBookmark.value ? "bookmark-checked" : "bookmark-checked";
-});
-const bookmarkTitle = computed<string>(() => {
-    return isBookmark.value ? "Remove From Bookmarks" : "Add to Bookmarks";
-});
+const isFav = inject('isFav') as boolean;
+const customer = inject('customer') as customerType;
 
 /**
  * Create a URL to go to Google Maps and address
