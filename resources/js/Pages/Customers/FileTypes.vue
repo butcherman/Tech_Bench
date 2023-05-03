@@ -6,11 +6,12 @@
                     <div class="card-body">
                         <div class="card-title">Customer File Types</div>
                         <p class="text-center">
-                            When uploading a file for a customer, it must be tagged as one
-                            of the following file types.
+                            When uploading a file for a customer, it must be
+                            tagged as one of the following file types.
                         </p>
                         <p class="text-center">
-                            Select the file type to edit, or create a new file type.
+                            Select the file type to edit, or create a new file
+                            type.
                         </p>
                         <Overlay :loading="loading">
                             <ul class="list-group">
@@ -80,73 +81,78 @@
 </template>
 
 <script setup lang="ts">
-    import App                       from '@/Layouts/app.vue';
-    import Overlay                   from '@/Components/Base/Overlay.vue';
-    import VueForm                   from '@/Components/Base/VueForm.vue';
-    import TextInput                 from '@/Components/Base/Input/TextInput.vue';
-    import Modal                     from '@/Components/Base/Modal/Modal.vue';
-    import { ref }                   from 'vue';
-    import { useForm }               from '@inertiajs/vue3';
-    import { router }               from '@inertiajs/vue3';
-    import { verifyModal }           from '@/Modules/verifyModal.module';
-    import type { customerFileType } from '@/Types';
-    import * as yup                  from 'yup';
+import App from "@/Layouts/app.vue";
+import Overlay from "@/Components/Base/Overlay.vue";
+import VueForm from "@/Components/Base/VueForm.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import Modal from "@/Components/Base/Modal/Modal.vue";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
+import { verifyModal } from "@/Modules/verifyModal.module";
+import type { customerFileType } from "@/Types";
+import * as yup from "yup";
 
-    defineProps<{
-        fileTypes: customerFileType[];
-    }>();
+defineProps<{
+    fileTypes: customerFileType[];
+}>();
 
-    const loading = ref<boolean>(false);
-    const validationSchema = {
-        description: yup.string().required().label('File Type Name')
-    }
+const loading = ref<boolean>(false);
+const validationSchema = {
+    description: yup.string().required().label("File Type Name"),
+};
 
-    /**
-     * New File Type
-     */
-    const newTypeForm = ref<InstanceType<typeof VueForm> | null>(null);
-    const onNewSubmit = (form:customerFileType) => {
-        const formData = useForm(form);
-        formData.post(route('admin.cust.file-types.store'), {
-            onFinish: () => newTypeForm.value?.endSubmit(),
-        });
-    }
+/**
+ * New File Type
+ */
+const newTypeForm = ref<InstanceType<typeof VueForm> | null>(null);
+const onNewSubmit = (form: customerFileType) => {
+    const formData = useForm(form);
+    formData.post(route("admin.cust.file-types.store"), {
+        onFinish: () => newTypeForm.value?.endSubmit(),
+    });
+};
 
-    /**
-     * Edit FIle Type
-     */
-    const editTypeModal = ref<InstanceType<typeof Modal>   | null>(null);
-    const editTypeForm  = ref<InstanceType<typeof VueForm> | null>(null);
-    const editId        = ref<number>();
-    const openEditForm  = (type:customerFileType) => {
-        editId.value = type.file_type_id;
-        editTypeForm.value?.setFieldValue('description' as never, type.description as never);
-        editTypeModal.value?.show();
-    }
-    const onEditSubmit  = (form:customerFileType) => {
-        const formData = useForm(form);
-        formData.put(route('admin.cust.file-types.update', editId.value), {
-            onSuccess: () => editTypeModal.value?.hide(),
-            onFinish : () => editTypeForm.value?.endSubmit(),
-        });
-    }
+/**
+ * Edit FIle Type
+ */
+const editTypeModal = ref<InstanceType<typeof Modal> | null>(null);
+const editTypeForm = ref<InstanceType<typeof VueForm> | null>(null);
+const editId = ref<number>();
+const openEditForm = (type: customerFileType) => {
+    editId.value = type.file_type_id;
+    editTypeForm.value?.setFieldValue(
+        "description" as never,
+        type.description as never
+    );
+    editTypeModal.value?.show();
+};
+const onEditSubmit = (form: customerFileType) => {
+    const formData = useForm(form);
+    formData.put(route("admin.cust.file-types.update", editId.value), {
+        onSuccess: () => editTypeModal.value?.hide(),
+        onFinish: () => editTypeForm.value?.endSubmit(),
+    });
+};
 
-    /**
-     * Delete file type
-     */
-    const removeType = (type:customerFileType) => {
-        verifyModal('This cannot be undone').then(res => {
-            if(res)
-            {
-                loading.value = true;
-                router.delete(route('admin.cust.file-types.destroy', type.file_type_id), {
-                    onFinish: () => loading.value = false,
-                });
-            }
-        });
-    }
+/**
+ * Delete file type
+ */
+const removeType = (type: customerFileType) => {
+    verifyModal("This cannot be undone").then((res) => {
+        if (res) {
+            loading.value = true;
+            router.delete(
+                route("admin.cust.file-types.destroy", type.file_type_id),
+                {
+                    onFinish: () => (loading.value = false),
+                }
+            );
+        }
+    });
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

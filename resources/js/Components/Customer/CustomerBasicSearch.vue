@@ -54,7 +54,7 @@
         name     : '',
         city     : '',
         equip    : null,
-        //  Pagination and sort paramaters
+        //  Pagination and sort parameters
         page     : 1,
         perPage  : 10,
         sortField: 'name',
@@ -62,7 +62,7 @@
     });
 
     /**
-     * If there is an initial value passed to the search box, we will immediatly perform search
+     * If there is an initial value passed to the search box, we will immediately perform search
      */
     onMounted(() => {
         if(props.initialSearch && props.initialSearch.length)

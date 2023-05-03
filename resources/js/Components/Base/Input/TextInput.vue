@@ -12,17 +12,20 @@
                 <fa-icon icon="fa-circle-question" />
             </span>
         </label>
-        <input
-            v-model="value"
-            :id="id"
-            :type="type ? type : 'text'"
-            :placeholder="placeholder"
-            :disabled="disabled"
-            class="form-control order-2"
-            :class="{ 'is-valid' : isValid, 'is-invalid' : isInvalid }"
-            v-focus="focus"
-            @change="$emit('change', value)"
-        >
+        <div class="input-group">
+            <input
+                v-model="value"
+                :id="id"
+                :type="type ? type : 'text'"
+                :placeholder="placeholder"
+                :disabled="disabled"
+                class="form-control"
+                :class="{ 'is-valid' : isValid, 'is-invalid' : isInvalid }"
+                v-focus="focus"
+                @change="$emit('change', value)"
+            />
+            <slot name="group-text" />
+        </div>
         <span v-if="errorMessage && (meta.dirty || meta.touched)" class="text-danger">{{ errorMessage }}</span>
     </div>
 </template>

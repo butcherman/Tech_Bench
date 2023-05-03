@@ -1,4 +1,5 @@
 <template>
+    <Head :title="customer.name" />
     <div>
         <div class="row">
             <div class="col-md-8">
@@ -13,10 +14,10 @@
         </div>
         <div class="row">
             <div class="col-md-5">
-                <Equipment />
+                <!-- <Equipment /> -->
             </div>
             <div class="col-md-7">
-                <Contacts />
+                <!-- <Contacts /> -->
             </div>
         </div>
     </div>
@@ -55,7 +56,7 @@
         axios.post(route('customers.bookmark'), {
             cust_id: props.customer.cust_id,
             state: !isBookmark.value
-        }).then(res => {
+        }).then(() => {
             bookmarkLoading.value = false;
             isBookmark.value = !isBookmark.value;
         });

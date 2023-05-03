@@ -24,7 +24,7 @@ export interface equipmentFormType {
     custData: string[];
 }
 
-export interface customerFormType {
+export type customerFormType = {
     cust_id  : number;
     parent_id: string;
     name     : string;

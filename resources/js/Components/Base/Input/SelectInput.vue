@@ -1,10 +1,10 @@
 <template>
     <div class="mb-3">
-        <label v-if="label" :for="id">
-            <strong>{{ label }}:</strong>
+        <label v-if="label" :for="id" class="form-label w-100">
+            {{ label }}:
         </label>
         <select
-            class="form-select form-select-lg"
+            class="form-select"
             :class="{ 'is-valid' : isValid, 'is-invalid' : isInvalid }"
             v-model="value"
         >
