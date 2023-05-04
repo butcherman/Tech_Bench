@@ -30,8 +30,6 @@ const canDisable = computed(() => {
 });
 
 const disableCustomer = () => {
-    console.log("disable");
-
     verifyModal(
         "No one will be able to access this customer or their information"
     ).then((res) => {

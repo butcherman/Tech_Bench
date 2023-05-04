@@ -14,7 +14,7 @@
         </div>
         <div class="row">
             <div class="col-md-5">
-                <!-- <Equipment /> -->
+                <Equipment :equipment="equipment" />
             </div>
             <div class="col-md-7">
                 <!-- <Contacts /> -->
@@ -30,7 +30,12 @@ import EditCustomer from "@/Components/Customer/EditCustomer.vue";
 import ManageCustomer from "@/Components/Customer/ManageCustomer.vue";
 import Equipment from "@/Components/Customer/Equipment/Equipment.vue";
 import Contacts from "@/Components/Customer/Contacts/Contacts.vue";
-import { custPermissionsKey, isCustFavKey, customerKey } from '@/SymbolKeys/CustomerKeys';
+import {
+    custPermissionsKey,
+    isCustFavKey,
+    customerKey,
+    allowShareKey,
+} from "@/SymbolKeys/CustomerKeys";
 import { ref, computed, provide, watch, unref } from "vue";
 import {
     customerPermissionType,
@@ -61,10 +66,13 @@ watch(
 );
 provide(customerKey, custData);
 
+/**
+ * Determine if entries for this customer are allowed to be shared with other customers
+ */
 const allowShare = computed(() => {
     return custData.value.child_count > 0 || custData.value.parent_id !== null;
 });
-provide("allowShare", allowShare);
+provide(allowShareKey, allowShare);
 </script>
 
 <script lang="ts">

@@ -11,33 +11,37 @@
                     <fa-icon icon="fa-rotate" :spin="loading" />
                 </button>
                 Equipment:
-                <NewEquipment v-if="permission?.equipment.create" />
+                <NewEquipment v-if="permission?.equipment.create" :existing-equipment="equipment" />
             </div>
             <Overlay :loading="loading">
-                <ShowEquipment />
+                <ShowEquipment :equipment="equipment" />
             </Overlay>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import Overlay                         from '@/Components/Base/Overlay.vue';
-    import NewEquipment                    from '@/Components/Customer/Equipment/NewEquipment.vue';
-    import ShowEquipment                   from '@/Components/Customer/Equipment/ShowEquipment.vue';
-    import { ref, provide, inject }        from 'vue';
-    import { router }                     from '@inertiajs/vue3';
-    import type { customerPermissionType } from '@/Types';
+import Overlay from "@/Components/Base/Overlay.vue";
+import NewEquipment from "@/Components/Customer/Equipment/NewEquipment.vue";
+import ShowEquipment from "@/Components/Customer/Equipment/ShowEquipment.vue";
+import { ref, provide, inject } from "vue";
+import { router } from "@inertiajs/vue3";
+import { custPermissionsKey, toggleEquipLoadKey } from "@/SymbolKeys/CustomerKeys";
+import type { customerEquipmentType, customerPermissionType } from "@/Types";
 
-    const permission = inject<customerPermissionType>('permission');
+defineProps<{
+    equipment: customerEquipmentType[];
+}>();
 
-    const loading    = ref(false);
-    const toggleLoad = () => { loading.value = !loading.value }
-    provide('toggleLoad', toggleLoad);
+const permission = inject(custPermissionsKey) as customerPermissionType;
+const loading = ref(false);
+const toggleLoad = () => { loading.value = !loading.value }
+provide(toggleEquipLoadKey, toggleLoad);
 
-    const refreshEquipment = () => {
-        toggleLoad();
-        router.get(route('customers.equipment.index'), {
-            only: (['flash', 'equipment']),
-        });
-    }
+const refreshEquipment = () => {
+    toggleLoad();
+    router.get(route("customers.equipment.index"), {
+        only: ["flash", "equipment"],
+    });
+};
 </script>
