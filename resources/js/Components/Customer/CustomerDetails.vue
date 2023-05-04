@@ -52,11 +52,13 @@
 import BookmarkItem from "@/Components/Base/BookmarkItem.vue";
 import { inject, computed } from "vue";
 import { linkedCustomers } from "@/Modules/linkedCustomers.module";
+import { isCustFavKey, customerKey } from "@/SymbolKeys/CustomerKeys";
 import type { customerType } from "@/Types";
+import type { Ref } from "vue";
 
 const $route = route;
-const isFav = inject('isFav') as boolean;
-const customer = inject('customer') as customerType;
+const isFav = inject(isCustFavKey) as boolean;
+const customer = inject(customerKey) as Ref<customerType>;
 
 /**
  * Create a URL to go to Google Maps and address

@@ -22,6 +22,7 @@ import { computed, inject } from "vue";
 import { customerSearchBox } from "@/Modules/customerSearchBox.module";
 import { useForm } from "@inertiajs/vue3";
 import { verifyModal } from "@/Modules/verifyModal.module";
+import { customerKey, toggleManageLoadKey } from "@/SymbolKeys/CustomerKeys";
 import type { Ref } from "vue";
 import type { customerType } from "@/Types";
 import type { InertiaForm } from "@inertiajs/vue3";
@@ -32,8 +33,8 @@ type linkFormType = {
     add: boolean;
 };
 
-const toggleLoad = inject("toggleLoad") as (set: boolean) => void;
-const customer = inject<Ref<customerType>>("customer");
+const customer = inject(customerKey) as Ref<customerType>;
+const toggleLoad = inject(toggleManageLoadKey) as (set: boolean) => void;
 
 //  Determine if the customer can be linked to a parent or not
 const canLink = computed(() => {

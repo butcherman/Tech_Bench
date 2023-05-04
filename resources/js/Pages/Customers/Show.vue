@@ -8,7 +8,7 @@
             <div class="col-md-4 col-12 mt-md-0 mt-4">
                 <div class="float-md-end text-center w-50">
                     <EditCustomer v-if="permissions.details.update" />
-                    <!-- <ManageCustomer v-if="permissions.details.manage" /> -->
+                    <ManageCustomer v-if="permissions.details.manage" />
                 </div>
             </div>
         </div>
@@ -30,6 +30,7 @@ import EditCustomer from "@/Components/Customer/EditCustomer.vue";
 import ManageCustomer from "@/Components/Customer/ManageCustomer.vue";
 import Equipment from "@/Components/Customer/Equipment/Equipment.vue";
 import Contacts from "@/Components/Customer/Contacts/Contacts.vue";
+import { custPermissionsKey, isCustFavKey, customerKey } from '@/SymbolKeys/CustomerKeys';
 import { ref, computed, provide, watch, unref } from "vue";
 import {
     customerPermissionType,
@@ -47,30 +48,23 @@ const props = defineProps<{
 /**
  * Basic shared data between all components
  */
-provide('custPermission', props.permissions);
-provide('isFav', props.isFav);
-provide('allowShare', computed(() => {
-    return props.customer.child_count > 0 || props.customer.parent_id !== null;
-}));
+provide(custPermissionsKey, props.permissions);
+provide(isCustFavKey, props.isFav);
 
 /**
  * Customer Detail Data
  */
-    const custData = ref(props.customer);
-    watch(() => props.customer, (newCust) => custData.value = newCust);
-provide('customer', custData);
+const custData = ref(props.customer);
+watch(
+    () => props.customer,
+    (newCust) => (custData.value = newCust)
+);
+provide(customerKey, custData);
 
-    const allowShare = computed(() => {
-        return custData.value.child_count > 0 || custData.value.parent_id !== null;
-    });
-    provide('allowShare', allowShare);
-
-    /**
-     * Customer Equipment Data
-     */
-    const custEquip = ref(props.equipment);
-    watch(() => props.equipment, (newEquip) => custEquip.value = newEquip);
-    provide('equipment', custEquip);
+const allowShare = computed(() => {
+    return custData.value.child_count > 0 || custData.value.parent_id !== null;
+});
+provide("allowShare", allowShare);
 </script>
 
 <script lang="ts">

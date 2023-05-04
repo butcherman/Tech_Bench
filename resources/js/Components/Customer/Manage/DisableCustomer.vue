@@ -12,11 +12,12 @@
 import { computed, inject } from "vue";
 import { verifyModal } from "@/Modules/verifyModal.module";
 import { router } from "@inertiajs/vue3";
+import { customerKey, toggleManageLoadKey } from "@/SymbolKeys/CustomerKeys";
 import type { customerType } from "@/Types";
 import type { Ref } from "vue";
 
-const customer = inject("customer") as Ref<customerType>;
-const toggleLoad = inject("toggleLoad") as (set: boolean) => void;
+const customer = inject(customerKey) as Ref<customerType>;
+const toggleLoad = inject(toggleManageLoadKey) as (set: boolean) => void;
 
 const emit = defineEmits(['disabling']);
 

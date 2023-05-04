@@ -43,12 +43,13 @@ import { ref, inject } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { allStates } from "@/Modules/allStates.module";
 import { customerValidation } from "@/Modules/Validation/customerValidation.module";
+import { customerKey } from "@/SymbolKeys/CustomerKeys";
 import type { Ref } from "vue";
 import type { customerFormType, customerType } from "@/Types";
 
 const emit = defineEmits(["success"]);
 const editCustomerForm = ref<InstanceType<typeof VueForm> | null>(null);
-const customer = inject<Ref<customerType>>("customer");
+const customer = inject(customerKey) as Ref<customerType>;
 const initialValues = <customerType>{
     name: customer?.value?.name,
     dba_name: customer?.value?.dba_name,

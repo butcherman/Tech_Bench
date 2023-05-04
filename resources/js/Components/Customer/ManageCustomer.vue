@@ -26,6 +26,7 @@ import DeletedItems from "./Manage/DeletedItems.vue";
 import LinkCustomer from "@/Components/Customer/Manage/LinkCustomer.vue";
 import DisableCustomer from "./Manage/DisableCustomer.vue";
 import { ref, provide } from "vue";
+import { toggleManageLoadKey } from '@/SymbolKeys/CustomerKeys';
 
 const manageCustomerModal = ref<InstanceType<typeof Modal> | null>(null);
 const loading = ref<boolean>(false);
@@ -34,5 +35,5 @@ const loading = ref<boolean>(false);
 const toggleLoading = (set: boolean) => {
     loading.value = set;
 };
-provide("toggleLoad", toggleLoading);
+provide(toggleManageLoadKey, toggleLoading);
 </script>
