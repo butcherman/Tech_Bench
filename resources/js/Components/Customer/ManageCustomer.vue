@@ -1,6 +1,6 @@
 <template>
     <button
-        class="btn btn-danger btn-pill w-75 my-1"
+        class="btn btn-danger btn-pill btn-sm w-75 my-1"
         title="Manage Customer"
         v-tooltip
         @click="manageCustomerModal?.show"

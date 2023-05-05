@@ -1,23 +1,23 @@
 /*
 *   Reset all styles to my liking
 */
-@import 'Layouts/reset';
+@import "Layouts/reset";
 
 /*
 *   Bootstrap and add-ons for Bootstrap
 */
-@import 'bootstrap';
+@import "bootstrap";
 
 /*
 *   Override Bootstrap's default breakpoints
 */
 $grid-breakpoints: (
-    xs: 0,                  //  Default 0
-    sm: 600px,              //  Default 576
-    md: 1000px,             //  Default 768
-    lg: 1200px,             //  Default 992
-    xl: 1280px,             //  Default 1200
-    xxl: 1400px,            //  Default 1400
+    xs: 0,          //  Default 0
+    sm: 600px,      //  Default 576
+    md: 1000px,     //  Default 768
+    lg: 1200px,     //  Default 992
+    xl: 1280px,     //  Default 1200
+    xxl: 1400px,    //  Default 1400
 );
 
 $brk-xs: map-get($grid-breakpoints, xs);
@@ -49,16 +49,16 @@ $brk-xxl: map-get($grid-breakpoints, xxl);
 
 .card {
     height: 100%;
-    box-shadow: 15px 15px 10px 1px rgba(0,0,0,.2);
+    box-shadow: 15px 15px 10px 1px rgba(0, 0, 0, 0.2);
     .card-body {
         .card-title {
-            color         : #787878;
-            font-size     : .875rem;
-            font-weight   : 500;
-            margin-bottom : 1.2rem;
+            color: #787878;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
             padding-bottom: 0.5rem;
             text-transform: uppercase;
-            border-bottom : 1px solid rgba(0,0,0,.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
     }
 }
@@ -71,23 +71,22 @@ $brk-xxl: map-get($grid-breakpoints, xxl);
 *   Bookmark Styles
 */
 .bookmark-checked {
-    color: #D46E70;
+    color: #d46e70;
 }
 
 .bookmark-unchecked {
-    color: #C4C4C4;
+    color: #c4c4c4;
 }
 
 .no-label {
     > label {
         display: none;
     }
-    > .form-control {
-        // border-top: none;
-        // border-left: none;
-        // border-right: none;
-        border: none;
-        border-bottom: 1px solid #ced4da
+    > .input-group {
+        > .form-control {
+            border: none;
+            border-bottom: 1px solid #ced4da;
+        }
     }
 }
 
@@ -112,10 +111,14 @@ $brk-xxl: map-get($grid-breakpoints, xxl);
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-active {
+    transition-delay: 1s;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
+    opacity: 0;
 }

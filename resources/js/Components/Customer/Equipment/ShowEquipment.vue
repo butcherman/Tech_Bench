@@ -1,65 +1,67 @@
 <template>
-    <nav>
-        <div :key="loadKey" id="nav-tab" class="nav nav-tabs">
-            <button
-                v-for="(equipType, index) in equipment"
-                :key="equipType.cust_equip_id"
-                :id="`nav-${equipType.cust_equip_id}-tab`"
-                class="nav-link"
-                :class="{ active: index === 0 }"
-                data-bs-toggle="tab"
-                :data-bs-target="`#nav-${equipType.cust_equip_id}`"
-                type="button"
-            >
-                <span
-                    v-if="equipType.shared"
-                    title="Equipment Shared Across Sites"
-                    v-tooltip
-                >
-                    <fa-icon icon="fa-share-nodes" />
-                </span>
-                {{ equipType.name }}
-            </button>
-        </div>
-    </nav>
-    <div :key="loadKey" id="nav-tabContent" class="tab-content">
+    <div v-if="equipment.length === 0">
+        <h5 class="text-center">No Equipment Assigned to this Customer</h5>
+    </div>
+    <div v-else class="accordion accordion-flush" id="equipment-accordion">
         <div
-            v-for="(equipData, index) in equipment"
-            :key="equipData.cust_equip_id"
-            :id="`nav-${equipData.cust_equip_id}`"
-            class="tab-pane fade"
-            :class="{ 'active show': index === 0 }"
-            show
-            active
+            v-for="(equip, index) in equipment"
+            :key="equip.equip_id"
+            class="accordion-item"
         >
-            <table class="table table-smd">
-                <tbody>
-                    <tr
-                        v-for="data in equipData.customer_equipment_data"
-                        :key="data.id.toString()"
+            <h2 class="accordion-header">
+                <button
+                    class="accordion-button"
+                    :class="{ collapsed: index !== 0 }"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    :data-bs-target="`#collapse-${equip.equip_id}`"
+                >
+                    <span
+                        v-if="equip.shared"
+                        class="me-2"
+                        title="Shared between sites"
+                        v-tooltip
                     >
-                        <th class="text-end">{{ data.field_name }}:</th>
-                        <td style="min-width: 50%">{{ data.value }}</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2" class="text-center">
-                            <button
-                                v-if="permission?.equipment.delete"
-                                class="btn btn-danger mx-1"
-                                title="Delete Equipment"
-                                v-tooltip
-                                @click="deleteEquipment(equipData)"
-                            >
-                                <fa-icon icon="fa-trash-can" />
-                                Delete
-                            </button>
-                            <EditEquipment :equip-data="equipData" />
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+                        <fa-icon icon="fa-share" />
+                    </span>
+                    {{ equip.name }}
+                </button>
+            </h2>
+            <div
+                :id="`collapse-${equip.equip_id}`"
+                class="accordion-collapse collapse"
+                :class="{ show: index === 0 }"
+                data-bs-parent="#equipment-accordion"
+            >
+                <table class="table table-smd">
+                    <tbody>
+                        <tr
+                            v-for="data in equip.customer_equipment_data"
+                            :key="data.id.toString()"
+                        >
+                            <th class="text-end">{{ data.field_name }}:</th>
+                            <td style="min-width: 50%">{{ data.value }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <button
+                                    v-if="permission?.equipment.delete"
+                                    class="btn btn-danger mx-1"
+                                    title="Delete Equipment"
+                                    v-tooltip
+                                    @click="deleteEquipment(equip)"
+                                >
+                                    <fa-icon icon="fa-trash-can" />
+                                    Delete
+                                </button>
+                                <EditEquipment :equip-data="equip" />
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -117,8 +119,9 @@ const deleteEquipment = (equip: customerEquipmentType) => {
 </script>
 
 <style scoped lang="scss">
-.nav-link.active {
-    background-color: rgb(227, 241, 241);
+h2 button {
+    font-weight: bold;
+    background-color: #619ced;
 }
 
 table {
