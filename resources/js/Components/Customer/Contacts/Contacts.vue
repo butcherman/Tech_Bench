@@ -13,30 +13,56 @@
                 Contacts:
                 <NewContact v-if="permission?.contact.create" />
             </div>
-            <Overlay :loading="loading">
-                Show Contacts
-            </Overlay>
+            <Overlay :loading="loading"> Show Contacts </Overlay>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import Overlay                         from '@/Components/Base/Overlay.vue';
-    import NewContact                      from './NewContact.vue';
-    import { ref, provide, inject }        from 'vue';
-    import { router }                     from '@inertiajs/vue3';
-    import type { customerPermissionType } from '@/Types';
+import Overlay from "@/Components/Base/Overlay.vue";
+import NewContact from "./NewContact.vue";
+import axios from "axios";
+import { ref, provide, inject, onMounted } from "vue";
+import { router } from "@inertiajs/vue3";
+import {
+    custPermissionsKey,
+    toggleContactsLoadKey,
+    phoneTypesKey,
+} from "@/SymbolKeys/CustomerKeys";
+import type { customerPermissionType, phoneNumberType } from "@/Types";
 
-    const permission = inject<customerPermissionType>('permission');
+const permission = inject(custPermissionsKey) as customerPermissionType;
+const loading = ref(false);
+const toggleLoad = () => {
+    loading.value = !loading.value;
+};
+provide(toggleContactsLoadKey, toggleLoad);
 
-    const loading    = ref(false);
-    const toggleLoad = () => { loading.value = !loading.value }
-    provide('toggleLoad', toggleLoad);
+/**
+ * Check for new model values
+ */
+const refreshContacts = () => {
+    toggleLoad();
+    router.get(route("customers.contacts.index"), {
+        only: ["flash", "contacts"],
+    });
+};
 
-    const refreshContacts = () => {
-        toggleLoad();
-        router.get(route('customers.contacts.index'), {
-            only: (['flash', 'contacts']),
+/**
+ * Types of possible selections for a phone number type
+ */
+onMounted(() => getPhoneTypes());
+const phoneTypes = ref<string[]>([]);
+provide(phoneTypesKey, phoneTypes);
+const getPhoneTypes = () => {
+    if (phoneTypes.value.length === 0) {
+        axios.get(route("get-number-types")).then((res) => {
+            let names: string[] = [];
+            res.data.forEach((item: phoneNumberType) => {
+                names.push(item.description);
+            });
+            phoneTypes.value = names;
         });
     }
+};
 </script>

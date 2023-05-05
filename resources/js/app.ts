@@ -1,6 +1,7 @@
 /**
  * Stylesheets
  */
+import 'maz-ui/css/main.css';
 import '../scss/app.scss';
 
 /*

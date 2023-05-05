@@ -85,7 +85,6 @@ onMounted(() => getEquipment());
 
 const props = defineProps<{
     existingEquipment: customerEquipmentType[];
-    equipmentList: equipSelectBox;
 }>();
 const emit = defineEmits(["success"]);
 
@@ -94,7 +93,6 @@ const custData = inject(customerKey) as Ref<customerType>;
 const toggleLoad = inject(toggleEquipLoadKey) as voidFunctionType;
 
 const loading = ref<boolean>(false);
-const equipList = ref<equipSelectBox>();
 const newEquipmentForm = ref<InstanceType<typeof VueForm> | null>(null);
 const otherFields = ref<dataListType[]>();
 const validationSchema = object({
@@ -105,6 +103,7 @@ const validationSchema = object({
 /**
  * Get a full list of available equipment types
  */
+const equipList = ref<equipSelectBox>();
 const getEquipment = async () => {
     if (equipList.value === undefined) {
         loading.value = true;

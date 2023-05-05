@@ -28,14 +28,14 @@
             </Link>
         </h6>
         <address>
-            <div class="float-start me-1 text-muted">
+            <div class="float-start me-1 h-100 text-muted">
                 <fa-icon icon="fa-map-marked" />
             </div>
             <a
                 id="addr-span"
                 :href="mapUrl"
                 target="_blank"
-                class="float-left ml-2"
+                class="float-start ml-2"
                 title="Click for Map"
                 v-tooltip
             >

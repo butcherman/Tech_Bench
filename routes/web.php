@@ -11,6 +11,7 @@
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Home\DownloadController;
+use App\Http\Controllers\Home\GetPhoneTypesController;
 use App\Http\Controllers\Home\UploadFileController;
 use App\Http\Controllers\Home\UploadImageController;
 use App\Http\Controllers\User\ChangePasswordController;
@@ -42,6 +43,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/{user}/update', UpdateAccountController::class)->name('update');
         Route::post('password', [ChangePasswordController::class, 'set'])->name('password.store');
     });
+
+    Route::get('phone-number-types', GetPhoneTypesController::class)->name('get-number-types');
 
     // Route::post('upload-image',      UploadImageController::class)->name('upload-image');
 });

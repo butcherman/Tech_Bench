@@ -1,6 +1,6 @@
 <template>
     <div class="mb-3">
-        <label v-if="label" :for="id" class="form-label w-100">
+        <label :for="id" class="form-label w-100">
             {{ label }}:
             <span
                 v-if="help"
@@ -12,20 +12,15 @@
                 <fa-icon icon="fa-circle-question" />
             </span>
         </label>
-        <div class="input-group">
-            <input
-                v-model="value"
-                :id="id"
-                :type="type ? type : 'text'"
-                :placeholder="placeholder"
-                :disabled="disabled"
-                class="form-control"
-                :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
-                v-focus="focus"
-                @change="$emit('change', value)"
-            />
-            <slot name="group-text" />
-        </div>
+        <MazTextarea
+            v-model="(value as string)"
+            :rows="getRows"
+            :id="id"
+            :disabled="disabled"
+            :label="placeholder"
+            :class="{ 'is-valid': isValid, is_invalid: isInvalid }"
+            @change="$emit('change', value)"
+        />
         <span
             v-if="errorMessage && (meta.dirty || meta.touched)"
             class="text-danger"
@@ -35,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import MazTextarea from 'maz-ui/components/MazTextarea';
 import { toRef, computed } from "vue";
 import { useField } from "vee-validate";
 import { helpModal } from "@/Modules/helpModal.module";
@@ -44,12 +40,11 @@ defineEmits(["change"]);
 const props = defineProps<{
     id: string;
     name: string;
-    type?: string;
-    label?: string;
+    label: string;
     placeholder?: string;
-    focus?: boolean;
     disabled?: boolean;
     help?: string;
+    rows?: number;
 }>();
 
 const isValid = computed(() => {
@@ -58,6 +53,10 @@ const isValid = computed(() => {
 
 const isInvalid = computed(() => {
     return !meta.valid && meta.validated && !meta.pending;
+});
+
+const getRows = computed(() => {
+    return props.rows !== undefined ? props.rows : 3;
 });
 
 const nameRef = toRef(props, "name");

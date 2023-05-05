@@ -11,7 +11,6 @@
     <Modal ref="newEquipmentModal" title="New Equipment">
         <NewCustomerEquipmentForm
             :existing-equipment="existingEquipment"
-            :equipmentList="equipList"
             @success="newEquipmentModal?.hide()"
         />
     </Modal>
@@ -21,16 +20,11 @@
 import Modal from "@/Components/Base/Modal/Modal.vue";
 import NewCustomerEquipmentForm from "@/Forms/Customer/NewCustomerEquipmentForm.vue";
 import { ref } from "vue";
-import type { categoryList, customerEquipmentType } from "@/Types";
-
-interface equipSelectBox {
-    [key: string]: categoryList;
-}
+import type { customerEquipmentType } from "@/Types";
 
 defineProps<{
     existingEquipment: customerEquipmentType[];
 }>();
 
-const equipList = ref<equipSelectBox>({});
 const newEquipmentModal = ref<InstanceType<typeof Modal> | null>(null);
 </script>

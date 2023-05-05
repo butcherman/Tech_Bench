@@ -1,11 +1,16 @@
 import type { userType } from '@/Types';
 import type { Page, PageProps } from '@inertiajs/vue3';
 
+export interface phoneNumberType {
+    description: string;
+    icon_class: string;
+}
+
 export interface pageInterface extends Page<PageProps> {
     app          : appProps;
     errors       : any;
     flash        : flashProps;
-    notifications: notifciationProps;
+    notifications: notificationProps;
     navbar       : navBarProps[];
     breadcrumbs  : breadcrumbsType[];
 }
@@ -31,7 +36,7 @@ export interface flashMessageType {
     message: string;
 }
 
-interface notifciationProps {
+interface notificationProps {
     list: object[];     //  TODO - type this
     new : number;
 }

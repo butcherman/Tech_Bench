@@ -12,20 +12,17 @@
                 <fa-icon icon="fa-circle-question" />
             </span>
         </label>
-        <div class="input-group">
-            <input
-                v-model="value"
-                :id="id"
-                :type="type ? type : 'text'"
-                :placeholder="placeholder"
-                :disabled="disabled"
-                class="form-control"
-                :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
-                v-focus="focus"
-                @change="$emit('change', value)"
-            />
-            <slot name="group-text" />
-        </div>
+        <MazPhoneNumberInput
+            v-model="(value as string)"
+            :id="id"
+            :disabled="disabled"
+            class="w-100"
+            :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
+            v-focus="focus"
+            @change="$emit('change', value)"
+            no-country-selector
+            size="sm"
+        />
         <span
             v-if="errorMessage && (meta.dirty || meta.touched)"
             class="text-danger"
@@ -35,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+import MazPhoneNumberInput from "maz-ui/components/MazPhoneNumberInput";
 import { toRef, computed } from "vue";
 import { useField } from "vee-validate";
 import { helpModal } from "@/Modules/helpModal.module";

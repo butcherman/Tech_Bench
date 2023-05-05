@@ -70,12 +70,3 @@ export interface customerPaginationType {
     listTotal: number;
     pageArr: number[];
 }
-
-/**
- * Provide/Inject Types
- */
-export interface customerBookmarkInjection {
-    isBookmark: Ref<boolean>;
-    bookmarkLoading: Ref<boolean>;
-    toggleBookmark: () => void;
-}

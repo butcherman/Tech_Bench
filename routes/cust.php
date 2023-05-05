@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
+use App\Http\Controllers\Customers\CustomerContactController;
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerFileTypeController;
@@ -54,6 +55,11 @@ Route::middleware('auth')->group(function () {
                 ->name('force-delete')
                 ->withTrashed();
         });
+
+        /**
+         * Contacts
+         */
+        Route::resource('contacts', CustomerContactController::class);
     });
 
     Route::resource('customers', CustomerController::class)
