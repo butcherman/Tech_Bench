@@ -279,7 +279,7 @@
         name     : '',
         city     : '',
         equip    : null,
-        //  Pagination and sort paramaters
+        //  Pagination and sort parameters
         page     : 1,
         perPage  : props.perPage,
         sortField: 'name',

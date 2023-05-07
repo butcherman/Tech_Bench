@@ -17,7 +17,7 @@
                 <Equipment :equipment="equipment" />
             </div>
             <div class="col-md-7">
-                <Contacts />
+                <Contacts :contacts="contacts" />
             </div>
         </div>
     </div>
@@ -37,10 +37,11 @@ import {
     allowShareKey,
 } from "@/SymbolKeys/CustomerKeys";
 import { ref, computed, provide, watch, unref } from "vue";
-import {
+import type {
     customerPermissionType,
     customerType,
     customerEquipmentType,
+    customerContactType,
 } from "@/Types";
 
 const props = defineProps<{
@@ -48,6 +49,7 @@ const props = defineProps<{
     isFav: boolean;
     customer: customerType;
     equipment: customerEquipmentType[];
+    contacts: customerContactType;
 }>();
 
 /**

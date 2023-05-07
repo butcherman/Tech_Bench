@@ -1,3 +1,4 @@
+import { contactPhoneType } from '@/Types';
 /**
  * Form types that will be used more than once are exported here
  */
@@ -33,4 +34,15 @@ export type customerFormType = {
     city     : string;
     state    : string;
     zip      : number;
+}
+
+export type customerContactFormType = {
+        cont_id: number;
+        cust_id: number;
+        shared: boolean;
+        name: string;
+        email: string | null;
+        title: string | null;
+        note: string | null;
+        phones: contactPhoneType
 }

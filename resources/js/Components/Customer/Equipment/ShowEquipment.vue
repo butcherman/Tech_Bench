@@ -33,7 +33,7 @@
                 :class="{ show: index === 0 }"
                 data-bs-parent="#equipment-accordion"
             >
-                <table class="table table-smd">
+                <table class="table table-sm">
                     <tbody>
                         <tr
                             v-for="data in equip.customer_equipment_data"

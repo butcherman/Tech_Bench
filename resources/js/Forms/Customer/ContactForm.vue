@@ -82,13 +82,20 @@
                     </div>
                 </div>
                 <div class="clearfix mb-4">
-                    <button class="btn btn-info btn-sm btn-pill float-end" @click="newPhone">
+                    <button
+                        class="btn btn-info btn-sm btn-pill float-end"
+                        @click="newPhone"
+                    >
                         <fa-icon icon="plus" />
                         Add
                     </button>
                 </div>
             </fieldset>
-            <SubmitButton :submitted="loading" text="Submit" class="mt-auto" />
+            <SubmitButton
+                :submitted="loading"
+                :text="submitText"
+                class="mt-auto"
+            />
         </Overlay>
     </form>
 </template>
@@ -101,51 +108,84 @@ import SelectInput from "@/Components/Base/Input/SelectInput.vue";
 import PhoneNumberInput from "@/Components/Base/Input/PhoneNumberInput.vue";
 import Overlay from "@/Components/Base/Overlay.vue";
 import SubmitButton from "@/Components/Base/Input/SubmitButton.vue";
-import { ref, reactive, onMounted, inject } from "vue";
+import { ref, onMounted, inject, watch, computed } from "vue";
+import { useForm } from "@inertiajs/vue3";
 import {
     allowShareKey,
     customerKey,
     phoneTypesKey,
     toggleContactsLoadKey,
 } from "@/SymbolKeys/CustomerKeys";
-import {
-    useForm as useVeeForm,
-    useIsFormTouched,
-    useFieldArray,
-} from "vee-validate";
-import { object, string, boolean, array } from 'yup';
+import { useForm as useVeeForm, useFieldArray } from "vee-validate";
+import { object, string, boolean, array } from "yup";
 import type { ComputedRef, Ref } from "vue";
-import type { customerType, phoneNumberType } from "@/Types";
-import { useForm } from "@inertiajs/vue3";
+import type {
+    customerType,
+    customerContactType,
+    contactPhoneType,
+} from "@/Types";
 
-const emit = defineEmits(['success']);
+const emit = defineEmits(["success"]);
 const props = defineProps<{
-    contactData?: {};
+    contactData?: customerContactType;
 }>();
 
 const allowShare = inject(allowShareKey) as ComputedRef<boolean>;
 const custData = inject(customerKey) as Ref<customerType>;
 const toggleLoad = inject(toggleContactsLoadKey) as () => void;
 const phoneTypes = inject(phoneTypesKey) as Ref<string[]>;
+const submitText = computed(() =>
+    props.contactData === undefined ? "Add Contact" : "Update Contact"
+);
 const loading = ref<boolean>(false);
 
+/**
+ * When a new contact is clicked, load that data into the edit form
+ */
+watch(props, () => {
+    resetForm();
+
+    setValues({
+        name: props.contactData?.name,
+        title: props.contactData?.title,
+        email: props.contactData?.email,
+        shared: props.contactData?.shared,
+        note: props.contactData?.note,
+    });
+
+    props.contactData?.customer_contact_phone.forEach(
+        (item: contactPhoneType) => {
+            push({
+                type: item.phone_number_type.description,
+                number: item.phone_number,
+                ext: item.extension,
+                id: item.id,
+            });
+        }
+    );
+
+    newPhone();
+});
 
 /**
  * Push a new phone number to the phones array
  */
 const newPhone = () => {
     push({
-        type: 'Mobile',
-        number: '',
-        ext: '',
+        type: "Mobile",
+        number: "",
+        ext: "",
     });
-}
+};
 
 /**
  * Initialize form
  */
-const { handleSubmit, values, errors } = useVeeForm({
-    initialValues: {},
+const { handleSubmit, resetForm, setValues } = useVeeForm({
+    initialValues: {
+        cust_id: 1,
+        shared: false,
+    },
     validationSchema: object({
         name: string().required(),
         title: string().nullable(),
@@ -163,20 +203,29 @@ onMounted(() => newPhone());
  */
 const onSubmit = handleSubmit((form) => {
     form.cust_id = custData.value.cust_id;
-    console.log(form);
-
     const formData = useForm(form);
-
     loading.value = true;
-    if(props.contactData !== undefined)
-    {
-        console.log('update contact');
-    }
-    else
-    {
-        formData.post(route('customers.contacts.store'), {
-            onFinish: () => {toggleLoad(); loading.value = false},
-            onSuccess: () => emit('success'),
+    toggleLoad();
+
+    // Determine if this is a new contact, or updating an existing one
+    if (props.contactData !== undefined) {
+        formData.put(
+            route("customers.contacts.update", props.contactData.cont_id),
+            {
+                onFinish: () => {
+                    toggleLoad();
+                    loading.value = false;
+                },
+                onSuccess: () => emit("success"),
+            }
+        );
+    } else {
+        formData.post(route("customers.contacts.store"), {
+            onFinish: () => {
+                toggleLoad();
+                loading.value = false;
+            },
+            onSuccess: () => emit("success"),
         });
     }
 });

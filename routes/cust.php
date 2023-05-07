@@ -9,6 +9,7 @@ use App\Http\Controllers\Customers\CustomerFileTypeController;
 use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
+use App\Http\Controllers\Customers\DownloadContactController;
 use App\Http\Controllers\Customers\GetCustomerSettingsController;
 use App\Http\Controllers\Customers\GetDeletedItemsController;
 use App\Http\Controllers\Customers\GetLinkedCustomerController;
@@ -60,6 +61,7 @@ Route::middleware('auth')->group(function () {
          * Contacts
          */
         Route::resource('contacts', CustomerContactController::class);
+        Route::get('contacts/download/{contact}', DownloadContactController::class)->name('contacts.download');
     });
 
     Route::resource('customers', CustomerController::class)

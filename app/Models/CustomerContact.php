@@ -30,4 +30,12 @@ class CustomerContact extends Model
     {
         return $this->hasMany(CustomerContactPhone::class, 'cont_id', 'cont_id');
     }
+
+    /**
+     * Each Contact is assigned to a customer
+     */
+    public function Customer()
+    {
+        return $this->hasOne(Customer::class, 'cust_id', 'cust_id');
+    }
 }

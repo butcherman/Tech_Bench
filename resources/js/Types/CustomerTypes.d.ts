@@ -70,3 +70,29 @@ export interface customerPaginationType {
     listTotal: number;
     pageArr: number[];
 }
+
+/**
+ * Customer Contact Information
+ */
+export interface contactPhoneType {
+    cont_id: number;
+    extension: string | null;
+    formatted: string;
+    id: number;
+    phone_number: number;
+    phone_number_type: {
+        description: string;
+        icon_class: string;
+    };
+}
+
+export interface customerContactType {
+    cont_id: number;
+    cust_id: number;
+    shared: boolean;
+    name: string;
+    email: string | null;
+    title: string | null;
+    note: string | null;
+    customer_contact_phone: contactPhoneType[];
+}

@@ -13,7 +13,9 @@
                 Contacts:
                 <NewContact v-if="permission?.contact.create" />
             </div>
-            <Overlay :loading="loading"> Show Contacts </Overlay>
+            <Overlay :loading="loading">
+                <ShowContacts :contacts="contacts" />
+             </Overlay>
         </div>
     </div>
 </template>
@@ -21,6 +23,7 @@
 <script setup lang="ts">
 import Overlay from "@/Components/Base/Overlay.vue";
 import NewContact from "./NewContact.vue";
+import ShowContacts from "./ShowContacts.vue";
 import axios from "axios";
 import { ref, provide, inject, onMounted } from "vue";
 import { router } from "@inertiajs/vue3";
@@ -29,7 +32,11 @@ import {
     toggleContactsLoadKey,
     phoneTypesKey,
 } from "@/SymbolKeys/CustomerKeys";
-import type { customerPermissionType, phoneNumberType } from "@/Types";
+import type { customerContactType, customerPermissionType, phoneNumberType } from "@/Types";
+
+const props = defineProps<{
+    contacts: customerContactType[];
+}>();
 
 const permission = inject(custPermissionsKey) as customerPermissionType;
 const loading = ref(false);
