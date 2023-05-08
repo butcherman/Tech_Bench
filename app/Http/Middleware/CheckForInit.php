@@ -27,6 +27,7 @@ class CheckForInit
 
     /**
      * Check to see if the app has been setup for the first time
+     *
      * @codeCoverageIgnore
      */
     public function handle(Request $request, Closure $next): Response
@@ -36,8 +37,7 @@ class CheckForInit
             && ! in_array(Route::current()->getName(), $this->bypassRoutes)
             && config('app.env') !== 'testing') {
 
-            if($request->user()->user_id !== 1)
-            {
+            if ($request->user()->user_id !== 1) {
                 abort(403);
             }
 

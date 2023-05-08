@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Actions;
 
 use App\Models\CustomerContact;
@@ -19,11 +18,9 @@ class BuildContactVCard
         $vCard->addAddress(null, null, $contact->customer->address, $contact->customer->city, $contact->customer->state, $contact->customer->zip, null);
 
         //  Phone Numbers
-        foreach($contact->CustomerContactPhone as $phone)
-        {
+        foreach ($contact->CustomerContactPhone as $phone) {
             $number = $phone->formatted;
-            if($phone->extension)
-            {
+            if ($phone->extension) {
                 $number .= ', '.$phone->extension;
             }
             $vCard->addPhoneNumber($number, $phone->PhoneNumberType->description);

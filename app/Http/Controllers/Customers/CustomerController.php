@@ -72,7 +72,7 @@ class CustomerController extends Controller
                 ->where('cust_id', $customer->cust_id)->count(),
             'customer' => fn () => $customer,
             'equipment' => fn () => $customer->ParentEquipment->merge($customer->CustomerEquipment),
-            'contacts' => fn() => $customer->ParentContact->merge($customer->CustomerContact),
+            'contacts' => fn () => $customer->ParentContact->merge($customer->CustomerContact),
         ]);
     }
 

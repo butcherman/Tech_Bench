@@ -6,8 +6,6 @@ use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Models\CustomerContactPhone;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DownloadContactTest extends TestCase
@@ -19,7 +17,7 @@ class DownloadContactTest extends TestCase
     {
         $cust = Customer::factory()->create();
         $cont = CustomerContact::factory()->create(['cust_id' => $cust->cust_id]);
-        CustomerContactPhone::factory()->create(['cont_id' => $cont->cont_id, 'extension' =>123]);
+        CustomerContactPhone::factory()->create(['cont_id' => $cont->cont_id, 'extension' => 123]);
 
         $response = $this->get(route('customers.contacts.download', $cont->cont_id));
         $response->assertStatus(302);

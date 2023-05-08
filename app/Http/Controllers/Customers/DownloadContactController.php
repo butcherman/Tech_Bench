@@ -14,6 +14,7 @@ class DownloadContactController extends Controller
     public function __invoke(CustomerContact $contact)
     {
         $vCard = new BuildContactVCard;
+
         return $vCard->buildCustomerContact($contact)->download();
     }
 }

@@ -28,12 +28,12 @@ class UserPasswordPolicyController extends Controller
                 'contains_lowercase' => (bool) config('auth.passwords.settings.contains_lowercase'),
                 'contains_number' => (bool) config('auth.passwords.settings.contains_number'),
                 'contains_special' => (bool) config('auth.passwords.settings.contains_special'),
-                'allowOath'     => (bool) config('services.azure.allow_login'),
+                'allowOath' => (bool) config('services.azure.allow_login'),
                 'allowRegister' => (bool) config('services.azure.allow_register'),
-                'tenantId'      => config('services.azure.tenant'),
-                'clientId'      => config('services.azure.client_id'),
-                'clientSecret'  => config('services.azure.client_secret') ? __('admin.fake_password') : '',
-                'redirectUri'   => config('app.url').'/auth/callback',
+                'tenantId' => config('services.azure.tenant'),
+                'clientId' => config('services.azure.client_id'),
+                'clientSecret' => config('services.azure.client_secret') ? __('admin.fake_password') : '',
+                'redirectUri' => config('app.url').'/auth/callback',
             ],
         ]);
     }
@@ -49,8 +49,7 @@ class UserPasswordPolicyController extends Controller
         Log::notice('Password policy has been updated by '.$request->user()->username, $request->toArray());
 
         //  If the first time setup flag is set, we will disable it
-        if(config('app.first_time_setup'))
-        {
+        if (config('app.first_time_setup')) {
             $this->clearSetting('app.first_time_setup');
         }
 
