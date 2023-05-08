@@ -46,6 +46,8 @@ class CustomerContactController extends Controller
      */
     public function destroy(CustomerContact $contact)
     {
+        $this->authorize('delete', $contact);
+
         $contact->delete();
         return back()->with('warning', 'Contact Deleted');
     }

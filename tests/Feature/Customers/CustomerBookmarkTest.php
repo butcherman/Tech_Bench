@@ -26,7 +26,7 @@ class CustomerBookmarkTest extends TestCase
         $customer = Customer::factory()->create();
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post(route('customers.bookmark'), ['cust_id' => $customer->cust_id, 'state' => true]);
+        $response = $this->actingAs($user)->post(route('customers.bookmark'), ['model_id' => $customer->cust_id, 'state' => true]);
         $response->assertSuccessful();
         $response->assertStatus(204);
         $this->assertDatabaseHas('user_customer_bookmarks', ['user_id' => $user->user_id, 'cust_id' => $customer->cust_id]);
@@ -41,7 +41,7 @@ class CustomerBookmarkTest extends TestCase
             'user_id' => $user->user_id,
         ]);
 
-        $response = $this->actingAs($user)->post(route('customers.bookmark'), ['cust_id' => $customer->cust_id, 'state' => false]);
+        $response = $this->actingAs($user)->post(route('customers.bookmark'), ['model_id' => $customer->cust_id, 'state' => false]);
         $response->assertSuccessful();
         $response->assertStatus(204);
         $this->assertDatabaseMissing('user_customer_bookmarks', ['user_id' => $user->user_id, 'cust_id' => $customer->cust_id]);
@@ -56,7 +56,7 @@ class CustomerBookmarkTest extends TestCase
             'user_id' => $user->user_id,
         ]);
 
-        $response = $this->actingAs($user)->post(route('customers.bookmark'), ['cust_id' => $customer->cust_id, 'state' => true]);
+        $response = $this->actingAs($user)->post(route('customers.bookmark'), ['model_id' => $customer->cust_id, 'state' => true]);
         $response->assertStatus(409);
     }
 }
