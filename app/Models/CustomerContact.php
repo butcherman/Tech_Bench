@@ -38,4 +38,23 @@ class CustomerContact extends Model
     {
         return $this->hasOne(Customer::class, 'cust_id', 'cust_id');
     }
+
+    /**
+     * Return the soft deleted items re-formatted to match other models
+     */
+    public static function getTrashed(Customer $customer)
+    {
+        $data = self::where('cust_id', $customer->cust_id)
+            ->onlyTrashed()
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'item_id' => $item->cont_id,
+                    'item_name' => $item->name,
+                    'item_deleted' => $item->deleted_at->toFormattedDateString(),
+                ];
+            });
+
+        return $data;
+    }
 }

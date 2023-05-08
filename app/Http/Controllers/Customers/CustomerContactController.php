@@ -52,4 +52,28 @@ class CustomerContactController extends Controller
 
         return back()->with('warning', 'Contact Deleted');
     }
+
+    /**
+     * Restore a soft deleted item
+     */
+    public function restore(CustomerContact $contact)
+    {
+        $this->authorize('restore', $contact);
+
+        $contact->restore();
+
+        return back()->with('success', 'Contact Restored');
+    }
+
+    /**
+     * Force delete contact forever
+     */
+    public function forceDelete(CustomerContact $contact)
+    {
+        $this->authorize('forceDelete', $contact);
+
+        $contact->forceDelete();
+
+        return back()->with('danger', 'Customer Contact Deleted');
+    }
 }

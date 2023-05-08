@@ -8,10 +8,10 @@
         <fa-icon icon="fa-tasks" />
         Manage
     </button>
-    <Modal ref="manageCustomerModal" title="Manage Customer">
+    <Modal ref="manageCustomerModal" title="Manage Customer" @show="deletedItemsComponent?.getDeletedItems()">
         <div class="text-center mt-2">
             <Overlay :loading="loading">
-                <DeletedItems />
+                <DeletedItems ref="deletedItemsComponent" />
                 <LinkCustomer />
                 <DisableCustomer @disabling="manageCustomerModal?.hide()" />
             </Overlay>
@@ -29,6 +29,7 @@ import { ref, provide } from "vue";
 import { toggleManageLoadKey } from '@/SymbolKeys/CustomerKeys';
 
 const manageCustomerModal = ref<InstanceType<typeof Modal> | null>(null);
+const deletedItemsComponent = ref<InstanceType<typeof DeletedItems> | null>(null);
 const loading = ref<boolean>(false);
 
 //  Loading state for the Modal

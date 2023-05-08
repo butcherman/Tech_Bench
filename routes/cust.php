@@ -61,7 +61,11 @@ Route::middleware('auth')->group(function () {
          * Contacts
          */
         Route::resource('contacts', CustomerContactController::class);
-        Route::get('contacts/download/{contact}', DownloadContactController::class)->name('contacts.download');
+        Route::prefix('contacts')->name('contacts.')->group(function() {
+            Route::get('{contact}/restore', [CustomerContactController::class, 'restore'])->name('restore')->withTrashed();
+            Route::delete('{contact}/force-delete', [CustomerContactController::class, 'forceDelete'])->name('force-delete')->withTrashed();
+            Route::get('download/{contact}', DownloadContactController::class)->name('download');
+        });
     });
 
     Route::resource('customers', CustomerController::class)
