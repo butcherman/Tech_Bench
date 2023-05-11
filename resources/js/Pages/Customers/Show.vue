@@ -20,6 +20,11 @@
                 <Contacts :contacts="contacts" />
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <Notes :notes="notes" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -30,6 +35,7 @@ import EditCustomer from "@/Components/Customer/EditCustomer.vue";
 import ManageCustomer from "@/Components/Customer/ManageCustomer.vue";
 import Equipment from "@/Components/Customer/Equipment/Equipment.vue";
 import Contacts from "@/Components/Customer/Contacts/Contacts.vue";
+import Notes from '@/Components/Customer/Notes/Notes.vue';
 import {
     custPermissionsKey,
     isCustFavKey,
@@ -42,6 +48,7 @@ import type {
     customerType,
     customerEquipmentType,
     customerContactType,
+    customerNoteType,
 } from "@/Types";
 
 const props = defineProps<{
@@ -49,7 +56,8 @@ const props = defineProps<{
     isFav: boolean;
     customer: customerType;
     equipment: customerEquipmentType[];
-    contacts: customerContactType;
+    contacts: customerContactType[];
+    notes: customerNoteType[];
 }>();
 
 /**

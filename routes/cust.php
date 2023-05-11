@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customers\CustomerNoteController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
 use App\Http\Controllers\Customers\CustomerContactController;
@@ -65,6 +66,15 @@ Route::middleware('auth')->group(function () {
             Route::get('{contact}/restore', [CustomerContactController::class, 'restore'])->name('restore')->withTrashed();
             Route::delete('{contact}/force-delete', [CustomerContactController::class, 'forceDelete'])->name('force-delete')->withTrashed();
             Route::get('download/{contact}', DownloadContactController::class)->name('download');
+        });
+
+        /**
+         * Notes
+         */
+        Route::resource('notes', CustomerNoteController::class);
+        Route::prefix('notes')->name('notes.')->group(function() {
+            Route::get('{note}/restore', [CustomerNoteController::class, 'restore'])->name('restore');
+            Route::delete('{note}/force-delete', [CustomerNoteController::class, 'forceDelete'])->name('force-delete')->withTrashed();
         });
     });
 

@@ -16,6 +16,7 @@ export interface customerPermissionType {
     };
     equipment: basicPermissionsType;
     contact: basicPermissionsType;
+    notes: basicPermissionsType;
 }
 
 export interface customerFileType {
@@ -95,4 +96,11 @@ export interface customerContactType {
     title: string | null;
     note: string | null;
     customer_contact_phone: contactPhoneType[];
+}
+
+export interface customerNoteType {
+    subject: string;
+    details: string;
+    shared: boolean;
+    urgent: boolean;
 }

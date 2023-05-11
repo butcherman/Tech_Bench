@@ -45,8 +45,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('phone-number-types', GetPhoneTypesController::class)->name('get-number-types');
-
-    // Route::post('upload-image',      UploadImageController::class)->name('upload-image');
+    Route::post('upload-image', UploadImageController::class)->name('upload-image');
 });
 
 /**

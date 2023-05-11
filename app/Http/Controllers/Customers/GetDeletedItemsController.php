@@ -19,6 +19,8 @@ class GetDeletedItemsController extends Controller
         return response()->json([
             'equipment' => CustomerEquipment::getTrashed($customer),
             'contacts' => CustomerContact::getTrashed($customer),
+            'notes' => [],
+            'files' => [],
         ]);
     }
 }

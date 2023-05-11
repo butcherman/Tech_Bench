@@ -4,7 +4,6 @@ namespace App\Actions;
 
 use App\Traits\AllowTrait;
 use Illuminate\Support\Facades\Gate;
-use Nwidart\Modules\Facades\Module;
 
 class BuildNavbar
 {
@@ -18,10 +17,9 @@ class BuildNavbar
 
         $admin = $this->getAdminNavbar();
         $navBar = $this->getPrimaryNavbar();
-        $modules = $this->getModules();
         array_splice($navBar, 1, 0, $admin); //  Move the Admin link just under the Dashboard link
 
-        return array_merge($navBar, $modules);
+        return $navBar;
     }
 
     /*
@@ -72,40 +70,6 @@ class BuildNavbar
         //         'route' => route('reports.index'),
         //         'icon'  => 'fas fa-chart-bar',
         //     ];
-        // }
-
-        return $nav;
-    }
-
-    /**
-     * If any add-on modules have been installed, add those to the navigation bar
-     *
-     * @codeCoverageIgnore
-     */
-    protected function getModules()
-    {
-        $nav = [];
-        // $modules = Module::allEnabled();
-
-        // foreach($modules as $module)
-        // {
-        //     $name    = $module->getLowerName();
-        //     $navData = config($name.'.navbar');
-
-        //     if($navData)
-        //     {
-        //         foreach($navData as $n)
-        //         {
-        //             if(!isset($n['perm_name']) || $this->checkPermission($this->user, $n['perm_name']))
-        //             {
-        //                 $nav[] = [
-        //                     'name'  => $n['name'],
-        //                     'route' => route($n['route']),
-        //                     'icon'  => $n['icon'],
-        //                 ];
-        //             }
-        //         }
-        //     }
         // }
 
         return $nav;

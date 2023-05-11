@@ -26,7 +26,7 @@ class SocialiteAuthorization
             return $this->user;
         }
 
-        //  If the user does not exist, determien if we can create them
+        //  If the user does not exist, determine if we can create them
         if (config('services.azure.allow_register')) {
             $this->buildUser($socUser);
             Auth::login($this->user, true);

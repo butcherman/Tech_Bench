@@ -34,14 +34,16 @@ defineProps<{
 }>();
 
 const permission = inject(custPermissionsKey) as customerPermissionType;
-const loading = ref(false);
+const loading = ref<boolean>(false);
 const toggleLoad = () => { loading.value = !loading.value }
 provide(toggleEquipLoadKey, toggleLoad);
 
 const refreshEquipment = () => {
     toggleLoad();
-    router.get(route("customers.equipment.index"), {
+    router.reload({
         only: ["flash", "equipment"],
+        preserveScroll: true,
+        onFinish: () => toggleLoad(),
     });
 };
 </script>

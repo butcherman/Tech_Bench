@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-// use Nwidart\Modules\Facades\Module;
 use App\Models\User;
 use App\Traits\AllowTrait;
 
@@ -26,11 +25,10 @@ class BuildAdminMenu
         $equipMenu = $this->buildEquipmentMenu();
         $customerMenu = $this->buildCustomerMenu();
         $techTipMenu = $this->buildTechTipMenu();
-        // $moduleMenu   = $this->buildModuleMenus();
         $settingsMenu = $this->buildSettingsMenu();
-        $maintMenu = $this->buildMaintenanceMenu();
+        $maintenanceMenu = $this->buildMaintenanceMenu();
 
-        return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $settingsMenu, $maintMenu);
+        return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $settingsMenu, $maintenanceMenu);
     }
 
     /**
@@ -180,47 +178,6 @@ class BuildAdminMenu
     }
 
     /**
-     * Build Admin menu's for all of the installed Modules
-     *
-     * @codeCoverageIgnore
-     */
-    protected function buildModuleMenus()
-    {
-        $nav = [];
-        // $modules = Module::allEnabled();
-
-        // foreach($modules as $module)
-        // {
-        //     $name    = $module->getLowerName();
-        //     $navData = config($name.'.admin_nav');
-        //     $modNav  = [];
-
-        //     if($navData)
-        //     {
-        //         foreach($navData as $n)
-        //         {
-        //             if(!isset($n['perm_name']) || $this->checkPermission($this->user, $n['perm_name']))
-        //             {
-        //                 $modNav[] = [
-        //                     'name' => $n['name'],
-        //                     'link' => route($n['route']),
-        //                     'icon' => $n['icon'],
-        //                 ];
-        //             }
-        //         }
-        //     }
-
-        //     if(count($modNav) > 0)
-        //     {
-        //         //  Split Camel Case name into normal name
-        //         $nav[implode(' ', preg_split('/(?=[A-Z])/', $module->getName()))] = $modNav;
-        //     }
-        // }
-
-        return $nav;
-    }
-
-    /**
      * Build navigation menu for Application Settings
      */
     protected function buildSettingsMenu()
@@ -245,11 +202,6 @@ class BuildAdminMenu
                         'icon' => 'fas fa-envelope',
                         'link' => route('admin.get-email'),
                     ],
-                    // [
-                    //     'name' => 'Add On Modules',
-                    //     'icon' => 'fas fa-cubes',
-                    //     'link' => route('admin.modules.index'),
-                    // ],
                 ],
             ];
         }

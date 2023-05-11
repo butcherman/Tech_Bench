@@ -50,8 +50,10 @@ provide(toggleContactsLoadKey, toggleLoad);
  */
 const refreshContacts = () => {
     toggleLoad();
-    router.get(route("customers.contacts.index"), {
+    router.reload({
         only: ["flash", "contacts"],
+        preserveScroll: true,
+        onFinish: () => toggleLoad(),
     });
 };
 

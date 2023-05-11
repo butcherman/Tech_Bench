@@ -23,6 +23,7 @@ class CustomerEquipmentController extends Controller
      */
     public function store(CustomerEquipmentRequest $request)
     {
+        //  FIXME - if the equipment is shared, it is assigned to the parent
         $newEquipment = CustomerEquipment::create($request->only(['cust_id', 'equip_id', 'shared']));
         $request->buildEquipData($newEquipment);
 

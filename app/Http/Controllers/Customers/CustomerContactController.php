@@ -22,6 +22,7 @@ class CustomerContactController extends Controller
      */
     public function store(CustomerContactRequest $request)
     {
+        //  FIXME - if the contact is shared, it is assigned to the parent
         $newContact = CustomerContact::create($request->only(['cust_id', 'shared', 'name', 'email', 'title', 'note']));
         $request->processPhoneNumbers($newContact->cont_id);
 
