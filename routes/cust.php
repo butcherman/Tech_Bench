@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('notes', CustomerNoteController::class);
         Route::get('{customer}/notes/{note}', [CustomerNoteController::class, 'show'])->name('notes.show')->breadcrumb('Note Details', 'customers.show');
         Route::prefix('notes')->name('notes.')->group(function() {
-            Route::get('{note}/restore', [CustomerNoteController::class, 'restore'])->name('restore');
+            Route::get('{note}/restore', [CustomerNoteController::class, 'restore'])->name('restore')->withTrashed();
             Route::delete('{note}/force-delete', [CustomerNoteController::class, 'forceDelete'])->name('force-delete')->withTrashed();
         });
     });

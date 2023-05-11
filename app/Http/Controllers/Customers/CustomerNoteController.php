@@ -65,8 +65,10 @@ class CustomerNoteController extends Controller
      */
     public function restore(CustomerNote $note)
     {
-        //
-        return 'restore';
+        $this->authorize('restore', $note);
+
+        $note->restore();
+        return back()->with('success', 'Note Restored');
     }
 
     /**
@@ -74,7 +76,9 @@ class CustomerNoteController extends Controller
      */
     public function forceDelete(CustomerNote $note)
     {
-        //
-        return 'force delete';
+        $this->authorize('force-delete', $note);
+        $note->forceDelete();
+
+        return back()->with('danger', 'Note Deleted');
     }
 }

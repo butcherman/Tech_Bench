@@ -53,4 +53,23 @@ class CustomerNote extends Model
 
         return $user ? $user->full_name : null;
     }
+
+    /**
+     * Return the soft deleted items re-formatted to match other models
+     */
+    public static function getTrashed(Customer $customer)
+    {
+        $data = self::where('cust_id', $customer->cust_id)
+            ->onlyTrashed()
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'item_id' => $item->note_id,
+                    'item_name' => $item->subject,
+                    'item_deleted' => $item->deleted_at->toFormattedDateString(),
+                ];
+            });
+
+        return $data;
+    }
 }
