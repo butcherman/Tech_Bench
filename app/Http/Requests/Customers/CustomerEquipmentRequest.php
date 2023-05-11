@@ -36,7 +36,7 @@ class CustomerEquipmentRequest extends FormRequest
     }
 
     /**
-     * Build the individial data fields for the equipment
+     * Build the individual data fields for the equipment
      */
     public function buildEquipData(CustomerEquipment $equipment)
     {

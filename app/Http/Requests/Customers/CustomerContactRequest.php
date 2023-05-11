@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Customers;
 
+use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Models\CustomerContactPhone;
 use App\Models\PhoneNumberType;
@@ -38,9 +39,23 @@ class CustomerContactRequest extends FormRequest
     }
 
     /**
+     * Check if the item is shared, if so change the id field to be the parent id
+     */
+    public function checkForShared()
+    {
+        if($this->shared) {
+            $cust = Customer::find($this->cust_id);
+            if($cust->parent_id)
+            {
+                $this->merge(['cust_id' => $cust->parent_id]);
+            }
+        }
+    }
+
+    /**
      * Add phone numbers to the Customer Contact
      */
-    public function processPhoneNumbers(int $contId, bool $isEdit = false)
+    public function processPhoneNumbers(int $contId, bool $isEdit = false): void
     {
         $existingPhones = $isEdit ? CustomerContactPhone::where('cont_id', $contId)->get()->pluck('id')->toArray() : [];
         foreach ($this->phones as $num) {
@@ -78,7 +93,7 @@ class CustomerContactRequest extends FormRequest
     /*
     *   Clean the phone number to be digits only
     */
-    protected function cleanPhoneNumber($number)
+    protected function cleanPhoneNumber($number): string
     {
         return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '$1$2$3', $number);
     }

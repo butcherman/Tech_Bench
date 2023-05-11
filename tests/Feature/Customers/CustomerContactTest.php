@@ -78,6 +78,38 @@ class CustomerContactTest extends TestCase
 
     public function test_store()
     {
+        $cust = Customer::factory()->create(['parent_id' => Customer::factory()->create()]);
+        $cont = CustomerContact::factory()->make();
+        $data = [
+            'cust_id' => $cust->cust_id,
+            'name' => $cont->name,
+            'email' => $cont->email,
+            'shared' => true,
+            'phones' => [[
+                'type' => 'Mobile',
+                'number' => '(213)555-1212',
+                'ext' => '232',
+            ]],
+        ];
+
+        $response = $this->actingAs(User::factory()->create())->post(route('customers.contacts.store'), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', 'Contact Created');
+        $this->assertDatabaseHas('customer_contacts', [
+            'cust_id' => $cust->parent_id,
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'shared' => $data['shared'],
+        ]);
+        $this->assertDatabaseHas('customer_contact_phones', [
+            'phone_type_id' => 3,
+            'phone_number' => 2135551212,
+            'extension' => 232,
+        ]);
+    }
+
+    public function test_store_to_parent()
+    {
         $cust = Customer::factory()->create();
         $cont = CustomerContact::factory()->make();
         $data = [
@@ -204,6 +236,48 @@ class CustomerContactTest extends TestCase
             'name' => $mod->name,
             'email' => $mod->email,
             'shared' => false,
+        ]);
+        $this->assertDatabaseHas('customer_contact_phones', [
+            'phone_type_id' => 3,
+            'phone_number' => 2135552121,
+            'extension' => null,
+        ]);
+        $this->assertDatabaseMissing('customer_contact_phones', $ph[1]->only('id', 'phone_number', 'phone_type_id', 'extension'));
+    }
+
+    public function test_update_to_parent()
+    {
+        $cust = Customer::factory()->create(['parent_id' => Customer::factory()->create()]);
+        $cont = CustomerContact::factory()->create();
+        $mod = CustomerContact::factory()->make();
+        $ph = CustomerContactPhone::factory()->count(2)->create(['cont_id' => $cont->cont_id]);
+        $data = [
+            'cust_id' => $cust->cust_id,
+            'name' => $mod->name,
+            'email' => $mod->email,
+            'shared' => true,
+            'phones' => [[
+                'id' => $ph[0]->id,
+                'type' => 'Mobile',
+                'number' => $ph[0]->phone_number,
+                'ext' => null,
+            ],
+                [
+                    'type' => 'Mobile',
+                    'number' => '(213)555-2121',
+                    'ext' => null,
+                ]],
+        ];
+
+        $response = $this->actingAs(User::factory()->create())->put(route('customers.contacts.update', $cont->cont_id), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', 'Contact Updated');
+        $this->assertDatabaseHas('customer_contacts', [
+            'cont_id' => $cont->cont_id,
+            'cust_id' => $cust->parent_id,
+            'name' => $mod->name,
+            'email' => $mod->email,
+            'shared' => true,
         ]);
         $this->assertDatabaseHas('customer_contact_phones', [
             'phone_type_id' => 3,

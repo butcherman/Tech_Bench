@@ -22,7 +22,7 @@ class CustomerContactController extends Controller
      */
     public function store(CustomerContactRequest $request)
     {
-        //  FIXME - if the contact is shared, it is assigned to the parent
+        $request->checkForShared();
         $newContact = CustomerContact::create($request->only(['cust_id', 'shared', 'name', 'email', 'title', 'note']));
         $request->processPhoneNumbers($newContact->cont_id);
 
@@ -36,6 +36,7 @@ class CustomerContactController extends Controller
      */
     public function update(CustomerContactRequest $request, CustomerContact $contact)
     {
+        $request->checkForShared();
         $contact->update($request->toArray());
         $request->processPhoneNumbers($contact->cont_id, true);
 
