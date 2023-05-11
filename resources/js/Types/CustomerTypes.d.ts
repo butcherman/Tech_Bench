@@ -1,3 +1,4 @@
+import { string } from 'yup';
 import type { Ref } from "vue";
 import { customerEquipmentType } from "@/Types";
 
@@ -103,4 +104,10 @@ export interface customerNoteType {
     details: string;
     shared: boolean;
     urgent: boolean;
+    created_at?: string;
+    updated_at?: string;
+    author?: string;
+    updated_author?: string;
+    note_id?: number;
+    cust_id?: number;
 }

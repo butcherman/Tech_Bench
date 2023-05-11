@@ -3,6 +3,7 @@
         ref="noteForm"
         :validation-schema="validationSchema"
         :initial-values="initialValues"
+        :submit-text="submitText"
         @submit="onSubmit"
     >
         <TextInput id="subject" name="subject" label="Title" focus />
@@ -30,7 +31,7 @@ import VueForm from "@/Components/Base/VueForm.vue";
 import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
 import TextInput from "@/Components/Base/Input/TextInput.vue";
 import Editor from "@/Components/Base/Input/Editor.vue";
-import { ref, reactive, onMounted, inject } from "vue";
+import { ref, reactive, onMounted, inject, computed } from "vue";
 import {
     customerKey,
     allowShareKey,
@@ -49,6 +50,10 @@ const customer = inject(customerKey) as Ref<customerType>;
 const allowShare = inject(allowShareKey) as ComputedRef<boolean>;
 const toggleLoad = inject(toggleNotesLoadKey) as () => void;
 
+const submitText = computed(() =>
+    props.noteData ? "Update Note" : "Create Note"
+);
+
 const noteForm = ref<InstanceType<typeof VueForm>>(null);
 const validationSchema = object({
     subject: string().required(),
@@ -65,25 +70,30 @@ const initialValues = {
 };
 
 const onSubmit = (form) => {
-    console.log(form);
-
     const formData = useForm(form);
     toggleLoad();
 
     if (props.noteData) {
-        console.log("editing");
+        formData.put(route("customers.notes.update", props.noteData.note_id), {
+            preserveScroll: true,
+            onFinish: () => {
+                toggleLoad();
+            },
+            onSuccess: () => {
+                noteForm.value.endSubmit();
+                emit("success");
+            },
+        });
     } else {
-        console.log("new");
-
         formData.post(route("customers.notes.store"), {
             only: ["notes", "flash"],
             preserveScroll: true,
             onFinish: () => {
                 toggleLoad();
-                noteForm.value.endSubmit();
-                noteForm.value.resetForm();
             },
             onSuccess: () => {
+                noteForm.value.endSubmit();
+                noteForm.value.resetForm();
                 emit("success");
             },
         });

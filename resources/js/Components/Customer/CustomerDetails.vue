@@ -2,6 +2,7 @@
     <div>
         <h3>
             <BookmarkItem
+                v-show="!hideFav"
                 :is-fav="isFav"
                 :toggle-route="$route('customers.bookmark')"
                 :model-id="customer.cust_id"
@@ -56,8 +57,12 @@ import { isCustFavKey, customerKey } from "@/SymbolKeys/CustomerKeys";
 import type { customerType } from "@/Types";
 import type { Ref } from "vue";
 
+defineProps<{
+    hideFav?: boolean;
+}>();
+
 const $route = route;
-const isFav = inject(isCustFavKey) as boolean;
+const isFav = inject(isCustFavKey, false) as boolean;
 const customer = inject(customerKey) as Ref<customerType>;
 
 /**

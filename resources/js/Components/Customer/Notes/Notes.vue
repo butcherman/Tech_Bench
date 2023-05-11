@@ -36,7 +36,7 @@ const props = defineProps<{
     notes: customerNoteType[];
 }>();
 
-onMounted(() => console.log(props.notes));
+// onMounted(() => console.log(props.notes));
 
 const permission = inject(custPermissionsKey) as customerPermissionType;
 const loading = ref<boolean>(false);

@@ -2,36 +2,23 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerNoteRequest;
+use App\Models\Customer;
 use App\Models\CustomerNote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class CustomerNoteController extends Controller
 {
-    /**
-     *  Redirecting back to customer page will refresh the notes list
-     */
-    public function index()
-    {
-        return back();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(CustomerNoteRequest $request)
     {
-        //  FIXME - if the note is shared, it is assigned to the parent
-
+        $request->checkForShared();
         $request->merge(['created_by' => $request->user()->user_id]);
         CustomerNote::create($request->only(['cust_id', 'created_by', 'subject', 'details', 'shared', 'urgent']));
 
@@ -41,37 +28,36 @@ class CustomerNoteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Customer $customer, CustomerNote $note)
     {
-        //
-
-        return 'show';
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return Inertia::render('Customers/Notes/Show', [
+            'permissions' => (new BuildCustomerPermissions)->execute($customer, Auth::user()),
+            'customer' => $customer,
+            'note' => $note,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerNoteRequest $request, CustomerNote $note)
     {
-        //
-        return 'update';
+        $request->checkForShared();
+        $request->merge(['updated_by' => $request->user()->user_id]);
+        $note->update($request->only(['cust_id', 'updated_by', 'subject', 'details', 'shared', 'urgent']));
+
+        return back()->with('success', 'Note Updated');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(CustomerNote $note)
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $note);
+        $note->delete();
+
+        return redirect(route('customers.show', $note->Customer->slug))->with('danger', 'Note Deleted');
     }
 
     /**

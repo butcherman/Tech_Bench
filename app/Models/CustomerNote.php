@@ -27,6 +27,11 @@ class CustomerNote extends Model
         'shared' => 'boolean',
     ];
 
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
+
     /**
      * Name of the user who created the note
      *
