@@ -1,12 +1,5 @@
 <template>
-    <button
-        v-if="permission?.equipment.update"
-        class="btn btn-warning mx-1"
-        @click="editEquipmentModal?.show()"
-    >
-        <fa-icon icon="edit" />
-        Edit
-    </button>
+    <EditButton class="btn-sm" @click="editEquipmentModal?.show" />
     <Modal ref="editEquipmentModal" :title="`Edit ${equipData.name}`">
         <EditEquipmentForm
             :equip-data="equipData"
@@ -18,6 +11,7 @@
 <script setup lang="ts">
 import Modal from "@/Components/Base/Modal/Modal.vue";
 import EditEquipmentForm from "@/Forms/Customer/EditEquipmentForm.vue";
+import EditButton from "@/Components/Base/Buttons/EditButton.vue";
 import { ref, inject } from "vue";
 import { custPermissionsKey } from "@/SymbolKeys/CustomerKeys";
 import type { customerEquipmentType, customerPermissionType } from "@/Types";

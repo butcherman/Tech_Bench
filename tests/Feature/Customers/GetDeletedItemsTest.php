@@ -8,8 +8,6 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class GetDeletedItemsTest extends TestCase
@@ -19,11 +17,11 @@ class GetDeletedItemsTest extends TestCase
      */
     public function test_invoke_guest()
     {
-        $cust  = Customer::factory()->create();
+        $cust = Customer::factory()->create();
         $equip = CustomerEquipment::factory()->create(['cust_id' => $cust->cust_id]);
-        $cont  = CustomerContact::factory()->create(['cust_id' => $cust->cust_id]);
-        $note  = CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
-        $file  = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
+        $cont = CustomerContact::factory()->create(['cust_id' => $cust->cust_id]);
+        $note = CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
+        $file = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
 
         $equip->delete();
         $cont->delete();
@@ -38,11 +36,11 @@ class GetDeletedItemsTest extends TestCase
 
     public function test_invoke_no_permission()
     {
-        $cust  = Customer::factory()->create();
+        $cust = Customer::factory()->create();
         $equip = CustomerEquipment::factory()->create(['cust_id' => $cust->cust_id]);
-        $cont  = CustomerContact::factory()->create(['cust_id' => $cust->cust_id]);
-        $note  = CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
-        $file  = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
+        $cont = CustomerContact::factory()->create(['cust_id' => $cust->cust_id]);
+        $note = CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
+        $file = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
 
         $equip->delete();
         $cont->delete();
@@ -55,11 +53,11 @@ class GetDeletedItemsTest extends TestCase
 
     public function test_invoke()
     {
-        $cust  = Customer::factory()->create();
+        $cust = Customer::factory()->create();
         $equip = CustomerEquipment::factory()->create(['cust_id' => $cust->cust_id]);
-        $cont  = CustomerContact::factory()->create(['cust_id' => $cust->cust_id]);
-        $note  = CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
-        $file  = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
+        $cont = CustomerContact::factory()->create(['cust_id' => $cust->cust_id]);
+        $note = CustomerNote::factory()->create(['cust_id' => $cust->cust_id]);
+        $file = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
 
         $equip->delete();
         $cont->delete();

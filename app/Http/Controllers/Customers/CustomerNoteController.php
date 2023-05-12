@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerNoteRequest;
 use App\Models\Customer;
 use App\Models\CustomerNote;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -68,6 +67,7 @@ class CustomerNoteController extends Controller
         $this->authorize('restore', $note);
 
         $note->restore();
+
         return back()->with('success', 'Note Restored');
     }
 

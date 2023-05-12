@@ -31,7 +31,7 @@ class BuildCustomerPermissions
                 'create' => $user->can('create', CustomerNote::class),
                 'update' => $user->can('update', CustomerNote::class),
                 'delete' => $user->can('delete', CustomerNote::class),
-            ]
+            ],
         ];
     }
 }

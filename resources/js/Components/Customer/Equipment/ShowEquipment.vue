@@ -46,17 +46,14 @@
                     <tfoot>
                         <tr>
                             <td colspan="2" class="text-center">
-                                <button
-                                    v-if="permission?.equipment.delete"
-                                    class="btn btn-danger mx-1"
-                                    title="Delete Equipment"
-                                    v-tooltip
+                                <DeleteButton
+                                    class="btn-sm"
                                     @click="deleteEquipment(equip)"
-                                >
-                                    <fa-icon icon="fa-trash-can" />
-                                    Delete
-                                </button>
-                                <EditEquipment :equip-data="equip" />
+                                />
+                                <EditEquipment
+                                    v-if="permission.equipment.update"
+                                    :equip-data="equip"
+                                />
                             </td>
                         </tr>
                     </tfoot>
@@ -68,6 +65,7 @@
 
 <script setup lang="ts">
 import EditEquipment from "@/Components/Customer/Equipment/EditEquipment.vue";
+import DeleteButton from "@/Components/Base/Buttons/DeleteButton.vue";
 import { ref, inject } from "vue";
 import { verifyModal } from "@/Modules/verifyModal.module";
 import { router } from "@inertiajs/vue3";

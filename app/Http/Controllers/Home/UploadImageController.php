@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Home\UploadImageRequest;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
 
 class UploadImageController extends Controller
 {

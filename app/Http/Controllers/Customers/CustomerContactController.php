@@ -56,7 +56,7 @@ class CustomerContactController extends Controller
     }
 
     /**
-     * Restore a soft deleted item
+     * Restore a soft deleted contact
      */
     public function restore(CustomerContact $contact)
     {

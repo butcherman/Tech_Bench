@@ -15,7 +15,7 @@
             </div>
             <Overlay :loading="loading">
                 <ShowContacts :contacts="contacts" />
-             </Overlay>
+            </Overlay>
         </div>
     </div>
 </template>
@@ -32,7 +32,11 @@ import {
     toggleContactsLoadKey,
     phoneTypesKey,
 } from "@/SymbolKeys/CustomerKeys";
-import type { customerContactType, customerPermissionType, phoneNumberType } from "@/Types";
+import type {
+    customerContactType,
+    customerPermissionType,
+    phoneNumberType,
+} from "@/Types";
 
 const props = defineProps<{
     contacts: customerContactType[];

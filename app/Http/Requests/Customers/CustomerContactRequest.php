@@ -43,10 +43,9 @@ class CustomerContactRequest extends FormRequest
      */
     public function checkForShared()
     {
-        if($this->shared) {
+        if ($this->shared) {
             $cust = Customer::find($this->cust_id);
-            if($cust->parent_id)
-            {
+            if ($cust->parent_id) {
                 $this->merge(['cust_id' => $cust->parent_id]);
             }
         }

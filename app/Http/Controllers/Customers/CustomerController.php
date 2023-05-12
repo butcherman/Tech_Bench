@@ -73,7 +73,7 @@ class CustomerController extends Controller
             'customer' => fn () => $customer,
             'equipment' => fn () => $customer->ParentEquipment->merge($customer->CustomerEquipment),
             'contacts' => fn () => $customer->ParentContact->merge($customer->CustomerContact),
-            'notes' => fn() => $customer->ParentNote->merge($customer->CustomerNote),
+            'notes' => fn () => $customer->ParentNote->merge($customer->CustomerNote),
         ]);
     }
 

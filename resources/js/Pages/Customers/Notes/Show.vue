@@ -16,8 +16,12 @@
                     <fa-icon icon="left-long" />
                     Back
                 </Link>
-                <DeleteButton class="float-end" @click="verifyDelete" />
-                <EditNote :note="note" />
+                <DeleteButton
+                    v-if="permissions.notes.delete"
+                    class="float-end"
+                    @click="verifyDelete"
+                />
+                <EditNote v-if="permissions.notes.update" :note="note" />
             </div>
         </div>
         <div class="row justify-content-center">
@@ -59,7 +63,8 @@
                         </div>
                         <div class="card-footer text-muted">
                             <div>
-                                Created: {{ note.created_at }} by {{ note.author }}
+                                Created: {{ note.created_at }} by
+                                {{ note.author }}
                             </div>
                             <div v-if="note.updated_author">
                                 Updated: {{ note.updated_at }} by
@@ -78,15 +83,24 @@ import App from "@/Layouts/app.vue";
 import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import EditNote from "@/Components/Customer/Notes/EditNote.vue";
 import DeleteButton from "@/Components/Base/Buttons/DeleteButton.vue";
-import Overlay from '@/Components/Base/Overlay.vue';
-import { router } from '@inertiajs/vue3';
+import Overlay from "@/Components/Base/Overlay.vue";
+import { router } from "@inertiajs/vue3";
 import { ref, reactive, onMounted, provide, toRef, computed } from "vue";
-import { customerKey, allowShareKey, toggleNotesLoadKey } from "@/SymbolKeys/CustomerKeys";
+import {
+    customerKey,
+    allowShareKey,
+    toggleNotesLoadKey,
+} from "@/SymbolKeys/CustomerKeys";
 import { verifyModal } from "@/Modules/verifyModal.module";
-import type { customerType, customerNoteType } from "@/Types";
+import type {
+    customerType,
+    customerNoteType,
+    customerPermissionType,
+} from "@/Types";
 
 const $route = route;
 const props = defineProps<{
+    permissions: customerPermissionType;
     customer: customerType;
     note: customerNoteType;
 }>();
@@ -108,14 +122,12 @@ const allowShare = computed(() => {
 provide(allowShareKey, allowShare);
 
 const verifyDelete = () => {
-    verifyModal('Please Verify').then(res => {
-        console.log(res);
-
-        if(res) {
-            router.delete(route('customers.notes.destroy', props.note.note_id));
+    verifyModal("Please Verify").then((res) => {
+        if (res) {
+            router.delete(route("customers.notes.destroy", props.note.note_id));
         }
     });
-}
+};
 </script>
 
 <script lang="ts">

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Customers\CustomerNoteController;
 use App\Http\Controllers\Customers\CheckCustIdController;
 use App\Http\Controllers\Customers\CustomerBookmarkController;
 use App\Http\Controllers\Customers\CustomerContactController;
@@ -8,6 +7,7 @@ use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
 use App\Http\Controllers\Customers\CustomerFileTypeController;
 use App\Http\Controllers\Customers\CustomerIdController;
+use App\Http\Controllers\Customers\CustomerNoteController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
 use App\Http\Controllers\Customers\DownloadContactController;
@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function () {
          * Contacts
          */
         Route::resource('contacts', CustomerContactController::class);
-        Route::prefix('contacts')->name('contacts.')->group(function() {
+        Route::prefix('contacts')->name('contacts.')->group(function () {
             Route::get('{contact}/restore', [CustomerContactController::class, 'restore'])->name('restore')->withTrashed();
             Route::delete('{contact}/force-delete', [CustomerContactController::class, 'forceDelete'])->name('force-delete')->withTrashed();
             Route::get('download/{contact}', DownloadContactController::class)->name('download');
@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
          */
         Route::resource('notes', CustomerNoteController::class);
         Route::get('{customer}/notes/{note}', [CustomerNoteController::class, 'show'])->name('notes.show')->breadcrumb('Note Details', 'customers.show');
-        Route::prefix('notes')->name('notes.')->group(function() {
+        Route::prefix('notes')->name('notes.')->group(function () {
             Route::get('{note}/restore', [CustomerNoteController::class, 'restore'])->name('restore')->withTrashed();
             Route::delete('{note}/force-delete', [CustomerNoteController::class, 'forceDelete'])->name('force-delete')->withTrashed();
         });

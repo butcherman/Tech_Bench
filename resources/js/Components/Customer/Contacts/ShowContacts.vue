@@ -116,13 +116,7 @@
                     :contact="selectedContact"
                     @openEdit="contactModal?.hide()"
                 />
-                <button
-                    class="btn btn-danger btn-sm mx-2 w-25"
-                    @click="deleteContact"
-                >
-                    <fa-icon icon="fa-trash-can" />
-                    Delete
-                </button>
+                <DeleteButton class="btn-sm mx-2 w-25" @click="deleteContact" />
             </div>
         </div>
     </Modal>
@@ -131,6 +125,7 @@
 <script setup lang="ts">
 import Modal from "@/Components/Base/Modal/Modal.vue";
 import EditContact from "@/Components/Customer/Contacts/EditContact.vue";
+import DeleteButton from "@/Components/Base/Buttons/DeleteButton.vue";
 import { ref, inject } from "vue";
 import { verifyModal } from "@/Modules/verifyModal.module";
 import { router } from "@inertiajs/vue3";
