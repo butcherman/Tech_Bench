@@ -74,6 +74,7 @@ class CustomerController extends Controller
             'equipment' => fn () => $customer->ParentEquipment->merge($customer->CustomerEquipment),
             'contacts' => fn () => $customer->ParentContact->merge($customer->CustomerContact),
             'notes' => fn () => $customer->ParentNote->merge($customer->CustomerNote),
+            'files' => fn() => $customer->ParentFile->merge($customer->CustomerFile),
         ]);
     }
 

@@ -25,6 +25,11 @@
                 <Notes :notes="notes" />
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <Files :files="files" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -36,6 +41,7 @@ import ManageCustomer from "@/Components/Customer/ManageCustomer.vue";
 import Equipment from "@/Components/Customer/Equipment/Equipment.vue";
 import Contacts from "@/Components/Customer/Contacts/Contacts.vue";
 import Notes from '@/Components/Customer/Notes/Notes.vue';
+import Files from '@/Components/Customer/Files/Files.vue';
 import {
     custPermissionsKey,
     isCustFavKey,
@@ -58,6 +64,7 @@ const props = defineProps<{
     equipment: customerEquipmentType[];
     contacts: customerContactType[];
     notes: customerNoteType[];
+    files: []; //  FIXME - type this
 }>();
 
 /**

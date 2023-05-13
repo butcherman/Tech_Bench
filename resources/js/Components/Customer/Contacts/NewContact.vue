@@ -1,13 +1,12 @@
 <template>
-    <button
-        class="float-end btn btn-info btn-pill btn-sm"
-        title="New Contact"
+    <AddButton
+        class="float-end"
+        pill
+        small
+        title="Add Contact"
         v-tooltip
-        @click="newContactModal?.show()"
-    >
-        <fa-icon icon="fa-plus" />
-        Add
-    </button>
+        @click="newContactModal.show()"
+    />
     <Modal ref="newContactModal" title="New Contact" size="lg">
         <ContactForm @success="newContactModal?.hide()" />
     </Modal>
@@ -15,6 +14,7 @@
 
 <script setup lang="ts">
 import Modal from "@/Components/Base/Modal/Modal.vue";
+import AddButton from "@/Components/Base/Buttons/AddButton.vue";
 import ContactForm from "@/Forms/Customer/ContactForm.vue";
 import { ref } from "vue";
 

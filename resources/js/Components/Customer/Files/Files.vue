@@ -2,16 +2,12 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-                <RefreshButton
-                    :only="['notes']"
-                    @start="toggleLoad"
-                    @end="toggleLoad"
-                />
-                Notes:
-                <NewNote v-if="permission?.notes.create" />
+                <RefreshButton :only="['files']" />
+                Files:
+                <NewFile />
             </div>
             <Overlay :loading="loading">
-                <ListNotes :notes="notes" />
+                <h3 class="text-center">Hello World!!!</h3>
             </Overlay>
         </div>
     </div>
@@ -20,18 +16,17 @@
 <script setup lang="ts">
 import Overlay from "@/Components/Base/Overlay.vue";
 import RefreshButton from "@/Components/Base/Buttons/RefreshButton.vue";
-import NewNote from "@/Components/Customer/Notes/NewNote.vue";
-import ListNotes from "@/Components/Customer/Notes/ListNotes.vue";
+import NewFile from '@/Components/Customer/Files/NewFile.vue';
+import AddButton from "@/Components/Base/Buttons/AddButton.vue";
 import { ref, reactive, onMounted, inject, provide } from "vue";
-import { router } from "@inertiajs/vue3";
 import {
     custPermissionsKey,
-    toggleNotesLoadKey,
+    toggleFilesLoadKey,
 } from "@/SymbolKeys/CustomerKeys";
-import type { customerPermissionType, customerNoteType } from "@/Types";
+import type { customerPermissionType } from "@/Types";
 
 const props = defineProps<{
-    notes: customerNoteType[];
+    files: [];
 }>();
 
 const permission = inject(custPermissionsKey) as customerPermissionType;
@@ -43,5 +38,5 @@ const loading = ref<boolean>(false);
 const toggleLoad = () => {
     loading.value = !loading.value;
 };
-provide(toggleNotesLoadKey, toggleLoad);
+provide(toggleFilesLoadKey, toggleLoad);
 </script>

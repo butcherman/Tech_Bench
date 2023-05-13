@@ -1,13 +1,12 @@
 <template>
-    <button
-        class="float-end btn btn-info btn-pill btn-sm"
-        title="New Equipment"
+    <AddButton
+        class="float-end"
+        pill
+        small
+        title="Add Equipment"
         v-tooltip
-        @click="newEquipmentModal?.show()"
-    >
-        <fa-icon icon="fa-plus" />
-        Add
-    </button>
+        @click="newEquipmentModal.show()"
+    />
     <Modal ref="newEquipmentModal" title="New Equipment">
         <NewCustomerEquipmentForm
             :existing-equipment="existingEquipment"
@@ -17,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import AddButton from "@/Components/Base/Buttons/AddButton.vue";
 import Modal from "@/Components/Base/Modal/Modal.vue";
 import NewCustomerEquipmentForm from "@/Forms/Customer/NewCustomerEquipmentForm.vue";
 import { ref } from "vue";

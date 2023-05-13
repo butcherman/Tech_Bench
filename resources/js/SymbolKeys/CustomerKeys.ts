@@ -19,3 +19,4 @@ export const toggleManageLoadKey: InjectionKey<(set: boolean) => boolean> =
 export const toggleEquipLoadKey: InjectionKey<() => void> = Symbol();
 export const toggleContactsLoadKey: InjectionKey<() => void> = Symbol();
 export const toggleNotesLoadKey: InjectionKey<() => void> = Symbol();
+export const toggleFilesLoadKey: InjectionKey<() => void> = Symbol();

@@ -2,14 +2,11 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-                <button
-                    class="btn btn-sm"
-                    title="Refresh Equipment"
-                    v-tooltip
-                    @click="refreshContacts"
-                >
-                    <fa-icon icon="fa-rotate" :spin="loading" />
-                </button>
+                <RefreshButton
+                    :only="['contacts']"
+                    @start="toggleLoad"
+                    @end="toggleLoad"
+                />
                 Contacts:
                 <NewContact v-if="permission?.contact.create" />
             </div>
@@ -22,6 +19,7 @@
 
 <script setup lang="ts">
 import Overlay from "@/Components/Base/Overlay.vue";
+import RefreshButton from "@/Components/Base/Buttons/RefreshButton.vue";
 import NewContact from "./NewContact.vue";
 import ShowContacts from "./ShowContacts.vue";
 import axios from "axios";
@@ -43,6 +41,10 @@ const props = defineProps<{
 }>();
 
 const permission = inject(custPermissionsKey) as customerPermissionType;
+
+/**
+ * Loading state of Component
+ */
 const loading = ref(false);
 const toggleLoad = () => {
     loading.value = !loading.value;
@@ -50,23 +52,14 @@ const toggleLoad = () => {
 provide(toggleContactsLoadKey, toggleLoad);
 
 /**
- * Check for new model values
- */
-const refreshContacts = () => {
-    toggleLoad();
-    router.reload({
-        only: ["flash", "contacts"],
-        preserveScroll: true,
-        onFinish: () => toggleLoad(),
-    });
-};
-
-/**
  * Types of possible selections for a phone number type
  */
 onMounted(() => getPhoneTypes());
+
 const phoneTypes = ref<string[]>([]);
 provide(phoneTypesKey, phoneTypes);
+
+//  Ajax call to get the types of phone's (home, mobile, etc.) from Database
 const getPhoneTypes = () => {
     if (phoneTypes.value.length === 0) {
         axios.get(route("get-number-types")).then((res) => {
