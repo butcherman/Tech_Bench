@@ -27,6 +27,7 @@
         "sass": "^1.62",
         "sass-loader": "^13.2",
         "tinymce": "^6.4",
+        "typescript": "^5.0.4",
         "vee-validate": "^4.8",
         "vite": "^4.3",
         "vue": "^3.2.40",

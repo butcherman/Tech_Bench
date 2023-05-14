@@ -9,6 +9,7 @@ use App\Http\Requests\Customers\CustomerRequest;
 use App\Http\Requests\Customers\SoftDeletedRequest;
 use App\Jobs\CustomerRemoveBookmarksJob;
 use App\Models\Customer;
+use App\Models\CustomerFileType;
 use App\Models\UserCustomerBookmark;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -75,6 +76,7 @@ class CustomerController extends Controller
             'contacts' => fn () => $customer->ParentContact->merge($customer->CustomerContact),
             'notes' => fn () => $customer->ParentNote->merge($customer->CustomerNote),
             'files' => fn() => $customer->ParentFile->merge($customer->CustomerFile),
+            'file-types' => fn() => CustomerFileType::all()->pluck('description'),
         ]);
     }
 

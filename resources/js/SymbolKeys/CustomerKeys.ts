@@ -10,6 +10,7 @@ export const custPermissionsKey: InjectionKey<customerPermissionType> =
 export const isCustFavKey: InjectionKey<boolean> = Symbol();
 export const allowShareKey: InjectionKey<ComputedRef<boolean>> = Symbol();
 export const phoneTypesKey: InjectionKey<Ref<string[]>> = Symbol();
+export const fileTypesKey: InjectionKey<Ref<string[]>> = Symbol();
 
 /**
  * Loading state managers

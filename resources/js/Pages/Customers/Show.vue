@@ -47,6 +47,7 @@ import {
     isCustFavKey,
     customerKey,
     allowShareKey,
+    fileTypesKey,
 } from "@/SymbolKeys/CustomerKeys";
 import { ref, computed, provide, watch, unref } from "vue";
 import type {
@@ -65,6 +66,7 @@ const props = defineProps<{
     contacts: customerContactType[];
     notes: customerNoteType[];
     files: []; //  FIXME - type this
+    fileTypes: string[];
 }>();
 
 /**
@@ -72,6 +74,7 @@ const props = defineProps<{
  */
 provide(custPermissionsKey, props.permissions);
 provide(isCustFavKey, props.isFav);
+provide(fileTypesKey, props.fileTypes);
 
 /**
  * Customer Detail Data
