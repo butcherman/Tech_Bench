@@ -5,6 +5,7 @@ use App\Http\Controllers\Customers\CustomerBookmarkController;
 use App\Http\Controllers\Customers\CustomerContactController;
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Customers\CustomerEquipmentController;
+use App\Http\Controllers\Customers\CustomerFileController;
 use App\Http\Controllers\Customers\CustomerFileTypeController;
 use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CustomerNoteController;
@@ -18,20 +19,6 @@ use App\Http\Controllers\Customers\SetCustomerSettingsController;
 use App\Http\Controllers\Customers\SetLinkedCustomerController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
-
-// use App\Http\Controllers\Customers\CheckIdController;
-// use App\Http\Controllers\Customers\GetLinkedController;
-// use App\Http\Controllers\Customers\CustomerIdController;
-// use App\Http\Controllers\Customers\CustomerNoteController;
-// use App\Http\Controllers\Customers\LinkCustomerController;
-// use App\Http\Controllers\Customers\CustomerFileController;
-// use App\Http\Controllers\Customers\GetDeletedItemsController;
-// use App\Http\Controllers\Customers\DownloadContactController;
-// use App\Http\Controllers\Customers\CustomerBookmarkController;
-// use App\Http\Controllers\Customers\CustomerContactsController;
-// use App\Http\Controllers\Customers\CustomerEquipmentController;
-// use App\Http\Controllers\Customers\CustomerFileTypesController;
-// use App\Http\Controllers\Customers\DeactivatedCustomerController;
 
 Route::middleware('auth')->group(function () {
 
@@ -77,6 +64,11 @@ Route::middleware('auth')->group(function () {
             Route::get('{note}/restore', [CustomerNoteController::class, 'restore'])->name('restore')->withTrashed();
             Route::delete('{note}/force-delete', [CustomerNoteController::class, 'forceDelete'])->name('force-delete')->withTrashed();
         });
+
+        /**
+         * Files
+         */
+        Route::resource('files', CustomerFileController::class);
     });
 
     Route::resource('customers', CustomerController::class)

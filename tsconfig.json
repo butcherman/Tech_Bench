@@ -15,6 +15,7 @@
         "noImplicitThis": true,
         "noImplicitReturns": true,
         "importHelpers": true,
-        "typeRoots": ["./resources/js/Types/", "./node_modules/@types"]
+        "typeRoots": ["./resources/js/Types/", "./node_modules/@types"],
+        "allowUnreachableCode": false
     }
 }

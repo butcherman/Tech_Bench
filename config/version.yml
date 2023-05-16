@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: dev
   buildmetadata: null
-  commit: '740'
+  commit: '741'
   timestamp:
     year: 2023
     month: 5
-    day: 14
-    hour: 18
-    minute: 38
-    second: 2
+    day: 16
+    hour: 2
+    minute: 9
+    second: 40
     timezone: UTC
 commit:
   mode: git-local
