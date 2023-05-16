@@ -14,15 +14,15 @@
         </div>
         <div class="row">
             <div class="col-md-5">
-                <Equipment :equipment="equipment" />
+                <!-- <Equipment :equipment="equipment" /> -->
             </div>
             <div class="col-md-7">
-                <Contacts :contacts="contacts" />
+                <!-- <Contacts :contacts="contacts" /> -->
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <Notes :notes="notes" />
+                <!-- <Notes :notes="notes" /> -->
             </div>
         </div>
         <div class="row">

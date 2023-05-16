@@ -15,8 +15,11 @@
         />
         <div class="file-container my-2 mb-4">
             <DropzoneInput
+                ref="dropzoneInput"
                 name="file"
                 class="file-container"
+                :uploadUrl="$route('customers.files.store')"
+                multiple
                 @filesAdded="checkNameField"
             />
         </div>
@@ -33,7 +36,9 @@ import { useForm } from "@inertiajs/vue3";
 import { object, string, array } from "yup";
 import { fileTypesKey } from "@/SymbolKeys/CustomerKeys";
 
+const $route = route;
 const newFileForm = ref(null);
+const dropzoneInput = ref(null);
 const fileTypes = inject(fileTypesKey, []) as string[];
 
 const validationSchema = object({
@@ -60,6 +65,8 @@ const checkNameField = (fileArr) => {
 
 const onSubmit = (form) => {
     console.log(form);
+
+    // dropzoneInput.value.process();
 
     const formData = useForm(form);
     formData.post(route("customers.files.store"), {
