@@ -4,7 +4,6 @@
             <fa-icon icon="fa-cloud-arrow-up" />
             Drag file here or click to upload
         </div>
-
         <div id="preview-template-container" class="d-none">
             <div class="dz-preview-wrapper">
                 <div class="dz-preview">
@@ -50,7 +49,7 @@ import Dropzone from "dropzone";
 import { ref, reactive, onMounted, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { getFileIcon } from "@/Modules/fileIcon.module";
-import type { fileDataType } from "@/Types";
+import type { fileDataType, pageInterface } from "@/Types";
 
 /**
  * Additional Styling for Drag and Drop
@@ -80,7 +79,7 @@ const props = defineProps<{
     required?: boolean;
 }>();
 const fileData = computed<fileDataType>(() => usePage().props.app.fileData);
-let myDrop = null;
+let myDrop:Dropzone;
 
 const process = () => {
     console.log("processing queue");
@@ -107,6 +106,7 @@ onMounted(() => {
             : undefined,
         addRemoveLinks: false,
         autoProcessQueue: false,
+        //  FIXME  -  Chunking eats up memory???
         // chunking: true,
         // chunkSize: fileData.value.chunkSize,
         headers: { "X-CSRF-TOKEN": fileData.value.token },

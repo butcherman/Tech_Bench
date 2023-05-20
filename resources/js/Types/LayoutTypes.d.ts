@@ -1,5 +1,10 @@
 import type { userType } from '@/Types';
-import type { Page, PageProps } from '@inertiajs/vue3';
+import type { Page, PageProps } from '@inertiajs/core';
+
+// import type { Page } from '@inertiajs/core'
+// declare module '@inertiajs/vue3' {
+//   export function usePage<T>(): Page<T>
+// }
 
 export interface phoneNumberType {
     description: string;
