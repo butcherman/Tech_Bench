@@ -42,8 +42,8 @@ class HandleInertiaRequests extends Middleware
                 'user' => fn () => $request->user() ? $request->user() : null,
                 //  File information
                 'fileData' => [
-                    'maxSize' => config('filesystems.max_filesize'),
-                    'chunkSize' => config('filesystems.chunk_size'),
+                    'maxSize' => round(config('filesystems.max_filesize') / 1024 / 1024,4),
+                    'chunkSize' => round(config('filesystems.chunk_size') /1024 / 1024,4),
                     'token' => csrf_token(),
                 ],
             ],

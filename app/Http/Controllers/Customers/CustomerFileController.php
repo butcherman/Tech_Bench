@@ -47,12 +47,12 @@ class CustomerFileController extends Controller
 
         // Log::critical('visited');
 
-        // return 'success';
+        return 'success';
 
-        $path = 'test_stuff';
-        $location = '/storage/'.Storage::disk('customers')->putFile($path, new File($request->file));
+        // $path = 'test_stuff';
+        // $location = '/storage/'.Storage::disk('customers')->putFile($path, new File($request->file));
 
-        return $location;
+        // return $location;
     }
 
     /**

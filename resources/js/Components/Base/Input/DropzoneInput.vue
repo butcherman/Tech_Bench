@@ -1,41 +1,185 @@
 <template>
-    <div id="dropzoneDiv" class="dropzone">
+    <div id="dropzone-container" class="dropzone">
+        <div class="dz-message">
+            <fa-icon icon="fa-cloud-arrow-up" />
+            Drag file here or click to upload
+        </div>
+
+        <div id="preview-template-container" class="d-none">
+            <div class="dz-preview-wrapper">
+                <div class="dz-preview">
+                    <div class="dz-preview dz-file-preview">
+                        <div class="dz-image">
+                            <img data-dz-thumbnail />
+                            <span class="img-attribute" />
+                        </div>
+                        <div class="dz-details">
+                            <div class="dz-size" data-dz-size></div>
+                            <div class="dz-filename">
+                                <span data-dz-name></span>
+                            </div>
+                        </div>
+                        <span class="dz-remove dz-tooltip" data-dz-remove>
+                            <fa-icon icon="fa-trash-alt" />
+                            <span class="dz-tooltip-text">Remove File</span>
+                        </span>
+                        <div class="dz-progress">
+                            <span
+                                class="dz-upload"
+                                data-dz-uploadprogress
+                            ></span>
+                        </div>
+                        <div class="dz-success-mark">
+                            <fa-icon icon="fa-check" />
+                        </div>
+                        <div class="dz-error-mark">
+                            <fa-icon icon="fa-exclamation-circle" />
+                        </div>
+                        <div class="dz-error-message">
+                            <span data-dz-errormessage />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { Dropzone } from 'dropzone';
-    import { ref, reactive, onMounted, computed } from 'vue';
-    import { usePage } from '@inertiajs/vue3';
+import Dropzone from "dropzone";
+import { ref, reactive, onMounted, computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
+import { getFileIcon } from "@/Modules/fileIcon.module";
+import type { fileDataType } from "@/Types";
 
-    import 'dropzone/dist/dropzone.css';
+/**
+ * Additional Styling for Drag and Drop
+ */
+import "file-icon-vectors/dist/file-icon-vectors.min.css";
+import "dropzone/dist/basic.css";
+import "../../../../scss/dropzoneInput.scss";
 
-    const props = defineProps<{
-        uploadUrl: string;
-    }>();
-    const fileData = computed(() => usePage().props.app.fileData);
-    let myDrop = null;
+const emit = defineEmits([
+    "file-added",
+    "file-removed",
+    "max-files-reached",
+    "max-files-exceeded",
+    "upload-progress",
+    "total-upload-progress",
+    "error",
+    "success",
+    "queue-complete",
+    "complete",
+]);
+const props = defineProps<{
+    uploadUrl: string;
+    method?: "POST" | "PUT";
+    paramName?: string;
+    maxFiles?: number;
+    acceptedFiles?: string[];
+    required?: boolean;
+}>();
+const fileData = computed<fileDataType>(() => usePage().props.app.fileData);
+let myDrop = null;
 
-    onMounted(() => {
-        myDrop = new Dropzone('div#dropzoneDiv', {
-            url: 'http://192.168.253.250/customers/files',
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': fileData.value.token,
+const process = () => {
+    console.log("processing queue");
+    myDrop.processQueue();
+};
+
+/**
+ * Initialize the Dropzone Input
+ */
+onMounted(() => {
+    /**
+     * Grab the template for adding new files to the dropzone container
+     */
+    let previewNode = document.getElementById("preview-template-container");
+    let previewTemplate = previewNode?.innerHTML;
+    previewNode?.remove();
+
+    /**
+     * Initialize Dropzone
+     */
+    myDrop = new Dropzone("div#dropzone-container", {
+        acceptedFiles: props.acceptedFiles
+            ? props.acceptedFiles.join(", ")
+            : undefined,
+        addRemoveLinks: false,
+        autoProcessQueue: false,
+        // chunking: true,
+        // chunkSize: fileData.value.chunkSize,
+        headers: { "X-CSRF-TOKEN": fileData.value.token },
+        maxFiles: props.maxFiles || 5,
+        maxFilesize: fileData.value.maxSize,
+        method: props.method || "POST",
+        parallelChunkUploads: true,
+        paramName: props.paramName || "file",
+        previewTemplate: previewTemplate,
+        retryChunks: true,
+        url: props.uploadUrl,
+    });
+
+    /**
+     * Set Event Listeners and emits
+     */
+    myDrop.on("addedfile", (file) => {
+        //  If this is not an image file, see if we have an icon available
+        const mime = file.type.split("/");
+        if (mime[0] !== "image") {
+            const ext = file.name.split(".").pop();
+            if (ext) {
+                const icon = getFileIcon(ext);
+                if (icon) {
+                    const imgWrapper =
+                        file.previewElement.getElementsByClassName(
+                            "dz-image"
+                        )[0];
+                    imgWrapper.getElementsByTagName("img")[0].src = icon.srcUrl;
+
+                    if (icon.attribute) {
+                        imgWrapper.getElementsByTagName("span")[0].innerHTML =
+                            icon.attribute;
+                    }
+                }
             }
-        });
+        }
 
-        // console.log(myDrop);
-        // console.log(fileData.value.token);
+        emit("file-added", file);
+    });
+    myDrop.on("removedfile", (file) => {
+        emit("file-removed", file);
+    });
+    myDrop.on("maxfilesreached", () => {
+        emit("max-files-reached");
+    });
+    myDrop.on("maxfilesexceeded", () => {
+        emit("max-files-exceeded");
+    });
 
-        // myDrop.on('queuecomplete', console.log('queue complete'));
+    myDrop.on("uploadprogress", (file, progress, bytesSent) => {
+        emit('upload-progress', { file, progress, bytesSent });
+    });
+    myDrop.on("totaluploadprogress", (progress, totalBytes, bytesSent) => {
+        emit("total-upload-progress", { progress, totalBytes, bytesSent });
+    });
 
-        myDrop.on('addedfile', (file, response) => {
-            console.log('added file', file);
-        });
-        myDrop.on('success', (file, response) => {
-            console.log('success file', file);
-            console.log('success response', response);
-        })
-    })
+    myDrop.on("error", (file, message) => {
+        console.log("error->file", file);
+        console.log("error->message", message);
+
+        emit('error', { file, message });
+    });
+    myDrop.on("success", (file, response) => {
+        emit('success', { file, response });
+    });
+    myDrop.on("complete", (file) => {
+        emit('complete', file);
+    });
+    myDrop.on("queuecomplete", () => {
+        emit('queue-complete');
+    });
+});
+
+defineExpose({ process });
 </script>

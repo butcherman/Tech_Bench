@@ -29,10 +29,14 @@
                         >
                             <DropzoneInput
                                 name="logo"
-                                input-text="Drag New Logo Here"
-                                file-types="image/*"
+                                ref="fileUpload"
+                                class="mb-2"
+                                paramName="logo"
+                                :accepted-files="['image/*']"
                                 :multiple="false"
                                 :max-files="1"
+                                :upload-url="$route('admin.set-logo')"
+                                @queue-complete="uploadComplete"
                             />
                         </VueForm>
                     </div>
@@ -47,17 +51,18 @@
     import VueForm       from '@/Components/Base/VueForm.vue';
     import DropzoneInput from '@/Components/Base/Input/DropzoneInput.vue';
     import { ref }       from 'vue';
-    import { useForm }   from '@inertiajs/vue3';
+    import { router }   from '@inertiajs/vue3';
     import * as yup      from 'yup';
 
     defineProps<{
         logo: string;
     }>();
+    const fileUpload = ref(null);
     const logoForm         = ref<InstanceType<typeof VueForm> | null>(null);
     const showForm         = ref(true);
-    const validationSchema = {
-        logo: yup.array().required(),
-    }
+    const validationSchema = {}
+
+    const $route = route;
 
     interface logoFormType {
         logo: {
@@ -69,11 +74,17 @@
     }
 
     const onSubmit = (form:logoFormType) => {
-        const formData = useForm({logo: form.logo[0]});
-        formData.post(route('admin.set-logo'), {
-            onFinish : () => logoForm.value?.endSubmit(),
-            onSuccess: () => showForm.value = false
-        })
+
+
+        console.log('process form', form);
+        fileUpload.value.process();
+    }
+
+    const uploadComplete = () => {
+        console.log('finished');
+
+        logoForm.value.endSubmit();
+        router.reload();
     }
 </script>
 

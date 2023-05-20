@@ -53,7 +53,7 @@ interface breadcrumbsType {
     is_current_page: boolean;
 }
 
-interface fileDataType {
+export interface fileDataType {
     chunkSize: number;
     maxSize  : number;
     token    : string;

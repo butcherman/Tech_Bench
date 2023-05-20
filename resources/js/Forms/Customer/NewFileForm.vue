@@ -17,10 +17,9 @@
             <DropzoneInput
                 ref="dropzoneInput"
                 name="file"
-                class="file-container"
-                :uploadUrl="$route('customers.files.store')"
-                multiple
-                @filesAdded="checkNameField"
+                :upload-url="$route('customers.files.store')"
+                :max-files="1"
+                @file-added="checkNameField"
             />
         </div>
     </VueForm>
@@ -48,13 +47,12 @@ const validationSchema = object({
 });
 const initialValues = {};
 
-const checkNameField = (fileArr) => {
-    console.log(fileArr)
+const checkNameField = (file) => {
     if (
         newFileForm.value.getFieldValue("name") === undefined ||
         !newFileForm.value.getFieldValue("name").length
     ) {
-        let fileName = fileArr.name;
+        let fileName = file.name;
         newFileForm.value.setFieldValue("name", fileName);
     }
 };
@@ -66,17 +64,17 @@ const checkNameField = (fileArr) => {
 const onSubmit = (form) => {
     console.log(form);
 
-    // dropzoneInput.value.process();
+    dropzoneInput.value.process();
 
-    const formData = useForm(form);
-    formData.post(route("customers.files.store"), {
-        onFinish: () => console.log("done"),
-    });
+    // const formData = useForm(form);
+    // formData.post(route("customers.files.store"), {
+    //     onFinish: () => console.log("done"),
+    // });
 };
 </script>
 
 <style lang="scss">
-.file-container {
-    height: 200px;
-}
+// .file-container {
+//     min-height: 200px;
+// }
 </style>

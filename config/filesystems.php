@@ -15,7 +15,7 @@ return [
 
     'default' => env('FILESYSTEM_DRIVER', 'local'),
     'max_filesize' => env('MAX_UPLOAD', 2000000000), //  2000000000 Bytes = 2GB
-    'chunk_size' => 500000,                       //  500000 Bytes = 4 MB
+    'chunk_size' => 5000000,                       //  5000000 Bytes = 5 MB
 
     /*
     |--------------------------------------------------------------------------

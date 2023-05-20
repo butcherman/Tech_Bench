@@ -184,12 +184,12 @@
              pageInterface,
              breadcrumbsType,
              flashMessageType,
-             notifciationProps, } from '@/Types';
+             notificationProps, } from '@/Types';
 
     const $route       = route;
     const app          = computed<appProps>         (() => usePage<pageInterface>().props.app);
     const navBar       = computed<navBarProps[]>    (() => usePage<pageInterface>().props.navbar);
-    const notif        = computed<notifciationProps>(() => usePage<pageInterface>().props.notifications);
+    const notif        = computed<notificationProps>(() => usePage<pageInterface>().props.notifications);
     const breadcrumbs  = computed<breadcrumbsType[]>(() => usePage<pageInterface>().props.breadcrumbs);
     const errors       = computed<errorType>        (() => usePage<pageInterface>().props.errors);
     const flash        = computed<flashProps>       (() => usePage<pageInterface>().props.flash);
