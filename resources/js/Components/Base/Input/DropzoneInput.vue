@@ -68,6 +68,7 @@ const emit = defineEmits([
     "upload-progress",
     "total-upload-progress",
     "error",
+    'sending',
     "success",
     "queue-complete",
     "complete",
@@ -83,12 +84,17 @@ const props = defineProps<{
 const fileData = computed<fileDataType>(() => usePage().props.app.fileData);
 const errMessage: Ref<string | null> = ref(null);
 const isTouched: Ref<boolean> = ref(false);
+const isSubmitting = ref(false);
+
 let myDrop: Dropzone;
+let myFormData = [];
 
 /**
  * Upload the valid files
  */
-const process = () => {
+const process = (form = {}) => {
+    myFormData = form;
+    isSubmitting.value = true;
     myDrop.processQueue();
 };
 
@@ -97,6 +103,7 @@ const process = () => {
  */
 const reset = () => {
     myDrop.removeAllFiles();
+    myDrop.reset();
 }
 
 /**
@@ -136,7 +143,7 @@ const validate = () => {
 };
 
 /**
- * Initialize the Dropzone Input
+ * Initialize the Dropzone Input and add event listeners
  */
 onMounted(() => {
     /**
@@ -210,6 +217,13 @@ onMounted(() => {
         emit("max-files-exceeded");
     });
 
+    myDrop.on('sending', (file, xhr, formData) => {
+        for(const field in myFormData)
+        {
+            formData.append(field, myFormData[field]);
+        }
+        emit('sending', file, xhr, formData);
+    });
     myDrop.on("uploadprogress", (file, progress, bytesSent) => {
         emit("upload-progress", { file, progress, bytesSent });
     });
@@ -218,15 +232,25 @@ onMounted(() => {
     });
 
     myDrop.on("error", (file, message) => {
+        console.log('error', message);
+
+        if(isSubmitting.value)
+        {
+            alert(`Error: ${message.message}`);
+        }
         emit("error", { file, message });
     });
     myDrop.on("success", (file, response) => {
+        console.log('success', response);
         emit("success", { file, response });
     });
     myDrop.on("complete", (file) => {
+        console.log('complete', file);
         emit("complete", file);
     });
     myDrop.on("queuecomplete", () => {
+        console.log('queue complete');
+        isSubmitting.value = false;
         emit("queue-complete");
     });
 });

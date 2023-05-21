@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customers\CustomerFileRequest;
 use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Models\CustomerFileType;
@@ -36,11 +37,11 @@ class CustomerFileController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerFileRequest $request)
     {
         //
 
-        // return $request;
+        return $request;
 
         // $path = Storage::disk('customers')->putFile('test', $request->file('file'));
         // return $path;
