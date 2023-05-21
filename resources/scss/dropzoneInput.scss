@@ -7,6 +7,7 @@
     border-radius: 15px;
     min-height: 200px;
     z-index: 0;
+    margin: 5px 0;
     &:hover {
         background-color: rgba(57, 187, 247, 0.25);
     }
@@ -43,7 +44,7 @@
             cursor: default;
             display: inline-block;
             margin: 16px;
-            min-height: 100px;
+            height: 120px;
             position: relative;
             vertical-align: top;
             &:hover {
@@ -152,7 +153,6 @@
                 border-radius: 6px;
                 color: #ffffff;
                 display: block;
-                height: 100%;
                 margin: 5px;
                 padding: 5px;
                 text-align: center;
@@ -160,7 +160,7 @@
                 z-index: 100;
 
                 position: relative;
-                bottom: -25px;
+                bottom: 25px;
                 left: 0;
 
                 &::after {
@@ -275,4 +275,10 @@ span.img-attribute a {
     position: absolute;
     bottom: 0;
     left: 0;
+}
+
+.dz-validation-message {
+    color: #fc0202;
+    margin: 2px;
+
 }

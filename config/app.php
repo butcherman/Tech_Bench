@@ -75,7 +75,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
-        // App\Providers\AppSettingsServiceProvider::class,  FIXME:  get correct settings done
+        App\Providers\AppSettingsServiceProvider::class,
 
     ],
 

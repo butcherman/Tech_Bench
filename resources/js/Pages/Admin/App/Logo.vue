@@ -28,15 +28,15 @@
                             @submit="onSubmit"
                         >
                             <DropzoneInput
-                                name="logo"
+                                paramName="logo"
                                 ref="fileUpload"
                                 class="mb-2"
-                                paramName="logo"
                                 :accepted-files="['image/*']"
                                 :multiple="false"
                                 :max-files="1"
                                 :upload-url="$route('admin.set-logo')"
-                                @queue-complete="uploadComplete"
+                                required
+                                @success="uploadComplete"
                             />
                         </VueForm>
                     </div>
@@ -47,47 +47,49 @@
 </template>
 
 <script setup lang="ts">
-    import App           from '@/Layouts/app.vue';
-    import VueForm       from '@/Components/Base/VueForm.vue';
-    import DropzoneInput from '@/Components/Base/Input/DropzoneInput.vue';
-    import { ref }       from 'vue';
-    import { router }   from '@inertiajs/vue3';
-    import * as yup      from 'yup';
+import App from "@/Layouts/app.vue";
+import VueForm from "@/Components/Base/VueForm.vue";
+import DropzoneInput from "@/Components/Base/Input/DropzoneInput.vue";
+import { ref } from "vue";
+import { router } from "@inertiajs/vue3";
 
-    defineProps<{
-        logo: string;
-    }>();
-    const fileUpload = ref(null);
-    const logoForm         = ref<InstanceType<typeof VueForm> | null>(null);
-    const showForm         = ref(true);
-    const validationSchema = {}
+defineProps<{
+    logo: string;
+}>();
+const fileUpload = ref<InstanceType<typeof DropzoneInput> | null>(null);
+const logoForm = ref<InstanceType<typeof VueForm> | null>(null);
+const showForm = ref(true);
+const validationSchema = {}
 
-    const $route = route;
+const $route = route;
 
-    interface logoFormType {
-        logo: {
-            path: string;
-            name: string;
-            size: number;
-            type: string;
-        }[]
+interface logoFormType {
+    logo: {
+        path: string;
+        name: string;
+        size: number;
+        type: string;
+    }[];
+}
+
+const onSubmit = (form: logoFormType) => {
+    console.log("process form", form);
+    if (fileUpload.value?.validate()) {
+        fileUpload.value?.process();
     }
-
-    const onSubmit = (form:logoFormType) => {
-
-
-        console.log('process form', form);
-        fileUpload.value.process();
+    else
+    {
+        logoForm.value?.endSubmit();
     }
+};
 
-    const uploadComplete = () => {
-        console.log('finished');
-
-        logoForm.value.endSubmit();
-        router.reload();
-    }
+const uploadComplete = () => {
+    logoForm.value?.endSubmit();
+    fileUpload.value.reset();
+    router.reload();
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

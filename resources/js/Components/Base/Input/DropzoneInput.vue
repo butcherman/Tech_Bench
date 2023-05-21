@@ -42,14 +42,16 @@
             </div>
         </div>
     </div>
+    <div v-if="errMessage" class="dz-validation-message">{{ errMessage }}</div>
 </template>
 
 <script setup lang="ts">
 import Dropzone from "dropzone";
-import { ref, reactive, onMounted, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { getFileIcon } from "@/Modules/fileIcon.module";
-import type { fileDataType, pageInterface } from "@/Types";
+import type { fileDataType } from "@/Types";
+import type { Ref } from "vue";
 
 /**
  * Additional Styling for Drag and Drop
@@ -72,18 +74,65 @@ const emit = defineEmits([
 ]);
 const props = defineProps<{
     uploadUrl: string;
+    paramName: string;
     method?: "POST" | "PUT";
-    paramName?: string;
     maxFiles?: number;
     acceptedFiles?: string[];
     required?: boolean;
 }>();
 const fileData = computed<fileDataType>(() => usePage().props.app.fileData);
-let myDrop:Dropzone;
+const errMessage: Ref<string | null> = ref(null);
+const isTouched: Ref<boolean> = ref(false);
+let myDrop: Dropzone;
 
+/**
+ * Upload the valid files
+ */
 const process = () => {
-    console.log("processing queue");
     myDrop.processQueue();
+};
+
+/**
+ * Reset Dropzone to its initial state
+ */
+const reset = () => {
+    myDrop.removeAllFiles();
+}
+
+/**
+ * Validate the field by making sure there are no errors
+ */
+const validate = () => {
+    //  If the field is required
+    if (props.required) {
+        if (
+            myDrop.getQueuedFiles().length &&
+            !myDrop.getRejectedFiles().length
+        ) {
+            errMessage.value = null;
+            return true;
+        }
+
+        //  If validation failed, get an error message to display to the user
+        if (props.required && myDrop.getRejectedFiles().length) {
+            errMessage.value =
+                "At least one error occurred.  Hover over the file(s) to view the error";
+        } else {
+            errMessage.value = "You must select a file to upload";
+        }
+
+        return false;
+    }
+
+    //  If the field is not required, verify there are no errors
+    if (!myDrop.getRejectedFiles.length) {
+        errMessage.value = null;
+        return true;
+    }
+
+    errMessage.value =
+        "At least one error occurred.  Hover over the file(s) to view the error";
+    return false;
 };
 
 /**
@@ -124,6 +173,9 @@ onMounted(() => {
      * Set Event Listeners and emits
      */
     myDrop.on("addedfile", (file) => {
+        //  Note Dropzone has been touched/interacted with
+        isTouched.value = true;
+
         //  If this is not an image file, see if we have an icon available
         const mime = file.type.split("/");
         if (mime[0] !== "image") {
@@ -148,6 +200,7 @@ onMounted(() => {
         emit("file-added", file);
     });
     myDrop.on("removedfile", (file) => {
+        validate();
         emit("file-removed", file);
     });
     myDrop.on("maxfilesreached", () => {
@@ -158,28 +211,25 @@ onMounted(() => {
     });
 
     myDrop.on("uploadprogress", (file, progress, bytesSent) => {
-        emit('upload-progress', { file, progress, bytesSent });
+        emit("upload-progress", { file, progress, bytesSent });
     });
     myDrop.on("totaluploadprogress", (progress, totalBytes, bytesSent) => {
         emit("total-upload-progress", { progress, totalBytes, bytesSent });
     });
 
     myDrop.on("error", (file, message) => {
-        console.log("error->file", file);
-        console.log("error->message", message);
-
-        emit('error', { file, message });
+        emit("error", { file, message });
     });
     myDrop.on("success", (file, response) => {
-        emit('success', { file, response });
+        emit("success", { file, response });
     });
     myDrop.on("complete", (file) => {
-        emit('complete', file);
+        emit("complete", file);
     });
     myDrop.on("queuecomplete", () => {
-        emit('queue-complete');
+        emit("queue-complete");
     });
 });
 
-defineExpose({ process });
+defineExpose({ process, validate, reset, isTouched });
 </script>
