@@ -151,46 +151,75 @@
                                         <tr
                                             v-for="customer in searchResults"
                                             :key="customer.cust_id"
-                                            class="pointer"
-                                            @click="followCustLink(customer)"
                                         >
                                             <td>
-                                                {{ customer.name }}
-                                                <span v-if="customer.dba_name">
-                                                    {{ customer.dba_name }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                {{ customer.city }}
-                                            </td>
-                                            <td>
-                                                <template
-                                                    v-if="
-                                                        customer
-                                                            .customer_equipment
-                                                            .length > 0
+                                                <Link
+                                                    :href="
+                                                        $route(
+                                                            'customers.show',
+                                                            customer.slug
+                                                        )
                                                     "
                                                 >
-                                                    <div
-                                                        v-for="equip in customer.customer_equipment"
+                                                    {{ customer.name }}
+                                                    <span
+                                                        v-if="customer.dba_name"
                                                     >
-                                                        {{ equip.name }}
-                                                    </div>
-                                                </template>
-                                                <template
-                                                    v-if="
-                                                        customer
-                                                            .parent_equipment
-                                                            .length > 0
+                                                        {{ customer.dba_name }}
+                                                    </span>
+                                                </Link>
+                                            </td>
+                                            <td>
+                                                <Link
+                                                    :href="
+                                                        $route(
+                                                            'customers.show',
+                                                            customer.slug
+                                                        )
                                                     "
                                                 >
-                                                    <div
-                                                        v-for="equip in customer.parent_equipment"
+                                                    {{ customer.city }}
+                                                </Link>
+                                            </td>
+                                            <td>
+                                                <Link
+                                                    :href="
+                                                        $route(
+                                                            'customers.show',
+                                                            customer.slug
+                                                        )
+                                                    "
+                                                >
+                                                    <template
+                                                        v-if="
+                                                            customer
+                                                                .customer_equipment
+                                                                .length > 0
+                                                        "
                                                     >
-                                                        <fa-icon icon="share" />
-                                                        {{ equip.name }}
-                                                    </div>
-                                                </template>
+                                                        <div
+                                                            v-for="equip in customer.customer_equipment"
+                                                        >
+                                                            {{ equip.name }}
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="
+                                                            customer
+                                                                .parent_equipment
+                                                                .length > 0
+                                                        "
+                                                    >
+                                                        <div
+                                                            v-for="equip in customer.parent_equipment"
+                                                        >
+                                                            <fa-icon
+                                                                icon="share"
+                                                            />
+                                                            {{ equip.name }}
+                                                        </div>
+                                                    </template>
+                                                </Link>
                                             </td>
                                         </tr>
                                     </template>
@@ -438,13 +467,6 @@ const onGoToPage = (page: number) => {
     searchParam.page = page;
     onSearch();
 };
-
-/**
- * GO to the selected customer
- */
-const followCustLink = (customer: customerType) => {
-    router.get(route("customers.show", customer.slug));
-};
 </script>
 
 <script lang="ts">
@@ -456,6 +478,21 @@ thead,
 tfoot {
     tr {
         background-color: rgb(233, 225, 225);
+    }
+}
+
+tbody {
+    tr {
+        td {
+            padding: 0;
+            a {
+                display: block;
+                height: 100%;
+                padding: 8px 0;
+                text-decoration: none;
+                color: #000000;
+            }
+        }
     }
 }
 </style>
