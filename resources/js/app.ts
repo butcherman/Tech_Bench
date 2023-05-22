@@ -1,54 +1,62 @@
 /**
  * Stylesheets
  */
-import 'maz-ui/css/main.css';
-import '../scss/app.scss';
+import "maz-ui/css/main.css";
+import "../scss/app.scss";
 
 /*
-*   Vue and base libraries
-*/
-import { createApp, h }                 from 'vue';
-import { createInertiaApp, Link, Head } from '@inertiajs/vue3';
-import { resolvePageComponent }         from 'laravel-vite-plugin/inertia-helpers';
-import { FontAwesomeIcon }              from '@fortawesome/vue-fontawesome';
+ *   Vue and base libraries
+ */
+import { createApp, h } from "vue";
+import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 //  Custom Directives
-import { vFocusDirective }              from './Directives/Focus';
-import { vTooltipDirective }            from './Directives/Tooltip';
-import { vPopoverDirective }            from './Directives/Popover';
+import { vFocusDirective } from "./Directives/Focus";
+import { vTooltipDirective } from "./Directives/Tooltip";
+import { vPopoverDirective } from "./Directives/Popover";
 
 /**
  * Font Awesome Icon Library
  */
-import './Modules/fontAwesome.module';
+import "./Modules/fontAwesome.module";
 
 /*
-*   Initialize App
-*/
-const appName:string = 'Tech Bench';
+ *   Initialize App
+ */
+const appName: string = "Tech Bench";
 
 createInertiaApp({
-    title  : (title:string):string => `${title} - ${appName}`,
-    resolve: (name:string) => resolvePageComponent<any>(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    title: (title: string): string => `${title} - ${appName}`,
+    resolve: (name: string) =>
+        resolvePageComponent<any>(
+            `./Pages/${name}.vue`,
+            import.meta.glob("./Pages/**/*.vue")
+        ),
     progress: {
-        color: '#4B5563',
+        color: "#4B5563",
     },
     setup({ el, App, props, plugin }) {
         const inertiaApp = createApp({ render: () => h(App, props) })
             .use(plugin)
-            .component('Link',    Link)                         //  Inertial Link
-            .component('Head',    Head)                         //  Head title
-            .component('fa-icon', FontAwesomeIcon)              //  Font Awesome
-            .directive('focus',   vFocusDirective)
-            .directive('tooltip', vTooltipDirective)
-            .directive('popover', vPopoverDirective)
+            .component("Link", Link) //  Inertial Link
+            .component("Head", Head) //  Head title
+            .component("fa-icon", FontAwesomeIcon) //  Font Awesome
+            .directive("focus", vFocusDirective)
+            .directive("tooltip", vTooltipDirective)
+            .directive("popover", vPopoverDirective);
 
         inertiaApp.mount(el);
-      },
+    },
 });
 
 // Prevent Bootstrap dialog from blocking focusin
-document.addEventListener('focusin', (e) => {
-    if (e.target.closest(".tox-tinymce-aux, .moxman-window, .tam-assetmanager-root") !== null) {
-      e.stopImmediatePropagation();
+document.addEventListener("focusin", (e) => {
+    if (
+        e.target.closest(
+            ".tox-tinymce-aux, .moxman-window, .tam-assetmanager-root"
+        ) !== null
+    ) {
+        e.stopImmediatePropagation();
     }
-  });
+});

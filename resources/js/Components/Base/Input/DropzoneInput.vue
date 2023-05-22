@@ -56,7 +56,7 @@ import type { Ref } from "vue";
 /**
  * Additional Styling for Drag and Drop
  */
-import "file-icon-vectors/dist/file-icon-vectors.min.css";
+// import "file-icon-vectors/dist/file-icon-vectors.min.css";
 import "dropzone/dist/basic.css";
 import "../../../../scss/dropzoneInput.scss";
 
@@ -163,8 +163,8 @@ onMounted(() => {
         addRemoveLinks: false,
         autoProcessQueue: false,
         //  FIXME  -  Chunking eats up memory???
-        // chunking: true,
-        // chunkSize: fileData.value.chunkSize,
+        chunking: true,
+        chunkSize: fileData.value.chunkSize,
         headers: { "X-CSRF-TOKEN": fileData.value.token },
         maxFiles: props.maxFiles || 5,
         maxFilesize: fileData.value.maxSize,

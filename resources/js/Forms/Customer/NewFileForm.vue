@@ -64,7 +64,7 @@ const validationSchema = object({
     shared: boolean().nullable(),
 });
 const initialValues = {
-    // shared: false,
+    shared: false,
     cust_id: customer.value.cust_id,
 };
 

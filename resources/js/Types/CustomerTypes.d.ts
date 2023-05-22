@@ -1,6 +1,5 @@
-import { string } from 'yup';
 import type { Ref } from "vue";
-import { customerEquipmentType } from "@/Types";
+import type { customerEquipmentType } from "@/Types";
 
 interface basicPermissionsType {
     create: boolean;

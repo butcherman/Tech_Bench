@@ -1,26 +1,25 @@
 import type { userType } from '@/Types';
 import type { Page, PageProps } from '@inertiajs/core';
 
-// import type { Page } from '@inertiajs/core'
-// declare module '@inertiajs/vue3' {
-//   export function usePage<T>(): Page<T>
-// }
-
-export interface phoneNumberType {
+export type phoneNumberType = {
     description: string;
     icon_class: string;
 }
 
-export interface pageInterface extends Page<PageProps> {
+export type pageData = Page & {
+        props: propsType;
+}
+
+export type propsType = PageProps & {
     app          : appProps;
-    errors       : any;
+    errors       : errorType;
     flash        : flashProps;
     notifications: notificationProps;
-    navbar       : navBarProps[];
+    navBar       : navBarProps[];
     breadcrumbs  : breadcrumbsType[];
 }
 
-interface appProps {
+export type appProps = {
     name     : string;
     logo     : string;
     version  : string;
@@ -29,36 +28,36 @@ interface appProps {
     fileData : fileDataType;
 }
 
-interface flashProps {
+type flashProps = {
     success: string | null;
     warning: string | null;
     danger : string | null;
     info   : string | null;
 }
 
-export interface flashMessageType {
+export type flashMessage = {
     type   : string;
     message: string;
 }
 
-interface notificationProps {
+type notificationProps = {
     list: object[];     //  TODO - type this
     new : number;
 }
 
-interface navBarProps {
+type navBarProps = {
     name : string;
     route: string;
     icon : string;
 }
 
-interface breadcrumbsType {
+type breadcrumbsType = {
     title          : string;
     url            : string;
     is_current_page: boolean;
 }
 
-export interface fileDataType {
+export type fileDataType = {
     chunkSize: number;
     maxSize  : number;
     token    : string;

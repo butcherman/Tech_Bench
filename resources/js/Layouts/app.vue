@@ -2,11 +2,8 @@
     <div class="app-layout">
         <nav class="navbar top-navbar fixed-top">
             <div class="navbar-logo-wrapper d-flex">
-                <Link
-                    :href="$route('dashboard')"
-                    class="navbar-logo"
-                >
-                    <img :src="app.logo" class="mr-2" :alt="app.name"/>
+                <Link :href="$route('dashboard')" class="navbar-logo">
+                    <img :src="app.logo" class="mr-2" :alt="app.name" />
                 </Link>
             </div>
             <div class="navbar-brand d-none d-md-flex">
@@ -36,7 +33,7 @@
                             <span
                                 class="badge bg-warning position-absolute top-0 start-100 translate-middle rounded-pill"
                             >
-                                {{ notif.new }}
+                                {{ notifications.new }}
                             </span>
                         </Link>
                     </li>
@@ -61,14 +58,16 @@
                                 </li>
                                 <li>
                                     <Link
-                                        :href="$route('settings.password.index')"
+                                        :href="
+                                            $route('settings.password.index')
+                                        "
                                         class="dropdown-item"
                                     >
                                         <fa-icon icon="fa-key" />
                                         Change Password
                                     </Link>
                                 </li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li><hr class="dropdown-divider" /></li>
                                 <li>
                                     <Link
                                         as="button"
@@ -96,9 +95,17 @@
             </div>
         </nav>
         <div class="container-fluid">
-            <nav id="side-nav" class="sidebar" :class="{ 'active' : navbarActive }">
+            <nav
+                id="side-nav"
+                class="sidebar"
+                :class="{ active: navbarActive }"
+            >
                 <ul class="nav">
-                    <li class="nav-item" v-for="link in navBar" :key="link.name">
+                    <li
+                        class="nav-item"
+                        v-for="link in navBar"
+                        :key="link.name"
+                    >
                         <Link class="nav-link" :href="link.route">
                             <fa-icon :icon="link.icon" />
                             <span class="menu-title">{{ link.name }}</span>
@@ -114,7 +121,7 @@
                                 <li
                                     v-for="crumb in breadcrumbs"
                                     :key="crumb.title"
-                                    :class="{ 'active' : crumb.is_current_page }"
+                                    :class="{ active: crumb.is_current_page }"
                                     class="breadcrumb-item"
                                 >
                                     <Link
@@ -146,21 +153,31 @@
                     </div>
                     <slot />
                 </div>
-                <footer class=" footer page-footer">
-                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
+                <footer class="footer page-footer">
+                    <div
+                        class="d-sm-flex justify-content-center justify-content-sm-between"
+                    >
+                        <span
+                            class="text-muted text-center text-sm-left d-block d-sm-inline-block"
+                        >
                             Copyright &copy;
                             {{ app.copyright }}
-                            <span class="d-none d-md-inline"> Butcherman - All rights reserved.</span>
+                            <span class="d-none d-md-inline">
+                                Butcherman - All rights reserved.</span
+                            >
                         </span>
-                        <span class="text-muted float-none float-sm-end d-block mt-1 mt-sm-0 text-center">
+                        <span
+                            class="text-muted float-none float-sm-end d-block mt-1 mt-sm-0 text-center"
+                        >
                             {{ app.version }}
                         </span>
                     </div>
                 </footer>
             </div>
         </div>
-        <div class="toast-container position-absolute top-0 start-50 translate-middle p-3">
+        <div
+            class="toast-container position-absolute top-0 start-50 translate-middle p-3"
+        >
             <template v-for="msg in flashMessage">
                 <AlertToast :background="msg.type" :message="msg.message" />
             </template>
@@ -169,76 +186,59 @@
 </template>
 
 <script setup lang="ts">
-    import AlertToast  from '@/Components/Base/AlertToast.vue';
-    import { usePage } from '@inertiajs/vue3';
-    import { router } from '@inertiajs/vue3';
-    import { computed,
-             ref,
-             watch,
-             onMounted } from 'vue';
+import AlertToast from "@/Components/Base/AlertToast.vue";
+import { usePage } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
+import { ref, watch, onMounted } from "vue";
+import type { flashMessage, pageData } from "@/Types";
 
-    import { appProps,
-             errorType,
-             flashProps,
-             navBarProps,
-             pageInterface,
-             breadcrumbsType,
-             flashMessageType,
-             notificationProps, } from '@/Types';
+const $route = route;
+const page: pageData = usePage();
+const { app, navBar, notifications, breadcrumbs, errors, flash } = page.props;
 
-    const $route       = route;
-    const app          = computed<appProps>         (() => usePage<pageInterface>().props.app);
-    const navBar       = computed<navBarProps[]>    (() => usePage<pageInterface>().props.navbar);
-    const notif        = computed<notificationProps>(() => usePage<pageInterface>().props.notifications);
-    const breadcrumbs  = computed<breadcrumbsType[]>(() => usePage<pageInterface>().props.breadcrumbs);
-    const errors       = computed<errorType>        (() => usePage<pageInterface>().props.errors);
-    const flash        = computed<flashProps>       (() => usePage<pageInterface>().props.flash);
+const navbarActive = ref<boolean>(false);
+const flashMessage = ref<flashMessage[]>([]);
 
-    const navbarActive = ref<boolean>(false);
-    const flashMessage = ref<flashMessageType[]>([]);
+router.on("navigate", () => (navbarActive.value = false));
 
-    router.on('navigate', () => navbarActive.value = false);
+watch(flash, () => checkFlashMessages());
+onMounted(() => checkFlashMessages());
 
-    watch(flash, () => checkFlashMessages());
-    onMounted(   () => checkFlashMessages());
-
-    const checkFlashMessages = () => {
-        for(const [type, message] of Object.entries(flash.value))
-        {
-            if(message !== null)
-            {
-                flashMessage.value.push({
-                    type,
-                    message,
-                });
-            }
+const checkFlashMessages = () => {
+    for (const [type, message] of Object.entries(flash)) {
+        if (message !== null) {
+            flashMessage.value.push({
+                type,
+                message,
+            });
         }
     }
+};
 </script>
 
 <style scoped lang="scss">
-    @import "../../scss/Layouts/appLayout.scss";
+@import "../../scss/Layouts/appLayout.scss";
 
-    .breadcrumbs-wrapper {
-        margin : 0;
-        margin-bottom: 15px;
-        padding: 5px;
-        nav {
-            margin-bottom: 0 !important;
-            .breadcrumb {
-                margin : 0 !important;
-                padding: 3px;
-                a {
-                    text-decoration: none;
-                }
+.breadcrumbs-wrapper {
+    margin: 0;
+    margin-bottom: 15px;
+    padding: 5px;
+    nav {
+        margin-bottom: 0 !important;
+        .breadcrumb {
+            margin: 0 !important;
+            padding: 3px;
+            a {
+                text-decoration: none;
             }
         }
     }
-    .dropdown-menu {
-        margin: 0 !important;
-    }
+}
+.dropdown-menu {
+    margin: 0 !important;
+}
 
-    .toast-container {
-        margin-top: 3rem;
-    }
+.toast-container {
+    margin-top: 3rem;
+}
 </style>

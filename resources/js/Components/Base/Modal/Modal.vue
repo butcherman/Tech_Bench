@@ -1,16 +1,13 @@
 <template>
     <Teleport to="body">
-        <div
-            ref="myModal"
-            id="myModal"
-            class="modal fade"
-            tabindex="-1"
-        >
+        <div ref="myModal" id="myModal" class="modal fade" tabindex="-1">
             <div
                 class="modal-dialog"
-                :class="{ 'modal-lg' : size === 'lg',
-                          'modal-xl' : size === 'xl',
-                          'modal-sm' : size === 'sm' }"
+                :class="{
+                    'modal-lg': size === 'lg',
+                    'modal-xl': size === 'xl',
+                    'modal-sm': size === 'sm',
+                }"
             >
                 <div class="modal-content">
                     <div class="modal-header">
@@ -35,34 +32,34 @@
 </template>
 
 <script setup lang="ts">
-    import { onMounted, ref } from "vue";
-    import { Modal }          from "bootstrap";
+import { onMounted, ref } from "vue";
+import { Modal } from "bootstrap";
 
-    defineProps<{
-        title?: string;
-        size ?: 'sm' | 'lg' | 'xl';
-    }>();
+defineProps<{
+    title?: string;
+    size?: "sm" | "lg" | "xl";
+}>();
 
-    const emit = defineEmits(['hide', 'hidden', 'show', 'shown']);
+const emit = defineEmits(["hide", "hidden", "show", "shown"]);
 
-    const myModal = ref<InstanceType<typeof Modal> | null>(null);
-    let thisModalObj:Modal;
+const myModal = ref<HTMLInputElement | null>(null);
+let thisModalObj: Modal;
 
-    onMounted(() => {
+onMounted(() => {
+    if (myModal.value) {
         thisModalObj = new Modal(myModal.value);
-    });
-
-    function _show():void
-    {
-        thisModalObj.show();
-        emit('show');
     }
+});
 
-    function _hide():void
-    {
-        thisModalObj.hide();
-        emit('hide');
-    }
+function _show(): void {
+    thisModalObj.show();
+    emit("show");
+}
 
-    defineExpose({ show: _show, hide: _hide });
+function _hide(): void {
+    thisModalObj.hide();
+    emit("hide");
+}
+
+defineExpose({ show: _show, hide: _hide });
 </script>

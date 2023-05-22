@@ -32,21 +32,22 @@ trait FileTrait
 
         //  Save a completed upload
         if ($save->isFinished()) {
-            $this->disk = $request->disk;
-            $this->folder = $request->folder;
-            $filename = $this->saveFile($save->getFile());
+            // $this->disk = $request->disk;
+            // $this->folder = $request->folder;
+            // $filename = $this->saveFile($save->getFile());
 
-            $status = [
-                'percent' => 100,
-                'complete' => true,
-                'filename' => $filename,
-                'disk' => $request->disk,
-                'folder' => $request->folder,
-            ];
+            // $status = [
+            //     'percent' => 100,
+            //     'complete' => true,
+            //     'filename' => $filename,
+            //     'disk' => $request->disk,
+            //     'folder' => $request->folder,
+            // ];
 
-            Log::debug('File Upload Completed.  Details - ', $status);
+            // Log::debug('File Upload Completed.  Details - ', $status);
 
-            return $status;
+            // return $status;
+            return 'completed';
         }
 
         $handler = $save->handler();

@@ -39,21 +39,9 @@ class CustomerFileController extends Controller
      */
     public function store(CustomerFileRequest $request)
     {
-        //
+        $status = $this->getChunk($request);
 
-        return $request;
-
-        // $path = Storage::disk('customers')->putFile('test', $request->file('file'));
-        // return $path;
-
-        // Log::critical('visited');
-
-        return 'success';
-
-        // $path = 'test_stuff';
-        // $location = '/storage/'.Storage::disk('customers')->putFile($path, new File($request->file));
-
-        // return $location;
+        return $status;
     }
 
     /**

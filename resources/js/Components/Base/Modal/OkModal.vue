@@ -1,10 +1,5 @@
 <template>
-    <div
-        ref="okModal"
-        id="okModal"
-        class="modal fade"
-        tabindex="-1"
-    >
+    <div ref="okModal" id="okModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -33,36 +28,35 @@
 </template>
 
 <script setup lang="ts">
-    import { ref,
-             onMounted,
-             onUnmounted } from "vue";
-    import { Modal }       from "bootstrap";
+import { ref, onMounted, onUnmounted } from "vue";
+import { Modal } from "bootstrap";
 
-    defineProps<{
-        title   : string;
-        message?: string;
-    }>();
+defineProps<{
+    title: string;
+    message?: string | null;
+}>();
 
-    let emit         = defineEmits(['ok-clicked', 'ok-hide', 'ok-hidden']);
-    let okModal      = ref(null);
-    let thisModalObj = { show: () => null, hide: () => null };
+let emit = defineEmits(["ok-clicked", "ok-hide", "ok-hidden"]);
+let okModal = ref<HTMLInputElement | null>(null);
+let thisModalObj: Modal;
 
-    onMounted(() => {
-        thisModalObj = new Modal(okModal.value);
+onMounted(() => {
+    if (okModal.value) {
+        thisModalObj = new Modal(okModal?.value);
         thisModalObj.show();
-
-        window.addEventListener('hide.bs.modal',   () => emit('ok-hide'));
-        window.addEventListener('hidden.bs.modal', () => emit('ok-hidden'));
-    });
-
-    onUnmounted(() => {
-        window.removeEventListener('hide.bs.modal',   () => emit('ok-hide'));
-        window.removeEventListener('hidden.bs.modal', () => emit('ok-hidden'));
-    });
-
-    function okClicked():void
-    {
-        emit('ok-clicked');
-        thisModalObj.hide();
     }
+
+    window.addEventListener("hide.bs.modal", () => emit("ok-hide"));
+    window.addEventListener("hidden.bs.modal", () => emit("ok-hidden"));
+});
+
+onUnmounted(() => {
+    window.removeEventListener("hide.bs.modal", () => emit("ok-hide"));
+    window.removeEventListener("hidden.bs.modal", () => emit("ok-hidden"));
+});
+
+function okClicked(): void {
+    emit("ok-clicked");
+    thisModalObj.hide();
+}
 </script>

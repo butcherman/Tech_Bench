@@ -44,12 +44,15 @@
     }>();
 
     let emit         = defineEmits(['ok-clicked', 'ok-hide', 'ok-hidden']);
-    let helpModal    = ref<InstanceType<typeof Modal> | null>(null);
-    let thisModalObj = { show: () => null, hide: () => null };
+    let helpModal    = ref<HTMLInputElement | null>(null);
+    let thisModalObj: Modal;
 
     onMounted(() => {
-        thisModalObj = new Modal(helpModal.value);
-        thisModalObj.show();
+        if(helpModal.value)
+        {
+            thisModalObj = new Modal(helpModal.value);
+            thisModalObj.show();
+        }
 
         window.addEventListener('hide.bs.modal',   () => emit('ok-hide'));
         window.addEventListener('hidden.bs.modal', () => emit('ok-hidden'));
