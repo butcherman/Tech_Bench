@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
 const emit = defineEmits(["start", "end"]);

@@ -68,11 +68,12 @@ const emit = defineEmits([
     "upload-progress",
     "total-upload-progress",
     "error",
-    'sending',
+    "sending",
     "success",
     "queue-complete",
     "complete",
 ]);
+
 const props = defineProps<{
     uploadUrl: string;
     paramName: string;
@@ -81,6 +82,7 @@ const props = defineProps<{
     acceptedFiles?: string[];
     required?: boolean;
 }>();
+
 const fileData = computed<fileDataType>(() => usePage().props.app.fileData);
 const errMessage: Ref<string | null> = ref(null);
 const isTouched: Ref<boolean> = ref(false);
@@ -104,7 +106,7 @@ const process = (form = {}) => {
 const reset = () => {
     myDrop.removeAllFiles();
     myDrop.reset();
-}
+};
 
 /**
  * Validate the field by making sure there are no errors
@@ -217,12 +219,11 @@ onMounted(() => {
         emit("max-files-exceeded");
     });
 
-    myDrop.on('sending', (file, xhr, formData) => {
-        for(const field in myFormData)
-        {
+    myDrop.on("sending", (file, xhr, formData) => {
+        for (const field in myFormData) {
             formData.append(field, myFormData[field]);
         }
-        emit('sending', file, xhr, formData);
+        emit("sending", file, xhr, formData);
     });
     myDrop.on("uploadprogress", (file, progress, bytesSent) => {
         emit("upload-progress", { file, progress, bytesSent });
@@ -232,24 +233,23 @@ onMounted(() => {
     });
 
     myDrop.on("error", (file, message) => {
-        console.log('error', message);
+        console.log("error", message);
 
-        if(isSubmitting.value)
-        {
+        if (isSubmitting.value) {
             alert(`Error: ${message.message}`);
         }
         emit("error", { file, message });
     });
     myDrop.on("success", (file, response) => {
-        console.log('success', response);
+        console.log("success", response);
         emit("success", { file, response });
     });
     myDrop.on("complete", (file) => {
-        console.log('complete', file);
+        console.log("complete", file);
         emit("complete", file);
     });
     myDrop.on("queuecomplete", () => {
-        console.log('queue complete');
+        console.log("queue complete");
         isSubmitting.value = false;
         emit("queue-complete");
     });

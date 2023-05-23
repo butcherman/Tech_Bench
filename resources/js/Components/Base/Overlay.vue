@@ -1,9 +1,6 @@
 <template>
     <div class="vld-parent">
-        <Loading
-            :active="loading"
-            :is-full-page="false"
-        >
+        <Loading :active="loading" :is-full-page="false">
             <slot name="loader">
                 <AtomLoader />
             </slot>
@@ -13,18 +10,18 @@
 </template>
 
 <script setup lang="ts">
-    import Loading    from 'vue3-loading-overlay';
-    import AtomLoader from './Loader/AtomLoader.vue';
+import Loading from "vue3-loading-overlay";
+import AtomLoader from "./Loader/AtomLoader.vue";
 
-    defineProps<{
-        loading: boolean;
-    }>();
+import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
+
+defineProps<{
+    loading: boolean;
+}>();
 </script>
 
 <style scoped lang="scss">
-    @import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
-
-    .vld-overlay.is-active {
-        background-color: rgba(197, 192, 192, 0.5);
-    }
+.vld-overlay.is-active {
+    background-color: rgba(197, 192, 192, 0.5);
+}
 </style>

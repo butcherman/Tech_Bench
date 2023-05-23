@@ -1,6 +1,6 @@
 <template>
     <Teleport to="body">
-        <div ref="myModal" id="myModal" class="modal fade" tabindex="-1">
+        <div ref="myModal" class="modal fade" tabindex="-1">
             <div
                 class="modal-dialog"
                 :class="{
@@ -51,15 +51,15 @@ onMounted(() => {
     }
 });
 
-function _show(): void {
+function show(): void {
     thisModalObj.show();
     emit("show");
 }
 
-function _hide(): void {
+function hide(): void {
     thisModalObj.hide();
     emit("hide");
 }
 
-defineExpose({ show: _show, hide: _hide });
+defineExpose({ show, hide });
 </script>

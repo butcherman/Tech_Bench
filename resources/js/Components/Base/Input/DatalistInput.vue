@@ -9,7 +9,7 @@
             :list="`datalist-${id}`"
             v-focus="focus"
             @change="$emit('change', value)"
-        >
+        />
         <label :for="id">{{ label }}</label>
         <span class="text-danger">{{ errorMessage }}</span>
         <datalist :id="`datalist-${id}`">
@@ -21,20 +21,20 @@
 </template>
 
 <script setup lang="ts">
-    import { toRef }    from 'vue';
-    import { useField } from 'vee-validate';
+import { toRef } from "vue";
+import { useField } from "vee-validate";
 
-    defineEmits(['change']);
+defineEmits(["change"]);
 
-    const props = defineProps<{
-        id       : string;
-        name     : string;
-        label    : string;
-        datalist : string[];
-        focus   ?: boolean;
-        disabled?: boolean;
-    }>();
+const props = defineProps<{
+    id: string;
+    name: string;
+    label: string;
+    datalist: string[];
+    focus?: boolean;
+    disabled?: boolean;
+}>();
 
-    const nameRef = toRef(props, 'name');
-    const { errorMessage, value } = useField(nameRef);
+const nameRef = toRef(props, "name");
+const { errorMessage, value } = useField(nameRef);
 </script>

@@ -38,7 +38,7 @@
                     label="Number (0-9)"
                 />
                 <CheckboxSwitch
-                    id="policy-specital"
+                    id="policy-special"
                     name="contains_special"
                     label="Special Character (!@#$%^&*)"
                 />

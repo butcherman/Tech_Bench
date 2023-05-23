@@ -19,18 +19,18 @@
 </template>
 
 <script setup lang="ts">
-    import { toRef }    from 'vue';
-    import { useField } from 'vee-validate';
+import { toRef } from "vue";
+import { useField } from "vee-validate";
 
-    const props = defineProps<{
-        id        : string;
-        label?    : string;
-        name      : string;
-        optionList: {
-            [key:string]: { [key:string]:string };
-        }
-    }>();
+const props = defineProps<{
+    id: string;
+    label?: string;
+    name: string;
+    optionList: {
+        [key: string]: { [key: string]: string };
+    };
+}>();
 
-    const nameRef                 = toRef(props, 'name');
-    const { errorMessage, value } = useField(nameRef);
+const nameRef = toRef(props, "name");
+const { errorMessage, value } = useField(nameRef);
 </script>

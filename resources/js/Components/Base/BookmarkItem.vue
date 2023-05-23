@@ -36,7 +36,7 @@ const bookmarkTitle = computed<string>(() => {
     return isBookmark.value ? "Remove From Bookmarks" : "Add to Bookmarks";
 });
 
-const toggleBookmark = () => {
+const toggleBookmark = ():void => {
     bookmarkLoading.value = true;
     axios
         .post(props.toggleRoute, {

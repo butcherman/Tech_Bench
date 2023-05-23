@@ -1,22 +1,35 @@
 {
     "compilerOptions": {
-        "jsx": "preserve",
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
         "baseUrl": ".",
+        "esModuleInterop": true,
+        "experimentalDecorators": false,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "jsx": "preserve",
+        "module": "ES2020",
+        "moduleResolution": "node",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "ES2020",
+        "typeRoots": ["./resources/js/Types/", "./node_modules/@types"],
+        "types": ["vite/client"],
         "paths": {
             "@/*": ["resources/js/*"]
         },
-        "experimentalDecorators": false,
-        "target": "ES2020",
-        "moduleResolution": "node",
-        "module": "ES2020",
-        "strict": true,
-        "types": ["vite/client"],
-        "noImplicitAny": true,
-        "noImplicitThis": true,
-        "noImplicitReturns": true,
-        "importHelpers": true,
-        "typeRoots": ["./resources/js/Types/", "./node_modules/@types"],
-        "allowUnreachableCode": false,
-        "esModuleInterop": true
+        "include": [
+            "resources/js/**/*.ts",
+            "resources/js/**/*.vue"
+        ],
+        "exclude": [
+            "node_modules"
+        ]
     }
 }
