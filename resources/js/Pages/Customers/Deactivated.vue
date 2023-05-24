@@ -83,10 +83,9 @@ import Overlay from "@/Components/Base/Overlay.vue";
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { verifyModal } from "@/Modules/verifyModal.module";
-import type { customerType } from "@/Types";
 
 const props = defineProps<{
-    customers: customerType[];
+    customers: customer[];
 }>();
 
 const checkAllMaster = ref<InstanceType<typeof HTMLInputElement> | null>(null);
@@ -97,7 +96,7 @@ const selected = ref<number[]>([]);
 /**
  * Check/Uncheck all items
  */
-const checkAll = () => {
+const checkAll = (): void => {
     if (allCheck.value) {
         props.customers.forEach((cust) => {
             selected.value.push(cust.cust_id);
@@ -108,9 +107,9 @@ const checkAll = () => {
 };
 
 /**
- * For styling, trigger the indeterminate psudo class on the input box
+ * For styling, trigger the indeterminate pseudo class on the input box
  */
-const intermediateCheck = () => {
+const intermediateCheck = (): void => {
     allCheck.value = false;
     if (checkAllMaster.value !== null) {
         checkAllMaster.value.indeterminate = true;
@@ -120,7 +119,7 @@ const intermediateCheck = () => {
 /**
  * Remove the soft deleted date for the selected customers
  */
-const restore = () => {
+const restore = (): void => {
     loading.value = true;
     const formData = useForm({
         cust_list: selected.value,
@@ -131,7 +130,7 @@ const restore = () => {
     });
 };
 
-const remove = () => {
+const remove = (): void => {
     verifyModal(
         "All data will be removed for this customer.  This cannot be undone"
     ).then((res) => {

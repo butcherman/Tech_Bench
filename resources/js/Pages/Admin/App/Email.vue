@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
     import App            from '@/Layouts/app.vue';
-    import EmailForm from '@/Components/Admin/EmailForm.vue';
+    import EmailForm from '@/Forms/Admin/EmailForm.vue';
 
     interface emSettingsType {
         host        : string;

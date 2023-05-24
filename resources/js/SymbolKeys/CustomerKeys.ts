@@ -1,16 +1,12 @@
 import type { Ref, ComputedRef, InjectionKey } from "vue";
-import type {
-    customerPermissionType,
-    customerType,
-} from "@/Types";
 
-export const customerKey: InjectionKey<Ref<customerType>> = Symbol();
-export const custPermissionsKey: InjectionKey<customerPermissionType> =
+export const customerKey: InjectionKey<Ref<customer>> = Symbol();
+export const custPermissionsKey: InjectionKey<customerPermissions> =
     Symbol();
 export const isCustFavKey: InjectionKey<boolean> = Symbol();
 export const allowShareKey: InjectionKey<ComputedRef<boolean>> = Symbol();
+export const fileTypesKey: InjectionKey<string[]> = Symbol();
 export const phoneTypesKey: InjectionKey<Ref<string[]>> = Symbol();
-export const fileTypesKey: InjectionKey<Ref<string[]>> = Symbol();
 
 /**
  * Loading state managers

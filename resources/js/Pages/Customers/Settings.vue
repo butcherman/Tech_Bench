@@ -11,10 +11,7 @@
                             :initial-values="initialValues"
                             @submit="onSubmit"
                         >
-                            <CheckboxSwitch
-                                id="select-id"
-                                name="selectId"
-                            >
+                            <CheckboxSwitch id="select-id" name="selectId">
                                 <template #label>
                                     Allow users to manually input customer ID
                                     <span
@@ -32,12 +29,10 @@
                                     </span>
                                 </template>
                             </CheckboxSwitch>
-                            <CheckboxSwitch
-                                id="update-slug"
-                                name="updateSlug"
-                            >
+                            <CheckboxSwitch id="update-slug" name="updateSlug">
                                 <template #label>
-                                    Automatically update slug when Customer Name is changed
+                                    Automatically update slug when Customer Name
+                                    is changed
                                     <span
                                         class="text-info"
                                         title="What is this?"
@@ -69,41 +64,41 @@
 </template>
 
 <script setup lang="ts">
-    import App            from '@/Layouts/app.vue';
-    import VueForm        from '@/Components/Base/VueForm.vue';
-    import SelectInput    from '@/Components/Base/Input/SelectInput.vue';
-    import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
-    import { ref }        from 'vue';
-    import { allStates }  from '@/Modules/allStates.module';
-    import { useForm }    from '@inertiajs/vue3';
-    import * as yup       from 'yup';
+import App from "@/Layouts/app.vue";
+import VueForm from "@/Components/Base/VueForm.vue";
+import SelectInput from "@/Components/Base/Input/SelectInput.vue";
+import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
+import { ref } from "vue";
+import { allStates } from "@/Modules/allStates.module";
+import { useForm } from "@inertiajs/vue3";
+import * as yup from "yup";
 
-    const props = defineProps<{
-        selectId    : boolean;
-        updateSlug  : boolean;
-        defaultState: string;
-    }>();
-    const customerSettingsForm = ref<InstanceType<typeof VueForm> | null>(null);
+const props = defineProps<{
+    selectId: boolean;
+    updateSlug: boolean;
+    defaultState: string;
+}>();
+const customerSettingsForm = ref<InstanceType<typeof VueForm> | null>(null);
 
-    const validationSchema = {
-        selectId    : yup.bool(),
-        updateSlug  : yup.bool(),
-        defaultState: yup.string().required().label('Default State'),
-    }
-    const initialValues    = {
-        selectId    : props.selectId,
-        updateSlug  : props.updateSlug,
-        defaultState: props.defaultState,
-    }
+const validationSchema = {
+    selectId: yup.bool(),
+    updateSlug: yup.bool(),
+    defaultState: yup.string().required().label("Default State"),
+};
+const initialValues = {
+    selectId: props.selectId,
+    updateSlug: props.updateSlug,
+    defaultState: props.defaultState,
+};
 
-    const onSubmit = (form) => {
-        const formData = useForm(form);
-        formData.post(route('admin.cust.set-settings'), {
-            onFinish: () => customerSettingsForm.value?.endSubmit(),
-        });
-    }
+const onSubmit = (form) => {
+    const formData = useForm(form);
+    formData.post(route("admin.cust.set-settings"), {
+        onFinish: () => customerSettingsForm.value?.endSubmit(),
+    });
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

@@ -5,9 +5,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Change Customer ID</div>
-                        <CustomerBasicSearch
-                            @selected="selectCust"
-                        />
+                        <CustomerBasicSearch @selected="selectCust" />
                     </div>
                 </div>
             </div>
@@ -16,16 +14,15 @@
 </template>
 
 <script setup lang="ts">
-    import App                   from '@/Layouts/app.vue';
-    import CustomerBasicSearch   from '@/Components/Customer/CustomerBasicSearch.vue';
-    import { router }           from '@inertiajs/vue3';
-    import type { customerType } from '@/Types';
+import App from "@/Layouts/app.vue";
+import CustomerBasicSearch from "@/Components/Customer/CustomerBasicSearch.vue";
+import { router } from "@inertiajs/vue3";
 
-    const selectCust = (cust:customerType) => {
-        router.visit(route('admin.cust.change_id.show', cust.slug));
-    }
+const selectCust = (cust: customer) => {
+    router.visit(route("admin.cust.change_id.show", cust.slug));
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

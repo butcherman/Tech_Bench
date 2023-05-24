@@ -85,43 +85,37 @@ import EditNote from "@/Components/Customer/Notes/EditNote.vue";
 import DeleteButton from "@/Components/Base/Buttons/DeleteButton.vue";
 import Overlay from "@/Components/Base/Overlay.vue";
 import { router } from "@inertiajs/vue3";
-import { ref, reactive, onMounted, provide, toRef, computed } from "vue";
+import { ref, provide, computed } from "vue";
 import {
     customerKey,
     allowShareKey,
     toggleNotesLoadKey,
 } from "@/SymbolKeys/CustomerKeys";
 import { verifyModal } from "@/Modules/verifyModal.module";
-import type {
-    customerType,
-    customerNoteType,
-    customerPermissionType,
-} from "@/Types";
 
 const $route = route;
 const props = defineProps<{
-    permissions: customerPermissionType;
-    customer: customerType;
-    note: customerNoteType;
+    permissions: customerPermissions;
+    customer: customer;
+    note: customerNote;
 }>();
 
 const loading = ref<boolean>(false);
-const toggleLoad = () => {
+const toggleLoad = (): void => {
     loading.value = !loading.value;
 };
 provide(toggleNotesLoadKey, toggleLoad);
-
 provide(customerKey, ref(props.customer));
 
 /**
  * Determine if entries for this customer are allowed to be shared with other customers
  */
-const allowShare = computed(() => {
+const allowShare = computed<boolean>(() => {
     return props.customer.child_count > 0 || props.customer.parent_id !== null;
 });
 provide(allowShareKey, allowShare);
 
-const verifyDelete = () => {
+const verifyDelete = (): void => {
     verifyModal("Please Verify").then((res) => {
         if (res) {
             router.delete(route("customers.notes.destroy", props.note.note_id));

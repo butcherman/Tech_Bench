@@ -14,15 +14,15 @@
         </div>
         <div class="row">
             <div class="col-md-5">
-                <!-- <Equipment :equipment="equipment" /> -->
+                <Equipment :equipment="equipment" />
             </div>
             <div class="col-md-7">
-                <!-- <Contacts :contacts="contacts" /> -->
+                <Contacts :contacts="contacts" />
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <!-- <Notes :notes="notes" /> -->
+                <Notes :notes="notes" />
             </div>
         </div>
         <div class="row">
@@ -40,8 +40,8 @@ import EditCustomer from "@/Components/Customer/EditCustomer.vue";
 import ManageCustomer from "@/Components/Customer/ManageCustomer.vue";
 import Equipment from "@/Components/Customer/Equipment/Equipment.vue";
 import Contacts from "@/Components/Customer/Contacts/Contacts.vue";
-import Notes from '@/Components/Customer/Notes/Notes.vue';
-import Files from '@/Components/Customer/Files/Files.vue';
+import Notes from "@/Components/Customer/Notes/Notes.vue";
+import Files from "@/Components/Customer/Files/Files.vue";
 import {
     custPermissionsKey,
     isCustFavKey,
@@ -49,22 +49,15 @@ import {
     allowShareKey,
     fileTypesKey,
 } from "@/SymbolKeys/CustomerKeys";
-import { ref, computed, provide, watch, unref } from "vue";
-import type {
-    customerPermissionType,
-    customerType,
-    customerEquipmentType,
-    customerContactType,
-    customerNoteType,
-} from "@/Types";
+import { ref, computed, provide, watch } from "vue";
 
 const props = defineProps<{
-    permissions: customerPermissionType;
+    permissions: customerPermissions;
     isFav: boolean;
-    customer: customerType;
-    equipment: customerEquipmentType[];
-    contacts: customerContactType[];
-    notes: customerNoteType[];
+    customer: customer;
+    equipment: customerEquipment[];
+    contacts: customerContact[];
+    notes: customerNote[];
     files: []; //  FIXME - type this
     fileTypes: string[];
 }>();
@@ -79,7 +72,7 @@ provide(fileTypesKey, props.fileTypes);
 /**
  * Customer Detail Data
  */
-const custData = ref(props.customer);
+const custData = ref<customer>(props.customer);
 watch(
     () => props.customer,
     (newCust) => (custData.value = newCust)
@@ -89,7 +82,7 @@ provide(customerKey, custData);
 /**
  * Determine if entries for this customer are allowed to be shared with other customers
  */
-const allowShare = computed(() => {
+const allowShare = computed<boolean>(() => {
     return custData.value.child_count > 0 || custData.value.parent_id !== null;
 });
 provide(allowShareKey, allowShare);

@@ -5,7 +5,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">{{ customer.name }}</div>
-                        <h6 class="text-center">Current ID - {{ customer.cust_id }}</h6>
+                        <h6 class="text-center">
+                            Current ID - {{ customer.cust_id }}
+                        </h6>
                         <div class="row justify-content-center">
                             <div class="col-md-6">
                                 <VueForm
@@ -30,33 +32,30 @@
 </template>
 
 <script setup lang="ts">
-    import VueForm               from '@/Components/Base/VueForm.vue';
-    import TextInput             from '@/Components/Base/Input/TextInput.vue';
-    import App                   from '@/Layouts/app.vue';
-    import { ref }               from 'vue';
-    import { useForm }           from '@inertiajs/vue3';
-    import type { customerType } from '@/Types';
-    import * as yup              from 'yup';
+import VueForm from "@/Components/Base/VueForm.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import App from "@/Layouts/app.vue";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import * as yup from "yup";
 
-    interface custIdFormType {
-        cust_id: number;
-    }
+const props = defineProps<{
+    customer: customer;
+}>();
 
-    const props = defineProps<{
-        customer: customerType;
-    }>();
+const customerIdForm = ref<InstanceType<typeof VueForm> | null>(null);
+const validationSchema = {
+    cust_id: yup.number().required().label("New Customer ID"),
+};
 
-    const customerIdForm   = ref<InstanceType<typeof VueForm>   | null>(null)
-    const validationSchema = { cust_id: yup.number().required().label('New Customer ID')}
-
-    const onSubmit = (form:custIdFormType) => {
-        const formData = useForm(form);
-        formData.put(route('admin.cust.change_id.update', props.customer.slug), {
-            onFinish: () => customerIdForm.value?.endSubmit(),
-        });
-    }
+const onSubmit = (form) => {
+    const formData = useForm(form);
+    formData.put(route("admin.cust.change_id.update", props.customer.slug), {
+        onFinish: () => customerIdForm.value?.endSubmit(),
+    });
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

@@ -389,20 +389,13 @@
 import App from "@/Layouts/app.vue";
 import Overlay from "@/Components/Base/Overlay.vue";
 import { ref, reactive, onMounted } from "vue";
-import { router } from "@inertiajs/vue3";
 import { performCustomerSearch } from "@/Modules/Customers/customers.module";
-import {
-    customerPaginationType,
-    customerPermissionType,
-    customerSearchParamType,
-    customerType,
-} from "@/Types";
 
 const $route = route;
 const props = defineProps<{
     perPage: number;
     paginationArr: number[];
-    permissions: customerPermissionType;
+    permissions: customerPermissions;
     equipment: {
         [key: string]: string[];
     };
@@ -411,8 +404,8 @@ const props = defineProps<{
 onMounted(() => onSearch());
 
 const loading = ref<boolean>(false);
-const searchResults = ref<customerType[]>([]);
-const searchParam = reactive<customerSearchParamType>({
+const searchResults = ref<customer[]>([]);
+const searchParam = reactive<customerSearchParam>({
     //  Search data
     name: "",
     city: "",
@@ -423,7 +416,7 @@ const searchParam = reactive<customerSearchParamType>({
     sortField: "name",
     sortType: "asc",
 });
-const paginationData = reactive<customerPaginationType>({
+const paginationData = reactive<customerPagination>({
     currentPage: 0,
     numPages: 0,
     listFrom: 0,
@@ -435,9 +428,9 @@ const paginationData = reactive<customerPaginationType>({
 /**
  * Search for a customer or group of customers
  */
-const onSearch = async () => {
+const onSearch = async (): Promise<void> => {
     loading.value = true;
-    const results = await performCustomerSearch(searchParam);
+    const results: customerSearch = await performCustomerSearch(searchParam);
 
     searchResults.value = results.data;
     paginationData.listFrom = results.listFrom;
@@ -453,7 +446,7 @@ const onSearch = async () => {
 /**
  * Clear the search parameters
  */
-const resetSearch = () => {
+const resetSearch = (): void => {
     searchParam.name = "";
     searchParam.city = "";
     searchParam.equip = null;
@@ -463,7 +456,7 @@ const resetSearch = () => {
 /**
  * Move to another page in the search results
  */
-const onGoToPage = (page: number) => {
+const onGoToPage = (page: number): void => {
     searchParam.page = page;
     onSearch();
 };

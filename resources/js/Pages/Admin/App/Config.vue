@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
     import App                    from '@/Layouts/app.vue';
-    import ConfigForm from '@/Components/Admin/ConfigForm.vue';
+    import ConfigForm from '@/Forms/Admin/ConfigForm.vue';
 
     interface settingsType {
         url          : string;
