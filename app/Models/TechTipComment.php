@@ -19,8 +19,8 @@ class TechTipComment extends Model
     /**
      * Each comment is created by a user
      */
-    // public function User()
-    // {
-    //     return $this->hasOne(User::class, 'user_id', 'user_id');
-    // }
+    public function User()
+    {
+        return $this->hasOne(User::class, 'user_id', 'user_id')->withTrashed();
+    }
 }

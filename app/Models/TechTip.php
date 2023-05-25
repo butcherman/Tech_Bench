@@ -61,7 +61,7 @@ class TechTip extends Model
      */
     public function CreatedBy()
     {
-        return $this->hasOne(User::class, 'user_id', 'user_id');
+        return $this->hasOne(User::class, 'user_id', 'user_id')->withTrashed();
     }
 
     /**
@@ -70,6 +70,6 @@ class TechTip extends Model
      */
     public function UpdatedBy()
     {
-        return $this->hasOne(User::class, 'user_id', 'updated_id');
+        return $this->hasOne(User::class, 'user_id', 'updated_id')->withTrashed();
     }
 }
