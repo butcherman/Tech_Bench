@@ -5,7 +5,9 @@ import type {
     Config,
 } from "ziggy-js";
 
-export {};
+// import type { ComponentInternal}
+
+// export {};
 
 declare global {
     interface Window {
@@ -18,9 +20,11 @@ declare global {
         absolute?: boolean,
         config?: Config
     ): string;
+
+    // interface ComponentInternalIns
 }
 
-export type voidFunctionType = () => void;
+// export type voidFunctionType = () => void;
 
 // export * from './LayoutTypes';
 // export * from './UserDataTypes';

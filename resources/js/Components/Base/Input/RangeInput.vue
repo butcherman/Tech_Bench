@@ -31,7 +31,7 @@ const props = defineProps<{
     format?: undefined | "prettybytes";
 }>();
 
-const formatValue = computed(() => {
+const formatValue = computed<unknown>(() => {
     switch (props.format) {
         case "prettybytes":
             return prettyBytes(Number(value.value));

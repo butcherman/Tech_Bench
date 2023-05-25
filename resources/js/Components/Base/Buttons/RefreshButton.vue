@@ -13,13 +13,13 @@ const props = defineProps<{
     only: string[];
 }>();
 
-const loading = ref(false);
+const loading = ref<boolean>(false);
 
-const refresh = () => {
+const refresh = (): void => {
     emit("start");
     loading.value = true;
 
-    let only = props.only;
+    let only: string[] = props.only;
     only.push("flash");
 
     router.reload({

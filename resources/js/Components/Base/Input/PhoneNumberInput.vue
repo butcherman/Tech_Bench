@@ -50,18 +50,18 @@ const props = defineProps<{
     help?: string;
 }>();
 
-const isValid = computed(() => {
+const isValid = computed<boolean>(() => {
     return meta.valid && meta.validated && !meta.pending;
 });
 
-const isInvalid = computed(() => {
+const isInvalid = computed<boolean>(() => {
     return !meta.valid && meta.validated && !meta.pending;
 });
 
 const nameRef = toRef(props, "name");
 const { errorMessage, value, meta } = useField(nameRef);
 
-const showHelp = () => {
+const showHelp = ():void => {
     helpModal("help", {
         title: "What is this?",
     });

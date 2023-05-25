@@ -103,7 +103,7 @@
                 <ul class="nav">
                     <li
                         class="nav-item"
-                        v-for="link in navBar"
+                        v-for="link in navbar"
                         :key="link.name"
                     >
                         <Link class="nav-link" :href="link.route">
@@ -187,14 +187,13 @@
 
 <script setup lang="ts">
 import AlertToast from "@/Components/Base/AlertToast.vue";
+import { ref, watch, onMounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
-import { ref, watch, onMounted } from "vue";
-import type { flashMessage, pageData } from "@/Types";
 
 const $route = route;
 const page: pageData = usePage();
-const { app, navBar, notifications, breadcrumbs, errors, flash } = page.props;
+const { app, navbar, notifications, breadcrumbs, errors, flash } = page.props;
 
 const navbarActive = ref<boolean>(false);
 const flashMessage = ref<flashMessage[]>([]);

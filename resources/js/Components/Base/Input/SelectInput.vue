@@ -24,7 +24,6 @@
 <script setup lang="ts">
 import { toRef, computed } from "vue";
 import { useField } from "vee-validate";
-import type { optionListObject } from "@/Types";
 
 const props = defineProps<{
     id: string;
@@ -33,15 +32,15 @@ const props = defineProps<{
     optionList: string[] | number[] | optionListObject[];
 }>();
 
-const isValid = computed(() => {
+const isValid = computed<boolean>(() => {
     return meta.valid && meta.validated && !meta.pending;
 });
 
-const isInvalid = computed(() => {
+const isInvalid = computed<boolean>(() => {
     return !meta.valid && meta.validated && !meta.pending;
 });
 
-const getValue = (opt: optionListObject | string | number) => {
+const getValue = (opt: optionListObject | string | number): string | number => {
     if (typeof opt === "object") {
         return opt.value;
     }
@@ -49,7 +48,7 @@ const getValue = (opt: optionListObject | string | number) => {
     return opt;
 };
 
-const getText = (opt: optionListObject | string | number) => {
+const getText = (opt: optionListObject | string | number): string | number => {
     if (typeof opt === "object") {
         return opt.text;
     }

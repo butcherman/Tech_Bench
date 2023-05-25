@@ -35,13 +35,21 @@ class CustomerFileController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created customer file
      */
     public function store(CustomerFileRequest $request)
     {
-        $status = $this->getChunk($request);
+        $this->disk = 'customers';
+        $this->folder = $request->input('cust_id');
 
-        return $status;
+        if($savedFile = $this->getChunk($request)) {        
+            $request->checkForShared();
+            $request->appendFileData($savedFile->file_id);
+
+            CustomerFile::create($request->all());
+        }
+
+        return response()->noContent();
     }
 
     /**

@@ -50,7 +50,6 @@ import Dropzone from "dropzone";
 import { ref, onMounted, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { getFileIcon } from "@/Modules/fileIcon.module";
-import type { fileDataType } from "@/Types";
 import type { Ref } from "vue";
 
 /**
@@ -89,7 +88,7 @@ const isTouched: Ref<boolean> = ref(false);
 const isSubmitting = ref(false);
 
 let myDrop: Dropzone;
-let myFormData = [];
+let myFormData:object;
 
 /**
  * Upload the valid files
@@ -166,12 +165,12 @@ onMounted(() => {
         autoProcessQueue: false,
         //  FIXME  -  Chunking eats up memory???
         chunking: true,
-        chunkSize: fileData.value.chunkSize,
+        // chunkSize: fileData.value.chunkSize,
         headers: { "X-CSRF-TOKEN": fileData.value.token },
         maxFiles: props.maxFiles || 5,
         maxFilesize: fileData.value.maxSize,
         method: props.method || "POST",
-        parallelChunkUploads: true,
+        parallelChunkUploads: false,
         paramName: props.paramName || "file",
         previewTemplate: previewTemplate,
         retryChunks: true,

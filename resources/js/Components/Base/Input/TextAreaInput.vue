@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import MazTextarea from 'maz-ui/components/MazTextarea';
+import MazTextarea from "maz-ui/components/MazTextarea";
 import { toRef, computed } from "vue";
 import { useField } from "vee-validate";
 import { helpModal } from "@/Modules/helpModal.module";
@@ -47,22 +47,22 @@ const props = defineProps<{
     rows?: number;
 }>();
 
-const isValid = computed(() => {
+const isValid = computed<boolean>(() => {
     return meta.valid && meta.validated && !meta.pending;
 });
 
-const isInvalid = computed(() => {
+const isInvalid = computed<boolean>(() => {
     return !meta.valid && meta.validated && !meta.pending;
 });
 
-const getRows = computed(() => {
+const getRows = computed<number>(() => {
     return props.rows !== undefined ? props.rows : 3;
 });
 
 const nameRef = toRef(props, "name");
 const { errorMessage, value, meta } = useField(nameRef);
 
-const showHelp = () => {
+const showHelp = ():void => {
     helpModal("help", {
         title: "What is this?",
     });

@@ -25,29 +25,32 @@ trait FileTrait
     /**
      * Get an uploaded file chunk and process it
      */
-    protected function getChunk($request)
+    protected function getChunk($request, $isPublic = false)
     {
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
         $save = $receiver->receive();
 
         //  Save a completed upload
         if ($save->isFinished()) {
-            // $this->disk = $request->disk;
-            // $this->folder = $request->folder;
-            // $filename = $this->saveFile($save->getFile());
+            $filename = $this->saveFile($save->getFile());
 
-            // $status = [
-            //     'percent' => 100,
-            //     'complete' => true,
-            //     'filename' => $filename,
-            //     'disk' => $request->disk,
-            //     'folder' => $request->folder,
-            // ];
+            $status = [
+                'percent' => 100,
+                'complete' => true,
+                'filename' => $filename,
+                'disk' => $this->disk,
+                'folder' => $this->folder,
+            ];
 
-            // Log::debug('File Upload Completed.  Details - ', $status);
+            Log::debug('File Upload Completed.  Details - ', $status);
+            $savedFile = FileUploads::create([
+                'disk' => $this->disk,
+                'folder' => $this->folder,
+                'file_name' => $filename,
+                'public' => $isPublic,
+            ]);
 
-            // return $status;
-            return 'completed';
+            return $savedFile;
         }
 
         $handler = $save->handler();
@@ -58,7 +61,7 @@ trait FileTrait
 
         Log::debug('File upload in progress.  Details - ', $status);
 
-        return $status;
+        return false;
     }
 
     /**
@@ -107,68 +110,68 @@ trait FileTrait
     /**
      * Make sure that there is some file data in the users current session - abort if it is missing
      */
-    protected function checkForFile()
-    {
-        if (! session()->has('new-file-upload')) {
-            Log::critical('File upload information missing', [
-                'route' => \Request::route()->getName(),
-                'user' => Auth::check() ? Auth::user()->username : \Request::ip(),
-            ]);
-            abort(500, 'Uploaded File Data Missing');
-        }
-    }
+    // protected function checkForFile()
+    // {
+    //     if (! session()->has('new-file-upload')) {
+    //         Log::critical('File upload information missing', [
+    //             'route' => \Request::route()->getName(),
+    //             'user' => Auth::check() ? Auth::user()->username : \Request::ip(),
+    //         ]);
+    //         abort(500, 'Uploaded File Data Missing');
+    //     }
+    // }
 
     /**
      * Move a file from one location to another and store new location in database
      */
-    protected function moveStoredFile($fileId, $newFolder, $newDisk = null)
-    {
-        $file = FileUploads::find($fileId);
+    // protected function moveStoredFile($fileId, $newFolder, $newDisk = null)
+    // {
+    //     $file = FileUploads::find($fileId);
 
-        $this->disk = $newDisk !== null ? $newDisk : $file->disk;
-        $this->folder = $newFolder;
+    //     $this->disk = $newDisk !== null ? $newDisk : $file->disk;
+    //     $this->folder = $newFolder;
 
-        //  Verify the file actually exists
-        if (! Storage::disk($file->disk)->exists($file->folder.DIRECTORY_SEPARATOR.$file->file_name)) {
-            return false;
-        }
+    //     //  Verify the file actually exists
+    //     if (! Storage::disk($file->disk)->exists($file->folder.DIRECTORY_SEPARATOR.$file->file_name)) {
+    //         return false;
+    //     }
 
-        //  Verify file is not duplicate and move
-        $newName = $this->checkForDuplicate($file->file_name);
-        Storage::disk($this->disk)->move($file->folder.DIRECTORY_SEPARATOR.$file->file_name, $this->folder.DIRECTORY_SEPARATOR.$newName);
+    //     //  Verify file is not duplicate and move
+    //     $newName = $this->checkForDuplicate($file->file_name);
+    //     Storage::disk($this->disk)->move($file->folder.DIRECTORY_SEPARATOR.$file->file_name, $this->folder.DIRECTORY_SEPARATOR.$newName);
 
-        //  Update the database
-        $file->file_name = $newName;
-        $file->folder = $this->folder;
-        $file->disk = $this->disk;
-        $file->save();
+    //     //  Update the database
+    //     $file->file_name = $newName;
+    //     $file->folder = $this->folder;
+    //     $file->disk = $this->disk;
+    //     $file->save();
 
-        return true;
-    }
+    //     return true;
+    // }
 
     /**
      * Determine if a file is no longer in use, and then delete it from the filesystem
      */
-    protected function deleteFile($fileID)
-    {
-        $fileData = FileUploads::find($fileID);
-        $file = $fileData->only(['disk', 'folder', 'file_name']);
+    // protected function deleteFile($fileID)
+    // {
+    //     $fileData = FileUploads::find($fileID);
+    //     $file = $fileData->only(['disk', 'folder', 'file_name']);
 
-        Log::debug('Attempting to delete file', $fileData->toArray());
+    //     Log::debug('Attempting to delete file', $fileData->toArray());
 
-        //  Try to delete the file from the database, if it fails, the file is in use elsewhere
-        try {
-            $fileData->delete();
-        } catch (QueryException $e) {
-            Log::debug('File ID '.$fileID.' is still in use and cannot be deleted');
+    //     //  Try to delete the file from the database, if it fails, the file is in use elsewhere
+    //     try {
+    //         $fileData->delete();
+    //     } catch (QueryException $e) {
+    //         Log::debug('File ID '.$fileID.' is still in use and cannot be deleted');
 
-            return false;
-        }
+    //         return false;
+    //     }
 
-        //  Delete the file from file storage
-        Log::alert('File '.$file['folder'].DIRECTORY_SEPARATOR.$file['file_name'].' has been deleted');
-        Storage::disk($file['disk'])->delete($file['folder'].DIRECTORY_SEPARATOR.$file['file_name']);
+    //     //  Delete the file from file storage
+    //     Log::alert('File '.$file['folder'].DIRECTORY_SEPARATOR.$file['file_name'].' has been deleted');
+    //     Storage::disk($file['disk'])->delete($file['folder'].DIRECTORY_SEPARATOR.$file['file_name']);
 
-        return true;
-    }
+    //     return true;
+    // }
 }

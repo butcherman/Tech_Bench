@@ -6,7 +6,12 @@
         submit-text="Upload File"
         @submit="onSubmit"
     >
-        <TextInput id="name" name="name" label="Name" placeholder="Enter a descriptive name" />
+        <TextInput
+            id="name"
+            name="name"
+            label="Name"
+            placeholder="Enter a descriptive name"
+        />
         <SelectInput
             id="type"
             name="type"
@@ -41,21 +46,23 @@
 import VueForm from "@/Components/Base/VueForm.vue";
 import TextInput from "@/Components/Base/Input/TextInput.vue";
 import SelectInput from "@/Components/Base/Input/SelectInput.vue";
-import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
+import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
 import DropzoneInput from "@/Components/Base/Input/DropzoneInput.vue";
-import { ref, reactive, onMounted, inject } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { ref, inject } from "vue";
 import { object, string, number, boolean } from "yup";
-import { customerKey, allowShareKey } from '@/SymbolKeys/CustomerKeys';
+import { customerKey, allowShareKey } from "@/SymbolKeys/CustomerKeys";
 import { fileTypesKey } from "@/SymbolKeys/CustomerKeys";
+import type { Ref, ComputedRef } from "vue";
+import type { DropzoneFile } from "dropzone";
 
 const $route = route;
-const customer = inject(customerKey) as Ref<customerType>;
-const allowShare = inject(allowShareKey) as ComputedRef<boolean>;
-// const toggleLoad = inject(toggleNotesLoadKey) as () => void;
 const newFileForm = ref<InstanceType<typeof VueForm> | null>(null);
 const dropzoneInput = ref<InstanceType<typeof DropzoneInput> | null>(null);
+
+const customer = inject<Ref<customer>>(customerKey);
+const allowShare = inject<ComputedRef<boolean>>(allowShareKey);
 const fileTypes = inject(fileTypesKey, []) as string[];
+// const toggleLoad = inject(toggleNotesLoadKey) as () => void;
 
 const validationSchema = object({
     name: string().required(),
@@ -65,44 +72,31 @@ const validationSchema = object({
 });
 const initialValues = {
     shared: false,
-    cust_id: customer.value.cust_id,
+    cust_id: customer?.value.cust_id,
 };
 
 /**
  * If the Name field is empty, we will populate it with the filename
  */
-const checkNameField = (file) => {
+const checkNameField = (file: DropzoneFile): void => {
+    console.log(file);
     if (
-        newFileForm.value.getFieldValue("name") === undefined ||
-        !newFileForm.value.getFieldValue("name").length
+        newFileForm.value?.getFieldValue("name") === undefined ||
+        !newFileForm.value?.getFieldValue("name").length
     ) {
         let fileName = file.name;
-        newFileForm.value.setFieldValue("name", fileName);
+        newFileForm.value?.setFieldValue("name", fileName);
     }
 };
 
 /**
  * Submit the form
  */
-const onSubmit = (form) => {
-    console.log(form);
-
-    dropzoneInput.value.process(form);
-
-    // const formData = useForm(form);
-    // formData.post(route("customers.files.store"), {
-    //     onFinish: () => console.log("done"),
-    // });
+const onSubmit = (form: object): void => {
+    dropzoneInput.value?.process(form);
 };
 
-const finalizeUpload = () => {
-    console.log('completed');
-    newFileForm.value.endSubmit();
-}
+const finalizeUpload = (): void => {
+    newFileForm.value?.endSubmit();
+};
 </script>
-
-<style lang="scss">
-// .file-container {
-//     min-height: 200px;
-// }
-</style>

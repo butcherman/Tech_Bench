@@ -52,7 +52,8 @@ const editorInit = {
             value: "img-fluid",
         },
     ],
-    file_picker_callback: function (cb, value, meta) {
+    //  TODO - update and type this
+    file_picker_callback: function (cb) {
         var input = document.createElement("input");
         input.setAttribute("type", "file");
         input.setAttribute("accept", "image/*");
@@ -73,11 +74,11 @@ const editorInit = {
     },
 };
 
-const isValid = computed(() => {
+const isValid = computed<boolean>(() => {
     return meta.valid && meta.validated && !meta.pending;
 });
 
-const isInvalid = computed(() => {
+const isInvalid = computed<boolean>(() => {
     return !meta.valid && meta.validated && !meta.pending;
 });
 

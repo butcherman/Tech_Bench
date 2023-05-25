@@ -26,32 +26,32 @@ import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 const emit = defineEmits(["submit"]);
 const props = defineProps<{
     validationSchema: object;
-    initialValues?: object;
+    initialValues?: { [key: string]: any };
     submitText?: string;
 }>();
 
-const isSubmitting = ref(false);
+const isSubmitting = ref<boolean>(false);
 const { handleSubmit, setFieldValue, setFieldError, values, resetForm } =
     useForm({
         validationSchema: props.validationSchema,
-        initialValues: props.initialValues ? props.initialValues : {},
+        initialValues: props.initialValues,
     });
 
-const onSubmit = handleSubmit((form) => {
+const onSubmit = handleSubmit((form): void => {
     isSubmitting.value = true;
     emit("submit", form);
 });
 
-const getFieldValue = (field: string) => {
+const getFieldValue = (field: string): string => {
     return values[field as keyof typeof values];
 };
 
-function _endSubmit() {
+function endSubmit(): void {
     isSubmitting.value = false;
 }
 
 defineExpose({
-    endSubmit: _endSubmit,
+    endSubmit,
     getFieldValue,
     setFieldValue,
     useFieldArray,
