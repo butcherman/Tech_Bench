@@ -32,34 +32,83 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref } from "vue";
 import { Modal } from "bootstrap";
 
-defineProps<{
+interface TB_Modal extends Modal {
+    _config?: {
+        backdrop: "static" | boolean;
+    };
+}
+
+const props = defineProps<{
     title?: string;
     size?: "sm" | "lg" | "xl";
+    noCloseOnClick?: boolean;
 }>();
 
-const emit = defineEmits(["hide", "hidden", "show", "shown"]);
+const emit = defineEmits(["hide", "hidden", "show", "shown", "hidePrevented"]);
 
 const myModal = ref<HTMLInputElement | null>(null);
-let thisModalObj: Modal;
+const preventClosing = ref<boolean>(false);
+let thisModalObj: TB_Modal;
 
 onMounted(() => {
     if (myModal.value) {
-        thisModalObj = new Modal(myModal.value);
+        thisModalObj = new Modal(myModal.value, {
+            backdrop: props.noCloseOnClick ? "static" : true,
+        });
+
+        myModal.value.addEventListener("show.bs.modal", () => emit("show"));
+        myModal.value.addEventListener("shown.bs.modal", () => emit("shown"));
+        myModal.value.addEventListener("hide.bs.modal", (e) => {
+            if (preventClosing.value) {
+                e.preventDefault();
+                emit("hidePrevented");
+            } else {
+                emit("hide");
+            }
+        });
+        myModal.value.addEventListener("hidden.bs.modal", () => emit("hidden"));
+        myModal.value.addEventListener("hidePrevented.bs.modal", () =>
+            emit("hidePrevented")
+        );
     }
 });
 
+onBeforeUnmount(() => {
+    myModal.value?.removeEventListener("show.bs.modal", () => emit("show"));
+    myModal.value?.removeEventListener("shown.bs.modal", () => emit("shown"));
+    myModal.value?.addEventListener("hide.bs.modal", () => emit("hide"));
+    myModal.value?.removeEventListener("hidden.bs.modal", () => emit("hidden"));
+    myModal.value?.removeEventListener("hidePrevented.bs.modal", () =>
+        emit("hidePrevented")
+    );
+
+    thisModalObj.dispose();
+});
+
+function stopClose() {
+    if (thisModalObj._config !== undefined) {
+        thisModalObj._config.backdrop = "static";
+        preventClosing.value = true;
+    }
+}
+
+function enableClose() {
+    if (thisModalObj._config !== undefined) {
+        thisModalObj._config.backdrop = true;
+        preventClosing.value = false;
+    }
+}
+
 function show(): void {
     thisModalObj.show();
-    emit("show");
 }
 
 function hide(): void {
     thisModalObj.hide();
-    emit("hide");
 }
 
-defineExpose({ show, hide });
+defineExpose({ show, hide, stopClose, enableClose });
 </script>

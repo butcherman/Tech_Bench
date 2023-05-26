@@ -42,7 +42,7 @@ class CustomerFileController extends Controller
         $this->disk = 'customers';
         $this->folder = $request->input('cust_id');
 
-        if($savedFile = $this->getChunk($request)) {        
+        if($savedFile = $this->getChunk($request)) {
             $request->checkForShared();
             $request->appendFileData($savedFile->file_id);
 
@@ -71,16 +71,23 @@ class CustomerFileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerFileRequest $request, CustomerFile $file)
     {
-        //
+        $request->checkForShared();
+        $request->appendFileTypeId();
+        $file->update($request->only(['name', 'file_type_id', 'shared']));
+
+        return back()->with('success', 'File Updated');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the customer file
      */
-    public function destroy(string $id)
+    public function destroy(CustomerFile $file)
     {
-        //
+        $this->authorize('delete', $file);
+
+        $file->delete();
+        return back()->with('danger', 'File Deleted');
     }
 }

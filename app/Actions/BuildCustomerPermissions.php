@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\CustomerContact;
 use App\Models\CustomerEquipment;
+use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 
 class BuildCustomerPermissions
@@ -32,6 +33,11 @@ class BuildCustomerPermissions
                 'update' => $user->can('update', CustomerNote::class),
                 'delete' => $user->can('delete', CustomerNote::class),
             ],
+            'files' => [
+                'create' => $user->can('create', CustomerFile::class),
+                'update' => $user->can('update', CustomerFile::class),
+                'delete' => $user->can('delete', CustomerFile::class),
+            ]
         ];
     }
 }

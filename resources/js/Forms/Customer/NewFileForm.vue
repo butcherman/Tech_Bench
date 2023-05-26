@@ -40,6 +40,7 @@
             />
         </div>
     </VueForm>
+    <button v-if="isSubmitting" class="btn btn-block btn-danger w-100 mt-2" @click="cancelUpload()">Cancel Upload</button>
 </template>
 
 <script setup lang="ts">
@@ -52,12 +53,16 @@ import { ref, inject } from "vue";
 import { object, string, number, boolean } from "yup";
 import { customerKey, allowShareKey } from "@/SymbolKeys/CustomerKeys";
 import { fileTypesKey } from "@/SymbolKeys/CustomerKeys";
+import { okModal } from "@/Modules/okModal.module";
 import type { Ref, ComputedRef } from "vue";
 import type { DropzoneFile } from "dropzone";
 
 const $route = route;
+const emit = defineEmits(['submitting', 'completed', 'canceled']);
 const newFileForm = ref<InstanceType<typeof VueForm> | null>(null);
 const dropzoneInput = ref<InstanceType<typeof DropzoneInput> | null>(null);
+const isSubmitting = ref<boolean>(false);
+const wasCanceled = ref<boolean>(false);
 
 const customer = inject<Ref<customer>>(customerKey);
 const allowShare = inject<ComputedRef<boolean>>(allowShareKey);
@@ -93,10 +98,35 @@ const checkNameField = (file: DropzoneFile): void => {
  * Submit the form
  */
 const onSubmit = (form: object): void => {
+    isSubmitting.value = true;
+    emit('submitting', true);
     dropzoneInput.value?.process(form);
 };
 
 const finalizeUpload = (): void => {
+    isSubmitting.value = false;
+
+    if(!wasCanceled.value)
+    {
+        resetForm();
+        emit('completed');
+    }
     newFileForm.value?.endSubmit();
 };
+
+const cancelUpload = () => {
+    console.log('cancel called');
+    wasCanceled.value = true;
+    dropzoneInput.value?.cancelUpload();
+    dropzoneInput.value?.reset();
+    okModal('Upload Canceled');
+    emit('canceled');
+}
+
+const resetForm = () => {
+    dropzoneInput.value?.reset();
+    newFileForm.value?.resetForm();
+}
+
+defineExpose({ resetForm });
 </script>

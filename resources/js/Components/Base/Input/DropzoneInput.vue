@@ -101,6 +101,15 @@ const process = (form = {}) => {
 };
 
 /**
+ * Cancel the upload process and remove all files from queue
+ */
+const cancelUpload = () => {
+    const fileList = myDrop.files;
+    fileList.forEach((file) => myDrop.cancelUpload(file));
+    isSubmitting.value = false;
+};
+
+/**
  * Reset Dropzone to its initial state
  */
 const reset = () => {
@@ -189,11 +198,11 @@ onMounted(() => {
             const ext = file.name.split(".").pop();
             if (ext) {
                 let iconClass = getFileIcon(ext);
-                let innerSpan ="";
+                let innerSpan = "";
                 //  If not icon was found, insert the default class
                 if (!iconClass) {
                     iconClass = "fiv-cla fiv-icon-blank fiv-size-xl";
-                    innerSpan = `<span class="ext-identifier">{.${ext}}</span>`
+                    innerSpan = `<span class="ext-identifier">{.${ext}}</span>`;
                 }
 
                 const imgWrapper =
@@ -217,7 +226,7 @@ onMounted(() => {
 
     myDrop.on("sending", (file, xhr, formData) => {
         for (const field in myFormData) {
-            formData.append(field, myFormData[field]);
+            formData.append(field, myFormData[field as keyof object]);
         }
         emit("sending", file, xhr, formData);
     });
@@ -229,11 +238,6 @@ onMounted(() => {
     });
 
     myDrop.on("error", (file, message) => {
-        console.log("error", message);
-
-        if (isSubmitting.value) {
-            alert(`Error: ${message.message}`);
-        }
         emit("error", { file, message });
     });
     myDrop.on("success", (file, response) => {
@@ -251,5 +255,5 @@ onMounted(() => {
     });
 });
 
-defineExpose({ process, validate, reset, isTouched });
+defineExpose({ process, cancelUpload, validate, reset, isTouched });
 </script>

@@ -45,7 +45,7 @@ import { allStates } from "@/Modules/allStates.module";
 import { customerValidation } from "@/Modules/Validation/customerValidation.module";
 import { customerKey } from "@/SymbolKeys/CustomerKeys";
 import type { Ref } from "vue";
-import type { customerFormType, customerType } from "@/Types";
+// import type { customerFormType, customerType } from "@/Types";
 
 const emit = defineEmits(["success"]);
 const editCustomerForm = ref<InstanceType<typeof VueForm> | null>(null);

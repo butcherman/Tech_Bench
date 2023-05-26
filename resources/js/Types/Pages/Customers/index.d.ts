@@ -63,6 +63,18 @@ type contactPhone = {
     };
 };
 
+type customerFile = {
+    cust_id?: number;
+    cust_file_id: number;
+    file_id: number;
+    shared: boolean;
+    name: string;
+    updated_at: string;
+    uploaded_by: string;
+    file_type: string;
+    file_upload: file
+}
+
 type basicPermissions = {
     create: boolean;
     update: boolean;
@@ -70,13 +82,9 @@ type basicPermissions = {
 };
 
 type customerPermissions = {
-    details: {
-        create: boolean;
-        update: boolean;
-        delete: boolean;
-        manage: boolean;
-    };
+    details: basicPermissions & { manage: boolean };
     equipment: basicPermissions;
     contact: basicPermissions;
     notes: basicPermissions;
+    files: basicPermissions;
 };

@@ -14,9 +14,9 @@ class CustomerFileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if($this->customerFile)
+        if($this->file)
         {
-            return $this->user()->can('update', $this->customerFile);
+            return $this->user()->can('update', $this->file);
         }
 
         return $this->user()->can('create', CustomerFile::class);
@@ -31,7 +31,7 @@ class CustomerFileRequest extends FormRequest
             'cust_id' => 'required|exists:customers',
             'name' => 'required|string',
             'type' => 'required|string',
-            'shared' => 'required|string',
+            'shared' => 'required',
         ];
     }
 
@@ -49,13 +49,23 @@ class CustomerFileRequest extends FormRequest
     }
 
     /**
+     * Set the proper file_type_id
+     */
+    public function appendFileTypeId()
+    {
+        $type = CustomerFileType::where('description', $this->type)->first();
+        $this->merge(['file_type_id' => $type->file_type_id]);
+    }
+
+    /**
      * Append the File ID and File Type ID to the request data
      */
     public function appendFileData($fileId)
     {
-        $type = CustomerFileType::where('description', $this->type)->first();
+        // $type = CustomerFileType::where('description', $this->type)->first();
+        $this->appendFileTypeId();
         $this->merge([
-            'file_type_id' => $type->file_type_id,
+            // 'file_type_id' => $type->file_type_id,
             'file_id' => $fileId,
             'shared' => (bool) $this->shared,
             'user_id' => $this->user()->user_id,

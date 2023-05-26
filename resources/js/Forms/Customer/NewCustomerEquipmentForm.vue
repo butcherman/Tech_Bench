@@ -105,13 +105,13 @@ const validationSchema = object({
  */
 const equipList = ref<equipSelectBox>();
 const getEquipment = async () => {
-    if (equipList.value === undefined) {
-        loading.value = true;
-        await axios(route("equipment.get-all")).then((res) => {
-            equipList.value = res.data;
-        });
-        loading.value = false;
-    }
+    // if (equipList.value === undefined) {
+    //     loading.value = true;
+    //     await axios(route("equipment.get-all")).then((res) => {
+    //         equipList.value = res.data;
+    //     });
+    //     loading.value = false;
+    // }
 };
 
 /**

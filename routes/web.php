@@ -51,5 +51,4 @@ Route::middleware('auth')->group(function () {
 /**
  * Standard routes for both Authenticated users and guests
  */
-// Route::post('upload-file',            UploadFileController::class) ->name('upload-file');
-// Route::get('download/{id}/{name}',    DownloadController::class)->name('download');
+Route::get('download/{id}/{name}',    DownloadController::class)->name('download');

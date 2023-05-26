@@ -64,6 +64,11 @@ type fileData = {
     token: string;
 };
 
+type file = {
+    file_id: number;
+    file_name: string;
+}
+
 // type user = {
 //     email: string;
 //     first_name: string;
