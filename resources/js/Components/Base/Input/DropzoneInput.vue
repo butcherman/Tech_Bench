@@ -8,9 +8,8 @@
             <div class="dz-preview-wrapper">
                 <div class="dz-preview">
                     <div class="dz-preview dz-file-preview">
-                        <div class="dz-image">
+                        <div class="dz-image h-100">
                             <img data-dz-thumbnail />
-                            <span class="img-attribute" />
                         </div>
                         <div class="dz-details">
                             <div class="dz-size" data-dz-size></div>
@@ -47,7 +46,7 @@
 
 <script setup lang="ts">
 import Dropzone from "dropzone";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { getFileIcon } from "@/Modules/fileIcon.module";
 import type { Ref } from "vue";
@@ -55,9 +54,10 @@ import type { Ref } from "vue";
 /**
  * Additional Styling for Drag and Drop
  */
-// import "file-icon-vectors/dist/file-icon-vectors.min.css";
+import "file-icon-vectors/dist/file-icon-vectors.min.css";
 import "dropzone/dist/basic.css";
 import "../../../../scss/dropzoneInput.scss";
+import "../../../../scss/extendedIconCatalog.scss";
 
 const emit = defineEmits([
     "file-added",
@@ -82,13 +82,14 @@ const props = defineProps<{
     required?: boolean;
 }>();
 
-const fileData = computed<fileDataType>(() => usePage().props.app.fileData);
+const page: pageData = usePage();
+const fileData: fileData = page.props.app.fileData;
 const errMessage: Ref<string | null> = ref(null);
 const isTouched: Ref<boolean> = ref(false);
 const isSubmitting = ref(false);
 
 let myDrop: Dropzone;
-let myFormData:object;
+let myFormData: object;
 
 /**
  * Upload the valid files
@@ -104,7 +105,6 @@ const process = (form = {}) => {
  */
 const reset = () => {
     myDrop.removeAllFiles();
-    myDrop.reset();
 };
 
 /**
@@ -163,12 +163,11 @@ onMounted(() => {
             : undefined,
         addRemoveLinks: false,
         autoProcessQueue: false,
-        //  FIXME  -  Chunking eats up memory???
         chunking: true,
-        // chunkSize: fileData.value.chunkSize,
-        headers: { "X-CSRF-TOKEN": fileData.value.token },
+        chunkSize: fileData.chunkSize,
+        headers: { "X-CSRF-TOKEN": fileData.token },
         maxFiles: props.maxFiles || 5,
-        maxFilesize: fileData.value.maxSize,
+        maxFilesize: fileData.maxSize,
         method: props.method || "POST",
         parallelChunkUploads: false,
         paramName: props.paramName || "file",
@@ -189,19 +188,17 @@ onMounted(() => {
         if (mime[0] !== "image") {
             const ext = file.name.split(".").pop();
             if (ext) {
-                const icon = getFileIcon(ext);
-                if (icon) {
-                    const imgWrapper =
-                        file.previewElement.getElementsByClassName(
-                            "dz-image"
-                        )[0];
-                    imgWrapper.getElementsByTagName("img")[0].src = icon.srcUrl;
-
-                    if (icon.attribute) {
-                        imgWrapper.getElementsByTagName("span")[0].innerHTML =
-                            icon.attribute;
-                    }
+                let iconClass = getFileIcon(ext);
+                let innerSpan ="";
+                //  If not icon was found, insert the default class
+                if (!iconClass) {
+                    iconClass = "fiv-cla fiv-icon-blank fiv-size-xl";
+                    innerSpan = `<span class="ext-identifier">{.${ext}}</span>`
                 }
+
+                const imgWrapper =
+                    file.previewElement.getElementsByClassName("dz-image")[0];
+                imgWrapper.innerHTML = `<span class="${iconClass} w-100 h-100" />${innerSpan}`;
             }
         }
 
