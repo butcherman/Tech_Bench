@@ -57,7 +57,7 @@ class CustomerController extends Controller
         );
 
         return redirect(route('customers.show', $newCust->slug))
-            ->with('success', __('cust.created'));
+            ->with('success', __('cust.created', ['name' => $newCust->name]));
     }
 
     /**

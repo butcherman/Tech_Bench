@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'created' => 'New Customer Created',
+    'created' => 'New Customer :name Created',
     'updated' => 'Customer Updated',
     'destroy' => 'Customer Deactivated',
     'restore' => 'Customer(s) Restored',

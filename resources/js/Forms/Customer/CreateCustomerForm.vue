@@ -74,7 +74,6 @@ import { useForm } from "@inertiajs/vue3";
 import { allStates } from "@/Modules/allStates.module";
 import { customerValidation } from "@/Modules/Validation/customerValidation.module";
 import { customerSearchBox } from "@/Modules/customerSearchBox.module";
-import type { customerFormType, customerType } from "@/Types";
 
 defineProps<{
     selectId: boolean;
@@ -85,38 +84,40 @@ const newCustomerForm = ref<InstanceType<typeof VueForm> | null>(null);
 /**
  * Make sure that the Customer ID field is not already taken.
  */
-const checkId = async (value: number) => {
+const checkId = async (value: number): Promise<void> => {
     if (value) {
-        await axios.get(route("customers.check-id", value)).then((res) => {
-            if (!res.data.valid) {
-                newCustomerForm.value?.setFieldError(
-                    "cust_id" as never,
-                    `This Customer ID is taken by ${res.data.name}`
-                );
-            }
-        });
+        await axios
+            .get<isCustValid>(route("customers.check-id", value))
+            .then((res) => {
+                if (!res.data.valid) {
+                    newCustomerForm.value?.setFieldError(
+                        "cust_id",
+                        `This Customer ID is taken by ${res.data.name}`
+                    );
+                }
+            });
     }
 };
 
 /**
  * Make sure that the Parent Site is valid and set the parent_id field (hidden)
  */
-const openCustSearch = () => {
+const openCustSearch = (): void => {
     customerSearchBox(newCustomerForm.value?.getFieldValue("parent_name")).then(
-        (res: customerType) => {
+        (res: customer) => {
             newCustomerForm.value?.setFieldValue(
-                "parent_name" as never,
-                res.name as never
+                "parent_name",
+                res.name
             );
             newCustomerForm.value?.setFieldValue(
-                "parent_id" as never,
-                res.cust_id as never
+                "parent_id",
+                res.cust_id
             );
         }
     );
 };
 
-const onSubmit = (form: customerFormType) => {
+const onSubmit = (form: customer): void => {
     //  Re-check the customer ID to show who has the ID if it is taken
     checkId(form.cust_id);
 
