@@ -187,13 +187,18 @@
 
 <script setup lang="ts">
 import AlertToast from "@/Components/Base/AlertToast.vue";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 
 const $route = route;
 const page: pageData = usePage();
-const { app, navbar, notifications, breadcrumbs, errors, flash } = page.props;
+const app = computed(() => page.props.app);
+const navbar = computed(() => page.props.navbar);
+const notifications = computed(() => page.props.notifications);
+const breadcrumbs = computed(() => page.props.breadcrumbs);
+const errors = computed(() => page.props.errors);
+const flash = computed(() => page.props.flash);
 
 const navbarActive = ref<boolean>(false);
 const flashMessage = ref<flashMessage[]>([]);
@@ -204,7 +209,7 @@ watch(flash, () => checkFlashMessages());
 onMounted(() => checkFlashMessages());
 
 const checkFlashMessages = () => {
-    for (const [type, message] of Object.entries(flash)) {
+    for (const [type, message] of Object.entries(flash.value)) {
         if (message !== null) {
             flashMessage.value.push({
                 type,
