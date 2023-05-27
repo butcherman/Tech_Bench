@@ -84,7 +84,6 @@ const initialValues = {
  * If the Name field is empty, we will populate it with the filename
  */
 const checkNameField = (file: DropzoneFile): void => {
-    console.log(file);
     if (
         newFileForm.value?.getFieldValue("name") === undefined ||
         !newFileForm.value?.getFieldValue("name").length
@@ -115,7 +114,6 @@ const finalizeUpload = (): void => {
 };
 
 const cancelUpload = () => {
-    console.log('cancel called');
     wasCanceled.value = true;
     dropzoneInput.value?.cancelUpload();
     dropzoneInput.value?.reset();

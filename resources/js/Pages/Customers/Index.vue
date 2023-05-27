@@ -1,4 +1,5 @@
 <template>
+    <Head title="Customers" />
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -19,363 +20,8 @@
                         </div>
                         <Overlay :loading="loading">
                             <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Customer Name</th>
-                                        <th>City</th>
-                                        <th>Equipment</th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input
-                                                id="cust-name"
-                                                v-model="searchParam.name"
-                                                type="search"
-                                                class="form-control"
-                                                placeholder="Search by Customer Name or ID"
-                                                @change="onSearch"
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                id="cust-city"
-                                                v-model="searchParam.city"
-                                                type="search"
-                                                class="form-control"
-                                                placeholder="Search by City"
-                                                @change="onSearch"
-                                            />
-                                        </td>
-                                        <td>
-                                            <div
-                                                class="input-group flex-nowrap"
-                                            >
-                                                <select
-                                                    id="cust-equip"
-                                                    v-model="searchParam.equip"
-                                                    class="form-select"
-                                                    @change="onSearch"
-                                                >
-                                                    <option
-                                                        value="null"
-                                                        disabled
-                                                        selected
-                                                        hidden
-                                                    >
-                                                        Search by Equipment
-                                                    </option>
-                                                    <optgroup
-                                                        v-for="(
-                                                            equipList, cat
-                                                        ) in equipment"
-                                                        :key="cat"
-                                                        :label="cat.toString()"
-                                                    >
-                                                        <option
-                                                            v-for="equip in equipList"
-                                                        >
-                                                            {{ equip }}
-                                                        </option>
-                                                    </optgroup>
-                                                </select>
-                                                <span
-                                                    class="input-group-text pointer"
-                                                    title="Search"
-                                                    v-tooltip
-                                                    @click="onSearch"
-                                                >
-                                                    <fa-icon
-                                                        icon="fa-brands fa-searchengin"
-                                                    />
-                                                </span>
-                                                <span
-                                                    class="input-group-text pointer"
-                                                    title="Clear Search"
-                                                    v-tooltip
-                                                    @click="resetSearch"
-                                                >
-                                                    <fa-icon icon="fa-xmark" />
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template v-if="loading">
-                                        <tr
-                                            v-for="i in searchParam.perPage"
-                                            :key="i"
-                                        >
-                                            <td class="placeholder-glow">
-                                                <span
-                                                    class="placeholder"
-                                                    :class="`col-${Math.floor(
-                                                        Math.random() *
-                                                            (10 - 3 + 1) +
-                                                            3
-                                                    )}`"
-                                                />
-                                            </td>
-                                            <td class="placeholder-glow">
-                                                <span
-                                                    class="placeholder"
-                                                    :class="`col-${Math.floor(
-                                                        Math.random() *
-                                                            (10 - 3 + 1) +
-                                                            3
-                                                    )}`"
-                                                />
-                                            </td>
-                                            <td class="placeholder-glow">
-                                                <span
-                                                    class="placeholder"
-                                                    :class="`col-${Math.floor(
-                                                        Math.random() *
-                                                            (10 - 3 + 1) +
-                                                            3
-                                                    )}`"
-                                                />
-                                            </td>
-                                        </tr>
-                                    </template>
-                                    <template
-                                        v-else-if="searchResults.length === 0"
-                                    >
-                                        <tr>
-                                            <td colspan="3" class="text-center">
-                                                No Results Found
-                                            </td>
-                                        </tr>
-                                    </template>
-                                    <template v-else>
-                                        <tr
-                                            v-for="customer in searchResults"
-                                            :key="customer.cust_id"
-                                        >
-                                            <td>
-                                                <Link
-                                                    :href="
-                                                        $route(
-                                                            'customers.show',
-                                                            customer.slug
-                                                        )
-                                                    "
-                                                >
-                                                    {{ customer.name }}
-                                                    <span
-                                                        v-if="customer.dba_name"
-                                                    >
-                                                        {{ customer.dba_name }}
-                                                    </span>
-                                                </Link>
-                                            </td>
-                                            <td>
-                                                <Link
-                                                    :href="
-                                                        $route(
-                                                            'customers.show',
-                                                            customer.slug
-                                                        )
-                                                    "
-                                                >
-                                                    {{ customer.city }}
-                                                </Link>
-                                            </td>
-                                            <td>
-                                                <Link
-                                                    :href="
-                                                        $route(
-                                                            'customers.show',
-                                                            customer.slug
-                                                        )
-                                                    "
-                                                >
-                                                    <template
-                                                        v-if="
-                                                            customer
-                                                                .customer_equipment
-                                                                .length > 0
-                                                        "
-                                                    >
-                                                        <div
-                                                            v-for="equip in customer.customer_equipment"
-                                                        >
-                                                            {{ equip.name }}
-                                                        </div>
-                                                    </template>
-                                                    <template
-                                                        v-if="
-                                                            customer
-                                                                .parent_equipment
-                                                                .length > 0
-                                                        "
-                                                    >
-                                                        <div
-                                                            v-for="equip in customer.parent_equipment"
-                                                        >
-                                                            <fa-icon
-                                                                icon="share"
-                                                            />
-                                                            {{ equip.name }}
-                                                        </div>
-                                                    </template>
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div class="row m-0">
-                                                <div class="col-auto">
-                                                    Per Page:
-                                                    <select
-                                                        id="res-per-page"
-                                                        @change="onSearch"
-                                                        v-model="
-                                                            searchParam.perPage
-                                                        "
-                                                    >
-                                                        <option
-                                                            v-for="num in paginationArr"
-                                                        >
-                                                            {{ num }}
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div class="col">
-                                                    <ul
-                                                        class="pagination justify-content-center"
-                                                    >
-                                                        <li
-                                                            class="page-item"
-                                                            :class="{
-                                                                disabled:
-                                                                    paginationData.currentPage ===
-                                                                    1,
-                                                            }"
-                                                            @click="
-                                                                onGoToPage(1)
-                                                            "
-                                                        >
-                                                            <span
-                                                                class="page-link pointer"
-                                                                title="First Page"
-                                                                v-tooltip
-                                                            >
-                                                                <fa-icon
-                                                                    icon="fa-angles-left"
-                                                                />
-                                                            </span>
-                                                        </li>
-                                                        <li
-                                                            class="page-item"
-                                                            :class="{
-                                                                disabled:
-                                                                    paginationData.currentPage ===
-                                                                    1,
-                                                            }"
-                                                            @click="
-                                                                onGoToPage(
-                                                                    paginationData.currentPage -
-                                                                        1
-                                                                )
-                                                            "
-                                                        >
-                                                            <span
-                                                                class="page-link pointer"
-                                                                title="Next Page"
-                                                                v-tooltip
-                                                            >
-                                                                <fa-icon
-                                                                    icon="fa-angle-left"
-                                                                />
-                                                            </span>
-                                                        </li>
-                                                        <li
-                                                            v-for="page in paginationData.pageArr"
-                                                            class="page-item"
-                                                            :class="{
-                                                                active:
-                                                                    paginationData.currentPage ===
-                                                                    page,
-                                                            }"
-                                                            @click="
-                                                                onGoToPage(page)
-                                                            "
-                                                        >
-                                                            <span
-                                                                class="page-link pointer"
-                                                            >
-                                                                {{ page }}
-                                                            </span>
-                                                        </li>
-                                                        <li
-                                                            class="page-item"
-                                                            :class="{
-                                                                disabled:
-                                                                    paginationData.currentPage ===
-                                                                    paginationData.numPages,
-                                                            }"
-                                                            @click="
-                                                                onGoToPage(
-                                                                    paginationData.currentPage +
-                                                                        1
-                                                                )
-                                                            "
-                                                        >
-                                                            <span
-                                                                class="page-link pointer"
-                                                                title="Next Page"
-                                                                v-tooltip
-                                                            >
-                                                                <fa-icon
-                                                                    icon="fa-angle-right"
-                                                                />
-                                                            </span>
-                                                        </li>
-                                                        <li
-                                                            class="page-item"
-                                                            :class="{
-                                                                disabled:
-                                                                    paginationData.currentPage ===
-                                                                    paginationData.numPages,
-                                                            }"
-                                                            @click="
-                                                                onGoToPage(
-                                                                    paginationData.numPages
-                                                                )
-                                                            "
-                                                        >
-                                                            <span
-                                                                class="page-link pointer"
-                                                                title="Last Page"
-                                                                v-tooltip
-                                                            >
-                                                                <fa-icon
-                                                                    icon="fa-angles-right"
-                                                                />
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-auto">
-                                                    Showing
-                                                    {{
-                                                        paginationData.listFrom
-                                                    }}
-                                                    -
-                                                    {{ paginationData.listTo }}
-                                                    of
-                                                    {{
-                                                        paginationData.listTotal
-                                                    }}
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tfoot>
+                                <TableHead :equipment="equipment" />
+
                             </table>
                         </Overlay>
                     </div>
@@ -388,8 +34,10 @@
 <script setup lang="ts">
 import App from "@/Layouts/app.vue";
 import Overlay from "@/Components/Base/Overlay.vue";
-import { ref, reactive, onMounted } from "vue";
-import { performCustomerSearch } from "@/Modules/Customers/customers.module";
+import TableHead from "@/Components/Customer/SearchPage/TableHead.vue";
+import { ref, reactive, onMounted, provide } from "vue";
+import {performCustomerSearch} from '@/Modules/Customers/customerSearch.module';
+import { customerSearchDataKey } from '@/SymbolKeys/CustomerKeys';
 
 const $route = route;
 const props = defineProps<{
@@ -401,10 +49,6 @@ const props = defineProps<{
     };
 }>();
 
-onMounted(() => onSearch());
-
-const loading = ref<boolean>(false);
-const searchResults = ref<customer[]>([]);
 const searchParam = reactive<customerSearchParam>({
     //  Search data
     name: "",
@@ -425,41 +69,18 @@ const paginationData = reactive<customerPagination>({
     pageArr: [1],
 });
 
-/**
- * Search for a customer or group of customers
- */
-const onSearch = async (): Promise<void> => {
-    loading.value = true;
-    const results: customerSearch = await performCustomerSearch(searchParam);
+const triggerSearch = () => {
+    console.log('trigger search', searchParam);
+}
 
-    searchResults.value = results.data;
-    paginationData.listFrom = results.listFrom;
-    paginationData.listTo = results.listTo;
-    paginationData.listTotal = results.listTotal;
-    paginationData.numPages = results.numPages;
-    paginationData.currentPage = results.currentPage;
-    paginationData.pageArr = results.pageArr;
+const resetSearch = () => {
+    console.log('reset search');
+}
 
-    loading.value = false;
-};
+provide(customerSearchDataKey, { searchParam, paginationData, triggerSearch, resetSearch });
 
-/**
- * Clear the search parameters
- */
-const resetSearch = (): void => {
-    searchParam.name = "";
-    searchParam.city = "";
-    searchParam.equip = null;
-    onSearch();
-};
 
-/**
- * Move to another page in the search results
- */
-const onGoToPage = (page: number): void => {
-    searchParam.page = page;
-    onSearch();
-};
+
 </script>
 
 <script lang="ts">
@@ -467,12 +88,7 @@ export default { layout: App };
 </script>
 
 <style scoped lang="scss">
-thead,
-tfoot {
-    tr {
-        background-color: rgb(233, 225, 225);
-    }
-}
+
 
 tbody {
     tr {

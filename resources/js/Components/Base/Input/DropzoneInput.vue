@@ -241,15 +241,12 @@ onMounted(() => {
         emit("error", { file, message });
     });
     myDrop.on("success", (file, response) => {
-        console.log("success", response);
         emit("success", { file, response });
     });
     myDrop.on("complete", (file) => {
-        console.log("complete", file);
         emit("complete", file);
     });
     myDrop.on("queuecomplete", () => {
-        console.log("queue complete");
         isSubmitting.value = false;
         emit("queue-complete");
     });

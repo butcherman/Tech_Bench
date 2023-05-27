@@ -1,10 +1,5 @@
 export const getFileIcon = (extension: string): string | false => {
-    //  Check the custom (extended) catalog to see if a custom icon exists
-    // if(extendedCatalog.includes(extension))
-    // {
-    //     console.log(extension);
-    //     return `custom-file-icon icon-${extension}`;
-    // }
+
 
     //  Check the base catalog (file-icon-vectors) to see if the icon exists
     if (baseCatalog.includes(extension)) {

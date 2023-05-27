@@ -1,5 +1,7 @@
 import type { Ref, ComputedRef, InjectionKey } from "vue";
 
+export const customerSearchDataKey:InjectionKey<customerSearchDataSymbol> = Symbol();
+
 export const customerKey: InjectionKey<Ref<customer>> = Symbol();
 export const custPermissionsKey: InjectionKey<customerPermissions> =
     Symbol();

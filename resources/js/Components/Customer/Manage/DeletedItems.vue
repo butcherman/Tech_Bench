@@ -87,7 +87,6 @@ const destroyDeletedItem = (
     group: keyof deletedItemsCategoryType,
     item: deletedItemType
 ) => {
-    console.log(item);
     verifyModal("This Action Cannot Be Undone").then((res) => {
         if (res) {
             loading.value = true;

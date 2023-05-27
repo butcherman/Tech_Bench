@@ -69,6 +69,8 @@ type file = {
     file_name: string;
 }
 
+type sort = 'up' | 'down' | 'none';
+
 // type user = {
 //     email: string;
 //     first_name: string;

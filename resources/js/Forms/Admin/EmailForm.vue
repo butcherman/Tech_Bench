@@ -137,7 +137,6 @@
         })
     });
     const onSubmit = (form:emSettingsType) => {
-        console.log('submitted');
         //  If Authentication has been disabled, clear out username and password fields
         if(!form.requireAuth)
         {

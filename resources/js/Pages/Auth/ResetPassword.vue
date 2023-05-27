@@ -91,7 +91,7 @@
         const myForm = useForm(form);
 
         myForm.post(route('password.reset-submit'), {
-            onFinish: () => { resetForm.value?.endSubmit(); console.log('done');},
+            onFinish: () => resetForm.value?.endSubmit(),
         });
     };
 </script>

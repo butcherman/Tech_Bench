@@ -26,3 +26,10 @@ type customerPagination = {
     listTotal: number;
     pageArr: number[];
 };
+
+type customerSearchDataSymbol = {
+    searchParam: customerSearchParam;
+    paginationData: customerPagination;
+    triggerSearch: () => void;
+    resetSearch: () => void;
+}

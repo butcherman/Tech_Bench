@@ -73,7 +73,6 @@ interface logoFormType {
 }
 
 const onSubmit = (form: logoFormType) => {
-    console.log("process form", form);
     if (fileUpload.value?.validate()) {
         fileUpload.value?.process();
     }

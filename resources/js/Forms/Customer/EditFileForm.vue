@@ -71,13 +71,11 @@ const onSubmit = (form: customerFile) => {
     formData.put(route("customers.files.update", props.file.cust_file_id), {
         preserveScroll: true,
         only: ["files", "flash"],
-        onSuccess: (page) => console.log(page),
         onFinish: () => {
             editFileForm.value?.endSubmit();
             toggleLoad();
             emit("success");
         },
-        onError: (err) => console.log(err),
     });
 };
 </script>
