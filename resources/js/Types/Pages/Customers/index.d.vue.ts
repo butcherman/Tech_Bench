@@ -30,6 +30,7 @@ type customerPagination = {
 type customerSearchDataSymbol = {
     searchParam: customerSearchParam;
     paginationData: customerPagination;
+    paginationArray: number[];
     triggerSearch: () => void;
     resetSearch: () => void;
 }

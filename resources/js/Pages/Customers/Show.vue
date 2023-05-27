@@ -8,7 +8,7 @@
             <div class="col-md-4 col-12 mt-md-0 mt-4">
                 <div class="float-md-end text-center w-50">
                     <EditCustomer v-if="permissions.details.update" />
-                    <ManageCustomer v-if="permissions.details.manage" />
+                    <!-- <ManageCustomer v-if="permissions.details.manage" /> -->
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <Files :files="files" />
+                <!-- <Files :files="files" /> -->
             </div>
         </div>
     </div>

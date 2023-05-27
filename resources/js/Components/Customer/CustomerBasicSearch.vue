@@ -37,7 +37,7 @@
     import VueForm                         from "@/Components/Base/VueForm.vue";
     import TextInput                       from "@/Components/Base/Input/TextInput.vue";
     import { ref, reactive, onMounted }    from 'vue';
-    import { performCustomerSearch }       from "@/Modules/Customers/customers.module";
+    import { performCustomerSearch }       from "@/Modules/Customers/customerSearch.module";
     import type { customerSearchParamType,
                   customerType }           from "@/Types";
 

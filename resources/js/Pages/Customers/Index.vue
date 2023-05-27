@@ -21,7 +21,9 @@
                         <Overlay :loading="loading">
                             <table class="table table-striped table-hover">
                                 <TableHead :equipment="equipment" />
-
+                                <TableBodyLoading v-if="loading" />
+                                <TableBody :search-results="searchResults" v-else />
+                                <TableFoot />
                             </table>
                         </Overlay>
                     </div>
@@ -35,20 +37,25 @@
 import App from "@/Layouts/app.vue";
 import Overlay from "@/Components/Base/Overlay.vue";
 import TableHead from "@/Components/Customer/SearchPage/TableHead.vue";
+import TableFoot from "@/Components/Customer/SearchPage/TableFoot.vue";
+import TableBody from '@/Components/Customer/SearchPage/TableBody.vue';
+import TableBodyLoading from "@/Components/Customer/SearchPage/TableBodyLoading.vue";
 import { ref, reactive, onMounted, provide } from "vue";
-import {performCustomerSearch} from '@/Modules/Customers/customerSearch.module';
-import { customerSearchDataKey } from '@/SymbolKeys/CustomerKeys';
+import { performCustomerSearch } from "@/Modules/Customers/customerSearch.module";
+import { customerSearchDataKey } from "@/SymbolKeys/CustomerKeys";
+
+onMounted(() => triggerSearch());
 
 const $route = route;
-const props = defineProps<{
-    perPage: number;
-    paginationArr: number[];
+defineProps<{
     permissions: customerPermissions;
     equipment: {
         [key: string]: string[];
     };
 }>();
 
+const loading = ref<boolean>(false);
+const searchResults = ref<customer[]>([]);
 const searchParam = reactive<customerSearchParam>({
     //  Search data
     name: "",
@@ -56,52 +63,59 @@ const searchParam = reactive<customerSearchParam>({
     equip: null,
     //  Pagination and sort parameters
     page: 1,
-    perPage: props.perPage,
+    perPage: 25,
     sortField: "name",
     sortType: "asc",
 });
 const paginationData = reactive<customerPagination>({
-    currentPage: 0,
-    numPages: 0,
+    currentPage: 1,
+    numPages: 1,
     listFrom: 0,
     listTo: 0,
     listTotal: 0,
     pageArr: [1],
 });
+const paginationArray = [25, 50, 100];
 
-const triggerSearch = () => {
-    console.log('trigger search', searchParam);
-}
+/**
+ * Perform a customer search and parse results
+ */
+const triggerSearch = async (): Promise<void> => {
+    loading.value = true;
+    const results = await performCustomerSearch(searchParam);
 
+    searchResults.value = results.data;
+    paginationData.listFrom = results.listFrom;
+    paginationData.listTo = results.listTo;
+    paginationData.listTotal = results.listTotal;
+    paginationData.numPages = results.numPages;
+    paginationData.currentPage = results.currentPage;
+    paginationData.pageArr = results.pageArr;
+
+    loading.value = false;
+};
+
+/**
+ * Clear search parameters
+ */
 const resetSearch = () => {
-    console.log('reset search');
-}
+    console.log("reset search");
+    searchParam.name = "";
+    searchParam.city = "";
+    searchParam.equip = null;
 
-provide(customerSearchDataKey, { searchParam, paginationData, triggerSearch, resetSearch });
+    triggerSearch();
+};
 
-
-
+provide(customerSearchDataKey, {
+    searchParam,
+    paginationData,
+    paginationArray,
+    triggerSearch,
+    resetSearch,
+});
 </script>
 
 <script lang="ts">
 export default { layout: App };
 </script>
-
-<style scoped lang="scss">
-
-
-tbody {
-    tr {
-        td {
-            padding: 0;
-            a {
-                display: block;
-                height: 100%;
-                padding: 8px 0;
-                text-decoration: none;
-                color: #000000;
-            }
-        }
-    }
-}
-</style>
