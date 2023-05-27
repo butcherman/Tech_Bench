@@ -121,8 +121,8 @@ const { searchParam, paginationData, paginationArray, triggerSearch } = inject(
     customerSearchDataKey
 ) as customerSearchDataSymbol;
 
-const onGoToPage = (page: number) => {
-    console.log("go to ", page);
+const onGoToPage = (page: number): void => {
+    searchParam.page = page;
     triggerSearch();
 };
 </script>
