@@ -74,6 +74,7 @@ class CustomerController extends Controller
             'contacts' => fn () => $customer->ParentContact->merge($customer->CustomerContact),
             'notes' => fn () => $customer->ParentNote->merge($customer->CustomerNote),
             'files' => fn() => $customer->ParentFile->merge($customer->CustomerFile),
+
             'file-types' => fn() => CustomerFileType::all()->pluck('description'),
         ]);
     }
@@ -96,7 +97,7 @@ class CustomerController extends Controller
         );
 
         return redirect(route('customers.show', $customer->slug))
-            ->with('success', __('cust.updated'));
+            ->with('success', __('cust.updated', ['name' => $customer->name]));
     }
 
     /**

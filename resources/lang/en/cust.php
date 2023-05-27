@@ -2,7 +2,8 @@
 
 return [
     'created' => 'New Customer :name Created',
-    'updated' => 'Customer Updated',
+    'updated' => ':name Updated',
+
     'destroy' => 'Customer Deactivated',
     'restore' => 'Customer(s) Restored',
     'delete' => 'Customer(s) Deleted',

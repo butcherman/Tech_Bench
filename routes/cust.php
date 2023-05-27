@@ -14,9 +14,8 @@ use App\Http\Controllers\Customers\DeactivatedCustomerController;
 use App\Http\Controllers\Customers\DownloadContactController;
 use App\Http\Controllers\Customers\GetCustomerSettingsController;
 use App\Http\Controllers\Customers\GetDeletedItemsController;
-use App\Http\Controllers\Customers\GetLinkedCustomerController;
+use App\Http\Controllers\Customers\LinkedCustomerController;
 use App\Http\Controllers\Customers\SetCustomerSettingsController;
-use App\Http\Controllers\Customers\SetLinkedCustomerController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -27,9 +26,9 @@ Route::middleware('auth')->group(function () {
         Route::post('restore', [CustomerController::class, 'restore'])->name('restore');
         Route::post('search', CustomerSearchController::class)->name('search');
         Route::post('bookmark', CustomerBookmarkController::class)->name('bookmark');
-        Route::post('linked', SetLinkedCustomerController::class)->name('set-link');
+        Route::post('linked', [LinkedCustomerController::class, 'set'])->name('set-link');
         Route::get('{id}/check-id', CheckCustIdController::class)->name('check-id');
-        Route::get('{customer}/get-linked', GetLinkedCustomerController::class)->name('linked');
+        Route::get('{customer}/get-linked', [LinkedCustomerController::class, 'get'])->name('linked');
         Route::get('{customer}/deleted-items', GetDeletedItemsController::class)->name('deleted-items');
 
         /**

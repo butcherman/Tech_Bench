@@ -45,12 +45,12 @@ import { allStates } from "@/Modules/allStates.module";
 import { customerValidation } from "@/Modules/Validation/customerValidation.module";
 import { customerKey } from "@/SymbolKeys/CustomerKeys";
 import type { Ref } from "vue";
-// import type { customerFormType, customerType } from "@/Types";
 
 const emit = defineEmits(["success"]);
 const editCustomerForm = ref<InstanceType<typeof VueForm> | null>(null);
-const customer = inject(customerKey) as Ref<customerType>;
-const initialValues = <customerType>{
+const customer = inject(customerKey) as Ref<customer>;
+
+const initialValues = <customer>{
     name: customer?.value?.name,
     dba_name: customer?.value?.dba_name,
     address: customer?.value?.address,
@@ -59,7 +59,7 @@ const initialValues = <customerType>{
     zip: customer?.value?.zip,
 };
 
-const onSubmit = (form: customerFormType) => {
+const onSubmit = (form: customer) => {
     const formData = useForm(form);
     formData.put(route("customers.update", customer?.value?.slug), {
         only: ["customer", "flash"],

@@ -10,22 +10,22 @@
             {{ customer?.name }}
             <small
                 v-if="
-                    customer?.child_count !== undefined &&
+                    customer.child_count !== undefined &&
                     customer.child_count > 0
                 "
                 class="fs-6 pointer"
                 title="Show Linked Customers"
                 v-tooltip
-                @click="linkedCustomers(customer?.slug, customer?.name)"
+                @click="linkedCustomers(customer.slug, customer?.name)"
             >
                 <fa-icon icon="fa-link" />
             </small>
         </h3>
-        <h5 v-if="customer?.dba_name">AKA - {{ customer.dba_name }}</h5>
-        <h6 v-if="customer?.parent_id">
+        <h5 v-if="customer.dba_name">AKA - {{ customer.dba_name }}</h5>
+        <h6 v-if="customer.parent_id">
             Child Site of -
-            <Link :href="$route('customers.show', customer?.parent?.slug)">
-                {{ customer?.parent?.name }}
+            <Link :href="$route('customers.show', customer.parent?.slug)">
+                {{ customer.parent?.name }}
             </Link>
         </h6>
         <address>
@@ -40,10 +40,10 @@
                 title="Click for Map"
                 v-tooltip
             >
-                {{ customer?.address }}<br />
-                {{ customer?.city }},
-                {{ customer?.state }}
-                &nbsp;{{ customer?.zip }}
+                {{ customer.address }}<br />
+                {{ customer.city }},
+                {{ customer.state }}
+                &nbsp;{{ customer.zip }}
             </a>
         </address>
     </div>
@@ -54,7 +54,6 @@ import BookmarkItem from "@/Components/Base/BookmarkItem.vue";
 import { inject, computed } from "vue";
 import { linkedCustomers } from "@/Modules/linkedCustomers.module";
 import { isCustFavKey, customerKey } from "@/SymbolKeys/CustomerKeys";
-import type { customerType } from "@/Types";
 import type { Ref } from "vue";
 
 defineProps<{
@@ -62,8 +61,8 @@ defineProps<{
 }>();
 
 const $route = route;
-const isFav = inject(isCustFavKey, false) as boolean;
-const customer = inject(customerKey) as Ref<customerType>;
+const isFav = inject(isCustFavKey) as boolean;
+const customer = inject(customerKey) as Ref<customer>;
 
 /**
  * Create a URL to go to Google Maps and address

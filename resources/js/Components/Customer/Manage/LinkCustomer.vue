@@ -24,16 +24,9 @@ import { useForm } from "@inertiajs/vue3";
 import { verifyModal } from "@/Modules/verifyModal.module";
 import { customerKey, toggleManageLoadKey } from "@/SymbolKeys/CustomerKeys";
 import type { Ref } from "vue";
-import type { customerType } from "@/Types";
 import type { InertiaForm } from "@inertiajs/vue3";
 
-type linkFormType = {
-    cust_id: number | undefined;
-    parent_id: number | null;
-    add: boolean;
-};
-
-const customer = inject(customerKey) as Ref<customerType>;
+const customer = inject(customerKey) as Ref<customer>;
 const toggleLoad = inject(toggleManageLoadKey) as (set: boolean) => void;
 
 //  Determine if the customer can be linked to a parent or not
@@ -52,10 +45,10 @@ const isLinked = computed(() => {
  * Create a link between this customer and a "parent" customer
  */
 const createLink = () => {
-    customerSearchBox().then((res: customerType) => {
+    customerSearchBox().then((res: customer) => {
         const formData = useForm({
             cust_id: customer?.value.cust_id,
-            parent_id: (res as customerType).cust_id,
+            parent_id: res.cust_id,
             add: true,
         });
 
@@ -85,7 +78,7 @@ const dissolveLink = () => {
 /**
  * Process the add/remove link
  */
-const processLink = (formData: InertiaForm<linkFormType>) => {
+const processLink = (formData: InertiaForm<linkForm>) => {
     toggleLoad(true);
     formData.post(route("customers.set-link"), {
         only: ["customer", "flash"],

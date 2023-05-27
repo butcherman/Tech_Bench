@@ -13,7 +13,7 @@ export const phoneTypesKey: InjectionKey<Ref<string[]>> = Symbol();
 /**
  * Loading state managers
  */
-export const toggleManageLoadKey: InjectionKey<(set: boolean) => boolean> =
+export const toggleManageLoadKey: InjectionKey<(set: boolean) => void> =
     Symbol();
 export const toggleEquipLoadKey: InjectionKey<() => void> = Symbol();
 export const toggleContactsLoadKey: InjectionKey<() => void> = Symbol();
