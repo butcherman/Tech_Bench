@@ -73,24 +73,19 @@ import {
     custPermissionsKey,
     toggleEquipLoadKey,
 } from "@/SymbolKeys/CustomerKeys";
-import type {
-    customerEquipmentType,
-    customerPermissionType,
-    voidFunctionType,
-} from "@/Types";
 
-const props = defineProps<{
-    equipment: customerEquipmentType[];
+defineProps<{
+    equipment: customerEquipment[];
 }>();
 
 const loadKey = ref<number>(0);
-const permission = inject(custPermissionsKey) as customerPermissionType;
-const toggleLoad = inject(toggleEquipLoadKey) as voidFunctionType;
+const permission = inject(custPermissionsKey) as customerPermissions;
+const toggleLoad = inject(toggleEquipLoadKey) as () => void;
 
 /**
  * Delete equipment from customer
  */
-const deleteEquipment = (equip: customerEquipmentType) => {
+const deleteEquipment = (equip: customerEquipment) => {
     let msg = "All information for this Equipment will also be deleted";
     if (equip.shared) {
         msg =

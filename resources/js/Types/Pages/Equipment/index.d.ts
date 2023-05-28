@@ -1,26 +1,30 @@
 type categoryList = {
     cat_id        : number;
     name          : string;
-    equipment_type: equipType[];
+    equipment_type: equipment[];
 }
 
-type equipType = {
+type equipment = {
     cat_id  : number;
     equip_id: number;
     name    : string;
 }
 
-type equipWithDataType = {
+type equipWithData = {
     equipment_category: {
         cat_id: number;
         name  : string;
     }
-    // data_field_type: dataListType[];
-} & equipType;
+    data_field_type: dataList[];
+} & equipment;
 
-type dataListType = {
+type dataList = {
     type_id: number;
     name   : string;
     hidden : boolean;
     in_use : boolean;
+}
+
+type equipSelectBox = {
+    [key: string]: categoryList;
 }

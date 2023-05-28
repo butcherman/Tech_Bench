@@ -30,5 +30,5 @@ Route::middleware('auth')->group(function () {
             ->show('References', 'equipment.index');
     });
 
-    Route::get('get-equipment', GetEquipmentController::class)->name('equipment.get-all');
+    // Route::get('get-equipment', GetEquipmentController::class)->name('equipment.get-all');
 });

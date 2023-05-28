@@ -5,123 +5,89 @@
         :initial-values="{ shared: false }"
         @submit="onSubmit"
     >
-        <Overlay :loading="loading">
-            <Field name="equip_id" v-slot="{ field, errorMessage }">
-                <label for="select-equip">Equipment Type:</label>
-                <select
-                    id="select-equip"
-                    class="form-select form-select-lg"
-                    v-bind="field"
-                    @change="populateForm"
+        <Field name="equip_id" class="my-2" v-slot="{ field, errorMessage }">
+            <label for="select-equip">Equipment Type:</label>
+            <select
+                id="select-equip"
+                class="form-select form-select-lg"
+                v-bind="field"
+                @change="populateForm"
+            >
+                <optgroup
+                    v-for="cat in equipList"
+                    :key="cat.cat_id"
+                    :label="cat.name"
                 >
-                    <optgroup
-                        v-for="cat in equipList"
-                        :key="cat.cat_id"
-                        :label="cat.name"
+                    <option
+                        v-for="equip in cat.equipment_type"
+                        :key="equip.equip_id"
+                        :value="equip.equip_id"
+                        :disabled="isFieldDisabled(equip)"
                     >
-                        <option
-                            v-for="equip in cat.equipment_type"
-                            :key="equip.equip_id"
-                            :value="equip.equip_id"
-                            :disabled="isFieldDisabled(equip)"
-                        >
-                            {{ equip.name }}
-                        </option>
-                    </optgroup>
-                </select>
-                <span class="text-danger">{{ errorMessage }}</span>
-            </Field>
-            <CheckboxSwitch
-                v-show="allowShare"
-                id="shared"
-                name="shared"
-                label="Shared Across All Linked Sited"
-                class="my-2"
+                        {{ equip.name }}
+                    </option>
+                </optgroup>
+            </select>
+            <span class="text-danger">{{ errorMessage }}</span>
+        </Field>
+        <CheckboxSwitch
+            v-show="allowShare"
+            id="shared"
+            name="shared"
+            label="Shared Across All Linked Sited"
+            class="my-2"
+        />
+        <template v-for="field in otherFields">
+            <TextInput
+                :id="`field-id-${field.type_id}`"
+                :name="`fieldId-${field.type_id}`"
+                :label="field.name"
             />
-            <template v-for="field in otherFields">
-                <TextInput
-                    :id="`field-id-${field.type_id}`"
-                    :name="`fieldId-${field.type_id}`"
-                    :label="field.name"
-                />
-            </template>
-        </Overlay>
+        </template>
     </VueForm>
 </template>
 
 <script setup lang="ts">
-import Overlay from "@/Components/Base/Overlay.vue";
 import VueForm from "@/Components/Base/VueForm.vue";
 import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
 import TextInput from "@/Components/Base/Input/TextInput.vue";
-import axios from "axios";
-import { ref, inject, onMounted, ComputedRef } from "vue";
+import { ref, inject } from "vue";
 import { Field } from "vee-validate";
 import { useForm } from "@inertiajs/vue3";
 import {
     allowShareKey,
     customerKey,
+    equipTypesKey,
     toggleEquipLoadKey,
 } from "@/SymbolKeys/CustomerKeys";
 import { object, string, boolean } from "yup";
-import type { Ref } from "vue";
-import type {
-    categoryList,
-    customerEquipmentDataType,
-    customerEquipmentType,
-    customerType,
-    dataListType,
-    equipType,
-    equipWithDataType,
-    voidFunctionType,
-} from "@/Types";
-
-interface equipSelectBox {
-    [key: string]: categoryList;
-}
-
-//  On Mount, get a full list of available equipment to assign to the customer
-onMounted(() => getEquipment());
+import type { Ref, ComputedRef } from "vue";
 
 const props = defineProps<{
-    existingEquipment: customerEquipmentType[];
+    existingEquipment: customerEquipment[];
 }>();
 const emit = defineEmits(["success"]);
 
 const allowShare = inject(allowShareKey) as ComputedRef<boolean>;
-const custData = inject(customerKey) as Ref<customerType>;
-const toggleLoad = inject(toggleEquipLoadKey) as voidFunctionType;
+const custData = inject(customerKey) as Ref<customer>;
+const equipList = inject(equipTypesKey) as categoryList[];
+const toggleLoad = inject(toggleEquipLoadKey) as () => void;
 
-const loading = ref<boolean>(false);
 const newEquipmentForm = ref<InstanceType<typeof VueForm> | null>(null);
-const otherFields = ref<dataListType[]>();
+const otherFields = ref<dataList[]>();
 const validationSchema = object({
     equip_id: string().required().label("Equipment Type"),
     shared: boolean().nullable(),
 });
 
 /**
- * Get a full list of available equipment types
- */
-const equipList = ref<equipSelectBox>();
-const getEquipment = async () => {
-    // if (equipList.value === undefined) {
-    //     loading.value = true;
-    //     await axios(route("equipment.get-all")).then((res) => {
-    //         equipList.value = res.data;
-    //     });
-    //     loading.value = false;
-    // }
-};
-
-/**
  * Determine if a field should be disabled based on if the equipment type
  * already exists or not
  */
-const isFieldDisabled = (equip: equipType) => {
+const isFieldDisabled = (equip: equipment) => {
     let found = false;
 
-    props.existingEquipment.forEach((item: customerEquipmentType) => {
+    props.existingEquipment.forEach((item: customerEquipment) => {
         if (item.equip_id === equip.equip_id) {
             found = true;
         }
@@ -144,18 +110,16 @@ const populateForm = (event: Event) => {
 /**
  * Find the equipment based on the equipId
  */
-const findEquipment = (equipId: number): equipWithDataType | undefined => {
-    let selectedEquip;
+const findEquipment = (equipId: number): equipWithData | undefined => {
+    let selectedEquip: equipWithData | undefined;
 
-    if (typeof equipList.value !== "undefined") {
-        Object.values(equipList.value).forEach((cat) => {
-            Object.values(cat.equipment_type).forEach((equip) => {
-                if (equip.equip_id == equipId) {
-                    selectedEquip = equip as equipWithDataType;
-                }
-            });
+    Object.values(equipList).forEach((cat) => {
+        Object.values(cat.equipment_type).forEach((equip) => {
+            if (equip.equip_id == equipId) {
+                selectedEquip = equip as equipWithData;
+            }
         });
-    }
+    });
 
     return selectedEquip;
 };
@@ -163,7 +127,7 @@ const findEquipment = (equipId: number): equipWithDataType | undefined => {
 /**
  * Submit the new equipment type
  */
-const onSubmit = (form: customerEquipmentDataType) => {
+const onSubmit = (form: customerEquipmentData) => {
     toggleLoad();
     //  Add customer ID to the form
     form.cust_id = custData?.value.cust_id as unknown as string;

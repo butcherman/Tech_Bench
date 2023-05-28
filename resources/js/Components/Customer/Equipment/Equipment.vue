@@ -26,18 +26,16 @@ import RefreshButton from "@/Components/Base/Buttons/RefreshButton.vue";
 import NewEquipment from "@/Components/Customer/Equipment/NewEquipment.vue";
 import ShowEquipment from "@/Components/Customer/Equipment/ShowEquipment.vue";
 import { ref, provide, inject } from "vue";
-import { router } from "@inertiajs/vue3";
 import {
     custPermissionsKey,
     toggleEquipLoadKey,
 } from "@/SymbolKeys/CustomerKeys";
-import type { customerEquipmentType, customerPermissionType } from "@/Types";
 
 defineProps<{
-    equipment: customerEquipmentType[];
+    equipment: customerEquipment[];
 }>();
 
-const permission = inject(custPermissionsKey) as customerPermissionType;
+const permission = inject(custPermissionsKey) as customerPermissions;
 
 /**
  * Loading State of Component

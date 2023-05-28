@@ -52,7 +52,7 @@ class LinkedCustomerRequest extends FormRequest
 
         Log::channel(['daily', 'cust'])->info('Customer '.$cust->name.' has been linked to '.$parent->name.' by '.Auth::user()->username);
 
-        return ['type' => 'success', 'message' => __('cust.linked.set')];
+        return ['type' => 'success', 'message' => __('cust.linked.set', ['cust' => $cust->name, 'parent' => $parent->name])];
     }
 
     /**
@@ -66,6 +66,6 @@ class LinkedCustomerRequest extends FormRequest
 
         Log::channel(['daily', 'cust'])->info('Customer '.$cust->name.' link to parent site has been removed by '.Auth::user()->username);
 
-        return ['type' => 'warning', 'message' => __('cust.linked.removed')];
+        return ['type' => 'warning', 'message' => __('cust.linked.removed', ['name' => $cust->name])];
     }
 }

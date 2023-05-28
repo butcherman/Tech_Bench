@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Events\Customer\CustomerEquipmentCreatedEvent;
+use App\Events\Customer\CustomerEquipmentUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerEquipmentRequest;
 use App\Models\CustomerEquipment;
@@ -11,14 +13,6 @@ use Illuminate\Support\Facades\Log;
 class CustomerEquipmentController extends Controller
 {
     /**
-     * Redirecting back to customer page will refresh the equipment list
-     */
-    public function index()
-    {
-        return back();
-    }
-
-    /**
      * Store a newly created customer equipment type
      */
     public function store(CustomerEquipmentRequest $request)
@@ -26,7 +20,10 @@ class CustomerEquipmentController extends Controller
         $newEquipment = CustomerEquipment::create($request->only(['cust_id', 'equip_id', 'shared']));
         $request->buildEquipData($newEquipment);
 
-        return back()->with('success', __('cust.equipment.created'));
+        Log::stack(['daily', 'cust'])->info('New Customer Equipment '.$newEquipment->name.' created by '.$request->user()->username.' for '.$newEquipment->Customer->name);
+        event(new CustomerEquipmentCreatedEvent($newEquipment->Customer, $newEquipment));
+
+        return back()->with('success', __('cust.equipment.created', ['equip' => $newEquipment->name]));
     }
 
     /**
@@ -35,8 +32,9 @@ class CustomerEquipmentController extends Controller
     public function update(CustomerEquipmentRequest $request, CustomerEquipment $equipment)
     {
         $request->updateEquipData($equipment);
+        event(new CustomerEquipmentUpdatedEvent($equipment->Customer, $equipment));
 
-        return back()->with('success', __('cust.equipment.updated'));
+        return back()->with('success', __('cust.equipment.updated', ['equip' => $equipment->name]));
     }
 
     /**
@@ -49,7 +47,7 @@ class CustomerEquipmentController extends Controller
         $equipment->delete();
         Log::stack(['daily', 'cust'])->info('Equipment '.$equipment->name.' deleted for Customer ID '.$equipment->cust_id.' by '.Auth::user()->username);
 
-        return back()->with('success', __('cust.equipment.deleted'));
+        return back()->with('success', __('cust.equipment.deleted', ['equip' => $equipment->name]));
     }
 
     /**
@@ -62,7 +60,7 @@ class CustomerEquipmentController extends Controller
         $equipment->restore();
         Log::stack(['daily', 'cust'])->info('Equipment '.$equipment->name.' has been restored for customer '.$equipment->cust_id.' by '.Auth::user()->username);
 
-        return back()->with('success', __('cust.equipment.restored'));
+        return back()->with('success', __('cust.equipment.restored', ['equip' => $equipment->name]));
     }
 
     /**
@@ -75,6 +73,6 @@ class CustomerEquipmentController extends Controller
         $equipment->forceDelete();
         Log::stack(['daily', 'cust'])->notice('Equipment '.$equipment->name.' has been force deleted for customer ID '.$equipment->cust_id.' by '.Auth::user()->username);
 
-        return back()->with('danger', __('cust.equipment.force_deleted'));
+        return back()->with('danger', __('cust.equipment.force_deleted', ['equip' => $equipment->name]));
     }
 }

@@ -8,6 +8,7 @@ export const custPermissionsKey: InjectionKey<customerPermissions> =
 export const isCustFavKey: InjectionKey<boolean> = Symbol();
 export const allowShareKey: InjectionKey<ComputedRef<boolean>> = Symbol();
 export const fileTypesKey: InjectionKey<string[]> = Symbol();
+export const equipTypesKey: InjectionKey<categoryList[]> = Symbol();
 export const phoneTypesKey: InjectionKey<Ref<string[]>> = Symbol();
 
 /**

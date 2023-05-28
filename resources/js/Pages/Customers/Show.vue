@@ -14,7 +14,7 @@
         </div>
         <div class="row">
             <div class="col-md-5">
-                <!-- <Equipment :equipment="equipment" /> -->
+                <Equipment :equipment="equipment" />
             </div>
             <div class="col-md-7">
                 <!-- <Contacts :contacts="contacts" /> -->
@@ -48,6 +48,7 @@ import {
     customerKey,
     allowShareKey,
     fileTypesKey,
+equipTypesKey,
 } from "@/SymbolKeys/CustomerKeys";
 import { ref, computed, provide, watch } from "vue";
 
@@ -60,6 +61,7 @@ const props = defineProps<{
     notes: customerNote[];
     files: []; //  FIXME - type this
     fileTypes: string[];
+    equipTypes: categoryList[];
 }>();
 
 /**
@@ -67,6 +69,7 @@ const props = defineProps<{
  */
 provide(custPermissionsKey, props.permissions);
 provide(isCustFavKey, props.isFav);
+provide(equipTypesKey, props.equipTypes);
 provide(fileTypesKey, props.fileTypes);
 
 /**

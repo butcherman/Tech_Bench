@@ -5,7 +5,7 @@
         small
         title="Add Equipment"
         v-tooltip
-        @click="newEquipmentModal.show()"
+        @click="newEquipmentModal?.show()"
     />
     <Modal ref="newEquipmentModal" title="New Equipment">
         <NewCustomerEquipmentForm
@@ -20,10 +20,9 @@ import AddButton from "@/Components/Base/Buttons/AddButton.vue";
 import Modal from "@/Components/Base/Modal/Modal.vue";
 import NewCustomerEquipmentForm from "@/Forms/Customer/NewCustomerEquipmentForm.vue";
 import { ref } from "vue";
-import type { customerEquipmentType } from "@/Types";
 
 defineProps<{
-    existingEquipment: customerEquipmentType[];
+    existingEquipment: customerEquipment[];
 }>();
 
 const newEquipmentModal = ref<InstanceType<typeof Modal> | null>(null);

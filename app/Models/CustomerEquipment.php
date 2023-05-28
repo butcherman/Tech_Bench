@@ -27,6 +27,14 @@ class CustomerEquipment extends Model
     ];
 
     /**
+     * Each piece of equipment belongs to a customer
+     */
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
+
+    /**
      * Get the name of the equipment without attaching the entire equipment object
      */
     public function getNameAttribute()

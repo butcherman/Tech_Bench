@@ -13,7 +13,7 @@ class UserSetting extends Model
 
     protected $guarded = ['setting_id', 'created_at', 'updated_at'];
 
-    protected $hidden = ['setting_id', 'user_id', 'created_at', 'updated_at'];
+    // protected $hidden = ['setting_id', 'user_id', 'created_at', 'updated_at'];
 
     protected $casts = [
         'value' => 'boolean',

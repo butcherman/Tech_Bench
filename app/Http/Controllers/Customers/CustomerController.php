@@ -10,6 +10,7 @@ use App\Http\Requests\Customers\SoftDeletedRequest;
 use App\Jobs\CustomerRemoveBookmarksJob;
 use App\Models\Customer;
 use App\Models\CustomerFileType;
+use App\Models\EquipmentCategory;
 use App\Models\UserCustomerBookmark;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -76,6 +77,7 @@ class CustomerController extends Controller
             'files' => fn() => $customer->ParentFile->merge($customer->CustomerFile),
 
             'file-types' => fn() => CustomerFileType::all()->pluck('description'),
+            'equip-types' => fn() => EquipmentCategory::with('EquipmentType.DataFieldType')->get(),
         ]);
     }
 
@@ -113,7 +115,7 @@ class CustomerController extends Controller
 
         Log::stack(['daily', 'cust'])->notice('Customer '.$customer->name.' has been deactivated by '.Auth::user()->username);
 
-        return redirect(route('customers.index'))->with('warning', __('cust.destroy'));
+        return redirect(route('customers.index'))->with('warning', __('cust.destroy', ['name' => $customer->name]));
     }
 
     /**

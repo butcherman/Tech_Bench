@@ -59,6 +59,16 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Admin\UserRoleUpdatedEvent' => [
             'App\Listeners\Admin\UpdateRolePermissions',
         ],
+
+        /**
+         * Customer Events
+         */
+        'App\Events\Customer\CustomerEquipmentCreatedEvent' => [
+            'App\Listeners\Notify\Customers\NewCustomerEquipmentNotification',
+        ],
+        'App\Events\Customer\CustomerEquipmentUpdatedEvent' => [
+            'App\Listeners\Notify\Customers\UpdatedCustomerEquipmentNotification',
+        ],
     ];
 
     /**

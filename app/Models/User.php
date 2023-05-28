@@ -67,6 +67,14 @@ class User extends Authenticatable
     }
 
     /**
+     * User Settings Data
+     */
+    public function UserSetting()
+    {
+        return $this->hasOne(UserSetting::class, 'user_id', 'user_id');
+    }
+
+    /**
      * Determine the new expire date for an updated password
      */
     public function getNewExpireTime()

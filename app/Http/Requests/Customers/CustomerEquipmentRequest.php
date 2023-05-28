@@ -74,9 +74,9 @@ class CustomerEquipmentRequest extends FormRequest
             Log::stack(['daily', 'cust'])->debug('Customer Equip Field ID '.$equipId.' updated to '.$value);
         }
 
-        Log::stack(['daily', 'cust'])->info('Customer Equipment Data for Customer ID '.
-                                            $equipment->cust_id.' and Equipment ID '.
-                                            $equipment->cust_equip_id.' updated by '.
+        Log::stack(['daily', 'cust'])->info('Customer Equipment Data for '.
+                                            $equipment->Customer->name.' and Equipment '.
+                                            $equipment->name.' updated by '.
                                             $this->user()->username, $this->toArray());
     }
 
