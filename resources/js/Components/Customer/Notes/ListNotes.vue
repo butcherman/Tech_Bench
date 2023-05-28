@@ -13,10 +13,21 @@
             <div class="card customer-note-minimized my-2 pointer">
                 <div class="card-body">
                     <div class="card-title">
-                        <span v-if="note.urgent" title="This note was marked as high importance" v-tooltip>
-                            <fa-icon icon="fa-exclamation-circle" class="me-1 text-danger" />
+                        <span
+                            v-if="note.urgent"
+                            title="This note was marked as high importance"
+                            v-tooltip
+                        >
+                            <fa-icon
+                                icon="fa-exclamation-circle"
+                                class="me-1 text-danger"
+                            />
                         </span>
-                        <span v-if="note.shared" title="This note is shared across multiple sites" v-tooltip>
+                        <span
+                            v-if="note.shared"
+                            title="This note is shared across multiple sites"
+                            v-tooltip
+                        >
                             <fa-icon icon="fa-share" class="me-1 text-info" />
                         </span>
                         {{ note.subject }}
@@ -66,16 +77,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, inject } from "vue";
+import { ref, computed, inject } from "vue";
 import { customerKey } from "@/SymbolKeys/CustomerKeys";
-import type { customerType, customerNoteType } from "@/Types";
+import type { Ref } from "vue";
 
 const props = defineProps<{
-    notes: customerNoteType[];
+    notes: customerNote[];
 }>();
 
 const $route = route;
-const customer = inject(customerKey) as customerType;
+const customer = inject(customerKey) as Ref<customer>;
 
 /**
  * Pagination Logic
@@ -87,15 +98,15 @@ const paginatedData = computed(() =>
     props.notes.slice((page.value - 1) * perPage, page.value * perPage)
 );
 
-const prevPage = () => {
+const prevPage = (): void => {
     page.value--;
 };
 
-const nextPage = () => {
+const nextPage = (): void => {
     page.value++;
 };
 
-const goToPage = (numPage) => {
+const goToPage = (numPage: number): void => {
     page.value = numPage;
 };
 </script>

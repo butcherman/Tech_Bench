@@ -31,7 +31,7 @@ import VueForm from "@/Components/Base/VueForm.vue";
 import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
 import TextInput from "@/Components/Base/Input/TextInput.vue";
 import Editor from "@/Components/Base/Input/Editor.vue";
-import { ref, reactive, onMounted, inject, computed } from "vue";
+import { ref, inject, computed } from "vue";
 import {
     customerKey,
     allowShareKey,
@@ -39,14 +39,14 @@ import {
 } from "@/SymbolKeys/CustomerKeys";
 import { object, string, boolean } from "yup";
 import { useForm } from "@inertiajs/vue3";
-import type { customerNoteType } from "@/Types";
+import type { Ref, ComputedRef } from 'vue';
 
 const emit = defineEmits(["success"]);
 const props = defineProps<{
-    noteData?: customerNoteType;
+    noteData?: customerNote;
 }>();
 
-const customer = inject(customerKey) as Ref<customerType>;
+const customer = inject(customerKey) as Ref<customer>;
 const allowShare = inject(allowShareKey) as ComputedRef<boolean>;
 const toggleLoad = inject(toggleNotesLoadKey) as () => void;
 
@@ -54,10 +54,10 @@ const submitText = computed(() =>
     props.noteData ? "Update Note" : "Create Note"
 );
 
-const noteForm = ref<InstanceType<typeof VueForm>>(null);
+const noteForm = ref<InstanceType<typeof VueForm> | null>(null);
 const validationSchema = object({
-    subject: string().required(),
-    details: string().required(),
+    subject: string().required().label('Title'),
+    details: string().required().label('Note Details'),
     shared: boolean().required(),
     urgent: boolean().required(),
 });
@@ -69,7 +69,7 @@ const initialValues = {
     urgent: props.noteData ? props.noteData.urgent : false,
 };
 
-const onSubmit = (form) => {
+const onSubmit = (form:customerNote) => {
     const formData = useForm(form);
     toggleLoad();
 
@@ -80,7 +80,7 @@ const onSubmit = (form) => {
                 toggleLoad();
             },
             onSuccess: () => {
-                noteForm.value.endSubmit();
+                noteForm.value?.endSubmit();
                 emit("success");
             },
         });
@@ -92,8 +92,8 @@ const onSubmit = (form) => {
                 toggleLoad();
             },
             onSuccess: () => {
-                noteForm.value.endSubmit();
-                noteForm.value.resetForm();
+                noteForm.value?.endSubmit();
+                noteForm.value?.resetForm();
                 emit("success");
             },
         });

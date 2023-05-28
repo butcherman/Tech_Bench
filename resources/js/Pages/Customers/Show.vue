@@ -22,7 +22,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <!-- <Notes :notes="notes" /> -->
+                <Notes :notes="notes" />
             </div>
         </div>
         <div class="row">

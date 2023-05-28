@@ -24,7 +24,7 @@ class CustomerContactController extends Controller
         Log::stack(['daily', 'cust'])->info('New Customer contact created for Customer '.$newContact->Customer->name.' by '.$request->user()->full_name);
         event(new CustomerContactCreatedEvent($newContact->Customer, $newContact));
 
-        return back()->with('success', 'Contact Created');
+        return back()->with('success', __('cust.contact.created', ['cont' => $newContact->name]));
     }
 
     /**
@@ -39,7 +39,7 @@ class CustomerContactController extends Controller
         Log::stack(['daily', 'cust'])->info('Customer contact updated for Customer '.$contact->Customer->name.' by '.$request->user()->full_name, $contact->toArray());
         event(new CustomerContactUpdatedEvent($contact->Customer, $contact));
 
-        return back()->with('success', 'Contact Updated');
+        return back()->with('success', __('cust.contact.updated', ['cont' => $contact->name]));
     }
 
     /**
@@ -52,7 +52,7 @@ class CustomerContactController extends Controller
         $contact->delete();
         Log::stack(['daily', 'cust'])->notice('Customer Contact '.$contact->name.' for '.$contact->Customer->name.' deleted by '.Auth::user()->username);
 
-        return back()->with('warning', 'Contact Deleted');
+        return back()->with('warning', __('cust.contact.deleted', ['cont' => $contact->name]));
     }
 
     /**
@@ -65,7 +65,7 @@ class CustomerContactController extends Controller
         $contact->restore();
         Log::stack(['daily', 'cust'])->info('Customer Contact '.$contact->name.' for '.$contact->Customer->name.' restored by '.Auth::user()->username);
 
-        return back()->with('success', 'Contact Restored');
+        return back()->with('success', __('cust.contact.restored', ['cont' => $contact->name]));
     }
 
     /**
@@ -78,6 +78,6 @@ class CustomerContactController extends Controller
         $contact->forceDelete();
         Log::stack(['daily', 'cust'])->info('Customer Contact '.$contact->name.' for '.$contact->Customer->name.' permanently deleted by '.Auth::user()->username);
 
-        return back()->with('danger', 'Customer Contact Deleted');
+        return back()->with('danger', __('cust.contact.force_deleted', ['cont' => $contact->name]));
     }
 }

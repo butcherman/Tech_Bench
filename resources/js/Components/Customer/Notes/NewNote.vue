@@ -5,10 +5,10 @@
         small
         title="Add Note"
         v-tooltip
-        @click="newNoteModal.show()"
+        @click="newNoteModal?.show()"
     />
     <Modal ref="newNoteModal" title="New Note" size="xl">
-        <NoteForm @success="newNoteModal.hide()" />
+        <NoteForm @success="newNoteModal?.hide()" />
     </Modal>
 </template>
 
@@ -16,7 +16,7 @@
 import AddButton from "@/Components/Base/Buttons/AddButton.vue";
 import Modal from "@/Components/Base/Modal/Modal.vue";
 import NoteForm from "@/Forms/Customer/NoteForm.vue";
-import { ref, reactive, onMounted } from "vue";
+import { ref } from "vue";
 
 const newNoteModal = ref<InstanceType<typeof Modal> | null>(null);
 </script>

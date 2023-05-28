@@ -75,6 +75,18 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Customer\CustomerContactUpdatedEvent' => [
             'App\Listeners\Notify\Customers\UpdatedCustomerContactNotification',
         ],
+        'App\Events\Customer\CustomerNoteCreatedEvent' => [
+            'App\Listeners\Notify\Customers\NewCustomerNoteNotification',
+        ],
+        'App\Events\Customer\CustomerNoteUpdatedEvent' => [
+            'App\Listeners\Notify\Customers\UpdatedCustomerNoteNotification',
+        ],
+        'App\Events\Customer\CustomerFileCreatedEvent' => [
+            'App\Listeners\Notify\Customers\NewCustomerFileNotification',
+        ],
+        'App\Events\Customer\CustomerFileUpdatedEvent' => [
+            'App\Listeners\Notify\Customers\UpdatedCustomerFileNotification',
+        ],
     ];
 
     /**

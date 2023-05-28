@@ -161,8 +161,8 @@ watch(props, () => {
             });
         });
 
+        newPhone();
     }
-    newPhone();
 });
 
 /**
@@ -181,7 +181,7 @@ const newPhone = () => {
  */
 const { handleSubmit, resetForm, setValues } = useVeeForm({
     initialValues: {
-        cust_id: 1,
+        cust_id: custData.value.cust_id,
         shared: false,
         name: '',
         title: '',
@@ -205,7 +205,6 @@ onMounted(() => newPhone());
  * Submit the new/updated contact
  */
 const onSubmit = handleSubmit((form) => {
-    form.cust_id = custData.value.cust_id;
     const formData = useForm(form);
     loading.value = true;
     toggleLoad();
@@ -218,6 +217,7 @@ const onSubmit = handleSubmit((form) => {
                 onFinish: () => {
                     toggleLoad();
                     loading.value = false;
+                    resetForm();
                 },
                 onSuccess: () => emit("success"),
             }
@@ -227,6 +227,7 @@ const onSubmit = handleSubmit((form) => {
             onFinish: () => {
                 toggleLoad();
                 loading.value = false;
+                resetForm();
             },
             onSuccess: () => emit("success"),
         });

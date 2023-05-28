@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Customers;
 
 use App\Actions\BuildCustomerPermissions;
+use App\Events\Customer\CustomerNoteCreatedEvent;
+use App\Events\Customer\CustomerNoteUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerNoteRequest;
 use App\Models\Customer;
 use App\Models\CustomerNote;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CustomerNoteController extends Controller
@@ -19,9 +22,11 @@ class CustomerNoteController extends Controller
     {
         $request->checkForShared();
         $request->merge(['created_by' => $request->user()->user_id]);
-        CustomerNote::create($request->only(['cust_id', 'created_by', 'subject', 'details', 'shared', 'urgent']));
+        $newNote = CustomerNote::create($request->only(['cust_id', 'created_by', 'subject', 'details', 'shared', 'urgent']));
+        event(new CustomerNoteCreatedEvent($newNote->Customer, $newNote));
+        Log::channel(['daily', 'cust'])->info('Note for '.$newNote->Customer->name.' created by '.$request->user()->username, $newNote->toArray());
 
-        return back()->with('success', 'New Note Created');
+        return back()->with('success', __('cust.note.created'));
     }
 
     /**
@@ -44,8 +49,9 @@ class CustomerNoteController extends Controller
         $request->checkForShared();
         $request->merge(['updated_by' => $request->user()->user_id]);
         $note->update($request->only(['cust_id', 'updated_by', 'subject', 'details', 'shared', 'urgent']));
+        event(new CustomerNoteUpdatedEvent($note->Customer, $note));
 
-        return back()->with('success', 'Note Updated');
+        return back()->with('success', __('cust.note.updated'));
     }
 
     /**
@@ -56,7 +62,7 @@ class CustomerNoteController extends Controller
         $this->authorize('delete', $note);
         $note->delete();
 
-        return redirect(route('customers.show', $note->Customer->slug))->with('danger', 'Note Deleted');
+        return redirect(route('customers.show', $note->Customer->slug))->with('danger', __('cust.note.deleted'));
     }
 
     /**
@@ -68,7 +74,7 @@ class CustomerNoteController extends Controller
 
         $note->restore();
 
-        return back()->with('success', 'Note Restored');
+        return back()->with('success', __('cust.note.restored'));
     }
 
     /**
@@ -79,6 +85,6 @@ class CustomerNoteController extends Controller
         $this->authorize('force-delete', $note);
         $note->forceDelete();
 
-        return back()->with('danger', 'Note Deleted');
+        return back()->with('danger', __('cust.note.force_deleted'));
     }
 }

@@ -22,19 +22,17 @@ import Overlay from "@/Components/Base/Overlay.vue";
 import RefreshButton from "@/Components/Base/Buttons/RefreshButton.vue";
 import NewNote from "@/Components/Customer/Notes/NewNote.vue";
 import ListNotes from "@/Components/Customer/Notes/ListNotes.vue";
-import { ref, reactive, onMounted, inject, provide } from "vue";
-import { router } from "@inertiajs/vue3";
+import { ref, inject, provide } from "vue";
 import {
     custPermissionsKey,
     toggleNotesLoadKey,
 } from "@/SymbolKeys/CustomerKeys";
-import type { customerPermissionType, customerNoteType } from "@/Types";
 
-const props = defineProps<{
-    notes: customerNoteType[];
+defineProps<{
+    notes: customerNote[];
 }>();
 
-const permission = inject(custPermissionsKey) as customerPermissionType;
+const permission = inject(custPermissionsKey) as customerPermissions;
 
 /**
  * Loading State of Component

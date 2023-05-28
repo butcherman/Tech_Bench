@@ -17,6 +17,20 @@ return [
         'restored' => ':equip Restored',
         'force_deleted' => ':equip Destroyed',
     ],
+    'contact' => [
+        'created' => ':cont Created',
+        'updated' => ':cont Updated',
+        'deleted' => ':cont Deleted',
+        'restored' => ':cont Restored',
+        'force_deleted' => ':cont Destroyed',
+    ],
+    'note' => [
+        'created' => 'New note Created',
+        'updated' => 'Note Updated',
+        'deleted' => 'Note Deleted',
+        'restored' => 'Note Restored',
+        'force_deleted' => 'Note Destroyed',
+    ],
 
     'admin' => [
         'change_id' => 'Customer ID Updated',
