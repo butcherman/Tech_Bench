@@ -26,8 +26,7 @@ class LogDebugVisits
         $requestData = $request->request->all();
 
         $routeArray = explode('.', Route::currentRouteName());
-        if($routeArray[0] !== 'horizon')
-        {
+        if ($routeArray[0] !== 'horizon') {
             Log::debug('Route '.Route::currentRouteName().' visited by '.$user);
 
             if (! empty($requestData)) {

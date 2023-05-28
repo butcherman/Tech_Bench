@@ -16,7 +16,6 @@ class LinkedCustomerController extends Controller
         return Customer::where('parent_id', $customer->cust_id)->get();
     }
 
-
     public function set(LinkedCustomerRequest $request)
     {
         $msg = $request->processLink();

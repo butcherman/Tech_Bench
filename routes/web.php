@@ -12,7 +12,6 @@ use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Home\DownloadController;
 use App\Http\Controllers\Home\GetPhoneTypesController;
-use App\Http\Controllers\Home\UploadFileController;
 use App\Http\Controllers\Home\UploadImageController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\UpdateAccountController;
@@ -51,4 +50,4 @@ Route::middleware('auth')->group(function () {
 /**
  * Standard routes for both Authenticated users and guests
  */
-Route::get('download/{id}/{name}',    DownloadController::class)->name('download');
+Route::get('download/{id}/{name}', DownloadController::class)->name('download');

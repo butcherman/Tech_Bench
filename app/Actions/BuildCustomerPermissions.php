@@ -37,7 +37,7 @@ class BuildCustomerPermissions
                 'create' => $user->can('create', CustomerFile::class),
                 'update' => $user->can('update', CustomerFile::class),
                 'delete' => $user->can('delete', CustomerFile::class),
-            ]
+            ],
         ];
     }
 }

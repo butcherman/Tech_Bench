@@ -18,11 +18,6 @@ return [
         'force_deleted' => ':equip Destroyed',
     ],
 
-
-
-
-
-
     'admin' => [
         'change_id' => 'Customer ID Updated',
     ],

@@ -6,7 +6,6 @@ use App\Models\Customer;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -32,12 +31,12 @@ class NewContactNotification extends Notification
         $settingId = UserSettingType::where('name', 'Receive Email Notifications')->first()->setting_type_id;
         $userSettings = UserSetting::where('user_id', $notifiable->user_id)->where('setting_type_id', $settingId)->first();
 
-        if($userSettings->value)
-        {
+        if ($userSettings->value) {
             return ['mail', 'database'];
         }
 
-        return ['database'];    }
+        return ['database'];
+    }
 
     /**
      * Get the mail representation of the notification.
@@ -59,9 +58,9 @@ class NewContactNotification extends Notification
     {
         return [
             'subject' => 'A Customer Contact Has Been Updated',
-            'data'    => [
+            'data' => [
                 'customer' => $this->customer->name,
-                'slug'     => $this->customer->slug,
+                'slug' => $this->customer->slug,
             ],
         ];
     }

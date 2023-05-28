@@ -6,13 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerFileRequest;
 use App\Models\Customer;
 use App\Models\CustomerFile;
-use App\Models\CustomerFileType;
-use Illuminate\Http\Request;
 use App\Traits\FileTrait;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
-
+use Illuminate\Support\Facades\Storage;
 
 class CustomerFileController extends Controller
 {
@@ -42,7 +38,7 @@ class CustomerFileController extends Controller
         $this->disk = 'customers';
         $this->folder = $request->input('cust_id');
 
-        if($savedFile = $this->getChunk($request)) {
+        if ($savedFile = $this->getChunk($request)) {
             $request->checkForShared();
             $request->appendFileData($savedFile->file_id);
 
@@ -88,6 +84,7 @@ class CustomerFileController extends Controller
         $this->authorize('delete', $file);
 
         $file->delete();
+
         return back()->with('danger', 'File Deleted');
     }
 }

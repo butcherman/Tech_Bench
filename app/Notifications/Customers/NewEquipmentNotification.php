@@ -11,7 +11,6 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
-
 class NewEquipmentNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -37,8 +36,7 @@ class NewEquipmentNotification extends Notification implements ShouldQueue
         $settingId = UserSettingType::where('name', 'Receive Email Notifications')->first()->setting_type_id;
         $userSettings = UserSetting::where('user_id', $notifiable->user_id)->where('setting_type_id', $settingId)->first();
 
-        if($userSettings->value)
-        {
+        if ($userSettings->value) {
             return ['mail', 'database'];
         }
 
@@ -67,9 +65,9 @@ class NewEquipmentNotification extends Notification implements ShouldQueue
     {
         return [
             'subject' => 'New Customer Equipment Has Been Created',
-            'data'    => [
+            'data' => [
                 'customer' => $this->customer->name,
-                'slug'     => $this->customer->slug,
+                'slug' => $this->customer->slug,
             ],
         ];
     }
