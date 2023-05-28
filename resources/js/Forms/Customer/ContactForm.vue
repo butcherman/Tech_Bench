@@ -49,7 +49,9 @@
                         <SelectInput
                             :id="`type-${index}`"
                             :name="`phones[${index}].type`"
-                            :option-list="phoneTypes"
+                            :option-list="
+                                phoneTypes.map((i) => i['description'])
+                            "
                         />
                     </div>
                     <div class="col-sm-5 px-1 py-0">
@@ -119,21 +121,16 @@ import {
 import { useForm as useVeeForm, useFieldArray } from "vee-validate";
 import { object, string, boolean, array } from "yup";
 import type { ComputedRef, Ref } from "vue";
-import type {
-    customerType,
-    customerContactType,
-    contactPhoneType,
-} from "@/Types";
 
 const emit = defineEmits(["success"]);
 const props = defineProps<{
-    contactData?: customerContactType;
+    contactData?: customerContact;
 }>();
 
 const allowShare = inject(allowShareKey) as ComputedRef<boolean>;
-const custData = inject(customerKey) as Ref<customerType>;
+const custData = inject(customerKey) as Ref<customer>;
 const toggleLoad = inject(toggleContactsLoadKey) as () => void;
-const phoneTypes = inject(phoneTypesKey) as Ref<string[]>;
+const phoneTypes = inject(phoneTypesKey) as phoneNumber[];
 const submitText = computed(() =>
     props.contactData === undefined ? "Add Contact" : "Update Contact"
 );
@@ -145,25 +142,26 @@ const loading = ref<boolean>(false);
 watch(props, () => {
     resetForm();
 
-    setValues({
-        name: props.contactData?.name,
-        title: props.contactData?.title,
-        email: props.contactData?.email,
-        shared: props.contactData?.shared,
-        note: props.contactData?.note,
-    });
+    if(props.contactData)
+    {
+        setValues({
+            name: props.contactData.name!!,
+            title: props.contactData.title!!,
+            email: props.contactData.email!!,
+            shared: props.contactData.shared!!,
+            note: props.contactData.note!!,
+        });
 
-    props.contactData?.customer_contact_phone.forEach(
-        (item: contactPhoneType) => {
+        props.contactData?.customer_contact_phone.forEach((item: contactPhone) => {
             push({
                 type: item.phone_number_type.description,
                 number: item.phone_number,
                 ext: item.extension,
                 id: item.id,
             });
-        }
-    );
+        });
 
+    }
     newPhone();
 });
 
@@ -185,8 +183,13 @@ const { handleSubmit, resetForm, setValues } = useVeeForm({
     initialValues: {
         cust_id: 1,
         shared: false,
+        name: '',
+        title: '',
+        email: '',
+        note: '',
+        phones: [],
     },
-    validationSchema: object({
+    validationSchema: object<customerContact>({
         name: string().required(),
         title: string().nullable(),
         email: string().email().nullable(),

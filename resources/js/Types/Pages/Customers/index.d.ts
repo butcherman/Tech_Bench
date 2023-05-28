@@ -57,11 +57,13 @@ type contactPhone = {
     formatted: string;
     id: number;
     phone_number: number;
-    phone_number_type: {
-        description: string;
-        icon_class: string;
-    };
+    phone_number_type: phoneNumber;
 };
+
+type phoneNumber = {
+    description: string;
+    icon_class: string;
+}
 
 type customerFile = {
     cust_id?: number;

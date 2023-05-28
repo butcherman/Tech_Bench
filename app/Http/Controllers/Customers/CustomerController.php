@@ -11,6 +11,7 @@ use App\Jobs\CustomerRemoveBookmarksJob;
 use App\Models\Customer;
 use App\Models\CustomerFileType;
 use App\Models\EquipmentCategory;
+use App\Models\PhoneNumberType;
 use App\Models\UserCustomerBookmark;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -76,6 +77,8 @@ class CustomerController extends Controller
             'notes' => fn () => $customer->ParentNote->merge($customer->CustomerNote),
             'files' => fn() => $customer->ParentFile->merge($customer->CustomerFile),
 
+            //  TODO - Cache these items
+            'phone-types' => fn() => PhoneNumberType::all(),
             'file-types' => fn() => CustomerFileType::all()->pluck('description'),
             'equip-types' => fn() => EquipmentCategory::with('EquipmentType.DataFieldType')->get(),
         ]);

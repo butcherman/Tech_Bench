@@ -133,23 +133,18 @@ import {
     custPermissionsKey,
     toggleContactsLoadKey,
 } from "@/SymbolKeys/CustomerKeys";
-import type {
-    customerContactType,
-    customerPermissionType,
-    voidFunctionType,
-} from "@/Types";
 
 defineProps<{
-    contacts: customerContactType[];
+    contacts: customerContact[];
 }>();
 
 const $route = route;
-const permission = inject(custPermissionsKey) as customerPermissionType;
-const toggleLoad = inject(toggleContactsLoadKey) as voidFunctionType;
+const permission = inject(custPermissionsKey) as customerPermissions;
+const toggleLoad = inject(toggleContactsLoadKey) as () => void;
 const contactModal = ref<InstanceType<typeof Modal> | null>(null);
-const selectedContact = ref<customerContactType>();
+const selectedContact = ref<customerContact>();
 
-const openContact = (contact: customerContactType) => {
+const openContact = (contact: customerContact) => {
     selectedContact.value = contact;
     contactModal.value?.show();
 };

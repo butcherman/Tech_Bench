@@ -13,11 +13,10 @@ import Modal from "@/Components/Base/Modal/Modal.vue";
 import EditButton from '@/Components/Base/Buttons/EditButton.vue';
 import ContactForm from "@/Forms/Customer/ContactForm.vue";
 import { ref } from "vue";
-import type { customerContactType } from "@/Types";
 
 const emit = defineEmits(["openEdit"]);
 defineProps<{
-    contact?: customerContactType;
+    contact?: customerContact;
 }>();
 
 const editContactModal = ref<InstanceType<typeof Modal> | null>(null);

@@ -36,7 +36,7 @@ class CustomerContact extends Model
      */
     public function Customer()
     {
-        return $this->hasOne(Customer::class, 'cust_id', 'cust_id');
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
     /**

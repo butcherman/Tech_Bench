@@ -5,7 +5,7 @@
         small
         title="Add Contact"
         v-tooltip
-        @click="newContactModal.show()"
+        @click="newContactModal?.show()"
     />
     <Modal ref="newContactModal" title="New Contact" size="lg">
         <ContactForm @success="newContactModal?.hide()" />
