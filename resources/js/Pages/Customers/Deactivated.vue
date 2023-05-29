@@ -27,6 +27,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <td v-if="!customers.length" colspan="5" class="text-center">
+                                            <h5>No Deactivated Customers</h5>
+                                        </td>
+                                    </tr>
                                     <tr
                                         v-for="cust in customers"
                                         :key="cust.cust_id"

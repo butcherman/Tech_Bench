@@ -39,8 +39,10 @@ class SoftDeletedRequest extends FormRequest
     {
         foreach ($this->cust_list as $custId) {
             $cust = Customer::onlyTrashed()->where('cust_id', $custId)->first();
-            $cust->restore();
-            Log::stack(['daily', 'cust'])->info('Customer '.$cust->name.' has been restored by '.$this->user()->username);
+            if($cust) {
+                $cust->restore();
+                Log::stack(['daily', 'cust'])->info('Customer '.$cust->name.' has been restored by '.$this->user()->username);
+            }
         }
     }
 

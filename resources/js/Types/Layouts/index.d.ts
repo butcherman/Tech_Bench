@@ -1,17 +1,15 @@
-// import { Page, PageProps } from "@inertiajs/core";
-
-// export type flashMessage = {
+/**
+ * Layout Specific types
+ */
 type flashMessage = {
     type: string;
     message: string;
 };
 
-// export type pageData = Page & {
 type pageData = {
     props: props;
 };
 
-// type props = PageProps & {
 type props = {
     app: appProps;
     errors: errors;
@@ -69,13 +67,9 @@ type file = {
     file_name: string;
 }
 
-type sort = 'up' | 'down' | 'none';
+type optionListObject = {
+    text: string | number;
+    value: string | number;
+};
 
-// type user = {
-//     email: string;
-//     first_name: string;
-//     full_name: string;
-//     initials: string;
-//     last_name: string;
-//     username: string;
-// };
+type sort = 'up' | 'down' | 'none';

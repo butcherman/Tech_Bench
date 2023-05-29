@@ -1,3 +1,12 @@
+/**
+ * Types and Interfaces for all customer related ts
+ */
+
+interface isCustValid {
+    valid: boolean;
+    name: string;
+}
+
 type customer = {
     address: string;
     child_count: number;
@@ -21,7 +30,7 @@ type customerEquipment = {
     cust_equip_id: number;
     shared: boolean;
     customer_equipment_data: customerEquipmentData[];
-} & equipType;
+} & equipment;
 
 type customerEquipmentData = {
     [key: string]: string | boolean;
@@ -77,6 +86,11 @@ type customerFile = {
     file_upload: file
 }
 
+type fileTypes = {
+    description: string;
+    file_type_id: number;
+}
+
 type basicPermissions = {
     create: boolean;
     update: boolean;
@@ -89,4 +103,58 @@ type customerPermissions = {
     contact: basicPermissions;
     notes: basicPermissions;
     files: basicPermissions;
+};
+
+type customerSearchParam = {
+    name: string | null;
+    city: string | null;
+    equip: string | null;
+    page: number;
+    perPage: number;
+    sortField: string;
+    sortType: "asc" | "desc";
+};
+
+type customerSearch = {
+    data: customer[];
+    currentPage: number;
+    numPages: number;
+    listFrom: number;
+    listTo: number;
+    listTotal: number;
+    pageArr: number[];
+};
+
+type customerPagination = {
+    currentPage: number;
+    numPages: number;
+    listFrom: number;
+    listTo: number;
+    listTotal: number;
+    pageArr: number[];
+};
+
+type customerSearchDataSymbol = {
+    searchParam: customerSearchParam;
+    paginationData: customerPagination;
+    paginationArray: number[];
+    triggerSearch: () => void;
+    resetSearch: () => void;
+}
+
+interface deletedItem {
+    item_id: number;
+    item_name: string;
+    item_deleted: string;
+}
+
+interface deletedItemsCategory {
+    equipment: deletedItem[];
+    contacts: deletedItem[];
+}
+
+type linkForm = {
+    cust_id: number | undefined;
+    parent_id: number | null;
+    add: boolean;
 };

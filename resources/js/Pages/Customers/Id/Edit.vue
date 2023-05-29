@@ -48,7 +48,7 @@ const validationSchema = {
     cust_id: yup.number().required().label("New Customer ID"),
 };
 
-const onSubmit = (form) => {
+const onSubmit = (form: customer) => {
     const formData = useForm(form);
     formData.put(route("admin.cust.change_id.update", props.customer.slug), {
         onFinish: () => customerIdForm.value?.endSubmit(),

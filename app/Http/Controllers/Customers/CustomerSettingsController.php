@@ -18,8 +18,8 @@ class CustomerSettingsController extends Controller
         $this->authorize('manage', Customer::class);
 
         return Inertia::render('Customers/Settings', [
-            'select-id' => config('customer.select_id'),
-            'update-slug' => config('customer.update_slug'),
+            'select-id' => (bool) config('customer.select_id'),
+            'update-slug' => (bool) config('customer.update_slug'),
             'default-state' => config('customer.default_state'),
         ]);
     }

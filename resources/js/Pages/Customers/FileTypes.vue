@@ -90,11 +90,10 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 import { verifyModal } from "@/Modules/verifyModal.module";
-import type { customerFileType } from "@/Types";
 import * as yup from "yup";
 
 defineProps<{
-    fileTypes: customerFileType[];
+    fileTypes: fileTypes[];
 }>();
 
 const loading = ref<boolean>(false);
@@ -106,7 +105,7 @@ const validationSchema = {
  * New File Type
  */
 const newTypeForm = ref<InstanceType<typeof VueForm> | null>(null);
-const onNewSubmit = (form: customerFileType) => {
+const onNewSubmit = (form: fileTypes) => {
     const formData = useForm(form);
     formData.post(route("admin.cust.file-types.store"), {
         onFinish: () => newTypeForm.value?.endSubmit(),
@@ -119,15 +118,12 @@ const onNewSubmit = (form: customerFileType) => {
 const editTypeModal = ref<InstanceType<typeof Modal> | null>(null);
 const editTypeForm = ref<InstanceType<typeof VueForm> | null>(null);
 const editId = ref<number>();
-const openEditForm = (type: customerFileType) => {
+const openEditForm = (type: fileTypes) => {
     editId.value = type.file_type_id;
-    editTypeForm.value?.setFieldValue(
-        "description" as never,
-        type.description as never
-    );
+    editTypeForm.value?.setFieldValue("description", type.description);
     editTypeModal.value?.show();
 };
-const onEditSubmit = (form: customerFileType) => {
+const onEditSubmit = (form: fileTypes) => {
     const formData = useForm(form);
     formData.put(route("admin.cust.file-types.update", editId.value), {
         onSuccess: () => editTypeModal.value?.hide(),
@@ -138,7 +134,7 @@ const onEditSubmit = (form: customerFileType) => {
 /**
  * Delete file type
  */
-const removeType = (type: customerFileType) => {
+const removeType = (type: fileTypes) => {
     verifyModal("This cannot be undone").then((res) => {
         if (res) {
             loading.value = true;
