@@ -68,6 +68,10 @@ Route::middleware('auth')->group(function () {
          * Files
          */
         Route::resource('files', CustomerFileController::class);
+        Route::prefix('files')->name('files.')->group(function () {
+            Route::get('{file}/restore', [CustomerFileController::class, 'restore'])->name('restore')->withTrashed();
+            Route::delete('{file}/force-delete', [CustomerFileController::class, 'forceDelete'])->name('force-delete')->withTrashed();
+        });
     });
 
     Route::resource('customers', CustomerController::class)

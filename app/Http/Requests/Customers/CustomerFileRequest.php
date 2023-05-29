@@ -14,7 +14,7 @@ class CustomerFileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->file) {
+        if ($this->isMethod('PUT')) {
             return $this->user()->can('update', $this->file);
         }
 

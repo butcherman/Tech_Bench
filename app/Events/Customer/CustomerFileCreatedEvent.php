@@ -2,11 +2,10 @@
 
 namespace App\Events\Customer;
 
-use Illuminate\Broadcasting\Channel;
+use App\Models\Customer;
+use App\Models\CustomerFile;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -14,23 +13,19 @@ class CustomerFileCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $customer;
+
+    public $file;
+
+    public $user;
+
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct(Customer $customer, CustomerFile $file, User $user)
     {
-        //
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
+        $this->customer = $customer;
+        $this->file = $file;
+        $this->user = $user;
     }
 }

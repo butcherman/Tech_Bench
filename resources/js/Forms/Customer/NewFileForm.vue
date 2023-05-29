@@ -67,7 +67,6 @@ const wasCanceled = ref<boolean>(false);
 const customer = inject<Ref<customer>>(customerKey);
 const allowShare = inject<ComputedRef<boolean>>(allowShareKey);
 const fileTypes = inject(fileTypesKey, []) as string[];
-// const toggleLoad = inject(toggleNotesLoadKey) as () => void;
 
 const validationSchema = object({
     name: string().required(),

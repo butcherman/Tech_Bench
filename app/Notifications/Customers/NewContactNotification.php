@@ -6,10 +6,11 @@ use App\Models\Customer;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewContactNotification extends Notification
+class NewContactNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -25,6 +26,7 @@ class NewContactNotification extends Notification
 
     /**
      * Get the notification's delivery channels.
+     * If the User's settings has Email notifications turned off, we will only notify via db
      */
     public function via(object $notifiable): array
     {

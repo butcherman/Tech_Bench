@@ -23,7 +23,7 @@ class CustomerNoteController extends Controller
         $request->checkForShared();
         $request->merge(['created_by' => $request->user()->user_id]);
         $newNote = CustomerNote::create($request->only(['cust_id', 'created_by', 'subject', 'details', 'shared', 'urgent']));
-        event(new CustomerNoteCreatedEvent($newNote->Customer, $newNote));
+        event(new CustomerNoteCreatedEvent($newNote->Customer, $newNote, $request->user()));
         Log::channel(['daily', 'cust'])->info('Note for '.$newNote->Customer->name.' created by '.$request->user()->username, $newNote->toArray());
 
         return back()->with('success', __('cust.note.created'));
@@ -49,7 +49,7 @@ class CustomerNoteController extends Controller
         $request->checkForShared();
         $request->merge(['updated_by' => $request->user()->user_id]);
         $note->update($request->only(['cust_id', 'updated_by', 'subject', 'details', 'shared', 'urgent']));
-        event(new CustomerNoteUpdatedEvent($note->Customer, $note));
+        event(new CustomerNoteUpdatedEvent($note->Customer, $note, $request->user()));
 
         return back()->with('success', __('cust.note.updated'));
     }

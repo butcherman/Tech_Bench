@@ -2,31 +2,42 @@
 
 namespace App\Notifications\Customers;
 
+use App\Models\Customer;
+use App\Models\UserSetting;
+use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewFileNotification extends Notification
+class NewFileNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    protected $customer;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(Customer $customer)
     {
-        //
+        $this->customer = $customer;
     }
 
     /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
+     * Get the notification's delivery channels
+     * If the User's settings has Email notifications turned off, we will only notify via db
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        $settingId = UserSettingType::where('name', 'Receive Email Notifications')->first()->setting_type_id;
+        $userSettings = UserSetting::where('user_id', $notifiable->user_id)->where('setting_type_id', $settingId)->first();
+
+        if ($userSettings->value) {
+            return ['mail', 'database'];
+        }
+
+        return ['database'];
     }
 
     /**
@@ -35,20 +46,24 @@ class NewFileNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('A New Customer File Has Been Created')
+            ->greeting('Hello '.$notifiable->full_name)
+            ->line('A new Customer File was just created for '.$this->customer->name)
+            ->action('Click Here to view the Customer', url(route('customers.show', $this->customer->slug)))
+            ->line('Note: You are receiving this notification because this customer is Bookmarked as a Favorite');
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Get the array representation of the notification
      */
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'subject' => 'A New Customer Contact Has Been Created',
+            'data' => [
+                'customer' => $this->customer->name,
+                'slug' => $this->customer->slug,
+            ],
         ];
     }
 }

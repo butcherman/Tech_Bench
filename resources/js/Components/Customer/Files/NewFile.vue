@@ -26,11 +26,14 @@
 import AddButton from "@/Components/Base/Buttons/AddButton.vue";
 import Modal from "@/Components/Base/Modal/Modal.vue";
 import NewFileForm from "@/Forms/Customer/NewFileForm.vue";
-import { ref } from "vue";
+import { ref, inject } from "vue";
+import { router } from '@inertiajs/vue3';
 import { okModal } from "@/Modules/okModal.module";
+import { toggleFilesLoadKey } from "@/SymbolKeys/CustomerKeys";
 
 const newFileModal = ref<InstanceType<typeof Modal> | null>(null);
 const newFileForm = ref<InstanceType<typeof NewFileForm> | null>(null);
+const toggleLoad = inject(toggleFilesLoadKey) as () => void;
 
 const preventClosing = () => {
     okModal(
@@ -42,8 +45,16 @@ const preventClosing = () => {
 };
 
 const uploadCompleted = () => {
+    toggleLoad();
     newFileModal.value?.enableClose();
     newFileModal.value?.hide();
+    router.reload({
+        only: ['flash', 'files'],
+        preserveScroll: true,
+        onFinish: () => {
+            toggleLoad();
+        },
+    });
 };
 
 const uploadCanceled = () => {

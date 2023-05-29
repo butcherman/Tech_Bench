@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <!-- <Files :files="files" /> -->
+                <Files :files="files" />
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@ const props = defineProps<{
     equipment: customerEquipment[];
     contacts: customerContact[];
     notes: customerNote[];
-    files: []; //  FIXME - type this
+    files: customerFile[];
     fileTypes: string[];
     equipTypes: categoryList[];
     phoneTypes: phoneNumber[];

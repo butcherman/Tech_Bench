@@ -31,6 +31,13 @@ return [
         'restored' => 'Note Restored',
         'force_deleted' => 'Note Destroyed',
     ],
+    'file' => [
+        'created' => 'New file Created',
+        'updated' => 'File Updated',
+        'deleted' => 'File Deleted',
+        'restored' => 'File Restored',
+        'force_deleted' => 'File Destroyed',
+    ],
 
     'admin' => [
         'change_id' => 'Customer ID Updated',

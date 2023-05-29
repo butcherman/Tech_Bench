@@ -22,7 +22,7 @@ class CustomerContactController extends Controller
         $request->processPhoneNumbers($newContact->cont_id);
 
         Log::stack(['daily', 'cust'])->info('New Customer contact created for Customer '.$newContact->Customer->name.' by '.$request->user()->full_name);
-        event(new CustomerContactCreatedEvent($newContact->Customer, $newContact));
+        event(new CustomerContactCreatedEvent($newContact->Customer, $newContact, $request->user()));
 
         return back()->with('success', __('cust.contact.created', ['cont' => $newContact->name]));
     }
@@ -37,7 +37,7 @@ class CustomerContactController extends Controller
         $request->processPhoneNumbers($contact->cont_id, true);
 
         Log::stack(['daily', 'cust'])->info('Customer contact updated for Customer '.$contact->Customer->name.' by '.$request->user()->full_name, $contact->toArray());
-        event(new CustomerContactUpdatedEvent($contact->Customer, $contact));
+        event(new CustomerContactUpdatedEvent($contact->Customer, $contact, $request->user()));
 
         return back()->with('success', __('cust.contact.updated', ['cont' => $contact->name]));
     }

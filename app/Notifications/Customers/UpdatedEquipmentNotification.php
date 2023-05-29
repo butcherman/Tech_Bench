@@ -26,6 +26,7 @@ class UpdatedEquipmentNotification extends Notification implements ShouldQueue
 
     /**
      * Get the notification's delivery channels
+     * If the User's settings has Email notifications turned off, we will only notify via db
      */
     public function via(object $notifiable): array
     {

@@ -6,7 +6,6 @@ use App\Events\Customer\CustomerNoteUpdatedEvent;
 use App\Notifications\Customers\UpdatedNoteNotification;
 use App\Traits\CustomerEventsTrait;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 

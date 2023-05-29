@@ -26,6 +26,7 @@ class NewNoteNotification extends Notification implements ShouldQueue
 
     /**
      * Get the notification's delivery channels
+     * If the User's settings has Email notifications turned off, we will only notify via db
      */
     public function via(object $notifiable): array
     {
@@ -59,9 +60,9 @@ class NewNoteNotification extends Notification implements ShouldQueue
     {
         return [
             'subject' => 'A New Customer Note Has Been Created',
-            'data'    => [
+            'data' => [
                 'customer' => $this->customer->name,
-                'slug'     => $this->customer->slug,
+                'slug' => $this->customer->slug,
             ],
         ];
     }

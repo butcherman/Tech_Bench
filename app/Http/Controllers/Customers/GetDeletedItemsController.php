@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Models\CustomerEquipment;
+use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 
 class GetDeletedItemsController extends Controller
@@ -21,7 +22,7 @@ class GetDeletedItemsController extends Controller
             'equipment' => CustomerEquipment::getTrashed($customer),
             'contacts' => CustomerContact::getTrashed($customer),
             'notes' => CustomerNote::getTrashed($customer),
-            'files' => [],
+            'files' => CustomerFile::getTrashed($customer),
         ]);
     }
 }

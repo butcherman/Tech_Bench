@@ -57,9 +57,7 @@ class NewEquipmentNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Get the array representation of the notification
      */
     public function toArray(object $notifiable): array
     {

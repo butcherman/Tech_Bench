@@ -21,7 +21,7 @@ class CustomerEquipmentController extends Controller
         $request->buildEquipData($newEquipment);
 
         Log::stack(['daily', 'cust'])->info('New Customer Equipment '.$newEquipment->name.' created by '.$request->user()->username.' for '.$newEquipment->Customer->name);
-        event(new CustomerEquipmentCreatedEvent($newEquipment->Customer, $newEquipment));
+        event(new CustomerEquipmentCreatedEvent($newEquipment->Customer, $newEquipment, $request->user()));
 
         return back()->with('success', __('cust.equipment.created', ['equip' => $newEquipment->name]));
     }
@@ -32,7 +32,7 @@ class CustomerEquipmentController extends Controller
     public function update(CustomerEquipmentRequest $request, CustomerEquipment $equipment)
     {
         $request->updateEquipData($equipment);
-        event(new CustomerEquipmentUpdatedEvent($equipment->Customer, $equipment));
+        event(new CustomerEquipmentUpdatedEvent($equipment->Customer, $equipment, $request->user()));
 
         return back()->with('success', __('cust.equipment.updated', ['equip' => $equipment->name]));
     }

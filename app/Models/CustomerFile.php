@@ -37,6 +37,14 @@ class CustomerFile extends Model
     }
 
     /**
+     * Each file belongs to a customer
+     */
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
+
+    /**
      * Full name of the user that uploaded the file
      *
      * @codeCoverageIgnore
@@ -54,5 +62,24 @@ class CustomerFile extends Model
     public function getFileTypeAttribute()
     {
         return CustomerFileType::find($this->file_type_id)->description;
+    }
+
+    /**
+     * Return the soft deleted items re-formatted to match other models
+     */
+    public static function getTrashed(Customer $customer)
+    {
+        $data = self::where('cust_id', $customer->cust_id)
+            ->onlyTrashed()
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'item_id' => $item->cust_equip_id,
+                    'item_name' => $item->name,
+                    'item_deleted' => $item->deleted_at->toFormattedDateString(),
+                ];
+            });
+
+        return $data;
     }
 }

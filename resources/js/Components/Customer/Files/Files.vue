@@ -18,6 +18,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr v-if="!files.length">
+                            <td colspan="5" class="text-center">No Files</td>
+                        </tr>
                         <template
                             v-for="file in files"
                             :key="file.cust_file_id"

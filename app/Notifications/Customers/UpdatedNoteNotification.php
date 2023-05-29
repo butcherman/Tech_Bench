@@ -26,6 +26,7 @@ class UpdatedNoteNotification extends Notification implements ShouldQueue
 
     /**
      * Get the notification's delivery channels
+     * If the User's settings has Email notifications turned off, we will only notify via db
      */
     public function via(object $notifiable): array
     {
@@ -45,11 +46,11 @@ class UpdatedNoteNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-        ->subject('A Customer Note Has Been Updated')
-        ->greeting('Hello '.$notifiable->full_name)
-        ->line('A Customer Note was just updated for '.$this->customer->name)
-        ->action('Click Here to view the Customer', url(route('customers.show', $this->customer->slug)))
-        ->line('Note: You are receiving this notification because this customer is Bookmarked as a Favorite');
+            ->subject('A Customer Note Has Been Updated')
+            ->greeting('Hello '.$notifiable->full_name)
+            ->line('A Customer Note was just updated for '.$this->customer->name)
+            ->action('Click Here to view the Customer', url(route('customers.show', $this->customer->slug)))
+            ->line('Note: You are receiving this notification because this customer is Bookmarked as a Favorite');
     }
 
     /**
@@ -59,9 +60,9 @@ class UpdatedNoteNotification extends Notification implements ShouldQueue
     {
         return [
             'subject' => 'A Customer Note Has Been Updated',
-            'data'    => [
+            'data' => [
                 'customer' => $this->customer->name,
-                'slug'     => $this->customer->slug,
+                'slug' => $this->customer->slug,
             ],
         ];
     }

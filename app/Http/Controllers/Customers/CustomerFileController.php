@@ -2,33 +2,20 @@
 
 namespace App\Http\Controllers\Customers;
 
+use App\Events\Customer\CustomerFileCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerFileRequest;
 use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Traits\FileTrait;
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerFileController extends Controller
 {
     use FileTrait;
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created customer file
@@ -42,26 +29,12 @@ class CustomerFileController extends Controller
             $request->checkForShared();
             $request->appendFileData($savedFile->file_id);
 
-            CustomerFile::create($request->all());
+            $newFile = CustomerFile::create($request->all());
+            Log::channel(['daily', 'cust'])->info('New Customer File created for '.$newFile->Customer->name, $newFile->toArray());
+            event(new CustomerFileCreatedEvent($newFile->Customer, $newFile, $request->user()));
         }
 
         return response()->noContent();
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -73,7 +46,9 @@ class CustomerFileController extends Controller
         $request->appendFileTypeId();
         $file->update($request->only(['name', 'file_type_id', 'shared']));
 
-        return back()->with('success', 'File Updated');
+        Log::channel(['daily', 'cust'])->info('Customer File for '.$file->Customer->name.' has been updated by '.$request->user()->username, $file->toArray());
+
+        return back()->with('success', __('cust.file.updated'));
     }
 
     /**
@@ -84,7 +59,34 @@ class CustomerFileController extends Controller
         $this->authorize('delete', $file);
 
         $file->delete();
+        Log::channel(['daily', 'cust'])->notice('Customer file for '.$file->Customer->name.' has been deleted by '.Auth::user()->username, $file->toArray());
 
-        return back()->with('danger', 'File Deleted');
+        return back()->with('danger', __('cust.file.deleted'));
+    }
+
+    /**
+     * Restore a soft deleted file
+     */
+    public function restore(CustomerFile $file)
+    {
+        $this->authorize('restore', $file);
+
+        $file->restore();
+        Log::stack(['daily', 'cust'])->info('Customer File for '.$file->Customer->name.' has been restored by '.Auth::user()->username, $file->toArray());
+
+        return back()->with('success', __('cust.file.restored'));
+    }
+
+    /**
+     * Force Delete a customer file
+     */
+    public function forceDelete(CustomerFile $file)
+    {
+        $this->authorize('forceDelete', $file);
+
+        $file->forceDelete();
+        Log::stack(['daily', 'cust'])->notice('Customer File for '.$file->Customer->name.' has been force deleted by '.Auth::user()->username, $file->toArray());
+
+        return back()->with('danger', __('cust.file.force_deleted'));
     }
 }
