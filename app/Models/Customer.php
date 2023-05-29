@@ -28,11 +28,11 @@ class Customer extends Model
     ];
 
     /**
-     * Key for Route/Model binding
+     * For Route/Model binding we will use either the slug or cust_id columns
      */
-    public function getRouteKeyName()
+    public function resolveRouteBinding($value, $field = null)
     {
-        return 'slug';
+        return $this->where('slug', $value)->orWhere('cust_id', $value)->firstOrFail();
     }
 
     /**

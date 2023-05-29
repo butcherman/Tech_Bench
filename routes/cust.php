@@ -9,6 +9,7 @@ use App\Http\Controllers\Customers\CustomerFileController;
 use App\Http\Controllers\Customers\CustomerFileTypeController;
 use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CustomerNoteController;
+use App\Http\Controllers\Customers\CustomerNotFoundController;
 use App\Http\Controllers\Customers\CustomerSearchController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
 use App\Http\Controllers\Customers\DownloadContactController;
@@ -17,7 +18,9 @@ use App\Http\Controllers\Customers\GetDeletedItemsController;
 use App\Http\Controllers\Customers\LinkedCustomerController;
 use App\Http\Controllers\Customers\SetCustomerSettingsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
 
@@ -72,6 +75,8 @@ Route::middleware('auth')->group(function () {
             Route::get('{file}/restore', [CustomerFileController::class, 'restore'])->name('restore')->withTrashed();
             Route::delete('{file}/force-delete', [CustomerFileController::class, 'forceDelete'])->name('force-delete')->withTrashed();
         });
+
+        Route::inertia('404', 'Customers/NotFound')->name('not-found')->breadcrumb('Err: Customer Not Found (404)', 'customers.index');
     });
 
     Route::resource('customers', CustomerController::class)
@@ -79,6 +84,8 @@ Route::middleware('auth')->group(function () {
             $breadcrumbs->index('Customers')
                 ->create('New Customer')
                 ->show('Customer Details');
+        })->missing(function() {
+            return redirect()->route('customers.not-found');
         });
 
     /**
