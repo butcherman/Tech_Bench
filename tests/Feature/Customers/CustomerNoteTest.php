@@ -57,6 +57,7 @@ class CustomerNoteTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->post(route('customers.notes.store'), $data);
         $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.note.created'));
         $this->assertDatabaseHas('customer_notes', $data);
     }
 
@@ -73,6 +74,7 @@ class CustomerNoteTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->post(route('customers.notes.store'), $data);
         $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.note.created'));
         $this->assertDatabaseHas('customer_notes', [
             'cust_id' => $cust->parent_id,
             'subject' => $data['subject'],
@@ -153,6 +155,7 @@ class CustomerNoteTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.notes.update', $note->note_id), $data);
         $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.note.updated'));
         $this->assertDatabaseHas('customer_notes', $data);
     }
 
@@ -170,6 +173,7 @@ class CustomerNoteTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.notes.update', $note->note_id), $data);
         $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.note.updated'));
         $this->assertDatabaseHas('customer_notes', [
             'note_id' => $note->note_id,
             'cust_id' => $cust->parent_id,
@@ -212,6 +216,7 @@ class CustomerNoteTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->delete(route('customers.notes.destroy', $note->note_id));
         $response->assertStatus(302);
+        $response->assertSessionHas('danger', __('cust.note.deleted'));
         $this->assertSoftDeleted('customer_notes', $note->only(['note_id', 'subject', 'details']));
     }
 
@@ -248,7 +253,7 @@ class CustomerNoteTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('customers.notes.restore', $note->note_id));
         $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Note Restored');
+        $response->assertSessionHas('success', __('cust.note.restored'));
         $this->assertDatabaseHas('customer_notes', $note->only(['note_id', 'subject', 'details']));
     }
 
@@ -285,7 +290,7 @@ class CustomerNoteTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.notes.force-delete', $note->note_id));
         $response->assertStatus(302);
-        $response->assertSessionHas('danger', 'Note Deleted');
+        $response->assertSessionHas('danger', __('cust.note.force_deleted'));
         $this->assertDatabaseMissing('customer_notes', $note->only(['note_id']));
     }
 }

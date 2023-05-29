@@ -152,26 +152,26 @@ trait FileTrait
     /**
      * Determine if a file is no longer in use, and then delete it from the filesystem
      */
-    // protected function deleteFile($fileID)
-    // {
-    //     $fileData = FileUploads::find($fileID);
-    //     $file = $fileData->only(['disk', 'folder', 'file_name']);
+    protected function deleteFile($fileID)
+    {
+        $fileData = FileUploads::find($fileID);
+        $file = $fileData->only(['disk', 'folder', 'file_name']);
 
-    //     Log::debug('Attempting to delete file', $fileData->toArray());
+        Log::debug('Attempting to delete file', $fileData->toArray());
 
-    //     //  Try to delete the file from the database, if it fails, the file is in use elsewhere
-    //     try {
-    //         $fileData->delete();
-    //     } catch (QueryException $e) {
-    //         Log::debug('File ID '.$fileID.' is still in use and cannot be deleted');
+        //  Try to delete the file from the database, if it fails, the file is in use elsewhere
+        try {
+            $fileData->delete();
+        } catch (QueryException $e) {
+            Log::debug('File ID '.$fileID.' is still in use and cannot be deleted');
 
-    //         return false;
-    //     }
+            return false;
+        }
 
-    //     //  Delete the file from file storage
-    //     Log::alert('File '.$file['folder'].DIRECTORY_SEPARATOR.$file['file_name'].' has been deleted');
-    //     Storage::disk($file['disk'])->delete($file['folder'].DIRECTORY_SEPARATOR.$file['file_name']);
+        //  Delete the file from file storage
+        Log::alert('File '.$file['folder'].DIRECTORY_SEPARATOR.$file['file_name'].' has been deleted');
+        Storage::disk($file['disk'])->delete($file['folder'].DIRECTORY_SEPARATOR.$file['file_name']);
 
-    //     return true;
-    // }
+        return true;
+    }
 }

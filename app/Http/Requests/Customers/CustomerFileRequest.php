@@ -39,7 +39,8 @@ class CustomerFileRequest extends FormRequest
      */
     public function checkForShared()
     {
-        if ($this->shared) {
+        // if ($this->shared) {
+        if(filter_var($this->shared, FILTER_VALIDATE_BOOL)) {
             $cust = Customer::find($this->cust_id);
             if ($cust->parent_id) {
                 $this->merge(['cust_id' => $cust->parent_id]);

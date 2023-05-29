@@ -12,24 +12,6 @@ use Tests\TestCase;
 class CustomerContactTest extends TestCase
 {
     /**
-     * Index function
-     */
-    public function test_index_guest()
-    {
-        $response = $this->get(route('customers.contacts.index'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login.index'));
-        $this->assertGuest();
-    }
-
-    public function test_index()
-    {
-        $response = $this->actingAs(User::factory()->create())->from(route('customers.index'))->get(route('customers.contacts.index'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('customers.index'));
-    }
-
-    /**
      * Store Method
      */
     public function test_store_guest()
@@ -94,7 +76,7 @@ class CustomerContactTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->post(route('customers.contacts.store'), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Contact Created');
+        $response->assertSessionHas('success', __('cust.contact.created', ['cont' => $data['name']]));
         $this->assertDatabaseHas('customer_contacts', [
             'cust_id' => $cust->parent_id,
             'name' => $data['name'],
@@ -126,7 +108,7 @@ class CustomerContactTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->post(route('customers.contacts.store'), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Contact Created');
+        $response->assertSessionHas('success', __('cust.contact.created', ['cont' => $data['name']]));
         $this->assertDatabaseHas('customer_contacts', [
             'cust_id' => $cust->cust_id,
             'name' => $data['name'],
@@ -229,7 +211,7 @@ class CustomerContactTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.contacts.update', $cont->cont_id), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Contact Updated');
+        $response->assertSessionHas('success', __('cust.contact.updated', ['cont' => $data['name']]));
         $this->assertDatabaseHas('customer_contacts', [
             'cont_id' => $cont->cont_id,
             'cust_id' => $cust->cust_id,
@@ -271,7 +253,7 @@ class CustomerContactTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.contacts.update', $cont->cont_id), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Contact Updated');
+        $response->assertSessionHas('success', __('cust.contact.updated', ['cont' => $data['name']]));
         $this->assertDatabaseHas('customer_contacts', [
             'cont_id' => $cont->cont_id,
             'cust_id' => $cust->parent_id,
@@ -316,6 +298,7 @@ class CustomerContactTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->delete(route('customers.contacts.destroy', $cont->cont_id));
         $response->assertStatus(302);
+        $response->assertSessionHas('warning', __('cust.contact.deleted', ['cont' => $cont->name]));
         $this->assertSoftDeleted('customer_contacts', $cont->toArray());
     }
 
@@ -349,7 +332,7 @@ class CustomerContactTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('customers.contacts.restore', $cont->cont_id));
         $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Contact Restored');
+        $response->assertSessionHas('success', __('cust.contact.restored', ['cont' => $cont->name]));
         $this->assertDatabaseHas('customer_contacts', (array) $cont->only(['cont_id']));
     }
 
@@ -383,7 +366,7 @@ class CustomerContactTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.contacts.force-delete', $cont->cont_id));
         $response->assertStatus(302);
-        $response->assertSessionHas('danger', 'Customer Contact Deleted');
+        $response->assertSessionHas('danger', __('cust.contact.force_deleted', ['cont' => $cont->name]));
         $this->assertDatabaseMissing('customer_contacts', (array) $cont->only(['cont_id']));
     }
 }

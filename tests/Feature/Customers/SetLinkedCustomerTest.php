@@ -39,15 +39,17 @@ class SetLinkedCustomerTest extends TestCase
 
     public function test_invoke_add_link()
     {
+        $cust = Customer::factory()->create();
+        $parent = Customer::factory()->create();
         $data = [
-            'cust_id' => Customer::factory()->create()->cust_id,
-            'parent_id' => Customer::factory()->create()->cust_id,
+            'cust_id' => $cust->cust_id,
+            'parent_id' => $parent->cust_id,
             'add' => true,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.set-link'), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.linked.set'));
+        $response->assertSessionHas('success', __('cust.linked.set', ['cust' => $cust->name, 'parent' => $parent->name]));
         $this->assertDatabaseHas('customers', [
             'cust_id' => $data['cust_id'],
             'parent_id' => $data['parent_id'],
@@ -56,16 +58,17 @@ class SetLinkedCustomerTest extends TestCase
 
     public function test_invoke_add_link_with_existing_parent()
     {
+        $cust = Customer::factory()->create();
         $parent = Customer::Factory()->create(['parent_id' => Customer::factory()->create()->cust_id]);
         $data = [
-            'cust_id' => Customer::factory()->create()->cust_id,
+            'cust_id' => $cust->cust_id,
             'parent_id' => $parent->cust_id,
             'add' => true,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.set-link'), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.linked.set'));
+        $response->assertSessionHas('success', __('cust.linked.set', ['cust' => $cust->name, 'parent' => $parent->name]));
         $this->assertDatabaseHas('customers', [
             'cust_id' => $data['cust_id'],
             'parent_id' => $parent->parent_id,
@@ -117,7 +120,7 @@ class SetLinkedCustomerTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.set-link'), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('warning', __('cust.linked.removed'));
+        $response->assertSessionHas('warning', __('cust.linked.removed', ['name' => $customer->name]));
         $this->assertDatabaseHas('customers', [
             'cust_id' => $data['cust_id'],
             'parent_id' => null,

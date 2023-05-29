@@ -14,23 +14,6 @@ use Tests\TestCase;
 class CustomerEquipmentTest extends TestCase
 {
     /**
-     * Index Method
-     */
-    public function test_index_guest()
-    {
-        $response = $this->get(route('customers.equipment.index'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login.index'));
-        $this->assertGuest();
-    }
-
-    public function test_index()
-    {
-        $response = $this->actingAs(User::factory()->create())->get(route('customers.equipment.index'));
-        $response->assertStatus(302);
-    }
-
-    /**
      * Store Method
      */
     public function test_store_guest()
@@ -118,7 +101,7 @@ class CustomerEquipmentTest extends TestCase
 
         $result = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('customers.equipment.store'), $data);
         $result->assertStatus(302);
-        $result->assertSessionHas('success', __('cust.equipment.created'));
+        $result->assertSessionHas('success', __('cust.equipment.created', ['equip' => $equipment->name]));
         $this->assertDatabaseHas('customer_equipment', ['cust_id' => $cust->cust_id, 'equip_id' => $equipment->equip_id, 'shared' => false]);
         // $this->assertDatabaseHas('customer_equipment_data', ['field_id' => $equipFields[0]->field_id, 'value' => 'something']);
         // $this->assertDatabaseHas('customer_equipment_data', ['field_id' => $equipFields[1]->field_id, 'value' => 'something 2']);
@@ -155,7 +138,7 @@ class CustomerEquipmentTest extends TestCase
 
         $result = $this->actingAs(User::factory()->create())->post(route('customers.equipment.store'), $data);
         $result->assertStatus(302);
-        $result->assertSessionHas('success', __('cust.equipment.created'));
+        $result->assertSessionHas('success', __('cust.equipment.created', ['equip' => $equipment->name]));
         $this->assertDatabaseHas('customer_equipment', ['cust_id' => $cust->parent_id, 'equip_id' => $equipment->equip_id, 'shared' => true]);
         // $this->assertDatabaseHas('customer_equipment_data', ['field_id' => $equipFields[0]->field_id, 'value' => 'something']);
         // $this->assertDatabaseHas('customer_equipment_data', ['field_id' => $equipFields[1]->field_id, 'value' => 'something 2']);
@@ -200,7 +183,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.equipment.update', $custEquip->cust_equip_id), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.equipment.updated'));
+        $response->assertSessionHas('success', __('cust.equipment.updated', ['equip' => $equipment->name]));
         $this->assertDatabaseHas('customer_equipment_data', ['id' => $dataField->id, 'field_id' => $dataField->field_id, 'value' => 'New Value']);
     }
 
@@ -219,7 +202,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.equipment.update', $custEquip->cust_equip_id), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.equipment.updated'));
+        $response->assertSessionHas('success', __('cust.equipment.updated', ['equip' => $equipment->name]));
         $this->assertDatabaseHas('customer_equipment', ['cust_id' => $customer->parent_id, 'equip_id' => $equipment->equip_id, 'shared' => true]);
         $this->assertDatabaseHas('customer_equipment_data', ['id' => $dataField->id, 'field_id' => $dataField->field_id, 'value' => 'New Value']);
     }
@@ -261,7 +244,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.equipment.destroy', $custEquip->cust_equip_id));
         $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.equipment.deleted'));
+        $response->assertSessionHas('success', __('cust.equipment.deleted', ['equip' => $equipment->name]));
         $this->assertSoftDeleted('customer_equipment', $custEquip->only(['cust_id', 'equip_id', 'shared']));
     }
 
@@ -303,7 +286,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('customers.equipment.restore', $equipment->cust_equip_id));
         $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.equipment.restored'));
+        $response->assertSessionHas('success', __('cust.equipment.restored', ['equip' => $equip->name]));
         $this->assertDatabaseHas('customer_equipment', $equipment->only(['cust_equip_id']));
     }
 
@@ -339,7 +322,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('customers.equipment.force-delete', $equipment->cust_equip_id));
         $response->assertStatus(302);
-        $response->assertSessionHas('danger', __('cust.equipment.force_deleted'));
+        $response->assertSessionHas('danger', __('cust.equipment.force_deleted', ['equip' => $equip->name]));
         $this->assertDatabaseMissing('customer_equipment', $equipment->only(['cust_equip_id']));
     }
 }

@@ -33,7 +33,7 @@ class CheckCustIdTest extends TestCase
 
     public function test_invoke_available_id()
     {
-        $customer = 8971243298457;             //  This random number should hopefull never be duplicated
+        $customer = 8971243298457;             //  This random number should hopefully never be duplicated
 
         $response = $this->actingAs(User::factory()->create())->get(route('customers.check-id', $customer));
         $response->assertSuccessful();

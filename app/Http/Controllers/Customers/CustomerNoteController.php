@@ -50,6 +50,7 @@ class CustomerNoteController extends Controller
         $request->merge(['updated_by' => $request->user()->user_id]);
         $note->update($request->only(['cust_id', 'updated_by', 'subject', 'details', 'shared', 'urgent']));
         event(new CustomerNoteUpdatedEvent($note->Customer, $note, $request->user()));
+        Log::channel(['daily', 'cust'])->info('Note for '.$note->Customer->name.' updated by '.$request->user()->username, $note->toArray());
 
         return back()->with('success', __('cust.note.updated'));
     }
@@ -61,6 +62,7 @@ class CustomerNoteController extends Controller
     {
         $this->authorize('delete', $note);
         $note->delete();
+        Log::channel(['daily', 'cust'])->notice('Note for '.$note->Customer->name.' deleted by '.Auth::user()->username, $note->toArray());
 
         return redirect(route('customers.show', $note->Customer->slug))->with('danger', __('cust.note.deleted'));
     }
@@ -73,6 +75,8 @@ class CustomerNoteController extends Controller
         $this->authorize('restore', $note);
 
         $note->restore();
+        Log::channel(['daily', 'cust'])->notice('Note for '.$note->Customer->name.' restored by '.Auth::user()->username, $note->toArray());
+
 
         return back()->with('success', __('cust.note.restored'));
     }
@@ -84,6 +88,7 @@ class CustomerNoteController extends Controller
     {
         $this->authorize('force-delete', $note);
         $note->forceDelete();
+        Log::channel(['daily', 'cust'])->notice('Note for '.$note->Customer->name.' force deleted by '.Auth::user()->username, $note->toArray());
 
         return back()->with('danger', __('cust.note.force_deleted'));
     }

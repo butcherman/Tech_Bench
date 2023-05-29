@@ -44,7 +44,7 @@ class CustomerFileController extends Controller
     {
         $request->checkForShared();
         $request->appendFileTypeId();
-        $file->update($request->only(['name', 'file_type_id', 'shared']));
+        $file->update($request->only(['cust_id', 'name', 'file_type_id', 'shared']));
 
         Log::channel(['daily', 'cust'])->info('Customer File for '.$file->Customer->name.' has been updated by '.$request->user()->username, $file->toArray());
 
