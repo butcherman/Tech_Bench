@@ -9,18 +9,14 @@ use App\Http\Controllers\Customers\CustomerFileController;
 use App\Http\Controllers\Customers\CustomerFileTypeController;
 use App\Http\Controllers\Customers\CustomerIdController;
 use App\Http\Controllers\Customers\CustomerNoteController;
-use App\Http\Controllers\Customers\CustomerNotFoundController;
 use App\Http\Controllers\Customers\CustomerSearchController;
+use App\Http\Controllers\Customers\CustomerSettingsController;
 use App\Http\Controllers\Customers\DeactivatedCustomerController;
 use App\Http\Controllers\Customers\DownloadContactController;
-use App\Http\Controllers\Customers\GetCustomerSettingsController;
 use App\Http\Controllers\Customers\GetDeletedItemsController;
 use App\Http\Controllers\Customers\LinkedCustomerController;
-use App\Http\Controllers\Customers\SetCustomerSettingsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
 
@@ -84,7 +80,7 @@ Route::middleware('auth')->group(function () {
             $breadcrumbs->index('Customers')
                 ->create('New Customer')
                 ->show('Customer Details');
-        })->missing(function() {
+        })->missing(function () {
             return redirect()->route('customers.not-found');
         });
 
@@ -92,10 +88,10 @@ Route::middleware('auth')->group(function () {
      * Customer Administration Routes
      */
     Route::prefix('administration/customers')->name('admin.cust.')->group(function () {
-        Route::get('settings', GetCustomerSettingsController::class)
+        Route::get('settings', [CustomerSettingsController::class, 'get'])
             ->name('settings')
             ->breadcrumb('Customer Settings', 'admin.index');
-        Route::post('settings', SetCustomerSettingsController::class)
+        Route::post('settings', [CustomerSettingsController::class, 'set'])
             ->name('set-settings');
         Route::get('deactivated-customers', DeactivatedCustomerController::class)
             ->name('deactivated')
@@ -111,44 +107,3 @@ Route::middleware('auth')->group(function () {
             });
     });
 });
-
-/**
- * Customer Information Routes
- */
-// Route::middleware('auth')->group(function()
-// {
-//     Route::prefix('customers')->name('customers.')->group(function()
-//     {
-
-//         Route::get( '{id}/get-deleted',         GetDeletedItemsController::class)                  ->name('get-deleted');
-//         Route::get( '{id}/download-contact',    DownloadContactController::class)                  ->name('contacts.download');
-
-//         //  Customer Resource Controllers
-//         Route::resource('equipment',            CustomerEquipmentController::class);
-//         Route::resource('contacts',             CustomerContactsController::class);
-//         Route::resource('notes',                CustomerNoteController::class);
-//         Route::resource('files',                CustomerFileController::class);
-
-//         //  Additional Methods for Resource Controllers
-//         Route::prefix('equipment')->name('equipment.')->group(function()
-//         {
-//             Route::get(   '{id}/restore',      [CustomerEquipmentController::class, 'restore'])    ->name('restore');
-//             Route::delete('{id}/force-delete', [CustomerEquipmentController::class, 'forceDelete'])->name('force-delete');
-//         });
-//         Route::prefix('contacts')->name('contacts.')->group(function()
-//         {
-//             Route::get(   '{id}/restore',      [CustomerContactsController::class, 'restore'])     ->name('restore');
-//             Route::delete('{id}/force-delete', [CustomerContactsController::class, 'forceDelete']) ->name('force-delete');
-//         });
-//         Route::prefix('notes')->name('notes.')->group(function()
-//         {
-//             Route::get(   '{id}/restore',      [CustomerNoteController::class, 'restore'])         ->name('restore');
-//             Route::delete('{id}/force-delete', [CustomerNoteController::class, 'forceDelete'])     ->name('force-delete');
-//         });
-//         Route::prefix('files')->name('files.')->group(function()
-//         {
-//             Route::get(   '{id}/restore',      [CustomerFileController::class, 'restore'])         ->name('restore');
-//             Route::delete('{id}/force-delete', [CustomerFileController::class, 'forceDelete'])     ->name('force-delete');
-//         });
-//     });
-// });

@@ -77,7 +77,6 @@ class CustomerNoteController extends Controller
         $note->restore();
         Log::channel(['daily', 'cust'])->notice('Note for '.$note->Customer->name.' restored by '.Auth::user()->username, $note->toArray());
 
-
         return back()->with('success', __('cust.note.restored'));
     }
 

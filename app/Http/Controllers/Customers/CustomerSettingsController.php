@@ -4,17 +4,27 @@ namespace App\Http\Controllers\Customers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerSettingsRequest;
+use App\Models\Customer;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
-class SetCustomerSettingsController extends Controller
+class CustomerSettingsController extends Controller
 {
     use AppSettingsTrait;
 
-    /**
-     * Update the default customer settings
-     */
-    public function __invoke(CustomerSettingsRequest $request)
+    public function get()
+    {
+        $this->authorize('manage', Customer::class);
+
+        return Inertia::render('Customers/Settings', [
+            'select-id' => config('customer.select_id'),
+            'update-slug' => config('customer.update_slug'),
+            'default-state' => config('customer.default_state'),
+        ]);
+    }
+
+    public function set(CustomerSettingsRequest $request)
     {
         foreach ($request->all() as $key => $value) {
             $this->saveSettings($request->getConfigKey($key), $value);

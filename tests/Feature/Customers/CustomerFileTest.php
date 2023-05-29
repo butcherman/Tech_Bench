@@ -5,11 +5,8 @@ namespace Tests\Feature\Customers;
 use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Models\CustomerFileType;
-use App\Models\FileUploads;
 use App\Models\User;
 use App\Models\UserRolePermissions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -23,9 +20,9 @@ class CustomerFileTest extends TestCase
     {
         $data = [
             'cust_id' => Customer::factory()->create()->cust_id,
-            'name'    => 'This is a test file',
-            'type'    => CustomerFileType::inRandomOrder()->first()->description,
-            'shared'  => 'false',
+            'name' => 'This is a test file',
+            'type' => CustomerFileType::inRandomOrder()->first()->description,
+            'shared' => 'false',
         ];
 
         $response = $this->post(route('customers.files.store'), $data);
@@ -38,9 +35,9 @@ class CustomerFileTest extends TestCase
     {
         $data = [
             'cust_id' => Customer::factory()->create()->cust_id,
-            'name'    => 'This is a test file',
-            'type'    => CustomerFileType::inRandomOrder()->first()->description,
-            'shared'  => 'false',
+            'name' => 'This is a test file',
+            'type' => CustomerFileType::inRandomOrder()->first()->description,
+            'shared' => 'false',
         ];
 
         UserRolePermissions::where('role_id', 4)->where('perm_type_id', 20)->update(['allow' => false]);
@@ -55,9 +52,9 @@ class CustomerFileTest extends TestCase
 
         $data = [
             'cust_id' => Customer::factory()->create()->cust_id,
-            'name'    => 'This is a test file',
-            'type'    => CustomerFileType::inRandomOrder()->first()->description,
-            'shared'  => 'false',
+            'name' => 'This is a test file',
+            'type' => CustomerFileType::inRandomOrder()->first()->description,
+            'shared' => 'false',
             'file' => UploadedFile::fake()->image('randomImage.png'),
         ];
 
@@ -75,9 +72,9 @@ class CustomerFileTest extends TestCase
         $cust = Customer::factory()->create(['parent_id' => Customer::factory()->create()->cust_id]);
         $data = [
             'cust_id' => $cust->cust_id,
-            'name'    => 'This is a test file',
-            'type'    => CustomerFileType::inRandomOrder()->first()->description,
-            'shared'  => 'true',
+            'name' => 'This is a test file',
+            'type' => CustomerFileType::inRandomOrder()->first()->description,
+            'shared' => 'true',
             'file' => UploadedFile::fake()->image('randomImage.png'),
         ];
 
@@ -96,9 +93,9 @@ class CustomerFileTest extends TestCase
         $file = CustomerFile::factory()->create();
         $data = [
             'cust_id' => $file->cust_id,
-            'name'    => 'This is a test file',
-            'type'    => CustomerFileType::inRandomOrder()->first()->description,
-            'shared'  => false,
+            'name' => 'This is a test file',
+            'type' => CustomerFileType::inRandomOrder()->first()->description,
+            'shared' => false,
         ];
 
         $response = $this->put(route('customers.files.update', $file->cust_file_id), $data);
@@ -112,9 +109,9 @@ class CustomerFileTest extends TestCase
         $file = CustomerFile::factory()->create();
         $data = [
             'cust_id' => $file->cust_id,
-            'name'    => 'This is a test file',
-            'type'    => CustomerFileType::inRandomOrder()->first()->description,
-            'shared'  => false,
+            'name' => 'This is a test file',
+            'type' => CustomerFileType::inRandomOrder()->first()->description,
+            'shared' => false,
         ];
 
         UserRolePermissions::where('role_id', 4)->where('perm_type_id', 21)->update(['allow' => false]);
@@ -128,9 +125,9 @@ class CustomerFileTest extends TestCase
         $file = CustomerFile::factory()->create();
         $data = [
             'cust_id' => $file->cust_id,
-            'name'    => 'This is a test file',
-            'type'    => CustomerFileType::inRandomOrder()->first()->description,
-            'shared'  => false,
+            'name' => 'This is a test file',
+            'type' => CustomerFileType::inRandomOrder()->first()->description,
+            'shared' => false,
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.files.update', $file->cust_file_id), $data);
@@ -146,9 +143,9 @@ class CustomerFileTest extends TestCase
         $file = CustomerFile::factory()->create(['cust_id' => $cust->cust_id]);
         $data = [
             'cust_id' => $cust->cust_id,
-            'name'    => 'This is a test file',
-            'type'    => CustomerFileType::inRandomOrder()->first()->description,
-            'shared'  => true,
+            'name' => 'This is a test file',
+            'type' => CustomerFileType::inRandomOrder()->first()->description,
+            'shared' => true,
         ];
 
         $response = $this->actingAs(User::factory()->create())->put(route('customers.files.update', $file->cust_file_id), $data);

@@ -153,7 +153,8 @@ class CustomerTest extends TestCase
     public function test_show_invalid_customer()
     {
         $response = $this->actingAs(User::factory()->create())->get(route('customers.show', 'ishkabibble'));
-        $response->assertStatus(404);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('customers.not-found'));
     }
 
     /**
