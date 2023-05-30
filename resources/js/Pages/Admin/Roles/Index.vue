@@ -43,20 +43,19 @@
 </template>
 
 <script setup lang="ts">
-    import App                   from '@/Layouts/app.vue';
-    import { router }           from '@inertiajs/vue3';
-    import type { userRoleType } from '@/Types';
+import App from "@/Layouts/app.vue";
+import { router } from "@inertiajs/vue3";
 
-    defineProps<{
-        roles: userRoleType[];
-    }>();
+defineProps<{
+    roles: userRole[];
+}>();
 
-    const $route   = route;
-    const gotoRole = (role:userRoleType) => {
-        router.get(route('admin.users.roles.show', role.role_id));
-    }
+const $route = route;
+const gotoRole = (role: userRole) => {
+    router.get(route("admin.users.roles.show", role.role_id));
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

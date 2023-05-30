@@ -21,7 +21,10 @@
                 :max="25"
             />
             <div class="m-3">
-                <p>A password should contain at least one each of the following:</p>
+                <p>
+                    A password should contain at least one each of the
+                    following:
+                </p>
                 <CheckboxSwitch
                     id="policy-uppercase"
                     name="contains_uppercase"
@@ -63,7 +66,7 @@
                 <div
                     id="oath-form-data"
                     class="col-md-11 border collapse p-2 m-0"
-                    :class="{ show : policy.allowOath }"
+                    :class="{ show: policy.allowOath }"
                 >
                     <div class="row justify-content-center">
                         <div class="col-md-10">
@@ -106,72 +109,75 @@
 </template>
 
 <script setup lang="ts">
-    import VueForm             from '@/Components/Base/VueForm.vue';
-    import TextInput           from '@/Components/Base/Input/TextInput.vue';
-    import RangeInput          from '@/Components/Base/Input/RangeInput.vue';
-    import CheckboxSwitch      from '@/Components/Base/Input/CheckboxSwitch.vue';
-    import { ref, reactive }   from 'vue';
-    import { useForm, router }         from '@inertiajs/vue3';
-    import { object, string, number, boolean } from 'yup';
+import VueForm from "@/Components/Base/VueForm.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import RangeInput from "@/Components/Base/Input/RangeInput.vue";
+import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
+import { ref, reactive } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { object, string, number, boolean } from "yup";
 
-    type passwordPolicyType = {
-        expire            : number,
-        min_length        : number,
-        contains_uppercase: boolean,
-        contains_lowercase: boolean,
-        contains_number   : boolean,
-        contains_special  : boolean,
-        allowOath    : boolean;
-        allowRegister: boolean;
-        tenantId     : string;
-        clientId     : string;
-        clientSecret : string;
-        redirectUri  : string;
-    }
+type passwordPolicyType = {
+    expire: number;
+    min_length: number;
+    contains_uppercase: boolean;
+    contains_lowercase: boolean;
+    contains_number: boolean;
+    contains_special: boolean;
+    allowOath: boolean;
+    allowRegister: boolean;
+    tenantId: string;
+    clientId: string;
+    clientSecret: string;
+    redirectUri: string;
+};
 
-    const passwordPolicyForm = ref<InstanceType<typeof VueForm> | null>(null);
-    const props              = defineProps<{
-        policy: passwordPolicyType;
-    }>();
-    const emit = defineEmits(['step-completed']);
+const passwordPolicyForm = ref<InstanceType<typeof VueForm> | null>(null);
+const props = defineProps<{
+    policy: passwordPolicyType;
+}>();
+const emit = defineEmits(["step-completed"]);
 
-    const policy = reactive({
-        validationSchema: object({
-            expire: number().required('Enter 0 for no expiration timer'),
-            min_length: number().required(),
-            contains_uppercase: boolean().required(),
-            contains_lowercase: boolean().required(),
-            contains_number: boolean().required(),
-            contains_special: boolean().required(),
-            allowOath:boolean().required(),
-            allowRegister: boolean().required(),
-            tenantId: string().when('allowOath', {
-                is: true,
-                then: (schema) => schema.required('You must enter the Azure Tenant ID'),
-                otherwise: (schema) => schema.nullable(),
-            }),
-            clientId: string().when('allowOath', {
-                is: true,
-                then: (schema) => schema.required('You must enter the Azure Tenant ID'),
-                otherwise: (schema) => schema.nullable(),
-            }),
-            clientSecret: string().when('allowOath', {
-                is: true,
-                then: (schema) => schema.required('You must enter the Azure Tenant ID'),
-                otherwise: (schema) => schema.nullable(),
-            }),
-            redirectUri: string().required(),
+const policy = reactive({
+    validationSchema: object({
+        expire: number().required("Enter 0 for no expiration timer"),
+        min_length: number().required(),
+        contains_uppercase: boolean().required(),
+        contains_lowercase: boolean().required(),
+        contains_number: boolean().required(),
+        contains_special: boolean().required(),
+        allowOath: boolean().required(),
+        allowRegister: boolean().required(),
+        tenantId: string().when("allowOath", {
+            is: true,
+            then: (schema) =>
+                schema.required("You must enter the Azure Tenant ID"),
+            otherwise: (schema) => schema.nullable(),
         }),
-        initialValues   : props.policy,
-    });
+        clientId: string().when("allowOath", {
+            is: true,
+            then: (schema) =>
+                schema.required("You must enter the Azure Tenant ID"),
+            otherwise: (schema) => schema.nullable(),
+        }),
+        clientSecret: string().when("allowOath", {
+            is: true,
+            then: (schema) =>
+                schema.required("You must enter the Azure Tenant ID"),
+            otherwise: (schema) => schema.nullable(),
+        }),
+        redirectUri: string().required(),
+    }),
+    initialValues: props.policy,
+});
 
-    const onSubmit = (form:passwordPolicyType) => {
-        const formData = useForm(form);
-        formData.post(route('admin.users.password-policy.store'), {
-            onFinish: () => {
-                passwordPolicyForm.value?.endSubmit();
-                emit('step-completed');
-            },
-        });
-    }
+const onSubmit = (form: passwordPolicyType) => {
+    const formData = useForm(form);
+    formData.post(route("admin.users.password-policy.store"), {
+        onFinish: () => {
+            passwordPolicyForm.value?.endSubmit();
+            emit("step-completed");
+        },
+    });
+};
 </script>

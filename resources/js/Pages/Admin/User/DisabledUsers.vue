@@ -16,14 +16,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="user in userList" :key="user.user_id">
+                                <tr
+                                    v-for="user in userList"
+                                    :key="user.user_id"
+                                >
                                     <td>{{ user.username }}</td>
                                     <td>{{ user.email }}</td>
                                     <td>{{ user.full_name }}</td>
                                     <td>{{ user.deleted_at }}</td>
                                     <td>
                                         <Link
-                                            :href="$route('admin.users.enable', user.username)"
+                                            :href="
+                                                $route(
+                                                    'admin.users.enable',
+                                                    user.username
+                                                )
+                                            "
                                             class="pointer text-muted"
                                             title="Enable User"
                                             v-tooltip
@@ -42,21 +50,15 @@
 </template>
 
 <script setup lang="ts">
-    import App               from '@/Layouts/app.vue';
-    import type { userType } from '@/Types';
+import App from "@/Layouts/app.vue";
 
-    interface disabledUserType extends userType {
-        user_id   : number;
-        deleted_at: string;
-    }
+defineProps<{
+    userList: disabledUser[];
+}>();
 
-    defineProps<{
-        userList: disabledUserType[];
-    }>();
-
-    const $route = route;
+const $route = route;
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

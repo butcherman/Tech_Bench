@@ -1,11 +1,11 @@
-type settingsType = {
-    url: string;
-    timezone: string;
-    filesize: number;
-};
+// type settingsType = {
+//     url: string;
+//     timezone: string;
+//     filesize: number;
+// };
 
-type timezoneType = {
-    [key: string]: {
-        [key: string]: string;
-    };
-};
+// type timezoneType = {
+//     [key: string]: {
+//         [key: string]: string;
+//     };
+// };

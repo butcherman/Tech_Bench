@@ -15,29 +15,29 @@
 </template>
 
 <script setup lang="ts">
-    import App                 from '@/Layouts/app.vue';
-    import UserSettingsForm from '@/Components/Admin/UserSettingsForm.vue';
+import App from "@/Layouts/app.vue";
+import UserSettingsForm from "@/Forms/Admin/User/UserSettingsForm.vue.js";
 
-    type passwordPolicyType = {
-        expire            : number,
-        min_length        : number,
-        contains_uppercase: boolean,
-        contains_lowercase: boolean,
-        contains_number   : boolean,
-        contains_special  : boolean,
-        allowOath    : boolean;
-        allowRegister: boolean;
-        tenantId     : string;
-        clientId     : string;
-        clientSecret : string;
-        redirectUri  : string;
-    }
+type passwordPolicyType = {
+    expire: number;
+    min_length: number;
+    contains_uppercase: boolean;
+    contains_lowercase: boolean;
+    contains_number: boolean;
+    contains_special: boolean;
+    allowOath: boolean;
+    allowRegister: boolean;
+    tenantId: string;
+    clientId: string;
+    clientSecret: string;
+    redirectUri: string;
+};
 
-    defineProps<{
-        policy: passwordPolicyType;
-    }>();
+defineProps<{
+    policy: passwordPolicyType;
+}>();
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

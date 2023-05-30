@@ -1,5 +1,5 @@
 /**
- * Layout Specific types
+ * Layout Specific and System Global/configuration types
  */
 type flashMessage = {
     type: string;

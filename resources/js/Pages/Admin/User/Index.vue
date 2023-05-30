@@ -17,14 +17,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="user in users" :key="user.user_id">
+                                    <tr
+                                        v-for="user in users"
+                                        :key="user.user_id"
+                                    >
                                         <td>{{ user.username }}</td>
                                         <td>{{ user.email }}</td>
                                         <td>{{ user.full_name }}</td>
                                         <td>{{ user.user_roles.name }}</td>
                                         <td>
                                             <Link
-                                                :href="$route('admin.users.edit', user.username)"
+                                                :href="
+                                                    $route(
+                                                        'admin.users.edit',
+                                                        user.username
+                                                    )
+                                                "
                                                 title="Edit User"
                                                 v-tooltip
                                             >
@@ -34,13 +42,19 @@
                                                 />
                                             </Link>
                                             <Link
-                                                :href="$route('admin.users.reset-password.edit', user.username)"
+                                                :href="
+                                                    $route(
+                                                        'admin.users.reset-password.edit',
+                                                        user.username
+                                                    )
+                                                "
                                                 title="Reset Password"
                                                 v-tooltip
                                             >
                                                 <fa-icon
                                                     class="mx-1 pointer text-primary"
-                                                    icon="key" title="Reset Password"
+                                                    icon="key"
+                                                    title="Reset Password"
                                                 />
                                             </Link>
                                             <span
@@ -76,41 +90,30 @@
 </template>
 
 <script setup lang="ts">
-    import App               from '@/Layouts/app.vue';
-    import Overlay           from '@/Components/Base/Overlay.vue';
-    import { ref }           from 'vue';
-    import { verifyModal }   from '@/Modules/verifyModal.module';
-    import { router }       from '@inertiajs/vue3'
-    import type { userType } from '@/Types';
+import App from "@/Layouts/app.vue";
+import Overlay from "@/Components/Base/Overlay.vue";
+import { ref } from "vue";
+import { verifyModal } from "@/Modules/verifyModal.module";
+import { router } from "@inertiajs/vue3";
 
-    interface userWithRole extends userType {
-        user_id   : number;
-        user_roles: {
-            description: string;
-            name       : string;
-            role_id    : number;
+defineProps<{
+    users: userWithRole[];
+}>();
+
+const $route = route;
+const loading = ref(false);
+const disableUser = (user: user) => {
+    verifyModal("This user will be immediately disabled").then((res) => {
+        if (res) {
+            loading.value = true;
+            router.delete(route("admin.users.destroy", user.username), {
+                onFinish: () => (loading.value = false),
+            });
         }
-    }
-
-    defineProps<{
-        users: userWithRole[];
-    }>();
-
-    const $route = route;
-    const loading = ref(false);
-    const disableUser = (user:userType) => {
-        verifyModal('This user will be immediately disabled').then(res => {
-            if(res)
-            {
-                loading.value = true;
-                router.delete(route('admin.users.destroy', user.username), {
-                    onFinish: () => loading.value = false,
-                });
-            }
-        });
-    }
+    });
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>
