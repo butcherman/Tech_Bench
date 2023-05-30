@@ -1,6 +1,6 @@
-import { number, string} from 'yup';
+import { object, number, string} from 'yup';
 
-export const customerValidation = {
+export const customerValidation = object({
     cust_id  : number().nullable(),
     parent_id: string().nullable(),
     name     : string().required().label('Customer Name'),
@@ -9,4 +9,4 @@ export const customerValidation = {
     city     : string().required().label('Customer City'),
     state    : string().required().label('Customer State'),
     zip      : number().required().label('Customer Zip Code'),
-};
+});

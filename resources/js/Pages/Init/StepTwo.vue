@@ -10,34 +10,22 @@
 </template>
 
 <script setup lang="ts">
-    import { router } from '@inertiajs/vue3';
-    import InitLayout from './InitLayout.vue';
-    import ConfigForm from '@/Components/Admin/ConfigForm.vue';
+import { router } from "@inertiajs/vue3";
+import InitLayout from "./InitLayout.vue";
+import ConfigForm from "@/Forms/Admin/ConfigForm.vue";
 
-    interface timezoneType {
-        [key:string]: {
-            [key:string]:string
-        }
-    }
+interface timezoneType {
+    [key: string]: {
+        [key: string]: string;
+    };
+}
 
-    interface settingsType {
-        url          : string;
-        timezone     : string;
-        filesize     : number;
-        allowOath    : boolean;
-        allowRegister: boolean;
-        tenantId     : string;
-        clientId     : string;
-        clientSecret : string;
-        redirectUri  : string;
-    }
+defineProps<{
+    settings: settings;
+    tz_list: timezoneType;
+}>();
 
-    defineProps<{
-        settings: settingsType;
-        tz_list: timezoneType;
-    }>();
-
-    const nextStep = () => {
-        router.get(route('init.step-3'));
-    }
+const nextStep = () => {
+    router.get(route("init.step-3"));
+};
 </script>

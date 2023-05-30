@@ -13,31 +13,30 @@
 </template>
 
 <script setup lang="ts">
-    import InitLayout from './InitLayout.vue';
-    import UserSettingsForm from '@/Components/Admin/UserSettingsForm.vue';
-    import { router } from '@inertiajs/vue3';
+import InitLayout from "./InitLayout.vue";
+import UserSettingsForm from '@/Forms/Admin/User/UserSettingsForm.vue';
+import { router } from "@inertiajs/vue3";
 
-    type passwordPolicyType = {
-        expire            : number,
-        min_length        : number,
-        contains_uppercase: boolean,
-        contains_lowercase: boolean,
-        contains_number   : boolean,
-        contains_special  : boolean,
-        allowOath    : boolean;
-        allowRegister: boolean;
-        tenantId     : string;
-        clientId     : string;
-        clientSecret : string;
-        redirectUri  : string;
-    }
+type passwordPolicyType = {
+    expire: number;
+    min_length: number;
+    contains_uppercase: boolean;
+    contains_lowercase: boolean;
+    contains_number: boolean;
+    contains_special: boolean;
+    allowOath: boolean;
+    allowRegister: boolean;
+    tenantId: string;
+    clientId: string;
+    clientSecret: string;
+    redirectUri: string;
+};
 
-    const $route = route;
-    const props = defineProps<{
-        policy: passwordPolicyType;
-    }>();
+defineProps<{
+    policy: passwordPolicyType;
+}>();
 
-    const nextStep = () => {
-        router.get(route('init.step-5'));
-    }
+const nextStep = () => {
+    router.get(route("init.step-5"));
+};
 </script>

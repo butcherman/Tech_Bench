@@ -1,9 +1,9 @@
-export interface levelsType {
+type levels = {
     icon : string;
     name : string;
 }
 
-export interface logFilesType {
+type logFiles = {
     alert    : number;
     critical : number;
     debug    : number;
@@ -16,7 +16,7 @@ export interface logFilesType {
     filename : string;
 }
 
-export interface logDetailsType {
+type logDetails = {
     date        : string;
     details    ?: any | null;
     env         : string;
@@ -24,4 +24,9 @@ export interface logDetailsType {
     message     : string;
     time        : string;
     stack_trace?: string[]
+}
+
+type logForm = {
+    days : string;
+    level: string;
 }

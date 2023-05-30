@@ -1,6 +1,5 @@
 export const getFileIcon = (extension: string): string | false => {
-
-
+    //  TODO - Add some custom icons and test
     //  Check the base catalog (file-icon-vectors) to see if the icon exists
     if (baseCatalog.includes(extension)) {
         return `fiv-viv fiv-icon-${extension} fiv-size-xl`;
@@ -13,8 +12,8 @@ export const getFileIcon = (extension: string): string | false => {
  * Additional icons added outside of the file-icon-vectors package
  */
 // const extendedCatalog = [
-    // "pcpx",
-    // "pcp",
+// "pcpx",
+// "pcp",
 // ];
 
 /**

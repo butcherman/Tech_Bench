@@ -16,14 +16,18 @@
                 focus
             />
             <TextInput
-                id="passsword"
+                id="password"
                 label="Password"
                 name="password"
                 placeholder="Password"
                 class="no-label"
                 type="password"
             />
-            <CheckboxSwitch id="remember-me" name="remember" label="Remember Me" />
+            <CheckboxSwitch
+                id="remember-me"
+                name="remember"
+                label="Remember Me"
+            />
         </VueForm>
         <div class="form-group row justify-content-center mb-0">
             <div v-if="allow_oath" class="col-md-8 text-center">
@@ -47,33 +51,33 @@
 </template>
 
 <script setup lang="ts">
-    import AuthLayout     from '@/Layouts/authLayout.vue';
-    import VueForm        from '@/Components/Base/VueForm.vue'
-    import TextInput      from '@/Components/Base/Input/TextInput.vue';
-    import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
-    import { ref }        from 'vue';
-    import { useForm }    from '@inertiajs/vue3';
-    import * as yup       from 'yup';
+import AuthLayout from "@/Layouts/authLayout.vue";
+import VueForm from "@/Components/Base/VueForm.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { object, string } from "yup";
 
-    defineProps<{
-        allow_oath: boolean;
-    }>();
-    const $route = route;
-    const loginForm        = ref<InstanceType<typeof VueForm> | null>(null);
-    const validationSchema =  {
-        username: yup.string().required('You must enter a username'),
-        password: yup.string().required('You must enter a password'),
-    }
+defineProps<{
+    allow_oath: boolean;
+}>();
+const $route = route;
+const loginForm = ref<InstanceType<typeof VueForm> | null>(null);
+const validationSchema = object({
+    username: string().required("You must enter a username"),
+    password: string().required("You must enter a password"),
+});
 
-    type loginFormType = {
-        username: string;
-        password: string;
-    }
+type loginFormType = {
+    username: string;
+    password: string;
+};
 
-    const onSubmit = (form:loginFormType) => {
-        const submittedData = useForm(form);
-        submittedData.post(route('login.submit'), {
-            onFinish: () => loginForm.value?.endSubmit(),
-        });
-    }
+const onSubmit = (form: loginFormType) => {
+    const submittedData = useForm(form);
+    submittedData.post(route("login.submit"), {
+        onFinish: () => loginForm.value?.endSubmit(),
+    });
+};
 </script>

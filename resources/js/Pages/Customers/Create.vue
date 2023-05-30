@@ -1,4 +1,5 @@
 <template>
+    <Head title="Create Customer" />
     <div>
         <div class="row justify-content-center">
             <div class="col-md-8">

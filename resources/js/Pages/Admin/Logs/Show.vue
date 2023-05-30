@@ -1,4 +1,5 @@
 <template>
+    <Head title="Log Details" />
     <div>
         <div class="row">
             <div class="col-12">
@@ -37,7 +38,12 @@
                         <div class="card-title">
                             Log Details
                             <a
-                                :href="$route('admin.logs.download', [props.channel, props.filename])"
+                                :href="
+                                    $route('admin.logs.download', [
+                                        props.channel,
+                                        props.filename,
+                                    ])
+                                "
                                 class="float-end text-primary"
                                 title="Download Log File"
                                 v-tooltip
@@ -56,7 +62,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <template v-for="(row, index) in logFile" :key="index">
+                                    <template
+                                        v-for="(row, index) in logFile"
+                                        :key="index"
+                                    >
                                         <tr>
                                             <td>{{ row.time }}</td>
                                             <th>{{ row.level }}</th>
@@ -70,7 +79,9 @@
                                                     :data-bs-target="`#stack-trace-${index}`"
                                                     v-tooltip
                                                 >
-                                                    <fa-icon icon="fa-exclamation-circle" />
+                                                    <fa-icon
+                                                        icon="fa-exclamation-circle"
+                                                    />
                                                 </span>
                                                 <span
                                                     v-else-if="row.details"
@@ -82,7 +93,6 @@
                                                 >
                                                     <fa-icon icon="fa-eye" />
                                                 </span>
-
                                             </td>
                                         </tr>
                                         <tr
@@ -92,10 +102,16 @@
                                         >
                                             <td colspan="4">
                                                 <div class="table-responsive">
-                                                    <table class="table table-warning">
+                                                    <table
+                                                        class="table table-warning"
+                                                    >
                                                         <tbody>
-                                                            <tr v-for="line in row.stack_trace">
-                                                                <td>{{ line }}</td>
+                                                            <tr
+                                                                v-for="line in row.stack_trace"
+                                                            >
+                                                                <td>
+                                                                    {{ line }}
+                                                                </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -109,9 +125,21 @@
                                         >
                                             <td colspan="4">
                                                 <dl class="row">
-                                                    <template v-for="(data, key) in row.details">
-                                                        <dt class="col-4 text-end border">{{ key }}:</dt>
-                                                        <dt class="col-8 border">{{ data }}</dt>
+                                                    <template
+                                                        v-for="(
+                                                            data, key
+                                                        ) in row.details"
+                                                    >
+                                                        <dt
+                                                            class="col-4 text-end border"
+                                                        >
+                                                            {{ key }}:
+                                                        </dt>
+                                                        <dt
+                                                            class="col-8 border"
+                                                        >
+                                                            {{ data }}
+                                                        </dt>
                                                     </template>
                                                 </dl>
                                             </td>
@@ -128,21 +156,18 @@
 </template>
 
 <script setup lang="ts">
-    import App           from '@/Layouts/app.vue';
-    import type { levelsType,
-        logFilesType,
-        logDetailsType } from '@/Types';
+import App from "@/Layouts/app.vue";
 
-    const $route = route;
-    const props  = defineProps<{
-        channel : string;
-        levels  : levelsType[];
-        filename: string;
-        stats   : logFilesType;
-        logFile : logDetailsType;
-    }>();
+const $route = route;
+const props = defineProps<{
+    channel: string;
+    levels: levels[];
+    filename: string;
+    stats: logFiles;
+    logFile: logDetails;
+}>();
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

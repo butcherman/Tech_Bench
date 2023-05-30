@@ -5,9 +5,7 @@
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">
-                            Please Enter New Password
-                        </h5>
+                        <h5 class="card-title">Please Enter New Password</h5>
                         <VueForm
                             ref="resetForm"
                             :validation-schema="validationSchema"
@@ -40,14 +38,9 @@
             <div class="col-md-6 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">
-                            Password Rules:
-                        </h5>
+                        <h5 class="card-title">Password Rules:</h5>
                         <ul>
-                            <li
-                                v-for="rule in password_rules"
-                                class="mx-2"
-                            >
+                            <li v-for="rule in password_rules" class="mx-2">
                                 {{ rule }}
                             </li>
                         </ul>
@@ -59,39 +52,41 @@
 </template>
 
 <script setup lang="ts">
-    import App         from '@/Layouts/app.vue';
-    import TextInput   from '@/Components/Base/Input/TextInput.vue';
-    import VueForm     from '@/Components/Base/VueForm.vue';
-    import { ref }     from 'vue';
-    import { useForm } from '@inertiajs/vue3';
-    import * as yup    from 'yup';
+import App from "@/Layouts/app.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import VueForm from "@/Components/Base/VueForm.vue";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import * as yup from "yup";
 
-    defineProps<{
-        password_rules: string[];
-    }>();
+defineProps<{
+    password_rules: string[];
+}>();
 
-    const resetForm = ref<InstanceType<typeof VueForm> | null>(null);
-    const validationSchema = {
-        current_password     : yup.string().required('Please enter your current password'),
-        password             : yup.string().required('You must enter a password'),
-        password_confirmation: yup.string().required('Enter password again'),
-    }
+const resetForm = ref<InstanceType<typeof VueForm> | null>(null);
+const validationSchema = {
+    current_password: yup
+        .string()
+        .required("Please enter your current password"),
+    password: yup.string().required("You must enter a password"),
+    password_confirmation: yup.string().required("Enter password again"),
+};
 
-    type passwordFormType = {
-        current_password     : string;
-        password             : string;
-        password_confirmation: string;
-    }
+type passwordFormType = {
+    current_password: string;
+    password: string;
+    password_confirmation: string;
+};
 
-    const onSubmit = (form:passwordFormType) => {
-        const formData = useForm(form);
+const onSubmit = (form: passwordFormType) => {
+    const formData = useForm(form);
 
-        formData.post(route('settings.password.store'), {
-            onFinish: () => resetForm.value?.endSubmit(),
-        });
-    };
+    formData.post(route("settings.password.store"), {
+        onFinish: () => resetForm.value?.endSubmit(),
+    });
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

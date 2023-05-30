@@ -33,7 +33,7 @@ const props = defineProps<{
     currentStep: number;
 }>();
 
-const navigateToStep = (stepId: number):void => {
+const navigateToStep = (stepId: number): void => {
     if (stepId <= props.currentStep) {
         router.visit(route(`init.step-${stepId}`));
     }

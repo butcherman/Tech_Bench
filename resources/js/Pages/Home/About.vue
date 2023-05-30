@@ -16,7 +16,9 @@
                                 Butcherman - All Rights Reserved
                             </span>
                         </p>
-                        <p class="text-center">{{ version }} (Build {{ build }})</p>
+                        <p class="text-center">
+                            {{ version }} (Build {{ build }})
+                        </p>
                         <p class="text-center">Build Date - {{ build_date }}</p>
                     </div>
                 </div>
@@ -26,16 +28,16 @@
 </template>
 
 <script setup lang="ts">
-    import App from '@/Layouts/app.vue';
+import App from "@/Layouts/app.vue";
 
-    defineProps<{
-        version   : string;
-        copyright : string;
-        build     : string;
-        build_date: string;
-    }>();
+defineProps<{
+    version: string;
+    copyright: string;
+    build: string;
+    build_date: string;
+}>();
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

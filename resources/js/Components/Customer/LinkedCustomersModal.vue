@@ -9,7 +9,7 @@
                     :key="cust.cust_id"
                 >
                     <Link
-                        :href="route('customers.show', cust.slug)"
+                        :href="$route('customers.show', cust.slug)"
                         @click="linkedCustomerModal?.hide()"
                     >
                         {{ cust.name }}
@@ -26,15 +26,15 @@ import Overlay from "../Base/Overlay.vue";
 import axios from "axios";
 import { Link } from "@inertiajs/vue3";
 import { ref, onMounted } from "vue";
-import type { customerType } from "@/Types";
 
+const $route = route;
 const props = defineProps<{
     name: string;
     slug: string;
 }>();
 
 const linkedCustomerModal = ref<InstanceType<typeof Modal> | null>(null);
-const custList = ref<customerType[]>([]);
+const custList = ref<customer[]>([]);
 const loading = ref<boolean>(false);
 
 onMounted(() => {

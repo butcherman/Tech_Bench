@@ -1,14 +1,11 @@
 import { createApp, h } from "vue";
 import { vFocusDirective } from "@/Directives/Focus";
-import { customerType } from "@/Types";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { vTooltipDirective } from "@/Directives/Tooltip";
 import CustomerSearchModal from "@/Components/Customer/CustomerSearchModal.vue";
 
-export function customerSearchBox(
-    nameParam: string = ""
-): Promise<customerType> {
-    const promise: Promise<customerType> = new Promise(function (resolve) {
+export function customerSearchBox(nameParam: string = ""): Promise<customer> {
+    const promise: Promise<customer> = new Promise(function (resolve) {
         const newComp = createApp({
             setup() {
                 return () =>

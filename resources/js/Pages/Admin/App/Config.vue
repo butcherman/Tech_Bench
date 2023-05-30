@@ -15,33 +15,21 @@
 </template>
 
 <script setup lang="ts">
-    import App                    from '@/Layouts/app.vue';
-    import ConfigForm from '@/Forms/Admin/ConfigForm.vue';
+import App from "@/Layouts/app.vue";
+import ConfigForm from "@/Forms/Admin/ConfigForm.vue";
 
-    interface settingsType {
-        url          : string;
-        timezone     : string;
-        filesize     : number;
-        allowOath    : boolean;
-        allowRegister: boolean;
-        tenantId     : string;
-        clientId     : string;
-        clientSecret : string;
-        redirectUri  : string;
-    }
+interface timezone {
+    [key: string]: {
+        [key: string]: string;
+    };
+}
 
-    interface timezoneType {
-        [key:string]: {
-            [key:string]:string
-        }
-    }
-
-    defineProps<{
-        settings: settingsType;
-        tz_list : timezoneType;
-    }>();
+defineProps<{
+    settings: settings;
+    tz_list: timezone;
+}>();
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

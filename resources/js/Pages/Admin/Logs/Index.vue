@@ -13,7 +13,9 @@
                                 class="col-lg-2"
                             >
                                 <Link
-                                    :href="$route('admin.logs.channels', channel)"
+                                    :href="
+                                        $route('admin.logs.channels', channel)
+                                    "
                                     type="button"
                                     class="btn btn-primary w-100 btn-pill"
                                 >
@@ -33,7 +35,10 @@
                         <p v-if="logFiles === undefined" class="text-center">
                             Select A Log Channel to View the Logs
                         </p>
-                        <p v-else-if="logFiles.length === 0" class="text-center">
+                        <p
+                            v-else-if="logFiles.length === 0"
+                            class="text-center"
+                        >
                             No Logs Available for this Channel
                         </p>
                         <div v-else>
@@ -71,22 +76,23 @@
 </template>
 
 <script setup lang="ts">
-    import App                               from '@/Layouts/app.vue';
-    import { router }                       from '@inertiajs/vue3';
-    import type { levelsType, logFilesType } from '@/Types';
+import App from "@/Layouts/app.vue";
+import { router } from "@inertiajs/vue3";
 
-    defineProps<{
-        channels : string[];
-        levels  ?: levelsType[];
-        logFiles?: logFilesType[];
-    }>();
+defineProps<{
+    channels: string[];
+    levels?: levels[];
+    logFiles?: logFiles[];
+}>();
 
-    const $route  = route;
-    const goToRow = (logData:logFilesType) => {
-        router.get(route('admin.logs.show', [route().params.channel, logData.filename]));
-    }
+const $route = route;
+const goToRow = (logData: logFiles) => {
+    router.get(
+        route("admin.logs.show", [route().params.channel, logData.filename])
+    );
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

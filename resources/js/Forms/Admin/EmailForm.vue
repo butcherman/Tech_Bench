@@ -93,9 +93,9 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     import VueForm from '@/Components/Base/VueForm.vue';
-    import TextInput from '../Base/Input/TextInput.vue';
-    import SelectInput from '../Base/Input/SelectInput.vue';
-    import CheckboxSwitch from '../Base/Input/CheckboxSwitch.vue';
+    import TextInput from '@/Components/Base/Input/TextInput.vue';
+    import SelectInput from '@/Components/Base/Input/SelectInput.vue';
+    import CheckboxSwitch from '@/Components/Base/Input/CheckboxSwitch.vue';
     import { object, string, number, boolean } from 'yup';
     import { useForm } from '@inertiajs/vue3';
     import { toLower } from 'lodash';

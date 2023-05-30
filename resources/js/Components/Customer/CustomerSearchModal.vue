@@ -8,9 +8,7 @@
             aria-labelledby=""
             aria-hidden="true"
         >
-            <div
-                class="modal-dialog"
-            >
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Search for Customer</h5>
@@ -34,37 +32,36 @@
 </template>
 
 <script setup lang="ts">
-    import CustomerBasicSearch   from "./CustomerBasicSearch.vue";
-    import { Modal }             from "bootstrap";
-    import { onMounted,
-             onUnmounted,
-             ref }               from "vue";
-    import type { customerType } from "@/Types";
+import CustomerBasicSearch from "./CustomerBasicSearch.vue";
+import { Modal } from "bootstrap";
+import { onMounted, onUnmounted, ref } from "vue";
 
-    const emit  = defineEmits(['hide', 'hidden', 'selected']);
-    defineProps<{
-        initialSearch?: string;
-    }>();
+const emit = defineEmits(["hide", "hidden", "selected"]);
+defineProps<{
+    initialSearch?: string;
+}>();
 
-    let thisModalObj:Modal;
-    const myModal = ref<InstanceType<typeof Modal>   | null>(null);
+let thisModalObj: Modal;
+const myModal = ref<HTMLInputElement | null>(null);
 
-    onMounted(() => {
-        window.addEventListener('hide.bs.modal',   () => emit('hide'));
-        window.addEventListener('hidden.bs.modal', () => emit('hidden'));
+onMounted(() => {
+    window.addEventListener("hide.bs.modal", () => emit("hide"));
+    window.addEventListener("hidden.bs.modal", () => emit("hidden"));
 
+    if (myModal.value) {
         thisModalObj = new Modal(myModal.value);
-
-        thisModalObj.show();
-    });
-
-    onUnmounted(() => {
-        window.removeEventListener('hide.bs.modal',   () => emit('hide'));
-        window.removeEventListener('hidden.bs.modal', () => emit('hidden'));
-    });
-
-    const selectCust = (cust:customerType) => {
-        emit('selected', cust);
-        thisModalObj.hide();
     }
+
+    thisModalObj.show();
+});
+
+onUnmounted(() => {
+    window.removeEventListener("hide.bs.modal", () => emit("hide"));
+    window.removeEventListener("hidden.bs.modal", () => emit("hidden"));
+});
+
+const selectCust = (cust: customer) => {
+    emit("selected", cust);
+    thisModalObj.hide();
+};
 </script>

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Deactivated Customers" />
     <div>
         <div class="row justify-content-center">
             <div class="col-md-10">

@@ -24,27 +24,27 @@
 </template>
 
 <script setup lang="ts">
-    import AuthLayout  from '@/Layouts/authLayout.vue';
-    import VueForm     from '@/Components/Base/VueForm.vue';
-    import TextInput   from '@/Components/Base/Input/TextInput.vue';
-    import { ref }     from 'vue';
-    import { useForm } from '@inertiajs/vue3';
-    import * as yup    from 'yup';
+import AuthLayout from "@/Layouts/authLayout.vue";
+import VueForm from "@/Components/Base/VueForm.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { object, string } from "yup";
 
-    const forgotForm       = ref<InstanceType<typeof VueForm> | null>(null);
-    const validationSchema = {
-        email: yup.string().email().required('You must enter an email address'),
-    }
+const forgotForm = ref<InstanceType<typeof VueForm> | null>(null);
+const validationSchema = object({
+    email: string().email().required("You must enter an email address"),
+});
 
-    type forgotFormType = {
-        email: string;
-    }
+type forgotForm = {
+    email: string;
+};
 
-    const onSubmit = (form:forgotFormType) => {
-        const loginForm = useForm(form);
+const onSubmit = (form: forgotForm) => {
+    const loginForm = useForm(form);
 
-        loginForm.post(route('password.submit-email'), {
-            onFinish: () => forgotForm.value?.endSubmit(),
-        });
-    };
+    loginForm.post(route("password.submit-email"), {
+        onFinish: () => forgotForm.value?.endSubmit(),
+    });
+};
 </script>

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Edit Customer ID" />
     <div>
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -37,16 +38,16 @@ import TextInput from "@/Components/Base/Input/TextInput.vue";
 import App from "@/Layouts/app.vue";
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import * as yup from "yup";
+import {object, number} from "yup";
 
 const props = defineProps<{
     customer: customer;
 }>();
 
 const customerIdForm = ref<InstanceType<typeof VueForm> | null>(null);
-const validationSchema = {
-    cust_id: yup.number().required().label("New Customer ID"),
-};
+const validationSchema = object({
+    cust_id: number().required().label("New Customer ID"),
+});
 
 const onSubmit = (form: customer) => {
     const formData = useForm(form);

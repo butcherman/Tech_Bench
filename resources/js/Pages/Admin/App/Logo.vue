@@ -63,7 +63,7 @@ const validationSchema = {}
 
 const $route = route;
 
-interface logoFormType {
+interface logoForm {
     logo: {
         path: string;
         name: string;
@@ -72,7 +72,7 @@ interface logoFormType {
     }[];
 }
 
-const onSubmit = (form: logoFormType) => {
+const onSubmit = () => {
     if (fileUpload.value?.validate()) {
         fileUpload.value?.process();
     }
@@ -84,7 +84,7 @@ const onSubmit = (form: logoFormType) => {
 
 const uploadComplete = () => {
     logoForm.value?.endSubmit();
-    fileUpload.value.reset();
+    fileUpload.value?.reset();
     router.reload();
 };
 </script>

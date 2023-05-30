@@ -18,49 +18,49 @@
 </template>
 
 <script setup lang="ts">
-    import App from '@/Layouts/app.vue';
-    import { ref } from 'vue';
-    import StepNavigation from '@/Components/Base/StepNavigation.vue';
+import App from "@/Layouts/app.vue";
+import { ref } from "vue";
+import StepNavigation from "@/Components/Base/StepNavigation.vue";
 
-    const props = defineProps<{
-        stepId: number;
-    }>();
-    const stepList = ref([
-        {
-            id    : 1,
-            name  : 'Welcome',
-            icon  : 'fa-house',
-            active: props.stepId === 1 ? true : false,
-        },
-        {
-            id: 2,
-            name: 'Basic Settings',
-            icon: 'fa-cog',
-            active: props.stepId === 2 ? true : false,
-        },
-        {
-            id: 3,
-            name: 'Email Settings',
-            icon: 'fa-envelope',
-            active: props.stepId === 3 ? true : false,
-        },
-        {
-            id: 4,
-            name: 'User Settings',
-            icon: 'fa-users-cog',
-            active: props.stepId === 4 ? true : false,
-        },
-        {
-            id: 5,
-            name: 'Finish',
-            icon: 'fa-check',
-            active: props.stepId === 5 ? true : false,
-        }
-    ]);
+const props = defineProps<{
+    stepId: number;
+}>();
+const stepList = ref([
+    {
+        id: 1,
+        name: "Welcome",
+        icon: "fa-house",
+        active: props.stepId === 1 ? true : false,
+    },
+    {
+        id: 2,
+        name: "Basic Settings",
+        icon: "fa-cog",
+        active: props.stepId === 2 ? true : false,
+    },
+    {
+        id: 3,
+        name: "Email Settings",
+        icon: "fa-envelope",
+        active: props.stepId === 3 ? true : false,
+    },
+    {
+        id: 4,
+        name: "User Settings",
+        icon: "fa-users-cog",
+        active: props.stepId === 4 ? true : false,
+    },
+    {
+        id: 5,
+        name: "Finish",
+        icon: "fa-check",
+        active: props.stepId === 5 ? true : false,
+    },
+]);
 </script>
 
 <style lang="scss">
-    #setup-card {
-        min-height: 50vh;
-    }
+#setup-card {
+    min-height: 50vh;
+}
 </style>

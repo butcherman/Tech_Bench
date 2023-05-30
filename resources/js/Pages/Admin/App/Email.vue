@@ -15,24 +15,24 @@
 </template>
 
 <script setup lang="ts">
-    import App            from '@/Layouts/app.vue';
-    import EmailForm from '@/Forms/Admin/EmailForm.vue';
+import App from "@/Layouts/app.vue";
+import EmailForm from "@/Forms/Admin/EmailForm.vue";
 
-    interface emSettingsType {
-        host        : string;
-        port        : number;
-        encryption  : string;
-        username    : string;
-        password    : string;
-        from_address: string;
-        requireAuth : boolean;
-    }
+interface emSettings {
+    host: string;
+    port: number;
+    encryption: string;
+    username: string;
+    password: string;
+    from_address: string;
+    requireAuth: boolean;
+}
 
-    defineProps<{
-        settings:emSettingsType;
-    }>();
+defineProps<{
+    settings: emSettings;
+}>();
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

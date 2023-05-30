@@ -40,8 +40,8 @@ import { useForm } from "@inertiajs/vue3";
 import { object, string, number } from "yup";
 
 const props = defineProps<{
-    settings: settingsType;
-    tz_list: timezoneType;
+    settings: settings;
+    tz_list: { [key: string]: { [key: string]: string } };
 }>();
 
 const emit = defineEmits(["step-completed"]);
@@ -58,7 +58,7 @@ const validationSchema = object().shape({
     filesize: number().required(),
 });
 
-const onSubmit = (form: settingsType) => {
+const onSubmit = (form: settings) => {
     const formData = useForm(form);
     formData.post(route("admin.set-config"), {
         onFinish: () => {

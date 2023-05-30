@@ -1,5 +1,4 @@
-// import * as yup from 'yup';
-import { addMethod, array, string } from "yup";
+import { object, addMethod, array, string } from "yup";
 
 /**
  * For an array of values, validate that at least one entry has a value
@@ -29,9 +28,9 @@ addMethod(array, 'noDuplicates', function(errMsg:string) {
     });
 });
 
-export const equipmentValidator = {
+export const equipmentValidator = object({
     category: string().required(),
     name    : string().required('Please enter a name for the Equipment'),
     custData: array().minOne('You must provide information to gather for customers')
                 .noDuplicates('Duplicates entries are not allowed'),
-}
+});

@@ -1,8 +1,7 @@
 export const vFocusDirective = {
-    mounted: (el, binding) => {
-        if(binding.value)
-        {
+    mounted: (el: HTMLElement, binding: { value: boolean }) => {
+        if (binding.value) {
             el.focus();
         }
-    }
-}
+    },
+};

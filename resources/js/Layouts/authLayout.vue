@@ -52,7 +52,6 @@
 <script setup lang="ts">
 import Guest from "./guest.vue";
 import { usePage } from "@inertiajs/vue3";
-import type { pageData } from "@/Types";
 
 const page: pageData = usePage();
 const { app, errors, flash } = page.props;

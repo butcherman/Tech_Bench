@@ -1,18 +1,31 @@
 <template>
+    <Head tile="Equipment Data Types" />
     <div>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">References</div>
-                        <p class="text-center">The <strong>{{ dataType.name }}</strong> Field is assigned to the following Equipment Types:</p>
+                        <p class="text-center">
+                            The <strong>{{ dataType.name }}</strong> Field is
+                            assigned to the following Equipment Types:
+                        </p>
                         <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <ul class="list-group">
-                                    <li v-for="(equip, cat) in equipment" class="list-group-item">
-                                        <strong>{{ cat }} Equipment Category</strong>
+                                    <li
+                                        v-for="(equip, cat) in equipment"
+                                        class="list-group-item"
+                                    >
+                                        <strong
+                                            >{{ cat }} Equipment
+                                            Category</strong
+                                        >
                                         <ul class="list-group">
-                                            <li v-for="item in equip" class="list-group-item">
+                                            <li
+                                                v-for="item in equip"
+                                                class="list-group-item"
+                                            >
                                                 {{ item.name }}
                                             </li>
                                         </ul>
@@ -28,17 +41,16 @@
 </template>
 
 <script setup lang="ts">
-    import App                              from '@/Layouts/app.vue';
-    import type { dataListType, equipType } from '@/Types';
+import App from "@/Layouts/app.vue";
 
-    defineProps<{
-        dataType: dataListType;
-        equipment: {
-            [key:string]: equipType[];
-        };
-    }>();
+defineProps<{
+    dataType: dataList;
+    equipment: {
+        [key: string]: equipment[];
+    };
+}>();
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

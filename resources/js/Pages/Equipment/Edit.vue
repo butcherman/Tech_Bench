@@ -1,4 +1,5 @@
 <template>
+    <Head title="Edit Equipment" />
     <div>
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -6,7 +7,10 @@
                     <div class="card-body">
                         <div class="card-title">Create New Equipment</div>
                         <form class="vld-parent" @submit="onSubmit" novalidate>
-                            <Loading :active="isSubmitting" :is-full-page="false">
+                            <Loading
+                                :active="isSubmitting"
+                                :is-full-page="false"
+                            >
                                 <HalfCircleLoader />
                             </Loading>
                             <TextInput
@@ -27,17 +31,20 @@
                                     <small>(drag to re-order)</small>
                                 </legend>
                                 <div
-                                    v-if="useIsFormTouched().value && errors['custData']"
+                                    v-if="
+                                        useIsFormTouched().value &&
+                                        errors['custData']
+                                    "
                                     class="text-center text-danger"
                                 >
-                                    {{ errors['custData'] }}
+                                    {{ errors["custData"] }}
                                 </div>
                                 <draggable
                                     v-model="fields"
                                     item-key="index"
                                     @end="onDragEnd"
                                 >
-                                    <template #item="{element, index}">
+                                    <template #item="{ element, index }">
                                         <div class="input-group">
                                             <span
                                                 class="pointer input-group-text"
@@ -95,109 +102,113 @@
 </template>
 
 <script setup lang="ts">
-    import App                        from '@/Layouts/app.vue'
-    import TextInput                  from '@/Components/Base/Input/TextInput.vue';
-    import DatalistInput              from '@/Components/Base/Input/DatalistInput.vue';
-    import SubmitButton               from '@/Components/Base/Input/SubmitButton.vue';
-    import Loading                    from 'vue3-loading-overlay';
-    import HalfCircleLoader           from '@/Components/Base/Loader/HalfCircleLoader.vue';
-    import draggable                  from 'vuedraggable';
-    import { ref }                    from 'vue';
-    import { useForm }                from '@inertiajs/vue3';
-    import { array_move }             from '@/Modules/helpers.module';
-    import { equipmentValidator }     from '@/Modules/Validation/equipment.module';
-    import { useForm as useVeeForm,
-             useIsFormTouched,
-             useFieldArray }          from 'vee-validate';
-    import type { equipWithDataType } from '@/Types';
-    import { verifyModal } from '@/Modules/verifyModal.module';
-import { router } from '@inertiajs/vue3';
+import App from "@/Layouts/app.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import DatalistInput from "@/Components/Base/Input/DatalistInput.vue";
+import SubmitButton from "@/Components/Base/Input/SubmitButton.vue";
+import Loading from "vue3-loading-overlay";
+import HalfCircleLoader from "@/Components/Base/Loader/HalfCircleLoader.vue";
+import draggable from "vuedraggable";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { array_move } from "@/Modules/helpers.module";
+import { equipmentValidator } from "@/Modules/Validation/equipment.module";
+import {
+    useForm as useVeeForm,
+    useIsFormTouched,
+    useFieldArray,
+} from "vee-validate";
+import { verifyModal } from "@/Modules/verifyModal.module";
+import { router } from "@inertiajs/vue3";
 
-    const props = defineProps<{
-        equipment: equipWithDataType;
-        dataList : string[];
-    }>();
+const props = defineProps<{
+    equipment: equipWithData;
+    dataList: string[];
+}>();
 
-    const isSubmitting       = ref<boolean>(false);
-    const { handleSubmit,
-            values, errors } = useVeeForm({
-        initialValues: {
-            category: props.equipment.equipment_category.name,
-            name    : props.equipment.name,
-            custData: props.equipment.data_field_type.map((obj) => obj.name),
-        },
-        validationSchema: equipmentValidator,
+const isSubmitting = ref<boolean>(false);
+const { handleSubmit, values, errors } = useVeeForm({
+    initialValues: {
+        category: props.equipment.equipment_category.name,
+        name: props.equipment.name,
+        custData: props.equipment.data_field_type.map((obj) => obj.name),
+    },
+    validationSchema: equipmentValidator,
+});
+
+const { remove, push, fields } = useFieldArray("custData");
+
+const onSubmit = handleSubmit((form) => {
+    isSubmitting.value = true;
+    const formData = useForm(form);
+    formData.put(route("equipment.update", props.equipment.equip_id), {
+        onFinish: () => (isSubmitting.value = false),
     });
+});
 
-    const { remove, push, fields } = useFieldArray('custData');
+type dragEvent = {
+    oldIndex: number;
+    newIndex: number;
+} & Event;
 
-    const onSubmit = handleSubmit(form => {
-        isSubmitting.value = true;
-        const formData     = useForm(form);
-        formData.put(route('equipment.update', props.equipment.equip_id), {
-            onFinish: () => isSubmitting.value = false,
-        });
+/**
+ * After a drag event is done, update the form with the proper order
+ */
+const onDragEnd = (e: dragEvent) => {
+    array_move(values.custData, e.oldIndex, e.newIndex);
+};
+
+/**
+ * Give user a warning of possible data deletion
+ */
+const removeItem = (index: number) => {
+    verifyModal(
+        "Any information already gathered for customers will be deleted"
+    ).then((res) => {
+        if (res) {
+            remove(index);
+        }
     });
+};
 
-    type dragEvent = {
-        oldIndex: number;
-        newIndex: number;
-    } & Event;
-
-    /**
-     * After a drag event is done, update the form with the proper order
-     */
-    const onDragEnd = (e:dragEvent) => {
-        array_move(values.custData, e.oldIndex, e.newIndex);
-    }
-
-    /**
-     * Give user a warning of possible data deletion
-     */
-    const removeItem = (index:number) => {
-        verifyModal('Any information already gathered for customers will be deleted').then(res => {
-            if(res) {
-                remove(index);
-            }
-        })
-    }
-
-    /**
-     * Verify that we want to delete this equipment
-     */
-    const verifyDelete = () => {
-        verifyModal('This action cannot be undone').then(res => {
-            if(res)
-            {
-                isSubmitting.value = true;
-                router.delete(route('equipment.destroy', props.equipment.equip_id), {
-                    onFinish: () => isSubmitting.value = false,
-                });
-            }
-        });
-    }
+/**
+ * Verify that we want to delete this equipment
+ */
+const verifyDelete = () => {
+    verifyModal("This action cannot be undone").then((res) => {
+        if (res) {
+            isSubmitting.value = true;
+            router.delete(
+                route("equipment.destroy", props.equipment.equip_id),
+                {
+                    onFinish: () => (isSubmitting.value = false),
+                }
+            );
+        }
+    });
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>
 
 <style scoped lang="scss">
-    @import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
+@import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 
-    fieldset {
-        border : 1px solid rgb(165, 163, 163, 0.5);
-        margin : 5px;
-        padding: 10px;
-        legend {
-            font-size: 1.2em;
-            small {
-                font-size: 0.7em;
-            }
+fieldset {
+    border: 1px solid rgb(165, 163, 163, 0.5);
+    margin: 5px;
+    padding: 10px;
+    legend {
+        font-size: 1.2em;
+        small {
+            font-size: 0.7em;
         }
     }
+}
 
-    .input-group-text {
-        margin-bottom: 1rem;
-    }
+.input-group-text {
+    margin-bottom: 1rem;
+}
 </style>

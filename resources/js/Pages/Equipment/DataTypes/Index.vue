@@ -1,4 +1,5 @@
 <template>
+    <Head title="Equipment Data Types" />
     <div>
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -11,13 +12,16 @@
                             information for that equipment
                         </p>
                         <p class="text-center">
-                            <strong>Note:</strong>  Data Types that are in use
+                            <strong>Note:</strong> Data Types that are in use
                             cannot be deleted until they have been removed from
                             all Equipment Types
                         </p>
                         <hr />
                         <ul class="list-group">
-                            <template v-for="data in dataList" :key="data.type_id">
+                            <template
+                                v-for="data in dataList"
+                                :key="data.type_id"
+                            >
                                 <li class="list-group-item">
                                     {{ data.name }}
                                     <span class="float-end">
@@ -32,12 +36,19 @@
                                         </span>
                                         <Link
                                             v-else
-                                            :href="$route('data_types.show', data.type_id)"
+                                            :href="
+                                                $route(
+                                                    'data_types.show',
+                                                    data.type_id
+                                                )
+                                            "
                                             class="text-info pointer mx-1"
                                             title="Show References"
                                             v-tooltip
                                         >
-                                            <fa-icon icon="fa-brands fa-searchengin" />
+                                            <fa-icon
+                                                icon="fa-brands fa-searchengin"
+                                            />
                                         </Link>
                                         <span
                                             class="text-info pointer mx-1"
@@ -81,89 +92,83 @@
                 :validation-schema="validationSchema"
                 @submit="onEditSubmit"
             >
-                <TextInput
-                    id="new-name"
-                    name="name"
-                    label="Data Type Name"
-                />
+                <TextInput id="new-name" name="name" label="Data Type Name" />
             </VueForm>
         </Modal>
     </div>
 </template>
 
 <script setup lang="ts">
-    import App                   from '@/Layouts/app.vue';
-    import Modal                 from '@/Components/Base/Modal/Modal.vue';
-    import VueForm               from '@/Components/Base/VueForm.vue';
-    import TextInput             from '@/Components/Base/Input/TextInput.vue';
-    import { ref }               from 'vue';
-    import { useForm }           from '@inertiajs/vue3';
-    import { verifyModal }       from '@/Modules/verifyModal.module';
-    import { router }           from '@inertiajs/vue3';
-    import * as yup              from 'yup';
-    import type { dataListType } from '@/Types';
+import App from "@/Layouts/app.vue";
+import Modal from "@/Components/Base/Modal/Modal.vue";
+import VueForm from "@/Components/Base/VueForm.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { verifyModal } from "@/Modules/verifyModal.module";
+import { router } from "@inertiajs/vue3";
+import { object, string } from "yup";
 
-    interface dataFormType {
-        name: string;
-    }
+type dataForm = {
+    name: string;
+};
 
-    defineProps<{
-        dataList: dataListType[];
-    }>();
+defineProps<{
+    dataList: dataList[];
+}>();
 
-    const $route = route;
+const $route = route;
 
-    /**
-     * Destroy Data
-     */
-    const verifyDelete = (data:dataListType) => {
-        verifyModal('Are you sure?').then(res => {
-            if(res)
-            {
-                router.delete(route('data_types.destroy', data.type_id));
-            }
-        });
-    }
+/**
+ * Destroy Data
+ */
+const verifyDelete = (data: dataList) => {
+    verifyModal("Are you sure?").then((res) => {
+        if (res) {
+            router.delete(route("data_types.destroy", data.type_id));
+        }
+    });
+};
 
-    /**
-     * Create Data
-     */
-    const newTypeForm = ref<InstanceType<typeof VueForm> | null>(null);
-    const validationSchema = {
-        name: yup.string().required('The Data Type must have a name'),
-    }
+/**
+ * Create Data
+ */
+const newTypeForm = ref<InstanceType<typeof VueForm> | null>(null);
+const validationSchema = object({
+    name: string().required("The Data Type must have a name"),
+});
 
-    const onNewSubmit = (form:dataFormType) => {
-        const formData = useForm(form);
-        formData.post(route('data_types.store'), {
-            onFinish: () => newTypeForm.value?.endSubmit(),
-        });
-    }
+const onNewSubmit = (form: dataForm) => {
+    const formData = useForm(form);
+    formData.post(route("data_types.store"), {
+        onFinish: () => newTypeForm.value?.endSubmit(),
+    });
+};
 
-    /**
-     * Edit Data
-     */
-    const editTypeModal = ref<InstanceType<typeof Modal>   | null>(null);
-    const editTypeForm  = ref<InstanceType<typeof VueForm> | null>(null);
-    const editId        = ref<number>();
+/**
+ * Edit Data
+ */
+const editTypeModal = ref<InstanceType<typeof Modal> | null>(null);
+const editTypeForm = ref<InstanceType<typeof VueForm> | null>(null);
+const editId = ref<number>();
 
-    const onEditClick   = (data:dataListType) => {
-        editTypeModal.value?.show();
-        editTypeForm.value?.setFieldValue('name', data.name as never);
-        editId.value = data.type_id;
-    }
+const onEditClick = (data: dataList) => {
+    editTypeModal.value?.show();
+    editTypeForm.value?.setFieldValue("name", data.name as never);
+    editId.value = data.type_id;
+};
 
-    const onEditSubmit = (form:dataFormType) => {
-        const formData = useForm(form);
-        formData.put(route('data_types.update', editId.value), {
-            onFinish: () => {
-                editTypeForm.value?.endSubmit();
-                editTypeModal.value?.hide();
-            },
-        });
-    }
+const onEditSubmit = (form: dataForm) => {
+    const formData = useForm(form);
+    formData.put(route("data_types.update", editId.value), {
+        onFinish: () => {
+            editTypeForm.value?.endSubmit();
+            editTypeModal.value?.hide();
+        },
+    });
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

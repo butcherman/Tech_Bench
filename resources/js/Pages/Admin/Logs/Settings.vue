@@ -32,39 +32,34 @@
 </template>
 
 <script setup lang="ts">
-    import App         from '@/Layouts/app.vue';
-    import VueForm     from '@/Components/Base/VueForm.vue';
-    import TextInput   from '@/Components/Base/Input/TextInput.vue';
-    import SelectInput from '@/Components/Base/Input/SelectInput.vue';
-    import { ref }     from 'vue';
-    import { useForm } from '@inertiajs/vue3';
+import App from "@/Layouts/app.vue";
+import VueForm from "@/Components/Base/VueForm.vue";
+import TextInput from "@/Components/Base/Input/TextInput.vue";
+import SelectInput from "@/Components/Base/Input/SelectInput.vue";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
 
-    const props = defineProps<{
-        logLevel: string;
-        days    : string;
-        types   : string[];
-    }>();
+const props = defineProps<{
+    logLevel: string;
+    days: string;
+    types: string[];
+}>();
 
-    const logSettingsForm  = ref<InstanceType<typeof VueForm> | null>(null);
-    const initialValues    = {
-        days : props.days,
-        level: props.logLevel,
-    }
-    const validationSchema = {}
+const logSettingsForm = ref<InstanceType<typeof VueForm> | null>(null);
+const initialValues = {
+    days: props.days,
+    level: props.logLevel,
+};
+const validationSchema = {};
 
-    interface logFormType {
-        days : string;
-        level: string;
-    }
-
-    const onSubmit = (form:logFormType) => {
-        const formData = useForm(form);
-        formData.post(route('admin.logs.set-settings'), {
-            onFinish: () => logSettingsForm.value?.endSubmit(),
-        });
-    }
+const onSubmit = (form: logForm) => {
+    const formData = useForm(form);
+    formData.post(route("admin.logs.set-settings"), {
+        onFinish: () => logSettingsForm.value?.endSubmit(),
+    });
+};
 </script>
 
 <script lang="ts">
-    export default { layout: App }
+export default { layout: App };
 </script>

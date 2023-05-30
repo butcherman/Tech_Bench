@@ -22,11 +22,11 @@ class BuildAdminMenu
     public function execute()
     {
         $userMenu = $this->buildUserMenu();
-        $equipMenu = []; // $this->buildEquipmentMenu();
+        $equipMenu = $this->buildEquipmentMenu();
         $customerMenu = $this->buildCustomerMenu();
         $techTipMenu = []; // $this->buildTechTipMenu();
-        $settingsMenu = []; // $this->buildSettingsMenu();
-        $maintenanceMenu = []; // $this->buildMaintenanceMenu();
+        $settingsMenu = $this->buildSettingsMenu();
+        $maintenanceMenu = $this->buildMaintenanceMenu();
 
         return array_merge($userMenu, $equipMenu, $customerMenu, $techTipMenu, $settingsMenu, $maintenanceMenu);
     }

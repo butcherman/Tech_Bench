@@ -1,10 +1,10 @@
 import type { Ref, ComputedRef, InjectionKey } from "vue";
 
-export const customerSearchDataKey:InjectionKey<customerSearchDataSymbol> = Symbol();
+export const customerSearchDataKey: InjectionKey<customerSearchDataSymbol> =
+    Symbol();
 
 export const customerKey: InjectionKey<Ref<customer>> = Symbol();
-export const custPermissionsKey: InjectionKey<customerPermissions> =
-    Symbol();
+export const custPermissionsKey: InjectionKey<customerPermissions> = Symbol();
 export const isCustFavKey: InjectionKey<boolean> = Symbol();
 export const allowShareKey: InjectionKey<ComputedRef<boolean>> = Symbol();
 export const fileTypesKey: InjectionKey<string[]> = Symbol();

@@ -10,7 +10,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            {{ title ? title : 'Are you sure?' }}
+                            {{ title ? title : "Are you sure?" }}
                         </h5>
                         <button
                             type="button"
@@ -45,42 +45,41 @@
 </template>
 
 <script setup lang="ts">
-    import { ref,
-             onMounted,
-             onUnmounted } from "vue";
-    import { Modal }       from "bootstrap";
+import { ref, onMounted, onUnmounted } from "vue";
+import { Modal } from "bootstrap";
 
-    defineProps<{
-        title ?: string;
-        message: string;
-    }>();
+defineProps<{
+    title?: string;
+    message: string;
+}>();
 
-    let emit         = defineEmits(['yes-clicked', 'no-clicked', 'hide', 'hidden']);
-    let verifyModal  = ref<InstanceType<typeof Modal> | null>(null);
-    let thisModalObj:any;
+let emit = defineEmits(["yes-clicked", "no-clicked", "hide", "hidden"]);
+let verifyModal = ref<HTMLInputElement | null>(null);
+let thisModalObj: any;
 
-    onMounted(() => {
+onMounted(() => {
+    if(verifyModal.value)
+    {
         thisModalObj = new Modal(verifyModal.value);
         thisModalObj.show();
 
-        window.addEventListener('hide.bs.modal',   () => emit('hide'));
-        window.addEventListener('hidden.bs.modal', () => emit('hidden'));
-    });
-
-    onUnmounted(() => {
-        window.removeEventListener('hide.bs.modal',   () => emit('hide'));
-        window.removeEventListener('hidden.bs.modal', () => emit('hidden'));
-    });
-
-    function yesClicked():void
-    {
-        emit('yes-clicked');
-        thisModalObj.hide();
+        window.addEventListener("hide.bs.modal", () => emit("hide"));
+        window.addEventListener("hidden.bs.modal", () => emit("hidden"));
     }
+});
 
-    function noClicked():void
-    {
-        emit('no-clicked');
-        thisModalObj.hide();
-    }
+onUnmounted(() => {
+    window.removeEventListener("hide.bs.modal", () => emit("hide"));
+    window.removeEventListener("hidden.bs.modal", () => emit("hidden"));
+});
+
+function yesClicked(): void {
+    emit("yes-clicked");
+    thisModalObj.hide();
+}
+
+function noClicked(): void {
+    emit("no-clicked");
+    thisModalObj.hide();
+}
 </script>
