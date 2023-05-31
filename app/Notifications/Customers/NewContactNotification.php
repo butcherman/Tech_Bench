@@ -3,6 +3,7 @@
 namespace App\Notifications\Customers;
 
 use App\Models\Customer;
+use App\Models\CustomerContact;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
@@ -15,13 +16,15 @@ class NewContactNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $customer;
+    protected $contact;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Customer $customer)
+    public function __construct(Customer $customer, CustomerContact $contact)
     {
         $this->customer = $customer;
+        $this->contact = $contact;
     }
 
     /**
@@ -46,11 +49,11 @@ class NewContactNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('A Customer Contact Has Been Updated')
+            ->subject($this->customer->name.' has a new Contact')
             ->greeting('Hello '.$notifiable->full_name)
-            ->line('A Customer Contact was just updated for '.$this->customer->name)
-            ->action('Click Here to view the Customer', url(route('customers.show', $this->customer->slug)))
-            ->line('Note: You are receiving this notification because this customer is Bookmarked as a Favorite');
+            ->line($this->contact->name.' was just created as a contact for '.$this->customer->name)
+            ->action('Click Here to view the Customer and get more information', url(route('customers.show', $this->customer->slug)))
+            ->line('Note: You are receiving this notification because '.$this->customer->name.' is Bookmarked as a Favorite');
     }
 
     /**
@@ -59,10 +62,12 @@ class NewContactNotification extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'subject' => 'A Customer Contact Has Been Updated',
+            'subject' => $this->customer->name.' has a new Contact',
+            'component' => 'Customers/ContactNotification',
             'data' => [
-                'customer' => $this->customer->name,
-                'slug' => $this->customer->slug,
+                'new' => true,
+                'customer' => $this->customer,
+                'contact' => $this->contact,
             ],
         ];
     }

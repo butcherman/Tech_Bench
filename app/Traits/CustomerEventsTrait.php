@@ -10,7 +10,8 @@ trait CustomerEventsTrait
     protected function getUserList(int $cust_id, int $ignore_id)
     {
         $bookmarks = UserCustomerBookmark::where('cust_id', $cust_id)->where('user_id', '!=', $ignore_id)->get()->pluck('user_id')->toArray();
-        $userList = User::find($bookmarks);
+        $userList = User::all(); // User::find($bookmarks);
+        //  TODO - put this back!!!!!!!!!!!!!!!!!
 
         return $userList;
     }

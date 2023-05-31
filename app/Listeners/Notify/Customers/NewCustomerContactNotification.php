@@ -21,6 +21,6 @@ class NewCustomerContactNotification implements ShouldQueue
         $userList = $this->getUserList($event->customer->cust_id, $event->user->user_id);
 
         Log::debug('Preparing to handle Customer Contact Created Event', $userList->toArray());
-        Notification::send($userList, new NewContactNotification($event->customer));
+        Notification::send($userList, new NewContactNotification($event->customer, $event->contact));
     }
 }

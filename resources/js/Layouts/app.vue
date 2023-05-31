@@ -175,6 +175,11 @@
                 </footer>
             </div>
         </div>
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <template v-for="msg in newNotifications">
+                <NotificationToast />
+            </template>
+        </div>
         <div
             class="toast-container position-absolute top-0 start-50 translate-middle p-3"
         >
@@ -187,10 +192,11 @@
 
 <script setup lang="ts">
 import AlertToast from "@/Components/Base/AlertToast.vue";
+import NotificationToast from '@/Components/Base/NotificationToast.vue';
 import { ref, watch, onMounted, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
-import { notifications, setNotifications } from '@/Modules/State/NotificationState';
+import { notifications, setNotifications, triggerFetchInterval, newNotifications } from '@/Modules/State/NotificationState';
 
 const $route = route;
 const page: pageData = usePage();
@@ -204,12 +210,14 @@ const flash = computed(() => page.props.flash);
 const navbarActive = ref<boolean>(false);
 const flashMessage = ref<flashMessage[]>([]);
 
+
 router.on("navigate", () => (navbarActive.value = false));
 
 watch(flash, () => checkFlashMessages());
 onMounted(() => {
     checkFlashMessages();
     setNotifications(notificationList.value);
+    triggerFetchInterval();
 });
 
 const checkFlashMessages = () => {

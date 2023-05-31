@@ -57,27 +57,31 @@ class CustomerContactRequest extends FormRequest
     public function processPhoneNumbers(int $contId, bool $isEdit = false): void
     {
         $existingPhones = $isEdit ? CustomerContactPhone::where('cont_id', $contId)->get()->pluck('id')->toArray() : [];
-        foreach ($this->phones as $num) {
-            //  Update or enter new number
-            $type = PhoneNumberType::where('description', $num['type'])->first();
-            if (isset($num['id']) && isset($num['number'])) {
-                $thisNum = CustomerContactPhone::find($num['id']);
-                $thisNum->update([
-                    'phone_type_id' => $type->phone_type_id,
-                    'phone_number' => $num['number'],
-                    'extension' => $num['ext'],
-                ]);
+        if($this->phones)
+        {
 
-                $key = array_search($num['id'], $existingPhones);
-                unset($existingPhones[$key]);
-            } else {
-                if (isset($num['number'])) {
-                    CustomerContactPhone::create([
-                        'cont_id' => $contId,
+            foreach ($this->phones as $num) {
+                //  Update or enter new number
+                $type = PhoneNumberType::where('description', $num['type'])->first();
+                if (isset($num['id']) && isset($num['number'])) {
+                    $thisNum = CustomerContactPhone::find($num['id']);
+                    $thisNum->update([
                         'phone_type_id' => $type->phone_type_id,
-                        'phone_number' => $this->cleanPhoneNumber($num['number']),
+                        'phone_number' => $num['number'],
                         'extension' => $num['ext'],
                     ]);
+
+                    $key = array_search($num['id'], $existingPhones);
+                    unset($existingPhones[$key]);
+                } else {
+                    if (isset($num['number'])) {
+                        CustomerContactPhone::create([
+                            'cont_id' => $contId,
+                            'phone_type_id' => $type->phone_type_id,
+                            'phone_number' => $this->cleanPhoneNumber($num['number']),
+                            'extension' => $num['ext'],
+                        ]);
+                    }
                 }
             }
         }
