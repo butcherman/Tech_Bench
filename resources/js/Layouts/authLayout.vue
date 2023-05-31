@@ -51,8 +51,11 @@
 
 <script setup lang="ts">
 import Guest from "./guest.vue";
+import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
 const page: pageData = usePage();
-const { app, errors, flash } = page.props;
+const app = computed(() => page.props.app);
+const errors = computed(() => page.props.errors);
+const flash = computed(() => page.props.flash);
 </script>

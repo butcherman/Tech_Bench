@@ -40,9 +40,23 @@ type flashProps = {
 };
 
 type notificationProps = {
-    list: object[]; //  TODO - type this
+    list: notification[];
     new: number;
 };
+
+type notification = {
+    created_at: string;
+    id: string;
+    notifiable_id: number;
+    notifiable_type: string;
+    read_at: string | null;
+    type: string;
+    updated_at: string;
+    data: {
+        subject: string;
+        data: object;
+    }
+}
 
 type navBarProps = {
     name: string;

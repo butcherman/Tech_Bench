@@ -190,12 +190,13 @@ import AlertToast from "@/Components/Base/AlertToast.vue";
 import { ref, watch, onMounted, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
+import { notifications, setNotifications } from '@/Modules/State/NotificationState';
 
 const $route = route;
 const page: pageData = usePage();
 const app = computed(() => page.props.app);
 const navbar = computed(() => page.props.navbar);
-const notifications = computed(() => page.props.notifications);
+const notificationList = computed(() => page.props.notifications);
 const breadcrumbs = computed(() => page.props.breadcrumbs);
 const errors = computed(() => page.props.errors);
 const flash = computed(() => page.props.flash);
@@ -206,7 +207,10 @@ const flashMessage = ref<flashMessage[]>([]);
 router.on("navigate", () => (navbarActive.value = false));
 
 watch(flash, () => checkFlashMessages());
-onMounted(() => checkFlashMessages());
+onMounted(() => {
+    checkFlashMessages();
+    setNotifications(notificationList.value);
+});
 
 const checkFlashMessages = () => {
     for (const [type, message] of Object.entries(flash.value)) {

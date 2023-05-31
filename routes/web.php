@@ -1,17 +1,9 @@
 <?php
-
-/**
- *          Note for all routes:
- *              Some Resource Routes have been broken out into their individual routes.  This is
- *              because the Gretel Breadcrumb package relies on Route Model Binding which we are not
- *              doing at this time.
- *              This may be changed later.
- */
-
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Home\DownloadController;
 use App\Http\Controllers\Home\GetPhoneTypesController;
+use App\Http\Controllers\Home\NotificationController;
 use App\Http\Controllers\Home\UploadImageController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\UpdateAccountController;
@@ -43,8 +35,8 @@ Route::middleware('auth')->group(function () {
         Route::post('password', [ChangePasswordController::class, 'set'])->name('password.store');
     });
 
-    Route::get('phone-number-types', GetPhoneTypesController::class)->name('get-number-types');
     Route::post('upload-image', UploadImageController::class)->name('upload-image');
+    Route::post('notifications', NotificationController::class)->name('notifications');
 });
 
 /**

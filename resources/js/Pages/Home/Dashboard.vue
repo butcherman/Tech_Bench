@@ -1,16 +1,18 @@
 <template>
     <Head title="Dashboard" />
     <div>
-        <h1 class="text-center">Logged In</h1>
-        <AtomLoader />
-        <HalfCircleLoader />
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <Notifications />
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script setup lang="ts">
 import App from "@/Layouts/app.vue";
-import AtomLoader from "@/Components/Base/Loader/AtomLoader.vue";
-import HalfCircleLoader from "@/Components/Base/Loader/HalfCircleLoader.vue";
+import Notifications from '@/Components/Home/Notifications.vue';
 </script>
 
 <script lang="ts">
