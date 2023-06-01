@@ -4,7 +4,7 @@
 *   Theme Style Variables
 */
 $default-font-size : .875rem;
-$soft-border       : 1px solid rgba(0,0,0,.15);
+$soft-border       : 1px solid #00000026;
 $header-height     : 70px;
 $header-background : #ffffff;
 $navbar-width      : 237px;
@@ -16,9 +16,7 @@ $footer-background : $content-background;
 /*
 *   Primary Section Styles
 */
-// @import 'Template/body';
 @import 'Template/header';
 @import "Template/sidebar";
 @import "Template/content";
 @import "Template/footer";
-// @import "Template/transitions";

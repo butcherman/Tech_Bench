@@ -34,17 +34,17 @@ class HandleInertiaRequests extends Middleware
             ],
             //  App information that is shared and used on all pages
             'app' => [
-                'name' => config('app.name'),
-                'logo' => config('app.logo'),
-                'version' => (new Version)->full(),
-                'copyright' => (new Version)->copyright(),
+                'name' => fn () => config('app.name'),
+                'logo' => fn () => config('app.logo'),
+                'version' => fn () => (new Version)->full(),             //  TODO - Cache this
+                'copyright' => fn () => (new Version)->copyright(),      //  TODO - Cache this
                 //  Current logged in user
                 'user' => fn () => $request->user() ? $request->user() : null,
                 //  File information
                 'fileData' => [
-                    'maxSize' => config('filesystems.max_filesize'),
-                    'chunkSize' => config('filesystems.chunk_size'),
-                    'token' => csrf_token(),
+                    'maxSize' => fn () => config('filesystems.max_filesize'),
+                    'chunkSize' => fn () => config('filesystems.chunk_size'),
+                    'token' => fn () => csrf_token(),
                 ],
             ],
             'notifications' => [

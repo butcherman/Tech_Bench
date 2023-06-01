@@ -89,8 +89,8 @@ import { ref } from "vue";
 import { verifyModal } from "@/Modules/verifyModal.module";
 import {
     notifications,
-    sendNotificationUpdate,
-} from "@/Modules/State/NotificationState";
+    // sendNotificationUpdate,
+} from "@/State/NotificationState";
 
 const checkAllMaster = ref<InstanceType<typeof HTMLInputElement> | null>(null);
 
@@ -123,7 +123,7 @@ const intermediateCheck = (): void => {
 const deleteSelected = () => {
     verifyModal("This cannot be undone").then((res) => {
         if (res) {
-            sendNotificationUpdate("delete", selected.value);
+            // sendNotificationUpdate("delete", selected.value);
         }
     });
 };
