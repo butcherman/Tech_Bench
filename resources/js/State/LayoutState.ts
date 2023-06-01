@@ -22,8 +22,8 @@ interface flashAlert {
 }
 
 export const flashAlerts = ref<flashAlert[]>([]);
+//  Push a new alert to DOM
 export const pushAlert = (type: string, message: string) => {
-    console.log("push alert");
     const id = uuidv4();
     flashAlerts.value.push({
         id,
@@ -33,12 +33,13 @@ export const pushAlert = (type: string, message: string) => {
 
     setAutoTimeout(id);
 };
+//  Manually remove an alert
 export const removeAlert = (id: string) => {
     flashAlerts.value = flashAlerts.value.filter((alert) => alert.id !== id);
 };
-
+//  Alerts will be auto removed after 30 seconds
 const setAutoTimeout = (id: string) => {
     setTimeout(() => {
         removeAlert(id);
-    }, 30000);
+    }, 15000);
 };

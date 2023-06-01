@@ -8,7 +8,7 @@
                     class="toast align-items-center fade show"
                 >
                     <div
-                        class="d-flex"
+                        class="toast-header"
                         :class="{
                             'text-bg-success': alert.type === 'success',
                             'text-bg-warning': alert.type === 'warning',
@@ -16,26 +16,24 @@
                             'text-bg-info': alert.type === 'info',
                         }"
                     >
-                        <div class="toast-body w-100">
-                            <div class="row m-0 p-0">
-                                <div class="col-2">
-                                    <span class="badge p-0 pt-1 m-0">
-                                        <fa-icon
-                                            :icon="getAlertIcon(alert.type)"
-                                            class="float-start"
-                                        />
-                                    </span>
-                                </div>
-                                <div class="col text-center">
-                                    {{ alert.message }}
-                                </div>
-                            </div>
-                        </div>
+                        <span class="me-2">
+                            <fa-icon
+                                :icon="getAlertIcon(alert.type)"
+                                class="float-start"
+                            />
+                        </span>
+                        <strong class="me-auto text-uppercase">{{
+                            alert.type
+                        }}</strong>
                         <button
                             type="button"
-                            class="btn-close me-2 m-auto"
-                            @click="removeAlert(alert.id)"
+                            class="btn-close"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"
                         ></button>
+                    </div>
+                    <div class="toast-body text-center">
+                        {{ alert.message }}
                     </div>
                 </div>
             </TransitionGroup>
@@ -76,13 +74,13 @@ const getAlertIcon = (type: string) => {
 /**
  * Animations
  */
-const onEnter = (el:HTMLElement) => {
+const onEnter = (el: Element) => {
     gsap.to(el, {
         x: 200,
     });
 };
 
-const onLeave = (el:HTMLElement) => {
+const onLeave = (el: Element) => {
     gsap.from(el, {
         opacity: 0,
         delay: 0.5,
