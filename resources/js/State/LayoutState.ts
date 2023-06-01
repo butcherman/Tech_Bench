@@ -23,7 +23,7 @@ interface flashAlert {
 
 export const flashAlerts = ref<flashAlert[]>([]);
 export const pushAlert = (type: string, message: string) => {
-    console.log('push alert');
+    console.log("push alert");
     const id = uuidv4();
     flashAlerts.value.push({
         id,

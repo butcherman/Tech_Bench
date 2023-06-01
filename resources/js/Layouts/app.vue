@@ -8,12 +8,6 @@
                     <AppBreadcrumbs />
                     <AppAlerts />
                     <slot />
-                    <button
-                        class="btn btn-info w-75"
-                        @click="pushAlert('warning', 'testing')"
-                    >
-                        Add Alert
-                    </button>
                 </div>
                 <AppFooter />
             </div>
