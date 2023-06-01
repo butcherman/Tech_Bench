@@ -17,6 +17,8 @@ import {
     faBullhorn,
     faChartBar,
     faCheck,
+    faCircleCheck,
+    faCircleExclamation,
     faCircleInfo,
     faCircleQuestion,
     faCircleXmark,
@@ -71,6 +73,7 @@ import {
     faUserSlash,
     faUserTie,
     faXmark,
+
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faBookmark as farBookmark } from "@fortawesome/free-regular-svg-icons";
@@ -92,6 +95,8 @@ library.add(
     faBullhorn,
     faChartBar,
     faCheck,
+    faCircleCheck,
+    faCircleExclamation,
     faCircleInfo,
     faCircleQuestion,
     faCircleXmark,

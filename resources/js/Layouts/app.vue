@@ -8,22 +8,22 @@
                     <AppBreadcrumbs />
                     <AppAlerts />
                     <slot />
+                    <button
+                        class="btn btn-info w-75"
+                        @click="pushAlert('warning', 'testing')"
+                    >
+                        Add Alert
+                    </button>
                 </div>
                 <AppFooter />
             </div>
         </div>
+        <AppFlash />
         <!-- <div class="toast-container position-fixed bottom-0 end-0 p-3">
             <template v-for="msg in newNotifications">
                 <NotificationToast />
             </template>
         </div> -->
-        <div
-            class="toast-container position-absolute top-0 start-50 translate-middle p-3"
-        >
-            <template v-for="msg in flashMessage">
-                <AlertToast :background="msg.type" :message="msg.message" />
-            </template>
-        </div>
     </div>
 </template>
 
@@ -33,31 +33,9 @@ import AppSideNav from "./AppLayout/AppSideNav.vue";
 import AppFooter from "./AppLayout/AppFooter.vue";
 import AppBreadcrumbs from "./AppLayout/AppBreadcrumbs.vue";
 import AppAlerts from "./AppLayout/AppAlerts.vue";
-import { onMounted, watch, computed, ref } from "vue";
-import { router, usePage } from "@inertiajs/vue3";
-import { closeNavbar } from "@/State/LayoutState";
+import AppFlash from "./AppLayout/AppFlash.vue";
+import { router } from "@inertiajs/vue3";
+import { closeNavbar, pushAlert } from "@/State/LayoutState";
 
 router.on("navigate", () => closeNavbar);
-
-const page: pageData = usePage();
-const flash = computed(() => page.props.flash);
-const flashMessage = ref<flashMessage[]>([]);
-
-watch(flash, () => checkFlashMessages());
-onMounted(() => {
-    checkFlashMessages();
-    // setNotifications(notificationList.value);
-    // triggerFetchInterval();
-});
-
-const checkFlashMessages = () => {
-    for (const [type, message] of Object.entries(flash.value)) {
-        if (message !== null) {
-            flashMessage.value.push({
-                type,
-                message,
-            });
-        }
-    }
-};
 </script>
