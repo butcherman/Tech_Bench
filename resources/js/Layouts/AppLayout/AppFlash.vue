@@ -22,14 +22,13 @@
                                 class="float-start"
                             />
                         </span>
-                        <strong class="me-auto text-uppercase">{{
-                            alert.type
-                        }}</strong>
+                        <strong class="me-auto text-uppercase">
+                            {{ alert.type }}
+                        </strong>
                         <button
                             type="button"
                             class="btn-close"
-                            data-bs-dismiss="toast"
-                            aria-label="Close"
+                            @click="removeAlert(alert.id)"
                         ></button>
                     </div>
                     <div class="toast-body text-center">

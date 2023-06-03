@@ -37,7 +37,7 @@ export const pushAlert = (type: string, message: string) => {
 export const removeAlert = (id: string) => {
     flashAlerts.value = flashAlerts.value.filter((alert) => alert.id !== id);
 };
-//  Alerts will be auto removed after 30 seconds
+//  Alerts will be auto removed after 15 seconds
 const setAutoTimeout = (id: string) => {
     setTimeout(() => {
         removeAlert(id);

@@ -8,22 +8,12 @@
                     <AppBreadcrumbs />
                     <AppAlerts />
                     <slot />
-                    <!-- <button
-                        class="btn btn-info w-75"
-                        @click="pushAlert('success', 'testing')"
-                    >
-                        Add Alert
-                    </button> -->
                 </div>
-                <AppFooter />
+\                <AppFooter />
             </div>
         </div>
         <AppFlash />
-        <!-- <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <template v-for="msg in newNotifications">
-                <NotificationToast />
-            </template>
-        </div> -->
+        <NotificationAlert />
     </div>
 </template>
 
@@ -34,8 +24,21 @@ import AppFooter from "./AppLayout/AppFooter.vue";
 import AppBreadcrumbs from "./AppLayout/AppBreadcrumbs.vue";
 import AppAlerts from "./AppLayout/AppAlerts.vue";
 import AppFlash from "./AppLayout/AppFlash.vue";
-import { router } from "@inertiajs/vue3";
-import { closeNavbar, pushAlert } from "@/State/LayoutState";
+import NotificationAlert from "./AppLayout/NotificationAlert.vue";
+import { onMounted } from 'vue';
+import { router, usePage } from "@inertiajs/vue3";
+import { closeNavbar } from "@/State/LayoutState";
+import { setNotifications, triggerFetchInterval } from "@/State/NotificationState";
 
 router.on("navigate", () => closeNavbar);
+
+/**
+ * Handle pushing notifications to their proper place on initial mount
+ * All notifications received after mount will be pushed via Ajax call
+ */
+onMounted(() => {
+    const page:pageData = usePage();
+    setNotifications(page.props.notifications);
+    triggerFetchInterval();
+})
 </script>
