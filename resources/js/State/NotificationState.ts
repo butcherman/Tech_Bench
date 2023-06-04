@@ -1,8 +1,10 @@
 import axios from "axios";
 import { ref, reactive } from "vue";
 import type { AxiosResponse } from "axios";
+import { router } from "@inertiajs/vue3";
 
-const intervalId = ref(0);
+const intervalId = ref<number>(0);
+const checkCounter = ref<number>(0);
 
 export const newNotifications = ref<notification[]>([]);
 export const notifications = reactive<notificationProps>({
@@ -11,63 +13,99 @@ export const notifications = reactive<notificationProps>({
 });
 
 /**
- * Async check for new notifications every 60 seconds
+ * Set timer to perform Async check for new notifications every 60 seconds
  */
 export const triggerFetchInterval = () => {
-    intervalId.value = setInterval(() => fetchNotifications(), 15000);
+    intervalId.value = setInterval(() => fetchNotifications(), 60000);
+};
+
+/**
+ * End the Async check for new notifications
+ */
+export const clearFetchInterval = () => {
+    clearInterval(intervalId.value);
+};
+
+/**
+ * Reset the fetch counter
+ */
+export const resetCheckCounter = () => {
+    checkCounter.value = 0;
 };
 
 /**
  * Async fetch notifications
  */
 export const fetchNotifications = () => {
-    console.log("fetching notifications");
-    axios
-        .post(route("notifications"), { action: "fetch" })
-        .then((res: AxiosResponse<notificationProps>) => {
-            notifications.new = res.data.new;
-            //  Check for new messages to throw an alert
-            res.data.list.forEach((msg) => {
-                const existing = notifications.list.filter(
-                    (n) => n.id === msg.id
-                )[0];
-                if (!existing) {
-                    newNotifications.value.push(msg);
-                    notifications.list.unshift(msg);
-                    setAutoTimeout(msg.id);
-                }
+    //  If the session has been idle for more than 15 minutes, log user out
+    if (checkCounter.value > 15) {
+        triggerAutoLogout();
+    } else {
+        axios
+            .post(route("notifications"), { action: "fetch" })
+            .then((res: AxiosResponse<notificationProps>) => {
+                //  Check for new messages to throw an alert
+                res.data.list.forEach((msg) => {
+                    const existing = notifications.list.filter(
+                        (n) => n.id === msg.id
+                    )[0];
+                    if (!existing) {
+                        newNotifications.value.push(msg);
+                        notifications.list.unshift(msg);
+                        setAutoTimeout(msg.id);
+                    }
+                });
+                //  repopulate the list to update read and deleted messages
+                setNotifications(res.data);
+                checkCounter.value++;
             });
-            //  repopulate the list to update read and deleted messages
-            notifications.list = res.data.list;
-        });
+    }
 };
 
+/**
+ * Set the current notification state
+ */
 export const setNotifications = (newList: notificationProps) => {
     notifications.new = newList.new;
     notifications.list = newList.list;
 };
 
+/**
+ * Remove or Mark notifications a read
+ */
 export const sendNotificationUpdate = (
     action: "mark" | "delete" | "fetch",
     updateIdList: string[]
 ) => {
-    clearInterval(intervalId.value);
+    clearFetchInterval();
     axios
         .post(route("notifications"), { action, list: updateIdList })
         .then(() => {
-            console.log("done");
             fetchNotifications();
             triggerFetchInterval();
         });
 };
 
+/**
+ * remove a specific notification from the New notification List
+ */
 const removeNotification = (id: string) => {
     newNotifications.value = newNotifications.value.filter((n) => n.id !== id);
 };
 
-//  Notification toast will be auto removed after 10 seconds
+/**
+ * Notification toast will be auto removed after 10 seconds
+ */
 const setAutoTimeout = (id: string) => {
     setTimeout(() => {
         removeNotification(id);
     }, 10000);
+};
+
+/**
+ * Popup automatic logout notice.  User has 60 seconds to respond before being logged out automatically
+ */
+const triggerAutoLogout = () => {
+    clearFetchInterval();
+    router.post(route("logout"), { reason: "timeout" });
 };

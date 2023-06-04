@@ -71,6 +71,7 @@
                                     :href="$route('logout')"
                                     class="dropdown-item"
                                     method="POST"
+                                    @click="clearFetchInterval"
                                 >
                                     <fa-icon icon="fa-sign-out-alt" />
                                     Logout
@@ -96,7 +97,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import { notifications } from "@/State/NotificationState";
+import { notifications, clearFetchInterval } from "@/State/NotificationState";
 import { toggleNavbar } from "@/State/LayoutState";
 
 const $route = route;

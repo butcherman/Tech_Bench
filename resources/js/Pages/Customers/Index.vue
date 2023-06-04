@@ -99,7 +99,6 @@ const triggerSearch = async (): Promise<void> => {
  * Clear search parameters
  */
 const resetSearch = () => {
-    console.log("reset search");
     searchParam.name = "";
     searchParam.city = "";
     searchParam.equip = null;

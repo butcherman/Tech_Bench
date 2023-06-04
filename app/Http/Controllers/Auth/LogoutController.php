@@ -13,10 +13,20 @@ class LogoutController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $msg = 'Successfully Logged Out';
+        if($request->has('reason'))
+        {
+            switch($request->input('reason')) {
+                case 'timeout':
+                    $msg = 'You have been logged out after being idle for more than 15 minutes';
+                    break;
+            }
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect(route('home'));
+        return redirect(route('home'))->withErrors($msg);
     }
 }

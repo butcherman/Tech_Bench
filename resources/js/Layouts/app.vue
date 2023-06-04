@@ -28,9 +28,12 @@ import NotificationAlert from "./AppLayout/NotificationAlert.vue";
 import { onMounted } from 'vue';
 import { router, usePage } from "@inertiajs/vue3";
 import { closeNavbar } from "@/State/LayoutState";
-import { setNotifications, triggerFetchInterval } from "@/State/NotificationState";
+import { resetCheckCounter, setNotifications, triggerFetchInterval } from "@/State/NotificationState";
 
-router.on("navigate", () => closeNavbar);
+router.on("navigate", () => {
+    closeNavbar();
+    resetCheckCounter();
+});
 
 /**
  * Handle pushing notifications to their proper place on initial mount

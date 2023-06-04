@@ -85,7 +85,6 @@ const initialValues = <customerSettings>{
 
 const onSubmit = (form: customerSettings) => {
     const formData = useForm(form);
-    console.log(formData);
     formData.post(route("admin.cust.set-settings"), {
         onFinish: () => customerSettingsForm.value?.endSubmit(),
     });
