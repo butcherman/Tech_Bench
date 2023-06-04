@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customers;
 
 use App\Actions\BuildCustomerPermissions;
 use App\Actions\EquipmentOptionList;
+use App\Events\Customer\CustomerVisitedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerRequest;
 use App\Http\Requests\Customers\SoftDeletedRequest;
@@ -67,6 +68,8 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
+        event(new CustomerVisitedEvent($customer, Auth::user()));
+
         return Inertia::render('Customers/Show', [
             'permissions' => (new BuildCustomerPermissions)->execute($customer, Auth::user()),
             'is-fav' => (bool) UserCustomerBookmark::where('user_id', Auth::user()->user_id)

@@ -63,6 +63,9 @@ class EventServiceProvider extends ServiceProvider
         /**
          * Customer Events
          */
+        'App\Events\Customer\CustomerVisitedEvent' => [
+            'App\Listeners\Customers\AddRecentCustomerEntry',
+        ],
         'App\Events\Customer\CustomerEquipmentCreatedEvent' => [
             'App\Listeners\Notify\Customers\NewCustomerEquipmentNotification',
         ],

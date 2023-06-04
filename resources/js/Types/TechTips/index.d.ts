@@ -1,6 +1,5 @@
-import { equipType } from '@/Types';
 
-export interface techTipType {
+type techTip = {
     created_at: string;
     details   : string;
     slug      : string;
@@ -12,6 +11,6 @@ export interface techTipType {
     views     : number;
 }
 
-export type techTipWithEquipment = {
-    equipment_type: equipType;
-} & techTipType;
+// export type techTipWithEquipment = {
+//     equipment_type: equipment;
+// } & techTip;

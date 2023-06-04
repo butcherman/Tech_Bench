@@ -87,3 +87,7 @@ type optionListObject = {
 };
 
 type sort = 'up' | 'down' | 'none';
+
+type bookmarkList = {
+    customers: customer[];
+}
