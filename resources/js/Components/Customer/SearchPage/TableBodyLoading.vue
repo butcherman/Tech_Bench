@@ -30,12 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
-import { customerSearchDataKey } from "@/SymbolKeys/CustomerKeys";
-
-const { searchParam } = inject(
-    customerSearchDataKey
-) as customerSearchDataSymbol;
+import { searchParam } from "@/State/Customer/SearchState";
 </script>
 
 <style scoped lang="scss">

@@ -10,7 +10,7 @@
                 <Link :href="$route('customers.show', customer.slug)">
                     {{ customer.name }}
                     <span v-if="customer.dba_name">
-                        {{ customer.dba_name }}
+                        - ( AKA: {{ customer.dba_name }} )
                     </span>
                 </Link>
             </td>
@@ -39,9 +39,8 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-    searchResults: customer[];
-}>();
+import { searchResults } from "@/State/Customer/SearchState";
+
 const $route = route;
 </script>
 
@@ -50,6 +49,7 @@ tbody {
     tr {
         td {
             padding: 0;
+            height: 100%;
             a {
                 display: block;
                 height: 100%;

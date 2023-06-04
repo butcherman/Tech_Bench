@@ -22,7 +22,7 @@
                                 :class="{
                                     disabled: paginationData.currentPage === 1,
                                 }"
-                                @click="onGoToPage(1)"
+                                @click="goToPage(1)"
                             >
                                 <span
                                     class="page-link pointer"
@@ -38,7 +38,7 @@
                                     disabled: paginationData.currentPage === 1,
                                 }"
                                 @click="
-                                    onGoToPage(paginationData.currentPage - 1)
+                                    goToPage(paginationData.currentPage - 1)
                                 "
                             >
                                 <span
@@ -55,7 +55,7 @@
                                 :class="{
                                     active: paginationData.currentPage === page,
                                 }"
-                                @click="onGoToPage(page)"
+                                @click="goToPage(page)"
                             >
                                 <span class="page-link pointer">
                                     {{ page }}
@@ -69,7 +69,7 @@
                                         paginationData.numPages,
                                 }"
                                 @click="
-                                    onGoToPage(paginationData.currentPage + 1)
+                                    goToPage(paginationData.currentPage + 1)
                                 "
                             >
                                 <span
@@ -87,7 +87,7 @@
                                         paginationData.currentPage ===
                                         paginationData.numPages,
                                 }"
-                                @click="onGoToPage(paginationData.numPages)"
+                                @click="goToPage(paginationData.numPages)"
                             >
                                 <span
                                     class="page-link pointer"
@@ -114,14 +114,14 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
-import { customerSearchDataKey } from "@/SymbolKeys/CustomerKeys";
+import {
+    triggerSearch,
+    paginationData,
+    searchParam,
+    paginationArray,
+} from "@/State/Customer/SearchState";
 
-const { searchParam, paginationData, paginationArray, triggerSearch } = inject(
-    customerSearchDataKey
-) as customerSearchDataSymbol;
-
-const onGoToPage = (page: number): void => {
+const goToPage = (page: number): void => {
     searchParam.page = page;
     triggerSearch();
 };

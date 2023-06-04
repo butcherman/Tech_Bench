@@ -21,8 +21,8 @@
                         <Overlay :loading="loading">
                             <table class="table table-striped table-hover">
                                 <TableHead :equipment="equipment" />
-                                <TableBodyLoading v-if="loading" />
-                                <TableBody :search-results="searchResults" v-else />
+                                <TableBodyLoading v-show="loading" />
+                                <TableBody v-show="!loading" />
                                 <TableFoot />
                             </table>
                         </Overlay>
@@ -40,9 +40,9 @@ import TableHead from "@/Components/Customer/SearchPage/TableHead.vue";
 import TableFoot from "@/Components/Customer/SearchPage/TableFoot.vue";
 import TableBody from '@/Components/Customer/SearchPage/TableBody.vue';
 import TableBodyLoading from "@/Components/Customer/SearchPage/TableBodyLoading.vue";
-import { ref, reactive, onMounted, provide } from "vue";
-import { performCustomerSearch } from "@/Modules/Customers/customerSearch.module";
-import { customerSearchDataKey } from "@/SymbolKeys/CustomerKeys";
+import { onMounted } from "vue";
+import { triggerSearch } from '@/State/Customer/SearchState';
+import { loading } from '@/State/Customer/SearchState';
 
 onMounted(() => triggerSearch());
 
@@ -53,66 +53,6 @@ defineProps<{
         [key: string]: string[];
     };
 }>();
-
-const loading = ref<boolean>(false);
-const searchResults = ref<customer[]>([]);
-const searchParam = reactive<customerSearchParam>({
-    //  Search data
-    name: "",
-    city: "",
-    equip: null,
-    //  Pagination and sort parameters
-    page: 1,
-    perPage: 25,
-    sortField: "name",
-    sortType: "asc",
-});
-const paginationData = reactive<customerPagination>({
-    currentPage: 1,
-    numPages: 1,
-    listFrom: 0,
-    listTo: 0,
-    listTotal: 0,
-    pageArr: [1],
-});
-const paginationArray = [25, 50, 100];
-
-/**
- * Perform a customer search and parse results
- */
-const triggerSearch = async (): Promise<void> => {
-    loading.value = true;
-    const results = await performCustomerSearch(searchParam);
-
-    searchResults.value = results.data;
-    paginationData.listFrom = results.listFrom;
-    paginationData.listTo = results.listTo;
-    paginationData.listTotal = results.listTotal;
-    paginationData.numPages = results.numPages;
-    paginationData.currentPage = results.currentPage;
-    paginationData.pageArr = results.pageArr;
-
-    loading.value = false;
-};
-
-/**
- * Clear search parameters
- */
-const resetSearch = () => {
-    searchParam.name = "";
-    searchParam.city = "";
-    searchParam.equip = null;
-
-    triggerSearch();
-};
-
-provide(customerSearchDataKey, {
-    searchParam,
-    paginationData,
-    paginationArray,
-    triggerSearch,
-    resetSearch,
-});
 </script>
 
 <script lang="ts">

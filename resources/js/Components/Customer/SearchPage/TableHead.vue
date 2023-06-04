@@ -80,16 +80,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, inject } from "vue";
-import { customerSearchDataKey } from "@/SymbolKeys/CustomerKeys";
+import { reactive, computed } from "vue";
+import {
+    triggerSearch,
+    resetSearch,
+    searchParam,
+} from "@/State/Customer/SearchState";
 
 defineProps<{
     equipment: { [key: string]: string[] };
 }>();
-
-const { searchParam, triggerSearch, resetSearch } = inject(
-    customerSearchDataKey
-) as customerSearchDataSymbol;
 
 const sort = reactive({
     name: "none",
