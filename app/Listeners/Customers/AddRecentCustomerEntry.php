@@ -14,9 +14,9 @@ class AddRecentCustomerEntry
      */
     public function handle(CustomerVisitedEvent $event): void
     {
-        UserCustomerRecent::create([
+        UserCustomerRecent::firstOrCreate([
             'cust_id' => $event->customer->cust_id,
             'user_id' => $event->user->user_id,
-        ]);
+        ])->touch();
     }
 }

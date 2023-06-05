@@ -13,10 +13,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <Equipment :equipment="equipment" />
             </div>
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <Contacts :contacts="contacts" />
             </div>
         </div>
