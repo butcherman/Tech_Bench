@@ -3,6 +3,7 @@
 namespace App\Notifications\Customers;
 
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
@@ -16,13 +17,15 @@ class NewEquipmentNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $customer;
+    protected $equipment;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Customer $customer)
+    public function __construct(Customer $customer, CustomerEquipment $equipment)
     {
         $this->customer = $customer;
+        $this->equipment = $equipment;
 
         Log::debug('New Equipment Notification Called');
     }
@@ -49,9 +52,9 @@ class NewEquipmentNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('New Customer Equipment Has Been Created')
+            ->subject('New Customer Equipment Created For '.$this->customer->name)
             ->greeting('Hello '.$notifiable->full_name)
-            ->line('New Customer Equipment was just created for '.$this->customer->name)
+            ->line($this->equipment->name.'has just been added to '.$this->customer->name)
             ->action('Click Here to view the Customer', url(route('customers.show', $this->customer->slug)))
             ->line('Note: You are receiving this notification because this customer is Bookmarked as a Favorite');
     }
@@ -59,13 +62,16 @@ class NewEquipmentNotification extends Notification implements ShouldQueue
     /**
      * Get the array representation of the notification
      */
-    public function toArray(object $notifiable): array
+    public function toArray(): array
     {
         return [
-            'subject' => 'New Customer Equipment Has Been Created',
-            'data' => [
+            'subject' => 'New Customer Equipment Created For '.$this->customer->name,
+            'component' => 'Customers/EquipmentNotification',
+            'props' => [
+                'new' => true,
                 'customer' => $this->customer->name,
                 'slug' => $this->customer->slug,
+                'equipment' => $this->equipment->name,
             ],
         ];
     }

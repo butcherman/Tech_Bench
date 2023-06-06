@@ -64,7 +64,7 @@ class NewContactNotification extends Notification implements ShouldQueue
         return [
             'subject' => $this->customer->name.' has a new Contact',
             'component' => 'Customers/ContactNotification',
-            'data' => [
+            'props' => [
                 'new' => true,
                 'customer' => $this->customer,
                 'contact' => $this->contact,

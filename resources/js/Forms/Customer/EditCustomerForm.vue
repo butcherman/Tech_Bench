@@ -39,29 +39,27 @@
 import VueForm from "@/Components/Base/VueForm.vue";
 import TextInput from "@/Components/Base/Input/TextInput.vue";
 import SelectInput from "@/Components/Base/Input/SelectInput.vue";
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { allStates } from "@/Modules/allStates.module";
 import { customerValidation } from "@/Modules/Validation/customerValidation.module";
-import { customerKey } from "@/SymbolKeys/CustomerKeys";
-import type { Ref } from "vue";
+import { customer } from '@/State/Customer/CustomerState';
 
 const emit = defineEmits(["success"]);
 const editCustomerForm = ref<InstanceType<typeof VueForm> | null>(null);
-const customer = inject(customerKey) as Ref<customer>;
 
 const initialValues = <customer>{
-    name: customer?.value?.name,
-    dba_name: customer?.value?.dba_name,
-    address: customer?.value?.address,
-    city: customer?.value?.city,
-    state: customer?.value?.state,
-    zip: customer?.value?.zip,
+    name: customer.value?.name,
+    dba_name: customer.value?.dba_name,
+    address: customer.value?.address,
+    city: customer.value?.city,
+    state: customer.value?.state,
+    zip: customer.value?.zip,
 };
 
 const onSubmit = (form: customer) => {
     const formData = useForm(form);
-    formData.put(route("customers.update", customer?.value?.slug), {
+    formData.put(route("customers.update", customer.value?.slug), {
         only: ["customer", "flash"],
         onFinish: () => {
             editCustomerForm.value?.endSubmit();

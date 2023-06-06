@@ -29,16 +29,13 @@
 import VueForm from "@/Components/Base/VueForm.vue";
 import TextInput from "@/Components/Base/Input/TextInput.vue";
 import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
-import { ref, computed, inject } from "vue";
+import { ref, computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import { allowShareKey, toggleEquipLoadKey } from "@/SymbolKeys/CustomerKeys";
-import type { Ref } from "vue";
+import { toggleEquipLoad, allowShare } from "@/State/Customer/CustomerState";
 
 const props = defineProps<{
     equipData: customerEquipment;
 }>();
-const toggleLoad = inject(toggleEquipLoadKey) as () => void;
-const allowShare = inject(allowShareKey) as Ref<boolean>;
 const emit = defineEmits(["success"]);
 
 const editEquipmentForm = ref<InstanceType<typeof VueForm> | null>(null);
@@ -54,7 +51,7 @@ const initialValues = computed(() => {
 });
 
 const onSubmit = (form: customerEquipmentData) => {
-    toggleLoad();
+    toggleEquipLoad();
     const formData = useForm(form);
     formData.put(
         route("customers.equipment.update", props.equipData.cust_equip_id),
@@ -64,11 +61,11 @@ const onSubmit = (form: customerEquipmentData) => {
             onSuccess: () => emit("success"),
             onFinish: () => {
                 editEquipmentForm.value?.endSubmit();
-                toggleLoad();
+                toggleEquipLoad();
             },
         }
     );
 };
 
-defineExpose({ reset : editEquipmentForm.value?.resetForm() });
+defineExpose({ reset: editEquipmentForm.value?.resetForm() });
 </script>

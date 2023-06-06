@@ -14,7 +14,7 @@
         @show="deletedItemsComponent?.getDeletedItems()"
     >
         <div class="text-center mt-2">
-            <Overlay :loading="loading">
+            <Overlay :loading="manageLoad">
                 <DeletedItems ref="deletedItemsComponent" />
                 <LinkCustomer />
                 <DisableCustomer @disabling="manageCustomerModal?.hide()" />
@@ -29,19 +29,11 @@ import Overlay from "@/Components/Base/Overlay.vue";
 import DeletedItems from "./Manage/DeletedItems.vue";
 import LinkCustomer from "@/Components/Customer/Manage/LinkCustomer.vue";
 import DisableCustomer from "./Manage/DisableCustomer.vue";
-import { ref, provide } from "vue";
-import { toggleManageLoadKey } from "@/SymbolKeys/CustomerKeys";
+import { ref } from "vue";
+import { manageLoad } from "@/State/Customer/CustomerState";
 
 const manageCustomerModal = ref<InstanceType<typeof Modal> | null>(null);
 const deletedItemsComponent = ref<InstanceType<typeof DeletedItems> | null>(
     null
 );
-const loading = ref<boolean>(false);
-
-//  Loading state for the Modal
-const toggleLoading = () => {
-    loading.value = !loading.value;
-};
-
-provide(toggleManageLoadKey, toggleLoading);
 </script>

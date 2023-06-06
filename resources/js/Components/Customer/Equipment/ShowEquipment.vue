@@ -1,5 +1,5 @@
 <template>
-    <div v-if="equipment.length === 0">
+    <div v-if="!equipment?.length">
         <h5 class="text-center">No Equipment Assigned to this Customer</h5>
     </div>
     <div v-else class="accordion accordion-flush" id="equipment-accordion">
@@ -33,7 +33,7 @@
                 :class="{ show: index === 0 }"
                 data-bs-parent="#equipment-accordion"
             >
-                <table class="table table-sm">
+                <table class="table">
                     <tbody>
                         <tr
                             v-for="data in equip.customer_equipment_data"
@@ -43,7 +43,7 @@
                             <td style="min-width: 50%">{{ data.value }}</td>
                         </tr>
                     </tbody>
-                    <tfoot>
+                    <tfoot class="mt-2">
                         <tr>
                             <td colspan="2" class="text-center">
                                 <DeleteButton
@@ -51,7 +51,7 @@
                                     @click="deleteEquipment(equip)"
                                 />
                                 <EditEquipment
-                                    v-if="permission.equipment.update"
+                                    v-if="permissions?.equipment.update"
                                     :equip-data="equip"
                                 />
                             </td>
@@ -66,21 +66,16 @@
 <script setup lang="ts">
 import EditEquipment from "@/Components/Customer/Equipment/EditEquipment.vue";
 import DeleteButton from "@/Components/Base/Buttons/DeleteButton.vue";
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import { verifyModal } from "@/Modules/verifyModal.module";
 import { router } from "@inertiajs/vue3";
 import {
-    custPermissionsKey,
-    toggleEquipLoadKey,
-} from "@/SymbolKeys/CustomerKeys";
-
-defineProps<{
-    equipment: customerEquipment[];
-}>();
+    permissions,
+    equipment,
+    toggleEquipLoad,
+} from "@/State/Customer/CustomerState";
 
 const loadKey = ref<number>(0);
-const permission = inject(custPermissionsKey) as customerPermissions;
-const toggleLoad = inject(toggleEquipLoadKey) as () => void;
 
 /**
  * Delete equipment from customer
@@ -94,14 +89,14 @@ const deleteEquipment = (equip: customerEquipment) => {
 
     verifyModal(msg).then((res) => {
         if (res) {
-            toggleLoad();
+            toggleEquipLoad();
             router.delete(
                 route("customers.equipment.destroy", equip.cust_equip_id),
                 {
                     only: ["flash", "equipment"],
                     preserveScroll: true,
                     onFinish: () => {
-                        toggleLoad();
+                        toggleEquipLoad();
                         loadKey.value++;
                     },
                 }

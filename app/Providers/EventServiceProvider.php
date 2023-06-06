@@ -66,6 +66,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Customer\CustomerVisitedEvent' => [
             'App\Listeners\Customers\AddRecentCustomerEntry',
         ],
+        'App\Events\Customer\CustomerDeactivatedEvent' => [
+            'App\Listeners\Customers\RemoveCustomerBookmarksListener',
+        ],
         'App\Events\Customer\CustomerEquipmentCreatedEvent' => [
             'App\Listeners\Notify\Customers\NewCustomerEquipmentNotification',
         ],

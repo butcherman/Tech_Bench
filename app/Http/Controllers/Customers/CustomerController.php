@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customers;
 
 use App\Actions\BuildCustomerPermissions;
 use App\Actions\EquipmentOptionList;
+use App\Events\Customer\CustomerDeactivatedEvent;
 use App\Events\Customer\CustomerVisitedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CustomerRequest;
@@ -117,7 +118,7 @@ class CustomerController extends Controller
         $customer->delete();
 
         //  Remove all bookmarks to avoid errors
-        CustomerRemoveBookmarksJob::dispatch($customer);
+        event(new CustomerDeactivatedEvent($customer));
 
         Log::stack(['daily', 'cust'])->notice('Customer '.$customer->name.' has been deactivated by '.Auth::user()->username);
 

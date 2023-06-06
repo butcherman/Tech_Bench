@@ -18,27 +18,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from "vue";
+import { computed } from "vue";
 import { customerSearchBox } from "@/Modules/customerSearchBox.module";
 import { useForm } from "@inertiajs/vue3";
 import { verifyModal } from "@/Modules/verifyModal.module";
-import { customerKey, toggleManageLoadKey } from "@/SymbolKeys/CustomerKeys";
-import type { Ref } from "vue";
+import { customer, toggleManageLoad } from "@/State/Customer/CustomerState";
 import type { InertiaForm } from "@inertiajs/vue3";
-
-const customer = inject(customerKey) as Ref<customer>;
-const toggleLoad = inject(toggleManageLoadKey) as (set: boolean) => void;
 
 //  Determine if the customer can be linked to a parent or not
 const canLink = computed(() => {
     return !(
-        customer?.value.parent_id ||
-        (customer?.value.child_count && customer?.value.child_count > 0)
+        customer.value?.parent_id ||
+        (customer.value?.child_count && customer?.value.child_count > 0)
     );
 });
 //  Is the customer already linked to a parent?
 const isLinked = computed(() => {
-    return customer?.value.parent_id !== null;
+    return customer.value?.parent_id !== null;
 });
 
 /**
@@ -47,7 +43,7 @@ const isLinked = computed(() => {
 const createLink = () => {
     customerSearchBox().then((res: customer) => {
         const formData = useForm({
-            cust_id: customer?.value.cust_id,
+            cust_id: customer.value?.cust_id,
             parent_id: res.cust_id,
             add: true,
         });
@@ -65,7 +61,7 @@ const dissolveLink = () => {
     ).then((res) => {
         if (res) {
             const formData = useForm({
-                cust_id: customer?.value.cust_id,
+                cust_id: customer.value?.cust_id,
                 parent_id: null,
                 add: false,
             });
@@ -79,11 +75,11 @@ const dissolveLink = () => {
  * Process the add/remove link
  */
 const processLink = (formData: InertiaForm<linkForm>) => {
-    toggleLoad(true);
+    toggleManageLoad();
     formData.post(route("customers.set-link"), {
         only: ["customer", "flash"],
         onFinish: () => {
-            toggleLoad(false);
+            toggleManageLoad();
         },
     });
 };

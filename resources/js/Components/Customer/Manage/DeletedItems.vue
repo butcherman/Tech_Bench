@@ -36,36 +36,40 @@
 
 <script setup lang="ts">
 import axios from "axios";
-import { ref, inject } from "vue";
-import { customerKey, toggleManageLoadKey } from "@/SymbolKeys/CustomerKeys";
+import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import { verifyModal } from "@/Modules/verifyModal.module";
-import type { Ref } from "vue";
-
-const customer = inject(customerKey) as Ref<customer>;
-const toggleLoad = inject(toggleManageLoadKey) as () => void;
+import { customer, toggleManageLoad } from "@/State/Customer/CustomerState";
+import { okModal } from "@/Modules/okModal.module";
 
 const deletedItems = ref<deletedItemsCategory>();
 
-const getDeletedItems = () => {
-    toggleLoad();
-    axios
+const getDeletedItems = async () => {
+    console.log("getting stuff");
+    toggleManageLoad();
+    await axios
         .get(route("customers.deleted-items", customer.value?.slug))
         .then((res) => {
             deletedItems.value = res.data;
-            toggleLoad();
-        });
+            console.log(res.data);
+        })
+        .catch(() => {
+            okModal(
+                "Unable to process request at this time.  PLease try again later"
+            );
+        })
+        .finally(() => toggleManageLoad());
 };
 
 const restoreDeletedItem = (
     group: keyof deletedItemsCategory,
     item: deletedItem
 ) => {
-    toggleLoad();
+    toggleManageLoad();
     router.get(route(`customers.${group}.restore`, item.item_id), undefined, {
         preserveState: true,
         onSuccess: () => getDeletedItems(),
-        onFinish: () => toggleLoad(),
+        onFinish: () => toggleManageLoad(),
     });
 };
 
@@ -75,13 +79,13 @@ const destroyDeletedItem = (
 ) => {
     verifyModal("This Action Cannot Be Undone").then((res) => {
         if (res) {
-            toggleLoad();
+            toggleManageLoad();
             router.delete(
                 route(`customers.${group}.force-delete`, item.item_id),
                 {
                     preserveState: true,
                     onSuccess: () => getDeletedItems(),
-                    onFinish: () => toggleLoad(),
+                    onFinish: () => toggleManageLoad(),
                 }
             );
         }

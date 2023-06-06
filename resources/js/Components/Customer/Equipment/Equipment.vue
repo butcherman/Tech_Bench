@@ -4,17 +4,14 @@
             <div class="card-title">
                 <RefreshButton
                     :only="['equipment']"
-                    @start="toggleLoad"
-                    @end="toggleLoad"
+                    @start="toggleEquipLoad"
+                    @end="toggleEquipLoad"
                 />
                 Equipment:
-                <NewEquipment
-                    v-if="permission?.equipment.create"
-                    :existing-equipment="equipment"
-                />
+                <NewEquipment v-if="permissions?.equipment.create" />
             </div>
-            <Overlay :loading="loading">
-                <ShowEquipment :equipment="equipment" />
+            <Overlay :loading="equipLoad">
+                <ShowEquipment />
             </Overlay>
         </div>
     </div>
@@ -25,24 +22,9 @@ import Overlay from "@/Components/Base/Overlay.vue";
 import RefreshButton from "@/Components/Base/Buttons/RefreshButton.vue";
 import NewEquipment from "@/Components/Customer/Equipment/NewEquipment.vue";
 import ShowEquipment from "@/Components/Customer/Equipment/ShowEquipment.vue";
-import { ref, provide, inject } from "vue";
 import {
-    custPermissionsKey,
-    toggleEquipLoadKey,
-} from "@/SymbolKeys/CustomerKeys";
-
-defineProps<{
-    equipment: customerEquipment[];
-}>();
-
-const permission = inject(custPermissionsKey) as customerPermissions;
-
-/**
- * Loading State of Component
- */
-const loading = ref<boolean>(false);
-const toggleLoad = () => {
-    loading.value = !loading.value;
-};
-provide(toggleEquipLoadKey, toggleLoad);
+    permissions,
+    toggleEquipLoad,
+    equipLoad,
+} from "@/State/Customer/CustomerState";
 </script>

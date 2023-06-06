@@ -2,137 +2,84 @@
     <VueForm
         ref="newEquipmentForm"
         :validation-schema="validationSchema"
-        :initial-values="{ shared: false }"
+        :initial-values="initialValues"
         @submit="onSubmit"
     >
-        <Field name="equip_id" class="my-2" v-slot="{ field, errorMessage }">
+        <Field
+            name="select_equipment"
+            class="my-2"
+            v-slot="{ field, errorMessage }"
+        >
             <label for="select-equip">Equipment Type:</label>
             <select
                 id="select-equip"
-                class="form-select form-select-lg"
                 v-bind="field"
-                @change="populateForm"
+                class="form-select form-select-lg"
+                @change="populateForm(field.value)"
             >
                 <optgroup
-                    v-for="cat in equipList"
-                    :key="cat.cat_id"
-                    :label="cat.name"
+                    v-for="category in equipTypes"
+                    :key="category.cat_id"
+                    :label="category.name"
                 >
                     <option
-                        v-for="equip in cat.equipment_type"
-                        :key="equip.equip_id"
-                        :value="equip.equip_id"
-                        :disabled="isFieldDisabled(equip)"
+                        v-for="equipment in category.equipment_type"
+                        :key="equipment.equip_id"
+                        :value="equipment"
+                        :disabled="isFieldDisabled(equipment)"
                     >
-                        {{ equip.name }}
+                        {{ equipment.name }}
                     </option>
                 </optgroup>
             </select>
             <span class="text-danger">{{ errorMessage }}</span>
         </Field>
-        <CheckboxSwitch
-            v-show="allowShare"
-            id="shared"
-            name="shared"
-            label="Shared Across All Linked Sited"
-            class="my-2"
-        />
-        <template v-for="field in otherFields">
-            <TextInput
-                :id="`field-id-${field.type_id}`"
-                :name="`fieldId-${field.type_id}`"
-                :label="field.name"
-            />
-        </template>
+        <div id="other-fields-wrapper">
+            <template v-for="field in otherFields">
+                <TextInput
+                    :id="`field-id-${field.type_id}`"
+                    :name="`fieldId-${field.type_id}`"
+                    :label="field.name"
+                />
+            </template>
+        </div>
     </VueForm>
 </template>
 
 <script setup lang="ts">
 import VueForm from "@/Components/Base/VueForm.vue";
-import CheckboxSwitch from "@/Components/Base/Input/CheckboxSwitch.vue";
 import TextInput from "@/Components/Base/Input/TextInput.vue";
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import { Field } from "vee-validate";
-import { useForm } from "@inertiajs/vue3";
 import {
-    allowShareKey,
-    customerKey,
-    equipTypesKey,
-    toggleEquipLoadKey,
-} from "@/SymbolKeys/CustomerKeys";
-import { object, string, boolean } from "yup";
-import type { Ref, ComputedRef } from "vue";
+    customer,
+    equipment,
+    equipTypes,
+    toggleEquipLoad,
+} from "@/State/Customer/CustomerState";
+import { gsap } from "gsap";
+import { useForm } from "@inertiajs/vue3";
+import { object, number, boolean } from "yup";
 
-const props = defineProps<{
-    existingEquipment: customerEquipment[];
-}>();
 const emit = defineEmits(["success"]);
-
-const allowShare = inject(allowShareKey) as ComputedRef<boolean>;
-const custData = inject(customerKey) as Ref<customer>;
-const equipList = inject(equipTypesKey) as categoryList[];
-const toggleLoad = inject(toggleEquipLoadKey) as () => void;
-
 const newEquipmentForm = ref<InstanceType<typeof VueForm> | null>(null);
 const otherFields = ref<dataList[]>();
 const validationSchema = object({
-    equip_id: string().required().label("Equipment Type"),
-    shared: boolean().nullable(),
+    cust_id: number().required(),
+    equip_id: number().required(),
+    shared: boolean().required(),
 });
-
-/**
- * Determine if a field should be disabled based on if the equipment type
- * already exists or not
- */
-const isFieldDisabled = (equip: equipment) => {
-    let found = false;
-
-    props.existingEquipment.forEach((item: customerEquipment) => {
-        if (item.equip_id === equip.equip_id) {
-            found = true;
-        }
-    });
-
-    return found;
+const initialValues = {
+    cust_id: customer.value?.cust_id,
+    equip_id: null,
+    shared: false,
 };
 
-/**
- * Build the form based on the selected equipment type
- */
-const populateForm = (event: Event) => {
-    const equipId = (event.target as HTMLInputElement)
-        .value as unknown as number;
-    const equip = findEquipment(equipId);
+const onSubmit = (form: { [key: string]: string }) => {
+    toggleEquipLoad();
+    delete form.select_equipment;
 
-    otherFields.value = equip?.data_field_type;
-};
-
-/**
- * Find the equipment based on the equipId
- */
-const findEquipment = (equipId: number): equipWithData | undefined => {
-    let selectedEquip: equipWithData | undefined;
-
-    Object.values(equipList).forEach((cat) => {
-        Object.values(cat.equipment_type).forEach((equip) => {
-            if (equip.equip_id == equipId) {
-                selectedEquip = equip as equipWithData;
-            }
-        });
-    });
-
-    return selectedEquip;
-};
-
-/**
- * Submit the new equipment type
- */
-const onSubmit = (form: customerEquipmentData) => {
-    toggleLoad();
-    //  Add customer ID to the form
-    form.cust_id = custData?.value.cust_id as unknown as string;
-
-    //  Set any undefined fields to blank strings
+    //  Set any undefined data as a blank string
     Object.keys(form).forEach((key) => {
         if (form[key] === undefined) {
             form[key] = "";
@@ -145,13 +92,56 @@ const onSubmit = (form: customerEquipmentData) => {
         only: ["equipment", "flash"],
         onFinish: () => {
             newEquipmentForm.value?.endSubmit();
-            toggleLoad();
+            toggleEquipLoad();
         },
         onSuccess: () => {
             newEquipmentForm.value?.resetForm();
-            otherFields.value = undefined;
+            otherFields.value = [];
             emit("success");
         },
+    });
+};
+
+/**
+ * If the customer already has equipment assigned, it cannot be selected
+ */
+const isFieldDisabled = (fieldEquip: customerEquipment) => {
+    let found: boolean = false;
+    if (equipment.value?.length) {
+        equipment.value.forEach((equip: customerEquipment) => {
+            if (equip.equip_id === fieldEquip.equip_id) {
+                found = true;
+            }
+        });
+    }
+
+    return found;
+};
+
+/**
+ * Populate the remaining fields in the form
+ */
+const populateForm = (equip: equipWithData) => {
+    newEquipmentForm.value?.setFieldValue("equip_id", equip.equip_id);
+    onLeave(document.getElementById("other-fields-wrapper"));
+    otherFields.value = equip.data_field_type;
+    onEnter(document.getElementById("other-fields-wrapper"));
+};
+
+/**
+ * Animation Styles
+ */
+const onEnter = (el: Element | null) => {
+    gsap.from(el, {
+        opacity: 0,
+        delay: 0.8,
+    });
+};
+
+const onLeave = (el: Element | null) => {
+    gsap.to(el, {
+        opacity: 0,
+        delay: 0.7,
     });
 };
 </script>

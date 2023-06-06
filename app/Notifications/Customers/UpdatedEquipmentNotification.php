@@ -3,6 +3,7 @@
 namespace App\Notifications\Customers;
 
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
@@ -15,13 +16,15 @@ class UpdatedEquipmentNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $customer;
+    protected $equipment;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Customer $customer)
+    public function __construct(Customer $customer, CustomerEquipment $equipment)
     {
         $this->customer = $customer;
+        $this->equipment = $equipment;
     }
 
     /**
@@ -46,25 +49,26 @@ class UpdatedEquipmentNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Customer Equipment Has Been Updated')
+            ->subject('Customer Equipment Updated For '.$this->customer->name)
             ->greeting('Hello '.$notifiable->full_name)
-            ->line('Customer Equipment was just updated for '.$this->customer->name)
+            ->line('Customer Data for '.$this->equipment->name.' was just updated for '.$this->customer->name)
             ->action('Click Here to view the Customer', url(route('customers.show', $this->customer->slug)))
             ->line('Note: You are receiving this notification because this customer is Bookmarked as a Favorite');
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Get the array representation of the notification
      */
-    public function toArray(object $notifiable): array
+    public function toArray(): array
     {
         return [
-            'subject' => 'Customer Equipment Has Been Updated',
-            'data' => [
+            'subject' => 'Customer Equipment Updated For '.$this->customer->name,
+            'component' => 'Customers/EquipmentNotification',
+            'props' => [
+                'new' => false,
                 'customer' => $this->customer->name,
                 'slug' => $this->customer->slug,
+                'equipment' => $this->equipment->name,
             ],
         ];
     }

@@ -14,20 +14,20 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <Equipment :equipment="equipment" />
+                <Equipment />
             </div>
             <div class="col-md-6">
-                <Contacts :contacts="contacts" />
+                <!-- <Contacts :contacts="contacts" /> -->
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <Notes :notes="notes" />
+                <!-- <Notes :notes="notes" /> -->
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <Files :files="files" />
+                <!-- <Files :files="files" /> -->
             </div>
         </div>
     </div>
@@ -42,16 +42,8 @@ import Equipment from "@/Components/Customer/Equipment/Equipment.vue";
 import Contacts from "@/Components/Customer/Contacts/Contacts.vue";
 import Notes from "@/Components/Customer/Notes/Notes.vue";
 import Files from "@/Components/Customer/Files/Files.vue";
-import {
-    custPermissionsKey,
-    isCustFavKey,
-    customerKey,
-    allowShareKey,
-    fileTypesKey,
-    equipTypesKey,
-    phoneTypesKey,
-} from "@/SymbolKeys/CustomerKeys";
-import { ref, computed, provide, watch } from "vue";
+import { ref, toRef, computed, provide, watch } from "vue";
+import { customer, updateState } from '@/State/Customer/CustomerState';
 
 const props = defineProps<{
     permissions: customerPermissions;
@@ -66,32 +58,42 @@ const props = defineProps<{
     phoneTypes: phoneNumber[];
 }>();
 
+updateState(props);
+watch(props, (newProps) => {
+    console.log('props changed', newProps);
+    updateState(newProps);
+});
+
+
+
+
+
 /**
  * Basic shared data between all components
  */
-provide(custPermissionsKey, props.permissions);
-provide(isCustFavKey, props.isFav);
-provide(equipTypesKey, props.equipTypes);
-provide(fileTypesKey, props.fileTypes);
-provide(phoneTypesKey, props.phoneTypes);
+// provide(custPermissionsKey, props.permissions);
+// provide(isCustFavKey, props.isFav);
+// provide(equipTypesKey, props.equipTypes);
+// provide(fileTypesKey, props.fileTypes);
+// provide(phoneTypesKey, props.phoneTypes);
 
-/**
- * Customer Detail Data
- */
-const custData = ref<customer>(props.customer);
-watch(
-    () => props.customer,
-    (newCust) => (custData.value = newCust)
-);
-provide(customerKey, custData);
+// /**
+//  * Customer Detail Data
+//  */
+// const custData = ref<customer>(props.customer);
+// watch(
+//     () => props.customer,
+//     (newCust) => (custData.value = newCust)
+// );
+// provide(customerKey, custData);
 
-/**
- * Determine if entries for this customer are allowed to be shared with other customers
- */
-const allowShare = computed<boolean>(() => {
-    return custData.value.child_count > 0 || custData.value.parent_id !== null;
-});
-provide(allowShareKey, allowShare);
+// /**
+//  * Determine if entries for this customer are allowed to be shared with other customers
+//  */
+// const allowShare = computed<boolean>(() => {
+//     return custData.value.child_count > 0 || custData.value.parent_id !== null;
+// });
+// provide(allowShareKey, allowShare);
 </script>
 
 <script lang="ts">

@@ -51,18 +51,15 @@
 
 <script setup lang="ts">
 import BookmarkItem from "@/Components/Base/BookmarkItem.vue";
-import { inject, computed } from "vue";
+import { computed } from "vue";
 import { linkedCustomers } from "@/Modules/linkedCustomers.module";
-import { isCustFavKey, customerKey } from "@/SymbolKeys/CustomerKeys";
-import type { Ref } from "vue";
+import { customer, isFav } from '@/State/Customer/CustomerState';
 
 defineProps<{
     hideFav?: boolean;
 }>();
 
 const $route = route;
-const isFav = inject(isCustFavKey) as boolean;
-const customer = inject(customerKey) as Ref<customer>;
 
 /**
  * Create a URL to go to Google Maps and address
