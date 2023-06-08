@@ -59,11 +59,11 @@ class NewContactNotification extends Notification implements ShouldQueue
     /**
      * Get the array representation of the notification
      */
-    public function toArray(object $notifiable): array
+    public function toArray(): array
     {
         return [
             'subject' => $this->customer->name.' has a new Contact',
-            'component' => 'Customers/ContactNotification',
+            'component' => 'Customer/ContactNotification',
             'props' => [
                 'new' => true,
                 'customer' => $this->customer,

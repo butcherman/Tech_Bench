@@ -3,6 +3,7 @@
 namespace App\Notifications\Customers;
 
 use App\Models\Customer;
+use App\Models\CustomerContact;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 use Illuminate\Bus\Queueable;
@@ -15,13 +16,15 @@ class UpdatedContactNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $customer;
+    protected $contact;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Customer $customer)
+    public function __construct(Customer $customer, CustomerContact $contact)
     {
         $this->customer = $customer;
+        $this->contact = $contact;
     }
 
     /**
@@ -46,9 +49,9 @@ class UpdatedContactNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('A Customer Contact Has Been Updated')
+            ->subject('Contact Information has been updated for '.$this->customer->name)
             ->greeting('Hello '.$notifiable->full_name)
-            ->line('A Customer Contact was just updated for '.$this->customer->name)
+            ->line('Customer Contact '.$this->contact->name.' was just updated for '.$this->customer->name)
             ->action('Click Here to view the Customer', url(route('customers.show', $this->customer->slug)))
             ->line('Note: You are receiving this notification because this customer is Bookmarked as a Favorite');
     }
@@ -56,13 +59,15 @@ class UpdatedContactNotification extends Notification implements ShouldQueue
     /**
      * Get the array representation of the notification
      */
-    public function toArray(object $notifiable): array
+    public function toArray(): array
     {
         return [
-            'subject' => 'A Customer Contact Has Been Updated',
-            'data' => [
-                'customer' => $this->customer->name,
-                'slug' => $this->customer->slug,
+            'subject' =>'Contact Information has been updated for '.$this->customer->name,
+            'component' => 'Customer/ContactNotification',
+            'props' => [
+                'new' => false,
+                'customer' => $this->customer,
+                'contact' => $this->contact,
             ],
         ];
     }

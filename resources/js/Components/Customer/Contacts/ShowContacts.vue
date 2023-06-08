@@ -112,7 +112,7 @@
             </table>
             <div class="text-center">
                 <EditContact
-                    v-if="permission.contact.update"
+                    v-if="permissions?.contact.update"
                     :contact="selectedContact"
                     @openEdit="contactModal?.hide()"
                 />
@@ -126,21 +126,16 @@
 import Modal from "@/Components/Base/Modal/Modal.vue";
 import EditContact from "@/Components/Customer/Contacts/EditContact.vue";
 import DeleteButton from "@/Components/Base/Buttons/DeleteButton.vue";
-import { ref, inject } from "vue";
+import { ref } from "vue";
 import { verifyModal } from "@/Modules/verifyModal.module";
 import { router } from "@inertiajs/vue3";
-import {
-    custPermissionsKey,
-    toggleContactsLoadKey,
-} from "@/SymbolKeys/CustomerKeys";
+import { permissions, toggleContLoad } from "@/State/Customer/CustomerState";
 
 defineProps<{
     contacts: customerContact[];
 }>();
 
 const $route = route;
-const permission = inject(custPermissionsKey) as customerPermissions;
-const toggleLoad = inject(toggleContactsLoadKey) as () => void;
 const contactModal = ref<InstanceType<typeof Modal> | null>(null);
 const selectedContact = ref<customerContact>();
 
@@ -152,7 +147,7 @@ const openContact = (contact: customerContact) => {
 const deleteContact = () => {
     verifyModal("Are you sure you want to delete this contact?").then((res) => {
         if (res) {
-            toggleLoad();
+            toggleContLoad();
             contactModal.value?.hide();
             router.delete(
                 route(
@@ -160,7 +155,7 @@ const deleteContact = () => {
                     selectedContact.value?.cont_id
                 ),
                 {
-                    onFinish: () => toggleLoad(),
+                    onFinish: () => toggleContLoad(),
                 }
             );
         }

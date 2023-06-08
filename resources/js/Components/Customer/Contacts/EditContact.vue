@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import Modal from "@/Components/Base/Modal/Modal.vue";
-import EditButton from '@/Components/Base/Buttons/EditButton.vue';
+import EditButton from "@/Components/Base/Buttons/EditButton.vue";
 import ContactForm from "@/Forms/Customer/ContactForm.vue";
 import { ref } from "vue";
 

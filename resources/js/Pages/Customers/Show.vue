@@ -17,7 +17,7 @@
                 <Equipment />
             </div>
             <div class="col-md-6">
-                <!-- <Contacts :contacts="contacts" /> -->
+                <Contacts :contacts="contacts" />
             </div>
         </div>
         <div class="row">

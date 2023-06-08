@@ -4,13 +4,13 @@
             <div class="card-title">
                 <RefreshButton
                     :only="['contacts']"
-                    @start="toggleLoad"
-                    @end="toggleLoad"
+                    @start="toggleContLoad"
+                    @end="toggleContLoad"
                 />
                 Contacts:
-                <NewContact v-if="permission?.contact.create" />
+                <NewContact v-if="permissions?.contact.create" />
             </div>
-            <Overlay :loading="loading">
+            <Overlay :loading="contactLoad">
                 <ShowContacts :contacts="contacts" />
             </Overlay>
         </div>
@@ -22,24 +22,13 @@ import Overlay from "@/Components/Base/Overlay.vue";
 import RefreshButton from "@/Components/Base/Buttons/RefreshButton.vue";
 import NewContact from "./NewContact.vue";
 import ShowContacts from "./ShowContacts.vue";
-import { ref, provide, inject } from "vue";
 import {
-    custPermissionsKey,
-    toggleContactsLoadKey,
-} from "@/SymbolKeys/CustomerKeys";
+    permissions,
+    contactLoad,
+    toggleContLoad,
+} from "@/State/Customer/CustomerState";
 
 defineProps<{
     contacts: customerContact[];
 }>();
-
-const permission = inject(custPermissionsKey) as customerPermissions;
-
-/**
- * Loading state of Component
- */
-const loading = ref(false);
-const toggleLoad = () => {
-    loading.value = !loading.value;
-};
-provide(toggleContactsLoadKey, toggleLoad);
 </script>

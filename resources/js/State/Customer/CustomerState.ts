@@ -20,6 +20,7 @@ export const customer = ref<customer>();
 export const equipment = ref<customerEquipment[]>();
 export const permissions = ref<customerPermissions>();
 export const equipTypes = ref();
+export const phoneTypes = ref();
 export const isFav = ref<boolean>(false);
 export const allowShare = computed<boolean>(() => {
     return customer.value?.child_count!! > 0 || customer.value?.parent_id !== null;
@@ -34,6 +35,7 @@ export const updateState = (newState: customerProps) => {
     permissions.value = newState.permissions;
     isFav.value = newState.isFav;
     equipTypes.value = newState.equipTypes;
+    phoneTypes.value = newState.phoneTypes;
 }
 
 /**
@@ -41,6 +43,7 @@ export const updateState = (newState: customerProps) => {
  */
 export const manageLoad = ref(false);
 export const equipLoad = ref(false);
+export const contactLoad = ref(false);
 
 
 export const toggleManageLoad = () => {
@@ -49,4 +52,8 @@ export const toggleManageLoad = () => {
 
 export const toggleEquipLoad = () => {
     equipLoad.value = !equipLoad.value;
+}
+
+export const toggleContLoad = () => {
+    contactLoad.value = !contactLoad.value;
 }

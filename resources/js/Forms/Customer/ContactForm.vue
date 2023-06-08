@@ -50,7 +50,7 @@
                             :id="`type-${index}`"
                             :name="`phones[${index}].type`"
                             :option-list="
-                                phoneTypes.map((i) => i['description'])
+                                phoneTypes.map((i: phoneNumber) => i['description'])
                             "
                         />
                     </div>
@@ -110,27 +110,22 @@ import SelectInput from "@/Components/Base/Input/SelectInput.vue";
 import PhoneNumberInput from "@/Components/Base/Input/PhoneNumberInput.vue";
 import Overlay from "@/Components/Base/Overlay.vue";
 import SubmitButton from "@/Components/Base/Input/SubmitButton.vue";
-import { ref, onMounted, inject, watch, computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import {
-    allowShareKey,
-    customerKey,
-    phoneTypesKey,
-    toggleContactsLoadKey,
-} from "@/SymbolKeys/CustomerKeys";
 import { useForm as useVeeForm, useFieldArray } from "vee-validate";
 import { object, string, boolean, array } from "yup";
-import type { ComputedRef, Ref } from "vue";
+import {
+    customer,
+    toggleContLoad,
+    allowShare,
+    phoneTypes,
+} from "@/State/Customer/CustomerState";
 
 const emit = defineEmits(["success"]);
 const props = defineProps<{
     contactData?: customerContact;
 }>();
 
-const allowShare = inject(allowShareKey) as ComputedRef<boolean>;
-const custData = inject(customerKey) as Ref<customer>;
-const toggleLoad = inject(toggleContactsLoadKey) as () => void;
-const phoneTypes = inject(phoneTypesKey) as phoneNumber[];
 const submitText = computed(() =>
     props.contactData === undefined ? "Add Contact" : "Update Contact"
 );
@@ -142,8 +137,7 @@ const loading = ref<boolean>(false);
 watch(props, () => {
     resetForm();
 
-    if(props.contactData)
-    {
+    if (props.contactData) {
         setValues({
             name: props.contactData.name!!,
             title: props.contactData.title!!,
@@ -152,14 +146,16 @@ watch(props, () => {
             note: props.contactData.note!!,
         });
 
-        props.contactData?.customer_contact_phone.forEach((item: contactPhone) => {
-            push({
-                type: item.phone_number_type.description,
-                number: item.phone_number,
-                ext: item.extension,
-                id: item.id,
-            });
-        });
+        props.contactData?.customer_contact_phone.forEach(
+            (item: contactPhone) => {
+                push({
+                    type: item.phone_number_type.description,
+                    number: item.phone_number,
+                    ext: item.extension,
+                    id: item.id,
+                });
+            }
+        );
 
         newPhone();
     }
@@ -181,12 +177,12 @@ const newPhone = () => {
  */
 const { handleSubmit, resetForm, setValues } = useVeeForm({
     initialValues: {
-        cust_id: custData.value.cust_id,
+        cust_id: customer.value?.cust_id,
         shared: false,
-        name: '',
-        title: '',
-        email: '',
-        note: '',
+        name: "",
+        title: "",
+        email: "",
+        note: "",
         phones: [],
     },
     validationSchema: object<customerContact>({
@@ -207,7 +203,7 @@ onMounted(() => newPhone());
 const onSubmit = handleSubmit((form) => {
     const formData = useForm(form);
     loading.value = true;
-    toggleLoad();
+    toggleContLoad();
 
     // Determine if this is a new contact, or updating an existing one
     if (props.contactData !== undefined) {
@@ -215,7 +211,7 @@ const onSubmit = handleSubmit((form) => {
             route("customers.contacts.update", props.contactData.cont_id),
             {
                 onFinish: () => {
-                    toggleLoad();
+                    toggleContLoad();
                     loading.value = false;
                     resetForm();
                 },
@@ -225,7 +221,7 @@ const onSubmit = handleSubmit((form) => {
     } else {
         formData.post(route("customers.contacts.store"), {
             onFinish: () => {
-                toggleLoad();
+                toggleContLoad();
                 loading.value = false;
                 resetForm();
             },
