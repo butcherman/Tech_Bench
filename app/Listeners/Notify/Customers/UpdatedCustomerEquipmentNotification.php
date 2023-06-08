@@ -21,6 +21,6 @@ class UpdatedCustomerEquipmentNotification implements ShouldQueue
         $userList = $this->getUserList($event->customer->cust_id, $event->user->user_id);
 
         Log::debug('Preparing to handle Customer Equipment Created Event', $userList->toArray());
-        Notification::send($userList, new UpdatedEquipmentNotification($event->customer));
+        Notification::send($userList, new UpdatedEquipmentNotification($event->customer, $event->equipment));
     }
 }

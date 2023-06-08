@@ -53,8 +53,9 @@ type notification = {
     type: string;
     updated_at: string;
     data: {
+        component: string;
         subject: string;
-        data: object;
+        props: object;
     }
 }
 

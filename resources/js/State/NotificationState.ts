@@ -7,10 +7,27 @@ const intervalId = ref<number>(0);
 const checkCounter = ref<number>(0);
 
 export const newNotifications = ref<notification[]>([]);
+export const displayNotification = ref<notification | null>(null);
 export const notifications = reactive<notificationProps>({
     list: [],
     new: 0,
 });
+
+/**
+ * Display a Modal showing the selected notification
+ */
+export const showNotification = (notification: notification) => {
+    console.log(notification)
+    displayNotification.value = notification;
+}
+
+/**
+ * Remove the active notification
+ */
+export const closeNotification = () => {
+    sendNotificationUpdate('mark', [displayNotification.value?.id!!]);
+    displayNotification.value = null;
+}
 
 /**
  * Set timer to perform Async check for new notifications every 60 seconds

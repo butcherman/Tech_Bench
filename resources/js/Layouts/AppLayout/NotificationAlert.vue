@@ -5,7 +5,8 @@
                 <div
                     v-for="notification in newNotifications"
                     :key="notification.id"
-                    class="toast align-items-center fade show"
+                    class="toast align-items-center fade show pointer"
+                    @click="showNotification(notification)"
                 >
                     <div class="toast-header">
                         <strong class="me-auto">New Notification</strong>
@@ -25,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { newNotifications } from "@/State/NotificationState";
+import { newNotifications, showNotification } from "@/State/NotificationState";
 import { gsap } from "gsap";
 
 /**

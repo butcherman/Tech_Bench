@@ -35,6 +35,11 @@ class NotificationRequest extends FormRequest
         {
             foreach($this->input('list') as $msg) {
                 $notification = $this->user()->notifications()->where('id', $msg)->first();
+                //  It is possible the notification was handled and deleted in a previous request
+                if(empty($notification)) {
+                    return true;
+                }
+
                 if($this->input('action') === 'mark') {
                     $notification->markAsRead();
                     Log::debug('Marked Notification ID '.$msg.' for '.$this->user()->username.' as read');

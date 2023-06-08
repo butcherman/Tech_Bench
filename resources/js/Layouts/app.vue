@@ -9,11 +9,12 @@
                     <AppAlerts />
                     <slot />
                 </div>
-\                <AppFooter />
+                \ <AppFooter />
             </div>
         </div>
         <AppFlash />
         <NotificationAlert />
+        <NotificationBase />
     </div>
 </template>
 
@@ -25,10 +26,15 @@ import AppBreadcrumbs from "./AppLayout/AppBreadcrumbs.vue";
 import AppAlerts from "./AppLayout/AppAlerts.vue";
 import AppFlash from "./AppLayout/AppFlash.vue";
 import NotificationAlert from "./AppLayout/NotificationAlert.vue";
-import { onMounted } from 'vue';
+import NotificationBase from "@/Components/Notification/NotificationBase.vue";
+import { onMounted } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { closeNavbar } from "@/State/LayoutState";
-import { resetCheckCounter, setNotifications, triggerFetchInterval } from "@/State/NotificationState";
+import {
+    resetCheckCounter,
+    setNotifications,
+    triggerFetchInterval,
+} from "@/State/NotificationState";
 
 router.on("navigate", () => {
     closeNavbar();
@@ -40,8 +46,8 @@ router.on("navigate", () => {
  * All notifications received after mount will be pushed via Ajax call
  */
 onMounted(() => {
-    const page:pageData = usePage();
+    const page: pageData = usePage();
     setNotifications(page.props.notifications);
     triggerFetchInterval();
-})
+});
 </script>

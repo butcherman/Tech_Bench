@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import VueForm from "@/Components/Base/VueForm.vue";
 import TextInput from "@/Components/Base/Input/TextInput.vue";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { Field } from "vee-validate";
 import {
     customer,
@@ -123,25 +123,22 @@ const isFieldDisabled = (fieldEquip: customerEquipment) => {
  */
 const populateForm = (equip: equipWithData) => {
     newEquipmentForm.value?.setFieldValue("equip_id", equip.equip_id);
-    onLeave(document.getElementById("other-fields-wrapper"));
-    otherFields.value = equip.data_field_type;
-    onEnter(document.getElementById("other-fields-wrapper"));
-};
 
-/**
- * Animation Styles
- */
-const onEnter = (el: Element | null) => {
-    gsap.from(el, {
-        opacity: 0,
-        delay: 0.8,
-    });
-};
+    const el = document.getElementById('other-fields-wrapper');
 
-const onLeave = (el: Element | null) => {
     gsap.to(el, {
         opacity: 0,
-        delay: 0.7,
+        duration: 1,
+        done: () => {
+            nextTick(() => {
+
+                otherFields.value = equip.data_field_type;
+                gsap.from(el, {
+                    opacity: 0,
+                    duration: 1,
+                });
+            });
+        }
     });
 };
 </script>

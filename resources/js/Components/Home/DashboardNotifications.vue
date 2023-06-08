@@ -37,6 +37,7 @@
                         <tr
                             v-for="notification in notificationList"
                             :key="notification.id"
+                            @click="showNotification(notification)"
                         >
                             <td>
                                 <input
@@ -91,6 +92,7 @@ import { ref, computed } from "vue";
 import { verifyModal } from "@/Modules/verifyModal.module";
 import {
     notifications,
+    showNotification,
     sendNotificationUpdate,
 } from "@/State/NotificationState";
 

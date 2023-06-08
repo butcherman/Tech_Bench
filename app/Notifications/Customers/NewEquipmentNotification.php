@@ -66,7 +66,7 @@ class NewEquipmentNotification extends Notification implements ShouldQueue
     {
         return [
             'subject' => 'New Customer Equipment Created For '.$this->customer->name,
-            'component' => 'Customers/EquipmentNotification',
+            'component' => 'Customer/EquipmentNotification',
             'props' => [
                 'new' => true,
                 'customer' => $this->customer->name,
