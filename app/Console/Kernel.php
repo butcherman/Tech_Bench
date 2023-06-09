@@ -2,38 +2,23 @@
 
 namespace App\Console;
 
-use App\Jobs\GarbageCollectionJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
     /**
-     * The Artisan commands provided by your application
+     * Define the application's command schedule.
      */
-    protected $commands = [
-        //
-    ];
-
-    /**
-     * Define the application's command schedule
-     */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
-        // $schedule->job(new GarbageCollectionJob)->daily();
-        $schedule->command('telescope:prune')->daily();
-
-        //  Nightly backup will only run if the task is
-        if (config('app.backups.enabled')) {
-            $schedule->command('tb_maintenance:backup')->dailyAt('03:00');
-        }
+        // $schedule->command('inspire')->hourly();
     }
 
     /**
-     * Register the commands for the application
+     * Register the commands for the application.
      */
-    protected function commands()
+    protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');
 

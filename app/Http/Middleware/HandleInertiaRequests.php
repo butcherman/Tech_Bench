@@ -2,27 +2,29 @@
 
 namespace App\Http\Middleware;
 
-use App\Actions\BuildNavbar;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use PragmaRX\Version\Package\Version;
 
 class HandleInertiaRequests extends Middleware
 {
+    /**
+     * The root template that's loaded on the first page visit
+     */
     protected $rootView = 'app';
 
     /**
-     * Determines the current asset version.
+     * Determines the current asset version
      */
-    public function version(Request $request)
+    public function version(Request $request): ?string
     {
         return parent::version($request);
     }
 
     /**
-     * Defines the props that are shared by default.
+     * Defines the props that are shared by default
      */
-    public function share(Request $request)
+    public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
             //  Flash messages are used for success/failure messages on next page load
@@ -52,7 +54,7 @@ class HandleInertiaRequests extends Middleware
                 'new' => fn () => $request->user() ? $request->user()->unreadNotifications->count() : null,
             ],
             //  Dynamically built navigation menu
-            'navbar' => fn () => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
+            'navbar' => [], /// fn () => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
         ]);
     }
 }

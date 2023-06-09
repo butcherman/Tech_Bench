@@ -9,44 +9,29 @@ return [
     |--------------------------------------------------------------------------
     | Telescope Domain
     |--------------------------------------------------------------------------
-    |
-    | This is the subdomain where Telescope will be accessible from. If the
-    | setting is null, Telescope will reside under the same domain as the
-    | application. Otherwise, this value will be used as the subdomain.
-    |
     */
 
-    'domain' => null, // env('TELESCOPE_DOMAIN', null),
+    'domain' => null, 
 
     /*
     |--------------------------------------------------------------------------
     | Telescope Path
     |--------------------------------------------------------------------------
-    |
-    | This is the URI path where Telescope will be accessible from. Feel free
-    | to change this path to anything you like. Note that the URI will not
-    | affect the paths of its internal API that aren't exposed to users.
-    |
     */
 
-    'path' => 'administration/telescope', // env('TELESCOPE_PATH', 'administration/telescope'),
+    'path' => 'administration/telescope',
 
     /*
     |--------------------------------------------------------------------------
     | Telescope Storage Driver
     |--------------------------------------------------------------------------
-    |
-    | This configuration options determines the storage driver that will
-    | be used to store Telescope's data. In addition, you may set any
-    | custom options as needed by the particular driver you choose.
-    |
     */
 
-    'driver' => 'database', // env('TELESCOPE_DRIVER', 'database'),
+    'driver' => 'database', 
 
     'storage' => [
         'database' => [
-            'connection' => 'mysql', // env('DB_CONNECTION', 'mysql'),
+            'connection' => 'mysql', 
             'chunk' => 1000,
         ],
     ],
@@ -55,11 +40,6 @@ return [
     |--------------------------------------------------------------------------
     | Telescope Master Switch
     |--------------------------------------------------------------------------
-    |
-    | This option may be used to disable all Telescope watchers regardless
-    | of their individual configuration, which simply provides a single
-    | and convenient way to enable or disable Telescope data storage.
-    |
     */
 
     'enabled' => env('TELESCOPE_ENABLED', false),
@@ -68,11 +48,6 @@ return [
     |--------------------------------------------------------------------------
     | Telescope Route Middleware
     |--------------------------------------------------------------------------
-    |
-    | These middleware will be assigned to every Telescope route, giving you
-    | the chance to add your own middleware to this list or change any of
-    | the existing middleware. Or, you can simply stick with this list.
-    |
     */
 
     'middleware' => [
@@ -84,11 +59,6 @@ return [
     |--------------------------------------------------------------------------
     | Allowed / Ignored Paths & Commands
     |--------------------------------------------------------------------------
-    |
-    | The following array lists the URI paths and Artisan commands that will
-    | not be watched by Telescope. In addition to this list, some Laravel
-    | commands, like migrations and queue commands, are always ignored.
-    |
     */
 
     'only_paths' => [
@@ -107,11 +77,6 @@ return [
     |--------------------------------------------------------------------------
     | Telescope Watchers
     |--------------------------------------------------------------------------
-    |
-    | The following array lists the "watchers" that will be registered with
-    | Telescope. The watchers gather the application's profile data when
-    | a request or task is executed. Feel free to customize this list.
-    |
     */
 
     'watchers' => [

@@ -1,45 +1,20 @@
 <?php
-use App\Http\Controllers\Home\AboutController;
-use App\Http\Controllers\Home\DashboardController;
-use App\Http\Controllers\Home\DownloadController;
-use App\Http\Controllers\Home\GetPhoneTypesController;
-use App\Http\Controllers\Home\NotificationController;
-use App\Http\Controllers\Home\UploadImageController;
-use App\Http\Controllers\User\ChangePasswordController;
-use App\Http\Controllers\User\UpdateAccountController;
-use App\Http\Controllers\User\UpdateNotificationsController;
-use App\Http\Controllers\User\UserSettingsController;
+
 use Illuminate\Support\Facades\Route;
 
-/**
- *   Standard Routes for users that have been successfully Authenticated
- */
-Route::middleware('auth')->group(function () {
-    Route::get('dashboard', DashboardController::class)
-        ->name('dashboard')
-        ->breadcrumb('Dashboard');
-    Route::get('about', AboutController::class)
-        ->name('about')
-        ->breadcrumb('About Tech Bench', 'dashboard');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
-    Route::prefix('settings')->name('settings.')->group(function () {
-        Route::get('/', UserSettingsController::class)
-            ->name('index')
-            ->breadcrumb('Settings', 'dashboard');
-        Route::get('password', [ChangePasswordController::class, 'get'])
-            ->name('password.index')
-            ->breadcrumb('Change Password', 'settings.index');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-        Route::post('notifications', UpdateNotificationsController::class)->name('notifications');
-        Route::post('/{user}/update', UpdateAccountController::class)->name('update');
-        Route::post('password', [ChangePasswordController::class, 'set'])->name('password.store');
-    });
-
-    Route::post('upload-image', UploadImageController::class)->name('upload-image');
-    Route::post('notifications', NotificationController::class)->name('notifications');
-});
-
-/**
- * Standard routes for both Authenticated users and guests
- */
-Route::get('download/{id}/{name}', DownloadController::class)->name('download');
+Route::inertia('/', 'Auth/Login');
