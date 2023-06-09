@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\User;
+use App\Traits\AllowTrait;
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class UserPolicy
+{
+    use AllowTrait;
+    use HandlesAuthorization;
+
+    public function manage(User $user)
+    {
+        return $this->checkPermission($user, 'Manage Users');
+    }
+
+    /**
+     * Determine whether the user can create models
+     */
+    public function create(User $user)
+    {
+        return $this->checkPermission($user, 'Manage Users');
+    }
+
+    /**
+     * Determine whether the user can update the user profile
+     */
+    public function update(User $user, User $model)
+    {
+        if ($user->user_id !== $model->user_id) {
+            return $this->checkPermission($user, 'Manage Users') && $user->role_id <= $model->role_id;
+        }
+
+        return $user->user_id === $model->user_id;
+    }
+
+    /**
+     * Determine if the user can deactivate a user profile
+     */
+    public function destroy(User $user, User $model)
+    {
+        return $this->checkPermission($user, 'Manage Users') && $user->role_id <= $model->role_id;
+    }
+}

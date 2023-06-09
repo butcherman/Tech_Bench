@@ -1,8 +1,7 @@
 /**
  * Stylesheets
  */
-// import "maz-ui/css/main.css";
-// import "../scss/app.scss";
+import "../scss/app.scss";
 
 /*
  *   Vue and base libraries
