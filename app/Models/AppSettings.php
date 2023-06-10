@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AppSettings extends Model
 {
-    // use HasFactory;
-
     protected $primaryKey = 'id';
 
     protected $guarded = ['id', 'created_at', 'updated_at'];

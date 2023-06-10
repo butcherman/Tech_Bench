@@ -40,8 +40,6 @@ class User extends Authenticatable
 
     /**
      * Users First and Last name combined
-     *
-     * @codeCoverageIgnore
      */
     public function getFullNameAttribute()
     {
@@ -50,8 +48,6 @@ class User extends Authenticatable
 
     /**
      * User Initials
-     *
-     * @codeCoverageIgnore
      */
     public function getInitialsAttribute()
     {
@@ -64,14 +60,6 @@ class User extends Authenticatable
     public function UserRoles()
     {
         return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
-    }
-
-    /**
-     * User Settings Data
-     */
-    public function UserSetting()
-    {
-        return $this->hasOne(UserSetting::class, 'user_id', 'user_id');
     }
 
     /**

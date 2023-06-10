@@ -99,6 +99,7 @@ class LoginTest extends TestCase
             'password' => 'somethingElse',
         ]);
 
+        //  FIXME - this is not locking user out
         $response->assertStatus(302)->assertRedirect(route('home'))->assertSessionHasErrors(['username']);
         $this->assertGuest();
 

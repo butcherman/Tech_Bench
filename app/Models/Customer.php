@@ -45,20 +45,10 @@ class Customer extends Model
 
     /**
      * If a customer is the parent and has children below it, they will be counted
-     *
-     * @codeCoverageIgnore
      */
     public function getChildCountAttribute()
     {
         return Customer::where('parent_id', $this->cust_id)->count();
-    }
-
-    /**
-     * Several equipment types can be assigned to a customer
-     */
-    public function EquipmentType()
-    {
-        return $this->hasManyThrough('App\Models\EquipmentType', 'App\Models\CustomerEquipment', 'cust_id', 'equip_id', 'cust_id', 'equip_id');
     }
 
     /**

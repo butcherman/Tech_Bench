@@ -34,8 +34,6 @@ class CustomerNote extends Model
 
     /**
      * Name of the user who created the note
-     *
-     * @codeCoverageIgnore
      */
     public function getAuthorAttribute()
     {
@@ -44,8 +42,6 @@ class CustomerNote extends Model
 
     /**
      * Name of the user who most recently updated the note
-     *
-     * @codeCoverageIgnore
      */
     public function getUpdatedAuthorAttribute()
     {

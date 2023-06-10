@@ -46,8 +46,6 @@ class CustomerFile extends Model
 
     /**
      * Full name of the user that uploaded the file
-     *
-     * @codeCoverageIgnore
      */
     public function getUploadedByAttribute()
     {
@@ -56,8 +54,6 @@ class CustomerFile extends Model
 
     /**
      * Type of file that was uploaded (i.e. Backup, Site Map, etc)
-     *
-     * @codeCoverageIgnore
      */
     public function getFileTypeAttribute()
     {

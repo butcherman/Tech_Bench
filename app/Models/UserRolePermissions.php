@@ -20,8 +20,8 @@ class UserRolePermissions extends Model
     /**
      * User Role Permissions explain what a permission type id is for
      */
-    public function UserRolePermissionTypes()
-    {
-        return $this->hasOne('App\Models\UserRolePermissionTypes', 'perm_type_id', 'perm_type_id');
-    }
+    // public function UserRolePermissionTypes()
+    // {
+    //     return $this->hasOne('App\Models\UserRolePermissionTypes', 'perm_type_id', 'perm_type_id');
+    // }
 }
