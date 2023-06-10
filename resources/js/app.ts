@@ -11,7 +11,7 @@ import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 // import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 //  Custom Directives
-// import { vFocusDirective } from "./Directives/Focus";
+import { vFocusDirective } from "./Directives/FocusDirective";
 // import { vTooltipDirective } from "./Directives/Tooltip";
 // import { vPopoverDirective } from "./Directives/Popover";
 
@@ -41,7 +41,7 @@ createInertiaApp({
             .component("Link", Link) //  Inertial Link
             .component("Head", Head) //  Head title
             // .component("fa-icon", FontAwesomeIcon) //  Font Awesome
-            // .directive("focus", vFocusDirective)
+            .directive("focus", vFocusDirective)
             // .directive("tooltip", vTooltipDirective)
             // .directive("popover", vPopoverDirective);
 

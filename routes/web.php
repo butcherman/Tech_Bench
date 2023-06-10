@@ -17,4 +17,11 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::inertia('/', 'Auth/Login');
+// Route::inertia('/', 'Auth/Login');
+
+
+// Route::get('auth/redirect', function() {
+//     return 'socialite login';
+// })-> name('azure-login');
+
+// Route::get('forgot-pass', function() { return 'forgot password'; })->name('password.forgot');

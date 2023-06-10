@@ -24,9 +24,17 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-        $this->routes(function () {
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
+        /**
+         * Register all files in the routes folder
+         */
+        Route::group([
+            'middleware' => 'web',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            $routes = glob(base_path('routes/*.php'));
+            foreach($routes as $route) {
+                require $route;
+            }
         });
     }
 }
