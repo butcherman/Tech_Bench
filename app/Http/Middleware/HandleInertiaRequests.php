@@ -29,6 +29,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => [
+                'status' => fn() => $request->session()->get('status'),
                 'success' => fn () => $request->session()->get('success'),
                 'warning' => fn () => $request->session()->get('warning'),
                 'danger' => fn () => $request->session()->get('danger'),

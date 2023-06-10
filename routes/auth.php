@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,7 +12,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('guest')->group(function() {
-    Route::inertia('/', 'Auth/Login');
+    Route::get('/', LoginController::class)->name('home');
+    Route::get('login', LoginController::class);
+    Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
+
+    /**
+     * Forgot Password Routes
+     */
+    Route::name('password.')->group(function() {
+        Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('forgot');
+        Route::get('reset-password', ResetPasswordController::class)->name('reset');
+    });
+
 
 
 
@@ -19,5 +33,7 @@ Route::middleware('guest')->group(function() {
         return 'socialite login';
     })-> name('azure-login');
 
-    Route::get('forgot-pass', function() { return 'forgot password'; })->name('password.forgot');
+    
 });
+
+Route::inertia('dashboard', 'Home/Dashboard')->name('dashboard');

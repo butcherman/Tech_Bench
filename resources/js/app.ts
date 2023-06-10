@@ -41,9 +41,11 @@ createInertiaApp({
             .component("Link", Link) //  Inertial Link
             .component("Head", Head) //  Head title
             // .component("fa-icon", FontAwesomeIcon) //  Font Awesome
-            .directive("focus", vFocusDirective)
-            // .directive("tooltip", vTooltipDirective)
-            // .directive("popover", vPopoverDirective);
+            .directive("focus", vFocusDirective);
+        // .directive("tooltip", vTooltipDirective)
+        // .directive("popover", vPopoverDirective);
+
+        inertiaApp.config.globalProperties.$route = route;
 
         inertiaApp.mount(el);
     },

@@ -1,13 +1,27 @@
-body #app {
+body #app div#guest-layout {
     height: 100vh;
     width: 100vw;
 
-    & {
-        background: #090321;
-        background: -moz-linear-gradient(-45deg, #090321 0%, #424242 50%, #5E5453 100%);
-        background: -webkit-linear-gradient(-45deg, #090321 0%, #424242 50%, #5E5453 100%);
-        background: linear-gradient(135deg, #090321 0%, #424242 50%, #5E5453 100%);
-        background-attachment: fixed;
-        min-height: 100vh;
+    background: #090321;
+    background: -moz-linear-gradient(
+        -45deg,
+        #090321 0%,
+        #424242 50%,
+        #5e5453 100%
+    );
+    background: -webkit-linear-gradient(
+        -45deg,
+        #090321 0%,
+        #424242 50%,
+        #5e5453 100%
+    );
+    background: linear-gradient(135deg, #090321 0%, #424242 50%, #5e5453 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+
+    .form-control {
+        border-top: none;
+        border-left: none;
+        border-right: none;
     }
 }

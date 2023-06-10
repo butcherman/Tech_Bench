@@ -23,6 +23,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.9",
         "jeroendesloovere/vcard": "^1.7",
+        "laravel/fortify": "^1.17",
         "laravel/framework": "^10.10",
         "laravel/horizon": "^5.16",
         "laravel/sanctum": "^3.2",

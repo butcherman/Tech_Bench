@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { toRef, computed } from "vue";
 import { useField } from "vee-validate";
-import { upperFirst } from 'lodash';
+import { upperFirst } from "lodash";
 // import { helpModal } from "@/Modules/helpModal.module";
 
 defineEmits(["change"]);

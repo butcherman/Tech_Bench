@@ -1,16 +1,13 @@
 <template>
     <VueForm
+        id="login-form"
+        ref="userLoginForm"
         :initial-values="initValues"
         :validation-schema="validationSchema"
         submit-text="Login"
         @submit="onSubmit"
     >
-        <TextInput
-            id="username"
-            name="username"
-            placeholder="Username"
-            focus
-        />
+        <TextInput id="username" name="username" placeholder="Username" focus />
         <TextInput
             id="password"
             name="password"
@@ -23,12 +20,17 @@
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "../_Base/TextInput.vue";
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
 import { object, string } from "yup";
+import { shake } from "@/Modules/Animation.module";
 
-interface loginForm {
+type loginForm = {
     username: string;
     password: string;
-}
+};
+
+const userLoginForm = ref<InstanceType<typeof VueForm> | null>(null);
 
 const initValues = {
     username: "",
@@ -40,14 +42,10 @@ const validationSchema = object({
 });
 
 const onSubmit = (form: loginForm) => {
-    console.log(form);
-}
+    const formData = useForm(form);
+    formData.post(route("login"), {
+        onFinish: () => userLoginForm.value?.endSubmit(),
+        onError: () => shake(document.getElementById("login-form")!!),
+    });
+};
 </script>
-
-<style lang="scss">
-    .form-control {
-        border-top: none;
-        border-left: none;
-        border-right: none;
-    }
-</style>
