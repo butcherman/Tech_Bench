@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 // Route::inertia('/', 'Auth/Login');
 
-
 // Route::get('auth/redirect', function() {
 //     return 'socialite login';
 // })-> name('azure-login');

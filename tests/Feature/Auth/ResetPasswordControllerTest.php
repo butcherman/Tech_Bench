@@ -3,8 +3,6 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ResetPasswordControllerTest extends TestCase
@@ -15,7 +13,7 @@ class ResetPasswordControllerTest extends TestCase
     public function test_invoke_guest()
     {
         $response = $this->get(route('password.reset', ['email' => 'em@some.com', 'token' => 'blahblahblah']));
-        
+
         $response->assertSuccessful();
         $this->assertGuest();
     }

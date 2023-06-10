@@ -15,7 +15,7 @@ class ResetPasswordController extends Controller
     public function __invoke(Request $request)
     {
         //  If the user is trying to visit the page without a proper token or email, show 404
-        if(!$request->has('token') || !$request->has('email')) {
+        if (! $request->has('token') || ! $request->has('email')) {
             abort(404);
         }
 

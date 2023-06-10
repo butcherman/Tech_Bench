@@ -11,7 +11,7 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('guest')->group(function() {
+Route::middleware('guest')->group(function () {
     Route::get('/', LoginController::class)->name('home');
     Route::get('login', LoginController::class);
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
@@ -19,20 +19,13 @@ Route::middleware('guest')->group(function() {
     /**
      * Forgot Password Routes
      */
-    Route::name('password.')->group(function() {
+    Route::name('password.')->group(function () {
         Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('forgot');
         Route::get('reset-password', ResetPasswordController::class)->name('reset');
     });
 
-
-
-
-
-
-    Route::get('auth/redirect', function() {
+    Route::get('auth/redirect', function () {
         return 'socialite login';
-    })-> name('azure-login');
-
+    })->name('azure-login');
 
 });
-

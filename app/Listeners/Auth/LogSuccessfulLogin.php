@@ -4,8 +4,6 @@ namespace App\Listeners\Auth;
 
 use App\Models\UserLogins;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
 class LogSuccessfulLogin

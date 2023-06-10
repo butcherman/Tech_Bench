@@ -32,7 +32,7 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace,
         ], function ($router) {
             $routes = glob(base_path('routes/*.php'));
-            foreach($routes as $route) {
+            foreach ($routes as $route) {
                 require $route;
             }
         });
