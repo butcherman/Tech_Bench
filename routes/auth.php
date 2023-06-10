@@ -33,7 +33,6 @@ Route::middleware('guest')->group(function() {
         return 'socialite login';
     })-> name('azure-login');
 
-    
+
 });
 
-Route::inertia('dashboard', 'Home/Dashboard')->name('dashboard');
