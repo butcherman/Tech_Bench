@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\SocialiteController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
@@ -24,8 +25,10 @@ Route::middleware('guest')->group(function () {
         Route::get('reset-password', ResetPasswordController::class)->name('reset');
     });
 
-    Route::get('auth/redirect', function () {
-        return 'socialite login';
-    })->name('azure-login');
+    /**
+     * Socialite Routes
+     */
+    Route::get('auth/redirect', [SocialiteController::class, 'redirectAuth'])->name('azure-login');
+    Route::get('auth/callback', [SocialiteController::class, 'callback'])->name('azure-callback');
 
 });
