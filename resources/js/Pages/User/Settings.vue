@@ -13,7 +13,11 @@
             <div class="card">
                 <div class="card-body d-flex flex-column">
                     <div class="card-title">Notifications</div>
-                    notification settings
+                    <UserNotificationForm
+                        :settings="settings"
+                        :username="app.user?.username"
+                        class="d-flex flex-column flex-grow-1"
+                    />
                 </div>
             </div>
         </div>
@@ -23,9 +27,11 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserAccountForm from "@/Forms/User/UserAccountForm.vue";
+import UserNotificationForm from "@/Forms/User/UserNotificationForm.vue";
 
 defineProps<{
     app: appProps;
+    settings: userSettings[];
 }>();
 </script>
 

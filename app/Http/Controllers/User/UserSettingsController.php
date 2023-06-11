@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\BuildUserSettings;
 use App\Events\User\EmailChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserProfileRequest;
@@ -15,7 +16,7 @@ class UserSettingsController extends Controller
     public function get(Request $request)
     {
         return Inertia::render('User/Settings', [
-            'settings' => [],
+            'settings' => (new BuildUserSettings)->build($request->user()),
         ]);
     }
 

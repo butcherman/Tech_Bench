@@ -56,8 +56,8 @@ type notification = {
         component: string;
         subject: string;
         props: object;
-    }
-}
+    };
+};
 
 type navBarProps = {
     name: string;
@@ -75,13 +75,4 @@ type fileData = {
     chunkSize: number;
     maxSize: number;
     token: string;
-};
-
-type user = {
-    email: string;
-    first_name: string;
-    full_name: string;
-    initials: string;
-    last_name: string;
-    username: string;
 };

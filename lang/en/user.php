@@ -8,4 +8,5 @@ return [
     */
 
     'updated' => 'Account Settings Updated',
+    'notification' => 'Notification Settings Updated',
 ];
