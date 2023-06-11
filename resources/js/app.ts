@@ -26,7 +26,7 @@ import "./Modules/FontAwesome.module";
 const appName: string = "Tech Bench";
 
 createInertiaApp({
-    title: (title: string): string => `${title} - ${appName}`,
+    title: (title: string): string => title ? `${title} - ${appName}` : `${appName}`,
     resolve: (name: string) =>
         resolvePageComponent<any>(
             `./Pages/${name}.vue`,
