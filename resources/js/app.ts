@@ -9,16 +9,16 @@ import "../scss/app.scss";
 import { createApp, h } from "vue";
 import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 //  Custom Directives
 import { vFocusDirective } from "./Directives/FocusDirective";
-// import { vTooltipDirective } from "./Directives/Tooltip";
+import { vTooltipDirective } from "./Directives/TooltipDirective";
 // import { vPopoverDirective } from "./Directives/Popover";
 
 /**
  * Font Awesome Icon Library
  */
-// import "./Modules/fontAwesome.module";
+import "./Modules/FontAwesome.module";
 
 /*
  *   Initialize App
@@ -40,9 +40,9 @@ createInertiaApp({
             .use(plugin)
             .component("Link", Link) //  Inertial Link
             .component("Head", Head) //  Head title
-            // .component("fa-icon", FontAwesomeIcon) //  Font Awesome
-            .directive("focus", vFocusDirective);
-        // .directive("tooltip", vTooltipDirective)
+            .component("fa-icon", FontAwesomeIcon) //  Font Awesome
+            .directive("focus", vFocusDirective)
+            .directive("tooltip", vTooltipDirective)
         // .directive("popover", vPopoverDirective);
 
         inertiaApp.config.globalProperties.$route = route;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Actions\BuildNavbar;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use PragmaRX\Version\Package\Version;
@@ -55,7 +56,7 @@ class HandleInertiaRequests extends Middleware
                 'new' => fn () => $request->user() ? $request->user()->unreadNotifications->count() : null,
             ],
             //  Dynamically built navigation menu
-            'navbar' => [], /// fn () => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
+            'navbar' => fn () => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
         ]);
     }
 }
