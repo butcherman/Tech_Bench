@@ -2,17 +2,26 @@
 
 namespace App\Actions\Fortify;
 
-use Laravel\Fortify\Rules\Password;
+use App\Rules\ContainsLowerCase;
+use App\Rules\ContainsNumber;
+use App\Rules\ContainsSpecialChar;
+use App\Rules\ContainsUpperCase;
 
 trait PasswordValidationRules
 {
     /**
-     * Get the validation rules used to validate passwords.
-     *
-     * @return array<int, \Illuminate\Contracts\Validation\Rule|array|string>
+     * Get the validation rules used to validate passwords
      */
     protected function passwordRules(): array
     {
-        return ['required', 'string', new Password, 'confirmed'];
+        return [
+            'required',
+            'string',
+            'confirmed',
+            new ContainsUpperCase,
+            new ContainsLowerCase,
+            new ContainsNumber,
+            new ContainsSpecialChar
+        ];
     }
 }

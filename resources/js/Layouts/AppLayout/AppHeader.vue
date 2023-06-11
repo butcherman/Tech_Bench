@@ -48,7 +48,7 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
                                 <Link
-                                    :href="$route('settings.index')"
+                                    :href="$route('user.settings.index')"
                                     class="dropdown-item"
                                 >
                                     <fa-icon icon="fa-cog" />
@@ -57,7 +57,7 @@
                             </li>
                             <li>
                                 <Link
-                                    :href="$route('settings.password.index')"
+                                    :href="$route('user.password')"
                                     class="dropdown-item"
                                 >
                                     <fa-icon icon="fa-key" />

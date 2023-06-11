@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Events\User\PasswordChangedEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -12,9 +13,7 @@ class ResetUserPassword implements ResetsUserPasswords
     use PasswordValidationRules;
 
     /**
-     * Validate and reset the user's forgotten password.
-     *
-     * @param  array<string, string>  $input
+     * Validate and reset the user's forgotten password
      */
     public function reset(User $user, array $input): void
     {
@@ -25,5 +24,7 @@ class ResetUserPassword implements ResetsUserPasswords
         $user->forceFill([
             'password' => Hash::make($input['password']),
         ])->save();
+
+        event(new PasswordChangedEvent($user));
     }
 }

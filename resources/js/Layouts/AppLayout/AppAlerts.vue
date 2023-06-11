@@ -1,16 +1,13 @@
 <template>
-    <div class="alert-wrapper">
-        <div
-            v-if="Object.keys(errors).length > 0"
-            class="alert alert-danger text-center"
-        >
-            <div v-for="(err, name) in errors">
-                <span v-if="name == 'link'">
-                    <Link :href="err">More Information</Link>
-                </span>
-                <span v-else>
+    <div v-if="Object.keys(errors).length" class="alert-wrapper">
+        <div v-for="error in errors" class="alert alert-danger text-center">
+            <div v-if="typeof error === 'object'">
+                <div v-for="err in error">
                     {{ err }}
-                </span>
+                </div>
+            </div>
+            <div v-else>
+                {{ error }}
             </div>
         </div>
     </div>

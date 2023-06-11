@@ -43,10 +43,8 @@ const assignValues = () => {
 };
 
 const onSubmit = (form: { [key: string]: boolean | undefined }) => {
-    console.log(form);
-
     const formData = useForm({ settingsData: form });
-    formData.post(route('settings.notifications', props.username), {
+    formData.post(route("user.settings.notifications", props.username), {
         onFinish: () => userNotificationForm.value?.endSubmit(),
     });
 };

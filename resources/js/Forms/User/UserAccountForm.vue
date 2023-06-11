@@ -41,7 +41,7 @@ const onSubmit = (form: user) => {
     console.log(props.user.username);
 
     const formData = useForm(form);
-    formData.post(route('settings.set', props.user.username), {
+    formData.post(route('user.settings.set', props.user.username), {
         onFinish: () => userAccountForm.value?.endSubmit(),
         onSuccess: () => {
             userAccountForm.value?.resetForm();
