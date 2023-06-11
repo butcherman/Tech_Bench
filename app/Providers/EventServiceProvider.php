@@ -42,6 +42,13 @@ class EventServiceProvider extends ServiceProvider
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
         ],
+
+        /**
+         * User Profile Events
+         */
+        'App\Events\User\EmailChangedEvent' => [
+            'App\Listeners\Notify\User\EmailChangedListener',
+        ],
     ];
 
     /**

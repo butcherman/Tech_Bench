@@ -11,7 +11,7 @@ class CustomerContactUnitTest extends TestCase
 {
     protected $contact;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -45,7 +45,7 @@ class CustomerContactUnitTest extends TestCase
                 'item_id' => $this->contact->cont_id,
                 'item_name' => $this->contact->name,
                 'item_deleted' => $this->contact->deleted_at->toFormattedDateString(),
-            ]
+            ],
         ]);
     }
 }

@@ -11,7 +11,7 @@ class EquipmentTypeUnitTest extends TestCase
 {
     protected $equip;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -10,7 +10,7 @@ class EquipmentCategoryUnitTest extends TestCase
 {
     protected $category;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

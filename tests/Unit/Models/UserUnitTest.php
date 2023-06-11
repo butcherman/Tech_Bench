@@ -4,7 +4,6 @@ namespace Tests\Unit\Models;
 
 use App\Models\User;
 use App\Models\UserRoles;
-use App\Models\UserSetting;
 use Carbon\Carbon;
 use Tests\TestCase;
 
@@ -12,7 +11,7 @@ class UserUnitTest extends TestCase
 {
     protected $user;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -10,7 +10,7 @@ class CustomerNoteUnitTest extends TestCase
 {
     protected $note;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setup();
 
@@ -50,7 +50,7 @@ class CustomerNoteUnitTest extends TestCase
                 'item_id' => $this->note->note_id,
                 'item_name' => $this->note->subject,
                 'item_deleted' => $this->note->deleted_at->toFormattedDateString(),
-            ]
+            ],
         ]);
     }
 }

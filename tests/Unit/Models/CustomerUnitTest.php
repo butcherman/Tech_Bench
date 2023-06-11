@@ -50,7 +50,6 @@ class CustomerUnitTest extends TestCase
         $note = CustomerNote::factory()->create(['cust_id' => $this->customer->cust_id]);
         $file = CustomerFile::factory()->create(['cust_id' => $this->customer->cust_id]);
 
-
         $this->assertEquals($this->customer->CustomerEquipment[0]->only(['cust_equip_id', 'equip_id']), $equip->only(['cust_equip_id', 'equip_id']));
         $this->assertEquals($this->customer->CustomerContact[0]->only(['cont_id', 'name']), $cont->only(['cont_id', 'name']));
         $this->assertEquals($this->customer->CustomerNote[0]->only(['note_id', 'subject']), $note->only(['note_id', 'subject']));

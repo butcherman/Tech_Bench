@@ -10,7 +10,7 @@ class CustomerEquipmentUnitTest extends TestCase
 {
     protected $equipment;
 
-    public function setup():void
+    public function setup(): void
     {
         parent::setup();
 
@@ -49,7 +49,7 @@ class CustomerEquipmentUnitTest extends TestCase
                 'item_id' => $this->equipment->equip_id,
                 'item_name' => $this->equipment->name,
                 'item_deleted' => $this->equipment->deleted_at->toFormattedDateString(),
-            ]
+            ],
         ]);
     }
 }

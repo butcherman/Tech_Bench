@@ -11,7 +11,7 @@ class CustomerFileUnitTest extends TestCase
 {
     protected $file;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -54,7 +54,7 @@ class CustomerFileUnitTest extends TestCase
                 'item_id' => $this->file->cont_id,
                 'item_name' => $this->file->name,
                 'item_deleted' => $this->file->deleted_at->toFormattedDateString(),
-            ]
+            ],
         ]);
     }
 }
