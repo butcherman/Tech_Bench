@@ -99,8 +99,7 @@ class LoginTest extends TestCase
             'password' => 'somethingElse',
         ]);
 
-        //  FIXME - this is not locking user out
-        $response->assertStatus(302)->assertRedirect(route('home'))->assertSessionHasErrors(['username']);
+        $response->assertStatus(429);
         $this->assertGuest();
 
         //  After more than 10 minutes, user should be able to try again

@@ -31,11 +31,10 @@ class EmailChangedNotification extends Notification
 
     /**
      * Get the mail representation of the notification.
+     * @codeCoverageIgnore
      */
     public function toMail(object $notifiable): MailMessage
     {
-        Log::debug('Sending Notification');
-
         return (new MailMessage)
             ->subject('Email Address Changed')
             ->line('This is a notification to let you know that the email address assigned to your account has been changed to '.$this->newEmail.'.')

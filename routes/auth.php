@@ -15,7 +15,7 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 Route::middleware('guest')->group(function () {
     Route::get('/', LoginController::class)->name('home');
     Route::get('login', LoginController::class);
-    Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
+    Route::middleware(['throttle:login'])->post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
     /**
      * Forgot Password Routes

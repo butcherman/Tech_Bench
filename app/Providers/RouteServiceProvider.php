@@ -30,7 +30,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::group([
             'middleware' => 'web',
             'namespace' => $this->namespace,
-        ], function ($router) {
+        ], function () {
             $routes = glob(base_path('routes/*.php'));
             foreach ($routes as $route) {
                 require $route;
