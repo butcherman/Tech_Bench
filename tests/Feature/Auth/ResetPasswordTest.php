@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use App\Notifications\User\PasswordChangedNotification;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -120,18 +121,21 @@ class ResetPasswordTest extends TestCase
      */
     public function test_submit_reset_password_form_valid()
     {
+        Notification::fake();
+
         $user = User::factory()->create();
 
         $response = $this->post(route('password.reset'), [
             'token' => Password::broker()->createToken($user),
             'email' => $user->email,
-            'password' => 'new-awesome-password',
-            'password_confirmation' => 'new-awesome-password',
+            'password' => 'New-awesome-password1!',
+            'password_confirmation' => 'New-awesome-password1!',
         ]);
 
         $response->assertRedirect(route('home'));
         $this->assertEquals($user->email, $user->fresh()->email);
-        $this->assertTrue(Hash::check('new-awesome-password', $user->fresh()->password));
+        $this->assertTrue(Hash::check('New-awesome-password1!', $user->fresh()->password));
+        Notification::assertSentTo($user, PasswordChangedNotification::class);
     }
 
     /**
@@ -146,8 +150,8 @@ class ResetPasswordTest extends TestCase
         $response = $this->from(route('password.reset', 'InvalidToken'))->post(route('password.reset'), [
             'token' => 'InvalidToken',
             'email' => $user->email,
-            'password' => 'new-awesome-password',
-            'password_confirmation' => 'new-awesome-password',
+            'password' => 'New-awesome-password1!',
+            'password_confirmation' => 'New-awesome-password1!',
         ]);
 
         $response->assertRedirect(route('password.reset', 'InvalidToken'));

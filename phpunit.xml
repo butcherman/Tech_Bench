@@ -32,6 +32,11 @@
             <file>./app/Excptions/Handler.php</file>
         </exclude>
     </source>
+    <coverage>
+        <report>
+            <html outputDirectory="./tests/_Report" lowUpperBound="50" highLowerBound="90" />
+        </report>
+    </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>

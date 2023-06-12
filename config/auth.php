@@ -33,7 +33,7 @@ return [
         ],
         'settings' => [
             'expire' => 30,         //  In days
-            'min_length' => 4,          //  Minimum password length
+            'min_length' => 6,      //  Minimum password length
             'contains_uppercase' => true,
             'contains_lowercase' => true,
             'contains_number' => true,
