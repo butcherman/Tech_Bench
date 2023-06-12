@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\NotificationSettingsController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
@@ -11,5 +12,6 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
         Route::post('{user}', [UserSettingsController::class, 'set'])->name('set');
         Route::post('notifications/{user}', NotificationSettingsController::class)->name('notifications');
     });
+    Route::post('notifications', NotificationController::class)->name('notifications');
     Route::get('password', UserPasswordController::class)->name('password')->breadcrumb('Change Password', 'user.settings.index');
 });
