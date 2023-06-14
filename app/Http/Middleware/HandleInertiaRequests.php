@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Actions\BuildNavbar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use PragmaRX\Version\Package\Version;
 
@@ -40,8 +41,16 @@ class HandleInertiaRequests extends Middleware
             'app' => [
                 'name' => fn () => config('app.name'),
                 'logo' => fn () => config('app.logo'),
-                'version' => fn () => (new Version)->full(),             //  TODO - Cache this
-                'copyright' => fn () => (new Version)->copyright(),      //  TODO - Cache this
+                'version' => fn () => Cache::get('version.full', function () {
+                    $version = (new Version)->full();
+                    Cache::put('version.full', $version);
+                    return $version;
+                }),
+                'copyright' => fn () => Cache::get('version.copyright', function () {
+                    $copyright = (new Version)->copyright();
+                    Cache::put('version.copyright', $copyright);
+                    return $copyright;
+                }),
                 //  Current logged in user
                 'user' => fn () => $request->user() ? $request->user() : null,
                 //  File information

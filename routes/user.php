@@ -15,3 +15,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::post('notifications', NotificationController::class)->name('notifications');
     Route::get('password', UserPasswordController::class)->name('password')->breadcrumb('Change Password', 'user.settings.index');
 });
+
+Route::middleware('guest')->group(function () {
+    Route::get('initialize-account/{token}', function () { return 'initialize'; })->name('initialize');
+});

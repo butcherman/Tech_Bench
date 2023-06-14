@@ -5,6 +5,7 @@ type user = {
     initials: string;
     last_name: string;
     username: string;
+    role_id: number;
 };
 
 type userSettings = {
@@ -12,3 +13,14 @@ type userSettings = {
     value: boolean;
     name: string;
 }
+
+type baseUserRole = {
+    name: string;
+    description: string;
+}
+
+type userRole = {
+    role_id: number;
+    perm_type_id: number;
+    allow_edit: boolean;
+} & baseUserRole;

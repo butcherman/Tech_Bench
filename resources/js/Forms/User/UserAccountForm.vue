@@ -1,6 +1,7 @@
 <template>
     <VueForm
         ref="userAccountForm"
+        id="user-account-form"
         :initial-values="initValues"
         :validation-schema="validation"
         submit-text="Update Account Settings"
@@ -18,6 +19,7 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import { object, string } from "yup";
 import { ref } from 'vue';
 import { useForm } from "@inertiajs/vue3";
+import { shake } from '@/Modules/Animation.module';
 
 const props = defineProps<{
     user: user;
@@ -37,12 +39,10 @@ const validation = object({
 });
 
 const onSubmit = (form: user) => {
-    console.log(form);
-    console.log(props.user.username);
-
     const formData = useForm(form);
     formData.post(route('user.settings.set', props.user.username), {
         onFinish: () => userAccountForm.value?.endSubmit(),
+        onError: () => shake(document.getElementById('user-account-form')!!),
         onSuccess: () => {
             userAccountForm.value?.resetForm();
             //  Update the form with the new values

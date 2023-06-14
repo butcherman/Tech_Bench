@@ -53,6 +53,10 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Notify\User\PasswordChangedListener',
             'App\Listeners\User\LogPasswordChanged',
         ],
+        'App\Events\User\UserCreatedEvent' => [
+            'App\Listeners\Notify\User\NotifyNewUser',
+            'App\Listeners\User\CreateUserSettingsEntry',
+        ],
     ];
 
     /**

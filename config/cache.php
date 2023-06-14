@@ -50,6 +50,6 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'tech_bench'), '_').'_cache'),
+    'prefix' => 'cache',
 
 ];

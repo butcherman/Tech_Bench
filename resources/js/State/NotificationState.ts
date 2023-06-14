@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ref, reactive } from "vue";
-import type { AxiosResponse } from "axios";
 import { router } from "@inertiajs/vue3";
+import type { AxiosResponse } from "axios";
 
 const intervalId = ref<number>(0);
 const checkCounter = ref<number>(0);
@@ -59,7 +59,7 @@ export const fetchNotifications = () => {
         triggerAutoLogout();
     } else {
         axios
-            .post(route("notifications"), { action: "fetch" })
+            .post(route("user.notifications"), { action: "fetch" })
             .then((res: AxiosResponse<notificationProps>) => {
                 //  Check for new messages to throw an alert
                 res.data.list.forEach((msg) => {
@@ -96,7 +96,7 @@ export const sendNotificationUpdate = (
 ) => {
     clearFetchInterval();
     axios
-        .post(route("notifications"), { action, list: updateIdList })
+        .post(route("user.notifications"), { action, list: updateIdList })
         .then(() => {
             fetchNotifications();
             triggerFetchInterval();
