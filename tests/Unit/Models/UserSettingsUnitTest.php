@@ -10,7 +10,7 @@ class UserSettingsUnitTest extends TestCase
 {
     protected $userSetting;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

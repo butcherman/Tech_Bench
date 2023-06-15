@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\InitializeUserController;
 use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\NotificationSettingsController;
 use App\Http\Controllers\User\UserPasswordController;
@@ -17,5 +18,6 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
 });
 
 Route::middleware('guest')->group(function () {
-    Route::get('initialize-account/{token}', function () { return 'initialize'; })->name('initialize');
+    Route::get('initialize-account/{token}', [InitializeUserController::class, 'get'])->name('initialize');
+    Route::post('initialize-account/{token}', [InitializeUserController::class, 'set'])->name('initialize.submit');
 });

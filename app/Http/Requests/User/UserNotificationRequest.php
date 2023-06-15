@@ -30,12 +30,12 @@ class UserNotificationRequest extends FormRequest
      */
     public function updateSettings()
     {
-        foreach($this->settingsData as $key => $value) {
+        foreach ($this->settingsData as $key => $value) {
             UserSetting::where('user_id', $this->user->user_id)
                 ->where('setting_type_id', str_replace('type_id_', '', $key))
                 ->update([
-                'value' => $value,
-            ]);
+                    'value' => $value,
+                ]);
         }
     }
 }

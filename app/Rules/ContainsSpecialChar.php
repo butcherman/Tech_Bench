@@ -14,7 +14,7 @@ class ContainsSpecialChar implements ValidationRule
     {
         //  The configuration allows for this rule to be skipped
         if (config('auth.passwords.settings.contains_uppercase')) {
-            if(!preg_match('/[@$!%*#?&]/', $value)) {
+            if (! preg_match('/[@$!%*#?&]/', $value)) {
                 $fail('The :attribute must contain a Special Character');
             }
         }

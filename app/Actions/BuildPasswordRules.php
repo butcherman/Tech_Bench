@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Facades\Cache;
+
 class BuildPasswordRules
 {
     public function build()
@@ -26,6 +28,8 @@ class BuildPasswordRules
         if (config('auth.passwords.settings.contains_special')) {
             $passwordRules[] = 'Must contain a Special Character';
         }
+
+        Cache::put('passwordRules', $passwordRules);
 
         return $passwordRules;
     }

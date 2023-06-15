@@ -31,7 +31,6 @@ class UserSetting extends Model
 
     /**
      * Each setting is tied to a setting type id
-     *
      */
     public function UserSettingType()
     {

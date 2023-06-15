@@ -12,7 +12,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * User Administration
      */
-    Route::resource('users', UserAdminController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+    Route::resource('users', UserAdminController::class)->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->index('User Administration', 'admin.index')->create('New User', 'admin.users.index')->edit('Edit User', 'admin.users.index');
     });
 });

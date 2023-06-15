@@ -44,11 +44,13 @@ class HandleInertiaRequests extends Middleware
                 'version' => fn () => Cache::get('version.full', function () {
                     $version = (new Version)->full();
                     Cache::put('version.full', $version);
+
                     return $version;
                 }),
                 'copyright' => fn () => Cache::get('version.copyright', function () {
                     $copyright = (new Version)->copyright();
                     Cache::put('version.copyright', $copyright);
+
                     return $copyright;
                 }),
                 //  Current logged in user

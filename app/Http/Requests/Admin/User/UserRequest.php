@@ -13,7 +13,7 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if($this->user) {
+        if ($this->user) {
             return $this->user()->can('update', $this->user);
         }
 

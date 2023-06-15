@@ -14,7 +14,7 @@ class ContainsLowerCase implements ValidationRule
     {
         //  The configuration allows for this rule to be skipped
         if (config('auth.passwords.settings.contains_lowercase')) {
-            if(!preg_match('/[a-z]/', $value)) {
+            if (! preg_match('/[a-z]/', $value)) {
                 $fail('The :attribute must contain a Lower Case Letter');
             }
         }

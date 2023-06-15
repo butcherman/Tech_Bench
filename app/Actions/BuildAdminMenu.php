@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Traits\AllowTrait;
-use Illuminate\Support\Facades\Gate;
 
 class BuildAdminMenu
 {
@@ -27,12 +26,11 @@ class BuildAdminMenu
     protected function buildUserMenu()
     {
         $userBuild = [];
-        if($this->checkPermission($this->user, 'Manage Users'))
-        {
+        if ($this->checkPermission($this->user, 'Manage Users')) {
             $userBuild[] = [
-                    'name' => 'Create New User',
-                    'icon' => 'fas fa-user-plus',
-                    'route' => route('admin.users.create'),
+                'name' => 'Create New User',
+                'icon' => 'fas fa-user-plus',
+                'route' => route('admin.users.create'),
             ];
             // $userBuild[] = [
             //         'name' => 'Modify User',
@@ -52,8 +50,7 @@ class BuildAdminMenu
 
         }
 
-        if($this->checkPermission($this->user, 'Manage Permissions'))
-        {
+        if ($this->checkPermission($this->user, 'Manage Permissions')) {
             // $userBuild[] = [
             //     'name' => 'User Roles and Permissions',
             //     'icon' => 'fas fa-users-cog',

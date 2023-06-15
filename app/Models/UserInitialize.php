@@ -9,7 +9,17 @@ class UserInitialize extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['username', 'token'];
+    protected $guarded = ['created_at', 'updated_at'];
 
     protected $hidden = ['id', 'created_at', 'updated_at'];
+
+    public function getRouteKeyName()
+    {
+        return 'token';
+    }
+
+    public function User()
+    {
+        return $this->hasOne(User::class, 'username', 'username');
+    }
 }

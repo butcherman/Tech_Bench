@@ -31,19 +31,18 @@ class NotificationRequest extends FormRequest
      */
     public function processNotifications()
     {
-        if($this->input('list'))
-        {
-            foreach($this->input('list') as $msg) {
+        if ($this->input('list')) {
+            foreach ($this->input('list') as $msg) {
                 $notification = $this->user()->notifications()->where('id', $msg)->first();
                 //  It is possible the notification was handled and deleted in a previous request
-                if(empty($notification)) {
+                if (empty($notification)) {
                     return true;
                 }
 
-                if($this->input('action') === 'mark') {
+                if ($this->input('action') === 'mark') {
                     $notification->markAsRead();
                     Log::debug('Marked Notification ID '.$msg.' for '.$this->user()->username.' as read');
-                } elseif($this->input('action') === 'delete') {
+                } elseif ($this->input('action') === 'delete') {
                     $notification->delete();
                     Log::debug('Deleted Notification ID '.$msg.' for '.$this->user()->username);
                 }

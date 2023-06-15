@@ -17,7 +17,7 @@ class GetAvailableUserRoles
         $userRole = $user->role_id;
         $roleList = Cache::get('users.roles', BuildCacheData::buildRoleCache());
 
-        switch($userRole) {
+        switch ($userRole) {
             case 1:
                 return $roleList;
             case 2:

@@ -9,5 +9,5 @@ return [
 
     'user' => [
         'created' => 'User :user Created',
-    ]
+    ],
 ];

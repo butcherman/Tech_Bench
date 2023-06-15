@@ -37,7 +37,7 @@ class FortifyServiceProvider extends ServiceProvider
             $username = (string) $request->username;
             $throttleKey = $username.'|'.$request->ip();
 
-            if(RateLimiter::tooManyAttempts($throttleKey, 10)) {
+            if (RateLimiter::tooManyAttempts($throttleKey, 10)) {
 
                 //  TODO - Proper Error Page
                 event(new Lockout($request));
@@ -45,7 +45,7 @@ class FortifyServiceProvider extends ServiceProvider
             }
 
             RateLimiter::hit($throttleKey, 600);
-            return;
+
         });
 
         RateLimiter::for('two-factor', function (Request $request) {

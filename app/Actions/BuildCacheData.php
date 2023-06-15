@@ -17,8 +17,9 @@ class BuildCacheData
      */
     public static function buildRoleCache()
     {
-        return Cache::get('users.roles', function() {
+        return Cache::get('users.roles', function () {
             Cache::put('users.role', $roleList = UserRoles::all());
+
             return $roleList;
         });
     }

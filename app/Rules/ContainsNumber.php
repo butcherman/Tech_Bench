@@ -14,7 +14,7 @@ class ContainsNumber implements ValidationRule
     {
         //  The configuration allows for this rule to be skipped
         if (config('auth.passwords.settings.contains_uppercase')) {
-            if(!preg_match('/[0-9]/', $value)) {
+            if (! preg_match('/[0-9]/', $value)) {
                 $fail('The :attribute must contain a Number');
             }
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Actions\BuildPasswordRules;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class ResetPasswordController extends Controller
@@ -22,7 +23,7 @@ class ResetPasswordController extends Controller
         return Inertia::render('Auth/ResetPassword', [
             'token' => $request->token,
             'email' => $request->email,
-            'password-rules' => (new BuildPasswordRules)->build(),
+            'password-rules' => Cache::get('passwordRules', (new BuildPasswordRules)->build()),
         ]);
     }
 }

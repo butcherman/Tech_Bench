@@ -21,7 +21,7 @@ trait PasswordValidationRules
             new ContainsUpperCase,
             new ContainsLowerCase,
             new ContainsNumber,
-            new ContainsSpecialChar
+            new ContainsSpecialChar,
         ];
     }
 }

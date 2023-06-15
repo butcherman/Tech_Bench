@@ -14,7 +14,7 @@ class ContainsUpperCase implements ValidationRule
     {
         //  The configuration allows for this rule to be skipped
         if (config('auth.passwords.settings.contains_uppercase')) {
-            if(!preg_match('/[A-Z]/', $value)) {
+            if (! preg_match('/[A-Z]/', $value)) {
                 $fail('The :attribute must contain an Upper Case Letter');
             }
         }
