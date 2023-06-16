@@ -32,7 +32,7 @@ class InitializeUserController extends Controller
         $user = $token->User;
         $user->forceFill([
             'password' => Hash::make($request->password),
-            'expires' => $user->getNewExpireTime(),
+            'password_expires' => $user->getNewExpireTime(),
         ])->save();
 
         Log::stack(['daily', 'auth', 'user'])->info('User '.$user->username.' has finished setting up their account');

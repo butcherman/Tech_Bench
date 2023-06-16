@@ -23,6 +23,7 @@ class ResetUserPassword implements ResetsUserPasswords
 
         $user->forceFill([
             'password' => Hash::make($input['password']),
+            'password_expires' => $user->getNewExpireTime(),
         ])->save();
 
         event(new PasswordChangedEvent($user));
