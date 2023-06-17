@@ -8,6 +8,11 @@ type user = {
     role_id: number;
 };
 
+type userWithRole = {
+    user_id: number;
+    user_role: userRole;
+} & user;
+
 type userSettings = {
     setting_type_id: number;
     value: boolean;

@@ -9,6 +9,7 @@ use App\Events\User\UserCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserRequest;
 use App\Models\User;
+use App\Models\UserLogins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -20,8 +21,11 @@ class UserAdminController extends Controller
      */
     public function index()
     {
-        //
-        return 'admin.users.index';
+        $this->authorize('manage', User::class);
+
+        return Inertia::render('Admin/User/Index', [
+            'user-list' => User::with('UserRole')->get(),
+        ]);
     }
 
     /**
@@ -46,15 +50,21 @@ class UserAdminController extends Controller
         event(new UserCreatedEvent($newUser));
         Log::stack(['daily', 'user'])->notice('New User Created By '.$request->user()->username, $newUser->toArray());
 
-        return redirect(route('admin.index'))->with('success', __('admin.user.created', ['user' => $newUser->full_name]));
+        return redirect(route('admin.users.index'))->with('success', __('admin.user.created', ['user' => $newUser->full_name]));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        $this->authorize('update', $user);
+
+        return Inertia::render('Admin/User/Show', [
+            'user' => $user,
+            'role' => $user->UserRole,
+            'last-login' => UserLogins::where('user_id', $user->user_id)->latest('created_at')->first(),
+        ]);
     }
 
     /**
@@ -63,6 +73,7 @@ class UserAdminController extends Controller
     public function edit(string $id)
     {
         //
+        return Inertia::render('Admin/Users/Edit');
     }
 
     /**

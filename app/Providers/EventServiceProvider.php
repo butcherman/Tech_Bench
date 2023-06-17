@@ -57,6 +57,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Notify\User\NotifyNewUser',
             'App\Listeners\User\CreateUserSettingsEntry',
         ],
+        'App\Events\User\ResendWelcomeEvent' => [
+            'App\Listeners\Notify\User\ResendWelcomeEmail',
+        ],
     ];
 
     /**

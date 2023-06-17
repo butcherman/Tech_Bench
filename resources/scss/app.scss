@@ -76,3 +76,18 @@ a:hover {
         }
     }
 }
+
+tr.row-link {
+    td {
+        padding: 0;
+        height: 100%;
+        a {
+            display: block;
+            height: 100%;
+            padding: 8px 0;
+            text-decoration: none;
+            font-weight: normal;
+            color: #000000;
+        }
+    }
+}

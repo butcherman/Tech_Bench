@@ -41,7 +41,7 @@ class UserUnitTest extends TestCase
     public function test_model_relationships()
     {
         $role = UserRoles::where('role_id', $this->user->role_id)->first();
-        $this->assertEquals($this->user->UserRoles->role_id, $role->role_id);
+        $this->assertEquals($this->user->UserRole->role_id, $role->role_id);
     }
 
     /**

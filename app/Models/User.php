@@ -20,7 +20,7 @@ class User extends Authenticatable
 
     protected $guarded = ['created_at', 'updated_at'];
 
-    protected $hidden = ['role_id', 'password', 'remember_token', 'deleted_at', 'created_at', 'password_expires', 'updated_at', 'user_id'];
+    protected $hidden = ['role_id', 'password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes', 'two_factor_confirmed_at', 'deleted_at', 'created_at', 'password_expires', 'updated_at', 'user_id'];
 
     protected $appends = ['full_name', 'initials'];
 
@@ -57,7 +57,7 @@ class User extends Authenticatable
     /**
      * Each user is assigned to a role that determines what permissions they are allowed
      */
-    public function UserRoles()
+    public function UserRole()
     {
         return $this->hasOne('App\Models\UserRoles', 'role_id', 'role_id');
     }

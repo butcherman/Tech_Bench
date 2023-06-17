@@ -32,11 +32,11 @@ class BuildAdminMenu
                 'icon' => 'fas fa-user-plus',
                 'route' => route('admin.users.create'),
             ];
-            // $userBuild[] = [
-            //         'name' => 'Modify User',
-            //         'icon' => 'fas fa-user-edit',
-            //         'route' => '#',
-            //     ];
+            $userBuild[] = [
+                    'name' => 'Show Users',
+                    'icon' => 'fas fa-user-edit',
+                    'route' => route('admin.users.index'),
+                ];
             // $userBuild[] = [
             //         'name' => 'Show Deactivated Users',
             //         'icon' => 'fas fa-store-alt-slash',

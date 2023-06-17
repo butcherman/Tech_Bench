@@ -11,7 +11,7 @@ export default defineConfig(({ mode} ) => {
         plugins: [
             laravel({
                 input: 'resources/js/app.ts',
-                refresh: ['routes/**'],
+                refresh: ['routes/**', 'app/Http/**'],
             }),
             vue({
                 template: {
