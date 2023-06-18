@@ -20,6 +20,6 @@ class ResetUserPasswordController extends Controller
             'password_expires' => $user->getNewExpireTime($request->changeRequired),
         ])->save();
 
-        return back()->with('success', 'Reset password');
+        return back()->with('success', __('user.password_reset', ['user' => $user->full_name]));
     }
 }

@@ -15,9 +15,11 @@ class SendWelcomeEmailController extends Controller
      */
     public function __invoke(Request $request, User $user)
     {
+        $this->authorize('manage', $user);
+
         event(new ResendWelcomeEvent($user));
         Log::stack(['daily', 'user', 'auth'])->info('Resending Welcome email to '.$user->full_name.'.  Triggered by '.$request->user()->username);
 
-        return back()->with('success', 'Email queued for delivery');
+        return back()->with('success', __('admin.user.welcome_sent'));
     }
 }

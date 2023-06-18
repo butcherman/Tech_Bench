@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-// use app\Actions\GetAvailableUserRoles;
-
 use App\Actions\GetAvailableUserRoles;
 use App\Events\User\UserCreatedEvent;
 use App\Http\Controllers\Controller;
@@ -83,13 +81,13 @@ class UserAdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
         $user->update($request->toArray());
 
         Log::stack(['daily', 'user'])->info('User information for '.$user->username.' has been updated by '.$request->user()->username, $request->toArray());
 
-        return redirect(route('admin.users.show', $user->username))->with('success', 'User Updated');
+        return redirect(route('admin.users.show', $user->username))->with('success', __('admin.user.updated', ['user' => $user->full_name]));
     }
 
     /**
@@ -102,7 +100,7 @@ class UserAdminController extends Controller
         $user->delete();
         Log::stack(['daily', 'user'])->notice('User '.$user->username.' has been deactivated by '.$request->user()->username);
 
-        return back()->with('warning', 'User Disabled');
+        return back()->with('warning', __('admin.user.disabled', ['user' => $user->full_name]));
     }
 
     /**
@@ -114,6 +112,6 @@ class UserAdminController extends Controller
 
         $user->restore();
         Log::stack(['daily', 'user'])->notice('User '.$user->username.' has been reactivated by '.$request->user()->username);
-        return back()->with('success', 'User Restored');
+        return back()->with('success', __('admin.user.restored', ['user' => $user->full_name]));
     }
 }
