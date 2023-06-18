@@ -1,5 +1,6 @@
 import type {
     Route,
+    Router,
     RouteParam,
     RouteParamsWithQueryOverload,
     Config,
@@ -21,11 +22,11 @@ declare global {
 declare module "@vue/runtime-core" {
     interface ComponentCustomProperties {
         $route: (
-            name: string,
+            name?: string,
             params?: RouteParamsWithQueryOverload | RouteParam,
             absolute?: boolean,
             config?: Config
-        ) => string;
+        ) => Router;
     }
 }
 

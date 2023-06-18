@@ -98,10 +98,13 @@
                                 <fa-icon icon="edit" class="float-start mt-1" />
                                 Update User Information
                             </Link>
-                            <!-- <button class="btn btn-info w-100 m-1">
+                            <button
+                                class="btn btn-info w-100 m-1"
+                                @click="notificationModal?.show"
+                            >
                                 <fa-icon icon="bell" class="float-start mt-1" />
-                                Send Notification/Alert
-                            </button> -->
+                                Send Notification
+                            </button>
                             <button
                                 class="btn btn-danger w-100 m-1"
                                 @click="disableUser"
@@ -134,6 +137,12 @@
                     @completed="resetPasswordModal?.hide()"
                 />
             </Modal>
+            <Modal ref="notificationModal" title="Send User Notification/Alert">
+                <NotificationForm
+                    :user="user"
+                    @completed="notificationModal?.hide"
+                />
+            </Modal>
         </div>
     </Overlay>
 </template>
@@ -142,6 +151,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import ResetPasswordForm from "@/Forms/Admin/User/ResetPasswordForm.vue";
+import NotificationForm from "@/Forms/Admin/User/NotificationForm.vue";
 import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import verify from "@/Modules/verify";
 import { ref } from "vue";
@@ -158,6 +168,7 @@ const props = defineProps<{
 }>();
 
 const resetPasswordModal = ref<InstanceType<typeof Modal> | null>(null);
+const notificationModal = ref<InstanceType<typeof Modal> | null>(null);
 const loading = ref<boolean>(false);
 
 /**
@@ -169,11 +180,12 @@ const resendInvite = () => {
             "Resending the Welcome Email will create a new setup link and invalidate the original Welcome Email",
     }).then((res) => {
         if (res) {
+            loading.value = true;
             router.get(
                 route("admin.users.send-welcome", props.user.username),
                 undefined,
                 {
-                    onFinish: () => console.log("done"),
+                    onFinish: () => (loading.value = false),
                 }
             );
         }
