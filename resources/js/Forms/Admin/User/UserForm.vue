@@ -3,7 +3,7 @@
         ref="userForm"
         :initial-values="initValues"
         :validation-schema="schema"
-        submit-text="Create User and Send Email Invite"
+        :submit-text="submitText"
         @submit="onSubmit"
     >
         <TextInput id="username" name="username" label="Username" focus />
@@ -26,7 +26,7 @@ import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { number, object, string } from "yup";
 import { useForm } from "@inertiajs/vue3";
 
@@ -35,6 +35,9 @@ const props = defineProps<{
     user?: user;
 }>();
 
+const submitText = computed(() => {
+    return props.user ? "Update User" : "Create User and Send Email Invite";
+});
 const userForm = ref<InstanceType<typeof VueForm> | null>(null);
 
 const initValues = {
@@ -57,6 +60,9 @@ const onSubmit = (form: user) => {
 
     if (props.user) {
         console.log("edit user");
+        formData.put(route("admin.users.update", props.user.username), {
+            onFinish: () => userForm.value?.endSubmit(),
+        });
     } else {
         formData.post(route("admin.users.store"), {
             onFinish: () => userForm.value?.endSubmit(),

@@ -1,11 +1,11 @@
 <template>
-    <!-- <Head title="Create User" /> -->
+    <Head title="Update User" />
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">Enter New User Information</div>
-
+                    <div class="card-title">Edit User</div>
+                    <UserForm :user="user" :roles="roles" />
                 </div>
             </div>
         </div>
@@ -14,14 +14,14 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-// import UserForm from "@/Forms/Admin/User/UserForm.vue";
-// import { ref, reactive, onMounted } from 'vue';
+import UserForm from "@/Forms/Admin/User/UserForm.vue";
 
-// defineProps<{
-//     roles: userRole[];
-// }>();
+defineProps<{
+    user: user;
+    roles: userRole[];
+}>();
 </script>
 
 <script lang="ts">
-export default { layout: AppLayout };
+export default { layout: AppLayout, components: { UserForm } };
 </script>

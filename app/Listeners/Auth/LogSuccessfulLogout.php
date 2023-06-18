@@ -12,10 +12,13 @@ class LogSuccessfulLogout
      */
     public function handle(Logout $event): void
     {
-        Log::stack(['daily', 'auth', 'user'])->info('User '.$event->user->full_name.' logged out', [
-            'User ID' => $event->user->user_id,
-            'Username' => $event->user->username,
-            'IP Address' => \Request::ip(),
-        ]);
+        //  TODO - How do I log the user logging out?
+        // dd($event);
+
+        // Log::stack(['daily', 'auth', 'user'])->info('User '.$event->user->full_name.' logged out', [
+        //     'User ID' => $event->user->user_id,
+        //     'Username' => $event->user->username,
+        //     'IP Address' => \Request::ip(),
+        // ]);
     }
 }

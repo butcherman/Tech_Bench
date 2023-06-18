@@ -65,8 +65,12 @@ class User extends Authenticatable
     /**
      * Determine the new expire date for an updated password
      */
-    public function getNewExpireTime()
+    public function getNewExpireTime($immediate = false)
     {
+        if($immediate) {
+            return Carbon::yesterday();
+        }
+
         return config('auth.passwords.settings.expire') ?
                     Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
     }

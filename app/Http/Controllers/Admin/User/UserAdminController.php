@@ -61,7 +61,7 @@ class UserAdminController extends Controller
         $this->authorize('update', $user);
 
         return Inertia::render('Admin/User/Show', [
-            'user' => $user,
+            'user' => $user->makeVisible(['created_at', 'updated_at', 'deleted_at']),
             'role' => $user->UserRole,
             'last-login' => UserLogins::where('user_id', $user->user_id)->latest('created_at')->first(),
         ]);
@@ -70,25 +70,50 @@ class UserAdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, User $user)
     {
-        //
-        return Inertia::render('Admin/Users/Edit');
+        $this->authorize('update', $user);
+
+        return Inertia::render('Admin/User/Edit', [
+            'user' => $user->makeVisible('role_id'),
+            'roles' => (new GetAvailableUserRoles)->build($request->user()),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->update($request->toArray());
+
+        Log::stack(['daily', 'user'])->info('User information for '.$user->username.' has been updated by '.$request->user()->username, $request->toArray());
+
+        return redirect(route('admin.users.show', $user->username))->with('success', 'User Updated');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, User $user)
     {
-        //
+        $this->authorize('manage', $user);
+
+        $user->delete();
+        Log::stack(['daily', 'user'])->notice('User '.$user->username.' has been deactivated by '.$request->user()->username);
+
+        return back()->with('warning', 'User Disabled');
+    }
+
+    /**
+     * Restore the users profile allowing them to login again
+     */
+    public function restore(Request $request, User $user)
+    {
+        $this->authorize('manage', $user);
+
+        $user->restore();
+        Log::stack(['daily', 'user'])->notice('User '.$user->username.' has been reactivated by '.$request->user()->username);
+        return back()->with('success', 'User Restored');
     }
 }
