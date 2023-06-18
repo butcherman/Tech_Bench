@@ -76,16 +76,30 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+    <div v-if="$route().current('admin.users.index')" class="row justify-content-center">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-body">
                     <Link
                         as="button"
                         :href="$route('admin.users.create')"
                         class="btn btn-info w-100"
-                        >Create New User</Link
                     >
+                        Create New User
+                    </Link>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <Link
+                        as="button"
+                        :href="$route('admin.users.deactivated')"
+                        class="btn btn-warning w-100"
+                    >
+                        Show Deactivated Users
+                    </Link>
                 </div>
             </div>
         </div>
