@@ -67,7 +67,7 @@ class User extends Authenticatable
      */
     public function getNewExpireTime($immediate = false)
     {
-        if($immediate) {
+        if ($immediate) {
             return Carbon::yesterday();
         }
 

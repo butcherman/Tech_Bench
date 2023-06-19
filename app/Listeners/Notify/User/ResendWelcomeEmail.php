@@ -5,8 +5,6 @@ namespace App\Listeners\Notify\User;
 use App\Events\User\ResendWelcomeEvent;
 use App\Models\UserInitialize;
 use App\Notifications\User\SendWelcomeEmail;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
@@ -19,7 +17,7 @@ class ResendWelcomeEmail
     public function handle(ResendWelcomeEvent $event): void
     {
         $oldLink = UserInitialize::where('username', $event->user->username)->first();
-        if($oldLink) {
+        if ($oldLink) {
             $oldLink->delete();
         }
 

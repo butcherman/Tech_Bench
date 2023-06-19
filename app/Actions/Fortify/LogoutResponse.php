@@ -2,8 +2,6 @@
 
 namespace App\Actions\Fortify;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,9 +14,8 @@ class LogoutResponse implements LogoutResponseContract
     {
         $msg = 'Successfully Logged Out';
 
-        if($request->has('reason'))
-        {
-            switch($request->input('reason')) {
+        if ($request->has('reason')) {
+            switch ($request->input('reason')) {
                 case 'timeout':
                     $msg = 'You have been logged out after being idle for more than 15 minutes';
                     break;

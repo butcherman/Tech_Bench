@@ -5,7 +5,7 @@ namespace App\Traits;
 use App\Models\AppSettings;
 
 /**
- *  AllowTrait only has one function to check permission for the policies
+ *  App Settings trait will set and clear configuration settings
  */
 trait AppSettingsTrait
 {
@@ -30,10 +30,12 @@ trait AppSettingsTrait
     }
 
     //  Array must be in the form of ['key' => 'value] in order to be properly updated
-    protected function saveArray($settingArray)
+    protected function saveSettingsArray($settingArray, $prefix = '')
     {
         foreach ($settingArray as $key => $value) {
-            $this->saveSettings($key, $value);
+            $newKey = $prefix !== '' ? $prefix.'.'.$key : $key;
+
+            $this->saveSettings($newKey, $value);
         }
     }
 }

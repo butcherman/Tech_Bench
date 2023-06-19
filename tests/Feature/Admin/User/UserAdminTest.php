@@ -302,5 +302,4 @@ class UserAdminTest extends TestCase
         $response->assertSessionHas('success', __('admin.user.restored', ['user' => $user->full_name]));
         $this->assertDatabaseHas('users', $user->only(['user_id', 'username', 'first_name', 'last_name']));
     }
-
 }

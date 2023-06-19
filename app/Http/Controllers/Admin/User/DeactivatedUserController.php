@@ -14,6 +14,8 @@ class DeactivatedUserController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $this->authorize('manage', User::class);
+
         return Inertia::render('Admin/User/Index', [
             'userList' => User::onlyTrashed()->with('UserRole')->get(),
         ]);

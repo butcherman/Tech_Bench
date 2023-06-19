@@ -15,7 +15,7 @@
             name="role_id"
             label="Role"
             :list="roles"
-            text-field="description"
+            text-field="name"
             value-field="role_id"
         />
     </VueForm>

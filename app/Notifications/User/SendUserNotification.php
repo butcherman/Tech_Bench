@@ -13,7 +13,9 @@ class SendUserNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $subject;
+
     protected $message;
+
     protected $from;
 
     /**
@@ -40,9 +42,9 @@ class SendUserNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject($this->subject)
-                    ->line('You have received a message from '.$this->from)
-                    ->line($this->message);
+            ->subject($this->subject)
+            ->line('You have received a message from '.$this->from)
+            ->line($this->message);
     }
 
     /**

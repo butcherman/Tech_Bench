@@ -112,6 +112,7 @@ class UserAdminController extends Controller
 
         $user->restore();
         Log::stack(['daily', 'user'])->notice('User '.$user->username.' has been reactivated by '.$request->user()->username);
+
         return back()->with('success', __('admin.user.restored', ['user' => $user->full_name]));
     }
 }

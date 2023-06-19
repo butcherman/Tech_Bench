@@ -33,20 +33,20 @@ class BuildAdminMenu
                 'route' => route('admin.users.create'),
             ];
             $userBuild[] = [
-                    'name' => 'Show Users',
-                    'icon' => 'fas fa-user-edit',
-                    'route' => route('admin.users.index'),
-                ];
-            $userBuild[] = [
-                    'name' => 'Show Deactivated Users',
-                    'icon' => 'fas fa-store-alt-slash',
-                    'route' => route('admin.users.deactivated'),
+                'name' => 'Show Users',
+                'icon' => 'fas fa-user-edit',
+                'route' => route('admin.users.index'),
             ];
-            // $userBuild[] = [
-            //         'name' => 'Password Policy',
-            //         'icon' => 'fas fa-user-lock',
-            //         'route' => '#',
-            // ];
+            $userBuild[] = [
+                'name' => 'Show Deactivated Users',
+                'icon' => 'fas fa-store-alt-slash',
+                'route' => route('admin.users.deactivated'),
+            ];
+            $userBuild[] = [
+                'name' => 'Password Policy',
+                'icon' => 'fas fa-user-lock',
+                'route' => route('admin.users.password-policy.get'),
+            ];
 
         }
 

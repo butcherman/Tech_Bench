@@ -17,6 +17,8 @@ class SendUserNotificationController extends Controller
      */
     public function __invoke(UserNotificationRequest $request, User $user)
     {
+        $this->authorize('manage', User::class);
+
         Notification::send($user, new SendUserNotification($request));
         Log::info('Administrator '.$request->user()->username.' has sent a message to '.$user->username);
 

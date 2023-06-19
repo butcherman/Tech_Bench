@@ -15,5 +15,6 @@ return [
         'password_reset' => 'Password for :user Reset',
         'welcome_sent' => 'Welcome Email Queued for Delivery',
         'notification_sent' => 'Notification Queued for Delivery',
+        'password_policy' => 'Password Policy Updated',
     ],
 ];
