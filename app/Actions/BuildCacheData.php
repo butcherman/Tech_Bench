@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\Cache;
 
 class BuildCacheData
 {
-    public function build()
-    {
-        //
-    }
-
     /**
      * Cache User Role Data
      */

@@ -41,6 +41,6 @@ class UserPolicy
      */
     public function destroy(User $user, User $model)
     {
-        return $this->checkPermission($user, 'Manage Users') && $user->role_id <= $model->role_id;
+        return $this->checkPermission($user, 'Manage Users');
     }
 }
