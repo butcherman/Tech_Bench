@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\UserRolePermissions;
 use App\Models\UserRoles;
 use Tests\TestCase;
 
@@ -22,5 +23,14 @@ class UserRolesUnitTest extends TestCase
     public function test_route_model_binding()
     {
         $this->assertEquals($this->role->getRouteKeyName(), 'role_id');
+    }
+
+    /**
+     * Test Model Relationships
+     */
+    public function test_model_relationships()
+    {
+        $rolePermissions = UserRolePermissions::where('role_id', $this->role->role_id)->get();
+        $this->assertEquals($this->role->UserRolePermissions->toArray(), $rolePermissions->toArray());
     }
 }

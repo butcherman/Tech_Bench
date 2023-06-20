@@ -18,6 +18,14 @@ class UserRolePermissionsUnitTest extends TestCase
     }
 
     /**
+     * Test Additional Attributes
+     */
+    public function test_additional_attributes()
+    {
+        $this->assertArrayHasKey('description', $this->permission->toArray());
+    }
+
+    /**
      * Test Model Relationships
      */
     public function test_model_relationships()

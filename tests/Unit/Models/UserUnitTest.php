@@ -51,4 +51,9 @@ class UserUnitTest extends TestCase
     {
         $this->assertEquals(date_format($this->user->getNewExpireTime(), 'Y/m/d'), date_format(Carbon::now()->addDays(config('auth.passwords.settings.expire')), 'Y/m/d'));
     }
+
+    public function test_new_expire_time_no_expire()
+    {
+        $this->assertEquals(date_format($this->user->getNewExpireTime(true), 'Y/m/d'), date_format(Carbon::yesterday(), 'Y/m/d'));
+    }
 }
