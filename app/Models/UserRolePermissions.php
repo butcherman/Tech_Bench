@@ -11,11 +11,18 @@ class UserRolePermissions extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    protected $hidden = ['role_id', 'created_at', 'updated_at', 'id'];
+    protected $hidden = ['role_id', 'created_at', 'updated_at', 'id', 'UserRolePermissionTypes'];
+
+    protected $appends = ['description'];
 
     protected $casts = [
         'allow' => 'boolean',
     ];
+
+    public function getDescriptionAttribute()
+    {
+        return $this->UserRolePermissionTypes->description;
+    }
 
     /**
      * User Role Permissions explain what a permission type id is for

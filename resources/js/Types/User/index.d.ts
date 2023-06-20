@@ -29,9 +29,14 @@ type baseUserRole = {
 
 type userRole = {
     role_id: number;
-    perm_type_id: number;
     allow_edit: boolean;
 } & baseUserRole;
+
+type rolePermission = {
+    description: string,
+    perm_type_id: number,
+    allow: boolean;
+};
 
 type passwordPolicy = {
     expire: number;

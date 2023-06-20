@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\Http\Requests\Admin\User\UserNotificationRequest;
 use App\Models\User;
-use App\Notifications\User\SendUserNotification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
@@ -13,7 +11,7 @@ class NotificationTest extends TestCase
 {
     protected $user;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

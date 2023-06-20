@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\User\ResetUserPasswordController;
 use App\Http\Controllers\Admin\User\SendUserNotificationController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdminController;
+use App\Http\Controllers\Admin\User\UserRoleController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -32,4 +33,12 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
             ->show('User Details', 'admin.users.index')
             ->edit('Edit User', 'admin.users.index');
     })->withTrashed();
+
+    Route::get('user-roles/{user_role}/copy', [UserRoleController::class, 'copy'])->name('user-roles.copy')->breadcrumb('Copy Role', 'admin.user-roles.index');
+    Route::resource('user-roles', UserRoleController::class)->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+        $breadcrumbs->index('Roles and Permissions', 'admin.index')
+            ->create('Build New Role', 'admin.user-roles.index')
+            ->show('View Role', 'admin.user-roles.index')
+            ->edit('Modify Role', 'admin.user-roles.show');
+    });
 });

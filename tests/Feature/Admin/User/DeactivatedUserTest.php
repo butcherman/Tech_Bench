@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admin\User;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DeactivatedUserTest extends TestCase

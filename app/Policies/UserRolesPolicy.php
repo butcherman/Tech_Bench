@@ -59,20 +59,4 @@ class UserRolesPolicy
 
         return $this->checkPermission($user, 'Manage Permissions');
     }
-
-    /**
-     * Determine whether the user can restore the model
-     */
-    // public function restore(User $user)
-    // {
-    //     return $this->checkPermission($user, 'Manage Permissions');
-    // }
-
-    /**
-     * Determine whether the user can permanently delete the model
-     */
-    // public function forceDelete(User $user)
-    // {
-    //     return $this->checkPermission($user, 'Manage Permissions');
-    // }
 }

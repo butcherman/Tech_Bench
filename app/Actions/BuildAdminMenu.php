@@ -51,11 +51,11 @@ class BuildAdminMenu
         }
 
         if ($this->checkPermission($this->user, 'Manage Permissions')) {
-            // $userBuild[] = [
-            //     'name' => 'User Roles and Permissions',
-            //     'icon' => 'fas fa-users-cog',
-            //     'route' => '#',
-            // ];
+            $userBuild[] = [
+                'name' => 'Roles and Permissions',
+                'icon' => 'fas fa-users-cog',
+                'route' => route('admin.user-roles.index'),
+            ];
         }
 
         return $userBuild;

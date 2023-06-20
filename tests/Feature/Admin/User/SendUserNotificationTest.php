@@ -4,8 +4,6 @@ namespace Tests\Feature\Admin\User;
 
 use App\Models\User;
 use App\Notifications\User\SendUserNotification;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 

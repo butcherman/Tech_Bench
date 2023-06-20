@@ -15,23 +15,23 @@ class UserRolePermissionTypes extends Model
 
     protected $guarded = ['perm_type_id', 'created_at', 'updated_at'];
 
-    // protected $appends = ['group'];
+    protected $appends = ['group'];
 
     /**
      * Get the Group name of the permission type
      */
-    // public function getGroupAttribute()
-    // {
-    //     $cat = $this->UserRolePermissionCategory;
+    public function getGroupAttribute()
+    {
+        $cat = $this->UserRolePermissionCategory;
 
-    //     return $cat ? $cat->category : null;
-    // }
+        return $cat ? $cat->category : null;
+    }
 
     /**
      * User Role Categories allow for grouping of the permission types
      */
-    // public function UserRolePermissionCategory()
-    // {
-    //     return $this->hasOne('App\Models\UserRolePermissionCategory', 'role_cat_id', 'role_cat_id');
-    // }
+    public function UserRolePermissionCategory()
+    {
+        return $this->hasOne('App\Models\UserRolePermissionCategory', 'role_cat_id', 'role_cat_id');
+    }
 }
