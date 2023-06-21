@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Spatie\CookieConsent\CookieConsentMiddleware::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\CheckPasswordExpire::class,
             \App\Http\Middleware\LogDebutVisits::class,
         ],
 
