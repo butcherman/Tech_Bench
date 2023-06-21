@@ -47,6 +47,11 @@ class BuildAdminMenu
                 'icon' => 'fas fa-user-lock',
                 'route' => route('admin.users.password-policy.get'),
             ];
+            $userBuild[] = [
+                'name' => 'User Settings',
+                'icon' => 'cog',
+                'route' => route('admin.user-settings.get'),
+            ];
 
         }
 

@@ -17,6 +17,7 @@ return [
         'default_role_id' => env('AZURE_DEFAULT_ROLE_ID', 4),
         'client_id' => env('AZURE_CLIENT_ID'),
         'client_secret' => env('AZURE_CLIENT_SECRET'),
+        'secret_expires' => env('AZURE_CLIENT_EXPIRES'),
         'redirect' => env('AZURE_REDIRECT_URI'),
         'tenant' => env('AZURE_TENANT_ID'),
     ],

@@ -7,6 +7,8 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    'fake-password' => 'This Is A Really Long String to Make You Think You Can Get A Password',
+
     'user' => [
         'created' => 'User :user Created',
         'updated' => 'User :user Updated',
@@ -16,6 +18,7 @@ return [
         'welcome_sent' => 'Welcome Email Queued for Delivery',
         'notification_sent' => 'Notification Queued for Delivery',
         'password_policy' => 'Password Policy Updated',
+        'settings_updated' => 'User Settings Updated',
     ],
 
     'user-roles' => [

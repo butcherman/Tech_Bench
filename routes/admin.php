@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\User\SendUserNotificationController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdminController;
 use App\Http\Controllers\Admin\User\UserRoleController;
+use App\Http\Controllers\Admin\User\UserSettingsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,9 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
             ->show('User Details', 'admin.users.index')
             ->edit('Edit User', 'admin.users.index');
     })->withTrashed();
+
+    Route::get('user-settings', [UserSettingsController::class, 'get'])->name('user-settings.get')->breadcrumb('User Settings', 'admin.users.index');
+    Route::post('user-settings', [UserSettingsController::class, 'set'])->name('user-settings.set');
 
     Route::get('user-roles/{user_role}/copy', [UserRoleController::class, 'copy'])->name('user-roles.copy')->breadcrumb('Copy Role', 'admin.user-roles.index');
     Route::resource('user-roles', UserRoleController::class)->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

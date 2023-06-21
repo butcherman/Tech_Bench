@@ -2,15 +2,15 @@
     <div class="mb-3">
         <label v-if="label" :for="id" class="form-label w-100">
             {{ label }}:
-            <!-- <span
+            <span
                 v-if="help"
                 title="What is this?"
-                class="pointer pl-2 text-primary float-end"
+                class="pointer pl-2 text-info float-end"
                 @click.prevent="showHelp"
                 v-tooltip
             >
                 <fa-icon icon="fa-circle-question" />
-            </span> -->
+            </span>
         </label>
         <div class="input-group">
             <input
@@ -36,10 +36,10 @@
 </template>
 
 <script setup lang="ts">
+import okModal from "@/Modules/ok";
 import { toRef, computed } from "vue";
 import { useField } from "vee-validate";
 import { upperFirst } from "lodash";
-// import { helpModal } from "@/Modules/helpModal.module";
 
 defineEmits(["change"]);
 
@@ -62,15 +62,12 @@ const isInvalid = computed<boolean>(() => {
     return !meta.valid && meta.validated && !meta.pending;
 });
 
+const showHelp = () => {
+    okModal(props.help!!);
+};
+
 const nameRef = toRef(props, "name");
 const { errorMessage, value, meta } = useField(nameRef);
-
-// const showHelp = (): void => {
-//     // helpModal("help", {
-//     //     title: "What is this?",
-//     // });
-//     console.log('need help');
-// };
 </script>
 
 <style>
