@@ -3,6 +3,8 @@
 namespace App\Traits;
 
 use App\Models\AppSettings;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
 
 /**
  *  App Settings trait will set and clear configuration settings
@@ -18,6 +20,8 @@ trait AppSettingsTrait
                 ['value' => $value]
             )->update(['value' => $value]);
         }
+
+        $this->cacheConfig();
     }
 
     //  Clear a setting from the database
@@ -27,6 +31,8 @@ trait AppSettingsTrait
         if ($data) {
             $data->delete();
         }
+
+        $this->cacheConfig();
     }
 
     //  Array must be in the form of ['key' => 'value] in order to be properly updated
@@ -36,6 +42,16 @@ trait AppSettingsTrait
             $newKey = $prefix !== '' ? $prefix.'.'.$key : $key;
 
             $this->saveSettings($newKey, $value);
+        }
+
+        $this->cacheConfig();
+    }
+
+    //  Cache the current config so it is not loaded on every request
+    protected function cacheConfig()
+    {
+        if(App::environment('production')) {
+            Artisan::call('config:cache');
         }
     }
 }
