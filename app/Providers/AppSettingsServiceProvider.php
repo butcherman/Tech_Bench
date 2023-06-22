@@ -18,7 +18,7 @@ class AppSettingsServiceProvider extends ServiceProvider
         /**
          * We will only Dynamically load the config if it has not been cached
          */
-        if(File::missing('../../bootstrap/cache/config.php')) {
+        if (File::missing('../../bootstrap/cache/config.php')) {
             try {
                 /*
                 *   All App Settings that can be adjusted are stored in the database - retrieve them here and assign to the config

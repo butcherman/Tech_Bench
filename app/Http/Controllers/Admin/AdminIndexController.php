@@ -6,7 +6,6 @@ use App\Actions\BuildAdminMenu;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class AdminIndexController extends Controller

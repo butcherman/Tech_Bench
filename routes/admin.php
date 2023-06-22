@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminIndexController;
-use App\Http\Controllers\Admin\LogoController;
+use App\Http\Controllers\Admin\Config\AppConfigController;
+use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\ResetUserPasswordController;
@@ -52,4 +53,6 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
      */
     Route::get('logo', [LogoController::class, 'get'])->name('logo.get')->breadcrumb('Logo', 'admin.index');
     Route::post('logo', [LogoController::class, 'set'])->name('logo.set');
+    Route::get('config', [AppConfigController::class, 'get'])->name('config.get')->breadcrumb('Application Configuration', 'admin.index');
+    Route::post('config', [AppConfigController::class, 'set'])->name('config.set');
 });

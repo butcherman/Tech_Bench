@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserSettingsRequest;
 use App\Models\User;
 use App\Traits\AppSettingsTrait;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class UserSettingsController extends Controller
@@ -29,7 +28,7 @@ class UserSettingsController extends Controller
 
     public function set(UserSettingsRequest $request)
     {
-        if($request->checkPasswordField()) {
+        if ($request->checkPasswordField()) {
             $this->saveSettingsArray($request->except(['redirectUri', 'client_secret']), 'services.azure');
         } else {
             $this->saveSettingsArray($request->except(['redirectUri']), 'services.azure');

@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Admin;
 
 use App\Models\AppSettings;
-use Illuminate\Http\File;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 

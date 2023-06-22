@@ -54,6 +54,6 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
+        'Timezonelist' => Jackiedo\Timezonelist\Facades\Timezonelist::class,
     ])->toArray(),
 ];

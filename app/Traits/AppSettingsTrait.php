@@ -50,7 +50,7 @@ trait AppSettingsTrait
     //  Cache the current config so it is not loaded on every request
     protected function cacheConfig()
     {
-        if(App::environment('production')) {
+        if (App::environment('production')) {
             Artisan::call('config:cache');
         }
     }

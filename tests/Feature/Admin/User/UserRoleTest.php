@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Admin\User;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use App\Models\UserRoles;
 use Illuminate\Foundation\Testing\WithFaker;

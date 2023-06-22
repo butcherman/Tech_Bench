@@ -12,13 +12,18 @@ use Tests\TestCase;
 class UserPolicyUnitTest extends TestCase
 {
     protected $user;
+
     protected $tech;
+
     protected $reports;
+
     protected $admin;
+
     protected $installer;
+
     protected $policyObj;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

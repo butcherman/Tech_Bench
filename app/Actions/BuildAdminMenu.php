@@ -17,8 +17,6 @@ class BuildAdminMenu
         $navBar = [];
         $navBar['Users'] = $this->buildUserMenu();
 
-
-
         $navBar['App Settings'] = $this->buildSettingsMenu();
 
         return $navBar;
@@ -70,13 +68,6 @@ class BuildAdminMenu
         return $userBuild;
     }
 
-
-
-
-
-
-
-
     /**
      * Build navigation menu for Application Settings
      */
@@ -90,16 +81,16 @@ class BuildAdminMenu
                 'icon' => 'fa-image',
                 'route' => route('admin.logo.get'),
             ],
-            [
-                'name' => 'Application Configuration',
-                'icon' => 'fa-server',
-                'route' => '#',
-            ],
-            [
-                'name' => 'Email Settings',
-                'icon' => 'fas fa-envelope',
-                'route' => '#',
-            ]];
+                [
+                    'name' => 'Application Configuration',
+                    'icon' => 'fa-server',
+                    'route' => route('admin.config.get'),
+                ],
+                [
+                    'name' => 'Email Settings',
+                    'icon' => 'fas fa-envelope',
+                    'route' => '#',
+                ]];
         }
 
         return $nav;

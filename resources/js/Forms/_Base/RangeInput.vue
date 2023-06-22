@@ -1,7 +1,7 @@
 <template>
     <div class="mb-3">
         <label :for="id" class="form-label">
-            {{ label }}: {{ value }}
+            {{ label }}: {{ formatValue }}
         </label>
         <input
             v-model="value"
@@ -18,7 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import { toRef } from "vue";
+import prettyBytes from "pretty-bytes";
+import { computed, toRef } from "vue";
 import { useField } from "vee-validate";
 
 const props = defineProps<{
@@ -27,7 +28,17 @@ const props = defineProps<{
     label: string;
     min?: number;
     max?: number;
+    format?: "prettybytes";
 }>();
+
+const formatValue = computed<unknown>(() => {
+    switch (props.format) {
+        case "prettybytes":
+            return prettyBytes(Number(value.value));
+        default:
+            return value.value;
+    }
+});
 
 const nameRef = toRef(props, "name");
 const { errorMessage, value } = useField(nameRef);
