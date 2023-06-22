@@ -7,3 +7,39 @@ export const shake = (el: Element) => {
         { x: 2, clearProps: "x", repeat: 4, duration: 0.1, ease: "rough" }
     );
 };
+
+// export const fadeOut = (el: Element) => {
+//     console.log('called fade out');
+
+//     gsap.to(el, {
+//         opacity: 0,
+//         // delay: 0.5,
+//         duration: 10,
+//     });
+// }
+
+// export const fadeIn = (el: Element) => {
+//     console.log('called fade in');
+//     console.log(el);
+
+//     // gsap.to(el, {
+//     //     opacity: 1,
+//     //     delay: 0.5,
+//     //     duration: 3,
+//     // });
+// }
+
+// export const fadeOutIn = (el: Element) => {
+//     gsap.to(el, {
+//         opacity: 0,
+//         delay: 0.5,
+//         duration: 10,
+//         onComplete: () => {
+//             gsap.to(el, {
+//                 opacity: 1,
+//                 delay: 0.5,
+//                 duration: 10,
+//             });
+//         }
+//     });
+// }

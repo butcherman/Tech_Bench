@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminIndexController;
+use App\Http\Controllers\Admin\LogoController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\ResetUserPasswordController;
@@ -45,4 +46,10 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
             ->show('View Role', 'admin.user-roles.index')
             ->edit('Modify Role', 'admin.user-roles.show');
     });
+
+    /**
+     * App Administration
+     */
+    Route::get('logo', [LogoController::class, 'get'])->name('logo.get')->breadcrumb('Logo', 'admin.index');
+    Route::post('logo', [LogoController::class, 'set'])->name('logo.set');
 });
