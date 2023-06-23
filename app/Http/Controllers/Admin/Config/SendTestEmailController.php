@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin\Config;
 use App\Http\Controllers\Controller;
 use App\Mail\TestEmail;
 use App\Models\AppSettings;
+use App\Notifications\Admin\SendTestEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Mailer\Exception\TransportException;
 
 class SendTestEmailController extends Controller
@@ -19,7 +21,7 @@ class SendTestEmailController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         try {
-            Mail::to($request->user())->send(new TestEmail);
+            Notification::send($request->user(), new SendTestEmail);
 
             return back()->with('success', __('admin.email.test'));
         } catch (TransportException $e) {
