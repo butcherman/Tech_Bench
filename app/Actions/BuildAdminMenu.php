@@ -89,7 +89,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Email Settings',
                     'icon' => 'fas fa-envelope',
-                    'route' => '#',
+                    'route' => route('admin.email.get'),
                 ]];
         }
 

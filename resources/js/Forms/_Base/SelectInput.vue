@@ -9,7 +9,10 @@
             :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
         >
             <template v-for="(option, key) in list" :key="key">
-                <template v-if="Array.isArray(option)">
+                <template v-if="typeof option === 'string'">
+                    <option :value="option">{{ option }}</option>
+                </template>
+                <template v-else-if="Array.isArray(option)">
                     <optgroup :label="key.toString()" :key="key">
                         <template v-for="item in option" :key="item[valueField]">
                             <option :value="item[valueField]">

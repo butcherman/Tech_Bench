@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\AppSettings;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 /**
  *  App Settings trait will set and clear configuration settings
@@ -14,11 +15,16 @@ trait AppSettingsTrait
     //  Save an individual setting into the database so that it can be modified from the hard coded setting
     protected function saveSettings($key, $value)
     {
-        if ($value !== __('admin.fake_password') && $value !== null) {
+        if ($value !== __('admin.fake-password') && $value !== null) {
             AppSettings::firstOrCreate(
                 ['key' => $key],
                 ['value' => $value]
             )->update(['value' => $value]);
+
+            Log::debug('App Settings Updated', [
+                'key' => $key,
+                'value' => $value,
+            ]);
         }
 
         $this->cacheConfig();
@@ -52,6 +58,7 @@ trait AppSettingsTrait
     {
         if (App::environment('production')) {
             Artisan::call('config:cache');
+            Log::debug('Caching new config');
         }
     }
 }

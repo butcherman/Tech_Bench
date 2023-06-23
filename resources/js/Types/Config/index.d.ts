@@ -9,3 +9,13 @@ type tzList = {
         [key: string]: string;
     }
 }
+
+type emailSettings = {
+    host: string;
+    port: number;
+    encryption: string;
+    username: string;
+    password: string;
+    from_address: string;
+    require_auth: boolean;
+}
