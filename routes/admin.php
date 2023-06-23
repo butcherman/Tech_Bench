@@ -53,12 +53,19 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * App Administration
      */
-    // Route::prefix()
-    Route::get('logo', [LogoController::class, 'get'])->name('logo.get')->breadcrumb('Logo', 'admin.index');
-    Route::post('logo', [LogoController::class, 'set'])->name('logo.set');
-    Route::get('config', [AppConfigController::class, 'get'])->name('config.get')->breadcrumb('Application Configuration', 'admin.index');
-    Route::post('config', [AppConfigController::class, 'set'])->name('config.set');
-    Route::get('email-settings', [EmailSettingsController::class, 'get'])->name('email.get')->breadcrumb('Email Settings', 'admin.index');
-    Route::post('email-settings', [EmailSettingsController::class, 'set'])->name('email.set');
-    Route::get('send-test-email', SendTestEmailController::class)->name('email.test');
+    Route::prefix('logo')->name('logo.')->group(function() {
+        Route::get('/', [LogoController::class, 'get'])->name('get')->breadcrumb('Logo', 'admin.index');
+        Route::post('/', [LogoController::class, 'set'])->name('set');
+    });
+
+    Route::prefix('config')->name('config.')->group(function() {
+        Route::get('/', [AppConfigController::class, 'get'])->name('get')->breadcrumb('Application Configuration', 'admin.index');
+        Route::post('/', [AppConfigController::class, 'set'])->name('set');
+    });
+
+    Route::prefix('email-settings')->name('email.')->group(function() {
+        Route::get('/', [EmailSettingsController::class, 'get'])->name('get')->breadcrumb('Email Settings', 'admin.index');
+        Route::post('/', [EmailSettingsController::class, 'set'])->name('set');
+        Route::get('send-test-email', SendTestEmailController::class)->name('test');
+    });
 });
