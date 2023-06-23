@@ -76,11 +76,12 @@ class BuildAdminMenu
         $nav = [];
 
         if ($this->checkPermission($this->user, 'App Settings')) {
-            $nav = [[
-                'name' => 'Application Logo',
-                'icon' => 'fa-image',
-                'route' => route('admin.logo.get'),
-            ],
+            $nav = [
+                [
+                    'name' => 'Application Logo',
+                    'icon' => 'fa-image',
+                    'route' => route('admin.logo.get'),
+                ],
                 [
                     'name' => 'Application Configuration',
                     'icon' => 'fa-server',
@@ -90,7 +91,13 @@ class BuildAdminMenu
                     'name' => 'Email Settings',
                     'icon' => 'fas fa-envelope',
                     'route' => route('admin.email.get'),
-                ]];
+                ],
+                [
+                    'name' => 'Security Settings',
+                    'icon' => 'fa-lock',
+                    'route' => route('admin.security.index'),
+                ],
+            ];
         }
 
         return $nav;

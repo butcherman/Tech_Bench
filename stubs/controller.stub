@@ -13,7 +13,7 @@ class {{ class }} extends Controller
      */
     public function index()
     {
-        Inertia::render('{{ class }}');
+        return Inertia::render('{{ class }}');
     }
 
     /**
@@ -21,7 +21,7 @@ class {{ class }} extends Controller
      */
     public function create()
     {
-        Inertia::render('{{ class }}/Create');
+        return Inertia::render('{{ class }}/Create');
     }
 
     /**
@@ -37,7 +37,7 @@ class {{ class }} extends Controller
      */
     public function show(string $id)
     {
-        Inertia::render('{{ class }}/Show');
+        return Inertia::render('{{ class }}/Show');
     }
 
     /**
@@ -45,7 +45,7 @@ class {{ class }} extends Controller
      */
     public function edit(string $id)
     {
-        Inertia::render('{{ class }}/Edit');
+        return Inertia::render('{{ class }}/Edit');
     }
 
     /**

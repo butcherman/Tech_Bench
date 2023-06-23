@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminIndexController;
 use App\Http\Controllers\Admin\Config\AppConfigController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\Config\LogoController;
+use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
@@ -67,5 +68,12 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         Route::get('/', [EmailSettingsController::class, 'get'])->name('get')->breadcrumb('Email Settings', 'admin.index');
         Route::post('/', [EmailSettingsController::class, 'set'])->name('set');
         Route::get('send-test-email', SendTestEmailController::class)->name('test');
+    });
+
+    Route::prefix('security')->name('security.')->group(function() {
+        Route::get('/', [SecurityController::class, 'index'])->name('index')->breadcrumb('Security Settings', 'admin.index');
+        Route::get('create', [SecurityController::class, 'create'])->name('create')->breadcrumb('Upload SSL Certificate', 'admin.security.index');
+        Route::post('create', [SecurityController::class, 'store'])->name('store');
+        Route::delete('/', [SecurityController::class, 'destroy'])->name('destroy');
     });
 });

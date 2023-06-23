@@ -10,7 +10,7 @@ class {{ class }} extends Controller
 {
     public function get()
     {
-        Inertia::render('{{ class }}');
+        return Inertia::render('{{ class }}');
     }
 
     public function set(Request $request)
