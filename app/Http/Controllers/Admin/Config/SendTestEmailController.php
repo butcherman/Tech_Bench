@@ -18,20 +18,10 @@ class SendTestEmailController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        // try {
-        //     Notification::send(Auth::user(), new SendTestEmail);
-
-        //     return back()->with('success', __('admin.test_email_success'));
-        // }
-        // @codeCoverageIgnoreStart
-        // catch (TransportException $e) {
-        //     return back()->withErrors(['failed' => __('admin.test_email_failure'), 'message' => $e->getMessage()]);
-        // }
-        // @codeCoverageIgnoreEnd
-
-
         try {
             Mail::to($request->user())->send(new TestEmail);
+
+            return back()->with('success', __('admin.email.test'));
         } catch (TransportException $e) {
             return back()->withErrors(['email' => $e->getMessage()]);
         }
