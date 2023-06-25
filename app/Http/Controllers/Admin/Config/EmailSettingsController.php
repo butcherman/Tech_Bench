@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Config;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EmailSettingsRequest;
 use App\Models\AppSettings;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 

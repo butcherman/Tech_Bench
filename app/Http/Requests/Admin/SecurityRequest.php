@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Admin;
 
-use Spatie\SslCertificate\SslCertificate;
 use App\Models\AppSettings;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Spatie\SslCertificate\SslCertificate;
 
 class SecurityRequest extends FormRequest
 {
@@ -38,8 +38,9 @@ class SecurityRequest extends FormRequest
 
         try {
             $cert = SslCertificate::createFromFile(Storage::disk('security')->path('tmp/server.crt'));
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             Log::critical('SSL Certificate Upload failed - '.$e->getMessage());
+
             return back()->withErrors($e->getMessage());
         }
 
@@ -51,8 +52,9 @@ class SecurityRequest extends FormRequest
             'organization' => $cert ? $cert->getOrganization() : null,
         ];
 
-        if(!$cert->isValid()) {
+        if (! $cert->isValid()) {
             Log::notice('An invalid SSL Certificate was uploaded.  See Details for more information', $certData);
+
             return back()->withErrors('The uploaded SSL Certificate is not valid.  No changes have been saved');
         }
 
@@ -67,7 +69,7 @@ class SecurityRequest extends FormRequest
         Storage::disk('security')->put('tmp/server.crt', $this->certificate);
         Storage::disk('security')->put('tmp/intermediate.crt', $this->intermediate);
 
-        if($this->wildcard) {
+        if ($this->wildcard) {
             Storage::disk('security')->put('tmp/server.key', $this->key);
         }
     }
@@ -76,7 +78,7 @@ class SecurityRequest extends FormRequest
     {
         Storage::disk('security')->move('tmp/server.crt', 'server.crt');
         Storage::disk('security')->move('tmp/intermediate.crt', 'intermediate.crt');
-        if($this->wildcard) {
+        if ($this->wildcard) {
             Storage::disk('security')->move('tmp/server.key', 'server.key');
         }
     }

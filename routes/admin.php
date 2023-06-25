@@ -57,23 +57,23 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * App Administration
      */
-    Route::prefix('logo')->name('logo.')->group(function() {
+    Route::prefix('logo')->name('logo.')->group(function () {
         Route::get('/', [LogoController::class, 'get'])->name('get')->breadcrumb('Logo', 'admin.index');
         Route::post('/', [LogoController::class, 'set'])->name('set');
     });
 
-    Route::prefix('config')->name('config.')->group(function() {
+    Route::prefix('config')->name('config.')->group(function () {
         Route::get('/', [AppConfigController::class, 'get'])->name('get')->breadcrumb('Application Configuration', 'admin.index');
         Route::post('/', [AppConfigController::class, 'set'])->name('set');
     });
 
-    Route::prefix('email-settings')->name('email.')->group(function() {
+    Route::prefix('email-settings')->name('email.')->group(function () {
         Route::get('/', [EmailSettingsController::class, 'get'])->name('get')->breadcrumb('Email Settings', 'admin.index');
         Route::post('/', [EmailSettingsController::class, 'set'])->name('set');
         Route::get('send-test-email', SendTestEmailController::class)->name('test');
     });
 
-    Route::prefix('security')->name('security.')->group(function() {
+    Route::prefix('security')->name('security.')->group(function () {
         Route::get('/', [SecurityController::class, 'index'])->name('index')->breadcrumb('Security Settings', 'admin.index');
         Route::get('create', [SecurityController::class, 'create'])->name('create')->breadcrumb('Upload SSL Certificate', 'admin.security.index');
         Route::post('create', [SecurityController::class, 'store'])->name('store');
@@ -83,7 +83,7 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
     /**
      * App Maintenance
      */
-    Route::prefix('logs')->name('logs.')->group(function() {
+    Route::prefix('logs')->name('logs.')->group(function () {
         Route::get('/', LogsController::class)->name('index')->breadcrumb('App Logs', 'admin.index');
         Route::get('{channel}', LogsController::class)->name('channel')->breadcrumb('Log List', 'admin.logs.index');
         Route::get('{channel}/{log}', ViewLogController::class)->name('view')->breadcrumb('Log Details', '.channel');

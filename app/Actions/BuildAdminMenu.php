@@ -118,21 +118,21 @@ class BuildAdminMenu
                     'icon' => 'fa-bug',
                     'route' => route('admin.logs.index'),
                 ],
-                    // [
-                    //     'name' => 'Log Settings',
-                    //     'icon' => 'fa-sliders',
-                    //     'route' => route('admin.logs.settings'),
-                    // ],
-                    // [
-                    //     'name' => 'Backups',
-                    //     'icon' => 'fa-hdd',
-                    //     'link' => route('admin.backups.show'),
-                    // ],
-                    // [
-                    //     'name' => 'Backup Settings',
-                    //     'icon' => 'fa-hdd',
-                    //     'link' => route('admin.backups.index'),
-                    // ],
+                // [
+                //     'name' => 'Log Settings',
+                //     'icon' => 'fa-sliders',
+                //     'route' => route('admin.logs.settings'),
+                // ],
+                // [
+                //     'name' => 'Backups',
+                //     'icon' => 'fa-hdd',
+                //     'link' => route('admin.backups.show'),
+                // ],
+                // [
+                //     'name' => 'Backup Settings',
+                //     'icon' => 'fa-hdd',
+                //     'link' => route('admin.backups.index'),
+                // ],
             ];
         }
 

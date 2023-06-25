@@ -8,7 +8,6 @@ use App\Traits\LogUtilitiesTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
 
 class DownloadLogController extends Controller
 {
@@ -22,9 +21,9 @@ class DownloadLogController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         //  Validate log file exists
-        if(!$this->validateLogFile($channel, $file)) {
-            abort(404, 'Cannot find the specified Log File');
+        if (! $this->validateLogFile($channel, $file)) {
             Log::error($request->user()->username.' has requested an invalid Log File '.$channel.DIRECTORY_SEPARATOR.$file);
+            abort(404, 'Cannot find the specified Log File');
         }
 
         Log::info($request->user()->username.' is downloading Log File '.$channel.DIRECTORY_SEPARATOR.$file);

@@ -2,10 +2,7 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-
-use function PHPUnit\Framework\isNull;
 
 /**
  * Log Utilities Trait holds all reusable Log File variables and methods
@@ -64,8 +61,8 @@ trait LogUtilitiesTrait
     {
         $availableChannels = [];
 
-        foreach($this->logChannels as $channel) {
-            if(Storage::disk('logs')->files($channel['folder'])) {
+        foreach ($this->logChannels as $channel) {
+            if (Storage::disk('logs')->files($channel['folder'])) {
                 $availableChannels[] = $channel['name'];
             }
         }
@@ -96,7 +93,7 @@ trait LogUtilitiesTrait
     {
         $channelData = $this->getChannel($channel);
         //  Because users are stupid, we have to validate the channel exists
-        if($channelData === null) {
+        if ($channelData === null) {
             return null;
         }
 
@@ -104,9 +101,9 @@ trait LogUtilitiesTrait
 
         //  Get the stats for each log file
         $statList = [];
-        foreach($fileList as $file) {
+        foreach ($fileList as $file) {
             $pathInfo = pathinfo($file);
-            if($pathInfo['extension'] === 'log') {
+            if ($pathInfo['extension'] === 'log') {
                 $stats = $this->getFileStats($file);
                 $stats['filename'] = $pathInfo['filename'];
                 $statList[] = $stats;
@@ -119,11 +116,10 @@ trait LogUtilitiesTrait
     /**
      * Get the Log Level Stats for a log file
      */
-    protected function getFileStats(string | array $file)
+    protected function getFileStats(string|array $file)
     {
         $stats = $this->getCleanStats();
-        if(!is_array($file))
-        {
+        if (! is_array($file)) {
             $file = $this->getFileToArray($file);
         }
 
@@ -251,18 +247,14 @@ trait LogUtilitiesTrait
     protected function validateLogFile(string $channel, string $file)
     {
         $channel = $this->getChannel($channel);
-        if(!$channel) {
+        if (! $channel) {
             return false;
         }
 
-        if(!Storage::disk('logs')->exists($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log')) {
+        if (! Storage::disk('logs')->exists($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log')) {
             return false;
         }
 
         return true;
     }
-
-
-
-
 }

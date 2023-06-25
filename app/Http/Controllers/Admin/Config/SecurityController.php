@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
-use Spatie\SslCertificate\SslCertificate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SecurityRequest;
 use App\Models\AppSettings;
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Spatie\SslCertificate\SslCertificate;
 
 class SecurityController extends Controller
 {
@@ -41,6 +40,8 @@ class SecurityController extends Controller
 
     public function create()
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         return Inertia::render('Admin/Security/Create');
     }
 
@@ -67,6 +68,7 @@ class SecurityController extends Controller
         Storage::disk('security')->delete('private/server.key');
 
         Log::alert('SSL Certificate and Private key have been deleted by '.$request->user()->username);
+
         return back()->with('warning', 'SSL Certificate Deleted.  Please reboot for changes to take affect');
     }
 }
