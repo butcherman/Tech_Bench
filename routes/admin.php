@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
+use App\Http\Controllers\Admin\Maintenance\LogsController;
+use App\Http\Controllers\Admin\Maintenance\ViewLogController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\ResetUserPasswordController;
@@ -75,5 +77,14 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         Route::get('create', [SecurityController::class, 'create'])->name('create')->breadcrumb('Upload SSL Certificate', 'admin.security.index');
         Route::post('create', [SecurityController::class, 'store'])->name('store');
         Route::delete('/', [SecurityController::class, 'destroy'])->name('destroy');
+    });
+
+    /**
+     * App Maintenance
+     */
+    Route::prefix('logs')->name('logs.')->group(function() {
+        Route::get('/', LogsController::class)->name('index')->breadcrumb('App Logs', 'admin.index');
+        Route::get('{channel}', LogsController::class)->name('channel')->breadcrumb('Log List', 'admin.logs.index');
+        Route::get('{channel}/{log}', ViewLogController::class)->name('view')->breadcrumb('Log Details', '.channel');
     });
 });

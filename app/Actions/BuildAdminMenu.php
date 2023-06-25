@@ -18,6 +18,7 @@ class BuildAdminMenu
         $navBar['Users'] = $this->buildUserMenu();
 
         $navBar['App Settings'] = $this->buildSettingsMenu();
+        $navBar['App Maintenance'] = $this->buildMaintenanceMenu();
 
         return $navBar;
     }
@@ -97,6 +98,41 @@ class BuildAdminMenu
                     'icon' => 'fa-lock',
                     'route' => route('admin.security.index'),
                 ],
+            ];
+        }
+
+        return $nav;
+    }
+
+    /**
+     * Build navigation menu for Application Maintenance
+     */
+    protected function buildMaintenanceMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'App Settings')) {
+            $nav = [
+                [
+                    'name' => 'Application Logs',
+                    'icon' => 'fa-bug',
+                    'route' => route('admin.logs.index'),
+                ],
+                    // [
+                    //     'name' => 'Log Settings',
+                    //     'icon' => 'fa-sliders',
+                    //     'route' => route('admin.logs.settings'),
+                    // ],
+                    // [
+                    //     'name' => 'Backups',
+                    //     'icon' => 'fa-hdd',
+                    //     'link' => route('admin.backups.show'),
+                    // ],
+                    // [
+                    //     'name' => 'Backup Settings',
+                    //     'icon' => 'fa-hdd',
+                    //     'link' => route('admin.backups.index'),
+                    // ],
             ];
         }
 

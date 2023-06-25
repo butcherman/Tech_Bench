@@ -19,3 +19,31 @@ type emailSettings = {
     from_address: string;
     require_auth: boolean;
 }
+
+type logLevels = {
+    name: string;
+    icon: string;
+    color: string;
+}
+
+type logStats = {
+    filename: string;
+    total: number;
+    alert: number;
+    critical: number;
+    debug: number;
+    emergency: number;
+    error: number;
+    info: number;
+    notice: number;
+    warning: number;
+}
+
+type logFile = {
+    date: string;
+    time: string;
+    env: string;
+    level: string;
+    message: string;
+    details?: any | any[];
+}
