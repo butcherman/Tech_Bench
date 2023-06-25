@@ -47,6 +47,14 @@
                                     @start="loading = true"
                                     @end="loading = false"
                                 />
+                                <a
+                                    :href="$route('admin.logs.download', [channel, fileName]).toString()"
+                                    class="float-end text-primary"
+                                    title="Download Log File"
+                                    v-tooltip
+                                >
+                                    <fa-icon icon="fa-download" />
+                                </a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table">
@@ -191,6 +199,7 @@ const props = defineProps<{
     channel: string;
     fileStats: logStats;
     logFile: any[];
+    fileName: string;
 }>();
 
 const loading = ref(false);

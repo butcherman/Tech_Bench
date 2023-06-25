@@ -236,13 +236,30 @@ trait LogUtilitiesTrait
     /**
      * Get the log level of a line
      */
-    protected function getLineLevel($line)
+    protected function getLineLevel(string $line)
     {
         if (preg_match($this->logLevelPattern, $line, $data)) {
             return $data[1];
         }
 
         return false;
+    }
+
+    /**
+     * Validate a log file and channel exist
+     */
+    protected function validateLogFile(string $channel, string $file)
+    {
+        $channel = $this->getChannel($channel);
+        if(!$channel) {
+            return false;
+        }
+
+        if(!Storage::disk('logs')->exists($channel['folder'].DIRECTORY_SEPARATOR.$file.'.log')) {
+            return false;
+        }
+
+        return true;
     }
 
 

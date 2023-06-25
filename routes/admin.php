@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
+use App\Http\Controllers\Admin\Maintenance\DownloadLogController;
 use App\Http\Controllers\Admin\Maintenance\LogsController;
 use App\Http\Controllers\Admin\Maintenance\ViewLogController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
@@ -86,5 +87,6 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         Route::get('/', LogsController::class)->name('index')->breadcrumb('App Logs', 'admin.index');
         Route::get('{channel}', LogsController::class)->name('channel')->breadcrumb('Log List', 'admin.logs.index');
         Route::get('{channel}/{log}', ViewLogController::class)->name('view')->breadcrumb('Log Details', '.channel');
+        Route::get('{channel}/{log}/download', DownloadLogController::class)->name('download');
     });
 });
