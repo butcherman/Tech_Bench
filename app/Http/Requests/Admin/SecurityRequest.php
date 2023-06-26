@@ -41,7 +41,7 @@ class SecurityRequest extends FormRequest
         } catch (Exception $e) {
             Log::critical('SSL Certificate Upload failed - '.$e->getMessage());
 
-            return back()->withErrors($e->getMessage());
+            return back()->withErrors(['failed' => $e->getMessage()]);
         }
 
         $certData = [
@@ -55,7 +55,7 @@ class SecurityRequest extends FormRequest
         if (! $cert->isValid()) {
             Log::notice('An invalid SSL Certificate was uploaded.  See Details for more information', $certData);
 
-            return back()->withErrors('The uploaded SSL Certificate is not valid.  No changes have been saved');
+            return back()->withErrors(['invalid' => 'The uploaded SSL Certificate is not valid.  No changes have been saved']);
         }
 
         $this->moveTmpFiles();
@@ -79,7 +79,7 @@ class SecurityRequest extends FormRequest
         Storage::disk('security')->move('tmp/server.crt', 'server.crt');
         Storage::disk('security')->move('tmp/intermediate.crt', 'intermediate.crt');
         if ($this->wildcard) {
-            Storage::disk('security')->move('tmp/server.key', 'server.key');
+            Storage::disk('security')->move('tmp/server.key', 'private/server.key');
         }
     }
 }
