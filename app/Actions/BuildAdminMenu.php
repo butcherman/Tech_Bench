@@ -118,11 +118,11 @@ class BuildAdminMenu
                     'icon' => 'fa-bug',
                     'route' => route('admin.logs.index'),
                 ],
-                // [
-                //     'name' => 'Log Settings',
-                //     'icon' => 'fa-sliders',
-                //     'route' => route('admin.logs.settings'),
-                // ],
+                [
+                    'name' => 'Log Settings',
+                    'icon' => 'fa-sliders',
+                    'route' => route('admin.logs.settings.get'),
+                ],
                 // [
                 //     'name' => 'Backups',
                 //     'icon' => 'fa-hdd',

@@ -6,6 +6,7 @@ Short description of major changes for each release
 
 IN PROGRESS!!!!!!!!!!!!!!!!!!!
 
+- Added O365 OATH login option
 - Added ability to upload SSL Certificates through browser
 - Added ability for Customer URL to use either Customer ID or Slug
 

@@ -36,12 +36,12 @@ trait LogUtilitiesTrait
      * Log Channels
      */
     protected $logChannels = [
-        ['name' => 'Emergency',      'folder' => 'Emergency'],
-        ['name' => 'Application',    'folder' => 'Application'],
-        ['name' => 'User',           'folder' => 'Users'],
-        ['name' => 'Authentication', 'folder' => 'Auth'],
-        ['name' => 'Customer',       'folder' => 'Cust'],
-        ['name' => 'Tech Tip',       'folder' => 'TechTip'],
+        ['name' => 'Emergency',      'folder' => 'Emergency',   'channel' => 'emergency'],
+        ['name' => 'Application',    'folder' => 'Application', 'channel' => 'daily'],
+        ['name' => 'User',           'folder' => 'Users',       'channel' => 'user'],
+        ['name' => 'Authentication', 'folder' => 'Auth',        'channel' => 'auth'],
+        ['name' => 'Customer',       'folder' => 'Cust',        'channel' => 'cust'],
+        ['name' => 'Tech Tip',       'folder' => 'TechTip',     'channel' => 'tip'],
     ];
 
     /**
@@ -57,8 +57,12 @@ trait LogUtilitiesTrait
      * Parse log data and find out channels that have files in them.
      * Channels that do not have any active log files will not be displayed
      */
-    protected function getLogChannels()
+    protected function getLogChannels(bool $all = false)
     {
+        if($all) {
+            return $this->logChannels; // ->only(['name', 'channel']);
+        }
+
         $availableChannels = [];
 
         foreach ($this->logChannels as $channel) {

@@ -47,3 +47,9 @@ type logFile = {
     message: string;
     details?: any | any[];
 }
+
+type logChannels = {
+    channel: string;
+    folder: string;
+    name: string;
+}

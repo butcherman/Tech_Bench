@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
 use App\Http\Controllers\Admin\Maintenance\DownloadLogController;
 use App\Http\Controllers\Admin\Maintenance\LogsController;
+use App\Http\Controllers\Admin\Maintenance\LogSettingsController;
 use App\Http\Controllers\Admin\Maintenance\ViewLogController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
@@ -85,6 +86,8 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
      */
     Route::prefix('logs')->name('logs.')->group(function () {
         Route::get('/', LogsController::class)->name('index')->breadcrumb('App Logs', 'admin.index');
+        Route::get('settings', [LogSettingsController::class, 'get'])->name('settings.get')->breadcrumb('Log Settings', 'admin.index');
+        Route::post('settings', [LogSettingsController::class, 'set'])->name('settings.set');
         Route::get('{channel}', LogsController::class)->name('channel')->breadcrumb('Log List', 'admin.logs.index');
         Route::get('{channel}/{log}', ViewLogController::class)->name('view')->breadcrumb('Log Details', '.channel');
         Route::get('{channel}/{log}/download', DownloadLogController::class)->name('download');
