@@ -44,6 +44,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
+        App\Providers\AppSettingsServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -53,6 +54,6 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
+        'Timezonelist' => Jackiedo\Timezonelist\Facades\Timezonelist::class,
     ])->toArray(),
 ];

@@ -2,28 +2,26 @@
     <Head title="Administration" />
     <div>
         <div class="row justify-content-center">
-            <div
-                v-for="(options, group) in links"
-                :key="group"
-                class="col-md-5"
-            >
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">{{ group }}</div>
-                        <ul class="list-unstyled">
-                            <li v-for="(link, key) in options" :key="key">
-                                <Link
-                                    :href="link.route"
-                                    class="text-secondary text-decoration-none"
-                                >
-                                    <fa-icon :icon="link.icon" />
-                                    {{ link.name }}
-                                </Link>
-                            </li>
-                        </ul>
+            <template v-for="(options, group) in links">
+                <div v-if="options.length" :key="group" class="col-md-5 mt-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">{{ group }}</div>
+                            <ul class="list-unstyled">
+                                <li v-for="(link, key) in options" :key="key">
+                                    <Link
+                                        :href="link.route"
+                                        class="text-secondary text-decoration-none"
+                                    >
+                                        <fa-icon :icon="link.icon" />
+                                        {{ link.name }}
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
     </div>
 </template>

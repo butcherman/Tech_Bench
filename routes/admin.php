@@ -1,6 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminIndexController;
+use App\Http\Controllers\Admin\Config\AppConfigController;
+use App\Http\Controllers\Admin\Config\EmailSettingsController;
+use App\Http\Controllers\Admin\Config\LogoController;
+use App\Http\Controllers\Admin\Config\SecurityController;
+use App\Http\Controllers\Admin\Config\SendTestEmailController;
+use App\Http\Controllers\Admin\Maintenance\DownloadLogController;
+use App\Http\Controllers\Admin\Maintenance\LogsController;
+use App\Http\Controllers\Admin\Maintenance\LogSettingsController;
+use App\Http\Controllers\Admin\Maintenance\ViewLogController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\ResetUserPasswordController;
@@ -44,5 +53,45 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
             ->create('Build New Role', 'admin.user-roles.index')
             ->show('View Role', 'admin.user-roles.index')
             ->edit('Modify Role', 'admin.user-roles.show');
+    });
+
+    /**
+     * App Administration
+     */
+    Route::prefix('logo')->name('logo.')->group(function () {
+        Route::get('/', [LogoController::class, 'get'])->name('get')->breadcrumb('Logo', 'admin.index');
+        Route::post('/', [LogoController::class, 'set'])->name('set');
+    });
+
+    Route::prefix('config')->name('config.')->group(function () {
+        Route::get('/', [AppConfigController::class, 'get'])->name('get')->breadcrumb('Application Configuration', 'admin.index');
+        Route::post('/', [AppConfigController::class, 'set'])->name('set');
+    });
+
+    Route::prefix('email-settings')->name('email.')->group(function () {
+        Route::get('/', [EmailSettingsController::class, 'get'])->name('get')->breadcrumb('Email Settings', 'admin.index');
+        Route::post('/', [EmailSettingsController::class, 'set'])->name('set');
+        Route::get('send-test-email', SendTestEmailController::class)->name('test');
+    });
+
+    Route::prefix('security')->name('security.')->group(function () {
+        Route::get('/', [SecurityController::class, 'index'])->name('index')->breadcrumb('Security Settings', 'admin.index');
+        Route::get('create', [SecurityController::class, 'create'])->name('create')->breadcrumb('Upload SSL Certificate', 'admin.security.index');
+        Route::post('create', [SecurityController::class, 'store'])->name('store');
+        Route::get('create-csr', [SecurityController::class, 'edit'])->name('edit')->breadcrumb('Generate CSR', 'admin.security.index');
+        Route::put('create-csr', [SecurityController::class, 'update'])->name('update')->breadcrumb('CSR Info', '.edit');
+        Route::delete('/', [SecurityController::class, 'destroy'])->name('destroy');
+    });
+
+    /**
+     * App Maintenance
+     */
+    Route::prefix('logs')->name('logs.')->group(function () {
+        Route::get('/', LogsController::class)->name('index')->breadcrumb('App Logs', 'admin.index');
+        Route::get('settings', [LogSettingsController::class, 'get'])->name('settings.get')->breadcrumb('Log Settings', 'admin.index');
+        Route::post('settings', [LogSettingsController::class, 'set'])->name('settings.set');
+        Route::get('{channel}', LogsController::class)->name('channel')->breadcrumb('Log List', 'admin.logs.index');
+        Route::get('{channel}/{log}', ViewLogController::class)->name('view')->breadcrumb('Log Details', '.channel');
+        Route::get('{channel}/{log}/download', DownloadLogController::class)->name('download');
     });
 });

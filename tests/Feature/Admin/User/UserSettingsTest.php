@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admin\User;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UserSettingsTest extends TestCase
@@ -43,7 +41,7 @@ class UserSettingsTest extends TestCase
             'tenant' => 'someRadomUUID',
             'client_id' => 'someRandomID',
             'client_secret' => 'someRandomPassword',
-            'redirectUri' => 'localhost/auth/callback'
+            'redirectUri' => 'localhost/auth/callback',
         ];
 
         $response = $this->post(route('admin.user-settings.set'), $data);
@@ -60,7 +58,7 @@ class UserSettingsTest extends TestCase
             'tenant' => 'someRadomUUID',
             'client_id' => 'someRandomID',
             'client_secret' => 'someRandomPassword',
-            'redirectUri' => 'localhost/auth/callback'
+            'redirectUri' => 'localhost/auth/callback',
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('admin.user-settings.set'), $data);
@@ -75,7 +73,7 @@ class UserSettingsTest extends TestCase
             'tenant' => 'someRadomUUID',
             'client_id' => 'someRandomID',
             'client_secret' => 'someRandomPassword',
-            'redirectUri' => 'localhost/auth/callback'
+            'redirectUri' => 'localhost/auth/callback',
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.user-settings.set'), $data);
@@ -96,7 +94,7 @@ class UserSettingsTest extends TestCase
             'tenant' => 'someRadomUUID',
             'client_id' => 'someRandomID',
             'client_secret' => __('admin.fake-password'),
-            'redirectUri' => 'localhost/auth/callback'
+            'redirectUri' => 'localhost/auth/callback',
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.user-settings.set'), $data);

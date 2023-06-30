@@ -16,47 +16,47 @@ return [
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/Application/TechBench.log'),
-            'level' => config('logging.log_level'),
+            'level' => env('LOG_LEVEL', 'info'),
             'permission' => 0777,
         ],
         //  Default logging channel
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/Application/TechBench.log'),
-            'level' => config('logging.log_level'),
-            'days' => config('logging.days'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
             'permission' => 0777,
         ],
         //  All User related logging
         'user' => [
             'driver' => 'daily',
             'path' => storage_path('logs/Users/UserLog.log'),
-            'level' => config('logging.log_level'),
-            'days' => config('logging.days'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
             'permission' => 0777,
         ],
         //  All authentication - login/logout logging
         'auth' => [
             'driver' => 'daily',
             'path' => storage_path('logs/Auth/AuthLog.log'),
-            'level' => config('logging.log_level'),
-            'days' => config('logging.days'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
             'permission' => 0777,
         ],
         //  All customer specific logging
         'cust' => [
             'driver' => 'daily',
             'path' => storage_path('logs/Cust/CustLog.log'),
-            'level' => config('logging.log_level'),
-            'days' => config('logging.days'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
             'permission' => 0777,
         ],
         //  All Tech Tip specific logging
         'tip' => [
             'driver' => 'daily',
             'path' => storage_path('logs/TechTip/TechTipLog.log'),
-            'level' => config('logging.log_level'),
-            'days' => config('logging.days'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
             'permission' => 0777,
         ],
 
@@ -71,12 +71,12 @@ return [
 
         'syslog' => [
             'driver' => 'syslog',
-            'level' => config('logging.log_level'),
+            'level' => env('LOG_LEVEL', 'info'),
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
-            'level' => config('logging.log_level'),
+            'level' => env('LOG_LEVEL', 'info'),
         ],
 
         'null' => [

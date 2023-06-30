@@ -9,11 +9,14 @@ use Tests\TestCase;
 class GatePolicyUnitTest extends TestCase
 {
     protected $tech;
+
     protected $reports;
+
     protected $admin;
+
     protected $installer;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

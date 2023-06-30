@@ -45,6 +45,7 @@ class FortifyServiceProvider extends ServiceProvider
             if (RateLimiter::tooManyAttempts($throttleKey, 10)) {
 
                 //  TODO - Proper Error Page
+                //  TODO - Fix Rate Limiter
                 event(new Lockout($request));
                 abort(429, 'Too Many Attempts.  Locked out for '.RateLimiter::availableIn($throttleKey));
             }

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserSettingsRequest;
 use App\Models\User;
 use App\Traits\AppSettingsTrait;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class UserSettingsController extends Controller
@@ -29,11 +29,9 @@ class UserSettingsController extends Controller
 
     public function set(UserSettingsRequest $request)
     {
-        if($request->checkPasswordField()) {
-            $this->saveSettingsArray($request->except(['redirectUri', 'client_secret']), 'services.azure');
-        } else {
-            $this->saveSettingsArray($request->except(['redirectUri']), 'services.azure');
-        }
+        $this->saveSettingsArray($request->except(['redirectUri']), 'services.azure');
+
+        Log::notice('User Settings updated by '.$request->user()->username, $request->except('client_secret'));
 
         return back()->with('success', __('admin.user.settings_updated'));
     }

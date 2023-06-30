@@ -10,7 +10,7 @@ class UserRolePermissionTypesUnitTest extends TestCase
 {
     protected $roleType;
 
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @codeCoverageIgnore
+ * Log user in via Office 365 Integration
  */
 class SocialiteAuthorization
 {

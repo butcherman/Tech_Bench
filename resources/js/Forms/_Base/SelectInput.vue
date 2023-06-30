@@ -9,8 +9,17 @@
             :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
         >
             <template v-for="(option, key) in list" :key="key">
-                <template v-if="Array.isArray(option)">
-                    <option>Is array</option>
+                <template v-if="typeof option === 'string'">
+                    <option :value="option">{{ option }}</option>
+                </template>
+                <template v-else-if="Array.isArray(option)">
+                    <optgroup :label="key.toString()" :key="key">
+                        <template v-for="item in option" :key="item[valueField]">
+                            <option :value="item[valueField]">
+                                {{ item[textField] }}
+                            </option>
+                        </template>
+                    </optgroup>
                 </template>
                 <template v-else>
                     <option :value="option[valueField]">
@@ -36,7 +45,7 @@ const props = defineProps<{
     id: string;
     name: string;
     label?: string;
-    list: any[];
+    list: any[] | any;
     textField?: string;
     valueField?: string;
 }>();

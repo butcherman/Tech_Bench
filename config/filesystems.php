@@ -79,11 +79,11 @@ return [
         ],
 
         /**
-         * All Tech Bench add on modules are stored here
+         * Security and SSL Certificates
          */
-        'modules' => [
+        'security' => [
             'driver' => 'local',
-            'root' => base_path().'/Modules',
+            'root' => base_path('keystore'),
         ],
 
         /**

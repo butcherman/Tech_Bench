@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 
 class BuildPasswordRules
 {
+    //  TODO - Move this to BuildCache Class
     public function build()
     {
         $passwordRules = [

@@ -6,6 +6,8 @@ Short description of major changes for each release
 
 IN PROGRESS!!!!!!!!!!!!!!!!!!!
 
+- Added O365 OATH login option
+- Added ability to upload SSL Certificates through browser
 - Added ability for Customer URL to use either Customer ID or Slug
 
 - Upgrade Laravel Framework to Laravel 10
@@ -19,7 +21,7 @@ IN PROGRESS!!!!!!!!!!!!!!!!!!!
 
 ## Release 6.4.0
 
-- Added ability to order Customer Equipment Data
+- Added ability to change order for Customer Equipment Data
 - Upgrade Laravel Framework to Laravel 9
 - Upgrade all dependencies to latest versions
 

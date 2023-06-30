@@ -26,5 +26,18 @@ return [
         'updated' => 'User Role Updated',
         'destroyed' => 'User Role Deleted',
         'in-use' => 'Unable to delete - Role is in use',
+    ],
+
+    'config' => [
+        'updated' => 'Application Configuration Updated',
+        'logo' => 'New Logo Applied',
+    ],
+
+    'email' => [
+        'test' => 'Email sent successfully.  Please check your inbox',
+    ],
+
+    'logging' => [
+        'updated' => 'Logging Settings have been updated',
     ]
 ];

@@ -18,7 +18,7 @@
 import SubmitButton from "@/Components/_Base/Buttons/SubmitButton.vue";
 import Loading from "vue3-loading-overlay";
 import TrinityRingsLoader from "@/Components/_Base/Loaders/TrinityRingsLoader.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useForm, useFieldArray } from "vee-validate";
 //  Overlay Styling
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
@@ -31,7 +31,7 @@ const props = defineProps<{
 }>();
 
 const isSubmitting = ref<boolean>(false);
-const { handleSubmit, setFieldValue, setFieldError, values, resetForm } =
+const { handleSubmit, setFieldValue, setFieldError, values, resetForm, meta, handleReset } =
     useForm({
         validationSchema: props.validationSchema,
         initialValues: props.initialValues,
@@ -46,6 +46,8 @@ const getFieldValue = (field: string): string => {
     return values[field as keyof typeof values];
 };
 
+const isDirty = (computed(() => meta.value.dirty ));
+
 function endSubmit(): void {
     isSubmitting.value = false;
 }
@@ -58,5 +60,7 @@ defineExpose({
     setFieldError,
     onSubmit,
     resetForm,
+    handleReset,
+    isDirty,
 });
 </script>

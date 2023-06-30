@@ -17,6 +17,9 @@ class BuildAdminMenu
         $navBar = [];
         $navBar['Users'] = $this->buildUserMenu();
 
+        $navBar['App Settings'] = $this->buildSettingsMenu();
+        $navBar['App Maintenance'] = $this->buildMaintenanceMenu();
+
         return $navBar;
     }
 
@@ -64,5 +67,75 @@ class BuildAdminMenu
         }
 
         return $userBuild;
+    }
+
+    /**
+     * Build navigation menu for Application Settings
+     */
+    protected function buildSettingsMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'App Settings')) {
+            $nav = [
+                [
+                    'name' => 'Application Logo',
+                    'icon' => 'fa-image',
+                    'route' => route('admin.logo.get'),
+                ],
+                [
+                    'name' => 'Application Configuration',
+                    'icon' => 'fa-server',
+                    'route' => route('admin.config.get'),
+                ],
+                [
+                    'name' => 'Email Settings',
+                    'icon' => 'fas fa-envelope',
+                    'route' => route('admin.email.get'),
+                ],
+                [
+                    'name' => 'Security Settings',
+                    'icon' => 'fa-lock',
+                    'route' => route('admin.security.index'),
+                ],
+            ];
+        }
+
+        return $nav;
+    }
+
+    /**
+     * Build navigation menu for Application Maintenance
+     */
+    protected function buildMaintenanceMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'App Settings')) {
+            $nav = [
+                [
+                    'name' => 'Application Logs',
+                    'icon' => 'fa-bug',
+                    'route' => route('admin.logs.index'),
+                ],
+                [
+                    'name' => 'Log Settings',
+                    'icon' => 'fa-sliders',
+                    'route' => route('admin.logs.settings.get'),
+                ],
+                // [
+                //     'name' => 'Backups',
+                //     'icon' => 'fa-hdd',
+                //     'link' => route('admin.backups.show'),
+                // ],
+                // [
+                //     'name' => 'Backup Settings',
+                //     'icon' => 'fa-hdd',
+                //     'link' => route('admin.backups.index'),
+                // ],
+            ];
+        }
+
+        return $nav;
     }
 }
