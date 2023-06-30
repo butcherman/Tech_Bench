@@ -78,6 +78,8 @@ Route::middleware('auth')->prefix('administration')->name('admin.')->group(funct
         Route::get('/', [SecurityController::class, 'index'])->name('index')->breadcrumb('Security Settings', 'admin.index');
         Route::get('create', [SecurityController::class, 'create'])->name('create')->breadcrumb('Upload SSL Certificate', 'admin.security.index');
         Route::post('create', [SecurityController::class, 'store'])->name('store');
+        Route::get('create-csr', [SecurityController::class, 'edit'])->name('edit')->breadcrumb('Generate CSR', 'admin.security.index');
+        Route::put('create-csr', [SecurityController::class, 'update'])->name('update')->breadcrumb('CSR Info', '.edit');
         Route::delete('/', [SecurityController::class, 'destroy'])->name('destroy');
     });
 

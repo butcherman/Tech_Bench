@@ -79,6 +79,11 @@
                                 Import New Certificate
                             </EditButton>
                         </Link>
+                        <Link :href="$route('admin.security.edit')">
+                            <AddButton class="w-100 my-1">
+                                Generate CSR
+                            </AddButton>
+                        </Link>
                         <DeleteButton
                             v-if="cert"
                             class="w-100 my-1"
@@ -95,9 +100,10 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
+import AddButton from '@/Components/_Base/Buttons/AddButton.vue';
 import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
 import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
-import { ref, computed, onMounted } from "vue";
+import { computed } from "vue";
 import verify from "@/Modules/verify";
 import { router } from "@inertiajs/vue3";
 

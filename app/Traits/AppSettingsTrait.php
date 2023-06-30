@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Log;
  */
 trait AppSettingsTrait
 {
-    //  Save an individual setting into the database so that it can be modified from the hard coded setting
+    /**
+     * Save an individual setting into the database so that it can be modified from the hard coded setting
+     */
     protected function saveSettings($key, $value)
     {
         if ($value !== __('admin.fake-password') && $value !== null) {
@@ -30,7 +32,9 @@ trait AppSettingsTrait
         $this->cacheConfig();
     }
 
-    //  Clear a setting from the database
+    /**
+     * Clear a setting from the database
+     */
     protected function clearSetting($key)
     {
         $data = AppSettings::where('key', $key)->first();
@@ -41,7 +45,9 @@ trait AppSettingsTrait
         $this->cacheConfig();
     }
 
-    //  Array must be in the form of ['key' => 'value] in order to be properly updated
+    /**
+     * Array must be in the form of ['key' => 'value] in order to be properly updated
+     */
     protected function saveSettingsArray($settingArray, $prefix = '')
     {
         foreach ($settingArray as $key => $value) {
@@ -53,7 +59,10 @@ trait AppSettingsTrait
         $this->cacheConfig();
     }
 
-    //  Cache the current config so it is not loaded on every request
+    /**
+     * Cache the current config so it is not loaded on every request
+     * @codeCoverageIgnore
+     */
     protected function cacheConfig()
     {
         if (App::environment('production')) {

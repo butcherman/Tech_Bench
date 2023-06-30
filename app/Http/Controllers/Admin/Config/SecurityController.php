@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Config;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CsrRequest;
 use App\Http\Requests\Admin\SecurityRequest;
 use App\Models\AppSettings;
 use Exception;
@@ -54,7 +55,18 @@ class SecurityController extends Controller
 
     public function edit()
     {
-        return 'generate csr';
+        $this->authorize('viewAny', AppSettings::class);
+
+        return Inertia::render('Admin/Security/Edit');
+    }
+
+    public function update(CsrRequest $request)
+    {
+        $csr = $request->processCsrRequest();
+
+        return Inertia::render('Admin/Security/Edit', [
+            'csr-request' => $csr,
+        ]);
     }
 
     /**

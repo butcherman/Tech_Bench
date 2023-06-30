@@ -100,9 +100,10 @@ class LoginTest extends TestCase
     //         'password' => 'somethingElse',
     //     ]);
 
-    //     dd($response);
+    //     // dd($response->getStatus());
 
-    //     $response->assertStatus(429);
+    //     $response->assertStatus(302);
+    //     $response->assertSessionHasErrors('throttle');
     //     $this->assertGuest();
 
     //     //  After more than 10 minutes, user should be able to try again
@@ -117,13 +118,13 @@ class LoginTest extends TestCase
     // }
 
     //  Make sure that the user is redirected to the Change Password page if their password has expired
-    // public function test_password_expired_redirect()
-    // {
-    //     $user = User::factory()->create(['password_expires' => Carbon::yesterday()]);
+    public function test_password_expired_redirect()
+    {
+        $user = User::factory()->create(['password_expires' => Carbon::yesterday()]);
 
-    //     $response = $this->actingAs($user)->get(route('home'));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('settings.password.index'));
-    //     $response->assertSessionHasErrors(['password']);
-    // }
+        $response = $this->actingAs($user)->get(route('home'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('user.password'));
+        $response->assertSessionHasErrors(['password']);
+    }
 }

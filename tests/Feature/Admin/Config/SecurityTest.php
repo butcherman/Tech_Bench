@@ -21,13 +21,13 @@ class SecurityTest extends TestCase
         parent::setUp();
 
         //  Generate private key
-        $this->key = openssl_pkey_new(array(
+        $this->key = openssl_pkey_new([
             'private_key_bits' => 2048,
             'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        ));
+        ]);
 
         //  Certificate Signing Request
-        $dn = array(
+        $dn = [
             'countryName' => 'US',
             'stateOrProvinceName' => 'CA',
             'localityName' => 'My Home USA',
@@ -35,11 +35,11 @@ class SecurityTest extends TestCase
             'organizationalUnitName' => 'Butcherman Unlimited',
             'commonName' => 'Its The Butcherman',
             'emailAddress' => 'butcherman@noem.com',
-        );
-        $csr = openssl_csr_new($dn, $this->key, array('digest_alg' => 'sha256'));
+        ];
+        $csr = openssl_csr_new($dn, $this->key, ['digest_alg' => 'sha256']);
 
         //  Cert is only valid for 5 days
-        $this->cert = openssl_csr_sign($csr, null, $this->key, 5, array('digest_alg' => 'sha256'));
+        $this->cert = openssl_csr_sign($csr, null, $this->key, 5, ['digest_alg' => 'sha256']);
     }
 
     /**
@@ -168,6 +168,82 @@ class SecurityTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.security.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['invalid' => 'The uploaded SSL Certificate is not valid.  No changes have been saved']);
+    }
+
+    /**
+     * Edit Method
+     */
+    public function test_edit_guest()
+    {
+        $response = $this->get(route('admin.security.edit'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_edit_no_permission()
+    {
+        $response = $this->actingAs(User::factory()->create())->get(route('admin.security.edit'));
+        $response->assertStatus(403);
+    }
+
+    public function test_edit()
+    {
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.security.edit'));
+        $response->assertSuccessful();
+    }
+
+    /**
+     * Update Method
+     */
+    public function test_update_guest()
+    {
+        $data = [
+            'country' => 'US',
+            'state' => 'CA',
+            'locality' => 'My Home USA',
+            'organization' => 'Butcherman Unlimited',
+            'ouName' => 'Butcherman Unlimited',
+            'common' => 'Its The Butcherman',
+            'email' => 'butcherman@noem.com',
+        ];
+
+        $response = $this->put(route('admin.security.update'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_update_no_permission()
+    {
+        $data = [
+            'country' => 'US',
+            'state' => 'CA',
+            'locality' => 'My Home USA',
+            'organization' => 'Butcherman Unlimited',
+            'ouName' => 'Butcherman Unlimited',
+            'common' => 'Its The Butcherman',
+            'email' => 'butcherman@noem.com',
+        ];
+
+        $response = $this->actingAs(User::factory()->create())->put(route('admin.security.update'), $data);
+        $response->assertStatus(403);
+    }
+
+    public function test_update()
+    {
+        $data = [
+            'country' => 'US',
+            'state' => 'CA',
+            'locality' => 'My Home USA',
+            'organization' => 'Butcherman Unlimited',
+            'ouName' => 'Butcherman Unlimited',
+            'common' => 'Its The Butcherman',
+            'email' => 'butcherman@noem.com',
+        ];
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.security.update'), $data);
+        $response->assertSuccessful();
     }
 
     /**

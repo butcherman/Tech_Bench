@@ -29,9 +29,4 @@ class UserSettingsRequest extends FormRequest
             'redirectUri' => 'required_if:allowOath,true',
         ];
     }
-
-    public function checkPasswordField()
-    {
-        return $this->client_secret == __('admin.fake-password');
-    }
 }
