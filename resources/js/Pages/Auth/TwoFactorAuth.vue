@@ -2,8 +2,13 @@
     <div>
         <div class="row">
             <div class="col-12">
-                <p class="text-center">Please check your email, a verification code has been sent</p>
+                <p class="text-center">
+                    Please check your email, a verification code has been sent
+                </p>
                 <VerificationCodeForm />
+                <div class="text-center mt-2">
+                    <Link :href="$route('dashboard')">Resend Code</Link>
+                </div>
             </div>
         </div>
     </div>
@@ -12,10 +17,7 @@
 <script setup lang="ts">
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
-import VerificationCodeForm from '@/Forms/Auth/VerificationCodeForm.vue';
-import { ref, reactive, onMounted } from "vue";
-
-const props = defineProps<{}>();
+import VerificationCodeForm from "@/Forms/Auth/VerificationCodeForm.vue";
 </script>
 
 <script lang="ts">

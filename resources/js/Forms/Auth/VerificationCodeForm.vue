@@ -1,17 +1,13 @@
 <template>
     <VueForm
         ref="verificationForm"
+        id="verification-form"
         :initial-values="initValues"
         :validation-schema="schema"
         submit-text="Verify"
         @submit="onSubmit"
     >
-        <TextInput
-            id="code"
-            name="code"
-            label="Verification Code"
-            focus
-        />
+        <TextInput id="code" name="code" label="Verification Code" focus />
     </VueForm>
 </template>
 
@@ -19,26 +15,24 @@
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
-import { ref, reactive, onMounted } from "vue";
-import { object, number } from "yup";
-
-// const props = defineProps<{}>();
+import { ref } from "vue";
+import { shake } from '@/Modules/Animation.module';
+import { object, string } from "yup";
 
 const verificationForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {
-    code: '',
+    code: "",
 };
 const schema = object({
-    code: number().required(),
+    code: string().required(),
 });
 
-const onSubmit = (form) => {
+const onSubmit = (form: { code: string }) => {
     const formData = useForm(form);
-    console.log(formData);
-    //
 
-    formData.post(route('2fa.store'), {
+    formData.post(route("2fa.store"), {
         onFinish: () => verificationForm.value?.endSubmit(),
+        onError: () => shake(document.getElementById("verification-form")!!),
     });
 };
 </script>

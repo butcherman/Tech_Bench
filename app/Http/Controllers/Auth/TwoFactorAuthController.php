@@ -18,7 +18,6 @@ class TwoFactorAuthController extends Controller
     {
         if($request->verifyCode()) {
             session()->put('2fa_verified', true);
-            // return 'worked';
 
             //  TODO - send back to original route requested
             return redirect(route('dashboard'));
