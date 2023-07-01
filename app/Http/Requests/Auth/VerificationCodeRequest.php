@@ -30,9 +30,19 @@ class VerificationCodeRequest extends FormRequest
      */
     public function verifyCode()
     {
-        return UserCode::where('user_id', $this->user()->user_id)
+        $code = UserCode::where('user_id', $this->user()->user_id)
             ->where('code', $this->code)
-            ->first()
-            ? true : false;
+            ->first();
+
+        if(!$code) {
+            return false;
+        }
+
+        if($this->remember) {
+            $token = $this->user()->generateRememberDeviceToken();
+            return $token;
+        }
+
+        return true;
     }
 }

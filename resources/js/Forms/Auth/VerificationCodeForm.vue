@@ -8,12 +8,14 @@
         @submit="onSubmit"
     >
         <TextInput id="code" name="code" label="Verification Code" focus />
+        <CheckboxSwitch id="remember-device" name="remember" label="Remember This Device" class="mb-3" />
     </VueForm>
 </template>
 
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
+import CheckboxSwitch from "../_Base/CheckboxSwitch.vue";
 import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { shake } from '@/Modules/Animation.module';

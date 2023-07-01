@@ -16,11 +16,15 @@ class TwoFactorAuthController extends Controller
 
     public function set(VerificationCodeRequest $request)
     {
-        if($request->verifyCode()) {
+        if($cookie = $request->verifyCode()) {
             session()->put('2fa_verified', true);
 
+            if(is_bool($cookie)) {
+                return redirect(route('dashboard'));
+            }
+
             //  TODO - send back to original route requested
-            return redirect(route('dashboard'));
+            return redirect(route('dashboard'))->withCookie('remember_device', $cookie, 259200);
         }
 
         return back()->withErrors(['2fa' => 'Sorry, the validation code was incorrect']);

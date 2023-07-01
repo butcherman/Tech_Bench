@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -65,6 +66,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Each user can have multiple devices registered for "remember me" using 2FA
+     */
+    public function DeviceToken()
+    {
+        return $this->hasMany(DeviceToken::class, 'user_id', 'user_id');
+    }
+
+    /**
      * Determine the new expire date for an updated password
      */
     public function getNewExpireTime($immediate = false)
@@ -90,5 +99,29 @@ class User extends Authenticatable
         );
 
         Notification::send($this, new SendAuthCode($code));
+    }
+
+    /**
+     * Generate a Remember Me token for a device
+     */
+    public function generateRememberDeviceToken()
+    {
+        $token = Str::random(60);
+        DeviceToken::create([
+            'user_id' => $this->user_id,
+            'token' => $token,
+        ]);
+
+        return $token;
+    }
+
+    /**
+     * Validate a Remember Me device token
+     */
+    public function validateDeviceToken($token)
+    {
+        $valid = DeviceToken::where('user_id', $this->user_id)->where('token', $token)->first();
+
+        return $valid ? true : false;
     }
 }
