@@ -21,12 +21,17 @@ class UserSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'allow_login' => 'required|boolean',
-            'allow_register' => 'required|boolean',
-            'tenant' => 'required_if:allowOath,true',
-            'client_id' => 'required_if:allowOath,true',
-            'client_secret' => 'required_if:allowOath,true',
-            'redirectUri' => 'required_if:allowOath,true',
+            'twoFa.required' => 'required|boolean',
+            'twoFa.allow_bypass' => 'required|boolean',
+            'twoFa.allow_save_device' => 'required|boolean',
+            'twoFa.allow_via_email' => 'required|boolean',
+            'twoFa.allow_via_sms' => 'required|boolean',
+            'oath.allow_login' => 'required|boolean',
+            'oath.allow_register' => 'required|boolean',
+            'oath.tenant' => 'required_if:allowOath,true',
+            'oath.client_id' => 'required_if:allowOath,true',
+            'oath.client_secret' => 'required_if:allowOath,true',
+            'oath.redirectUri' => 'required_if:allowOath,true',
         ];
     }
 }

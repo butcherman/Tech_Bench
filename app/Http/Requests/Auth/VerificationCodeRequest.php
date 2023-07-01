@@ -34,10 +34,12 @@ class VerificationCodeRequest extends FormRequest
             ->where('code', $this->code)
             ->first();
 
+        //  Does code exist?
         if(!$code) {
             return false;
         }
 
+        //  Is the "Remember Device" flag set
         if($this->remember) {
             $token = $this->user()->generateRememberDeviceToken();
             return $token;

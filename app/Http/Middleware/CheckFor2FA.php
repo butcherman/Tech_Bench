@@ -13,15 +13,12 @@ class CheckFor2FA
      */
     public function handle(Request $request, Closure $next): Response
     {
-        /**
-         * Any authenticated route will check to make sure user has verified themselves
-         */
+        // Any authenticated route will check to make sure user has verified themselves
         if(session()->missing('2fa_verified')) {
-            /**
-             * Check to see if a remember device token exists
-             */
+            // Check to see if a remember device token exists
             if($rememberToken = $request->cookie('remember_device')) {
                 if($request->user()->validateDeviceToken($rememberToken)) {
+                    //  If device is valid, we will attach verification and move on
                     $request->session()->put('2fa_verified', true);
                     return $next($request);
                 }
@@ -29,6 +26,7 @@ class CheckFor2FA
 
             $request->user()->generateVerificationCode();
 
+            app('redirect')->setIntendedUrl($request->path());
             return redirect(route('2fa.index'));
         }
 

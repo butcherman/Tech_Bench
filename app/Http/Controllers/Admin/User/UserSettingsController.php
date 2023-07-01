@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\User;
 
+use App\Actions\BuildAdminUserSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserSettingsRequest;
 use App\Models\User;
@@ -17,19 +18,19 @@ class UserSettingsController extends Controller
     {
         $this->authorize('manage', User::class);
 
+        $settingsObj = new BuildAdminUserSettings;
+
         return Inertia::render('Admin/User/Settings', [
-            'allow_login' => (bool) config('services.azure.allow_login'),
-            'allow_register' => (bool) config('services.azure.allow_register'),
-            'tenant' => config('services.azure.tenant'),
-            'client_id' => config('services.azure.client_id'),
-            'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',
-            'redirectUri' => config('app.url').'/auth/callback',
+            'two-fa' => $settingsObj->buildTwoFaSettings(),
+            'oath' => $settingsObj->buildOathSettings(),
         ]);
     }
 
     public function set(UserSettingsRequest $request)
     {
-        $this->saveSettingsArray($request->except(['redirectUri']), 'services.azure');
+        // dd($request);
+        $this->saveSettingsArray($request->oath, 'services.azure');
+        $this->saveSettingsArray($request->twoFa, 'auth.twoFa');
 
         Log::notice('User Settings updated by '.$request->user()->username, $request->except('client_secret'));
 
