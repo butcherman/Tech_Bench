@@ -14,12 +14,14 @@
             placeholder="Password"
             type="password"
         />
+        <CheckboxSwitch id="remember-me" name="remember" label="Remember Me" class="mb-2" />
     </VueForm>
 </template>
 
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "../_Base/TextInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import CheckboxSwitch from '@/Forms/_Base/CheckboxSwitch.vue';
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { object, string } from "yup";
@@ -42,6 +44,7 @@ const validationSchema = object({
 });
 
 const onSubmit = (form: loginForm) => {
+    console.log(form);
     const formData = useForm(form);
     formData.post(route("login"), {
         onFinish: () => userLoginForm.value?.endSubmit(),
