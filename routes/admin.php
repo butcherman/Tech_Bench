@@ -21,7 +21,7 @@ use App\Http\Controllers\Admin\User\UserSettingsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->prefix('administration')->name('admin.')->group(function () {
+Route::middleware(['auth', 'user_security'])->prefix('administration')->name('admin.')->group(function () {
     Route::get('/', AdminIndexController::class)->name('index')->breadcrumb('Administration');
 
     /**

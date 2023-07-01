@@ -7,7 +7,7 @@ use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
+Route::middleware(['auth', 'user_security'])->prefix('user')->name('user.')->group(function () {
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [UserSettingsController::class, 'get'])->name('index')->breadcrumb('Settings', 'dashboard');
         Route::post('{user}', [UserSettingsController::class, 'set'])->name('set');
