@@ -17,7 +17,9 @@ class TwoFactorAuthController extends Controller
      */
     public function get()
     {
-        return Inertia::render('Auth/TwoFactorAuth');
+        return Inertia::render('Auth/TwoFactorAuth', [
+            'allow-remember' => (bool) config('auth.twoFa.allow_save_device'),
+        ]);
     }
 
     /**

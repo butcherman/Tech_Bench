@@ -5,7 +5,7 @@
                 <p class="text-center">
                     Please check your email, a verification code has been sent
                 </p>
-                <VerificationCodeForm />
+                <VerificationCodeForm :allow-remember="allowRemember" />
                 <div class="text-center mt-2">
                     <Link :href="$route('dashboard')">Resend Code</Link>
                 </div>
@@ -18,6 +18,10 @@
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
 import VerificationCodeForm from "@/Forms/Auth/VerificationCodeForm.vue";
+
+defineProps<{
+    allowRemember: boolean;
+}>();
 </script>
 
 <script lang="ts">

@@ -15,13 +15,6 @@
         <div class="row justify-content-center">
             <div class="col-10 border">
                 <CheckboxSwitch
-                    id="bypass"
-                    name="twoFa.allow_bypass"
-                    label="Allow Users to Bypass 2FA Requirement"
-                    help="Allowing this option will not force users to use 2FA, but will put an annoying banner at the top of their browser page reminding them it needs to be setup."
-                    :disabled="disable2FaFields"
-                />
-                <CheckboxSwitch
                     id="save-device"
                     name="twoFa.allow_save_device"
                     label="Allow Users to Save Devices for Future Login"
@@ -109,7 +102,6 @@ const userSettingsForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = props;
 const schema = object({
     twoFa: object({
-        allow_bypass: boolean().required(),
         allow_save_device: boolean().required(),
         allow_via_email: boolean().required(),
         allow_via_sms: boolean().required(),

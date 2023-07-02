@@ -8,7 +8,6 @@ class BuildAdminUserSettings
     {
         return [
             'required' => (bool) config('auth.twoFa.required'),
-            'allow_bypass' => (bool) config('auth.twoFa.allow_bypass'),
             'allow_save_device' => (bool) config('auth.twoFa.allow_save_device'),
             'allow_via_email' => (bool) config('auth.twoFa.allow_via_email'),
             'allow_via_sms' => (bool) config('auth.twoFa.allow_via_sms'),

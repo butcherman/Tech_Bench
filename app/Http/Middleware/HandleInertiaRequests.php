@@ -37,6 +37,8 @@ class HandleInertiaRequests extends Middleware
                 'danger' => fn () => $request->session()->get('danger'),
                 'info' => fn () => $request->session()->get('info'),
             ],
+            //  Alert messages that will stick to top of request
+            'alerts' => fn () => $request->session()->get('alert'),
             //  App information that is shared and used on all pages
             'app' => [
                 'name' => fn () => config('app.name'),

@@ -22,7 +22,6 @@ class UserSettingsRequest extends FormRequest
     {
         return [
             'twoFa.required' => 'required|boolean',
-            'twoFa.allow_bypass' => 'required|boolean',
             'twoFa.allow_save_device' => 'required|boolean',
             'twoFa.allow_via_email' => 'required|boolean',
             'twoFa.allow_via_sms' => 'required|boolean',

@@ -8,7 +8,7 @@
         @submit="onSubmit"
     >
         <TextInput id="code" name="code" label="Verification Code" focus />
-        <CheckboxSwitch id="remember-device" name="remember" label="Remember This Device" class="mb-3" />
+        <CheckboxSwitch v-if="allowRemember" id="remember-device" name="remember" label="Remember This Device" class="mb-3" />
     </VueForm>
 </template>
 
@@ -20,6 +20,10 @@ import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { shake } from '@/Modules/Animation.module';
 import { object, string } from "yup";
+
+defineProps<{
+    allowRemember: boolean;
+}>();
 
 const verificationForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {
