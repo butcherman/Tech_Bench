@@ -29,12 +29,15 @@ class UserSettingsController extends Controller
 
     public function set(UserSettingsRequest $request)
     {
-        // dd($request);
         $this->saveSettingsArray($request->oath, 'services.azure');
         $this->saveSettingsArray($request->twoFa, 'auth.twoFa');
         $this->saveSettingsArray($request->twilio, 'services.twilio');
 
         Log::notice('User Settings updated by '.$request->user()->username, $request->except('client_secret'));
+
+        //  If the user just enabled 2FA, they will be prompted for a code immediately.
+        //  Bypass by manually adding verification to session
+        $request->session()->put('2fa_verified', true);
 
         return back()->with('success', __('admin.user.settings_updated'));
     }

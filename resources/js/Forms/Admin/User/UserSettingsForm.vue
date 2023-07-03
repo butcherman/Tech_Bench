@@ -12,112 +12,125 @@
             label="Require Two-Factor Authentication"
             help="With this enabled, users will have to verify their identity by entering an authorization code sent to their email or mobile device"
         />
-        <div id="two-fa-wrapper" class="row justify-content-center">
-            <div class="col-10 border">
-                <CheckboxSwitch
-                    id="save-device"
-                    name="twoFa.allow_save_device"
-                    label="Allow Users to Save Devices for Future Login"
-                    help="Allowing a user to save devices will bypass the 2FA challenge on future visits with the same device for 180 days."
-                    :disabled="disable2FaFields"
-                />
-                <CheckboxSwitch
-                    id="via-email"
-                    name="twoFa.allow_via_email"
-                    label="Allow Via Email"
-                    disabled
-                />
-                <CheckboxSwitch
-                    id="via-sms"
-                    name="twoFa.allow_via_sms"
-                    label="Allow Via SMS"
-                />
-                <div class="row justify-content-center">
-                    <div class="col-10 border">
-                        <p class="text-center">
-                            Tech Bench uses
-                            <a href="https://twilio.com" target="_blank">
-                                Twilio
-                            </a>
-                            to send SMS messages. Before enabling SMS, please
-                            setup a Twilio account to get the information needed
-                            below.
-                        </p>
-                        <TextInput
-                            id="twilio-sid"
-                            name="twilio.sid"
-                            label="Twilio SID"
-                            :disabled="disableTwilioFields"
-                        />
-                        <TextInput
-                            id="twilio-token"
-                            name="twilio.token"
-                            label="Twilio Token"
-                            type="password"
-                            :disabled="disableTwilioFields"
-                        />
-                        <TextInput
-                            id="twilio-from"
-                            name="twilio.from"
-                            label="Twilio From Number"
-                            :disabled="disableTwilioFields"
-                        />
-                    </div>
+        <Collapse :visible="!disable2FaFields">
+            <div id="two-fa-wrapper" class="row justify-content-center">
+                <div class="col-10 border">
+                    <CheckboxSwitch
+                        id="save-device"
+                        name="twoFa.allow_save_device"
+                        label="Allow Users to Save Devices for Future Login"
+                        help="Allowing a user to save devices will bypass the 2FA challenge on future visits with the same device for 180 days."
+                        :disabled="disable2FaFields"
+                    />
+                    <CheckboxSwitch
+                        id="via-email"
+                        name="twoFa.allow_via_email"
+                        label="Allow Via Email"
+                        disabled
+                    />
+                    <CheckboxSwitch
+                        id="via-sms"
+                        name="twoFa.allow_via_sms"
+                        label="Allow Via SMS"
+                    />
+                    <Collapse :visible="!disableTwilioFields">
+                        <div
+                            id="twilio-wrapper"
+                            class="row justify-content-center"
+                        >
+                            <div class="col-10 border">
+                                <p class="text-center">
+                                    Tech Bench uses
+                                    <a
+                                        href="https://twilio.com"
+                                        target="_blank"
+                                    >
+                                        Twilio
+                                    </a>
+                                    to send SMS messages. Before enabling SMS,
+                                    please setup a Twilio account to get the
+                                    information needed below.
+                                </p>
+                                <TextInput
+                                    id="twilio-sid"
+                                    name="twilio.sid"
+                                    label="Twilio SID"
+                                    :disabled="disableTwilioFields"
+                                />
+                                <TextInput
+                                    id="twilio-token"
+                                    name="twilio.token"
+                                    label="Twilio Token"
+                                    type="password"
+                                    :disabled="disableTwilioFields"
+                                />
+                                <TextInput
+                                    id="twilio-from"
+                                    name="twilio.from"
+                                    label="Twilio From Number"
+                                    :disabled="disableTwilioFields"
+                                />
+                            </div>
+                        </div>
+                    </Collapse>
                 </div>
             </div>
-        </div>
+        </Collapse>
         <CheckboxSwitch
             id="allow-oath"
             name="oath.allow_login"
             label="Allow Office 365 Login"
+            help="When enabled, users within your organization can log into the Tech Bench with their Azure username and password"
         />
-        <div class="row justify-content-center">
-            <div class="col-10 border">
-                <CheckboxSwitch
-                    id="oath_register"
-                    name="oath.allow_register"
-                    class="w-100"
-                    label="Allow anyone in my organization to login"
-                    help="If left unchecked, only users created manually can log into the Tech Bench"
-                    :disabled="disableOathFields"
-                />
-                <TextInput
-                    id="azure-tenant-id"
-                    name="oath.tenant"
-                    label="Azure Tenant ID"
-                    :disabled="disableOathFields"
-                />
-                <TextInput
-                    id="azure-client-id"
-                    name="oath.client_id"
-                    label="Azure Client ID"
-                    :disabled="disableOathFields"
-                />
-                <TextInput
-                    id="azure-client-secret"
-                    type="password"
-                    name="oath.client_secret"
-                    label="Azure Client Secret"
-                    :disabled="disableOathFields"
-                />
-                <TextInput
-                    id="azure-secret-expiration"
-                    name="oath.secret_expires"
-                    label="Date Client Secret Expires"
-                    type="date"
-                    :disabled="disableOathFields"
-                    help="An email notification will be sent to System Administrators 30 days before the Secret expires"
-                />
-                <TextInput
-                    id="azure-redirect"
-                    type="url"
-                    name="oath.redirectUri"
-                    label="Azure Redirect URI"
-                    help="Set your Azure Redirect URI to this setting for proper login returns"
-                    disabled
-                />
+        <Collapse :visible="!disableOathFields">
+            <div id="oath-wrapper" class="row justify-content-center">
+                <div class="col-10 border">
+                    <CheckboxSwitch
+                        id="oath_register"
+                        name="oath.allow_register"
+                        class="w-100"
+                        label="Allow anyone in my organization to login"
+                        help="If left unchecked, only users created manually can log into the Tech Bench"
+                        :disabled="disableOathFields"
+                    />
+                    <TextInput
+                        id="azure-tenant-id"
+                        name="oath.tenant"
+                        label="Azure Tenant ID"
+                        :disabled="disableOathFields"
+                    />
+                    <TextInput
+                        id="azure-client-id"
+                        name="oath.client_id"
+                        label="Azure Client ID"
+                        :disabled="disableOathFields"
+                    />
+                    <TextInput
+                        id="azure-client-secret"
+                        type="password"
+                        name="oath.client_secret"
+                        label="Azure Client Secret"
+                        :disabled="disableOathFields"
+                    />
+                    <TextInput
+                        id="azure-secret-expiration"
+                        name="oath.secret_expires"
+                        label="Date Client Secret Expires"
+                        type="date"
+                        :disabled="disableOathFields"
+                        help="An email notification will be sent to System Administrators 30 days before the Secret expires"
+                    />
+                    <TextInput
+                        id="azure-redirect"
+                        type="url"
+                        name="oath.redirectUri"
+                        label="Azure Redirect URI"
+                        help="Set your Azure Redirect URI to this setting for proper login returns"
+                        disabled
+                    />
+                </div>
             </div>
-        </div>
+        </Collapse>
     </VueForm>
 </template>
 
@@ -125,6 +138,7 @@
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import CheckboxSwitch from "@/Forms/_Base/CheckboxSwitch.vue";
+import Collapse from "@/Components/_Base/Collapse.vue";
 import { useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import { object, string, boolean } from "yup";
