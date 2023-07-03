@@ -17,6 +17,11 @@ class TwoFactorAuthController extends Controller
      */
     public function get()
     {
+        // If the user has already verified, re-route to intended route or dashboard
+        if(session()->has('2fa_verified')) {
+            return redirect()->intended(route('dashboard'));
+        }
+
         return Inertia::render('Auth/TwoFactorAuth', [
             'allow-remember' => (bool) config('auth.twoFa.allow_save_device'),
         ]);

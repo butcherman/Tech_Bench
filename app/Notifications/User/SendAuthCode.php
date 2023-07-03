@@ -2,11 +2,14 @@
 
 namespace App\Notifications\User;
 
+use App\Notifications\Channels\SmsChannel;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
+use Twilio\Rest\Client;
 
 class SendAuthCode extends Notification implements ShouldQueue
 {
@@ -27,7 +30,7 @@ class SendAuthCode extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', SmsChannel::class];
     }
 
     /**
@@ -42,5 +45,13 @@ class SendAuthCode extends Notification implements ShouldQueue
             ->greeting('Hello '.$notifiable->full_name)
             ->line('For security reasons, please enter the verification code to complete your two-factor authentication to sign into the Tech Bench')
             ->line('Verification Code: '.$this->authCode);
+    }
+
+    /**
+     * Build the SMS 2Fa Message
+     */
+    public function toSms(object $notifiable): string
+    {
+        return 'Tech Bench 2FA Code - '.$this->authCode;
     }
 }

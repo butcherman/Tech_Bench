@@ -5,12 +5,15 @@ namespace App\Models;
 use App\Notifications\User\SendAuthCode;
 use App\Traits\Notifiable;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
+use Twilio\Rest\Client;
 
 class User extends Authenticatable
 {
@@ -99,6 +102,26 @@ class User extends Authenticatable
         );
 
         Notification::send($this, new SendAuthCode($code));
+
+        // $receiverNumber = '15308700160';
+        // $message = "2FA login code is ". $code;
+
+        // try {
+
+        //     $account_sid = getenv("TWILIO_SID");
+        //     $auth_token = getenv("TWILIO_TOKEN");
+        //     $twilio_number = getenv("TWILIO_FROM");
+
+        //     $client = new Client($account_sid, $auth_token);
+        //     $client->messages->create('+15308700160', [
+        //         'from' => '+18336280280',
+        //         'body' => $message]);
+
+        //         Log::notice('2fa code sent');
+
+        // } catch (Exception $e) {
+        //     Log::info("Error: ". $e->getMessage());
+        // }
     }
 
     /**
