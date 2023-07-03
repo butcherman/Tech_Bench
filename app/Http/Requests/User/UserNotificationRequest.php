@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User;
 
+use App\Models\UserCode;
 use App\Models\UserSetting;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,7 +22,9 @@ class UserNotificationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'settingsData' => 'required|array',
+            'sms_notification' => 'required|boolean',
+            'phone' => 'required_if:sms_notifications,true',
+            'settingList' => 'required|array',
         ];
     }
 
@@ -30,12 +33,25 @@ class UserNotificationRequest extends FormRequest
      */
     public function updateSettings()
     {
-        foreach ($this->settingsData as $key => $value) {
+        foreach ($this->settingList as $key => $value) {
             UserSetting::where('user_id', $this->user->user_id)
                 ->where('setting_type_id', str_replace('type_id_', '', $key))
                 ->update([
                     'value' => $value,
                 ]);
         }
+    }
+
+    /**
+     * Update the users 2fa delivery type
+     */
+    public function updateTwoFa()
+    {
+        UserCode::firstOrCreate([
+            'user_id' => $this->user()->user_id
+        ],)->update([
+            'code' => rand(0000, 9999),
+            'receive_sms' => $this->sms_notification,
+        ]);
     }
 }

@@ -16,8 +16,10 @@ class NotificationSettingsController extends Controller
     public function __invoke(UserNotificationRequest $request, User $user)
     {
         $request->updateSettings();
+        $request->updateTwoFa();
+        $user->update(['phone' => $request->phone]);
 
-        Log::stack(['daily', 'user'])->info('User Notification Settings ahve been updated for '.$user->username, $request->toArray());
+        Log::stack(['daily', 'user'])->info('User Notification Settings have been updated for '.$user->username, $request->toArray());
 
         return back()->with('success', __('user.notification'));
     }
