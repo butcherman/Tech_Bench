@@ -70,3 +70,9 @@ type twoFaConfig = {
     allow_via_email: boolean;
     allow_via_sms: boolean;
 }
+
+type twilioConfig = {
+    sid: string;
+    token: string;
+    from: string;
+}

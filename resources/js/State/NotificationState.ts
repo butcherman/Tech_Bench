@@ -56,7 +56,7 @@ export const resetCheckCounter = () => {
 export const fetchNotifications = () => {
     //  If the session has been idle for more than 15 minutes, log user out
     if (checkCounter.value > 15) {
-        triggerAutoLogout();
+        // triggerAutoLogout();
     } else {
         axios
             .post(route("user.notifications"), { action: "fetch" })

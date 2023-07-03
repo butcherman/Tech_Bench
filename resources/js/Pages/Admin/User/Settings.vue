@@ -8,6 +8,7 @@
                     <UserSettingsForm
                         :two-fa="twoFa"
                         :oath="oath"
+                        :twilio="twilio"
                     />
                 </div>
             </div>
@@ -22,6 +23,7 @@ import UserSettingsForm from "@/Forms/Admin/User/UserSettingsForm.vue";
 defineProps<{
     twoFa: twoFaConfig;
     oath: oathConfig;
+    twilio: twilioConfig;
 }>();
 </script>
 

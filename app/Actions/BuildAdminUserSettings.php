@@ -22,7 +22,17 @@ class BuildAdminUserSettings
             'tenant' => config('services.azure.tenant'),
             'client_id' => config('services.azure.client_id'),
             'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',
+            'secret_expires' => config('services.azure.secret_expires'),
             'redirectUri' => config('app.url').'/auth/callback',
+        ];
+    }
+
+    public function buildTwilioSettings()
+    {
+        return [
+            'sid' => config('services.twilio.sid'),
+            'token' => config('services.twilio.token'),
+            'from' => config('services.twilio.from'),
         ];
     }
 }
