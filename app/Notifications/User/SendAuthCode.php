@@ -16,13 +16,15 @@ class SendAuthCode extends Notification implements ShouldQueue
     use Queueable;
 
     protected $authCode;
+    protected $viaSms;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(string $code)
+    public function __construct(string $code, bool $toSms)
     {
         $this->authCode = $code;
+        $this->viaSms = $toSms;
     }
 
     /**
@@ -30,7 +32,11 @@ class SendAuthCode extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', SmsChannel::class];
+        if($this->viaSms) {
+            return [SmsChannel::class];
+        }
+
+        return ['mail'];
     }
 
     /**

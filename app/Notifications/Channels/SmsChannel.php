@@ -19,7 +19,7 @@ class SmsChannel
         //  Send the SMS Message
         try {
             $client = new Client(config('services.twilio.sid'), config('services.twilio.token'));
-            $client->messages->create($notifiable->phone, [
+            $client->messages->create('+1'.$notifiable->phone, [
                 'from' => config('services.twilio.from'),
                 'body' => $message]);
         } catch (Exception $e) {

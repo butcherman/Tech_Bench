@@ -96,12 +96,14 @@ class User extends Authenticatable
     {
         $code = rand(0000, 9999);
 
-        UserCode::updateOrCreate(
+        $codeData = UserCode::updateOrCreate(
             ['user_id' => $this->user_id],
             ['code' => $code],
-        );
+        )->first();
 
-        Notification::send($this, new SendAuthCode($code));
+        // dd($codeData);
+
+        Notification::send($this, new SendAuthCode($code, $codeData->receive_sms));
     }
 
     /**
