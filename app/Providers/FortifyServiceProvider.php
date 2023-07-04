@@ -2,13 +2,10 @@
 
 namespace App\Providers;
 
-use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\LogoutResponse;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -44,6 +41,7 @@ class FortifyServiceProvider extends ServiceProvider
                 $availableIn = ceil(RateLimiter::availableIn($throttleKey) / 60);
 
                 event(new Lockout($request));
+
                 return back()->withErrors(['throttle' => 'Too many failed login attempts, try again in '.$availableIn.' minutes']);
             }
 

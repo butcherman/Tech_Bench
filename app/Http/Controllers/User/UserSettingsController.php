@@ -7,7 +7,6 @@ use App\Events\User\EmailChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserProfileRequest;
 use App\Models\User;
-use App\Models\UserCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -16,15 +15,12 @@ class UserSettingsController extends Controller
 {
     public function get(Request $request)
     {
-        $twoFaCode = UserCode::where('user_id', $request->user()->user_id)->first();
-        $allowSms = $twoFaCode ? $twoFaCode->receive_sms : false;
-
         return Inertia::render('User/Settings', [
             'user' => $request->user(),
             'notifications' => (new BuildUserSettings)->build($request->user()),
             'two-fa' => [
-                'allow_sms' => (bool) config('auth.twoFa.allow_via_sms'),
-                'sms_notifications' => (bool) $allowSms,
+                'allow_sms' => (bool) config('auth.twoFa.allow_via_sms') && config('auth.twoFa.required'),
+                'receive_sms' => (bool) $request->user()->receive_sms,
                 'phone' => $request->user()->phone,
             ],
         ]);

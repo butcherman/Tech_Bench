@@ -4,8 +4,6 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use App\Models\UserCode;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class TwoFactorAuthTest extends TestCase
@@ -104,5 +102,24 @@ class TwoFactorAuthTest extends TestCase
         $response->assertRedirect(route('dashboard'));
 
         $this->assertDatabaseHas('device_tokens', ['user_id' => $user->user_id]);
+    }
+
+    public function test_set_validate_sms()
+    {
+        $user = User::factory()->create(['phone' => 2105551212, 'receive_sms' => true]);
+        UserCode::create([
+            'user_id' => $user->user_id,
+            'code' => 1234,
+        ]);
+
+        $data = [
+            'code' => '1234',
+            'remember' => false,
+        ];
+
+        $response = $this->actingAs($user)->withSession(['verify_sms' => true])->post(route('2fa.store'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('dashboard'));
+        $response->assertSessionMissing('verify_sms');
     }
 }

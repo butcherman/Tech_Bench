@@ -66,14 +66,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Each user can have multiple devices registered for "remember me" using 2FA
-     */
-    // public function DeviceToken()
-    // {
-    //     return $this->hasMany(DeviceToken::class, 'user_id', 'user_id');
-    // }
-
-    /**
      * Determine the new expire date for an updated password
      */
     public function getNewExpireTime($immediate = false)
@@ -89,16 +81,17 @@ class User extends Authenticatable
     /**
      * Generate a 2FA Code
      */
-    public function generateVerificationCode()
+    public function generateVerificationCode($verify = false)
     {
         $code = rand(0000, 9999);
+        $toSms = $this->receive_sms && ($this->sms_verified || $verify);
 
-        $codeData = UserCode::updateOrCreate(
+        UserCode::updateOrCreate(
             ['user_id' => $this->user_id],
             ['code' => $code],
-        )->first();
+        );
 
-        Notification::send($this, new SendAuthCode($code, $codeData->receive_sms));
+        Notification::send($this, new SendAuthCode($code, $toSms));
     }
 
     /**

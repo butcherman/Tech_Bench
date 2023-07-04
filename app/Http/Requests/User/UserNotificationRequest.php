@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\User;
 
-use App\Models\UserCode;
 use App\Models\UserSetting;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,7 +21,7 @@ class UserNotificationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sms_notification' => 'required|boolean',
+            'receive_sms' => 'required|boolean',
             'phone' => 'required_if:sms_notifications,true',
             'settingList' => 'required|array',
         ];
@@ -43,14 +42,16 @@ class UserNotificationRequest extends FormRequest
     }
 
     /**
-     * Update the users 2fa delivery type
+     * Update the users SMS Notification settings, return boolean if we need to verify the number
      */
-    public function updateTwoFa()
+    public function doWeReVerify()
     {
-        UserCode::updateOrCreate([
-            'user_id' => $this->user()->user_id,
-            'code' => rand(0000, 9999),
-            'receive_sms' => $this->sms_notification,
-        ]);
+        $oldPhone = $this->user()->phone;
+
+        if ($oldPhone !== $this->phone && $this->receive_sms) {
+            return true;
+        }
+
+        return false;
     }
 }

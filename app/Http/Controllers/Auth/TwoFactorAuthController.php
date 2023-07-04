@@ -17,7 +17,7 @@ class TwoFactorAuthController extends Controller
     public function get()
     {
         // If the user has already verified, re-route to intended route or dashboard
-        if (session()->has('2fa_verified')) {
+        if (session()->has('2fa_verified') && session()->missing('verify_sms')) {
             return redirect()->intended(route('dashboard'));
         }
 
@@ -33,6 +33,10 @@ class TwoFactorAuthController extends Controller
     {
         if ($cookie = $request->verifyCode()) {
             session()->put('2fa_verified', true);
+            if ($request->user()->receive_sms && $request->session()->has('verify_sms')) {
+                $request->user()->update(['sms_verified' => true]);
+                $request->session()->forget('verify_sms');
+            }
 
             if (is_bool($cookie)) {
                 return redirect()->intended(route('dashboard'));

@@ -54,7 +54,7 @@ class UserSettingsTest extends TestCase
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
                 'redirectUri' => 'localhost/auth/callback',
-            ]
+            ],
         ];
 
         $response = $this->post(route('admin.user-settings.set'), $data);
@@ -84,7 +84,7 @@ class UserSettingsTest extends TestCase
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
                 'redirectUri' => 'localhost/auth/callback',
-            ]
+            ],
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('admin.user-settings.set'), $data);
@@ -112,7 +112,7 @@ class UserSettingsTest extends TestCase
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
                 'redirectUri' => 'localhost/auth/callback',
-            ]
+            ],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.user-settings.set'), $data);
@@ -152,7 +152,7 @@ class UserSettingsTest extends TestCase
                 'client_id' => 'someRandomID',
                 'client_secret' => __('admin.fake-password'),
                 'redirectUri' => 'localhost/auth/callback',
-            ]
+            ],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.user-settings.set'), $data);

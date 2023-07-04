@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\UserCode;
 use App\Notifications\User\SendAuthCode;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 

@@ -9,7 +9,7 @@
         <CheckboxSwitch
             v-if="twoFa.allow_sms"
             id="sms-notification"
-            name="sms_notification"
+            name="receive_sms"
             label="Receive Two-Factor Auth code via SMS"
         />
         <Collapse :visible="showTel">
@@ -49,19 +49,19 @@ const props = defineProps<{
     notifications: userSettings[];
     twoFa: {
         allow_sms: boolean;
-        sms_notifications: boolean;
+        receive_sms: boolean;
         phone: string;
     };
 }>();
 
 const userNotificationForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {
-    sms_notification: props.twoFa.sms_notifications,
+    receive_sms: props.twoFa.receive_sms,
     phone: props.twoFa.phone,
 };
 const schema = object({
-    sms_notification: boolean().required(),
-    phone: string().when("sms_notification", {
+    receive_sms: boolean().required(),
+    phone: string().when("receive_sms", {
         is: true,
         then: (schema) =>
             schema.required(
@@ -72,7 +72,7 @@ const schema = object({
 });
 const showTel = computed(() =>
     userNotificationForm.value
-        ? userNotificationForm.value.getFieldValue("sms_notification")
+        ? userNotificationForm.value.getFieldValue("receive_sms")
         : false
 );
 

@@ -15,15 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('code');
-            $table->boolean('receive_sms')->default(false);
             $table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->unique(['user_id', 'code']);
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('phone')->after('email')->nullable();
-        });
     }
 
     /**
