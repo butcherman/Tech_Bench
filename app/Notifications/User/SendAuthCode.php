@@ -3,19 +3,18 @@
 namespace App\Notifications\User;
 
 use App\Notifications\Channels\SmsChannel;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
-use Twilio\Rest\Client;
 
 class SendAuthCode extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected $authCode;
+
     protected $viaSms;
 
     /**
@@ -32,7 +31,7 @@ class SendAuthCode extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        if($this->viaSms) {
+        if ($this->viaSms) {
             return [SmsChannel::class];
         }
 

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unique(['user_id', 'code']);
         });
 
-        Schema::table('users', function(Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('phone')->after('email')->nullable();
         });
     }

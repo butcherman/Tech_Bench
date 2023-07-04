@@ -51,8 +51,7 @@ const initValues = {
         daily: props.values.daily,
         tip: props.values.tip,
         user: props.values.user,
-    }
-
+    },
 };
 const schema = object({
     days: number().required(),
@@ -67,8 +66,6 @@ const schema = object({
 
 const onSubmit = (form: { [key: string]: string }) => {
     const formData = useForm(form);
-
-    console.log(form);
 
     formData.post(route("admin.logs.settings.set"), {
         onFinish: () => logSettingsForm.value?.endSubmit(),

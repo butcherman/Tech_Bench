@@ -17,17 +17,16 @@ export const notifications = reactive<notificationProps>({
  * Display a Modal showing the selected notification
  */
 export const showNotification = (notification: notification) => {
-    console.log(notification)
     displayNotification.value = notification;
-}
+};
 
 /**
  * Remove the active notification
  */
 export const closeNotification = () => {
-    sendNotificationUpdate('mark', [displayNotification.value?.id!!]);
+    sendNotificationUpdate("mark", [displayNotification.value?.id!!]);
     displayNotification.value = null;
-}
+};
 
 /**
  * Set timer to perform Async check for new notifications every 60 seconds

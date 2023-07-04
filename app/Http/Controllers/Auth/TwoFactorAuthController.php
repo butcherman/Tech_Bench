@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\VerificationCodeRequest;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 /**
@@ -18,7 +17,7 @@ class TwoFactorAuthController extends Controller
     public function get()
     {
         // If the user has already verified, re-route to intended route or dashboard
-        if(session()->has('2fa_verified')) {
+        if (session()->has('2fa_verified')) {
             return redirect()->intended(route('dashboard'));
         }
 
@@ -32,10 +31,10 @@ class TwoFactorAuthController extends Controller
      */
     public function set(VerificationCodeRequest $request)
     {
-        if($cookie = $request->verifyCode()) {
+        if ($cookie = $request->verifyCode()) {
             session()->put('2fa_verified', true);
 
-            if(is_bool($cookie)) {
+            if (is_bool($cookie)) {
                 return redirect()->intended(route('dashboard'));
             }
 

@@ -122,7 +122,7 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->create(['password_expires' => Carbon::yesterday()]);
 
-        $response = $this->actingAs($user)->get(route('home'));
+        $response = $this->actingAs($user)->get(route('dashboard'));
         $response->assertStatus(302);
         $response->assertRedirect(route('user.password'));
         $response->assertSessionHasErrors(['password']);

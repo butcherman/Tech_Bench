@@ -59,7 +59,7 @@ trait LogUtilitiesTrait
      */
     protected function getLogChannels(bool $all = false)
     {
-        if($all) {
+        if ($all) {
             return $this->logChannels; // ->only(['name', 'channel']);
         }
 

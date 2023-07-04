@@ -23,7 +23,7 @@ class SmsChannel
                 'from' => config('services.twilio.from'),
                 'body' => $message]);
         } catch (Exception $e) {
-            Log::error("Unable to send SMS via Twilio: ". $e->getMessage());
+            Log::error('Unable to send SMS via Twilio: '.$e->getMessage());
         }
     }
 }

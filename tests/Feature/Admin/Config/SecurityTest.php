@@ -10,13 +10,15 @@ use Tests\TestCase;
 class SecurityTest extends TestCase
 {
     protected $cert;
+
     protected $key;
+
     protected $intermediate;
 
     /**
      * Setup will generate a self signed cert for testing with
      */
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
 

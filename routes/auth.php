@@ -26,8 +26,6 @@ Route::middleware('guest')->group(function () {
         Route::get('reset-password', ResetPasswordController::class)->name('reset');
     });
 
-
-
     /**
      * Socialite Routes
      */

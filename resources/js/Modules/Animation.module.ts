@@ -8,13 +8,13 @@ export const shake = (el: Element) => {
     );
 };
 
-export const grow = (el: Element) => {
-    console.log('called grow');
-    gsap.from(
-        el,
-        { height:0  },
-    )
-}
+// export const grow = (el: Element) => {
+//     console.log('called grow');
+//     gsap.from(
+//         el,
+//         { height:0  },
+//     )
+// }
 
 // export const fadeOut = (el: Element) => {
 //     console.log('called fade out');

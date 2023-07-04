@@ -5,15 +5,12 @@ namespace App\Models;
 use App\Notifications\User\SendAuthCode;
 use App\Traits\Notifiable;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
-use Twilio\Rest\Client;
 
 class User extends Authenticatable
 {

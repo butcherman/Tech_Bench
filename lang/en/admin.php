@@ -39,5 +39,5 @@ return [
 
     'logging' => [
         'updated' => 'Logging Settings have been updated',
-    ]
+    ],
 ];

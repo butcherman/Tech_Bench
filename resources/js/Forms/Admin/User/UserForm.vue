@@ -59,7 +59,6 @@ const onSubmit = (form: user) => {
     const formData = useForm(form);
 
     if (props.user) {
-        console.log("edit user");
         formData.put(route("admin.users.update", props.user.username), {
             onFinish: () => userForm.value?.endSubmit(),
         });

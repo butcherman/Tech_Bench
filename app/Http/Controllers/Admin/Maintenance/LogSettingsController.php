@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LogSettingsRequest;
 use App\Models\AppSettings;
 use App\Traits\LogUtilitiesTrait;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -21,8 +20,8 @@ class LogSettingsController extends Controller
         $logChannels = $this->getLogChannels(true);
         $channelValues = [];
 
-        foreach($logChannels as $channel) {
-            if($channel['name'] !== 'Emergency') {
+        foreach ($logChannels as $channel) {
+            if ($channel['name'] !== 'Emergency') {
                 $channelValues[$channel['channel']] = ucfirst(config('logging.channels.'.strtolower($channel['channel']).'.level'));
             }
         }
@@ -40,6 +39,7 @@ class LogSettingsController extends Controller
         $request->processRequest();
 
         Log::notice('Logging Configuration changed by '.$request->user()->username, $request->toArray());
+
         return back()->with('success', __('admin.logging.updated'));
     }
 }

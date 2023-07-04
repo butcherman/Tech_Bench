@@ -3,7 +3,6 @@
 use App\Http\Controllers\User\InitializeUserController;
 use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\NotificationSettingsController;
-use App\Http\Controllers\User\TwoFaController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use Illuminate\Support\Facades\Route;

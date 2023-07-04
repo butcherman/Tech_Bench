@@ -47,9 +47,8 @@ class UserNotificationRequest extends FormRequest
      */
     public function updateTwoFa()
     {
-        UserCode::firstOrCreate([
-            'user_id' => $this->user()->user_id
-        ],)->update([
+        UserCode::updateOrCreate([
+            'user_id' => $this->user()->user_id,
             'code' => rand(0000, 9999),
             'receive_sms' => $this->sms_notification,
         ]);

@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import VueForm from "../_Base/VueForm.vue";
 import CheckboxSwitch from "../_Base/CheckboxSwitch.vue";
-import PhoneInput from '@/Forms/_Base/PhoneInput.vue';
+import PhoneInput from "@/Forms/_Base/PhoneInput.vue";
 import Collapse from "@/Components/_Base/Collapse.vue";
 import { ref, computed, onMounted } from "vue";
 import { useForm } from "@inertiajs/vue3";
@@ -51,7 +51,7 @@ const props = defineProps<{
         allow_sms: boolean;
         sms_notifications: boolean;
         phone: string;
-    }
+    };
 }>();
 
 const userNotificationForm = ref<InstanceType<typeof VueForm> | null>(null);
@@ -61,13 +61,20 @@ const initValues = {
 };
 const schema = object({
     sms_notification: boolean().required(),
-    phone: string().when('sms_notification', {
+    phone: string().when("sms_notification", {
         is: true,
-        then: (schema) => schema.required('You must enter your mobile number to get SMS messages'),
+        then: (schema) =>
+            schema.required(
+                "You must enter your mobile number to get SMS messages"
+            ),
         otherwise: (schema) => schema.nullable(),
     }),
 });
-const showTel = computed(() => userNotificationForm.value ? userNotificationForm.value.getFieldValue('sms_notification') : false);
+const showTel = computed(() =>
+    userNotificationForm.value
+        ? userNotificationForm.value.getFieldValue("sms_notification")
+        : false
+);
 
 const assignValues = () => {
     props.notifications.forEach((setting) => {
@@ -79,9 +86,6 @@ const assignValues = () => {
 };
 
 const onSubmit = (form: { [key: string]: boolean | undefined }) => {
-    console.log(form);
-    // userNotificationForm.value?.endSubmit()
-
     const formData = useForm(form);
     formData.post(route("user.settings.notifications", props.username), {
         onFinish: () => userNotificationForm.value?.endSubmit(),

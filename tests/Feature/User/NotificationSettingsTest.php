@@ -14,7 +14,9 @@ class NotificationSettingsTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
+            'sms_notification' => false,
+            'phone' => null,
+            'settingList' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->post(route('user.settings.notifications', ['user' => $user->username]), $data);
@@ -27,8 +29,9 @@ class NotificationSettingsTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'user_id' => $user->user_id,
-            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
+            'sms_notification' => false,
+            'phone' => null,
+            'settingList' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->actingAs($user)->post(route('user.settings.notifications', ['user' => $user->username]), $data);
@@ -40,8 +43,9 @@ class NotificationSettingsTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'user_id' => $user->user_id,
-            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
+            'sms_notification' => false,
+            'phone' => null,
+            'settingList' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('user.settings.notifications', ['user' => $user->username]), $data);
@@ -53,8 +57,9 @@ class NotificationSettingsTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'user_id' => $user->user_id,
-            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
+            'sms_notification' => false,
+            'phone' => null,
+            'settingList' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('user.settings.notifications', ['user' => $user->username]), $data);
@@ -65,8 +70,9 @@ class NotificationSettingsTest extends TestCase
     {
         $user = User::factory()->create(['role_id' => 1]);
         $data = [
-            'user_id' => $user->user_id,
-            'settingsData' => ['type_id_1' => false, 'type_id_2' => true],
+            'sms_notification' => false,
+            'phone' => null,
+            'settingList' => ['type_id_1' => false, 'type_id_2' => true],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 2]))->post(route('user.settings.notifications', ['user' => $user->username]), $data);

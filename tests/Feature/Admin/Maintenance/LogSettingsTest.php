@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admin\Maintenance;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class LogSettingsTest extends TestCase
@@ -45,7 +43,7 @@ class LogSettingsTest extends TestCase
                 'daily' => 'debug',
                 'tip' => 'debug',
                 'user' => 'debug',
-            ]
+            ],
         ];
 
         $response = $this->post(route('admin.logs.settings.set'), $data);
@@ -64,7 +62,7 @@ class LogSettingsTest extends TestCase
                 'daily' => 'debug',
                 'tip' => 'debug',
                 'user' => 'debug',
-            ]
+            ],
         ];
 
         $response = $this->actingAs(User::factory()->create())->post(route('admin.logs.settings.set'), $data);
@@ -81,7 +79,7 @@ class LogSettingsTest extends TestCase
                 'daily' => 'debug',
                 'tip' => 'debug',
                 'user' => 'debug',
-            ]
+            ],
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->post(route('admin.logs.settings.set'), $data);
