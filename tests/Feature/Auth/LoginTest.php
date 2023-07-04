@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\DeviceToken;
 use App\Models\User;
 use App\Models\UserCode;
 use App\Notifications\User\SendAuthCode;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -71,55 +71,52 @@ class LoginTest extends TestCase
     }
 
     //  Verify that a user is locked out if they try more than five login attempts
-    //  FIXME - Why did this stop working????
-    // public function test_login_lockout()
-    // {
-    //     $user = User::factory()->create();
+    public function test_login_lockout()
+    {
+        $user = User::factory()->create();
 
-    //     //  Attempt five failed attempts
-    //     $this->post(route('login'), [
-    //         'username' => $user->username,
-    //         'password' => 'somethingElse',
-    //     ]);
-    //     $this->post(route('login'), [
-    //         'username' => $user->username,
-    //         'password' => 'somethingElse',
-    //     ]);
-    //     $this->post(route('login'), [
-    //         'username' => $user->username,
-    //         'password' => 'somethingElse',
-    //     ]);
-    //     $this->post(route('login'), [
-    //         'username' => $user->username,
-    //         'password' => 'somethingElse',
-    //     ]);
-    //     $this->post(route('login'), [
-    //         'username' => $user->username,
-    //         'password' => 'somethingElse',
-    //     ]);
+        //  Attempt five failed attempts
+        $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'somethingElse',
+        ]);
+        $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'somethingElse',
+        ]);
+        $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'somethingElse',
+        ]);
+        $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'somethingElse',
+        ]);
+        $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'somethingElse',
+        ]);
 
-    //     //  Sixth attempt should fail
-    //     $response = $this->post(route('login'), [
-    //         'username' => $user->username,
-    //         'password' => 'somethingElse',
-    //     ]);
+        //  Sixth attempt should fail
+        $response = $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'somethingElse',
+        ]);
 
-    //     // dd($response->getStatus());
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors('throttle');
+        $this->assertGuest();
 
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHasErrors('throttle');
-    //     $this->assertGuest();
+        //  After more than 10 minutes, user should be able to try again
+        Carbon::setTestNow(Carbon::now()->addMinutes(15));
+        $response = $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'somethingElse',
+        ]);
 
-    //     //  After more than 10 minutes, user should be able to try again
-    //     Carbon::setTestNow(Carbon::now()->addMinutes(15));
-    //     $response = $this->post(route('login'), [
-    //         'username' => $user->username,
-    //         'password' => 'somethingElse',
-    //     ]);
-
-    //     $response->assertStatus(302)->assertRedirect(route('home'))->assertSessionHasErrors(['username' => __('auth.failed')]);
-    //     $this->assertGuest();
-    // }
+        $response->assertStatus(302)->assertRedirect(route('home'))->assertSessionHasErrors(['username' => __('auth.failed')]);
+        $this->assertGuest();
+    }
 
     //  Make sure that the user is redirected to the Change Password page if their password has expired
     public function test_password_expired_redirect()

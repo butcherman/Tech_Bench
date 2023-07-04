@@ -30,32 +30,24 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::createUsersUsing(CreateNewUser::class);
-        // Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         //  Deliver a logout message to the user
         $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
 
+        //  Rate limiter for login attempts
         RateLimiter::for('login', function (Request $request) {
-            $username = (string) $request->username;
-            $throttleKey = $username.'|'.$request->ip();
+            $throttleKey = $request->ip();
 
-            if (RateLimiter::tooManyAttempts($throttleKey, 10)) {
+            if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+                $availableIn = ceil(RateLimiter::availableIn($throttleKey) / 60);
 
-                //  TODO - Proper Error Page
-                //  TODO - Fix Rate Limiter
                 event(new Lockout($request));
-                abort(429, 'Too Many Attempts.  Locked out for '.RateLimiter::availableIn($throttleKey));
+                return back()->withErrors(['throttle' => 'Too many failed login attempts, try again in '.$availableIn.' minutes']);
             }
 
             RateLimiter::hit($throttleKey, 600);
-
-        });
-
-        RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
     }
 }

@@ -13,10 +13,10 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', 'throttle:50,120'])->group(function () {
     Route::get('/', LoginController::class)->name('home');
     Route::get('login', LoginController::class);
-    Route::middleware(['throttle:login'])->post('login', [AuthenticatedSessionController::class, 'store'])->name('login');  //  TODO - Is this messing up my throttle?
+    Route::middleware(['throttle:login'])->post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
     /**
      * Forgot Password Routes
