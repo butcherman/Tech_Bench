@@ -64,7 +64,6 @@ type passwordForm = {
 
 const onSubmit = (form: passwordForm) => {
     const formData = useForm(form);
-    console.log(formData);
     formData.post(route("admin.users.reset-password", props.user.username), {
         onFinish: () => resetPasswordForm.value?.endSubmit(),
         onSuccess: () => emit("completed"),

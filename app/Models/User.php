@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Notifications\User\SendAuthCode;
 use App\Traits\Notifiable;
 use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -73,5 +76,45 @@ class User extends Authenticatable
 
         return config('auth.passwords.settings.expire') ?
                     Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+    }
+
+    /**
+     * Generate a 2FA Code
+     */
+    public function generateVerificationCode($verify = false)
+    {
+        $code = rand(0000, 9999);
+        $toSms = $this->receive_sms && ($this->sms_verified || $verify);
+
+        UserCode::updateOrCreate(
+            ['user_id' => $this->user_id],
+            ['code' => $code],
+        );
+
+        Notification::send($this, new SendAuthCode($code, $toSms));
+    }
+
+    /**
+     * Generate a Remember Me token for a device
+     */
+    public function generateRememberDeviceToken()
+    {
+        $token = Str::random(60);
+        DeviceToken::create([
+            'user_id' => $this->user_id,
+            'token' => $token,
+        ]);
+
+        return $token;
+    }
+
+    /**
+     * Validate a Remember Me device token
+     */
+    public function validateDeviceToken($token)
+    {
+        $valid = DeviceToken::where('user_id', $this->user_id)->where('token', $token)->first();
+
+        return $valid ? true : false;
     }
 }

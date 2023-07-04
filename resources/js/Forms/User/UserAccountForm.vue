@@ -17,9 +17,9 @@
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import { object, string } from "yup";
-import { ref } from 'vue';
+import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import { shake } from '@/Modules/Animation.module';
+import { shake } from "@/Modules/Animation.module";
 
 const props = defineProps<{
     user: user;
@@ -40,15 +40,21 @@ const validation = object({
 
 const onSubmit = (form: user) => {
     const formData = useForm(form);
-    formData.post(route('user.settings.set', props.user.username), {
+    formData.post(route("user.settings.set", props.user.username), {
         onFinish: () => userAccountForm.value?.endSubmit(),
-        onError: () => shake(document.getElementById('user-account-form')!!),
+        onError: () => shake(document.getElementById("user-account-form")!!),
         onSuccess: () => {
             userAccountForm.value?.resetForm();
             //  Update the form with the new values
-            userAccountForm.value?.setFieldValue('first_name', props.user.first_name);
-            userAccountForm.value?.setFieldValue('last_name', props.user.last_name);
-            userAccountForm.value?.setFieldValue('email', props.user.email);
+            userAccountForm.value?.setFieldValue(
+                "first_name",
+                props.user.first_name
+            );
+            userAccountForm.value?.setFieldValue(
+                "last_name",
+                props.user.last_name
+            );
+            userAccountForm.value?.setFieldValue("email", props.user.email);
         },
     });
 };

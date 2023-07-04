@@ -16,6 +16,7 @@ type props = {
     notifications: notificationProps;
     navbar: navBarProps[];
     breadcrumbs: breadcrumbs[];
+    alerts: alert[];
 };
 
 type appProps = {
@@ -76,3 +77,9 @@ type fileData = {
     maxSize: number;
     token: string;
 };
+
+type alert = {
+    type: string;
+    html?: string;
+    message?: string;
+}

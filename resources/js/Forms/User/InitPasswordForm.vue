@@ -32,7 +32,7 @@ type passwordForm = {
     username: string;
     password: string;
     password_confirmation: string;
-}
+};
 
 const props = defineProps<{
     token: string;
@@ -57,10 +57,8 @@ const schema = object({
 });
 
 const onSubmit = (form: passwordForm) => {
-    console.log(form);
-
     const formData = useForm(form);
-    formData.post(route('initialize.submit', props.token), {
+    formData.post(route("initialize.submit", props.token), {
         onFinish: () => initUserForm.value?.endSubmit(),
     });
 };

@@ -16,7 +16,13 @@ class UserSettingsController extends Controller
     public function get(Request $request)
     {
         return Inertia::render('User/Settings', [
-            'settings' => (new BuildUserSettings)->build($request->user()),
+            'user' => $request->user(),
+            'notifications' => (new BuildUserSettings)->build($request->user()),
+            'two-fa' => [
+                'allow_sms' => (bool) config('auth.twoFa.allow_via_sms') && config('auth.twoFa.required'),
+                'receive_sms' => (bool) $request->user()->receive_sms,
+                'phone' => $request->user()->phone,
+            ],
         ]);
     }
 

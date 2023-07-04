@@ -83,11 +83,9 @@ const schema = object({
 
 const onSubmit = (form: passwordPolicy) => {
     const formData = useForm(form);
-    console.log(formData);
-    //\\
 
-    formData.post(route('admin.users.password-policy.set'), {
+    formData.post(route("admin.users.password-policy.set"), {
         onFinish: () => passwordPolicyForm.value?.endSubmit(),
-    })
+    });
 };
 </script>

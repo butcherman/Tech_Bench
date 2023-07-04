@@ -36,12 +36,9 @@ const validation = object({
 });
 
 const onSubmit = (form: emailForm) => {
-    console.log(form);
-
     const formData = useForm(form);
     formData.post(route("password.forgot"), {
         onFinish: () => resetPasswordForm.value?.endSubmit(),
-        onError: () => console.log("error"),
     });
 };
 </script>

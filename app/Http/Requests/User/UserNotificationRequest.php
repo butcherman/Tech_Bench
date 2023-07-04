@@ -21,7 +21,9 @@ class UserNotificationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'settingsData' => 'required|array',
+            'receive_sms' => 'required|boolean',
+            'phone' => 'required_if:sms_notifications,true',
+            'settingList' => 'required|array',
         ];
     }
 
@@ -30,12 +32,26 @@ class UserNotificationRequest extends FormRequest
      */
     public function updateSettings()
     {
-        foreach ($this->settingsData as $key => $value) {
+        foreach ($this->settingList as $key => $value) {
             UserSetting::where('user_id', $this->user->user_id)
                 ->where('setting_type_id', str_replace('type_id_', '', $key))
                 ->update([
                     'value' => $value,
                 ]);
         }
+    }
+
+    /**
+     * Update the users SMS Notification settings, return boolean if we need to verify the number
+     */
+    public function doWeReVerify()
+    {
+        $oldPhone = $this->user()->phone;
+
+        if ($oldPhone !== $this->phone && $this->receive_sms) {
+            return true;
+        }
+
+        return false;
     }
 }

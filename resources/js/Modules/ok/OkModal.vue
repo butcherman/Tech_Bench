@@ -29,7 +29,7 @@ defineProps<{
     message: string;
 }>();
 
-let emit = defineEmits(["hide", "hidden"]);
+let emit = defineEmits(["hide", "hidden", "ok-clicked"]);
 let okModal = ref<HTMLInputElement | null>(null);
 let thisModalObj: any;
 

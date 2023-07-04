@@ -29,7 +29,7 @@ class AppSettingsServiceProvider extends ServiceProvider
                         config([$setting->key => $setting->value]);
                     }
                 }
-            // @codeCoverageIgnoreStart
+                // @codeCoverageIgnoreStart
             } catch (Exception $e) {
                 report($e);
             }

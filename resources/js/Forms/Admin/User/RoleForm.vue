@@ -75,12 +75,8 @@ const schema = object({
 
 const onSubmit = (form: userRole) => {
     const formData = useForm(form);
-    console.log(formData);
-    //
 
     if (props.edit) {
-        console.log("edit role");
-
         formData.put(
             route("admin.user-roles.update", props.baseRole?.role_id),
             {
@@ -88,8 +84,6 @@ const onSubmit = (form: userRole) => {
             }
         );
     } else {
-        console.log("new role");
-
         formData.post(route("admin.user-roles.store"), {
             onFinish: () => roleForm.value?.endSubmit(),
         });

@@ -5,6 +5,7 @@
             v-model="value"
             class="form-check-input"
             type="checkbox"
+            :name="name"
             :value="true"
             :unchecked-value="false"
             :disabled="disabled"

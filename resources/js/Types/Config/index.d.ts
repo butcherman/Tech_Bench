@@ -53,3 +53,26 @@ type logChannels = {
     folder: string;
     name: string;
 }
+
+type oathConfig = {
+    allow_login: boolean;
+    allow_register: boolean;
+    tenant: string | null;
+    client_id: string | null;
+    client_secret: string | null;
+    redirectUri: string | null;
+}
+
+type twoFaConfig = {
+    required: boolean;
+    allow_bypass: boolean;
+    allow_save_Device: boolean;
+    allow_via_email: boolean;
+    allow_via_sms: boolean;
+}
+
+type twilioConfig = {
+    sid: string;
+    token: string;
+    from: string;
+}

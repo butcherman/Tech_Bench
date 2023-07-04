@@ -3,7 +3,7 @@
 use App\Http\Controllers\Home\AboutController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'user_security'])->group(function () {
     Route::inertia('dashboard', 'Home/Dashboard')->name('dashboard')->breadcrumb('Dashboard');
     Route::get('about', AboutController::class)->name('about')->breadcrumb('About', 'dashboard');
 

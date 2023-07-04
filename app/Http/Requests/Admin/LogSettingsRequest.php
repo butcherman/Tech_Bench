@@ -26,11 +26,11 @@ class LogSettingsRequest extends FormRequest
         return [
             'days' => 'required|numeric',
             // 'levels' => [
-                'level.auth' => 'required|string',
-                'level.cust' => 'required|string',
-                'level.daily' => 'required|string',
-                'level.tip' => 'required|string',
-                'level.user' => 'required|string',
+            'level.auth' => 'required|string',
+            'level.cust' => 'required|string',
+            'level.daily' => 'required|string',
+            'level.tip' => 'required|string',
+            'level.user' => 'required|string',
             // ]
         ];
     }
@@ -41,9 +41,9 @@ class LogSettingsRequest extends FormRequest
     public function processRequest()
     {
         $settingsData = ['logging.days' => $this->days];
-        foreach($this->level as $level => $value) {
+        foreach ($this->level as $level => $value) {
             $settingsData['logging.channels.'.$level.'.days'] = $this->days;
-            $settingsData['logging.channels.'.$level.'.level'] = strToLower($value);
+            $settingsData['logging.channels.'.$level.'.level'] = strtolower($value);
         }
 
         $this->saveSettingsArray($settingsData);

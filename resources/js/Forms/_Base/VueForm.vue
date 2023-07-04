@@ -42,7 +42,7 @@ const onSubmit = handleSubmit((form: any): void => {
     emit("submit", form);
 });
 
-const getFieldValue = (field: string): string => {
+const getFieldValue = (field: string): any => {
     return values[field as keyof typeof values];
 };
 

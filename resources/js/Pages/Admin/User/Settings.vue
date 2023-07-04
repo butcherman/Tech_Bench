@@ -6,12 +6,9 @@
                 <div class="card-body">
                     <div class="card-title">User Settings</div>
                     <UserSettingsForm
-                        :allow_login="allow_login"
-                        :allow_register="allow_register"
-                        :tenant="tenant"
-                        :client_id="client_id"
-                        :client_secret="client_secret"
-                        :redirect-uri="redirectUri"
+                        :two-fa="twoFa"
+                        :oath="oath"
+                        :twilio="twilio"
                     />
                 </div>
             </div>
@@ -24,12 +21,9 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import UserSettingsForm from "@/Forms/Admin/User/UserSettingsForm.vue";
 
 defineProps<{
-    allow_login: boolean;
-    allow_register: boolean;
-    tenant: string | null;
-    client_id: string | null;
-    client_secret: string | null;
-    redirectUri: string | null;
+    twoFa: twoFaConfig;
+    oath: oathConfig;
+    twilio: twilioConfig;
 }>();
 </script>
 
