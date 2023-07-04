@@ -16,7 +16,7 @@
                             >
                                 <h6>{{ name }}</h6>
                                 <div
-                                    class="col-6 col-lg-4"
+                                    class="col-12 col-lg-4"
                                     v-for="opt in group"
                                     :key="opt.perm_type_id"
                                 >
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-body text-center">
                         <div class="text-center">
@@ -52,7 +52,7 @@
                                     )
                                 "
                                 type="button"
-                                class="btn btn-info w-50 m-1"
+                                class="btn btn-info w-100 m-1"
                             >
                                 <fa-icon icon="copy" class="me-1" />
                                 Copy Role
@@ -68,7 +68,7 @@
                                     )
                                 "
                                 type="button"
-                                class="btn btn-warning w-50 m-1"
+                                class="btn btn-warning w-100 m-1"
                                 :disabled="!role.allow_edit"
                             >
                                 <fa-icon icon="edit" class="me-1" />
@@ -82,7 +82,7 @@
                         <div class="text-center">
                             <button
                                 type="button"
-                                class="btn btn-danger w-50 m-1"
+                                class="btn btn-danger w-100 m-1"
                                 :disabled="!role.allow_edit"
                                 @click="deleteRole"
                             >

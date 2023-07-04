@@ -6,62 +6,64 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">User Details</div>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <th class="text-end">Username:</th>
-                                    <td>{{ user.username }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-end">First Name:</th>
-                                    <td>{{ user.first_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-end">Last Name:</th>
-                                    <td>{{ user.last_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-end">Email Address:</th>
-                                    <td>{{ user.email }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-end">Role:</th>
-                                    <td>
-                                        <span
-                                            :title="role.description"
-                                            v-tooltip
-                                        >
-                                            {{ role.name }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-end">Last Login:</th>
-                                    <td>
-                                        <span v-if="lastLogin">
-                                            {{ lastLogin.created_at }}
-                                        </span>
-                                        <span v-else class="text-danger">
-                                            User has never logged in
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-end">Created On:</th>
-                                    <td>{{ user.created_at }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-end">
-                                        Profile Updated On:
-                                    </th>
-                                    <td>{{ user.updated_at }}</td>
-                                </tr>
-                                <tr v-if="user.deleted_at">
-                                    <th class="text-end">Disabled On:</th>
-                                    <td>{{ user.deleted_at }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-end">Username:</th>
+                                        <td>{{ user.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-end">First Name:</th>
+                                        <td>{{ user.first_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-end">Last Name:</th>
+                                        <td>{{ user.last_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-end">Email Address:</th>
+                                        <td>{{ user.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-end">Role:</th>
+                                        <td>
+                                            <span
+                                                :title="role.description"
+                                                v-tooltip
+                                            >
+                                                {{ role.name }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-end">Last Login:</th>
+                                        <td>
+                                            <span v-if="lastLogin">
+                                                {{ lastLogin.created_at }}
+                                            </span>
+                                            <span v-else class="text-danger">
+                                                User has never logged in
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-end">Created On:</th>
+                                        <td>{{ user.created_at }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-end">
+                                            Profile Updated On:
+                                        </th>
+                                        <td>{{ user.updated_at }}</td>
+                                    </tr>
+                                    <tr v-if="user.deleted_at">
+                                        <th class="text-end">Disabled On:</th>
+                                        <td>{{ user.deleted_at }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

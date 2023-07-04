@@ -32,45 +32,32 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Log Files</div>
-                        <table
-                            class="table table-striped table-hover table-bordered"
-                        >
-                            <LogStatsHeader :levels="levels" has-filename />
-                            <tbody>
-                                <template
-                                    v-for="log in logList"
-                                    :key="log.filename"
-                                >
-                                    <tr class="row-link">
-                                        <td>
-                                            <Link
-                                                :href="
-                                                    $route('admin.logs.view', [
-                                                        channel,
-                                                        log.filename,
-                                                    ])
-                                                "
-                                            >
-                                                {{ log.filename }}
-                                            </Link>
-                                        </td>
-                                        <td>
-                                            <Link
-                                                class="text-end pe-3"
-                                                :href="
-                                                    $route('admin.logs.view', [
-                                                        channel,
-                                                        log.filename,
-                                                    ])
-                                                "
-                                            >
-                                                {{ log.total }}
-                                            </Link>
-                                        </td>
-                                        <template
-                                            v-for="level in levels"
-                                            :key="level.name"
-                                        >
+                        <div class="table-responsive">
+                            <table
+                                class="table table-striped table-hover table-bordered"
+                            >
+                                <LogStatsHeader :levels="levels" has-filename />
+                                <tbody>
+                                    <template
+                                        v-for="log in logList"
+                                        :key="log.filename"
+                                    >
+                                        <tr class="row-link">
+                                            <td>
+                                                <Link
+                                                    :href="
+                                                        $route(
+                                                            'admin.logs.view',
+                                                            [
+                                                                channel,
+                                                                log.filename,
+                                                            ]
+                                                        )
+                                                    "
+                                                >
+                                                    {{ log.filename }}
+                                                </Link>
+                                            </td>
                                             <td>
                                                 <Link
                                                     class="text-end pe-3"
@@ -84,18 +71,39 @@
                                                         )
                                                     "
                                                 >
-                                                    {{
-                                                        log[
-                                                            level.name.toLocaleLowerCase() as keyof typeof log
-                                                        ]
-                                                    }}
+                                                    {{ log.total }}
                                                 </Link>
                                             </td>
-                                        </template>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
+                                            <template
+                                                v-for="level in levels"
+                                                :key="level.name"
+                                            >
+                                                <td>
+                                                    <Link
+                                                        class="text-end pe-3"
+                                                        :href="
+                                                            $route(
+                                                                'admin.logs.view',
+                                                                [
+                                                                    channel,
+                                                                    log.filename,
+                                                                ]
+                                                            )
+                                                        "
+                                                    >
+                                                        {{
+                                                            log[
+                                                                level.name.toLocaleLowerCase() as keyof typeof log
+                                                            ]
+                                                        }}
+                                                    </Link>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
