@@ -22,6 +22,7 @@ class VerificationCodeRequest extends FormRequest
     {
         return [
             'code' => 'required',
+            'remember' => 'nullable|boolean',
         ];
     }
 

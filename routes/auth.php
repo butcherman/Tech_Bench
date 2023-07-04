@@ -33,10 +33,10 @@ Route::middleware('guest')->group(function () {
     Route::get('auth/callback', [SocialiteController::class, 'callback'])->name('azure-callback');
 });
 
-Route::middleware('auth')->group(function () {
-    /**
-     * Two-Factor Authentication Routes
-     */
-    Route::get('two-factor-authentication', [TwoFactorAuthController::class, 'get'])->name('2fa.index');
-    Route::post('two-factor-authentication', [TwoFactorAuthController::class, 'set'])->name('2fa.store');
+/**
+ * Two-Factor Authentication Routes
+ */
+Route::middleware('auth')->name('2fa.')->group(function () {
+    Route::get('two-factor-authentication', [TwoFactorAuthController::class, 'get'])->name('index');
+    Route::post('two-factor-authentication', [TwoFactorAuthController::class, 'set'])->name('store');
 });
