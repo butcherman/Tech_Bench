@@ -16,6 +16,7 @@ class BuildAdminMenu
 
         $navBar = [];
         $navBar['Users'] = $this->buildUserMenu();
+        $navBar['Equipment'] = $this->buildEquipmentMenu();
 
         $navBar['App Settings'] = $this->buildSettingsMenu();
         $navBar['App Maintenance'] = $this->buildMaintenanceMenu();
@@ -67,6 +68,31 @@ class BuildAdminMenu
         }
 
         return $userBuild;
+    }
+
+    /**
+     * Build navigation menu for Equipment Administration
+     */
+    protected function buildEquipmentMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'Manage Equipment')) {
+            $nav = [
+                [
+                    'name' => 'Equipment Administration',
+                    'icon' => 'fas fa-cogs',
+                    'route' => route('equipment.index'),
+                ],
+                [
+                    'name' => 'Customer Equipment Data',
+                    'icon' => 'fas fa-database',
+                    'route' => '#', // route('data_types.index'),
+                ],
+            ];
+        }
+
+        return $nav;
     }
 
     /**
