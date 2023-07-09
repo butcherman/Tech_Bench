@@ -9,6 +9,7 @@ Route::middleware(['auth', 'user_security'])->group(function() {
     Route::resource('equipment', EquipmentController::class)->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
         $breadcrumbs->index('Equipment Administration', 'admin.index')
             ->create('Create New Equipment', '.index')
+            ->show('Equipment References', '.edit')
             ->edit('Edit Equipment', '.index');
     });
 

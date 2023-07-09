@@ -22,6 +22,8 @@ class EquipmentController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', EquipmentType::class);
+
         return Inertia::render('Equipment/Index', [
             'equip-list' => EquipmentCategory::with('EquipmentType')->get(),
         ]);
@@ -32,6 +34,8 @@ class EquipmentController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', EquipmentType::class);
+
         return Inertia::render('Equipment/Create', [
             'categories' => EquipmentCategory::all(),
             'data-list' => DataFieldType::all()->pluck('name'),
@@ -53,9 +57,13 @@ class EquipmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(EquipmentType $equipment)
     {
-        return Inertia::render('Equipment/Show');
+        $this->authorize('viewAny', $equipment);
+
+        return Inertia::render('Equipment/Show', [
+            'equipment' => $equipment->load(['Customer', 'TechTip']),
+        ]);
     }
 
     /**
@@ -63,6 +71,8 @@ class EquipmentController extends Controller
      */
     public function edit(EquipmentType $equipment)
     {
+        $this->authorize('update', $equipment);
+
         return Inertia::render('Equipment/Edit', [
             'categories' => EquipmentCategory::all(),
             'data-list' => DataFieldType::all()->pluck('name'),

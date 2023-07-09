@@ -25,6 +25,7 @@
                 name="custData"
                 placeholder="Information to gather for customer"
                 :datalist="dataList"
+                :remove-warning="removeWarning"
                 drag
             />
         </fieldset>
@@ -46,7 +47,14 @@ const props = defineProps<{
     equipment?: equipWithData;
 }>();
 
-const submitText = computed(() => props.equipment ? 'Update Equipment' : 'Create Equipment');
+const submitText = computed(() =>
+    props.equipment ? "Update Equipment" : "Create Equipment"
+);
+const removeWarning = computed(() =>
+    props.equipment
+        ? "Removing this item will also remove any customer data gathered for this item"
+        : undefined
+);
 
 const equipmentForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {
@@ -72,11 +80,11 @@ const onSubmit = (form: equipForm) => {
     console.log(form);
     const formData = useForm(form);
 
-    if(props.equipment) {
-        console.log('edit');
-        formData.put(route('equipment.update', props.equipment.equip_id), {
+    if (props.equipment) {
+        console.log("edit");
+        formData.put(route("equipment.update", props.equipment.equip_id), {
             onFinish: () => equipmentForm.value?.endSubmit(),
-        })
+        });
     } else {
         formData.post(route("equipment.store"), {
             onFinish: () => equipmentForm.value?.endSubmit(),

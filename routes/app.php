@@ -14,4 +14,16 @@ Route::middleware(['auth', 'user_security'])->group(function () {
     Route::get('customers', function () {
         return 'customers.index';
     })->name('customers.index');
+
+    Route::get('customers/{name}', function ($name) {
+        return 'customers.show';
+    })->name('customers.show');
+
+    Route::get('tech-tips', function () {
+        return 'tech-tips.index';
+    })->name('tech-tips.index');
+
+    Route::get('tech-tips/{name}', function ($name) {
+        return 'tech-tips.show';
+    })->name('tech-tips.show');
 });

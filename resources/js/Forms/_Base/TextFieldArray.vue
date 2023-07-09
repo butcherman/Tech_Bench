@@ -23,7 +23,7 @@
                             class="input-group-text pointer"
                             title="Remove this item"
                             v-tooltip
-                            @click="remove(index)"
+                            @click="verifyRemove(index)"
                         >
                             <fa-icon icon="xmark" class="text-danger" />
                         </span>
@@ -42,6 +42,7 @@ import TextInput from "./TextInput.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import draggable from "vuedraggable";
 import { useFieldArray } from "vee-validate";
+import  verify  from '@/Modules/verify';
 
 const props = defineProps<{
     name: string;
@@ -49,6 +50,7 @@ const props = defineProps<{
     placeholder?: string;
     drag?: boolean;
     datalist?: string[];
+    removeWarning?: string;
 }>();
 
 const { remove, push, fields, move } = useFieldArray(props.name);
@@ -61,4 +63,20 @@ type dragEvent = {
 const onDragEnd = (event: dragEvent) => {
     move(event.oldIndex, event.newIndex);
 };
+
+/**
+ * Present a warning message to the user about removing the specified item
+ */
+const verifyRemove = (index: number) => {
+    if(!props.removeWarning) {
+        remove(index);
+    } else {
+        console.log('remove me');
+        verify({ title: 'WARNING:  Possible Data Loss', message: props.removeWarning }).then((res) => {
+            if(res) {
+                remove(index);
+            }
+        });
+    }
+}
 </script>

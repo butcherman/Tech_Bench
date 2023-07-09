@@ -10,6 +10,11 @@ type equipment = {
     name    : string;
 }
 
+type equipWithReferences = {
+    customer: customer[];
+    tech_tip: techTip[];
+} & equipment
+
 type equipWithData = {
     equipment_category: {
         cat_id: number;
