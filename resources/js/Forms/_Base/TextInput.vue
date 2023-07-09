@@ -13,6 +13,7 @@
             </span>
         </label>
         <div class="input-group">
+            <slot name="start-group-text" />
             <input
                 v-model="value"
                 :id="id"
@@ -24,7 +25,7 @@
                 v-focus="focus"
                 @change="$emit('change', value)"
             />
-            <slot name="group-text" />
+            <slot name="end-group-text" />
         </div>
         <span
             v-if="errorMessage && (meta.dirty || meta.touched)"

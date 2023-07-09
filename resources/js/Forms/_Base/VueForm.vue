@@ -19,7 +19,7 @@ import SubmitButton from "@/Components/_Base/Buttons/SubmitButton.vue";
 import Loading from "vue3-loading-overlay";
 import TrinityRingsLoader from "@/Components/_Base/Loaders/TrinityRingsLoader.vue";
 import { ref, computed } from "vue";
-import { useForm, useFieldArray } from "vee-validate";
+import { useForm } from "vee-validate";
 //  Overlay Styling
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 
@@ -56,7 +56,6 @@ defineExpose({
     endSubmit,
     getFieldValue,
     setFieldValue,
-    useFieldArray,
     setFieldError,
     onSubmit,
     resetForm,
