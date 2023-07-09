@@ -61,16 +61,22 @@ class EquipmentController extends Controller
     public function edit(EquipmentType $equipment)
     {
         return Inertia::render('Equipment/Edit', [
-            'equipment' => $equipment,
+            'categories' => EquipmentCategory::all(),
+            'data-list' => DataFieldType::all()->pluck('name'),
+            'equipment' => $equipment->load('DataFieldType'),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(EquipmentRequest $request, EquipmentType $equipment)
     {
-        //
+        $equipment->update($request->only(['cat_id', 'name']));
+        (new OrderEquipDataTypes)->build($request->custData, $equipment->equip_id);
+
+        Log::info('Equipment Type '.$request->name.' has been updated by '.$request->user()->username, $request->toArray());
+        return redirect(route('equipment.index'))->with('success', 'updated');
     }
 
     /**

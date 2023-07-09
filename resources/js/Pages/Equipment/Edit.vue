@@ -1,15 +1,15 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="text-center text-md-left">Hello World</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
+        <Head title="Update Equipment" />
+        <div class="row justify-content-center">
+            <div class="col-md-10">
                 <div class="card">
                     <div class="card-body">
-                        <p class="text-center">This is a new page</p>
+                        <EquipmentForm
+                            :categories="categories"
+                            :data-list="dataList"
+                            :equipment="equipment"
+                        />
                     </div>
                 </div>
             </div>
@@ -18,12 +18,16 @@
 </template>
 
 <script setup lang="ts">
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref, reactive, onMounted } from "vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import EquipmentForm from "@/Forms/Equipment/EquipmentForm.vue";
 
-const props = defineProps<{}>();
+defineProps<{
+    categories: categoryList[];
+    dataList: string[];
+    equipment: equipWithData;
+}>();
 </script>
 
 <script lang="ts">
-export default { layout: AppLayout }
+export default { layout: AppLayout };
 </script>

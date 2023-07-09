@@ -3,6 +3,7 @@
         ref="equipmentForm"
         :initial-values="initValues"
         :validation-schema="schema"
+        :submit-text="submitText"
         @submit="onSubmit"
     >
         <SelectInput
@@ -36,39 +37,51 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import TextFieldArray from "../_Base/TextFieldArray.vue";
 import { useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { object, string, number, array } from "yup";
 
-defineProps<{
+const props = defineProps<{
     categories: categoryList[];
     dataList: string[];
+    equipment?: equipWithData;
 }>();
+
+const submitText = computed(() => props.equipment ? 'Update Equipment' : 'Create Equipment');
 
 const equipmentForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {
-    cat_id: null,
-    name: '',
-    custData: [null, null, null],
+    cat_id: props.equipment ? props.equipment.cat_id : null,
+    name: props.equipment ? props.equipment.name : "",
+    custData: props.equipment
+        ? props.equipment.data_field_type.map((obj) => obj.name)
+        : [null, null, null],
 };
 const schema = object({
-    cat_id: number().required().label('Category'),
+    cat_id: number().required().label("Category"),
     name: string().required(),
-    custData: array().ensure().min(1, 'You must have at least one entry'),
+    custData: array().ensure().min(1, "You must have at least one entry"),
 });
 
 type equipForm = {
     cat_id: number;
     name: string;
     custData: string[];
-}
+};
 
 const onSubmit = (form: equipForm) => {
     console.log(form);
     const formData = useForm(form);
 
-    formData.post(route('equipment.store'), {
-        onFinish: () => equipmentForm.value?.endSubmit(),
-    });
+    if(props.equipment) {
+        console.log('edit');
+        formData.put(route('equipment.update', props.equipment.equip_id), {
+            onFinish: () => equipmentForm.value?.endSubmit(),
+        })
+    } else {
+        formData.post(route("equipment.store"), {
+            onFinish: () => equipmentForm.value?.endSubmit(),
+        });
+    }
 };
 </script>
 
