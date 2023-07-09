@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Exceptions\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentCategoryRequest;
 use App\Models\EquipmentCategory;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -45,8 +47,14 @@ class EquipmentCategoryController extends Controller
 
         try {
             $equipment_category->delete();
-        } catch(Exception $e) {
-            dd(get_class($e));
+        } catch(QueryException $e) {
+            //  If the model is still in use, throw a unique exception
+            if(in_array($e->errorInfo[1], [19, 1451])) {
+                throw new RecordInUseException('Attempt to delete Equipment '.$equipment_category->name.' failed. It is still in use', 0, $e);
+            }
+
+            Log::error('Error when trying to delete Equipment Category '.$equipment_category->name, $e->errorInfo);
+            return back()->withErrors(['error' => 'failed']);
         }
 
         Log::notice('Equipment Category '.$equipment_category->name.' has been deleted by '.$request->user()->username);

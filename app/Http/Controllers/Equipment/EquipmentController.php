@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Equipment;
 
 use App\Actions\OrderEquipDataTypes;
+use App\Exceptions\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentRequest;
 use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -82,8 +85,24 @@ class EquipmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, EquipmentType $equipment)
     {
-        //
+        $this->authorize('delete', $equipment);
+
+        try {
+            $equipment->delete();
+        } catch (QueryException $e) {
+            //  If the model is still in use, throw a unique exception
+            if(in_array($e->errorInfo[1], [19, 1451])) {
+                throw new RecordInUseException('Attempt to delete Equipment '.$equipment->name.' failed. It is still in use', 0, $e);
+            }
+
+            Log::error('Error when trying to delete Equipment '.$equipment->name, $e->errorInfo);
+            return back()->withErrors(['error' => 'failed']);
+        }
+
+        Log::notice('Equipment Type '.$equipment->name.' was deleted by '.$request->user()->username);
+
+        return redirect(route('equipment.index'))->with('warning', 'equipment deleted');
     }
 }
