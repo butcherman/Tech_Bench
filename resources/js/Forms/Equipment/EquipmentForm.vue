@@ -23,13 +23,9 @@
             <TextFieldArray
                 name="custData"
                 placeholder="Information to gather for customer"
-            >
-                <template #start-group-text>
-                    <span class="input-group-text pointer" title="Drag to Re-Order" v-tooltip>
-                        <fa-icon icon="sort" class="text-primary" />
-                    </span>
-                </template>
-            </TextFieldArray>
+                :datalist="dataList"
+                drag
+            />
         </fieldset>
     </VueForm>
 </template>
@@ -40,18 +36,25 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import TextFieldArray from "../_Base/TextFieldArray.vue";
 import { useForm } from "@inertiajs/vue3";
-import { ref, reactive, onMounted } from "vue";
-import { object, string } from "yup";
+import { ref } from "vue";
+import { object, string, number, array } from "yup";
 
 defineProps<{
     categories: categoryList[];
+    dataList: string[];
 }>();
 
 const equipmentForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {
-    custData: ["", "", ""],
+    cat_id: null,
+    name: '',
+    custData: [null, null, null],
 };
-const schema = object({});
+const schema = object({
+    cat_id: number().required().label('Category'),
+    name: string().required(),
+    custData: array().ensure().min(1, 'You must have at least one entry'),
+});
 
 type equipForm = {
     cat_id: number;
@@ -60,14 +63,12 @@ type equipForm = {
 }
 
 const onSubmit = (form: equipForm) => {
-    // console.log(form);
-    console.log('submitted', form);
+    console.log(form);
+    const formData = useForm(form);
 
-    // const formData = useForm(form);
-    // console.log(formData);
-    //
-
-    equipmentForm.value?.endSubmit();
+    formData.post(route('equipment.store'), {
+        onFinish: () => equipmentForm.value?.endSubmit(),
+    });
 };
 </script>
 

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Actions\OrderEquipDataTypes;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\EquipmentRequest;
+use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class EquipmentController extends Controller
@@ -27,15 +31,20 @@ class EquipmentController extends Controller
     {
         return Inertia::render('Equipment/Create', [
             'categories' => EquipmentCategory::all(),
+            'data-list' => DataFieldType::all()->pluck('name'),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(EquipmentRequest $request)
     {
-        //
+        $newEquip = EquipmentType::create($request->only(['cat_id', 'name']));
+        (new OrderEquipDataTypes)->build($request->custData, $newEquip->equip_id);
+
+        Log::info('New Equipment Type '.$request->name.' created by '.$request->user()->username, $request->toArray());
+        return redirect(route('equipment.index'))->with('success', 'equipment created');
     }
 
     /**

@@ -5,7 +5,7 @@
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-body">
-                        <EquipmentForm :categories="categories" />
+                        <EquipmentForm :categories="categories" :data-list="dataList" />
                     </div>
                 </div>
             </div>
@@ -16,10 +16,10 @@
 <script setup lang="ts">
 import AppLayout from '@/Layouts/AppLayout.vue';
 import EquipmentForm from '@/Forms/Equipment/EquipmentForm.vue';
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{
+defineProps<{
     categories: categoryList[];
+    dataList: string[];
 }>();
 </script>
 

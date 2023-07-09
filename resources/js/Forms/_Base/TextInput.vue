@@ -20,6 +20,7 @@
                 :type="type ? type : 'text'"
                 :placeholder="placeholder"
                 :disabled="disabled"
+                :list="`datalist-${id}`"
                 class="form-control"
                 :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
                 v-focus="focus"
@@ -33,6 +34,11 @@
         >
             {{ upperFirst(errorMessage) }}
         </span>
+        <datalist :id="`datalist-${id}`">
+            <template v-for="item in datalist" :key="item">
+                <option :value="item" />
+            </template>
+        </datalist>
     </div>
 </template>
 
@@ -53,6 +59,7 @@ const props = defineProps<{
     focus?: boolean;
     disabled?: boolean;
     help?: string;
+    datalist?: string[];
 }>();
 
 const isValid = computed<boolean>(() => {
