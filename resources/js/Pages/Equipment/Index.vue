@@ -148,12 +148,7 @@ const editCategory = (category: categoryList) => {
 const deleteCategory = (category: categoryList) => {
     verify().then((res) => {
         if (res) {
-            router.delete(
-                route("equipment-category.destroy", category.cat_id),
-                {
-                    onFinish: () => console.log("done"),
-                }
-            );
+            router.delete(route("equipment-category.destroy", category.cat_id));
         }
     });
 };

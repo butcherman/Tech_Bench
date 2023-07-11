@@ -13,7 +13,7 @@ class EquipmentCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if($this->equipment_category) {
+        if ($this->equipment_category) {
             return $this->user()->can('update', $this->equipment_category);
         }
 

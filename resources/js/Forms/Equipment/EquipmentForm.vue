@@ -77,11 +77,9 @@ type equipForm = {
 };
 
 const onSubmit = (form: equipForm) => {
-    console.log(form);
     const formData = useForm(form);
 
     if (props.equipment) {
-        console.log("edit");
         formData.put(route("equipment.update", props.equipment.equip_id), {
             onFinish: () => equipmentForm.value?.endSubmit(),
         });

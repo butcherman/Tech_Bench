@@ -71,7 +71,6 @@ const verifyRemove = (index: number) => {
     if(!props.removeWarning) {
         remove(index);
     } else {
-        console.log('remove me');
         verify({ title: 'WARNING:  Possible Data Loss', message: props.removeWarning }).then((res) => {
             if(res) {
                 remove(index);

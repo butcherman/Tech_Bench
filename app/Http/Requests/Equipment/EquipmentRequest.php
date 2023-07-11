@@ -13,7 +13,7 @@ class EquipmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if($this->equipment) {
+        if ($this->equipment) {
             return $this->user()->can('update', $this->equipment);
         } else {
             return $this->user()->can('create', EquipmentType::class);

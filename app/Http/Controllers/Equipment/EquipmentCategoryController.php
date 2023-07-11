@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
 
 class EquipmentCategoryController extends Controller
 {
@@ -23,7 +22,7 @@ class EquipmentCategoryController extends Controller
 
         Log::info('New Equipment Category '.$newCategory->name.' has been created by '.$request->user()->username);
 
-        return back()->with('success', 'created');
+        return back()->with('success', __('equipment.category.created'));
     }
 
     /**
@@ -35,7 +34,7 @@ class EquipmentCategoryController extends Controller
 
         Log::info('Equipment ID '.$equipment_category->cat_id.' has been updated by '.$request->user()->username, $request->toArray());
 
-        return back()->with('success', 'updated');
+        return back()->with('success', __('equipment.category.updated'));
     }
 
     /**
@@ -47,18 +46,20 @@ class EquipmentCategoryController extends Controller
 
         try {
             $equipment_category->delete();
-        } catch(QueryException $e) {
+        } catch (QueryException $e) {
             //  If the model is still in use, throw a unique exception
-            if(in_array($e->errorInfo[1], [19, 1451])) {
-                throw new RecordInUseException('Attempt to delete Equipment '.$equipment_category->name.' failed. It is still in use', 0, $e);
+            if (in_array($e->errorInfo[1], [19, 1451])) {
+                throw new RecordInUseException(__('equipment.category.in-use', ['name' => $equipment_category->name]), 0, $e);
             }
-
+            // @codeCoverageIgnoreStart
             Log::error('Error when trying to delete Equipment Category '.$equipment_category->name, $e->errorInfo);
-            return back()->withErrors(['error' => 'failed']);
+
+            return back()->withErrors(['error' => __('equipment.category.destroy-failed')]);
+            // @codeCoverageIgnoreEnd
         }
 
         Log::notice('Equipment Category '.$equipment_category->name.' has been deleted by '.$request->user()->username);
 
-        return back()->with('warning', 'deleted');
+        return back()->with('warning', __('equipment.category.destroyed'));
     }
 }

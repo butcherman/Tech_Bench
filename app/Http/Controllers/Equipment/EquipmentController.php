@@ -51,7 +51,8 @@ class EquipmentController extends Controller
         (new OrderEquipDataTypes)->build($request->custData, $newEquip->equip_id);
 
         Log::info('New Equipment Type '.$request->name.' created by '.$request->user()->username, $request->toArray());
-        return redirect(route('equipment.index'))->with('success', 'equipment created');
+
+        return redirect(route('equipment.index'))->with('success', __('equipment.created'));
     }
 
     /**
@@ -89,7 +90,8 @@ class EquipmentController extends Controller
         (new OrderEquipDataTypes)->build($request->custData, $equipment->equip_id);
 
         Log::info('Equipment Type '.$request->name.' has been updated by '.$request->user()->username, $request->toArray());
-        return redirect(route('equipment.index'))->with('success', 'updated');
+
+        return redirect(route('equipment.index'))->with('success', __('equipment.updated'));
     }
 
     /**
@@ -103,16 +105,19 @@ class EquipmentController extends Controller
             $equipment->delete();
         } catch (QueryException $e) {
             //  If the model is still in use, throw a unique exception
-            if(in_array($e->errorInfo[1], [19, 1451])) {
-                throw new RecordInUseException('Attempt to delete Equipment '.$equipment->name.' failed. It is still in use', 0, $e);
+            if (in_array($e->errorInfo[1], [19, 1451])) {
+                throw new RecordInUseException(__('equipment.in-use', ['name' => $equipment->name]), 0, $e);
             }
 
+            // @codeCoverageIgnoreStart
             Log::error('Error when trying to delete Equipment '.$equipment->name, $e->errorInfo);
+
             return back()->withErrors(['error' => 'failed']);
+            // @codeCoverageIgnoreEnd
         }
 
         Log::notice('Equipment Type '.$equipment->name.' was deleted by '.$request->user()->username);
 
-        return redirect(route('equipment.index'))->with('warning', 'equipment deleted');
+        return redirect(route('equipment.index'))->with('warning', __('equipment.destroyed'));
     }
 }
