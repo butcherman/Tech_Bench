@@ -17,8 +17,6 @@ class UserCustomerRecent extends Model
 
     /**
      * Each recent is linked to a customer ID
-     *
-     * @codeCoverageIgnore
      */
     public function Customer()
     {
@@ -27,8 +25,6 @@ class UserCustomerRecent extends Model
 
     /**
      * Get the name of the customer bookmarked
-     *
-     * @codeCoverageIgnore
      */
     public function getNameAttribute()
     {
@@ -38,8 +34,6 @@ class UserCustomerRecent extends Model
 
     /**
      * Get the slug for the link
-     *
-     * @codeCoverageIgnore
      */
     public function getSlugAttribute()
     {

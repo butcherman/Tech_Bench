@@ -20,13 +20,15 @@ type equipWithData = {
         cat_id: number;
         name  : string;
     }
-    data_field_type: dataList[];
+    data_field_type: dataTypes[];
 } & equipment;
 
-type dataList = {
+type dataTypes = {
     type_id: number;
     name   : string;
-    hidden : boolean;
+    pattern: string;
+    masked : boolean;
+    required: boolean;
     in_use : boolean;
 }
 

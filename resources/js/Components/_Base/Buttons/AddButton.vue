@@ -1,6 +1,6 @@
 <template>
     <button type="button" class="btn btn-info" :class="{ 'btn-pill': pill, 'btn-sm': small }">
-        <fa-icon icon="fa-plus" />
+        <fa-icon icon="fa-plus" class="me-1" />
         <slot>
             Add
         </slot>

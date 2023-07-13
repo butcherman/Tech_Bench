@@ -17,8 +17,6 @@ class DataField extends Model
 
     /**
      * Name of the data field that is attached to this equipment type
-     *
-     * @codeCoverageIgnore
      */
     public function DataFieldType()
     {

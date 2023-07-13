@@ -29,8 +29,6 @@ class TechTip extends Model
 
     /**
      * Shortened version of the details column for a brief view
-     *
-     * @codeCoverageIgnore
      */
     // public function getSummaryAttribute()
     // {

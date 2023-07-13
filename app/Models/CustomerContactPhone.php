@@ -19,8 +19,6 @@ class CustomerContactPhone extends Model
 
     /**
      * Mobile Work, Home, etc
-     *
-     * @codeCoverageIgnore
      */
     public function PhoneNumberType()
     {
@@ -29,8 +27,6 @@ class CustomerContactPhone extends Model
 
     /**
      * Get a readable number in a familiar NA format
-     *
-     * @codeCoverageIgnore
      */
     public function getFormattedAttribute()
     {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Equipment\DataTypesController;
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
 use App\Http\Controllers\Equipment\EquipmentController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -14,4 +15,10 @@ Route::middleware(['auth', 'user_security'])->group(function () {
     });
 
     Route::resource('equipment-category', EquipmentCategoryController::class);
+
+    Route::resource('data-types', DataTypesController::class)->breadcrumbs(function(ResourceBreadcrumbs $breadcrumbs) {
+        $breadcrumbs->index('Equipment Data Types', 'equipment.index')
+            ->create('Create New Data Type', '.index')
+            ->edit('Update Data Type', '.index');
+    });
 });

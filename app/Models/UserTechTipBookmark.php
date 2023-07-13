@@ -17,8 +17,6 @@ class UserTechTipBookmark extends Model
 
     /**
      * Each Bookmark is tied to a Tech Tip ID
-     *
-     * @codeCoverageIgnore
      */
     public function TechTip()
     {
@@ -27,8 +25,6 @@ class UserTechTipBookmark extends Model
 
     /**
      * Get the subject of the Tech Tip
-     *
-     * @codeCoverageIgnore
      */
     public function getSubjectAttribute()
     {
@@ -37,8 +33,6 @@ class UserTechTipBookmark extends Model
 
     /**
      * Get the Slug for the link to the Tech Tip
-     *
-     * @codeCoverageIgnore
      */
     public function getSlugAttribute()
     {

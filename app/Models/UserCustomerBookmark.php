@@ -17,8 +17,6 @@ class UserCustomerBookmark extends Model
 
     /**
      * Each bookmark is tied to a customer ID
-     *
-     * @codeCoverageIgnore
      */
     public function Customer()
     {
@@ -27,8 +25,6 @@ class UserCustomerBookmark extends Model
 
     /**
      * Get the name of the customer bookmarked
-     *
-     * @codeCoverageIgnore
      */
     public function getNameAttribute()
     {
@@ -37,8 +33,6 @@ class UserCustomerBookmark extends Model
 
     /**
      * Get the slug for the link
-     *
-     * @codeCoverageIgnore
      */
     public function getSlugAttribute()
     {
