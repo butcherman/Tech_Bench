@@ -16,6 +16,14 @@ return new class extends Migration
             $table->boolean('required')->after('pattern')->default(false);
             $table->renameColumn('hidden', 'masked');
         });
+
+        /**
+         * Fix the Foreign Key restraint on the data_fields table to not cascade on delete
+         */
+        Schema::table('data_fields', function (Blueprint $table) {
+            $table->dropForeign(['type_id']);
+            $table->foreign('type_id')->references('type_id')->on('data_field_types')->onUpdate('cascade');
+        });
     }
 
     /**

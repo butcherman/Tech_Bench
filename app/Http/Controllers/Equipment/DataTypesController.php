@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Exceptions\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\DataTypeRequest;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -29,6 +31,8 @@ class DataTypesController extends Controller
      */
     public function create()
     {
+        $this->authorize('viewAny', EquipmentType::class);
+
         return Inertia::render('Equipment/DataTypes/Create');
     }
 
@@ -75,7 +79,19 @@ class DataTypesController extends Controller
     {
         $this->authorize('viewAny', EquipmentType::class);
 
-        $data_type->delete();
+        try {
+            $data_type->delete();
+        } catch (QueryException $e) {
+            if(in_array($e->errorInfo[1], [19, 1451])) {
+                throw new RecordInUseException(__('equipment.data-field-type.in-use'), 0, $e);
+            }
+
+            // @codeCoverageIgnoreStart
+            Log::error('Error when trying to delete Data Type '.$data_type->name, $e->errorInfo);
+
+            return back()->withErrors(['error' => 'failed']);
+            // @codeCoverageIgnoreEnd
+        }
 
         Log::notice('Data Field '.$data_type->name.' deleted by '.$request->user()->username);
 

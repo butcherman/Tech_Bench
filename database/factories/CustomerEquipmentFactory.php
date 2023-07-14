@@ -26,7 +26,7 @@ class CustomerEquipmentFactory extends Factory
         return [
             'cust_id' => Customer::factory()->create()->cust_id,
             'equip_id' => EquipmentType::factory()->create()->equip_id,
-            'shared' => $this->faker->boolean(),
+            'shared' => false,
         ];
     }
 }
