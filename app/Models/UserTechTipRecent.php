@@ -17,8 +17,6 @@ class UserTechTipRecent extends Model
 
     /**
      * Each Recent is tied to a Tech tip ID
-     *
-     * @codeCoverageIgnore
      */
     public function TechTip()
     {
@@ -27,8 +25,6 @@ class UserTechTipRecent extends Model
 
     /**
      * Get the subject of the Tech Tip
-     *
-     * @codeCoverageIgnore
      */
     public function getSubjectAttribute()
     {
@@ -38,8 +34,6 @@ class UserTechTipRecent extends Model
 
     /**
      * Get the Slug for the link to the Tech Tip
-     *
-     * @codeCoverageIgnore
      */
     public function getSlugAttribute()
     {

@@ -13,18 +13,20 @@
             </span>
         </label>
         <div class="input-group">
+            <slot name="start-group-text" />
             <input
                 v-model="value"
                 :id="id"
                 :type="type ? type : 'text'"
                 :placeholder="placeholder"
                 :disabled="disabled"
+                :list="`datalist-${id}`"
                 class="form-control"
                 :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
                 v-focus="focus"
                 @change="$emit('change', value)"
             />
-            <slot name="group-text" />
+            <slot name="end-group-text" />
         </div>
         <span
             v-if="errorMessage && (meta.dirty || meta.touched)"
@@ -32,6 +34,11 @@
         >
             {{ upperFirst(errorMessage) }}
         </span>
+        <datalist :id="`datalist-${id}`">
+            <template v-for="item in datalist" :key="item">
+                <option :value="item" />
+            </template>
+        </datalist>
     </div>
 </template>
 
@@ -52,6 +59,7 @@ const props = defineProps<{
     focus?: boolean;
     disabled?: boolean;
     help?: string;
+    datalist?: string[];
 }>();
 
 const isValid = computed<boolean>(() => {

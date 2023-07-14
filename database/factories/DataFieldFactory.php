@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\DataField;
+use App\Models\DataFieldType;
+use App\Models\EquipmentType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DataFieldFactory extends Factory
@@ -22,7 +24,9 @@ class DataFieldFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'equip_id' => EquipmentType::factory()->create()->equip_id,
+            'type_id' => DataFieldType::factory()->create()->type_id,
+            'order' => 0,
         ];
     }
 }

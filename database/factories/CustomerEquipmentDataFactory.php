@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
+use App\Models\DataField;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerEquipmentDataFactory extends Factory
@@ -22,6 +24,8 @@ class CustomerEquipmentDataFactory extends Factory
     public function definition()
     {
         return [
+            'cust_equip_id' => CustomerEquipment::factory()->create()->cust_equip_id,
+            'field_id' => 1,
             'value' => $this->faker->word(5),
         ];
     }

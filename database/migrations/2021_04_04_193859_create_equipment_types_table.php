@@ -29,7 +29,7 @@ class CreateEquipmentTypesTable extends Migration
      */
     public function down()
     {
-        Shcema::table('equipment_types', function (Blueprint $table) {
+        Schema::table('equipment_types', function (Blueprint $table) {
             $table->dropForeign(['cat_id']);
         });
         Schema::dropIfExists('equipment_types');

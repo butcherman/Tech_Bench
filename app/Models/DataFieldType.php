@@ -11,7 +11,7 @@ class DataFieldType extends Model
 
     protected $primaryKey = 'type_id';
 
-    protected $fillable = ['name', 'hidden'];
+    protected $guarded = ['type_id', 'created_at', 'updated_at'];
 
     protected $hidden = ['updated_at', 'created_at'];
 
@@ -19,8 +19,6 @@ class DataFieldType extends Model
 
     /**
      * Shows if this field is being used by any equipment
-     *
-     * @codeCoverageIgnore
      */
     public function getInUseAttribute()
     {

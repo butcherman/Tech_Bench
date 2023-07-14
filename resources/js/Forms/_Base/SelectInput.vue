@@ -5,6 +5,7 @@
         </label>
         <select
             v-model="value"
+            :id="id"
             class="form-select"
             :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
         >

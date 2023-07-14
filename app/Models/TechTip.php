@@ -18,7 +18,7 @@ class TechTip extends Model
 
     protected $hidden = ['deleted_at', 'tip_type_id', 'updated_id', 'user_id'];
 
-    protected $appends = ['summary'];
+    // protected $appends = ['summary'];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
@@ -29,8 +29,6 @@ class TechTip extends Model
 
     /**
      * Shortened version of the details column for a brief view
-     *
-     * @codeCoverageIgnore
      */
     // public function getSummaryAttribute()
     // {

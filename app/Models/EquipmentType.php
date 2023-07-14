@@ -28,7 +28,7 @@ class EquipmentType extends Model
      */
     public function EquipmentCategory()
     {
-        return $this->belongsTo('App\Models\EquipmentCategory', 'cat_id', 'cat_id');
+        return $this->belongsTo(EquipmentCategory::class, 'cat_id', 'cat_id');
     }
 
     /**
@@ -36,6 +36,22 @@ class EquipmentType extends Model
      */
     public function DataFieldType()
     {
-        return $this->hasManyThrough('App\Models\DataFieldType', 'App\Models\DataField', 'equip_id', 'type_id', 'equip_id', 'type_id')->orderBy('order');
+        return $this->hasManyThrough(DataFieldType::class, DataField::class, 'equip_id', 'type_id', 'equip_id', 'type_id')->orderBy('order');
+    }
+
+    /**
+     * Include a list of customers this equipment is tied to
+     */
+    public function Customer()
+    {
+        return $this->hasManyThrough(Customer::class, CustomerEquipment::class, 'equip_id', 'cust_id', 'equip_id', 'cust_id');
+    }
+
+    /**
+     * Include a list of the Tech Tips this equipment is tied to
+     */
+    public function TechTip()
+    {
+        return $this->hasManyThrough(TechTip::class, TechTipEquipment::class, 'equip_id', 'tip_id', 'equip_id', 'tip_id');
     }
 }

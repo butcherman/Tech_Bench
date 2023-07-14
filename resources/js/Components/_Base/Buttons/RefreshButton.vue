@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn-sm" title="Refresh" v-tooltip @click="refresh">
+    <button type="button" class="btn btn-sm" title="Refresh" v-tooltip @click="refresh">
         <fa-icon icon="fa-rotate" :spin="loading" />
     </button>
 </template>

@@ -23,7 +23,8 @@ class DataFieldTypeFactory extends Factory
     {
         return [
             'name' => $this->faker->word(2),
-            'hidden' => false,
+            'masked' => false,
+            'required' => false,
         ];
     }
 }

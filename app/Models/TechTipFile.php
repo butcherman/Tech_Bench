@@ -17,8 +17,6 @@ class TechTipFile extends Model
 
     /**
      * Each Tech Tip file is attached to a file upload id
-     *
-     * @codeCoverageIgnore
      */
     public function FileUpload()
     {

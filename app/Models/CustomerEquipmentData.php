@@ -17,8 +17,6 @@ class CustomerEquipmentData extends Model
 
     /**
      * The name of the field this value data belongs to
-     *
-     * @codeCoverageIgnore
      */
     public function getFieldNameAttribute()
     {
@@ -27,8 +25,6 @@ class CustomerEquipmentData extends Model
 
     /**
      * The order that the data field should be in
-     *
-     * @codeCoverageIgnore
      */
     public function getOrderAttribute()
     {
