@@ -10,6 +10,9 @@ class BuildAdminMenu
 
     protected $user;
 
+    /**
+     * Complete Action Process
+     */
     public function build($user)
     {
         $this->user = $user;

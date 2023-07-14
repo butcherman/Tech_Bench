@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
-use App\Models\DataField;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerEquipmentDataFactory extends Factory

@@ -6,8 +6,6 @@ use App\Models\DataField;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DataTypesTest extends TestCase
@@ -258,7 +256,6 @@ class DataTypesTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('data-types.destroy', $type->type_id));
 
         // dd($response->getSession());
-
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors('query_error', __('equipment.data-field-type.in-use'));

@@ -82,7 +82,7 @@ class DataTypesController extends Controller
         try {
             $data_type->delete();
         } catch (QueryException $e) {
-            if(in_array($e->errorInfo[1], [19, 1451])) {
+            if (in_array($e->errorInfo[1], [19, 1451])) {
                 throw new RecordInUseException(__('equipment.data-field-type.in-use'), 0, $e);
             }
 
