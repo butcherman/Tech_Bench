@@ -1,38 +1,32 @@
 <template>
     <Teleport to="body">
-        <div class="toast-container p-3">
+        <div class="toast-container translate-middle-x fade show p-3">
             <TransitionGroup @enter="onEnter" @leave="onLeave">
                 <div
                     v-for="alert in flashAlerts"
                     :key="alert.id"
-                    class="toast align-items-center fade show"
+                    class="toast align-items-center"
                 >
                     <div
-                        class="toast-header"
+                        class="toast-body text-center"
                         :class="{
                             'text-bg-success': alert.type === 'success',
                             'text-bg-warning': alert.type === 'warning',
                             'text-bg-danger': alert.type === 'danger',
                             'text-bg-info': alert.type === 'info',
+                            'text-bg-primary': alert.type === 'status',
                         }"
                     >
-                        <span class="me-2">
-                            <fa-icon
-                                :icon="getAlertIcon(alert.type)"
-                                class="float-start"
-                            />
-                        </span>
-                        <strong class="me-auto text-uppercase">
-                            {{ alert.type }}
-                        </strong>
+                        <fa-icon
+                            :icon="getAlertIcon(alert.type)"
+                            class="float-start"
+                        />
+                        {{ alert.message }}
                         <button
                             type="button"
-                            class="btn-close"
+                            class="btn-close float-end"
                             @click="removeAlert(alert.id)"
-                        ></button>
-                    </div>
-                    <div class="toast-body text-center">
-                        {{ alert.message }}
+                        />
                     </div>
                 </div>
             </TransitionGroup>
@@ -74,15 +68,17 @@ const getAlertIcon = (type: string) => {
  * Animations
  */
 const onEnter = (el: Element) => {
-    gsap.to(el, {
-        x: 200,
+    gsap.from(el, {
+        x: -2000,
+        ease: "back.out",
+        duration: 0.5,
     });
 };
 
 const onLeave = (el: Element) => {
-    gsap.from(el, {
-        opacity: 0,
-        delay: 0.5,
+    gsap.to(el, {
+        x: 2000,
+        ease: "back.in",
     });
 };
 </script>
@@ -91,12 +87,13 @@ const onLeave = (el: Element) => {
 .toast-container {
     position: fixed;
     top: 10px;
-    left: -150px;
+    left: 50%;
     .toast {
         border-radius: 10px;
         overflow: hidden;
         line-height: 1.2em;
         font-size: 1.2em;
+        display: block;
         .badge {
             font-size: 1em;
         }
