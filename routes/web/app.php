@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\Testing\PrivateEvent;
+use App\Events\Testing\PublicEvent;
 use App\Http\Controllers\Home\AboutController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +24,19 @@ Route::middleware(['auth', 'user_security'])->group(function () {
     Route::get('tech-tips/{name}', function ($name) {
         return 'tech-tips.show';
     })->name('tech-tips.show');
+
+
+
+    /**
+     * Test Broadcasting Routes
+     */
+    Route::get('private-event', function() {
+        PrivateEvent::dispatch('This was a private event');
+        return response('sent private event');
+    })->name('private-event');
+
+    Route::get('public-event', function() {
+        PublicEvent::dispatch('This was a public event');
+        return response('sent public event');
+    })->name('public-event');
 });

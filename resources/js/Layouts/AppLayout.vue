@@ -45,11 +45,11 @@ router.on("navigate", () => {
  * Handle pushing notifications to their proper place on initial mount
  * All notifications received after mount will be pushed via Ajax call
  */
-onMounted(() => {
-    const page: pageData = usePage();
-    setNotifications(page.props.notifications);
-    triggerFetchInterval();
-});
+// onMounted(() => {
+//     const page: pageData = usePage();
+//     setNotifications(page.props.notifications);
+//     triggerFetchInterval();
+// });
 </script>
 
 <style lang="scss">

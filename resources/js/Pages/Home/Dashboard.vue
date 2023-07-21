@@ -11,11 +11,14 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <button
-                            class="btn btn-dark"
+                            class="btn btn-dark w-75 m-2"
                             @click="pushAlert('success', 'this is an alert')"
                         >
                             New Flash Alert
                         </button>
+                        <button class="btn btn-info w-75 m-2">New Broadcasting Alert</button>
+                        <button class="btn btn-info w-75 m-2" @click="sendPrivateEvent">New Private Event</button>
+                        <button class="btn btn-info w-75 m-2" @click="sendPublicEvent">New Public Event</button>
                     </div>
                 </div>
             </div>
@@ -27,8 +30,18 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 // import { ref, reactive, onMounted } from 'vue';
 import { pushAlert } from "@/State/LayoutState";
+import axios from "axios";
 
 // const props = defineProps<{}>();
+
+
+const sendPrivateEvent = () => {
+    axios.get(route('private-event')).then(res => console.log(res));
+}
+
+const sendPublicEvent = () => {
+    axios.get(route('public-event')).then(res => console.log(res));
+}
 </script>
 
 <script lang="ts">
