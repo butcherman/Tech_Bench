@@ -9,15 +9,17 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
 class PrivateEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $message)
+    public function __construct(public string $message, public int $userId)
     {
         //
     }
@@ -33,6 +35,13 @@ class PrivateEvent implements ShouldBroadcast
         //     new PrivateChannel('channel-name'),
         // ];
 
-        return new PrivateChannel('private.'.auth()->user()->user_id);
+        // return new PrivateChannel('1');
+
+        return new PrivateChannel('user.'.$this->userId);
     }
+
+    // public function broadcastAs()
+    // {
+    //     return 'private.message';
+    // }
 }

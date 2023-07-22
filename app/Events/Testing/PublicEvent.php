@@ -34,4 +34,9 @@ class PublicEvent implements ShouldBroadcast
         // ];
         return new Channel('public');
     }
+
+    // public function broadcastAs()
+    // {
+    //     return 'public.test';
+    // }
 }

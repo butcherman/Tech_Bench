@@ -4,6 +4,7 @@ use App\Events\Testing\PrivateEvent;
 use App\Events\Testing\PublicEvent;
 use App\Http\Controllers\Home\AboutController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::middleware(['auth', 'user_security'])->group(function () {
     Route::inertia('dashboard', 'Home/Dashboard')->name('dashboard')->breadcrumb('Dashboard');
@@ -31,7 +32,7 @@ Route::middleware(['auth', 'user_security'])->group(function () {
      * Test Broadcasting Routes
      */
     Route::get('private-event', function() {
-        PrivateEvent::dispatch('This was a private event');
+        PrivateEvent::dispatch('This was a private event', Auth::user()->user_id);
         return response('sent private event');
     })->name('private-event');
 
