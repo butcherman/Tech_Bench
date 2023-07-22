@@ -42,6 +42,17 @@ const sendPrivateEvent = () => {
 const sendPublicEvent = () => {
     axios.get(route('public-event')).then(res => console.log(res));
 }
+
+console.log(Echo);
+
+Echo.channel('public').listenToAll((event, data) => {
+    console.log(event, data);
+});
+
+Echo.private('user.1').listenToAll((event, data) => {
+    console.log(event, data);
+});
+
 </script>
 
 <script lang="ts">

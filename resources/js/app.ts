@@ -62,3 +62,23 @@ createInertiaApp({
 //         e.stopImmediatePropagation();
 //     }
 // });
+
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+window.Pusher = Pusher;
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'app-key',
+    wsHost: '192.168.1.250',
+    wsPort: 6001,
+    wssPort: 6001,
+    cluster: 'TechBenchCluster',
+    forceTLS: false,
+    // encrypted: true,
+    enableLogging: true,
+    // disableStats: true,
+    enabledTransports: ['ws', 'wss'],
+
+});
