@@ -28,28 +28,24 @@ import NotificationAlert from './AppLayout/NotificationAlert.vue';
 import { onMounted } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { closeNavbar } from "@/State/LayoutState";
-import {
-    resetCheckCounter,
-    setNotifications,
-    triggerFetchInterval,
-} from "@/State/NotificationState";
+import { newNotificationCount, notificationList } from "@/State/NotificationState";
 
 import "../../scss/Layouts/appLayout.scss";
 
 router.on("navigate", () => {
     closeNavbar();
-    resetCheckCounter();
+    // resetCheckCounter();
 });
 
 /**
- * Handle pushing notifications to their proper place on initial mount
- * All notifications received after mount will be pushed via Ajax call
+ * Handle pushing notifications to their proper place on initial page load
+ * All notifications received after mount will be pushed via Broadcast Channel
  */
-// onMounted(() => {
-//     const page: pageData = usePage();
-//     setNotifications(page.props.notifications);
-//     triggerFetchInterval();
-// });
+onMounted(() => {
+    const page: pageData = usePage();
+    newNotificationCount.value = page.props.notifications.new;
+    notificationList.value = page.props.notifications.list;
+});
 </script>
 
 <style lang="scss">

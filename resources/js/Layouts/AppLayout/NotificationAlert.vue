@@ -26,8 +26,17 @@
 </template>
 
 <script setup lang="ts">
-import { newNotifications, showNotification } from "@/State/NotificationState";
+import { ref } from 'vue';
+// import { newNotifications, showNotification } from "@/State/NotificationState";
+import { echo } from '@/State/LayoutState';
 import { gsap } from "gsap";
+
+const newNotifications = ref([]);
+
+
+
+
+
 
 /**
  * Animations

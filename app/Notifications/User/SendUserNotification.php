@@ -5,6 +5,7 @@ namespace App\Notifications\User;
 use App\Http\Requests\Admin\User\UserNotificationRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -33,7 +34,7 @@ class SendUserNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
@@ -60,5 +61,13 @@ class SendUserNotification extends Notification implements ShouldQueue
                 'from' => $this->from,
             ],
         ];
+    }
+
+    /**
+     * Get the Broadcast representation of the notification
+     */
+    public function toBroadcast(object $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage($this->toArray($notifiable));
     }
 }
