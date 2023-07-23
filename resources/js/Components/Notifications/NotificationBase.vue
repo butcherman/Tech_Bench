@@ -1,9 +1,6 @@
 <template>
-    <Modal
-        ref="notificationModal"
-        :title="displayNotification?.data.subject"
-    >
-    <component
+    <Modal ref="notificationModal" :title="displayNotification?.data.subject">
+        <component
             :is="asyncComponent"
             v-bind="displayNotification?.data.props"
             @hideNotification="notificationModal?.hide()"
@@ -50,17 +47,16 @@ watch(displayNotification, (newDisplayNotification) => {
         notificationModal.value?.show();
         console.log(newDisplayNotification);
 
-        sendNotificationUpdate('mark', [newDisplayNotification.id]);
+        sendNotificationUpdate("mark", [newDisplayNotification.id]);
     }
 });
 
 const deleteNotification = () => {
-    if(displayNotification.value)
-    {
+    if (displayNotification.value) {
         const notificationId = displayNotification.value.id;
 
         notificationModal.value?.hide();
-        sendNotificationUpdate('delete', [notificationId]);
+        sendNotificationUpdate("delete", [notificationId]);
     }
-}
+};
 </script>

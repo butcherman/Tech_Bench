@@ -17,6 +17,12 @@ declare global {
         absolute?: boolean,
         config?: Config
     ): string;
+
+    interface ImportMeta {
+        env: {
+            VITE_WS_HOST: string;
+        }
+    }
 }
 
 declare module "@vue/runtime-core" {

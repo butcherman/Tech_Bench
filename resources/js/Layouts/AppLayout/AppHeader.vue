@@ -97,7 +97,7 @@
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 // import { notifications, clearFetchInterval } from "@/State/NotificationState";
-import { newNotificationCount } from '@/State/NotificationState';
+import { newNotificationCount } from "@/State/NotificationState";
 import { toggleNavbar } from "@/State/LayoutState";
 
 const page: pageData = usePage();

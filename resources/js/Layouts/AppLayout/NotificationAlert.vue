@@ -27,8 +27,12 @@
 
 <script setup lang="ts">
 import { gsap } from "gsap";
-import { ref, watch } from 'vue';
-import { newNotificationReceived, notificationList, displayNotification } from '@/State/NotificationState';
+import { ref, watch } from "vue";
+import {
+    newNotificationReceived,
+    notificationList,
+    displayNotification,
+} from "@/State/NotificationState";
 
 const newNotifications = ref<notification[]>([]);
 
@@ -44,11 +48,11 @@ watch(newNotificationReceived, () => {
 
 const removeNotification = (id: string) => {
     newNotifications.value = newNotifications.value.filter((n) => n.id !== id);
-}
+};
 
 const showNotification = (notification: notification) => {
     displayNotification.value = notification;
-}
+};
 
 /**
  * Notifications will automatically be removed after 10 seconds
@@ -57,7 +61,7 @@ const setAutoTimeout = (id: string) => {
     setTimeout(() => {
         removeNotification(id);
     }, 10000);
-}
+};
 
 /**
  * Animations

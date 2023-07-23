@@ -30,7 +30,7 @@ const app = computed(() => page.props.app);
 </script>
 
 <style scoped lang="scss">
-@import '../../../scss/Layouts/appLayout.scss';
+@import "../../../scss/Layouts/appLayout.scss";
 .footer {
     background-color: $footer-background;
     border-top: $soft-border;
