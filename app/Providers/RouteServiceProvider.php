@@ -31,7 +31,7 @@ class RouteServiceProvider extends ServiceProvider
             'middleware' => 'web',
             'namespace' => $this->namespace,
         ], function () {
-            $routes = glob(base_path('routes/*.php'));
+            $routes = glob(base_path('routes/web/*.php'));
             foreach ($routes as $route) {
                 require $route;
             }

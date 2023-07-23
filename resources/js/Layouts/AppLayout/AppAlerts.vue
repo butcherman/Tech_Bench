@@ -1,6 +1,10 @@
 <template>
     <div v-if="alerts" class="alert-wrapper">
-        <div v-for="alert in alerts" class="alert text-center" :class="`alert-${alert.type}`">
+        <div
+            v-for="alert in alerts"
+            class="alert text-center"
+            :class="`alert-${alert.type}`"
+        >
             <div v-if="alert.html" v-html="alert.html" />
             <div v-else>{{ alert.message }}</div>
         </div>

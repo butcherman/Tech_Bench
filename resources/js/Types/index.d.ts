@@ -48,17 +48,21 @@ type notificationProps = {
 type notification = {
     created_at: string;
     id: string;
-    notifiable_id: number;
-    notifiable_type: string;
     read_at: string | null;
-    type: string;
-    updated_at: string;
     data: {
         component: string;
         subject: string;
         props: object;
     };
 };
+
+type notificationBroadcast = {
+    component: string;
+    id: string;
+    props: object;
+    subject: string;
+    type: string;
+}
 
 type navBarProps = {
     name: string;

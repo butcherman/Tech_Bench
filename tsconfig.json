@@ -20,16 +20,12 @@
         "strict": true,
         "target": "ES2020",
         "typeRoots": ["./resources/js/Types/", "./node_modules/@types"],
-        "types": ["vite/client"],
         "paths": {
             "@/*": ["resources/js/*"]
         },
         "include": [
             "resources/js/**/*.ts",
             "resources/js/**/*.vue"
-        ],
-        "exclude": [
-            "node_modules"
         ]
     }
 }

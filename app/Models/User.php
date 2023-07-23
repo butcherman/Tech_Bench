@@ -34,6 +34,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * We will sent notification broadcasts on username not user_id
+     */
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'user-notification.'.$this->username;
+    }
+
+    /**
      * Key for Route/Model binding
      */
     public function getRouteKeyName()

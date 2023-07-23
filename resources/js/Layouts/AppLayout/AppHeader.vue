@@ -32,7 +32,7 @@
                         <span
                             class="badge bg-warning position-absolute top-0 start-100 translate-middle rounded-pill"
                         >
-                            {{ notifications.new }}
+                            {{ newNotificationCount }}
                         </span>
                     </Link>
                 </li>
@@ -71,7 +71,6 @@
                                     :href="$route('logout')"
                                     class="dropdown-item"
                                     method="POST"
-                                    @click="clearFetchInterval"
                                 >
                                     <fa-icon icon="fa-sign-out-alt" />
                                     Logout
@@ -97,7 +96,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import { notifications, clearFetchInterval } from "@/State/NotificationState";
+// import { notifications, clearFetchInterval } from "@/State/NotificationState";
+import { newNotificationCount } from "@/State/NotificationState";
 import { toggleNavbar } from "@/State/LayoutState";
 
 const page: pageData = usePage();

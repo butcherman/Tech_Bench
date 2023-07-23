@@ -14,6 +14,7 @@
         </div>
         <AppFlash />
         <NotificationAlert />
+        <NotificationBase />
     </div>
 </template>
 
@@ -22,33 +23,35 @@ import AppHeader from "./AppLayout/AppHeader.vue";
 import AppSideNav from "./AppLayout/AppSideNav.vue";
 import AppBreadcrumbs from "./AppLayout/AppBreadcrumbs.vue";
 import AppAlerts from "./AppLayout/AppAlerts.vue";
-import AppFooter from './AppLayout/AppFooter.vue';
-import AppFlash from './AppLayout/AppFlash.vue';
-import NotificationAlert from './AppLayout/NotificationAlert.vue';
+import AppFooter from "./AppLayout/AppFooter.vue";
+import AppFlash from "./AppLayout/AppFlash.vue";
+import NotificationAlert from "./AppLayout/NotificationAlert.vue";
+import NotificationBase from "@/Components/Notifications/NotificationBase.vue";
 import { onMounted } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { closeNavbar } from "@/State/LayoutState";
 import {
-    resetCheckCounter,
-    setNotifications,
-    triggerFetchInterval,
+    newNotificationCount,
+    notificationList,
+    registerNotificationChannel,
 } from "@/State/NotificationState";
 
 import "../../scss/Layouts/appLayout.scss";
 
 router.on("navigate", () => {
     closeNavbar();
-    resetCheckCounter();
 });
 
 /**
- * Handle pushing notifications to their proper place on initial mount
- * All notifications received after mount will be pushed via Ajax call
+ * Handle pushing notifications to their proper place on initial page load
+ * All notifications received after mount will be pushed via Broadcast Channel
  */
 onMounted(() => {
     const page: pageData = usePage();
-    setNotifications(page.props.notifications);
-    triggerFetchInterval();
+
+    registerNotificationChannel("admin");
+    newNotificationCount.value = page.props.notifications.new;
+    notificationList.value = page.props.notifications.list;
 });
 </script>
 
