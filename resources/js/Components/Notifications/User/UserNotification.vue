@@ -1,7 +1,9 @@
 <template>
-    <h6 class="text-center">New Message From {{ from }}</h6>
-    <div class="text-center">
-        {{ message }}
+    <div>
+        <h6 class="text-center">New Message From {{ from }}</h6>
+        <div class="text-center">
+            {{ message }}
+        </div>
     </div>
 </template>
 

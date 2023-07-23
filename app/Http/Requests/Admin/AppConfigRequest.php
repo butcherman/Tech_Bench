@@ -35,6 +35,8 @@ class AppConfigRequest extends FormRequest
      */
     public function processSettings()
     {
+        $this->updateEnvWsHost();
+
         $setArr = [
             'app.url' => $this->url,
             'app.timezone' => $this->timezone,
@@ -43,5 +45,22 @@ class AppConfigRequest extends FormRequest
         ];
 
         $this->saveSettingsArray($setArr);
+    }
+
+    /**
+     * Write the new APP_URL to the .env file as VITE_WS_HOST
+     * This is used for Soketi Broadcasting Configuration
+     */
+    protected function updateEnvWsHost()
+    {
+        $oldHost = preg_replace("(^https?://)", "", config('app.url') );
+        $newHost = preg_replace("(^https?://)", "", $this->url );
+        $envFile = base_path('.env');
+
+        if (file_exists($envFile)) {
+            file_put_contents($envFile, str_replace(
+                'VITE_WS_HOST='.$oldHost, 'VITE_WS_HOST='.$newHost, file_get_contents($envFile)
+            ));
+        }
     }
 }
