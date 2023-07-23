@@ -3,23 +3,35 @@ import { echo } from '@/State/LayoutState';
 import axios from "axios";
 
 export const newNotificationCount = ref<number>(0);
+export const newNotificationReceived = ref<number>(0);
 export const notificationList = ref<notification[]>([]);
-
+export const displayNotification = ref<notification | null>(null);
 export const loadingState = ref<boolean>(false);
-
-
-
-
 
 /***************************************************
  * Register to Notification Channel
  ***************************************************/
-echo.private('App.Models.User.1').notification((notification) => {
-    console.log(notification);
+export const registerNotificationChannel = (username: string) => {
+    echo.private(`user-notification.${username}`).notification((data: notificationBroadcast) => {
+        console.log(data);
 
-    newNotificationCount.value++;
-});
+        let newNotification = {
+            created_at: new Date().toDateString().slice(4),
+            read_at: null,
+            id: data.id,
+            notifiableId: 1,
+            data: {
+                subject: data.subject,
+                component: data.component,
+                props: data.props,
+            }
+        }
 
+        notificationList.value.unshift(newNotification);
+        newNotificationCount.value++;
+        newNotificationReceived.value++
+    });
+}
 
 /***************************************************
  * Remove or Mark notifications a read

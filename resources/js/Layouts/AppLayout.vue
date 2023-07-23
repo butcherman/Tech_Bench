@@ -14,6 +14,7 @@
         </div>
         <AppFlash />
         <NotificationAlert />
+        <NotificationBase />
     </div>
 </template>
 
@@ -25,16 +26,16 @@ import AppAlerts from "./AppLayout/AppAlerts.vue";
 import AppFooter from './AppLayout/AppFooter.vue';
 import AppFlash from './AppLayout/AppFlash.vue';
 import NotificationAlert from './AppLayout/NotificationAlert.vue';
+import NotificationBase from '@/Components/Notifications/NotificationBase.vue';
 import { onMounted } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { closeNavbar } from "@/State/LayoutState";
-import { newNotificationCount, notificationList } from "@/State/NotificationState";
+import { newNotificationCount, notificationList, registerNotificationChannel } from "@/State/NotificationState";
 
 import "../../scss/Layouts/appLayout.scss";
 
 router.on("navigate", () => {
     closeNavbar();
-    // resetCheckCounter();
 });
 
 /**
@@ -43,6 +44,8 @@ router.on("navigate", () => {
  */
 onMounted(() => {
     const page: pageData = usePage();
+
+    registerNotificationChannel('admin');
     newNotificationCount.value = page.props.notifications.new;
     notificationList.value = page.props.notifications.list;
 });

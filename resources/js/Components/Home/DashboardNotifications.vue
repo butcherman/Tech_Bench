@@ -55,6 +55,7 @@
                                             : 'fw-bold'
                                     "
                                     class="pointer"
+                                    @click="showNotification(notification)"
                                 >
                                     {{ notification.data.subject }}
                                 </td>
@@ -65,6 +66,7 @@
                                             : 'fw-bold'
                                     "
                                     class="pointer"
+                                    @click="showNotification(notification)"
                                 >
                                     {{ notification.created_at }}
                                 </td>
@@ -91,15 +93,20 @@
 <script setup lang="ts">
 import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import { ref } from "vue";
-import { newNotificationCount, notificationList, sendNotificationUpdate, loadingState } from '@/State/NotificationState';
+import { newNotificationCount, notificationList, sendNotificationUpdate, loadingState, displayNotification } from '@/State/NotificationState';
 import verify from "@/Modules/verify";
-
 
 const checkAllMaster = ref<InstanceType<typeof HTMLInputElement> | null>(null);
 
 const allCheck = ref<boolean>(false);
 const selected = ref<string[]>([]);
-// const notificationList = computed(() => notificationList);
+
+/**
+ * Show the Notification Modal
+ */
+const showNotification = (notification: notification) => {
+    displayNotification.value = notification;
+}
 
 /**
  * Check/Uncheck all items

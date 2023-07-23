@@ -4,7 +4,7 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
 /***************************************************
- * Broadcasting Channels
+ * Enable Broadcasting Channels
  ***************************************************/
 export const pusher = Pusher;
 export const echo = new Echo({

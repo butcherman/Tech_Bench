@@ -37,6 +37,9 @@ import axios from "axios";
 // const props = defineProps<{}>();
 
 
+
+
+
 const sendPrivateEvent = () => {
     axios.get(route('private-event')).then(res => console.log(res));
 }
