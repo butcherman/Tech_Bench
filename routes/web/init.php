@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Init\StepFive;
 use App\Http\Controllers\Init\StepFour;
+use App\Http\Controllers\Init\StepOne;
 use App\Http\Controllers\Init\StepThree;
 use App\Http\Controllers\Init\StepTwo;
-use App\Http\Controllers\Init\StepOne;
 use Illuminate\Support\Facades\Route;
 
 /**
