@@ -53,8 +53,8 @@ class AppConfigRequest extends FormRequest
      */
     protected function updateEnvWsHost()
     {
-        $oldHost = preg_replace("(^https?://)", "", config('app.url') );
-        $newHost = preg_replace("(^https?://)", "", $this->url );
+        $oldHost = preg_replace('(^https?://)', '', config('app.url'));
+        $newHost = preg_replace('(^https?://)', '', $this->url);
         $envFile = base_path('.env');
 
         if (file_exists($envFile)) {

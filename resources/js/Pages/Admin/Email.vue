@@ -17,9 +17,8 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import EmailConfigForm from "@/Forms/Admin/Config/EmailConfigForm.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{
+defineProps<{
     settings: emailSettings;
 }>();
 </script>

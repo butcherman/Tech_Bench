@@ -17,6 +17,7 @@ type props = {
     navbar: navBarProps[];
     breadcrumbs: breadcrumbs[];
     alerts: alert[];
+    stepId?: number;
 };
 
 type appProps = {

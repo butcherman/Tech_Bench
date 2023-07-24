@@ -57,11 +57,16 @@ const schema = object({
         }),
 });
 
+const emit = defineEmits(['success']);
+
 const onSubmit = (form: passwordForm) => {
     const formData = useForm(form);
     formData.put(route("user-password.update"), {
         onFinish: () => passwordForm.value?.endSubmit(),
-        onSuccess: () => passwordForm.value?.resetForm(),
+        onSuccess: () => {
+            passwordForm.value?.resetForm();
+            emit('success');
+        },
     });
 };
 </script>

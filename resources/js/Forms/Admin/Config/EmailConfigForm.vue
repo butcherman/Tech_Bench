@@ -127,13 +127,15 @@ const schema = object({
 const sendingTest = ref(false);
 const encryptionTypes = ["NONE", "TLS", "SSL"];
 
+const emit = defineEmits(['success']);
+
 const onSubmit = (form: emailSettings) => {
     const formData = useForm(form);
 
     formData.post(route("admin.email.set"), {
-        onFinish: () => {
-            emailSettingsForm.value?.endSubmit();
-        },
+        preserveScroll: true,
+        onFinish: () => emailSettingsForm.value?.endSubmit(),
+        onSuccess: () => emit('success'),
     });
 };
 </script>
