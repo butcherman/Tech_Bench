@@ -50,11 +50,14 @@ const schema = object({
     max_filesize: number().required(),
 });
 
+const emit = defineEmits(['success']);
+
 const onSubmit = (form: appConfig) => {
     const formData = useForm(form);
 
     formData.post(route("admin.config.set"), {
         onFinish: () => settingsForm.value?.endSubmit(),
+        onSuccess: () => emit('success'),
     });
 };
 </script>

@@ -35,7 +35,7 @@ class AppConfigRequest extends FormRequest
      */
     public function processSettings()
     {
-        $this->updateEnvWsHost();
+        // $this->updateEnvWsHost();  TODO - re-enable me.
 
         $setArr = [
             'app.url' => $this->url,

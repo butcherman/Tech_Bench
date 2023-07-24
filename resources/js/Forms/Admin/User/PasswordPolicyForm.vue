@@ -81,11 +81,14 @@ const schema = object({
     contains_special: boolean().required(),
 });
 
+const emit = defineEmits(['success']);
+
 const onSubmit = (form: passwordPolicy) => {
     const formData = useForm(form);
 
     formData.post(route("admin.users.password-policy.set"), {
         onFinish: () => passwordPolicyForm.value?.endSubmit(),
+        onSuccess: () => emit('success'),
     });
 };
 </script>
