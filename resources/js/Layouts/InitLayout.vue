@@ -7,7 +7,10 @@
                 <div class="content-wrapper">
                     <AppBreadcrumbs />
                     <AppAlerts />
-                    <StepNavigation :step-list="stepList" :current-step="stepId ? stepId : 0" />
+                    <StepNavigation
+                        :step-list="stepList"
+                        :current-step="stepId"
+                    />
                     <div class="row justify-content-center">
                         <div class="col-md-10">
                             <div class="card">
@@ -31,14 +34,16 @@ import AppBreadcrumbs from "./AppLayout/AppBreadcrumbs.vue";
 import AppAlerts from "./AppLayout/AppAlerts.vue";
 import AppFooter from "./AppLayout/AppFooter.vue";
 import AppFlash from "./AppLayout/AppFlash.vue";
-import StepNavigation from '@/Components/_Base/StepNavigation.vue';
-import { ref, computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import StepNavigation from "@/Components/_Base/StepNavigation.vue";
+import { ref, computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
 import "../../scss/Layouts/appLayout.scss";
 
-const stepId = computed(() => usePage().props.stepId);
-
+const page: pageData = usePage();
+const stepId = computed<number>(() =>
+    page.props.stepId ? page.props.stepId : 0
+);
 
 const stepList = ref([
     {

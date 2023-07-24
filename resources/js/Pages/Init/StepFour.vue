@@ -15,16 +15,16 @@
 
 <script setup lang="ts">
 import InitLayout from "@/Layouts/InitLayout.vue";
-import PasswordPolicyForm from '@/Forms/Admin/User/PasswordPolicyForm.vue';
-import { router } from '@inertiajs/vue3';
+import PasswordPolicyForm from "@/Forms/Admin/User/PasswordPolicyForm.vue";
+import { router } from "@inertiajs/vue3";
 
 defineProps<{
     policy: passwordPolicy;
 }>();
 
 const nextStep = () => {
-    router.get(route('init.step-5'));
-}
+    router.get(route("init.step-5"));
+};
 </script>
 
 <script lang="ts">
