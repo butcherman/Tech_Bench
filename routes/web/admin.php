@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
+use App\Http\Controllers\Admin\Maintenance\Backups\BackupController;
 use App\Http\Controllers\Admin\Maintenance\DownloadLogController;
 use App\Http\Controllers\Admin\Maintenance\LogsController;
 use App\Http\Controllers\Admin\Maintenance\LogSettingsController;
@@ -93,5 +94,9 @@ Route::middleware(['auth', 'user_security'])->prefix('administration')->name('ad
         Route::get('{channel}', LogsController::class)->name('channel')->breadcrumb('Log List', 'admin.logs.index');
         Route::get('{channel}/{log}', ViewLogController::class)->name('view')->breadcrumb('Log Details', '.channel');
         Route::get('{channel}/{log}/download', DownloadLogController::class)->name('download');
+    });
+
+    Route::prefix('backups')->name('backups.')->group(function() {
+        Route::get('/', BackupController::class)->name('index')->breadcrumb('Backups', 'admin.index');
     });
 });
