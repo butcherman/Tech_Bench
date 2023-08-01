@@ -65,13 +65,19 @@ class EventServiceProvider extends ServiceProvider
          * Administrative Events
          */
         'Spatie\Backup\Events\BackupManifestWasCreated' => [
-            'App\Listeners\Admin\AddVersionToBackup',
+            'App\Listeners\Admin\Backup\AddVersionToBackup',
         ],
         'Spatie\Backup\Events\BackupWasSuccessful' => [
-            'App\Listeners\Admin\LogSuccessfulBackup',
+            'App\Listeners\Admin\Backup\BackupWasSuccessful',
         ],
         'Spatie\Backup\Events\BackupHasFailed' => [
-            'App\Listeners\Admin\LogFailedBackup',
+            'App\Listeners\Admin\Backup\BackupHasFailed',
+        ],
+        'Spatie\Backup\Events\BackupZipWasCreated' => [
+            'App\Listeners\Admin\Backup\BackupZipWasCreated',
+        ],
+        'Spatie\Backup\Events\DumpingDatabase' => [
+            'App\Listeners\Admin\Backup\DumpingDatabase',
         ],
     ];
 
