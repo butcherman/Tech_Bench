@@ -27,7 +27,7 @@ return [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 // 'host' => env('PUSHER_HOST') ?: 'api-'.env('PUSHER_APP_CLUSTER', 'mt1').'.pusher.com',
                 'host' => env('PUSHER_HOST', 'soketi'),
-                'port' => env('PUSHER_PORT', 443),
+                'port' => env('PUSHER_PORT', 6001),
                 // 'scheme' => env('PUSHER_SCHEME', 'https'),
                 'scheme' => env('PUSHER_SCHEME', 'http'),
                 'encrypted' => true,
