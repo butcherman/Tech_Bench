@@ -7,6 +7,9 @@ use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
 use App\Http\Controllers\Admin\Maintenance\Backups\BackupController;
+use App\Http\Controllers\Admin\Maintenance\Backups\DeleteBackupController;
+use App\Http\Controllers\Admin\Maintenance\Backups\DownloadBackupController;
+use App\Http\Controllers\Admin\Maintenance\Backups\FetchBackupsController;
 use App\Http\Controllers\Admin\Maintenance\Backups\RunBackupController;
 use App\Http\Controllers\Admin\Maintenance\DownloadLogController;
 use App\Http\Controllers\Admin\Maintenance\LogsController;
@@ -100,5 +103,8 @@ Route::middleware(['auth', 'user_security'])->prefix('administration')->name('ad
     Route::prefix('backups')->name('backups.')->group(function() {
         Route::get('/', BackupController::class)->name('index')->breadcrumb('Backups', 'admin.index');
         Route::put('run', RunBackupController::class)->name('run');
+        Route::get('fetch-backups', FetchBackupsController::class)->name('fetch');
+        Route::get('download/{backup}', DownloadBackupController::class)->name('download');
+        Route::delete('delete/{backup}', DeleteBackupController::class)->name('destroy');
     });
 });
