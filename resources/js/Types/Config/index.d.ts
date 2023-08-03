@@ -76,3 +76,11 @@ type twilioConfig = {
     token: string;
     from: string;
 }
+
+type backupSettings = {
+    nightly_backup: boolean;
+    nightly_cleanup: boolean;
+    encryption: boolean;
+    password: string;
+    mail_to: string;
+}

@@ -40,4 +40,8 @@ return [
     'logging' => [
         'updated' => 'Logging Settings have been updated',
     ],
+
+    'backups' => [
+        'settings-successful' => 'Backup Settings Saved',
+    ]
 ];

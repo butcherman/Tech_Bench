@@ -27,13 +27,14 @@ import AppFooter from "./AppLayout/AppFooter.vue";
 import AppFlash from "./AppLayout/AppFlash.vue";
 import NotificationAlert from "./AppLayout/NotificationAlert.vue";
 import NotificationBase from "@/Components/Notifications/NotificationBase.vue";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { closeNavbar } from "@/State/LayoutState";
 import {
     newNotificationCount,
     notificationList,
     registerNotificationChannel,
+    leaveNotificationChannel,
 } from "@/State/NotificationState";
 
 import "../../scss/Layouts/appLayout.scss";
@@ -53,6 +54,10 @@ onMounted(() => {
     newNotificationCount.value = page.props.notifications.new;
     notificationList.value = page.props.notifications.list;
 });
+
+onUnmounted(() => {
+    leaveNotificationChannel();
+})
 </script>
 
 <style lang="scss">

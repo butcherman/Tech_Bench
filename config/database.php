@@ -1,7 +1,5 @@
 <?php
 
-// use Illuminate\Support\Str;
-
 return [
     'default' => env('DB_CONNECTION', 'mysql'),
     'connections' => [
@@ -33,6 +31,12 @@ return [
         ],
     ],
     'migrations' => 'migrations',
+    /**
+     * Redis Database's are as follows:
+     *  0 - default, used for primary work queues
+     *  1 - cache data
+     *  2 - session data
+     */
     'redis' => [
         'client' => env('REDIS_CLIENT', 'predis'),
         'options' => [
@@ -52,6 +56,13 @@ return [
             'password' => env('REDIS_PASSWORD', 'tbRootPassword'),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
+        ],
+        'session' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', 'redis'),
+            'password' => env('REDIS_PASSWORD', 'tbRootPassword'),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '2'),
         ],
     ],
 ];

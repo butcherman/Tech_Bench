@@ -60,6 +60,25 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\User\ResendWelcomeEvent' => [
             'App\Listeners\Notify\User\ResendWelcomeEmail',
         ],
+
+        /**
+         * Administrative Events
+         */
+        'Spatie\Backup\Events\BackupManifestWasCreated' => [
+            'App\Listeners\Admin\Backup\AddVersionToBackup',
+        ],
+        'Spatie\Backup\Events\BackupWasSuccessful' => [
+            'App\Listeners\Admin\Backup\BackupWasSuccessful',
+        ],
+        'Spatie\Backup\Events\BackupHasFailed' => [
+            'App\Listeners\Admin\Backup\BackupHasFailed',
+        ],
+        'Spatie\Backup\Events\BackupZipWasCreated' => [
+            'App\Listeners\Admin\Backup\BackupZipWasCreated',
+        ],
+        'Spatie\Backup\Events\DumpingDatabase' => [
+            'App\Listeners\Admin\Backup\DumpingDatabase',
+        ],
     ];
 
     /**

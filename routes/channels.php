@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AppSettings;
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -12,4 +13,11 @@ Broadcast::channel('user-notification.{username}', function (User $user, string 
 
 Broadcast::channel('user.{id}', function ($user, $id) {
     return (int) $user->user_id === (int) $id;
+});
+
+/**
+ * Live Stream Channel for running administrative processes
+ */
+Broadcast::channel('process.{type}', function (User $user) {
+    return $user->can('viewAny', AppSettings::class);
 });
