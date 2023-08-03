@@ -1,7 +1,8 @@
 <?php
 
 return [
-
+    'nightly_backup' => true,
+    'nightly_cleanup' => true,
     'backup' => [
         'name' => env('APP_NAME', 'tech-bench'),
         'source' => [
@@ -90,38 +91,38 @@ return [
             'to' => 'test@noem.com',
 
             'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
+                'address' => env('MAIL_FROM_ADDRESS', null),
+                'name' => env('MAIL_FROM_NAME', 'Tech Bench'),
             ],
         ],
 
-        'slack' => [
-            'webhook_url' => '',
+        // 'slack' => [
+        //     'webhook_url' => '',
 
-            /*
-             * If this is set to null the default channel of the webhook will be used.
-             */
-            'channel' => null,
+        //     /*
+        //      * If this is set to null the default channel of the webhook will be used.
+        //      */
+        //     'channel' => null,
 
-            'username' => null,
+        //     'username' => null,
 
-            'icon' => null,
+        //     'icon' => null,
 
-        ],
+        // ],
 
-        'discord' => [
-            'webhook_url' => '',
+        // 'discord' => [
+        //     'webhook_url' => '',
 
-            /*
-             * If this is an empty string, the name field on the webhook will be used.
-             */
-            'username' => '',
+        //     /*
+        //      * If this is an empty string, the name field on the webhook will be used.
+        //      */
+        //     'username' => '',
 
-            /*
-             * If this is an empty string, the avatar on the webhook will be used.
-             */
-            'avatar_url' => '',
-        ],
+        //     /*
+        //      * If this is an empty string, the avatar on the webhook will be used.
+        //      */
+        //     'avatar_url' => '',
+        // ],
     ],
 
     /*
@@ -135,7 +136,7 @@ return [
             'disks' => ['backups'],
             'health_checks' => [
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
-                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
+                // \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
             ],
         ],
     ],

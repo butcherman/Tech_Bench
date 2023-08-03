@@ -157,11 +157,11 @@ class BuildAdminMenu
                     'icon' => 'fa-hdd',
                     'route' => route('admin.backups.index'),
                 ],
-                // [
-                //     'name' => 'Automatic Backup Settings',
-                //     'icon' => 'fa-hdd',
-                //     'link' => route('admin.backups.index'),
-                // ],
+                [
+                    'name' => 'Backup Settings',
+                    'icon' => 'fa-cog',
+                    'route' => route('admin.backups.settings.get'),
+                ],
             ];
         }
 
