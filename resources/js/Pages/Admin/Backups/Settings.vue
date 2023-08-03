@@ -15,11 +15,13 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Backup Cleanup Policy:</div>
-                        <p>Keep all backups for 7 days</p>
-                        <p>Keep Daily backup for 14 days</p>
-                        <p>Keep Weekly backups for 8 weeks</p>
-                        <p>Keep Monthly backups for 6 months</p>
-                        <p>Keep Yearly backups for 2 years</p>
+                        <p class="my-0 ms-4">Keep All backups for 7 days</p>
+                        <p class="my-0 ms-4">Keep Daily backup for 14 days</p>
+                        <p class="my-0 ms-4">Keep Weekly backups for 8 weeks</p>
+                        <p class="my-0 ms-4">
+                            Keep Monthly backups for 6 months
+                        </p>
+                        <p class="my-0 ms-4">Keep Yearly backups for 2 years</p>
                     </div>
                 </div>
             </div>
