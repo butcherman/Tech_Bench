@@ -14,8 +14,6 @@ class BackupSettingsController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        // return config('backup.backup.password');
-
         return Inertia::render('Admin/Backups/Settings', [
             'backup-settings' => [
                 'nightly_backup' => config('backup.nightly_backup'),
@@ -30,10 +28,8 @@ class BackupSettingsController extends Controller
 
     public function set(BackupSettingsRequest $request)
     {
-        //
         $request->processBackupSettings();
 
-        // return 'working';
-        return back()->with('success', 'Backup Settings Saved');
+        return back()->with('success', __('admin.backups.settings-successful'));
     }
 }

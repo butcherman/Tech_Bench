@@ -37,8 +37,9 @@ class BackupSettingsRequest extends FormRequest
      */
     public function processBackupSettings(): void
     {
-        $this->saveSettingsArray($this->only(['nightly_backup', 'nightly_cleanup']), 'backup.');
-        $this->saveSettingsArray($this->only(['encryption', 'password']), 'backup.backup.');
+        $this->saveSettingsArray($this->only(['nightly_backup', 'nightly_cleanup']), 'backup');
+        $this->saveSettings('backup.backup.password', $this->password);
+        $this->saveSettings('backup.backup.encryption', $this->encryption ? 'default' : false);
         $this->saveSettings('backup.notifications.mail.to', $this->mail_to);
     }
 }
