@@ -34,6 +34,13 @@ export const registerNotificationChannel = (username: string) => {
 };
 
 /***************************************************
+ * Leave Notification Channel
+ ***************************************************/
+export const leaveNotificationChannel = () => {
+    echo.leaveAllChannels();
+}
+
+/***************************************************
  * Remove or Mark notifications a read
  ***************************************************/
 export const sendNotificationUpdate = (
