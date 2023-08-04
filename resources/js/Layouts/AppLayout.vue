@@ -50,9 +50,11 @@ router.on("navigate", () => {
 onMounted(() => {
     const page: pageData = usePage();
 
-    registerNotificationChannel("admin");
-    newNotificationCount.value = page.props.notifications.new;
-    notificationList.value = page.props.notifications.list;
+    if(page.props.app.user) {
+        registerNotificationChannel(page.props.app.user.username);
+        newNotificationCount.value = page.props.notifications.new;
+        notificationList.value = page.props.notifications.list;
+    }
 });
 
 onUnmounted(() => {
