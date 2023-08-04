@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Maintenance;
 
+use App\Exceptions\LogFileMissingException;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Traits\LogUtilitiesTrait;
@@ -22,9 +23,7 @@ class DownloadLogController extends Controller
 
         //  Validate log file exists
         if (! $this->validateLogFile($channel, $file)) {
-            Log::error($request->user()->username.' has requested an invalid Log File '.$channel.DIRECTORY_SEPARATOR.$file);
-            // TODO - Change this to throw an exception
-            abort(404, 'Cannot find the specified Log File');
+            throw new LogFileMissingException($file);
         }
 
         Log::info($request->user()->username.' is downloading Log File '.$channel.DIRECTORY_SEPARATOR.$file);

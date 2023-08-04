@@ -18,7 +18,6 @@ class ResetPasswordController extends Controller
     {
         //  If the user is trying to visit the page without a proper token or email, show 404
         if (! $request->has('token') || ! $request->has('email')) {
-            // TODO - should this trigger custom exception?
             abort(404);
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Maintenance;
 
+use App\Exceptions\LogFileMissingException;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Traits\LogUtilitiesTrait;
@@ -22,9 +23,7 @@ class ViewLogController extends Controller
 
         //  Validate log file exists
         if (! $this->validateLogFile($channel, $logFile)) {
-            Log::error($request->user()->username.' has requested an invalid Log File '.$channel.DIRECTORY_SEPARATOR.$logFile);
-            // TODO - Throw exception if log file missing
-            abort(404, 'Cannot find the specified Log File');
+            throw new LogFileMissingException($logFile);
         }
 
         $fileArr = $this->getFileToArray($channel.DIRECTORY_SEPARATOR.$logFile.'.log');

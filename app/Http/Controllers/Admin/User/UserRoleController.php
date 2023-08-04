@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Actions\GetAvailableUserRoles;
+use App\Exceptions\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserRoleRequest;
 use App\Models\UserRolePermissionTypes;
@@ -119,11 +120,9 @@ class UserRoleController extends Controller
         try {
             $user_role->delete();
         } catch (QueryException $e) {
-            // TODO - This should trigger the specific exception
-            if ($e->errorInfo[1] === 19 || $e->errorInfo[1] === 1451) {
-                Log::stack(['daily', 'user'])->error('Unable to delete Role '.$user_role->name.'.  It is currently in use');
 
-                return back()->withErrors(['in-use' => __('admin.user-roles.in-use')]);
+            if(in_array($e->errorInfo[1], [19, 1451])) {
+                throw new RecordInUseException(__('admin.user-roles.in-use'), 0, $e);
             }
         }
 

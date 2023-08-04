@@ -347,7 +347,7 @@ class UserRoleTest extends TestCase
         User::factory()->create(['role_id' => $testRole->role_id]);
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->delete(route('admin.user-roles.destroy', $testRole->role_id));
         $response->assertStatus(302);
-        $response->assertSessionHasErrors(['in-use' => __('admin.user-roles.in-use')]);
+        $response->assertSessionHasErrors(['query_error' => __('admin.user-roles.in-use')]);
     }
 
     public function test_destroy()
