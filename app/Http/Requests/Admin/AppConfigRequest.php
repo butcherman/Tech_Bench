@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Events\Admin\AppUrlChangedEvent;
 use App\Models\AppSettings;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Foundation\Http\FormRequest;
@@ -35,10 +36,14 @@ class AppConfigRequest extends FormRequest
      */
     public function processSettings()
     {
-        $this->updateEnvWsHost();
+        // $this->updateEnvWsHost();
+
+        if(config('app.url') !== $this->url) {
+            event(new AppUrlChangedEvent($this->url, config('app.url')));
+            $this->saveSettings('app.url', $this->url);
+        }
 
         $setArr = [
-            'app.url' => $this->url,
             'app.timezone' => $this->timezone,
             'filesystems.max_filesize' => $this->max_filesize,
             'services.azure.redirect' => $this->url.'/auth/callback',
