@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\BuildCacheData;
 use App\Actions\BuildPasswordRules;
 use App\Events\User\PasswordChangedEvent;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class InitializeUserController extends Controller
         return Inertia::render('User/Initialize', [
             'link' => $token->token,
             'user' => $token->User,
-            'password-rules' => Cache::get('passwordRules', (new BuildPasswordRules)->build()),
+            'password-rules' => Cache::get('passwordRules', BuildCacheData::buildPasswordRules()),
         ]);
     }
 
