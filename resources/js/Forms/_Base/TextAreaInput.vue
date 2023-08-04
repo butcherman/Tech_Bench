@@ -15,8 +15,9 @@
         <span
             v-if="errorMessage && (meta.dirty || meta.touched)"
             class="text-danger"
-            >{{ errorMessage }}</span
         >
+            {{ errorMessage }}
+        </span>
     </div>
 </template>
 

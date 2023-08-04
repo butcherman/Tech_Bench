@@ -13,7 +13,7 @@ class BackupHasFailed
      */
     public function handle(BackupHasFailedEvent $event): void
     {
-        Log::critical('Backup Process failed.', $event);
+        Log::critical('Backup Process failed.  Please see above Stack Trace for more information');
 
         event(new BroadcastBackupStatus('Backup Has Failed.  Please check logs for more information'));
     }
