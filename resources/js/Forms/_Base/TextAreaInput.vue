@@ -4,7 +4,7 @@
             {{ label }}:
         </label>
         <textarea
-            v-model="(value as string)"
+            v-bind="value"
             :rows="getRows"
             :id="id"
             :disabled="disabled"
