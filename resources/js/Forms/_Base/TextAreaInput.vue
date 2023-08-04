@@ -4,7 +4,7 @@
             {{ label }}:
         </label>
         <textarea
-            v-model="(value as string)"
+            v-bind="value"
             :rows="getRows"
             :id="id"
             :disabled="disabled"
@@ -15,8 +15,9 @@
         <span
             v-if="errorMessage && (meta.dirty || meta.touched)"
             class="text-danger"
-            >{{ errorMessage }}</span
         >
+            {{ errorMessage }}
+        </span>
     </div>
 </template>
 

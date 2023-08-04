@@ -65,14 +65,14 @@ No Backup Running
                                     >
                                         <fa-icon icon="trash-can" />
                                     </span>
-                                    <span
+                                    <a
+                                        :href="$route('admin.backups.download', backup).toString()"
                                         class="float-end pointer text-info mx-1"
                                         title="Download"
                                         v-tooltip
-                                        @click="downloadBackup(backup)"
                                     >
                                         <fa-icon icon="download" />
-                                    </span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -87,6 +87,7 @@ No Backup Running
 import AppLayout from "@/Layouts/AppLayout.vue";
 import axios from "axios";
 import { echo } from "@/State/LayoutState";
+import { router } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted } from "vue";
 import ok from "@/Modules/ok";
 import verify from "@/Modules/verify";
@@ -155,9 +156,7 @@ const fetchBackups = (): void => {
  * Download a selected backup
  */
 const downloadBackup = (backup: string): void => {
-    axios.get(route("admin.backups.download", backup)).catch((err) => {
-        ok(err.response.data.message);
-    });
+    router.get(route("admin.backups.download", backup));
 };
 
 /**
@@ -185,5 +184,6 @@ export default { layout: AppLayout };
 <style scoped lang="scss">
 #backup-output-box {
     height: 250px;
+    overflow-y: auto;
 }
 </style>

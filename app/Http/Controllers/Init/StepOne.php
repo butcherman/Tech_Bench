@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Init;
 
+use App\Actions\BuildCacheData;
 use App\Actions\BuildPasswordRules;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
@@ -23,7 +24,7 @@ class StepOne extends Controller
 
         return Inertia::render('Init/StepOne', [
             'stepId' => 1,
-            'rules' => Cache::get('passwordRules', (new BuildPasswordRules)->build()),
+            'rules' => Cache::get('passwordRules', BuildCacheData::buildPasswordRules()),
         ]);
     }
 }

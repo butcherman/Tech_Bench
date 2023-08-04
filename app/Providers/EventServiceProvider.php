@@ -64,6 +64,13 @@ class EventServiceProvider extends ServiceProvider
         /**
          * Administrative Events
          */
+        'App\Events\Admin\AppUrlChangedEvent' => [
+            'App\Listeners\Admin\UpdateEnvWsHost',
+        ],
+
+        /**
+         * Backup Administrative Events
+         */
         'Spatie\Backup\Events\BackupManifestWasCreated' => [
             'App\Listeners\Admin\Backup\AddVersionToBackup',
         ],
