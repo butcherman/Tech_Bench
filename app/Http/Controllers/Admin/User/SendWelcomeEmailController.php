@@ -8,11 +8,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * When a new user is created, a welcome email is generated
+ * This class will create a new initialization link and re-send the welcome email
+ */
 class SendWelcomeEmailController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request, User $user)
     {
         $this->authorize('manage', $user);

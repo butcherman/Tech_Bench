@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Admin\Maintenance\Backups;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+/**
+ * Backup Landing page for backup operations
+ */
 class BackupController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke()
     {
         $this->authorize('viewAny', AppSettings::class);

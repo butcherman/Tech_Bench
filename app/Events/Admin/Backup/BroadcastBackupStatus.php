@@ -2,15 +2,17 @@
 
 namespace App\Events\Admin\Backup;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
+/**
+ * When running a backup, events are generated
+ * This event will broadcast those events so that anyone monitoring can see
+ * the current status of the backup
+ */
 class BroadcastBackupStatus implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -18,7 +20,9 @@ class BroadcastBackupStatus implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $message, public bool $completed = false){}
+    public function __construct(public string $message, public bool $completed = false)
+    {
+    }
 
     /**
      * Get the channels the event should broadcast on.

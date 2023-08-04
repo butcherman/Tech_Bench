@@ -8,11 +8,11 @@ use App\Models\AppSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+/**
+ * First time setup - Step 2 - Basic App Settings
+ */
 class StepTwo extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request)
     {
         $this->authorize('viewAny', AppSettings::class);

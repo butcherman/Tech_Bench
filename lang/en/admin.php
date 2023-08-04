@@ -43,5 +43,5 @@ return [
 
     'backups' => [
         'settings-successful' => 'Backup Settings Saved',
-    ]
+    ],
 ];

@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Admin\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserPasswordRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * Manually reset an existing users password
+ */
 class ResetUserPasswordController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(UserPasswordRequest $request, User $user)
     {
         $user->forceFill([

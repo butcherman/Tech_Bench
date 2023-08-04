@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin\Maintenance\Backups;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BackupSettingsRequest;
 use App\Models\AppSettings;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+/**
+ * View and modify Automated Backup Settings
+ */
 class BackupSettingsController extends Controller
 {
     public function get()
@@ -21,7 +23,7 @@ class BackupSettingsController extends Controller
                 'encryption' => config('backup.backup.encryption') === 'default' ? true : false,
                 'password' => config('backup.backup.password') ? __('admin.fake-password') : null,
                 'mail_to' => config('backup.notifications.mail.to'),
-            ]
+            ],
 
         ]);
     }

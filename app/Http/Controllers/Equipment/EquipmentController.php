@@ -15,10 +15,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * Equipment types that can be assigned to customers and Tech Tips
+ */
 class EquipmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all Equipment types
      */
     public function index()
     {
@@ -30,7 +33,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Equipment Type
      */
     public function create()
     {
@@ -43,7 +46,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Equipment Type
      */
     public function store(EquipmentRequest $request)
     {
@@ -56,7 +59,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the Equipment Type along with all references to it
      */
     public function show(EquipmentType $equipment)
     {
@@ -68,7 +71,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the Equipment Type and its Data Types
      */
     public function edit(EquipmentType $equipment)
     {
@@ -82,7 +85,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Equipment Type and Data Types for that equipment
      */
     public function update(EquipmentRequest $request, EquipmentType $equipment)
     {
@@ -95,7 +98,8 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Equipiment Type
+     * Note:  Equipment cannot be deleted if it is in use
      */
     public function destroy(Request $request, EquipmentType $equipment)
     {

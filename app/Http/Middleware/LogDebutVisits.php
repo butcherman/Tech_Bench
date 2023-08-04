@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * When Debug Logging is turned on, all page visits will be logged along with
+ * all data passed
+ */
 class LogDebutVisits
 {
     //  These items should never be logged

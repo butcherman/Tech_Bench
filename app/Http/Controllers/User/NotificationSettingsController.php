@@ -5,21 +5,20 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserNotificationRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Update the users Email Notification settings
+ */
 class NotificationSettingsController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(UserNotificationRequest $request, User $user)
     {
         $reVerify = $request->doWeReVerify();
         $request->updateSettings();
         $user->update($request->only(['phone', 'receive_sms']));
 
-        // If the user has not verified their mobile number, they will have to do so
+        // If using 2FA and the user has not verified their mobile number, they will have to do so
         if ($reVerify) {
             app('redirect')->setIntendedUrl(route('user.settings.index'));
             $user->generateVerificationCode(true);

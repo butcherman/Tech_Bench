@@ -5,6 +5,10 @@ namespace App\Actions;
 use App\Models\UserRolePermissions;
 use App\Models\UserSetting;
 
+/**
+ * Build a list of user settings that the user can make adjustments to.
+ * Skip any that the user does not have permission to adjust
+ */
 class BuildUserSettings
 {
     public function build($user)

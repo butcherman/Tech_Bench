@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * If the users password has expired, force them to change their password
+ */
 class CheckPasswordExpire
 {
     //  Routes that are not affected by the password expiring

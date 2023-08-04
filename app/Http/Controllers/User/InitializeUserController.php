@@ -7,17 +7,16 @@ use App\Events\User\PasswordChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\InitializeUserRequest;
 use App\Models\UserInitialize;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * Show and save form for a user to finish setting up their own account
+ */
 class InitializeUserController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function get(UserInitialize $token)
     {
         return Inertia::render('User/Initialize', [
@@ -38,6 +37,7 @@ class InitializeUserController extends Controller
         Log::stack(['daily', 'auth', 'user'])->info('User '.$user->username.' has finished setting up their account');
         event(new PasswordChangedEvent($user));
 
+        // Remove the token to invalidate it
         $token->delete();
 
         return redirect(route('login'))->with('success', __('user.initialized'));

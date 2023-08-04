@@ -12,10 +12,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * Individual User Administration
+ */
 class UserAdminController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of active users
      */
     public function index()
     {
@@ -39,7 +42,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Save a newly created user and trigger welcome email
      */
     public function store(UserRequest $request)
     {
@@ -52,7 +55,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show a specific users basic information
      */
     public function show(User $user)
     {
@@ -66,7 +69,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Form to edit users basic information
      */
     public function edit(Request $request, User $user)
     {
@@ -79,7 +82,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the users basic information
      */
     public function update(UserRequest $request, User $user)
     {
@@ -91,7 +94,8 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Deactivate an active user.
+     * Note:  We do not delete users to keep their contributions in tact
      */
     public function destroy(Request $request, User $user)
     {

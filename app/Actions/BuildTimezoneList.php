@@ -4,6 +4,9 @@ namespace App\Actions;
 
 use Jackiedo\Timezonelist\Facades\Timezonelist;
 
+/**
+ * Build a full list of all available time zones
+ */
 class BuildTimezoneList
 {
     public function build()

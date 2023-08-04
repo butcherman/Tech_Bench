@@ -2,8 +2,13 @@
 
 namespace App\Actions;
 
+use App\Models\User;
 use App\Traits\AllowTrait;
 
+/**
+ * Build Administration Menu based on users permissions.
+ * Only show items that they have permission to adjust
+ */
 class BuildAdminMenu
 {
     use AllowTrait;
@@ -13,7 +18,7 @@ class BuildAdminMenu
     /**
      * Complete Action Process
      */
-    public function build($user)
+    public function build(User $user)
     {
         $this->user = $user;
 
@@ -28,7 +33,7 @@ class BuildAdminMenu
     }
 
     /**
-     * Get the navigation links for Users
+     * Get the administration links for Users
      */
     protected function buildUserMenu()
     {
@@ -74,7 +79,7 @@ class BuildAdminMenu
     }
 
     /**
-     * Build navigation menu for Equipment Administration
+     * Build administration menu for Equipment, Categories and Data Types
      */
     protected function buildEquipmentMenu()
     {
@@ -99,7 +104,7 @@ class BuildAdminMenu
     }
 
     /**
-     * Build navigation menu for Application Settings
+     * Build administration menu for Application Settings
      */
     protected function buildSettingsMenu()
     {
@@ -134,7 +139,7 @@ class BuildAdminMenu
     }
 
     /**
-     * Build navigation menu for Application Maintenance
+     * Build administration menu for Application Maintenance
      */
     protected function buildMaintenanceMenu()
     {

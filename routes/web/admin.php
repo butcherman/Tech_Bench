@@ -101,7 +101,7 @@ Route::middleware(['auth', 'user_security'])->prefix('administration')->name('ad
         Route::get('{channel}/{log}/download', DownloadLogController::class)->name('download');
     });
 
-    Route::prefix('backups')->name('backups.')->group(function() {
+    Route::prefix('backups')->name('backups.')->group(function () {
         Route::get('/', BackupController::class)->name('index')->breadcrumb('Backups', 'admin.index');
         Route::put('run', RunBackupController::class)->name('run');
         Route::get('fetch-backups', FetchBackupsController::class)->name('fetch');

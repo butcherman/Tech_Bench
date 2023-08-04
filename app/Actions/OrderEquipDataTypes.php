@@ -8,12 +8,12 @@ use App\Models\DataFieldType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Cycle through a list of data field types (for customers) to see what options have been added
+ * to an equipment type and what options have been removed
+ */
 class OrderEquipDataTypes
 {
-    /**
-     * Cycle through a list of data field types (for customers) to see what options have been added
-     * to an equipment type and what options have been removed
-     */
     public function build($dataList, $equipId)
     {
         $order = 0;

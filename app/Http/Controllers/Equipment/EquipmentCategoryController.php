@@ -11,10 +11,13 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * All Equipment is placed under a specific Equipment Category
+ */
 class EquipmentCategoryController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Category
      */
     public function store(EquipmentCategoryRequest $request)
     {
@@ -26,7 +29,7 @@ class EquipmentCategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Category name
      */
     public function update(EquipmentCategoryRequest $request, EquipmentCategory $equipment_category)
     {
@@ -38,7 +41,8 @@ class EquipmentCategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified category
+     * Note:  Category cannot be removed if it has equipment assigned to it
      */
     public function destroy(Request $request, EquipmentCategory $equipment_category)
     {

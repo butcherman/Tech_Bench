@@ -12,10 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * Data Types are specific information to be gathered for equipment that is assigned to a customer.
+ * For example, most equipment software has a version, or IP Address, or unique login information
+ */
 class DataTypesController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the existing Data Types
      */
     public function index()
     {
@@ -27,7 +31,7 @@ class DataTypesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new data type
      */
     public function create()
     {
@@ -37,7 +41,7 @@ class DataTypesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created data type
      */
     public function store(DataTypeRequest $request)
     {
@@ -49,7 +53,7 @@ class DataTypesController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified data type
      */
     public function edit(DataFieldType $data_type)
     {
@@ -61,7 +65,7 @@ class DataTypesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified data type
      */
     public function update(DataTypeRequest $request, DataFieldType $data_type)
     {
@@ -73,7 +77,8 @@ class DataTypesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified data type
+     * Note:  Data Type cannot be removed if it is in use
      */
     public function destroy(Request $request, DataFieldType $data_type)
     {

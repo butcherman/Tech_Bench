@@ -7,17 +7,17 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Triggered when a new user is created
+ */
 class UserCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
-
     /**
      * Create a new event instance.
      */
-    public function __construct(User $user)
+    public function __construct(public User $user)
     {
-        $this->user = $user;
     }
 }

@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Download an existing log file
+ */
 class DownloadLogController extends Controller
 {
     use LogUtilitiesTrait;
 
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request, string $channel, string $file)
     {
         $this->authorize('viewAny', AppSettings::class);
@@ -23,6 +23,7 @@ class DownloadLogController extends Controller
         //  Validate log file exists
         if (! $this->validateLogFile($channel, $file)) {
             Log::error($request->user()->username.' has requested an invalid Log File '.$channel.DIRECTORY_SEPARATOR.$file);
+            // TODO - Change this to throw an exception
             abort(404, 'Cannot find the specified Log File');
         }
 

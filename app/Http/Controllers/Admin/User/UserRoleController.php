@@ -12,10 +12,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * User Role/User Permission Groups Administration
+ */
 class UserRoleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of current Roles
      */
     public function index(Request $request)
     {
@@ -27,7 +30,7 @@ class UserRoleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Role
      */
     public function create()
     {
@@ -56,7 +59,7 @@ class UserRoleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Role
      */
     public function store(UserRoleRequest $request)
     {
@@ -68,7 +71,7 @@ class UserRoleController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified Role and its given permissions
      */
     public function show(UserRoles $user_role)
     {
@@ -81,7 +84,7 @@ class UserRoleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing a Roles Permissions
      */
     public function edit(UserRoles $user_role)
     {
@@ -94,7 +97,7 @@ class UserRoleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the roles Permissions
      */
     public function update(UserRoleRequest $request, UserRoles $user_role)
     {
@@ -106,7 +109,8 @@ class UserRoleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a Role
+     * Note:  A role cannot be removed if it is assigned to any number of users
      */
     public function destroy(Request $request, UserRoles $user_role)
     {
@@ -115,6 +119,7 @@ class UserRoleController extends Controller
         try {
             $user_role->delete();
         } catch (QueryException $e) {
+            // TODO - This should trigger the specific exception
             if ($e->errorInfo[1] === 19 || $e->errorInfo[1] === 1451) {
                 Log::stack(['daily', 'user'])->error('Unable to delete Role '.$user_role->name.'.  It is currently in use');
 

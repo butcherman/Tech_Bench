@@ -5,6 +5,9 @@ namespace App\Actions;
 use App\Traits\AllowTrait;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * Build the standard nav sidebar that all logged in users see
+ */
 class BuildNavbar
 {
     use AllowTrait;

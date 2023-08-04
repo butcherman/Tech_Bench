@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use PragmaRX\Version\Package\Version;
 
+/**
+ * About page shows current version information
+ */
 class AboutController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request)
     {
         $version = new Version;

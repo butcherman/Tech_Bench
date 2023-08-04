@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use PragmaRX\Version\Package\Version;
 
+/**
+ * Middleware to process all InertiaJS responses
+ */
 class HandleInertiaRequests extends Middleware
 {
     /**

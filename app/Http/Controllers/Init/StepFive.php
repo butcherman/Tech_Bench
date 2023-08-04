@@ -8,13 +8,13 @@ use App\Traits\AppSettingsTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+/**
+ * First time setup - Step 5 - Wrapping it all up
+ */
 class StepFive extends Controller
 {
     use AppSettingsTrait;
 
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request)
     {
         $this->authorize('viewAny', AppSettings::class);

@@ -7,13 +7,13 @@ use App\Models\AppSettings;
 use App\Traits\LogUtilitiesTrait;
 use Inertia\Inertia;
 
+/**
+ * List all log channels and log files that exist in the system
+ */
 class LogsController extends Controller
 {
     use LogUtilitiesTrait;
 
-    /**
-     * Display a listing of the resource.
-     */
     public function __invoke(string $channel = null)
     {
         $this->authorize('viewAny', AppSettings::class);

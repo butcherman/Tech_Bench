@@ -8,19 +8,19 @@ use App\Models\AppSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
 
+/**
+ * Delete an existing backup from filesystem
+ */
 class DeleteBackupController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request, string $backup)
     {
         $this->authorize('viewAny', AppSettings::class);
 
         // Verify Backup Exists
-        if(!Storage::disk('backups')->exists(config('backup.backup.name').DIRECTORY_SEPARATOR.$backup)) {
+        if (! Storage::disk('backups')->exists(config('backup.backup.name').DIRECTORY_SEPARATOR.$backup)) {
+            // If backup does not exist, throw 404 error
             throw new BackupMissingException($backup);
         }
 

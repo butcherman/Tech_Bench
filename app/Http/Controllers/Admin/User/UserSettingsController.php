@@ -10,6 +10,9 @@ use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * View and modify Global User Settings (login settings)
+ */
 class UserSettingsController extends Controller
 {
     use AppSettingsTrait;

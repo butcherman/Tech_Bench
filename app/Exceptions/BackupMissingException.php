@@ -5,6 +5,9 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Triggered when a requested backup file does not exist
+ */
 class BackupMissingException extends Exception
 {
     public function report()

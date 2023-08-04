@@ -8,6 +8,9 @@ use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * View and adjust Application Logo (company logo)
+ */
 class LogoController extends Controller
 {
     use AppSettingsTrait;

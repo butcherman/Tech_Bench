@@ -9,6 +9,9 @@ use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * View and modify the Global User Password policy
+ */
 class PasswordPolicyController extends Controller
 {
     use AppSettingsTrait;

@@ -8,6 +8,9 @@ use App\Models\AppSettings;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * View and adjust Email Settings
+ */
 class EmailSettingsController extends Controller
 {
     public function get()

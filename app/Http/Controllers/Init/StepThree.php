@@ -7,11 +7,11 @@ use App\Models\AppSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+/**
+ * First time setup - Step 3 - Email Settings
+ */
 class StepThree extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request)
     {
         $this->authorize('viewAny', AppSettings::class);

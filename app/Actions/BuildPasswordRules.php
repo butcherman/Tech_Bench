@@ -4,6 +4,9 @@ namespace App\Actions;
 
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Build an array of strings with all of the enabled password rules
+ */
 class BuildPasswordRules
 {
     //  TODO - Move this to BuildCache Class

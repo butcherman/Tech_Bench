@@ -9,6 +9,9 @@ use App\Models\AppSettings;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * View and adjust basic Application Settings
+ */
 class AppConfigController extends Controller
 {
     public function get()

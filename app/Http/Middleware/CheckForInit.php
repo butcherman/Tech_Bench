@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Check to see if this is the first time that the application is being
+ * accessed.  If so, start the setup Wizard
+ */
 class CheckForInit
 {
     //  Routes that are not affected by this middleware
@@ -28,9 +32,7 @@ class CheckForInit
     ];
 
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * Handle an incoming request
      */
     public function handle(Request $request, Closure $next): Response
     {

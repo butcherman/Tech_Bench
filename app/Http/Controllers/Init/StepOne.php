@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
+/**
+ * First time setup - Step 1 - Change Administrators Password
+ */
 class StepOne extends Controller
 {
     /**

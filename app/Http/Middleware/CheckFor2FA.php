@@ -6,6 +6,10 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * If Two Factor Authentication is enabled, verify that the user has properly
+ * authenticated via 2FA
+ */
 class CheckFor2FA
 {
     /**

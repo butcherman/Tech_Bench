@@ -7,11 +7,11 @@ use App\Rules\ContainsNumber;
 use App\Rules\ContainsSpecialChar;
 use App\Rules\ContainsUpperCase;
 
+/**
+ * Get the validation rules used to validate passwords
+ */
 trait PasswordValidationRules
 {
-    /**
-     * Get the validation rules used to validate passwords
-     */
     protected function passwordRules(): array
     {
         return [

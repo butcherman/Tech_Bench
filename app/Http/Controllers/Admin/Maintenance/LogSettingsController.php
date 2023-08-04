@@ -9,6 +9,9 @@ use App\Traits\LogUtilitiesTrait;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * View and modify the settings for capturing logs
+ */
 class LogSettingsController extends Controller
 {
     use LogUtilitiesTrait;
@@ -20,6 +23,7 @@ class LogSettingsController extends Controller
         $logChannels = $this->getLogChannels(true);
         $channelValues = [];
 
+        //  The emergency channel will not be listed in this instance
         foreach ($logChannels as $channel) {
             if ($channel['name'] !== 'Emergency') {
                 $channelValues[$channel['channel']] = ucfirst(config('logging.channels.'.strtolower($channel['channel']).'.level'));

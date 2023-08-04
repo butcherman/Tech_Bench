@@ -13,16 +13,20 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Spatie\SslCertificate\SslCertificate;
 
+/**
+ * SSL Certificate Operations
+ */
 class SecurityController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Landing page to show existing SSL Cert and offer options for replacing/removing
      */
     public function index()
     {
         $this->authorize('viewAny', AppSettings::class);
 
         try {
+            // Attempt to pull current SSL Cert and validate
             $cert = SslCertificate::createFromFile(Storage::disk('security')->path('server.crt'));
         } catch (Exception) {
             $cert = null;
@@ -39,6 +43,9 @@ class SecurityController extends Controller
         ]);
     }
 
+    /**
+     * Form to load a new SSL Certificate
+     */
     public function create()
     {
         $this->authorize('viewAny', AppSettings::class);
@@ -46,6 +53,9 @@ class SecurityController extends Controller
         return Inertia::render('Admin/Security/Create');
     }
 
+    /**
+     * Save new SSL Certificate
+     */
     public function store(SecurityRequest $request)
     {
         $valid = $request->processCertificate();
@@ -53,6 +63,9 @@ class SecurityController extends Controller
         return $valid;
     }
 
+    /**
+     * Form to generate a new CSR request for SSL Certificate
+     */
     public function edit()
     {
         $this->authorize('viewAny', AppSettings::class);
@@ -60,6 +73,9 @@ class SecurityController extends Controller
         return Inertia::render('Admin/Security/Edit');
     }
 
+    /**
+     * Use provided form to generate CSR request
+     */
     public function update(CsrRequest $request)
     {
         $csr = $request->processCsrRequest();
@@ -70,12 +86,14 @@ class SecurityController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete existing SSL Certification.
+     * New Self Signed Cert will be created on reboot if one is not uploaded
      */
     public function destroy(Request $request)
     {
         $this->authorize('viewAny', AppSettings::class);
 
+        // Remove both SSL Cert and Private Key
         Storage::disk('security')->delete('server.crt');
         Storage::disk('security')->delete('private/server.key');
 

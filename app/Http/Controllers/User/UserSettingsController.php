@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * View and modify a users individual settings
+ */
 class UserSettingsController extends Controller
 {
     public function get(Request $request)

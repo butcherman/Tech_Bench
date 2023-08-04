@@ -8,6 +8,8 @@ use App\Providers\RouteServiceProvider;
 use Laravel\Socialite\Facades\Socialite;
 
 /**
+ * If OATH is allowed, redirect user to O365 login page for Single Sign On
+ *
  * @codeCoverageIgnore
  */
 class SocialiteController extends Controller

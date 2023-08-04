@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Mailer\Exception\TransportException;
 
+/**
+ * Send a test email to the submitting user to test email settings
+ */
 class SendTestEmailController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request)
     {
         $this->authorize('viewAny', AppSettings::class);
@@ -27,6 +27,5 @@ class SendTestEmailController extends Controller
             return back()->withErrors(['email' => $e->getMessage()]);
         }
         // @codeCoverageIgnoreEnd
-
     }
 }

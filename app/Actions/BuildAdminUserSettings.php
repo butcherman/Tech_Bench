@@ -2,8 +2,14 @@
 
 namespace App\Actions;
 
+/**
+ * Build arrays that have the different settings for User Administration
+ */
 class BuildAdminUserSettings
 {
+    /**
+     * Two Factor Authentication Settings
+     */
     public function buildTwoFaSettings()
     {
         return [
@@ -14,6 +20,9 @@ class BuildAdminUserSettings
         ];
     }
 
+    /**
+     * Open Auth/Office 365 login settings
+     */
     public function buildOathSettings()
     {
         return [
@@ -27,6 +36,9 @@ class BuildAdminUserSettings
         ];
     }
 
+    /**
+     * 3rd Party Twilio settings for SMS
+     */
     public function buildTwilioSettings()
     {
         return [
