@@ -23,7 +23,7 @@ class FileUploadsFactory extends Factory
     public function definition()
     {
         return [
-            'disk' => 'default',
+            'disk' => 'local',
             'folder' => 'randomFolder',
             'file_name' => Str::random(5).'.jpg',
             'public' => $this->faker->boolean(),

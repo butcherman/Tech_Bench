@@ -28,17 +28,28 @@ const props = defineProps<{
     validationSchema: object;
     initialValues: { [key: string]: any };
     submitText?: string;
+    manualSubmit?: boolean;
 }>();
 
 const isSubmitting = ref<boolean>(false);
-const { handleSubmit, setFieldValue, setFieldError, values, resetForm, meta, handleReset } =
-    useForm({
-        validationSchema: props.validationSchema,
-        initialValues: props.initialValues,
-    });
+const {
+    handleSubmit,
+    setFieldValue,
+    setFieldError,
+    values,
+    resetForm,
+    meta,
+    handleReset,
+} = useForm({
+    validationSchema: props.validationSchema,
+    initialValues: props.initialValues,
+});
 
 const onSubmit = handleSubmit((form: any): void => {
-    isSubmitting.value = true;
+    if (!props.manualSubmit) {
+        isSubmitting.value = true;
+    }
+
     emit("submit", form);
 });
 
@@ -46,7 +57,11 @@ const getFieldValue = (field: string): any => {
     return values[field as keyof typeof values];
 };
 
-const isDirty = (computed(() => meta.value.dirty ));
+const isDirty = computed(() => meta.value.dirty);
+
+function triggerSubmit(): void {
+    isSubmitting.value = true;
+}
 
 function endSubmit(): void {
     isSubmitting.value = false;
@@ -58,8 +73,10 @@ defineExpose({
     setFieldValue,
     setFieldError,
     onSubmit,
+    triggerSubmit,
     resetForm,
     handleReset,
     isDirty,
+    isSubmitting,
 });
 </script>

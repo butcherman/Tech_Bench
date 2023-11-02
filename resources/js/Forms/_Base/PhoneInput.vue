@@ -13,6 +13,7 @@
             </span>
         </label>
         <div class="input-group">
+            <slot name="start-group-text" />
             <input
                 v-model="formattedValue"
                 :id="id"
@@ -24,7 +25,7 @@
                 v-focus="focus"
                 @change="$emit('change', value)"
             />
-            <slot name="group-text" />
+            <slot name="end-group-text" />
         </div>
         <span
             v-if="errorMessage && (meta.dirty || meta.touched)"
@@ -60,18 +61,18 @@ const formattedValue = ref<string | null>(null);
  * yet keep the value as only the 10 digit number
  */
 watch(formattedValue, (newVal) => {
-    let cleaned = (`${newVal}`).replace(/\D/g, '');
+    let cleaned = `${newVal}`.replace(/\D/g, "");
     let parts = cleaned.match(/^(1|)?([2-9]{1}\d{2})(\d{3})(\d{4})$/);
 
-    if(parts) {
+    if (parts) {
         formattedValue.value = `+1 (${parts[2]}) ${parts[3]}-${parts[4]}`;
     }
 
-    setValue(cleaned.replace(/^1/, ''));
+    setValue(cleaned.replace(/^1/, ""));
 });
 
 const isValid = computed<boolean>(() => {
-    return meta.valid && meta.validated && !meta.pending;
+    return meta.valid && meta.validated && !meta.pending && meta.dirty;
 });
 
 const isInvalid = computed<boolean>(() => {
@@ -86,7 +87,7 @@ const nameRef = toRef(props, "name");
 const { errorMessage, value, meta, setValue } = useField(nameRef);
 
 onMounted(() => {
-    if(typeof value.value === 'string') {
+    if (typeof value.value === "string") {
         formattedValue.value = value.value;
     }
 });

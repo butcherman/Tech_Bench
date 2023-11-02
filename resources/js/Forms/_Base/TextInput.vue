@@ -31,9 +31,8 @@
         <span
             v-if="errorMessage && (meta.dirty || meta.touched)"
             class="text-danger"
-        >
-            {{ upperFirst(errorMessage) }}
-        </span>
+            v-html="upperFirst(errorMessage)"
+        />
         <datalist :id="`datalist-${id}`">
             <template v-for="item in datalist" :key="item">
                 <option :value="item" />

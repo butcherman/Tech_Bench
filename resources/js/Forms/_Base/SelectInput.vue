@@ -9,13 +9,16 @@
             class="form-select"
             :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
         >
-            <template v-for="(option, key) in list" :key="key">
+            <template v-for="(option, key) in selectList" :key="key">
                 <template v-if="typeof option === 'string'">
                     <option :value="option">{{ option }}</option>
                 </template>
                 <template v-else-if="Array.isArray(option)">
                     <optgroup :label="key.toString()" :key="key">
-                        <template v-for="item in option" :key="item[valueField]">
+                        <template
+                            v-for="item in option"
+                            :key="item[valueField]"
+                        >
                             <option :value="item[valueField]">
                                 {{ item[textField] }}
                             </option>
@@ -46,10 +49,28 @@ const props = defineProps<{
     id: string;
     name: string;
     label?: string;
-    list: any[] | any;
+    list: any[];
     textField?: string;
     valueField?: string;
+    allowNull?: boolean;
 }>();
+
+const selectList = computed(() => {
+    let newList = [...props.list];
+
+    if (props.allowNull) {
+        if (props.textField && props.valueField) {
+            newList.unshift({
+                [props.textField]: null,
+                [props.valueField]: null,
+            });
+        } else {
+            newList.unshift(null);
+        }
+    }
+
+    return newList;
+});
 
 const valueField = computed(() =>
     props.valueField ? props.valueField : "value"

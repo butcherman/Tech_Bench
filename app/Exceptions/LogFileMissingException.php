@@ -11,6 +11,7 @@ class LogFileMissingException extends Exception
     {
 
     }
+
     public function report()
     {
         Log::alert('Selected log file '.$this->logFile.' is missing from filesystem');

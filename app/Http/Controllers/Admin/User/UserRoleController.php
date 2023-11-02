@@ -121,7 +121,7 @@ class UserRoleController extends Controller
             $user_role->delete();
         } catch (QueryException $e) {
 
-            if(in_array($e->errorInfo[1], [19, 1451])) {
+            if (in_array($e->errorInfo[1], [19, 1451])) {
                 throw new RecordInUseException(__('admin.user-roles.in-use'), 0, $e);
             }
         }

@@ -17,6 +17,8 @@
                             class="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
+                            title="Close"
+                            v-tooltip
                         />
                     </div>
                     <div class="modal-body">

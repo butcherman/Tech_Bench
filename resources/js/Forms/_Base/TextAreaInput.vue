@@ -1,10 +1,9 @@
 <template>
     <div class="mb-3">
-        <label :for="id" class="form-label w-100">
-            {{ label }}:
-        </label>
+        <label :for="id" class="form-label w-100"> {{ label }}: </label>
         <textarea
-            v-bind="value"
+            v-model="value"
+            :name="name"
             :rows="getRows"
             :id="id"
             :disabled="disabled"
@@ -52,9 +51,3 @@ const getRows = computed<number>(() => {
 const nameRef = toRef(props, "name");
 const { errorMessage, value, meta } = useField(nameRef);
 </script>
-
-<style>
-label {
-    font-weight: bold;
-}
-</style>

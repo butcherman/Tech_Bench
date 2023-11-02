@@ -12,6 +12,8 @@ use Illuminate\Queue\SerializesModels;
  * When running a backup, events are generated
  * This event will broadcast those events so that anyone monitoring can see
  * the current status of the backup
+ *
+ * @codeCoverageIgnore
  */
 class BroadcastBackupStatus implements ShouldBroadcast
 {

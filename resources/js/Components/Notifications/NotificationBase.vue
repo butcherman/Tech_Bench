@@ -31,7 +31,9 @@ const asyncComponent = computed(() => {
     if (displayNotification.value) {
         return defineAsyncComponent({
             loader: () =>
-                import(`./${displayNotification.value?.data.component}.vue`),
+                import(
+                    /* @vite-ignore */ `./${displayNotification.value?.data.component}.vue`
+                ),
             loadingComponent: AtomLoader,
             delay: 200,
             errorComponent: NotificationLoadFailed,
@@ -45,7 +47,6 @@ const asyncComponent = computed(() => {
 watch(displayNotification, (newDisplayNotification) => {
     if (newDisplayNotification) {
         notificationModal.value?.show();
-        console.log(newDisplayNotification);
 
         sendNotificationUpdate("mark", [newDisplayNotification.id]);
     }

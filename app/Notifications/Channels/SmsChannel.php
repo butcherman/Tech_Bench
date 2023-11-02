@@ -11,6 +11,8 @@ class SmsChannel
 {
     /**
      * Sene a SMS message via Twilio SMS
+     *
+     * @codeCoverageIgnore
      */
     public function send(object $notifiable, Notification $notification): void
     {

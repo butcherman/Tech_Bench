@@ -36,7 +36,7 @@ class AppConfigRequest extends FormRequest
      */
     public function processSettings()
     {
-        if(config('app.url') !== $this->url) {
+        if (config('app.url') !== $this->url) {
             event(new AppUrlChangedEvent($this->url, config('app.url')));
             $this->saveSettings('app.url', $this->url);
         }

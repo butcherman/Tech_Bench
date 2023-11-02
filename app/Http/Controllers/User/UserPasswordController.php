@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Actions\BuildCacheData;
-use App\Actions\BuildPasswordRules;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

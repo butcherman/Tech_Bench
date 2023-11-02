@@ -20,7 +20,7 @@ class CallViteBuild implements ShouldQueue
      */
     public function handle(): void
     {
-        if(App::environment('production')) {
+        if (App::environment('production')) {
             Log::notice('Rebuilding Vite Dependencies');
             Process::run('npm build');
         }

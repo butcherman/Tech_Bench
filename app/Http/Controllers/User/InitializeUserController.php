@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Actions\BuildCacheData;
-use App\Actions\BuildPasswordRules;
 use App\Events\User\PasswordChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\InitializeUserRequest;
