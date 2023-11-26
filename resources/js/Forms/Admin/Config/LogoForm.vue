@@ -1,6 +1,6 @@
 <template>
     <VueForm
-        ref="logoForm"
+        ref="logoForm"        
         :initial-values="initValues"
         :validation-schema="schema"
         submit-text="Upload Logo"

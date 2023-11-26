@@ -2,7 +2,7 @@
     <nav class="navbar top-navbar fixed-top">
         <div class="navbar-logo-wrapper d-flex">
             <Link :href="$route('dashboard')" class="navbar-logo">
-                <img :src="app.logo" class="mr-2" :alt="app.name" />
+                <img :src="app.logo" class="mx-2" :alt="app.name" />
             </Link>
         </div>
         <div class="navbar-brand d-none d-md-flex">

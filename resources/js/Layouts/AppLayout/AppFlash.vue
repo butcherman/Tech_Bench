@@ -1,11 +1,11 @@
 <template>
     <Teleport to="body">
-        <div class="toast-container translate-middle-x fade show p-3">
+        <div class="toast-container translate-middle-x fade show p-3 w-75">
             <TransitionGroup @enter="onEnter" @leave="onLeave">
                 <div
                     v-for="alert in flashAlerts"
                     :key="alert.id"
-                    class="toast align-items-center"
+                    class="toast align-items-center w-100"
                 >
                     <div
                         class="toast-body text-center"
@@ -17,16 +17,24 @@
                             'text-bg-primary': alert.type === 'status',
                         }"
                     >
-                        <fa-icon
-                            :icon="getAlertIcon(alert.type)"
-                            class="float-start"
-                        />
-                        {{ alert.message }}
-                        <button
-                            type="button"
-                            class="btn-close float-end"
-                            @click="removeAlert(alert.id)"
-                        />
+                        <div class="row align-items-center m-0 p-0">
+                            <div class="col-1 pe-4">
+                                <fa-icon
+                                    :icon="getAlertIcon(alert.type)"
+                                    class="little-larger-text"
+                                />
+                            </div>
+                            <div class="col">
+                                {{ alert.message }}
+                            </div>
+                            <div class="col-1 ps-4">
+                                <button
+                                    type="button"
+                                    class="btn-close float-end"
+                                    @click="removeAlert(alert.id)"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </TransitionGroup>
@@ -96,6 +104,13 @@ const onLeave = (el: Element) => {
         display: block;
         .badge {
             font-size: 1em;
+        }
+
+        .toast-body {
+            border-left: 10px solid #0b590b;
+            .little-larger-text {
+                font-size: 1.8rem;
+            }
         }
     }
 }

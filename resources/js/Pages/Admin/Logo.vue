@@ -18,9 +18,12 @@
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column">
                         <div class="card-title">New Logo</div>
-                        <LogoForm @completed="refresh" />
+                        <LogoForm 
+                            class="d-flex flex-column flex-grow-1" 
+                            @completed="refresh"  
+                        />
                     </div>
                 </div>
             </div>

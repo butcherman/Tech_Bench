@@ -12,7 +12,7 @@
                     <div class="card-body text-center">
                         <button
                             class="btn btn-dark w-75 m-2"
-                            @click="pushAlert('success', 'this is an alert')"
+                            @click="pushAlert('success', 'this is a lround for a bit')"
                         >
                             New Flash Alert
                         </button>

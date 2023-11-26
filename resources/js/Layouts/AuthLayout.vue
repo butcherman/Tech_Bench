@@ -8,7 +8,7 @@
                         <div
                             class="row justify-content-center align-items-center"
                         >
-                            <div class="col col-12 col-md-6">
+                            <div class="col col-12 col-md-6 text-align-center">
                                 <img
                                     :src="app.logo"
                                     alt="Company Logo"
