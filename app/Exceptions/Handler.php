@@ -20,7 +20,7 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    protected $bypassRoutes = [
+    protected $overrideRoutes = [
         'bypass-test',
     ];
 
@@ -40,7 +40,7 @@ class Handler extends ExceptionHandler
 
         if ($response->status() === 404
             && in_array(Route::current()
-            && Route::current()->getName(), $this->bypassRoutes)
+            && Route::current()->getName(), $this->overrideRoutes)
         ) {
             return $response;
         }
