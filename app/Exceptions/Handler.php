@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Throwable;
 
@@ -19,7 +20,9 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    protected $bypassRoutes = [];
+    protected $bypassRoutes = [
+        'bypass-test',
+    ];
 
     /**
      * Register the exception handling callbacks for the application.
@@ -34,6 +37,13 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         $response = parent::render($request, $e);
+
+        if ($response->status() === 404
+            && in_array(Route::current()
+            && Route::current()->getName(), $this->bypassRoutes)
+        ) {
+            return $response;
+        }
 
         if (! app()->environment([/**'local', */ 'testing'])
             && in_array($response->status(), [500, 503, 404, 403, 429])
