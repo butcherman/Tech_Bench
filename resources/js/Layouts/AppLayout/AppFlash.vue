@@ -1,6 +1,6 @@
 <template>
     <Teleport to="body">
-        <div class="toast-container translate-middle-x fade show p-3 w-75">
+        <div class="toast-container translate-middle-x fade show p-3">
             <TransitionGroup @enter="onEnter" @leave="onLeave">
                 <div
                     v-for="alert in flashAlerts"
@@ -92,10 +92,17 @@ const onLeave = (el: Element) => {
 </script>
 
 <style scoped lang="scss">
+@import "../../../scss/Layouts/appLayout.scss";
 .toast-container {
     position: fixed;
     top: 10px;
     left: 50%;
+    @media (min-width: $brk-lg) {
+        width: 50%;
+    }
+    @media (max-width: $brk-lg) {
+        width: 100%;
+    }
     .toast {
         border-radius: 10px;
         overflow: hidden;
