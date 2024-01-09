@@ -26,7 +26,7 @@ class CreateAppSettingsTable extends Migration
             'key' => 'app.first_time_setup',
             'value' => true,
             'created_at' => NOW(),
-            'updated_at' => NOW()
+            'updated_at' => NOW(),
         ]];
 
         DB::table('app_settings')->insert($firstTimeInit);

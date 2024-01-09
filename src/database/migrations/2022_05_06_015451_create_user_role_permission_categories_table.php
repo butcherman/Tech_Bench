@@ -33,19 +33,19 @@ class CreateUserRolePermissionCategoriesTable extends Migration
                 'role_cat_id' => 1,
                 'category' => 'Administration',
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'role_cat_id' => 2,
                 'category' => 'Customers',
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'role_cat_id' => 3,
                 'category' => 'Tech Tips',
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
         ];
         DB::table('user_role_permission_categories')->insert($defaultCategories);

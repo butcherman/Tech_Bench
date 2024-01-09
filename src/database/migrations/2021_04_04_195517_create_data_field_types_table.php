@@ -28,63 +28,63 @@ class CreateDataFieldTypesTable extends Migration
                 'name' => 'IP Address',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 2,
                 'name' => 'Version',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 3,
                 'name' => 'Login Username',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 4,
                 'name' => 'Login Password',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 5,
                 'name' => 'Remote Access',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 6,
                 'name' => 'Subnet Mask',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 7,
                 'name' => 'Default Gateway',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 8,
                 'name' => 'Primary DNS',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 9,
                 'name' => 'Secondary DNS',
                 'hidden' => false,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
         ];
         DB::table('data_field_types')->insert($defaultData);

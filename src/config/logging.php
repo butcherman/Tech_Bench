@@ -2,120 +2,81 @@
 
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
-use Monolog\Processor\PsrLogMessageProcessor;
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Log Channel
-    |--------------------------------------------------------------------------
-    |
-    | This option defines the default log channel that gets used when writing
-    | messages to the logs. The name specified in this option should match
-    | one of the channels defined in the "channels" configuration array.
-    |
-    */
-
-    'default' => env('LOG_CHANNEL', 'stack'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Deprecations Log Channel
-    |--------------------------------------------------------------------------
-    |
-    | This option controls the log channel that should be used to log warnings
-    | regarding deprecated PHP and library features. This allows you to get
-    | your application ready for upcoming major versions of dependencies.
-    |
-    */
-
-    'deprecations' => [
-        'channel' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
-        'trace' => false,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Log Channels
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log channels for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Drivers: "single", "daily", "slack", "syslog",
-    |                    "errorlog", "monolog",
-    |                    "custom", "stack"
-    |
-    */
-
+    'default' => env('LOG_CHANNEL', 'daily'),
+    'days' => 14,
+    'log_level' => env('LOG_LEVEL', 'info'),
     'channels' => [
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
-
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
+            'path' => storage_path('logs/Application/TechBench.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'permission' => 0777,
         ],
-
+        //  Default logging channel
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'path' => storage_path('logs/Application/TechBench.log'),
+            'level' => env('LOG_LEVEL', 'info'),
             'days' => 14,
-            'replace_placeholders' => true,
+            'permission' => 0777,
         ],
-
-        'slack' => [
-            'driver' => 'slack',
-            'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'Laravel Log',
-            'emoji' => ':boom:',
-            'level' => env('LOG_LEVEL', 'critical'),
-            'replace_placeholders' => true,
+        //  All User related logging
+        'user' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/Users/UserLog.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
+            'permission' => 0777,
         ],
-
-        'papertrail' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
-            'handler_with' => [
-                'host' => env('PAPERTRAIL_URL'),
-                'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
-            ],
-            'processors' => [PsrLogMessageProcessor::class],
+        //  All authentication - login/logout logging
+        'auth' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/Auth/AuthLog.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
+            'permission' => 0777,
+        ],
+        //  All customer specific logging
+        'cust' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/Cust/CustLog.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
+            'permission' => 0777,
+        ],
+        //  All Tech Tip specific logging
+        'tip' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/TechTip/TechTipLog.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => 14,
+            'permission' => 0777,
         ],
 
         'stderr' => [
             'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
             'formatter' => env('LOG_STDERR_FORMATTER'),
             'with' => [
                 'stream' => 'php://stderr',
             ],
-            'processors' => [PsrLogMessageProcessor::class],
         ],
 
         'syslog' => [
             'driver' => 'syslog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'facility' => LOG_USER,
-            'replace_placeholders' => true,
+            'level' => env('LOG_LEVEL', 'info'),
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
+            'level' => env('LOG_LEVEL', 'info'),
         ],
 
         'null' => [
@@ -124,7 +85,7 @@ return [
         ],
 
         'emergency' => [
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/Emergency/EmergencyLog.log'),
         ],
     ],
 

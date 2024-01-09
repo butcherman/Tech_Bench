@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\TechTip;
 use App\Models\Equipment;
+use App\Models\TechTip;
 use App\Models\TechTipEquipment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

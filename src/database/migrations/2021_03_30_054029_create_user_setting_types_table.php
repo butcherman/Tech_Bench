@@ -27,7 +27,7 @@ class CreateUserSettingTypesTable extends Migration
                 'setting_type_id' => 1,
                 'name' => 'Receive Email Notifications',
                 'updated_at' => NOW(),
-                'created_at' => NOW()
+                'created_at' => NOW(),
             ],
         ];
 

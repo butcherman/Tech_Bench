@@ -26,19 +26,19 @@ class CreateTechTipTypesTable extends Migration
                 'tip_type_id' => 1,
                 'description' => 'Tech Tip',
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'tip_type_id' => 2,
                 'description' => 'Documentation',
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'tip_type_id' => 3,
                 'description' => 'Software',
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
         ];
 

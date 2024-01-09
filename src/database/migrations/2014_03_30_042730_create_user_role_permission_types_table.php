@@ -29,36 +29,35 @@ class CreateUserRolePermissionTypesTable extends Migration
                 'description' => 'App Settings',
                 'is_admin_link' => 1,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 2,
-                'description' =>
-                'Manage Users',
+                'description' => 'Manage Users',
                 'is_admin_link' => 1,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 3,
                 'description' => 'Manage Permissions',
                 'is_admin_link' => 1,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 4,
                 'description' => 'Run Reports',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 5,
                 'description' => 'Manage Equipment',
                 'is_admin_link' => 1,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             //  Customer Permissions
             [
@@ -66,35 +65,35 @@ class CreateUserRolePermissionTypesTable extends Migration
                 'description' => 'Manage Customers',
                 'is_admin_link' => 1,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 7,
                 'description' => 'Add Customer',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 8,
                 'description' => 'Update Customer',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 9,
                 'description' => 'Deactivate Customer',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 10,
                 'description' => 'Delete Customer',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             //  Customer Equipment Permissions
             [
@@ -102,21 +101,21 @@ class CreateUserRolePermissionTypesTable extends Migration
                 'description' => 'Add Customer Equipment',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 12,
                 'description' => 'Edit Customer Equipment',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 13,
                 'description' => 'Delete Customer Equipment',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             //  Customer Contact Permissions
             [
@@ -124,21 +123,21 @@ class CreateUserRolePermissionTypesTable extends Migration
                 'description' => 'Add Customer Contact',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 15,
                 'description' => 'Edit Customer Contact',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 16,
                 'description' => 'Delete Customer Contact',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             //  Customer Notes Permissions
             [
@@ -146,21 +145,21 @@ class CreateUserRolePermissionTypesTable extends Migration
                 'description' => 'Add Customer Note',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 18,
                 'description' => 'Edit Customer Note',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 19,
                 'description' => 'Delete Customer Note',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             //  Customer Notes Permissions
             [
@@ -168,21 +167,21 @@ class CreateUserRolePermissionTypesTable extends Migration
                 'description' => 'Add Customer File',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 21,
                 'description' => 'Edit Customer File',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 22,
                 'description' => 'Delete Customer File',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             //  Tech Tips Permissions
             [
@@ -190,35 +189,35 @@ class CreateUserRolePermissionTypesTable extends Migration
                 'description' => 'Add Tech Tip',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 24,
                 'description' => 'Edit Tech Tip',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 25,
                 'description' => 'Delete Tech Tip',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 26,
                 'description' => 'Manage Tech Tips',
                 'is_admin_link' => 1,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 27,
                 'description' => 'Comment on Tech Tip',
                 'is_admin_link' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
         ];
 

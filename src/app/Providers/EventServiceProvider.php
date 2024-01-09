@@ -10,14 +10,39 @@ use Illuminate\Support\Facades\Event;
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * The event to listener mappings for the application.
-     *
-     * @var array<class-string, array<int, class-string>>
+     * The event to listener mappings for the application
      */
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        /**
+         * Authentication Events
+         */
+        'Illuminate\Auth\Events\Login' => [
+            'App\Listeners\Auth\LogSuccessfulLogin',
+        ],
+        'Illuminate\Auth\Events\Failed' => [
+            'App\Listeners\Auth\LogFailedLoginAttempt',
+        ],
+        'Illuminate\Auth\Events\Logout' => [
+            'App\Listeners\Auth\LogSuccessfulLogout',
+        ],
+        'Illuminate\Auth\Events\Lockout' => [
+            'App\Listeners\Auth\LogLockout',
+        ],
+        'Illuminate\Auth\Events\PasswordReset' => [
+            'App\Listeners\Auth\LogPasswordReset',
+        ],
+
+        /**
+         * Office 365 Authentication Events
+         */
+        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+            \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
+        ],
+
     ];
 
     /**

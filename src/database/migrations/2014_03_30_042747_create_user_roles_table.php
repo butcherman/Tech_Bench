@@ -30,7 +30,7 @@ class CreateUserRolesTable extends Migration
                 'description' => 'All Access Administrator',
                 'allow_edit' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'role_id' => 2,
@@ -38,7 +38,7 @@ class CreateUserRolesTable extends Migration
                 'description' => 'System Administrator',
                 'allow_edit' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'role_id' => 3,
@@ -46,7 +46,7 @@ class CreateUserRolesTable extends Migration
                 'description' => 'User who can run reports',
                 'allow_edit' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
             [
                 'role_id' => 4,
@@ -54,7 +54,7 @@ class CreateUserRolesTable extends Migration
                 'description' => 'Standard User',
                 'allow_edit' => 0,
                 'created_at' => NOW(),
-                'updated_at' => NOW()
+                'updated_at' => NOW(),
             ],
         ];
         DB::table('user_roles')->insert($defaultData);
