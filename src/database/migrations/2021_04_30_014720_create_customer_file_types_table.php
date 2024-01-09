@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateCustomerFileTypesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -20,19 +18,40 @@ class CreateCustomerFileTypesTable extends Migration
             $table->timestamps();
         });
 
+        /**
+         * Default Data
+         */
         $defaultData = [
-            ['file_type_id' => 1, 'description' => 'Equipment Backup',    'created_at' => NOW(), 'updated_at' => NOW()],
-            ['file_type_id' => 2, 'description' => 'License',             'created_at' => NOW(), 'updated_at' => NOW()],
-            ['file_type_id' => 3, 'description' => 'Site Map',            'created_at' => NOW(), 'updated_at' => NOW()],
-            ['file_type_id' => 4, 'description' => 'Other',               'created_at' => NOW(), 'updated_at' => NOW()],
+            [
+                'file_type_id' => 1,
+                'description' => 'Equipment Backup',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'file_type_id' => 2,
+                'description' => 'License',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'file_type_id' => 3,
+                'description' => 'Site Map',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'file_type_id' => 4,
+                'description' => 'Other',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
         ];
         DB::table('customer_file_types')->insert($defaultData);
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

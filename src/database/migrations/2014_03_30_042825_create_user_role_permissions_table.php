@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUserRolePermissionsTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -20,11 +18,20 @@ class CreateUserRolePermissionsTable extends Migration
             $table->unsignedBigInteger('perm_type_id');
             $table->boolean('allow')->default(0);
             $table->timestamps();
-            $table->foreign('role_id')->references('role_id')->on('user_roles')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('perm_type_id')->references('perm_type_id')->on('user_role_permission_types')->onUpdate('cascade');
+            $table->foreign('role_id')
+                ->references('role_id')
+                ->on('user_roles')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('perm_type_id')
+                ->references('perm_type_id')
+                ->on('user_role_permission_types')
+                ->onUpdate('cascade');
         });
 
-        //  Setup the default role permissions
+        /**
+         * Setup the default role permissions
+         */
         $defaults = [
             1 => [
                 1 => 1,
@@ -158,14 +165,13 @@ class CreateUserRolePermissionsTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {
         Schema::table('user_role_permissions', function (Blueprint $table) {
-            $table->dropForeign(['role_id', 'perm_type_id']);
+            $table->dropForeign(['role_id']);
+            $table->dropForeign(['perm_type_id']);
         });
         Schema::dropIfExists('user_role_permissions');
     }

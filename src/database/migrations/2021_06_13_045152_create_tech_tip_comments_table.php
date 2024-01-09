@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateTechTipCommentsTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -20,15 +18,20 @@ class CreateTechTipCommentsTable extends Migration
             $table->longText('comment');
             $table->boolean('flagged')->default(false);
             $table->timestamps();
-            $table->foreign('tip_id')->references('tip_id')->on('tech_tips')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade');
+            $table->foreign('tip_id')
+                ->references('tip_id')
+                ->on('tech_tips')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('user_id')
+                ->on('users')
+                ->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

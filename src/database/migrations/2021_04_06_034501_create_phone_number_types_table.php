@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 class CreatePhoneNumberTypesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -21,18 +19,37 @@ class CreatePhoneNumberTypesTable extends Migration
             $table->timestamps();
         });
 
+        /**
+         * Default Data
+         */
         $defaultData = [
-            ['phone_type_id' => 1, 'description' => 'Home',   'icon_class' => 'fas fa-home',       'created_at' => NOW(), 'updated_at' => NOW()],
-            ['phone_type_id' => 2, 'description' => 'Work',   'icon_class' => 'fas fa-briefcase',  'created_at' => NOW(), 'updated_at' => NOW()],
-            ['phone_type_id' => 3, 'description' => 'Mobile', 'icon_class' => 'fas fa-mobile-alt', 'created_at' => NOW(), 'updated_at' => NOW()],
+            [
+                'phone_type_id' => 1,
+                'description' => 'Home',
+                'icon_class' => 'fa-home',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'phone_type_id' => 2,
+                'description' => 'Work',
+                'icon_class' => 'fa-briefcase',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'phone_type_id' => 3,
+                'description' => 'Mobile',
+                'icon_class' => 'fa-mobile-alt',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
         ];
         DB::table('phone_number_types')->insert($defaultData);
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

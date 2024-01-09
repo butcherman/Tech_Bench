@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateDataFieldsTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -19,20 +17,27 @@ class CreateDataFieldsTable extends Migration
             $table->unsignedBigInteger('type_id');
             $table->integer('order');
             $table->timestamps();
-            $table->foreign('equip_id')->references('equip_id')->on('equipment_types')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('type_id')->references('type_id')->on('data_field_types')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('equip_id')
+                ->references('equip_id')
+                ->on('equipment_types')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('type_id')
+                ->references('type_id')
+                ->on('data_field_types')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {
         Schema::table('data_fields', function (Blueprint $table) {
-            $table->dropForeign(['equip_id', 'type_id']);
+            $table->dropForeign(['equip_id']);
+            $table->dropForeign(['type_id']);
         });
         Schema::dropIfExists('data_fields');
     }

@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateEquipmentCategoriesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -21,9 +19,7 @@ class CreateEquipmentCategoriesTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

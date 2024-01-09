@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateTechTipEquipmentTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -18,15 +16,20 @@ class CreateTechTipEquipmentTable extends Migration
             $table->unsignedBigInteger('tip_id');
             $table->unsignedBigInteger('equip_id');
             $table->timestamps();
-            $table->foreign('tip_id')->references('tip_id')->on('tech_tips')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('equip_id')->references('equip_id')->on('equipment_types')->onUpdate('cascade');
+            $table->foreign('tip_id')
+                ->references('tip_id')
+                ->on('tech_tips')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('equip_id')
+                ->references('equip_id')
+                ->on('equipment_types')
+                ->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

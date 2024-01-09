@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateAppSettingsTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -21,14 +19,21 @@ class CreateAppSettingsTable extends Migration
             $table->timestamps();
         });
 
-        $firstTimeInit = [['key' => 'app.first_time_setup', 'value' => true, 'created_at' => NOW(), 'updated_at' => NOW()]];
+        /**
+         * Default Settings
+         */
+        $firstTimeInit = [[
+            'key' => 'app.first_time_setup',
+            'value' => true,
+            'created_at' => NOW(),
+            'updated_at' => NOW()
+        ]];
+
         DB::table('app_settings')->insert($firstTimeInit);
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

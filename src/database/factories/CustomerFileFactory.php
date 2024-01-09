@@ -23,7 +23,9 @@ class CustomerFileFactory extends Factory
     {
         return [
             'file_id' => FileUploads::factory(),
-            'file_type_id' => CustomerFileType::inRandomOrder()->first()->file_type_id,
+            'file_type_id' => CustomerFileType::inRandomOrder()
+                ->first()
+                ->file_type_id,
             'cust_equip_id' => null,
             'cust_id' => Customer::factory(),
             'user_id' => User::inRandomOrder()->first()->user_id,

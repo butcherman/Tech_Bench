@@ -21,7 +21,9 @@ class CustomerContactPhoneFactory extends Factory
     {
         return [
             'cont_id' => CustomerContact::factory(),
-            'phone_type_id' => PhoneNumberType::inRandomOrder()->first()->phone_type_id,
+            'phone_type_id' => PhoneNumberType::inRandomOrder()
+                ->first()
+                ->phone_type_id,
             'phone_number' => $this->faker->phoneNumber(),
             'extension' => null,
         ];

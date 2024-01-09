@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUserCustomerBookmarksTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -19,15 +17,21 @@ class CreateUserCustomerBookmarksTable extends Migration
             $table->unsignedBigInteger('cust_id');
             $table->timestamps();
             $table->unique(['user_id', 'cust_id']);
-            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('user_id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('cust_id')
+                ->references('cust_id')
+                ->on('customers')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

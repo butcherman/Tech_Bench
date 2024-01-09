@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUserRolesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -22,20 +20,48 @@ class CreateUserRolesTable extends Migration
             $table->timestamps();
         });
 
-        //  Insert default data
+        /**
+         * Insert default data
+         */
         $defaultData = [
-            ['role_id' => 1, 'name' => 'Installer',     'description' => 'All Access Administrator', 'allow_edit' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['role_id' => 2, 'name' => 'Administrator', 'description' => 'System Administrator',     'allow_edit' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['role_id' => 3, 'name' => 'Reports',       'description' => 'User who can run reports', 'allow_edit' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['role_id' => 4, 'name' => 'Tech',          'description' => 'Standard User',            'allow_edit' => 0, 'created_at' => NOW(), 'updated_at' => NOW()],
+            [
+                'role_id' => 1,
+                'name' => 'Installer',
+                'description' => 'All Access Administrator',
+                'allow_edit' => 0,
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'role_id' => 2,
+                'name' => 'Administrator',
+                'description' => 'System Administrator',
+                'allow_edit' => 0,
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'role_id' => 3,
+                'name' => 'Reports',
+                'description' => 'User who can run reports',
+                'allow_edit' => 0,
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'role_id' => 4,
+                'name' => 'Tech',
+                'description' => 'Standard User',
+                'allow_edit' => 0,
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
         ];
         DB::table('user_roles')->insert($defaultData);
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

@@ -8,9 +8,8 @@
 
 Tech Bench is a custom Content Management System (CMS) designed specifically for service technicians working in the field.
 This application allows technicians to securely store and share important customer information such as contact names, equipment
-installed, equipment backups, and notes about the customer. The advantage to using this application is to allow any technician
-
--   even those unfamiliar with the customer - quick and centralized access to all of this information.
+installed, equipment backups, and notes about the customer. The advantage to using this application is to allow any technician -
+even those unfamiliar with the customer - quick and centralized access to all of this information.
 
 ## Tech Bench consists of two major sections
 

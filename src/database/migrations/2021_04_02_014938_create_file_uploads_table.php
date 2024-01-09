@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateFileUploadsTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -24,9 +22,7 @@ class CreateFileUploadsTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

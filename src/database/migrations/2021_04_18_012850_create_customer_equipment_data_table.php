@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateCustomerEquipmentDataTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -19,20 +17,27 @@ class CreateCustomerEquipmentDataTable extends Migration
             $table->unsignedBigInteger('field_id');
             $table->text('value')->nullable();
             $table->timestamps();
-            $table->foreign('cust_equip_id')->references('cust_equip_id')->on('customer_equipment')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('field_id')->references('field_id')->on('data_fields')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('cust_equip_id')
+                ->references('cust_equip_id')
+                ->on('customer_equipment')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('field_id')
+                ->references('field_id')
+                ->on('data_fields')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {
         Schema::table('customer_equipment_data', function (Blueprint $table) {
-            $table->dropForeign(['cust_equip_id', 'field_id']);
+            $table->dropForeign(['cust_equip_id']);
+            $table->dropForeign(['field_id']);
         });
         Schema::dropIfExists('customer_equipment_data');
     }

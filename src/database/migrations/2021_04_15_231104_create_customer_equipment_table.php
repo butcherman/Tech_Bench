@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateCustomerEquipmentTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -20,20 +18,26 @@ class CreateCustomerEquipmentTable extends Migration
             $table->boolean('shared');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('equip_id')->references('equip_id')->on('equipment_types')->onUpdate('cascade');
+            $table->foreign('cust_id')
+                ->references('cust_id')
+                ->on('customers')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('equip_id')
+                ->references('equip_id')
+                ->on('equipment_types')
+                ->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {
         Schema::table('customer_equipment', function (Blueprint $table) {
-            $table->dropForeign(['cust_id', 'equip_id']);
+            $table->dropForeign(['cust_id']);
+            $table->dropForeign(['equip_id']);
         });
         Schema::dropIfExists('customer_equipment');
     }

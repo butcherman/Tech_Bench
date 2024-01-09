@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUserInitializesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -22,9 +20,7 @@ class CreateUserInitializesTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

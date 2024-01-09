@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateTechTipFilesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -18,15 +16,20 @@ class CreateTechTipFilesTable extends Migration
             $table->unsignedBigInteger('tip_id');
             $table->unsignedBigInteger('file_id');
             $table->timestamps();
-            $table->foreign('tip_id')->references('tip_id')->on('tech_tips')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('file_id')->references('file_id')->on('file_uploads')->onUpdate('cascade');
+            $table->foreign('tip_id')
+                ->references('tip_id')
+                ->on('tech_tips')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('file_id')
+                ->references('file_id')
+                ->on('file_uploads')
+                ->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

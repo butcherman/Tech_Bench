@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateCustomerContactPhonesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -20,15 +18,20 @@ class CreateCustomerContactPhonesTable extends Migration
             $table->text('phone_number');
             $table->text('extension')->nullable();
             $table->timestamps();
-            $table->foreign('cont_id')->references('cont_id')->on('customer_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('phone_type_id')->references('phone_type_id')->on('phone_number_types')->onUpdate('cascade');
+            $table->foreign('cont_id')
+                ->references('cont_id')
+                ->on('customer_contacts')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('phone_type_id')
+                ->references('phone_type_id')
+                ->on('phone_number_types')
+                ->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

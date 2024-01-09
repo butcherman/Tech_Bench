@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUserSettingsTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -20,11 +18,21 @@ class CreateUserSettingsTable extends Migration
             $table->unsignedBigInteger('setting_type_id');
             $table->boolean('value')->default(1);
             $table->timestamps();
-            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('setting_type_id')->references('setting_type_id')->on('user_setting_types')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('user_id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('setting_type_id')
+                ->references('setting_type_id')
+                ->on('user_setting_types')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
 
-        //  Add the default admin user to the table
+        /**
+         * Add the default admin user to the table
+         */
         $default = [
             ['user_id' => 1, 'setting_type_id' => 1, 'value' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
             ['user_id' => 1, 'setting_type_id' => 2, 'value' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
@@ -34,9 +42,7 @@ class CreateUserSettingsTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

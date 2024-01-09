@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateCustomersTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -25,14 +23,15 @@ class CreateCustomersTable extends Migration
             $table->integer('zip');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('parent_id')->references('cust_id')->on('customers')->onUpdate('cascade');
+            $table->foreign('parent_id')
+                ->references('cust_id')
+                ->on('customers')
+                ->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

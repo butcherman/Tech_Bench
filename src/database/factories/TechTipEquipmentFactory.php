@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\TechTip;
+use App\Models\Equipment;
 use App\Models\TechTipEquipment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,9 +19,9 @@ class TechTipEquipmentFactory extends Factory
      */
     public function definition(): array
     {
-        // TODO - Necessary???
         return [
-            //
+            'tip_id' => TechTip::factory(),
+            'equip_id' => Equipment::factory(),
         ];
     }
 }

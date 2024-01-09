@@ -25,11 +25,28 @@ class CreateUserRolePermissionCategoriesTable extends Migration
             $table->foreign('role_cat_id')->references('role_cat_id')->on('user_role_permission_categories')->onUpdate('cascade');
         });
 
-        //  Default Data
+        /**
+         * Default Data
+         */
         $defaultCategories = [
-            ['role_cat_id' => 1, 'category' => 'Administration',  'created_at' => NOW(), 'updated_at' => NOW()],
-            ['role_cat_id' => 2, 'category' => 'Customers',       'created_at' => NOW(), 'updated_at' => NOW()],
-            ['role_cat_id' => 3, 'category' => 'Tech Tips',       'created_at' => NOW(), 'updated_at' => NOW()],
+            [
+                'role_cat_id' => 1,
+                'category' => 'Administration',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'role_cat_id' => 2,
+                'category' => 'Customers',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'role_cat_id' => 3,
+                'category' => 'Tech Tips',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
         ];
         DB::table('user_role_permission_categories')->insert($defaultCategories);
 
@@ -66,7 +83,8 @@ class CreateUserRolePermissionCategoriesTable extends Migration
             ['perm_type_id' => 27, 'role_cat_id' => 3],
         ];
         foreach ($defaultPermissions as $perm) {
-            UserRolePermissionTypes::where('perm_type_id', $perm['perm_type_id'])->update(['role_cat_id' => $perm['role_cat_id']]);
+            UserRolePermissionTypes::where('perm_type_id', $perm['perm_type_id'])
+                ->update(['role_cat_id' => $perm['role_cat_id']]);
         }
     }
 

@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateCustomerNotesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -24,21 +22,31 @@ class CreateCustomerNotesTable extends Migration
             $table->longText('details');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('cust_id')->references('cust_id')->on('customers')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('created_by')->references('user_id')->on('users')->onUpdate('cascade');
-            $table->foreign('updated_by')->references('user_id')->on('users')->onUpdate('cascade');
+            $table->foreign('cust_id')
+                ->references('cust_id')
+                ->on('customers')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('created_by')
+                ->references('user_id')
+                ->on('users')
+                ->onUpdate('cascade');
+            $table->foreign('updated_by')
+                ->references('user_id')
+                ->on('users')
+                ->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {
         Schema::table('customer_notes', function (Blueprint $table) {
-            $table->dropForeign(['cust_id', 'created_by', 'updated_by']);
+            $table->dropForeign(['cust_id']);
+            $table->dropForeign(['created_by']);
+            $table->dropForeign(['updated_by']);
         });
         Schema::dropIfExists('customer_notes');
     }

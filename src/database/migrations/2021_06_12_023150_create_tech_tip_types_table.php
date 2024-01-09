@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateTechTipTypesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -20,19 +18,35 @@ class CreateTechTipTypesTable extends Migration
             $table->timestamps();
         });
 
+        /**
+         * Default Data
+         */
         $defaultData = [
-            ['tip_type_id' => 1, 'description' => 'Tech Tip',      'created_at' => NOW(), 'updated_at' => NOW()],
-            ['tip_type_id' => 2, 'description' => 'Documentation', 'created_at' => NOW(), 'updated_at' => NOW()],
-            ['tip_type_id' => 3, 'description' => 'Software',      'created_at' => NOW(), 'updated_at' => NOW()],
+            [
+                'tip_type_id' => 1,
+                'description' => 'Tech Tip',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'tip_type_id' => 2,
+                'description' => 'Documentation',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
+            [
+                'tip_type_id' => 3,
+                'description' => 'Software',
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ],
         ];
 
         DB::table('tech_tip_types')->insert($defaultData);
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

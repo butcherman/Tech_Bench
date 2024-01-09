@@ -14,8 +14,8 @@ class CustomerEquipmentSiteFactory extends Factory
     public function definition(): array
     {
         return [
-            'cust_site_id' => CustomerSite::factory()->create(),
-            'cust_equip_id' => CustomerEquipment::factory()->create(),
+            'cust_site_id' => CustomerSite::factory(),
+            'cust_equip_id' => CustomerEquipment::factory(),
         ];
     }
 }

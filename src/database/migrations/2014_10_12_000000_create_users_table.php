@@ -11,9 +11,7 @@ use Illuminate\Support\Str;
 class CreateUsersTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -24,15 +22,21 @@ class CreateUsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->string('password')->default(Hash::make(strtolower(Str::random(15))));       //  Generate a random password if one is not assigned
+            $table->string('password')
+                ->default(Hash::make(strtolower(Str::random(15))));       //  Generate a random password if one is not assigned
             $table->rememberToken();
             $table->timestamp('password_expires')->nullable();
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('role_id')->references('role_id')->on('user_roles')->onUpdate('cascade');
+            $table->foreign('role_id')
+                ->references('role_id')
+                ->on('user_roles')
+                ->onUpdate('cascade');
         });
 
-        //  Create the initial default user
+        /**
+         * Create the initial default user
+         */
         $default = [
             'user_id' => 1,
             'role_id' => 1,
@@ -48,9 +52,7 @@ class CreateUsersTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateTechTipsTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -25,16 +23,23 @@ class CreateTechTipsTable extends Migration
             $table->integer('views')->default(0);
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade');
-            $table->foreign('updated_id')->references('user_id')->on('users')->onUpdate('cascade');
-            $table->foreign('tip_type_id')->references('tip_type_id')->on('tech_tip_types')->onUpdate('cascade');
+            $table->foreign('user_id')
+                ->references('user_id')
+                ->on('users')
+                ->onUpdate('cascade');
+            $table->foreign('updated_id')
+                ->references('user_id')
+                ->on('users')
+                ->onUpdate('cascade');
+            $table->foreign('tip_type_id')
+                ->references('tip_type_id')
+                ->on('tech_tip_types')
+                ->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

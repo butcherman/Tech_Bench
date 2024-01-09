@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUserSettingTypesTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -21,18 +19,23 @@ class CreateUserSettingTypesTable extends Migration
             $table->timestamps();
         });
 
+        /**
+         * Default Data
+         */
         $default = [
-            ['setting_type_id' => 1, 'name' => 'Receive Email Notifications',               'updated_at' => NOW(), 'created_at' => NOW()],
-            ['setting_type_id' => 2, 'name' => 'Receive Bookmarked Customer Notifications', 'updated_at' => NOW(), 'created_at' => NOW()],
+            [
+                'setting_type_id' => 1,
+                'name' => 'Receive Email Notifications',
+                'updated_at' => NOW(),
+                'created_at' => NOW()
+            ],
         ];
 
         DB::table('user_setting_types')->insert($default);
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {

@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUserLoginsTable extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
+     * Run the migrations
      */
     public function up()
     {
@@ -18,14 +16,16 @@ class CreateUserLoginsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->text('ip_address');
             $table->timestamps();
-            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('user_id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
+     * Reverse the migrations
      */
     public function down()
     {
