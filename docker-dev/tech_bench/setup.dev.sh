@@ -17,7 +17,7 @@ composer install
 npm install
 
 #  Create .env file
-cp /app/.env.example /app/.env
+cp /scripts/.env.dev /app/.env
 #  Add App URL to the .env file
 sed -i "s/localhost/$TB_URL/g" /app/.env
 

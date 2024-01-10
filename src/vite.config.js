@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
-import basicSsl from "@vitejs/plugin-basic-ssl";
+import fs from "fs";
 
 export default defineConfig(({ mode }) => {
     process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
@@ -24,15 +24,20 @@ export default defineConfig(({ mode }) => {
                     },
                 },
             }),
-            basicSsl(),
         ],
         server: {
-            https: true,
+            https: {
+                key: fs.readFileSync("./keystore/private/server.key"),
+                cert: fs.readFileSync("./keystore/server.crt"),
+            },
             host: "0.0.0.0",
             hmr: {
                 protocol: "wss",
                 host: wsHost,
-                https: true,
+                https: {
+                    key: fs.readFileSync("./keystore/private/server.key"),
+                    cert: fs.readFileSync("./keystore/server.crt"),
+                },
             },
         },
     };

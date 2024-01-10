@@ -9,9 +9,11 @@ FROM butcherman/tech_bench_baseline:1.0
 COPY ./php.ini /opt/bitnami/php/lib/
 COPY ./entrypoint.dev.sh /scripts/
 COPY ./setup.dev.sh /scripts/
+COPY ./.env.dev /scripts/.env.dev
 
 RUN chmod 775 /scripts/entrypoint.dev.sh
 RUN chmod 775 /scripts/setup.dev.sh
+RUN chmod 777 /scripts/.env.dev
 
 #  Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends

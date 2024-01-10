@@ -24,6 +24,7 @@ services:
             - ../src:/app
         environment:
             - SERVICE=app
+            - TB_URL=TB_URL
         networks:
             - app-tier
 
@@ -142,7 +143,7 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ../src:/app
-            - ../appData/ca-certificates:/usr/local/share/ca-certificates
+            # - ../appData/ca-certificates:/usr/local/share/ca-certificates
         environment:
             - SERVICE=app
         networks:
