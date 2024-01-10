@@ -123,15 +123,15 @@ services:
     ###########################################################################################
 
     #  Mailpit for Email Traps
-    mailpit:
-        image: axllent/mailpit:latest
-        container_name: mailpit
-        restart: unless-stopped
-        networks:
-            - app-tier
-        ports:
-            - "8025:8025"
-            - "1025:1025"
+    # mailpit:
+    #     image: axllent/mailpit:latest
+    #     container_name: mailpit
+    #     restart: unless-stopped
+    #     networks:
+    #         - app-tier
+    #     ports:
+    #         - "8025:8025"
+    #         - "1025:1025"
 
     #  NPM Container to run npm run dev
     npm:
@@ -142,6 +142,7 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ../src:/app
+            - ../appData/ca-certificates:/usr/local/share/ca-certificates
         environment:
             - SERVICE=app
         networks:

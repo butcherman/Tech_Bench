@@ -35,7 +35,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             // \Spatie\CookieConsent\CookieConsentMiddleware::class,
             // \App\Http\Middleware\CheckForInit::class,
-            // \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 
         'api' => [
