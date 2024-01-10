@@ -9,6 +9,7 @@ return [
     'env' => env('APP_ENV', 'production'),
     'debug' => (bool) env('APP_DEBUG', false),
     'url' => env('APP_URL', 'http://localhost'),
+    'parent_url' => ('PARENT_URL'),
     'asset_url' => env('ASSET_URL', null),
     'timezone' => 'UTC',
     'locale' => 'en',

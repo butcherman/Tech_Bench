@@ -18,7 +18,12 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted } from 'vue';
+import AuthLayout from "@/Layouts/AuthLayout.vue";
+import { ref, reactive, onMounted } from "vue";
 
-    const props = defineProps<{}>();
+const props = defineProps<{}>();
+</script>
+
+<script lang="ts">
+export default { layout: AuthLayout };
 </script>

@@ -1,7 +1,7 @@
 /**
  * Stylesheets
  */
-// import "../scss/app.scss";
+import "../scss/app.scss";
 
 /*
  *   Vue and base libraries
@@ -9,8 +9,10 @@
 import { createApp, h } from "vue";
 import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-//  Custom Directives
+
+/**
+ * Custom Directives
+ */
 // import { vFocusDirective } from "./Directives/FocusDirective";
 // import { vTooltipDirective } from "./Directives/TooltipDirective";
 // import { vPopoverDirective } from "./Directives/Popover";
@@ -18,6 +20,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 /**
  * Font Awesome Icon Library
  */
+// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 // import "./Modules/FontAwesome.module";
 
 /*

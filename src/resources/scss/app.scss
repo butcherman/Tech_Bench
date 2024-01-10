@@ -1,0 +1,93 @@
+/*
+*   Reset all styles to my liking
+*/
+@import "reset";
+
+/*
+*   Bootstrap and add-ons for Bootstrap
+*/
+@import "bootstrap";
+
+/*
+*   Override Bootstrap's default breakpoints
+*/
+$grid-breakpoints: (
+    xs: 0,
+    //  Default 0
+    sm: 600px,
+    //  Default 576
+    md: 1000px,
+    //  Default 768
+    lg: 1200px,
+    //  Default 992
+    xl: 1280px,
+    //  Default 1200
+    xxl: 1400px,
+    //  Default 1400
+);
+
+$brk-xs: map-get($grid-breakpoints, xs);
+$brk-sm: map-get($grid-breakpoints, sm);
+$brk-md: map-get($grid-breakpoints, md);
+$brk-lg: map-get($grid-breakpoints, lg);
+$brk-xl: map-get($grid-breakpoints, xl);
+$brk-xxl: map-get($grid-breakpoints, xxl);
+
+/*
+*   Custom styles used throughout app
+*/
+// .center {
+//     margin-left: auto;
+//     margin-right: auto;
+// }
+
+.pointer {
+    cursor: pointer !important;
+}
+
+// .nope {
+//     cursor: not-allowed !important;
+// }
+
+// .btn-pill {
+//     border-radius: 25px !important;
+// }
+
+// .row {
+//     padding: 1rem;
+// }
+
+// a:hover {
+//     font-weight: bold;
+// }
+
+// .card {
+//     height: 100%;
+//     box-shadow: 15px 15px 10px 1px rgba(0, 0, 0, 0.2);
+//     .card-body {
+//         .card-title {
+//             color: #787878;
+//             font-size: 0.875rem;
+//             font-weight: 500;
+//             margin-bottom: 1.2rem;
+//             padding-bottom: 0.5rem;
+//             text-transform: uppercase;
+//             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+//         }
+//     }
+// }
+
+// tr.row-link {
+//     td {
+//         padding: 0;
+//         height: 100%;
+//         a {
+//             display: block;
+//             height: 100%;
+//             padding: 8px 0;
+//             text-decoration: none;
+//             font-weight: normal;
+//             color: #000000;
+//         }
+//     }
+// }
