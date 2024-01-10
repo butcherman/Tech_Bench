@@ -21,14 +21,4 @@ return [
         'redirect' => env('AZURE_REDIRECT_URI'),
         'tenant' => env('AZURE_TENANT_ID'),
     ],
-
-    /**
-     * Twilio SMS Service
-     */
-    'twilio' => [
-        'active' => env('TWILIO_ACTIVE', false),
-        'sid' => env('TWILIO_SID'),
-        'token' => env('TWILIO_TOKEN'),
-        'from' => env('TWILIO_FROM'),
-    ],
 ];

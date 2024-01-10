@@ -27,7 +27,7 @@ return [
         'required' => false,
         'allow_save_device' => true,
         'allow_via_email' => true,
-        'allow_via_sms' => false,
+        'allow_via_authenticator' => false,
     ],
 
     /*

@@ -2,6 +2,6 @@
 
 return [
     'except' => [
-        'debugbar.*', 'ignition.*', 'horizon.*',
+        'debugbar.*', 'ignition.*', 'horizon.*', 'telescope.*',
     ],
 ];

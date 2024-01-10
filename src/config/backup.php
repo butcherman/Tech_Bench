@@ -72,6 +72,7 @@ return [
      */
     'notifications' => [
 
+        // TODO - Set notifications for backups
         'notifications' => [
             \Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification::class => ['mail'],
             \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification::class => ['mail'],
@@ -95,34 +96,6 @@ return [
                 'name' => env('MAIL_FROM_NAME', 'Tech Bench'),
             ],
         ],
-
-        // 'slack' => [
-        //     'webhook_url' => '',
-
-        //     /*
-        //      * If this is set to null the default channel of the webhook will be used.
-        //      */
-        //     'channel' => null,
-
-        //     'username' => null,
-
-        //     'icon' => null,
-
-        // ],
-
-        // 'discord' => [
-        //     'webhook_url' => '',
-
-        //     /*
-        //      * If this is an empty string, the name field on the webhook will be used.
-        //      */
-        //     'username' => '',
-
-        //     /*
-        //      * If this is an empty string, the avatar on the webhook will be used.
-        //      */
-        //     'avatar_url' => '',
-        // ],
     ],
 
     /*

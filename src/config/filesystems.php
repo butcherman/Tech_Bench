@@ -53,6 +53,14 @@ return [
         ],
 
         /**
+         * File Links files are stored here
+         */
+        'fileLinks' => [
+            'driver' => 'local',
+            'storage_path' => storage_path('app/file_links'),
+        ],
+
+        /**
          * Only used for public accessible items such as images
          */
         'public' => [
@@ -70,29 +78,29 @@ return [
             'root' => storage_path('logs'),
         ],
 
-        /**
-         * Application Backups
-         */
-        'backups' => [
-            'driver' => 'local',
-            'root' => storage_path('backups'),
-        ],
+    /**
+     * Application Backups
+     */
+        // 'backups' => [
+        //     'driver' => 'local',
+        //     'root' => storage_path('backups'),
+        // ],
 
-        /**
-         * Security and SSL Certificates
-         */
-        'security' => [
-            'driver' => 'local',
-            'root' => base_path('keystore'),
-        ],
+    /**
+     * Security and SSL Certificates
+     */
+        // 'security' => [
+        //     'driver' => 'local',
+        //     'root' => base_path('keystore'),
+        // ],
 
-        /**
-         * Downloaded Update files will be stored here
-         */
-        'updates' => [
-            'driver' => 'local',
-            'root' => storage_path('updates'),
-        ],
+    /**
+     * Downloaded Update files will be stored here
+     */
+        // 'updates' => [
+        //     'driver' => 'local',
+        //     'root' => storage_path('updates'),
+        // ],
     ],
 
     /*
