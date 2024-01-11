@@ -27,19 +27,36 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
+     * Put all flash data into an array to be gone over by front end
+     */
+    protected function getFlashData()
+    {
+        $flashArr = [];
+        $flash = session('_flash');
+
+        foreach ($flash['new'] as $f) {
+            $flashArr[] = [
+                $f,
+            ];
+        }
+        foreach ($flash['old'] as $f) {
+            $flashArr[] = [
+                'type' => $f,
+                'message' => session()->get($f),
+            ];
+        }
+
+        return $flashArr;
+    }
+
+    /**
      * Defines the props that are shared by default
      */
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
             //  Flash messages are used for success/failure messages on next page load
-            // 'flash' => [
-            //     'status' => fn () => $request->session()->get('status'),
-            //     'success' => fn () => $request->session()->get('success'),
-            //     'warning' => fn () => $request->session()->get('warning'),
-            //     'danger' => fn () => $request->session()->get('danger'),
-            //     'info' => fn () => $request->session()->get('info'),
-            // ],
+            'flash' => $this->getFlashData(),
             // //  Alert messages that will stick to top of request
             // 'alerts' => fn () => $request->session()->get('alert'),
             // //  App information that is shared and used on all pages

@@ -20,21 +20,21 @@ class EventServiceProvider extends ServiceProvider
         /**
          * Authentication Events
          */
-        // 'Illuminate\Auth\Events\Login' => [
-        //     'App\Listeners\Auth\LogSuccessfulLogin',
-        // ],
-        // 'Illuminate\Auth\Events\Failed' => [
-        //     'App\Listeners\Auth\LogFailedLoginAttempt',
-        // ],
-        // 'Illuminate\Auth\Events\Logout' => [
-        //     'App\Listeners\Auth\LogSuccessfulLogout',
-        // ],
-        // 'Illuminate\Auth\Events\Lockout' => [
-        //     'App\Listeners\Auth\LogLockout',
-        // ],
-        // 'Illuminate\Auth\Events\PasswordReset' => [
-        //     'App\Listeners\Auth\LogPasswordReset',
-        // ],
+        'Illuminate\Auth\Events\Login' => [
+            'App\Listeners\Auth\LogSuccessfulLogin',
+        ],
+        'Illuminate\Auth\Events\Failed' => [
+            'App\Listeners\Auth\LogFailedLoginAttempt',
+        ],
+        'Illuminate\Auth\Events\Logout' => [
+            'App\Listeners\Auth\LogSuccessfulLogout',
+        ],
+        'Illuminate\Auth\Events\Lockout' => [
+            'App\Listeners\Auth\LogLockout',
+        ],
+        'Illuminate\Auth\Events\PasswordReset' => [
+            'App\Listeners\Auth\LogPasswordReset',
+        ],
 
         /**
          * Office 365 Authentication Events

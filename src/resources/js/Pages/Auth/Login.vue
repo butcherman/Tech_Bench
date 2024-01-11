@@ -29,6 +29,15 @@
         </div>
         <div id="login-form-wrapper">
             <div id="login-form">
+                <div v-if="app.flash.length">
+                    <div
+                        v-for="flash in app.flash"
+                        class="alert text-center"
+                        :class="`alert-${flash.type}`"
+                    >
+                        {{ flash.message }}
+                    </div>
+                </div>
                 <h5 class="text-center">Tech Login:</h5>
                 <LoginForm />
                 <div class="separator">or</div>

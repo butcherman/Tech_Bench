@@ -50,12 +50,21 @@ interface loginForm {
 }
 
 const onSubmit = (form: loginForm) => {
+    loginForm.value?.clearErrorAlert();
     const formData = useForm(form);
-    console.log(form);
 
     formData.post(route("login"), {
         onFinish: () => loginForm.value?.endSubmit(),
-        onError: () => loginForm.value?.setValidationErrors(formData.errors),
+        onError: () => checkForThrottle(formData.errors),
     });
+};
+
+const checkForThrottle = (formErrors: { [key: string]: string }): void => {
+    if (formErrors["throttle"]) {
+        console.log("throttle error");
+        loginForm.value?.pushErrorAlert(formErrors["throttle"]);
+    } else {
+        loginForm.value?.setValidationErrors(formErrors);
+    }
 };
 </script>

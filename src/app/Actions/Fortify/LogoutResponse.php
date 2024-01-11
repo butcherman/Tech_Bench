@@ -25,6 +25,6 @@ class LogoutResponse implements LogoutResponseContract
             }
         }
 
-        return redirect(route('home'))->withErrors($msg);
+        return redirect(route('login'))->with('info', $msg);
     }
 }

@@ -12,8 +12,8 @@ type pageData = {
 
 type pageProps = {
     app: appProps;
+    flash: flashData[];
     // errors: errors;
-    // flash: flashProps;
     // notifications: notificationProps;
     // navbar: navBarProps[];
     // breadcrumbs: breadcrumbs[];
@@ -28,4 +28,9 @@ type appProps = {
     // copyright: string;
     // user: user | null;
     // fileData: fileData;
+};
+
+type flashData = {
+    type: string;
+    message: string;
 };

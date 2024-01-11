@@ -88,6 +88,9 @@ const errorAlerts = ref<string[]>([]);
 function pushErrorAlert(alert: string): void {
     errorAlerts.value.push(alert);
 }
+function clearErrorAlert(): void {
+    errorAlerts.value = [];
+}
 
 /*******************************************************************************
  * Errors triggered by server side validation
@@ -109,6 +112,7 @@ defineExpose({
     resetForm,
     handleReset,
     pushErrorAlert,
+    clearErrorAlert,
     setValidationErrors,
     isDirty,
     isSubmitting,
