@@ -1,0 +1,21 @@
+$grid-breakpoints: (
+    xs: 0,
+    //  Default 0
+    sm: 600px,
+    //  Default 576
+    md: 1000px,
+    //  Default 768
+    lg: 1200px,
+    //  Default 992
+    xl: 1280px,
+    //  Default 1200
+    xxl: 1400px,
+    //  Default 1400
+);
+
+$brk-xs: map-get($grid-breakpoints, xs);
+$brk-sm: map-get($grid-breakpoints, sm);
+$brk-md: map-get($grid-breakpoints, md);
+$brk-lg: map-get($grid-breakpoints, lg);
+$brk-xl: map-get($grid-breakpoints, xl);
+$brk-xxl: map-get($grid-breakpoints, xxl);

@@ -43,30 +43,30 @@ class HandleInertiaRequests extends Middleware
             // //  Alert messages that will stick to top of request
             // 'alerts' => fn () => $request->session()->get('alert'),
             // //  App information that is shared and used on all pages
-            // 'app' => [
-            //     'name' => fn () => config('app.name'),
-            //     'logo' => fn () => config('app.logo'),
-            //     'version' => fn () => Cache::get('version.full', function () {
-            //         $version = (new Version)->full();
-            //         Cache::put('version.full', $version);
+            'app' => [
+                'name' => fn () => config('app.name'),
+                'logo' => fn () => config('app.logo'),
+                //     'version' => fn () => Cache::get('version.full', function () {
+                //         $version = (new Version)->full();
+                //         Cache::put('version.full', $version);
 
-            //         return $version;
-            //     }),
-            //     'copyright' => fn () => Cache::get('version.copyright', function () {
-            //         $copyright = (new Version)->copyright();
-            //         Cache::put('version.copyright', $copyright);
+                //         return $version;
+                //     }),
+                //     'copyright' => fn () => Cache::get('version.copyright', function () {
+                //         $copyright = (new Version)->copyright();
+                //         Cache::put('version.copyright', $copyright);
 
-            //         return $copyright;
-            //     }),
-            //     //  Current logged in user
-            //     'user' => fn () => $request->user() ? $request->user() : null,
-            //     //  File information
-            //     'fileData' => [
-            //         'maxSize' => fn () => config('filesystems.max_filesize'),
-            //         'chunkSize' => fn () => config('filesystems.chunk_size'),
-            //         'token' => fn () => csrf_token(),
-            //     ],
-            // ],
+                //         return $copyright;
+                //     }),
+                //     //  Current logged in user
+                //     'user' => fn () => $request->user() ? $request->user() : null,
+                //     //  File information
+                //     'fileData' => [
+                //         'maxSize' => fn () => config('filesystems.max_filesize'),
+                //         'chunkSize' => fn () => config('filesystems.chunk_size'),
+                //         'token' => fn () => csrf_token(),
+                //     ],
+            ],
             // 'notifications' => [
             //     'list' => fn () => $request->user() ? $request->user()->notifications : null,
             //     'new' => fn () => $request->user() ? $request->user()->unreadNotifications->count() : null,
