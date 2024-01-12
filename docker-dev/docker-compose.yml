@@ -69,70 +69,70 @@ services:
             - "6379:6379"
 
     #  Horizon Container to run background jobs
-    # horizon:
-    #     container_name: horizon
-    #     restart: unless-stopped
-    #     build:
-    #         context: ./tech_bench
-    #         dockerfile: Dockerfile
-    #     volumes:
-    #         - ../src:/app
-    #     environment:
-    #         - SERVICE=horizon
-    #     networks:
-    #         - app-tier
-    #     depends_on:
-    #         - database
-    #         - redis
-    #     entrypoint: php artisan horizon:watch --without-tty
+    horizon:
+        container_name: horizon
+        restart: unless-stopped
+        build:
+            context: ./tech_bench
+            dockerfile: Dockerfile
+        volumes:
+            - ../src:/app
+        environment:
+            - SERVICE=horizon
+        networks:
+            - app-tier
+        depends_on:
+            - database
+            - redis
+        entrypoint: php artisan horizon:watch --without-tty
 
     #  Scheduler Container to monitor and run scheduled jobs
-    # dev-scheduler:
-    #     container_name: dev-scheduler
-    #     restart: unless-stopped
-    #     build:
-    #         context: ./tech_bench
-    #         dockerfile: Dockerfile
-    #     volumes:
-    #         - ../src:/app
-    #     environment:
-    #         - SERVICE=scheduler
-    #     networks:
-    #         - app-tier
-    #     depends_on:
-    #         - database
-    #         - redis
+    dev-scheduler:
+        container_name: dev-scheduler
+        restart: unless-stopped
+        build:
+            context: ./tech_bench
+            dockerfile: Dockerfile
+        volumes:
+            - ../src:/app
+        environment:
+            - SERVICE=scheduler
+        networks:
+            - app-tier
+        depends_on:
+            - database
+            - redis
 
     #  Soketi Container for Broadcasting Realtime Notifications via Websockets
-    # soketi:
-    #     image: "quay.io/soketi/soketi:latest-16-alpine"
-    #     container_name: soketi
-    #     environment:
-    #         SOKETI_DEBUG: "1"
-    #         SOKETI_METRICS_SERVER_PORT: "9601"
-    #         PUSHER_APP_KEY: app-key
-    #         PUSHER_APP_ID: app-id
-    #         PUSHER_APP_SECRET: app-secret
-    #     ports:
-    #         - "6001:6001"
-    #         - "9601:9601"
-    #     networks:
-    #         - app-tier
+    soketi:
+        image: "quay.io/soketi/soketi:latest-16-alpine"
+        container_name: soketi
+        environment:
+            SOKETI_DEBUG: "1"
+            SOKETI_METRICS_SERVER_PORT: "9601"
+            PUSHER_APP_KEY: app-key
+            PUSHER_APP_ID: app-id
+            PUSHER_APP_SECRET: app-secret
+        ports:
+            - "6001:6001"
+            - "9601:9601"
+        networks:
+            - app-tier
 
     ###########################################################################################
     #                               Dev Specific Containers                                   #
     ###########################################################################################
 
     #  Mailpit for Email Traps
-    # mailpit:
-    #     image: axllent/mailpit:latest
-    #     container_name: mailpit
-    #     restart: unless-stopped
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - "8025:8025"
-    #         - "1025:1025"
+    mailpit:
+        image: axllent/mailpit:latest
+        container_name: mailpit
+        restart: unless-stopped
+        networks:
+            - app-tier
+        ports:
+            - "8025:8025"
+            - "1025:1025"
 
     #  NPM Container to run npm run dev
     npm:

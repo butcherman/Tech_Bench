@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 /*
@@ -21,10 +21,10 @@ Route::middleware(['guest', 'throttle:50,120'])->group(function () {
     /**
      * Forgot Password Routes
      */
-    // Route::name('password.')->group(function () {
-    //     Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('forgot');
-    //     Route::get('reset-password', ResetPasswordController::class)->name('reset');
-    // });
+    Route::name('password.')->group(function () {
+        Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('forgot');
+        Route::get('reset-password', ResetPasswordController::class)->name('reset');
+    });
 
     /**
      * Socialite Routes

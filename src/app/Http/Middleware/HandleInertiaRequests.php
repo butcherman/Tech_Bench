@@ -33,17 +33,35 @@ class HandleInertiaRequests extends Middleware
     {
         $flashArr = [];
         $flash = session('_flash');
+        $allowedTypes = [
+            'primary',
+            'secondary',
+            'success',
+            'danger',
+            'warning',
+            'info',
+            'light',
+            'dark',
+        ];
 
-        foreach ($flash['new'] as $f) {
-            $flashArr[] = [
-                $f,
-            ];
+        if ($flash['new']) {
+            foreach ($flash['new'] as $f) {
+                if (in_array($f, $allowedTypes)) {
+                    $flashArr[] = [
+                        $f,
+                    ];
+                }
+            }
         }
-        foreach ($flash['old'] as $f) {
-            $flashArr[] = [
-                'type' => $f,
-                'message' => session()->get($f),
-            ];
+        if ($flash['old']) {
+            foreach ($flash['old'] as $f) {
+                if (in_array($f, $allowedTypes)) {
+                    $flashArr[] = [
+                        'type' => $f,
+                        'message' => session()->get($f),
+                    ];
+                }
+            }
         }
 
         return $flashArr;

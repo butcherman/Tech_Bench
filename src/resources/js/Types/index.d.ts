@@ -1,11 +1,6 @@
 /**
  * Global Types
  */
-
-interface ComponentInternalInstance {
-    $route: () => string;
-}
-
 type pageData = {
     props: pageProps;
 };

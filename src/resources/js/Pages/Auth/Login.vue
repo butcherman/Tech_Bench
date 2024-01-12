@@ -1,6 +1,7 @@
 <template>
     <div id="home-wrapper">
-        <div id="content-wrapper">
+        <Head title="Login" />
+        <div id="content-wrapper" class="container-fluid">
             <h1 class="text-center text-light">{{ app.name }}</h1>
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -28,25 +29,31 @@
             </div>
         </div>
         <div id="login-form-wrapper">
-            <div id="login-form">
-                <div v-if="app.flash.length">
-                    <div
-                        v-for="flash in app.flash"
-                        class="alert text-center"
-                        :class="`alert-${flash.type}`"
-                    >
-                        {{ flash.message }}
+            <div id="login-form" class="row align-items-center h-100">
+                <div class="col">
+                    <div v-if="app.flash.length">
+                        <div
+                            v-for="flash in app.flash"
+                            class="alert text-center"
+                            :class="`alert-${flash.type}`"
+                        >
+                            {{ flash.message }}
+                        </div>
                     </div>
+                    <h5 class="text-center">Tech Login:</h5>
+                    <LoginForm />
+                    <div class="separator">or</div>
+                    <button v-if="allowOath" class="btn btn-primary w-100 my-1">
+                        Login With Office 365
+                    </button>
+                    <Link
+                        :href="$route('password.forgot')"
+                        as="button"
+                        class="btn btn-primary w-100 my-1"
+                    >
+                        Forgot Password
+                    </Link>
                 </div>
-                <h5 class="text-center">Tech Login:</h5>
-                <LoginForm />
-                <div class="separator">or</div>
-                <button v-if="allowOath" class="btn btn-primary w-100 my-1">
-                    Login With Office 365
-                </button>
-                <button class="btn btn-primary w-100 my-1">
-                    Forgot Password
-                </button>
             </div>
         </div>
     </div>
@@ -75,18 +82,19 @@ const app = useAppStore();
 export default { layout: AuthLayout };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "../../../scss/_global_variables.scss";
 
 #home-wrapper {
-    height: 100vh;
-    width: 100vw;
+    min-height: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
 
     /**
     * Mobile/Small Screens
     */
     @media (max-width: $brk-lg) {
-        display: block;
         padding-top: 50px;
 
         #content-wrapper {
@@ -110,30 +118,20 @@ export default { layout: AuthLayout };
 
         #content-wrapper {
             width: 65%;
-            display: flex;
-            flex-direction: column;
-            align-self: center;
         }
         #login-form-wrapper {
             width: 35%;
             height: 100%;
-
             border-top-left-radius: 5px;
             border-bottom-left-radius: 5px;
+            padding: 0;
+            margin: 0;
         }
     }
 
     #login-form-wrapper {
         background-color: #ffffff;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        #login-form {
-            width: 100%;
-            margin-left: 4px;
-            margin-right: 4px;
-            padding: 5px;
-        }
+        padding: 1rem;
     }
 }
 </style>

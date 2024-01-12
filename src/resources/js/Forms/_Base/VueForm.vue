@@ -4,7 +4,10 @@
             <TrinityRingsLoader />
         </Loading>
         <div v-if="errorAlerts.length">
-            <div v-for="alert in errorAlerts" class="alert alert-danger">
+            <div
+                v-for="alert in errorAlerts"
+                class="alert alert-danger text-center"
+            >
                 {{ alert }}
             </div>
         </div>

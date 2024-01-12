@@ -52,7 +52,7 @@ createInertiaApp({
             .directive("tooltip", vTooltipDirective);
         // .directive("popover", vPopoverDirective);
 
-        // inertiaApp.config.globalProperties.$route = route;
+        inertiaApp.config.globalProperties.$route = route;
 
         inertiaApp.mount(el);
     },
