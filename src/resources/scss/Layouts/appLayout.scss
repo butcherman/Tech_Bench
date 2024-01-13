@@ -17,6 +17,9 @@ $content-background: #dddce1;
 $footer-background: $content-background;
 
 body #app-layout {
+    /**
+    * Top Header
+    */
     .top-navbar {
         background-color: $header-background;
         height: $header-height;
@@ -49,6 +52,9 @@ body #app-layout {
         }
     }
 
+    /**
+    * Hide navbar toggler on large screens
+    */
     .navbar-toggler {
         display: flex;
         @media (min-width: $brk-lg) {
@@ -56,7 +62,81 @@ body #app-layout {
         }
     }
 
-    // .dropdown-menu {
-    //     margin: 0 !important;
-    // }
+    /**
+    * Primary Content Section (including side nav)
+    */
+    #app-wrapper {
+        position: absolute;
+        top: $header-height;
+        padding: 0;
+        margin: 0;
+        min-height: calc(100vh - #{$header-height});
+        height: calc(100% - #{$header-height});
+
+        /**
+        * Side Navbar
+        */
+        #side-nav {
+            background-color: $navbar-background;
+            height: 100%;
+            position: fixed;
+            right: -$navbar-width;
+            transition: all 0.25s ease-out;
+            width: $navbar-width;
+            z-index: 500;
+
+            /**
+            * Always active on large screens
+            */
+            @media (min-width: $brk-lg) {
+                border-right: $soft-border;
+                left: 0;
+            }
+
+            /**
+            * When active on small screens
+            */
+            &.active {
+                border-left: $soft-border;
+                right: 0;
+            }
+
+            /**
+            * Navbar Content
+            */
+            .nav {
+                margin-left: 0.375rem;
+                margin-right: 0.375rem;
+                margin-top: 1.45rem;
+                .nav-item {
+                    .nav-link {
+                        align-items: center;
+                        color: $navbar-link-color;
+                        white-space: nowrap;
+                        .menu-title {
+                            margin-left: 4px;
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+        * Primary Content Slot
+        */
+        #content-wrapper {
+            background-color: $content-background;
+            height: 100%;
+            padding: 0.5rem;
+            /**
+            * Move to allow room for navbar
+            */
+            @media (min-width: $brk-lg) {
+                width: calc(100% - #{$navbar-width});
+                left: $navbar-width;
+                padding: 1rem;
+                position: fixed;
+            }
+        }
+    }
 }

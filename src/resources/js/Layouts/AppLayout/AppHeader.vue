@@ -11,6 +11,7 @@
         <div class="navbar-data">
             <ul class="nav">
                 <li class="nav-item">
+                    <!-- TODO - Build Help Modal -->
                     <Link href="#" class="text-muted" title="Help " v-tooltip>
                         <fa-icon icon="fa-circle-question" />
                     </Link>
@@ -37,7 +38,7 @@
                         <span
                             class="badge bg-warning position-absolute top-0 start-100 translate-middle rounded-pill"
                         >
-                            43
+                            {{ app.userNotifications.new }}
                         </span>
                     </Link>
                 </li>
@@ -85,7 +86,11 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="navbar-toggler">
+                    <button
+                        type="button"
+                        class="navbar-toggler"
+                        @click="$emit('navbar-toggle')"
+                    >
                         <span class="navbar-toggler-icon" />
                     </button>
                 </li>
@@ -95,9 +100,8 @@
 </template>
 
 <script setup lang="ts">
-// import { computed } from "vue";
-// import { usePage } from "@inertiajs/vue3";
 import { useAppStore } from "@/Store/AppStore";
 
+defineEmits(["navbar-toggle"]);
 const app = useAppStore();
 </script>

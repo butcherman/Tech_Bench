@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Actions\BuildNavbar;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use PragmaRX\Version\Package\Version;
 
@@ -71,42 +70,33 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return array_merge(parent::share($request), [
+        $userShare = [];
+        $primaryShare = array_merge(parent::share($request), [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => $this->getFlashData(),
-            // //  Alert messages that will stick to top of request
-            // 'alerts' => fn () => $request->session()->get('alert'),
             // App information that is shared and used on all pages
             'app' => [
                 'name' => fn () => config('app.name'),
                 'logo' => fn () => config('app.logo'),
-                //     'version' => fn () => Cache::get('version.full', function () {
-                //         $version = (new Version)->full();
-                //         Cache::put('version.full', $version);
-
-                //         return $version;
-                //     }),
-                //     'copyright' => fn () => Cache::get('version.copyright', function () {
-                //         $copyright = (new Version)->copyright();
-                //         Cache::put('version.copyright', $copyright);
-
-                //         return $copyright;
-                //     }),
-                //  File information
-                //     'fileData' => [
-                //         'maxSize' => fn () => config('filesystems.max_filesize'),
-                //         'chunkSize' => fn () => config('filesystems.chunk_size'),
-                //         'token' => fn () => csrf_token(),
-                //     ],
             ],
-            //  Current logged in user
-            'current_user' => fn () => $request->user() ? $request->user() : null,
-            // 'notifications' => [
-            //     'list' => fn () => $request->user() ? $request->user()->notifications : null,
-            //     'new' => fn () => $request->user() ? $request->user()->unreadNotifications->count() : null,
-            // ],
-            // //  Dynamically built navigation menu
-            // 'navbar' => fn () => $request->user() ? (new BuildNavbar)->build($request->user()) : [],
         ]);
+
+        /**
+         * If a user is logged in, we need additional data
+         */
+        if ($request->user()) {
+            $userShare = [
+                //  Current logged in user
+                'current_user' => fn () => $request->user(),
+                'user_notifications' => [
+                    'list' => fn () => $request->user()->notifications,
+                    'new' => fn () => $request->user()->unreadNotifications->count(),
+                ],
+                //  Dynamically built navigation menu
+                'navbar' => fn () => BuildNavbar::build($request->user()),
+            ];
+        }
+
+        return array_merge($primaryShare, $userShare);
     }
 }
