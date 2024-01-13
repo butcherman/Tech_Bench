@@ -4,11 +4,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body h-100 text-center">
-                    <img :src="app.logo" class="img-fluid w-50" />
-                    <h5>
-                        Enter your Email Address for instructions on recovering
-                        your account
-                    </h5>
+                    <h5>Reset Your Password</h5>
                     <div class="row align-items-center">
                         <div class="col">
                             <div v-if="app.flash.length">
@@ -20,9 +16,19 @@
                                     {{ flash.message }}
                                 </div>
                             </div>
-                            <ForgotPasswordForm />
+                            <ResetPasswordForm :email="email" :token="token" />
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-body text-center">
+                    <h5>Password Rules</h5>
+                    <ul class="list-group">
+                        <li v-for="rule in rules" class="list-group-item">
+                            {{ rule }}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -31,10 +37,16 @@
 
 <script setup lang="ts">
 import AuthLayout from "@/Layouts/AuthLayout.vue";
-import ForgotPasswordForm from "@/Forms/Auth/ForgotPasswordForm.vue";
+import ResetPasswordForm from "@/Forms/Auth/ResetPasswordForm.vue";
 import { useAppStore } from "@/Store/AppStore";
 
 const app = useAppStore();
+
+defineProps<{
+    email: string;
+    token: string;
+    rules: string[];
+}>();
 </script>
 
 <script lang="ts">

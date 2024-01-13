@@ -38,6 +38,14 @@ html {
 }
 
 /**
+* Add "status" alert to possible alert types
+*/
+.alert-status {
+    background-color: #1f0683;
+    color: #ffffff;
+}
+
+/**
 * Separation line with text in middle
 */
 .separator {

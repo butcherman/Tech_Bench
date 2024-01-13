@@ -42,9 +42,10 @@ class HandleInertiaRequests extends Middleware
             'info',
             'light',
             'dark',
+            'status',
         ];
 
-        if ($flash['new']) {
+        if ($flash) {
             foreach ($flash['new'] as $f) {
                 if (in_array($f, $allowedTypes)) {
                     $flashArr[] = [
@@ -52,8 +53,6 @@ class HandleInertiaRequests extends Middleware
                     ];
                 }
             }
-        }
-        if ($flash['old']) {
             foreach ($flash['old'] as $f) {
                 if (in_array($f, $allowedTypes)) {
                     $flashArr[] = [

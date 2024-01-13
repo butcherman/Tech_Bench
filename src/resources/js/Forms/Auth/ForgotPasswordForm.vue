@@ -28,7 +28,6 @@ const schema = object({
 
 const onSubmit = (form: { email: string }) => {
     const formData = useForm(form);
-    console.log(form);
 
     formData.post(route("password.forgot"), {
         onFinish: () => resetPasswordForm.value?.endSubmit(),

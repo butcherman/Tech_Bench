@@ -68,73 +68,41 @@ return [
     */
 
     'defaults' => [
-        // 'supervisor-1' => [
-        //     'connection' => 'redis',
-        //     'queue' => ['default'],
-        //     'balance' => 'auto',
-        //     'maxProcesses' => 10,
-        //     'maxTime' => 0,
-        //     'maxJobs' => 0,
-        //     'memory' => 128,
-        //     'tries' => 1,
-        //     'timeout' => 60,
-        //     'nice' => 0,
-        // ],
-        'job-queue' => [
+        'supervisor-1' => [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
-            'maxProcesses' => 10,
+            'maxProcesses' => 5,
             'maxTime' => 0,
-            'maxjobs' => 0,
+            'maxJobs' => 0,
             'memory' => 128,
-            'tried' => 1,
+            'tries' => 1,
             'timeout' => 60,
             'nice' => 0,
         ],
-        'job-queue' => [
-            'connection' => 'redis',
-            'queue' => ['default'],
-            'balance' => 'auto',
-            'maxProcesses' => 10,
-            'balanceMaxShift' => 1,
-            'balanceCooldown' => 3,
-            'maxTime' => 0,
-            'maxjobs' => 0,
-            'memory' => 128,
-            'tried' => 1,
-            'timeout' => 60,
-            'nice' => 0,
-        ],
-        'mail-queue' => [
+        'supervisor-2' => [
             'connection' => 'redis',
             'queue' => ['mail'],
             'balance' => 'auto',
             'maxProcesses' => 10,
-            'balanceMaxShift' => 1,
-            'balanceCooldown' => 3,
             'maxTime' => 0,
-            'maxjobs' => 0,
+            'maxJobs' => 0,
             'memory' => 128,
-            'tried' => 1,
+            'tries' => 1,
+            'timeout' => 60,
+            'nice' => 0,
+        ],
+        'supervisor-3' => [
+            'connection' => 'redis',
+            'queue' => ['job'],
+            'balance' => 'auto',
+            'maxProcesses' => 10,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 1,
             'timeout' => 60,
             'nice' => 0,
         ],
     ],
-
-    // 'environments' => [
-    //     'production' => [
-    //         'supervisor-1' => [
-    //             'maxProcesses' => 10,
-    //             'balanceMaxShift' => 1,
-    //             'balanceCooldown' => 3,
-    //         ],
-    //     ],
-
-    //     'local' => [
-    //         'supervisor-1' => [
-    //             'maxProcesses' => 5,
-    //         ],
-    //     ],
-    // ],
 ];

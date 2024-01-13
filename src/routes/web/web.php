@@ -20,7 +20,7 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 //     return Inertia::render('Home');
 // });
 
-Route::get('dashboard', function () {
+Route::middleware('auth')->get('dashboard', function () {
     // return 'dashboard';
     return Inertia::render('Home/Dashboard');
 })->name('dashboard');
