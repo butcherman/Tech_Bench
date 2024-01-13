@@ -76,7 +76,7 @@ class HandleInertiaRequests extends Middleware
             'flash' => $this->getFlashData(),
             // //  Alert messages that will stick to top of request
             // 'alerts' => fn () => $request->session()->get('alert'),
-            // //  App information that is shared and used on all pages
+            // App information that is shared and used on all pages
             'app' => [
                 'name' => fn () => config('app.name'),
                 'logo' => fn () => config('app.logo'),
@@ -92,15 +92,15 @@ class HandleInertiaRequests extends Middleware
 
                 //         return $copyright;
                 //     }),
-                //     //  Current logged in user
-                //     'user' => fn () => $request->user() ? $request->user() : null,
-                //     //  File information
+                //  File information
                 //     'fileData' => [
                 //         'maxSize' => fn () => config('filesystems.max_filesize'),
                 //         'chunkSize' => fn () => config('filesystems.chunk_size'),
                 //         'token' => fn () => csrf_token(),
                 //     ],
             ],
+            //  Current logged in user
+            'current_user' => fn () => $request->user() ? $request->user() : null,
             // 'notifications' => [
             //     'list' => fn () => $request->user() ? $request->user()->notifications : null,
             //     'new' => fn () => $request->user() ? $request->user()->unreadNotifications->count() : null,

@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Home\AboutController;
+use App\Http\Controllers\Home\DashboardController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::middleware(['auth', 'user_security'])->get('dashboard', function () {
-    // return 'dashboard';
-    return Inertia::render('Home/Dashboard');
-})->name('dashboard');
+Route::middleware(['auth', 'user_security'])->group(function () {
+
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('about', AboutController::class)->name('about');
+});

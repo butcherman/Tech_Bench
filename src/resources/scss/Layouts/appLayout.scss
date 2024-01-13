@@ -1,0 +1,62 @@
+/**
+*   Layout is used for all internal authenticated pages
+*/
+@import "../global_variables";
+
+/*
+*   Theme Style Variables
+*/
+$default-font-size: 0.875rem;
+$soft-border: 1px solid #00000026;
+$header-height: 70px;
+$header-background: #ffffff;
+$navbar-width: 237px;
+$navbar-background: $header-background;
+$navbar-link-color: #5f5f5f;
+$content-background: #dddce1;
+$footer-background: $content-background;
+
+body #app-layout {
+    .top-navbar {
+        background-color: $header-background;
+        height: $header-height;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        border-bottom: $soft-border;
+        .navbar-logo-wrapper {
+            height: 100%;
+            @media (min-width: $brk-md) {
+                width: $navbar-width;
+            }
+            .navbar-logo {
+                margin: auto;
+                img {
+                    max-height: $header-height - 20;
+                }
+            }
+        }
+        .navbar-data {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            padding-right: 5px;
+            .nav {
+                .nav-item {
+                    margin-right: 5px;
+                    margin-left: 4px;
+                }
+            }
+        }
+    }
+
+    .navbar-toggler {
+        display: flex;
+        @media (min-width: $brk-lg) {
+            display: none;
+        }
+    }
+
+    // .dropdown-menu {
+    //     margin: 0 !important;
+    // }
+}

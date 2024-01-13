@@ -8,6 +8,7 @@ type pageData = {
 type pageProps = {
     app: appProps;
     flash: flashData[];
+    current_user: user | null;
     // errors: errors;
     // notifications: notificationProps;
     // navbar: navBarProps[];

@@ -25,10 +25,4 @@ Route::middleware(['guest', 'throttle:50,120'])->group(function () {
         Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('forgot');
         Route::get('reset-password', ResetPasswordController::class)->name('reset');
     });
-
-    /**
-     * Socialite Routes
-     */
-    // Route::get('auth/redirect', [SocialiteController::class, 'redirectAuth'])->name('azure-login');
-    // Route::get('auth/callback', [SocialiteController::class, 'callback'])->name('azure-callback');
 });

@@ -9,7 +9,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <p class="text-center">Dashboard</p>
+                        <p class="text-center">About</p>
                     </div>
                 </div>
             </div>

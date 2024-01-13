@@ -20,25 +20,40 @@ class User extends Authenticatable
 
     protected $guarded = ['created_at', 'updated_at'];
 
-    // protected $hidden = [
-    //     'role_id',
-    //     'password',
-    //     'remember_token',
-    //     'deleted_at',
-    //     'created_at',
-    //     'password_expires',
-    //     'updated_at',
-    //     'user_id',
-    //     'phone',
-    //     'receive_sms',
-    //     'sms_verified',
-    // ];
+    protected $hidden = [
+        'role_id',
+        'password',
+        'remember_token',
+        'deleted_at',
+        'created_at',
+        'password_expires',
+        'updated_at',
+        'user_id',
+        // 'phone',
+        // 'receive_sms',
+        // 'sms_verified',
+    ];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
     ];
+
+    protected $appends = ['full_name', 'initials'];
+
+    /**
+     * Additional User Attributes
+     */
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getInitialsAttribute()
+    {
+        return "{$this->first_name[0]}{$this->last_name[0]}";
+    }
 
     /**
      * Determine the new expire date for an updated password

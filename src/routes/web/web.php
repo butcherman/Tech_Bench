@@ -22,4 +22,4 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 //     return Inertia::render('Home');
 // });
 
-Route::get('logout', [AuthenticatedSessionController::class, 'destroy']);
+// Route::get('logout', [AuthenticatedSessionController::class, 'destroy']);
