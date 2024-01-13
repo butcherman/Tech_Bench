@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Notifiable;
+use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,26 +20,36 @@ class User extends Authenticatable
 
     protected $guarded = ['created_at', 'updated_at'];
 
-    protected $hidden = [
-        'role_id',
-        'password',
-        'remember_token',
-        // 'two_factor_secret',
-        // 'two_factor_recovery_codes',
-        // 'two_factor_confirmed_at',
-        'deleted_at',
-        'created_at',
-        'password_expires',
-        'updated_at',
-        'user_id',
-        'phone',
-        'receive_sms',
-        'sms_verified',
-    ];
+    // protected $hidden = [
+    //     'role_id',
+    //     'password',
+    //     'remember_token',
+    //     'deleted_at',
+    //     'created_at',
+    //     'password_expires',
+    //     'updated_at',
+    //     'user_id',
+    //     'phone',
+    //     'receive_sms',
+    //     'sms_verified',
+    // ];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
     ];
+
+    /**
+     * Determine the new expire date for an updated password
+     */
+    public function getNewExpireTime($immediate = false)
+    {
+        if ($immediate) {
+            return Carbon::yesterday();
+        }
+
+        return config('auth.passwords.settings.expire') ?
+            Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+    }
 }
