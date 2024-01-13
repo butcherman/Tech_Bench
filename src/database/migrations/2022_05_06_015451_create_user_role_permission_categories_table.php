@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\UserRolePermissionTypes;
+use App\Models\UserRolePermissionType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -83,7 +83,7 @@ class CreateUserRolePermissionCategoriesTable extends Migration
             ['perm_type_id' => 27, 'role_cat_id' => 3],
         ];
         foreach ($defaultPermissions as $perm) {
-            UserRolePermissionTypes::where('perm_type_id', $perm['perm_type_id'])
+            UserRolePermissionType::where('perm_type_id', $perm['perm_type_id'])
                 ->update(['role_cat_id' => $perm['role_cat_id']]);
         }
     }

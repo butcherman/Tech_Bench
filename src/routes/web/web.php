@@ -15,14 +15,11 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 |
 */
 
+// TODO - Delete this file
+
 // Route::get('/', function () {
 //     // return view('welcome');
 //     return Inertia::render('Home');
 // });
-
-Route::middleware('auth')->get('dashboard', function () {
-    // return 'dashboard';
-    return Inertia::render('Home/Dashboard');
-})->name('dashboard');
 
 Route::get('logout', [AuthenticatedSessionController::class, 'destroy']);

@@ -22,7 +22,7 @@ class LogDebutVisits
     protected $redact = ['password', 'password_confirmation', 'current_password'];
 
     //  These route prefixes are not logged
-    protected $doNotLog = ['horizon'];
+    protected $doNotLog = ['horizon', 'telescope'];
 
     /**
      * When Debug Logging is one, log every page visit and all $request data - Except Horizon Routes
