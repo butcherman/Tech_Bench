@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class UserPasswordController extends Controller
 {
@@ -12,8 +13,7 @@ class UserPasswordController extends Controller
      */
     public function show()
     {
-        //
-        return 'show';
+        return Inertia::render('User/Password');
     }
 
     /**

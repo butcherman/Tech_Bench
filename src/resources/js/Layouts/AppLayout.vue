@@ -1,18 +1,20 @@
 <template>
-    <div id="app-layout" class="container-fluid h-100 p-0 m-0">
+    <div id="app-layout-wrapper" class="container-fluid">
         <AppHeader @navbar-toggle="navbarActive = !navbarActive" />
-        <div id="app-wrapper" class="container-fluid">
+        <main id="app-wrapper">
             <AppSideNav :active="navbarActive" />
             <div id="content-wrapper">
                 <slot />
             </div>
-        </div>
+            <AppFooter />
+        </main>
     </div>
 </template>
 
 <script setup lang="ts">
 import AppHeader from "@/Layouts/AppLayout/AppHeader.vue";
 import AppSideNav from "@/Layouts/AppLayout/AppSideNav.vue";
+import AppFooter from "./AppLayout/AppFooter.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import "../../scss/Layouts/appLayout.scss";
