@@ -1,5 +1,5 @@
 <template>
-    <div id="auth-layout" class="container-fluid h-100 p-0 m-0">
+    <div id="auth-layout-wrapper">
         <slot />
     </div>
 </template>

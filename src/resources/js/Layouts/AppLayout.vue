@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import AppHeader from "@/Layouts/AppLayout/AppHeader.vue";
 import AppSideNav from "@/Layouts/AppLayout/AppSideNav.vue";
-import { ref, reactive, onMounted } from "vue";
+import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import "../../scss/Layouts/appLayout.scss";
 

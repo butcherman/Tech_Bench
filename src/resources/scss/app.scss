@@ -16,19 +16,11 @@
 /**
 *   Set all main elements to full height to allow better layout control
 */
-html {
+html,
+body,
+#app {
     min-height: 100%;
     height: 100%;
-
-    body {
-        min-height: 100%;
-        height: 100%;
-
-        #app {
-            min-height: 100%;
-            height: 100%;
-        }
-    }
 }
 
 /**
