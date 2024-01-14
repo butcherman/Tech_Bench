@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Illuminate\Support\Facades\Cache as FacadesCache;
+use PragmaRX\Version\Package\Version;
 
 /**
  * Cache will return cached items and build them if they are not already in the cache
@@ -39,6 +40,34 @@ class Cache
             FacadesCache::put('passwordRules', $passwordRules);
 
             return $passwordRules;
+        });
+    }
+
+    /**
+     * Current Version of application
+     */
+    public static function version()
+    {
+        return FacadesCache::get('version', function () {
+            $version = (new Version)->full();
+
+            FacadesCache::put('version', $version);
+
+            return $version;
+        });
+    }
+
+    /**
+     * Copyright Year String
+     */
+    public static function copyright()
+    {
+        return FacadesCache::get('copyright', function () {
+            $copyright = (new Version)->copyright();
+
+            FacadesCache::put('copyright', $copyright);
+
+            return $copyright;
         });
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Actions\BuildNavbar;
+use App\Service\Cache;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use PragmaRX\Version\Package\Version;
@@ -78,6 +79,8 @@ class HandleInertiaRequests extends Middleware
             'app' => [
                 'name' => fn () => config('app.name'),
                 'logo' => fn () => config('app.logo'),
+                'version' => fn () => Cache::version(),
+                'copyright' => fn () => Cache::copyright(),
             ],
         ]);
 

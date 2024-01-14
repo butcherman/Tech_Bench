@@ -21,9 +21,8 @@ type pageProps = {
 type appProps = {
     name: string;
     logo: string;
-    // version: string;
-    // copyright: string;
-    // user: user | null;
+    version: string;
+    copyright: string;
     // fileData: fileData;
 };
 

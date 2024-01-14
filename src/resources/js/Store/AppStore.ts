@@ -10,6 +10,12 @@ import { usePage } from "@inertiajs/vue3";
 export const useAppStore = defineStore("appStore", () => {
     const name = computed<string>(() => usePage<pageProps>().props.app.name);
     const logo = computed<string>(() => usePage<pageProps>().props.app.logo);
+    const version = computed<string>(
+        () => usePage<pageProps>().props.app.version
+    );
+    const copyright = computed<string>(
+        () => usePage<pageProps>().props.app.copyright
+    );
     const navbar = computed<navbar[]>(() => usePage<pageProps>().props.navbar);
     const flash = computed<flashData[]>(() => usePage<pageProps>().props.flash);
     const user = computed<user | null>(
@@ -19,5 +25,14 @@ export const useAppStore = defineStore("appStore", () => {
         () => usePage<pageProps>().props.user_notifications
     );
 
-    return { name, logo, flash, user, userNotifications, navbar };
+    return {
+        name,
+        logo,
+        flash,
+        user,
+        userNotifications,
+        navbar,
+        version,
+        copyright,
+    };
 });
