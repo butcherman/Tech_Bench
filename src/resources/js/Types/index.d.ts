@@ -12,7 +12,7 @@ type pageProps = {
     user_notifications: userNotificationProp;
     navbar: navbar[];
     breadcrumbs: breadcrumbs[];
-    // errors: errors;
+    errors: { [key: string]: string }[];
     // notifications: notificationProps;
     // alerts: alert[];
     // stepId?: number;

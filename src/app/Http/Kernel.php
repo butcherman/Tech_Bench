@@ -40,7 +40,7 @@ class Kernel extends HttpKernel
 
         'user_security' => [
             // \App\Http\Middleware\CheckFor2FA::class,
-            // \App\Http\Middleware\CheckPasswordExpire::class,
+            \App\Http\Middleware\CheckPasswordExpire::class,
         ],
 
         'api' => [

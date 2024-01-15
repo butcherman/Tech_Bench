@@ -5,7 +5,10 @@
             <AppSideNav :active="navbarActive" />
             <div id="content-wrapper">
                 <AppBreadcrumbs />
-                <slot />
+                <AppAlerts />
+                <div id="content">
+                    <slot />
+                </div>
             </div>
             <AppFooter />
         </main>
@@ -17,6 +20,7 @@ import AppHeader from "@/Layouts/AppLayout/AppHeader.vue";
 import AppSideNav from "@/Layouts/AppLayout/AppSideNav.vue";
 import AppFooter from "./AppLayout/AppFooter.vue";
 import AppBreadcrumbs from "./AppLayout/AppBreadcrumbs.vue";
+import AppAlerts from "./AppLayout/AppAlerts.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import "../../scss/Layouts/appLayout.scss";

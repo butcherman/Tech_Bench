@@ -4,7 +4,18 @@ use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Routes for User Settings and Passwords
+ */
 Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
-    Route::apiSingleton('change-password', UserPasswordController::class);
-    Route::apiSingleton('user-settings', UserSettingsController::class);
+    Route::get('user-settings', [UserSettingsController::class, 'show'])
+        ->name('user-settings.show')
+        ->breadcrumb('User Settings', 'dashboard');
+    Route::put('user-settings', [UserSettingsController::class, 'update'])
+        ->name('user-settings.update');
+    Route::get('change-password', [UserPasswordController::class, 'show'])
+        ->name('change-password.show')
+        ->breadcrumb('Change Password', 'user.user-settings.show');
+    Route::put('change-password', [UserPasswordController::class, 'update'])
+        ->name('change-password.update');
 });

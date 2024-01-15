@@ -16,8 +16,8 @@ class CheckPasswordExpire
 {
     //  Routes that are not affected by the password expiring
     protected $bypassRoutes = [
-        'user.password',
-        'user-password.update',
+        // 'user.password.show',
+        // 'user-password.update',
         'logout',
     ];
 
@@ -32,7 +32,7 @@ class CheckPasswordExpire
                 ->notice('User '.$request->user()->full_name.' is being forced to change their password');
 
             return redirect()
-                ->route('user.password')
+                ->route('user.change-password.show')
                 ->withErrors(['password' => __('user.password_expired')]);
         }
 
