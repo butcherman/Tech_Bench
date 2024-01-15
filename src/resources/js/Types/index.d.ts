@@ -11,9 +11,9 @@ type pageProps = {
     current_user: user | null;
     user_notifications: userNotificationProp;
     navbar: navbar[];
+    breadcrumbs: breadcrumbs[];
     // errors: errors;
     // notifications: notificationProps;
-    // breadcrumbs: breadcrumbs[];
     // alerts: alert[];
     // stepId?: number;
 };
@@ -35,4 +35,10 @@ type navbar = {
 type flashData = {
     type: string;
     message: string;
+};
+
+type breadcrumbs = {
+    title: string;
+    url: string;
+    is_current_page: boolean;
 };

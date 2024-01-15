@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-12">
-                <h4 class="text-center text-md-left">Hello World</h4>
+                <h4 class="text-center text-md-left">Password</h4>
             </div>
         </div>
         <div class="row">
@@ -18,7 +18,12 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted } from 'vue';
+import AppLayout from "@/Layouts/AppLayout.vue";
+// import { ref, reactive, onMounted } from "vue";
 
-    const props = defineProps<{}>();
+// const props = defineProps<{}>();
+</script>
+
+<script lang="ts">
+export default { layout: AppLayout };
 </script>
