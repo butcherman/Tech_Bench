@@ -37,6 +37,24 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         /**
+         * User Profile Events
+         */
+        'App\Events\User\EmailChangedEvent' => [
+            'App\Listeners\Notify\User\EmailChangedListener',
+        ],
+        'App\Events\User\PasswordChangedEvent' => [
+            'App\Listeners\Notify\User\PasswordChangedListener',
+            'App\Listeners\User\LogPasswordChanged',
+        ],
+        'App\Events\User\UserCreatedEvent' => [
+            'App\Listeners\Notify\User\NotifyNewUser',
+            'App\Listeners\User\CreateUserSettingsEntry',
+        ],
+        'App\Events\User\ResendWelcomeEvent' => [
+            'App\Listeners\Notify\User\ResendWelcomeEmail',
+        ],
+
+        /**
          * Office 365 Authentication Events
          */
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [

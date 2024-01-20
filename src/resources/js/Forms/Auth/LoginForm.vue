@@ -3,8 +3,9 @@
         ref="loginForm"
         :initial-values="initValues"
         :validation-schema="schema"
+        :submit-route="$route('login')"
         submit-text="Login"
-        @submit="onSubmit"
+        submit-method="post"
     >
         <TextInput id="username" name="username" placeholder="Username" focus />
         <TextInput
@@ -30,7 +31,6 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import CheckboxSwitch from "../_Base/CheckboxSwitch.vue";
 import { ref } from "vue";
 import { boolean, object, string } from "yup";
-import { useForm } from "@inertiajs/vue3";
 
 const loginForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {
@@ -43,28 +43,4 @@ const schema = object({
     password: string().required(),
     remember: boolean().required(),
 });
-
-interface loginForm {
-    username: string;
-    password: string;
-}
-
-const onSubmit = (form: loginForm) => {
-    loginForm.value?.clearErrorAlert();
-    const formData = useForm(form);
-
-    formData.post(route("login"), {
-        onFinish: () => loginForm.value?.endSubmit(),
-        onError: () => checkForThrottle(formData.errors),
-    });
-};
-
-const checkForThrottle = (formErrors: { [key: string]: string }): void => {
-    if (formErrors["throttle"]) {
-        console.log("throttle error");
-        loginForm.value?.pushErrorAlert(formErrors["throttle"]);
-    } else {
-        loginForm.value?.setValidationErrors(formErrors);
-    }
-};
 </script>

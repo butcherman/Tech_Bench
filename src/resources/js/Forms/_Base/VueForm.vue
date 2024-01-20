@@ -12,7 +12,7 @@
             </div>
         </div>
         <slot />
-        <slot name="submit" v-if="!hideSubmit">
+        <slot name="submit">
             <SubmitButton
                 :submitted="isSubmitting"
                 class="mt-auto"
@@ -29,17 +29,23 @@ import Loading from "vue3-loading-overlay";
 import TrinityRingsLoader from "@/Components/_Base/Loaders/TrinityRingsLoader.vue";
 import { ref, computed } from "vue";
 import { useForm } from "vee-validate";
+import { useForm as useInertiaForm } from "@inertiajs/vue3";
+
 //  Overlay Styling
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 
-const emit = defineEmits(["submit"]);
+interface formData {
+    [key: string]: string;
+}
+
+const emit = defineEmits(["submitting", "success", "has-errors"]);
 const props = defineProps<{
     validationSchema: object;
     initialValues: { [key: string]: any };
     submitText?: string;
     submitVariant?: "primary" | "info" | "success" | "danger" | "warning";
-    manualSubmit?: boolean;
-    hideSubmit?: boolean;
+    submitRoute: string;
+    submitMethod: "post" | "put";
     hideOverlay?: boolean;
 }>();
 
@@ -59,30 +65,50 @@ const {
     initialValues: props.initialValues,
 });
 
-const onSubmit = handleSubmit((form: any): void => {
-    if (!props.manualSubmit) {
-        isSubmitting.value = true;
-    }
+const isDirty = computed(() => meta.value.dirty);
 
-    emit("submit", form);
+/*******************************************************************************
+ * Handle the Form Submission
+ *******************************************************************************/
+const isSubmitting = ref<boolean>(false);
+const onSubmit = handleSubmit((form): void => {
+    isSubmitting.value = true;
+    const formData = useInertiaForm(form);
+    clearErrorAlert();
+
+    formData.submit(props.submitMethod, props.submitRoute, {
+        onFinish: () => (isSubmitting.value = false),
+        onSuccess: () => emit("success"),
+        onError: () => handleErrors(form, formData.errors),
+    });
 });
+
+const handleErrors = (
+    originalForm: formData,
+    formErrors: Partial<Record<string | number, string>>
+) => {
+    emit("has-errors");
+    const formKeys = Object.keys(originalForm);
+
+    for (const [key, value] of Object.entries(formErrors)) {
+        if (value) {
+            console.log(typeof value);
+            if (typeof value === "object") {
+                handleErrors(originalForm, value);
+            } else {
+                if (formKeys.indexOf(key) != -1) {
+                    setFieldError(key, value);
+                } else {
+                    pushErrorAlert(value);
+                }
+            }
+        }
+    }
+};
 
 const getFieldValue = (field: string): any => {
     return values[field as keyof typeof values];
 };
-
-const isDirty = computed(() => meta.value.dirty);
-
-/*******************************************************************************
- * Submission status of the form
- *******************************************************************************/
-const isSubmitting = ref<boolean>(false);
-function triggerSubmit(): void {
-    isSubmitting.value = true;
-}
-function endSubmit(): void {
-    isSubmitting.value = false;
-}
 
 /*******************************************************************************
  * Errors to be triggered above the form (used for errors without field name)
@@ -95,28 +121,12 @@ function clearErrorAlert(): void {
     errorAlerts.value = [];
 }
 
-/*******************************************************************************
- * Errors triggered by server side validation
- *******************************************************************************/
-function setValidationErrors(errorData: { [key: string]: string }): void {
-    const errKeys = Object.keys(errorData);
-    errKeys.forEach((field) => {
-        setFieldError(field, errorData[field]);
-    });
-}
-
 defineExpose({
-    endSubmit,
     getFieldValue,
     setFieldValue,
     setFieldError,
-    onSubmit,
-    triggerSubmit,
     resetForm,
     handleReset,
-    pushErrorAlert,
-    clearErrorAlert,
-    setValidationErrors,
     isDirty,
     isSubmitting,
 });

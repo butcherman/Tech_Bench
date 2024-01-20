@@ -3,8 +3,9 @@
         ref="resetPasswordForm"
         :initial-values="initValues"
         :validation-schema="schema"
+        :submit-route="$route('password.reset')"
+        submit-method="post"
         submit-text="Reset Password"
-        @submit="onSubmit"
     >
         <TextInput id="email" name="email" placeholder="Email Address" />
         <TextInput
@@ -26,10 +27,8 @@
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-
 import { ref } from "vue";
 import { ref as reference, object, string } from "yup";
-import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps<{
     email: string;
@@ -51,22 +50,4 @@ const schema = object({
         "Passwords must match"
     ),
 });
-
-interface ResetPasswordForm {
-    email: string;
-    token: string;
-    password: string;
-    password_confirmation: string;
-}
-
-const onSubmit = (form: ResetPasswordForm) => {
-    const formData = useForm(form);
-    console.log(form);
-
-    formData.post(route("password.reset"), {
-        onFinish: () => resetPasswordForm.value?.endSubmit(),
-        onError: () =>
-            resetPasswordForm.value?.setValidationErrors(formData.errors),
-    });
-};
 </script>

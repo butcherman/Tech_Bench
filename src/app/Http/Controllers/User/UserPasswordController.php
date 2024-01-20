@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Service\Cache;
 use Inertia\Inertia;
 
 class UserPasswordController extends Controller
@@ -11,17 +11,10 @@ class UserPasswordController extends Controller
     /**
      * Display the resource.
      */
-    public function show()
+    public function __invoke()
     {
-        return Inertia::render('User/Password');
-    }
-
-    /**
-     * Update the resource in storage.
-     */
-    public function update(Request $request)
-    {
-        //
-        return 'update';
+        return Inertia::render('User/Password', [
+            'rules' => Cache::PasswordRules(),
+        ]);
     }
 }

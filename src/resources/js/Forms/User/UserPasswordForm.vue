@@ -3,8 +3,9 @@
         ref="userPasswordForm"
         :initial-values="initValues"
         :validation-schema="schema"
+        :submit-route="$route('user-password.update')"
+        submit-method="put"
         submit-text="Update Password"
-        @submit="onSubmit"
     >
         <TextInput
             id="current-password"
@@ -31,10 +32,8 @@
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-
 import { ref } from "vue";
 import { object, string, ref as reference } from "yup";
-import { useForm } from "@inertiajs/vue3";
 
 const userPasswordForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {
@@ -49,14 +48,4 @@ const schema = object({
         .required("You must confirm your password")
         .oneOf([reference("password")], "Passwords must match"),
 });
-
-const onSubmit = (form) => {
-    const formData = useForm(form);
-    console.log(form);
-
-    formData.put(route("user.change-password.update"), {
-        onFinish: () => userPasswordForm.value.endSubmit(),
-        onSuccess: () => console.log("success"),
-    });
-};
 </script>
