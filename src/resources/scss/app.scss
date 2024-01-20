@@ -26,8 +26,9 @@ body,
 /**
 * Add "status" alert to possible alert types
 */
-.alert-status {
-    background-color: #1f0683;
+.alert-status,
+.text-bg-status {
+    background-color: #2f1988;
     color: #ffffff;
 }
 
@@ -54,5 +55,21 @@ body,
 
     &:not(:empty)::after {
         margin-left: 0.25em;
+    }
+}
+
+.card {
+    height: 100%;
+    box-shadow: 15px 15px 10px 1px rgba(0, 0, 0, 0.2);
+    .card-body {
+        .card-title {
+            color: #787878;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.5rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
     }
 }

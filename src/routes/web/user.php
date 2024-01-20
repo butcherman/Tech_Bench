@@ -13,6 +13,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
         ->breadcrumb('User Settings', 'dashboard');
     Route::put('user-settings', [UserSettingsController::class, 'update'])
         ->name('user-settings.update');
+
     Route::get('change-password', UserPasswordController::class)
         ->name('change-password.show')
         ->breadcrumb('Change Password', 'user.user-settings.show');

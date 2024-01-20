@@ -1,5 +1,6 @@
 <template>
     <div id="app-layout-wrapper" class="container-fluid">
+        <AppFlash />
         <AppHeader @navbar-toggle="navbarActive = !navbarActive" />
         <main id="app-wrapper">
             <AppSideNav :active="navbarActive" />
@@ -21,6 +22,7 @@ import AppSideNav from "@/Layouts/AppLayout/AppSideNav.vue";
 import AppFooter from "./AppLayout/AppFooter.vue";
 import AppBreadcrumbs from "./AppLayout/AppBreadcrumbs.vue";
 import AppAlerts from "./AppLayout/AppAlerts.vue";
+import AppFlash from "./AppLayout/AppFlash.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import "../../scss/Layouts/appLayout.scss";

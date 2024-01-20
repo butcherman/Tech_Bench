@@ -22,6 +22,7 @@ class UserSettingsController extends Controller
     public function update(Request $request)
     {
         //
-        return 'update';
+        // return 'update';
+        return back()->with('status', 'it worked');
     }
 }

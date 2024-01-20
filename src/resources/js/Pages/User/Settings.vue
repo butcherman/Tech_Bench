@@ -1,15 +1,20 @@
 <template>
     <div>
+        <Head title="User Settings" />
         <div class="row">
-            <div class="col-12">
-                <h4 class="text-center text-md-left">Settings</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
+            <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <p class="text-center">This is a new page</p>
+                        <div class="card-title">Account</div>
+                        <UserAccountForm :current-user="current_user" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body d-flex flex-column">
+                        <div class="card-title">Notifications</div>
+                        notifications form
                     </div>
                 </div>
             </div>
@@ -19,9 +24,13 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
+import UserAccountForm from "@/Forms/User/UserAccountForm.vue";
+// import ?
 // import { ref, reactive, onMounted } from "vue";
 
-// const props = defineProps<{}>();
+const props = defineProps<{
+    current_user: user;
+}>();
 </script>
 
 <script lang="ts">
