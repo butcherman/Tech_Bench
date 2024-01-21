@@ -11,7 +11,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('user-settings', [UserSettingsController::class, 'show'])
         ->name('user-settings.show')
         ->breadcrumb('User Settings', 'dashboard');
-    Route::put('user-settings', [UserSettingsController::class, 'update'])
+    Route::put('user-settings/{user}', [UserSettingsController::class, 'update'])
         ->name('user-settings.update');
 
     Route::get('change-password', UserPasswordController::class)

@@ -29,9 +29,6 @@ class User extends Authenticatable
         'password_expires',
         'updated_at',
         'user_id',
-        // 'phone',
-        // 'receive_sms',
-        // 'sms_verified',
     ];
 
     protected $casts = [
@@ -41,6 +38,14 @@ class User extends Authenticatable
     ];
 
     protected $appends = ['full_name', 'initials'];
+
+    /**
+     * Key for Route/Model binding
+     */
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
 
     /**
      * Additional User Attributes

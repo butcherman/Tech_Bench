@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\User\UserAccountRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class UserSettingsController extends Controller
@@ -19,10 +21,13 @@ class UserSettingsController extends Controller
     /**
      * Update the resource in storage.
      */
-    public function update(Request $request)
+    public function update(UserAccountRequest $request, User $user)
     {
-        //
-        // return 'update';
-        return back()->with('status', 'it worked');
+        $request->checkForEmailChange();
+        $user->update($request->only(['first_name', 'last_name', 'email']));
+        Log::channel('user')->info('User Information for '.$user->username.
+            ' has been updated by '.$request->user()->username, $request->toArray());
+
+        return back()->with('success', __('user.updated'));
     }
 }

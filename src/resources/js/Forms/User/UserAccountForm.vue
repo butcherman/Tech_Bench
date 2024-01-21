@@ -3,7 +3,9 @@
         ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('user.user-settings.update')"
+        :submit-route="
+            $route('user.user-settings.update', currentUser.username)
+        "
         submit-method="put"
         submit-text="Update Account Settings"
     >
@@ -16,7 +18,6 @@
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-import { ref } from "vue";
 import { object, string } from "yup";
 
 const props = defineProps<{
