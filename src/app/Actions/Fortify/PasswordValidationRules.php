@@ -19,12 +19,12 @@ trait PasswordValidationRules
             'required',
             'string',
             'confirmed',
-            'different:current_password',
+            // 'different:current_password',
             new ContainsUpperCase,
             new ContainsLowerCase,
             new ContainsNumber,
             new ContainsSpecialChar,
-            Password::min(6)->uncompromised(3),
+            // Password::min(6)->uncompromised(3),
         ];
     }
 }

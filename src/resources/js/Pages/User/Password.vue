@@ -1,19 +1,25 @@
 <template>
-    <div class="row justify-content-center align-self-center h-100 w-100">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <UserPasswordForm />
+    <div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <UserPasswordForm />
+                    </div>
                 </div>
             </div>
-            <div class="card mt-4">
-                <div class="card-body text-center">
-                    <h5>Password Rules</h5>
-                    <ul class="list-group">
-                        <li v-for="rule in rules" class="list-group-item">
-                            {{ rule }}
-                        </li>
-                    </ul>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>Password Rules</h5>
+                        <ul class="list-group">
+                            <li v-for="rule in rules" class="list-group-item">
+                                {{ rule }}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

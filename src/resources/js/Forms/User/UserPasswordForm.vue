@@ -6,6 +6,7 @@
         :submit-route="$route('user-password.update')"
         submit-method="put"
         submit-text="Update Password"
+        @success="$emit('success')"
     >
         <TextInput
             id="current-password"
@@ -34,6 +35,8 @@ import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import { ref } from "vue";
 import { object, string, ref as reference } from "yup";
+
+defineEmits(["success"]);
 
 const userPasswordForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {

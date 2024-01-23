@@ -26,7 +26,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\LogDebutVisits::class,
+            // \App\Http\Middleware\LogDebutVisits::class,
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
@@ -34,11 +34,12 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Spatie\CookieConsent\CookieConsentMiddleware::class,
-            // \App\Http\Middleware\CheckForInit::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 
-        'user_security' => [
+        'auth.secure' => [
+            \App\Http\Middleware\Authenticate::class,
+            \App\Http\Middleware\CheckForInit::class,
             // \App\Http\Middleware\CheckFor2FA::class,
             \App\Http\Middleware\CheckPasswordExpire::class,
         ],
@@ -62,6 +63,7 @@ class Kernel extends HttpKernel
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'init' => \App\Http\Middleware\InitializeApp::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,

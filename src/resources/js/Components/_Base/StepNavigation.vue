@@ -3,7 +3,7 @@
         <template v-for="step in stepList" :key="step.id">
             <li
                 :class="{
-                    active: step.active,
+                    active: step.id === currentStep,
                     complete: step.id < currentStep,
                 }"
                 @click="navigateToStep(step.id)"
@@ -28,7 +28,6 @@ const props = defineProps<{
         id: number;
         name: string;
         icon: string;
-        active: boolean;
     }[];
     currentStep: number;
 }>();
@@ -42,15 +41,10 @@ const navigateToStep = (stepId: number): void => {
 
 <style lang="scss">
 .step-indicator {
-    border-collapse: separate;
-    display: table;
-    margin-left: 0px;
-    position: relative;
-    table-layout: fixed;
+    margin: 0;
+    overflow: auto;
+    padding: 0;
     text-align: center;
-    vertical-align: middle;
-    padding-left: 0;
-    padding-top: 20px;
 
     li {
         display: table-cell;

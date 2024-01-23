@@ -62,7 +62,7 @@ return [
             'host' => env('REDIS_HOST', 'redis'),
             'password' => env('REDIS_PASSWORD', 'tbRootPassword'),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '2'),
+            'database' => env('REDIS_SESSION_DB', '2'),
         ],
     ],
 ];
