@@ -19,12 +19,13 @@ trait PasswordValidationRules
             'required',
             'string',
             'confirmed',
+            // TODO - Remove Comments
             // 'different:current_password',
             new ContainsUpperCase,
             new ContainsLowerCase,
             new ContainsNumber,
             new ContainsSpecialChar,
-            // Password::min(6)->uncompromised(3),
+            // Password::min(config('auth.passwords.settings.min_length'))->uncompromised(3),
         ];
     }
 }
