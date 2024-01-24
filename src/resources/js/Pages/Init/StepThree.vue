@@ -27,7 +27,7 @@
                     <Link
                         v-if="allowNext"
                         as="button"
-                        :href="$route('dashboard')"
+                        :href="$route('init.step-4')"
                         class="btn btn-info w-100 my-2"
                     >
                         Continue

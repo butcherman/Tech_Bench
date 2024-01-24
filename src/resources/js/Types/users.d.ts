@@ -30,3 +30,12 @@ type userRoles = {
     description: string;
     allow_edit: boolean;
 };
+
+type passwordPolicy = {
+    expire: number;
+    min_length: number;
+    contains_uppercase: boolean;
+    contains_lowercase: boolean;
+    contains_number: boolean;
+    contains_special: boolean;
+};

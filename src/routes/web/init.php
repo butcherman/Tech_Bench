@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
+use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use App\Http\Controllers\Init\Finish;
 use App\Http\Controllers\Init\StepFour;
@@ -31,6 +32,6 @@ Route::middleware(['auth', 'init'])
             ->name('step-2.submit');
         Route::put('email-settings', [EmailSettingsController::class, 'update'])
             ->name('step-3.submit');
-        Route::put('user-settings', StepFour::class)->name('step-4.submit');
-        Route::put('finish', Finish::class)->name('finish.submit');
+        Route::put('user-settings', [PasswordPolicyController::class, 'update'])
+            ->name('step-4.submit');
     });
