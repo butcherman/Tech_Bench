@@ -35,6 +35,7 @@ return [
 
     'email' => [
         'test' => 'Email sent successfully.  Please check your inbox',
+        'updated' => 'Email Settings saved',
     ],
 
     'logging' => [

@@ -1,9 +1,12 @@
 <template>
     <VueForm
-        ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('basic-settings.update')"
+        :submit-route="
+            init
+                ? $route('init.step-2.submit')
+                : $route('basic-settings.update')
+        "
         submit-method="put"
         submit-text="Update Application Configuration"
         @success="$emit('success')"
@@ -43,7 +46,9 @@ const props = defineProps<{
     url: string;
     timezone: string;
     maxFilesize: number;
+    init?: boolean;
 }>();
+
 const initValues = {
     url: props.url,
     timezone: props.timezone,

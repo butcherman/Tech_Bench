@@ -14,6 +14,7 @@
                         :url="settings.url"
                         :timezone="settings.timezone"
                         :max-filesize="settings.max_filesize"
+                        init
                         @success="router.get($route('init.step-3'))"
                     />
                 </div>

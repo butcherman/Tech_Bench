@@ -29,7 +29,7 @@ class CheckForInit
 
             Log::info('First Time Setup Required, redirecting to Initialization Wizard');
 
-            return redirect(route('init.welcome'))->with('warning', 'Setup Required');
+            return redirect(route('init.welcome'));
         }
 
         return $next($request);

@@ -1,6 +1,5 @@
 <template>
     <VueForm
-        ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
         :submit-route="

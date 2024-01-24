@@ -19,7 +19,7 @@ class StepTwo extends Controller
             'settings' => [
                 'url' => preg_replace('(^https?://)', '', config('app.url')),
                 'timezone' => config('app.timezone'),
-                'max_filesize' => config('filesystems.max_filesize'),
+                'max_filesize' => (int) config('filesystems.max_filesize'),
             ],
             'timezone-list' => TimezoneList::Build(),
         ]);

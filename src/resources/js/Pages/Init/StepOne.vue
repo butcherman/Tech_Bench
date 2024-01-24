@@ -8,12 +8,26 @@
                         To start, lets make sure that our Administrator Account
                         is secure.
                     </p>
-                    <p class="text-center">
-                        Please enter a new Administrator Password
-                    </p>
-                    <UserPasswordForm
-                        @success="router.get($route('init.step-2'))"
-                    />
+                    <div v-if="!step1b">
+                        <p class="text-center">
+                            Please update the System Administrator Account
+                            Settings
+                        </p>
+                        <UserForm
+                            :roles="roles"
+                            :user="user"
+                            init
+                            @success="step1b = true"
+                        />
+                    </div>
+                    <div v-else>
+                        <p class="text-center">
+                            Please enter a new Administrator Password
+                        </p>
+                        <UserPasswordForm
+                            @success="router.get($route('init.step-2'))"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,12 +48,18 @@
 
 <script setup lang="ts">
 import InitLayout from "@/Layouts/InitLayout.vue";
+import UserForm from "@/Forms/Admin/User/UserForm.vue";
 import UserPasswordForm from "@/Forms/User/UserPasswordForm.vue";
+import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
 defineProps<{
     rules: string[];
+    roles: userRoles[];
+    user: user;
 }>();
+
+const step1b = ref(false);
 </script>
 
 <script lang="ts">

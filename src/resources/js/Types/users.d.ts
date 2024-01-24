@@ -5,6 +5,7 @@ type user = {
     last_name: string;
     full_name: string;
     initials: string;
+    role_id: string;
 };
 
 type userNotificationProp = {
@@ -21,4 +22,11 @@ type userNotification = {
         subject: string;
         props: object;
     };
+};
+
+type userRoles = {
+    role_id: number;
+    name: string;
+    description: string;
+    allow_edit: boolean;
 };
