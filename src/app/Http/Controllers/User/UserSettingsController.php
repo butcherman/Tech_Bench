@@ -25,6 +25,7 @@ class UserSettingsController extends Controller
     {
         $request->checkForEmailChange();
         $user->update($request->only(['first_name', 'last_name', 'email']));
+
         Log::channel('user')->info('User Information for '.$user->username.
             ' has been updated by '.$request->user()->username, $request->toArray());
 

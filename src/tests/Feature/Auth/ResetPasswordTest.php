@@ -41,14 +41,17 @@ class ResetPasswordTest extends TestCase
     public function test_submit_reset_password_form()
     {
         Notification::fake();
+
         $user = User::factory()->create();
 
         $response = $this->post(route('password.forgot'), [
             'email' => $user->email,
         ]);
 
-        $response->assertStatus(302)->assertSessionHas('status', __('passwords.sent'));
+        $response->assertStatus(302)
+            ->assertSessionHas('status', __('passwords.sent'));
         $this->assertDatabaseHas('password_resets', ['email' => $user->email]);
+
         Notification::assertSentTo($user, ResetPassword::class);
     }
 
@@ -63,8 +66,14 @@ class ResetPasswordTest extends TestCase
             'email' => 'randomEmail@em.com',
         ]);
 
-        $response->assertStatus(302)->assertRedirect(route('home'))->assertSessionHasErrors('email');
-        Notification::assertNotSentTo(User::factory()->make(['email' => 'randomEmail@em.com']), ResetPassword::class);
+        $response->assertStatus(302)
+            ->assertRedirect(route('home'))
+            ->assertSessionHasErrors('email');
+
+        Notification::assertNotSentTo(
+            User::factory()->make(['email' => 'randomEmail@em.com']),
+            ResetPassword::class
+        );
     }
 
     /**
@@ -85,7 +94,10 @@ class ResetPasswordTest extends TestCase
         $user = User::factory()->create();
         $token = Password::broker()->createToken($user);
 
-        $response = $this->get(route('password.reset', ['token' => $token, 'email' => $user->email]));
+        $response = $this->get(route('password.reset', [
+            'token' => $token,
+            'email' => $user->email,
+        ]));
 
         $response->assertSuccessful();
     }
@@ -134,8 +146,11 @@ class ResetPasswordTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
         $this->assertEquals($user->email, $user->fresh()->email);
-        $this->assertTrue(Hash::check('New-awesome-password1!', $user->fresh()->password));
-        // Notification::assertSentTo($user, PasswordChangedNotification::class);
+        $this->assertTrue(
+            Hash::check('New-awesome-password1!', $user->fresh()->password)
+        );
+
+        Notification::assertSentTo($user, PasswordChangedNotification::class);
     }
 
     /**
@@ -147,12 +162,13 @@ class ResetPasswordTest extends TestCase
             'password' => bcrypt('old-password'),
         ]);
 
-        $response = $this->from(route('password.reset', 'InvalidToken'))->post(route('password.reset'), [
-            'token' => 'InvalidToken',
-            'email' => $user->email,
-            'password' => 'New-awesome-password1!',
-            'password_confirmation' => 'New-awesome-password1!',
-        ]);
+        $response = $this->from(route('password.reset', 'InvalidToken'))
+            ->post(route('password.reset'), [
+                'token' => 'InvalidToken',
+                'email' => $user->email,
+                'password' => 'New-awesome-password1!',
+                'password_confirmation' => 'New-awesome-password1!',
+            ]);
 
         $response->assertRedirect(route('password.reset', 'InvalidToken'));
         $this->assertEquals($user->email, $user->fresh()->email);
@@ -170,14 +186,16 @@ class ResetPasswordTest extends TestCase
         ]);
         $token = Password::broker()->createToken($user);
 
-        $response = $this->from(route('password.reset', $token))->post(route('password.reset'), [
-            'token' => $token,
-            'email' => $user->email,
-            'password' => '',
-            'password_confirmation' => '',
-        ]);
+        $response = $this->from(route('password.reset', $token))
+            ->post(route('password.reset'), [
+                'token' => $token,
+                'email' => $user->email,
+                'password' => '',
+                'password_confirmation' => '',
+            ]);
         $response->assertRedirect(route('password.reset', $token));
         $response->assertSessionHasErrors('password');
+
         $this->assertTrue(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));
         $this->assertEquals($user->email, $user->fresh()->email);
@@ -195,14 +213,16 @@ class ResetPasswordTest extends TestCase
         ]);
         $token = Password::broker()->createToken($user);
 
-        $response = $this->from(route('password.reset', $token))->post(route('password.reset'), [
-            'token' => $token,
-            'email' => '',
-            'password' => 'new-awesome-password',
-            'password_confirmation' => 'new-awesome-password',
-        ]);
+        $response = $this->from(route('password.reset', $token))
+            ->post(route('password.reset'), [
+                'token' => $token,
+                'email' => '',
+                'password' => 'new-awesome-password',
+                'password_confirmation' => 'new-awesome-password',
+            ]);
         $response->assertRedirect(route('password.reset', $token));
         $response->assertSessionHasErrors('email');
+
         $this->assertFalse(session()->hasOldInput('password'));
         $this->assertEquals($user->email, $user->fresh()->email);
         $this->assertTrue(Hash::check('old-password', $user->fresh()->password));

@@ -36,7 +36,9 @@ class LoginTest extends TestCase
             'password' => 'somethingElse',
         ]);
 
-        $response->assertStatus(302)->assertRedirect(route('home'))->assertSessionHasErrors(['username' => __('auth.failed')]);
+        $response->assertStatus(302)
+            ->assertRedirect(route('home'))
+            ->assertSessionHasErrors(['username' => __('auth.failed')]);
         $this->assertGuest();
     }
 
@@ -53,7 +55,9 @@ class LoginTest extends TestCase
             'password' => $password,
         ]);
 
-        $response->assertStatus(302)->assertRedirect(route('home'))->assertSessionHasErrors(['username' => __('auth.failed')]);
+        $response->assertStatus(302)
+            ->assertRedirect(route('home'))
+            ->assertSessionHasErrors(['username' => __('auth.failed')]);
         $this->assertGuest();
     }
 
@@ -112,20 +116,23 @@ class LoginTest extends TestCase
             'password' => 'somethingElse',
         ]);
 
-        $response->assertStatus(302)->assertRedirect(route('home'))->assertSessionHasErrors(['username' => __('auth.failed')]);
+        $response->assertStatus(302)
+            ->assertRedirect(route('home'))
+            ->assertSessionHasErrors(['username' => __('auth.failed')]);
         $this->assertGuest();
     }
 
     //  Make sure that the user is redirected to the Change Password page if their password has expired
-    // public function test_password_expired_redirect()
-    // {
-    //     $user = User::factory()->create(['password_expires' => Carbon::yesterday()]);
+    public function test_password_expired_redirect()
+    {
+        $user = User::factory()
+            ->create(['password_expires' => Carbon::yesterday()]);
 
-    //     $response = $this->actingAs($user)->get(route('dashboard'));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('user.password'));
-    //     $response->assertSessionHasErrors(['password']);
-    // }
+        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('user.change-password.show'));
+        $response->assertSessionHasErrors(['password']);
+    }
 
     //  Make sure that the user is redirected to the 2fa page if enabled
     // public function test_redirect_two_fa()
