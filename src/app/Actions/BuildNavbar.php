@@ -48,7 +48,7 @@ class BuildNavbar
         if (Gate::allows('admin-link', $user)) {
             $nav[] = [
                 'name' => 'Administration',
-                'route' => '#', // route('admin.index'),
+                'route' => route('admin.index'),
                 'icon' => 'fas fa-user-shield',
             ];
         }

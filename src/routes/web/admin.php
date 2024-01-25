@@ -1,15 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('administration')->name('admin.')->group(function () {
+Route::middleware('auth.secure')->prefix('administration')->name('admin.')->group(function () {
 
-    Route::get('/', function () {
-        return 'system administration';
-    })->name('index');
+    Route::get('/', AdminController::class)->name('index');
 
     // Route::get('basic-settings', [BasicSettingsController::class, 'show'])
     //     ->name('basic-settings.show');
