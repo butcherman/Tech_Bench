@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_codes', function (Blueprint $table) {
+        Schema::create('user_verification_codes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('code');
@@ -29,9 +29,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('user_codes', function (Blueprint $table) {
+        Schema::table('user_verification_codes', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
         });
-        Schema::dropIfExists('user_codes');
+        Schema::dropIfExists('user_verification_codes');
     }
 };

@@ -36,6 +36,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Karmendra\LaravelAgentDetector\AgentDetectorServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -57,5 +58,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Timezonelist' => Jackiedo\Timezonelist\Facades\Timezonelist::class,
+        'AgentDetector' => Karmendra\LaravelAgentDetector\Facades\AgentDetector::class,
     ])->toArray(),
 ];

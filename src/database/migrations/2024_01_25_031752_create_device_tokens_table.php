@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id('device_id');
             $table->unsignedBigInteger('user_id');
             $table->string('token');
+            $table->string('os');
+            $table->string('browser');
             $table->timestamps();
             $table->foreign('user_id')
                 ->references('user_id')

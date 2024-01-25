@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
+use Karmendra\LaravelAgentDetector\AgentDetector;
 
 class User extends Authenticatable
 {
@@ -80,13 +82,41 @@ class User extends Authenticatable
      */
     public function generateVerificationCode()
     {
-        $code = rand(0000, 9999);
+        $code = rand(1000, 9999);
 
-        UserCode::updateOrCreate(
+        UserVerificationCode::updateOrCreate(
             ['user_id' => $this->user_id],
             ['code' => $code],
         );
 
         Notification::send($this, new SendAuthCode($code));
+    }
+
+    /**
+     * Generate a Remember token for a device
+     */
+    public function generateRememberDeviceToken()
+    {
+        $token = Str::random(60);
+        $agent = new AgentDetector($_SERVER['HTTP_USER_AGENT']);
+
+        DeviceToken::create([
+            'user_id' => $this->user_id,
+            'token' => $token,
+            'os' => $agent->platform().' '.$agent->platformVersion(),
+            'browser' => $agent->browser(),
+        ]);
+
+        return $token;
+    }
+
+    /**
+     * Validate a Remember Me device token
+     */
+    public function validateDeviceToken($token)
+    {
+        $valid = DeviceToken::where('user_id', $this->user_id)->where('token', $token)->first();
+
+        return $valid ? true : false;
     }
 }

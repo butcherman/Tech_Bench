@@ -20,14 +20,14 @@ class CheckFor2FA
         // Any authenticated route will check to make sure user has verified themselves
         if (config('auth.twoFa.required') && session()->missing('2fa_verified')) {
             // Check to see if a remember device token exists and is valid
-            // if ($rememberToken = $request->cookie('remember_device')) {
-            //     if ($request->user()->validateDeviceToken($rememberToken)) {
-            //         //  If device is valid, we will attach verification and move on
-            //         $request->session()->put('2fa_verified', true);
+            if ($rememberToken = $request->cookie('remember_device')) {
+                if ($request->user()->validateDeviceToken($rememberToken)) {
+                    //  If device is valid, we will attach verification and move on
+                    $request->session()->put('2fa_verified', true);
 
-            //         return $next($request);
-            //     }
-            // }
+                    return $next($request);
+                }
+            }
 
             $request->user()->generateVerificationCode();
 

@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Models\UserCode;
+use App\Models\UserVerificationCode;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class VerificationCodeRequest extends FormRequest
 {
@@ -29,24 +30,19 @@ class VerificationCodeRequest extends FormRequest
     /**
      * Determine if the verification code is valid
      */
-    public function verifyCode()
+    public function after()
     {
-        $code = UserCode::where('user_id', $this->user()->user_id)
-            ->where('code', $this->code)
-            ->first();
+        return [
+            function (Validator $validator) {
+                $code = UserVerificationCode::where('user_id', $this->user()->user_id)
+                    ->whereCode($this->code)
+                    ->count();
 
-        //  Does code exist?
-        if (! $code) {
-            return false;
-        }
-
-        //  Is the "Remember Device" flag set
-        if ($this->remember) {
-            $token = $this->user()->generateRememberDeviceToken();
-
-            return $token;
-        }
-
-        return true;
+                if (! $code) {
+                    $validator->errors()
+                        ->add('code', 'The provided code is incorrect');
+                }
+            },
+        ];
     }
 }

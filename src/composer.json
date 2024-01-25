@@ -25,6 +25,7 @@
         "inertiajs/inertia-laravel": "^0.6.9",
         "jackiedo/timezonelist": "^5.1",
         "jeroendesloovere/vcard": "^1.7",
+        "karmendra/laravel-agent-detector": "^1.1",
         "laravel/fortify": "^1.17",
         "laravel/framework": "^10.10",
         "laravel/horizon": "^5.16",
