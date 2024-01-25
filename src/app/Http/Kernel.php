@@ -40,7 +40,7 @@ class Kernel extends HttpKernel
         'auth.secure' => [
             \App\Http\Middleware\Authenticate::class,
             \App\Http\Middleware\CheckForInit::class,
-            // \App\Http\Middleware\CheckFor2FA::class,
+            \App\Http\Middleware\CheckFor2FA::class,
             \App\Http\Middleware\CheckPasswordExpire::class,
         ],
 

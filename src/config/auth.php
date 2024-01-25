@@ -24,10 +24,9 @@ return [
     |--------------------------------------------------------------------------
     */
     'twoFa' => [
-        'required' => false,
+        'required' => true, // false,
         'allow_save_device' => true,
         'allow_via_email' => true,
-        'allow_via_authenticator' => false,
     ],
 
     /*

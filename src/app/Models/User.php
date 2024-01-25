@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Notifications\User\SendAuthCode;
 use App\Traits\Notifiable;
 use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Notification;
 
 class User extends Authenticatable
 {
@@ -71,5 +73,20 @@ class User extends Authenticatable
 
         return config('auth.passwords.settings.expire') ?
             Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+    }
+
+    /**
+     * Generate a 2FA Code
+     */
+    public function generateVerificationCode()
+    {
+        $code = rand(0000, 9999);
+
+        UserCode::updateOrCreate(
+            ['user_id' => $this->user_id],
+            ['code' => $code],
+        );
+
+        Notification::send($this, new SendAuthCode($code));
     }
 }
