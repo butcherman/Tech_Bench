@@ -28,6 +28,8 @@ class EmailChangedNotification extends Notification
 
     /**
      * Get the mail representation of the notification.
+     *
+     * @codeCoverageIgnore
      */
     public function toMail(object $notifiable): MailMessage
     {

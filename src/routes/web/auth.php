@@ -37,5 +37,5 @@ Route::middleware('auth')->name('2fa.')->group(function () {
     Route::get('two-factor-authentication', [TwoFactorController::class, 'show'])
         ->name('show');
     Route::put('two-factor-authentication', [TwoFactorController::class, 'update'])
-        ->name('store');
+        ->name('update');
 });

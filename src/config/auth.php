@@ -24,7 +24,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'twoFa' => [
-        'required' => true, // false,
+        'required' => false,
         'allow_save_device' => true,
         'allow_via_email' => true,
     ],

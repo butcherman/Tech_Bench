@@ -9,6 +9,8 @@ class UserRolePermission extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id';
+
     /**
      * User Role Permissions explain what a permission type id is for
      */

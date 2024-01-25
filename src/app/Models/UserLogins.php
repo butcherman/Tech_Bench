@@ -9,6 +9,8 @@ class UserLogins extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id';
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $hidden = ['id', 'updated_at'];

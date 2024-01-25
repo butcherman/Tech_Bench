@@ -3,7 +3,7 @@
         ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('2fa.store')"
+        :submit-route="$route('2fa.update')"
         submit-method="put"
         submit-text="Verify"
     >

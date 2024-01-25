@@ -116,7 +116,12 @@ class User extends Authenticatable
     public function validateDeviceToken($token)
     {
         $valid = DeviceToken::where('user_id', $this->user_id)->where('token', $token)->first();
+        if ($valid) {
+            $valid->touch();
 
-        return $valid ? true : false;
+            return true;
+        }
+
+        return false;
     }
 }

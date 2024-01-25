@@ -3,8 +3,6 @@
 namespace App\Listeners\Notify\User;
 
 use App\Events\User\ResendWelcomeEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class ResendWelcomeEmail
 {
