@@ -31,6 +31,17 @@ type userRoles = {
     allow_edit: boolean;
 };
 
+type userDevice = {
+    device_id: number;
+    type: string;
+    os: string;
+    browser: string;
+    registered_ip_address: string;
+    updated_ip_address: string;
+    created_at: string;
+    updated_at: string;
+};
+
 type passwordPolicy = {
     expire: number;
     min_length: number;

@@ -99,12 +99,16 @@ class User extends Authenticatable
     {
         $token = Str::random(60);
         $agent = new AgentDetector($_SERVER['HTTP_USER_AGENT']);
+        $ipAddr = \Request::ip();
 
         DeviceToken::create([
             'user_id' => $this->user_id,
             'token' => $token,
+            'type' => $agent->device(),
             'os' => $agent->platform().' '.$agent->platformVersion(),
             'browser' => $agent->browser(),
+            'registered_ip_address' => $ipAddr,
+            'updated_ip_address' => $ipAddr,
         ]);
 
         return $token;
@@ -117,7 +121,7 @@ class User extends Authenticatable
     {
         $valid = DeviceToken::where('user_id', $this->user_id)->where('token', $token)->first();
         if ($valid) {
-            $valid->touch();
+            $valid->update(['updated_ip_address' => \Request::ip()]);
 
             return true;
         }
