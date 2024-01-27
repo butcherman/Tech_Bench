@@ -38,7 +38,7 @@ interface formData {
     [key: string]: string;
 }
 
-const emit = defineEmits(["submitting", "success", "has-errors"]);
+const emit = defineEmits(["submitting", "success", "has-errors", "values"]);
 const props = defineProps<{
     validationSchema: object;
     initialValues: { [key: string]: any };
@@ -47,6 +47,7 @@ const props = defineProps<{
     submitRoute: string;
     submitMethod: "post" | "put";
     hideOverlay?: boolean;
+    testing?: boolean;
 }>();
 
 /*******************************************************************************
@@ -76,11 +77,21 @@ const onSubmit = handleSubmit((form): void => {
     const formData = useInertiaForm(form);
     clearErrorAlert();
 
-    formData.submit(props.submitMethod, props.submitRoute, {
-        onFinish: () => (isSubmitting.value = false),
-        onSuccess: () => emit("success"),
-        onError: () => handleErrors(form, formData.errors),
-    });
+    /**
+     * During development, we can set the testing flag to only return the form
+     * values, but not actually submit the form
+     */
+    if (props.testing) {
+        emit("values", form);
+        console.log("form values", form);
+        isSubmitting.value = false;
+    } else {
+        formData.submit(props.submitMethod, props.submitRoute, {
+            onFinish: () => (isSubmitting.value = false),
+            onSuccess: () => emit("success"),
+            onError: () => handleErrors(form, formData.errors),
+        });
+    }
 });
 
 const handleErrors = (

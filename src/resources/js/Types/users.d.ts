@@ -42,6 +42,12 @@ type userDevice = {
     updated_at: string;
 };
 
+type userSettings = {
+    setting_type_id: number;
+    value: boolean;
+    name: string;
+};
+
 type passwordPolicy = {
     expire: number;
     min_length: number;

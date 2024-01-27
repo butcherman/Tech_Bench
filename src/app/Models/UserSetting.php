@@ -13,9 +13,26 @@ class UserSetting extends Model
 
     protected $guarded = ['setting_id', 'created_at', 'updated_at'];
 
-    protected $hidden = ['setting_id', 'user_id', 'created_at', 'updated_at', 'user_setting_type'];
+    protected $hidden = [
+        'setting_id',
+        'user_id', 'created_at',
+        'updated_at',
+        'UserSettingType',
+    ];
+
+    protected $appends = ['name'];
 
     protected $casts = [
         'value' => 'boolean',
     ];
+
+    public function getNameAttribute()
+    {
+        return $this->UserSettingType->name;
+    }
+
+    public function UserSettingType()
+    {
+        return $this->hasOne(UserSettingType::class, 'setting_type_id', 'setting_type_id');
+    }
 }

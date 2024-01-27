@@ -2,10 +2,8 @@
     <VueForm
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="
-            $route('user.user-settings.update', currentUser.username)
-        "
-        submit-method="put"
+        :submit-route="$route('user.user-settings.store', user.username)"
+        submit-method="post"
         submit-text="Update Account Settings"
     >
         <TextInput id="first-name" name="first_name" label="First Name" focus />
@@ -20,12 +18,12 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import { object, string } from "yup";
 
 const props = defineProps<{
-    currentUser: user;
+    user: user;
 }>();
 const initValues = {
-    first_name: props.currentUser.first_name,
-    last_name: props.currentUser.last_name,
-    email: props.currentUser.email,
+    first_name: props.user.first_name,
+    last_name: props.user.last_name,
+    email: props.user.email,
 };
 const schema = object({
     first_name: string().required(),

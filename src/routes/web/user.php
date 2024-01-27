@@ -13,6 +13,8 @@ Route::middleware('auth.secure')->prefix('user')->name('user.')->group(function 
     Route::get('user-settings', [UserSettingsController::class, 'show'])
         ->name('user-settings.show')
         ->breadcrumb('User Settings', 'dashboard');
+    Route::post('user-settings/{user}', [UserSettingsController::class, 'store'])
+        ->name('user-settings.store');
     Route::put('user-settings/{user}', [UserSettingsController::class, 'update'])
         ->name('user-settings.update');
 
