@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DeviceToken extends Model
 {
+    use HasFactory;
+
     protected $primaryKey = 'device_id';
 
     protected $guarded = ['device_id', 'created_at', 'updated_at'];

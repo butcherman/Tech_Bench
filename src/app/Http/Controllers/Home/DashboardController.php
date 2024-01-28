@@ -16,6 +16,8 @@ class DashboardController extends Controller
     {
         // $userAgent = $_SERVER['HTTP_USER_AGENT'];
 
+        // return $userAgent;
+
         // $ad = new AgentDetector($userAgent);
 
         // dd($ad);
