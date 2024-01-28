@@ -23,6 +23,7 @@ type appProps = {
     logo: string;
     version: string;
     copyright: string;
+    current_route: string;
     // fileData: fileData;
 };
 

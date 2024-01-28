@@ -19,6 +19,9 @@ export const useAppStore = defineStore("appStore", () => {
     const copyright = computed<string>(
         () => usePage<pageProps>().props.app.copyright
     );
+    const currentRoute = computed<string>(
+        () => usePage<pageProps>().props.app.current_route
+    );
 
     /**
      * Dynamic Navbar for authenticated users
@@ -72,6 +75,7 @@ export const useAppStore = defineStore("appStore", () => {
         navbar,
         version,
         copyright,
+        currentRoute,
         flash,
         flashAlerts,
         pushFlashMsg,

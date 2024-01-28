@@ -11,10 +11,15 @@
         <div class="navbar-data">
             <ul class="nav">
                 <li class="nav-item">
-                    <!-- TODO - Build Help Modal -->
-                    <Link href="#" class="text-muted" title="Help " v-tooltip>
+                    <span
+                        class="text-muted pointer"
+                        title="Help "
+                        @click="helpModal?.show"
+                        v-tooltip
+                    >
                         <fa-icon icon="fa-circle-question" />
-                    </Link>
+                    </span>
+                    <HelpModal ref="helpModal" />
                 </li>
                 <li class="nav-item">
                     <Link
@@ -100,8 +105,11 @@
 </template>
 
 <script setup lang="ts">
+import HelpModal from "@/Components/Help/HelpModal.vue";
+import { ref } from "vue";
 import { useAppStore } from "@/Store/AppStore";
 
 defineEmits(["navbar-toggle"]);
 const app = useAppStore();
+const helpModal = ref<InstanceType<typeof HelpModal> | null>(null);
 </script>

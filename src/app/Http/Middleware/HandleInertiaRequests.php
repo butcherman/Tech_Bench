@@ -27,6 +27,44 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
+     * Defines the props that are shared by default
+     */
+    public function share(Request $request): array
+    {
+        $userShare = [];
+        $primaryShare = array_merge(parent::share($request), [
+            //  Flash messages are used for success/failure messages on next page load
+            'flash' => $this->getFlashData(),
+            // App information that is shared and used on all pages
+            'app' => [
+                'name' => fn () => config('app.name'),
+                'logo' => fn () => config('app.logo'),
+                'version' => fn () => Cache::version(),
+                'copyright' => fn () => Cache::copyright(),
+                'current_route' => fn () => $request->route()->getName(),
+            ],
+        ]);
+
+        /**
+         * If a user is logged in, we need additional data
+         */
+        if ($request->user()) {
+            $userShare = [
+                //  Current logged in user
+                'current_user' => fn () => $request->user(),
+                'user_notifications' => [
+                    'list' => fn () => $request->user()->notifications,
+                    'new' => fn () => $request->user()->unreadNotifications->count(),
+                ],
+                //  Dynamically built navigation menu
+                'navbar' => fn () => BuildNavbar::build($request->user()),
+            ];
+        }
+
+        return array_merge($primaryShare, $userShare);
+    }
+
+    /**
      * Put all flash data into an array to be gone over by front end
      */
     protected function getFlashData()
@@ -64,42 +102,5 @@ class HandleInertiaRequests extends Middleware
         }
 
         return $flashArr;
-    }
-
-    /**
-     * Defines the props that are shared by default
-     */
-    public function share(Request $request): array
-    {
-        $userShare = [];
-        $primaryShare = array_merge(parent::share($request), [
-            //  Flash messages are used for success/failure messages on next page load
-            'flash' => $this->getFlashData(),
-            // App information that is shared and used on all pages
-            'app' => [
-                'name' => fn () => config('app.name'),
-                'logo' => fn () => config('app.logo'),
-                'version' => fn () => Cache::version(),
-                'copyright' => fn () => Cache::copyright(),
-            ],
-        ]);
-
-        /**
-         * If a user is logged in, we need additional data
-         */
-        if ($request->user()) {
-            $userShare = [
-                //  Current logged in user
-                'current_user' => fn () => $request->user(),
-                'user_notifications' => [
-                    'list' => fn () => $request->user()->notifications,
-                    'new' => fn () => $request->user()->unreadNotifications->count(),
-                ],
-                //  Dynamically built navigation menu
-                'navbar' => fn () => BuildNavbar::build($request->user()),
-            ];
-        }
-
-        return array_merge($primaryShare, $userShare);
     }
 }
