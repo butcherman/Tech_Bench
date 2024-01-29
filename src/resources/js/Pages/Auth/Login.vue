@@ -43,9 +43,14 @@
                     <h5 class="text-center">Tech Login:</h5>
                     <LoginForm />
                     <div class="separator">or</div>
-                    <button v-if="allowOath" class="btn btn-primary w-100 my-1">
+                    <a
+                        v-if="allowOath"
+                        as="button"
+                        :href="$route('azure-login')"
+                        class="btn btn-primary w-100 my-1"
+                    >
                         Login With Office 365
-                    </button>
+                    </a>
                     <Link
                         :href="$route('password.forgot')"
                         as="button"

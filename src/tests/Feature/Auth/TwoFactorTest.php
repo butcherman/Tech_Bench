@@ -108,6 +108,25 @@ class TwoFactorTest extends TestCase
         $response->assertSessionHasErrors('code');
     }
 
+    public function test_update_expired_code()
+    {
+        $user = User::factory()->create();
+        UserVerificationCode::create([
+            'user_id' => $user->user_id,
+            'code' => 1234,
+        ]);
+
+        $data = [
+            'code' => '1234',
+            'remember' => false,
+        ];
+
+        $this->travel(45)->minutes();
+        $response = $this->actingAs($user)->put(route('2fa.update'), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors('code');
+    }
+
     // TODO - Get this working...
     // public function test_update_with_remember_device()
     // {

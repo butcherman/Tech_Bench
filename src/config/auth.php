@@ -24,7 +24,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'twoFa' => [
-        'required' => false,
+        'required' => env('REQUIRE_2FA', false),
         'allow_save_device' => true,
         'allow_via_email' => true,
     ],

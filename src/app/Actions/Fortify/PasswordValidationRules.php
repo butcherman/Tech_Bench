@@ -19,7 +19,6 @@ trait PasswordValidationRules
             'required',
             'string',
             'confirmed',
-            // TODO - Remove Comments
             'different:current_password',
             new ContainsUpperCase,
             new ContainsLowerCase,

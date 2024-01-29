@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\UserVerificationCode;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -36,11 +37,14 @@ class VerificationCodeRequest extends FormRequest
             function (Validator $validator) {
                 $code = UserVerificationCode::where('user_id', $this->user()->user_id)
                     ->whereCode($this->code)
-                    ->count();
+                    ->get();
 
-                if (! $code) {
+                if ($code->count() !== 1) {
                     $validator->errors()
                         ->add('code', 'The provided code is incorrect');
+                } elseif ($code->first()->updated_at->addMinutes(30) < Carbon::now()) {
+                    $validator->errors()
+                        ->add('code', 'This Verification Code has expired');
                 }
             },
         ];
