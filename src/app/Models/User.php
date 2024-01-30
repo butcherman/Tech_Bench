@@ -33,6 +33,7 @@ class User extends Authenticatable
         'password_expires',
         'updated_at',
         'user_id',
+        'UserRole',
     ];
 
     protected $casts = [
@@ -41,7 +42,7 @@ class User extends Authenticatable
         'deleted_at' => 'datetime:M d, Y',
     ];
 
-    protected $appends = ['full_name', 'initials'];
+    protected $appends = ['full_name', 'initials', 'role_name'];
 
     /**
      * Key for Route/Model binding
@@ -62,6 +63,11 @@ class User extends Authenticatable
     public function getInitialsAttribute()
     {
         return "{$this->first_name[0]}{$this->last_name[0]}";
+    }
+
+    public function getRoleNameAttribute()
+    {
+        return $this->UserRole->name;
     }
 
     /**
