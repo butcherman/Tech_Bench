@@ -18,7 +18,9 @@ class UserAdministrationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Admin/User/Index');
+        return Inertia::render('Admin/User/Index', [
+            'user-list' => User::with('UserRole')->get(),
+        ]);
     }
 
     /**

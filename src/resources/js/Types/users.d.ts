@@ -6,6 +6,7 @@ type user = {
     full_name: string;
     initials: string;
     role_id: string;
+    user_role: userRoles;
 };
 
 type userNotificationProp = {

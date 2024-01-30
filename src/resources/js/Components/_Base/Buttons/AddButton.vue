@@ -1,9 +1,11 @@
 <template>
-    <button type="button" class="btn btn-info" :class="{ 'btn-pill': pill, 'btn-sm': small }">
+    <button
+        type="button"
+        class="btn btn-info"
+        :class="{ 'rounded-5': pill, 'btn-sm': small }"
+    >
         <fa-icon icon="fa-plus" class="me-1" />
-        <slot>
-            Add
-        </slot>
+        <slot> Add </slot>
     </button>
 </template>
 

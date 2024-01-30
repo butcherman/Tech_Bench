@@ -65,6 +65,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Relationships
+     */
+    public function UserRole()
+    {
+        return $this->hasOne(UserRole::class, 'role_id', 'role_id');
+    }
+
+    /**
      * Determine the new expire date for an updated password
      */
     public function getNewExpireTime($immediate = false)

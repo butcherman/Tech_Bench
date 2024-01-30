@@ -36,17 +36,17 @@ class BuildAdminMenu
         $userBuild = [];
         if ($this->checkPermission($this->user, 'Manage Users')) {
             $userBuild[] = [
-                'name' => 'Create New User',
+                'name' => 'Users',
+                'icon' => 'fas fa-user-edit',
+                'route' => route('admin.user.index'),
+            ];
+            $userBuild[] = [
+                'name' => 'Create User',
                 'icon' => 'fas fa-user-plus',
                 'route' => route('admin.user.create'),
             ];
             $userBuild[] = [
-                'name' => 'Show Users',
-                'icon' => 'fas fa-user-edit',
-                'route' => '#', // route('admin.user.index'),
-            ];
-            $userBuild[] = [
-                'name' => 'Show Deactivated Users',
+                'name' => 'List Deactivated Users',
                 'icon' => 'fas fa-store-alt-slash',
                 'route' => '#', // route('admin.user.deactivated'),
             ];

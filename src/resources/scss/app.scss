@@ -94,3 +94,19 @@ body,
 .text-small {
     font-size: 0.8rem;
 }
+
+.row-link {
+    tr td,
+    td {
+        padding: 0;
+        height: 100%;
+        a {
+            display: block;
+            height: 100%;
+            padding: 8px 0;
+            text-decoration: none;
+            font-weight: normal;
+            color: #000000;
+        }
+    }
+}
