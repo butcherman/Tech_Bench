@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\UserRole;
 use Illuminate\Support\Facades\Cache as FacadesCache;
 use PragmaRX\Version\Package\Version;
 
@@ -68,6 +69,20 @@ class Cache
             FacadesCache::put('copyright', $copyright);
 
             return $copyright;
+        });
+    }
+
+    /**
+     * Full List of User Roles
+     */
+    public static function userRoles()
+    {
+        return FacadesCache::get('user_roles', function () {
+            $roleList = UserRole::all();
+
+            FacadesCache::put('user_roles', $roleList);
+
+            return $roleList;
         });
     }
 }

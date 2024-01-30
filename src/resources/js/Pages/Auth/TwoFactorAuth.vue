@@ -10,6 +10,13 @@
                     </h5>
                     <p class="text-center">Please input the code below.</p>
                     <TwoFactorForm :allow-remember="allowRemember" />
+                    <Link
+                        as="button"
+                        :href="$route('dashboard')"
+                        class="btn btn-info mt-3"
+                    >
+                        Send New Verification Code
+                    </Link>
                 </div>
             </div>
         </div>

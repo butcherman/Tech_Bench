@@ -1,20 +1,41 @@
 <template>
     <div class="row justify-content-center">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h1>Hello World</h1>
+        <Head title="Administration" />
+        <template v-for="(items, group) in menu" :key="group">
+            <div v-if="items.length" class="col-md-5 mt-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">{{ group }}</div>
+                        <ul class="list-unstyled">
+                            <li v-for="(link, key) in items" :key="key">
+                                <Link
+                                    :href="link.route"
+                                    class="text-secondary text-decoration-none"
+                                >
+                                    <fa-icon :icon="link.icon" />
+                                    {{ link.name }}
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{}>();
+defineProps<{
+    menu: {
+        [key: string]: {
+            icon: string;
+            route: string;
+            name: string;
+        }[];
+    };
+}>();
 </script>
 
 <script lang="ts">

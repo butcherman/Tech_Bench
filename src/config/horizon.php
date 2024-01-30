@@ -80,29 +80,21 @@ return [
             'timeout' => 60,
             'nice' => 0,
         ],
-        'supervisor-2' => [
-            'connection' => 'redis',
-            'queue' => ['mail'],
-            'balance' => 'auto',
-            'maxProcesses' => 10,
-            'maxTime' => 0,
-            'maxJobs' => 0,
-            'memory' => 128,
-            'tries' => 1,
-            'timeout' => 60,
-            'nice' => 0,
+    ],
+
+    'environments' => [
+        'production' => [
+            'supervisor-1' => [
+                'maxProcesses' => 10,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+            ],
         ],
-        'supervisor-3' => [
-            'connection' => 'redis',
-            'queue' => ['job'],
-            'balance' => 'auto',
-            'maxProcesses' => 10,
-            'maxTime' => 0,
-            'maxJobs' => 0,
-            'memory' => 128,
-            'tries' => 1,
-            'timeout' => 60,
-            'nice' => 0,
+
+        'local' => [
+            'supervisor-1' => [
+                'maxProcesses' => 5,
+            ],
         ],
     ],
 ];

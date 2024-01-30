@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\InitializeUserController;
 use App\Http\Controllers\User\RemoveDeviceController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
@@ -25,4 +26,14 @@ Route::middleware('auth.secure')->prefix('user')->name('user.')->group(function 
 
     Route::get('remove-device/{user}/{device}', RemoveDeviceController::class)
         ->name('remove-device');
+});
+
+/**
+ * Routes for Initializing a users account/first time setup
+ */
+Route::middleware('guest')->group(function () {
+    Route::get('initialize-account/{token}', [InitializeUserController::class, 'show'])
+        ->name('initialize');
+    Route::put('initialize-account/{token}', [InitializeUserController::class, 'update'])
+        ->name('initialize.update');
 });

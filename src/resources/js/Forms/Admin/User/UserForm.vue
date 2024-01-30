@@ -5,7 +5,7 @@
         :validation-schema="schema"
         :submit-route="submitRoute"
         :submit-text="submitText"
-        submit-method="put"
+        :submit-method="submitMethod"
         @success="$emit('success')"
     >
         <TextInput id="username" name="username" label="Username" focus />
@@ -47,8 +47,12 @@ const submitRoute = computed(() => {
     }
 
     return props.user
-        ? route("admin.users.update", props.user.username)
-        : route("admin.users.store");
+        ? route("admin.user.update", props.user.username)
+        : route("admin.user.store");
+});
+
+const submitMethod = computed(() => {
+    return props.user ? "put" : "post";
 });
 
 const initValues = {

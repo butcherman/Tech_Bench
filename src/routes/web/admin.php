@@ -4,11 +4,27 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
+use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth.secure')->prefix('administration')->name('admin.')->group(function () {
 
-    Route::get('/', AdminController::class)->name('index');
+    Route::get('/', AdminController::class)->name('index')
+        ->breadcrumb('Administration');
+
+    /**
+     * User Administration
+     */
+    Route::prefix('users')->name('user.')->group(function () {
+        //
+    });
+    Route::resource('user', UserAdministrationController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('User Administration', 'admin.index')
+                ->create('New User', 'admin.user.index')
+                ->show('User Details', 'admin.user.index')
+                ->edit('Edit User', 'admin.user.index');
+        })->withTrashed();
 
     // Route::get('basic-settings', [BasicSettingsController::class, 'show'])
     //     ->name('basic-settings.show');

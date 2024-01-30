@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin\User;
 
+use App\Actions\BuildUserRoles;
+use App\Events\User\UserCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserAdministrationRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class UserAdministrationController extends Controller
 {
@@ -15,23 +18,37 @@ class UserAdministrationController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Admin/User/Index');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $this->authorize('create', User::class);
+
+        return Inertia::render('Admin/User/Create', [
+            'roles' => BuildUserRoles::build($request->user()),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserAdministrationRequest $request)
     {
-        //
+        $newUser = User::create($request->toArray());
+
+        event(new UserCreatedEvent($newUser));
+        Log::stack(['daily', 'user'])
+            ->notice('New User created by '.$request->user()->username,
+                $newUser->toArray());
+
+        return redirect(route('admin.user.show', $newUser->username))
+            ->with('success', __('admin.user.created', [
+                'user' => $newUser->full_name,
+            ]));
     }
 
     /**
@@ -39,7 +56,7 @@ class UserAdministrationController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Inertia::render('Admin/User/Show');
     }
 
     /**
@@ -47,7 +64,7 @@ class UserAdministrationController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render('Admin/User/Edit');
     }
 
     /**
@@ -68,7 +85,7 @@ class UserAdministrationController extends Controller
             ]));
         }
 
-        return redirect(route('admin.users.show', $user->username))
+        return redirect(route('admin.user.show', $user->username))
             ->with('success', __('admin.user.updated', [
                 'user' => $user->full_name,
             ]));
