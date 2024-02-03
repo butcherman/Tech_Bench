@@ -48,21 +48,37 @@ const columns = [
         label: "Name",
         field: "full_name",
         sort: true,
+        filterOptions: {
+            enabled: true,
+            // placeholder: "Search",
+        },
     },
     {
         label: "Username",
         field: "username",
         sort: true,
+        filterOptions: {
+            enabled: true,
+            // placeholder: "Search",
+        },
     },
     {
         label: "Email",
         field: "email",
         sort: true,
+        filterOptions: {
+            enabled: true,
+            // placeholder: "Search",
+        },
     },
     {
         label: "Role",
         field: "role_name",
         sort: true,
+        filterOptions: {
+            enabled: true,
+            // placeholder: "Search",
+        },
     },
 ];
 </script>

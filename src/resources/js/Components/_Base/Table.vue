@@ -37,10 +37,17 @@
 import { ref, computed } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
 
+// TODO - Add Filtering to Table
+// TODO - Add Pagination to Table
+
 interface column {
     label: string;
     field: string;
     sort?: boolean;
+    filterOptions?: {
+        enabled: boolean;
+        placeholder?: string;
+    };
 }
 
 defineEmits(["on-row-click"]);
@@ -52,13 +59,16 @@ const props = defineProps<{
     rowClickable?: boolean;
 }>();
 
+/*******************************************************************************
+ * The modified list that has been filtered and sorted
+ *******************************************************************************/
 const sortedData = computed(() =>
     sortDataObject(props.rows, sortOrder.value, sortBy.value)
 );
 
-/**
+/*******************************************************************************
  * Sorting Properties
- */
+ *******************************************************************************/
 const sortBy = ref<string>(props.initialSort || props.columns[0].field);
 const sortOrder = ref<"asc" | "desc">("asc");
 
