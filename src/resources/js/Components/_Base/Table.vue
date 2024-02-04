@@ -13,6 +13,19 @@
                             <fa-icon :icon="sortIcons[col.field]" />
                         </span>
                     </th>
+                    <th v-if="slots.action" />
+                </tr>
+                <tr v-if="canFilter">
+                    <td v-for="col in columns" :key="col.field">
+                        <input
+                            v-model="filterValues[col.field]"
+                            type="text"
+                            class="form-control"
+                            :disabled="!col.filterOptions?.enabled"
+                            :placeholder="col.filterOptions?.placeholder"
+                        />
+                    </td>
+                    <td v-if="slots.action" />
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +52,6 @@
 import { ref, computed, useSlots } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
 
-// TODO - Add Filtering to Table
 // TODO - Add Pagination to Table
 
 interface column {
@@ -53,6 +65,7 @@ interface column {
 }
 
 defineEmits(["on-row-click"]);
+const slots = useSlots();
 const props = defineProps<{
     columns: column[];
     rows: any[];
@@ -61,13 +74,11 @@ const props = defineProps<{
     rowClickable?: boolean;
 }>();
 
-const slots = useSlots();
-
 /*******************************************************************************
  * The modified list that has been filtered and sorted
  *******************************************************************************/
 const sortedData = computed(() =>
-    sortDataObject(props.rows, sortOrder.value, sortBy.value)
+    sortDataObject(filteredData.value, sortOrder.value, sortBy.value)
 );
 
 /*******************************************************************************
@@ -88,6 +99,7 @@ const updateSort = (field: string) => {
     sortOrder.value = newOrder;
 };
 
+// Sort up/down icons for each column
 const sortIcons = computed<{ [key: string]: string }>(() => {
     let icons: { [key: string]: string } = {};
 
@@ -102,5 +114,50 @@ const sortIcons = computed<{ [key: string]: string }>(() => {
     });
 
     return icons;
+});
+
+/*******************************************************************************
+ * Filtering Properties
+ *******************************************************************************/
+const filterValues = ref<{ [key: string]: string }>({});
+
+// If any of the Filter Options values are set to true, we will show the filter inputs
+const canFilter = computed(() => {
+    let filterAllowed = false;
+
+    props.columns.forEach((col) => {
+        if (col.filterOptions?.enabled) {
+            filterAllowed = true;
+        }
+    });
+
+    return filterAllowed;
+});
+
+// Filter rows based on search input for each column
+const filteredData = computed(() => {
+    const filteredData: any[] = [];
+    const filterKeys = Object.keys(filterValues.value);
+
+    props.rows.forEach((row) => {
+        let hasFilter = true;
+        filterKeys.forEach((key) => {
+            if (filterValues.value[key].length) {
+                if (
+                    !row[key]
+                        .toLowerCase()
+                        .includes(filterValues.value[key].toLowerCase())
+                ) {
+                    hasFilter = false;
+                }
+            }
+        });
+
+        if (hasFilter) {
+            filteredData.push(row);
+        }
+    });
+
+    return filteredData;
 });
 </script>

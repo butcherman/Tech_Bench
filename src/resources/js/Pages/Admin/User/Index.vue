@@ -73,7 +73,7 @@ const columns = [
         sort: true,
         filterOptions: {
             enabled: true,
-            // placeholder: "Search",
+            placeholder: "Filter Name",
         },
     },
     {
@@ -82,7 +82,7 @@ const columns = [
         sort: true,
         filterOptions: {
             enabled: true,
-            // placeholder: "Search",
+            placeholder: "Filter Username",
         },
     },
     {
@@ -91,17 +91,17 @@ const columns = [
         sort: true,
         filterOptions: {
             enabled: true,
-            // placeholder: "Search",
+            placeholder: "Filter Email",
         },
     },
     {
         label: "Role",
         field: "role_name",
         sort: true,
-        filterOptions: {
-            enabled: true,
-            // placeholder: "Search",
-        },
+        // filterOptions: {
+        //     enabled: false,
+        //     // placeholder: "Search",
+        // },
     },
 ];
 </script>
