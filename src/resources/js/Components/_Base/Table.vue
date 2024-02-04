@@ -20,13 +20,15 @@
                     v-for="(row, index) in sortedData"
                     :key="index"
                     :class="{ pointer: rowClickable }"
-                    @click="$emit('on-row-click', row)"
                 >
                     <template v-for="col in columns">
-                        <td>
+                        <td @click="$emit('on-row-click', row)">
                             {{ row[col.field] }}
                         </td>
                     </template>
+                    <td v-if="slots.action">
+                        <slot name="action" :row-data="row" />
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -34,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, useSlots } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
 
 // TODO - Add Filtering to Table
@@ -58,6 +60,8 @@ const props = defineProps<{
     initialSort?: string;
     rowClickable?: boolean;
 }>();
+
+const slots = useSlots();
 
 /*******************************************************************************
  * The modified list that has been filtered and sorted

@@ -20,7 +20,18 @@
                             responsive
                             row-clickable
                             @on-row-click="rowClicked"
-                        />
+                        >
+                            <template #action="{ rowData }">
+                                <span
+                                    class="badge bg-danger rounded-pill mx-1"
+                                    title="Disable"
+                                    v-tooltip
+                                    @click="disableUser(rowData)"
+                                >
+                                    <fa-icon icon="user-slash" />
+                                </span>
+                            </template>
+                        </Table>
                     </div>
                 </div>
             </div>
@@ -32,12 +43,24 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import Table from "@/Components/_Base/Table.vue";
+import verifyModal from "@/Modules/verifyModal";
 import { ref, reactive, onMounted } from "vue";
 import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     userList: user[];
 }>();
+
+const disableUser = (user: user) => {
+    verifyModal(`${user.full_name} will be immediately disabled`).then(
+        (res) => {
+            console.log(res);
+            if (res) {
+                router.delete(route("admin.user.destroy", user.username));
+            }
+        }
+    );
+};
 
 const rowClicked = (row: user) => {
     router.get(route("admin.user.show", row.username));

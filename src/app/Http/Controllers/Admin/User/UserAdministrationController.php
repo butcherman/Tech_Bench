@@ -96,8 +96,16 @@ class UserAdministrationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, User $user)
     {
-        //
+        $this->authorize('destroy', $user);
+
+        $user->delete();
+        Log::stack(['daily', 'user'])
+            ->notice('User '.$user->username.' has been deactivated by '.
+                $request->user()->username);
+
+        return back()
+            ->with('warning', __('admin.user.disabled', ['user' => $user->full_name]));
     }
 }
