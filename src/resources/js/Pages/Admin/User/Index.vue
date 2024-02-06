@@ -19,6 +19,8 @@
                             initial-sort="username"
                             responsive
                             row-clickable
+                            paginate
+                            :per-page-default="25"
                             @on-row-click="rowClicked"
                         >
                             <template #action="{ rowData }">

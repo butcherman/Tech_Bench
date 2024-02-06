@@ -30,7 +30,7 @@
             </thead>
             <tbody>
                 <tr
-                    v-for="(row, index) in sortedData"
+                    v-for="(row, index) in paginatedData"
                     :key="index"
                     :class="{ pointer: rowClickable }"
                 >
@@ -44,15 +44,43 @@
                     </td>
                 </tr>
             </tbody>
+            <tfoot>
+                <slot name="footer">
+                    <tr v-if="paginate">
+                        <td :colspan="columnCount">
+                            <span class="float-start w-auto">
+                                <select v-model="perPage" class="form-select">
+                                    <option
+                                        v-for="num in perPageArray"
+                                        :value="num"
+                                    >
+                                        {{ num }}
+                                    </option>
+                                </select>
+                            </span>
+                            <span class="float-end">
+                                Showing {{ showingStart }}-{{ showingEnd }} of
+                                {{ totalRecords }}
+                            </span>
+                            <Pagination
+                                :currentPage="currentPage"
+                                :totalPages="totalPages"
+                                @prev-page="currentPage--"
+                                @next-page="currentPage++"
+                                @go-to-page="goToPage"
+                            />
+                        </td>
+                    </tr>
+                </slot>
+            </tfoot>
         </table>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useSlots } from "vue";
+import Pagination from "./Pagination.vue";
+import { ref, computed, watch, useSlots } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
-
-// TODO - Add Pagination to Table
 
 interface column {
     label: string;
@@ -72,7 +100,14 @@ const props = defineProps<{
     responsive?: boolean;
     initialSort?: string;
     rowClickable?: boolean;
+    paginate?: boolean;
+    perPageArray?: number[];
+    perPageDefault?: number;
 }>();
+
+const columnCount = computed(
+    () => props.columns.length + (slots.action ? 1 : 0)
+);
 
 /*******************************************************************************
  * The modified list that has been filtered and sorted
@@ -160,4 +195,48 @@ const filteredData = computed(() => {
 
     return filteredData;
 });
+
+/*******************************************************************************
+ * Pagination Properties
+ *******************************************************************************/
+const perPageArray = props.perPageArray || [10, 25, 50, 100];
+
+const totalRecords = computed(() => sortedData.value.length);
+const showingStart = computed(
+    () => (currentPage.value - 1) * perPage.value + 1
+);
+const showingEnd = computed(
+    () => showingStart.value + paginatedData.value.length - 1
+);
+
+const perPage = ref(props.perPageDefault || 10);
+const currentPage = ref(1);
+const totalPages = computed(() =>
+    Math.ceil(totalRecords.value / perPage.value)
+);
+
+// If the data is resorted, and there are less records than current page, jump to page 1
+watch(totalPages, (newTotalPages) => {
+    if (newTotalPages < currentPage.value) {
+        currentPage.value = 1;
+    }
+});
+
+// Chunk of results to show on current page
+const paginatedData = computed(() => {
+    // If Pagination is turned off, we just pass the filtered array
+    if (!props.paginate) {
+        return sortedData.value;
+    }
+
+    return sortedData.value.slice(
+        (currentPage.value - 1) * perPage.value,
+        currentPage.value * perPage.value
+    );
+});
+
+// Navigate to a specific page
+const goToPage = (newPage: number) => {
+    currentPage.value = newPage;
+};
 </script>
