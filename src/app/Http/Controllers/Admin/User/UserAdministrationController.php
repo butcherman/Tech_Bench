@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserAdministrationRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 class UserAdministrationController extends Controller
@@ -58,6 +60,22 @@ class UserAdministrationController extends Controller
      */
     public function show(string $id)
     {
+        $routeList = collect(Route::getRoutes())->filter(function ($route) {
+            return in_array('GET', $route->methods);
+        })->map(function ($route) {
+            return $route->action;
+        })->pluck('as')->filter(function ($name) {
+            $exploded = explode('.', $name);
+
+            // dd($exploded);
+
+            return count(array_intersect(['debugbar', 'horizon', null], $exploded)) == 0;
+        });
+
+        $routeNames = Arr::pluck($routeList, 'as');
+
+        dd($routeList);
+
         return Inertia::render('Admin/User/Show');
     }
 
