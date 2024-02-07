@@ -1,7 +1,7 @@
 <template>
     <div class="row justify-content-center align-items-center h-100 p-3">
         <Head title="Forgot Password" />
-        <div class="col-md-6">
+        <div class="col-sm-8 col-md-6 col-xl-5 col-xxl-4">
             <div class="card">
                 <div class="card-body h-100 text-center">
                     <h5>Reset Your Password</h5>

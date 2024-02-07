@@ -99,7 +99,7 @@ export default { layout: AuthLayout };
     /**
     * Mobile/Small Screens
     */
-    @media (max-width: $brk-lg) {
+    @media (max-width: $brk-md) {
         padding-top: 50px;
 
         #content-wrapper {
@@ -116,7 +116,7 @@ export default { layout: AuthLayout };
     /**
     * Standard screens
     */
-    @media (min-width: $brk-lg) {
+    @media (min-width: $brk-md) {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -126,6 +126,7 @@ export default { layout: AuthLayout };
         }
         #login-form-wrapper {
             width: 35%;
+            max-width: 400px;
             height: 100%;
             border-top-left-radius: 5px;
             border-bottom-left-radius: 5px;
