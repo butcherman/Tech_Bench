@@ -41,7 +41,6 @@
                     </div>
                 </div>
             </div>
-            <!-- ************************************************************************* -->
             <div v-if="app.user?.username !== user.username" class="col-md-5">
                 <div class="card">
                     <div class="card-body">
@@ -58,9 +57,12 @@
                                 />
                                 Resend Welcome Email
                             </button>
-                            <button class="btn btn-warning w-100 m-1">
+                            <button
+                                class="btn btn-warning w-100 m-1"
+                                @click="sendResetLink"
+                            >
                                 <fa-icon icon="key" class="float-start mt-1" />
-                                Reset Password
+                                Send Reset Password Link
                             </button>
                             <Link
                                 as="button"
@@ -70,11 +72,10 @@
                                 <fa-icon icon="edit" class="float-start mt-1" />
                                 Update User Information
                             </Link>
-                            <button class="btn btn-info w-100 m-1">
-                                <fa-icon icon="bell" class="float-start mt-1" />
-                                Send Notification
-                            </button>
-                            <button class="btn btn-danger w-100 m-1">
+                            <button
+                                class="btn btn-danger w-100 m-1"
+                                @click="disableUser"
+                            >
                                 <fa-icon
                                     icon="user-slash"
                                     class="float-start mt-1"
@@ -94,9 +95,7 @@
                     </div>
                 </div>
             </div>
-            <!-- ************************************************************************* -->
         </div>
-        <!-- ************************************************************************* -->
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
                 <div class="card">
@@ -139,7 +138,6 @@
                 </div>
             </div>
         </div>
-        <!-- ************************************************************************* -->
     </div>
 </template>
 
@@ -147,7 +145,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import verifyModal from "@/Modules/verifyModal";
 import { useAppStore } from "@/Store/AppStore";
-import { router } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 
 const props = defineProps<{
     user: user;
@@ -166,17 +164,33 @@ const resendInvite = () => {
         `Resending the Welcome Email will create a new setup link and invalidate
          the original Welcome Email`
     ).then((res) => {
-        console.log(res);
         if (res) {
-            router.get(
-                route("admin.user.send-welcome", props.user.username),
-                undefined,
-                {
-                    onFinish: () => console.log("done"),
-                }
-            );
+            router.get(route("admin.user.send-welcome", props.user.username));
         }
     });
+};
+
+const sendResetLink = () => {
+    verifyModal(
+        `This will send the user an email with a link and instructions for resetting
+         their password`
+    ).then((res) => {
+        if (res) {
+            const formData = useForm({ email: props.user.email });
+            formData.post(route("admin.user.password-link"));
+        }
+    });
+};
+
+const disableUser = () => {
+    verifyModal(`${props.user.full_name} will be immediately disabled`).then(
+        (res) => {
+            console.log(res);
+            if (res) {
+                router.delete(route("admin.user.destroy", props.user.username));
+            }
+        }
+    );
 };
 </script>
 
