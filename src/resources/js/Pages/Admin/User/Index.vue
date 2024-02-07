@@ -46,10 +46,9 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import Table from "@/Components/_Base/Table.vue";
 import verifyModal from "@/Modules/verifyModal";
-import { ref, reactive, onMounted } from "vue";
 import { router } from "@inertiajs/vue3";
 
-const props = defineProps<{
+defineProps<{
     userList: user[];
 }>();
 
@@ -100,10 +99,6 @@ const columns = [
         label: "Role",
         field: "role_name",
         sort: true,
-        // filterOptions: {
-        //     enabled: false,
-        //     // placeholder: "Search",
-        // },
     },
 ];
 </script>

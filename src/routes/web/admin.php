@@ -28,7 +28,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
             $breadcrumbs->index('User Administration', 'admin.index')
                 ->create('New User', 'admin.user.index')
                 ->show('User Details', 'admin.user.index')
-                ->edit('Edit User', 'admin.user.index');
+                ->edit('Edit User Details', 'admin.user.show');
         })->withTrashed();
 
     // Route::get('basic-settings', [BasicSettingsController::class, 'show'])

@@ -1,16 +1,10 @@
 <template>
-    <div>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="text-center text-md-left">Hello World</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="text-center">This is a new page</p>
-                    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">Edit User Details</div>
+                    <UserForm :roles="roles" :user="user" />
                 </div>
             </div>
         </div>
@@ -18,7 +12,15 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted } from 'vue';
+import AppLayout from "@/Layouts/AppLayout.vue";
+import UserForm from "@/Forms/Admin/User/UserForm.vue";
 
-    const props = defineProps<{}>();
+defineProps<{
+    roles: userRoles[];
+    user: user;
+}>();
+</script>
+
+<script lang="ts">
+export default { layout: AppLayout };
 </script>
