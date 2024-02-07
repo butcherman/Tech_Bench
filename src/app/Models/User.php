@@ -142,4 +142,14 @@ class User extends Authenticatable
 
         return false;
     }
+
+    /**
+     * Function to get login history for the last xx days
+     */
+    public function getLoginHistory($days = 365)
+    {
+        return UserLogins::whereUserId($this->user_id)
+            ->where('created_at', '>', now()->subDays($days))
+            ->get();
+    }
 }

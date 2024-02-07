@@ -8,9 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserAdministrationRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 class UserAdministrationController extends Controller
@@ -58,25 +56,16 @@ class UserAdministrationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        $routeList = collect(Route::getRoutes())->filter(function ($route) {
-            return in_array('GET', $route->methods);
-        })->map(function ($route) {
-            return $route->action;
-        })->pluck('as')->filter(function ($name) {
-            $exploded = explode('.', $name);
+        $this->authorize('view', $user);
 
-            // dd($exploded);
-
-            return count(array_intersect(['debugbar', 'horizon', null], $exploded)) == 0;
-        });
-
-        $routeNames = Arr::pluck($routeList, 'as');
-
-        dd($routeList);
-
-        return Inertia::render('Admin/User/Show');
+        return Inertia::render('Admin/User/Show', [
+            'user' => $user->makeVisible(['created_at', 'updated_at', 'deleted_at']),
+            'role' => $user->UserRole,
+            'last-login' => $user->getLoginHistory(1825)->last(),
+            'thirty-day-count' => $user->getLoginHistory(30)->count(),
+        ]);
     }
 
     /**
@@ -123,7 +112,9 @@ class UserAdministrationController extends Controller
             ->notice('User '.$user->username.' has been deactivated by '.
                 $request->user()->username);
 
-        return back()
-            ->with('warning', __('admin.user.disabled', ['user' => $user->full_name]));
+        return redirect(route('admin.user.index'))
+            ->with('warning', __('admin.user.disabled', [
+                'user' => $user->full_name,
+            ]));
     }
 }

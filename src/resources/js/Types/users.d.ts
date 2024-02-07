@@ -7,6 +7,9 @@ type user = {
     initials: string;
     role_id: string;
     user_role: userRoles;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
 };
 
 type userNotificationProp = {
