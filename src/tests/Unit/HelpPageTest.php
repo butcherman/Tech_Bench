@@ -26,6 +26,7 @@ class HelpPageTest extends TestCase
         'azure-callback',
         'home',
         'remove-device',
+        'send-welcome',
     ];
 
     /**
