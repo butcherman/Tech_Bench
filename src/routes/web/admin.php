@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
+use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -18,10 +19,16 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
      * User Administration
      */
     Route::prefix('users')->name('user.')->group(function () {
-        Route::get('{user}/resend-welcome-email', SendWelcomeEmailController::class)
-            ->name('send-welcome');
+        Route::get('deactivated-users', DeactivatedUserController::class)
+            ->name('deactivated')
+            ->breadcrumb('Deactivated Users', 'admin.user.index');
         Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
             ->name('password-link');
+        Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
+            ->withTrashed()
+            ->name('restore');
+        Route::get('{user}/resend-welcome-email', SendWelcomeEmailController::class)
+            ->name('send-welcome');
     });
     Route::resource('user', UserAdministrationController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

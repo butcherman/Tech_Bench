@@ -124,4 +124,21 @@ class UserAdministrationController extends Controller
                 'user' => $user->full_name,
             ]));
     }
+
+    /**
+     * Restore a Disabled User
+     */
+    public function restore(Request $request, User $user)
+    {
+        $this->authorize('destroy', $user);
+
+        $user->restore();
+        Log::stack(['daily', 'user'])
+            ->notice('User '.$user->username.' has been reactivated by '.
+                $request->user()->username);
+
+        return back()->with('success', __('admin.user.restored', [
+            'user' => $user->full_name,
+        ]));
+    }
 }

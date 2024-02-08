@@ -84,7 +84,10 @@
                             </button>
                         </template>
                         <template v-else>
-                            <button class="btn btn-danger w-100 m-1">
+                            <button
+                                class="btn btn-danger w-100 m-1"
+                                @click="restoreUser"
+                            >
                                 <fa-icon
                                     icon="unlock-alt"
                                     class="float-start mt-1"
@@ -107,6 +110,12 @@
                                     <tr>
                                         <th class="text-end">User Created:</th>
                                         <td>{{ user.created_at }}</td>
+                                    </tr>
+                                    <tr v-if="user.deleted_at">
+                                        <th class="text-end">
+                                            Deactivated Date
+                                        </th>
+                                        <td>{{ user.deleted_at }}</td>
                                     </tr>
                                     <tr v-if="lastLogin">
                                         <th class="text-end">
@@ -188,6 +197,16 @@ const disableUser = () => {
             console.log(res);
             if (res) {
                 router.delete(route("admin.user.destroy", props.user.username));
+            }
+        }
+    );
+};
+
+const restoreUser = () => {
+    verifyModal(`${props.user.full_name} will be immediately enabled`).then(
+        (res) => {
+            if (res) {
+                router.get(route("admin.user.restore", props.user.username));
             }
         }
     );
