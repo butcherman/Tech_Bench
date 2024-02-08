@@ -18,6 +18,8 @@ class UserAdministrationController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         return Inertia::render('Admin/User/Index', [
             'user-list' => User::with('UserRole')->get(),
         ]);

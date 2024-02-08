@@ -11,6 +11,11 @@ class UserPolicy
     use AllowTrait;
     use HandlesAuthorization;
 
+    public function viewAny(User $user)
+    {
+        return $this->checkPermission($user, 'Manage Users');
+    }
+
     public function view(User $user, User $model)
     {
         if ($user->user_id !== $model->user_id) {

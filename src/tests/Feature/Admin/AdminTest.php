@@ -2,19 +2,33 @@
 
 namespace Tests\Feature\Admin;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Tests\TestCase;
 
 class AdminTest extends TestCase
 {
     /**
-     * A basic feature test example.
+     * Invoke Method
      */
-    public function test_example(): void
+    public function test_invoke_guest()
     {
-        $response = $this->get('/');
+        $response = $this->get(route('admin.index'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-        $response->assertStatus(200);
+    public function test_invoke_no_permission()
+    {
+        $response = $this->actingAs(User::factory()->create())
+            ->get(route('admin.index'));
+        $response->assertStatus(403);
+    }
+
+    public function test_invoke()
+    {
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('admin.index'));
+        $response->assertSuccessful();
     }
 }
