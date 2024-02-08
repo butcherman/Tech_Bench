@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
+use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -19,6 +20,11 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
      * User Administration
      */
     Route::prefix('users')->name('user.')->group(function () {
+        Route::get('password-policy', [PasswordPolicyController::class, 'show'])
+            ->name('password-policy.show')
+            ->breadcrumb('Password Policy', 'admin.index');
+        Route::put('password-policy', [PasswordPolicyController::class, 'update'])
+            ->name('password-policy.update');
         Route::get('deactivated-users', DeactivatedUserController::class)
             ->name('deactivated')
             ->breadcrumb('Deactivated Users', 'admin.user.index');
@@ -47,7 +53,5 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     //     ->name('email-settings.show');
     // Route::put('email-settings', [EmailSettingsController::class, 'update'])
     //     ->name('email-settings.update');
-
-    // Route::resource('users', UserAdministrationController::class);
 
 });

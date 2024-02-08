@@ -78,7 +78,6 @@ class UserPasswordTest extends TestCase
         ];
 
         $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        // dd($response);
         $response->assertStatus(302);
         $response->assertInvalid();
     }

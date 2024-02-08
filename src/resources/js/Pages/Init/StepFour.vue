@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import InitLayout from "@/Layouts/InitLayout.vue";
 import PasswordPolicyForm from "@/Forms/Admin/User/PasswordPolicyForm.vue";
-import UserPasswordForm from "@/Forms/User/UserPasswordForm.vue";
 import { router } from "@inertiajs/vue3";
 
 defineProps<{

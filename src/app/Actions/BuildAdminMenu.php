@@ -46,14 +46,14 @@ class BuildAdminMenu
                 'route' => route('admin.user.create'),
             ];
             $userBuild[] = [
-                'name' => 'List Deactivated Users',
+                'name' => 'List Disabled Users',
                 'icon' => 'fas fa-store-alt-slash',
                 'route' => route('admin.user.deactivated'),
             ];
             $userBuild[] = [
                 'name' => 'Password Policy',
                 'icon' => 'fas fa-user-lock',
-                'route' => '#', // route('admin.user.password-policy.get'),
+                'route' => route('admin.user.password-policy.show'),
             ];
             $userBuild[] = [
                 'name' => 'User Settings',

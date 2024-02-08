@@ -59,4 +59,5 @@ type passwordPolicy = {
     contains_lowercase: boolean;
     contains_number: boolean;
     contains_special: boolean;
+    disable_compromised: boolean;
 };

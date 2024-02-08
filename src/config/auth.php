@@ -49,6 +49,7 @@ return [
             'contains_lowercase' => true,
             'contains_number' => true,
             'contains_special' => true,
+            'disable_compromised' => false,
         ],
     ],
 

@@ -4,7 +4,9 @@
         :initial-values="initValues"
         :validation-schema="schema"
         :submit-route="
-            init ? $route('init.step-4.submit') : $route('dashboard')
+            init
+                ? $route('init.step-4.submit')
+                : $route('admin.user.password-policy.update')
         "
         submit-method="put"
         submit-text="Update Password Policy"
@@ -49,6 +51,11 @@
                     name="contains_special"
                     label="Special Character (!@#$%^&*)"
                 />
+                <CheckboxSwitch
+                    id="policy-compromised"
+                    name="disable_compromised"
+                    label="Disable Known Compromised Passwords (Example: Pa$$word!)"
+                />
             </div>
         </fieldset>
     </VueForm>
@@ -74,6 +81,7 @@ const initValues = {
     contains_lowercase: props.policy.contains_lowercase,
     contains_number: props.policy.contains_number,
     contains_special: props.policy.contains_special,
+    disable_compromised: props.policy.disable_compromised,
 };
 const schema = object({
     expire: number().required(),
@@ -82,5 +90,6 @@ const schema = object({
     contains_lowercase: boolean().required(),
     contains_number: boolean().required(),
     contains_special: boolean().required(),
+    disable_compromised: boolean().required(),
 });
 </script>
