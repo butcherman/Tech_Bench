@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import okModal from "@/Modules/ok";
+import okModal from "@/Modules/okModal";
 import { ref, toRef, computed, watch, onMounted } from "vue";
 import { useField } from "vee-validate";
 import { upperFirst } from "lodash";

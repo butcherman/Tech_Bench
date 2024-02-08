@@ -8,5 +8,5 @@
 </template>
 
 <script setup lang="ts">
-import AtomLoader from "../_Base/Loaders/AtomLoader.vue";
+import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 </script>

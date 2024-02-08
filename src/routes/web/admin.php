@@ -7,19 +7,28 @@ use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
+use App\Http\Controllers\Admin\User\UserSettingsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 Route::middleware('auth.secure')->prefix('administration')->name('admin.')->group(function () {
 
+    /***************************************************************************
+     * Administration Home Page
+     ***************************************************************************/
     Route::get('/', AdminController::class)->name('index')
         ->breadcrumb('Administration');
 
-    /**
+    /***************************************************************************
      * User Administration
-     */
+     ***************************************************************************/
     Route::prefix('users')->name('user.')->group(function () {
+        Route::get('user-settings', [UserSettingsController::class, 'show'])
+            ->name('user-settings.show')
+            ->breadcrumb('User Settings', 'admin.index');
+        Route::put('user-settings', [UserSettingsController::class, 'update'])
+            ->name('user-settings.update');
         Route::get('password-policy', [PasswordPolicyController::class, 'show'])
             ->name('password-policy.show')
             ->breadcrumb('Password Policy', 'admin.index');
@@ -27,7 +36,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
             ->name('password-policy.update');
         Route::get('deactivated-users', DeactivatedUserController::class)
             ->name('deactivated')
-            ->breadcrumb('Deactivated Users', 'admin.user.index');
+            ->breadcrumb('Disabled Users', 'admin.user.index');
         Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
             ->name('password-link');
         Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])

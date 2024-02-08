@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import ok from "@/Modules/ok";
+import okModal from "@/Modules/okModal";
 import { toRef } from "vue";
 import { useField } from "vee-validate";
 import { upperFirst } from "lodash";
@@ -62,7 +62,7 @@ const props = defineProps<{
 }>();
 
 const showHelp = () => {
-    ok(props.help!!);
+    okModal(props.help!!);
 };
 
 const nameRef = toRef(props, "name");

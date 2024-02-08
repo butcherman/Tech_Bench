@@ -58,7 +58,7 @@ class BuildAdminMenu
             $userBuild[] = [
                 'name' => 'User Settings',
                 'icon' => 'cog',
-                'route' => '#', // route('admin.user-settings.get'),
+                'route' => route('admin.user.user-settings.show'),
             ];
 
         }

@@ -105,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import HelpModal from "@/Components/Help/HelpModal.vue";
+import HelpModal from "@/Help/HelpModal.vue";
 import { ref } from "vue";
 import { useAppStore } from "@/Store/AppStore";
 

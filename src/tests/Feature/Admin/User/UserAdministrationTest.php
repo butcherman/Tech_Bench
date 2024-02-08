@@ -324,34 +324,40 @@ class UserAdministrationTest extends TestCase
     /**
      * Restore Method
      */
-    // public function test_restore_guest()
-    // {
-    //     $user = User::factory()->create();
-    //     $user->delete();
+    public function test_restore_guest()
+    {
+        $user = User::factory()->create();
+        $user->delete();
 
-    //     $response = $this->get(route('admin.user.restore', $user->username));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response = $this->get(route('admin.user.restore', $user->username));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // public function test_restore_no_permission()
-    // {
-    //     $user = User::factory()->create();
-    //     $user->delete();
+    public function test_restore_no_permission()
+    {
+        $user = User::factory()->create();
+        $user->delete();
 
-    //     $response = $this->actingAs(User::factory()->create())->get(route('admin.user.restore', $user->username));
-    //     $response->assertStatus(403);
-    // }
+        $response = $this->actingAs(User::factory()->create())
+            ->get(route('admin.user.restore', $user->username));
+        $response->assertStatus(403);
+    }
 
-    // public function test_restore()
-    // {
-    //     $user = User::factory()->create();
-    //     $user->delete();
+    public function test_restore()
+    {
+        $user = User::factory()->create();
+        $user->delete();
 
-    //     $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('admin.user.restore', $user->username));
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('success', __('admin.user.restored', ['user' => $user->full_name]));
-    //     $this->assertDatabaseHas('users', $user->only(['user_id', 'username', 'first_name', 'last_name']));
-    // }
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('admin.user.restore', $user->username));
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('admin.user.restored', [
+            'user' => $user->full_name,
+        ]));
+        $this->assertDatabaseHas('users', $user->only([
+            'user_id', 'username', 'first_name', 'last_name',
+        ]));
+    }
 }

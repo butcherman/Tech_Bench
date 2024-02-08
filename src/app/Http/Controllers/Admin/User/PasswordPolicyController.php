@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PasswordPolicyRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -14,6 +15,8 @@ class PasswordPolicyController extends Controller
      */
     public function show()
     {
+        $this->authorize('viewAny', User::class);
+
         return Inertia::render('Admin/User/PasswordPolicy', [
             'policy' => [
                 'expire' => config('auth.passwords.settings.expire'),

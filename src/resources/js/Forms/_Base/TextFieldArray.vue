@@ -1,5 +1,10 @@
 <template>
-    <draggable :disabled="!drag" :list="fields" item-key="index" @end="onDragEnd">
+    <draggable
+        :disabled="!drag"
+        :list="fields"
+        item-key="index"
+        @end="onDragEnd"
+    >
         <template #item="{ element, index }">
             <div>
                 <TextInput
@@ -42,7 +47,7 @@ import TextInput from "./TextInput.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import draggable from "vuedraggable";
 import { useFieldArray } from "vee-validate";
-import  verify  from '@/Modules/verify';
+import verifyModal from "@/Modules/verifyModal";
 
 const props = defineProps<{
     name: string;
@@ -68,14 +73,16 @@ const onDragEnd = (event: dragEvent) => {
  * Present a warning message to the user about removing the specified item
  */
 const verifyRemove = (index: number) => {
-    if(!props.removeWarning) {
+    if (!props.removeWarning) {
         remove(index);
     } else {
-        verify({ title: 'WARNING:  Possible Data Loss', message: props.removeWarning }).then((res) => {
-            if(res) {
-                remove(index);
+        verifyModal("WARNING:  Possible Data Loss", props.removeWarning).then(
+            (res) => {
+                if (res) {
+                    remove(index);
+                }
             }
-        });
+        );
     }
-}
+};
 </script>

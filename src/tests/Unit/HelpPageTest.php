@@ -27,6 +27,7 @@ class HelpPageTest extends TestCase
         'home',
         'remove-device',
         'send-welcome',
+        'restore',
     ];
 
     /**
@@ -45,7 +46,7 @@ class HelpPageTest extends TestCase
         });
 
         foreach ($routeList as $route) {
-            $this->assertFileExists(resource_path('js/Components/Help/Components/'.$route.'.vue'));
+            $this->assertFileExists(resource_path('js/Help/Components/'.$route.'.vue'));
         }
     }
 }
