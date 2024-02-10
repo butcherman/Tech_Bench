@@ -55,7 +55,7 @@ import { router } from "@inertiajs/vue3";
 
 defineProps<{
     rules: string[];
-    roles: userRoles[];
+    roles: userRole[];
     user: user;
 }>();
 

@@ -16,7 +16,7 @@ class LoginController extends Controller
         return Inertia::render('Auth/Login', [
             'welcome-message' => config('app.welcome_message'),
             'home-links' => config('app.home_links'),
-            'allow-oath' => config('services.azure.allow_login'),
+            'allow-oath' => (bool) config('services.azure.allow_login'),
         ]);
     }
 }

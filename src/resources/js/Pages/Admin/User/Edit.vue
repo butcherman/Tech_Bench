@@ -16,7 +16,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import UserForm from "@/Forms/Admin/User/UserForm.vue";
 
 defineProps<{
-    roles: userRoles[];
+    roles: userRole[];
     user: user;
 }>();
 </script>

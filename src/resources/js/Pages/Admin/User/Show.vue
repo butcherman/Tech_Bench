@@ -158,7 +158,7 @@ import { router, useForm } from "@inertiajs/vue3";
 
 const props = defineProps<{
     user: user;
-    role: userRoles;
+    role: userRole;
     lastLogin: {
         ip_address: string;
         created_at: string;

@@ -12,6 +12,18 @@ use PragmaRX\Version\Package\Version;
 class Cache
 {
     /**
+     * Clear a Cached Item, or the entire Cache
+     */
+    public static function clearCache(?string $cacheKey = null)
+    {
+        if ($cacheKey) {
+            FacadesCache::forget($cacheKey);
+        } else {
+            FacadesCache::flush();
+        }
+    }
+
+    /**
      * Rules for users passwords
      */
     public static function PasswordRules()

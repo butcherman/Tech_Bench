@@ -6,7 +6,7 @@ type user = {
     full_name: string;
     initials: string;
     role_id: string;
-    user_role: userRoles;
+    user_role: userRole;
     created_at: string;
     updated_at: string;
     deleted_at: string;
@@ -28,12 +28,21 @@ type userNotification = {
     };
 };
 
-type userRoles = {
+type userRole = {
     role_id: number;
     name: string;
     description: string;
     allow_edit: boolean;
 };
+
+type userRolePermission = {
+    perm_type_id: number;
+    description: string;
+    group: string;
+    allow: boolean;
+};
+
+type userRolePermissionGroup = { [key: string]: userRolePermission[] };
 
 type userDevice = {
     device_id: number;

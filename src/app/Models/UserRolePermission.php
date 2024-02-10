@@ -2,17 +2,38 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UserRolePermission extends Model
 {
-    use HasFactory;
-
     protected $primaryKey = 'id';
 
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    protected $hidden = [
+        'id',
+        'role_id',
+        'created_at',
+        'updated_at',
+        'UserRolePermissionType',
+    ];
+
+    protected $appends = ['description'];
+
+    protected $casts = [
+        'allow' => 'boolean',
+    ];
+
     /**
-     * User Role Permissions explain what a permission type id is for
+     * Additional Attributes
+     */
+    public function getDescriptionAttribute()
+    {
+        return $this->UserRolePermissionType->description;
+    }
+
+    /**
+     * Model Relationships
      */
     public function UserRolePermissionType()
     {

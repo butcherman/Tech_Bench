@@ -21,7 +21,7 @@ return [
         'settings_updated' => 'User Settings Updated',
     ],
 
-    'user-roles' => [
+    'user-role' => [
         'created' => 'New User Role Created',
         'updated' => 'User Role Updated',
         'destroyed' => 'User Role Deleted',

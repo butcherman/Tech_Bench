@@ -13,7 +13,12 @@ class UserRole extends Model
 
     protected $guarded = ['role_id', 'allow_edit', 'created_at', 'updated_at'];
 
-    protected $hidden = ['allow_edit', 'created_at', 'updated_at', 'UserRolePermission'];
+    protected $hidden = [
+        'allow_edit',
+        'created_at',
+        'updated_at',
+        'UserRolePermission',
+    ];
 
     protected $casts = [
         'allow_edit' => 'boolean',
@@ -27,7 +32,7 @@ class UserRole extends Model
         return 'role_id';
     }
 
-    public function UserRolePermissions()
+    public function UserRolePermission()
     {
         return $this->hasMany(UserRolePermission::class, 'role_id', 'role_id');
     }

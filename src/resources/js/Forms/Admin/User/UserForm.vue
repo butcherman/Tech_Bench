@@ -32,7 +32,7 @@ import { number, object, string } from "yup";
 
 defineEmits(["success"]);
 const props = defineProps<{
-    roles: userRoles[];
+    roles: userRole[];
     user?: user | null;
     init?: boolean;
 }>();

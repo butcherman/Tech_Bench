@@ -83,7 +83,9 @@ const onSubmit = handleSubmit((form): void => {
      */
     if (props.testing) {
         emit("values", form);
-        console.log("form values", form);
+        console.log("Form Route", props.submitRoute);
+        console.log("Form Method", props.submitMethod);
+        console.log("Form Values", form);
         isSubmitting.value = false;
     } else {
         formData.submit(props.submitMethod, props.submitRoute, {

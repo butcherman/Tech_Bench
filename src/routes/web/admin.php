@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
+use App\Http\Controllers\Admin\User\UserRolesController;
 use App\Http\Controllers\Admin\User\UserSettingsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,20 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
                 ->show('User Details', 'admin.user.index')
                 ->edit('Edit User Details', 'admin.user.show');
         })->withTrashed();
+
+    /***************************************************************************
+     * User Role Administration
+     ***************************************************************************/
+    Route::post('user-roles/create', [UserRolesController::class, 'create'])
+        ->name('user-roles.copy')
+        ->breadcrumb('Build New Role', 'admin.user-roles.index');
+    Route::resource('user-roles', UserRolesController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Roles and Permissions', 'admin.index')
+                ->create('Build New Role')
+                ->show('View Role')
+                ->edit('Modify Role');
+        });
 
     // Route::get('basic-settings', [BasicSettingsController::class, 'show'])
     //     ->name('basic-settings.show');
