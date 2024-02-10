@@ -119,7 +119,7 @@ const sortedData = computed(() =>
 /*******************************************************************************
  * Sorting Properties
  *******************************************************************************/
-const sortBy = ref<string>(props.initialSort || props.columns[0].field);
+const sortBy = ref<string>(props.initialSort || "");
 const sortOrder = ref<"asc" | "desc">("asc");
 
 const updateSort = (field: string) => {

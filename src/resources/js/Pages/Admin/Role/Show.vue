@@ -71,7 +71,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
-import { ref, computed, onMounted } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
     role: userRole;
@@ -83,7 +83,6 @@ const deleteText = computed(() =>
 );
 
 const deleteRole = () => {
-    console.log("delete role");
     verifyModal("This Operation Cannot Be Undone").then((res) => {
         if (res) {
             router.delete(

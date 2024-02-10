@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Actions\BuildUserRoles;
-use App\Exceptions\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserRoleRequest;
 use App\Models\UserRole;
 use App\Models\UserRolePermissionType;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -92,18 +90,17 @@ class UserRolesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserRole $user_role)
+    public function destroy(UserRoleRequest $request, UserRole $user_role)
     {
         $this->authorize('destroy', $user_role);
 
-        try {
-            $user_role->delete();
-        } catch (QueryException $e) {
-            if (in_array($e->errorInfo[1], [19, 1451])) {
-                throw new RecordInUseException('Role is currently in use', 0, $e);
-            }
-        }
+        $request->destroyRole();
 
-        return 'worked';
+        Log::stack(['daily', 'user'])
+            ->notice('Role '.$user_role->name.' has been deleted by '.
+                $request->user()->username);
+
+        return redirect(route('admin.user-roles.index'))
+            ->with('warning', __('admin.user-role.destroyed'));
     }
 }

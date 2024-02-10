@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests\Admin\User;
 
+use App\Exceptions\Database\RecordInUseException;
+use App\Exceptions\GeneralQueryException;
 use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use App\Service\Cache;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,6 +30,10 @@ class UserRoleRequest extends FormRequest
      */
     public function rules(): array
     {
+        if ($this->getMethod('delete')) {
+            return [];
+        }
+
         return [
             'name' => [
                 'required',
@@ -55,9 +62,33 @@ class UserRoleRequest extends FormRequest
             }
         }
 
-        // Flush the Roles Cache so it can be rebuilt
-        Cache::clearCache('user_roles');
+        $this->flushRoleCache();
 
         return $newRole;
+    }
+
+    /**
+     * Delete an existing Role
+     */
+    public function destroyRole()
+    {
+        try {
+            $this->user_role->delete();
+            $this->flushRoleCache();
+        } catch (QueryException $e) {
+            if (in_array($e->errorInfo[1], [19, 1451])) {
+                throw new RecordInUseException('This Role is currently assigned to at least one user and cannot be deleted', 0, $e);
+            } else {
+                throw new GeneralQueryException('', 0, $e);
+            }
+        }
+    }
+
+    /**
+     * Flush the Roles Cache so it can be rebuilt
+     */
+    protected function flushRoleCache()
+    {
+        Cache::clearCache('user_roles');
     }
 }
