@@ -18,6 +18,7 @@ class UserSettingsController extends Controller
         $this->authorize('create', User::class);
 
         return Inertia::render('Admin/User/UserSettings', [
+            'auto-logout-timer' => intval(config('auth.auto_logout_timer')),
             'two-fa' => [
                 'required' => (bool) config('auth.twoFa.required'),
                 'allow_save_device' => (bool) config('auth.twoFa.allow_save_device'),

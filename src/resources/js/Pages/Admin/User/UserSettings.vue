@@ -4,7 +4,11 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">User Settings</div>
-                    <UserSettingsForm :twoFa="twoFa" :oath="oath" />
+                    <UserSettingsForm
+                        :auto-logout-timer="autoLogoutTimer"
+                        :twoFa="twoFa"
+                        :oath="oath"
+                    />
                 </div>
             </div>
         </div>
@@ -14,9 +18,9 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserSettingsForm from "@/Forms/Admin/User/UserSettingsForm.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{
+defineProps<{
+    autoLogoutTimer: number;
     twoFa: twoFaConfig;
     oath: oathConfig;
 }>();

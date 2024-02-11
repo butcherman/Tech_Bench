@@ -20,7 +20,8 @@ class LogoutResponse implements LogoutResponseContract
         if ($request->has('reason')) {
             switch ($request->input('reason')) {
                 case 'timeout':
-                    $msg = 'You have been logged out after being idle for more than 15 minutes';
+                    $msg = 'You have been logged out after being idle for more than '.
+                        config('auth.auto_logout_timer').' minutes';
                     break;
             }
         }

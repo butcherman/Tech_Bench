@@ -3,6 +3,16 @@
         <table class="table">
             <tbody>
                 <tr>
+                    <th class="text-end">
+                        User Idle Log Out Timer (in Minutes)
+                    </th>
+                    <td>
+                        If the user is idle in the application for more than
+                        this amount of time, they will be automatically logged
+                        out to prevent others from using their session.
+                    </td>
+                </tr>
+                <tr>
                     <th colspan="2">Two Factor Authentication</th>
                 </tr>
                 <tr>

@@ -38,6 +38,7 @@ class UserSettingsTest extends TestCase
     public function test_update_guest()
     {
         $data = [
+            'auto_logout_timer' => 5,
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
@@ -63,6 +64,7 @@ class UserSettingsTest extends TestCase
     public function test_update_no_permission()
     {
         $data = [
+            'auto_logout_timer' => 5,
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
@@ -87,6 +89,7 @@ class UserSettingsTest extends TestCase
     public function test_update()
     {
         $data = [
+            'auto_logout_timer' => 5,
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
@@ -107,6 +110,11 @@ class UserSettingsTest extends TestCase
             ->put(route('admin.user.user-settings.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user.settings_updated'));
+
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'auth.auto_logout_timer',
+            'value' => 5,
+        ]);
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.twoFa.required',
@@ -154,6 +162,7 @@ class UserSettingsTest extends TestCase
     public function test_update_no_password_change()
     {
         $data = [
+            'auto_logout_timer' => 5,
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
@@ -173,6 +182,11 @@ class UserSettingsTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.user.user-settings.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user.settings_updated'));
+
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'auth.auto_logout_timer',
+            'value' => 5,
+        ]);
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.twoFa.required',

@@ -24,6 +24,7 @@ class UserSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'auto_logout_timer' => 'required',
             'twoFa.required' => 'required|boolean',
             'twoFa.allow_save_device' => 'required|boolean',
             'oath.allow_login' => 'required|boolean',
@@ -42,6 +43,7 @@ class UserSettingsRequest extends FormRequest
      */
     public function updateUserSettings()
     {
+        $this->saveSettings('auth.auto_logout_timer', intval($this->auto_logout_timer));
         $this->saveSettingsArray($this->oath, 'services.azure');
         $this->saveSettingsArray($this->twoFa, 'auth.twoFa');
     }

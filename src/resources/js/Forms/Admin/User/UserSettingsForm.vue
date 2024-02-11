@@ -7,6 +7,13 @@
         submit-method="put"
         submit-text="Update User Settings"
     >
+        <TextInput
+            id="auto-logout"
+            name="auto_logout_timer"
+            label="User Idle Log Out Timer (in Minutes)"
+            :help="`If the user is idle for more than this timer, the system
+                    will automatically log them out`"
+        />
         <fieldset class="border-bottom">
             <legend>Two Factor Authentication</legend>
             <div class="ms-4">
@@ -91,6 +98,7 @@ import { ref, computed } from "vue";
 import { boolean, object, string } from "yup";
 
 const props = defineProps<{
+    autoLogoutTimer: number;
     twoFa: twoFaConfig;
     oath: oathConfig;
 }>();
@@ -105,10 +113,12 @@ const disableOathFields = computed(
 );
 
 const initValues = {
+    auto_logout_timer: props.autoLogoutTimer,
     twoFa: props.twoFa,
     oath: props.oath,
 };
 const schema = object({
+    auto_logout_timer: string().required().label("Auto Logout Timer"),
     twoFa: object({
         required: boolean().required(),
         allow_save_device: boolean().required(),

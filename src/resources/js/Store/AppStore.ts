@@ -39,6 +39,13 @@ export const useAppStore = defineStore("appStore", () => {
     );
 
     /**
+     * User Session Data
+     */
+    const idleTimeout = computed<number>(
+        () => usePage<pageProps>().props.idle_timeout
+    );
+
+    /**
      * Flash Data shows notifications across top of page
      */
     const flash = computed<flashData[]>(() => usePage<pageProps>().props.flash);
@@ -72,6 +79,7 @@ export const useAppStore = defineStore("appStore", () => {
         logo,
         user,
         userNotifications,
+        idleTimeout,
         navbar,
         version,
         copyright,
