@@ -32,11 +32,20 @@
                 <tr
                     v-for="(row, index) in paginatedData"
                     :key="index"
-                    :class="{ pointer: rowClickable }"
+                    :class="{ pointer: rowClickable, 'row-link': row.href }"
                 >
                     <template v-for="col in columns">
-                        <td @click="$emit('on-row-click', row)">
-                            {{ row[col.field] }}
+                        <td @click="$emit('on-row-click', [$event, row])">
+                            <Link
+                                v-if="row.href"
+                                :href="row.href"
+                                class="block-link"
+                            >
+                                {{ row[col.field] }}
+                            </Link>
+                            <span v-else>
+                                {{ row[col.field] }}
+                            </span>
                         </td>
                     </template>
                     <td v-if="slots.action">
@@ -240,3 +249,16 @@ const goToPage = (newPage: number) => {
     currentPage.value = newPage;
 };
 </script>
+
+<style scoped lang="scss">
+tr.row-link {
+    padding: 0;
+    margin: 0;
+    a.block-link {
+        display: block;
+        padding: 0.5rem;
+        margin: 0;
+        height: 100%;
+    }
+}
+</style>

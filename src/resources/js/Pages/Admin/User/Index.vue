@@ -15,13 +15,11 @@
                         </div>
                         <Table
                             :columns="columns"
-                            :rows="userList"
+                            :rows="userLinkList"
                             initial-sort="username"
                             responsive
-                            row-clickable
                             paginate
                             :per-page-default="25"
-                            @on-row-click="rowClicked"
                         >
                             <template #action="{ rowData }">
                                 <span
@@ -46,11 +44,25 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import Table from "@/Components/_Base/Table.vue";
 import verifyModal from "@/Modules/verifyModal";
+import { computed } from "vue";
 import { router } from "@inertiajs/vue3";
 
-defineProps<{
-    userList: user[];
+type userLinkList = {
+    href: string;
+} & user;
+
+const props = defineProps<{
+    userList: userLinkList[];
 }>();
+
+const userLinkList = computed<userLinkList[]>(() => {
+    let newList = [...props.userList];
+    newList.forEach((item) => {
+        item.href = route("admin.user.edit", item.username);
+    });
+
+    return newList;
+});
 
 const disableUser = (user: user) => {
     verifyModal(`${user.full_name} will be immediately disabled`).then(
@@ -61,10 +73,6 @@ const disableUser = (user: user) => {
             }
         }
     );
-};
-
-const rowClicked = (row: user) => {
-    router.get(route("admin.user.show", row.username));
 };
 
 const columns = [
