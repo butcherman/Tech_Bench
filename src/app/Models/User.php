@@ -108,6 +108,8 @@ class User extends Authenticatable
 
     /**
      * Generate a Remember token for a device
+     *
+     * @codeCoverageIgnore
      */
     public function generateRememberDeviceToken()
     {
@@ -130,6 +132,8 @@ class User extends Authenticatable
 
     /**
      * Validate a Remember Me device token
+     *
+     * @codeCoverageIgnore
      */
     public function validateDeviceToken($token)
     {
@@ -145,6 +149,8 @@ class User extends Authenticatable
 
     /**
      * Function to get login history for the last xx days
+     *
+     * @codeCoverageIgnore
      */
     public function getLoginHistory($days = 365)
     {

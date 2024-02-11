@@ -4,7 +4,9 @@ namespace Tests\Unit\Models;
 
 use App\Models\User;
 use App\Models\UserRole;
+use App\Notifications\User\SendAuthCode;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class UserUnitTest extends TestCase
@@ -57,5 +59,14 @@ class UserUnitTest extends TestCase
         // Test Future Expire
         $future = Carbon::now()->addDays(config('auth.passwords.settings.expire'))->format('M d Y');
         $this->assertEquals($this->model->getNewExpireTime()->format('M d Y'), $future);
+    }
+
+    public function test_generate_verification_code()
+    {
+        Notification::fake();
+
+        $this->model->generateVerificationCode();
+
+        Notification::assertSentTo($this->model, SendAuthCode::class);
     }
 }
