@@ -52,19 +52,23 @@ class UserRoleRequest extends FormRequest
     {
         $newRole = UserRole::create($this->only(['name', 'description']));
 
-        foreach ($this->permissions as $key => $value) {
-            if ($value !== null) {
-                UserRolePermission::create([
-                    'role_id' => $newRole->role_id,
-                    'perm_type_id' => $key,
-                    'allow' => $value,
-                ]);
-            }
-        }
-
+        $this->processPermissions($newRole->role_id);
         $this->flushRoleCache();
 
         return $newRole;
+    }
+
+    /**
+     * Update an existing Role
+     */
+    public function processExistingRole()
+    {
+        $this->user_role->update($this->only(['name', 'description']));
+
+        $this->processPermissions($this->user_role->role_id);
+        $this->flushRoleCache();
+
+        return $this->user_role;
     }
 
     /**
@@ -80,6 +84,21 @@ class UserRoleRequest extends FormRequest
                 throw new RecordInUseException('This Role is currently assigned to at least one user and cannot be deleted', 0, $e);
             } else {
                 throw new GeneralQueryException('', 0, $e);
+            }
+        }
+    }
+
+    /**
+     * Go through all Role Permissions and build/update in Database
+     */
+    protected function processPermissions($roleId)
+    {
+        foreach ($this->permissions as $key => $value) {
+            if ($value !== null) {
+                UserRolePermission::firstOrCreate([
+                    'role_id' => $roleId,
+                    'perm_type_id' => $key,
+                ])->update(['allow' => $value]);
             }
         }
     }

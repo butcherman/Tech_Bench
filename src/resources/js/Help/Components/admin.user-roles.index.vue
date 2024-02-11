@@ -12,14 +12,11 @@
         </p>
         <p>
             <strong>Note:</strong> The default built-in roles can be viewed, but
-            cannot be modified.
+            cannot be modified or deleted.
         </p>
     </div>
 </template>
 
 <script setup lang="ts">
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import { ref, reactive, onMounted } from "vue";
-
-const props = defineProps<{}>();
 </script>

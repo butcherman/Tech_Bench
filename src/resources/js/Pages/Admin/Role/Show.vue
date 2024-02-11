@@ -45,21 +45,29 @@
                         <Link
                             :href="$route('admin.user-roles.copy')"
                             as="button"
-                            class="btn btn-block btn-info m-1"
+                            class="btn btn-info m-1"
                             method="post"
                             :data="role"
                         >
                             <fa-icon icon="copy" class="me-1" />
                             Copy Role
                         </Link>
-                        <button
-                            class="btn btn-block btn-danger m-1"
-                            :disabled="!role.allow_edit"
+                        <EditButton
+                            v-if="role.allow_edit"
+                            :href="
+                                $route('admin.user-roles.edit', role.role_id)
+                            "
+                            class="m-1"
+                        >
+                            Edit Role
+                        </EditButton>
+                        <DeleteButton
+                            v-if="role.allow_edit"
+                            class="m-1"
                             @click="deleteRole"
                         >
-                            <fa-icon icon="trash-alt" class="me-1" />
-                            {{ deleteText }}
-                        </button>
+                            Delete Role
+                        </DeleteButton>
                     </div>
                 </div>
             </div>
@@ -69,18 +77,15 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
+import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
+import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
-import { computed } from "vue";
 
 const props = defineProps<{
     role: userRole;
     permissionList: userRolePermissionGroup;
 }>();
-
-const deleteText = computed(() =>
-    props.role.allow_edit ? "Delete Role" : "Cannot Delete A Default Role"
-);
 
 const deleteRole = () => {
     verifyModal("This Operation Cannot Be Undone").then((res) => {

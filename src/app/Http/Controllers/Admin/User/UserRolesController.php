@@ -74,17 +74,28 @@ class UserRolesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(UserRole $user_role)
     {
-        //
+        $this->authorize('update', $user_role);
+
+        return Inertia::render('Admin/Role/Edit', [
+            'base-role' => $user_role,
+            'permission-list' => $user_role->UserRolePermission
+                ->groupBy('UserRolePermissionType.group'),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRoleRequest $request, UserRole $user_role)
     {
-        //
+        $modifiedRole = $request->processExistingRole();
+
+        Log::info('User Role Updated by '.$request->user()->username,
+            $modifiedRole->toArray());
+
+        return back()->with('success', __('admin.user-role.updated'));
     }
 
     /**
