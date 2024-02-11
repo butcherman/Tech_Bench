@@ -13,6 +13,8 @@ class Cache
 {
     /**
      * Clear a Cached Item, or the entire Cache
+     *
+     * @codeCoverageIgnore
      */
     public static function clearCache(?string $cacheKey = null)
     {

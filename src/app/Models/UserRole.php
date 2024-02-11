@@ -32,6 +32,9 @@ class UserRole extends Model
         return 'role_id';
     }
 
+    /**
+     * Model Relationships
+     */
     public function UserRolePermission()
     {
         return $this->hasMany(UserRolePermission::class, 'role_id', 'role_id');

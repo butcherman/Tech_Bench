@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Gate;
 
 class BuildNavbar
 {
+    // TODO - Unit Test Class
     public static function build(User $user)
     {
         $primaryNav = [

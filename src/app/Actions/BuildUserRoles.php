@@ -21,9 +21,9 @@ class BuildUserRoles
             case 1:
                 return $roleList;
             case 2:
-                return $roleList->where('role_id', '>=', 2)->get();
+                return $roleList->where('role_id', '>=', 2);
             default:
-                return $roleList->where('role_id', '>=', 2)->get();
+                return $roleList->where('role_id', '>=', 2);
         }
     }
 }

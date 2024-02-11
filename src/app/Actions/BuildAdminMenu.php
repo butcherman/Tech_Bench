@@ -11,6 +11,7 @@ use App\Traits\AllowTrait;
  */
 class BuildAdminMenu
 {
+    // TODO - Unit Test Class
     use AllowTrait;
 
     protected $menu = [];

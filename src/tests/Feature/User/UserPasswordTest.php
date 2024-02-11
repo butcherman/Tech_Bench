@@ -195,4 +195,21 @@ class UserPasswordTest extends TestCase
         $response->assertStatus(302);
         $response->assertValid();
     }
+
+    public function test_change_password_no_compromised_enabled()
+    {
+        Notification::fake();
+
+        config(['auth.password.settings.disable_compromised' => true]);
+        $user = User::factory()->create();
+        $data = [
+            'current_password' => 'password',
+            'password' => $pass = 'password123',
+            'password_confirmation' => $pass,
+        ];
+
+        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
+        $response->assertStatus(302);
+        $response->assertInvalid();
+    }
 }

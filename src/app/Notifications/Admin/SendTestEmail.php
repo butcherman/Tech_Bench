@@ -38,16 +38,4 @@ class SendTestEmail extends Notification
             ->action('Notification Action', url('/'))
             ->line('Thank you for using our application!');
     }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
-    }
 }

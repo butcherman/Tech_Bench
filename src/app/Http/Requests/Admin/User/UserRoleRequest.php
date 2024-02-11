@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Admin\User;
 
+use App\Exceptions\Database\GeneralQueryException;
 use App\Exceptions\Database\RecordInUseException;
-use App\Exceptions\GeneralQueryException;
 use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use App\Service\Cache;
@@ -81,7 +81,7 @@ class UserRoleRequest extends FormRequest
             $this->flushRoleCache();
         } catch (QueryException $e) {
             if (in_array($e->errorInfo[1], [19, 1451])) {
-                throw new RecordInUseException('This Role is currently assigned to at least one user and cannot be deleted', 0, $e);
+                throw new RecordInUseException(__('admin.user-role.in-use'), 0, $e);
             } else {
                 throw new GeneralQueryException('', 0, $e);
             }
