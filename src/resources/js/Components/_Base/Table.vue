@@ -29,6 +29,15 @@
                 </tr>
             </thead>
             <tbody>
+                <tr v-if="!paginatedData.length">
+                    <td :colspan="columnCount">
+                        <slot name="no-results">
+                            <div class="text-center">
+                                {{ noResultsText || "No Results" }}
+                            </div>
+                        </slot>
+                    </td>
+                </tr>
                 <tr
                     v-for="(row, index) in paginatedData"
                     :key="index"
@@ -112,6 +121,7 @@ const props = defineProps<{
     paginate?: boolean;
     perPageArray?: number[];
     perPageDefault?: number;
+    noResultsText?: string;
 }>();
 
 const columnCount = computed(

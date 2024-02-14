@@ -31,4 +31,12 @@ class Customer extends Model
         return $this->where('slug', $value)->orWhere('cust_id', $value)
             ->firstOrFail();
     }
+
+    /**
+     * Model Relationships
+     */
+    public function CustomerSite()
+    {
+        return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
+    }
 }

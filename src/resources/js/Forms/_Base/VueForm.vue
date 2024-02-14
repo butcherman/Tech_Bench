@@ -14,6 +14,7 @@
         <slot />
         <slot name="submit">
             <SubmitButton
+                v-if="!hideSubmit"
                 :submitted="isSubmitting"
                 class="mt-auto"
                 :text="submitText"
@@ -47,6 +48,7 @@ const props = defineProps<{
     submitRoute: string;
     submitMethod: "post" | "put";
     hideOverlay?: boolean;
+    hideSubmit?: boolean;
     testing?: boolean;
 }>();
 

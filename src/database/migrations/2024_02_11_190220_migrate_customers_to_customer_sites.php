@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -50,6 +49,12 @@ return new class extends Migration
                 'state' => $cust->state,
                 'zip' => $cust->zip,
             ]);
+
+            // Add the Primary Site to the Customer Profile
+            if (!$cust->parent_id) {
+                $cust->primary_site_id = $cust->cust_id;
+                $cust->save();
+            }
         }
     }
 

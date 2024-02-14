@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,9 +12,11 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Customer/Index');
+        return Inertia::render('Customer/Index', [
+            'permissions' => BuildCustomerPermissions::build($request->user()),
+        ]);
     }
 
     /**
@@ -22,6 +25,7 @@ class CustomerController extends Controller
     public function create()
     {
         //
+        return 'create customer';
     }
 
     /**
@@ -38,6 +42,7 @@ class CustomerController extends Controller
     public function show(string $id)
     {
         //
+        return 'show ' . $id;
     }
 
     /**
