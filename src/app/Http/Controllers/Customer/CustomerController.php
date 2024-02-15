@@ -50,10 +50,12 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, Customer $customer)
     {
-        //
-        return 'show ' . $id;
+        return Inertia::render('Customer/Show', [
+            'permissions' => BuildCustomerPermissions::build($request->user()),
+            'customer' => $customer,
+        ]);
     }
 
     /**
