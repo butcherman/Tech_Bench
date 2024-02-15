@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Customer;
 
 use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerRequest;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -24,16 +26,25 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
-        return 'create customer';
+        $this->authorize('create', Customer::class);
+
+        return Inertia::render('Customer/Create', [
+            'select-id' => (bool) config('customer.select_id'),
+            'default-state' => config('customer.default_state'),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
-        //
+        $newCustomer = $request->createNewCustomer();
+
+        return redirect(route('customers.show', $newCustomer->slug))
+            ->with('success', __('cust.created', [
+                'name' => $newCustomer->name,
+            ]));
     }
 
     /**
