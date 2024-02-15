@@ -29,7 +29,7 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'select-id' => (bool) config('customer.select_id'),
+            'selectId' => (bool) config('customer.select_id'),
             'default-state' => config('customer.default_state'),
         ]);
     }
