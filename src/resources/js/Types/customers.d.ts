@@ -18,6 +18,20 @@ type customerSite = {
     zip: number;
 };
 
+type customerPageProps = {
+    customer: customer;
+    siteList: customerSite[];
+    permissions: customerPermissions;
+    // customer_alerts: customerAlert[];
+    // contacts: customerContact[];
+    // equipment: customerEquipment[];
+    // notes: customerNote[];
+    // files: customerFile[];
+    // phoneTypes: string[];
+    // equipTypes: { [key: string]: equipment[] };
+    // fileTypes: fileTypes[];
+} & pageProps;
+
 /*******************************************************************************
  *                          Customer Misc
  *******************************************************************************/

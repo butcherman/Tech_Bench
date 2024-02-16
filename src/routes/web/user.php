@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\User\InitializeUserController;
+use App\Http\Controllers\User\PinnedLinksController;
 use App\Http\Controllers\User\RemoveDeviceController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
@@ -26,6 +27,8 @@ Route::middleware('auth.secure')->prefix('user')->name('user.')->group(function 
 
     Route::get('remove-device/{user}/{device}', RemoveDeviceController::class)
         ->name('remove-device');
+
+    Route::post('pin-link-item', PinnedLinksController::class)->name('pinned-links');
 });
 
 /**
