@@ -1,5 +1,5 @@
 import { usePage } from "@inertiajs/vue3";
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { sortCustSites, findPrimarySite } from "@/Modules/CustomerSite.module";
 
 const page = usePage<customerPageProps>();
@@ -13,8 +13,11 @@ const permissions = computed<customerPermissions>(() => page.props.permissions);
  * Customer Information
  *******************************************************************************/
 const customer = computed<customer>(() => page.props.customer);
-const primarySite = computed(() => findPrimarySite(customer.value));
-const currentSite = computed(() => page.props.site);
+const customerAlerts = computed<customerAlert[]>(() => page.props.alerts);
+const primarySite = computed<customerSite | undefined>(() =>
+    findPrimarySite(customer.value)
+);
+const currentSite = computed<customerSite>(() => page.props.site || null);
 const siteList = computed<customerSite[]>(() =>
     sortCustSites(page.props.siteList, customer.value.primary_site_id)
 );
@@ -22,4 +25,11 @@ const siteList = computed<customerSite[]>(() =>
 /*******************************************************************************
  * Exported Data to Vue Components
  *******************************************************************************/
-export { customer, primarySite, currentSite, siteList, permissions };
+export {
+    permissions,
+    customer,
+    customerAlerts,
+    currentSite,
+    primarySite,
+    siteList,
+};

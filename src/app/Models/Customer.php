@@ -39,4 +39,9 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
     }
+
+    public function CustomerAlert()
+    {
+        return $this->hasMany(CustomerAlert::class, 'cust_id', 'cust_id');
+    }
 }

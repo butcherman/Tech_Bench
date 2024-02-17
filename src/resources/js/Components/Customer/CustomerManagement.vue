@@ -10,23 +10,30 @@
         <ul class="dropdown-menu">
             <li>
                 <Link
+                    :href="$route('customers.alerts.index', customer.slug)"
+                    class="dropdown-item"
+                >
+                    Customer Alerts
+                </Link>
+            </li>
+            <li>Deleted Items</li>
+            <li v-if="currentSite">Edit Site</li>
+            <li v-if="currentSite">Disable Site</li>
+            <li>
+                <Link
                     :href="$route('customers.edit', customer.slug)"
                     class="dropdown-item"
                 >
                     Edit Customer
                 </Link>
             </li>
-            <li>Edit Site</li>
-            <li>Deleted Items</li>
-            <li>Customer Alerts</li>
-            <li>Disable Site</li>
             <li>Disable Customer</li>
         </ul>
     </div>
 </template>
 
 <script setup lang="ts">
-import { customer } from "@/State/CustomerState";
+import { customer, currentSite } from "@/State/CustomerState";
 // import { ref, reactive, onMounted } from "vue";
 // const props = defineProps<{}>();
 </script>

@@ -3,15 +3,17 @@
         <Head :title="customer.name" />
         <div class="border-bottom border-secondary-subtle">
             <CustomerManagement v-if="showManagement" class="float-end" />
-            <h3>{{ customer.name }}</h3>
-            <h5 v-if="customer.dba_name">{{ customer.dba_name }}</h5>
+            <CustomerDetails />
         </div>
+        <CustomerAlerts />
     </div>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import CustomerManagement from "@/Components/Customer/CustomerManagement.vue";
+import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
+import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
 import { ref, computed, onMounted } from "vue";
 import { customer, permissions } from "@/State/CustomerState";
 

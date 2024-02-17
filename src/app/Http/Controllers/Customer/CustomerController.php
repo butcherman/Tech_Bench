@@ -63,6 +63,7 @@ class CustomerController extends Controller
                 'permissions' => BuildCustomerPermissions::build($request->user()),
                 'customer' => $customer,
                 'siteList' => $customer->CustomerSite,
+                'alerts' => $customer->CustomerAlert,
             ]);
         }
 
@@ -71,6 +72,7 @@ class CustomerController extends Controller
             'customer' => $customer,
             'site' => $customer->CustomerSite[0],
             'siteList' => $customer->CustomerSite,
+            'alerts' => $customer->CustomerAlert,
         ]);
     }
 

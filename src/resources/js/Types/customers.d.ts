@@ -19,11 +19,11 @@ type customerSite = {
 };
 
 type customerPageProps = {
-    customer: customer;
-    siteList: customerSite[];
     permissions: customerPermissions;
+    customer: customer;
     site: customerSite;
-    // customer_alerts: customerAlert[];
+    siteList: customerSite[];
+    alerts: customerAlert[];
     // contacts: customerContact[];
     // equipment: customerEquipment[];
     // notes: customerNote[];
@@ -42,4 +42,11 @@ type customerPermissions = {
     contact: basicPermissions;
     notes: basicPermissions;
     files: basicPermissions;
+};
+
+type customerAlert = {
+    alert_id: number;
+    cust_id: number;
+    message: string;
+    type: string;
 };
