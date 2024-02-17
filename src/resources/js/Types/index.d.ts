@@ -45,3 +45,9 @@ type breadcrumbs = {
     url: string;
     is_current_page: boolean;
 };
+
+type basicPermissions = {
+    create: boolean;
+    update: boolean;
+    delete: boolean;
+};
