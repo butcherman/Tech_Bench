@@ -6,15 +6,11 @@ use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerRequest;
 use App\Models\Customer;
-use App\Models\UserPinnedLink;
-use App\Traits\PinnedLinkTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
-    use PinnedLinkTrait;
-
     /**
      * Display a listing of the resource.
      */
@@ -58,7 +54,6 @@ class CustomerController extends Controller
     {
         return Inertia::render('Customer/Show', [
             'permissions' => BuildCustomerPermissions::build($request->user()),
-            'is-pinned' => $this->isPinnedLink($customer->name, 'Customer', $request->user()->user_id),
             'customer' => $customer,
         ]);
     }
