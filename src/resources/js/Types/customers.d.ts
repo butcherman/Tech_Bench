@@ -22,6 +22,7 @@ type customerPageProps = {
     customer: customer;
     siteList: customerSite[];
     permissions: customerPermissions;
+    site: customerSite;
     // customer_alerts: customerAlert[];
     // contacts: customerContact[];
     // equipment: customerEquipment[];

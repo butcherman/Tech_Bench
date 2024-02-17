@@ -52,9 +52,20 @@ class CustomerController extends Controller
      */
     public function show(Request $request, Customer $customer)
     {
-        return Inertia::render('Customer/Show', [
+        if ($customer->CustomerSite->count() > 1) {
+
+            return Inertia::render('Customer/Show', [
+                'permissions' => BuildCustomerPermissions::build($request->user()),
+                'customer' => $customer,
+                'siteList' => $customer->CustomerSite,
+            ]);
+        }
+
+        return Inertia::render('Customer/Site/Show', [
             'permissions' => BuildCustomerPermissions::build($request->user()),
             'customer' => $customer,
+            'site' => $customer->CustomerSite[0],
+            'siteList' => $customer->CustomerSite,
         ]);
     }
 
@@ -64,6 +75,7 @@ class CustomerController extends Controller
     public function edit(string $id)
     {
         //
+        return 'edit customer';
     }
 
     /**
