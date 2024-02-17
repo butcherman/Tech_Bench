@@ -3,6 +3,7 @@
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
+use App\Models\Customer;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,9 @@ Route::middleware('auth.secure')->group(function () {
 
     Route::resource('customers', CustomerController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-            $breadcrumbs->index('Customers');
+            $breadcrumbs->index('Customers')
+                ->show(fn(Customer|string $customer) => $customer->name)
+                ->edit('Edit Customer Details');
         })->missing(function () {
             return 'customer not found';
         });

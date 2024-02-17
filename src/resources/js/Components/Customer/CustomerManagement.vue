@@ -8,10 +8,17 @@
             <fa-icon icon="ellipsis-vertical" />
         </button>
         <ul class="dropdown-menu">
-            <li>Edit Customer</li>
+            <li>
+                <Link
+                    :href="$route('customers.edit', customer.slug)"
+                    class="dropdown-item"
+                >
+                    Edit Customer
+                </Link>
+            </li>
             <li>Edit Site</li>
-            <li>Manage Deleted Items</li>
-            <li>Create Customer Alert</li>
+            <li>Deleted Items</li>
+            <li>Customer Alerts</li>
             <li>Disable Site</li>
             <li>Disable Customer</li>
         </ul>
@@ -19,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import { customer } from "@/State/CustomerState";
 // import { ref, reactive, onMounted } from "vue";
 // const props = defineProps<{}>();
 </script>

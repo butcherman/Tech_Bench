@@ -88,10 +88,6 @@ class CustomerRequest extends FormRequest
 
         $newCustomer->update(['primary_site_id' => $newSite->cust_site_id]);
 
-        Log::stack(['daily', 'cust'])
-            ->info('New Customer ' . $newCustomer->name . ' created by '
-                . $this->user()->username, $newCustomer->toArray());
-
         return $newCustomer;
     }
 
@@ -113,9 +109,7 @@ class CustomerRequest extends FormRequest
             'primary_site_id',
         ]));
 
-        Log::stack(['daily', 'cust'])
-            ->info('Customer information updated for ' . $customer->name
-                . ' by ' . $this->user()->username, $customer->toArray());
+
 
         return $customer;
     }

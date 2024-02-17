@@ -2,7 +2,7 @@
     <VueForm
         ref="form"
         :initial-values="initValues"
-        :validation-schema="schema"
+        :validation-schema="getFormSchema()"
         :submit-route="submitRoute"
         :submit-method="submitMethod"
         :submit-text="submitText"
@@ -21,7 +21,16 @@
             name="dba_name"
             label="Secondary Name (AKA Name)"
         />
-        <fieldset v-if="customer && siteList">select parent site...</fieldset>
+        <fieldset v-if="customer && siteList && siteList.length > 1">
+            <SelectInput
+                id="primary-site"
+                name="primary_site_id"
+                label="Primary Site"
+                :list="siteList"
+                text-field="site_name"
+                value-field="cust_site_id"
+            />
+        </fieldset>
         <fieldset v-if="!customer">
             <TextInput id="address" name="address" label="Address" />
             <TextInput id="city" name="city" label="City" />
@@ -69,9 +78,17 @@ const submitText = computed(() =>
 const submitMethod = computed(() => (props.customer ? "put" : "post"));
 const submitRoute = computed(() =>
     props.customer
-        ? route("customers.edit", props.customer.slug)
+        ? route("customers.update", props.customer.slug)
         : route("customers.store")
 );
+
+const getFormSchema = () => {
+    if (props.customer) {
+        return editSchema;
+    }
+
+    return newSchema;
+};
 
 const initValues = {
     cust_id: props.customer?.cust_id,
@@ -83,7 +100,8 @@ const initValues = {
     state: props.defaultState,
     zip: null,
 };
-const schema = object({
+
+const newSchema = object({
     cust_id: string()
         .nullable()
         .test("uniqueCustId", async function (value) {
@@ -97,30 +115,15 @@ const schema = object({
         }),
     name: string().required().label("Customer Name"),
     dba_name: string().nullable(),
-    primary_site_id: number().when([], {
-        is: props.customer === undefined,
-        then: (schema) => schema.nullable(),
-        otherwise: (schema) => schema.required(),
-    }),
-    address: string().when([], {
-        is: props.customer === undefined,
-        then: (schema) => schema.required(),
-        otherwise: (schema) => schema.nullable(),
-    }),
-    city: string().when([], {
-        is: props.customer === undefined,
-        then: (schema) => schema.required(),
-        otherwise: (schema) => schema.nullable(),
-    }),
-    state: string().when([], {
-        is: props.customer === undefined,
-        then: (schema) => schema.required(),
-        otherwise: (schema) => schema.nullable(),
-    }),
-    zip: number().when([], {
-        is: props.customer === undefined,
-        then: (schema) => schema.required(),
-        otherwise: (schema) => schema.nullable(),
-    }),
+    address: string().required(),
+    city: string().required(),
+    state: string().required(),
+    zip: number().required(),
+});
+
+const editSchema = object({
+    name: string().required().label("Customer Name"),
+    dba_name: string().nullable(),
+    primary_site_id: number().required(),
 });
 </script>

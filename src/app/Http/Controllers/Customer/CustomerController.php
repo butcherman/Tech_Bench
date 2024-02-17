@@ -6,6 +6,7 @@ use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerRequest;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -41,6 +42,10 @@ class CustomerController extends Controller
     {
         $newCustomer = $request->createNewCustomer();
 
+        Log::channel('cust')
+            ->info('New Customer ' . $newCustomer->name . ' created by '
+                . $request->user()->username, $newCustomer->toArray());
+
         return redirect(route('customers.show', $newCustomer->slug))
             ->with('success', __('cust.created', [
                 'name' => $newCustomer->name,
@@ -72,18 +77,33 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Customer $customer)
     {
-        //
-        return 'edit customer';
+        $this->authorize('update', $customer);
+
+        return Inertia::render('Customer/Edit', [
+            'selectId' => (bool) config('customer.select_id'),
+            'default-state' => config('customer.default_state'),
+            'customer' => $customer,
+            'siteList' => $customer->CustomerSite,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerRequest $request, Customer $customer)
     {
-        //
+        $updatedCustomer = $request->updateCustomer($customer);
+
+        Log::channel('cust')
+            ->info('Customer information updated for ' . $customer->name
+                . ' by ' . $request->user()->username, $customer->toArray());
+
+        return redirect(route('customers.show', $updatedCustomer->slug))
+            ->with('success', __('cust.updated', [
+                'name' => $updatedCustomer->name
+            ]));
     }
 
     /**
