@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Log;
@@ -111,8 +112,16 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(CustomerDisableRequest $request, Customer $customer)
     {
-        //
+        $customer->update(['deleted_reason' => $request->reason]);
+        $customer->delete();
+
+        Log::channel('cust')->alert('Customer ' . $customer->name . ' has been disabled by ' .
+            $request->user()->username);
+
+        return redirect(route('customers.index'))->with('danger', __('cust.destroy', [
+            'name' => $customer->name,
+        ]));
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Customer\CustomerAlertsController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
@@ -45,6 +46,9 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Alerts', 'customers.show');
             })->only(['index', 'store', 'update', 'destroy']);
 
+        Route::get('deleted-items', CustomerDeletedItemsController::class)
+            ->name('deleted-items')
+            ->breadcrumb('Deleted Items', 'customers.show');
         Route::resource('sites', CustomerSiteController::class);
     });
 

@@ -46,7 +46,7 @@ const props = defineProps<{
     submitText?: string;
     submitVariant?: "primary" | "info" | "success" | "danger" | "warning";
     submitRoute: string;
-    submitMethod: "post" | "put";
+    submitMethod: "post" | "put" | "delete";
     hideOverlay?: boolean;
     hideSubmit?: boolean;
     testing?: boolean;

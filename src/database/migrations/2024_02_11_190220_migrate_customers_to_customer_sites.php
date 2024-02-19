@@ -71,6 +71,7 @@ return new class extends Migration {
         Schema::table('customers', function (Blueprint $table) {
             $table->dropForeign(['parent_id']);
             $table->dropColumn(['parent_id', 'address', 'city', 'state', 'zip']);
+            $table->text('deleted_reason')->nullable()->after('slug');
         });
     }
 

@@ -16,7 +16,14 @@
                     Customer Alerts
                 </Link>
             </li>
-            <li>Deleted Items</li>
+            <li>
+                <Link
+                    :href="$route('customers.deleted-items', customer.slug)"
+                    class="dropdown-item"
+                >
+                    Deleted Items
+                </Link>
+            </li>
             <li v-if="currentSite">Edit Site</li>
             <li v-if="currentSite">Disable Site</li>
             <li>
@@ -27,13 +34,42 @@
                     Edit Customer
                 </Link>
             </li>
-            <li>Disable Customer</li>
+            <li>
+                <span
+                    class="dropdown-item pointer"
+                    @click="showDisableModal('customer')"
+                >
+                    Disable Customer
+                </span>
+            </li>
         </ul>
+        <Modal ref="disableModal" title="Please Verify">
+            <div v-if="disableForm === 'customer'">
+                <p class="text-center">
+                    Disabling this customer means that all sites and customer
+                    information will no longer be accessible.
+                </p>
+                <p class="text-center">
+                    For logging reasons, please note why the customer is being
+                    disabled.
+                </p>
+                <CustomerDisableForm :customer="customer" />
+            </div>
+        </Modal>
     </div>
 </template>
 
 <script setup lang="ts">
+import Modal from "@/Components/_Base/Modal.vue";
+import CustomerDisableForm from "@/Forms/Customer/CustomerDisableForm.vue";
+import { ref } from "vue";
 import { customer, currentSite } from "@/State/CustomerState";
-// import { ref, reactive, onMounted } from "vue";
-// const props = defineProps<{}>();
+
+const disableModal = ref<InstanceType<typeof Modal> | null>(null);
+const disableForm = ref();
+
+const showDisableModal = (type: "customer" | "site") => {
+    disableForm.value = type;
+    disableModal.value?.show();
+};
 </script>
