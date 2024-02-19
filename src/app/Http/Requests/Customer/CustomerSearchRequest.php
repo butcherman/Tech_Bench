@@ -23,7 +23,7 @@ class CustomerSearchRequest extends FormRequest
     {
         return [
             'basic' => 'required|boolean',
-            'page' => 'required|numeric',
+            'page' => 'required_if:basic,false|numeric',
             'perPage' => 'required_if:basic,false|numeric',
             'searchFor' => 'nullable|string',
         ];
@@ -47,7 +47,7 @@ class CustomerSearchRequest extends FormRequest
     protected function basicSearch()
     {
         $searchList = Customer::orderBy('name')
-            ->where('name', 'like', '%'.$this->searchFor.'%')
+            ->where('name', 'like', '%' . $this->searchFor . '%')
             ->get();
 
         Log::stack(['daily', 'cust'])
@@ -62,11 +62,11 @@ class CustomerSearchRequest extends FormRequest
     protected function detailedSearch()
     {
         $searchList = Customer::orderBy('name')
-            ->where('name', 'like', '%'.$this->searchFor.'%')
-            ->orWhere('cust_id', 'like', '%'.$this->searchFor.'%')
+            ->where('name', 'like', '%' . $this->searchFor . '%')
+            ->orWhere('cust_id', 'like', '%' . $this->searchFor . '%')
             ->orWhereHas('CustomerSite', function ($q) {
-                $q->where('site_name', 'like', '%'.$this->searchFor.'%')
-                    ->orWhere('cust_site_id', 'like', '%'.$this->searchFor.'%');
+                $q->where('site_name', 'like', '%' . $this->searchFor . '%')
+                    ->orWhere('cust_site_id', 'like', '%' . $this->searchFor . '%');
             })
             ->with('CustomerSite')
             ->paginate($this->perPage);

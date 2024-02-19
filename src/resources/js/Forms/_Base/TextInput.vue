@@ -25,6 +25,7 @@
                 :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
                 v-focus="focus"
                 @change="$emit('change', value)"
+                @focus="$emit('focus')"
             />
             <slot name="end-group-text" />
         </div>
@@ -47,7 +48,7 @@ import { toRef, computed } from "vue";
 import { useField } from "vee-validate";
 import { upperFirst } from "lodash";
 
-defineEmits(["change"]);
+defineEmits(["change", "focus"]);
 
 const props = defineProps<{
     id: string;

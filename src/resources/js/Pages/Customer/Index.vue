@@ -63,7 +63,7 @@
                 </Link>
                 <Link
                     as="button"
-                    :href="$route('customers.site.create')"
+                    :href="$route('customers.create-site')"
                     class="btn btn-info w-75 m-2"
                 >
                     Add Site to Existing Customer

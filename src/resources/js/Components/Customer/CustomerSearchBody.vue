@@ -26,10 +26,10 @@ import { searchResults } from '../../Modules/CustomerSearch.module';
                                 <td>
                                     <Link
                                         :href="
-                                            $route(
-                                                'customers.sites.show',
-                                                site.site_slug
-                                            )
+                                            $route('customers.sites.show', [
+                                                res.slug,
+                                                site.site_slug,
+                                            ])
                                         "
                                         class="block-link"
                                         title="View Site"
@@ -55,10 +55,10 @@ import { searchResults } from '../../Modules/CustomerSearch.module';
                                 <td>
                                     <Link
                                         :href="
-                                            $route(
-                                                'customers.sites.show',
-                                                site.site_slug
-                                            )
+                                            $route('customers.sites.show', [
+                                                site.site_slug,
+                                                res.slug,
+                                            ])
                                         "
                                         class="block-link"
                                         title="View Site"

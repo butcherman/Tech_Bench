@@ -32,4 +32,9 @@ class CustomerSite extends Model
             ->orWhere('cust_site_id', $value)
             ->firstOrFail();
     }
+
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
 }

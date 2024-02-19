@@ -4,6 +4,7 @@ use App\Http\Controllers\Customer\CustomerAlertsController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
+use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -14,8 +15,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth.secure')->group(function () {
 
     Route::prefix('customers')->name('customers.')->group(function () {
-        Route::post('search', CustomerSearchController::class)->name('search');
-        Route::get('check-id/{custId}', CustomerIdController::class)->name('check-id');
+        Route::post('search', CustomerSearchController::class)
+            ->name('search');
+        Route::get('check-id/{custId}', CustomerIdController::class)
+            ->name('check-id');
+        Route::get('create-site', [CustomerSiteController::class, 'create'])
+            ->name('create-site')
+            ->breadcrumb('New Customer Site', 'customers.index');
+        Route::post('create-site', [CustomerSiteController::class, 'store'])
+            ->name('store-site');
     });
 
     Route::resource('customers', CustomerController::class)
@@ -27,6 +35,7 @@ Route::middleware('auth.secure')->group(function () {
             return 'customer not found';
         });
 
+
     /***************************************************************************
      *                          Customer Specific Routes                       *
      ***************************************************************************/
@@ -35,13 +44,15 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Alerts', 'customers.show');
             })->only(['index', 'store', 'update', 'destroy']);
+
+        Route::resource('sites', CustomerSiteController::class);
     });
 
-    Route::get('create-site', function () {
-        return 'create site';
-    })->name('customers.site.create');
+    // Route::get('create-site', function () {
+    //     return 'create site';
+    // })->name('customers.site.create');
 
-    Route::get('show-site/{site}', function () {
-        return 'show site';
-    })->name('customers.sites.show');
+    // Route::get('show-site/{site}', function () {
+    //     return 'show site';
+    // })->name('customers.sites.show');
 });
