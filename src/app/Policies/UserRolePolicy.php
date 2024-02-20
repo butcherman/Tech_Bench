@@ -13,14 +13,6 @@ class UserRolePolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models
-     */
-    public function viewAny(User $user)
-    {
-        return $this->checkPermission($user, 'Manage Permissions');
-    }
-
-    /**
      * Determine whether the user can view the model
      */
     public function view(User $user)
@@ -41,7 +33,7 @@ class UserRolePolicy
      */
     public function update(User $user, UserRole $role)
     {
-        if (! $role->allow_edit) {
+        if (!$role->allow_edit) {
             return false;
         }
 
@@ -51,9 +43,9 @@ class UserRolePolicy
     /**
      * Determine whether the user can delete the model
      */
-    public function destroy(User $user, UserRole $role)
+    public function delete(User $user, UserRole $role)
     {
-        if (! $role->allow_edit) {
+        if (!$role->allow_edit) {
             return false;
         }
 

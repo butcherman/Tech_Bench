@@ -46,8 +46,10 @@ class UserAdministrationController extends Controller
 
         event(new UserCreatedEvent($newUser));
         Log::stack(['daily', 'user'])
-            ->notice('New User created by '.$request->user()->username,
-                $newUser->toArray());
+            ->notice(
+                'New User created by ' . $request->user()->username,
+                $newUser->toArray()
+            );
 
         return redirect(route('admin.user.show', $newUser->username))
             ->with('success', __('admin.user.created', [
@@ -91,7 +93,7 @@ class UserAdministrationController extends Controller
         $user->update($request->toArray());
 
         Log::stack(['daily', 'user'])
-            ->info('User information for '.$user->username.' has been updated by '.
+            ->info('User information for ' . $user->username . ' has been updated by ' .
                 $request->user()->username, $request->toArray());
 
         // This function is also used during first time setup
@@ -112,11 +114,11 @@ class UserAdministrationController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-        $this->authorize('destroy', $user);
+        $this->authorize('delete', $user);
 
         $user->delete();
         Log::stack(['daily', 'user'])
-            ->notice('User '.$user->username.' has been deactivated by '.
+            ->notice('User ' . $user->username . ' has been deactivated by ' .
                 $request->user()->username);
 
         return redirect(route('admin.user.index'))
@@ -130,11 +132,11 @@ class UserAdministrationController extends Controller
      */
     public function restore(Request $request, User $user)
     {
-        $this->authorize('destroy', $user);
+        $this->authorize('delete', $user);
 
         $user->restore();
         Log::stack(['daily', 'user'])
-            ->notice('User '.$user->username.' has been reactivated by '.
+            ->notice('User ' . $user->username . ' has been reactivated by ' .
                 $request->user()->username);
 
         return back()->with('success', __('admin.user.restored', [

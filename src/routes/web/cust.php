@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerAlertsController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*******************************************************************************
@@ -16,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth.secure')->group(function () {
 
     Route::prefix('customers')->name('customers.')->group(function () {
+        Route::inertia('customer-not-found', 'Customer/NotFound')
+            ->name('notFound');
         Route::post('search', CustomerSearchController::class)
             ->name('search');
         Route::get('check-id/{custId}', CustomerIdController::class)
@@ -30,10 +34,12 @@ Route::middleware('auth.secure')->group(function () {
     Route::resource('customers', CustomerController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
-                ->show(fn(Customer|string $customer) => $customer->name)
-                ->edit('Edit Customer Details');
-        })->missing(function () {
-            return 'customer not found';
+                ->show(
+                    fn(Customer|string $customer) =>
+                    gettype($customer) === 'object' ? $customer->name : $customer
+                )->edit('Edit Customer Details');
+        })->missing(function (Request $request) {
+            throw new CustomerNotFoundException($request);
         });
 
 
@@ -49,7 +55,7 @@ Route::middleware('auth.secure')->group(function () {
         Route::get('deleted-items', CustomerDeletedItemsController::class)
             ->name('deleted-items')
             ->breadcrumb('Deleted Items', 'customers.show');
-        Route::resource('sites', CustomerSiteController::class);
+        Route::resource('sites', CustomerSiteController::class)->except(['index', 'create', 'show', 'edit']);
     });
 
     // Route::get('create-site', function () {

@@ -41,7 +41,7 @@ class UserPolicy
         return $user->user_id === $model->user_id;
     }
 
-    public function destroy(User $user, User $model)
+    public function delete(User $user, User $model)
     {
         return $this->checkPermission($user, 'Manage Users');
     }

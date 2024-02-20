@@ -49,7 +49,7 @@ class UserRolesController extends Controller
     {
         $newRole = $request->processNewRole();
 
-        Log::info('New User Role created by '.
+        Log::info('New User Role created by ' .
             $request->user()->username, $newRole->toArray());
 
         return redirect(route('admin.user-roles.show', $newRole->role_id))
@@ -92,8 +92,10 @@ class UserRolesController extends Controller
     {
         $modifiedRole = $request->processExistingRole();
 
-        Log::info('User Role Updated by '.$request->user()->username,
-            $modifiedRole->toArray());
+        Log::info(
+            'User Role Updated by ' . $request->user()->username,
+            $modifiedRole->toArray()
+        );
 
         return back()->with('success', __('admin.user-role.updated'));
     }
@@ -103,12 +105,10 @@ class UserRolesController extends Controller
      */
     public function destroy(UserRoleRequest $request, UserRole $user_role)
     {
-        $this->authorize('destroy', $user_role);
-
         $request->destroyRole();
 
         Log::stack(['daily', 'user'])
-            ->notice('Role '.$user_role->name.' has been deleted by '.
+            ->notice('Role ' . $user_role->name . ' has been deleted by ' .
                 $request->user()->username);
 
         return redirect(route('admin.user-roles.index'))

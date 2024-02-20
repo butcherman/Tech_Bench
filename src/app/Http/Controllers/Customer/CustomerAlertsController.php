@@ -17,6 +17,8 @@ class CustomerAlertsController extends Controller
      */
     public function index(Customer $customer)
     {
+        $this->authorize('viewAny', CustomerAlert::class);
+
         return Inertia::render('Customer/Alert/Index', [
             'customer' => $customer,
             'alerts' => $customer->CustomerAlert,
@@ -40,7 +42,7 @@ class CustomerAlertsController extends Controller
             $newAlert->toArray()
         );
 
-        return back()->with('success', 'Alert Created');
+        return back()->with('success', __('cust.alert.created'));
     }
 
     /**
@@ -56,7 +58,7 @@ class CustomerAlertsController extends Controller
         Log::channel('cust')->info('Customer Alert Updated for ' . $customer->name .
             ' by ' . $request->user()->username, $alert->toArray());
 
-        return back()->with('success', 'Alert Updated');
+        return back()->with('success', __('cust.alert.updated'));
     }
 
     /**
@@ -64,9 +66,13 @@ class CustomerAlertsController extends Controller
      */
     public function destroy(Request $request, Customer $customer, CustomerAlert $alert)
     {
+        $this->authorize('delete', $alert);
+
         $alert->delete();
 
         Log::channel('cust')->info('Customer Alert for ' . $customer->name .
             ' deleted by ' . $request->user()->username, $alert->toArray());
+
+        return back()->with('warning', __('cust.alert.destroy'));
     }
 }

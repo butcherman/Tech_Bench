@@ -23,19 +23,19 @@
                         additional strings to search for this user.
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="!edit">
                     <th class="text-end">Address:</th>
                     <td>Customers physical address.</td>
                 </tr>
-                <tr>
+                <tr v-if="!edit">
                     <th class="text-end">City:</th>
                     <td>City customer is located in.</td>
                 </tr>
-                <tr>
+                <tr v-if="!edit">
                     <th class="text-end">State:</th>
                     <td>State customer is located in.</td>
                 </tr>
-                <tr>
+                <tr v-if="!edit">
                     <th class="text-end">Zip Code:</th>
                     <td>Zip Code customer is located in.</td>
                 </tr>

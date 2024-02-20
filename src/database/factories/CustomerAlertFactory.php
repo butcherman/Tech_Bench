@@ -14,9 +14,11 @@ class CustomerAlertFactory extends Factory
     {
         return [
             'cust_id' => Customer::factory(),
-            'message' => $this->faker->word(3),
+            'message' => $this->faker->word(),
             'type' => $this->faker->randomElement([
-                'success', 'warning', 'danger',
+                'success',
+                'warning',
+                'danger',
             ]),
         ];
     }

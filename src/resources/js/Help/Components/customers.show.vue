@@ -1,6 +1,12 @@
 <template>
     <div>
-        <h5>Show Customer</h5>
+        <h5 class="text-center">Show Customer</h5>
+        <p class="text-center">
+            Customer information is shown here. If the customer has multiple
+            sites, information for all sites will be shown here. Select a
+            specific site to drill down to that sites information.
+        </p>
+        <!-- TODO - Add Additional Information -->
     </div>
 </template>
 

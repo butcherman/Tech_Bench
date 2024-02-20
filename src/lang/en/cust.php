@@ -13,6 +13,7 @@ return [
 
     'alert' => [
         'created' => 'Customer Alert Created',
+        'updated' => 'Customer Alert Updated',
         'destroy' => 'Customer Alert Deleted',
     ],
 
