@@ -4,9 +4,8 @@ namespace App\Http\Requests\Customer;
 
 use App\Models\Customer;
 use App\Models\CustomerSite;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class CustomerRequest extends FormRequest
 {
@@ -55,7 +54,7 @@ class CustomerRequest extends FormRequest
         $slug = Str::slug($this->name);
 
         while (Customer::where('slug', $slug)->first()) {
-            $slug = Str::slug($this->name . '-' . $index);
+            $slug = Str::slug($this->name.'-'.$index);
             $index++;
         }
 
@@ -108,8 +107,6 @@ class CustomerRequest extends FormRequest
             'dba_name',
             'primary_site_id',
         ]));
-
-
 
         return $customer;
     }

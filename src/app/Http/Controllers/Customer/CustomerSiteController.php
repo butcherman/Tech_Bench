@@ -22,8 +22,7 @@ class CustomerSiteController extends Controller
         return Inertia::render('Customer/Site/Index', [
             'permissions' => BuildCustomerPermissions::build($request->user()),
             'customer' => $customer,
-            'site' => $customer->CustomerSite[0],
-            'siteList' => $customer->CustomerSite,
+            'siteList' => $customer->CustomerSite->makeVisible('href'),
             'alerts' => $customer->CustomerAlert,
         ]);
     }
@@ -31,8 +30,10 @@ class CustomerSiteController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Customer $customer = null)
+    public function create(?Customer $customer = null)
     {
+        $this->authorize('create', CustomerSite::class);
+
         return Inertia::render('Customer/Site/Create', [
             'default-state' => config('customer.default_state'),
             'parent-customer' => $customer,
@@ -42,7 +43,7 @@ class CustomerSiteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CustomerSiteRequest $request, Customer $customer = null)
+    public function store(CustomerSiteRequest $request, ?Customer $customer = null)
     {
         if ($customer === null) {
             $customer = Customer::find($request->cust_id);
@@ -51,12 +52,12 @@ class CustomerSiteController extends Controller
         $request->setSlug();
         $newSite = CustomerSite::create($request->except(['cust_name']));
 
-        Log::channel('cust')->info('New Customer Site created for ' . $request->cust_name .
-            ' by ' . $request->user()->username, $newSite->toArray());
+        Log::channel('cust')->info('New Customer Site created for '.$request->cust_name.
+            ' by '.$request->user()->username, $newSite->toArray());
 
         return redirect(route('customers.sites.show', [
             $newSite->Customer->slug,
-            $newSite->site_slug
+            $newSite->site_slug,
         ]))->with('success', __('cust.site.created', ['name' => $newSite->site_name]));
     }
 
@@ -79,6 +80,8 @@ class CustomerSiteController extends Controller
      */
     public function edit(Customer $customer, CustomerSite $site)
     {
+        $this->authorize('update', $site);
+
         return Inertia::render('Customer/Site/Edit', [
             'default-state' => config('customer.default_state'),
             'parent-customer' => $customer,
@@ -94,12 +97,12 @@ class CustomerSiteController extends Controller
         $request->setSlug();
         $site->update($request->except(['cust_name']));
 
-        Log::channel('cust')->info('Customer Site ' . $site->site_name . ' updated for ' .
-            $request->cust_name . ' by ' . $request->user()->username, $site->toArray());
+        Log::channel('cust')->info('Customer Site '.$site->site_name.' updated for '.
+            $request->cust_name.' by '.$request->user()->username, $site->toArray());
 
         return redirect(route('customers.sites.show', [
             $customer->slug,
-            $site->site_slug
+            $site->site_slug,
         ]))->with('success', __('cust.site.updated', ['name' => $site->site_name]));
     }
 
@@ -111,8 +114,8 @@ class CustomerSiteController extends Controller
         $site->update(['deleted_reason' => $request->reason]);
         $site->delete();
 
-        Log::channel('cust')->alert('Customer Site ' . $site->site_name . ' for ' .
-            $customer->name . ' has been disabled by ' . $request->user()->username);
+        Log::channel('cust')->alert('Customer Site '.$site->site_name.' for '.
+            $customer->name.' has been disabled by '.$request->user()->username);
 
         return redirect(route('customers.show', $customer->slug))->with('danger', __('cust.destroy', [
             'name' => $site->site_name,

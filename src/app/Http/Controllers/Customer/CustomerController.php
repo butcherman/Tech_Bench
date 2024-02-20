@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerRequest;
 use App\Models\Customer;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -44,8 +44,8 @@ class CustomerController extends Controller
         $newCustomer = $request->createNewCustomer();
 
         Log::channel('cust')
-            ->info('New Customer ' . $newCustomer->name . ' created by '
-                . $request->user()->username, $newCustomer->toArray());
+            ->info('New Customer '.$newCustomer->name.' created by '
+                .$request->user()->username, $newCustomer->toArray());
 
         return redirect(route('customers.show', $newCustomer->slug))
             ->with('success', __('cust.created', [
@@ -100,12 +100,12 @@ class CustomerController extends Controller
         $updatedCustomer = $request->updateCustomer($customer);
 
         Log::channel('cust')
-            ->info('Customer information updated for ' . $customer->name
-                . ' by ' . $request->user()->username, $customer->toArray());
+            ->info('Customer information updated for '.$customer->name
+                .' by '.$request->user()->username, $customer->toArray());
 
         return redirect(route('customers.show', $updatedCustomer->slug))
             ->with('success', __('cust.updated', [
-                'name' => $updatedCustomer->name
+                'name' => $updatedCustomer->name,
             ]));
     }
 
@@ -117,7 +117,7 @@ class CustomerController extends Controller
         $customer->update(['deleted_reason' => $request->reason]);
         $customer->delete();
 
-        Log::channel('cust')->alert('Customer ' . $customer->name . ' has been disabled by ' .
+        Log::channel('cust')->alert('Customer '.$customer->name.' has been disabled by '.
             $request->user()->username);
 
         return redirect(route('customers.index'))->with('danger', __('cust.destroy', [

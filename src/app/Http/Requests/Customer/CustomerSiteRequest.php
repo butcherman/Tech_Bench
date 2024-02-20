@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Customer;
 
 use App\Models\CustomerSite;
-use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class CustomerSiteRequest extends FormRequest
 {
@@ -45,7 +45,7 @@ class CustomerSiteRequest extends FormRequest
         $slug = Str::slug($this->site_name);
 
         while (CustomerSite::where('site_slug', $slug)->first()) {
-            $slug = Str::slug($this->site_name . '-' . $index);
+            $slug = Str::slug($this->site_name.'-'.$index);
             $index++;
         }
 

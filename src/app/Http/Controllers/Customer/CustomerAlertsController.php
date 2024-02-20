@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerAlertRequest;
 use App\Models\Customer;
 use App\Models\CustomerAlert;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CustomerAlertsController extends Controller
@@ -37,8 +37,8 @@ class CustomerAlertsController extends Controller
         ]);
 
         Log::channel('cust')->info(
-            'New Customer Alert created for ' .
-            $customer->name . ' by ' . $request->user()->username,
+            'New Customer Alert created for '.
+            $customer->name.' by '.$request->user()->username,
             $newAlert->toArray()
         );
 
@@ -55,8 +55,8 @@ class CustomerAlertsController extends Controller
             'type' => $request->type,
         ]);
 
-        Log::channel('cust')->info('Customer Alert Updated for ' . $customer->name .
-            ' by ' . $request->user()->username, $alert->toArray());
+        Log::channel('cust')->info('Customer Alert Updated for '.$customer->name.
+            ' by '.$request->user()->username, $alert->toArray());
 
         return back()->with('success', __('cust.alert.updated'));
     }
@@ -70,8 +70,8 @@ class CustomerAlertsController extends Controller
 
         $alert->delete();
 
-        Log::channel('cust')->info('Customer Alert for ' . $customer->name .
-            ' deleted by ' . $request->user()->username, $alert->toArray());
+        Log::channel('cust')->info('Customer Alert for '.$customer->name.
+            ' deleted by '.$request->user()->username, $alert->toArray());
 
         return back()->with('warning', __('cust.alert.destroy'));
     }

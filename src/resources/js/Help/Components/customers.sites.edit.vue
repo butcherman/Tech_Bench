@@ -1,9 +1,7 @@
 <template>
     <div>
         <h5 class="text-center">New Customer Site</h5>
-        <p class="text-center">
-            Use this form to create a new site for an existing customer.
-        </p>
+        <p class="text-center">Use this form to edit an existing.</p>
         <customerCustomerSiteForm />
     </div>
 </template>

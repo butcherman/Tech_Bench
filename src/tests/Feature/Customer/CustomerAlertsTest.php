@@ -5,8 +5,6 @@ namespace Tests\Feature\Customer;
 use App\Models\Customer;
 use App\Models\CustomerAlert;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerAlertsTest extends TestCase
@@ -91,7 +89,7 @@ class CustomerAlertsTest extends TestCase
 
         $response = $this->put(route('customers.alerts.update', [
             $this->customer->slug,
-            $alert->alert_id
+            $alert->alert_id,
         ]), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
@@ -109,7 +107,7 @@ class CustomerAlertsTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->put(route('customers.alerts.update', [
                 $this->customer->slug,
-                $alert->alert_id
+                $alert->alert_id,
             ]), $data);
         $response->assertStatus(403);
     }
@@ -125,7 +123,7 @@ class CustomerAlertsTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->put(route('customers.alerts.update', [
                 $this->customer->slug,
-                $alert->alert_id
+                $alert->alert_id,
             ]), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.alert.updated'));

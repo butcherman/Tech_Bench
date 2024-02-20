@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\CustomerAlert;
 use App\Models\User;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\Response;
 
 class CustomerAlertPolicy
 {
