@@ -15,7 +15,16 @@ class CustomerSite extends Model
 
     protected $guarded = ['updated_at', 'created_at', 'deleted_at'];
 
-    protected $hidden = ['updated_at', 'created_at', 'deleted_at'];
+    protected $appends = ['is_primary', 'href'];
+
+    protected $hidden = [
+        'updated_at',
+        'created_at',
+        'deleted_at',
+        'deleted_reason',
+        'Customer',
+        'href',
+    ];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
@@ -31,6 +40,16 @@ class CustomerSite extends Model
         return $this->where('site_slug', $value)
             ->orWhere('cust_site_id', $value)
             ->firstOrFail();
+    }
+
+    public function getIsPrimaryAttribute()
+    {
+        return $this->Customer->primary_site_id === $this->cust_site_id;
+    }
+
+    public function getHrefAttribute()
+    {
+        return route('customers.sites.show', [$this->Customer->slug, $this->site_slug]);
     }
 
     public function Customer()

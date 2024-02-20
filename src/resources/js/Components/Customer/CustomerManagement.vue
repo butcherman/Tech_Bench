@@ -24,8 +24,27 @@
                     Deleted Items
                 </Link>
             </li>
-            <li v-if="currentSite">Edit Site</li>
-            <li v-if="currentSite">Disable Site</li>
+            <li v-if="currentSite">
+                <Link
+                    :href="
+                        $route('customers.sites.edit', [
+                            customer.slug,
+                            currentSite.site_slug,
+                        ])
+                    "
+                    class="dropdown-item"
+                >
+                    Edit Site
+                </Link>
+            </li>
+            <li v-if="currentSite">
+                <span
+                    class="dropdown-item pointer"
+                    @click="showDisableModal('site')"
+                >
+                    Disable Site
+                </span>
+            </li>
             <li>
                 <Link
                     :href="$route('customers.edit', customer.slug)"
@@ -53,7 +72,36 @@
                     For logging reasons, please note why the customer is being
                     disabled.
                 </p>
-                <CustomerDisableForm :customer="customer" />
+                <CustomerDisableForm
+                    :customer="customer"
+                    @success="disableModal?.hide"
+                />
+            </div>
+            <div v-else-if="disableForm === 'site'">
+                <div v-if="currentSite.is_primary">
+                    <h5 class="text-center">
+                        You cannot delete the primary site
+                    </h5>
+                    <p class="text-center">
+                        Please assign another site as the primary site before
+                        disabling this site.
+                    </p>
+                </div>
+                <div v-else>
+                    <p class="text-center">
+                        Disabling this site means this sites and information
+                        attached to only this site will no longer be accessible.
+                    </p>
+                    <p class="text-center">
+                        For logging reasons, please note why the site is being
+                        disabled.
+                    </p>
+                    <CustomerSiteDisableForm
+                        :customer="customer"
+                        :site="currentSite"
+                        @success="disableModal?.hide"
+                    />
+                </div>
             </div>
         </Modal>
     </div>
@@ -62,6 +110,7 @@
 <script setup lang="ts">
 import Modal from "@/Components/_Base/Modal.vue";
 import CustomerDisableForm from "@/Forms/Customer/CustomerDisableForm.vue";
+import CustomerSiteDisableForm from "@/Forms/Customer/CustomerSiteDisableForm.vue";
 import { ref } from "vue";
 import { customer, currentSite } from "@/State/CustomerState";
 

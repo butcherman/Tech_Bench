@@ -15,7 +15,12 @@ class Customer extends Model
 
     protected $guarded = ['updated_at', 'created_at', 'deleted_at'];
 
-    protected $hidden = ['updated_at', 'created_at', 'deleted_at'];
+    protected $hidden = [
+        'updated_at',
+        'created_at',
+        'deleted_at',
+        'deleted_reason'
+    ];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',

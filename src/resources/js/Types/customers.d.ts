@@ -9,6 +9,7 @@ type customer = {
 
 type customerSite = {
     cust_site_id: number;
+    is_primary: boolean;
     cust_id: number;
     site_name: string;
     site_slug: string;

@@ -1,12 +1,13 @@
 <template>
     <div class="row justify-content-center">
-        <Head title="New Customer Site" />
+        <Head title="Edit Customer Site" />
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
                     <CustomerSiteForm
                         :default-state="defaultState"
                         :parent-customer="parentCustomer"
+                        :customer-site="site"
                     />
                 </div>
             </div>
@@ -21,6 +22,7 @@ import CustomerSiteForm from "@/Forms/Customer/CustomerSiteForm.vue";
 defineProps<{
     defaultState: string;
     parentCustomer: customer | null;
+    site: customerSite;
 }>();
 </script>
 

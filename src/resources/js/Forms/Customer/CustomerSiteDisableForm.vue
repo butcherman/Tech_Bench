@@ -3,16 +3,18 @@
         ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('customers.destroy', customer.slug)"
+        :submit-route="
+            $route('customers.sites.destroy', [customer.slug, site.site_slug])
+        "
         submit-method="delete"
         submit-variant="danger"
-        :submit-text="`Disable ${customer.name}`"
+        :submit-text="`Disable ${site.site_name}`"
         @success="$emit('success')"
     >
         <TextAreaInput
             id="reason"
             name="reason"
-            label="Reason For Disabling Customer"
+            label="Reason For Disabling Site"
         />
     </VueForm>
 </template>
@@ -25,6 +27,7 @@ import { object, string } from "yup";
 defineEmits(["success"]);
 defineProps<{
     customer: customer;
+    site: customerSite;
 }>();
 const initValues = {
     reason: "",

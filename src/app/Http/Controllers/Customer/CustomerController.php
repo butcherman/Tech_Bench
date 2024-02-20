@@ -63,7 +63,7 @@ class CustomerController extends Controller
             return Inertia::render('Customer/Show', [
                 'permissions' => BuildCustomerPermissions::build($request->user()),
                 'customer' => $customer,
-                'siteList' => $customer->CustomerSite,
+                'siteList' => $customer->CustomerSite->makeVisible('href'),
                 'alerts' => $customer->CustomerAlert,
             ]);
         }

@@ -6,24 +6,26 @@
             <CustomerDetails />
         </div>
         <CustomerAlerts />
-        <!-- <div class="row my-2">
+        <div class="row my-2">
             <QuickJump :nav-list="quickJumpList" class="col" />
         </div>
         <div id="site-list" class="row my-2">
             <div class="col">
                 <CustomerSiteList />
             </div>
+        </div>
+        <div class="row my-2">
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h1>Contacts</h1>
+                        <h1>Equipment</h1>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h1>Equipment</h1>
+                        <h1>Contacts</h1>
                     </div>
                 </div>
             </div>
@@ -45,7 +47,7 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
 </template>
 

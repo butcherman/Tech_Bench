@@ -8,6 +8,7 @@ use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
+use App\Models\CustomerSite;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -55,14 +56,12 @@ Route::middleware('auth.secure')->group(function () {
         Route::get('deleted-items', CustomerDeletedItemsController::class)
             ->name('deleted-items')
             ->breadcrumb('Deleted Items', 'customers.show');
-        Route::resource('sites', CustomerSiteController::class)->except(['index', 'create', 'show', 'edit']);
+        Route::resource('sites', CustomerSiteController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Sites', 'customers.show')
+                    ->create('New Customer Site')
+                    ->show(fn(Customer $customer, CustomerSite $site) => $site->site_name)
+                    ->edit('Edit Site');
+            });
     });
-
-    // Route::get('create-site', function () {
-    //     return 'create site';
-    // })->name('customers.site.create');
-
-    // Route::get('show-site/{site}', function () {
-    //     return 'show site';
-    // })->name('customers.sites.show');
 });
