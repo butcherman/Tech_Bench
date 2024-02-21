@@ -14,15 +14,11 @@
                 <CustomerSiteList />
             </div>
         </div>
-        <div class="row my-2">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h1>Equipment</h1>
-                    </div>
-                </div>
+        <div class="row">
+            <div id="equipment" class="col-md-7 my-2">
+                <CustomerEquipment />
             </div>
-            <div class="col">
+            <div class="col-md-5 my-2">
                 <div class="card">
                     <div class="card-body">
                         <h1>Contacts</h1>
@@ -58,6 +54,7 @@ import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
 import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
+import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
 import { ref, computed, onMounted } from "vue";
 import { customer, permissions } from "@/State/CustomerState";
 
@@ -74,12 +71,12 @@ const quickJumpList = [
         name: "Sites",
     },
     {
-        navId: "contacts",
-        name: "Contacts",
-    },
-    {
         navId: "equipment",
         name: "Equipment",
+    },
+    {
+        navId: "contacts",
+        name: "Contacts",
     },
     {
         navId: "notes",

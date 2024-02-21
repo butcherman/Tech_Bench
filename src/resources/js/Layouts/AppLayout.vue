@@ -13,6 +13,7 @@
             </div>
             <AppFooter />
         </main>
+        <AppNotificationToast />
         <AppAutoLogout />
     </div>
 </template>
@@ -24,6 +25,7 @@ import AppFooter from "./AppLayout/AppFooter.vue";
 import AppBreadcrumbs from "./AppLayout/AppBreadcrumbs.vue";
 import AppAlerts from "./AppLayout/AppAlerts.vue";
 import AppFlash from "./AppLayout/AppFlash.vue";
+import AppNotificationToast from "./AppLayout/AppNotificationToast.vue";
 import AppAutoLogout from "./AppLayout/AppAutoLogout.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";

@@ -9,9 +9,15 @@
                 >
                     <AddButton text="Add Site" small pill />
                 </Link>
-                Customer Sites:
+                Sites:
             </div>
-            <Table :columns="columns" :rows="siteList" responsive rowClickable>
+            <Table
+                :columns="columns"
+                :rows="siteList"
+                :paginate="siteList.length > 10"
+                responsive
+                rowClickable
+            >
                 <template #action="{ rowData }">
                     <span
                         v-if="rowData.is_primary"
@@ -30,7 +36,6 @@
 <script setup lang="ts">
 import Table from "../_Base/Table.vue";
 import AddButton from "../_Base/Buttons/AddButton.vue";
-import { ref, reactive, onMounted } from "vue";
 import { siteList, permissions, customer } from "@/State/CustomerState";
 
 const columns = [

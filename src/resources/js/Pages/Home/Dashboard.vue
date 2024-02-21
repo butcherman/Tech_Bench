@@ -6,8 +6,19 @@
                     <div class="card-body">
                         <p class="text-center">Dashboard</p>
                         <div class="text-center">
-                            <button class="btn btn-info" @click="pushFlashMsg">
+                            <button
+                                class="btn btn-info m-2"
+                                @click="newFlashMsg"
+                            >
                                 Push Flash Msg
+                            </button>
+                            <button
+                                class="btn btn-info m-2"
+                                @click="
+                                    pushToastMsg('Test Toast', 'Test Title')
+                                "
+                            >
+                                Push Notification Toast
                             </button>
                         </div>
                     </div>
@@ -24,12 +35,13 @@ import { ref, reactive, onMounted } from "vue";
 
 // const props = defineProps<{}>();
 
-const app = useAppStore();
+// const app = useAppStore();
+const { pushFlashMsg, pushToastMsg } = useAppStore();
 
 const count = ref(1);
-const pushFlashMsg = () => {
+const newFlashMsg = () => {
     console.log("pushing flash message");
-    app.pushFlashMsg({
+    pushFlashMsg({
         id: count.value.toString(),
         type: "success",
         message: `Testing ${count.value}`,

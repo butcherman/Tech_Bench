@@ -8,9 +8,9 @@ import { usePage } from "@inertiajs/vue3";
 import { v4 as uuidv4 } from "uuid";
 
 export const useAppStore = defineStore("appStore", () => {
-    /**
+    /***************************************************************************
      * Standard App Info
-     */
+     ***************************************************************************/
     const name = computed<string>(() => usePage<pageProps>().props.app.name);
     const logo = computed<string>(() => usePage<pageProps>().props.app.logo);
     const version = computed<string>(
@@ -23,14 +23,14 @@ export const useAppStore = defineStore("appStore", () => {
         () => usePage<pageProps>().props.app.current_route
     );
 
-    /**
+    /***************************************************************************
      * Dynamic Navbar for authenticated users
-     */
+     ***************************************************************************/
     const navbar = computed<navbar[]>(() => usePage<pageProps>().props.navbar);
 
-    /**
+    /***************************************************************************
      * User Data
-     */
+     ***************************************************************************/
     const user = computed<user | null>(
         () => usePage<pageProps>().props.current_user
     );
@@ -38,16 +38,16 @@ export const useAppStore = defineStore("appStore", () => {
         () => usePage<pageProps>().props.user_notifications
     );
 
-    /**
+    /***************************************************************************
      * User Session Data
-     */
+     ***************************************************************************/
     const idleTimeout = computed<number>(
         () => usePage<pageProps>().props.idle_timeout
     );
 
-    /**
+    /***************************************************************************
      * Flash Data shows notifications across top of page
-     */
+     ***************************************************************************/
     const flash = computed<flashData[]>(() => usePage<pageProps>().props.flash);
     const flashAlerts = ref<flashData[]>([]);
 
@@ -74,6 +74,39 @@ export const useAppStore = defineStore("appStore", () => {
         newFlash.forEach((newAlert) => pushFlashMsg(newAlert));
     });
 
+    /***************************************************************************
+     * Notification Toast shows notifications across bottom right corner
+     ***************************************************************************/
+    const notificationToasts = ref<toastData[]>([]);
+
+    // Manually push a new Toast Message
+    const pushToastMsg = (
+        message: string,
+        title: string = "New Notification"
+    ) => {
+        let toastId = uuidv4();
+
+        notificationToasts.value.push({
+            id: toastId,
+            title,
+            message,
+        });
+        setToastTimeout(toastId);
+    };
+    // Manually Remove a Toast Message
+    const removeToastMsg = (id: string) => {
+        notificationToasts.value = notificationToasts.value.filter(
+            (toast) => toast.id !== id
+        );
+    };
+    // Auto Delete Toast after 15 seconds
+    const setToastTimeout = (id: string) => {
+        setTimeout(() => {
+            removeToastMsg(id);
+        }, 15000);
+    };
+
+    /***************************************************************************/
     return {
         name,
         logo,
@@ -84,9 +117,14 @@ export const useAppStore = defineStore("appStore", () => {
         version,
         copyright,
         currentRoute,
+
         flash,
         flashAlerts,
         pushFlashMsg,
         removeFlashMsg,
+
+        notificationToasts,
+        pushToastMsg,
+        removeToastMsg,
     };
 });
