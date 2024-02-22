@@ -1,13 +1,14 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -24,7 +25,7 @@ return new class extends Migration
         });
 
         $this->migrate();
-        // $this->migrateCustomerEquipment();
+        $this->migrateCustomerEquipment();
         // $this->migrateCustomerContacts();
         // $this->migrateCustomerNotes();
         // $this->migrateCustomerFiles();
@@ -52,7 +53,7 @@ return new class extends Migration
             ]);
 
             // Add the Primary Site to the Customer Profile
-            if (! $cust->parent_id) {
+            if (!$cust->parent_id) {
                 $cust->primary_site_id = $cust->cust_id;
                 $cust->save();
             }
@@ -79,43 +80,47 @@ return new class extends Migration
     /**
      * Migrate Customer Equipment to new schema
      */
-    // public function migrateCustomerEquipment()
-    // {
-    //     $customerEquipment = CustomerEquipment::withTrashed()->get();
+    public function migrateCustomerEquipment()
+    {
+        $customerEquipment = CustomerEquipment::withTrashed()->get();
 
-    //     foreach ($customerEquipment as $equip) {
-    //         CustomerEquipmentSite::create([
-    //             'cust_site_id' => $equip->cust_id,
-    //             'cust_equip_id' => $equip->cust_equip_id,
-    //         ]);
+        foreach ($customerEquipment as $equip) {
+            DB::table('customer_site_equipment')->insert([
+                'cust_site_id' => $equip->cust_id,
+                'cust_equip_id' => $equip->cust_equip_id,
+                'updated_at' => NOW(),
+                'created_at' => NOW(),
+            ]);
 
-    //         // Verify which customer and site this item is attached to
-    //         $cust = Customer::withTrashed()->find($equip->cust_id);
-    //         if ($cust) {
+            // Verify which customer and site this item is attached to
+            $cust = Customer::withTrashed()->find($equip->cust_id);
+            if ($cust) {
 
-    //             if ($cust->parent_id) {
-    //                 $equip->update([
-    //                     'cust_id' => $cust->parent_id,
-    //                 ]);
-    //             }
-    //         }
+                if ($cust->parent_id) {
+                    $equip->update([
+                        'cust_id' => $cust->parent_id,
+                    ]);
+                }
+            }
 
-    //         //  If equipment is shared, add the other sites it is shared with
-    //         if ($equip->shared) {
-    //             $custList = Customer::where('parent_id', $equip->cust_id)->get();
-    //             foreach ($custList as $cust) {
-    //                 CustomerEquipmentSite::create([
-    //                     'cust_site_id' => $cust->cust_id,
-    //                     'cust_equip_id' => $equip->cust_equip_id,
-    //                 ]);
-    //             }
-    //         }
-    //     }
-    // }
+            //  If equipment is shared, add the other sites it is shared with
+            if ($equip->shared) {
+                $custList = Customer::where('parent_id', $equip->cust_id)->get();
+                foreach ($custList as $cust) {
+                    DB::table('customer_site_equipment')->insert([
+                        'cust_site_id' => $cust->cust_id,
+                        'cust_equip_id' => $equip->cust_equip_id,
+                        'updated_at' => NOW(),
+                        'created_at' => NOW(),
+                    ]);
+                }
+            }
+        }
+    }
 
     /**
      * Migrate Customer Contacts to new schema
-    //  */
+     */
     // public function migrateCustomerContacts()
     // {
     //     $migrationData = CustomerContact::withTrashed()->get();
