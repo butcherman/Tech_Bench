@@ -40,6 +40,12 @@ type flashData = {
     message: string;
 };
 
+type toastData = {
+    id: string;
+    title: string;
+    message: string;
+};
+
 type breadcrumbs = {
     title: string;
     url: string;

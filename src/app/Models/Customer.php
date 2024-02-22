@@ -20,6 +20,8 @@ class Customer extends Model
         'created_at',
         'deleted_at',
         'deleted_reason',
+        'CustomerAlert',
+        'CustomerEquipment',
     ];
 
     protected $casts = [
@@ -48,5 +50,10 @@ class Customer extends Model
     public function CustomerAlert()
     {
         return $this->hasMany(CustomerAlert::class, 'cust_id', 'cust_id');
+    }
+
+    public function CustomerEquipment()
+    {
+        return $this->hasMany(CustomerEquipment::class, 'cust_id', 'cust_id');
     }
 }

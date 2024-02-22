@@ -1,14 +1,54 @@
 <template>
     <div class="card">
         <div class="card-body">
-            <div class="card-title">Equipment:</div>
+            <div class="card-title">
+                <CustomerEquipmentCreate
+                    v-if="permissions.equipment.create"
+                    class="float-end"
+                />
+                Equipment:
+            </div>
+            <Overlay :loading="isLoading">
+                <h5 v-if="!equipment.length" class="text-center">
+                    No Equipment
+                </h5>
+                <ul class="list-group">
+                    <li
+                        v-for="equip in equipment"
+                        :key="equip.cust_equip_id"
+                        class="list-group-item"
+                    >
+                        <Link
+                            as="button"
+                            :href="
+                                $route('customers.equipment.show', [
+                                    customer.slug,
+                                    equip.cust_equip_id,
+                                ])
+                            "
+                            class="btn w-100 btn-info"
+                        >
+                            {{ equip.equip_name }}
+                        </Link>
+                    </li>
+                </ul>
+            </Overlay>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import Overlay from "../_Base/Loaders/Overlay.vue";
-import { ref, reactive, onMounted } from "vue";
+import CustomerEquipmentCreate from "./CustomerEquipmentCreate.vue";
+import {
+    loading,
+    equipment,
+    customer,
+    permissions,
+} from "@/State/CustomerState";
+// import { ref, reactive, onMounted } from "vue";
 
 // const props = defineProps<{}>();
+
+const isLoading = loading.equipment;
 </script>

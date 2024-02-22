@@ -4,6 +4,7 @@ use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerAlertsController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
+use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
@@ -36,7 +37,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object' ? $customer->name : $customer
+                    fn(Customer|string $customer) => gettype($customer) === 'object' ? $customer->name : $customer
                 )->edit('Edit Customer Details');
         })->missing(function (Request $request) {
             throw new CustomerNotFoundException($request);
@@ -46,20 +47,23 @@ Route::middleware('auth.secure')->group(function () {
      *                          Customer Specific Routes                       *
      ***************************************************************************/
     Route::prefix('{customer}')->name('customers.')->group(function () {
+        Route::get('deleted-items', CustomerDeletedItemsController::class)
+            ->name('deleted-items')
+            ->breadcrumb('Deleted Items', 'customers.show');
+
         Route::resource('alerts', CustomerAlertsController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Alerts', 'customers.show');
             })->only(['index', 'store', 'update', 'destroy']);
 
-        Route::get('deleted-items', CustomerDeletedItemsController::class)
-            ->name('deleted-items')
-            ->breadcrumb('Deleted Items', 'customers.show');
         Route::resource('sites', CustomerSiteController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
-                    ->show(fn (Customer $customer, CustomerSite $site) => $site->site_name)
+                    ->show(fn(Customer $customer, CustomerSite $site) => $site->site_name)
                     ->edit('Edit Site');
             });
+
+        Route::resource('equipment', CustomerEquipmentController::class);
     });
 });

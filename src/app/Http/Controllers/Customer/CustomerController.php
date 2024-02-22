@@ -44,8 +44,8 @@ class CustomerController extends Controller
         $newCustomer = $request->createNewCustomer();
 
         Log::channel('cust')
-            ->info('New Customer '.$newCustomer->name.' created by '
-                .$request->user()->username, $newCustomer->toArray());
+            ->info('New Customer ' . $newCustomer->name . ' created by '
+                . $request->user()->username, $newCustomer->toArray());
 
         return redirect(route('customers.show', $newCustomer->slug))
             ->with('success', __('cust.created', [
@@ -65,6 +65,7 @@ class CustomerController extends Controller
                 'customer' => $customer,
                 'siteList' => $customer->CustomerSite->makeVisible('href'),
                 'alerts' => $customer->CustomerAlert,
+                'equipment' => $customer->CustomerEquipment,
             ]);
         }
 
@@ -74,6 +75,7 @@ class CustomerController extends Controller
             'site' => $customer->CustomerSite[0],
             'siteList' => $customer->CustomerSite,
             'alerts' => $customer->CustomerAlert,
+            'equipment' => $customer->CustomerEquipment,
         ]);
     }
 
@@ -100,8 +102,8 @@ class CustomerController extends Controller
         $updatedCustomer = $request->updateCustomer($customer);
 
         Log::channel('cust')
-            ->info('Customer information updated for '.$customer->name
-                .' by '.$request->user()->username, $customer->toArray());
+            ->info('Customer information updated for ' . $customer->name
+                . ' by ' . $request->user()->username, $customer->toArray());
 
         return redirect(route('customers.show', $updatedCustomer->slug))
             ->with('success', __('cust.updated', [
@@ -117,7 +119,7 @@ class CustomerController extends Controller
         $customer->update(['deleted_reason' => $request->reason]);
         $customer->delete();
 
-        Log::channel('cust')->alert('Customer '.$customer->name.' has been disabled by '.
+        Log::channel('cust')->alert('Customer ' . $customer->name . ' has been disabled by ' .
             $request->user()->username);
 
         return redirect(route('customers.index'))->with('danger', __('cust.destroy', [

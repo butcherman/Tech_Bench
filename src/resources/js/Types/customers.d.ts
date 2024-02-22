@@ -25,14 +25,31 @@ type customerPageProps = {
     site: customerSite;
     siteList: customerSite[];
     alerts: customerAlert[];
+    equipment: customerEquipment[];
     // contacts: customerContact[];
-    // equipment: customerEquipment[];
     // notes: customerNote[];
     // files: customerFile[];
     // phoneTypes: string[];
     // equipTypes: { [key: string]: equipment[] };
     // fileTypes: fileTypes[];
 } & pageProps;
+
+/*******************************************************************************
+ *                          Customer Equipment
+ *******************************************************************************/
+type customerEquipment = {
+    cust_id: number;
+    cust_equip_id: number;
+    equip_name: string;
+    // customer_equipment_data: customerEquipmentData[];
+};
+
+// type customerEquipmentData = {
+//     id: number;
+//     order: number;
+//     field_name: string;
+//     value: string;
+// };
 
 /*******************************************************************************
  *                          Customer Misc
