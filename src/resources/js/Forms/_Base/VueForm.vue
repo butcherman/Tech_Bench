@@ -76,6 +76,7 @@ const isDirty = computed(() => meta.value.dirty);
 const isSubmitting = ref<boolean>(false);
 const onSubmit = handleSubmit((form): void => {
     isSubmitting.value = true;
+    emit("submitting");
     const formData = useInertiaForm(form);
     clearErrorAlert();
 

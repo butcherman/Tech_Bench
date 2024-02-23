@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerEquipmentRequest;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class CustomerEquipmentController extends Controller
@@ -28,9 +30,11 @@ class CustomerEquipmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerEquipmentRequest $request, Customer $customer)
     {
-        //
+        $equip = $request->createEquipment();
+
+        return back()->with('success', __('cust.equipment.created', ['equip' => $equip->equip_name]));
     }
 
     /**
@@ -48,6 +52,7 @@ class CustomerEquipmentController extends Controller
     public function edit(string $id)
     {
         //
+        return 'edit';
     }
 
     /**
@@ -56,6 +61,7 @@ class CustomerEquipmentController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        return 'update';
     }
 
     /**
@@ -64,5 +70,6 @@ class CustomerEquipmentController extends Controller
     public function destroy(string $id)
     {
         //
+        return 'destroy';
     }
 }

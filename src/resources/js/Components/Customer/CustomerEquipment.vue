@@ -8,7 +8,7 @@
                 />
                 Equipment:
             </div>
-            <Overlay :loading="isLoading">
+            <Overlay :loading="loading.equipment">
                 <h5 v-if="!equipment.length" class="text-center">
                     No Equipment
                 </h5>
@@ -46,9 +46,4 @@ import {
     customer,
     permissions,
 } from "@/State/CustomerState";
-// import { ref, reactive, onMounted } from "vue";
-
-// const props = defineProps<{}>();
-
-const isLoading = loading.equipment;
 </script>

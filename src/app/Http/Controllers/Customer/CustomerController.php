@@ -19,7 +19,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Customer/Index', [
-            'permissions' => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
         ]);
     }
 
@@ -31,8 +31,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'selectId' => (bool) config('customer.select_id'),
-            'default-state' => config('customer.default_state'),
+            'selectId' => fn() => (bool) config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
         ]);
     }
 
@@ -61,21 +61,22 @@ class CustomerController extends Controller
         if ($customer->CustomerSite->count() > 1) {
 
             return Inertia::render('Customer/Show', [
-                'permissions' => BuildCustomerPermissions::build($request->user()),
-                'customer' => $customer,
-                'siteList' => $customer->CustomerSite->makeVisible('href'),
-                'alerts' => $customer->CustomerAlert,
-                'equipment' => $customer->CustomerEquipment,
+                'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
+                'customer' => fn() => $customer,
+                'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
+                'alerts' => fn() => $customer->CustomerAlert,
+                'equipment' => fn() => $customer->CustomerEquipment,
             ]);
         }
 
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => BuildCustomerPermissions::build($request->user()),
-            'customer' => $customer,
-            'site' => $customer->CustomerSite[0],
-            'siteList' => $customer->CustomerSite,
-            'alerts' => $customer->CustomerAlert,
-            'equipment' => $customer->CustomerEquipment,
+            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn() => $customer,
+            'site' => fn() => $customer->CustomerSite[0],
+            'siteList' => fn() => $customer->CustomerSite,
+            'alerts' => fn() => $customer->CustomerAlert,
+            'equipment' => fn() => $customer->CustomerEquipment
+                ->load('CustomerEquipment.CustomerSite'),
         ]);
     }
 
@@ -87,10 +88,10 @@ class CustomerController extends Controller
         $this->authorize('update', $customer);
 
         return Inertia::render('Customer/Edit', [
-            'selectId' => (bool) config('customer.select_id'),
-            'default-state' => config('customer.default_state'),
-            'customer' => $customer,
-            'siteList' => $customer->CustomerSite,
+            'selectId' => fn() => (bool) config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $customer->CustomerSite,
         ]);
     }
 

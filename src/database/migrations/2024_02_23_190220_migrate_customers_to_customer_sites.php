@@ -70,10 +70,16 @@ return new class extends Migration {
             $cust->forceDelete();
         }
 
+        // Remove Parent ID and add Deleted Reason to Customers Table
         Schema::table('customers', function (Blueprint $table) {
             $table->dropForeign(['parent_id']);
             $table->dropColumn(['parent_id', 'address', 'city', 'state', 'zip']);
             $table->text('deleted_reason')->nullable()->after('slug');
+        });
+
+        // Remove Shared Column from all other customer tables
+        Schema::table('customer_equipment', function (Blueprint $table) {
+            $table->dropColumn('shared');
         });
     }
 
@@ -88,8 +94,6 @@ return new class extends Migration {
             DB::table('customer_site_equipment')->insert([
                 'cust_site_id' => $equip->cust_id,
                 'cust_equip_id' => $equip->cust_equip_id,
-                'updated_at' => NOW(),
-                'created_at' => NOW(),
             ]);
 
             // Verify which customer and site this item is attached to
@@ -110,8 +114,6 @@ return new class extends Migration {
                     DB::table('customer_site_equipment')->insert([
                         'cust_site_id' => $cust->cust_id,
                         'cust_equip_id' => $equip->cust_equip_id,
-                        'updated_at' => NOW(),
-                        'created_at' => NOW(),
                     ]);
                 }
             }

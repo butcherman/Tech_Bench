@@ -23,11 +23,6 @@ return [
         'destroy' => ':name has been disabled',
     ],
 
-    'linked' => [
-        'set' => ':cust successfully linked to :parent',
-        'removed' => 'Link removed for :name',
-    ],
-
     'equipment' => [
         'created' => ':equip Created',
         'updated' => ':equip Updated',

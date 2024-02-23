@@ -24,6 +24,7 @@ class CustomerSite extends Model
         'deleted_reason',
         'Customer',
         'href',
+        'pivot',
     ];
 
     protected $casts = [

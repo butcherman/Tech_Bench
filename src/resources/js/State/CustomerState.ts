@@ -1,5 +1,5 @@
 import { usePage } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { computed, reactive } from "vue";
 import { sortCustSites, findPrimarySite } from "@/Modules/CustomerSite.module";
 
 const page = usePage<customerPageProps>();
@@ -12,9 +12,13 @@ const permissions = computed<customerPermissions>(() => page.props.permissions);
 /*******************************************************************************
  * Loading States
  *******************************************************************************/
-const loading = {
-    site: ref(false),
-    equipment: ref(false),
+const loading = reactive({
+    site: false,
+    equipment: false,
+});
+
+const toggleLoading = (key: "site" | "equipment") => {
+    loading[key] = !loading[key];
 };
 
 /*******************************************************************************
@@ -41,6 +45,7 @@ const equipment = computed<customerEquipment[]>(() => page.props.equipment);
 export {
     permissions,
     loading,
+    toggleLoading,
     customer,
     customerAlerts,
     currentSite,

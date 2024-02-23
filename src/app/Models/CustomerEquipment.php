@@ -34,4 +34,14 @@ class CustomerEquipment extends Model
     {
         return $this->belongsTo(EquipmentType::class, 'equip_id', 'equip_id');
     }
+
+    public function CustomerSite()
+    {
+        return $this->belongsToMany(
+            CustomerSite::class,
+            'customer_site_equipment',
+            'cust_equip_id',
+            'cust_site_id'
+        );
+    }
 }
