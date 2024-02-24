@@ -8,6 +8,7 @@
         submit-text="Add Equipment"
         @success="$emit('success')"
         @submitting="$emit('submitting')"
+        @has-errors="$emit('has-errors')"
     >
         <SelectInput
             id="equip-id"
@@ -36,7 +37,7 @@ import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import MultiSelectInput from "../_Base/MultiSelectInput.vue";
 import { array, number, object } from "yup";
 
-defineEmits(["success", "submitting"]);
+defineEmits(["success", "submitting", "has-errors"]);
 const props = defineProps<{
     equipmentList: {
         [key: string]: { text: string; value: string | number }[];

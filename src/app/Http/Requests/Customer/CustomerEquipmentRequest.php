@@ -4,6 +4,7 @@ namespace App\Http\Requests\Customer;
 
 use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
+use App\Rules\CheckForDuplicateSiteEquipment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerEquipmentRequest extends FormRequest
@@ -23,7 +24,11 @@ class CustomerEquipmentRequest extends FormRequest
     {
         return [
             'equip_id' => 'required|exists:equipment_types',
-            'site_list' => 'required|array',
+            'site_list' => [
+                'required',
+                'array',
+                new CheckForDuplicateSiteEquipment
+            ],
         ];
     }
 

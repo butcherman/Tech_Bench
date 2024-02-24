@@ -14,6 +14,7 @@
                 :site-list="siteList"
                 @submitting="onSubmit"
                 @success="onSuccess"
+                @has-errors="onSubmit"
             />
         </Modal>
     </AddButton>
