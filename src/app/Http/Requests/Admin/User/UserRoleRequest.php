@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Admin\User;
 
-use App\Exceptions\Database\GeneralQueryException;
 use App\Exceptions\Database\RecordInUseException;
+use App\Exceptions\Database\GeneralQueryException;
 use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use App\Service\Cache;

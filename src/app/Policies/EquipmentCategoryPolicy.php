@@ -4,63 +4,35 @@ namespace App\Policies;
 
 use App\Models\EquipmentCategory;
 use App\Models\User;
+use App\Traits\AllowTrait;
+use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
 class EquipmentCategoryPolicy
 {
+    use AllowTrait;
+
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can create models
      */
-    public function viewAny(User $user): bool
+    public function create(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Manage Equipment');
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can update the model
      */
-    public function view(User $user, EquipmentCategory $equipmentCategory): bool
+    public function update(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Manage Equipment');
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can delete the model
      */
-    public function create(User $user): bool
+    public function delete(User $user)
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, EquipmentCategory $equipmentCategory): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, EquipmentCategory $equipmentCategory): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, EquipmentCategory $equipmentCategory): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, EquipmentCategory $equipmentCategory): bool
-    {
-        //
+        return $this->checkPermission($user, 'Manage Equipment');
     }
 }

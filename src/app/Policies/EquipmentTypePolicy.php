@@ -4,63 +4,42 @@ namespace App\Policies;
 
 use App\Models\EquipmentType;
 use App\Models\User;
+use App\Traits\AllowTrait;
 use Illuminate\Auth\Access\Response;
 
 class EquipmentTypePolicy
 {
+    use AllowTrait;
+
     /**
-     * Determine whether the user can view any models.
+     * Determine if the user can view the index page
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Manage Equipment');
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can create models
      */
-    public function view(User $user, EquipmentType $equipmentType): bool
+    public function create(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Manage Equipment');
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can update the model
      */
-    public function create(User $user): bool
+    public function update(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Manage Equipment');
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can delete the model
      */
-    public function update(User $user, EquipmentType $equipmentType): bool
+    public function delete(User $user)
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, EquipmentType $equipmentType): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, EquipmentType $equipmentType): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, EquipmentType $equipmentType): bool
-    {
-        //
+        return $this->checkPermission($user, 'Manage Equipment');
     }
 }

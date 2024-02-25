@@ -19,6 +19,7 @@ class BuildAdminMenu
     public function __construct(protected User $user)
     {
         $this->buildUserMenu();
+        $this->buildEquipmentMenu();
     }
 
     /**
@@ -73,5 +74,30 @@ class BuildAdminMenu
         }
 
         $this->menu['Users'] = $userBuild;
+    }
+
+    /**
+     * Build administration menu for Equipment, Categories and Data Types
+     */
+    protected function buildEquipmentMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'Manage Equipment')) {
+            $nav = [
+                [
+                    'name' => 'Equipment Categories and Types',
+                    'icon' => 'fas fa-cogs',
+                    'route' => route('equipment.index'),
+                ],
+                [
+                    'name' => 'Customer Equipment Data',
+                    'icon' => 'fas fa-database',
+                    'route' => route('data-types.index'),
+                ],
+            ];
+        }
+
+        $this->menu['Equipment'] = $nav;
     }
 }
