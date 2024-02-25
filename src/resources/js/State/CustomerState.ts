@@ -37,7 +37,9 @@ const siteList = computed<customerSite[]>(() =>
 /*******************************************************************************
  * Customer Equipment
  *******************************************************************************/
-const equipment = computed<customerEquipment[]>(() => page.props.equipment);
+const equipmentList = computed<customerEquipment[]>(
+    () => page.props.equipmentList
+);
 
 /*******************************************************************************
  * Exported Data to Vue Components
@@ -51,5 +53,5 @@ export {
     currentSite,
     primarySite,
     siteList,
-    equipment,
+    equipmentList,
 };

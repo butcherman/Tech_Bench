@@ -25,7 +25,7 @@ type customerPageProps = {
     site: customerSite;
     siteList: customerSite[];
     alerts: customerAlert[];
-    equipment: customerEquipment[];
+    equipmentList: customerEquipment[];
     // contacts: customerContact[];
     // notes: customerNote[];
     // files: customerFile[];
@@ -44,12 +44,12 @@ type customerEquipment = {
     // customer_equipment_data: customerEquipmentData[];
 };
 
-// type customerEquipmentData = {
-//     id: number;
-//     order: number;
-//     field_name: string;
-//     value: string;
-// };
+type customerEquipmentData = {
+    id: number;
+    order: number;
+    field_name: string;
+    value: string;
+};
 
 /*******************************************************************************
  *                          Customer Misc

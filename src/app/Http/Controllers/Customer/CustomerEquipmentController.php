@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentRequest;
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CustomerEquipmentController extends Controller
 {
@@ -40,10 +43,15 @@ class CustomerEquipmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, Customer $customer, CustomerEquipment $equipment)
     {
-        //
-        return 'show';
+        return Inertia::render('Customer/Equipment/Show', [
+            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn() => $customer,
+            'equipment' => fn() => $equipment,
+            'site-list' => fn() => $equipment->CustomerSite,
+            'equipment-data' => fn() => $equipment->CustomerEquipmentData,
+        ]);
     }
 
     /**

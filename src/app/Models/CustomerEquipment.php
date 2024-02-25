@@ -25,6 +25,11 @@ class CustomerEquipment extends Model
 
     protected $appends = ['equip_name'];
 
+    protected $casts = [
+        'shared' => 'boolean',
+        'deleted_at' => 'datetime:M d, Y',
+    ];
+
     public function getEquipNameAttribute()
     {
         return $this->EquipmentType->name;
@@ -43,5 +48,13 @@ class CustomerEquipment extends Model
             'cust_equip_id',
             'cust_site_id'
         );
+    }
+
+    /**
+     * Site specific information for the selected piece of equipment
+     */
+    public function CustomerEquipmentData()
+    {
+        return $this->hasMany(CustomerEquipmentData::class, 'cust_equip_id', 'cust_equip_id');
     }
 }

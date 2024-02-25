@@ -72,6 +72,7 @@ class CustomerSiteController extends Controller
             'site' => fn() => $site,
             'siteList' => fn() => $customer->CustomerSite,
             'alerts' => fn() => $customer->CustomerAlert,
+            'equipmentList' => fn() => $site->SiteEquipment,
         ]);
     }
 

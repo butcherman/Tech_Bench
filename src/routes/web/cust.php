@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Http\Request;
@@ -64,6 +65,13 @@ Route::middleware('auth.secure')->group(function () {
                     ->edit('Edit Site');
             });
 
-        Route::resource('equipment', CustomerEquipmentController::class);
+        /***********************************************************************
+         *                     Customer Equipment Routes                       *
+         ***********************************************************************/
+        Route::resource('equipment', CustomerEquipmentController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Equipment', 'customers.show')
+                    ->show(fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name);
+            });
     });
 });

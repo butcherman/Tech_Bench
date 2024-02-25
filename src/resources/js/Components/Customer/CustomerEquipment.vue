@@ -9,12 +9,12 @@
                 Equipment:
             </div>
             <Overlay :loading="loading.equipment">
-                <h5 v-if="!equipment.length" class="text-center">
+                <h5 v-if="!equipmentList.length" class="text-center">
                     No Equipment
                 </h5>
                 <ul class="list-group">
                     <li
-                        v-for="equip in equipment"
+                        v-for="equip in equipmentList"
                         :key="equip.cust_equip_id"
                         class="list-group-item"
                     >
@@ -42,7 +42,7 @@ import Overlay from "../_Base/Loaders/Overlay.vue";
 import CustomerEquipmentCreate from "./CustomerEquipmentCreate.vue";
 import {
     loading,
-    equipment,
+    equipmentList,
     customer,
     permissions,
 } from "@/State/CustomerState";

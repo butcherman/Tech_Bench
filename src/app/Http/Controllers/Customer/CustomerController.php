@@ -65,7 +65,7 @@ class CustomerController extends Controller
                 'customer' => fn() => $customer,
                 'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
                 'alerts' => fn() => $customer->CustomerAlert,
-                'equipment' => fn() => $customer->CustomerEquipment,
+                'equipmentList' => fn() => $customer->CustomerEquipment,
             ]);
         }
 
@@ -75,8 +75,7 @@ class CustomerController extends Controller
             'site' => fn() => $customer->CustomerSite[0],
             'siteList' => fn() => $customer->CustomerSite,
             'alerts' => fn() => $customer->CustomerAlert,
-            'equipment' => fn() => $customer->CustomerEquipment
-                ->load('CustomerEquipment.CustomerSite'),
+            'equipmentList' => fn() => $customer->CustomerEquipment,
         ]);
     }
 

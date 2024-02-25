@@ -49,7 +49,7 @@ const props = defineProps<{
 const initValues = {
     equip_id: null,
     site_list:
-        props.siteList.length === 1 ? props.siteList[0].cust_site_id : [],
+        props.siteList.length === 1 ? [props.siteList[0].cust_site_id] : [],
 };
 const schema = object({
     equip_id: number().required().label("Equipment Type"),
