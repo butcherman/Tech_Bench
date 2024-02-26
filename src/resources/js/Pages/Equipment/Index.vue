@@ -95,7 +95,7 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mt-4">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body flex-row justify-content-center">
@@ -137,11 +137,11 @@ import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import CategoryForm from "@/Forms/Equipment/CategoryForm.vue";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
 
-const props = defineProps<{
+defineProps<{
     equipmentList: categoryList[];
 }>();
 

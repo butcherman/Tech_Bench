@@ -16,7 +16,9 @@ Route::middleware('auth.secure')->group(function () {
      ***************************************************************************/
     Route::resource('equipment', EquipmentTypeController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-            $breadcrumbs->index('Equipment Categories and Types', 'admin.index');
+            $breadcrumbs->index('Equipment Categories and Types', 'admin.index')
+                ->create('Create New Equipment')
+                ->edit('Edit Equipment', 'equipment.index');
         });
 
     Route::post('equipment-category', [EquipmentCategoryController::class, 'store'])

@@ -7,6 +7,7 @@ use App\Exceptions\Database\GeneralQueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentCategoryRequest;
 use App\Models\EquipmentCategory;
+use App\Service\Cache;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -19,6 +20,7 @@ class EquipmentCategoryController extends Controller
     public function store(EquipmentCategoryRequest $request)
     {
         $newCat = EquipmentCategory::create($request->all());
+        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
 
         Log::info('New Equipment Category ' . $newCat->name . ' created by ' .
             $request->user()->username, $newCat->toArray());
@@ -32,6 +34,7 @@ class EquipmentCategoryController extends Controller
     public function update(EquipmentCategoryRequest $request, EquipmentCategory $category)
     {
         $category->update($request->all());
+        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
 
         Log::info('Equipment Category ' . $category->name . ' has been updated by ' .
             $request->user()->username);
@@ -46,6 +49,7 @@ class EquipmentCategoryController extends Controller
     {
         try {
             $category->delete();
+            Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
         } catch (QueryException $e) {
             if (in_array($e->errorInfo[1], [19, 1451])) {
                 throw new RecordInUseException(

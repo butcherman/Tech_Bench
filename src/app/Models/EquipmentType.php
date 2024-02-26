@@ -19,4 +19,19 @@ class EquipmentType extends Model
     {
         return $this->belongsTo(EquipmentCategory::class, 'cat_id', 'cat_id');
     }
+
+    /**
+     * When assigning equipment to a customer, specific data fields are used to enter customer specific information
+     */
+    public function DataFieldType()
+    {
+        return $this->hasManyThrough(
+            DataFieldType::class,
+            DataField::class,
+            'equip_id',
+            'type_id',
+            'equip_id',
+            'type_id'
+        )->orderBy('order');
+    }
 }

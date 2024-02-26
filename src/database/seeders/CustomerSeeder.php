@@ -34,22 +34,5 @@ class CustomerSeeder extends Seeder
                 ]);
             }
         }
-
-        // $custList = Customer::all();
-
-        /**
-         * Assign 0-5 contacts to each customer
-         */
-        // foreach ($custList as $cust) {
-        //     $newContactList = CustomerContact::factory()->count(rand(0, 5))->create(['cust_id' => $cust->cust_id]);
-        //     if ($newContactList) {
-        //         foreach ($newContactList as $cont) {
-        //             CustomerContactSite::create([
-        //                 'cont_id' => $cont->cont_id,
-        //                 'cust_site_id' => $cust->primary_site_id,
-        //             ]);
-        //         }
-        //     }
-        // }
     }
 }
