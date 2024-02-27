@@ -14,8 +14,9 @@ type equipment = {
 type dataTypes = {
     type_id: number;
     name: string;
-    // pattern: string;
-    // masked : boolean;
-    // required: boolean;
+    pattern: string | null;
+    masked: boolean;
+    is_hyperlink: boolean;
+    allow_copy: boolean;
     in_use: boolean;
 };

@@ -50,10 +50,31 @@
                                 :href="row.href"
                                 class="block-link"
                             >
-                                {{ row[col.field] }}
+                                <span v-if="col.isBoolean">
+                                    <fa-icon icon="check" />
+                                </span>
+                                <span v-else>
+                                    {{ row[col.field] }}
+                                </span>
                             </Link>
                             <span v-else>
-                                {{ row[col.field] }}
+                                <span v-if="col.isBoolean">
+                                    <fa-icon
+                                        :icon="
+                                            row[col.field]
+                                                ? 'circle-check'
+                                                : 'circle-xmark'
+                                        "
+                                        :class="
+                                            row[col.field]
+                                                ? 'text-success'
+                                                : 'text-danger'
+                                        "
+                                    />
+                                </span>
+                                <span v-else>
+                                    {{ row[col.field] }}
+                                </span>
                             </span>
                         </td>
                     </template>
@@ -104,6 +125,7 @@ interface column {
     label: string;
     field: string;
     sort?: boolean;
+    isBoolean?: boolean;
     filterOptions?: {
         enabled: boolean;
         placeholder?: string;

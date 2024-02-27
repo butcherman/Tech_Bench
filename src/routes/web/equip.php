@@ -4,6 +4,8 @@
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
 use App\Http\Controllers\Equipment\EquipmentListController;
 use App\Http\Controllers\Equipment\EquipmentTypeController;
+use App\Http\Controllers\Equipment\EquipmentDataTypeController;
+use App\Models\EquipmentType;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +20,8 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Equipment Categories and Types', 'admin.index')
                 ->create('Create New Equipment')
-                ->edit('Edit Equipment', 'equipment.index');
+                ->edit('Edit Equipment', 'equipment.index')
+                ->show(fn(EquipmentType $equipment) => $equipment->name . ' References', 'equipment.edit');
         });
 
     Route::post('equipment-category', [EquipmentCategoryController::class, 'store'])
@@ -28,7 +31,8 @@ Route::middleware('auth.secure')->group(function () {
     Route::delete('equipment-category/{category}', [EquipmentCategoryController::class, 'destroy'])
         ->name('equipment-category.destroy');
 
-    Route::get('equipment-data', function () {
-        return 'equipment-data';
-    })->name('data-types.index');
+    Route::resource('equipment-data', EquipmentDataTypeController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Equipment Data Types', 'equipment.index');
+        });
 });
