@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::table('data_field_types', function (Blueprint $table) {
             $table->string('pattern')->after('name')->nullable();
             $table->boolean('is_hyperlink')->after('pattern')->default(false);
+            $table->boolean('allow_copy')->after('is_hyperlink')->default(false);
             $table->renameColumn('hidden', 'masked');
         });
 

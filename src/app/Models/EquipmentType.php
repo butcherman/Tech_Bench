@@ -34,4 +34,16 @@ class EquipmentType extends Model
             'type_id'
         )->orderBy('order');
     }
+
+    public function Customer()
+    {
+        return $this->hasManyThrough(
+            Customer::class,
+            CustomerEquipment::class,
+            'equip_id',
+            'cust_id',
+            'equip_id',
+            'cust_id'
+        );
+    }
 }

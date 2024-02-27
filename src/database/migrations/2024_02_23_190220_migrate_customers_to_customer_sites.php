@@ -25,11 +25,10 @@ return new class extends Migration {
         });
 
         $this->migrate();
-        $this->migrateCustomerEquipment();
         // $this->migrateCustomerContacts();
         // $this->migrateCustomerNotes();
         // $this->migrateCustomerFiles();
-        $this->cleanup();
+        // $this->cleanup();
     }
 
     /**
@@ -76,49 +75,9 @@ return new class extends Migration {
             $table->dropColumn(['parent_id', 'address', 'city', 'state', 'zip']);
             $table->text('deleted_reason')->nullable()->after('slug');
         });
-
-        // Remove Shared Column from all other customer tables
-        Schema::table('customer_equipment', function (Blueprint $table) {
-            $table->dropColumn('shared');
-        });
     }
 
-    /**
-     * Migrate Customer Equipment to new schema
-     */
-    public function migrateCustomerEquipment()
-    {
-        $customerEquipment = CustomerEquipment::withTrashed()->get();
 
-        foreach ($customerEquipment as $equip) {
-            DB::table('customer_site_equipment')->insert([
-                'cust_site_id' => $equip->cust_id,
-                'cust_equip_id' => $equip->cust_equip_id,
-            ]);
-
-            // Verify which customer and site this item is attached to
-            $cust = Customer::withTrashed()->find($equip->cust_id);
-            if ($cust) {
-
-                if ($cust->parent_id) {
-                    $equip->update([
-                        'cust_id' => $cust->parent_id,
-                    ]);
-                }
-            }
-
-            //  If equipment is shared, add the other sites it is shared with
-            if ($equip->shared) {
-                $custList = Customer::where('parent_id', $equip->cust_id)->get();
-                foreach ($custList as $cust) {
-                    DB::table('customer_site_equipment')->insert([
-                        'cust_site_id' => $cust->cust_id,
-                        'cust_equip_id' => $equip->cust_equip_id,
-                    ]);
-                }
-            }
-        }
-    }
 
     /**
      * Migrate Customer Contacts to new schema

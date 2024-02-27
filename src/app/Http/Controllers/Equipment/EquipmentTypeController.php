@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Exceptions\Database\GeneralQueryException;
+use App\Exceptions\Database\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentTypeRequest;
 use App\Jobs\Customer\UpdateCustomerDataFieldsJob;
@@ -9,6 +11,7 @@ use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Service\Cache;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -20,6 +23,8 @@ class EquipmentTypeController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', EquipmentType::class);
+
         return Inertia::render('Equipment/Index', [
             'equipment-list' => fn() => Cache::equipmentCategories(),
         ]);
@@ -30,6 +35,8 @@ class EquipmentTypeController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', EquipmentType::class);
+
         return Inertia::render('Equipment/Create', [
             'category-list' => fn() => Cache::equipmentCategories(),
             'data-list' => fn() => DataFieldType::all()->pluck('name'),
@@ -58,7 +65,12 @@ class EquipmentTypeController extends Controller
      */
     public function show(EquipmentType $equipment)
     {
-        return Inertia::render('Equipment/Show');
+        $this->authorize('viewAny', $equipment);
+
+        return Inertia::render('Equipment/Show', [
+            // TODO - Add Tech Tip References
+            'equipment' => $equipment->load(['Customer',/** 'TechTip' */]),
+        ]);
     }
 
     /**
@@ -66,6 +78,8 @@ class EquipmentTypeController extends Controller
      */
     public function edit(EquipmentType $equipment)
     {
+        $this->authorize('update', $equipment);
+
         return Inertia::render('Equipment/Edit', [
             'equipment' => fn() => $equipment->load('DataFieldType'),
             'category-list' => fn() => Cache::equipmentCategories(),
@@ -93,9 +107,28 @@ class EquipmentTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, EquipmentType $equipment)
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $equipment);
+
+        try {
+            $equipment->delete();
+            Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
+        } catch (QueryException $e) {
+            if (in_array($e->errorInfo[1], [19, 1451])) {
+                throw new RecordInUseException(
+                    $equipment->name . ' is still in use and cannot be deleted',
+                    0,
+                    $e
+                );
+            } else {
+                throw new GeneralQueryException('', 0, $e);
+            }
+        }
+
+        Log::notice('Equipment Type ' . $equipment->name . ' was deleted by ' .
+            $request->user()->username);
+
+        return redirect(route('equipment.index'))->with('warning', __('equipment.destroyed'));
     }
 }

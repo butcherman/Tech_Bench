@@ -2,14 +2,41 @@
     <div>
         <div class="row">
             <div class="col-12">
-                <h4 class="text-center text-md-left">Hello World</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <p class="text-center">This is a new page</p>
+                        <h4 class="text-center">{{ equipment.name }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            Customers with {{ equipment.name }}
+                        </div>
+                        <div
+                            v-if="!equipment.customer.length"
+                            class="text-center"
+                        >
+                            No Customer References
+                        </div>
+                        <ul class="list-group">
+                            <li
+                                v-for="customer in equipment.customer"
+                                :key="customer.cust_id"
+                                class="list-group-item"
+                            >
+                                <Link
+                                    :href="
+                                        $route('customers.show', customer.slug)
+                                    "
+                                    class="btn btn-info w-100"
+                                    >{{ customer.name }}</Link
+                                >
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -18,7 +45,16 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted } from 'vue';
+import AppLayout from "@/Layouts/AppLayout.vue";
 
-    const props = defineProps<{}>();
+defineProps<{
+    equipment: {
+        customer: customer[];
+        // techTip: techTip[];
+    } & equipment;
+}>();
+</script>
+
+<script lang="ts">
+export default { layout: AppLayout };
 </script>

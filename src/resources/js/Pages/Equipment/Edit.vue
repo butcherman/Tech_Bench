@@ -1,19 +1,38 @@
 <template>
-    <div class="row justify-content-center">
-        <Head title="Create New Equipment" />
-        <div class="col-md-10">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">Create New Equipment</div>
-                    <EquipmentForm
-                        :category-list="categoryList"
-                        :data-list="dataList"
-                        :equipment="equipment"
-                    />
-                    <div class="text-center">
-                        Click the
-                        <fa-icon icon="circle-question" class="text-muted" />
-                        icon for detailed information on each field.
+    <div>
+        <div class="row justify-content-center">
+            <Head title="Create New Equipment" />
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Create New Equipment</div>
+                        <EquipmentForm
+                            :category-list="categoryList"
+                            :data-list="dataList"
+                            :equipment="equipment"
+                        />
+                        <div class="text-center">
+                            Click the
+                            <fa-icon
+                                icon="circle-question"
+                                class="text-muted"
+                            />
+                            icon for detailed information on each field.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        <Link
+                            :href="$route('equipment.show', equipment.equip_id)"
+                            class="btn btn-info my-2"
+                            >Show References</Link
+                        >
+                        <DeleteButton class="my-2" @click="deleteEquipment" />
                     </div>
                 </div>
             </div>
@@ -24,13 +43,24 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import EquipmentForm from "@/Forms/Equipment/EquipmentForm.vue";
+import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
 import { ref, reactive, onMounted } from "vue";
+import verifyModal from "@/Modules/verifyModal";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     equipment: equipment;
     categoryList: categoryList[];
     dataList: string[];
 }>();
+
+const deleteEquipment = () => {
+    verifyModal("This action cannot be undone").then((res) => {
+        if (res) {
+            router.delete(route("equipment.destroy", props.equipment.equip_id));
+        }
+    });
+};
 </script>
 
 <script lang="ts">
