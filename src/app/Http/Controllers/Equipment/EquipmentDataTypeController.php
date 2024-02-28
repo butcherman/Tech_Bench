@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Equipment;
 
 use App\Exceptions\Database\GeneralQueryException;
 use App\Exceptions\Database\RecordInUseException;
+use App\Http\Requests\Equipment\DataTypeRequest;
 use Illuminate\Database\QueryException;
 use App\Service\Cache;
 use App\Models\DataFieldType;
@@ -32,44 +33,59 @@ class EquipmentDataTypeController extends Controller
      */
     public function create()
     {
-        //
-        return 'create';
+        $this->authorize('viewAny', EquipmentType::class);
+
+        return Inertia::render('Equipment/DataType/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DataTypeRequest $request)
     {
-        //
-        return 'store';
+        $newField = DataFieldType::create($request->toArray());
+
+        Log::info('New Equipment Data Field created by ' .
+            $request->user()->username, $newField->toArray());
+
+        return redirect(route('equipment-data.index'))
+            ->with('success', __('equipment.data-field-type.created'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-        return 'show';
-    }
+    // public function show(string $id)
+    // {
+    //     //
+    //     return 'show';
+    // }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(DataFieldType $equipment_datum)
     {
-        //
-        return 'edit';
+        $this->authorize('viewAny', EquipmentType::class);
+
+        return Inertia::render('Equipment/DataType/Edit', [
+            'data-field-type' => $equipment_datum,
+        ]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(DataTypeRequest $request, DataFieldType $equipment_datum)
     {
-        //
-        return 'update';
+        $equipment_datum->update($request->toArray());
+
+        Log::info('Equipment Data Type ' . $equipment_datum->name . ' updated by ' .
+            $request->user()->username, $equipment_datum->toArray());
+
+        return redirect(route('equipment-data.index'))
+            ->with('success', __('equipment.data-field-type.update'));
     }
 
     /**
@@ -78,9 +94,6 @@ class EquipmentDataTypeController extends Controller
     public function destroy(Request $request, DataFieldType $equipment_datum)
     {
         $this->authorize('viewAny', EquipmentType::class);
-
-        // return $data_type;
-        // dd($equipment_datum);
 
         try {
             $equipment_datum->delete();

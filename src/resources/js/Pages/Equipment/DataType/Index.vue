@@ -5,7 +5,15 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">Equipment Data Types</div>
+                        <div class="card-title">
+                            <Link
+                                :href="$route('equipment-data.create')"
+                                class="float-end"
+                            >
+                                <AddButton text="Add Data Type" small pill />
+                            </Link>
+                            Equipment Data Types
+                        </div>
                         <p class="text-center">
                             When equipment is assigned to a customer, the
                             following Data Types are available to gather
@@ -52,6 +60,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Table from "@/Components/_Base/Table.vue";
+import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import verifyModal from "@/Modules/verifyModal";

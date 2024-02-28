@@ -33,6 +33,7 @@ Route::middleware('auth.secure')->group(function () {
 
     Route::resource('equipment-data', EquipmentDataTypeController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-            $breadcrumbs->index('Equipment Data Types', 'equipment.index');
+            $breadcrumbs->index('Equipment Data Types', 'equipment.index')
+                ->edit('Edit Data Type', 'equipment-data.index');
         });
 });
