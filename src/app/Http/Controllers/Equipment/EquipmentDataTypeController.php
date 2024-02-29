@@ -53,15 +53,6 @@ class EquipmentDataTypeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     //
-    //     return 'show';
-    // }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(DataFieldType $equipment_datum)
@@ -85,7 +76,7 @@ class EquipmentDataTypeController extends Controller
             $request->user()->username, $equipment_datum->toArray());
 
         return redirect(route('equipment-data.index'))
-            ->with('success', __('equipment.data-field-type.update'));
+            ->with('success', __('equipment.data-field-type.updated'));
     }
 
     /**

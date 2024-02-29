@@ -30,6 +30,10 @@ class HelpPageTest extends TestCase
         'restore',
         'check-id',
         'notFound',
+        'equipment-list',
+
+        // TODO - Remove Testing Bypass Routes
+        'customers',
     ];
 
     /**
@@ -48,7 +52,7 @@ class HelpPageTest extends TestCase
         });
 
         foreach ($routeList as $route) {
-            $this->assertFileExists(resource_path('js/Help/Components/'.$route.'.vue'));
+            $this->assertFileExists(resource_path('js/Help/Pages/' . $route . '.vue'));
         }
     }
 }

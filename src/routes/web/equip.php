@@ -32,8 +32,10 @@ Route::middleware('auth.secure')->group(function () {
         ->name('equipment-category.destroy');
 
     Route::resource('equipment-data', EquipmentDataTypeController::class)
+        ->except('show')
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Equipment Data Types', 'equipment.index')
+                ->create('Create Data Type', 'equipment-data.index')
                 ->edit('Edit Data Type', 'equipment-data.index');
         });
 });

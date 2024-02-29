@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="row justify-content-center">
-            <Head title="Create New Equipment" />
+            <Head title="Edit Equipment" />
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">Create New Equipment</div>
+                        <div class="card-title">Edit Equipment</div>
                         <EquipmentForm
                             :category-list="categoryList"
                             :data-list="dataList"
