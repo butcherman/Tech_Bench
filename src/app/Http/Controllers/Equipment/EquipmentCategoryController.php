@@ -47,18 +47,22 @@ class EquipmentCategoryController extends Controller
      */
     public function destroy(Request $request, EquipmentCategory $category)
     {
+        $this->authorize('delete', $category);
+
         try {
             $category->delete();
             Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
         } catch (QueryException $e) {
             if (in_array($e->errorInfo[1], [19, 1451])) {
                 throw new RecordInUseException(
-                    $category->name . ' is still in use and cannot be deleted',
+                    __('equipment.category.in-use', ['name' => $category->name]),
                     0,
                     $e
                 );
             } else {
+                // @codeCoverageIgnoreStart
                 throw new GeneralQueryException('', 0, $e);
+                // @codeCoverageIgnoreEnd
             }
         }
 

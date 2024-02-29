@@ -97,7 +97,9 @@ class EquipmentDataTypeController extends Controller
                     $e
                 );
             } else {
+                // @codeCoverageIgnoreStart
                 throw new GeneralQueryException('', 0, $e);
+                // @codeCoverageIgnoreEnd
             }
         }
 
