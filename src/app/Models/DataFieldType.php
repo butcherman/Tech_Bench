@@ -17,6 +17,11 @@ class DataFieldType extends Model
 
     protected $appends = ['in_use'];
 
+    protected $casts = [
+        'is_hyperlink' => 'boolean',
+        'masked' => 'boolean',
+    ];
+
     /**
      * Shows if this field is being used by any equipment
      */

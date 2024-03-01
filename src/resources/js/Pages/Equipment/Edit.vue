@@ -44,7 +44,6 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import EquipmentForm from "@/Forms/Equipment/EquipmentForm.vue";
 import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
-import { ref, reactive, onMounted } from "vue";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
 

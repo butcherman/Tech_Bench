@@ -49,6 +49,7 @@ type customerEquipmentData = {
     order: number;
     field_name: string;
     value: string;
+    data_field_type: dataTypes;
 };
 
 /*******************************************************************************
