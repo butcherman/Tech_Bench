@@ -17,7 +17,7 @@ const props = defineProps<{
     value: any | any[];
 }>();
 
-const bgVariant = ref("bg-warning");
+const bgVariant = ref("bg-primary");
 
 const copyToClipboard = () => {
     navigator.clipboard.writeText(props.value);

@@ -13,7 +13,7 @@ class DataFieldType extends Model
 
     protected $guarded = ['type_id', 'created_at', 'updated_at'];
 
-    protected $hidden = ['updated_at', 'created_at'];
+    protected $hidden = ['updated_at', 'created_at', 'laravel_through_key'];
 
     protected $appends = ['in_use'];
 

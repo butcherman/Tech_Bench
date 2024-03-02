@@ -5,6 +5,7 @@ use App\Http\Controllers\Customer\CustomerAlertsController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
+use App\Http\Controllers\Customer\CustomerEquipmentDataController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
@@ -71,7 +72,12 @@ Route::middleware('auth.secure')->group(function () {
         Route::resource('equipment', CustomerEquipmentController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
-                    ->show(fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name);
+                    ->show(
+                        fn(Customer $customer, CustomerEquipment $equipment) =>
+                        $equipment->equip_name
+                    );
             });
+        Route::put('equipment-data', CustomerEquipmentDataController::class)
+            ->name('update-equipment-data');
     });
 });
