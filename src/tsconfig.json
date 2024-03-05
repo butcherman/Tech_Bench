@@ -8,6 +8,7 @@
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
         "jsx": "preserve",
+        "lib": ["es5", "es6", "dom", "dom.iterable", "es2016"],
         "module": "ES2020",
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,

@@ -2,14 +2,10 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-                <Link
-                    v-if="permissions.details.create"
-                    :href="$route('customers.sites.create', customer.slug)"
-                    class="float-end"
-                >
-                    <AddButton text="Add Site" small pill />
-                </Link>
-                Sites:
+                <span class="float-end">
+                    <slot name="add-button"> </slot>
+                </span>
+                {{ titleText || "Sites" }}:
             </div>
             <Table
                 :columns="columns"
@@ -17,6 +13,7 @@
                 :paginate="siteList.length > 10"
                 responsive
                 rowClickable
+                :no-results-text="noResultsText"
             >
                 <template #action="{ rowData }">
                     <span
@@ -35,8 +32,19 @@
 
 <script setup lang="ts">
 import Table from "../_Base/Table.vue";
-import AddButton from "../_Base/Buttons/AddButton.vue";
-import { siteList, permissions, customer } from "@/State/CustomerState";
+import { computed } from "vue";
+import { siteList } from "@/State/CustomerState";
+
+const props = defineProps<{
+    titleText?: string;
+    emptyText?: string;
+}>();
+
+const noResultsText = computed(
+    () =>
+        props.emptyText ||
+        "No Sites attached to this Customer.  Please add one."
+);
 
 const columns = [
     {

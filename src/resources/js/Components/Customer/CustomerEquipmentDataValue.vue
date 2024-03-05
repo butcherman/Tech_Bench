@@ -14,7 +14,7 @@
                 target="_blank"
                 >{{ data.value }}</a
             >
-            <span v-else style="-webkit-text-security: disk">
+            <span v-else>
                 {{ data.value }}
             </span>
         </span>

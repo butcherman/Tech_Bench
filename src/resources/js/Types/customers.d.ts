@@ -4,6 +4,7 @@ type customer = {
     name: string;
     dba_name: string | null;
     slug: string;
+    site_count: number;
     customer_site: customerSite[];
 };
 
@@ -39,9 +40,9 @@ type customerPageProps = {
  *******************************************************************************/
 type customerEquipment = {
     cust_id: number;
+    equip_id: number;
     cust_equip_id: number;
     equip_name: string;
-    // customer_equipment_data: customerEquipmentData[];
 };
 
 type customerEquipmentData = {

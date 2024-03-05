@@ -16,6 +16,6 @@ class CustomerEquipmentDataController extends Controller
     {
         $request->processDataChanges();
 
-        return back()->with('success', 'changes saved');
+        return back()->with('success', 'Saved Successfully');
     }
 }

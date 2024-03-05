@@ -58,8 +58,8 @@ class CustomerController extends Controller
      */
     public function show(Request $request, Customer $customer)
     {
-        if ($customer->CustomerSite->count() > 1) {
 
+        if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
             return Inertia::render('Customer/Show', [
                 'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
                 'customer' => fn() => $customer,

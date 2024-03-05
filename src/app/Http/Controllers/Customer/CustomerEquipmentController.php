@@ -49,27 +49,19 @@ class CustomerEquipmentController extends Controller
             'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
             'customer' => fn() => $customer,
             'equipment' => fn() => $equipment,
-            'site-list' => fn() => $equipment->CustomerSite,
+            'siteList' => fn() => $equipment->CustomerSite,
             'equipment-data' => fn() => $equipment->CustomerEquipmentData,
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-        return 'edit';
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerEquipmentRequest $request, Customer $customer, CustomerEquipment $equipment)
     {
-        //
-        return 'update';
+        $equipment->CustomerSite()->sync($request->site_list);
+
+        return back()->with('success', 'Sites Updated');
     }
 
     /**

@@ -33,7 +33,7 @@ class CheckForDuplicateSiteEquipment implements ValidationRule, DataAwareRule
                 if ($siteEquip) {
                     $site = CustomerSite::find($siteId);
 
-                    $fail($site->site_name . ' already has this equipment.');
+                    $fail($site->site_name . ' already has this type of equipment assigned.');
                 }
             }
         }

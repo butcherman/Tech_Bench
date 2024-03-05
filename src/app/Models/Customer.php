@@ -15,6 +15,8 @@ class Customer extends Model
 
     protected $guarded = ['updated_at', 'created_at', 'deleted_at'];
 
+    protected $appends = ['site_count'];
+
     protected $hidden = [
         'updated_at',
         'created_at',
@@ -37,6 +39,11 @@ class Customer extends Model
     {
         return $this->where('slug', $value)->orWhere('cust_id', $value)
             ->firstOrFail();
+    }
+
+    public function getSiteCountAttribute()
+    {
+        return $this->CustomerSite->count();
     }
 
     /**

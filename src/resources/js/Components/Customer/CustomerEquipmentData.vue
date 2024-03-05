@@ -1,86 +1,92 @@
 <template>
-    <div class="table-responsive">
-        <table class="table">
-            <tbody>
-                <tr
-                    v-for="data in sortDataObject(
-                        equipmentData,
-                        'asc',
-                        'order'
-                    )"
-                    :key="data.id"
-                >
-                    <th class="text-end">{{ data.field_name }}:</th>
-                    <td
-                        :class="{
-                            'mask-field': data.data_field_type.masked,
-                        }"
+    <Overlay :loading="loading">
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <tbody>
+                    <tr
+                        v-for="data in sortDataObject(
+                            equipmentData,
+                            'asc',
+                            'order'
+                        )"
+                        :key="data.id"
                     >
-                        <input
-                            v-if="editFields.includes(data.id)"
-                            :id="`field-id-${data.id}`"
-                            type="text"
-                            :value="data.value"
-                            class="form-control"
-                        />
-                        <CustomerEquipmentDataValue v-else :data="data" />
-                    </td>
-                    <td>
-                        <span v-if="editFields.includes(data.id)">
-                            <span
-                                class="badge rounded-pill pointer bg-danger float-end"
-                                title="Cancel Edit"
-                                v-tooltip
-                                @click="cancelEdit(data.id)"
-                            >
-                                <fa-icon icon="xmark" />
+                        <th class="text-end">{{ data.field_name }}:</th>
+                        <td
+                            :class="{
+                                'mask-field':
+                                    data.data_field_type.masked && data.value,
+                            }"
+                        >
+                            <input
+                                v-if="editFields.includes(data.id)"
+                                :id="`field-id-${data.id}`"
+                                type="text"
+                                :value="data.value"
+                                class="form-control"
+                            />
+                            <CustomerEquipmentDataValue v-else :data="data" />
+                        </td>
+                        <td>
+                            <span v-if="editFields.includes(data.id)">
+                                <span
+                                    class="badge rounded-pill pointer bg-danger float-end"
+                                    title="Cancel Edit"
+                                    v-tooltip
+                                    @click="cancelEdit(data.id)"
+                                >
+                                    <fa-icon icon="xmark" />
+                                </span>
+                                <span
+                                    class="badge rounded-pill pointer bg-primary float-start"
+                                    title="Save"
+                                    v-tooltip
+                                    @click="saveField(data.id)"
+                                >
+                                    <fa-icon icon="floppy-disk" />
+                                </span>
                             </span>
-                            <span
-                                class="badge rounded-pill pointer bg-primary float-start"
-                                title="Save"
-                                v-tooltip
-                                @click="saveField(data.id)"
+                            <span v-else>
+                                <ClipboardCopy
+                                    v-if="
+                                        data.data_field_type.allow_copy &&
+                                        data.value
+                                    "
+                                    :value="data.value"
+                                    class="float-start"
+                                />
+                                <EditBadge
+                                    class="float-end"
+                                    @click="editFields.push(data.id)"
+                                />
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <EditButton
+                                class="float-end"
+                                text="Edit All"
+                                small
+                                pill
+                                @click="onEditAll"
+                            />
+                            <button
+                                v-if="editFields.length"
+                                class="btn btn-primary btn-sm rounded-5 float-end"
+                                @click="saveAllFields"
                             >
                                 <fa-icon icon="floppy-disk" />
-                            </span>
-                        </span>
-                        <span v-else>
-                            <ClipboardCopy
-                                v-if="data.data_field_type.allow_copy"
-                                :value="data.value"
-                                class="float-start"
-                            />
-                            <EditBadge
-                                class="float-end"
-                                @click="editFields.push(data.id)"
-                            />
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3">
-                        <EditButton
-                            class="float-end"
-                            text="Edit All"
-                            small
-                            pill
-                            @click="onEditAll"
-                        />
-                        <button
-                            v-if="editFields.length"
-                            class="btn btn-primary btn-sm rounded-5 float-end"
-                            @click="saveAllFields"
-                        >
-                            <fa-icon icon="floppy-disk" />
-                            Save All
-                        </button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+                                Save All
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </Overlay>
 </template>
 
 <script setup lang="ts">
@@ -88,6 +94,7 @@ import EditButton from "../_Base/Buttons/EditButton.vue";
 import EditBadge from "../_Base/Badges/EditBadge.vue";
 import CustomerEquipmentDataValue from "./CustomerEquipmentDataValue.vue";
 import ClipboardCopy from "@/Components/_Base/Badges/ClipboardCopy.vue";
+import Overlay from "../_Base/Loaders/Overlay.vue";
 import { ref } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
 import { useForm } from "@inertiajs/vue3";
@@ -101,6 +108,8 @@ interface equipmentFormData {
 const props = defineProps<{
     equipmentData: customerEquipmentData[];
 }>();
+
+const loading = ref(false);
 
 /**
  * List of fields that are being edited
@@ -165,12 +174,13 @@ const getFieldValue = (fieldId: number) => {
  */
 const saveFormData = (form: equipmentFormData[]) => {
     const formData = useForm({ saveData: form });
+    loading.value = true;
 
     console.log(formData);
     formData.put(
         route("customers.update-equipment-data", customer.value.slug),
         {
-            onFinish: () => console.log("finish"),
+            onFinish: () => (loading.value = false),
             onSuccess: () => form.forEach((item) => cancelEdit(item.fieldId)),
         }
     );

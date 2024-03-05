@@ -11,7 +11,18 @@
         </div>
         <div id="site-list" class="row my-2">
             <div class="col">
-                <CustomerSiteList />
+                <CustomerSiteList>
+                    <template #add-button>
+                        <Link
+                            v-if="permissions.details.create"
+                            :href="
+                                $route('customers.sites.create', customer.slug)
+                            "
+                        >
+                            <AddButton text="Add Site" small pill />
+                        </Link>
+                    </template>
+                </CustomerSiteList>
             </div>
         </div>
         <div class="row">
@@ -55,7 +66,8 @@ import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
 import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
 import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
-import { ref, computed, onMounted } from "vue";
+import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
+import { computed } from "vue";
 import { customer, permissions } from "@/State/CustomerState";
 
 const showManagement = computed(

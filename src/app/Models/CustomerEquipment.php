@@ -19,7 +19,6 @@ class CustomerEquipment extends Model
         'deleted_at',
         'created_at',
         'updated_at',
-        'equip_id',
         'EquipmentType'
     ];
 
