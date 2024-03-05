@@ -29,6 +29,7 @@ return [
         'deleted' => ':equip Deleted',
         'restored' => ':equip Restored',
         'force_deleted' => ':equip Destroyed',
+        'site-updated' => 'Site List Updated',
     ],
     'contact' => [
         'created' => ':cont Created',

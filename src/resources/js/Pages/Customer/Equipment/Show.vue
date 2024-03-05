@@ -2,6 +2,25 @@
     <div id="customer-wrapper">
         <Head :title="customer.name" />
         <div class="border-bottom border-secondary-subtle mb-2">
+            <div id="manage-customer-dropdown" class="dropdown float-end">
+                <button
+                    class="btn rounded-circle dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                >
+                    <fa-icon icon="ellipsis-vertical" />
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <span
+                            class="dropdown-item pointer"
+                            @click="disableEquipment"
+                        >
+                            Disable Equipment
+                        </span>
+                    </li>
+                </ul>
+            </div>
             <CustomerDetails />
         </div>
         <div class="row justify-content-center">
@@ -55,13 +74,28 @@ import CustomerEquipmentSitesForm from "@/Forms/Customer/CustomerEquipmentSitesF
 import Modal from "@/Components/_Base/Modal.vue";
 import { customer, siteList } from "@/State/CustomerState";
 import { ref } from "vue";
+import verifyModal from "@/Modules/verifyModal";
+import { router } from "@inertiajs/vue3";
 
-defineProps<{
+const props = defineProps<{
     equipment: customerEquipment;
     equipmentData: customerEquipmentData[];
 }>();
 
 const manageSitesModal = ref<InstanceType<typeof Modal> | null>(null);
+
+const disableEquipment = () => {
+    verifyModal("This Equipment will no longer be accessible").then((res) => {
+        if (res) {
+            router.delete(
+                route("customers.equipment.destroy", [
+                    customer.value.slug,
+                    props.equipment.cust_equip_id,
+                ])
+            );
+        }
+    });
+};
 </script>
 
 <script lang="ts">

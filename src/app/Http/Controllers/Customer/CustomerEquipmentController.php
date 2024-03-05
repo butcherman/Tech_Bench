@@ -8,6 +8,7 @@ use App\Http\Requests\Customer\CustomerEquipmentRequest;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CustomerEquipmentController extends Controller
@@ -15,19 +16,15 @@ class CustomerEquipmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, Customer $customer)
     {
-        //
-        return 'index';
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-        return 'create';
+        return Inertia::render('Customer/Equipment/Index', [
+            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $customer->CustomerSite,
+            'alerts' => fn() => $customer->CustomerAlert,
+            'equipmentList' => fn() => $customer->CustomerEquipment,
+        ]);
     }
 
     /**
@@ -36,6 +33,9 @@ class CustomerEquipmentController extends Controller
     public function store(CustomerEquipmentRequest $request, Customer $customer)
     {
         $equip = $request->createEquipment();
+
+        Log::channel('cust')->info('New Customer Equipment added to ' . $customer->name .
+            ' by ' . $request->user()->username, $equip->toArray());
 
         return back()->with('success', __('cust.equipment.created', ['equip' => $equip->equip_name]));
     }
@@ -61,15 +61,27 @@ class CustomerEquipmentController extends Controller
     {
         $equipment->CustomerSite()->sync($request->site_list);
 
-        return back()->with('success', 'Sites Updated');
+        Log::channel('cust')->info('Customer Sites updated for Customer Equipment by ' .
+            $request->user()->username, $equipment->toArray());
+
+        return back()->with('success', __('cust.equipment.site-updated'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, Customer $customer, CustomerEquipment $equipment)
     {
         //
-        return 'destroy';
+        // return 'destroy';
+        $this->authorize('delete', $equipment);
+
+        $equipment->delete();
+
+        Log::channel('cust')->notice('Customer Equipment Disabled for ' . $customer->name .
+            ' by ' . $request->user()->username, $equipment->toArray());
+
+        return redirect(route('customers.equipment.index', $customer->slug))
+            ->with('warning', __('cust.equipment.deleted', ['equip' => $equipment->equip_name]));
     }
 }

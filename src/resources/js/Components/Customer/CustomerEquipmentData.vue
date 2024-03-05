@@ -53,10 +53,10 @@
                                         data.value
                                     "
                                     :value="data.value"
-                                    class="float-start"
+                                    class="float-md-start"
                                 />
                                 <EditBadge
-                                    class="float-end"
+                                    class="float-md-end"
                                     @click="editFields.push(data.id)"
                                 />
                             </span>
@@ -188,6 +188,15 @@ const saveFormData = (form: equipmentFormData[]) => {
 </script>
 
 <style lang="scss">
+table {
+    tbody {
+        tr {
+            th {
+                width: 40%;
+            }
+        }
+    }
+}
 .mask-text {
     display: none;
 }

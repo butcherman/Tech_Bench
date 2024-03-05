@@ -87,7 +87,7 @@
                 <slot name="footer">
                     <tr v-if="paginate">
                         <td :colspan="columnCount">
-                            <span class="float-start w-auto">
+                            <span class="float-md-start w-auto">
                                 <select v-model="perPage" class="form-select">
                                     <option
                                         v-for="num in perPageArray"
@@ -97,7 +97,9 @@
                                     </option>
                                 </select>
                             </span>
-                            <span class="float-end">
+                            <span
+                                class="float-md-end w-auto d-block d-md-inline text-center"
+                            >
                                 Showing {{ showingStart }}-{{ showingEnd }} of
                                 {{ totalRecords }}
                             </span>

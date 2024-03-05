@@ -76,7 +76,7 @@ Route::middleware('auth.secure')->group(function () {
                         fn(Customer $customer, CustomerEquipment $equipment) =>
                         $equipment->equip_name
                     );
-            })->except(['edit']);
+            })->except(['create', 'edit']);
         Route::put('equipment-data', CustomerEquipmentDataController::class)
             ->name('update-equipment-data');
     });
