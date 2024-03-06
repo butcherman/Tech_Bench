@@ -1,5 +1,13 @@
 <template>
     <Overlay :loading="loading">
+        <div v-if="!equipmentData.length" class="text-center">
+            <p>
+                Looks like we have not finished building the Equipment Profile
+                yet.
+            </p>
+            <p>Please Refresh and try again.</p>
+            <RefreshButton :only="['equipment-data']" />
+        </div>
         <div class="table-responsive">
             <table class="table table-sm">
                 <tbody>
@@ -23,7 +31,8 @@
                                 :id="`field-id-${data.id}`"
                                 type="text"
                                 :value="data.value"
-                                class="form-control"
+                                class="form-control equip-data-input"
+                                :pattern="data.data_field_type.pattern!"
                             />
                             <CustomerEquipmentDataValue v-else :data="data" />
                         </td>
@@ -94,6 +103,7 @@ import EditButton from "../_Base/Buttons/EditButton.vue";
 import EditBadge from "../_Base/Badges/EditBadge.vue";
 import CustomerEquipmentDataValue from "./CustomerEquipmentDataValue.vue";
 import ClipboardCopy from "@/Components/_Base/Badges/ClipboardCopy.vue";
+import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 import Overlay from "../_Base/Loaders/Overlay.vue";
 import { ref } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
@@ -197,9 +207,11 @@ table {
         }
     }
 }
+
 .mask-text {
     display: none;
 }
+
 .mask-field {
     .mask-text {
         display: inline;

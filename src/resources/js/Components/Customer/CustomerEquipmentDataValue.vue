@@ -9,7 +9,7 @@
         </span>
         <span class="mask-value">
             <a
-                v-if="data.data_field_type.is_hyperlink"
+                v-if="data.value && data.data_field_type.is_hyperlink"
                 :href="checkForHyperlink(data.value)"
                 target="_blank"
                 >{{ data.value }}</a

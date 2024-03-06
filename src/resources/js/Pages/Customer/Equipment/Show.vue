@@ -27,7 +27,15 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="text-center">{{ equipment.equip_name }}</h5>
+                        <div class="card-title">
+                            <RefreshButton
+                                :only="['equipment-data']"
+                                class="float-start w-auto"
+                            />
+                            <h5 class="text-center">
+                                {{ equipment.equip_name }}
+                            </h5>
+                        </div>
                         <CustomerEquipmentData
                             :equipment-data="equipmentData"
                         />
@@ -71,6 +79,7 @@ import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import CustomerEquipmentData from "@/Components/Customer/CustomerEquipmentData.vue";
 import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
 import CustomerEquipmentSitesForm from "@/Forms/Customer/CustomerEquipmentSitesForm.vue";
+import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import { customer, siteList } from "@/State/CustomerState";
 import { ref } from "vue";

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentRequest;
+use App\Jobs\Customer\CreateCustomerDataFieldsJob;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class CustomerEquipmentController extends Controller
     public function store(CustomerEquipmentRequest $request, Customer $customer)
     {
         $equip = $request->createEquipment();
+        dispatch(new CreateCustomerDataFieldsJob($equip));
 
         Log::channel('cust')->info('New Customer Equipment added to ' . $customer->name .
             ' by ' . $request->user()->username, $equip->toArray());

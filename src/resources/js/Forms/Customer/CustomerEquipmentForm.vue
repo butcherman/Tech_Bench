@@ -16,17 +16,13 @@
             label="Select Equipment Type"
             :list="equipmentList"
         />
-        <MultiSelectInput
-            v-if="siteList.length > 1"
-            id="site-list"
+        <SelectBoxInput
+            id="equipment-site-list"
             name="site_list"
-            label="Equipment Belongs to Sites:"
-            mode="tags"
-            :list="siteList"
+            label="Select Which Sites have this Equipment"
             text-field="site_name"
             value-field="cust_site_id"
-            searchable
-            allow-select-all
+            :list="siteList"
         />
     </VueForm>
 </template>
@@ -34,7 +30,7 @@
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
-import MultiSelectInput from "../_Base/MultiSelectInput.vue";
+import SelectBoxInput from "../_Base/SelectBoxInput.vue";
 import { array, number, object } from "yup";
 
 defineEmits(["success", "submitting", "has-errors"]);
