@@ -51,7 +51,7 @@ class CustomerEquipmentController extends Controller
             'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
             'customer' => fn() => $customer,
             'equipment' => fn() => $equipment,
-            'siteList' => fn() => $equipment->CustomerSite,
+            'siteList' => fn() => $equipment->CustomerSite->makeVisible('href'),
             'equipment-data' => fn() => $equipment->CustomerEquipmentData,
         ]);
     }

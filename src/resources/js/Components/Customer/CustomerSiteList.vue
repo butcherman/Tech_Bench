@@ -2,10 +2,13 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-                <span class="float-end">
-                    <slot name="add-button"> </slot>
+                <span class="float-start">
+                    <slot name="status" />
                 </span>
-                {{ titleText || "Sites" }}:
+                <span class="float-end">
+                    <slot name="add-button" />
+                </span>
+                <div class="mt-1">{{ titleText || "Sites" }}:</div>
             </div>
             <Table
                 :columns="columns"

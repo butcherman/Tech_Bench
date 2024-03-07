@@ -15,6 +15,11 @@
                 <div class="input-group-text">/ g</div>
             </template>
         </TextInput>
+        <TextInput
+            id="error-msg"
+            name="pattern_error"
+            label="Error Message when Pattern is not Matched"
+        />
         <CheckboxSwitch id="masked" name="masked" label="Field is Masked" />
         <CheckboxSwitch
             id="is-hyperlink"
@@ -53,6 +58,7 @@ const submitText = computed(() =>
 const initValues = {
     name: props.dataFieldType?.name || null,
     pattern: props.dataFieldType?.pattern || null,
+    pattern_error: props.dataFieldType?.pattern_error || null,
     masked: props.dataFieldType?.masked || false,
     is_hyperlink: props.dataFieldType?.is_hyperlink || false,
     allow_copy: props.dataFieldType?.allow_copy || false,
@@ -60,6 +66,14 @@ const initValues = {
 const schema = object({
     name: string().required(),
     pattern: string().nullable(),
+    pattern_error: string().when("pattern", {
+        is: (val: string) => (val && val.length > 0 ? true : false),
+        then: (schema) =>
+            schema.required(
+                "Please enter an error message to tell the user about the needed pattern"
+            ),
+        otherwise: (schema) => schema.nullable(),
+    }),
     masked: boolean().required(),
     is_hyperlink: boolean().required(),
     allow_copy: boolean().required(),

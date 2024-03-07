@@ -15,6 +15,7 @@ type dataTypes = {
     type_id: number;
     name: string;
     pattern: string | null;
+    pattern_error: string | null;
     masked: boolean;
     is_hyperlink: boolean;
     allow_copy: boolean;

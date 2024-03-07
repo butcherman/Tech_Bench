@@ -26,13 +26,9 @@
                                     data.data_field_type.masked && data.value,
                             }"
                         >
-                            <input
+                            <CustomerEquipmentDataInput
                                 v-if="editFields.includes(data.id)"
-                                :id="`field-id-${data.id}`"
-                                type="text"
-                                :value="data.value"
-                                class="form-control equip-data-input"
-                                :pattern="data.data_field_type.pattern!"
+                                :data="data"
                             />
                             <CustomerEquipmentDataValue v-else :data="data" />
                         </td>
@@ -102,6 +98,7 @@
 import EditButton from "../_Base/Buttons/EditButton.vue";
 import EditBadge from "../_Base/Badges/EditBadge.vue";
 import CustomerEquipmentDataValue from "./CustomerEquipmentDataValue.vue";
+import CustomerEquipmentDataInput from "./CustomerEquipmentDataInput.vue";
 import ClipboardCopy from "@/Components/_Base/Badges/ClipboardCopy.vue";
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 import Overlay from "../_Base/Loaders/Overlay.vue";

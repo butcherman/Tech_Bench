@@ -45,31 +45,9 @@
         </div>
         <div v-if="customer.site_count > 1" class="row my-4">
             <div class="col">
-                <CustomerSiteList
-                    title-text="Sites with this Equipment"
-                    empty-text="No Sites attached to this Equipment"
-                >
-                    <template #add-button>
-                        <button
-                            class="btn btn-primary rounded-5 btn-sm"
-                            @click="manageSitesModal?.show"
-                        >
-                            <fa-icon icon="share-nodes" />
-                            Manage Sites
-                        </button>
-                    </template>
-                </CustomerSiteList>
+                <CustomerEquipmentSites :equipment="equipment" />
             </div>
         </div>
-        <Modal ref="manageSitesModal" title="Manage Sites">
-            <CustomerEquipmentSitesForm
-                :equipment="equipment"
-                :customer="customer"
-                :site-list="customer.customer_site"
-                :current-list="siteList"
-                @success="manageSitesModal?.hide"
-            />
-        </Modal>
     </div>
 </template>
 
@@ -77,12 +55,9 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import CustomerEquipmentData from "@/Components/Customer/CustomerEquipmentData.vue";
-import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
-import CustomerEquipmentSitesForm from "@/Forms/Customer/CustomerEquipmentSitesForm.vue";
+import CustomerEquipmentSites from "@/Components/Customer/CustomerEquipmentSites.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
-import Modal from "@/Components/_Base/Modal.vue";
-import { customer, siteList } from "@/State/CustomerState";
-import { ref } from "vue";
+import { customer } from "@/State/CustomerState";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
 
@@ -90,8 +65,6 @@ const props = defineProps<{
     equipment: customerEquipment;
     equipmentData: customerEquipmentData[];
 }>();
-
-const manageSitesModal = ref<InstanceType<typeof Modal> | null>(null);
 
 const disableEquipment = () => {
     verifyModal("This Equipment will no longer be accessible").then((res) => {

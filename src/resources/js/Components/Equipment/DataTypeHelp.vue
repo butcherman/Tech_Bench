@@ -14,18 +14,31 @@
                     .
                 </li>
                 <li class="list-group-item">
-                    <strong>Field is Masked</strong>
+                    <strong>Error Message when Pattern is not Matched:</strong>
+                    Enter a descriptive message to convey to the user what
+                    pattern they should be using for this Data Type.
+                    <br />
+                    <span class="text-danger">
+                        <strong>Important Note:</strong>Even if the pattern does
+                        not match the user will still be able to save the
+                        invalid field. The pattern option is there to let the
+                        user know that the data they are inputting is not in the
+                        proper format.
+                    </span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Field is Masked:</strong>
                     When enabled, the field will not show its contents unless
                     directly interacted with (hover or click show icon). This is
                     helpful for password fields and other sensitive information.
                 </li>
                 <li class="list-group-item">
-                    <strong>Field is a Hyperlink</strong>
+                    <strong>Field is a Hyperlink:</strong>
                     When enabled, the field will be treated as a link to an
                     external website.
                 </li>
                 <li class="list-group-item">
-                    <strong>Add A Copy to Clipboard Button</strong>
+                    <strong>Add A Copy to Clipboard Button:</strong>
                     When enabled, the field will have a
                     <span class="badge bg-warning rounded-pill">
                         <fa-icon icon="copy" />
