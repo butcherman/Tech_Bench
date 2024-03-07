@@ -18,7 +18,7 @@ class EquipmentCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->word(1),
+            'name' => $this->faker->unique()->word(),
         ];
     }
 }

@@ -74,8 +74,6 @@ class CustomerEquipmentController extends Controller
      */
     public function destroy(Request $request, Customer $customer, CustomerEquipment $equipment)
     {
-        //
-        // return 'destroy';
         $this->authorize('delete', $equipment);
 
         $equipment->delete();

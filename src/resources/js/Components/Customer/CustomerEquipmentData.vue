@@ -27,7 +27,10 @@
                             }"
                         >
                             <CustomerEquipmentDataInput
-                                v-if="editFields.includes(data.id)"
+                                v-if="
+                                    editFields.includes(data.id) &&
+                                    permissions.equipment.update
+                                "
                                 :data="data"
                             />
                             <CustomerEquipmentDataValue v-else :data="data" />
@@ -43,6 +46,7 @@
                                     <fa-icon icon="xmark" />
                                 </span>
                                 <span
+                                    v-if="permissions.equipment.update"
                                     class="badge rounded-pill pointer bg-primary float-start"
                                     title="Save"
                                     v-tooltip
@@ -61,6 +65,7 @@
                                     class="float-md-start"
                                 />
                                 <EditBadge
+                                    v-if="permissions.equipment.update"
                                     class="float-md-end"
                                     @click="editFields.push(data.id)"
                                 />
@@ -72,6 +77,7 @@
                     <tr>
                         <td colspan="3">
                             <EditButton
+                                v-if="permissions.equipment.update"
                                 class="float-end"
                                 text="Edit All"
                                 small
@@ -79,7 +85,10 @@
                                 @click="onEditAll"
                             />
                             <button
-                                v-if="editFields.length"
+                                v-if="
+                                    editFields.length &&
+                                    permissions.equipment.update
+                                "
                                 class="btn btn-primary btn-sm rounded-5 float-end"
                                 @click="saveAllFields"
                             >
@@ -105,7 +114,7 @@ import Overlay from "../_Base/Loaders/Overlay.vue";
 import { ref } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
 import { useForm } from "@inertiajs/vue3";
-import { customer } from "@/State/CustomerState";
+import { customer, permissions } from "@/State/CustomerState";
 
 interface equipmentFormData {
     fieldId: number;

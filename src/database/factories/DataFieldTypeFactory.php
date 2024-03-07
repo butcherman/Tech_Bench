@@ -20,6 +20,7 @@ class DataFieldTypeFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'pattern' => null,
+            'pattern_error' => null,
             'masked' => false,
             'is_hyperlink' => false,
             'allow_copy' => false,

@@ -21,7 +21,7 @@ class CustomerEquipmentDataFactory extends Factory
         return [
             'cust_equip_id' => CustomerEquipment::factory(),
             'field_id' => 1,
-            'value' => $this->faker->word(5),
+            'value' => $this->faker->words(5),
         ];
     }
 }

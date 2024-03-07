@@ -23,7 +23,7 @@ class CustomerContactFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'title' => $this->faker->title(),
-            'note' => $this->faker->word(10),
+            'note' => $this->faker->word(),
             'local' => true,
             'decision_maker' => false,
         ];

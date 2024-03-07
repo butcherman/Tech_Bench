@@ -9,6 +9,7 @@
             </template>
             <template #add-button>
                 <button
+                    v-if="permissions.equipment.update"
                     class="btn btn-primary rounded-5 btn-sm"
                     @click="manageSitesModal?.show"
                 >
@@ -17,7 +18,11 @@
                 </button>
             </template>
         </CustomerSiteList>
-        <Modal ref="manageSitesModal" title="Manage Sites">
+        <Modal
+            v-if="permissions.equipment.update"
+            ref="manageSitesModal"
+            title="Manage Sites"
+        >
             <CustomerEquipmentSitesForm
                 :equipment="equipment"
                 :customer="customer"
@@ -35,7 +40,7 @@ import CustomerEquipmentSitesForm from "@/Forms/Customer/CustomerEquipmentSitesF
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import { ref } from "vue";
-import { customer, siteList } from "@/State/CustomerState";
+import { customer, siteList, permissions } from "@/State/CustomerState";
 
 defineProps<{
     equipment: customerEquipment;

@@ -2,7 +2,11 @@
     <div id="customer-wrapper">
         <Head :title="customer.name" />
         <div class="border-bottom border-secondary-subtle mb-2">
-            <div id="manage-customer-dropdown" class="dropdown float-end">
+            <div
+                v-if="permissions.equipment.delete"
+                id="manage-customer-dropdown"
+                class="dropdown float-end"
+            >
                 <button
                     class="btn rounded-circle dropdown-toggle"
                     type="button"
@@ -57,8 +61,8 @@ import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import CustomerEquipmentData from "@/Components/Customer/CustomerEquipmentData.vue";
 import CustomerEquipmentSites from "@/Components/Customer/CustomerEquipmentSites.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
-import { customer } from "@/State/CustomerState";
 import verifyModal from "@/Modules/verifyModal";
+import { customer, permissions } from "@/State/CustomerState";
 import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
