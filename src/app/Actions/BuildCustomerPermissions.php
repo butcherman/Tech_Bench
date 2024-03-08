@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
+use App\Models\CustomerContact;
 use App\Models\User;
 
 class BuildCustomerPermissions
@@ -22,11 +23,11 @@ class BuildCustomerPermissions
                 'update' => $user->can('update', CustomerEquipment::class),
                 'delete' => $user->can('delete', CustomerEquipment::class),
             ],
-            // 'contact' => [
-            //     'create' => $user->can('create', CustomerContact::class),
-            //     'update' => $user->can('update', CustomerContact::class),
-            //     'delete' => $user->can('delete', CustomerContact::class),
-            // ],
+            'contact' => [
+                'create' => $user->can('create', CustomerContact::class),
+                'update' => $user->can('update', CustomerContact::class),
+                'delete' => $user->can('delete', CustomerContact::class),
+            ],
             // 'notes' => [
             //     'create' => $user->can('create', CustomerNote::class),
             //     'update' => $user->can('update', CustomerNote::class),

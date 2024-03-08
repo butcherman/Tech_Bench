@@ -4,63 +4,50 @@ namespace App\Policies;
 
 use App\Models\CustomerContact;
 use App\Models\User;
+use App\Traits\AllowTrait;
 use Illuminate\Auth\Access\Response;
 
 class CustomerContactPolicy
 {
+    use AllowTrait;
+
     /**
-     * Determine whether the user can view any models.
+     *  Determine if the user can create a contact
      */
-    public function viewAny(User $user): bool
+    public function create(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Add Customer Contact');
     }
 
     /**
-     * Determine whether the user can view the model.
+     *  Determine if the user can update a contact
      */
-    public function view(User $user, CustomerContact $customerContact): bool
+    public function update(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Edit Customer Contact');
     }
 
     /**
-     * Determine whether the user can create models.
+     *  Determine if the user can delete a contact
      */
-    public function create(User $user): bool
+    public function delete(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Delete Customer Contact');
     }
 
     /**
-     * Determine whether the user can update the model.
+     *  Determine if the user can restore a deleted contact
      */
-    public function update(User $user, CustomerContact $customerContact): bool
+    public function restore(User $user)
     {
-        //
+        return $this->checkPermission($user, 'Manage Customers');
     }
 
     /**
-     * Determine whether the user can delete the model.
+     *  Determine if the user can permanently delete a contact
      */
-    public function delete(User $user, CustomerContact $customerContact): bool
+    public function forceDelete(User $user)
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, CustomerContact $customerContact): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, CustomerContact $customerContact): bool
-    {
-        //
+        return $this->checkPermission($user, 'Manage Customers');
     }
 }
