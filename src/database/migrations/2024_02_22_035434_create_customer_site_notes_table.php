@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('customer_site_notes', function (Blueprint $table) {
             $table->unsignedBigInteger('note_id');
             $table->unsignedBigInteger('cust_site_id');
-            $table->timestamps();
             $table->foreign('note_id')
                 ->references('note_id')
                 ->on('customer_notes')

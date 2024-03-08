@@ -22,33 +22,25 @@ return new class extends Migration {
      */
     public function migrateCustomerEquipment()
     {
-        $customerEquipment = CustomerEquipment::withTrashed()->get();
+        $customerEquipment = CustomerEquipment::withTrashed()
+            ->get();
 
         foreach ($customerEquipment as $equip) {
-            DB::table('customer_site_equipment')->insert([
-                'cust_site_id' => $equip->cust_id,
-                'cust_equip_id' => $equip->cust_equip_id,
-            ]);
+            $equip->CustomerSite()->attach($equip->cust_id);
 
-            // Verify which customer and site this item is attached to
+            // Verify the equipment is applied to the primary Customer ID
             $cust = Customer::withTrashed()->find($equip->cust_id);
-            if ($cust) {
-
-                if ($cust->parent_id) {
-                    $equip->update([
-                        'cust_id' => $cust->parent_id,
-                    ]);
-                }
+            if ($cust->parent_id) {
+                $equip->update([
+                    'cust_id' => $cust->parent_id,
+                ]);
             }
 
             //  If equipment is shared, add the other sites it is shared with
             if ($equip->shared) {
-                $custList = Customer::where('parent_id', $equip->cust_id)->get();
-                foreach ($custList as $cust) {
-                    DB::table('customer_site_equipment')->insert([
-                        'cust_site_id' => $cust->cust_id,
-                        'cust_equip_id' => $equip->cust_equip_id,
-                    ]);
+                $siteList = CustomerSite::where('cust_id', $equip->cust_id)->get();
+                foreach ($siteList as $site) {
+                    $equip->CustomerSite()->attach($site->cust_site_id);
                 }
             }
         }
@@ -59,7 +51,6 @@ return new class extends Migration {
      */
     public function cleanup()
     {
-        // Remove Shared Column from all other customer tables
         Schema::table('customer_equipment', function (Blueprint $table) {
             $table->dropColumn('shared');
         });

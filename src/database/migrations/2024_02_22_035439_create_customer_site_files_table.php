@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('customer_site_files', function (Blueprint $table) {
             $table->unsignedBigInteger('cust_file_id');
             $table->unsignedBigInteger('cust_site_id');
-            $table->timestamps();
             $table->foreign('cust_file_id')
                 ->references('cust_file_id')
                 ->on('customer_files')
