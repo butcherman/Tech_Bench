@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,5 +39,13 @@ class UserRole extends Model
     public function UserRolePermission()
     {
         return $this->hasMany(UserRolePermission::class, 'role_id', 'role_id');
+    }
+
+    /**
+     * Appended Accessors
+     */
+    public function getHrefAttribute()
+    {
+        return route('admin.user-roles.show', $this->role_id);
     }
 }

@@ -19,11 +19,11 @@ class BuildUserRoles
 
         switch ($userRole) {
             case 1:
-                return $roleList;
+                return $roleList->append('href');
             case 2:
-                return $roleList->where('role_id', '>=', 2);
+                return $roleList->where('role_id', '>=', 2)->append('href');
             default:
-                return $roleList->where('role_id', '>=', 2);
+                return $roleList->where('role_id', '>=', 2)->append('href');
         }
     }
 }
