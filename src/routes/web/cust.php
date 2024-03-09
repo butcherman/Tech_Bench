@@ -2,6 +2,7 @@
 
 use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerAlertsController;
+use App\Http\Controllers\Customer\CustomerContactController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
@@ -79,5 +80,10 @@ Route::middleware('auth.secure')->group(function () {
             })->except(['create', 'edit']);
         Route::put('equipment-data', CustomerEquipmentDataController::class)
             ->name('update-equipment-data');
+
+        /***********************************************************************
+         *                     Customer Contacts Routes                        *
+         ***********************************************************************/
+        Route::resource('contacts', CustomerContactController::class);
     });
 });

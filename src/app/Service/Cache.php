@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use App\Models\PhoneNumberType;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Cache as FacadesCache;
 use PragmaRX\Version\Package\Version;
@@ -99,6 +100,9 @@ class Cache
         });
     }
 
+    /**
+     * List of Equipment Categories
+     */
     public static function equipmentCategories()
     {
         return FacadesCache::get('equipmentCategories', function () {
@@ -106,10 +110,23 @@ class Cache
         });
     }
 
+    /**
+     * List of Equipment Types
+     */
     public static function equipmentTypes()
     {
         return FacadesCache::get('equipmentTypes', function () {
             return EquipmentType::all();
+        });
+    }
+
+    /**
+     * List of phone number types
+     */
+    public static function phoneTypes()
+    {
+        return FacadesCache::get('phoneTypes', function () {
+            return PhoneNumberType::all();
         });
     }
 }

@@ -22,7 +22,7 @@
         <span
             v-if="help"
             title="What is this?"
-            class="pointer pl-2 text-info float-end"
+            class="pointer pl-2 text-info float-end ms-3"
             @click.prevent="showHelp"
             v-tooltip
         >

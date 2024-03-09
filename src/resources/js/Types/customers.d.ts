@@ -54,6 +54,41 @@ type customerEquipmentData = {
 };
 
 /*******************************************************************************
+ *                          Customer Contacts
+ *******************************************************************************/
+type customerContact = {
+    cont_id: number;
+    cust_id: number;
+    local: boolean;
+    decision_maker: boolean;
+    name: string;
+    email: string | null;
+    title: string | null;
+    note: string | null;
+    // customer_contact_phone: contactPhone[];
+    // customer_contact_site: contactSite[];
+};
+
+// type contactPhone = {
+//     cont_id: number;
+//     extension: string | null;
+//     formatted: string;
+//     id: number;
+//     phone_number: number;
+//     phone_number_type: phoneNumber;
+// };
+
+type phoneType = {
+    description: string;
+    icon_class: string;
+};
+
+// type contactSite = {
+//     cont_id: number;
+//     cust_site_id: number;
+// };
+
+/*******************************************************************************
  *                          Customer Misc
  *******************************************************************************/
 type customerPermissions = {
