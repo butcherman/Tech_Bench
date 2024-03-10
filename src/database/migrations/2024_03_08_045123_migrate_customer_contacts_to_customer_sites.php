@@ -13,6 +13,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        Schema::table('customer_contacts', function (Blueprint $table) {
+            $table->boolean('local')->after('note')->default(false);
+            $table->boolean('decision_maker')->after('local')->default(false);
+        });
+
         $this->migrateCustomerContacts();
         $this->cleanup();
     }

@@ -63,4 +63,9 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerEquipment::class, 'cust_id', 'cust_id');
     }
+
+    public function CustomerContact()
+    {
+        return $this->hasMany(CustomerContact::class, 'cust_id', 'cust_id');
+    }
 }

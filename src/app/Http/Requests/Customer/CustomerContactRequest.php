@@ -54,12 +54,28 @@ class CustomerContactRequest extends FormRequest
     }
 
     /**
+     * Modify an existing contact
+     */
+    public function updateContact()
+    {
+        $this->contact->update($this->except(['phones', 'site_list']));
+        $this->contact->CustomerSite()->sync($this->site_list);
+        $this->updatePhoneNumbers($this->contact);
+
+        return $this->contact;
+    }
+
+    /**
      * Create or update all phone numbers
      */
     protected function updatePhoneNumbers(CustomerContact $contact)
     {
-        $phoneService = new PhoneNumberService;
         $phoneIdList = [];
+        $phoneService = new PhoneNumberService;
+        $existingNumbers = CustomerContactPhone::where('cont_id', $contact->cont_id)
+            ->get()
+            ->pluck('id')
+            ->toArray();
 
         if ($this->phones) {
             foreach ($this->phones as $num) {
@@ -68,7 +84,8 @@ class CustomerContactRequest extends FormRequest
                         'id' => $num['id'] ?? null,
                         'cont_id' => $contact->cont_id,
                     ], [
-                        'phone_type_id' => $phoneService->getPhoneNumberType($num['type'])->phone_type_id,
+                        'phone_type_id' => $phoneService->getPhoneNumberType($num['type'])
+                            ->phone_type_id,
                         'phone_number' => $phoneService->cleanPhoneString($num['number']),
                         'extension' => $num['ext'],
                     ]);
@@ -78,6 +95,10 @@ class CustomerContactRequest extends FormRequest
             }
         }
 
-        // $contact->CustomerContactPhone()->sync($phoneIdList);
+        // Remove any of the numbers that were deleted
+        $removedNumbers = array_diff($existingNumbers, $phoneIdList);
+        foreach ($removedNumbers as $num) {
+            CustomerContactPhone::where('id', $num)->delete();
+        }
     }
 }

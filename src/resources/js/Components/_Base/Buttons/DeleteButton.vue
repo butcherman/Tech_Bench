@@ -6,7 +6,7 @@
         @click="onBtnClick"
     >
         <fa-icon icon="fa-trash-can" class="me-1" />
-        <slot>Delete</slot>
+        <slot>{{ text || "Delete" }}</slot>
     </button>
 </template>
 
@@ -17,6 +17,7 @@ const props = defineProps<{
     pill?: boolean;
     small?: boolean;
     href?: string;
+    text?: string;
 }>();
 
 const onBtnClick = () => {

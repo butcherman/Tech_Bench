@@ -84,6 +84,7 @@ Route::middleware('auth.secure')->group(function () {
         /***********************************************************************
          *                     Customer Contacts Routes                        *
          ***********************************************************************/
-        Route::resource('contacts', CustomerContactController::class);
+        Route::resource('contacts', CustomerContactController::class)
+            ->except(['index', 'edit', 'show']);
     });
 });

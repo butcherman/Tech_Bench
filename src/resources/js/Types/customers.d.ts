@@ -27,7 +27,7 @@ type customerPageProps = {
     siteList: customerSite[];
     alerts: customerAlert[];
     equipmentList: customerEquipment[];
-    // contacts: customerContact[];
+    contacts: customerContact[];
     // notes: customerNote[];
     // files: customerFile[];
     // phoneTypes: string[];
@@ -65,28 +65,23 @@ type customerContact = {
     email: string | null;
     title: string | null;
     note: string | null;
-    // customer_contact_phone: contactPhone[];
-    // customer_contact_site: contactSite[];
+    customer_contact_phone: contactPhone[];
+    customer_site: customerSite[];
 };
 
-// type contactPhone = {
-//     cont_id: number;
-//     extension: string | null;
-//     formatted: string;
-//     id: number;
-//     phone_number: number;
-//     phone_number_type: phoneNumber;
-// };
+type contactPhone = {
+    cont_id: number;
+    extension: string | null;
+    formatted: string;
+    id: number;
+    phone_number: number;
+    phone_number_type: phoneType;
+};
 
 type phoneType = {
     description: string;
     icon_class: string;
 };
-
-// type contactSite = {
-//     cont_id: number;
-//     cust_site_id: number;
-// };
 
 /*******************************************************************************
  *                          Customer Misc

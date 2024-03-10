@@ -12,24 +12,6 @@ use Illuminate\Support\Facades\Log;
 class CustomerContactController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-        return 'index';
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-        return 'create';
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(CustomerContactRequest $request, Customer $customer)
@@ -48,38 +30,40 @@ class CustomerContactController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-        return 'show';
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-        return 'edit';
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerContactRequest $request, Customer $customer, CustomerContact $contact)
     {
-        //
-        return 'update';
+        $updatedContact = $request->updateContact();
+
+        Log::channel('cust')->info(
+            'Customer Contact updated for ' .
+            $customer->name . ' by ' . $request->user()->username,
+            $updatedContact->toArray()
+        );
+
+        return back()->with('success', __('cust.contact.updated', [
+            'cont' => $updatedContact->name
+        ]));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, Customer $customer, CustomerContact $contact)
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $contact);
+
+        $contact->delete();
+
+        Log::channel('cust')->notice(
+            'Customer Contact deleted for ' .
+            $customer->name . ' by ' . $request->user()->username,
+            $contact->toArray()
+        );
+
+        return back()->with('warning', __('cust.contact.deleted', [
+            'cont' => $contact->name
+        ]));
     }
 }

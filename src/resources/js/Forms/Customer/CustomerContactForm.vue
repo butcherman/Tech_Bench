@@ -97,16 +97,41 @@ const submitText = computed(() =>
     props.contact ? "Update Contact" : "Create Contact"
 );
 
+/**
+ * Reformat the phone number list to match the forms Field Array
+ */
+const buildPhoneInitialValues = () => {
+    let phoneList: {
+        type: string;
+        number: number;
+        ext: string | null;
+        id: number;
+    }[] = [];
+
+    props.contact?.customer_contact_phone.forEach((phone) => {
+        phoneList.push({
+            type: phone.phone_number_type.description,
+            number: phone.phone_number,
+            ext: phone.extension,
+            id: phone.id,
+        });
+    });
+
+    return phoneList;
+};
+
 const initValues = {
     name: props.contact?.name || null,
     title: props.contact?.title || null,
     email: props.contact?.email || null,
-    site_list: props.contact ? [] : [],
+    site_list: props.contact
+        ? props.contact.customer_site.map((site) => site.cust_site_id)
+        : [],
     local: props.contact?.local || false,
     decision_maker: props.contact?.decision_maker || false,
     note: props.contact?.note || null,
     phones: props.contact
-        ? []
+        ? buildPhoneInitialValues()
         : [
               {
                   type: "Mobile",
