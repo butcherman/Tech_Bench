@@ -31,6 +31,7 @@ class HelpPageTest extends TestCase
         'check-id',
         'notFound',
         'equipment-list',
+        'phone-types',
 
         // TODO - Remove Testing Bypass Routes
         'customers',
