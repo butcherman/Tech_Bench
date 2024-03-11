@@ -13,12 +13,8 @@
             <div id="equipment" class="col-md-7 my-2">
                 <CustomerEquipment />
             </div>
-            <div class="col-md-5 my-2">
-                <div class="card">
-                    <div class="card-body">
-                        <h1>Contacts</h1>
-                    </div>
-                </div>
+            <div id="contacts" class="col-md-5 my-2">
+                <CustomerContact />
             </div>
         </div>
         <div class="row my-2">
@@ -49,6 +45,7 @@ import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
 import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
+import CustomerContact from "@/Components/Customer/CustomerContact.vue";
 import { ref, computed, onMounted } from "vue";
 import { customer, siteList, permissions } from "@/State/CustomerState";
 

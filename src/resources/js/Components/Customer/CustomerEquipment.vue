@@ -9,9 +9,9 @@
                 Equipment:
             </div>
             <Overlay :loading="loading.equipment">
-                <h5 v-if="!equipmentList.length" class="text-center">
+                <h6 v-if="!equipmentList.length" class="text-center">
                     No Equipment
-                </h5>
+                </h6>
                 <ul class="list-group">
                     <li
                         v-for="equip in equipmentList"
