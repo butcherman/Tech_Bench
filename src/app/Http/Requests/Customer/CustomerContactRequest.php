@@ -31,7 +31,7 @@ class CustomerContactRequest extends FormRequest
             'name' => 'required|string',
             'title' => 'nullable|string',
             'email' => 'nullable|email',
-            'sites' => 'nullable',
+            'site_list' => 'nullable',
             'local' => 'required|boolean',
             'decision_maker' => 'required|boolean',
             'note' => 'nullable|string',
