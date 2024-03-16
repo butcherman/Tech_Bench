@@ -8,6 +8,7 @@ use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerEquipmentDataController;
 use App\Http\Controllers\Customer\CustomerIdController;
+use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
@@ -86,5 +87,17 @@ Route::middleware('auth.secure')->group(function () {
          ***********************************************************************/
         Route::resource('contacts', CustomerContactController::class)
             ->except(['index', 'edit', 'show']);
+
+        /***********************************************************************
+         *                     Customer Notes Routes                           *
+         ***********************************************************************/
+        Route::resource('notes', CustomerNoteController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Customer Notes', 'customers.show')
+                    ->create('New Note');
+            });
+        Route::get('notes/create/{site}', [CustomerNoteController::class, 'create'])
+            ->name('site-note.create')
+            ->breadcrumb('New Note', 'customers.sites.show');
     });
 });

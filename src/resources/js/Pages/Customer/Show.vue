@@ -33,17 +33,13 @@
                 <CustomerContact />
             </div>
         </div>
-        <div class="row my-2">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h1>Notes</h1>
-                    </div>
-                </div>
+        <div id="notes" class="row my-2">
+            <div class="col my-2">
+                <CustomerNote />
             </div>
         </div>
         <div class="row my-2">
-            <div class="col">
+            <div class="col my-2">
                 <div class="card">
                     <div class="card-body">
                         <h1>Files</h1>
@@ -63,6 +59,7 @@ import QuickJump from "@/Components/_Base/QuickJump.vue";
 import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
 import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
 import CustomerContact from "@/Components/Customer/CustomerContact.vue";
+import CustomerNote from "@/Components/Customer/CustomerNote.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import { computed } from "vue";
 import { customer, permissions } from "@/State/CustomerState";

@@ -67,6 +67,7 @@ class CustomerController extends Controller
                 'alerts' => fn() => $customer->CustomerAlert,
                 'equipmentList' => fn() => $customer->CustomerEquipment,
                 'contacts' => fn() => $customer->CustomerContact,
+                'notes' => fn() => $customer->CustomerNote,
             ]);
         }
 
@@ -78,6 +79,7 @@ class CustomerController extends Controller
             'alerts' => fn() => $customer->CustomerAlert,
             'equipmentList' => fn() => $customer->CustomerEquipment,
             'contacts' => fn() => $customer->CustomerContact,
+            'notes' => fn() => $customer->CustomerNote,
         ]);
     }
 

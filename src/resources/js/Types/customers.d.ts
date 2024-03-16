@@ -28,7 +28,7 @@ type customerPageProps = {
     alerts: customerAlert[];
     equipmentList: customerEquipment[];
     contacts: customerContact[];
-    // notes: customerNote[];
+    notes: customerNote[];
     // files: customerFile[];
     // phoneTypes: string[];
     // equipTypes: { [key: string]: equipment[] };
@@ -81,6 +81,13 @@ type contactPhone = {
 type phoneType = {
     description: string;
     icon_class: string;
+};
+
+/*******************************************************************************
+ *                          Customer Notes
+ *******************************************************************************/
+type customerNote = {
+    note_id: number;
 };
 
 /*******************************************************************************
