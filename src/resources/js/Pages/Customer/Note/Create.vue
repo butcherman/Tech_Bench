@@ -13,6 +13,7 @@
                             :customer="customer"
                             :site-list="siteList"
                             :equip-list="equipmentList"
+                            :current-site="currentSite"
                         />
                     </div>
                 </div>
@@ -34,8 +35,6 @@ import {
     permissions,
     equipmentList,
 } from "@/State/CustomerState";
-
-const props = defineProps<{}>();
 </script>
 
 <script lang="ts">

@@ -21,4 +21,14 @@ class CustomerNote extends Model
         'deleted_at' => 'datetime:M d, Y',
         'urgent' => 'boolean',
     ];
+
+    public function CustomerSite()
+    {
+        return $this->belongsToMany(
+            CustomerSite::class,
+            'customer_site_notes',
+            'note_id',
+            'cust_site_id'
+        );
+    }
 }

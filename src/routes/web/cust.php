@@ -99,5 +99,7 @@ Route::middleware('auth.secure')->group(function () {
         Route::get('notes/create/{site}', [CustomerNoteController::class, 'create'])
             ->name('site-note.create')
             ->breadcrumb('New Note', 'customers.sites.show');
+        Route::post('notes/create/{site}', [CustomerNoteController::class, 'store'])
+            ->name('site-note.store');
     });
 });

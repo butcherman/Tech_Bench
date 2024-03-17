@@ -88,6 +88,11 @@ type phoneType = {
  *******************************************************************************/
 type customerNote = {
     note_id: number;
+    subject: string;
+    urgent: boolean;
+    site_list: customerSite[];
+    cust_equip_id: number;
+    details: string;
 };
 
 /*******************************************************************************

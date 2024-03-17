@@ -79,83 +79,9 @@ return new class extends Migration {
 
 
 
-    /**
-     * Migrate Customer Contacts to new schema
-     */
-    // public function migrateCustomerContacts()
-    // {
-    //     $migrationData = CustomerContact::withTrashed()->get();
-
-    //     foreach ($migrationData as $data) {
-
-    //         CustomerContactSite::create([
-    //             'cust_site_id' => $data->cust_id,
-    //             'cont_id' => $data->cont_id,
-    //         ]);
-
-    //         // Verify which customer and site this item is attached to
-    //         $cust = Customer::withTrashed()->find($data->cust_id);
-    //         if ($cust) {
-
-    //             if ($cust->parent_id) {
-    //                 $data->update([
-    //                     'cust_id' => $cust->parent_id,
-    //                 ]);
-    //             }
-    //         }
-
-    //         //  If equipment is shared, add the other sites it is shared with
-    //         if ($data->shared) {
-    //             $custList = Customer::where('parent_id', $data->cust_id)->get();
-    //             foreach ($custList as $cust) {
-    //                 CustomerContactSite::create([
-    //                     'cust_site_id' => $cust->cust_id,
-    //                     'cont_id' => $data->cont_id,
-    //                 ]);
-    //             }
-    //         }
-    //     }
-    // }
 
     /**
-     * Migrate Customer Notes to new schema
-     */
-    // public function migrateCustomerNotes()
-    // {
-    //     $migrationData = CustomerNote::withTrashed()->get();
-
-    //     foreach ($migrationData as $data) {
-    //         CustomerNoteSite::create([
-    //             'cust_site_id' => $data->cust_id,
-    //             'note_id' => $data->note_id,
-    //         ]);
-
-    //         // Verify which customer and site this item is attached to
-    //         $cust = Customer::withTrashed()->find($data->cust_id);
-    //         if ($cust) {
-
-    //             if ($cust->parent_id) {
-    //                 $data->update([
-    //                     'cust_id' => $cust->parent_id,
-    //                 ]);
-    //             }
-    //         }
-
-    //         //  If equipment is shared, add the other sites it is shared with
-    //         if ($data->shared) {
-    //             $custList = Customer::where('parent_id', $data->cust_id)->get();
-    //             foreach ($custList as $cust) {
-    //                 CustomerNoteSite::create([
-    //                     'cust_site_id' => $cust->cust_id,
-    //                     'note_id' => $data->note_id,
-    //                 ]);
-    //             }
-    //         }
-    //     }
-    // }
-
-    /**
-     * Migrate Customer Notes to new schema
+     * Migrate Customer Files to new schema
      */
     // public function migrateCustomerFiles()
     // {
