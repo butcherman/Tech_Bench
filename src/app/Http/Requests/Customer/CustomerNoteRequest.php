@@ -41,7 +41,10 @@ class CustomerNoteRequest extends FormRequest
     {
         $this->addAttributes();
         $newNote = CustomerNote::create($this->except(['note_type', 'site_list']));
-        $newNote->CustomerSite()->sync($this->site_list);
+
+        if ($this->note_type === 'site') {
+            $newNote->CustomerSite()->sync($this->site_list);
+        }
 
         return $newNote;
     }

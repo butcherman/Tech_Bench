@@ -26,7 +26,7 @@
                     <div class="modal-body">
                         <slot name="default" />
                     </div>
-                    <div class="modal-footer">
+                    <div v-if="!hideFooter" class="modal-footer">
                         <slot name="footer" />
                     </div>
                 </div>
@@ -48,6 +48,7 @@ interface TB_Modal extends Modal {
 const props = defineProps<{
     title?: string;
     size?: "sm" | "lg" | "xl";
+    hideFooter?: boolean;
     noCloseOnClick?: boolean;
 }>();
 

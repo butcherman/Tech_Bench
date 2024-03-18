@@ -15,12 +15,35 @@ class CustomerNote extends Model
 
     protected $guarded = ['note_id', 'updated_at', 'created_at'];
 
+    protected $appends = ['author', 'updated_author'];
+
+    protected $with = ['EquipmentType'];
+
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
         'urgent' => 'boolean',
     ];
+
+    public function getAuthorAttribute()
+    {
+        return User::withTrashed()->find($this->created_by)->full_name;
+    }
+
+    public function getUpdatedAuthorAttribute()
+    {
+        if ($this->updated_by) {
+            return User::withTrashed()->find($this->updated_by)->full_name;
+        }
+    }
+
+    // public function getEquipmentNameAttribute()
+    // {
+    //     if ($this->cust_equip_id) {
+    //         return EquipmentType::where('equip_id', $this->cust_equip_id)->first()->name;
+    //     }
+    // }
 
     public function CustomerSite()
     {
@@ -30,5 +53,10 @@ class CustomerNote extends Model
             'note_id',
             'cust_site_id'
         );
+    }
+
+    public function EquipmentType()
+    {
+        return $this->hasOne(CustomerEquipment::class, 'cust_equip_id', 'cust_equip_id');
     }
 }

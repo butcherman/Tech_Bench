@@ -93,8 +93,11 @@ type customerNote = {
     site_list: customerSite[];
     cust_equip_id: number;
     details: string;
+    author: string;
+    updated_author: string;
     updated_at: string;
     created_at: string;
+    equipment_type: customerEquipment;
 };
 
 /*******************************************************************************

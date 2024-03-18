@@ -23,6 +23,7 @@
             >
                 <div
                     class="card text-bg-light px-2 py-1 pointer customer-note-minimized"
+                    @click="peakNote(note)"
                 >
                     <div class="card-title text-center text-md-start">
                         <span
@@ -89,12 +90,23 @@
                 </div>
             </nav>
         </div>
+        <Modal
+            ref="customerNoteModal"
+            title="Note Details"
+            size="xl"
+            hide-footer
+            @hidden="activeNote = null"
+        >
+            <CustomerNoteDetails v-if="activeNote" :note="activeNote" />
+        </Modal>
     </div>
 </template>
 
 <script setup lang="ts">
 import AddButton from "../_Base/Buttons/AddButton.vue";
 import Pagination from "../_Base/Pagination.vue";
+import Modal from "../_Base/Modal.vue";
+import CustomerNoteDetails from "./CustomerNoteDetails.vue";
 import { ref, computed } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
 import {
@@ -103,6 +115,13 @@ import {
     permissions,
     currentSite,
 } from "@/State/CustomerState";
+
+const customerNoteModal = ref<InstanceType<typeof Modal> | null>(null);
+const activeNote = ref<customerNote | null>(null);
+const peakNote = (note: customerNote) => {
+    activeNote.value = note;
+    customerNoteModal.value?.show();
+};
 
 /**
  * Determine which route the add button takes based on if there is a customer
