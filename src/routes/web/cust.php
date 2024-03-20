@@ -94,7 +94,9 @@ Route::middleware('auth.secure')->group(function () {
         Route::resource('notes', CustomerNoteController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Customer Notes', 'customers.show')
-                    ->create('New Note');
+                    ->create('New Note')
+                    ->show('Note Details')
+                    ->edit('Edit Note');
             });
         Route::get('notes/create/{site}', [CustomerNoteController::class, 'create'])
             ->name('site-note.create')

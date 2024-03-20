@@ -22,7 +22,6 @@
             :list="formTypes"
             class="text-center"
             inline
-            :disabled="note ? true : false"
             @change="updateNoteType"
         />
         <SelectBoxInput
@@ -57,7 +56,6 @@ import SelectInput from "../_Base/SelectInput.vue";
 import Editor from "../_Base/Editor.vue";
 import { computed, ref } from "vue";
 import { object, string, boolean, array } from "yup";
-// import { currentSite } from "@/State/CustomerState";
 
 const props = defineProps<{
     customer: customer;
@@ -77,7 +75,10 @@ const getNoteType = (): "general" | "site" | "equipment" => {
         return "equipment";
     }
 
-    if ((props.note && props.note.site_list.length > 0) || props.currentSite) {
+    if (
+        (props.note && props.note.customer_site.length > 0) ||
+        props.currentSite
+    ) {
         return "site";
     }
 
@@ -112,7 +113,11 @@ const initValues = {
     subject: props.note?.subject,
     note_type: noteType.value,
     urgent: props.note?.urgent || false,
-    site_list: props.note?.site_list || [props.currentSite?.cust_site_id] || [],
+    site_list:
+        props.note?.customer_site.map((site) => site.cust_site_id) || [
+            props.currentSite?.cust_site_id,
+        ] ||
+        [],
     cust_equip_id: props.note?.cust_equip_id || null,
     details: props.note?.details,
 };

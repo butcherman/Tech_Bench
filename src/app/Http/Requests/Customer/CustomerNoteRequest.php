@@ -50,6 +50,19 @@ class CustomerNoteRequest extends FormRequest
     }
 
     /**
+     * Update an existing note
+     */
+    public function updateNote()
+    {
+        $this->addAttributes();
+        $this->note->update($this->except(['note_type', 'site_list']));
+
+        $this->note->CustomerSite()->sync($this->site_list);
+
+        return $this->note;
+    }
+
+    /**
      * Add additional attributes needed for the note
      */
     public function addAttributes()
@@ -68,6 +81,11 @@ class CustomerNoteRequest extends FormRequest
         // If this is not an equipment note, remove equip_id
         if ($this->note_type !== 'equipment') {
             $this->cust_equip_id = null;
+        }
+
+        // If this is not a site note, remove any attached sites
+        if ($this->note_type !== 'site') {
+            $this->site_list = [];
         }
     }
 }

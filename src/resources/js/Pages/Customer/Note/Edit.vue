@@ -13,7 +13,8 @@
                             :customer="customer"
                             :site-list="siteList"
                             :equip-list="equipmentList"
-                            :current-site="currentSite"
+                            :current-site="null"
+                            :note="note"
                         />
                     </div>
                 </div>
@@ -27,12 +28,18 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
 import CustomerNoteForm from "@/Forms/Customer/CustomerNoteForm.vue";
+import { ref, reactive, onMounted } from "vue";
 import {
     customer,
     siteList,
-    currentSite,
+    // currentSite,
+    permissions,
     equipmentList,
 } from "@/State/CustomerState";
+
+defineProps<{
+    note: customerNote;
+}>();
 </script>
 
 <script lang="ts">

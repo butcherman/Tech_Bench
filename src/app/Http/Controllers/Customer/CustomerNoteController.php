@@ -17,10 +17,13 @@ class CustomerNoteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, Customer $customer)
     {
-        //
-        return 'index';
+        return Inertia::render('Customer/Note/Index', [
+            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn() => $customer,
+            'notes' => fn() => $customer->CustomerNote,
+        ]);
     }
 
     /**
@@ -62,36 +65,60 @@ class CustomerNoteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, Customer $customer, CustomerNote $note)
     {
-        //
-        return 'show';
+        return Inertia::render('Customer/Note/Show', [
+            'permissions' => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $note->CustomerSite->makeVisible('href'),
+            'note' => fn() => $note,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, Customer $customer, CustomerNote $note)
     {
-        //
-        return 'edit';
+        $this->authorize('update', $note);
+
+        return Inertia::render('Customer/Note/Edit', [
+            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
+            'equipmentList' => fn() => $customer->load('CustomerEquipment')->CustomerEquipment,
+            'note' => fn() => $note->load('CustomerSite'),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerNoteRequest $request, Customer $customer, CustomerNote $note)
     {
-        //
-        return 'update';
+        $updatedNote = $request->updateNote();
+
+        Log::channel('cust')->info('Customer Note for ' . $customer->name .
+            ' updated by ' . $request->user()->username, $updatedNote->toArray());
+
+        return redirect(route('customers.notes.show', [$customer->slug, $updatedNote->note_id]))
+            ->with('success', __('cust.note.updated'));
+        ;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, Customer $customer, CustomerNote $note)
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $note);
+
+        $note->delete();
+
+        Log::channel('cust')->notice('Customer Note for ' . $customer->name .
+            ' deleted by ' . $request->user()->username, $note->toArray());
+
+        return redirect(route('customers.notes.index', $customer->slug))
+            ->with('warning', __('cust.note.deleted'));
     }
 }

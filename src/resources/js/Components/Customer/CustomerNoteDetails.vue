@@ -53,6 +53,10 @@
                 {{ note.updated_author }}
             </div>
         </div>
+        <div v-if="!isExpanded" class="text-center tiny-text mt-2">
+            To update this note, click
+            <fa-icon icon="square-arrow-up-right" class="text-info" />
+        </div>
     </div>
 </template>
 
@@ -64,3 +68,9 @@ defineProps<{
     isExpanded?: boolean;
 }>();
 </script>
+
+<style scoped lang="scss">
+.tiny-text {
+    font-size: small;
+}
+</style>

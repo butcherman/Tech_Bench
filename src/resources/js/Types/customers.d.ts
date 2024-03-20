@@ -98,6 +98,7 @@ type customerNote = {
     updated_at: string;
     created_at: string;
     equipment_type: customerEquipment;
+    customer_site: customerSite[];
 };
 
 /*******************************************************************************

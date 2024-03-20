@@ -38,13 +38,6 @@ class CustomerNote extends Model
         }
     }
 
-    // public function getEquipmentNameAttribute()
-    // {
-    //     if ($this->cust_equip_id) {
-    //         return EquipmentType::where('equip_id', $this->cust_equip_id)->first()->name;
-    //     }
-    // }
-
     public function CustomerSite()
     {
         return $this->belongsToMany(
