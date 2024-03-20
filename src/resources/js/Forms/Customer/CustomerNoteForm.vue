@@ -77,7 +77,7 @@ const getNoteType = (): "general" | "site" | "equipment" => {
 
     if (
         (props.note && props.note.customer_site.length > 0) ||
-        props.currentSite
+        (props.currentSite && props.siteList.length > 1)
     ) {
         return "site";
     }

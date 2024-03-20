@@ -18,18 +18,22 @@
                         :key="equip.cust_equip_id"
                         class="list-group-item"
                     >
-                        <Link
-                            as="button"
-                            :href="
-                                $route('customers.equipment.show', [
-                                    customer.slug,
-                                    equip.cust_equip_id,
-                                ])
-                            "
-                            class="btn w-100 btn-info"
-                        >
-                            {{ equip.equip_name }}
-                        </Link>
+                        <div class="card">
+                            <div class="card-body p-0 m-0">
+                                <Link
+                                    as="button"
+                                    :href="
+                                        $route('customers.equipment.show', [
+                                            customer.slug,
+                                            equip.cust_equip_id,
+                                        ])
+                                    "
+                                    class="btn w-100 btn-info"
+                                >
+                                    {{ equip.equip_name }}
+                                </Link>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </Overlay>
