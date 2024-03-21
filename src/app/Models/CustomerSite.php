@@ -67,4 +67,35 @@ class CustomerSite extends Model
             'cust_equip_id'
         );
     }
+
+    public function SiteNote()
+    {
+        return $this->belongsToMany(
+            CustomerNote::class,
+            'customer_site_notes',
+            'cust_site_id',
+            'note_id'
+        );
+    }
+
+    public function EquipmentNote()
+    {
+        return CustomerNote::whereIn('cust_equip_id', $this->SiteEquipment->pluck('cust_equip_id'))
+            ->get();
+    }
+
+    public function GeneralNote()
+    {
+        return CustomerNote::where('cust_id', $this->Customer->cust_id)
+            ->whereNull('cust_equip_id')
+            ->doesntHave('CustomerSite')
+            ->get();
+    }
+
+    public function getNotes()
+    {
+        return $this->SiteNote
+            ->concat($this->EquipmentNote())
+            ->concat($this->GeneralNote());
+    }
 }
