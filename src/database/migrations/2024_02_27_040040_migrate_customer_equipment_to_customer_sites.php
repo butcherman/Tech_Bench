@@ -38,10 +38,10 @@ return new class extends Migration {
 
             //  If equipment is shared, add the other sites it is shared with
             if ($equip->shared) {
-                $siteList = CustomerSite::where('cust_id', $equip->cust_id)->get();
-                foreach ($siteList as $site) {
-                    $equip->CustomerSite()->attach($site->cust_site_id);
-                }
+                $siteList = CustomerSite::where('cust_id', $equip->cust_id)
+                    ->get()
+                    ->pluck('cust_site_id');
+                $equip->CustomerSite()->sync($siteList);
             }
         }
     }

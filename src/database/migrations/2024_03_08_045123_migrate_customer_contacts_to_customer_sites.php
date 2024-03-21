@@ -43,10 +43,8 @@ return new class extends Migration {
             // If Contact is shared, att the other sites it is shared with
             if ($contact->shared) {
                 $siteList = CustomerSite::where('cust_id', $contact->cust_id)
-                    ->get();
-                foreach ($siteList as $site) {
-                    $contact->CustomerSite()->attach($site->cust_site_id);
-                }
+                    ->get()->pluck('cust_site_id')->toArray();
+                $contact->CustomerSite()->sync($siteList);
             }
         }
     }

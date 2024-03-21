@@ -49,10 +49,8 @@ return new class extends Migration {
             // If Note is shared, add teh other sites it is shared with
             if ($note->shared) {
                 $siteList = CustomerSite::where('cust_id', $note->cust_id)
-                    ->get();
-                foreach ($siteList as $site) {
-                    $note->CustomerSite()->attach($site->cust_site_id);
-                }
+                    ->get()->pluck('cust_site_id')->toArray();
+                $note->CustomerSite()->sync($siteList);
             }
         }
     }
