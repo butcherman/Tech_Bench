@@ -14,6 +14,7 @@
                 :cust-id="customer.cust_id"
                 :site-list="siteList"
                 :phone-types="phoneStore.getPhoneTypesString()"
+                @submitting="toggleLoading('contacts')"
                 @success="hideModal"
             />
         </Modal>
@@ -25,7 +26,7 @@ import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import Modal from "../_Base/Modal.vue";
 import CustomerContactForm from "@/Forms/Customer/CustomerContactForm.vue";
 import { ref } from "vue";
-import { customer, siteList } from "@/State/CustomerState";
+import { customer, siteList, toggleLoading } from "@/State/CustomerState";
 import { usePhoneTypesStore } from "@/Store/PhoneTypesStore";
 
 const newContactModal = ref<InstanceType<typeof Modal> | null>(null);
@@ -41,5 +42,6 @@ const showModal = () => {
 const hideModal = () => {
     isShown.value = false;
     newContactModal.value?.hide();
+    toggleLoading("contacts");
 };
 </script>

@@ -6,9 +6,14 @@
                     v-if="permissions.equipment.create"
                     class="float-end"
                 />
+                <RefreshButton
+                    :only="['equipmentList']"
+                    @loading-start="toggleLoading('equipment')"
+                    @loading-complete="toggleLoading('equipment')"
+                />
                 Equipment:
             </div>
-            <Overlay :loading="loading.equipment">
+            <Overlay :loading="loading.equipment" class="h-100">
                 <h6 v-if="!equipmentList.length" class="text-center">
                     No Equipment
                 </h6>
@@ -43,9 +48,11 @@
 
 <script setup lang="ts">
 import Overlay from "../_Base/Loaders/Overlay.vue";
+import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 import CustomerEquipmentCreate from "./CustomerEquipmentCreate.vue";
 import {
     loading,
+    toggleLoading,
     equipmentList,
     customer,
     permissions,

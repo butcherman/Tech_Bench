@@ -2,33 +2,43 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
+                <RefreshButton
+                    :only="['contacts']"
+                    @loading-start="toggleLoading('contacts')"
+                    @loading-complete="toggleLoading('contacts')"
+                />
                 Contacts:
                 <CustomerContactCreate
                     v-if="permissions.contact.create"
                     class="float-end"
                 />
             </div>
-            <div v-if="!contacts.length">
-                <h6 class="text-center">No Contacts</h6>
-            </div>
-            <div
-                v-for="cont in contacts"
-                :key="cont.cont_id"
-                class="card m-1 pointer"
-                @click="showContact(cont)"
-            >
-                <div class="card-body p-2">
-                    <div class="row m-0 p-0">
-                        <div class="col-1">
-                            <fa-icon icon="user-tie" />
-                        </div>
-                        <div class="col">
-                            {{ cont.name }}
-                            <span v-if="cont.title">({{ cont.title }})</span>
+            <Overlay :loading="loading.contacts" class="h-100">
+                <div v-if="!contacts.length">
+                    <h6 class="text-center">No Contacts</h6>
+                </div>
+                <div
+                    v-for="cont in contacts"
+                    :key="cont.cont_id"
+                    @click="showContact(cont)"
+                >
+                    <div class="card m-1 pointer">
+                        <div class="card-body p-2">
+                            <div class="row m-0 p-0">
+                                <div class="col-1">
+                                    <fa-icon icon="user-tie" />
+                                </div>
+                                <div class="col">
+                                    {{ cont.name }}
+                                    <span v-if="cont.title"
+                                        >({{ cont.title }})</span
+                                    >
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </Overlay>
         </div>
         <CustomerContactModal
             v-if="activeContact"
@@ -53,7 +63,15 @@ import verifyModal from "@/Modules/verifyModal";
 import CustomerContactCreate from "./CustomerContactCreate.vue";
 import CustomerContactModal from "./CustomerContactModal.vue";
 import CustomerContactEdit from "./CustomerContactEdit.vue";
-import { permissions, contacts, customer } from "@/State/CustomerState";
+import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
+import Overlay from "../_Base/Loaders/Overlay.vue";
+import {
+    permissions,
+    contacts,
+    customer,
+    loading,
+    toggleLoading,
+} from "@/State/CustomerState";
 import { ref, nextTick } from "vue";
 import { router } from "@inertiajs/vue3";
 
@@ -83,6 +101,7 @@ const deleteContact = (cont: customerContact) => {
         (res) => {
             if (res) {
                 contactDetailsModal.value?.closeModal();
+                toggleLoading("contacts");
                 router.delete(
                     route("customers.contacts.destroy", [
                         customer.value.slug,
@@ -90,6 +109,7 @@ const deleteContact = (cont: customerContact) => {
                     ]),
                     {
                         only: ["flash", "contacts"],
+                        onFinish: () => toggleLoading("contacts"),
                     }
                 );
             }

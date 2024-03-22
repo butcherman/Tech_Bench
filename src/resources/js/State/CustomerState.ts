@@ -15,9 +15,14 @@ const permissions = computed<customerPermissions>(() => page.props.permissions);
 const loading = reactive({
     site: false,
     equipment: false,
+    contacts: false,
+    notes: false,
+    files: false,
 });
 
-const toggleLoading = (key: "site" | "equipment") => {
+const toggleLoading = (
+    key: "site" | "equipment" | "contacts" | "notes" | "files"
+) => {
     loading[key] = !loading[key];
 };
 

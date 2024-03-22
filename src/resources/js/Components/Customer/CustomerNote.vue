@@ -2,6 +2,11 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
+                <RefreshButton
+                    :only="['notes']"
+                    @loading-start="toggleLoading('notes')"
+                    @loading-complete="toggleLoading('notes')"
+                />
                 Notes:
                 <Link :href="addRoute">
                     <AddButton
@@ -13,82 +18,84 @@
                     />
                 </Link>
             </div>
-            <div v-if="!notes.length">
-                <h6 class="text-center">No Notes</h6>
-            </div>
-            <div
-                v-for="note in paginatedNotes"
-                :key="note.note_id"
-                class="my-1"
-            >
+            <Overlay :loading="loading.notes">
+                <div v-if="!notes.length">
+                    <h6 class="text-center">No Notes</h6>
+                </div>
                 <div
-                    class="card text-bg-light px-2 py-1 pointer customer-note-minimized"
-                    @click="peakNote(note)"
+                    v-for="note in paginatedNotes"
+                    :key="note.note_id"
+                    class="my-1"
                 >
-                    <div class="card-title text-center text-md-start">
-                        <span
-                            v-if="note.urgent"
-                            class="float-start float-md-none"
-                            title="This note was marked with high importance"
-                            v-tooltip
-                        >
-                            <fa-icon
-                                icon="exclamation-circle"
-                                class="me-1 text-danger"
-                            />
-                        </span>
-                        {{ note.subject }}
-                        <div class="float-md-end">
-                            <span class="d-none d-md-inline">
-                                Last Updated -
+                    <div
+                        class="card text-bg-light px-2 py-1 pointer customer-note-minimized"
+                        @click="peakNote(note)"
+                    >
+                        <div class="card-title text-center text-md-start">
+                            <span
+                                v-if="note.urgent"
+                                class="float-start float-md-none"
+                                title="This note was marked with high importance"
+                                v-tooltip
+                            >
+                                <fa-icon
+                                    icon="exclamation-circle"
+                                    class="me-1 text-danger"
+                                />
                             </span>
-                            {{ note.updated_at }}
+                            {{ note.subject }}
+                            <div class="float-md-end">
+                                <span class="d-none d-md-inline">
+                                    Last Updated -
+                                </span>
+                                {{ note.updated_at }}
+                            </div>
                         </div>
+                        <div
+                            v-html="note.details"
+                            class="note-details-minimized text-muted"
+                        />
+                    </div>
+                </div>
+                <nav class="row justify-content-end my-2">
+                    <div class="col-md-4" v-if="totalPages > 1">
+                        <Pagination
+                            :current-page="currentPage"
+                            :total-pages="totalPages"
+                            @go-to-page="goToPage"
+                            @next-page="nextPage"
+                            @prev-page="prevPage"
+                        />
                     </div>
                     <div
-                        v-html="note.details"
-                        class="note-details-minimized text-muted"
-                    />
-                </div>
-            </div>
-            <nav class="row justify-content-end my-2">
-                <div class="col-md-4" v-if="totalPages > 1">
-                    <Pagination
-                        :current-page="currentPage"
-                        :total-pages="totalPages"
-                        @go-to-page="goToPage"
-                        @next-page="nextPage"
-                        @prev-page="prevPage"
-                    />
-                </div>
-                <div
-                    class="col-md-4 text-center border py-2"
-                    v-if="notes.length > 1"
-                >
-                    <h6>Sort By</h6>
-                    <button
-                        class="btn btn-light btn-sm"
-                        :class="{ active: sortBy === 'urgent' }"
-                        @click="sortNotes('urgent')"
+                        class="col-md-4 text-center border py-2"
+                        v-if="notes.length > 1"
                     >
-                        Urgent
-                    </button>
-                    <button
-                        class="btn btn-light btn-sm"
-                        :class="{ active: sortBy === 'subject' }"
-                        @click="sortNotes('subject')"
-                    >
-                        Subject
-                    </button>
-                    <button
-                        class="btn btn-light btn-sm"
-                        :class="{ active: sortBy === 'updated_at' }"
-                        @click="sortNotes('updated_at')"
-                    >
-                        Last Updated
-                    </button>
-                </div>
-            </nav>
+                        <h6>Sort By</h6>
+                        <button
+                            class="btn btn-light btn-sm"
+                            :class="{ active: sortBy === 'urgent' }"
+                            @click="sortNotes('urgent')"
+                        >
+                            Urgent
+                        </button>
+                        <button
+                            class="btn btn-light btn-sm"
+                            :class="{ active: sortBy === 'subject' }"
+                            @click="sortNotes('subject')"
+                        >
+                            Subject
+                        </button>
+                        <button
+                            class="btn btn-light btn-sm"
+                            :class="{ active: sortBy === 'updated_at' }"
+                            @click="sortNotes('updated_at')"
+                        >
+                            Last Updated
+                        </button>
+                    </div>
+                </nav>
+            </Overlay>
         </div>
         <Modal
             ref="customerNoteModal"
@@ -106,6 +113,8 @@
 import AddButton from "../_Base/Buttons/AddButton.vue";
 import Pagination from "../_Base/Pagination.vue";
 import Modal from "../_Base/Modal.vue";
+import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
+import Overlay from "../_Base/Loaders/Overlay.vue";
 import CustomerNoteDetails from "./CustomerNoteDetails.vue";
 import { ref, computed } from "vue";
 import { sortDataObject } from "@/Modules/SortDataObject.module";
@@ -114,6 +123,8 @@ import {
     notes,
     permissions,
     currentSite,
+    loading,
+    toggleLoading,
 } from "@/State/CustomerState";
 
 const customerNoteModal = ref<InstanceType<typeof Modal> | null>(null);
