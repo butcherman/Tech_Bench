@@ -49,6 +49,11 @@ class CustomerEquipment extends Model
         );
     }
 
+    public function CustomerNote()
+    {
+        return $this->hasMany(CustomerNote::class, 'cust_equip_id', 'cust_equip_id');
+    }
+
     /**
      * Site specific information for the selected piece of equipment
      */

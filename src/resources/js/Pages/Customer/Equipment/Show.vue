@@ -52,6 +52,11 @@
                 <CustomerEquipmentSites :equipment="equipment" />
             </div>
         </div>
+        <div class="row my-4">
+            <div class="col">
+                <CustomerNote />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -60,6 +65,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import CustomerEquipmentData from "@/Components/Customer/CustomerEquipmentData.vue";
 import CustomerEquipmentSites from "@/Components/Customer/CustomerEquipmentSites.vue";
+import CustomerNote from "@/Components/Customer/CustomerNote.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import verifyModal from "@/Modules/verifyModal";
 import { customer, permissions } from "@/State/CustomerState";
