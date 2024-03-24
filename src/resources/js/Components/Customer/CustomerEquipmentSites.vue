@@ -10,7 +10,7 @@
             <template #add-button>
                 <button
                     v-if="permissions.equipment.update"
-                    class="btn btn-primary rounded-5 btn-sm"
+                    class="btn btn-info rounded-5 btn-sm"
                     @click="manageSitesModal?.show"
                 >
                     <fa-icon icon="share-nodes" />
