@@ -13,6 +13,7 @@ use App\Http\Controllers\Customer\CustomerNoteEquipmentController;
 use App\Http\Controllers\Customer\CustomerNoteSiteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
+use App\Http\Controllers\Customer\DownloadNoteController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
@@ -95,6 +96,8 @@ Route::middleware('auth.secure')->group(function () {
         /***********************************************************************
          *                     Customer Notes Routes                           *
          ***********************************************************************/
+        Route::get('{note}/download', DownloadNoteController::class)
+            ->name('notes.download');
         Route::resource('notes', CustomerNoteController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Customer Notes', 'customers.show')

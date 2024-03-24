@@ -10,7 +10,15 @@
                 <fa-icon icon="exclamation-circle" class="text-danger" />
             </span>
             {{ note.subject }}
-            <a href="#">
+            <a
+                :href="
+                    $route('customers.notes.download', [
+                        customer.cust_id,
+                        note.note_id,
+                    ])
+                "
+                target="_blank"
+            >
                 <span
                     class="badge bg-info float-end pointer mx-1"
                     title="Download Note"
