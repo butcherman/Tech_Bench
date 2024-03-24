@@ -36,8 +36,6 @@ return new class extends Migration {
         $customerNotes = CustomerNote::withTrashed()->get();
 
         foreach ($customerNotes as $note) {
-            $note->CustomerSite()->attach($note->cust_id);
-
             // Verify the note is applied to the primary Customer ID
             $cust = Customer::withTrashed()->find($note->cust_id);
             if ($cust->parent_id) {
