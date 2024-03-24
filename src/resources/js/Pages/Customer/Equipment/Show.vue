@@ -54,7 +54,7 @@
         </div>
         <div class="row my-4">
             <div class="col">
-                <CustomerNote />
+                <CustomerNote :equipment="equipment" />
             </div>
         </div>
     </div>

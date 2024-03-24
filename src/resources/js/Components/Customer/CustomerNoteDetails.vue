@@ -19,15 +19,7 @@
                     <fa-icon icon="fa-download" />
                 </span>
             </a>
-            <Link
-                v-if="!isExpanded"
-                :href="
-                    $route('customers.notes.show', [
-                        customer.slug,
-                        note.note_id,
-                    ])
-                "
-            >
+            <Link v-if="!isExpanded" :href="getShowRoute()">
                 <span
                     class="badge bg-info float-end mx-1"
                     title="Open Full Note"
@@ -61,12 +53,36 @@
 </template>
 
 <script setup lang="ts">
-import { customer } from "@/State/CustomerState";
+import { customer, currentSite } from "@/State/CustomerState";
 
-defineProps<{
+const props = defineProps<{
     note: customerNote;
+    equipment?: customerEquipment;
     isExpanded?: boolean;
 }>();
+
+const getShowRoute = () => {
+    if (props.equipment) {
+        return route("customers.equipment.notes.show", [
+            customer.value.slug,
+            props.equipment.cust_equip_id,
+            props.note.note_id,
+        ]);
+    }
+
+    if (currentSite.value) {
+        return route("customers.site.notes.show", [
+            customer.value.slug,
+            currentSite.value.site_slug,
+            props.note.note_id,
+        ]);
+    }
+
+    return route("customers.notes.show", [
+        customer.value.slug,
+        props.note.note_id,
+    ]);
+};
 </script>
 
 <style scoped lang="scss">

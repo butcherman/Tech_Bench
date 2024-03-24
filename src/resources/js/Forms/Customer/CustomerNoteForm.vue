@@ -62,6 +62,7 @@ const props = defineProps<{
     siteList: customerSite[];
     equipList: any[];
     currentSite: customerSite | null;
+    equipment?: customerEquipment;
     note?: customerNote;
 }>();
 
@@ -71,7 +72,7 @@ const customerNoteForm = ref<InstanceType<typeof VueForm> | null>(null);
  * Determine the note type based on prop parameters
  */
 const getNoteType = (): "general" | "site" | "equipment" => {
-    if (props.note && props.note.cust_equip_id) {
+    if ((props.note && props.note.cust_equip_id) || props.equipment) {
         return "equipment";
     }
 
@@ -87,13 +88,27 @@ const getNoteType = (): "general" | "site" | "equipment" => {
 const noteType = ref(getNoteType());
 
 const submitRoute = computed(() => {
-    if (props.currentSite) {
+    if (props.equipment) {
         return props.note
-            ? route("customers.notes.update", [
+            ? route("customers.equipment.notes.update", [
                   props.customer.slug,
+                  props.equipment.cust_equip_id,
                   props.note.note_id,
               ])
-            : route("customers.site-note.store", [
+            : route("customers.equipment.notes.store", [
+                  props.customer.slug,
+                  props.equipment.cust_equip_id,
+              ]);
+    }
+
+    if (props.currentSite) {
+        return props.note
+            ? route("customers.site.notes.update", [
+                  props.customer.slug,
+                  props.currentSite.site_slug,
+                  props.note.note_id,
+              ])
+            : route("customers.site.notes.store", [
                   props.customer.slug,
                   props.currentSite.site_slug,
               ]);
@@ -118,7 +133,7 @@ const initValues = {
             props.currentSite?.cust_site_id,
         ] ||
         [],
-    cust_equip_id: props.note?.cust_equip_id || null,
+    cust_equip_id: props.note?.cust_equip_id || props.equipment?.cust_equip_id,
     details: props.note?.details,
 };
 const schema = object({

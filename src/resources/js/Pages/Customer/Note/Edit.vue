@@ -13,8 +13,9 @@
                             :customer="customer"
                             :site-list="siteList"
                             :equip-list="equipmentList"
-                            :current-site="null"
+                            :current-site="currentSite"
                             :note="note"
+                            :equipment="equipment"
                         />
                     </div>
                 </div>
@@ -32,13 +33,14 @@ import { ref, reactive, onMounted } from "vue";
 import {
     customer,
     siteList,
-    // currentSite,
+    currentSite,
     permissions,
     equipmentList,
 } from "@/State/CustomerState";
 
 defineProps<{
     note: customerNote;
+    equipment?: customerEquipment;
 }>();
 </script>
 

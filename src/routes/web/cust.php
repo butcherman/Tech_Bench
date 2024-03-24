@@ -9,6 +9,8 @@ use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerEquipmentDataController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerNoteController;
+use App\Http\Controllers\Customer\CustomerNoteEquipmentController;
+use App\Http\Controllers\Customer\CustomerNoteSiteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
@@ -50,7 +52,7 @@ Route::middleware('auth.secure')->group(function () {
     /***************************************************************************
      *                          Customer Specific Routes                       *
      ***************************************************************************/
-    Route::prefix('{customer}')->name('customers.')->group(function () {
+    Route::prefix('customers/{customer}')->name('customers.')->group(function () {
         Route::get('deleted-items', CustomerDeletedItemsController::class)
             ->name('deleted-items')
             ->breadcrumb('Deleted Items', 'customers.show');
@@ -71,6 +73,8 @@ Route::middleware('auth.secure')->group(function () {
         /***********************************************************************
          *                     Customer Equipment Routes                       *
          ***********************************************************************/
+        Route::get('equipment/{equipment}/note/create', [CustomerNoteController::class, 'createEquipmentNote'])
+            ->name('equipment.note.create');
         Route::resource('equipment', CustomerEquipmentController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
@@ -98,10 +102,21 @@ Route::middleware('auth.secure')->group(function () {
                     ->show('Note Details')
                     ->edit('Edit Note');
             });
-        Route::get('notes/create/{site}', [CustomerNoteController::class, 'create'])
-            ->name('site-note.create')
-            ->breadcrumb('New Note', 'customers.sites.show');
-        Route::post('notes/create/{site}', [CustomerNoteController::class, 'store'])
-            ->name('site-note.store');
+        Route::prefix('site/{site}')->name('site.')->group(function () {
+            Route::resource('notes', CustomerNoteSiteController::class)
+                ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                    $breadcrumbs->create('New Note', 'customers.sites.show')
+                        ->show('Note Details', 'customers.sites.show')
+                        ->edit('Edit Note');
+                })->except(['index']);
+        });
+        Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
+            Route::resource('notes', CustomerNoteEquipmentController::class)
+                ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                    $breadcrumbs->create('New Note', 'customers.equipment.show')
+                        ->show('Note Details', 'customers.equipment.show')
+                        ->edit('Edit Note');
+                })->except(['index']);
+        });
     });
 });

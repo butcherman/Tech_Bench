@@ -104,7 +104,11 @@
             hide-footer
             @hidden="activeNote = null"
         >
-            <CustomerNoteDetails v-if="activeNote" :note="activeNote" />
+            <CustomerNoteDetails
+                v-if="activeNote"
+                :note="activeNote"
+                :equipment="equipment"
+            />
         </Modal>
     </div>
 </template>
@@ -127,6 +131,10 @@ import {
     toggleLoading,
 } from "@/State/CustomerState";
 
+const props = defineProps<{
+    equipment?: customerEquipment;
+}>();
+
 const customerNoteModal = ref<InstanceType<typeof Modal> | null>(null);
 const activeNote = ref<customerNote | null>(null);
 const peakNote = (note: customerNote) => {
@@ -138,14 +146,23 @@ const peakNote = (note: customerNote) => {
  * Determine which route the add button takes based on if there is a customer
  * site currently selected
  */
-const addRoute = computed(() =>
-    currentSite.value
-        ? route("customers.site-note.create", [
-              customer.value.slug,
-              currentSite.value.site_slug,
-          ])
-        : route("customers.notes.create", customer.value.slug)
-);
+const addRoute = computed(() => {
+    if (props.equipment) {
+        return route("customers.equipment.notes.create", [
+            customer.value.slug,
+            props.equipment.cust_equip_id,
+        ]);
+    }
+
+    if (currentSite.value) {
+        return route("customers.site.notes.create", [
+            customer.value.slug,
+            currentSite.value.site_slug,
+        ]);
+    }
+
+    return route("customers.notes.create", customer.value.slug);
+});
 
 /**
  * Sort Notes
@@ -194,10 +211,6 @@ const nextPage = (): void => {
 
 const goToPage = (numPage: number): void => {
     currentPage.value = numPage;
-};
-
-const resetPagination = () => {
-    currentPage.value = 1;
 };
 </script>
 

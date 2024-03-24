@@ -14,6 +14,7 @@
                             :site-list="siteList"
                             :equip-list="equipmentList"
                             :current-site="currentSite"
+                            :equipment="equipment"
                         />
                     </div>
                 </div>
@@ -33,6 +34,10 @@ import {
     currentSite,
     equipmentList,
 } from "@/State/CustomerState";
+
+defineProps<{
+    equipment?: customerEquipment;
+}>();
 </script>
 
 <script lang="ts">
