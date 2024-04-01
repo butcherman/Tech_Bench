@@ -25,7 +25,7 @@ type appProps = {
     version: string;
     copyright: string;
     current_route: string;
-    // fileData: fileData;
+    fileData: fileData;
 };
 
 type navbar = {
@@ -56,4 +56,10 @@ type basicPermissions = {
     create: boolean;
     update: boolean;
     delete: boolean;
+};
+
+type fileData = {
+    chunkSize: number;
+    maxSize: number;
+    token: string;
 };

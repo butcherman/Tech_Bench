@@ -57,6 +57,11 @@ const contacts = computed<customerContact[]>(() => page.props.contacts);
 const notes = computed<customerNote[]>(() => page.props.notes);
 
 /*******************************************************************************
+ * Customer Files
+ *******************************************************************************/
+const files = computed<customerFile[]>(() => page.props.files);
+
+/*******************************************************************************
  * Exported Data to Vue Components
  *******************************************************************************/
 export {
@@ -71,4 +76,5 @@ export {
     equipmentList,
     contacts,
     notes,
+    files,
 };

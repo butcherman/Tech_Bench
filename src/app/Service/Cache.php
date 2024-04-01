@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\CustomerFileType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\PhoneNumberType;
@@ -127,6 +128,16 @@ class Cache
     {
         return FacadesCache::get('phoneTypes', function () {
             return PhoneNumberType::all();
+        });
+    }
+
+    /**
+     * List of file types that can be assigned to Customer Files
+     */
+    public static function fileTypes()
+    {
+        return FacadesCache::get('fileTypes', function () {
+            return CustomerFileType::all();
         });
     }
 }

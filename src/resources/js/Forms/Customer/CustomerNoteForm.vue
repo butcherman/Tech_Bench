@@ -60,7 +60,7 @@ import { object, string, boolean, array } from "yup";
 const props = defineProps<{
     customer: customer;
     siteList: customerSite[];
-    equipList: any[];
+    equipList: customerEquipment[];
     currentSite: customerSite | null;
     equipment?: customerEquipment;
     note?: customerNote;

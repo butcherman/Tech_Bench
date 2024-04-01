@@ -22,14 +22,14 @@ class CustomerFile extends Model
         'deleted_at',
     ];
 
-    protected $appends = [
-        'uploaded_by',
-        'file_type',
-        'equip_name',
-        'created_stamp',
-    ];
+    // protected $appends = [
+    //     'uploaded_by',
+    //     'file_type',
+    //     'equip_name',
+    //     'created_stamp',
+    // ];
 
-    protected $with = ['FileUpload'];
+    // protected $with = ['FileUpload'];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',

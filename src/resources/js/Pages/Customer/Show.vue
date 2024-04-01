@@ -38,13 +38,9 @@
                 <CustomerNote />
             </div>
         </div>
-        <div class="row my-2">
+        <div id="files" class="row my-2">
             <div class="col my-2">
-                <div class="card">
-                    <div class="card-body">
-                        <h1>Files</h1>
-                    </div>
-                </div>
+                <CustomerFile />
             </div>
         </div>
     </div>
@@ -60,6 +56,7 @@ import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
 import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
 import CustomerContact from "@/Components/Customer/CustomerContact.vue";
 import CustomerNote from "@/Components/Customer/CustomerNote.vue";
+import CustomerFile from "@/Components/Customer/CustomerFile.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import { computed } from "vue";
 import { customer, permissions } from "@/State/CustomerState";

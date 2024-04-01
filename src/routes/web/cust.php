@@ -7,6 +7,7 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerEquipmentDataController;
+use App\Http\Controllers\Customer\CustomerFileController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerNoteEquipmentController;
@@ -120,6 +121,14 @@ Route::middleware('auth.secure')->group(function () {
                         ->show('Note Details', 'customers.equipment.show')
                         ->edit('Edit Note');
                 })->except(['index']);
+        });
+
+        /***********************************************************************
+         *                     Customer Files Routes                           *
+         ***********************************************************************/
+        Route::prefix('files')->name('files.')->group(function () {
+            Route::post('/', [CustomerFileController::class, 'store'])
+                ->name('store');
         });
     });
 });

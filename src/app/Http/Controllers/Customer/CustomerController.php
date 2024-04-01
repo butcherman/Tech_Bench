@@ -68,6 +68,7 @@ class CustomerController extends Controller
                 'equipmentList' => fn() => $customer->CustomerEquipment,
                 'contacts' => fn() => $customer->CustomerContact,
                 'notes' => fn() => $customer->CustomerNote,
+                'files' => fn() => $customer->CustomerFile,
             ]);
         }
 
@@ -80,6 +81,7 @@ class CustomerController extends Controller
             'equipmentList' => fn() => $customer->CustomerEquipment,
             'contacts' => fn() => $customer->CustomerContact,
             'notes' => fn() => $customer->CustomerNote,
+            'files' => fn() => $customer->CustomerFile,
         ]);
     }
 

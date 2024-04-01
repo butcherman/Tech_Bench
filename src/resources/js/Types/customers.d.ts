@@ -29,10 +29,7 @@ type customerPageProps = {
     equipmentList: customerEquipment[];
     contacts: customerContact[];
     notes: customerNote[];
-    // files: customerFile[];
-    // phoneTypes: string[];
-    // equipTypes: { [key: string]: equipment[] };
-    // fileTypes: fileTypes[];
+    files: customerFile[];
 } & pageProps;
 
 /*******************************************************************************
@@ -99,6 +96,20 @@ type customerNote = {
     created_at: string;
     equipment_type: customerEquipment;
     customer_site: customerSite[];
+};
+
+/*******************************************************************************
+ *                          Customer Files
+ *******************************************************************************/
+type customerFile = {
+    cust_file_id: number;
+    file_id: number;
+    customer_site: customerSite[];
+};
+
+type customerFileType = {
+    file_type_id: number;
+    description: string;
 };
 
 /*******************************************************************************

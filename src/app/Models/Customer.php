@@ -73,4 +73,9 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id');
     }
+
+    public function CustomerFile()
+    {
+        return $this->hasMany(CustomerFile::class, 'cust_id', 'cust_id');
+    }
 }
