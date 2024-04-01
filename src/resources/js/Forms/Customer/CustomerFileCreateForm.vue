@@ -8,7 +8,7 @@
         file-required
         @file-added="checkNameField"
         @success="$emit('success')"
-        :max-files="5"
+        @submitting="$emit('submitting')"
     >
         <TextInput
             id="name"

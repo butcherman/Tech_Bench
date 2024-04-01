@@ -8,7 +8,7 @@
                     @loading-complete="toggleLoading('files')"
                 />
                 Files:
-                <CustomerFileCreate class="float-end" />
+                <CustomerFileCreate class="float-end" :equipment="equipment" />
             </div>
             <Overlay :loading="loading.files">
                 <div v-if="!files.length">
@@ -26,8 +26,9 @@
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 import Overlay from "../_Base/Loaders/Overlay.vue";
 import CustomerFileCreate from "@/Components/Customer/CustomerFileCreate.vue";
-import { ref, reactive, onMounted } from "vue";
-import { customer, loading, toggleLoading, files } from "@/State/CustomerState";
+import { loading, toggleLoading, files } from "@/State/CustomerState";
 
-// const props = defineProps<{}>();
+defineProps<{
+    equipment?: customerEquipment;
+}>();
 </script>

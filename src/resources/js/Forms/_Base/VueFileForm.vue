@@ -1,38 +1,52 @@
 <template>
-    <form class="vld-parent" @submit.prevent="onSubmit" novalidate>
-        <Loading :active="isSubmitting && !hideOverlay" :is-full-page="false">
-            <TrinityRingsLoader />
-        </Loading>
-        <div v-if="errorAlerts.length">
-            <div
-                v-for="alert in errorAlerts"
-                class="alert alert-danger text-center"
+    <div>
+        <form class="vld-parent" @submit.prevent="onSubmit" novalidate>
+            <Loading
+                :active="isSubmitting && !hideOverlay"
+                :is-full-page="false"
             >
-                {{ alert }}
+                <TrinityRingsLoader />
+            </Loading>
+            <div v-if="errorAlerts.length">
+                <div
+                    v-for="alert in errorAlerts"
+                    class="alert alert-danger text-center"
+                >
+                    {{ alert }}
+                </div>
             </div>
-        </div>
-        <slot />
-        <DropzoneInput
-            ref="dropzoneInput"
-            paramName="file"
-            :upload-url="submitRoute"
-            :max-files="maxFiles || 1"
-            :required="fileRequired"
-            @file-added="onFileAdded"
-            @file-removed="onFileRemoved"
-            @success="$emit('success')"
-        />
-        <slot name="after-file" />
-        <slot name="submit">
-            <SubmitButton
-                v-if="!hideSubmit"
-                :submitted="isSubmitting"
-                class="mt-auto"
-                :text="submitText"
-                :btn-variant="submitVariant"
+            <slot />
+            <DropzoneInput
+                ref="dropzoneInput"
+                paramName="file"
+                :upload-url="submitRoute"
+                :max-files="maxFiles || 1"
+                :required="fileRequired"
+                @file-added="onFileAdded"
+                @file-removed="onFileRemoved"
+                @success="$emit('success')"
             />
+            <slot name="after-file" />
+            <slot name="submit">
+                <SubmitButton
+                    v-if="!hideSubmit"
+                    :submitted="isSubmitting"
+                    class="mt-auto"
+                    :text="submitText"
+                    :btn-variant="submitVariant"
+                />
+            </slot>
+        </form>
+        <slot name="cancel">
+            <button
+                type="button"
+                class="btn btn-danger my-2 w-100"
+                @click="onCancel"
+            >
+                Cancel Upload
+            </button>
         </slot>
-    </form>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -46,6 +60,7 @@ import { useForm } from "vee-validate";
 //  Overlay Styling
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 import { DropzoneFile } from "dropzone";
+import okModal from "@/Modules/okModal";
 
 interface formData {
     [key: string]: string;
@@ -54,6 +69,7 @@ interface formData {
 const emit = defineEmits([
     "submitting",
     "success",
+    "canceled",
     "has-errors",
     "values",
     "file-added",
@@ -81,6 +97,12 @@ const onFileAdded = (file: DropzoneFile) => {
 };
 const onFileRemoved = (file: DropzoneFile) => {
     emit("file-removed", file);
+};
+const onCancel = () => {
+    dropzoneInput.value?.cancelUpload();
+    okModal("Upload Canceled");
+    isSubmitting.value = false;
+    emit("canceled");
 };
 
 /*******************************************************************************

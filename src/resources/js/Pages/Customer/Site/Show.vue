@@ -22,13 +22,9 @@
                 <CustomerNote />
             </div>
         </div>
-        <div class="row my-2">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h1>Files</h1>
-                    </div>
-                </div>
+        <div id="files" class="row my-2">
+            <div class="col my-2">
+                <CustomerFile />
             </div>
         </div>
     </div>
@@ -43,8 +39,9 @@ import QuickJump from "@/Components/_Base/QuickJump.vue";
 import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
 import CustomerContact from "@/Components/Customer/CustomerContact.vue";
 import CustomerNote from "@/Components/Customer/CustomerNote.vue";
-import { ref, computed, onMounted } from "vue";
-import { customer, siteList, permissions } from "@/State/CustomerState";
+import CustomerFile from "@/Components/Customer/CustomerFile.vue";
+import { computed } from "vue";
+import { customer, permissions } from "@/State/CustomerState";
 
 const showManagement = computed(
     () =>

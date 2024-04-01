@@ -1,13 +1,22 @@
 <template>
     <AddButton small pill @click="onShowModal">
         Add File
-        <Modal ref="newFileModal" title="New Customer File">
-            <CustomerFileForm
+        <Modal
+            ref="newFileModal"
+            size="xl"
+            title="New Customer File"
+            @hide-prevented="onPreventClosing"
+            @hidden="isShown = false"
+        >
+            <CustomerFileCreateForm
                 v-if="isShown"
                 :customer="customer"
                 :site-list="siteList"
                 :equip-list="equipmentList"
                 :file-types="fileStore.getFileTypes()"
+                :current-site="currentSite"
+                :equipment="equipment"
+                @submitting="onSubmit"
                 @success="onSuccess"
             />
         </Modal>
@@ -17,8 +26,8 @@
 <script setup lang="ts">
 import AddButton from "../_Base/Buttons/AddButton.vue";
 import Modal from "../_Base/Modal.vue";
-import CustomerFileForm from "@/Forms/Customer/CustomerFileForm.vue";
-import { ref, reactive, onMounted, nextTick } from "vue";
+import CustomerFileCreateForm from "@/Forms/Customer/CustomerFileCreateForm.vue";
+import { ref } from "vue";
 import { useFileTypeStore } from "@/Store/FileTypeStore";
 import {
     customer,
@@ -26,8 +35,11 @@ import {
     siteList,
     equipmentList,
 } from "@/State/CustomerState";
+import okModal from "@/Modules/okModal";
 
-// const props = defineProps<{}>();
+defineProps<{
+    equipment?: customerEquipment;
+}>();
 
 const isShown = ref(false);
 const fileStore = useFileTypeStore();
@@ -35,15 +47,22 @@ const newFileModal = ref<InstanceType<typeof Modal> | null>(null);
 
 const onShowModal = () => {
     isShown.value = true;
-
     newFileModal.value?.show();
-    // nextTick(() => );
+};
+
+const onSubmit = () => {
+    newFileModal.value?.stopClose();
 };
 
 const onSuccess = () => {
-    console.log("success");
-
-    newFileModal.value?.hide();
     isShown.value = false;
+    newFileModal.value?.enableClose();
+    newFileModal.value?.hide();
+};
+
+const onPreventClosing = () => {
+    okModal(
+        "File Upload in progress.  Please cancel upload before navigating away"
+    );
 };
 </script>

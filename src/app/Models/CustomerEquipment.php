@@ -54,6 +54,11 @@ class CustomerEquipment extends Model
         return $this->hasMany(CustomerNote::class, 'cust_equip_id', 'cust_equip_id');
     }
 
+    public function CustomerFile()
+    {
+        return $this->hasMany(CustomerFile::class, 'cust_equip_id', 'cust_equip_id');
+    }
+
     /**
      * Site specific information for the selected piece of equipment
      */

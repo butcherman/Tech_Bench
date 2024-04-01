@@ -54,6 +54,8 @@ class CustomerEquipmentController extends Controller
             'siteList' => fn() => $equipment->CustomerSite->makeVisible('href'),
             'equipment-data' => fn() => $equipment->CustomerEquipmentData,
             'notes' => fn() => $equipment->CustomerNote,
+            'files' => fn() => $equipment->CustomerFile,
+            'equipmentList' => fn() => [$equipment],
         ]);
     }
 
