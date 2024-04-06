@@ -21,16 +21,19 @@ class CustomerFile extends Model
         'user_id',
         'deleted_at',
         'CustomerFileType',
+        'CustomerEquipment',
+        'user'
     ];
 
     protected $appends = [
-        //     'uploaded_by',
+        'uploaded_by',
         'file_type',
-        //     'equip_name',
+        'equip_name',
         'created_stamp',
     ];
 
     // protected $with = ['FileUpload'];
+    protected $with = ['CustomerSite'];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
@@ -61,6 +64,16 @@ class CustomerFile extends Model
         return $this->hasOne(CustomerFileType::class, 'file_type_id', 'file_type_id');
     }
 
+    public function User()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
+
+    public function CustomerEquipment()
+    {
+        return $this->belongsTo(CustomerEquipment::class, 'cust_equip_id', 'cust_equip_id');
+    }
+
     public function getFileTypeAttribute()
     {
         return $this->CustomerFileType->description;
@@ -74,5 +87,15 @@ class CustomerFile extends Model
     public function getHrefAttribute()
     {
         return route('download', [$this->file_id, $this->FileUpload->file_name]);
+    }
+
+    public function getUploadedByAttribute()
+    {
+        return $this->user->full_name;
+    }
+
+    public function getEquipNameAttribute()
+    {
+        return $this->cust_equip_id ? $this->CustomerEquipment->equip_name : null;
     }
 }

@@ -63,3 +63,9 @@ type fileData = {
     maxSize: number;
     token: string;
 };
+
+type fileUpload = {
+    file_id: number;
+    file_name: string;
+    file_size: number;
+};

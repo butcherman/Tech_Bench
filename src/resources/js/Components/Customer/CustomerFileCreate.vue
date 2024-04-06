@@ -27,15 +27,17 @@
 import AddButton from "../_Base/Buttons/AddButton.vue";
 import Modal from "../_Base/Modal.vue";
 import CustomerFileCreateForm from "@/Forms/Customer/CustomerFileCreateForm.vue";
+import okModal from "@/Modules/okModal";
 import { ref } from "vue";
 import { useFileTypeStore } from "@/Store/FileTypeStore";
+import { router } from "@inertiajs/vue3";
 import {
     customer,
     currentSite,
     siteList,
     equipmentList,
+    toggleLoading,
 } from "@/State/CustomerState";
-import okModal from "@/Modules/okModal";
 
 defineProps<{
     equipment?: customerEquipment;
@@ -52,12 +54,17 @@ const onShowModal = () => {
 
 const onSubmit = () => {
     newFileModal.value?.stopClose();
+    toggleLoading("files");
 };
 
 const onSuccess = () => {
     isShown.value = false;
     newFileModal.value?.enableClose();
     newFileModal.value?.hide();
+    router.reload({
+        only: ["flash", "files"],
+        onFinish: () => toggleLoading("files"),
+    });
 };
 
 const onPreventClosing = () => {

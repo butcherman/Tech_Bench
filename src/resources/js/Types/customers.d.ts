@@ -104,7 +104,15 @@ type customerNote = {
 type customerFile = {
     cust_file_id: number;
     file_id: number;
+    name: string;
+    created_at: string;
+    created_stamp: string;
+    file_type: string;
+    uploaded_by: string;
+    href: string;
+    equip_name: string;
     customer_site: customerSite[];
+    file_upload: fileUpload;
 };
 
 type customerFileType = {
