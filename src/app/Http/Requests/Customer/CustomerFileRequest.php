@@ -5,6 +5,7 @@ namespace App\Http\Requests\Customer;
 use App\Models\CustomerFile;
 use App\Models\FileUpload;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class CustomerFileRequest extends FormRequest
 {
@@ -67,7 +68,7 @@ class CustomerFileRequest extends FormRequest
         }
 
         // If this is not a site note, remove any attached sites
-        if ($this->note_type !== 'site') {
+        if ($this->file_type !== 'site') {
             $this->site_list = json_decode('[]');
         }
     }
