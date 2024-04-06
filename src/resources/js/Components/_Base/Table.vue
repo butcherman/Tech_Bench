@@ -8,7 +8,7 @@
                         <span
                             v-if="col.sort"
                             class="float-end pointer"
-                            @click="updateSort(col.field)"
+                            @click="updateSort(col.sortField || col.field)"
                         >
                             <fa-icon :icon="sortIcons[col.field]" />
                         </span>
@@ -45,8 +45,20 @@
                 >
                     <template v-for="col in columns">
                         <td @click="$emit('on-row-click', [$event, row])">
+                            <a
+                                v-if="row.href && noInertiaLink"
+                                :href="row.href"
+                                class="block-link"
+                            >
+                                <span v-if="col.isBoolean">
+                                    <fa-icon icon="check" />
+                                </span>
+                                <span v-else>
+                                    {{ row[col.field] }}
+                                </span>
+                            </a>
                             <Link
-                                v-if="row.href"
+                                v-else-if="row.href"
                                 :href="row.href"
                                 class="block-link"
                             >
@@ -127,6 +139,7 @@ interface column {
     label: string;
     field: string;
     sort?: boolean;
+    sortField?: string;
     isBoolean?: boolean;
     filterOptions?: {
         enabled: boolean;
@@ -146,6 +159,7 @@ const props = defineProps<{
     perPageArray?: number[];
     perPageDefault?: number;
     noResultsText?: string;
+    noInertiaLink?: boolean;
 }>();
 
 const columnCount = computed(
@@ -182,9 +196,15 @@ const sortIcons = computed<{ [key: string]: string }>(() => {
     let icons: { [key: string]: string } = {};
 
     props.columns.forEach((col: column) => {
-        if (sortBy.value === col.field && sortOrder.value === "asc") {
+        if (
+            (sortBy.value === col.field || sortBy.value === col.sortField) &&
+            sortOrder.value === "asc"
+        ) {
             icons[col.field] = "sort-down";
-        } else if (sortBy.value === col.field && sortOrder.value === "desc") {
+        } else if (
+            (sortBy.value === col.field || sortBy.value === col.sortField) &&
+            sortOrder.value === "desc"
+        ) {
             icons[col.field] = "sort-up";
         } else {
             icons[col.field] = "sort";
@@ -272,6 +292,7 @@ const paginatedData = computed(() => {
         return sortedData.value;
     }
 
+    // FIXME - cannot sort data when paginating
     return sortedData.value.slice(
         (currentPage.value - 1) * perPage.value,
         currentPage.value * perPage.value

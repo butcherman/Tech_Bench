@@ -20,14 +20,15 @@ class CustomerFile extends Model
         'updated_at',
         'user_id',
         'deleted_at',
+        'CustomerFileType',
     ];
 
-    // protected $appends = [
-    //     'uploaded_by',
-    //     'file_type',
-    //     'equip_name',
-    //     'created_stamp',
-    // ];
+    protected $appends = [
+        //     'uploaded_by',
+        'file_type',
+        //     'equip_name',
+        'created_stamp',
+    ];
 
     // protected $with = ['FileUpload'];
 
@@ -53,5 +54,25 @@ class CustomerFile extends Model
             'cust_file_id',
             'cust_site_id'
         );
+    }
+
+    public function CustomerFileType()
+    {
+        return $this->hasOne(CustomerFileType::class, 'file_type_id', 'file_type_id');
+    }
+
+    public function getFileTypeAttribute()
+    {
+        return $this->CustomerFileType->description;
+    }
+
+    public function getCreatedStampAttribute()
+    {
+        return $this->created_at;
+    }
+
+    public function getHrefAttribute()
+    {
+        return route('download', [$this->file_id, $this->FileUpload->file_name]);
     }
 }

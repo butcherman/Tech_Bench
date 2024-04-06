@@ -75,7 +75,7 @@ class CustomerSiteController extends Controller
             'equipmentList' => fn() => $site->SiteEquipment,
             'contacts' => fn() => $customer->CustomerContact,
             'notes' => fn() => $site->getNotes(),
-            'files' => fn() => $customer->CustomerFile,
+            'files' => fn() => $site->getFiles()->append('href'),
         ]);
     }
 

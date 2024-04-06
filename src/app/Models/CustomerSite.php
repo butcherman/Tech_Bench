@@ -78,9 +78,25 @@ class CustomerSite extends Model
         );
     }
 
+    public function SiteFile()
+    {
+        return $this->belongsToMany(
+            CustomerFile::class,
+            'customer_site_files',
+            'cust_site_id',
+            'cust_file_id'
+        );
+    }
+
     public function EquipmentNote()
     {
         return CustomerNote::whereIn('cust_equip_id', $this->SiteEquipment->pluck('cust_equip_id'))
+            ->get();
+    }
+
+    public function EquipmentFile()
+    {
+        return CustomerFile::whereIn('cust_equip_id', $this->SiteEquipment->pluck('cust_equip_id'))
             ->get();
     }
 
@@ -92,10 +108,25 @@ class CustomerSite extends Model
             ->get();
     }
 
+    public function GeneralFile()
+    {
+        return CustomerFile::where('cust_id', $this->Customer->cust_id)
+            ->whereNull('cust_equip_id')
+            ->doesntHave('CustomerSite')
+            ->get();
+    }
+
     public function getNotes()
     {
         return $this->SiteNote
             ->concat($this->EquipmentNote())
             ->concat($this->GeneralNote());
+    }
+
+    public function getFiles()
+    {
+        return $this->SiteFile
+            ->concat($this->EquipmentFile())
+            ->concat($this->GeneralFile());
     }
 }

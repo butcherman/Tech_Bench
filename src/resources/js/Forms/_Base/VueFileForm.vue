@@ -41,6 +41,7 @@
             <button
                 type="button"
                 class="btn btn-danger my-2 w-100"
+                :disabled="!isSubmitting"
                 @click="onCancel"
             >
                 Cancel Upload
