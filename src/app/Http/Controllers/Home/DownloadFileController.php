@@ -25,6 +25,7 @@ class DownloadFileController extends Controller
             'public' => $file->public,
             'user' => $request->user() ? $request->user()->username : null,
             'ip_address' => $request->ip(),
+            'file_data' => $file->toArray(),
         ]);
 
         //  Prepare header information for file download
