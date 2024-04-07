@@ -24,7 +24,14 @@
                         >
                             <fa-icon icon="circle-info" />
                         </span>
-                        <CustomerFileEdit :customer-file="rowData" />
+                        <CustomerFileEdit
+                            v-if="permissions.files.update"
+                            :customer-file="rowData"
+                        />
+                        <DeleteBadge
+                            v-if="permissions.files.delete"
+                            @click="deleteFile(rowData)"
+                        />
                     </template>
                 </Table>
             </Overlay>
@@ -43,8 +50,17 @@ import Table from "../_Base/Table.vue";
 import CustomerFileCreate from "@/Components/Customer/CustomerFileCreate.vue";
 import CustomerFileEdit from "@/Components/Customer/CustomerFileEdit.vue";
 import CustomerFileDetails from "@/Components/Customer/CustomerFileDetails.vue";
+import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
 import { nextTick, reactive, ref } from "vue";
-import { loading, toggleLoading, files } from "@/State/CustomerState";
+import {
+    loading,
+    toggleLoading,
+    files,
+    permissions,
+    customer,
+} from "@/State/CustomerState";
+import verifyModal from "@/Modules/verifyModal";
+import { router } from "@inertiajs/vue3";
 
 defineProps<{
     equipment?: customerEquipment;
@@ -57,6 +73,24 @@ const showDetailsModal = ref<boolean>(false);
 const showFileDetails = (fileData: customerFile) => {
     showDetailsModal.value = true;
     nextTick(() => customerFileDetails.value?.show(fileData));
+};
+
+const deleteFile = (fileData: customerFile) => {
+    verifyModal("Do you want to delete this file?").then((res) => {
+        if (res) {
+            toggleLoading("files");
+            router.delete(
+                route("customers.files.destroy", [
+                    customer.value.cust_id,
+                    fileData.cust_file_id,
+                ]),
+                {
+                    preserveScroll: true,
+                    onFinish: () => toggleLoading("files"),
+                }
+            );
+        }
+    });
 };
 
 const tableColumns = reactive([

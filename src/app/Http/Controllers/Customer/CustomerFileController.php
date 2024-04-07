@@ -49,9 +49,16 @@ class CustomerFileController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, Customer $customer, CustomerFile $file)
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $file);
+
+        $file->delete();
+
+        Log::channel('cust')
+            ->notice('Customer File deleted for ' . $customer->name . ' by ' .
+                $request->user()->username, $file->toArray());
+
+        return back()->with('warning', __('cust.file.deleted'));
     }
 }
