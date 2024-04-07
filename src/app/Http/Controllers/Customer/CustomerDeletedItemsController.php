@@ -14,6 +14,16 @@ class CustomerDeletedItemsController extends Controller
      */
     public function __invoke(Request $request, Customer $customer)
     {
-        return Inertia::render('Customer/DeletedItems');
+        $this->authorize('manage', $customer);
+
+        return Inertia::render('Customer/DeletedItems', [
+            'customer' => $customer,
+            'deleted-items' => [
+                'equipment' => $customer->CustomerEquipment()->onlyTrashed()->get(),
+                'contacts' => $customer->CustomerContact()->onlyTrashed()->get(),
+                'notes' => $customer->CustomerNote()->onlyTrashed()->get(),
+                'files' => $customer->CustomerFile()->onlyTrashed()->get(),
+            ]
+        ]);
     }
 }

@@ -61,4 +61,35 @@ class CustomerFileController extends Controller
 
         return back()->with('warning', __('cust.file.deleted'));
     }
+
+    /**
+     * Restore a soft deleted file
+     */
+    public function restore(Request $request, Customer $customer, CustomerFile $file)
+    {
+        $this->authorize('restore', $file);
+
+        $file->restore();
+        Log::channel('cust')
+            ->info('Customer File restored for ' . $customer->name . ' by ' .
+                $request->user()->username, $file->toArray());
+
+        return back()->with('success', __('cust.file.restored'));
+    }
+
+    /**
+     * remove a soft deleted file
+     */
+    public function forceDelete(Request $request, Customer $customer, CustomerFile $file)
+    {
+        $this->authorize('force-delete', $file);
+
+        Log::channel('cust')
+            ->notice('Customer File force deleted for ' . $customer->name .
+                ' by ' . $request->user()->username, $file->toArray());
+        $file->forceDelete();
+
+        return back()
+            ->with('warning', __('cust.file.force_deleted'));
+    }
 }

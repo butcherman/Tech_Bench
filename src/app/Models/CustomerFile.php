@@ -65,7 +65,7 @@ class CustomerFile extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'user_id')->withTrashed();
     }
 
     public function CustomerEquipment()
@@ -95,6 +95,6 @@ class CustomerFile extends Model
 
     public function getEquipNameAttribute()
     {
-        return $this->cust_equip_id ? $this->CustomerEquipment->equip_name : null;
+        return $this->CustomerEquipment ? $this->CustomerEquipment->equip_name : null;
     }
 }

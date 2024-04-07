@@ -17,6 +17,7 @@
             :list="equipmentList"
         />
         <SelectBoxInput
+            v-if="siteList.length > 1"
             id="equipment-site-list"
             name="site_list"
             label="Select Which Sites have this Equipment"

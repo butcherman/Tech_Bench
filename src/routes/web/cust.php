@@ -55,9 +55,40 @@ Route::middleware('auth.secure')->group(function () {
      *                          Customer Specific Routes                       *
      ***************************************************************************/
     Route::prefix('customers/{customer}')->name('customers.')->group(function () {
-        Route::get('deleted-items', CustomerDeletedItemsController::class)
-            ->name('deleted-items')
-            ->breadcrumb('Deleted Items', 'customers.show');
+        Route::prefix('deleted-items')->name('deleted-items.')->group(function () {
+
+            Route::get('/', CustomerDeletedItemsController::class)
+                ->name('index')
+                ->breadcrumb('Deleted Items', 'customers.show');
+            Route::prefix('restore')->name('restore.')->group(function () {
+                Route::get('equipment/{equipment}', [CustomerEquipmentController::class, 'restore'])
+                    ->withTrashed()
+                    ->name('equipment');
+                Route::get('contacts/{contact}', [CustomerContactController::class, 'restore'])
+                    ->withTrashed()
+                    ->name('contacts');
+                Route::get('notes/{note}', [CustomerNoteController::class, 'restore'])
+                    ->withTrashed()
+                    ->name('notes');
+                Route::get('files/{file}', [CustomerFileController::class, 'restore'])
+                    ->withTrashed()
+                    ->name('files');
+            });
+            Route::prefix('force-delete')->name('force-delete.')->group(function () {
+                Route::delete('equipment/{equipment}', [CustomerEquipmentController::class, 'forceDelete'])
+                    ->withTrashed()
+                    ->name('equipment');
+                Route::delete('contacts/{contact}', [CustomerContactController::class, 'forceDelete'])
+                    ->withTrashed()
+                    ->name('contacts');
+                Route::delete('notes/{note}', [CustomerNoteController::class, 'forceDelete'])
+                    ->withTrashed()
+                    ->name('notes');
+                Route::delete('files/{file}', [CustomerFileController::class, 'forceDelete'])
+                    ->withTrashed()
+                    ->name('files');
+            });
+        });
 
         Route::resource('alerts', CustomerAlertsController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
@@ -77,6 +108,7 @@ Route::middleware('auth.secure')->group(function () {
          ***********************************************************************/
         Route::get('equipment/{equipment}/note/create', [CustomerNoteController::class, 'createEquipmentNote'])
             ->name('equipment.note.create');
+
         Route::resource('equipment', CustomerEquipmentController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')

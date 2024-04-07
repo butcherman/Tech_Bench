@@ -87,4 +87,40 @@ class CustomerEquipmentController extends Controller
         return redirect(route('customers.equipment.index', $customer->slug))
             ->with('warning', __('cust.equipment.deleted', ['equip' => $equipment->equip_name]));
     }
+
+    /**
+     * Restore a soft deleted item
+     */
+    public function restore(Request $request, Customer $customer, CustomerEquipment $equipment)
+    {
+        $this->authorize('restore', $equipment);
+
+        $equipment->restore();
+        Log::channel('cust')
+            ->info('Customer Equipment restored for ' . $customer->name . ' by ' .
+                $request->user()->username, $equipment->toArray());
+
+        return back()
+            ->with('success', __('cust.equipment.restored', [
+                'equip' => $equipment->equip_name
+            ]));
+    }
+
+    /**
+     * Force delete a soft deleted item
+     */
+    public function forceDelete(Request $request, Customer $customer, CustomerEquipment $equipment)
+    {
+        $this->authorize('forceDelete', $equipment);
+
+        $equipment->forceDelete();
+        Log::channel('cust')
+            ->notice('Customer Equipment force deleted for ' . $customer->name .
+                ' by ' . $request->user()->username, $equipment->toArray());
+
+        return back()
+            ->with('warning', __('cust.equipment.force_deleted', [
+                'equip' => $equipment->equip_name
+            ]));
+    }
 }

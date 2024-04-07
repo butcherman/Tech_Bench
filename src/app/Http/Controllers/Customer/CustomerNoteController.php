@@ -118,4 +118,38 @@ class CustomerNoteController extends Controller
         return redirect(route('customers.show', $customer->slug))
             ->with('warning', __('cust.note.deleted'));
     }
+
+    /**
+     * Restore a soft deleted note
+     */
+    public function restore(Request $request, Customer $customer, CustomerNote $note)
+    {
+        $this->authorize('restore', $note);
+
+        $note->restore();
+        Log::channel('cust')
+            ->info('Customer Note restored for ' . $customer->name . ' by ' .
+                $request->user()->username, $note->toArray());
+
+        return back()->with('success', __('cust.note.restored'));
+    }
+
+    /**
+     * remove a soft deleted note
+     */
+    public function forceDelete(Request $request, Customer $customer, CustomerNote $note)
+    {
+
+        $this->authorize('force-delete', $note);
+
+        $note->forceDelete();
+        Log::channel('cust')
+            ->notice('Customer NOte force deleted for ' . $customer->name .
+                ' by ' . $request->user()->username, $note->toArray());
+
+        return back()
+            ->with('warning', __('cust.note.force_deleted', [
+                'cont' => $note->name
+            ]));
+    }
 }

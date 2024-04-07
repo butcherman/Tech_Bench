@@ -66,4 +66,40 @@ class CustomerContactController extends Controller
             'cont' => $contact->name
         ]));
     }
+
+    /**
+     * Restore a soft deleted contact
+     */
+    public function restore(Request $request, Customer $customer, CustomerContact $contact)
+    {
+        $this->authorize('restore', $contact);
+
+        $contact->restore();
+        Log::channel('cust')
+            ->info('Customer Contact restored for ' . $customer->name . ' by ' .
+                $request->user()->username, $contact->toArray());
+
+        return back()->with('success', __('cust.contact.restored', [
+            'cont' => $contact->name
+        ]));
+    }
+
+    /**
+     * remove a soft deleted contact
+     */
+    public function forceDelete(Request $request, Customer $customer, CustomerContact $contact)
+    {
+
+        $this->authorize('force-delete', $contact);
+
+        $contact->forceDelete();
+        Log::channel('cust')
+            ->notice('Customer Contact force deleted for ' . $customer->name .
+                ' by ' . $request->user()->username, $contact->toArray());
+
+        return back()
+            ->with('warning', __('cust.contact.force_deleted', [
+                'cont' => $contact->name
+            ]));
+    }
 }

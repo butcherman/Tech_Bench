@@ -18,7 +18,9 @@
             </li>
             <li>
                 <Link
-                    :href="$route('customers.deleted-items', customer.slug)"
+                    :href="
+                        $route('customers.deleted-items.index', customer.slug)
+                    "
                     class="dropdown-item"
                 >
                     Deleted Items
