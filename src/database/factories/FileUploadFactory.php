@@ -2,16 +2,16 @@
 
 namespace Database\Factories;
 
-use App\Models\FileUploads;
+use App\Models\FileUpload;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class FileUploadsFactory extends Factory
+class FileUploadFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model
      */
-    protected $model = FileUploads::class;
+    protected $model = FileUpload::class;
 
     /**
      * Define the model's default state
@@ -21,7 +21,7 @@ class FileUploadsFactory extends Factory
         return [
             'disk' => 'local',
             'folder' => 'randomFolder',
-            'file_name' => Str::random(5).'.jpg',
+            'file_name' => Str::random(5) . '.jpg',
             'file_size' => 1,
             'public' => $this->faker->boolean(),
         ];
