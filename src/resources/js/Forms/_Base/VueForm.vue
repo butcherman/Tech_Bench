@@ -92,6 +92,7 @@ const onSubmit = handleSubmit((form): void => {
         isSubmitting.value = false;
     } else {
         formData.submit(props.submitMethod, props.submitRoute, {
+            preserveScroll: true,
             onFinish: () => (isSubmitting.value = false),
             onSuccess: () => emit("success"),
             onError: () => handleErrors(form, formData.errors),

@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from "vue";
+import { computed } from "vue";
 
 interface rowHeaders {
     label: string;
@@ -30,11 +30,11 @@ interface rowHeaders {
 }
 
 const props = defineProps<{
-    rows: { [key: string]: string };
+    rows: any;
     headers?: rowHeaders[];
 }>();
 
-const computedRows = computed(() => {
+const computedRows = computed<{ [key: string]: string | any }>(() => {
     if (props.headers) {
         let rowData: { [key: string]: string } = {};
 

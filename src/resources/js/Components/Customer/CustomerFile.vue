@@ -24,6 +24,7 @@
                         >
                             <fa-icon icon="circle-info" />
                         </span>
+                        <CustomerFileEdit :customer-file="rowData" />
                     </template>
                 </Table>
             </Overlay>
@@ -40,6 +41,7 @@ import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 import Overlay from "../_Base/Loaders/Overlay.vue";
 import Table from "../_Base/Table.vue";
 import CustomerFileCreate from "@/Components/Customer/CustomerFileCreate.vue";
+import CustomerFileEdit from "@/Components/Customer/CustomerFileEdit.vue";
 import CustomerFileDetails from "@/Components/Customer/CustomerFileDetails.vue";
 import { nextTick, reactive, ref } from "vue";
 import { loading, toggleLoading, files } from "@/State/CustomerState";

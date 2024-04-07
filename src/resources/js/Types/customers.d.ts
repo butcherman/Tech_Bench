@@ -108,9 +108,11 @@ type customerFile = {
     created_at: string;
     created_stamp: string;
     file_type: string;
+    file_type_id: number;
     uploaded_by: string;
     href: string;
     equip_name: string;
+    cust_equip_id: number;
     customer_site: customerSite[];
     file_upload: fileUpload;
 };

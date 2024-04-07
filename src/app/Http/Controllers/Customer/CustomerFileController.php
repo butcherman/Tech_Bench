@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerFileRequest;
 use App\Models\Customer;
+use App\Models\CustomerFile;
 use App\Traits\FileTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -33,30 +34,16 @@ class CustomerFileController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-        return 'show';
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-        return 'edit';
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerFileRequest $request, Customer $customer, CustomerFile $file)
     {
-        //
-        return 'update';
+        $request->updateFile();
+
+        Log::channel('cust')
+            ->info('Customer File Information updated by ' . $request->user()->username, $file->toArray());
+
+        return back()->with('success', __('cust.file.updated'));
     }
 
     /**

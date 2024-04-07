@@ -126,9 +126,7 @@ Route::middleware('auth.secure')->group(function () {
         /***********************************************************************
          *                     Customer Files Routes                           *
          ***********************************************************************/
-        Route::prefix('files')->name('files.')->group(function () {
-            Route::post('/', [CustomerFileController::class, 'store'])
-                ->name('store');
-        });
+        Route::resource('files', CustomerFileController::class)
+            ->except(['index', 'show', 'edit']);
     });
 });

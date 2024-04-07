@@ -15,7 +15,7 @@ class CustomerFileRequest extends FormRequest
     public function authorize(): bool
     {
         if ($this->isMethod('PUT')) {
-            return $this->user->can('update', $this->file);
+            return $this->user()->can('update', $this->file);
         }
 
         return $this->user()->can('create', CustomerFile::class);
@@ -50,6 +50,17 @@ class CustomerFileRequest extends FormRequest
         }
 
         return $newFile;
+    }
+
+    /**
+     * Update an existing Customer File
+     */
+    public function updateFile()
+    {
+        $this->addAttributes();
+        $this->file->update($this->except(['file_type', 'site_list']));
+
+        $this->file->CustomerSite()->sync($this->site_list);
     }
 
     /**

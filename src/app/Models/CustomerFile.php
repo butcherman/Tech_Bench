@@ -32,7 +32,6 @@ class CustomerFile extends Model
         'created_stamp',
     ];
 
-    // protected $with = ['FileUpload'];
     protected $with = ['CustomerSite'];
 
     protected $casts = [

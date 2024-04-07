@@ -1,14 +1,17 @@
 <template>
-    <VueFileForm
-        ref="customerFileForm"
+    <VueForm
+        ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('customers.files.store', customer.slug)"
-        submit-text="Upload File"
-        file-required
-        @file-added="checkNameField"
+        :submit-route="
+            $route('customers.files.update', [
+                customer.slug,
+                customerFile.cust_file_id,
+            ])
+        "
+        submit-method="put"
+        submit-text="Update File Data"
         @success="$emit('success')"
-        @submitting="$emit('submitting')"
     >
         <TextInput
             id="name"
@@ -51,43 +54,43 @@
             text-field="description"
             value-field="file_type_id"
         />
-    </VueFileForm>
+    </VueForm>
 </template>
 
 <script setup lang="ts">
-import VueFileForm from "@/Forms/_Base/VueFileForm.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import RadioGroupInput from "../_Base/RadioGroupInput.vue";
 import SelectBoxInput from "../_Base/SelectBoxInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import { ref } from "vue";
-import { array, object, string } from "yup";
-import { DropzoneFile } from "dropzone";
+import { object, string, array } from "yup";
 
+defineEmits(["success"]);
 const props = defineProps<{
     customer: customer;
     siteList: customerSite[];
+    customerFile: customerFile;
     equipList: customerEquipment[];
     fileTypes: customerFileType[];
-    equipment?: customerEquipment;
-    currentSite?: customerSite;
 }>();
-
-const customerFileForm = ref<InstanceType<typeof VueFileForm> | null>(null);
 
 /**
  * Determine the note type based on prop parameters
  */
 const getFileFormType = (): "general" | "site" | "equipment" => {
-    if (props.equipment) {
+    if (props.customerFile.cust_equip_id) {
         return "equipment";
     }
 
-    if (props.currentSite && props.siteList.length > 1) {
+    if (props.customerFile.customer_site.length > 0) {
         return "site";
     }
 
     return "general";
+};
+const updateFileFormType = (type: "general" | "site" | "equipment") => {
+    fileFormType.value = type;
 };
 const fileFormType = ref(getFileFormType());
 
@@ -112,16 +115,14 @@ if (props.siteList.length > 1) {
     });
 }
 
-const updateFileFormType = (type: "general" | "site" | "equipment") => {
-    fileFormType.value = type;
-};
-
 const initValues = {
-    name: "",
+    name: props.customerFile.name,
     file_type: fileFormType.value,
-    site_list: props.currentSite ? [props.currentSite.cust_site_id] : [],
-    cust_equip_id: props.equipment?.cust_equip_id || null,
-    file_type_id: null,
+    site_list: props.customerFile.customer_site.map(
+        (site) => site.cust_site_id
+    ),
+    cust_equip_id: props.customerFile.cust_equip_id,
+    file_type_id: props.customerFile.file_type_id,
 };
 const schema = object({
     name: string().required(),
@@ -142,20 +143,4 @@ const schema = object({
     }),
     file_type_id: string().required("What type of file is this?"),
 });
-
-/**
- * If the name field is not filled out when a file is selected, populate that
- * field with the file name
- */
-const checkNameField = (file: DropzoneFile) => {
-    console.log("checking name field");
-    if (
-        customerFileForm.value?.getFieldValue("name") === undefined ||
-        !customerFileForm.value?.getFieldValue("name").length
-    ) {
-        console.log("is empty", file);
-        let fileName = file.name;
-        customerFileForm.value?.setFieldValue("name", fileName);
-    }
-};
 </script>
