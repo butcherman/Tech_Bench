@@ -19,6 +19,7 @@ class BuildAdminMenu
     public function __construct(protected User $user)
     {
         $this->buildUserMenu();
+        $this->buildCustomerMenu();
         $this->buildEquipmentMenu();
     }
 
@@ -37,30 +38,32 @@ class BuildAdminMenu
     {
         $userBuild = [];
         if ($this->checkPermission($this->user, 'Manage Users')) {
-            $userBuild[] = [
-                'name' => 'Users',
-                'icon' => 'fas fa-user-edit',
-                'route' => route('admin.user.index'),
-            ];
-            $userBuild[] = [
-                'name' => 'Create User',
-                'icon' => 'fas fa-user-plus',
-                'route' => route('admin.user.create'),
-            ];
-            $userBuild[] = [
-                'name' => 'List Disabled Users',
-                'icon' => 'fas fa-store-alt-slash',
-                'route' => route('admin.user.deactivated'),
-            ];
-            $userBuild[] = [
-                'name' => 'Password Policy',
-                'icon' => 'fas fa-user-lock',
-                'route' => route('admin.user.password-policy.show'),
-            ];
-            $userBuild[] = [
-                'name' => 'User Settings',
-                'icon' => 'cog',
-                'route' => route('admin.user.user-settings.show'),
+            $userBuild = [
+                [
+                    'name' => 'Users',
+                    'icon' => 'fas fa-user-edit',
+                    'route' => route('admin.user.index'),
+                ],
+                [
+                    'name' => 'Create User',
+                    'icon' => 'fas fa-user-plus',
+                    'route' => route('admin.user.create'),
+                ],
+                [
+                    'name' => 'List Disabled Users',
+                    'icon' => 'fas fa-store-alt-slash',
+                    'route' => route('admin.user.deactivated'),
+                ],
+                [
+                    'name' => 'Password Policy',
+                    'icon' => 'fas fa-user-lock',
+                    'route' => route('admin.user.password-policy.show'),
+                ],
+                [
+                    'name' => 'User Settings',
+                    'icon' => 'cog',
+                    'route' => route('admin.user.user-settings.show'),
+                ]
             ];
 
         }
@@ -74,6 +77,36 @@ class BuildAdminMenu
         }
 
         $this->menu['Users'] = $userBuild;
+    }
+
+    /**
+     * Build Administration menu for Customers
+     */
+    protected function buildCustomerMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'Manage Customers')) {
+            $nav = [
+                [
+                    'name' => 'Customer Settings',
+                    'icon' => 'cog',
+                    'route' => route('customers.settings.edit'),
+                ],
+                [
+                    'name' => 'Deactivated Customers',
+                    'icon' => 'ban',
+                    'route' => '#',
+                ],
+                [
+                    'name' => 'Customer File Types',
+                    'icon' => 'file-import',
+                    'route' => '#',
+                ],
+            ];
+        }
+
+        $this->menu['Customers'] = $nav;
     }
 
     /**

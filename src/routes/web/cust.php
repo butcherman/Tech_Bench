@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\Customer\CustomerNotFoundException;
+use App\Http\Controllers\Customer\CustomerAdminController;
 use App\Http\Controllers\Customer\CustomerAlertsController;
 use App\Http\Controllers\Customer\CustomerContactController;
 use App\Http\Controllers\Customer\CustomerController;
@@ -39,6 +40,14 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumb('New Customer Site', 'customers.index');
         Route::post('create-site', [CustomerSiteController::class, 'store'])
             ->name('store-site');
+
+        /***********************************************************************
+         * Customer Administration
+         ***********************************************************************/
+        Route::get('settings', [CustomerAdminController::class, 'edit'])
+            ->name('settings.edit');
+        Route::put('settings', [CustomerAdminController::class, 'update'])
+            ->name('settings.update');
     });
 
     Route::resource('customers', CustomerController::class)
