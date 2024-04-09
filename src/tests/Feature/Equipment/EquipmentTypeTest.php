@@ -261,6 +261,8 @@ class EquipmentTypeTest extends TestCase
             ],
         ];
 
+        CustomerEquipment::factory()->count(3)->create(['equip_id' => $existing->equip_id]);
+
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->put(route('equipment.update', $existing->equip_id), $form);
         $response->assertStatus(302);

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Customer;
 
 use App\Models\Customer;
-use App\Models\CustomerEquipment;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
@@ -82,7 +81,7 @@ class CustomerNoteTest extends TestCase
             'note_type' => 'general',
             'urgent' => true,
             'site_list' => [],
-            'cust_equip_id' => null,
+            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
@@ -106,7 +105,7 @@ class CustomerNoteTest extends TestCase
             'note_type' => 'general',
             'urgent' => true,
             'site_list' => [],
-            'cust_equip_id' => null,
+            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
@@ -129,7 +128,7 @@ class CustomerNoteTest extends TestCase
             'note_type' => 'general',
             'urgent' => true,
             'site_list' => [],
-            'cust_equip_id' => null,
+            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
@@ -140,6 +139,7 @@ class CustomerNoteTest extends TestCase
 
         unset($data['site_list']);
         unset($data['note_type']);
+        unset($data['note_id']);
         $this->assertDatabaseHas('customer_notes', $data);
 
         // TODO - Dispatch Event
@@ -158,7 +158,7 @@ class CustomerNoteTest extends TestCase
             'note_type' => 'site',
             'urgent' => true,
             'site_list' => $customer->CustomerSite->pluck('cust_site_id'),
-            'cust_equip_id' => null,
+            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
@@ -169,6 +169,7 @@ class CustomerNoteTest extends TestCase
 
         unset($data['site_list']);
         unset($data['note_type']);
+        unset($data['note_id']);
         $this->assertDatabaseHas('customer_notes', $data);
         $this->assertDatabaseHas('customer_site_notes', [
             'cust_site_id' => $customer->CustomerSite[0]->cust_site_id,
@@ -189,14 +190,14 @@ class CustomerNoteTest extends TestCase
         // Event::fake();
 
         $customer = Customer::factory()->create();
-        $equipment = CustomerEquipment::factory()
+        $notement = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
         $data = [
             'subject' => 'This is a test Note',
             'note_type' => 'general',
             'urgent' => true,
             'site_list' => [],
-            'cust_equip_id' => $equipment->cust_equip_id,
+            'note_id' => $notement->note_id,
             'details' => 'This is the notes details',
         ];
 
@@ -207,6 +208,7 @@ class CustomerNoteTest extends TestCase
 
         unset($data['site_list']);
         unset($data['note_type']);
+        unset($data['note_id']);
         $this->assertDatabaseHas('customer_notes', $data);
 
         // TODO - Dispatch Event
@@ -308,7 +310,7 @@ class CustomerNoteTest extends TestCase
             'note_type' => 'general',
             'urgent' => true,
             'site_list' => [],
-            'cust_equip_id' => null,
+            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
@@ -331,7 +333,7 @@ class CustomerNoteTest extends TestCase
             'note_type' => 'general',
             'urgent' => true,
             'site_list' => [],
-            'cust_equip_id' => null,
+            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
@@ -359,7 +361,7 @@ class CustomerNoteTest extends TestCase
             'note_type' => 'general',
             'urgent' => true,
             'site_list' => [],
-            'cust_equip_id' => null,
+            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
@@ -373,6 +375,7 @@ class CustomerNoteTest extends TestCase
 
         unset($data['site_list']);
         unset($data['note_type']);
+        $data['note_id'] = $note->note_id;
         $this->assertDatabaseHas('customer_notes', $data);
 
         // TODO - Dispatch Event
@@ -401,7 +404,7 @@ class CustomerNoteTest extends TestCase
                 $customer->CustomerSite[1]->cust_site_id,
                 $customer->CustomerSite[2]->cust_site_id
             ],
-            'cust_equip_id' => null,
+            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
@@ -415,6 +418,7 @@ class CustomerNoteTest extends TestCase
 
         unset($data['site_list']);
         unset($data['note_type']);
+        $data['note_id'] = $note->note_id;
         $this->assertDatabaseHas('customer_notes', $data);
         $this->assertDatabaseMissing('customer_site_notes', [
             'note_id' => $note->note_id,
@@ -496,5 +500,100 @@ class CustomerNoteTest extends TestCase
 
         // TODO - Dispatch Event
         // Event::assertDispatched(CustomerNoteDeletedEvent::class);
+    }
+
+    /**
+     * Restore Method
+     */
+    public function test_restore_guest()
+    {
+        $note = CustomerNote::factory()->create();
+
+        $response = $this->get(route('customers.deleted-items.restore.notes', [
+            $note->cust_id,
+            $note->note_id,
+        ]));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_restore_no_permission()
+    {
+        $note = CustomerNote::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())
+            ->get(route('customers.deleted-items.restore.notes', [
+                $note->cust_id,
+                $note->note_id,
+            ]));
+
+        $response->assertStatus(403);
+    }
+
+    public function test_restore()
+    {
+        $note = CustomerNote::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('customers.deleted-items.restore.notes', [
+                $note->cust_id,
+                $note->note_id,
+            ]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.note.restored'));
+        $this->assertDatabaseHas('customer_notes', $note->only([
+            'note_id'
+        ]));
+    }
+
+    /**
+     * Force Delete Method
+     */
+    public function test_force_delete_guest()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+
+        $response = $this->delete(route('customers.deleted-items.force-delete.notes', [
+            $note->cust_id,
+            $note->note_id,
+        ]));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_force_delete_no_permission()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+
+        $response = $this->actingAs(User::factory()->create())
+            ->delete(route('customers.deleted-items.force-delete.notes', [
+                $note->cust_id,
+                $note->note_id,
+            ]));
+
+        $response->assertStatus(403);
+    }
+
+    public function test_force_delete()
+    {
+        $note = CustomerNote::factory()->create();
+        $note->delete();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->delete(route('customers.deleted-items.force-delete.notes', [
+                $note->cust_id,
+                $note->note_id,
+            ]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', __('cust.note.force_deleted'));
+        $this->assertDatabaseMissing('customer_notes', $note->only(['note_id']));
     }
 }

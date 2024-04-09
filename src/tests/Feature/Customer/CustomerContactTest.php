@@ -294,40 +294,9 @@ class CustomerContactTest extends TestCase
         // Event::assertDispatched(CustomerContactUpdatedEvent::class);
     }
 
-    /******************************************************************************************************** */
-
-
-    // public function test_update_bad_cont_id()
-    // {
-    //     $cust = Customer::factory()->create();
-    //     $site = CustomerSite::factory()
-    //         ->count(5)
-    //         ->create(['cust_id' => $cust->cust_id]);
-    //     $mod = CustomerContact::factory()->make();
-
-    //     $data = [
-    //         'cust_id' => $cust->cust_id,
-    //         'name' => $mod->name,
-    //         'title' => $mod->title,
-    //         'email' => $mod->email,
-    //         'site_list' => [$site[1]->cust_site_id, $site[3]->cust_site_id],
-    //         'local' => false,
-    //         'decision_maker' => false,
-    //         'phones' => [],
-    //     ];
-
-    //     $response = $this->actingAs(User::factory()->create())
-    //         ->put(
-    //             route('customers.contacts.update', [$cust->slug, 54785521445]),
-    //             $data
-    //         );
-    //     $response->assertSuccessful();
-    //     $response->assertViewIs('error.customerResourceMissing');
-    // }
-
-    // /**
-    //  * Destroy Method
-    //  */
+    /**
+     * Destroy Method
+     */
     public function test_destroy_guest()
     {
         $cont = CustomerContact::factory()->create();
@@ -372,5 +341,109 @@ class CustomerContactTest extends TestCase
         $this->assertSoftDeleted('customer_contacts', $cont->toArray());
 
         // Event::assertDispatched(CustomerContactDeletedEvent::class);
+    }
+
+    /**
+     * Restore Method
+     */
+    public function test_restore_guest()
+    {
+        $cont = CustomerContact::factory()->create();
+        $cont->delete();
+
+        $response = $this->get(
+            route(
+                'customers.deleted-items.restore.contacts',
+                [
+                    $cont->cust_id,
+                    $cont->cont_id
+                ]
+            )
+        );
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_restore_no_permission()
+    {
+        $cont = CustomerContact::factory()->create();
+        $cont->delete();
+
+        $response = $this->actingAs(User::factory()->create())
+            ->get(route('customers.deleted-items.restore.contacts', [
+                $cont->cust_id,
+                $cont->cont_id
+            ]));
+        $response->assertStatus(403);
+    }
+
+    public function test_restore()
+    {
+        $cont = CustomerContact::factory()->create();
+        $cont->delete();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('customers.deleted-items.restore.contacts', [
+                $cont->cust_id,
+                $cont->cont_id
+            ]));
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.contact.restored', [
+            'cont' => $cont->name
+        ]));
+        $this->assertDatabaseHas('customer_contacts', (array) $cont->only(['cont_id']));
+    }
+
+    /**
+     * Force Delete Method
+     */
+    public function test_force_delete_guest()
+    {
+        $cont = CustomerContact::factory()->create();
+        $cont->delete();
+
+        $response = $this->delete(
+            route(
+                'customers.deleted-items.force-delete.contacts',
+                [
+                    $cont->cust_id,
+                    $cont->cont_id
+                ]
+            )
+        );
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_force_delete_no_permission()
+    {
+        $cont = CustomerContact::factory()->create();
+        $cont->delete();
+
+        $response = $this->actingAs(User::factory()->create())
+            ->delete(route('customers.deleted-items.force-delete.contacts', [
+                $cont->cust_id,
+                $cont->cont_id
+            ]));
+        $response->assertStatus(403);
+    }
+
+    public function test_force_delete()
+    {
+        $cont = CustomerContact::factory()->create();
+        $cont->delete();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->delete(route('customers.deleted-items.force-delete.contacts', [
+                $cont->cust_id,
+                $cont->cont_id
+            ]));
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', __('cust.contact.force_deleted', [
+            'cont' => $cont->name
+        ]));
+        $this->assertDatabaseMissing('customer_contacts', (array) $cont->only(['cont_id']));
     }
 }

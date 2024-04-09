@@ -37,7 +37,8 @@ class Customer extends Model
      */
     public function resolveRouteBinding($value, $field = null)
     {
-        return $this->where('slug', $value)->orWhere('cust_id', $value)
+        return $this->where('slug', $value)
+            ->orWhere('cust_id', $value)
             ->firstOrFail();
     }
 

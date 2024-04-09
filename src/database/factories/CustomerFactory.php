@@ -25,4 +25,16 @@ class CustomerFactory extends Factory
             'slug' => Str::slug($name),
         ];
     }
+
+    /**
+     * Create a customer Site for the Primary Site ID field
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Customer $customer) {
+            $site = CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
+            $customer->primary_site_id = $site->cust_site_id;
+            $customer->save();
+        });
+    }
 }

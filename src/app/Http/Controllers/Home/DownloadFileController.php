@@ -16,6 +16,7 @@ class DownloadFileController extends Controller
     {
         $file->validateFile($fileName);
 
+        // @codeCoverageIgnoreStart
         $path = $file->getFilePath();
         $fileName = basename($path);
 
@@ -46,5 +47,6 @@ class DownloadFileController extends Controller
             ob_flush();
             flush();
         }
+        // @codeCoverageIgnoreEnd
     }
 }

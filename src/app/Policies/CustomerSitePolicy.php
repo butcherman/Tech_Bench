@@ -9,14 +9,6 @@ class CustomerSitePolicy
 {
     use AllowTrait;
 
-    /*
-    * Manage customers determines if they can deactivate and recover customers
-    */
-    public function manage(User $user)
-    {
-        return $this->checkPermission($user, 'Manage Customers');
-    }
-
     /**
      * Determine whether the user can create new customers
      */
