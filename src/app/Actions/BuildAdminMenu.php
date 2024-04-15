@@ -94,9 +94,9 @@ class BuildAdminMenu
                     'route' => route('customers.settings.edit'),
                 ],
                 [
-                    'name' => 'Deactivated Customers',
+                    'name' => 'Disabled Customers',
                     'icon' => 'ban',
-                    'route' => '#',
+                    'route' => route('customers.disabled.index'),
                 ],
                 [
                     'name' => 'Customer File Types',

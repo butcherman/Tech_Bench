@@ -20,11 +20,6 @@ class CustomerSeeder extends Seeder
          */
         for ($i = 0; $i < 150; $i++) {
             $newCust = Customer::factory()->create();
-            $newSite = CustomerSite::factory()->create([
-                'cust_id' => $newCust->cust_id,
-            ]);
-            $newCust->primary_site_id = $newSite->cust_site_id;
-            $newCust->save();
 
             // Pick a random number, if it has a factor of 7, assign sub sites
             $randomNum = rand(1, 50);
@@ -34,5 +29,15 @@ class CustomerSeeder extends Seeder
                 ]);
             }
         }
+
+        /**
+         * Select 10 random customers to disable
+         */
+        $custList = Customer::inRandomOrder()->limit(10)->get();
+        $custList->each(function ($customer) {
+            $customer->deleted_reason = 'Testing Seeder';
+            $customer->save();
+            $customer->delete();
+        });
     }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\Customer\CustomerNoteEquipmentController;
 use App\Http\Controllers\Customer\CustomerNoteSiteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
+use App\Http\Controllers\Customer\DisabledCustomerController;
 use App\Http\Controllers\Customer\DownloadNoteController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
@@ -45,9 +46,21 @@ Route::middleware('auth.secure')->group(function () {
          * Customer Administration
          ***********************************************************************/
         Route::get('settings', [CustomerAdminController::class, 'edit'])
-            ->name('settings.edit');
+            ->name('settings.edit')
+            ->breadcrumb('Customer Settings', 'admin.index');
         Route::put('settings', [CustomerAdminController::class, 'update'])
             ->name('settings.update');
+        Route::prefix('disabled-customers')->name('disabled.')->group(function () {
+            Route::get('/', DisabledCustomerController::class)
+                ->name('index')
+                ->breadcrumb('Disabled Customers', 'admin.index');
+            Route::get('{customer}/restore', [CustomerController::class, 'restore'])
+                ->withTrashed()
+                ->name('restore');
+            Route::delete('{customer}/force-delete', [CustomerController::class, 'forceDelete'])
+                ->withTrashed()
+                ->name('force-delete');
+        });
     });
 
     Route::resource('customers', CustomerController::class)
@@ -64,8 +77,8 @@ Route::middleware('auth.secure')->group(function () {
      *                          Customer Specific Routes                       *
      ***************************************************************************/
     Route::prefix('customers/{customer}')->name('customers.')->group(function () {
-        Route::prefix('deleted-items')->name('deleted-items.')->group(function () {
 
+        Route::prefix('deleted-items')->name('deleted-items.')->group(function () {
             Route::get('/', CustomerDeletedItemsController::class)
                 ->name('index')
                 ->breadcrumb('Deleted Items', 'customers.show');

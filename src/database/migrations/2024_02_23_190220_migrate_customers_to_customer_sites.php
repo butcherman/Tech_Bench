@@ -25,10 +25,6 @@ return new class extends Migration {
         });
 
         $this->migrate();
-        // $this->migrateCustomerContacts();
-        // $this->migrateCustomerNotes();
-        // $this->migrateCustomerFiles();
-        // $this->cleanup();
     }
 
     /**
@@ -58,62 +54,4 @@ return new class extends Migration {
             }
         }
     }
-
-    /**
-     * Cleanup unneeded tables and data
-     */
-    protected function cleanup()
-    {
-        $custList = Customer::whereNotNull('parent_id')->withTrashed()->get();
-        foreach ($custList as $cust) {
-            $cust->forceDelete();
-        }
-
-        // Remove Parent ID and add Deleted Reason to Customers Table
-        Schema::table('customers', function (Blueprint $table) {
-            $table->dropForeign(['parent_id']);
-            $table->dropColumn(['parent_id', 'address', 'city', 'state', 'zip']);
-            $table->text('deleted_reason')->nullable()->after('slug');
-        });
-    }
-
-
-
-
-    /**
-     * Migrate Customer Files to new schema
-     */
-    // public function migrateCustomerFiles()
-    // {
-    //     $migrationData = CustomerFile::withTrashed()->get();
-
-    //     foreach ($migrationData as $data) {
-    //         CustomerFileSite::create([
-    //             'cust_site_id' => $data->cust_id,
-    //             'cust_file_id' => $data->cust_file_id,
-    //         ]);
-
-    //         // Verify which customer and site this item is attached to
-    //         $cust = Customer::withTrashed()->find($data->cust_id);
-    //         if ($cust) {
-
-    //             if ($cust->parent_id) {
-    //                 $data->update([
-    //                     'cust_id' => $cust->parent_id,
-    //                 ]);
-    //             }
-    //         }
-
-    //         //  If equipment is shared, add the other sites it is shared with
-    //         if ($data->shared) {
-    //             $custList = Customer::where('parent_id', $data->cust_id)->get();
-    //             foreach ($custList as $cust) {
-    //                 CustomerFileSite::create([
-    //                     'cust_site_id' => $cust->cust_id,
-    //                     'cust_file_id' => $data->cust_file_id,
-    //                 ]);
-    //             }
-    //         }
-    //     }
-    // }
 };

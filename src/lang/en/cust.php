@@ -10,6 +10,8 @@ return [
     'created' => ':name Successfully Created',
     'updated' => ':name Successfully Updated',
     'destroy' => ':name has been disabled',
+    'restored' => ':name has been re-enabled',
+    'force_deleted' => ':name has been queued for deletion',
 
     'alert' => [
         'created' => 'Customer Alert Created',

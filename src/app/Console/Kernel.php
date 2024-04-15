@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
         // Re-occurring maintenance
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+        $schedule->command('model:prune')->daily();
     }
 
     /**
@@ -22,7 +23,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

@@ -6,6 +6,7 @@ use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerRequest;
+use App\Jobs\Customer\DestroyCustomerJob;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -131,5 +132,33 @@ class CustomerController extends Controller
         return redirect(route('customers.index'))->with('danger', __('cust.destroy', [
             'name' => $customer->name,
         ]));
+    }
+
+    /**
+     * Restore a soft deleted customer
+     */
+    public function restore(Request $request, Customer $customer)
+    {
+        $this->authorize('restore', $customer);
+
+        $customer->restore();
+        Log::channel('cust')->notice('Customer ' . $customer->name .
+            ' has been restored by ' . $request->user()->username);
+
+        return back()->with('success', __('cust.restored', ['name' => $customer->name]));
+    }
+
+    /**
+     * Completely remove a soft deleted customer
+     */
+    public function forceDelete(Request $request, Customer $customer)
+    {
+        $this->authorize('forceDelete', $customer);
+
+        dispatch(new DestroyCustomerJob($customer));
+        Log::channel('cust')->warning('Customer ' . $customer->name .
+            ' has been permanently removed by ' . $request->user()->username);
+
+        return back()->with('danger', __('cust.force_deleted', ['name' => $customer->name]));
     }
 }

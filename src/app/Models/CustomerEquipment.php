@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerEquipment extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Prunable;
 
     protected $primaryKey = 'cust_equip_id';
 
@@ -65,5 +67,17 @@ class CustomerEquipment extends Model
     public function CustomerEquipmentData()
     {
         return $this->hasMany(CustomerEquipmentData::class, 'cust_equip_id', 'cust_equip_id');
+    }
+
+    /**
+     * Automatically remove soft deleted models after 90 days
+     */
+    public function prunable()
+    {
+        if (config('customer.auto_purge')) {
+            return static::where('deleted_at', '<=', now()->subDays(90));
+        }
+
+        return false;
     }
 }
