@@ -10,15 +10,14 @@ class PhoneTypesController extends Controller
 {
     public function index()
     {
-        return Cache::phoneTypes();
     }
 
     /**
      * Show the form for creating the resource.
      */
-    public function create(): never
+    public function create()
     {
-        abort(404);
+        return Cache::phoneTypes();
     }
 
     /**

@@ -14,9 +14,9 @@ Route::middleware('auth.secure')->group(function () {
     Route::get('about', AboutController::class)
         ->name('about')
         ->breadcrumb('About', 'dashboard');
-    Route::get('phone-types', [PhoneTypesController::class, 'index'])
+    Route::get('phone-types', [PhoneTypesController::class, 'create'])
         ->name('phone-types');
-    Route::get('file-types', [FileTypesController::class, 'index'])
+    Route::get('file-types', [FileTypesController::class, 'create'])
         ->name('file-types');
 });
 

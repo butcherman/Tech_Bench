@@ -101,6 +101,11 @@ class BuildAdminMenu
                 [
                     'name' => 'Customer File Types',
                     'icon' => 'file-import',
+                    'route' => route('admin.file-types.index'),
+                ],
+                [
+                    'name' => 'Contact Phone Types',
+                    'icon' => 'phone',
                     'route' => '#',
                 ],
             ];
