@@ -45,4 +45,16 @@ return [
     'backups' => [
         'settings-successful' => 'Backup Settings Saved',
     ],
+
+    'file-type' => [
+        'created' => 'New File Type Created',
+        'updated' => 'File Type Updated',
+        'destroyed' => 'File Type Deleted',
+    ],
+
+    'phone-type' => [
+        'created' => 'New Phone Number Type Created',
+        'updated' => 'Phone Number Type Updated',
+        'destroyed' => 'Phone Number Type Deleted',
+    ]
 ];

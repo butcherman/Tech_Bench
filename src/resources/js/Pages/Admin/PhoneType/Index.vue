@@ -4,24 +4,28 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                        Customer File Types
+                        Contact Phone Types
                         <AddButton
                             class="float-end"
-                            text="Add File Type"
+                            text="Add Phone Type"
                             pill
                             small
-                            @click="addFileType"
+                            @click="addPhoneType"
                         />
                     </div>
-                    <Table :columns="cols" :rows="fileTypes">
+                    <Table :columns="cols" :rows="phoneTypes">
+                        <template #column="{ rowData }">
+                            <fa-icon :icon="rowData.icon_class" />
+                            {{ rowData.description }}
+                        </template>
                         <template #action="{ rowData }">
                             <DeleteBadge
                                 class="float-end"
-                                @click="deleteFileType(rowData)"
+                                @click="deletePhoneType(rowData)"
                             />
                             <EditBadge
                                 class="float-end"
-                                @click="editFileType(rowData)"
+                                @click="editPhoneType(rowData)"
                             />
                         </template>
                     </Table>
@@ -29,14 +33,14 @@
             </div>
         </div>
         <Modal
-            ref="fileTypeModal"
+            ref="phoneTypeModal"
             @show="showModal = true"
             @hidden="clearModal"
         >
-            <FileTypeForm
+            <PhoneTypeForm
                 v-if="showModal"
-                :file-type="activeType"
-                @success="fileTypeModal?.hide()"
+                :phone-type="activeType"
+                @success="phoneTypeModal?.hide()"
             />
         </Modal>
     </div>
@@ -49,18 +53,22 @@ import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import Modal from "@/Components/_Base/Modal.vue";
-import FileTypeForm from "@/Forms/Admin/FileTypeForm.vue";
+import PhoneTypeForm from "@/Forms/Admin/PhoneTypeForm.vue";
 import verifyModal from "@/Modules/verifyModal";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
+type adminPhoneType = {
+    phone_type_id: number;
+} & phoneType;
+
 defineProps<{
-    fileTypes: customerFileType[];
+    phoneTypes: adminPhoneType[];
 }>();
 
-const fileTypeModal = ref<InstanceType<typeof Modal> | null>(null);
+const phoneTypeModal = ref<InstanceType<typeof Modal> | null>(null);
 const showModal = ref(false);
-const activeType = ref();
+const activeType = ref<adminPhoneType | undefined>();
 
 const cols = [
     {
@@ -70,27 +78,30 @@ const cols = [
 ];
 
 const clearModal = () => {
-    activeType.value = null;
+    activeType.value = undefined;
     showModal.value = false;
 };
 
-const editFileType = (fileType: customerFileType) => {
-    activeType.value = fileType;
-    fileTypeModal.value?.show();
+const editPhoneType = (phoneType: adminPhoneType) => {
+    console.log("edit");
+    activeType.value = phoneType;
+    phoneTypeModal.value?.show();
 };
 
-const deleteFileType = (fileType: customerFileType) => {
-    verifyModal().then((res) => {
+const deletePhoneType = (phoneType: adminPhoneType) => {
+    console.log("delete");
+    verifyModal("This cannot be undone").then((res) => {
         if (res) {
             router.delete(
-                route("admin.file-types.destroy", fileType.file_type_id)
+                route("admin.phone-types.destroy", phoneType.phone_type_id)
             );
         }
     });
 };
 
-const addFileType = () => {
-    fileTypeModal.value?.show();
+const addPhoneType = () => {
+    console.log("add");
+    phoneTypeModal.value?.show();
 };
 </script>
 

@@ -45,49 +45,55 @@
                 >
                     <template v-for="col in columns">
                         <td @click="$emit('on-row-click', [$event, row])">
-                            <a
-                                v-if="row.href && noInertiaLink"
-                                :href="row.href"
-                                class="block-link"
+                            <slot
+                                name="column"
+                                :column-name="col.field"
+                                :row-data="row"
                             >
-                                <span v-if="col.isBoolean">
-                                    <fa-icon icon="check" />
-                                </span>
+                                <a
+                                    v-if="row.href && noInertiaLink"
+                                    :href="row.href"
+                                    class="block-link"
+                                >
+                                    <span v-if="col.isBoolean">
+                                        <fa-icon icon="check" />
+                                    </span>
+                                    <span v-else>
+                                        {{ row[col.field] }}
+                                    </span>
+                                </a>
+                                <Link
+                                    v-else-if="row.href"
+                                    :href="row.href"
+                                    class="block-link"
+                                >
+                                    <span v-if="col.isBoolean">
+                                        <fa-icon icon="check" />
+                                    </span>
+                                    <span v-else>
+                                        {{ row[col.field] }}
+                                    </span>
+                                </Link>
                                 <span v-else>
-                                    {{ row[col.field] }}
+                                    <span v-if="col.isBoolean">
+                                        <fa-icon
+                                            :icon="
+                                                row[col.field]
+                                                    ? 'circle-check'
+                                                    : 'circle-xmark'
+                                            "
+                                            :class="
+                                                row[col.field]
+                                                    ? 'text-success'
+                                                    : 'text-danger'
+                                            "
+                                        />
+                                    </span>
+                                    <span v-else>
+                                        {{ row[col.field] }}
+                                    </span>
                                 </span>
-                            </a>
-                            <Link
-                                v-else-if="row.href"
-                                :href="row.href"
-                                class="block-link"
-                            >
-                                <span v-if="col.isBoolean">
-                                    <fa-icon icon="check" />
-                                </span>
-                                <span v-else>
-                                    {{ row[col.field] }}
-                                </span>
-                            </Link>
-                            <span v-else>
-                                <span v-if="col.isBoolean">
-                                    <fa-icon
-                                        :icon="
-                                            row[col.field]
-                                                ? 'circle-check'
-                                                : 'circle-xmark'
-                                        "
-                                        :class="
-                                            row[col.field]
-                                                ? 'text-success'
-                                                : 'text-danger'
-                                        "
-                                    />
-                                </span>
-                                <span v-else>
-                                    {{ row[col.field] }}
-                                </span>
-                            </span>
+                            </slot>
                         </td>
                     </template>
                     <td v-if="slots.action">

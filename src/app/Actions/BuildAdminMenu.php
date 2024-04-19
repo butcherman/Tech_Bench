@@ -99,14 +99,14 @@ class BuildAdminMenu
                     'route' => route('customers.disabled.index'),
                 ],
                 [
-                    'name' => 'Customer File Types',
+                    'name' => 'Uploaded File Types',
                     'icon' => 'file-import',
                     'route' => route('admin.file-types.index'),
                 ],
                 [
                     'name' => 'Contact Phone Types',
                     'icon' => 'phone',
-                    'route' => '#',
+                    'route' => route('admin.phone-types.index'),
                 ],
             ];
         }

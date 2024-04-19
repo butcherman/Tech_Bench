@@ -28,7 +28,9 @@
                 :for="`radio-group-${name}-${index}`"
                 class="form-check-label"
             >
-                {{ item.text }}
+                <slot name="item-label" :text="item.text" :value="item.value">
+                    {{ item.text }}
+                </slot>
             </label>
         </div>
         <span
