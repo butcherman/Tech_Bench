@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerSettingsRequest;
+use App\Models\Customer;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -18,6 +19,8 @@ class CustomerAdminController extends Controller
      */
     public function edit()
     {
+        $this->authorize('manage', Customer::class);
+
         return Inertia::render('Customer/Admin', [
             'select_id' => (bool) config('customer.select_id'),
             'update_slug' => (bool) config('customer.update_slug'),

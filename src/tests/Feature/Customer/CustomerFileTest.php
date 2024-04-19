@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\File\FileDataDeletedEvent;
 use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Models\CustomerFileType;
@@ -11,6 +12,7 @@ use App\Models\UserRolePermission;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -422,6 +424,8 @@ class CustomerFileTest extends TestCase
 
     public function test_force_delete()
     {
+        // Event::fake();
+
         $file = CustomerFile::factory()->create();
         $file->delete();
 
@@ -434,5 +438,7 @@ class CustomerFileTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.file.force_deleted'));
         $this->assertDatabaseMissing('customer_files', $file->only(['file_id']));
+
+        // Event::assertDispatched(FileDataDeletedEvent::class);
     }
 }

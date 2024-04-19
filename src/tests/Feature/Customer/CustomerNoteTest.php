@@ -535,6 +535,7 @@ class CustomerNoteTest extends TestCase
     public function test_restore()
     {
         $note = CustomerNote::factory()->create();
+        $note->delete();
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('customers.deleted-items.restore.notes', [

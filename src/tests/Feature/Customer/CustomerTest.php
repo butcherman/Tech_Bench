@@ -108,7 +108,8 @@ class CustomerTest extends TestCase
             'zip' => $site->zip,
         ];
 
-        $response = $this->ActingAs($user)->post(route('customers.store'), $data);
+        $response = $this->actingAs($user)
+            ->post(route('customers.store'), $data);
         $response->assertStatus(403);
         $this->assertDatabaseMissing('customers', [
             'name' => $data['name'],
@@ -162,9 +163,9 @@ class CustomerTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'].' 1');
+        $slug = Str::slug($data['name'] . ' 1');
 
-        $response = $this->ActingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.created', [
@@ -187,7 +188,7 @@ class CustomerTest extends TestCase
         $existing1 = Customer::factory()->has(CustomerSite::factory())->create();
         Customer::factory()->create([
             'name' => $existing1->name,
-            'slug' => Str::slug($existing1->slug.'-1'),
+            'slug' => Str::slug($existing1->slug . '-1'),
         ]);
 
         $cust = Customer::factory()->make();
@@ -200,9 +201,9 @@ class CustomerTest extends TestCase
             'state' => $existing1->CustomerSite[0]->state,
             'zip' => $existing1->CustomerSite[0]->zip,
         ];
-        $slug = Str::slug($data['name'].' 2');
+        $slug = Str::slug($data['name'] . ' 2');
 
-        $response = $this->ActingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.created', [
@@ -236,7 +237,6 @@ class CustomerTest extends TestCase
     public function test_show()
     {
         $cust = Customer::factory()->create();
-        CustomerSite::factory()->create(['cust_id' => $cust->cust_id]);
 
         $response = $this->actingAs(User::factory()->create())
             ->get(route('customers.show', $cust->slug));
@@ -346,7 +346,9 @@ class CustomerTest extends TestCase
     public function test_update()
     {
         $customer = Customer::factory()->create();
-        $newSite = CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
+        $newSite = CustomerSite::factory()->create([
+            'cust_id' => $customer->cust_id
+        ]);
         $updated = Customer::factory()->make();
 
         $data = [
@@ -358,7 +360,9 @@ class CustomerTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->put(route('customers.update', $customer->slug), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.updated', ['name' => $updated->name]));
+        $response->assertSessionHas('success', __('cust.updated', [
+            'name' => $updated->name
+        ]));
         $response->assertRedirect(route('customers.show', $updated->slug));
         $this->assertDatabaseHas('customers', [
             'cust_id' => $customer->cust_id,
@@ -408,8 +412,99 @@ class CustomerTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('customers.destroy', $cust->slug), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('danger', __('cust.destroy', ['name' => $cust->name]));
+        $response->assertSessionHas('danger', __('cust.destroy', [
+            'name' => $cust->name
+        ]));
         $response->assertRedirect(route('customers.index'));
         $this->assertSoftDeleted('customers', $cust->only(['cust_id']));
+    }
+
+    /**
+     * Restore Method
+     */
+    public function test_restore_guest()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+
+        $response = $this->get(
+            route('customers.disabled.restore', $cust->cust_id)
+        );
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_restore_no_permission()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+
+        $response = $this->actingAs(User::factory()->create())
+            ->get(route('customers.disabled.restore', $cust->cust_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_restore()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('customers.disabled.restore', $cust->cust_id));
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('cust.restored', [
+            'name' => $cust->name,
+        ]));
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $cust->cust_id,
+            'name' => $cust->name,
+            'deleted_at' => null,
+        ]);
+    }
+
+    /**
+     * Force Delete Function
+     */
+    public function test_force_delete_guest()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+
+        $response = $this->delete(
+            route('customers.disabled.force-delete', $cust->cust_id)
+        );
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_force_delete_no_permission()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+
+        $response = $this->actingAs(User::factory()->create())
+            ->delete(route('customers.disabled.force-delete', $cust->cust_id));
+        $response->assertStatus(403);
+    }
+
+    public function test_force_delete()
+    {
+        $cust = Customer::factory()->create();
+        $cust->delete();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->delete(route('customers.disabled.force-delete', $cust->cust_id));
+        $response->assertStatus(302);
+        $response->assertSessionHas('danger', __('cust.force_deleted', [
+            'name' => $cust->name,
+        ]));
+
+        $this->assertDatabaseMissing('customers', [
+            'cust_id' => $cust->cust_id,
+            'name' => $cust->name,
+        ]);
     }
 }
