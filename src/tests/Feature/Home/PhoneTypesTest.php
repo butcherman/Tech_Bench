@@ -5,8 +5,6 @@ namespace Tests\Feature\Home;
 use App\Models\CustomerContactPhone;
 use App\Models\PhoneNumberType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PhoneTypesTest extends TestCase
@@ -200,7 +198,7 @@ class PhoneTypesTest extends TestCase
         $response->assertSessionHas('warning', __('admin.phone-type.destroyed'));
 
         $this->assertDatabaseMissing('phone_number_types', $phoneType->only([
-            'phone_type_id'
+            'phone_type_id',
         ]));
     }
 
@@ -208,7 +206,7 @@ class PhoneTypesTest extends TestCase
     {
         $phoneType = PhoneNumberType::find(1);
         CustomerContactPhone::factory()->create([
-            'phone_type_id' => $phoneType->phone_type_id
+            'phone_type_id' => $phoneType->phone_type_id,
         ]);
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(
@@ -218,7 +216,7 @@ class PhoneTypesTest extends TestCase
         $response->assertSessionHasErrors('query_error');
 
         $this->assertDatabaseHas('phone_number_types', $phoneType->only([
-            'phone_type_id'
+            'phone_type_id',
         ]));
     }
 }

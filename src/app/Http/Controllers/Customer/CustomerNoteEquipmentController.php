@@ -8,7 +8,6 @@ use App\Http\Requests\Customer\CustomerNoteRequest;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerNote;
-use App\Models\CustomerSite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -23,11 +22,11 @@ class CustomerNoteEquipmentController extends Controller
         $this->authorize('create', CustomerNote::class);
 
         return Inertia::render('Customer/Note/Create', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
             'equipment' => $equipment,
-            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
-            'equipmentList' => fn() => $customer->load('CustomerEquipment')->CustomerEquipment,
+            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
+            'equipmentList' => fn () => $customer->load('CustomerEquipment')->CustomerEquipment,
         ]);
     }
 
@@ -38,8 +37,8 @@ class CustomerNoteEquipmentController extends Controller
     {
         $newNote = $request->createNote();
 
-        Log::channel('cust')->info('New Customer Note created for ' . $customer->name .
-            ' by ' . $request->user()->username, $newNote->toArray());
+        Log::channel('cust')->info('New Customer Note created for '.$customer->name.
+            ' by '.$request->user()->username, $newNote->toArray());
 
         return redirect(route('customers.equipment.show', [$customer->slug, $equipment->cust_equip_id]))
             ->with('success', __('cust.note.created'));
@@ -52,9 +51,9 @@ class CustomerNoteEquipmentController extends Controller
     {
         return Inertia::render('Customer/Note/Show', [
             'permissions' => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $note->CustomerSite->makeVisible('href'),
-            'note' => fn() => $note,
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $note->CustomerSite->makeVisible('href'),
+            'note' => fn () => $note,
             'equipment' => $equipment,
         ]);
     }
@@ -67,11 +66,11 @@ class CustomerNoteEquipmentController extends Controller
         $this->authorize('update', $note);
 
         return Inertia::render('Customer/Note/Edit', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
-            'equipmentList' => fn() => $customer->CustomerEquipment,
-            'note' => fn() => $note->load('CustomerSite'),
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
+            'equipmentList' => fn () => $customer->CustomerEquipment,
+            'note' => fn () => $note->load('CustomerSite'),
             'equipment' => $equipment,
         ]);
     }
@@ -83,13 +82,13 @@ class CustomerNoteEquipmentController extends Controller
     {
         $updatedNote = $request->updateNote();
 
-        Log::channel('cust')->info('Customer Note for ' . $customer->name .
-            ' updated by ' . $request->user()->username, $updatedNote->toArray());
+        Log::channel('cust')->info('Customer Note for '.$customer->name.
+            ' updated by '.$request->user()->username, $updatedNote->toArray());
 
         return redirect(route('customers.equipment.notes.show', [
             $customer->slug,
             $equipment->cust_equip_id,
-            $updatedNote->note_id
+            $updatedNote->note_id,
         ]))->with('success', __('cust.note.updated'));
     }
 
@@ -102,8 +101,8 @@ class CustomerNoteEquipmentController extends Controller
 
         $note->delete();
 
-        Log::channel('cust')->notice('Customer Note for ' . $customer->name .
-            ' deleted by ' . $request->user()->username, $note->toArray());
+        Log::channel('cust')->notice('Customer Note for '.$customer->name.
+            ' deleted by '.$request->user()->username, $note->toArray());
 
         return redirect(route('customers.equipment.show', [$customer->slug, $equipment->cust_equip_id]))
             ->with('warning', __('cust.note.deleted'));

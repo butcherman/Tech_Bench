@@ -4,8 +4,6 @@ namespace Tests\Feature\Home;
 
 use App\Models\FileUpload;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DownloadFileTest extends TestCase

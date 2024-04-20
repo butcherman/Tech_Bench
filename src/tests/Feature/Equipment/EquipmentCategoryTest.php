@@ -5,8 +5,6 @@ namespace Tests\Feature\Equipment;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EquipmentCategoryTest extends TestCase
@@ -91,7 +89,7 @@ class EquipmentCategoryTest extends TestCase
         $response->assertSessionHas('success', __('equipment.category.updated'));
         $this->assertDatabaseHas('equipment_categories', [
             'cat_id' => $cat->cat_id,
-            'name' => $form['name']
+            'name' => $form['name'],
         ]);
     }
 
@@ -126,11 +124,11 @@ class EquipmentCategoryTest extends TestCase
             ->delete(route('equipment-category.destroy', $cat->cat_id));
         $response->assertStatus(302);
         $response->assertSessionHasErrors([
-            'query_error' => __('equipment.category.in-use', ['name' => $cat->name])
+            'query_error' => __('equipment.category.in-use', ['name' => $cat->name]),
         ]);
         $this->assertDatabaseHas('equipment_categories', [
             'cat_id' => $cat->cat_id,
-            'name' => $cat->name
+            'name' => $cat->name,
         ]);
     }
 
@@ -144,7 +142,7 @@ class EquipmentCategoryTest extends TestCase
         $response->assertSessionHas('warning', __('equipment.category.destroyed'));
         $this->assertDatabaseMissing('equipment_categories', [
             'cat_id' => $cat->cat_id,
-            'name' => $cat->name
+            'name' => $cat->name,
         ]);
     }
 }

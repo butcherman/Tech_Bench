@@ -42,7 +42,7 @@ class PhoneTypesController extends Controller
 
         Log::stack(['daily', 'cust'])
             ->info(
-                'New Phone Number Type created by ' . $request->user()->username,
+                'New Phone Number Type created by '.$request->user()->username,
                 $phoneType->toArray()
             );
 
@@ -59,7 +59,7 @@ class PhoneTypesController extends Controller
 
         Log::stack(['daily', 'cust'])
             ->info(
-                'Phone Number Type updated by ' . $request->user()->username,
+                'Phone Number Type updated by '.$request->user()->username,
                 $phone_type->toArray()
             );
 
@@ -81,7 +81,7 @@ class PhoneTypesController extends Controller
             CheckDatabaseError::check($e, 'Unable to delete, Phone Number Type is in use by at least one customer');
         }
 
-        Log::stack(['daily', 'cust'])->notice('Phone Number Type deleted by ' .
+        Log::stack(['daily', 'cust'])->notice('Phone Number Type deleted by '.
             $request->user()->username, $phone_type->toArray());
 
         return back()->with('warning', __('admin.phone-type.destroyed'));

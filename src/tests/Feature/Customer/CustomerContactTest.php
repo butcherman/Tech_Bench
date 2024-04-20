@@ -5,12 +5,9 @@ namespace Tests\Feature\Customer;
 use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Models\CustomerContactPhone;
-use App\Models\CustomerContactSite;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerContactTest extends TestCase
@@ -34,7 +31,7 @@ class CustomerContactTest extends TestCase
                     'type' => 'Mobile',
                     'number' => '(213)555-1212',
                     'ext' => '232',
-                ]
+                ],
             ],
         ];
 
@@ -63,7 +60,7 @@ class CustomerContactTest extends TestCase
                     'type' => 'Mobile',
                     'number' => '(213)555-1212',
                     'ext' => '232',
-                ]
+                ],
             ],
         ];
 
@@ -94,7 +91,7 @@ class CustomerContactTest extends TestCase
                     'type' => 'Mobile',
                     'number' => '(213)555-1212',
                     'ext' => '232',
-                ]
+                ],
             ],
         ];
 
@@ -102,7 +99,7 @@ class CustomerContactTest extends TestCase
             ->post(route('customers.contacts.store', $cust->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.contact.created', [
-            'cont' => $data['name']
+            'cont' => $data['name'],
         ]));
 
         $this->assertDatabaseHas('customer_contacts', [
@@ -152,7 +149,7 @@ class CustomerContactTest extends TestCase
                     'phone_number_type' => ['description' => 'Mobile'],
                     'phone_number' => '(213)555-2121',
                     'extension' => null,
-                ]
+                ],
             ],
         ];
 
@@ -192,7 +189,7 @@ class CustomerContactTest extends TestCase
                     'type' => 'Mobile',
                     'number' => '(213)555-2121',
                     'ext' => null,
-                ]
+                ],
             ],
         ];
 
@@ -207,6 +204,7 @@ class CustomerContactTest extends TestCase
             );
         $response->assertStatus(403);
     }
+
     public function test_update()
     {
         // Event::fake();
@@ -241,7 +239,7 @@ class CustomerContactTest extends TestCase
                     'type' => 'Mobile',
                     'number' => '(213)555-2121',
                     'ext' => null,
-                ]
+                ],
             ],
         ];
 
@@ -252,7 +250,7 @@ class CustomerContactTest extends TestCase
             );
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.contact.updated', [
-            'cont' => $data['name']
+            'cont' => $data['name'],
         ]));
 
         $this->assertDatabaseHas('customer_contacts', [
@@ -336,7 +334,7 @@ class CustomerContactTest extends TestCase
             );
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.contact.deleted', [
-            'cont' => $cont->name
+            'cont' => $cont->name,
         ]));
         $this->assertSoftDeleted('customer_contacts', $cont->toArray());
 
@@ -356,7 +354,7 @@ class CustomerContactTest extends TestCase
                 'customers.deleted-items.restore.contacts',
                 [
                     $cont->cust_id,
-                    $cont->cont_id
+                    $cont->cont_id,
                 ]
             )
         );
@@ -373,7 +371,7 @@ class CustomerContactTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->get(route('customers.deleted-items.restore.contacts', [
                 $cont->cust_id,
-                $cont->cont_id
+                $cont->cont_id,
             ]));
         $response->assertStatus(403);
     }
@@ -386,11 +384,11 @@ class CustomerContactTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('customers.deleted-items.restore.contacts', [
                 $cont->cust_id,
-                $cont->cont_id
+                $cont->cont_id,
             ]));
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.contact.restored', [
-            'cont' => $cont->name
+            'cont' => $cont->name,
         ]));
         $this->assertDatabaseHas('customer_contacts', (array) $cont->only(['cont_id']));
     }
@@ -408,7 +406,7 @@ class CustomerContactTest extends TestCase
                 'customers.deleted-items.force-delete.contacts',
                 [
                     $cont->cust_id,
-                    $cont->cont_id
+                    $cont->cont_id,
                 ]
             )
         );
@@ -425,7 +423,7 @@ class CustomerContactTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->delete(route('customers.deleted-items.force-delete.contacts', [
                 $cont->cust_id,
-                $cont->cont_id
+                $cont->cont_id,
             ]));
         $response->assertStatus(403);
     }
@@ -438,11 +436,11 @@ class CustomerContactTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('customers.deleted-items.force-delete.contacts', [
                 $cont->cust_id,
-                $cont->cont_id
+                $cont->cont_id,
             ]));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.contact.force_deleted', [
-            'cont' => $cont->name
+            'cont' => $cont->name,
         ]));
         $this->assertDatabaseMissing('customer_contacts', (array) $cont->only(['cont_id']));
     }

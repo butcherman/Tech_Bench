@@ -6,9 +6,7 @@ use App\Actions\BuildCustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerNoteRequest;
 use App\Models\Customer;
-use App\Models\CustomerEquipment;
 use App\Models\CustomerNote;
-use App\Models\CustomerSite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -21,9 +19,9 @@ class CustomerNoteController extends Controller
     public function index(Request $request, Customer $customer)
     {
         return Inertia::render('Customer/Note/Index', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'notes' => fn() => $customer->CustomerNote,
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'notes' => fn () => $customer->CustomerNote,
         ]);
     }
 
@@ -35,10 +33,10 @@ class CustomerNoteController extends Controller
         $this->authorize('create', CustomerNote::class);
 
         return Inertia::render('Customer/Note/Create', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
-            'equipmentList' => fn() => $customer
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
+            'equipmentList' => fn () => $customer
                 ->load('CustomerEquipment')
                 ->CustomerEquipment,
         ]);
@@ -51,8 +49,8 @@ class CustomerNoteController extends Controller
     {
         $newNote = $request->createNote();
 
-        Log::channel('cust')->info('New Customer Note created for ' . $customer->name .
-            ' by ' . $request->user()->username, $newNote->toArray());
+        Log::channel('cust')->info('New Customer Note created for '.$customer->name.
+            ' by '.$request->user()->username, $newNote->toArray());
 
         return redirect(route('customers.show', $customer->slug))
             ->with('success', __('cust.note.created'));
@@ -65,9 +63,9 @@ class CustomerNoteController extends Controller
     {
         return Inertia::render('Customer/Note/Show', [
             'permissions' => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $note->CustomerSite->makeVisible('href'),
-            'note' => fn() => $note,
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $note->CustomerSite->makeVisible('href'),
+            'note' => fn () => $note,
         ]);
     }
 
@@ -79,11 +77,11 @@ class CustomerNoteController extends Controller
         $this->authorize('update', $note);
 
         return Inertia::render('Customer/Note/Edit', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
-            'equipmentList' => fn() => $customer->CustomerEquipment,
-            'note' => fn() => $note->load('CustomerSite'),
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
+            'equipmentList' => fn () => $customer->CustomerEquipment,
+            'note' => fn () => $note->load('CustomerSite'),
         ]);
     }
 
@@ -94,12 +92,12 @@ class CustomerNoteController extends Controller
     {
         $updatedNote = $request->updateNote();
 
-        Log::channel('cust')->info('Customer Note for ' . $customer->name .
-            ' updated by ' . $request->user()->username, $updatedNote->toArray());
+        Log::channel('cust')->info('Customer Note for '.$customer->name.
+            ' updated by '.$request->user()->username, $updatedNote->toArray());
 
         return redirect(route('customers.notes.show', [
             $customer->slug,
-            $updatedNote->note_id
+            $updatedNote->note_id,
         ]))->with('success', __('cust.note.updated'));
     }
 
@@ -112,8 +110,8 @@ class CustomerNoteController extends Controller
 
         $note->delete();
 
-        Log::channel('cust')->notice('Customer Note for ' . $customer->name .
-            ' deleted by ' . $request->user()->username, $note->toArray());
+        Log::channel('cust')->notice('Customer Note for '.$customer->name.
+            ' deleted by '.$request->user()->username, $note->toArray());
 
         return redirect(route('customers.show', $customer->slug))
             ->with('warning', __('cust.note.deleted'));
@@ -128,7 +126,7 @@ class CustomerNoteController extends Controller
 
         $note->restore();
         Log::channel('cust')
-            ->info('Customer Note restored for ' . $customer->name . ' by ' .
+            ->info('Customer Note restored for '.$customer->name.' by '.
                 $request->user()->username, $note->toArray());
 
         return back()->with('success', __('cust.note.restored'));
@@ -144,12 +142,12 @@ class CustomerNoteController extends Controller
 
         $note->forceDelete();
         Log::channel('cust')
-            ->notice('Customer NOte force deleted for ' . $customer->name .
-                ' by ' . $request->user()->username, $note->toArray());
+            ->notice('Customer NOte force deleted for '.$customer->name.
+                ' by '.$request->user()->username, $note->toArray());
 
         return back()
             ->with('warning', __('cust.note.force_deleted', [
-                'cont' => $note->name
+                'cont' => $note->name,
             ]));
     }
 }

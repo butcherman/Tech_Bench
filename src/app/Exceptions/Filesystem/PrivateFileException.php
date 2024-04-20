@@ -7,6 +7,10 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Exception triggered when a non-authorized user tries to download a
+ * file that has not been flagged as a public file.
+ */
 class PrivateFileException extends Exception
 {
     public function __construct(protected FileUpload $fileData)

@@ -2,12 +2,7 @@
 
 namespace App\Events\File;
 
-use App\Models\FileUpload;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -16,7 +11,8 @@ class FileDataDeletedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is triggered when a file is removed from the
+     * file_uploads table
      */
     public function __construct(public int $fileId)
     {

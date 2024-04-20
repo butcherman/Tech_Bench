@@ -40,7 +40,7 @@ class CustomerEquipmentRequest extends FormRequest
             'site_list' => [
                 'required',
                 'array',
-                new CheckForDuplicateSiteEquipment
+                new CheckForDuplicateSiteEquipment,
             ],
         ];
     }

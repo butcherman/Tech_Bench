@@ -6,9 +6,9 @@ use App\Models\User;
 use App\Service\Cache;
 
 /**
- * This Action will return a list of roles that the logged in user can assign to new/edit users
- * This list is based on the logged in users current role.  They cannot assign a role with a
- * lower RoleId than they have access to.
+ * This Action will return a list of roles that the logged in user can assign
+ * to new/edit users.  This list is based on the logged in users current role.
+ * They cannot assign a role with a lower RoleId than they have access to.
  */
 class BuildUserRoles
 {

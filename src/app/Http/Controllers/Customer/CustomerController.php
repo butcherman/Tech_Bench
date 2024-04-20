@@ -8,16 +8,18 @@ use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerRequest;
 use App\Jobs\Customer\DestroyCustomerJob;
 use App\Models\Customer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CustomerController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Customer Search Page
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         return Inertia::render('Customer/Index', [
             'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
@@ -25,9 +27,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Customer.
      */
-    public function create()
+    public function create(): Response
     {
         $this->authorize('create', Customer::class);
 
@@ -38,9 +40,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Customer in storage.
      */
-    public function store(CustomerRequest $request)
+    public function store(CustomerRequest $request): RedirectResponse
     {
         $newCustomer = $request->createNewCustomer();
 
@@ -55,9 +57,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified Customer.
      */
-    public function show(Request $request, Customer $customer)
+    public function show(Request $request, Customer $customer): Response
     {
 
         if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
@@ -87,9 +89,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Customer.
      */
-    public function edit(Customer $customer)
+    public function edit(Customer $customer): Response
     {
         $this->authorize('update', $customer);
 
@@ -102,9 +104,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Customer in storage.
      */
-    public function update(CustomerRequest $request, Customer $customer)
+    public function update(CustomerRequest $request, Customer $customer): RedirectResponse
     {
         $updatedCustomer = $request->updateCustomer($customer);
 
@@ -119,9 +121,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Customer from storage.
      */
-    public function destroy(CustomerDisableRequest $request, Customer $customer)
+    public function destroy(CustomerDisableRequest $request, Customer $customer): RedirectResponse
     {
         $customer->update(['deleted_reason' => $request->reason]);
         $customer->delete();
@@ -137,7 +139,7 @@ class CustomerController extends Controller
     /**
      * Restore a soft deleted customer
      */
-    public function restore(Request $request, Customer $customer)
+    public function restore(Request $request, Customer $customer): RedirectResponse
     {
         $this->authorize('restore', $customer);
 
@@ -151,7 +153,7 @@ class CustomerController extends Controller
     /**
      * Completely remove a soft deleted customer
      */
-    public function forceDelete(Request $request, Customer $customer)
+    public function forceDelete(Request $request, Customer $customer): RedirectResponse
     {
         $this->authorize('forceDelete', $customer);
 

@@ -9,8 +9,6 @@ use App\Models\CustomerFileType;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
@@ -97,7 +95,7 @@ class CustomerFileTest extends TestCase
         ]);
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
+                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
             );
 
         // Event::assertDispatched(CustomerFileCreatedEvent::class);
@@ -145,7 +143,7 @@ class CustomerFileTest extends TestCase
             'cust_site_id' => $sites[2]->cust_site_id,
         ]);
         Storage::disk('customers')
-            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png');
+            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png');
 
         // Event::assertDispatched(CustomerFileCreatedEvent::class);
     }
@@ -386,7 +384,7 @@ class CustomerFileTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.file.restored'));
         $this->assertDatabaseHas('customer_files', $file->only([
-            'file_id'
+            'file_id',
         ]));
     }
 

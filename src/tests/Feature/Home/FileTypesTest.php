@@ -2,12 +2,9 @@
 
 namespace Tests\Feature\Home;
 
-use App\Models\CustomerContactPhone;
 use App\Models\CustomerFile;
 use App\Models\CustomerFileType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class FileTypesTest extends TestCase
@@ -192,7 +189,7 @@ class FileTypesTest extends TestCase
         $response->assertSessionHas('warning', __('admin.file-type.destroyed'));
 
         $this->assertDatabaseMissing('customer_file_types', $fileType->only([
-            'file_type_id'
+            'file_type_id',
         ]));
     }
 
@@ -200,7 +197,7 @@ class FileTypesTest extends TestCase
     {
         $fileType = CustomerFileType::factory()->create();
         CustomerFile::factory()->create([
-            'file_type_id' => $fileType->file_type_id
+            'file_type_id' => $fileType->file_type_id,
         ]);
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('admin.file-types.destroy', $fileType->file_type_id));
@@ -208,7 +205,7 @@ class FileTypesTest extends TestCase
         $response->assertSessionHasErrors('query_error');
 
         $this->assertDatabaseHas('customer_file_types', $fileType->only([
-            'file_type_id'
+            'file_type_id',
         ]));
     }
 }

@@ -12,7 +12,7 @@ class EmailChangedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is triggered when a user changes their email address
      */
     public function __construct(public string $oldEmail, public User $user)
     {

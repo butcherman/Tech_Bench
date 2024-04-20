@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Equipment;
 
 use App\Exceptions\Database\GeneralQueryException;
 use App\Exceptions\Database\RecordInUseException;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\DataTypeRequest;
-use Illuminate\Database\QueryException;
-use App\Service\Cache;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
-use App\Http\Controllers\Controller;
+use App\Service\Cache;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -45,7 +45,7 @@ class EquipmentDataTypeController extends Controller
     {
         $newField = DataFieldType::create($request->toArray());
 
-        Log::info('New Equipment Data Field created by ' .
+        Log::info('New Equipment Data Field created by '.
             $request->user()->username, $newField->toArray());
 
         return redirect(route('equipment-data.index'))
@@ -72,7 +72,7 @@ class EquipmentDataTypeController extends Controller
     {
         $equipment_datum->update($request->toArray());
 
-        Log::info('Equipment Data Type ' . $equipment_datum->name . ' updated by ' .
+        Log::info('Equipment Data Type '.$equipment_datum->name.' updated by '.
             $request->user()->username, $equipment_datum->toArray());
 
         return redirect(route('equipment-data.index'))
@@ -92,7 +92,7 @@ class EquipmentDataTypeController extends Controller
         } catch (QueryException $e) {
             if (in_array($e->errorInfo[1], [19, 1451])) {
                 throw new RecordInUseException(
-                    $equipment_datum->name . ' is still in use and cannot be deleted',
+                    $equipment_datum->name.' is still in use and cannot be deleted',
                     0,
                     $e
                 );
@@ -103,7 +103,7 @@ class EquipmentDataTypeController extends Controller
             }
         }
 
-        Log::notice('Data Field ' . $equipment_datum->name . ' deleted by ' .
+        Log::notice('Data Field '.$equipment_datum->name.' deleted by '.
             $request->user()->username);
 
         return back()->with('warning', __('equipment.data-field-type.destroyed'));

@@ -16,11 +16,11 @@ class DownloadNoteController extends Controller
      */
     public function __invoke(Request $request, Customer $customer, CustomerNote $note)
     {
-        Log::channel('cust')->info('Customer Note ID ' . $note->note_id . ' downloaded by ' . $request->user()->username);
+        Log::channel('cust')->info('Customer Note ID '.$note->note_id.' downloaded by '.$request->user()->username);
 
         return Pdf::loadView('pdf.customer_note', [
             'customer' => $customer,
-            'note' => $note->load(['EquipmentType', 'CustomerSite'])
+            'note' => $note->load(['EquipmentType', 'CustomerSite']),
         ])->stream();
     }
 }

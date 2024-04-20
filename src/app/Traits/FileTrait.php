@@ -3,10 +3,8 @@
 namespace App\Traits;
 
 use App\Models\FileUpload;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 // use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
@@ -114,18 +112,18 @@ trait FileTrait
 
         if (
             Storage::disk($this->disk)
-                ->exists($this->folder . DIRECTORY_SEPARATOR . $name)
+                ->exists($this->folder.DIRECTORY_SEPARATOR.$name)
         ) {
             $parts = pathinfo($name);
-            $ext = isset($parts['extension']) ? ('.' . $parts['extension']) : '';
+            $ext = isset($parts['extension']) ? ('.'.$parts['extension']) : '';
             $base = preg_replace('(\(\d\))', '', $parts['filename']);
             $number = 0;
 
             do {
-                $name = $base . '(' . ++$number . ')' . $ext;
+                $name = $base.'('.++$number.')'.$ext;
             } while (
                 Storage::disk($this->disk)
-                    ->exists($this->folder . DIRECTORY_SEPARATOR . $name)
+                    ->exists($this->folder.DIRECTORY_SEPARATOR.$name)
             );
         }
 

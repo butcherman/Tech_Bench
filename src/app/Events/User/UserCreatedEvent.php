@@ -12,7 +12,7 @@ class UserCreatedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is triggered when a new user is created
      */
     public function __construct(public User $user)
     {

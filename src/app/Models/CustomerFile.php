@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CustomerFile extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use Prunable;
+    use SoftDeletes;
 
     protected $primaryKey = 'cust_file_id';
 
@@ -24,7 +24,7 @@ class CustomerFile extends Model
         'deleted_at',
         'CustomerFileType',
         'CustomerEquipment',
-        'user'
+        'user',
     ];
 
     protected $appends = [

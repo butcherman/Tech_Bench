@@ -26,7 +26,7 @@ class CustomerSettingsRequest extends FormRequest
             'select_id' => 'required|boolean',
             'update_slug' => 'required|boolean',
             'default_state' => 'required|string',
-            'auto_purge' => 'required|boolean'
+            'auto_purge' => 'required|boolean',
         ];
     }
 }

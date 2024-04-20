@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CustomerNote extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use Prunable;
+    use SoftDeletes;
 
     protected $primaryKey = 'note_id';
 

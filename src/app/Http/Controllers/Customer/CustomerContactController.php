@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class CustomerContactController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Customer Contact in storage.
      */
     public function store(CustomerContactRequest $request, Customer $customer)
     {
@@ -25,12 +25,12 @@ class CustomerContactController extends Controller
         );
 
         return back()->with('success', __('cust.contact.created', [
-            'cont' => $newContact->name
+            'cont' => $newContact->name,
         ]));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Customer Contact in storage.
      */
     public function update(CustomerContactRequest $request, Customer $customer, CustomerContact $contact)
     {
@@ -43,12 +43,12 @@ class CustomerContactController extends Controller
         );
 
         return back()->with('success', __('cust.contact.updated', [
-            'cont' => $updatedContact->name
+            'cont' => $updatedContact->name,
         ]));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Customer Contact from storage.
      */
     public function destroy(Request $request, Customer $customer, CustomerContact $contact)
     {
@@ -63,7 +63,7 @@ class CustomerContactController extends Controller
         );
 
         return back()->with('warning', __('cust.contact.deleted', [
-            'cont' => $contact->name
+            'cont' => $contact->name,
         ]));
     }
 
@@ -75,12 +75,13 @@ class CustomerContactController extends Controller
         $this->authorize('restore', $contact);
 
         $contact->restore();
+
         Log::channel('cust')
             ->info('Customer Contact restored for ' . $customer->name . ' by ' .
                 $request->user()->username, $contact->toArray());
 
         return back()->with('success', __('cust.contact.restored', [
-            'cont' => $contact->name
+            'cont' => $contact->name,
         ]));
     }
 
@@ -93,13 +94,14 @@ class CustomerContactController extends Controller
         $this->authorize('force-delete', $contact);
 
         $contact->forceDelete();
+
         Log::channel('cust')
             ->notice('Customer Contact force deleted for ' . $customer->name .
                 ' by ' . $request->user()->username, $contact->toArray());
 
         return back()
             ->with('warning', __('cust.contact.force_deleted', [
-                'cont' => $contact->name
+                'cont' => $contact->name,
             ]));
     }
 }

@@ -5,6 +5,11 @@ namespace App\Actions;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * Build the primary navigation bar for the app.
+ * This includes links that may be allowed/disallowed or
+ * Features that are enables/disabled
+ */
 class BuildNavbar
 {
     // TODO - Unit Test Class
@@ -44,16 +49,14 @@ class BuildNavbar
      */
     protected static function getAdminNav(User $user)
     {
-        $nav = false;
-
         if (Gate::allows('admin-link', $user)) {
-            $nav[] = [
+            return [
                 'name' => 'Administration',
                 'route' => route('admin.index'),
                 'icon' => 'fas fa-user-shield',
             ];
         }
 
-        return $nav;
+        return false;
     }
 }

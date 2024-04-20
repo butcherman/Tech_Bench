@@ -12,7 +12,8 @@ class ResendWelcomeEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is triggered when an admin requests to re-send the welcome
+     * email for a new user
      */
     public function __construct(public User $user)
     {

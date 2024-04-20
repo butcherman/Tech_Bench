@@ -6,7 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -19,7 +20,7 @@ return new class extends Migration {
         // Add the file size of each current file
         $allFiles = FileUpload::all();
         foreach ($allFiles as $fileData) {
-            $path = $fileData->folder . DIRECTORY_SEPARATOR . $fileData->file_name;
+            $path = $fileData->folder.DIRECTORY_SEPARATOR.$fileData->file_name;
             $size = -1;
 
             if (Storage::disk($fileData->disk)->exists($path)) {

@@ -9,8 +9,6 @@ use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EquipmentTypeTest extends TestCase
@@ -129,7 +127,7 @@ class EquipmentTypeTest extends TestCase
         $response->assertSessionHas('success', __('equipment.created'));
         $this->assertDatabaseHas('equipment_types', [
             'cat_id' => $category->cat_id,
-            'name' => $equip->name
+            'name' => $equip->name,
         ]);
         $this->assertDatabaseHas('data_field_types', ['name' => 'IP Address']);
         $this->assertDatabaseHas('data_field_types', ['name' => 'Gateway']);
@@ -271,7 +269,7 @@ class EquipmentTypeTest extends TestCase
         $this->assertDatabaseHas('equipment_types', [
             'equip_id' => $existing->equip_id,
             'cat_id' => $existing->cat_id,
-            'name' => $form['name']
+            'name' => $form['name'],
         ]);
         $this->assertDatabaseHas('data_field_types', ['name' => 'IP Address']);
         $this->assertDatabaseHas('data_field_types', ['name' => 'Gateway']);
@@ -315,16 +313,16 @@ class EquipmentTypeTest extends TestCase
         $this->assertDatabaseHas('equipment_types', [
             'equip_id' => $existing->equip_id,
             'cat_id' => $existing->cat_id,
-            'name' => $form['name']
+            'name' => $form['name'],
         ]);
         $this->assertDatabaseHas('data_field_types', ['name' => 'IP Address']);
         $this->assertDatabaseMissing('data_fields', [
             'equip_id' => $equip->equip_id,
-            'type_id' => $dataField->type_id
+            'type_id' => $dataField->type_id,
         ]);
         $this->assertDatabaseMissing('customer_equipment_data', [
             'cust_equip_id' => $custEquip->cust_equip_id,
-            'field_id' => $equipField->field_id
+            'field_id' => $equipField->field_id,
         ]);
     }
 

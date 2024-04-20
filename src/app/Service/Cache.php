@@ -20,7 +20,7 @@ class Cache
      *
      * @codeCoverageIgnore
      */
-    public static function clearCache(array|string $cacheKey = null)
+    public static function clearCache(array|string|null $cacheKey = null)
     {
         if ($cacheKey) {
             if (is_array($cacheKey)) {
@@ -42,9 +42,9 @@ class Cache
     {
         return FacadesCache::get('password_rules', function () {
             $passwordRules = [
-                'Password must be at least ' .
-                config('auth.passwords.settings.min_length') .
-                ' characters'
+                'Password must be at least '.
+                config('auth.passwords.settings.min_length').
+                ' characters',
             ];
 
             if (config('auth.passwords.settings.contains_uppercase')) {

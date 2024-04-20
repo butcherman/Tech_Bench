@@ -3,8 +3,6 @@
 namespace Tests\Feature\Customer;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerAdminTest extends TestCase
@@ -82,19 +80,19 @@ class CustomerAdminTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.select_id',
-            'value' => false
+            'value' => false,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.update_slug',
-            'value' => false
+            'value' => false,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.default_state',
-            'value' => 'OR'
+            'value' => 'OR',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.auto_purge',
-            'value' => false
+            'value' => false,
         ]);
     }
 }

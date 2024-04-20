@@ -7,6 +7,10 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Exception triggered when a file exists in the database, but not in the
+ * filesystem
+ */
 class FileMissingException extends Exception
 {
     public function __construct(protected FileUpload $fileData)

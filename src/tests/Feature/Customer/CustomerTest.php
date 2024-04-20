@@ -163,7 +163,7 @@ class CustomerTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'] . ' 1');
+        $slug = Str::slug($data['name'].' 1');
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.store'), $data);
@@ -188,7 +188,7 @@ class CustomerTest extends TestCase
         $existing1 = Customer::factory()->has(CustomerSite::factory())->create();
         Customer::factory()->create([
             'name' => $existing1->name,
-            'slug' => Str::slug($existing1->slug . '-1'),
+            'slug' => Str::slug($existing1->slug.'-1'),
         ]);
 
         $cust = Customer::factory()->make();
@@ -201,7 +201,7 @@ class CustomerTest extends TestCase
             'state' => $existing1->CustomerSite[0]->state,
             'zip' => $existing1->CustomerSite[0]->zip,
         ];
-        $slug = Str::slug($data['name'] . ' 2');
+        $slug = Str::slug($data['name'].' 2');
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.store'), $data);
@@ -347,7 +347,7 @@ class CustomerTest extends TestCase
     {
         $customer = Customer::factory()->create();
         $newSite = CustomerSite::factory()->create([
-            'cust_id' => $customer->cust_id
+            'cust_id' => $customer->cust_id,
         ]);
         $updated = Customer::factory()->make();
 
@@ -361,7 +361,7 @@ class CustomerTest extends TestCase
             ->put(route('customers.update', $customer->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.updated', [
-            'name' => $updated->name
+            'name' => $updated->name,
         ]));
         $response->assertRedirect(route('customers.show', $updated->slug));
         $this->assertDatabaseHas('customers', [
@@ -413,7 +413,7 @@ class CustomerTest extends TestCase
             ->delete(route('customers.destroy', $cust->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('danger', __('cust.destroy', [
-            'name' => $cust->name
+            'name' => $cust->name,
         ]));
         $response->assertRedirect(route('customers.index'));
         $this->assertSoftDeleted('customers', $cust->only(['cust_id']));

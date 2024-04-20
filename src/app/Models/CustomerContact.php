@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CustomerContact extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use Prunable;
+    use SoftDeletes;
 
     protected $primaryKey = 'cont_id';
 

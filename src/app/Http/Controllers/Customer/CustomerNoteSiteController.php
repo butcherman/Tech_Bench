@@ -22,11 +22,11 @@ class CustomerNoteSiteController extends Controller
         $this->authorize('create', CustomerNote::class);
 
         return Inertia::render('Customer/Note/Create', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'site' => fn() => $site,
-            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
-            'equipmentList' => fn() => $customer->load('CustomerEquipment')->CustomerEquipment,
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'site' => fn () => $site,
+            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
+            'equipmentList' => fn () => $customer->load('CustomerEquipment')->CustomerEquipment,
         ]);
     }
 
@@ -37,8 +37,8 @@ class CustomerNoteSiteController extends Controller
     {
         $newNote = $request->createNote();
 
-        Log::channel('cust')->info('New Customer Note created for ' . $customer->name .
-            ' by ' . $request->user()->username, $newNote->toArray());
+        Log::channel('cust')->info('New Customer Note created for '.$customer->name.
+            ' by '.$request->user()->username, $newNote->toArray());
 
         return redirect(route('customers.sites.show', [$customer->slug, $site->site_slug]))
             ->with('success', __('cust.note.created'));
@@ -51,10 +51,10 @@ class CustomerNoteSiteController extends Controller
     {
         return Inertia::render('Customer/Note/Show', [
             'permissions' => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $note->CustomerSite->makeVisible('href'),
-            'note' => fn() => $note,
-            'site' => fn() => $site,
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $note->CustomerSite->makeVisible('href'),
+            'note' => fn () => $note,
+            'site' => fn () => $site,
         ]);
     }
 
@@ -66,12 +66,12 @@ class CustomerNoteSiteController extends Controller
         $this->authorize('update', $note);
 
         return Inertia::render('Customer/Note/Edit', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
-            'equipmentList' => fn() => $customer->CustomerEquipment,
-            'note' => fn() => $note->load('CustomerSite'),
-            'site' => fn() => $site,
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
+            'equipmentList' => fn () => $customer->CustomerEquipment,
+            'note' => fn () => $note->load('CustomerSite'),
+            'site' => fn () => $site,
         ]);
     }
 
@@ -82,13 +82,13 @@ class CustomerNoteSiteController extends Controller
     {
         $updatedNote = $request->updateNote();
 
-        Log::channel('cust')->info('Customer Note for ' . $customer->name .
-            ' updated by ' . $request->user()->username, $updatedNote->toArray());
+        Log::channel('cust')->info('Customer Note for '.$customer->name.
+            ' updated by '.$request->user()->username, $updatedNote->toArray());
 
         return redirect(route('customers.site.notes.show', [
             $customer->slug,
             $site->site_slug,
-            $updatedNote->note_id
+            $updatedNote->note_id,
         ]))->with('success', __('cust.note.updated'));
     }
 
@@ -101,8 +101,8 @@ class CustomerNoteSiteController extends Controller
 
         $note->delete();
 
-        Log::channel('cust')->notice('Customer Note for ' . $customer->name .
-            ' deleted by ' . $request->user()->username, $note->toArray());
+        Log::channel('cust')->notice('Customer Note for '.$customer->name.
+            ' deleted by '.$request->user()->username, $note->toArray());
 
         return redirect(route('customers.sites.show', [$customer->slug, $site->site_slug]))
             ->with('warning', __('cust.note.deleted'));

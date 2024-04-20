@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/**
+ * Exception triggered when trying to access a customer that does not exist
+ */
 class CustomerNotFoundException extends Exception
 {
     protected $request;

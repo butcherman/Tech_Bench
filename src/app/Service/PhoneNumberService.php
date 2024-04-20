@@ -15,7 +15,7 @@ class PhoneNumberService
     }
 
     /**
-     * Remove all formatting from a number, end result should be a 10 digit string 
+     * Remove all formatting from a number, end result should be a 10 digit string
      */
     public function cleanPhoneString(string $number): string
     {

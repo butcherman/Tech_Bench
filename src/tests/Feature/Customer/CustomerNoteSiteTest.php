@@ -8,8 +8,6 @@ use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerNoteSiteTest extends TestCase
@@ -269,7 +267,7 @@ class CustomerNoteSiteTest extends TestCase
             ->get(route('customers.site.notes.edit', [
                 $customer->slug,
                 $site->site_slug,
-                $note->note_id
+                $note->note_id,
             ]));
         $response->assertStatus(403);
     }
@@ -285,7 +283,7 @@ class CustomerNoteSiteTest extends TestCase
             ->get(route('customers.site.notes.edit', [
                 $customer->slug,
                 $site->site_slug,
-                $note->note_id
+                $note->note_id,
             ]));
         $response->assertSuccessful();
     }
@@ -392,7 +390,7 @@ class CustomerNoteSiteTest extends TestCase
 
         $note->CustomerSite()->sync([
             $customer->CustomerSite[0]->cust_site_id,
-            $customer->CustomerSite[1]->cust_site_id
+            $customer->CustomerSite[1]->cust_site_id,
         ]);
         $data = [
             'subject' => 'This is a test Note',
@@ -400,7 +398,7 @@ class CustomerNoteSiteTest extends TestCase
             'urgent' => true,
             'site_list' => [
                 $customer->CustomerSite[1]->cust_site_id,
-                $customer->CustomerSite[2]->cust_site_id
+                $customer->CustomerSite[2]->cust_site_id,
             ],
             'cust_equip_id' => null,
             'details' => 'This is the notes details',
@@ -420,15 +418,15 @@ class CustomerNoteSiteTest extends TestCase
         $this->assertDatabaseHas('customer_notes', $data);
         $this->assertDatabaseMissing('customer_site_notes', [
             'note_id' => $note->note_id,
-            'cust_site_id' => $customer->CustomerSite[0]->cust_site_id
+            'cust_site_id' => $customer->CustomerSite[0]->cust_site_id,
         ]);
         $this->assertDatabaseHas('customer_site_notes', [
             'note_id' => $note->note_id,
-            'cust_site_id' => $customer->CustomerSite[1]->cust_site_id
+            'cust_site_id' => $customer->CustomerSite[1]->cust_site_id,
         ]);
         $this->assertDatabaseHas('customer_site_notes', [
             'note_id' => $note->note_id,
-            'cust_site_id' => $customer->CustomerSite[2]->cust_site_id
+            'cust_site_id' => $customer->CustomerSite[2]->cust_site_id,
         ]);
 
         // TODO - Dispatch Event

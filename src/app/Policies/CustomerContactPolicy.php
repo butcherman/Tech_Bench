@@ -2,10 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\CustomerContact;
 use App\Models\User;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\Response;
 
 class CustomerContactPolicy
 {

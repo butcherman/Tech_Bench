@@ -6,6 +6,10 @@ use App\Events\File\FileDataDeletedEvent;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Complete process of removing a customer and all related data from the
+ * database and file system
+ */
 class DestroyCustomer
 {
     protected $isSuccessful = false;
@@ -30,6 +34,9 @@ class DestroyCustomer
         $this->isSuccessful = true;
     }
 
+    /**
+     * Remove all Customer Files from the disk if not in use by other items
+     */
     protected function destroyFiles()
     {
         $fileList = $this->customer->CustomerFile;
@@ -38,24 +45,26 @@ class DestroyCustomer
             $fileData->forceDelete();
             event(new FileDataDeletedEvent($fileData->FileUpload->file_id));
 
-
         }
     }
 
+    /**
+     * Remove all related sites from the customer
+     */
     protected function destroySites()
     {
         // Clear out the primary site id so that all sites can be destroyed
         $this->customer->primary_site_id = null;
         $this->customer->save();
 
-        Log::channel('cust')->debug('Destroying Customer Sites for ' . $this->customer->name);
+        Log::channel('cust')->debug('Destroying Customer Sites for '.$this->customer->name);
         $siteList = $this->customer->CustomerSite;
 
         // Remove all sites associated with this customer
         $siteList->each(function ($site) {
             $site->forceDelete();
             Log::channel('cust')
-                ->debug('Customer Site ' . $site->site_name . ' destroyed');
+                ->debug('Customer Site '.$site->site_name.' destroyed');
         });
     }
 }

@@ -20,10 +20,10 @@ class CustomerSiteController extends Controller
     public function index(Request $request, Customer $customer)
     {
         return Inertia::render('Customer/Site/Index', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
-            'alerts' => fn() => $customer->CustomerAlert,
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
+            'alerts' => fn () => $customer->CustomerAlert,
         ]);
     }
 
@@ -35,8 +35,8 @@ class CustomerSiteController extends Controller
         $this->authorize('create', CustomerSite::class);
 
         return Inertia::render('Customer/Site/Create', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
         ]);
     }
 
@@ -52,8 +52,8 @@ class CustomerSiteController extends Controller
         $request->setSlug();
         $newSite = CustomerSite::create($request->except(['cust_name']));
 
-        Log::channel('cust')->info('New Customer Site created for ' . $request->cust_name .
-            ' by ' . $request->user()->username, $newSite->toArray());
+        Log::channel('cust')->info('New Customer Site created for '.$request->cust_name.
+            ' by '.$request->user()->username, $newSite->toArray());
 
         return redirect(route('customers.sites.show', [
             $newSite->Customer->slug,
@@ -67,15 +67,15 @@ class CustomerSiteController extends Controller
     public function show(Request $request, Customer $customer, CustomerSite $site)
     {
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'site' => fn() => $site,
-            'siteList' => fn() => $customer->CustomerSite,
-            'alerts' => fn() => $customer->CustomerAlert,
-            'equipmentList' => fn() => $site->SiteEquipment,
-            'contacts' => fn() => $customer->CustomerContact,
-            'notes' => fn() => $site->getNotes(),
-            'files' => fn() => $site->getFiles()->append('href'),
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'site' => fn () => $site,
+            'siteList' => fn () => $customer->CustomerSite,
+            'alerts' => fn () => $customer->CustomerAlert,
+            'equipmentList' => fn () => $site->SiteEquipment,
+            'contacts' => fn () => $customer->CustomerContact,
+            'notes' => fn () => $site->getNotes(),
+            'files' => fn () => $site->getFiles()->append('href'),
         ]);
     }
 
@@ -87,9 +87,9 @@ class CustomerSiteController extends Controller
         $this->authorize('update', $site);
 
         return Inertia::render('Customer/Site/Edit', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
-            'site' => fn() => $site,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
+            'site' => fn () => $site,
         ]);
     }
 
@@ -101,8 +101,8 @@ class CustomerSiteController extends Controller
         $request->setSlug();
         $site->update($request->except(['cust_name']));
 
-        Log::channel('cust')->info('Customer Site ' . $site->site_name . ' updated for ' .
-            $request->cust_name . ' by ' . $request->user()->username, $site->toArray());
+        Log::channel('cust')->info('Customer Site '.$site->site_name.' updated for '.
+            $request->cust_name.' by '.$request->user()->username, $site->toArray());
 
         return redirect(route('customers.sites.show', [
             $customer->slug,
@@ -118,8 +118,8 @@ class CustomerSiteController extends Controller
         $site->update(['deleted_reason' => $request->reason]);
         $site->delete();
 
-        Log::channel('cust')->alert('Customer Site ' . $site->site_name . ' for ' .
-            $customer->name . ' has been disabled by ' . $request->user()->username);
+        Log::channel('cust')->alert('Customer Site '.$site->site_name.' for '.
+            $customer->name.' has been disabled by '.$request->user()->username);
 
         return redirect(route('customers.show', $customer->slug))->with('danger', __('cust.destroy', [
             'name' => $site->site_name,

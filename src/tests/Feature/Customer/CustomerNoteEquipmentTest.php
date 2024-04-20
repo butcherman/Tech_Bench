@@ -5,11 +5,8 @@ namespace Tests\Feature\Customer;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerNote;
-use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerNoteEquipmentTest extends TestCase
@@ -233,7 +230,7 @@ class CustomerNoteEquipmentTest extends TestCase
             ->get(route('customers.equipment.notes.edit', [
                 $customer->slug,
                 $equipment->cust_equip_id,
-                $note->note_id
+                $note->note_id,
             ]));
         $response->assertStatus(403);
     }
@@ -249,7 +246,7 @@ class CustomerNoteEquipmentTest extends TestCase
             ->get(route('customers.equipment.notes.edit', [
                 $customer->slug,
                 $equipment->cust_equip_id,
-                $note->note_id
+                $note->note_id,
             ]));
         $response->assertSuccessful();
     }

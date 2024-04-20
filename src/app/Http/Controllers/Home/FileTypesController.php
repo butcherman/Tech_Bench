@@ -43,7 +43,7 @@ class FileTypesController extends Controller
         $fileType = CustomerFileType::create($request->only(['description']));
 
         Cache::clearCache(['fileTypes']);
-        Log::stack(['cust', 'daily'])->info('New Customer File Type created by ' .
+        Log::stack(['cust', 'daily'])->info('New Customer File Type created by '.
             $request->user()->username, $fileType->toArray());
 
         return back()->with('success', __('admin.file-type.created'));
@@ -57,7 +57,7 @@ class FileTypesController extends Controller
         $file_type->update($request->only(['description']));
 
         Cache::clearCache(['fileTypes']);
-        Log::stack(['cust', 'daily'])->info('Customer File Type Updated by ' .
+        Log::stack(['cust', 'daily'])->info('Customer File Type Updated by '.
             $request->user()->username, $file_type->toArray());
 
         return back()->with('success', __('admin.file-type.updated'));

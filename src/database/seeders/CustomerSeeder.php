@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
-use App\Models\CustomerContact;
-use App\Models\CustomerContactSite;
 use App\Models\CustomerSite;
 use Illuminate\Database\Seeder;
 

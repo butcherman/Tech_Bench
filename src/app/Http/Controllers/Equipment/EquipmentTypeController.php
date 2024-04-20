@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentTypeRequest;
 use App\Jobs\Customer\UpdateCustomerDataFieldsJob;
 use App\Models\DataFieldType;
-use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Service\Cache;
 use Illuminate\Database\QueryException;
@@ -26,7 +25,7 @@ class EquipmentTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/Index', [
-            'equipment-list' => fn() => Cache::equipmentCategories(),
+            'equipment-list' => fn () => Cache::equipmentCategories(),
         ]);
     }
 
@@ -38,8 +37,8 @@ class EquipmentTypeController extends Controller
         $this->authorize('create', EquipmentType::class);
 
         return Inertia::render('Equipment/Create', [
-            'category-list' => fn() => Cache::equipmentCategories(),
-            'data-list' => fn() => DataFieldType::all()->pluck('name'),
+            'category-list' => fn () => Cache::equipmentCategories(),
+            'data-list' => fn () => DataFieldType::all()->pluck('name'),
         ]);
     }
 
@@ -53,7 +52,7 @@ class EquipmentTypeController extends Controller
 
         Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
         Log::info(
-            'New Equipment Type created by ' . $request->user()->username,
+            'New Equipment Type created by '.$request->user()->username,
             $request->toArray()
         );
 
@@ -69,7 +68,7 @@ class EquipmentTypeController extends Controller
 
         return Inertia::render('Equipment/Show', [
             // TODO - Add Tech Tip References
-            'equipment' => $equipment->load(['Customer',/** 'TechTip' */]),
+            'equipment' => $equipment->load(['Customer'/** 'TechTip' */]),
         ]);
     }
 
@@ -81,9 +80,9 @@ class EquipmentTypeController extends Controller
         $this->authorize('update', $equipment);
 
         return Inertia::render('Equipment/Edit', [
-            'equipment' => fn() => $equipment->load('DataFieldType'),
-            'category-list' => fn() => Cache::equipmentCategories(),
-            'data-list' => fn() => DataFieldType::all()->pluck('name'),
+            'equipment' => fn () => $equipment->load('DataFieldType'),
+            'category-list' => fn () => Cache::equipmentCategories(),
+            'data-list' => fn () => DataFieldType::all()->pluck('name'),
         ]);
     }
 
@@ -96,7 +95,7 @@ class EquipmentTypeController extends Controller
         $request->processCustomerFields($equipment);
 
         Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-        Log::info('Equipment Type ' . $equipment->name . ' updated by ' .
+        Log::info('Equipment Type '.$equipment->name.' updated by '.
             $request->user()->username, $request->toArray());
 
         UpdateCustomerDataFieldsJob::dispatch($equipment);
@@ -117,7 +116,7 @@ class EquipmentTypeController extends Controller
         } catch (QueryException $e) {
             if (in_array($e->errorInfo[1], [19, 1451])) {
                 throw new RecordInUseException(
-                    $equipment->name . ' is still in use and cannot be deleted',
+                    $equipment->name.' is still in use and cannot be deleted',
                     0,
                     $e
                 );
@@ -128,7 +127,7 @@ class EquipmentTypeController extends Controller
             }
         }
 
-        Log::notice('Equipment Type ' . $equipment->name . ' was deleted by ' .
+        Log::notice('Equipment Type '.$equipment->name.' was deleted by '.
             $request->user()->username);
 
         return redirect(route('equipment.index'))->with('warning', __('equipment.destroyed'));

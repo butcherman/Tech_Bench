@@ -7,8 +7,6 @@ use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerNoteTest extends TestCase
@@ -278,7 +276,7 @@ class CustomerNoteTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->get(route('customers.notes.edit', [
                 $customer->slug,
-                $note->note_id
+                $note->note_id,
             ]));
         $response->assertStatus(403);
     }
@@ -292,7 +290,7 @@ class CustomerNoteTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->get(route('customers.notes.edit', [
                 $customer->slug,
-                $note->note_id
+                $note->note_id,
             ]));
         $response->assertSuccessful();
     }
@@ -394,7 +392,7 @@ class CustomerNoteTest extends TestCase
 
         $note->CustomerSite()->sync([
             $customer->CustomerSite[0]->cust_site_id,
-            $customer->CustomerSite[1]->cust_site_id
+            $customer->CustomerSite[1]->cust_site_id,
         ]);
         $data = [
             'subject' => 'This is a test Note',
@@ -402,7 +400,7 @@ class CustomerNoteTest extends TestCase
             'urgent' => true,
             'site_list' => [
                 $customer->CustomerSite[1]->cust_site_id,
-                $customer->CustomerSite[2]->cust_site_id
+                $customer->CustomerSite[2]->cust_site_id,
             ],
             'note_id' => null,
             'details' => 'This is the notes details',
@@ -422,15 +420,15 @@ class CustomerNoteTest extends TestCase
         $this->assertDatabaseHas('customer_notes', $data);
         $this->assertDatabaseMissing('customer_site_notes', [
             'note_id' => $note->note_id,
-            'cust_site_id' => $customer->CustomerSite[0]->cust_site_id
+            'cust_site_id' => $customer->CustomerSite[0]->cust_site_id,
         ]);
         $this->assertDatabaseHas('customer_site_notes', [
             'note_id' => $note->note_id,
-            'cust_site_id' => $customer->CustomerSite[1]->cust_site_id
+            'cust_site_id' => $customer->CustomerSite[1]->cust_site_id,
         ]);
         $this->assertDatabaseHas('customer_site_notes', [
             'note_id' => $note->note_id,
-            'cust_site_id' => $customer->CustomerSite[2]->cust_site_id
+            'cust_site_id' => $customer->CustomerSite[2]->cust_site_id,
         ]);
 
         // TODO - Dispatch Event
@@ -546,7 +544,7 @@ class CustomerNoteTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.note.restored'));
         $this->assertDatabaseHas('customer_notes', $note->only([
-            'note_id'
+            'note_id',
         ]));
     }
 

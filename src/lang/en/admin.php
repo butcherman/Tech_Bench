@@ -56,5 +56,5 @@ return [
         'created' => 'New Phone Number Type Created',
         'updated' => 'Phone Number Type Updated',
         'destroyed' => 'Phone Number Type Deleted',
-    ]
+    ],
 ];

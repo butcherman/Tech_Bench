@@ -107,8 +107,8 @@ class EquipmentTypeRequest extends FormRequest
             $dataFieldObj = DataField::find($fieldId);
             if ($dataFieldObj) {
 
-                Log::notice('Data Field ID ' . $fieldId . ' was deleted for Equipment ID ' .
-                    $equipId . ' by ' . $this->user()->username, $dataFieldObj->toArray());
+                Log::notice('Data Field ID '.$fieldId.' was deleted for Equipment ID '.
+                    $equipId.' by '.$this->user()->username, $dataFieldObj->toArray());
                 $dataFieldObj->delete();
             }
         }

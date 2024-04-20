@@ -3,12 +3,16 @@
 namespace App\Actions;
 
 use App\Models\Customer;
-use App\Models\CustomerEquipment;
 use App\Models\CustomerContact;
+use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\User;
 
+/**
+ * Build the permission list for each customer tasks they are allowed or not
+ * allowed to perform
+ */
 class BuildCustomerPermissions
 {
     public static function build(User $user)

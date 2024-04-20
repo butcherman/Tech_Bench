@@ -4,7 +4,6 @@ namespace App\Http\Requests\Customer;
 
 use App\Models\CustomerContact;
 use App\Models\CustomerContactPhone;
-use App\Models\PhoneNumberType;
 use App\Service\PhoneNumberService;
 use Illuminate\Foundation\Http\FormRequest;
 

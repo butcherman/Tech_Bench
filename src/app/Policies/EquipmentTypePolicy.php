@@ -2,10 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\EquipmentType;
 use App\Models\User;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\Response;
 
 class EquipmentTypePolicy
 {

@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CustomerEquipment extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use Prunable;
+    use SoftDeletes;
 
     protected $primaryKey = 'cust_equip_id';
 
@@ -21,7 +21,7 @@ class CustomerEquipment extends Model
         'deleted_at',
         'created_at',
         'updated_at',
-        'EquipmentType'
+        'EquipmentType',
     ];
 
     protected $appends = ['equip_name'];

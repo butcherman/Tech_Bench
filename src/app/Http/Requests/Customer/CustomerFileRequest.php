@@ -5,7 +5,6 @@ namespace App\Http\Requests\Customer;
 use App\Models\CustomerFile;
 use App\Models\FileUpload;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 
 class CustomerFileRequest extends FormRequest
 {

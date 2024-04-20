@@ -2,11 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\EquipmentCategory;
 use App\Models\User;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
 
 class EquipmentCategoryPolicy
 {

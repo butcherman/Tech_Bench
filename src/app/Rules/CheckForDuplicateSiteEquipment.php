@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\DB;
 
-class CheckForDuplicateSiteEquipment implements ValidationRule, DataAwareRule
+class CheckForDuplicateSiteEquipment implements DataAwareRule, ValidationRule
 {
     protected $data;
 
@@ -33,7 +33,7 @@ class CheckForDuplicateSiteEquipment implements ValidationRule, DataAwareRule
                 if ($siteEquip) {
                     $site = CustomerSite::find($siteId);
 
-                    $fail($site->site_name . ' already has this type of equipment assigned.');
+                    $fail($site->site_name.' already has this type of equipment assigned.');
                 }
             }
         }

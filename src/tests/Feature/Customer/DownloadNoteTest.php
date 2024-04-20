@@ -5,8 +5,6 @@ namespace Tests\Feature\Customer;
 use App\Models\Customer;
 use App\Models\CustomerNote;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DownloadNoteTest extends TestCase
@@ -18,7 +16,7 @@ class DownloadNoteTest extends TestCase
     {
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()->create([
-            'cust_id' => $customer->cust_id
+            'cust_id' => $customer->cust_id,
         ]);
 
         $response = $this->get(route('customers.notes.download', [
@@ -34,7 +32,7 @@ class DownloadNoteTest extends TestCase
     {
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()->create([
-            'cust_id' => $customer->cust_id
+            'cust_id' => $customer->cust_id,
         ]);
 
         $response = $this->actingAs(User::factory()->create())

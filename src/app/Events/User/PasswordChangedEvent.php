@@ -12,7 +12,7 @@ class PasswordChangedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is triggered when a user changes their password
      */
     public function __construct(public User $user)
     {

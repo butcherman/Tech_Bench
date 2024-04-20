@@ -1,10 +1,9 @@
 <?php
 
-
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
+use App\Http\Controllers\Equipment\EquipmentDataTypeController;
 use App\Http\Controllers\Equipment\EquipmentListController;
 use App\Http\Controllers\Equipment\EquipmentTypeController;
-use App\Http\Controllers\Equipment\EquipmentDataTypeController;
 use App\Models\EquipmentType;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +20,7 @@ Route::middleware('auth.secure')->group(function () {
             $breadcrumbs->index('Equipment Categories and Types', 'admin.index')
                 ->create('Create New Equipment')
                 ->edit('Edit Equipment', 'equipment.index')
-                ->show(fn(EquipmentType $equipment) => $equipment->name . ' References', 'equipment.edit');
+                ->show(fn (EquipmentType $equipment) => $equipment->name.' References', 'equipment.edit');
         });
 
     Route::post('equipment-category', [EquipmentCategoryController::class, 'store'])

@@ -7,7 +7,7 @@ use App\Traits\AllowTrait;
 
 /**
  * Build Administration Menu based on users permissions.
- * Only show items that they have permission to adjust
+ * Only show items that they have permission to view
  */
 class BuildAdminMenu
 {
@@ -63,7 +63,7 @@ class BuildAdminMenu
                     'name' => 'User Settings',
                     'icon' => 'cog',
                     'route' => route('admin.user.user-settings.show'),
-                ]
+                ],
             ];
 
         }

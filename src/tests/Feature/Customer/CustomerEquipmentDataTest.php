@@ -6,26 +6,22 @@ use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
-use App\Models\EquipmentCategory;
-use App\Models\EquipmentType;
 use App\Models\User;
-use App\Models\UserRolePermission;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerEquipmentDataTest extends TestCase
 {
-    protected $customer, $equipment;
+    protected $customer;
+
+    protected $equipment;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->customer = Customer::factory()->create();
         $this->equipment = CustomerEquipment::factory()->create([
-            'cust_id' => $this->customer->cust_id
+            'cust_id' => $this->customer->cust_id,
         ]);
-
 
     }
 
@@ -37,7 +33,7 @@ class CustomerEquipmentDataTest extends TestCase
         $data = [
             'saveData' => [
                 'fieldId' => 1,
-                'value' => '12.52.25.1'
+                'value' => '12.52.25.1',
             ],
         ];
 
@@ -79,8 +75,8 @@ class CustomerEquipmentDataTest extends TestCase
             'saveData' => [
                 [
                     'fieldId' => $data1->id,
-                    'value' => $newVal0 = '12.52.25.1'
-                ]
+                    'value' => $newVal0 = '12.52.25.1',
+                ],
             ],
         ];
 
@@ -143,20 +139,20 @@ class CustomerEquipmentDataTest extends TestCase
             'saveData' => [
                 [
                     'fieldId' => $data1->id,
-                    'value' => $newVal0 = '12.52.25.1'
+                    'value' => $newVal0 = '12.52.25.1',
                 ],
                 [
                     'fieldId' => $data2->id,
-                    'value' => $newVal1 = '8.6'
+                    'value' => $newVal1 = '8.6',
                 ],
                 [
                     'fieldId' => $data3->id,
-                    'value' => $newVal2 = 'billy_bob'
+                    'value' => $newVal2 = 'billy_bob',
                 ],
                 [
                     'fieldId' => $data4->id,
-                    'value' => $newVal3 = 'newPassword'
-                ]
+                    'value' => $newVal3 = 'newPassword',
+                ],
             ],
         ];
 

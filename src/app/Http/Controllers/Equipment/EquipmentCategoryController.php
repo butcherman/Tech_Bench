@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Equipment;
 
-use App\Exceptions\Database\RecordInUseException;
 use App\Exceptions\Database\GeneralQueryException;
+use App\Exceptions\Database\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentCategoryRequest;
 use App\Models\EquipmentCategory;
@@ -22,7 +22,7 @@ class EquipmentCategoryController extends Controller
         $newCat = EquipmentCategory::create($request->all());
         Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
 
-        Log::info('New Equipment Category ' . $newCat->name . ' created by ' .
+        Log::info('New Equipment Category '.$newCat->name.' created by '.
             $request->user()->username, $newCat->toArray());
 
         return back()->with('success', __('equipment.category.created'));
@@ -36,7 +36,7 @@ class EquipmentCategoryController extends Controller
         $category->update($request->all());
         Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
 
-        Log::info('Equipment Category ' . $category->name . ' has been updated by ' .
+        Log::info('Equipment Category '.$category->name.' has been updated by '.
             $request->user()->username);
 
         return back()->with('success', __('equipment.category.updated'));
@@ -66,7 +66,7 @@ class EquipmentCategoryController extends Controller
             }
         }
 
-        Log::notice('Equipment Category ' . $category->name . ' has been deleted by ' .
+        Log::notice('Equipment Category '.$category->name.' has been deleted by '.
             $request->user()->username);
 
         return back()->with('warning', __('equipment.category.destroyed'));
