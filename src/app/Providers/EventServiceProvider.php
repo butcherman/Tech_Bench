@@ -59,7 +59,7 @@ class EventServiceProvider extends ServiceProvider
          * Office 365 Authentication Events
          */
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-            \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
+            \SocialiteProviders\Azure\AzureExtendSocialite::class . '@handle',
         ],
 
         /**
@@ -72,9 +72,14 @@ class EventServiceProvider extends ServiceProvider
         /**
          * Customer Events
          */
-        'App\Events\Customer\CustomerAlertEvent' => [
-            'App\Listeners\Customer\HandleCustomerAlert',
-        ],
+        'App\Events\Customer\CustomerEvent' => [],
+        'App\Events\Customer\CustomerSiteEvent' => [],
+        'App\Events\Customer\CustomerAlertEvent' => [],
+        'App\Events\Customer\CustomerContactEvent' => [],
+        'App\Events\Customer\CustomerEquipmentEvent' => [],
+        'App\Events\Customer\CustomerEquipmentDataEvent' => [],
+        'App\Events\Customer\CustomerNoteEvent' => [],
+        'App\Events\Customer\CustomerFileEvent' => [],
 
     ];
 

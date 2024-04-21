@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerEquipmentDataEvent;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerEquipmentDataTest extends TestCase
@@ -48,6 +50,8 @@ class CustomerEquipmentDataTest extends TestCase
 
     public function test_invoke_one_field()
     {
+        Event::fake();
+
         $fields = DataField::factory()->count(4)->create(['equip_id' => $this->equipment->equip_id]);
 
         $data1 = CustomerEquipmentData::create([
@@ -108,10 +112,14 @@ class CustomerEquipmentDataTest extends TestCase
             'field_id' => $fields[3]->field_id,
             'value' => $value3,
         ]);
+
+        Event::assertDispatched(CustomerEquipmentDataEvent::class);
     }
 
     public function test_invoke_all_fields()
     {
+        Event::fake();
+
         $fields = DataField::factory()->count(4)->create(['equip_id' => $this->equipment->equip_id]);
 
         $data1 = CustomerEquipmentData::create([
@@ -184,5 +192,7 @@ class CustomerEquipmentDataTest extends TestCase
             'field_id' => $fields[3]->field_id,
             'value' => $newVal3,
         ]);
+
+        Event::assertDispatched(CustomerEquipmentDataEvent::class);
     }
 }

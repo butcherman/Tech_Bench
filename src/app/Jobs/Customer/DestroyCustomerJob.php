@@ -33,7 +33,9 @@ class DestroyCustomerJob implements ShouldQueue
         if ($jobData->wasSuccessful()) {
             Log::channel('cust')->critical('was successful');
         } else {
+            // @codeCoverageIgnoreStart
             Log::channel('cust')->critical('job failed');
+            // @codeCoverageIgnoreEnd
         }
     }
 }

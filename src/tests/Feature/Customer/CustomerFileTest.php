@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerFileEvent;
 use App\Events\File\FileDataDeletedEvent;
 use App\Models\Customer;
 use App\Models\CustomerFile;
@@ -64,8 +65,7 @@ class CustomerFileTest extends TestCase
 
     public function test_store()
     {
-        // Event::fake();
-
+        Event::fake();
         Storage::fake('customers');
 
         $customer = Customer::factory()->create();
@@ -84,6 +84,7 @@ class CustomerFileTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.files.store', $customer->slug), $data);
         $response->assertSuccessful();
+
         $this->assertDatabaseHas('customer_files', [
             'cust_id' => $customer->cust_id,
             'name' => $fileName,
@@ -93,18 +94,18 @@ class CustomerFileTest extends TestCase
             'folder' => $customer->cust_id,
             'file_name' => 'randomImage.png',
         ]);
+
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
+                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
             );
 
-        // Event::assertDispatched(CustomerFileCreatedEvent::class);
+        Event::assertDispatched(CustomerFileEvent::class);
     }
 
     public function test_store_site_file()
     {
-        // Event::fake();
-
+        Event::fake();
         Storage::fake('customers');
 
         $customer = Customer::factory()->create();
@@ -124,6 +125,7 @@ class CustomerFileTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.files.store', $customer->slug), $data);
         $response->assertSuccessful();
+
         $this->assertDatabaseHas('customer_files', [
             'cust_id' => $customer->cust_id,
             'name' => $fileName,
@@ -142,10 +144,11 @@ class CustomerFileTest extends TestCase
         $this->assertDatabaseHas('customer_site_files', [
             'cust_site_id' => $sites[2]->cust_site_id,
         ]);
-        Storage::disk('customers')
-            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png');
 
-        // Event::assertDispatched(CustomerFileCreatedEvent::class);
+        Storage::disk('customers')
+            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png');
+
+        Event::assertDispatched(CustomerFileEvent::class);
     }
 
     /*
@@ -203,7 +206,7 @@ class CustomerFileTest extends TestCase
 
     public function test_update()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $file = CustomerFile::factory()
@@ -225,17 +228,18 @@ class CustomerFileTest extends TestCase
             ]), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.file.updated'));
+
         $this->assertDatabaseHas('customer_files', [
             'cust_id' => $customer->cust_id,
             'name' => $data['name'],
         ]);
 
-        // Event::assertDispatched(CustomerFileUpdatedEvent::class);
+        Event::assertDispatched(CustomerFileEvent::class);
     }
 
     public function test_update_site_file()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $sites = CustomerSite::factory()
@@ -244,14 +248,6 @@ class CustomerFileTest extends TestCase
             ->pluck('cust_site_id');
         $file = CustomerFile::factory()->create(['cust_id' => $customer->cust_id]);
         $file->CustomerSite()->sync([$sites[0], $sites[1]]);
-        // CustomerFileSite::create([
-        //     'cust_file_id' => $file->cust_file_id,
-        //     'cust_site_id' => $sites[0],
-        // ]);
-        // CustomerFileSite::create([
-        //     'cust_file_id' => $file->cust_file_id,
-        //     'cust_site_id' => $sites[1],
-        // ]);
         $data = [
             'name' => 'This is a test file',
             'file_type' => 'site',
@@ -269,6 +265,7 @@ class CustomerFileTest extends TestCase
             ]), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.file.updated'));
+
         $this->assertDatabaseHas('customer_files', [
             'cust_id' => $customer->cust_id,
             'name' => $data['name'],
@@ -286,7 +283,7 @@ class CustomerFileTest extends TestCase
             'cust_site_id' => $sites[2],
         ]);
 
-        // Event::assertDispatched(CustomerFileUpdatedEvent::class);
+        Event::assertDispatched(CustomerFileEvent::class);
     }
 
     /*
@@ -321,7 +318,7 @@ class CustomerFileTest extends TestCase
 
     public function test_destroy()
     {
-        // Event::fake();
+        Event::fake();
 
         $data = CustomerFile::factory()->create();
 
@@ -332,13 +329,14 @@ class CustomerFileTest extends TestCase
             ]));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.file.deleted'));
+
         $this->assertSoftDeleted('customer_files', $data->only([
             'file_id',
             'cust_file_id',
             'name',
         ]));
 
-        // Event::assertDispatched(CustomerFileDeletedEvent::class);
+        Event::assertDispatched(CustomerFileEvent::class);
     }
 
     /**
@@ -373,6 +371,8 @@ class CustomerFileTest extends TestCase
 
     public function test_restore()
     {
+        Event::fake();
+
         $file = CustomerFile::factory()->create();
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
@@ -383,9 +383,12 @@ class CustomerFileTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.file.restored'));
+
         $this->assertDatabaseHas('customer_files', $file->only([
             'file_id',
         ]));
+
+        Event::assertDispatched(CustomerFileEvent::class);
     }
 
     /**
@@ -422,7 +425,7 @@ class CustomerFileTest extends TestCase
 
     public function test_force_delete()
     {
-        // Event::fake();
+        Event::fake();
 
         $file = CustomerFile::factory()->create();
         $file->delete();
@@ -437,6 +440,7 @@ class CustomerFileTest extends TestCase
         $response->assertSessionHas('warning', __('cust.file.force_deleted'));
         $this->assertDatabaseMissing('customer_files', $file->only(['file_id']));
 
-        // Event::assertDispatched(FileDataDeletedEvent::class);
+        Event::assertDispatched(FileDataDeletedEvent::class);
+        Event::assertDispatched(CustomerFileEvent::class);
     }
 }

@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerSearchRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CustomerSearchController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Perform a search for a customer
      */
-    public function __invoke(CustomerSearchRequest $request)
+    public function __invoke(CustomerSearchRequest $request): JsonResponse
     {
         return response()->json($request->search());
     }

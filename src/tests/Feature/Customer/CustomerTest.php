@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerEvent;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -111,6 +113,7 @@ class CustomerTest extends TestCase
         $response = $this->actingAs($user)
             ->post(route('customers.store'), $data);
         $response->assertStatus(403);
+
         $this->assertDatabaseMissing('customers', [
             'name' => $data['name'],
         ]);
@@ -118,6 +121,8 @@ class CustomerTest extends TestCase
 
     public function test_store()
     {
+        Event::fake();
+
         $cust = Customer::factory()->make();
         $site = CustomerSite::factory()->make();
 
@@ -138,6 +143,7 @@ class CustomerTest extends TestCase
             'name' => $data['name'],
         ]));
         $response->assertRedirect(route('customers.show', $slug));
+
         $this->assertDatabaseHas('customers', [
             'name' => $data['name'],
             'dba_name' => $data['dba_name'],
@@ -147,10 +153,14 @@ class CustomerTest extends TestCase
             'address' => $data['address'],
             'city' => $data['city'],
         ]);
+
+        Event::assertDispatched(CustomerEvent::class);
     }
 
     public function test_store_duplicate_slug()
     {
+        Event::fake();
+
         $existing = Customer::factory()->create();
         $cust = Customer::factory()->make();
         $site = CustomerSite::factory()->make();
@@ -163,7 +173,7 @@ class CustomerTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'].' 1');
+        $slug = Str::slug($data['name'] . ' 1');
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.store'), $data);
@@ -172,6 +182,7 @@ class CustomerTest extends TestCase
             'name' => $data['name'],
         ]));
         $response->assertRedirect(route('customers.show', $slug));
+
         $this->assertDatabaseHas('customers', [
             'name' => $data['name'],
             'dba_name' => $data['dba_name'],
@@ -181,14 +192,18 @@ class CustomerTest extends TestCase
             'address' => $data['address'],
             'city' => $data['city'],
         ]);
+
+        Event::assertDispatched(CustomerEvent::class);
     }
 
     public function test_store_second_duplicate_slug()
     {
+        Event::fake();
+
         $existing1 = Customer::factory()->has(CustomerSite::factory())->create();
         Customer::factory()->create([
             'name' => $existing1->name,
-            'slug' => Str::slug($existing1->slug.'-1'),
+            'slug' => Str::slug($existing1->slug . '-1'),
         ]);
 
         $cust = Customer::factory()->make();
@@ -201,7 +216,7 @@ class CustomerTest extends TestCase
             'state' => $existing1->CustomerSite[0]->state,
             'zip' => $existing1->CustomerSite[0]->zip,
         ];
-        $slug = Str::slug($data['name'].' 2');
+        $slug = Str::slug($data['name'] . ' 2');
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.store'), $data);
@@ -210,6 +225,7 @@ class CustomerTest extends TestCase
             'name' => $data['name'],
         ]));
         $response->assertRedirect(route('customers.show', $slug));
+
         $this->assertDatabaseHas('customers', [
             'name' => $data['name'],
             'dba_name' => $data['dba_name'],
@@ -219,6 +235,8 @@ class CustomerTest extends TestCase
             'address' => $data['address'],
             'city' => $data['city'],
         ]);
+
+        Event::assertDispatched(CustomerEvent::class);
     }
 
     /**
@@ -345,6 +363,8 @@ class CustomerTest extends TestCase
 
     public function test_update()
     {
+        Event::fake();
+
         $customer = Customer::factory()->create();
         $newSite = CustomerSite::factory()->create([
             'cust_id' => $customer->cust_id,
@@ -364,10 +384,13 @@ class CustomerTest extends TestCase
             'name' => $updated->name,
         ]));
         $response->assertRedirect(route('customers.show', $updated->slug));
+
         $this->assertDatabaseHas('customers', [
             'cust_id' => $customer->cust_id,
             'name' => $updated->name,
         ]);
+
+        Event::assertDispatched(CustomerEvent::class);
     }
 
     /**
@@ -406,6 +429,8 @@ class CustomerTest extends TestCase
 
     public function test_destroy()
     {
+        Event::fake();
+
         $cust = Customer::factory()->create();
         $data = ['reason' => 'Just because'];
 
@@ -416,7 +441,10 @@ class CustomerTest extends TestCase
             'name' => $cust->name,
         ]));
         $response->assertRedirect(route('customers.index'));
+
         $this->assertSoftDeleted('customers', $cust->only(['cust_id']));
+
+        Event::assertDispatched(CustomerEvent::class);
     }
 
     /**
@@ -447,6 +475,8 @@ class CustomerTest extends TestCase
 
     public function test_restore()
     {
+        Event::fake();
+
         $cust = Customer::factory()->create();
         $cust->delete();
 
@@ -462,6 +492,8 @@ class CustomerTest extends TestCase
             'name' => $cust->name,
             'deleted_at' => null,
         ]);
+
+        Event::assertDispatched(CustomerEvent::class);
     }
 
     /**
@@ -492,6 +524,8 @@ class CustomerTest extends TestCase
 
     public function test_force_delete()
     {
+        Event::fake();
+
         $cust = Customer::factory()->create();
         $cust->delete();
 
@@ -506,5 +540,7 @@ class CustomerTest extends TestCase
             'cust_id' => $cust->cust_id,
             'name' => $cust->name,
         ]);
+
+        Event::assertDispatched(CustomerEvent::class);
     }
 }

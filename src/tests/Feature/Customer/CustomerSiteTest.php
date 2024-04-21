@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerSiteEvent;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerSiteTest extends TestCase
@@ -106,18 +108,20 @@ class CustomerSiteTest extends TestCase
 
         //  Remove the "Add Customer" permission from the Tech Role
         UserRolePermission::whereRoleId(4)
-            ->wherePermTypeId(8)
+            ->wherePermTypeId(7)
             ->update([
                 'allow' => false,
             ]);
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.sites.store', $customer->slug), $site->toArray());
-        $response->assertStatus(302);
+        $response->assertStatus(403);
     }
 
     public function test_store()
     {
+        Event::fake();
+
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->make();
 
@@ -139,10 +143,14 @@ class CustomerSiteTest extends TestCase
             'state',
             'zip',
         ]));
+
+        Event::assertDispatched(CustomerSiteEvent::class);
     }
 
     public function test_store_duplicate_slug()
     {
+        Event::fake();
+
         $customer = Customer::factory()->create();
         CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
         $site = CustomerSite::factory()->make();
@@ -168,8 +176,10 @@ class CustomerSiteTest extends TestCase
         ]));
     }
 
-    public function test_store_without_parent()
+    public function test_store_without_parent_in_url()
     {
+        Event::fake();
+
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->make();
 
@@ -191,6 +201,8 @@ class CustomerSiteTest extends TestCase
             'state',
             'zip',
         ]));
+
+        Event::assertDispatched(CustomerSiteEvent::class);
     }
 
     /**
@@ -319,6 +331,8 @@ class CustomerSiteTest extends TestCase
 
     public function test_update()
     {
+        Event::fake();
+
         $site = CustomerSite::factory()->create();
         $data = CustomerSite::factory()->make();
 
@@ -342,6 +356,8 @@ class CustomerSiteTest extends TestCase
             'cust_site_id' => $site->cust_site_id,
             'site_name' => $data->site_name,
         ]);
+
+        Event::assertDispatched(CustomerSiteEvent::class);
     }
 
     /**
@@ -376,6 +392,8 @@ class CustomerSiteTest extends TestCase
 
     public function test_destroy()
     {
+        Event::fake();
+
         $site = CustomerSite::factory()->create();
         $data = ['reason' => 'For testing purposes'];
 
@@ -388,5 +406,7 @@ class CustomerSiteTest extends TestCase
         $response->assertSessionHas('danger', __('cust.destroy', ['name' => $site->site_name]));
 
         $this->assertSoftDeleted('customer_sites', $site->only(['cust_site_id']));
+
+        Event::assertDispatched(CustomerSiteEvent::class);
     }
 }

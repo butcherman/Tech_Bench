@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerNoteEvent;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerNoteSiteTest extends TestCase
@@ -102,7 +104,7 @@ class CustomerNoteSiteTest extends TestCase
 
     public function test_store()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
@@ -124,13 +126,12 @@ class CustomerNoteSiteTest extends TestCase
         unset($data['note_type']);
         $this->assertDatabaseHas('customer_notes', $data);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteCreatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_store_site_note()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()
             ->has(CustomerSite::factory()->count(3))
@@ -162,13 +163,12 @@ class CustomerNoteSiteTest extends TestCase
             'cust_site_id' => $customer->CustomerSite[2]->cust_site_id,
         ]);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteCreatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_store_equipment_note()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
@@ -192,8 +192,7 @@ class CustomerNoteSiteTest extends TestCase
         unset($data['note_type']);
         $this->assertDatabaseHas('customer_notes', $data);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteCreatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /**
@@ -346,7 +345,7 @@ class CustomerNoteSiteTest extends TestCase
 
     public function test_update()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
@@ -372,15 +371,15 @@ class CustomerNoteSiteTest extends TestCase
 
         unset($data['site_list']);
         unset($data['note_type']);
+
         $this->assertDatabaseHas('customer_notes', $data);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteUpdatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_update_sites()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()
             ->has(CustomerSite::factory()->count(3))
@@ -415,6 +414,7 @@ class CustomerNoteSiteTest extends TestCase
 
         unset($data['site_list']);
         unset($data['note_type']);
+
         $this->assertDatabaseHas('customer_notes', $data);
         $this->assertDatabaseMissing('customer_site_notes', [
             'note_id' => $note->note_id,
@@ -429,8 +429,7 @@ class CustomerNoteSiteTest extends TestCase
             'cust_site_id' => $customer->CustomerSite[2]->cust_site_id,
         ]);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteUpdatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /*
@@ -480,7 +479,7 @@ class CustomerNoteSiteTest extends TestCase
 
     public function test_destroy()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
@@ -500,7 +499,6 @@ class CustomerNoteSiteTest extends TestCase
             'details',
         ]));
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteDeletedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 }

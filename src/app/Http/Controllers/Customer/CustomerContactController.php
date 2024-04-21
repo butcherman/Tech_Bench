@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Enum\CrudAction;
+use App\Events\Customer\CustomerContactEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerContactRequest;
 use App\Models\Customer;
 use App\Models\CustomerContact;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -14,7 +17,7 @@ class CustomerContactController extends Controller
     /**
      * Store a newly created Customer Contact in storage.
      */
-    public function store(CustomerContactRequest $request, Customer $customer)
+    public function store(CustomerContactRequest $request, Customer $customer): RedirectResponse
     {
         $newContact = $request->createContact();
 
@@ -24,6 +27,8 @@ class CustomerContactController extends Controller
             $newContact->toArray()
         );
 
+        event(new CustomerContactEvent($customer, $newContact, CrudAction::Create));
+
         return back()->with('success', __('cust.contact.created', [
             'cont' => $newContact->name,
         ]));
@@ -32,8 +37,11 @@ class CustomerContactController extends Controller
     /**
      * Update the specified Customer Contact in storage.
      */
-    public function update(CustomerContactRequest $request, Customer $customer, CustomerContact $contact)
-    {
+    public function update(
+        CustomerContactRequest $request,
+        Customer $customer,
+        CustomerContact $contact
+    ): RedirectResponse {
         $updatedContact = $request->updateContact();
 
         Log::channel('cust')->info(
@@ -41,6 +49,8 @@ class CustomerContactController extends Controller
             $customer->name . ' by ' . $request->user()->username,
             $updatedContact->toArray()
         );
+
+        event(new CustomerContactEvent($customer, $updatedContact, CrudAction::Update));
 
         return back()->with('success', __('cust.contact.updated', [
             'cont' => $updatedContact->name,
@@ -50,8 +60,11 @@ class CustomerContactController extends Controller
     /**
      * Remove the specified Customer Contact from storage.
      */
-    public function destroy(Request $request, Customer $customer, CustomerContact $contact)
-    {
+    public function destroy(
+        Request $request,
+        Customer $customer,
+        CustomerContact $contact
+    ): RedirectResponse {
         $this->authorize('delete', $contact);
 
         $contact->delete();
@@ -62,6 +75,8 @@ class CustomerContactController extends Controller
             $contact->toArray()
         );
 
+        event(new CustomerContactEvent($customer, $contact, CrudAction::Destroy));
+
         return back()->with('warning', __('cust.contact.deleted', [
             'cont' => $contact->name,
         ]));
@@ -70,8 +85,11 @@ class CustomerContactController extends Controller
     /**
      * Restore a soft deleted contact
      */
-    public function restore(Request $request, Customer $customer, CustomerContact $contact)
-    {
+    public function restore(
+        Request $request,
+        Customer $customer,
+        CustomerContact $contact
+    ): RedirectResponse {
         $this->authorize('restore', $contact);
 
         $contact->restore();
@@ -79,6 +97,8 @@ class CustomerContactController extends Controller
         Log::channel('cust')
             ->info('Customer Contact restored for ' . $customer->name . ' by ' .
                 $request->user()->username, $contact->toArray());
+
+        event(new CustomerContactEvent($customer, $contact, CrudAction::Restore));
 
         return back()->with('success', __('cust.contact.restored', [
             'cont' => $contact->name,
@@ -88,8 +108,11 @@ class CustomerContactController extends Controller
     /**
      * remove a soft deleted contact
      */
-    public function forceDelete(Request $request, Customer $customer, CustomerContact $contact)
-    {
+    public function forceDelete(
+        Request $request,
+        Customer $customer,
+        CustomerContact $contact
+    ): RedirectResponse {
 
         $this->authorize('force-delete', $contact);
 
@@ -98,6 +121,8 @@ class CustomerContactController extends Controller
         Log::channel('cust')
             ->notice('Customer Contact force deleted for ' . $customer->name .
                 ' by ' . $request->user()->username, $contact->toArray());
+
+        event(new CustomerContactEvent($customer, $contact, CrudAction::ForceDelete));
 
         return back()
             ->with('warning', __('cust.contact.force_deleted', [

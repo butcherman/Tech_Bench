@@ -8,16 +8,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerAlertRequest;
 use App\Models\Customer;
 use App\Models\CustomerAlert;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CustomerAlertsController extends Controller
 {
     /**
      * Display a listing of alerts for the requested customer
      */
-    public function index(Customer $customer)
+    public function index(Customer $customer): Response
     {
         $this->authorize('viewAny', CustomerAlert::class);
 
@@ -30,7 +32,7 @@ class CustomerAlertsController extends Controller
     /**
      * Store a newly created customer alert
      */
-    public function store(CustomerAlertRequest $request, Customer $customer)
+    public function store(CustomerAlertRequest $request, Customer $customer): RedirectResponse
     {
         $newAlert = CustomerAlert::create([
             'cust_id' => $customer->cust_id,
@@ -52,8 +54,11 @@ class CustomerAlertsController extends Controller
     /**
      * Update the specified customer alert
      */
-    public function update(CustomerAlertRequest $request, Customer $customer, CustomerAlert $alert)
-    {
+    public function update(
+        CustomerAlertRequest $request,
+        Customer $customer,
+        CustomerAlert $alert
+    ): RedirectResponse {
         $alert->update([
             'message' => $request->message,
             'type' => $request->type,
@@ -70,8 +75,11 @@ class CustomerAlertsController extends Controller
     /**
      * Remove the specified customer alert
      */
-    public function destroy(Request $request, Customer $customer, CustomerAlert $alert)
-    {
+    public function destroy(
+        Request $request,
+        Customer $customer,
+        CustomerAlert $alert
+    ): RedirectResponse {
         $this->authorize('delete', $alert);
 
         $alert->delete();

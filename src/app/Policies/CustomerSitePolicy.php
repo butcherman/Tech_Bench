@@ -32,20 +32,4 @@ class CustomerSitePolicy
     {
         return $this->checkPermission($user, 'Deactivate Customer');
     }
-
-    /**
-     * Determine whether the user can restore the customer
-     */
-    public function restore(User $user)
-    {
-        return $this->checkPermission($user, 'Deactivate Customer');
-    }
-
-    /**
-     * Determine whether the user can permanently delete the customer
-     */
-    public function forceDelete(User $user)
-    {
-        return $this->checkPermission($user, 'Delete Customer');
-    }
 }

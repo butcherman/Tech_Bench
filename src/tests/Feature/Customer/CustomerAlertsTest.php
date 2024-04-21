@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerAlertEvent;
 use App\Models\Customer;
 use App\Models\CustomerAlert;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerAlertsTest extends TestCase
@@ -66,6 +68,8 @@ class CustomerAlertsTest extends TestCase
 
     public function test_store()
     {
+        Event::fake();
+
         $data = CustomerAlert::factory()->make()->toArray();
         $data['cust_id'] = $this->customer->cust_id;
 
@@ -73,7 +77,10 @@ class CustomerAlertsTest extends TestCase
             ->post(route('customers.alerts.store', $this->customer->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.alert.created'));
+
         $this->assertDatabaseHas('customer_alerts', $data);
+
+        Event::assertDispatched(CustomerAlertEvent::class);
     }
 
     /**
@@ -114,6 +121,8 @@ class CustomerAlertsTest extends TestCase
 
     public function test_update()
     {
+        Event::fake();
+
         $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
         $data = [
             'message' => 'updated message',
@@ -127,8 +136,10 @@ class CustomerAlertsTest extends TestCase
             ]), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.alert.updated'));
+
         $this->assertDatabaseHas('customer_alerts', $data);
 
+        Event::assertDispatched(CustomerAlertEvent::class);
     }
 
     /**
@@ -155,12 +166,17 @@ class CustomerAlertsTest extends TestCase
 
     public function test_destroy()
     {
+        Event::fake();
+
         $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('customers.alerts.destroy', [$this->customer->slug, $alert->alert_id]));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.alert.destroy'));
+
         $this->assertDatabaseMissing('customer_alerts', $alert->toArray());
+
+        Event::assertDispatched(CustomerAlertEvent::class);
     }
 }

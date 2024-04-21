@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\Customer\CustomerEquipmentDataEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentDataRequest;
 use App\Models\Customer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CustomerEquipmentDataController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Save changes made to Customer Equipment Data
      */
-    public function __invoke(CustomerEquipmentDataRequest $request, Customer $customer)
+    public function __invoke(CustomerEquipmentDataRequest $request, Customer $customer): RedirectResponse
     {
         $request->processDataChanges();
+
+        event(new CustomerEquipmentDataEvent($customer));
 
         return back()->with('success', 'Saved Successfully');
     }

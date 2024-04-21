@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class CustomerIdController extends Controller
 {
     /**
      * Determine if a customer ID Number is already in use
      */
-    public function __invoke(int $custId)
+    public function __invoke(int $custId): JsonResponse
     {
         $cust = Customer::find($custId);
 

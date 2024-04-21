@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Actions\BuildCustomerPermissions;
+use App\Enum\CrudAction;
+use App\Events\Customer\CustomerEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerRequest;
@@ -50,6 +52,8 @@ class CustomerController extends Controller
             ->info('New Customer ' . $newCustomer->name . ' created by '
                 . $request->user()->username, $newCustomer->toArray());
 
+        event(new CustomerEvent($newCustomer, CrudAction::Create));
+
         return redirect(route('customers.show', $newCustomer->slug))
             ->with('success', __('cust.created', [
                 'name' => $newCustomer->name,
@@ -61,7 +65,7 @@ class CustomerController extends Controller
      */
     public function show(Request $request, Customer $customer): Response
     {
-
+        // If the customer has multiple sites, show the Customer Home Page
         if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
             return Inertia::render('Customer/Show', [
                 'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
@@ -75,6 +79,7 @@ class CustomerController extends Controller
             ]);
         }
 
+        // If the customer only has a single site, show that sites details
         return Inertia::render('Customer/Site/Show', [
             'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
             'customer' => fn() => $customer,
@@ -114,6 +119,8 @@ class CustomerController extends Controller
             ->info('Customer information updated for ' . $customer->name
                 . ' by ' . $request->user()->username, $customer->toArray());
 
+        event(new CustomerEvent($updatedCustomer, CrudAction::Update));
+
         return redirect(route('customers.show', $updatedCustomer->slug))
             ->with('success', __('cust.updated', [
                 'name' => $updatedCustomer->name,
@@ -131,6 +138,8 @@ class CustomerController extends Controller
         Log::channel('cust')->alert('Customer ' . $customer->name . ' has been disabled by ' .
             $request->user()->username);
 
+        event(new CustomerEvent($customer, CrudAction::Destroy));
+
         return redirect(route('customers.index'))->with('danger', __('cust.destroy', [
             'name' => $customer->name,
         ]));
@@ -144,8 +153,11 @@ class CustomerController extends Controller
         $this->authorize('restore', $customer);
 
         $customer->restore();
+
         Log::channel('cust')->notice('Customer ' . $customer->name .
             ' has been restored by ' . $request->user()->username);
+
+        event(new CustomerEvent($customer, CrudAction::Restore));
 
         return back()->with('success', __('cust.restored', ['name' => $customer->name]));
     }
@@ -158,9 +170,14 @@ class CustomerController extends Controller
         $this->authorize('forceDelete', $customer);
 
         dispatch(new DestroyCustomerJob($customer));
+
         Log::channel('cust')->warning('Customer ' . $customer->name .
             ' has been permanently removed by ' . $request->user()->username);
 
-        return back()->with('danger', __('cust.force_deleted', ['name' => $customer->name]));
+        event(new CustomerEvent($customer, CrudAction::ForceDelete));
+
+        return back()->with('danger', __('cust.force_deleted', [
+            'name' => $customer->name
+        ]));
     }
 }

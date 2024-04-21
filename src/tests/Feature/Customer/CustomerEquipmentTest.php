@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerEquipmentEvent;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
@@ -9,6 +10,7 @@ use App\Models\DataField;
 use App\Models\EquipmentType;
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerEquipmentTest extends TestCase
@@ -90,6 +92,8 @@ class CustomerEquipmentTest extends TestCase
 
     public function test_store()
     {
+        Event::fake();
+
         $equip = EquipmentType::factory()->create();
         DataField::factory()->count(2)->create(['equip_id' => $equip->equip_id]);
 
@@ -124,6 +128,8 @@ class CustomerEquipmentTest extends TestCase
             'cust_equip_id' => $this->customer->CustomerEquipment[0]->cust_equip_id,
             'cust_site_id' => $data['site_list'][1],
         ]);
+
+        Event::assertDispatched(CustomerEquipmentEvent::class);
     }
 
     public function test_store_duplicate_equipment()
@@ -256,6 +262,8 @@ class CustomerEquipmentTest extends TestCase
 
     public function test_update()
     {
+        Event::fake();
+
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
         ]);
@@ -300,6 +308,8 @@ class CustomerEquipmentTest extends TestCase
             'cust_equip_id' => $this->customer->CustomerEquipment[0]->cust_equip_id,
             'cust_site_id' => $this->customer->CustomerSite[1]->cust_site_id,
         ]);
+
+        Event::assertDispatched(CustomerEquipmentEvent::class);
     }
 
     /**
@@ -336,6 +346,8 @@ class CustomerEquipmentTest extends TestCase
 
     public function test_destroy()
     {
+        Event::fake();
+
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
         ]);
@@ -353,6 +365,8 @@ class CustomerEquipmentTest extends TestCase
         $this->assertSoftDeleted('customer_equipment', [
             'cust_equip_id' => $equip->cust_equip_id,
         ]);
+
+        Event::assertDispatched(CustomerEquipmentEvent::class);
     }
 
     /**
@@ -391,6 +405,8 @@ class CustomerEquipmentTest extends TestCase
 
     public function test_restore()
     {
+        Event::fake();
+
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
         ]);
@@ -408,6 +424,8 @@ class CustomerEquipmentTest extends TestCase
         $this->assertDatabaseHas('customer_equipment', $equip->only([
             'cust_equip_id',
         ]));
+
+        Event::assertDispatched(CustomerEquipmentEvent::class);
     }
 
     /**
@@ -448,6 +466,8 @@ class CustomerEquipmentTest extends TestCase
 
     public function test_force_delete()
     {
+        Event::fake();
+
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
         ]);
@@ -466,5 +486,7 @@ class CustomerEquipmentTest extends TestCase
         $this->assertDatabaseMissing('customer_equipment', $equip->only([
             'cust_equip_id',
         ]));
+
+        Event::assertDispatched(CustomerEquipmentEvent::class);
     }
 }

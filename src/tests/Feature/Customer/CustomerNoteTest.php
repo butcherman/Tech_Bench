@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerNoteEvent;
 use App\Models\Customer;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerNoteTest extends TestCase
@@ -118,7 +120,7 @@ class CustomerNoteTest extends TestCase
 
     public function test_store()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $data = [
@@ -138,15 +140,15 @@ class CustomerNoteTest extends TestCase
         unset($data['site_list']);
         unset($data['note_type']);
         unset($data['note_id']);
+
         $this->assertDatabaseHas('customer_notes', $data);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteCreatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_store_site_note()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()
             ->has(CustomerSite::factory()->count(3))
@@ -168,6 +170,7 @@ class CustomerNoteTest extends TestCase
         unset($data['site_list']);
         unset($data['note_type']);
         unset($data['note_id']);
+
         $this->assertDatabaseHas('customer_notes', $data);
         $this->assertDatabaseHas('customer_site_notes', [
             'cust_site_id' => $customer->CustomerSite[0]->cust_site_id,
@@ -179,13 +182,12 @@ class CustomerNoteTest extends TestCase
             'cust_site_id' => $customer->CustomerSite[2]->cust_site_id,
         ]);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteCreatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_store_equipment_note()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $notement = CustomerNote::factory()
@@ -209,8 +211,7 @@ class CustomerNoteTest extends TestCase
         unset($data['note_id']);
         $this->assertDatabaseHas('customer_notes', $data);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteCreatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /**
@@ -349,7 +350,7 @@ class CustomerNoteTest extends TestCase
 
     public function test_update()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()
@@ -374,15 +375,15 @@ class CustomerNoteTest extends TestCase
         unset($data['site_list']);
         unset($data['note_type']);
         $data['note_id'] = $note->note_id;
+
         $this->assertDatabaseHas('customer_notes', $data);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteUpdatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_update_sites()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()
             ->has(CustomerSite::factory()->count(3))
@@ -417,6 +418,7 @@ class CustomerNoteTest extends TestCase
         unset($data['site_list']);
         unset($data['note_type']);
         $data['note_id'] = $note->note_id;
+
         $this->assertDatabaseHas('customer_notes', $data);
         $this->assertDatabaseMissing('customer_site_notes', [
             'note_id' => $note->note_id,
@@ -431,8 +433,7 @@ class CustomerNoteTest extends TestCase
             'cust_site_id' => $customer->CustomerSite[2]->cust_site_id,
         ]);
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteUpdatedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /*
@@ -478,7 +479,7 @@ class CustomerNoteTest extends TestCase
 
     public function test_destroy()
     {
-        // Event::fake();
+        Event::fake();
 
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()->create(['cust_id' => $customer->cust_id]);
@@ -496,8 +497,7 @@ class CustomerNoteTest extends TestCase
             'details',
         ]));
 
-        // TODO - Dispatch Event
-        // Event::assertDispatched(CustomerNoteDeletedEvent::class);
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /**
@@ -532,6 +532,8 @@ class CustomerNoteTest extends TestCase
 
     public function test_restore()
     {
+        Event::fake();
+
         $note = CustomerNote::factory()->create();
         $note->delete();
 
@@ -543,9 +545,12 @@ class CustomerNoteTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.note.restored'));
+
         $this->assertDatabaseHas('customer_notes', $note->only([
             'note_id',
         ]));
+
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /**
@@ -582,6 +587,8 @@ class CustomerNoteTest extends TestCase
 
     public function test_force_delete()
     {
+        Event::fake();
+
         $note = CustomerNote::factory()->create();
         $note->delete();
 
@@ -593,6 +600,9 @@ class CustomerNoteTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.note.force_deleted'));
+
         $this->assertDatabaseMissing('customer_notes', $note->only(['note_id']));
+
+        Event::assertDispatched(CustomerNoteEvent::class);
     }
 }

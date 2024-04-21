@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerContactEvent;
 use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Models\CustomerContactPhone;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerContactTest extends TestCase
@@ -75,7 +77,7 @@ class CustomerContactTest extends TestCase
 
     public function test_store()
     {
-        // Event::fake();
+        Event::Fake();
 
         $cust = Customer::factory()->hasCustomerSite(5)->create();
         $cont = CustomerContact::factory()->make();
@@ -116,7 +118,7 @@ class CustomerContactTest extends TestCase
             'extension' => 232,
         ]);
 
-        // Event::assertDispatched(CustomerContactCreatedEvent::class);
+        Event::assertDispatched(CustomerContactEvent::class);
     }
 
     /**
@@ -207,7 +209,7 @@ class CustomerContactTest extends TestCase
 
     public function test_update()
     {
-        // Event::fake();
+        Event::fake();
 
         $cust = Customer::factory()->create();
         $site = CustomerSite::factory()
@@ -289,7 +291,7 @@ class CustomerContactTest extends TestCase
             )
         );
 
-        // Event::assertDispatched(CustomerContactUpdatedEvent::class);
+        Event::assertDispatched(CustomerContactEvent::class);
     }
 
     /**
@@ -324,7 +326,7 @@ class CustomerContactTest extends TestCase
 
     public function test_destroy()
     {
-        // Event::fake();
+        Event::fake();
 
         $cont = CustomerContact::factory()->create();
 
@@ -338,7 +340,7 @@ class CustomerContactTest extends TestCase
         ]));
         $this->assertSoftDeleted('customer_contacts', $cont->toArray());
 
-        // Event::assertDispatched(CustomerContactDeletedEvent::class);
+        Event::assertDispatched(CustomerContactEvent::class);
     }
 
     /**
@@ -378,6 +380,8 @@ class CustomerContactTest extends TestCase
 
     public function test_restore()
     {
+        Event::fake();
+
         $cont = CustomerContact::factory()->create();
         $cont->delete();
 
@@ -390,7 +394,10 @@ class CustomerContactTest extends TestCase
         $response->assertSessionHas('success', __('cust.contact.restored', [
             'cont' => $cont->name,
         ]));
+
         $this->assertDatabaseHas('customer_contacts', (array) $cont->only(['cont_id']));
+
+        Event::assertDispatched(CustomerContactEvent::class);
     }
 
     /**
@@ -430,6 +437,8 @@ class CustomerContactTest extends TestCase
 
     public function test_force_delete()
     {
+        Event::Fake();
+
         $cont = CustomerContact::factory()->create();
         $cont->delete();
 
@@ -442,6 +451,9 @@ class CustomerContactTest extends TestCase
         $response->assertSessionHas('warning', __('cust.contact.force_deleted', [
             'cont' => $cont->name,
         ]));
+
         $this->assertDatabaseMissing('customer_contacts', (array) $cont->only(['cont_id']));
+
+        Event::assertDispatched(CustomerContactEvent::class);
     }
 }
