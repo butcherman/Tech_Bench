@@ -19,7 +19,7 @@ class CustomerNote extends Model
 
     protected $appends = ['author', 'updated_author'];
 
-    protected $with = ['EquipmentType'];
+    protected $with = ['CustomerEquipment'];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
@@ -50,7 +50,7 @@ class CustomerNote extends Model
         );
     }
 
-    public function EquipmentType()
+    public function CustomerEquipment()
     {
         return $this->hasOne(CustomerEquipment::class, 'cust_equip_id', 'cust_equip_id');
     }
@@ -61,9 +61,9 @@ class CustomerNote extends Model
     public function prunable()
     {
         if (config('customer.auto_purge')) {
-            return static::where('deleted_at', '<=', now()->subDays(90));
+            return static::whereDate('deleted_at', '<=', now()->subDays(90));
         }
 
-        return false;
+        return static::whereNoteId(0);
     }
 }

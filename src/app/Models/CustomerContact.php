@@ -54,9 +54,9 @@ class CustomerContact extends Model
     public function prunable()
     {
         if (config('customer.auto_purge')) {
-            return static::where('deleted_at', '<=', now()->subDays(90));
+            return static::whereDate('deleted_at', '<=', now()->subDays(90));
         }
 
-        return false;
+        return static::whereContId(0);
     }
 }

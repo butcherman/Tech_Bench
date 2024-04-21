@@ -23,7 +23,7 @@ class DownloadNoteController extends Controller
 
         return Pdf::loadView('pdf.customer_note', [
             'customer' => $customer,
-            'note' => $note->load(['EquipmentType', 'CustomerSite']),
+            'note' => $note->load(['CustomerEquipment', 'CustomerSite']),
         ])->stream();
     }
 }

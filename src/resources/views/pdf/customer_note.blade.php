@@ -22,7 +22,7 @@
     <div class="text-muted">
 @if($note->EquipmentType)
         <div>
-            Equipment: {{ $note->EquipmentType->equip_name }}
+            Equipment: {{ $note->CustomerEquipment->equip_name }}
         </div>
 @endif
         <div>

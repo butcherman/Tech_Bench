@@ -52,6 +52,7 @@ class CustomerUnitTest extends TestCase
     {
         $data = CustomerSite::where('cust_site_id', $this->model->primary_site_id)
             ->first();
+
         $this->assertEquals(
             $data->toArray(),
             $this->model->CustomerSite[0]->toArray()
@@ -62,6 +63,7 @@ class CustomerUnitTest extends TestCase
     {
         $data = CustomerAlert::factory()
             ->create(['cust_id' => $this->model->cust_id]);
+
         $this->assertEquals(
             $data->toArray(),
             $this->model->CustomerAlert[0]->toArray()
@@ -72,6 +74,7 @@ class CustomerUnitTest extends TestCase
     {
         $data = CustomerEquipment::factory()
             ->create(['cust_id' => $this->model->cust_id]);
+
         $this->assertEquals(
             $data->toArray(),
             $this->model->CustomerEquipment[0]->toArray()
@@ -82,6 +85,7 @@ class CustomerUnitTest extends TestCase
     {
         $data = CustomerContact::factory()
             ->create(['cust_id' => $this->model->cust_id]);
+
         $this->assertEquals(
             $data->toArray(),
             $this->model
@@ -95,12 +99,16 @@ class CustomerUnitTest extends TestCase
     {
         $data = CustomerNote::factory()
             ->create(['cust_id' => $this->model->cust_id]);
+
         $this->assertEquals(
             $data->toArray(),
             $this->model
                 ->CustomerNote[0]
-                ->makeHidden(['updated_by', 'cust_equip_id', 'deleted_at', 'EquipmentType'])
-                ->toArray()
+                ->makeHidden([
+                    'cust_equip_id',
+                    'deleted_at',
+                    'CustomerEquipment'
+                ])->toArray()
         );
     }
 

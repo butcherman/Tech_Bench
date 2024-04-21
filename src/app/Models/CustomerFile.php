@@ -43,6 +43,35 @@ class CustomerFile extends Model
     ];
 
     /**
+     * Model Attributes
+     */
+    public function getFileTypeAttribute()
+    {
+        return $this->CustomerFileType->description;
+    }
+
+    public function getCreatedStampAttribute()
+    {
+        return $this->created_at;
+    }
+
+    public function getHrefAttribute()
+    {
+        return route('download', [$this->file_id, $this->FileUpload->file_name]);
+    }
+
+    public function getUploadedByAttribute()
+    {
+        return $this->user->full_name;
+    }
+
+    public function getEquipNameAttribute()
+    {
+        return $this->CustomerEquipment ? $this->CustomerEquipment->equip_name : null;
+    }
+
+
+    /**
      * Each file is attached to a specific file entry
      */
     public function FileUpload()
@@ -75,40 +104,15 @@ class CustomerFile extends Model
         return $this->belongsTo(CustomerEquipment::class, 'cust_equip_id', 'cust_equip_id');
     }
 
-    public function getFileTypeAttribute()
-    {
-        return $this->CustomerFileType->description;
-    }
-
-    public function getCreatedStampAttribute()
-    {
-        return $this->created_at;
-    }
-
-    public function getHrefAttribute()
-    {
-        return route('download', [$this->file_id, $this->FileUpload->file_name]);
-    }
-
-    public function getUploadedByAttribute()
-    {
-        return $this->user->full_name;
-    }
-
-    public function getEquipNameAttribute()
-    {
-        return $this->CustomerEquipment ? $this->CustomerEquipment->equip_name : null;
-    }
-
     /**
      * Automatically remove soft deleted models after 90 days
      */
     public function prunable()
     {
         if (config('customer.auto_purge')) {
-            return static::where('deleted_at', '<=', now()->subDays(90));
+            return static::whereDate('deleted_at', '<=', now()->subDays(90));
         }
 
-        return false;
+        return static::whereFileId(0);
     }
 }

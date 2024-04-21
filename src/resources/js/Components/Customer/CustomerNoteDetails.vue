@@ -41,8 +41,8 @@
         <div class="note-details" v-html="note.details" />
         <hr />
         <div class="text-muted">
-            <div v-if="note.equipment_type">
-                Equipment: {{ note.equipment_type.equip_name }}
+            <div v-if="note.customer_equipment">
+                Equipment: {{ note.customer_equipment.equip_name }}
             </div>
             <div>
                 Created: {{ note.created_at }} by
