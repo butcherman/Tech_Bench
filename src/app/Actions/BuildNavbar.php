@@ -33,11 +33,9 @@ class BuildNavbar
             ],
         ];
 
-        $adminNav = self::getAdminNav($user);
-
-        // If the Admin Nav exists, move it just under the Dashboard
-        if ($adminNav) {
-            array_splice($primaryNav, 1, 0, $adminNav);
+        // // If the Admin Nav exists, move it just under the Dashboard
+        if ($adminNav = self::getAdminNav($user)) {
+            array_splice($primaryNav, 1, 0, [$adminNav]);
         }
 
         return $primaryNav;
