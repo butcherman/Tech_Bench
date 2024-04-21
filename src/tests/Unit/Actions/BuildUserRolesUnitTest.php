@@ -17,7 +17,7 @@ class BuildUserRolesUnitTest extends TestCase
     public function test_installer_role()
     {
         $user = User::factory()->create(['role_id' => 1]);
-        $shouldBe = UserRole::all()->toArray();
+        $shouldBe = UserRole::all()->append('href')->toArray();
         $testData = BuildUserRoles::build($user)->toArray();
 
         $this->assertEquals($shouldBe, $testData);
@@ -26,7 +26,10 @@ class BuildUserRolesUnitTest extends TestCase
     public function test_administrator_role()
     {
         $user = User::factory()->create(['role_id' => 2]);
-        $shouldBe = UserRole::where('role_id', '>=', 2)->get()->toArray();
+        $shouldBe = UserRole::where('role_id', '>=', 2)
+            ->get()
+            ->append('href')
+            ->toArray();
         $testData = BuildUserRoles::build($user)->toArray();
 
         $this->assertEquals($shouldBe, array_values($testData));
@@ -35,7 +38,10 @@ class BuildUserRolesUnitTest extends TestCase
     public function test_other_role()
     {
         $user = User::factory()->create(['role_id' => 3]);
-        $shouldBe = UserRole::where('role_id', '>=', 2)->get()->toArray();
+        $shouldBe = UserRole::where('role_id', '>=', 2)
+            ->get()
+            ->append('href')
+            ->toArray();
         $testData = BuildUserRoles::build($user)->toArray();
 
         $this->assertEquals($shouldBe, array_values($testData));

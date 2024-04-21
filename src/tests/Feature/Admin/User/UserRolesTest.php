@@ -306,7 +306,6 @@ class UserRolesTest extends TestCase
 
     public function test_update_default_role()
     {
-        // UserRoles::factory()->create();
         $form = [
             'name' => 'New Role',
             'description' => 'This is for testing purposes only',
@@ -354,8 +353,9 @@ class UserRolesTest extends TestCase
 
     public function test_destroy_default()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
-            ->delete(route('admin.user-roles.destroy', 1));
+        $testRole = UserRole::factory()->create(['allow_edit' => false]);
+        $response = $this->actingAs(User::factory()->create(['role_id' => $testRole->role_id]))
+            ->delete(route('admin.user-roles.destroy', 2));
         $response->assertStatus(403);
     }
 

@@ -2,11 +2,11 @@
     <button
         type="button"
         class="btn btn-danger mx-1"
-        :class="{ 'btn-pill': pill, 'btn-sm': small }"
+        :class="{ 'rounded-5': pill, 'btn-sm': small }"
         @click="onBtnClick"
     >
         <fa-icon icon="fa-trash-can" class="me-1" />
-        <slot>Delete</slot>
+        <slot>{{ text || "Delete" }}</slot>
     </button>
 </template>
 
@@ -17,6 +17,7 @@ const props = defineProps<{
     pill?: boolean;
     small?: boolean;
     href?: string;
+    text?: string;
 }>();
 
 const onBtnClick = () => {

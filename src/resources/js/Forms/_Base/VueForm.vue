@@ -14,6 +14,7 @@
         <slot />
         <slot name="submit">
             <SubmitButton
+                v-if="!hideSubmit"
                 :submitted="isSubmitting"
                 class="mt-auto"
                 :text="submitText"
@@ -42,11 +43,12 @@ const emit = defineEmits(["submitting", "success", "has-errors", "values"]);
 const props = defineProps<{
     validationSchema: object;
     initialValues: { [key: string]: any };
+    submitMethod: "post" | "put" | "delete";
+    submitRoute: string;
     submitText?: string;
     submitVariant?: "primary" | "info" | "success" | "danger" | "warning";
-    submitRoute: string;
-    submitMethod: "post" | "put";
     hideOverlay?: boolean;
+    hideSubmit?: boolean;
     testing?: boolean;
 }>();
 
@@ -74,6 +76,7 @@ const isDirty = computed(() => meta.value.dirty);
 const isSubmitting = ref<boolean>(false);
 const onSubmit = handleSubmit((form): void => {
     isSubmitting.value = true;
+    emit("submitting");
     const formData = useInertiaForm(form);
     clearErrorAlert();
 
@@ -89,6 +92,7 @@ const onSubmit = handleSubmit((form): void => {
         isSubmitting.value = false;
     } else {
         formData.submit(props.submitMethod, props.submitRoute, {
+            preserveScroll: true,
             onFinish: () => (isSubmitting.value = false),
             onSuccess: () => emit("success"),
             onError: () => handleErrors(form, formData.errors),

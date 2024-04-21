@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
+use App\Models\DataField;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerEquipmentDataFactory extends Factory
@@ -20,8 +21,8 @@ class CustomerEquipmentDataFactory extends Factory
     {
         return [
             'cust_equip_id' => CustomerEquipment::factory(),
-            'field_id' => 1,
-            'value' => $this->faker->word(5),
+            'field_id' => DataField::factory(),
+            'value' => $this->faker->word(),
         ];
     }
 }

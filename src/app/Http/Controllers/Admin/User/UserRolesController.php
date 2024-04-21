@@ -92,8 +92,10 @@ class UserRolesController extends Controller
     {
         $modifiedRole = $request->processExistingRole();
 
-        Log::info('User Role Updated by '.$request->user()->username,
-            $modifiedRole->toArray());
+        Log::info(
+            'User Role Updated by '.$request->user()->username,
+            $modifiedRole->toArray()
+        );
 
         return back()->with('success', __('admin.user-role.updated'));
     }
@@ -103,8 +105,6 @@ class UserRolesController extends Controller
      */
     public function destroy(UserRoleRequest $request, UserRole $user_role)
     {
-        $this->authorize('destroy', $user_role);
-
         $request->destroyRole();
 
         Log::stack(['daily', 'user'])

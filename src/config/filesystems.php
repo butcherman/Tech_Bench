@@ -57,7 +57,7 @@ return [
          */
         'fileLinks' => [
             'driver' => 'local',
-            'storage_path' => storage_path('app/file_links'),
+            'root' => storage_path('app/file_links'),
         ],
 
         /**

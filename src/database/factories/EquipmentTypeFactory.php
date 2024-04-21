@@ -20,7 +20,7 @@ class EquipmentTypeFactory extends Factory
     {
         return [
             'cat_id' => EquipmentCategory::factory(),
-            'name' => $this->faker->unique()->word(1),
+            'name' => $this->faker->unique()->word(),
         ];
     }
 }

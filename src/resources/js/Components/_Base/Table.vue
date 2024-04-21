@@ -8,7 +8,7 @@
                         <span
                             v-if="col.sort"
                             class="float-end pointer"
-                            @click="updateSort(col.field)"
+                            @click="updateSort(col.sortField || col.field)"
                         >
                             <fa-icon :icon="sortIcons[col.field]" />
                         </span>
@@ -29,6 +29,15 @@
                 </tr>
             </thead>
             <tbody>
+                <tr v-if="!paginatedData.length">
+                    <td :colspan="columnCount">
+                        <slot name="no-results">
+                            <div class="text-center">
+                                {{ noResultsText || "No Results" }}
+                            </div>
+                        </slot>
+                    </td>
+                </tr>
                 <tr
                     v-for="(row, index) in paginatedData"
                     :key="index"
@@ -36,16 +45,55 @@
                 >
                     <template v-for="col in columns">
                         <td @click="$emit('on-row-click', [$event, row])">
-                            <Link
-                                v-if="row.href"
-                                :href="row.href"
-                                class="block-link"
+                            <slot
+                                name="column"
+                                :column-name="col.field"
+                                :row-data="row"
                             >
-                                {{ row[col.field] }}
-                            </Link>
-                            <span v-else>
-                                {{ row[col.field] }}
-                            </span>
+                                <a
+                                    v-if="row.href && noInertiaLink"
+                                    :href="row.href"
+                                    class="block-link"
+                                >
+                                    <span v-if="col.isBoolean">
+                                        <fa-icon icon="check" />
+                                    </span>
+                                    <span v-else>
+                                        {{ row[col.field] }}
+                                    </span>
+                                </a>
+                                <Link
+                                    v-else-if="row.href"
+                                    :href="row.href"
+                                    class="block-link"
+                                >
+                                    <span v-if="col.isBoolean">
+                                        <fa-icon icon="check" />
+                                    </span>
+                                    <span v-else>
+                                        {{ row[col.field] }}
+                                    </span>
+                                </Link>
+                                <span v-else>
+                                    <span v-if="col.isBoolean">
+                                        <fa-icon
+                                            :icon="
+                                                row[col.field]
+                                                    ? 'circle-check'
+                                                    : 'circle-xmark'
+                                            "
+                                            :class="
+                                                row[col.field]
+                                                    ? 'text-success'
+                                                    : 'text-danger'
+                                            "
+                                        />
+                                    </span>
+                                    <span v-else>
+                                        {{ row[col.field] }}
+                                    </span>
+                                </span>
+                            </slot>
                         </td>
                     </template>
                     <td v-if="slots.action">
@@ -57,7 +105,7 @@
                 <slot name="footer">
                     <tr v-if="paginate">
                         <td :colspan="columnCount">
-                            <span class="float-start w-auto">
+                            <span class="float-md-start w-auto">
                                 <select v-model="perPage" class="form-select">
                                     <option
                                         v-for="num in perPageArray"
@@ -67,7 +115,9 @@
                                     </option>
                                 </select>
                             </span>
-                            <span class="float-end">
+                            <span
+                                class="float-md-end w-auto d-block d-md-inline text-center"
+                            >
                                 Showing {{ showingStart }}-{{ showingEnd }} of
                                 {{ totalRecords }}
                             </span>
@@ -95,6 +145,8 @@ interface column {
     label: string;
     field: string;
     sort?: boolean;
+    sortField?: string;
+    isBoolean?: boolean;
     filterOptions?: {
         enabled: boolean;
         placeholder?: string;
@@ -112,6 +164,8 @@ const props = defineProps<{
     paginate?: boolean;
     perPageArray?: number[];
     perPageDefault?: number;
+    noResultsText?: string;
+    noInertiaLink?: boolean;
 }>();
 
 const columnCount = computed(
@@ -148,9 +202,15 @@ const sortIcons = computed<{ [key: string]: string }>(() => {
     let icons: { [key: string]: string } = {};
 
     props.columns.forEach((col: column) => {
-        if (sortBy.value === col.field && sortOrder.value === "asc") {
+        if (
+            (sortBy.value === col.field || sortBy.value === col.sortField) &&
+            sortOrder.value === "asc"
+        ) {
             icons[col.field] = "sort-down";
-        } else if (sortBy.value === col.field && sortOrder.value === "desc") {
+        } else if (
+            (sortBy.value === col.field || sortBy.value === col.sortField) &&
+            sortOrder.value === "desc"
+        ) {
             icons[col.field] = "sort-up";
         } else {
             icons[col.field] = "sort";
@@ -238,6 +298,7 @@ const paginatedData = computed(() => {
         return sortedData.value;
     }
 
+    // FIXME - cannot sort data when paginating
     return sortedData.value.slice(
         (currentPage.value - 1) * perPage.value,
         currentPage.value * perPage.value

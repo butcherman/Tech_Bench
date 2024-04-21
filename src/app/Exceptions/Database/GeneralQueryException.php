@@ -6,6 +6,9 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 
 /**
+ * Generic exception created for when write to database fails.  Generic
+ * response is returned, while additional data is logged for admin.
+ *
  * @codeCoverageIgnore
  */
 class GeneralQueryException extends Exception

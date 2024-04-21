@@ -25,7 +25,7 @@ type appProps = {
     version: string;
     copyright: string;
     current_route: string;
-    // fileData: fileData;
+    fileData: fileData;
 };
 
 type navbar = {
@@ -40,8 +40,32 @@ type flashData = {
     message: string;
 };
 
+type toastData = {
+    id: string;
+    title: string;
+    message: string;
+};
+
 type breadcrumbs = {
     title: string;
     url: string;
     is_current_page: boolean;
+};
+
+type basicPermissions = {
+    create: boolean;
+    update: boolean;
+    delete: boolean;
+};
+
+type fileData = {
+    chunkSize: number;
+    maxSize: number;
+    token: string;
+};
+
+type fileUpload = {
+    file_id: number;
+    file_name: string;
+    file_size: number;
 };

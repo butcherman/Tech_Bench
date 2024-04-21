@@ -39,4 +39,12 @@ class UserRole extends Model
     {
         return $this->hasMany(UserRolePermission::class, 'role_id', 'role_id');
     }
+
+    /**
+     * Appended Accessors
+     */
+    public function getHrefAttribute()
+    {
+        return route('admin.user-roles.show', $this->role_id);
+    }
 }

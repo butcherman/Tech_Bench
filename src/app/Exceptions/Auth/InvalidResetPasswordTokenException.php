@@ -6,6 +6,10 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Exception occurs when a visit to reset password route happens with an
+ * invalid token ID.
+ */
 class InvalidResetPasswordTokenException extends Exception
 {
     protected ResetPasswordRequest $requestData;

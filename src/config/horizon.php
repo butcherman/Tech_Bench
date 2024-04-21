@@ -3,7 +3,7 @@
 return [
     'domain' => null,
     'path' => 'administration/horizon',
-    'use' => 'default',
+    'use' => 'queue',
     'prefix' => 'tech_bench_horizon:',
     'middleware' => ['web'],
 

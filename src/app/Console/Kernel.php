@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
         // Re-occurring maintenance
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+        $schedule->command('model:prune')->daily();
     }
 
     /**

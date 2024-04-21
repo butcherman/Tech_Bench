@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import Dropzone from "dropzone";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { getFileIcon } from "@/Modules/FileIcons.module";
 import type { Ref } from "vue";
@@ -61,8 +61,7 @@ import type { Router } from "ziggy-js";
  */
 import "file-icon-vectors/dist/file-icon-vectors.min.css";
 import "dropzone/dist/basic.css";
-import "../../../scss/dropzoneInput.scss";
-import "../../../scss/extendedIconCatalog.scss";
+import "@/../scss/dropzoneInput.scss";
 
 const emit = defineEmits([
     "file-added",
@@ -81,15 +80,13 @@ const emit = defineEmits([
 const props = defineProps<{
     uploadUrl: string | Router;
     paramName: string;
-    method?: "POST" | "PUT";
     maxFiles?: number;
     acceptedFiles?: string[];
     required?: boolean;
     message?: string;
 }>();
 
-const page: pageData = usePage();
-const fileData: fileData = page.props.app.fileData;
+const fileData: fileData = usePage<pageProps>().props.app.fileData;
 const errMessage: Ref<string | null> = ref(null);
 const isTouched: Ref<boolean> = ref(false);
 const isSubmitting = ref(false);
@@ -125,7 +122,7 @@ const reset = () => {
 };
 
 /**
- * Validate the field by making sure there are no errors
+ * Validate the dropzone field by making sure there are no errors
  */
 const validate = () => {
     //  If the field is required
@@ -140,8 +137,17 @@ const validate = () => {
 
         //  If validation failed, get an error message to display to the user
         if (props.required && myDrop.getRejectedFiles().length) {
-            errMessage.value =
-                "At least one error occurred.  Hover over the file(s) to view the error";
+            if (props.maxFiles && myDrop.files.length > props.maxFiles) {
+                errMessage.value = `Maximum number of files has been exceeded.  
+                                    Only ${props.maxFiles} are allowed.  Please 
+                                    remove ${
+                                        myDrop.files.length - props.maxFiles
+                                    }
+                                    files to continue.`;
+            } else {
+                errMessage.value =
+                    "At least one error occurred.  Hover over the file(s) to view the error";
+            }
         } else {
             errMessage.value = "You must select a file to upload";
         }
@@ -185,7 +191,7 @@ onMounted(() => {
         headers: { "X-CSRF-TOKEN": fileData.token },
         maxFiles: props.maxFiles || 5,
         maxFilesize: fileData.maxSize,
-        method: props.method || "POST",
+        method: "POST",
         parallelChunkUploads: false,
         paramName: props.paramName || "file",
         previewTemplate: previewTemplate,
@@ -199,7 +205,6 @@ onMounted(() => {
     myDrop.on("addedfile", (file) => {
         //  Note Dropzone has been touched/interacted with
         isTouched.value = true;
-
         //  If this is not an image file, see if we have an icon available
         const mime = file.type.split("/");
         if (mime[0] !== "image") {
@@ -212,14 +217,13 @@ onMounted(() => {
                     iconClass = "fiv-cla fiv-icon-blank fiv-size-xl";
                     innerSpan = `<span class="ext-identifier">{.${ext}}</span>`;
                 }
-
                 const imgWrapper =
                     file.previewElement.getElementsByClassName("dz-image")[0];
                 imgWrapper.innerHTML = `<span class="${iconClass} w-100 h-100" />${innerSpan}`;
             }
         }
-
         emit("file-added", file);
+        nextTick(() => validate());
     });
     myDrop.on("removedfile", (file) => {
         validate();

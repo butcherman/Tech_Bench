@@ -2,6 +2,10 @@
 
 namespace App\Service;
 
+use App\Models\CustomerFileType;
+use App\Models\EquipmentCategory;
+use App\Models\EquipmentType;
+use App\Models\PhoneNumberType;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Cache as FacadesCache;
 use PragmaRX\Version\Package\Version;
@@ -16,10 +20,16 @@ class Cache
      *
      * @codeCoverageIgnore
      */
-    public static function clearCache(?string $cacheKey = null)
+    public static function clearCache(array|string|null $cacheKey = null)
     {
         if ($cacheKey) {
-            FacadesCache::forget($cacheKey);
+            if (is_array($cacheKey)) {
+                foreach ($cacheKey as $value) {
+                    FacadesCache::forget($value);
+                }
+            } else {
+                FacadesCache::forget($cacheKey);
+            }
         } else {
             FacadesCache::flush();
         }
@@ -34,7 +44,8 @@ class Cache
             $passwordRules = [
                 'Password must be at least '.
                 config('auth.passwords.settings.min_length').
-                ' characters'];
+                ' characters',
+            ];
 
             if (config('auth.passwords.settings.contains_uppercase')) {
                 $passwordRules[] = 'Must contain an Uppercase letter';
@@ -51,8 +62,6 @@ class Cache
             if (config('auth.passwords.settings.contains_special')) {
                 $passwordRules[] = 'Must contain a Special Character';
             }
-
-            FacadesCache::put('passwordRules', $passwordRules);
 
             return $passwordRules;
         });
@@ -78,11 +87,7 @@ class Cache
     public static function copyright()
     {
         return FacadesCache::get('copyright', function () {
-            $copyright = (new Version)->copyright();
-
-            FacadesCache::put('copyright', $copyright);
-
-            return $copyright;
+            return (new Version)->copyright();
         });
     }
 
@@ -92,11 +97,47 @@ class Cache
     public static function userRoles()
     {
         return FacadesCache::get('user_roles', function () {
-            $roleList = UserRole::all();
+            return UserRole::all();
+        });
+    }
 
-            FacadesCache::put('user_roles', $roleList);
+    /**
+     * List of Equipment Categories
+     */
+    public static function equipmentCategories()
+    {
+        return FacadesCache::get('equipmentCategories', function () {
+            return EquipmentCategory::with('EquipmentType')->get();
+        });
+    }
 
-            return $roleList;
+    /**
+     * List of Equipment Types
+     */
+    public static function equipmentTypes()
+    {
+        return FacadesCache::get('equipmentTypes', function () {
+            return EquipmentType::all();
+        });
+    }
+
+    /**
+     * List of phone number types
+     */
+    public static function phoneTypes()
+    {
+        return FacadesCache::get('phoneTypes', function () {
+            return PhoneNumberType::all();
+        });
+    }
+
+    /**
+     * List of file types that can be assigned to Customer Files
+     */
+    public static function fileTypes()
+    {
+        return FacadesCache::get('fileTypes', function () {
+            return CustomerFileType::all();
         });
     }
 }

@@ -5,6 +5,10 @@ namespace App\Exceptions\Database;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Exception triggered when database query fails due to foreign key
+ * constraint.
+ */
 class RecordInUseException extends Exception
 {
     public function report()

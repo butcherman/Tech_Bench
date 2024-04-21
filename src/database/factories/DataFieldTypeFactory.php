@@ -18,9 +18,12 @@ class DataFieldTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(2),
+            'name' => $this->faker->word(),
+            'pattern' => null,
+            'pattern_error' => null,
             'masked' => false,
-            'required' => false,
+            'is_hyperlink' => false,
+            'allow_copy' => false,
         ];
     }
 }

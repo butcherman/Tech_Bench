@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use App\Http\Controllers\Admin\User\UserRolesController;
 use App\Http\Controllers\Admin\User\UserSettingsController;
+use App\Http\Controllers\Home\FileTypesController;
+use App\Http\Controllers\Home\PhoneTypesController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
@@ -67,6 +69,18 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
                 ->show('View Role')
                 ->edit('Modify Role');
         });
+
+    /**
+     * Additional Data for Customer Administration
+     */
+    Route::resource('file-types', FileTypesController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Customer File Types', 'customers.settings.edit');
+        })->except(['edit', 'show']);
+    Route::resource('phone-types', PhoneTypesController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Customer Contact Phone Types', 'customers.settings.edit');
+        })->except(['edit', 'show']);
 
     // Route::get('basic-settings', [BasicSettingsController::class, 'show'])
     //     ->name('basic-settings.show');

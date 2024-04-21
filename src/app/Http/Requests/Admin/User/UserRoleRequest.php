@@ -19,6 +19,10 @@ class UserRoleRequest extends FormRequest
     public function authorize(): bool
     {
         if ($this->user_role) {
+            if ($this->getMethod() === 'DELETE') {
+                return $this->user()->can('delete', $this->user_role);
+            }
+
             return $this->user()->can('update', $this->user_role);
         }
 
@@ -30,7 +34,7 @@ class UserRoleRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->getMethod('delete')) {
+        if ($this->getMethod() === 'DELETE') {
             return [];
         }
 

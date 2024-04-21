@@ -28,6 +28,15 @@ class HelpPageTest extends TestCase
         'remove-device',
         'send-welcome',
         'restore',
+        'check-id',
+        'notFound',
+        'equipment-list',
+        'phone-types',
+        'file-types',
+        'download',
+
+        // TODO - Remove Testing Bypass Routes
+        'customers',
     ];
 
     /**
@@ -46,7 +55,7 @@ class HelpPageTest extends TestCase
         });
 
         foreach ($routeList as $route) {
-            $this->assertFileExists(resource_path('js/Help/Components/'.$route.'.vue'));
+            $this->assertFileExists(resource_path('js/Help/Pages/'.$route.'.vue'));
         }
     }
 }

@@ -62,6 +62,25 @@ class EventServiceProvider extends ServiceProvider
             \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
         ],
 
+        /**
+         * File Events
+         */
+        'App\Events\File\FileDataDeletedEvent' => [
+            'App\Listeners\File\DeleteFileFromDiskIfNotInUse',
+        ],
+
+        /**
+         * Customer Events
+         */
+        'App\Events\Customer\CustomerEvent' => [],
+        'App\Events\Customer\CustomerSiteEvent' => [],
+        'App\Events\Customer\CustomerAlertEvent' => [],
+        'App\Events\Customer\CustomerContactEvent' => [],
+        'App\Events\Customer\CustomerEquipmentEvent' => [],
+        'App\Events\Customer\CustomerEquipmentDataEvent' => [],
+        'App\Events\Customer\CustomerNoteEvent' => [],
+        'App\Events\Customer\CustomerFileEvent' => [],
+
     ];
 
     /**

@@ -46,8 +46,10 @@ class UserAdministrationController extends Controller
 
         event(new UserCreatedEvent($newUser));
         Log::stack(['daily', 'user'])
-            ->notice('New User created by '.$request->user()->username,
-                $newUser->toArray());
+            ->notice(
+                'New User created by '.$request->user()->username,
+                $newUser->toArray()
+            );
 
         return redirect(route('admin.user.show', $newUser->username))
             ->with('success', __('admin.user.created', [
@@ -112,7 +114,7 @@ class UserAdministrationController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-        $this->authorize('destroy', $user);
+        $this->authorize('delete', $user);
 
         $user->delete();
         Log::stack(['daily', 'user'])
@@ -130,7 +132,7 @@ class UserAdministrationController extends Controller
      */
     public function restore(Request $request, User $user)
     {
-        $this->authorize('destroy', $user);
+        $this->authorize('delete', $user);
 
         $user->restore();
         Log::stack(['daily', 'user'])

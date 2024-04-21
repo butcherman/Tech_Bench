@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
+use App\Http\Controllers\Home\DownloadFileController;
+use App\Http\Controllers\Home\FileTypesController;
+use App\Http\Controllers\Home\PhoneTypesController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth.secure')->group(function () {
@@ -11,4 +14,11 @@ Route::middleware('auth.secure')->group(function () {
     Route::get('about', AboutController::class)
         ->name('about')
         ->breadcrumb('About', 'dashboard');
+    Route::get('phone-types', [PhoneTypesController::class, 'create'])
+        ->name('phone-types');
+    Route::get('file-types', [FileTypesController::class, 'create'])
+        ->name('file-types');
 });
+
+Route::get('download/{file}/{fileName}', DownloadFileController::class)
+    ->name('download');

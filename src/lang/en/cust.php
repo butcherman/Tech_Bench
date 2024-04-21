@@ -10,9 +10,12 @@ return [
     'created' => ':name Successfully Created',
     'updated' => ':name Successfully Updated',
     'destroy' => ':name has been disabled',
+    'restored' => ':name has been re-enabled',
+    'force_deleted' => ':name has been queued for deletion',
 
     'alert' => [
         'created' => 'Customer Alert Created',
+        'updated' => 'Customer Alert Updated',
         'destroy' => 'Customer Alert Deleted',
     ],
 
@@ -22,17 +25,13 @@ return [
         'destroy' => ':name has been disabled',
     ],
 
-    'linked' => [
-        'set' => ':cust successfully linked to :parent',
-        'removed' => 'Link removed for :name',
-    ],
-
     'equipment' => [
         'created' => ':equip Created',
         'updated' => ':equip Updated',
         'deleted' => ':equip Deleted',
         'restored' => ':equip Restored',
         'force_deleted' => ':equip Destroyed',
+        'site-updated' => 'Site List Updated',
     ],
     'contact' => [
         'created' => ':cont Created',

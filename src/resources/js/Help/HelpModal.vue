@@ -25,7 +25,7 @@ const HelpComponent = computed(() => {
     const curRoute = app.currentRoute;
 
     return defineAsyncComponent({
-        loader: () => import(`./Components/${curRoute}.vue`),
+        loader: () => import(`./Pages/${curRoute}.vue`),
         loadingComponent: HelpLoader,
         errorComponent: HelpError,
         delay: 200,

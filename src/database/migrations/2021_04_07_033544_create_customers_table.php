@@ -17,10 +17,10 @@ class CreateCustomersTable extends Migration
             $table->text('name');
             $table->text('dba_name')->nullable();
             $table->text('slug');
-            $table->text('address');
-            $table->text('city');
-            $table->text('state');
-            $table->integer('zip');
+            $table->text('address')->nullable();
+            $table->text('city')->nullable();
+            $table->text('state')->nullable();
+            $table->integer('zip')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('parent_id')

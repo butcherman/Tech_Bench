@@ -5,10 +5,8 @@
         </label>
         <div id="editor-toolbar" class="p-0 my-2"></div>
         <Editor
-            api-key="no-api-key"
             v-model="value"
             :id="id"
-            ref="tinyMceEditor"
             class="form-control editor-input"
             :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
             :disabled="disabled"
@@ -25,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import "@/tinyMce";
 import Editor from "@tinymce/tinymce-vue";
 import { ref, toRef, computed } from "vue";
 import { useField } from "vee-validate";
@@ -38,6 +37,9 @@ const props = defineProps<{
     placeholder?: string;
 }>();
 
+/**
+ * Validation Data
+ */
 const isValid = computed<boolean>(() => {
     return meta.valid && meta.validated && !meta.pending;
 });
@@ -49,8 +51,9 @@ const isInvalid = computed<boolean>(() => {
 const nameRef = toRef(props, "name");
 const { errorMessage, value, meta } = useField(nameRef);
 
-const tinyMceEditor = ref(null);
-
+/**
+ * TinyMCE Initialization
+ */
 const editorInit = {
     /**
      * Basic Settings
@@ -71,24 +74,12 @@ const editorInit = {
     },
 
     /**
-     * Layout
-     */
-    toolbar:
-        "undo redo bold italic strikethrough forecolor | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | table image link preview code",
-    extended_valid_elements:
-        "table[align<center?left?right|bgcolor|cellpadding|cellspacing|class=table" +
-        "|dir<ltr?rtl|frame|height|id|lang|onclick|ondblclick|onkeydown|onkeypress" +
-        "|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|rules" +
-        "|summary|title|width],",
-
-    /**
      * Plugin List
      */
     plugins: [
         "advlist",
         "autolink",
         "code",
-        "help",
         "image",
         "link",
         "lists",
@@ -101,13 +92,27 @@ const editorInit = {
      * Plugin Settings
      */
     link_default_target: "_blank",
+    formats: {
+        table: { classes: "table" },
+    },
+
+    /**
+     * Layout
+     */
+    toolbar:
+        "undo redo bold italic strikethrough forecolor | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat | table image link preview code",
+    extended_valid_elements:
+        "table[align<center?left?right|bgcolor|cellpadding|cellspacing|class=table" +
+        "|dir<ltr?rtl|frame|height|id|lang|onclick|ondblclick|onkeydown|onkeypress" +
+        "|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|rules" +
+        "|summary|title|width],",
 
     /**
      * Image Upload Settings
      */
     automatic_uploads: true,
     file_picker_types: "image",
-    images_upload_url: route("upload-image"),
+    images_upload_url: "#", // route("upload-image"),
     image_dimensions: false,
     image_class_list: [
         {
@@ -119,11 +124,11 @@ const editorInit = {
 </script>
 
 <style lang="scss">
-.tox-notifications-container {
-    display: none;
-}
-
 .editor-input {
     min-height: 500px;
+}
+
+.tox-promotion {
+    display: none;
 }
 </style>
