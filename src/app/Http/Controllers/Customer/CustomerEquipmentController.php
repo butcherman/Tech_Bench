@@ -24,11 +24,11 @@ class CustomerEquipmentController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Equipment/Index', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->CustomerSite,
-            'alerts' => fn() => $customer->CustomerAlert,
-            'equipmentList' => fn() => $customer->CustomerEquipment,
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->CustomerSite,
+            'alerts' => fn () => $customer->CustomerAlert,
+            'equipmentList' => fn () => $customer->CustomerEquipment,
         ]);
     }
 
@@ -40,13 +40,13 @@ class CustomerEquipmentController extends Controller
         $equip = $request->createEquipment();
         dispatch(new CreateCustomerDataFieldsJob($equip));
 
-        Log::channel('cust')->info('New Customer Equipment added to ' . $customer->name .
-            ' by ' . $request->user()->username, $equip->toArray());
+        Log::channel('cust')->info('New Customer Equipment added to '.$customer->name.
+            ' by '.$request->user()->username, $equip->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equip, CrudAction::Create));
 
         return back()->with('success', __('cust.equipment.created', [
-            'equip' => $equip->equip_name
+            'equip' => $equip->equip_name,
         ]));
     }
 
@@ -56,14 +56,14 @@ class CustomerEquipmentController extends Controller
     public function show(Request $request, Customer $customer, CustomerEquipment $equipment): Response
     {
         return Inertia::render('Customer/Equipment/Show', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'equipment' => fn() => $equipment,
-            'siteList' => fn() => $equipment->CustomerSite->makeVisible('href'),
-            'equipment-data' => fn() => $equipment->CustomerEquipmentData,
-            'notes' => fn() => $equipment->CustomerNote,
-            'files' => fn() => $equipment->CustomerFile->append('href'),
-            'equipmentList' => fn() => [$equipment],
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'equipment' => fn () => $equipment,
+            'siteList' => fn () => $equipment->CustomerSite->makeVisible('href'),
+            'equipment-data' => fn () => $equipment->CustomerEquipmentData,
+            'notes' => fn () => $equipment->CustomerNote,
+            'files' => fn () => $equipment->CustomerFile->append('href'),
+            'equipmentList' => fn () => [$equipment],
         ]);
     }
 
@@ -77,7 +77,7 @@ class CustomerEquipmentController extends Controller
     ): RedirectResponse {
         $equipment->CustomerSite()->sync($request->site_list);
 
-        Log::channel('cust')->info('Customer Sites updated for Customer Equipment by ' .
+        Log::channel('cust')->info('Customer Sites updated for Customer Equipment by '.
             $request->user()->username, $equipment->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equipment, CrudAction::Update));
@@ -94,14 +94,14 @@ class CustomerEquipmentController extends Controller
 
         $equipment->delete();
 
-        Log::channel('cust')->notice('Customer Equipment Disabled for ' . $customer->name .
-            ' by ' . $request->user()->username, $equipment->toArray());
+        Log::channel('cust')->notice('Customer Equipment Disabled for '.$customer->name.
+            ' by '.$request->user()->username, $equipment->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equipment, CrudAction::Destroy));
 
         return redirect(route('customers.equipment.index', $customer->slug))
             ->with('warning', __('cust.equipment.deleted', [
-                'equip' => $equipment->equip_name
+                'equip' => $equipment->equip_name,
             ]));
     }
 
@@ -114,7 +114,7 @@ class CustomerEquipmentController extends Controller
 
         $equipment->restore();
         Log::channel('cust')
-            ->info('Customer Equipment restored for ' . $customer->name . ' by ' .
+            ->info('Customer Equipment restored for '.$customer->name.' by '.
                 $request->user()->username, $equipment->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equipment, CrudAction::Restore));
@@ -134,8 +134,8 @@ class CustomerEquipmentController extends Controller
 
         $equipment->forceDelete();
         Log::channel('cust')
-            ->notice('Customer Equipment force deleted for ' . $customer->name .
-                ' by ' . $request->user()->username, $equipment->toArray());
+            ->notice('Customer Equipment force deleted for '.$customer->name.
+                ' by '.$request->user()->username, $equipment->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equipment, CrudAction::ForceDelete));
 

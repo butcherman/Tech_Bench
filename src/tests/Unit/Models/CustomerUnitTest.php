@@ -107,7 +107,7 @@ class CustomerUnitTest extends TestCase
                 ->makeHidden([
                     'cust_equip_id',
                     'deleted_at',
-                    'CustomerEquipment'
+                    'CustomerEquipment',
                 ])->toArray()
         );
     }

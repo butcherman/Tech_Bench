@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentDataRequest;
 use App\Models\Customer;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class CustomerEquipmentDataController extends Controller
 {

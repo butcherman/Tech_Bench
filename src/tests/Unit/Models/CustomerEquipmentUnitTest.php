@@ -14,7 +14,9 @@ use tests\TestCase;
 
 class CustomerEquipmentUnitTest extends TestCase
 {
-    protected $model, $customer;
+    protected $model;
+
+    protected $customer;
 
     public function setUp(): void
     {
@@ -60,7 +62,7 @@ class CustomerEquipmentUnitTest extends TestCase
         $data = CustomerNote::factory()
             ->create([
                 'cust_id' => $this->customer->cust_id,
-                'cust_equip_id' => $this->model->cust_equip_id
+                'cust_equip_id' => $this->model->cust_equip_id,
             ]);
 
         $this->assertEquals(
@@ -77,7 +79,7 @@ class CustomerEquipmentUnitTest extends TestCase
         $data = CustomerFile::factory()
             ->create([
                 'cust_id' => $this->customer->cust_id,
-                'cust_equip_id' => $this->model->cust_equip_id
+                'cust_equip_id' => $this->model->cust_equip_id,
             ]);
 
         $this->assertEquals(

@@ -14,7 +14,9 @@ use tests\TestCase;
 
 class CustomerFileUnitTest extends TestCase
 {
-    protected $model, $customer;
+    protected $model;
+
+    protected $customer;
 
     public function setUp(): void
     {

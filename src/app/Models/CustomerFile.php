@@ -70,7 +70,6 @@ class CustomerFile extends Model
         return $this->CustomerEquipment ? $this->CustomerEquipment->equip_name : null;
     }
 
-
     /**
      * Each file is attached to a specific file entry
      */

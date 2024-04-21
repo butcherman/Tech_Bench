@@ -97,7 +97,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
+                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
             );
 
         Event::assertDispatched(CustomerFileEvent::class);
@@ -146,7 +146,7 @@ class CustomerFileTest extends TestCase
         ]);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png');
+            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png');
 
         Event::assertDispatched(CustomerFileEvent::class);
     }

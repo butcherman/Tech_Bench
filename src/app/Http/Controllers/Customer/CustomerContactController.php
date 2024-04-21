@@ -22,8 +22,8 @@ class CustomerContactController extends Controller
         $newContact = $request->createContact();
 
         Log::channel('cust')->info(
-            'New Customer Contact created for ' .
-            $customer->name . ' by ' . $request->user()->username,
+            'New Customer Contact created for '.
+            $customer->name.' by '.$request->user()->username,
             $newContact->toArray()
         );
 
@@ -45,8 +45,8 @@ class CustomerContactController extends Controller
         $updatedContact = $request->updateContact();
 
         Log::channel('cust')->info(
-            'Customer Contact updated for ' .
-            $customer->name . ' by ' . $request->user()->username,
+            'Customer Contact updated for '.
+            $customer->name.' by '.$request->user()->username,
             $updatedContact->toArray()
         );
 
@@ -70,8 +70,8 @@ class CustomerContactController extends Controller
         $contact->delete();
 
         Log::channel('cust')->notice(
-            'Customer Contact deleted for ' .
-            $customer->name . ' by ' . $request->user()->username,
+            'Customer Contact deleted for '.
+            $customer->name.' by '.$request->user()->username,
             $contact->toArray()
         );
 
@@ -95,7 +95,7 @@ class CustomerContactController extends Controller
         $contact->restore();
 
         Log::channel('cust')
-            ->info('Customer Contact restored for ' . $customer->name . ' by ' .
+            ->info('Customer Contact restored for '.$customer->name.' by '.
                 $request->user()->username, $contact->toArray());
 
         event(new CustomerContactEvent($customer, $contact, CrudAction::Restore));
@@ -119,8 +119,8 @@ class CustomerContactController extends Controller
         $contact->forceDelete();
 
         Log::channel('cust')
-            ->notice('Customer Contact force deleted for ' . $customer->name .
-                ' by ' . $request->user()->username, $contact->toArray());
+            ->notice('Customer Contact force deleted for '.$customer->name.
+                ' by '.$request->user()->username, $contact->toArray());
 
         event(new CustomerContactEvent($customer, $contact, CrudAction::ForceDelete));
 

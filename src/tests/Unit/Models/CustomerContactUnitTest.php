@@ -11,7 +11,9 @@ use tests\TestCase;
 
 class CustomerContactUnitTest extends TestCase
 {
-    protected $model, $customer;
+    protected $model;
+
+    protected $customer;
 
     public function setUp(): void
     {
@@ -40,7 +42,6 @@ class CustomerContactUnitTest extends TestCase
     {
         $data = CustomerContactPhone::factory()
             ->create(['cont_id' => $this->model->cont_id]);
-
 
         $this->assertEquals(
             $data->toArray(),

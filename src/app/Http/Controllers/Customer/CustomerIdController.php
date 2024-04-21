@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 class CustomerIdController extends Controller
 {

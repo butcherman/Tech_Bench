@@ -11,7 +11,9 @@ use tests\TestCase;
 
 class CustomerNoteUnitTest extends TestCase
 {
-    protected $model, $customer;
+    protected $model;
+
+    protected $customer;
 
     public function setUp(): void
     {

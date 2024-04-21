@@ -5,9 +5,7 @@ namespace App\Events\Customer;
 use App\Enum\CrudAction;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -30,13 +28,13 @@ class CustomerEquipmentEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on
-     * 
+     *
      * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('customer.' . $this->customer->slug),
+            new PrivateChannel('customer.'.$this->customer->slug),
         ];
     }
 }

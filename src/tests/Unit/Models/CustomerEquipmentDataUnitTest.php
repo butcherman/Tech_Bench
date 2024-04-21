@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Customer;
 use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use App\Models\DataFieldType;

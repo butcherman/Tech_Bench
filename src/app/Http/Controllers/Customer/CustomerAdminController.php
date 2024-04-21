@@ -23,10 +23,10 @@ class CustomerAdminController extends Controller
         $this->authorize('manage', Customer::class);
 
         return Inertia::render('Customer/Admin', [
-            'select_id' => fn() => (bool) config('customer.select_id'),
-            'update_slug' => fn() => (bool) config('customer.update_slug'),
-            'default_state' => fn() => config('customer.default_state'),
-            'auto_purge' => fn() => (bool) config('customer.auto_purge'),
+            'select_id' => fn () => (bool) config('customer.select_id'),
+            'update_slug' => fn () => (bool) config('customer.update_slug'),
+            'default_state' => fn () => config('customer.default_state'),
+            'auto_purge' => fn () => (bool) config('customer.auto_purge'),
         ]);
     }
 
@@ -37,7 +37,7 @@ class CustomerAdminController extends Controller
     {
         $this->saveSettingsArray($request->toArray(), 'customer');
 
-        Log::stack(['daily', 'cust'])->info('Customer Settings Updated By ' .
+        Log::stack(['daily', 'cust'])->info('Customer Settings Updated By '.
             $request->user()->username, $request->toArray());
 
         return back()->with('success', 'Customer Settings Updated');
