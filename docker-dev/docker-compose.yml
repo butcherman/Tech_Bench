@@ -87,8 +87,8 @@ services:
         entrypoint: php artisan horizon:watch --without-tty
 
     #  Scheduler Container to monitor and run scheduled jobs
-    dev-scheduler:
-        container_name: dev-scheduler
+    scheduler:
+        container_name: scheduler
         restart: unless-stopped
         build:
             context: ./tech_bench

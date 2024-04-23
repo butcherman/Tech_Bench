@@ -16,14 +16,18 @@ class CustomerAlertEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public string $action;
+
     /**
-     * Create a new event instance.
+     * Event is triggered when a Customer Alert is Created, Updated, or Destroyed
      */
     public function __construct(
         public Customer $customer,
         public CustomerAlert $alert,
-        public CrudAction $action
+        CrudAction $action
     ) {
+        $this->action = $action->name;
+
         Log::debug('Customer Alert Event called', [
             'customer' => $customer->toArray(),
             'alert' => $alert->toArray(),
@@ -38,8 +42,11 @@ class CustomerAlertEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
+        Log::debug('Broadcasting Customer Alert Event on channel `customer.' .
+            $this->customer->slug . '`');
+
         return [
-            new PrivateChannel('customer.'.$this->customer->slug),
+            new PrivateChannel('customer.' . $this->customer->slug),
         ];
     }
 }
