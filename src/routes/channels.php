@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-// Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-//     return (int) $user->id === (int) $id;
-// });
+/**
+ * Customer Monitoring Channel
+ */
+Broadcast::channel('customer.{slug}', function (User $user) {
+    Log::debug('Channel customer.{slug} being subscribed to by ' . $user->username);
+
+    return $user ? true : false;
+});

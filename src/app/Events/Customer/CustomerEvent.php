@@ -9,17 +9,25 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CustomerEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public string $action;
+
     /**
-     * Create a new event instance.
+     * Event is triggered when Customer is Created, Updated, or Destroyed
      */
-    public function __construct(public Customer $customer, public CrudAction $action)
+    public function __construct(public Customer $customer, CrudAction $action)
     {
-        //
+        $this->action = $action->name;
+
+        Log::debug('Customer Event called', [
+            'customer' => $customer->toArray(),
+            'crud_action' => $action->name
+        ]);
     }
 
     /**
@@ -29,8 +37,11 @@ class CustomerEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
+        Log::debug('Broadcasting Customer Event on channel `customer.' .
+            $this->customer->slug . '`');
+
         return [
-            new PrivateChannel('customer.'.$this->customer->slug),
+            new PrivateChannel('customer.' . $this->customer->slug),
         ];
     }
 }
