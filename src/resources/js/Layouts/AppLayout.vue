@@ -38,5 +38,8 @@ const navbarActive = ref(false);
 /**
  * Close the navbar when routing to new page
  */
-router.on("navigate", () => (navbarActive.value = false));
+router.on("navigate", () => {
+    navbarActive.value = false;
+    console.log("current route - ", route().current());
+});
 </script>

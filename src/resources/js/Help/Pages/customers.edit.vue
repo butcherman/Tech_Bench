@@ -11,7 +11,4 @@
 
 <script setup lang="ts">
 import customerCustomerDetailsForm from "../Forms/customer.customerDetailsForm.vue";
-import { ref, reactive, onMounted } from "vue";
-
-const props = defineProps<{}>();
 </script>
