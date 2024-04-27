@@ -26,7 +26,7 @@
         />
         <SelectBoxInput
             v-if="noteType === 'site'"
-            id="equipment-site-list"
+            id="site-list"
             name="site_list"
             label="Select which Sites this note is relevant to"
             text-field="site_name"

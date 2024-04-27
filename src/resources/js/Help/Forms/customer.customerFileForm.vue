@@ -8,7 +8,7 @@ import TableStacked from "@/Components/_Base/TableStacked.vue";
 const formData = {
     Name: "Enter a name to reference this file by.",
     "File Category": "Select the category this file belongs to.",
-    "Site List": `If this file is for multiple sites, select the equipment that 
+    "Site List": `If this file is for multiple sites, select the sites that 
                   the file is for.`,
     Equipment: `If the file is for Equipment attached to the customer, select 
                   that equipment.`,

@@ -12,7 +12,10 @@
                 <customerSiteEquipmentList />
             </li>
             <customerSiteContacts />
-            <customerSiteNotes />
+            <li class="list-group-item">
+                <strong>Notes</strong> -
+                <customerSiteNotes />
+            </li>
             <customerSiteFiles />
         </ul>
     </div>

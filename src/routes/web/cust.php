@@ -67,7 +67,8 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object' ? $customer->name : $customer
+                    fn(Customer|string $customer) =>
+                    gettype($customer) === 'object' ? $customer->name : $customer
                 )->edit('Edit Customer Details');
         })->missing(function (Request $request) {
             throw new CustomerNotFoundException($request);
@@ -121,7 +122,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
-                    ->show(fn (Customer $customer, CustomerSite $site) => $site->site_name)
+                    ->show(fn(Customer $customer, CustomerSite $site) => $site->site_name)
                     ->edit('Edit Site');
             });
 
@@ -135,7 +136,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
-                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
             })->except(['create', 'edit']);
         Route::put('equipment-data', CustomerEquipmentDataController::class)
@@ -145,7 +146,7 @@ Route::middleware('auth.secure')->group(function () {
          *                     Customer Contacts Routes                        *
          ***********************************************************************/
         Route::resource('contacts', CustomerContactController::class)
-            ->except(['index', 'edit', 'show']);
+            ->except(['index', 'edit', 'show', 'create']);
 
         /***********************************************************************
          *                     Customer Notes Routes                           *
@@ -180,6 +181,6 @@ Route::middleware('auth.secure')->group(function () {
          *                     Customer Files Routes                           *
          ***********************************************************************/
         Route::resource('files', CustomerFileController::class)
-            ->except(['index', 'show', 'edit']);
+            ->except(['index', 'show', 'edit', 'create']);
     });
 });
