@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="!paginatedData.length">
+                <tr v-if="!paginatedData.length && !loading">
                     <td :colspan="columnCount">
                         <slot name="no-results">
                             <div class="text-center">
@@ -44,7 +44,7 @@
                     :class="{ pointer: rowClickable, 'row-link': row.href }"
                 >
                     <template v-for="col in columns">
-                        <td @click="$emit('on-row-click', [$event, row])">
+                        <td @click="$emit('on-row-click', row, $event)">
                             <slot
                                 name="column"
                                 :column-name="col.field"
@@ -166,6 +166,7 @@ const props = defineProps<{
     perPageDefault?: number;
     noResultsText?: string;
     noInertiaLink?: boolean;
+    loading?: boolean;
 }>();
 
 const columnCount = computed(

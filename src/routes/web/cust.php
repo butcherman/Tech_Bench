@@ -17,6 +17,7 @@ use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
 use App\Http\Controllers\Customer\DownloadNoteController;
+use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
@@ -61,6 +62,11 @@ Route::middleware('auth.secure')->group(function () {
                 ->withTrashed()
                 ->name('force-delete');
         });
+        Route::get('re-assign-site', [ReAssignCustomerController::class, 'edit'])
+            ->name('re-assign.edit')
+            ->breadcrumb('Re-Assign Customer Site', 'customers.settings.edit');
+        Route::put('re-assign-site', [ReAssignCustomerController::class, 'update'])
+            ->name('re-assign.update');
     });
 
     Route::resource('customers', CustomerController::class)

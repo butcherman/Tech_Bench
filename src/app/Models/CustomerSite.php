@@ -45,7 +45,11 @@ class CustomerSite extends Model
 
     public function getIsPrimaryAttribute()
     {
-        return $this->Customer->primary_site_id === $this->cust_site_id;
+        if ($this->Customer) {
+            return $this->Customer->primary_site_id === $this->cust_site_id;
+        }
+
+        return false;
     }
 
     public function getHrefAttribute()

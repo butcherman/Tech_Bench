@@ -173,7 +173,7 @@ class CustomerTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'].' 1');
+        $slug = Str::slug($data['name'] . ' 1');
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.store'), $data);
@@ -203,7 +203,7 @@ class CustomerTest extends TestCase
         $existing1 = Customer::factory()->has(CustomerSite::factory())->create();
         Customer::factory()->create([
             'name' => $existing1->name,
-            'slug' => Str::slug($existing1->slug.'-1'),
+            'slug' => Str::slug($existing1->slug . '-1'),
         ]);
 
         $cust = Customer::factory()->make();
@@ -216,7 +216,7 @@ class CustomerTest extends TestCase
             'state' => $existing1->CustomerSite[0]->state,
             'zip' => $existing1->CustomerSite[0]->zip,
         ];
-        $slug = Str::slug($data['name'].' 2');
+        $slug = Str::slug($data['name'] . ' 2');
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('customers.store'), $data);

@@ -35,13 +35,14 @@ interface axiosSearchResults {
         prev_page_url: string;
         to: number;
         total: number;
-    }
+    };
 }
 
 /*******************************************************************************
  *                    Search and loading Parameters                            *
  *******************************************************************************/
 export const isLoading = ref<boolean>(false);
+export const isDirty = ref<boolean>(false);
 export const showSiteList = ref<boolean>(true);
 export const searchResults = ref<customer[]>([]);
 export const searchParams = reactive<searchParams>({
@@ -65,6 +66,7 @@ export const paginationData = reactive<paginationData>({
  *******************************************************************************/
 export const triggerSearch = async () => {
     isLoading.value = true;
+    isDirty.value = true;
 
     await axios
         .post(route("customers.search"), searchParams)
@@ -75,6 +77,11 @@ export const triggerSearch = async () => {
             )
         )
         .finally(() => (isLoading.value = false));
+};
+
+export const resetSearch = () => {
+    searchParams.searchFor = "";
+    isDirty.value = false;
 };
 
 const processResults = (res: axiosSearchResults) => {

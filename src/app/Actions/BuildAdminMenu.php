@@ -108,6 +108,11 @@ class BuildAdminMenu
                     'icon' => 'phone',
                     'route' => route('admin.phone-types.index'),
                 ],
+                [
+                    'name' => 'Re-Assign Customer Site',
+                    'icon' => 'truck-moving',
+                    'route' => route('customers.re-assign.edit'),
+                ]
             ];
         }
 
