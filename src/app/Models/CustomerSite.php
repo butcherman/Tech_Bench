@@ -72,6 +72,16 @@ class CustomerSite extends Model
         );
     }
 
+    public function SiteContact()
+    {
+        return $this->belongsToMany(
+            CustomerContact::class,
+            'customer_site_contacts',
+            'cust_site_id',
+            'cont_id'
+        );
+    }
+
     public function SiteNote()
     {
         return $this->belongsToMany(
