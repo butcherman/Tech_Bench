@@ -170,7 +170,9 @@ const verifyMove = () => {
                 toCustomer: toCustomer.value?.cust_id,
             });
 
-            formData.put(route("customers.re-assign.update"));
+            formData.put(route("customers.re-assign.update"), {
+                onSuccess: () => resetAll(),
+            });
         }
     });
 };

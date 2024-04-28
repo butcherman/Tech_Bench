@@ -24,5 +24,7 @@ class ReAssignCustomerController extends Controller
     public function update(ReAssignSiteRequest $request)
     {
         dispatch(new ReAssignSiteJob($request));
+
+        return back()->with('success', 'Re-Assignment job started in background.  This may take some time');
     }
 }
