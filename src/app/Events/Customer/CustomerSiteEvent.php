@@ -31,7 +31,7 @@ class CustomerSiteEvent implements ShouldBroadcast
         Log::debug('Customer Site Event called', [
             'customer' => $customer->toArray(),
             'site' => $site->toArray(),
-            'crud_action' => $action->name
+            'crud_action' => $action->name,
         ]);
     }
 
@@ -42,11 +42,11 @@ class CustomerSiteEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Customer Site Event on channel `customer.' .
-            $this->customer->slug . '`');
+        Log::debug('Broadcasting Customer Site Event on channel `customer.'.
+            $this->customer->slug.'`');
 
         return [
-            new PrivateChannel('customer.' . $this->customer->slug),
+            new PrivateChannel('customer.'.$this->customer->slug),
         ];
     }
 }

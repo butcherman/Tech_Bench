@@ -31,7 +31,7 @@ class CustomerEquipmentEvent implements ShouldBroadcast
         Log::debug('Customer Equipment Event called', [
             'customer' => $customer->toArray(),
             'equipment' => $equipment->toArray(),
-            'crud_action' => $action->name
+            'crud_action' => $action->name,
         ]);
     }
 
@@ -42,11 +42,11 @@ class CustomerEquipmentEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Customer Equipment Event on channel `customer.' .
-            $this->customer->slug . '`');
+        Log::debug('Broadcasting Customer Equipment Event on channel `customer.'.
+            $this->customer->slug.'`');
 
         return [
-            new PrivateChannel('customer.' . $this->customer->slug),
+            new PrivateChannel('customer.'.$this->customer->slug),
         ];
     }
 }

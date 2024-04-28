@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\ReAssignSiteRequest;
 use App\Jobs\Customer\ReAssignSiteJob;
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ReAssignCustomerController extends Controller

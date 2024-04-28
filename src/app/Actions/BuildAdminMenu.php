@@ -112,7 +112,7 @@ class BuildAdminMenu
                     'name' => 'Re-Assign Customer Site',
                     'icon' => 'truck-moving',
                     'route' => route('customers.re-assign.edit'),
-                ]
+                ],
             ];
         }
 

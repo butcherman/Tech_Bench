@@ -22,7 +22,7 @@ class ReAssignSiteRequest extends FormRequest
     {
         return [
             'moveSiteId' => 'required|exists:customer_sites,cust_site_id',
-            'toCustomer' => 'required|exists:customers,cust_id'
+            'toCustomer' => 'required|exists:customers,cust_id',
         ];
     }
 }

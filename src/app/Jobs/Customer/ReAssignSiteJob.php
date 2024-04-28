@@ -18,7 +18,11 @@ class ReAssignSiteJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $moveSite, $toCustomer, $isSolo;
+    protected $moveSite;
+
+    protected $toCustomer;
+
+    protected $isSolo;
 
     /**
      * Create a new job instance.
@@ -33,7 +37,7 @@ class ReAssignSiteJob implements ShouldQueue
         $this->isSolo = $fromCustomer->site_count === 1;
 
         Log::stack(['daily', 'cust'])
-            ->notice('Re-Assign Customer job called by ' . $request->user()->username, [
+            ->notice('Re-Assign Customer job called by '.$request->user()->username, [
                 'site_moving' => $this->moveSite->toArray(),
                 'from_customer' => $this->moveSite->Customer->toArray(),
                 'to_customer' => $this->toCustomer->toArray(),
@@ -71,8 +75,8 @@ class ReAssignSiteJob implements ShouldQueue
             foreach ($modelList as $model) {
                 if ($model->CustomerSite->count() === 1) {
                     Log::channel('cust')->info(
-                        'Moving data from Customer ID' . $model->cust_id .
-                        ' to Customer ID ' . $this->toCustomer->cust_id,
+                        'Moving data from Customer ID'.$model->cust_id.
+                        ' to Customer ID '.$this->toCustomer->cust_id,
                         $model->toArray()
                     );
 
@@ -98,9 +102,9 @@ class ReAssignSiteJob implements ShouldQueue
              * If not, it will be detached from the site
              */
             if ($equip->CustomerSite->count() === 1) {
-                Log::channel('cust')->info('Moving Customer Equipment ID ' .
-                    $equip->cust_equip_id . ' from Customer ID ' . $equip->cust_id .
-                    ' to Customer ID' . $this->toCustomer->cust_id);
+                Log::channel('cust')->info('Moving Customer Equipment ID '.
+                    $equip->cust_equip_id.' from Customer ID '.$equip->cust_id.
+                    ' to Customer ID'.$this->toCustomer->cust_id);
 
                 // $equip->update(['cust_id' => $this->toCustomer->cust_id]);
                 $this->reAssignModel($equip);
@@ -194,7 +198,7 @@ class ReAssignSiteJob implements ShouldQueue
             $customer->primary_site_id = null;
             $customer->save();
 
-            Log::channel('cust')->notice('Primary Site for ' . $customer->name . ' has been removed');
+            Log::channel('cust')->notice('Primary Site for '.$customer->name.' has been removed');
         }
 
         if ($this->isSolo) {
@@ -202,7 +206,7 @@ class ReAssignSiteJob implements ShouldQueue
             $customer->save();
             $customer->delete();
 
-            Log::channel('cust')->notice('Customer ' . $customer->name . ' has been disabled due to no active sites.');
+            Log::channel('cust')->notice('Customer '.$customer->name.' has been disabled due to no active sites.');
         }
 
         $this->moveSite->cust_id = $this->toCustomer->cust_id;

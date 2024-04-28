@@ -31,7 +31,7 @@ class CustomerContactEvent implements ShouldBroadcast
         Log::debug('Customer Contact Event called', [
             'customer' => $customer->toArray(),
             'contact' => $contact->toArray(),
-            'crud_action' => $action->name
+            'crud_action' => $action->name,
         ]);
     }
 
@@ -42,11 +42,11 @@ class CustomerContactEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Customer Contact Event on channel `customer.' .
-            $this->customer->slug . '`');
+        Log::debug('Broadcasting Customer Contact Event on channel `customer.'.
+            $this->customer->slug.'`');
 
         return [
-            new PrivateChannel('customer.' . $this->customer->slug),
+            new PrivateChannel('customer.'.$this->customer->slug),
         ];
     }
 }

@@ -9,8 +9,6 @@ use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ReAssignCustomerTest extends TestCase
@@ -135,7 +133,7 @@ class ReAssignCustomerTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn($site) => $site->cust_site_id);
+            ->map(fn ($site) => $site->cust_site_id);
 
         // Create two Equipment Types
         $equip = CustomerEquipment::factory()
@@ -149,12 +147,12 @@ class ReAssignCustomerTest extends TestCase
             CustomerNote::factory()
                 ->create([
                     'cust_id' => $fromCust->cust_id,
-                    'cust_equip_id' => $equip[0]->cust_equip_id
+                    'cust_equip_id' => $equip[0]->cust_equip_id,
                 ]),
             CustomerNote::factory()
                 ->create([
                     'cust_id' => $fromCust->cust_id,
-                    'cust_equip_id' => $equip[1]->cust_equip_id
+                    'cust_equip_id' => $equip[1]->cust_equip_id,
                 ]),
         ];
 
@@ -163,14 +161,14 @@ class ReAssignCustomerTest extends TestCase
             CustomerFile::factory()
                 ->create([
                     'cust_id' => $fromCust->cust_id,
-                    'cust_equip_id' => $equip[0]->cust_equip_id
+                    'cust_equip_id' => $equip[0]->cust_equip_id,
                 ]),
 
             CustomerFile::factory()
                 ->create([
                     'cust_id' => $fromCust->cust_id,
-                    'cust_equip_id' => $equip[1]->cust_equip_id
-                ])
+                    'cust_equip_id' => $equip[1]->cust_equip_id,
+                ]),
         ];
 
         $data = [
@@ -227,7 +225,7 @@ class ReAssignCustomerTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn($site) => $site->cust_site_id);
+            ->map(fn ($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
         $fromCust->CustomerContact[0]->CustomerSite()->sync($siteArray);
@@ -281,7 +279,7 @@ class ReAssignCustomerTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn($site) => $site->cust_site_id);
+            ->map(fn ($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
         $fromCust->CustomerNote[0]->CustomerSite()->sync($siteArray);
@@ -333,7 +331,7 @@ class ReAssignCustomerTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn($site) => $site->cust_site_id);
+            ->map(fn ($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
         $fromCust->CustomerFile[0]->CustomerSite()->sync($siteArray);
