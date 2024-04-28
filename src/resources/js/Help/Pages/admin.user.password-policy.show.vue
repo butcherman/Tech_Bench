@@ -10,7 +10,4 @@
 
 <script setup lang="ts">
 import AdminUserPasswordPolicyForm from "../Forms/admin.user.passwordPolicyForm.vue";
-import { ref, reactive, onMounted } from "vue";
-
-const props = defineProps<{}>();
 </script>

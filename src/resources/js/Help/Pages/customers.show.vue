@@ -1,17 +1,15 @@
 <template>
     <div>
-        <h5 class="text-center">Show Customer</h5>
-        <p class="text-center">
-            Customer information is shown here. If the customer has multiple
-            sites, information for all sites will be shown here. Select a
-            specific site to drill down to that sites information.
-        </p>
-        <!-- TODO - Add Additional Information -->
+        <customerSiteSingle v-if="isSingleSite" />
+        <customerSiteMultiple v-else />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { usePage } from "@inertiajs/vue3";
+import customerSiteMultiple from "../Components/customer.site.multiple.vue";
+import customerSiteSingle from "../Components/customer.site.single.vue";
 
-const props = defineProps<{}>();
+const isSingleSite: boolean =
+    usePage<customerPageProps>().props.customer.site_count === 1;
 </script>

@@ -14,7 +14,12 @@
                 <div v-if="!files.length">
                     <h6 class="text-center">No Files</h6>
                 </div>
-                <Table :columns="tableColumns" :rows="files" no-inertia-link>
+                <Table
+                    v-else
+                    :columns="tableColumns"
+                    :rows="files"
+                    no-inertia-link
+                >
                     <template #action="{ rowData }">
                         <span
                             class="badge bg-info rounded-pill pointer"

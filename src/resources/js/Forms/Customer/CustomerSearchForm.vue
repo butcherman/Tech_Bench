@@ -15,7 +15,12 @@
                 <fa-icon icon="fa-brands fa-searchengin" />
                 <span class="d-none d-md-inline"> Search </span>
             </button>
-            <button type="reset" class="btn btn-warning" @click="onReset">
+            <button
+                v-if="!hideReset"
+                type="reset"
+                class="btn btn-warning"
+                @click="onReset"
+            >
                 <fa-icon icon="rotate" />
                 <span class="d-none d-md-inline"> Reset </span>
             </button>
@@ -25,10 +30,18 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { searchParams, triggerSearch } from "@/Modules/CustomerSearch.module";
+import {
+    searchParams,
+    triggerSearch,
+    resetSearch,
+} from "@/Modules/CustomerSearch.module";
+
+defineProps<{
+    hideReset?: boolean;
+}>();
 
 const onReset = () => {
-    searchParams.searchFor = "";
+    resetSearch();
     triggerSearch();
 };
 

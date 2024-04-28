@@ -66,7 +66,4 @@
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import { ref, reactive, onMounted } from "vue";
-
-const props = defineProps<{}>();
 </script>

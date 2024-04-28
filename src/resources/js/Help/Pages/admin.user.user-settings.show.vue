@@ -12,7 +12,4 @@
 
 <script setup lang="ts">
 import AdminUserUserSettingsForm from "../Forms/admin.user.userSettingsForm.vue";
-import { ref, reactive, onMounted } from "vue";
-
-const props = defineProps<{}>();
 </script>

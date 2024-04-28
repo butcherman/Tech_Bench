@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Broadcast;
  * Customer Monitoring Channel
  */
 Broadcast::channel('customer.{slug}', function (User $user) {
-    Log::debug('Channel customer.{slug} being subscribed to by ' . $user->username);
+    Log::debug('Channel customer.{slug} being subscribed to by '.$user->username);
 
     return $user ? true : false;
 });

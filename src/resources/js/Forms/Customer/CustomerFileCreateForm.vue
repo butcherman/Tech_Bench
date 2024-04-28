@@ -29,7 +29,7 @@
             v-if="fileFormType === 'site'"
             id="equipment-site-list"
             name="site_list"
-            label="Select which Sites this note is relevant to"
+            label="Select which Sites this file is relevant to"
             text-field="site_name"
             value-field="cust_site_id"
             :list="siteList"

@@ -45,7 +45,11 @@ class CustomerSite extends Model
 
     public function getIsPrimaryAttribute()
     {
-        return $this->Customer->primary_site_id === $this->cust_site_id;
+        if ($this->Customer) {
+            return $this->Customer->primary_site_id === $this->cust_site_id;
+        }
+
+        return false;
     }
 
     public function getHrefAttribute()
@@ -65,6 +69,16 @@ class CustomerSite extends Model
             'customer_site_equipment',
             'cust_site_id',
             'cust_equip_id'
+        );
+    }
+
+    public function SiteContact()
+    {
+        return $this->belongsToMany(
+            CustomerContact::class,
+            'customer_site_contacts',
+            'cust_site_id',
+            'cont_id'
         );
     }
 
