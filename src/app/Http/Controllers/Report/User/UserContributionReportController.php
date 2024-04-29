@@ -3,23 +3,24 @@
 namespace App\Http\Controllers\Report\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Report\User\UserActivityReportRequest;
 use App\Http\Requests\Report\User\UserReportRequest;
 use App\Models\User;
-use App\Service\Reports\UserActivityReport;
+use App\Service\Reports\UserContributionsReport;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-class UserActivityReportController extends Controller
+class UserContributionReportController extends Controller
 {
+    /**
+     * Show the form for creating the resource.
+     */
     public function index()
     {
-        return Inertia::render('Report/User/Activity/Index', [
+        return Inertia::render('Report/User/Contribution/Index', [
             'user-list' => User::all(),
         ]);
-
     }
 
     /**
@@ -27,10 +28,10 @@ class UserActivityReportController extends Controller
      */
     public function show(UserReportRequest $request)
     {
-        Log::info('User Login Activity Report run by ' . $request->user()->username);
-        $report = new UserActivityReport($request);
+        Log::info('User Contributions Report run by ' . $request->user()->username);
+        $report = new UserContributionsReport($request);
 
-        return Inertia::render('Report/User/Activity/Show', [
+        return Inertia::render('Report/User/Contribution/Show', [
             'report-data' => $report->getReportData(),
             'start-date' => Carbon::parse($request->start_date)->format('M d, Y'),
             'end-date' => Carbon::parse($request->end_date)->format('M d, Y'),

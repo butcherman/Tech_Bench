@@ -3,10 +3,10 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">User Login Activity Report</div>
+                    <div class="card-title">User Contributions Report</div>
                     <UserReportsForm
                         :user-list="userList"
-                        submit-route="reports.user.run-activity"
+                        submit-route="reports.user.run-contribution"
                     />
                 </div>
             </div>

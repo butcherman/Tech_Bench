@@ -4,7 +4,7 @@
             <tbody>
                 <tr v-for="(value, index) in computedRows" :key="index">
                     <slot name="default" :row-data="{ value, index }">
-                        <th class="text-end">
+                        <th :class="alignText">
                             <slot name="index" :row-data="{ value, index }">
                                 {{ index }}:
                             </slot>
@@ -32,7 +32,10 @@ interface rowHeaders {
 const props = defineProps<{
     rows: any;
     headers?: rowHeaders[];
+    alignLeft?: boolean;
 }>();
+
+const alignText = computed(() => (props.alignLeft ? "text-start" : "text-end"));
 
 const computedRows = computed<{ [key: string]: string | any }>(() => {
     if (props.headers) {

@@ -2,32 +2,20 @@
     <div>
         <Head title="Reports" />
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div v-for="(items, category) in menu" class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">User Reports</div>
+                        <div class="card-title">{{ category }}</div>
                         <ul class="list-group">
-                            <Link
-                                as="li"
-                                :href="$route('reports.user.activity')"
-                                class="list-group-item pointer"
-                            >
-                                User Login Activity Report
-                            </Link>
-                            <Link
-                                as="li"
-                                href="#"
-                                class="list-group-item pointer"
-                            >
-                                User Contributions Report
-                            </Link>
-                            <Link
-                                as="li"
-                                href="#"
-                                class="list-group-item pointer"
-                            >
-                                User Permissions Report
-                            </Link>
+                            <template v-for="item in items">
+                                <Link
+                                    as="li"
+                                    :href="item.route"
+                                    class="list-group-item pointer"
+                                >
+                                    {{ item.name }}
+                                </Link>
+                            </template>
                         </ul>
                     </div>
                 </div>
@@ -38,9 +26,10 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{}>();
+defineProps<{
+    menu: { [key: string]: { name: string; route: string }[] };
+}>();
 </script>
 
 <script lang="ts">

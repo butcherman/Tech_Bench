@@ -2,18 +2,28 @@
 
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Report\User\UserActivityReportController;
+use App\Http\Controllers\Report\User\UserContributionReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(function () {
     Route::get('/', ReportController::class)->name('index')
         ->breadcrumb('Reports');
 
+    /***************************************************************************
+     * User Reports
+     ***************************************************************************/
     Route::prefix('user-reports')->name('user.')->group(function () {
         Route::get('activity-report', [UserActivityReportController::class, 'index'])
             ->name('activity')
             ->breadcrumb('User Login Activity Report', 'reports.index');
         Route::put('activity-report', [UserActivityReportController::class, 'show'])
             ->name('run-activity')
-            ->breadcrumb('User Login Activity Report', 'reports.index');
+            ->breadcrumb('Report Details', 'reports.user.activity');
+        Route::get('contribution-report', [UserContributionReportController::class, 'index'])
+            ->name('contribution')
+            ->breadcrumb('User Contribution Report', 'reports.index');
+        Route::put('contribution-report', [UserContributionReportController::class, 'show'])
+            ->name('run-contribution')
+            ->breadcrumb('Report Details', 'reports.user.contribution');
     });
 });
