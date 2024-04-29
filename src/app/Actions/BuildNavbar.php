@@ -33,7 +33,12 @@ class BuildNavbar
             ],
         ];
 
-        // // If the Admin Nav exists, move it just under the Dashboard
+        // If the Reports Nav exists, move it under Dashboard
+        if ($reportsNav = self::getReportsNav($user)) {
+            array_splice($primaryNav, 1, 0, [$reportsNav]);
+        }
+
+        // If the Admin Nav exists, move it just under the Dashboard
         if ($adminNav = self::getAdminNav($user)) {
             array_splice($primaryNav, 1, 0, [$adminNav]);
         }
@@ -52,6 +57,22 @@ class BuildNavbar
                 'name' => 'Administration',
                 'route' => route('admin.index'),
                 'icon' => 'fas fa-user-shield',
+            ];
+        }
+
+        return false;
+    }
+
+    /**
+     * If the user can access the Reports link, include that link
+     */
+    protected static function getReportsNav(User $user)
+    {
+        if (Gate::allows('reports-link', $user)) {
+            return [
+                'name' => 'Reports',
+                'icon' => 'chart-bar',
+                'route' => route('reports.index'),
             ];
         }
 

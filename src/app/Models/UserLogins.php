@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +17,12 @@ class UserLogins extends Model
     protected $hidden = ['id', 'updated_at'];
 
     protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
+        'created_at' => 'date',
+        'updated_at' => 'date',
     ];
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->toDayDateTimeString();
+    }
 }

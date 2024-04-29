@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 Route::middleware('auth.secure')->prefix('administration')->name('admin.')->group(function () {
-
     /***************************************************************************
      * Administration Home Page
      ***************************************************************************/

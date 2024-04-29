@@ -128,7 +128,8 @@ const addItems = () => {
     addingArray.forEach((itemValue) => {
         selectedList.value.push(itemValue);
 
-        let listItemIndx = availableList.value.findIndex((i) => i == itemValue);
+        let itemObj = findOriginalItem(itemValue);
+        let listItemIndx = availableList.value.findIndex((i) => i == itemObj);
         availableList.value.splice(listItemIndx, 1);
     });
 
