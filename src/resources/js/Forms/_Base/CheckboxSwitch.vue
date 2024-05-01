@@ -12,6 +12,7 @@
             :value="true"
             :unchecked-value="false"
             :disabled="disabled"
+            @change="$emit('change')"
         />
         <label :for="id" class="form-check-label">
             <slot name="label">
@@ -35,6 +36,8 @@
 import okModal from "@/Modules/okModal";
 import { toRef } from "vue";
 import { useField } from "vee-validate";
+
+defineEmits(["change"]);
 
 const props = defineProps<{
     id: string;

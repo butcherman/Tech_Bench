@@ -3,6 +3,7 @@
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Report\User\UserActivityReportController;
 use App\Http\Controllers\Report\User\UserContributionReportController;
+use App\Http\Controllers\Report\User\UserPermissionsReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(function () {
@@ -25,5 +26,11 @@ Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(fun
         Route::put('contribution-report', [UserContributionReportController::class, 'show'])
             ->name('run-contribution')
             ->breadcrumb('Report Details', 'reports.user.contribution');
+        Route::get('user-permissions-report', [UserPermissionsReportController::class, 'index'])
+            ->name('permissions')
+            ->breadcrumb('User Permissions Report', 'reports.index');
+        Route::put('user-permissions-report', [UserPermissionsReportController::class, 'show'])
+            ->name('run-permissions')
+            ->breadcrumb('Report Details', 'reports.user.permissions');
     });
 });

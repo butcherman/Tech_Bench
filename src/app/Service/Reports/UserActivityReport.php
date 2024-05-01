@@ -3,6 +3,7 @@
 namespace App\Service\Reports;
 
 use App\Http\Requests\Report\User\UserReportRequest;
+use App\Interface\ReportsInterface;
 use App\Models\User;
 use App\Models\UserLogins;
 
@@ -10,18 +11,11 @@ use App\Models\UserLogins;
  * Report will return the login dates and times for the selected users 
  * within the selected time period
  */
-class UserActivityReport
+class UserActivityReport extends Reports
 {
-    protected $reportData = [];
-
     public function __construct(protected UserReportRequest $request)
     {
-        $this->buildReportData();
-    }
-
-    public function getReportData()
-    {
-        return $this->reportData;
+        parent::__construct();
     }
 
     protected function buildReportData()

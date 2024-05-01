@@ -3,22 +3,18 @@
 namespace App\Service\Reports;
 
 use App\Http\Requests\Report\User\UserReportRequest;
+use App\Interface\ReportsInterface;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\User;
 
-class UserContributionsReport
+class UserContributionsReport extends Reports
 {
     protected $reportData = [];
 
     public function __construct(protected UserReportRequest $request)
     {
-        $this->buildReportData();
-    }
-
-    public function getReportData()
-    {
-        return $this->reportData;
+        parent::__construct();
     }
 
     protected function buildReportData()
