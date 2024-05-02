@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Report\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Report\User\UserReportRequest;
 use App\Models\User;
+use App\Policies\GatePolicy;
 use App\Service\Reports\UserContributionsReport;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -17,6 +18,8 @@ class UserContributionReportController extends Controller
      */
     public function index()
     {
+        $this->authorize('reports-link', GatePolicy::class);
+
         return Inertia::render('Report/User/Contribution/Index', [
             'user-list' => User::all(),
         ]);
@@ -27,7 +30,7 @@ class UserContributionReportController extends Controller
      */
     public function show(UserReportRequest $request)
     {
-        Log::info('User Contributions Report run by '.$request->user()->username);
+        Log::info('User Contributions Report run by ' . $request->user()->username);
         $report = new UserContributionsReport($request);
 
         return Inertia::render('Report/User/Contribution/Show', [
