@@ -3,7 +3,7 @@
         ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('reports.user.run-permissions')"
+        :submit-route="$route(submitRoute)"
         submit-method="put"
         submit-text="Run Report"
     >
@@ -44,6 +44,7 @@ import { array, boolean, object } from "yup";
 
 defineProps<{
     userList: user[];
+    submitRoute: string;
 }>();
 
 const showUserList = ref(true);

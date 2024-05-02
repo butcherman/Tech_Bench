@@ -3,10 +3,10 @@
 namespace App\Service\Reports;
 
 use App\Http\Requests\Report\User\UserPermissionsRequest;
-use App\Http\Resources\UserPermissionResource;
+use App\Http\Resources\UserDetailsResource;
 use App\Models\User;
 
-class UserPermissionsReport extends Reports
+class UserDetailsReport extends Reports
 {
     public function __construct(protected UserPermissionsRequest $request)
     {
@@ -15,7 +15,7 @@ class UserPermissionsReport extends Reports
 
     public function buildReportData()
     {
-        $this->reportData = UserPermissionResource::collection($this->getUserList());
+        $this->reportData = UserDetailsResource::collection($this->getUserList());
     }
 
     protected function getUserList()

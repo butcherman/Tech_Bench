@@ -3,7 +3,6 @@
 namespace App\Service\Reports;
 
 use App\Http\Requests\Report\User\UserReportRequest;
-use App\Interface\ReportsInterface;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\User;
@@ -36,7 +35,7 @@ class UserContributionsReport extends Reports
         return $model::where($userIdField, $user->user_id)
             ->whereBetween('created_at', [
                 $this->request->start_date,
-                $this->request->end_date
+                $this->request->end_date,
             ])
             ->count();
     }

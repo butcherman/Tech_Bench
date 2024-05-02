@@ -40,6 +40,7 @@ class User extends Authenticatable
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
         'deleted_at' => 'datetime:M d, Y',
+        'password_expires' => 'datetime: M d, Y',
     ];
 
     protected $appends = ['full_name', 'initials', 'role_name'];
@@ -137,7 +138,10 @@ class User extends Authenticatable
      */
     public function validateDeviceToken($token)
     {
-        $valid = DeviceToken::where('user_id', $this->user_id)->where('token', $token)->first();
+        $valid = DeviceToken::where('user_id', $this->user_id)
+            ->where('token', $token)
+            ->first();
+
         if ($valid) {
             $valid->update(['updated_ip_address' => \Request::ip()]);
 
@@ -157,5 +161,17 @@ class User extends Authenticatable
         return UserLogins::whereUserId($this->user_id)
             ->where('created_at', '>', now()->subDays($days))
             ->get();
+    }
+
+    /**
+     * Get the date and time of last login
+     *
+     * @codeCoverageIgnore
+     */
+    public function getLastLogin()
+    {
+        return UserLogins::whereUserId($this->user_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
 }

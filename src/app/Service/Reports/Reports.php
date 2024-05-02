@@ -2,8 +2,6 @@
 
 namespace App\Service\Reports;
 
-use App\Actions\BuildReportsMenu;
-
 abstract class Reports
 {
     protected $reportData = [];

@@ -3,10 +3,10 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">User Permissions Report</div>
+                    <div class="card-title">User Details Report</div>
                     <UserListReportsForm
                         :user-list="userList"
-                        submit-route="reports.user.run-permissions"
+                        submit-route="reports.user.run-details"
                     />
                 </div>
             </div>
@@ -17,8 +17,9 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserListReportsForm from "@/Forms/Report/User/UserListReportsForm.vue";
+import { ref, reactive, onMounted } from "vue";
 
-defineProps<{
+const props = defineProps<{
     userList: user[];
 }>();
 </script>

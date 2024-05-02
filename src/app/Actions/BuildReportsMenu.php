@@ -10,7 +10,7 @@ class BuildReportsMenu
             'User Reports' => [
                 [
                     'name' => 'User Details Report',
-                    'route' => '#',
+                    'route' => route('reports.user.details'),
                 ],
                 [
                     'name' => 'User Login Activity Report',
@@ -25,7 +25,7 @@ class BuildReportsMenu
                     'route' => route('reports.user.permissions'),
                 ],
             ],
-            'Customer Reports' => []
+            'Customer Reports' => [],
         ];
     }
 }

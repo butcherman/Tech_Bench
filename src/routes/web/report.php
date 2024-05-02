@@ -3,6 +3,7 @@
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Report\User\UserActivityReportController;
 use App\Http\Controllers\Report\User\UserContributionReportController;
+use App\Http\Controllers\Report\User\UserDetailsReportController;
 use App\Http\Controllers\Report\User\UserPermissionsReportController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,5 +33,11 @@ Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(fun
         Route::put('user-permissions-report', [UserPermissionsReportController::class, 'show'])
             ->name('run-permissions')
             ->breadcrumb('Report Details', 'reports.user.permissions');
+        Route::get('user-details-report', [UserDetailsReportController::class, 'index'])
+            ->name('details')
+            ->breadcrumb('User Details Report', 'reports.index');
+        Route::put('user-details-report', [UserDetailsReportController::class, 'show'])
+            ->name('run-details')
+            ->breadcrumb('Report Details', 'reports.user.details');
     });
 });

@@ -3,12 +3,11 @@
 namespace App\Service\Reports;
 
 use App\Http\Requests\Report\User\UserReportRequest;
-use App\Interface\ReportsInterface;
 use App\Models\User;
 use App\Models\UserLogins;
 
 /**
- * Report will return the login dates and times for the selected users 
+ * Report will return the login dates and times for the selected users
  * within the selected time period
  */
 class UserActivityReport extends Reports
@@ -26,7 +25,7 @@ class UserActivityReport extends Reports
             $loginData = UserLogins::where('user_id', $user->user_id)
                 ->whereBetween('created_at', [
                     $this->request->start_date,
-                    $this->request->end_date
+                    $this->request->end_date,
                 ])
                 ->get();
 

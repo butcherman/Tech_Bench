@@ -7,7 +7,6 @@ use App\Http\Requests\Report\User\UserReportRequest;
 use App\Models\User;
 use App\Service\Reports\UserContributionsReport;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -28,7 +27,7 @@ class UserContributionReportController extends Controller
      */
     public function show(UserReportRequest $request)
     {
-        Log::info('User Contributions Report run by ' . $request->user()->username);
+        Log::info('User Contributions Report run by '.$request->user()->username);
         $report = new UserContributionsReport($request);
 
         return Inertia::render('Report/User/Contribution/Show', [

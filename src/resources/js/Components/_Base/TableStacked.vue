@@ -6,7 +6,11 @@
                     <slot name="default" :row-data="{ value, index }">
                         <th :class="alignText">
                             <slot name="index" :row-data="{ value, index }">
-                                {{ index }}:
+                                {{
+                                    titleCase
+                                        ? toTitleCase(index.toString())
+                                        : index
+                                }}:
                             </slot>
                         </th>
                         <td>
@@ -33,6 +37,7 @@ const props = defineProps<{
     rows: any;
     headers?: rowHeaders[];
     alignLeft?: boolean;
+    titleCase?: boolean;
 }>();
 
 const alignText = computed(() => (props.alignLeft ? "text-start" : "text-end"));
@@ -50,4 +55,13 @@ const computedRows = computed<{ [key: string]: string | any }>(() => {
 
     return props.rows;
 });
+
+const toTitleCase = (str: string): string => {
+    return str
+        .split("_")
+        .map(function (item) {
+            return item.charAt(0).toUpperCase() + item.substring(1);
+        })
+        .join(" ");
+};
 </script>

@@ -5,19 +5,18 @@ namespace App\Http\Controllers\Report\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Report\User\UserPermissionsRequest;
 use App\Models\User;
-use App\Models\UserRolePermissionType;
-use App\Service\Reports\UserPermissionsReport;
+use App\Service\Reports\UserDetailsReport;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-class UserPermissionsReportController extends Controller
+class UserDetailsReportController extends Controller
 {
     /**
      * Show the form for creating the resource.
      */
     public function index()
     {
-        return Inertia::render('Report/User/Permissions/Index', [
+        return Inertia::render('Report/User/Details/Index', [
             'user-list' => User::all(),
         ]);
     }
@@ -27,12 +26,11 @@ class UserPermissionsReportController extends Controller
      */
     public function show(UserPermissionsRequest $request)
     {
-        Log::info('User Permissions Report run by '.$request->user()->username);
-        $report = new UserPermissionsReport($request);
+        Log::info('User Details Report run by '.$request->user()->username);
+        $report = new UserDetailsReport($request);
 
-        return Inertia::render('Report/User/Permissions/Show', [
+        return Inertia::render('Report/User/Details/Show', [
             'report-data' => $report->getReportData(),
-            'permission-list' => UserRolePermissionType::all()->groupBy('group'),
         ]);
     }
 }
