@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Report\Customer\CustomerFilesReportController;
 use App\Http\Controllers\Report\Customer\CustomerSummaryReportController;
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Report\User\UserActivityReportController;
@@ -52,5 +53,11 @@ Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(fun
         Route::put('summary-report', [CustomerSummaryReportController::class, 'show'])
             ->name('run-summary')
             ->breadcrumb('Report Data', 'reports.customer.summary');
+        Route::get('files-report', [CustomerFilesReportController::class, 'index'])
+            ->name('files')
+            ->breadcrumb('Customer Files Report', 'reports.index');
+        Route::put('files-report', [CustomerFilesReportController::class, 'show'])
+            ->name('run-files')
+            ->breadcrumb('Report Data', 'reports.customer.files');
     });
 });

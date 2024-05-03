@@ -32,7 +32,7 @@ class BuildReportsMenu
                 ],
                 [
                     'name' => 'Customer Files Report',
-                    'route' => '#',
+                    'route' => route('reports.customer.files'),
                 ],
             ],
         ];

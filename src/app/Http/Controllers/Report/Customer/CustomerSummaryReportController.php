@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Report\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Report\Customer\CustomerSummaryRequest;
+use App\Policies\GatePolicy;
 use App\Service\Reports\CustomerSummaryReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +17,8 @@ class CustomerSummaryReportController extends Controller
      */
     public function index()
     {
+        $this->authorize('reports-link', GatePolicy::class);
+
         return Inertia::render('Report/Customer/Summary/Index');
     }
 

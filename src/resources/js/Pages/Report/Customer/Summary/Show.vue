@@ -48,7 +48,7 @@ interface custReportData {
     };
 }
 
-const props = defineProps<{
+defineProps<{
     reportData: custReportData;
 }>();
 </script>
