@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Report\Customer\CustomerSummaryReportController;
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Report\User\UserActivityReportController;
 use App\Http\Controllers\Report\User\UserContributionReportController;
@@ -39,5 +40,17 @@ Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(fun
         Route::put('user-details-report', [UserDetailsReportController::class, 'show'])
             ->name('run-details')
             ->breadcrumb('Report Details', 'reports.user.details');
+    });
+
+    /***************************************************************************
+     * Customer Reports
+     ***************************************************************************/
+    Route::prefix('customer-reports')->name('customer.')->group(function () {
+        Route::get('summary-report', [CustomerSummaryReportController::class, 'index'])
+            ->name('summary')
+            ->breadcrumb('Customer Summary Report', 'reports.index');
+        Route::put('summary-report', [CustomerSummaryReportController::class, 'show'])
+            ->name('run-summary')
+            ->breadcrumb('Report Data', 'reports.customer.summary');
     });
 });

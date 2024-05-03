@@ -25,7 +25,16 @@ class BuildReportsMenu
                     'route' => route('reports.user.permissions'),
                 ],
             ],
-            'Customer Reports' => [],
+            'Customer Reports' => [
+                [
+                    'name' => 'Customer Summary Report',
+                    'route' => route('reports.customer.summary'),
+                ],
+                [
+                    'name' => 'Customer Files Report',
+                    'route' => '#',
+                ],
+            ],
         ];
     }
 }
