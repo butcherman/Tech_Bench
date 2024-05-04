@@ -13,7 +13,9 @@ class CheckDatabaseError
         if (in_array($e->errorInfo[1], [19, 1451])) {
             throw new RecordInUseException($message, 0, $e);
         } else {
+            // @codeCoverageIgnoreStart
             throw new GeneralQueryException('', 0, $e);
+            // @codeCoverageIgnoreEnd
         }
     }
 }

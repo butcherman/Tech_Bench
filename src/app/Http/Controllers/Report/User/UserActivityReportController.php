@@ -28,7 +28,7 @@ class UserActivityReportController extends Controller
      */
     public function show(UserReportRequest $request)
     {
-        Log::info('User Login Activity Report run by ' . $request->user()->username);
+        Log::info('User Login Activity Report run by '.$request->user()->username);
         $report = new UserActivityReport($request);
 
         return Inertia::render('Report/User/Activity/Show', [

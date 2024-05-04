@@ -33,8 +33,7 @@ class CustomerFilesReport extends Reports
     {
         return Customer::whereHas(
             'CustomerFile',
-            fn(Builder $query) =>
-            $query->where('file_type_id', $typeId)
+            fn (Builder $query) => $query->where('file_type_id', $typeId)
         )->with('CustomerFile')->orderBy('name', 'asc')->get();
     }
 
@@ -42,8 +41,7 @@ class CustomerFilesReport extends Reports
     {
         return Customer::whereDoesntHave(
             'CustomerFile',
-            fn(Builder $query) =>
-            $query->where('file_type_id', $typeId)
+            fn (Builder $query) => $query->where('file_type_id', $typeId)
         )->orderBy('name', 'asc')->get();
     }
 }

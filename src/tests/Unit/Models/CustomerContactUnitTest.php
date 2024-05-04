@@ -7,7 +7,7 @@ use App\Models\CustomerContact;
 use App\Models\CustomerContactPhone;
 use App\Models\CustomerSite;
 use Illuminate\Support\Facades\Artisan;
-use tests\TestCase;
+use Tests\TestCase;
 
 class CustomerContactUnitTest extends TestCase
 {

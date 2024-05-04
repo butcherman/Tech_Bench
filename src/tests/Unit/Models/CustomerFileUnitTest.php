@@ -10,7 +10,7 @@ use App\Models\CustomerSite;
 use App\Models\FileUpload;
 use App\Models\User;
 use Artisan;
-use tests\TestCase;
+use Tests\TestCase;
 
 class CustomerFileUnitTest extends TestCase
 {

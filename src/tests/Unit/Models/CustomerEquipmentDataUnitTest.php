@@ -5,7 +5,7 @@ namespace Tests\Unit\Models;
 use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use App\Models\DataFieldType;
-use tests\TestCase;
+use Tests\TestCase;
 
 class CustomerEquipmentDataUnitTest extends TestCase
 {

@@ -4,8 +4,6 @@ namespace Tests\Feature\Report\User;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UserActivityReportTest extends TestCase
@@ -50,7 +48,7 @@ class UserActivityReportTest extends TestCase
         $data = [
             'start_date' => Carbon::today()->subDays(30)->format('Y-d-m'),
             'end_date' => Carbon::today()->format('Y-d-m'),
-            'user_list' => User::all()->map(fn($user) => $user->username)->toArray(),
+            'user_list' => User::all()->map(fn ($user) => $user->username)->toArray(),
         ];
 
         $response = $this->put(route('reports.user.run-activity'), $data);
@@ -64,7 +62,7 @@ class UserActivityReportTest extends TestCase
         $data = [
             'start_date' => Carbon::today()->subDays(30)->format('Y-d-m'),
             'end_date' => Carbon::today()->format('Y-d-m'),
-            'user_list' => User::all()->map(fn($user) => $user->username)->toArray(),
+            'user_list' => User::all()->map(fn ($user) => $user->username)->toArray(),
         ];
 
         $response = $this->ActingAs(User::factory()->create())
@@ -77,7 +75,7 @@ class UserActivityReportTest extends TestCase
         $data = [
             'start_date' => Carbon::today()->subDays(30)->format('Y-d-m'),
             'end_date' => Carbon::today()->format('Y-d-m'),
-            'user_list' => User::all()->map(fn($user) => $user->username)->toArray(),
+            'user_list' => User::all()->map(fn ($user) => $user->username)->toArray(),
         ];
 
         $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))

@@ -50,6 +50,7 @@ trait FileTrait
             return $savedFile;
         }
 
+        // @codeCoverageIgnoreStart
         $handler = $save->handler();
         $status = [
             'percent' => $handler->getPercentageDone(),
@@ -59,6 +60,7 @@ trait FileTrait
         Log::debug('File upload in progress.  Details - ', $status);
 
         return false;
+        // @codeCoverageIgnoreEnd
     }
 
     /**

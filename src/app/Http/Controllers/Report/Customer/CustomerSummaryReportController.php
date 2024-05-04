@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Report\Customer\CustomerSummaryRequest;
 use App\Policies\GatePolicy;
 use App\Service\Reports\CustomerSummaryReport;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -27,7 +26,7 @@ class CustomerSummaryReportController extends Controller
      */
     public function show(CustomerSummaryRequest $request)
     {
-        Log::info('Customer Summary Report run by ' . $request->user()->username);
+        Log::info('Customer Summary Report run by '.$request->user()->username);
         $report = new CustomerSummaryReport($request);
 
         return Inertia::render('Report/Customer/Summary/Show', [

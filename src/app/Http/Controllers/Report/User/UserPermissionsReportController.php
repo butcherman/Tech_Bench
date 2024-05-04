@@ -30,7 +30,7 @@ class UserPermissionsReportController extends Controller
      */
     public function show(UserPermissionsRequest $request)
     {
-        Log::info('User Permissions Report run by ' . $request->user()->username);
+        Log::info('User Permissions Report run by '.$request->user()->username);
         $report = new UserPermissionsReport($request);
 
         return Inertia::render('Report/User/Permissions/Show', [

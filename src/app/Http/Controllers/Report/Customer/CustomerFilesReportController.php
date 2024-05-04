@@ -7,7 +7,6 @@ use App\Http\Requests\Report\Customer\CustomerFilesRequest;
 use App\Policies\GatePolicy;
 use App\Service\Cache;
 use App\Service\Reports\CustomerFilesReport;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -30,7 +29,7 @@ class CustomerFilesReportController extends Controller
      */
     public function show(CustomerFilesRequest $request)
     {
-        Log::info('Customer Files Report run by ' . $request->user()->username);
+        Log::info('Customer Files Report run by '.$request->user()->username);
         $report = new CustomerFilesReport($request);
 
         return Inertia::render('Report/Customer/Files/Show', [
