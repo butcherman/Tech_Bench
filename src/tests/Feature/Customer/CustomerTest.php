@@ -4,6 +4,9 @@ namespace Tests\Feature\Customer;
 
 use App\Events\Customer\CustomerEvent;
 use App\Models\Customer;
+use App\Models\CustomerContact;
+use App\Models\CustomerFile;
+use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
@@ -526,7 +529,11 @@ class CustomerTest extends TestCase
     {
         Event::fake();
 
-        $cust = Customer::factory()->create();
+        $cust = Customer::factory()
+            ->has(CustomerFile::factory())
+            ->has(CustomerNote::factory())
+            ->has(CustomerContact::factory())
+            ->create();
         $cust->delete();
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))

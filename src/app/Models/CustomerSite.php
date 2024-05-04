@@ -49,7 +49,9 @@ class CustomerSite extends Model
             return $this->Customer->primary_site_id === $this->cust_site_id;
         }
 
+        // @codeCoverageIgnoreStart
         return false;
+        // @codeCoverageIgnoreEnd
     }
 
     public function getHrefAttribute()

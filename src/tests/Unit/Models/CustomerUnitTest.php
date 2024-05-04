@@ -9,7 +9,7 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
-use tests\TestCase;
+use Tests\TestCase;
 
 class CustomerUnitTest extends TestCase
 {

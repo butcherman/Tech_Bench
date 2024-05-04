@@ -22,7 +22,7 @@ class CustomerFileFactory extends Factory
     public function definition(): array
     {
         return [
-            'file_id' => FileUpload::factory(),
+            'file_id' => FileUpload::factory(['disk' => 'customers']),
             'file_type_id' => CustomerFileType::inRandomOrder()
                 ->first()
                 ->file_type_id,

@@ -1,17 +1,18 @@
 <?php
 
-namespace Tests\Feature\Report\User;
+namespace Tests\Feature\Report\Customer;
 
+use App\Models\Customer;
 use App\Models\User;
 use Tests\TestCase;
 
-class UserDetailsReportTest extends TestCase
+class CustomerSummaryReportTest extends TestCase
 {
     public function setUp(): void
     {
         parent::setUp();
 
-        User::factory()->count(20)->create();
+        Customer::factory()->count(20)->create();
     }
 
     /**
@@ -19,7 +20,7 @@ class UserDetailsReportTest extends TestCase
      */
     public function test_index_guest()
     {
-        $response = $this->get(route('reports.user.details'));
+        $response = $this->get(route('reports.customer.summary'));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
@@ -28,14 +29,14 @@ class UserDetailsReportTest extends TestCase
     public function test_index_no_permission()
     {
         $response = $this->actingAs(User::factory()->create())
-            ->get(route('reports.user.details'));
+            ->get(route('reports.customer.summary'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
         $response = $this->actingAs(User::factory()->create(['role_id' => 2]))
-            ->get(route('reports.user.details'));
+            ->get(route('reports.customer.summary'));
         $response->assertSuccessful();
     }
 
@@ -45,11 +46,10 @@ class UserDetailsReportTest extends TestCase
     public function test_show_guest()
     {
         $data = [
-            'allUsers' => true,
-            'disabledUsers' => true,
+            'disabledCustomers' => false,
         ];
 
-        $response = $this->put(route('reports.user.run-details'), $data);
+        $response = $this->put(route('reports.customer.run-summary'), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
@@ -58,24 +58,22 @@ class UserDetailsReportTest extends TestCase
     public function test_show_no_permission()
     {
         $data = [
-            'allUsers' => true,
-            'disabledUsers' => true,
+            'disabledCustomers' => false,
         ];
 
         $response = $this->ActingAs(User::factory()->create())
-            ->put(route('reports.user.run-details'), $data);
+            ->put(route('reports.customer.run-summary'), $data);
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
         $data = [
-            'allUsers' => true,
-            'disabledUsers' => true,
+            'disabledCustomers' => false,
         ];
 
         $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
-            ->put(route('reports.user.run-details'), $data);
+            ->put(route('reports.customer.run-summary'), $data);
         $response->assertSuccessful();
     }
 }

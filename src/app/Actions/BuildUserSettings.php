@@ -21,18 +21,17 @@ class BuildUserSettings
              * Determine if this setting is linked to a permission feature
              * (i.e. should not be displayed if the user cannot access the feature)
              * Note, not used yet
-             *
-             * @codeCoverageIgnoreStart
              */
             if (! is_null($setting->UserSettingType->perm_type_id)) {
+                // @codeCoverageIgnoreStart
                 $allowed = UserRolePermission::where('role_id', $user->role_id)
                     ->where('perm_type_id', $setting->UserSettingType->perm_type_id)->first();
 
                 if (! $allowed->allow) {
                     $userSettings->forget($key);
                 }
+                // @codeCoverageIgnoreEnd
             }
-            // @codeCoverageIgnoreEnd
         }
 
         return $userSettings;

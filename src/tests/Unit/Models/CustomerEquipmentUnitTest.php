@@ -10,7 +10,7 @@ use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\EquipmentType;
 use Illuminate\Support\Facades\Artisan;
-use tests\TestCase;
+use Tests\TestCase;
 
 class CustomerEquipmentUnitTest extends TestCase
 {

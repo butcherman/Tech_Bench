@@ -29,7 +29,7 @@ class UserDetailsReportController extends Controller
      */
     public function show(UserPermissionsRequest $request)
     {
-        Log::info('User Details Report run by ' . $request->user()->username);
+        Log::info('User Details Report run by '.$request->user()->username);
         $report = new UserDetailsReport($request);
 
         return Inertia::render('Report/User/Details/Show', [
