@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\Config\LogoController;
+use App\Http\Controllers\Admin\Config\SendTestEmailController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
@@ -97,9 +98,10 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     Route::put('basic-settings', [BasicSettingsController::class, 'update'])
         ->name('basic-settings.update');
 
-    // Route::get('email-settings', [EmailSettingsController::class, 'show'])
-    //     ->name('email-settings.show');
-    // Route::put('email-settings', [EmailSettingsController::class, 'update'])
-    //     ->name('email-settings.update');
+    Route::get('email-settings', [EmailSettingsController::class, 'show'])
+        ->name('email-settings.show');
+    Route::put('email-settings', [EmailSettingsController::class, 'update'])
+        ->name('email-settings.update');
+    Route::get('test-email', SendTestEmailController::class)->name('test-email');
 
 });

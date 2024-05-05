@@ -167,13 +167,13 @@ class BuildAdminMenu
                 [
                     'name' => 'Email Settings',
                     'icon' => 'fas fa-envelope',
-                    'route' => '#' // route('admin.email.get'),
+                    'route' => route('admin.email-settings.show'),
                 ],
-                [
-                    'name' => 'Security Settings',
-                    'icon' => 'fa-lock',
-                    'route' => '#' // route('admin.security.index'),
-                ],
+                // [
+                //     'name' => 'Security Settings',
+                //     'icon' => 'fa-lock',
+                //     'route' => '#' // route('admin.security.index'),
+                // ],
             ];
         }
 
