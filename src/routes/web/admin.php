@@ -99,7 +99,8 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         ->name('basic-settings.update');
 
     Route::get('email-settings', [EmailSettingsController::class, 'show'])
-        ->name('email-settings.show');
+        ->name('email-settings.show')
+        ->breadcrumb('Email Settings', 'admin.index');
     Route::put('email-settings', [EmailSettingsController::class, 'update'])
         ->name('email-settings.update');
     Route::get('test-email', SendTestEmailController::class)->name('test-email');
