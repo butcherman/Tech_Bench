@@ -2,11 +2,7 @@
     <VueForm
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="
-            init
-                ? $route('init.step-2.submit')
-                : $route('basic-settings.update')
-        "
+        :submit-route="submitRoute"
         submit-method="put"
         submit-text="Update Application Configuration"
         @success="$emit('success')"
@@ -39,6 +35,7 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import RangeInput from "@/Forms/_Base/RangeInput.vue";
 import { number, object, string } from "yup";
+import { computed } from "vue";
 
 defineEmits(["success"]);
 const props = defineProps<{
@@ -48,6 +45,12 @@ const props = defineProps<{
     maxFilesize: number;
     init?: boolean;
 }>();
+
+const submitRoute = computed(() =>
+    props.init
+        ? route("init.step-2.submit")
+        : route("admin.basic-settings.update")
+);
 
 const initValues = {
     url: props.url,

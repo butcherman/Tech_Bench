@@ -162,7 +162,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Application Configuration',
                     'icon' => 'fa-server',
-                    'route' => '#' // route('admin.config.get'),
+                    'route' => route('admin.basic-settings.show'),
                 ],
                 [
                     'name' => 'Email Settings',

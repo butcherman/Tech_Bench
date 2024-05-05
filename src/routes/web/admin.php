@@ -91,10 +91,11 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     Route::post('logo', [LogoController::class, 'update'])
         ->name('logo.update');
 
-    // Route::get('basic-settings', [BasicSettingsController::class, 'show'])
-    //     ->name('basic-settings.show');
-    // Route::put('basic-settings', [BasicSettingsController::class, 'update'])
-    //     ->name('basic-settings.update');
+    Route::get('basic-settings', [BasicSettingsController::class, 'show'])
+        ->name('basic-settings.show')
+        ->breadcrumb('Tech Bench Settings', 'admin.index');
+    Route::put('basic-settings', [BasicSettingsController::class, 'update'])
+        ->name('basic-settings.update');
 
     // Route::get('email-settings', [EmailSettingsController::class, 'show'])
     //     ->name('email-settings.show');
