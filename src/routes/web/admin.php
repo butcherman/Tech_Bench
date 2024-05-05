@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
+use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
@@ -69,9 +70,9 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
                 ->edit('Modify Role');
         });
 
-    /**
-     * Additional Data for Customer Administration
-     */
+    /***************************************************************************
+     * Additional Routes for Customer Administration
+     ***************************************************************************/
     Route::resource('file-types', FileTypesController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customer File Types', 'customers.settings.edit');
@@ -80,6 +81,15 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customer Contact Phone Types', 'customers.settings.edit');
         })->except(['edit', 'show']);
+
+    /***************************************************************************
+     * Application Configuration Routes
+     ***************************************************************************/
+    Route::get('logo', [LogoController::class, 'show'])
+        ->name('logo.show')
+        ->breadcrumb('Tech Bench Logo', 'admin.index');
+    Route::post('logo', [LogoController::class, 'update'])
+        ->name('logo.update');
 
     // Route::get('basic-settings', [BasicSettingsController::class, 'show'])
     //     ->name('basic-settings.show');

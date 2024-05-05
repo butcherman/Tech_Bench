@@ -22,9 +22,10 @@
                 :upload-url="submitRoute"
                 :max-files="maxFiles || 1"
                 :required="fileRequired"
+                :accepted-files="acceptedFiles"
                 @file-added="onFileAdded"
                 @file-removed="onFileRemoved"
-                @success="$emit('success')"
+                @success="onSuccess"
             />
             <slot name="after-file" />
             <slot name="submit">
@@ -87,6 +88,7 @@ const props = defineProps<{
     testing?: boolean;
     fileRequired?: boolean;
     maxFiles?: number;
+    acceptedFiles?: string[];
 }>();
 
 /*******************************************************************************
@@ -151,6 +153,11 @@ const onSubmit = handleSubmit((form): void => {
         }
     }
 });
+
+const onSuccess = () => {
+    emit("success");
+    isSubmitting.value = false;
+};
 
 const handleErrors = (
     originalForm: formData,

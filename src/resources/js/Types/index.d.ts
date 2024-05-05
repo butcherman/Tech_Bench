@@ -35,7 +35,7 @@ type navbar = {
 };
 
 type flashData = {
-    id: string;
+    id?: string;
     type: string;
     message: string;
 };
