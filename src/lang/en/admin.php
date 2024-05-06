@@ -33,6 +33,10 @@ return [
         'logo' => 'New Logo Applied',
     ],
 
+    'security' => [
+        'updated' => 'Certificate successfully saved.  Restart Tech Bench to activate new cert.',
+    ],
+
     'email' => [
         'test' => 'Email sent successfully.  Please check your inbox',
         'updated' => 'Email Settings saved',

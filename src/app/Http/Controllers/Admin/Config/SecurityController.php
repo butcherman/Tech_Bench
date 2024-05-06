@@ -47,14 +47,15 @@ class SecurityController extends Controller
      */
     public function store(SecurityRequest $request)
     {
-        // $certObj = new CertificateService;
-        // $certObj->processNewCertificate($request);
+        $certObj = new CertificateService(false);
+        $certObj->processNewCertificate($request);
 
-        // if (!$certObj->getSuccess()) {
-        //     return back()->withErrors($certObj->getMessage());
-        // }
+        if (!$certObj->wasSuccessful()) {
+            return back()->withErrors($certObj->getMessage());
+        }
 
-        return back()->with('success', 'it worked');
+        return redirect(route('admin.security.index'))
+            ->with('success', __('admin.security.updated'));
     }
 
     /**

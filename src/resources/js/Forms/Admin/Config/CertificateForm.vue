@@ -7,7 +7,7 @@
         submit-method="post"
         submit-text="Upload Certificate"
     >
-        <h6 class="text-center">
+        <h6 v-if="!hasKey" class="text-center">
             No Private Key Exists. You must either generate a CSR Request, or
             upload a wildcard cert with key
         </h6>
