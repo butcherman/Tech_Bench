@@ -79,4 +79,16 @@ class CustomerFilesReportTest extends TestCase
             ->put(route('reports.customer.run-files'), $data);
         $response->assertSuccessful();
     }
+
+    public function test_show_missing()
+    {
+        $data = [
+            'hasInput' => 'doesnt have',
+            'fileTypes' => [1, 2],
+        ];
+
+        $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
+            ->put(route('reports.customer.run-files'), $data);
+        $response->assertSuccessful();
+    }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\Config\LogoController;
+use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
@@ -104,5 +105,11 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     Route::put('email-settings', [EmailSettingsController::class, 'update'])
         ->name('email-settings.update');
     Route::get('test-email', SendTestEmailController::class)->name('test-email');
+
+    Route::resource('security', SecurityController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('SSL Certificate', 'admin.index')
+                ->create('Upload New Certificate');
+        });
 
 });

@@ -7,6 +7,7 @@ use App\Exceptions\Database\RecordInUseException;
 use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use App\Service\Cache;
+use App\Service\CheckDatabaseError;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -84,11 +85,7 @@ class UserRoleRequest extends FormRequest
             $this->user_role->delete();
             $this->flushRoleCache();
         } catch (QueryException $e) {
-            if (in_array($e->errorInfo[1], [19, 1451])) {
-                throw new RecordInUseException(__('admin.user-role.in-use'), 0, $e);
-            } else {
-                throw new GeneralQueryException('', 0, $e);
-            }
+            CheckDatabaseError::check($e, __('admin.user-role.in-use'));
         }
     }
 

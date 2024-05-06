@@ -71,7 +71,36 @@ class UserPermissionsReportTest extends TestCase
     {
         $data = [
             'allUsers' => true,
+            'disabledUsers' => false,
+        ];
+
+        $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
+            ->put(route('reports.user.run-permissions'), $data);
+        $response->assertSuccessful();
+    }
+
+    public function test_show_disabled()
+    {
+        $data = [
+            'allUsers' => true,
             'disabledUsers' => true,
+        ];
+
+        $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
+            ->put(route('reports.user.run-permissions'), $data);
+        $response->assertSuccessful();
+    }
+
+    public function test_show_some()
+    {
+        $data = [
+            'allUsers' => false,
+            'disabledUsers' => false,
+            'user_list' => User::inRandomOrder()
+                ->limit(10)
+                ->get()
+                ->map(fn($u) => $u->username)
+                ->toArray(),
         ];
 
         $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
