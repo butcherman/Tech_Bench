@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Http\Requests\Admin\CsrRequest;
 use App\Http\Requests\Admin\SecurityRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -18,6 +19,7 @@ class CertificateService
     {
         $this->storage = Storage::disk('security');
 
+        // If true or no argument passed, we will load the existing SSL Certificate from filesystem
         if ($fromFile) {
             $this->loadCertificate();
             $this->registerCert();
@@ -52,6 +54,9 @@ class CertificateService
         return $this->certFile;
     }
 
+    /**
+     * Return information for this certificate
+     */
     public function getCertData(): array|bool
     {
         if (!$this->certData) {
@@ -187,5 +192,37 @@ class CertificateService
         $this->storage->put('server.crt', $this->certFile);
         $this->storage->put('intermediate.crt', $this->intermediateFile);
         $this->storage->put('private/server.key', $this->keyFile);
+    }
+
+    /**
+     * Generate a CSR Request and new private key
+     */
+    public function generateCsr(CsrRequest $request)
+    {
+        $newKey = openssl_pkey_new([
+            'private_key_bits' => 2048,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+        ]);
+
+        $csrForm = $request->all();
+
+        $csr = openssl_csr_new($csrForm, $newKey, ['digest_alg' => 'sha256']);
+        openssl_pkey_export($newKey, $pkeyOut);
+
+        $this->storage->delete('private/server.key');
+        $this->storage->put('private/server.key', $pkeyOut);
+
+        openssl_csr_export($csr, $csrOut);
+
+        return $csrOut;
+    }
+
+    /**
+     * Destroy the current SSL Certificate
+     */
+    public function destroyCertificate()
+    {
+        $this->storage->delete('server.crt');
+        $this->storage->delete('private/server.key');
     }
 }

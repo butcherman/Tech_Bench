@@ -109,7 +109,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     Route::resource('security', SecurityController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('SSL Certificate', 'admin.index')
-                ->create('Upload New Certificate');
-        });
-
+                ->create('Upload New Certificate')
+                ->edit('Generate CSR', 'admin.security.index');
+        })->except(['show']);
 });

@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import laravel from "laravel-vite-plugin";
+import mkcert from 'vite-plugin-mkcert';
 import vue from "@vitejs/plugin-vue";
 import fs from "fs";
 
@@ -24,6 +25,7 @@ export default defineConfig(({ mode }) => {
                     },
                 },
             }),
+            mkcert(),
         ],
         server: {
             https: {

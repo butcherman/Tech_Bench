@@ -25,7 +25,8 @@ return [
         'created' => 'New User Role Created',
         'updated' => 'User Role Updated',
         'destroyed' => 'User Role Deleted',
-        'in-use' => 'This Role is currently assigned to at least one user and cannot be deleted',
+        'in-use' => 'This Role is currently assigned to at least one user and 
+                     cannot be deleted',
     ],
 
     'config' => [
@@ -34,7 +35,10 @@ return [
     ],
 
     'security' => [
-        'updated' => 'Certificate successfully saved.  Restart Tech Bench to activate new cert.',
+        'updated' => 'Certificate successfully saved.  Restart Tech Bench to 
+                      activate new cert.',
+        'deleted' => 'Certificate and Private Key deleted.  Restart Tech Bench 
+                      to generate a new Self Signed Certificate',
     ],
 
     'email' => [
