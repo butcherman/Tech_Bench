@@ -98,13 +98,13 @@ class CertificateService
 
         $this->registerCert();
 
-        if ($this->certData->isValid() && $this->validateKey()) {
+        if ($this->certData && $this->certData->isValid() && $this->validateKey()) {
             $this->saveCertificateFiles();
 
             return;
         }
 
-        if (!$this->certData->isValid()) {
+        if (!$this->certData || !$this->certData->isValid()) {
             $this->success = false;
             $this->message = 'The uploaded certificate is not a valid certificate';
         }

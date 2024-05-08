@@ -56,7 +56,8 @@ class SecurityController extends Controller
                 'message' => $certObj->getMessage(),
             ]);
 
-            return back()->withErrors($certObj->getMessage());
+            // TODO - Verify this shows properly
+            return back()->withErrors(['cert_error' => $certObj->getMessage()]);
         }
 
         Log::info('New Certificate uploaded by ' . $request->user()->username);
@@ -70,6 +71,8 @@ class SecurityController extends Controller
      */
     public function edit()
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         return Inertia::render('Admin/Security/Edit');
     }
 
