@@ -3,6 +3,9 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
+use App\Http\Controllers\Admin\Config\LogoController;
+use App\Http\Controllers\Admin\Config\SecurityController;
+use App\Http\Controllers\Admin\Config\SendTestEmailController;
 use App\Http\Controllers\Admin\User\DeactivatedUserController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\SendWelcomeEmailController;
@@ -69,9 +72,9 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
                 ->edit('Modify Role');
         });
 
-    /**
-     * Additional Data for Customer Administration
-     */
+    /***************************************************************************
+     * Additional Routes for Customer Administration
+     ***************************************************************************/
     Route::resource('file-types', FileTypesController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customer File Types', 'customers.settings.edit');
@@ -81,14 +84,32 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
             $breadcrumbs->index('Customer Contact Phone Types', 'customers.settings.edit');
         })->except(['edit', 'show']);
 
-    // Route::get('basic-settings', [BasicSettingsController::class, 'show'])
-    //     ->name('basic-settings.show');
-    // Route::put('basic-settings', [BasicSettingsController::class, 'update'])
-    //     ->name('basic-settings.update');
+    /***************************************************************************
+     * Application Configuration Routes
+     ***************************************************************************/
+    Route::get('logo', [LogoController::class, 'show'])
+        ->name('logo.show')
+        ->breadcrumb('Tech Bench Logo', 'admin.index');
+    Route::post('logo', [LogoController::class, 'update'])
+        ->name('logo.update');
 
-    // Route::get('email-settings', [EmailSettingsController::class, 'show'])
-    //     ->name('email-settings.show');
-    // Route::put('email-settings', [EmailSettingsController::class, 'update'])
-    //     ->name('email-settings.update');
+    Route::get('basic-settings', [BasicSettingsController::class, 'show'])
+        ->name('basic-settings.show')
+        ->breadcrumb('Tech Bench Settings', 'admin.index');
+    Route::put('basic-settings', [BasicSettingsController::class, 'update'])
+        ->name('basic-settings.update');
 
+    Route::get('email-settings', [EmailSettingsController::class, 'show'])
+        ->name('email-settings.show')
+        ->breadcrumb('Email Settings', 'admin.index');
+    Route::put('email-settings', [EmailSettingsController::class, 'update'])
+        ->name('email-settings.update');
+    Route::get('test-email', SendTestEmailController::class)->name('test-email');
+
+    Route::resource('security', SecurityController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('SSL Certificate', 'admin.index')
+                ->create('Upload New Certificate')
+                ->edit('Generate CSR', 'admin.security.index');
+        })->except(['show']);
 });

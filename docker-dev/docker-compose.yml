@@ -141,6 +141,7 @@ services:
         build:
             context: ./tech_bench
             dockerfile: Dockerfile
+        user: root
         volumes:
             - ../src:/app
             # - ../appData/ca-certificates:/usr/local/share/ca-certificates

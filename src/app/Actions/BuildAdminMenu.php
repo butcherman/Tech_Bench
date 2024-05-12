@@ -21,6 +21,7 @@ class BuildAdminMenu
         $this->buildUserMenu();
         $this->buildCustomerMenu();
         $this->buildEquipmentMenu();
+        $this->buildSettingsMenu();
     }
 
     /**
@@ -142,5 +143,40 @@ class BuildAdminMenu
         }
 
         $this->menu['Equipment'] = $nav;
+    }
+
+    /**
+     * BUild Administration Menu for Application Settings
+     */
+    protected function buildSettingsMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'App Settings')) {
+            $nav = [
+                [
+                    'name' => 'Application Logo',
+                    'icon' => 'fa-image',
+                    'route' => route('admin.logo.show'),
+                ],
+                [
+                    'name' => 'Application Configuration',
+                    'icon' => 'fa-server',
+                    'route' => route('admin.basic-settings.show'),
+                ],
+                [
+                    'name' => 'Email Settings',
+                    'icon' => 'fas fa-envelope',
+                    'route' => route('admin.email-settings.show'),
+                ],
+                [
+                    'name' => 'Security Settings',
+                    'icon' => 'fa-lock',
+                    'route' => route('admin.security.index'),
+                ],
+            ];
+        }
+
+        $this->menu['Settings'] = $nav;
     }
 }

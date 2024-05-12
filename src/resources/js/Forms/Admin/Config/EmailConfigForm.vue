@@ -3,11 +3,7 @@
         ref="emailSettingsForm"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="
-            init
-                ? $route('init.step-3.submit')
-                : $route('email-settings.update')
-        "
+        :submit-route="submitRoute"
         submit-method="put"
         submit-text="Update Email Settings"
         @success="$emit('success')"
@@ -75,7 +71,7 @@ import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import CheckboxSwitch from "@/Forms/_Base/CheckboxSwitch.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { object, string, number, boolean } from "yup";
 
 defineEmits(["success"]);
@@ -85,6 +81,13 @@ const props = defineProps<{
 }>();
 
 const emailSettingsForm = ref<InstanceType<typeof VueForm> | null>(null);
+
+const submitRoute = computed(() =>
+    props.init
+        ? route("init.step-3.submit")
+        : route("admin.email-settings.update")
+);
+
 const initValues = props.settings;
 const schema = object({
     from_address: string().email().required().label("From Address"),

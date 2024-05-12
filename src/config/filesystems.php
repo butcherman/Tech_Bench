@@ -78,21 +78,21 @@ return [
             'root' => storage_path('logs'),
         ],
 
-    /**
-     * Application Backups
-     */
+        /**
+         * Application Backups
+         */
         // 'backups' => [
         //     'driver' => 'local',
         //     'root' => storage_path('backups'),
         // ],
 
-    /**
-     * Security and SSL Certificates
-     */
-        // 'security' => [
-        //     'driver' => 'local',
-        //     'root' => base_path('keystore'),
-        // ],
+        /**
+         * Security and SSL Certificates
+         */
+        'security' => [
+            'driver' => 'local',
+            'root' => base_path('keystore'),
+        ],
 
     /**
      * Downloaded Update files will be stored here

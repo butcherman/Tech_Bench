@@ -21,6 +21,11 @@ class UserLogins extends Model
         'updated_at' => 'date',
     ];
 
+    /**
+     * Format time and date string
+     *
+     * @codeCoverageIgnore
+     */
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->toDayDateTimeString();

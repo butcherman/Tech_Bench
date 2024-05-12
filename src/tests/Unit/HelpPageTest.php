@@ -34,6 +34,7 @@ class HelpPageTest extends TestCase
         'phone-types',
         'file-types',
         'download',
+        'test-email',
     ];
 
     /**

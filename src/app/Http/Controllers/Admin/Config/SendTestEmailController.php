@@ -25,10 +25,12 @@ class SendTestEmailController extends Controller
             Log::info('Sending test email to '.$request->user()->email);
 
             return back()->with('success', __('admin.email.test'));
+            // @codeCoverageIgnoreStart
         } catch (TransportException $e) {
             Log::error('Test email failed - '.$e->getMessage());
 
             return back()->withErrors(['email' => $e->getMessage()]);
         }
+        // @codeCoverageIgnoreEnd
     }
 }

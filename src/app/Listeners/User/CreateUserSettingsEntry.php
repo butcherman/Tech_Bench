@@ -5,9 +5,10 @@ namespace App\Listeners\User;
 use App\Events\User\UserCreatedEvent;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
-class CreateUserSettingsEntry
+class CreateUserSettingsEntry implements ShouldQueue
 {
     /**
      * Handle the event.

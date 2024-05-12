@@ -9,7 +9,8 @@
         "axios": "^1.6",
         "chokidar": "^3.6",
         "laravel-vite-plugin": "^1.0",
-        "vite": "^5.2"
+        "vite": "^5.2",
+        "vite-plugin-mkcert": "^1.17.5"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.4",
