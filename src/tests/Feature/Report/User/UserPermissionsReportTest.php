@@ -99,7 +99,7 @@ class UserPermissionsReportTest extends TestCase
             'user_list' => User::inRandomOrder()
                 ->limit(10)
                 ->get()
-                ->map(fn($u) => $u->username)
+                ->map(fn ($u) => $u->username)
                 ->toArray(),
         ];
 

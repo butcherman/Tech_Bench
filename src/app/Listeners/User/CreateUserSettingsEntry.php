@@ -15,7 +15,7 @@ class CreateUserSettingsEntry implements ShouldQueue
      */
     public function handle(UserCreatedEvent $event): void
     {
-        Log::debug('Building User Settings for New User ' . $event->user->full_name);
+        Log::debug('Building User Settings for New User '.$event->user->full_name);
         $settings = UserSettingType::all();
         foreach ($settings as $setting) {
             UserSetting::create([

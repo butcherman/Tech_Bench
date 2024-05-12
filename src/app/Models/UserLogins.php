@@ -23,7 +23,7 @@ class UserLogins extends Model
 
     /**
      * Format time and date string
-     * 
+     *
      * @codeCoverageIgnore
      */
     protected function serializeDate(DateTimeInterface $date)

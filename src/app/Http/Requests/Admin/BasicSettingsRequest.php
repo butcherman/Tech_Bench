@@ -44,7 +44,7 @@ class BasicSettingsRequest extends FormRequest
         $setArr = [
             'app.timezone' => $this->timezone,
             'filesystems.max_filesize' => $this->max_filesize,
-            'services.azure.redirect' => $this->url . '/auth/callback',
+            'services.azure.redirect' => $this->url.'/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);

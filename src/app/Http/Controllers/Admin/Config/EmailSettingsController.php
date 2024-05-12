@@ -38,7 +38,7 @@ class EmailSettingsController extends Controller
         $request->processSettings();
 
         Log::notice(
-            'Email Settings Updated by ' . $request->user()->username,
+            'Email Settings Updated by '.$request->user()->username,
             $request->except('password')
         );
 

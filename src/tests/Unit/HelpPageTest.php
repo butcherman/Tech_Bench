@@ -53,7 +53,7 @@ class HelpPageTest extends TestCase
         });
 
         foreach ($routeList as $route) {
-            $this->assertFileExists(resource_path('js/Help/Pages/' . $route . '.vue'));
+            $this->assertFileExists(resource_path('js/Help/Pages/'.$route.'.vue'));
         }
     }
 }

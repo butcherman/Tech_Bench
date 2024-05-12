@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admin\Config;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class BasicSettingsTest extends TestCase
@@ -42,7 +40,7 @@ class BasicSettingsTest extends TestCase
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
-            'max_filesize' => 123456
+            'max_filesize' => 123456,
         ];
 
         $response = $this->put(route('admin.basic-settings.update'), $data);
@@ -56,7 +54,7 @@ class BasicSettingsTest extends TestCase
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
-            'max_filesize' => 123456
+            'max_filesize' => 123456,
         ];
 
         $response = $this->actingAs(User::factory()->create())
@@ -69,7 +67,7 @@ class BasicSettingsTest extends TestCase
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
-            'max_filesize' => 123456
+            'max_filesize' => 123456,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
@@ -79,15 +77,15 @@ class BasicSettingsTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.url',
-            'value' => $data['url']
+            'value' => $data['url'],
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.timezone',
-            'value' => $data['timezone']
+            'value' => $data['timezone'],
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'filesystems.max_filesize',
-            'value' => $data['max_filesize']
+            'value' => $data['max_filesize'],
         ]);
     }
 }

@@ -35,6 +35,6 @@ class LogoRequest extends FormRequest
         $path = 'images/logo';
         $storedFile = Storage::disk('public')->putFile($path, new File($this->file));
 
-        return '/storage/' . $storedFile;
+        return '/storage/'.$storedFile;
     }
 }

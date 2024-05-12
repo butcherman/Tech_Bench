@@ -4,14 +4,16 @@ namespace Tests\Feature\Admin\Config;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SecurityTest extends TestCase
 {
-    protected $cert, $key, $intermediate;
+    protected $cert;
+
+    protected $key;
+
+    protected $intermediate;
 
     /**
      * Setup will generate a self signed cert for testing with
@@ -122,7 +124,7 @@ class SecurityTest extends TestCase
 
     public function test_store()
     {
-        Storage::fake();
+        Storage::fake('security');
 
         openssl_x509_export($this->cert, $certOut);
         openssl_pkey_export($this->key, $pkeyOut);
@@ -145,6 +147,8 @@ class SecurityTest extends TestCase
 
     public function test_store_invalid_cert()
     {
+        Storage::fake('security');
+
         $data = [
             'wildcard' => true,
             'certificate' => 'blah blah not a real cert',
@@ -161,7 +165,7 @@ class SecurityTest extends TestCase
 
     public function test_store_expired_cert()
     {
-        Storage::fake();
+        Storage::fake('security');
 
         openssl_x509_export($this->cert, $certOut);
         openssl_pkey_export($this->key, $pkeyOut);
@@ -246,6 +250,8 @@ class SecurityTest extends TestCase
 
     public function test_update()
     {
+        Storage::fake('security');
+
         $data = [
             'countryName' => 'US',
             'stateOrProvinceName' => 'CA',
@@ -281,7 +287,7 @@ class SecurityTest extends TestCase
 
     public function test_destroy()
     {
-        Storage::fake();
+        Storage::fake('security');
 
         openssl_x509_export($this->cert, $certOut);
         openssl_pkey_export($this->key, $pkeyOut);
