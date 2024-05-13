@@ -22,6 +22,7 @@ class BuildAdminMenu
         $this->buildCustomerMenu();
         $this->buildEquipmentMenu();
         $this->buildSettingsMenu();
+        $this->buildMaintenanceMenu();
     }
 
     /**
@@ -178,5 +179,40 @@ class BuildAdminMenu
         }
 
         $this->menu['Settings'] = $nav;
+    }
+
+    /**
+     * Build administration menu for Application Maintenance
+     */
+    protected function buildMaintenanceMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'App Settings')) {
+            $nav = [
+                [
+                    'name' => 'Application Logs',
+                    'icon' => 'fa-bug',
+                    'route' => '#', // route('admin.logs.index'),
+                ],
+                [
+                    'name' => 'Log Settings',
+                    'icon' => 'fa-sliders',
+                    'route' => route('maint.log-settings.show'),
+                ],
+                [
+                    'name' => 'Backups',
+                    'icon' => 'fa-hdd',
+                    'route' => '#', // route('admin.backups.index'),
+                ],
+                [
+                    'name' => 'Backup Settings',
+                    'icon' => 'fa-cog',
+                    'route' => '#', // route('admin.backups.settings.get'),
+                ],
+            ];
+        }
+
+        $this->menu['Maintenance'] = $nav;
     }
 }
