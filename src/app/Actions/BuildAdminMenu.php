@@ -193,7 +193,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Application Logs',
                     'icon' => 'fa-bug',
-                    'route' => '#', // route('admin.logs.index'),
+                    'route' => route('maint.logs.index'),
                 ],
                 [
                     'name' => 'Log Settings',

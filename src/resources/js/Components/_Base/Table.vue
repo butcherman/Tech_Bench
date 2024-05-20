@@ -4,6 +4,11 @@
             <thead>
                 <tr>
                     <th v-for="col in columns" :key="col.field">
+                        <fa-icon
+                            v-if="col.icon"
+                            :icon="col.icon"
+                            :class="col.textVariant"
+                        />
                         {{ col.label }}
                         <span
                             v-if="col.sort"
@@ -151,6 +156,8 @@ interface column {
         enabled: boolean;
         placeholder?: string;
     };
+    icon?: string;
+    textVariant?: string;
 }
 
 defineEmits(["on-row-click"]);
