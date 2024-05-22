@@ -16,10 +16,11 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Log Files</div>
-                        <h5 v-if="!channel" class="text-center">
+                        <h5 v-if="!logList?.length" class="text-center">
                             Select A Channel Above To See Log Files
                         </h5>
                         <Table
+                            v-else
                             :columns="tableCols"
                             :rows="logList"
                             row-clickable
@@ -46,8 +47,8 @@ interface logList {
 const props = defineProps<{
     channels: logChannel[];
     levels: logLevel[];
-    channel: string | null;
-    logList: logList[];
+    channel?: string | null;
+    logList?: logList[];
 }>();
 
 const tableCols = ref<tableColumn[]>([
@@ -58,6 +59,11 @@ const tableCols = ref<tableColumn[]>([
         filterOptions: {
             enabled: true,
         },
+    },
+    {
+        label: "Total Entries",
+        field: "total",
+        sort: true,
     },
 ]);
 

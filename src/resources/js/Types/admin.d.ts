@@ -4,6 +4,16 @@ interface TimezoneList {
     };
 }
 
+type logLine = {
+    date: string;
+    details: string[];
+    env: string;
+    level: string;
+    message: string;
+    time: string;
+    stack_trace?: string[];
+};
+
 type logLevel = {
     name: string;
     icon: string;

@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Traits\LogUtilitiesTrait;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 
-class ViewLogController extends Controller
+class DownloadLogController extends Controller
 {
     use LogUtilitiesTrait;
 
@@ -21,14 +21,9 @@ class ViewLogController extends Controller
         $this->validateChannel($channel);
 
         $filePath = $this->getLogFile($channel, $logFile);
-        $fileArray = $this->getFileToArray($filePath);
 
-        return Inertia::render('Maint/LogView', [
-            'levels' => fn() => $this->logLevels,
-            'channel' => fn() => $channel,
-            'filename' => fn() => $logFile,
-            'file-stats' => fn() => [$this->getFileStats($fileArray)],
-            'file-entries' => fn() => array_reverse($this->parseLogFile($fileArray)),
-        ]);
+        Log::info($request->user()->username . ' is downloading log file ' . $filePath);
+
+        return $this->storage->download($filePath);
     }
 }

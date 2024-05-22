@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Maintenance\DownloadLogController;
 use App\Http\Controllers\Maintenance\LogSettingsController;
 use App\Http\Controllers\Maintenance\LogsIndexController;
 use App\Http\Controllers\Maintenance\ViewLogController;
@@ -23,6 +24,9 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
     Route::get('logs/{channel}', LogsIndexController::class)
         ->name('logs.show')
         ->breadcrumb(fn(string $channel) => ucfirst($channel), 'maint.logs.index');
-    Route::Get('logs/{channel}/{logFile}', ViewLogController::class)
-        ->name('logs.view');
+    Route::get('logs/{channel}/{logFile}', ViewLogController::class)
+        ->name('logs.view')
+        ->breadcrumb('View Log File', 'maint.logs.show');
+    Route::get('logs/{channel}/{logFile}/download', DownloadLogController::class)
+        ->name('logs.download');
 });

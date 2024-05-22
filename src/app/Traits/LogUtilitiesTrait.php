@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Exceptions\Maintenance\BadLogChannelException;
+use App\Exceptions\Maintenance\LogFileMissingException;
 use Illuminate\Support\Facades\Storage;
 
 trait LogUtilitiesTrait
@@ -44,9 +46,8 @@ trait LogUtilitiesTrait
          */
         $this->logChannels = collect([
             ['name' => 'Application', 'folder' => 'Application', 'channel' => 'daily'],
-            ['name' => 'Auth', 'folder' => 'Auth', 'channel' => 'auth'],
-            ['name' => 'User', 'folder' => 'Users', 'channel' => 'user'],
             ['name' => 'Authentication', 'folder' => 'Auth', 'channel' => 'auth'],
+            ['name' => 'User', 'folder' => 'Users', 'channel' => 'user'],
             ['name' => 'Customer', 'folder' => 'Cust', 'channel' => 'cust'],
             ['name' => 'Tech Tip', 'folder' => 'TechTip', 'channel' => 'tip'],
         ]);
@@ -83,6 +84,16 @@ trait LogUtilitiesTrait
     }
 
     /**
+     * Validate a channel, or throw exception
+     */
+    protected function validateChannel(string $channelName)
+    {
+        if (!$this->getChannel($channelName)) {
+            throw new BadLogChannelException($channelName);
+        }
+    }
+
+    /**
      * Return the Channel Object based on the channel name
      */
     protected function getChannel(string $channelName)
@@ -109,11 +120,94 @@ trait LogUtilitiesTrait
     }
 
     /**
+     * Return a specific log file
+     */
+    protected function getLogFile(string $channel, string $fileName)
+    {
+        $channel = $this->getChannel($channel);
+        $logFile = $channel['folder'] . DIRECTORY_SEPARATOR . $fileName . '.log';
+
+        if ($this->storage->missing($logFile)) {
+            throw new LogFileMissingException($logFile);
+        }
+
+        return $logFile;
+    }
+
+    /**
      * Take log file and convert each line to an array entry
      */
     protected function getFileToArray(string $fileName)
     {
         return file($this->storage->path($fileName));
+    }
+
+    /**
+     * Parse a log file to identify each individual log entry
+     */
+    protected function parseLogFile(array $logFile)
+    {
+        $parsed = [];
+        $errorKey = null;
+
+        //  Go through each line of the file
+        foreach ($logFile as $line) {
+            $parse = $this->parseLine($line);
+            if (!$parse) {
+                $parse = $this->parseErrorLine($line);
+                if ($parse) {
+                    $parsed[] = $parse;
+                    $errorKey = array_key_last($parsed);
+                } else {
+                    $parsed[$errorKey]['stack_trace'][] = $line;
+                }
+            } else {
+                $parsed[] = $parse;
+            }
+        }
+
+        return $parsed;
+    }
+
+    /**
+     * Use Regex to parse the portions of each log line
+     */
+    protected function parseLine($line)
+    {
+        //  If it is a standard log line, we return standard data
+        if (preg_match($this->logEntryPattern, $line, $data)) {
+            return [
+                'date' => $data[1],
+                'time' => $data[2],
+                'env' => $data[3],
+                'level' => $data[4],
+                'message' => $data[5],
+                'details' => isset($data[6]) ? json_decode($data[6]) : null,
+            ];
+        }
+
+        //  If the line is a major error, the line and stack trace will follow
+        return false;
+    }
+
+    /**
+     * Use Regex to get the error line
+     */
+    protected function parseErrorLine($line)
+    {
+        if (preg_match($this->logErrorPattern, $line, $data)) {
+            return [
+                'date' => $data[1],
+                'time' => $data[2],
+                'env' => $data[3],
+                'level' => $data[4],
+                'message' => $data[5],
+                'details' => [],
+            ];
+        }
+
+        //  If the line is a major error, the line and stack trace will follow
+        return false;
     }
 
     /**
