@@ -69,3 +69,17 @@ type fileUpload = {
     file_name: string;
     file_size: number;
 };
+
+interface tableColumn {
+    label: string;
+    field: string;
+    sort?: boolean;
+    sortField?: string;
+    isBoolean?: boolean;
+    filterOptions?: {
+        enabled: boolean;
+        placeholder?: string;
+    };
+    icon?: string;
+    textVariant?: string;
+}

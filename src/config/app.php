@@ -11,7 +11,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
     'asset_url' => env('ASSET_URL', null),
     'timezone' => 'UTC',
-    'schedule_timezone' => config('app.timezone'),
+    'schedule_timezone' => 'UTC',
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',

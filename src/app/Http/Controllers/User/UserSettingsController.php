@@ -19,6 +19,8 @@ class UserSettingsController extends Controller
      */
     public function show(Request $request)
     {
+        $this->authorize('view', $request->user());
+
         return Inertia::render('User/Settings', [
             'twoFaEnabled' => config('auth.twoFa.required')
                 && config('auth.twoFa.allow_save_device'),
@@ -35,8 +37,8 @@ class UserSettingsController extends Controller
         $request->checkForEmailChange();
         $user->update($request->only(['first_name', 'last_name', 'email']));
 
-        Log::channel('user')->info('User Information for '.$user->username.
-            ' has been updated by '.$request->user()->username, $request->toArray());
+        Log::channel('user')->info('User Information for ' . $user->username .
+            ' has been updated by ' . $request->user()->username, $request->toArray());
 
         return back()->with('success', __('user.updated'));
     }
@@ -48,8 +50,8 @@ class UserSettingsController extends Controller
     {
         $request->updateSettings();
 
-        Log::channel('user')->info('User Settings for '.$user->username.
-            ' have been updated by '.$request->user()->username, $user->toArray());
+        Log::channel('user')->info('User Settings for ' . $user->username .
+            ' have been updated by ' . $request->user()->username, $user->toArray());
 
         return back()->with('success', __('user.updated'));
     }

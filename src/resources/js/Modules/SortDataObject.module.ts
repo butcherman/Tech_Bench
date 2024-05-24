@@ -12,12 +12,43 @@ export function sortDataObject<T>(
         (data) => data[sortField] != undefined && data[sortField] != null
     );
 
-    // Determine what type of data we are working with
+    // Determine if we are working with boolean fields
     if (testData && typeof testData[sortField] === "boolean") {
         return sortBooleanObject(sortArray, sortOrder, sortField);
     }
 
+    // Determine if we are working with number fields
+    if (testData && typeof testData[sortField] === "number") {
+        return sortNumberObject(sortArray, sortOrder, sortField);
+    }
+
     return sortStringObject(sortArray, sortOrder, sortField);
+}
+
+/**
+ *
+ * Sort Number Objects
+ */
+function sortNumberObject<T>(
+    sortArray: T[],
+    sortOrder: sortOrder,
+    sortField: keyof T
+) {
+    if (sortOrder === "asc") {
+        return sortArray.sort((a, b) => {
+            const aVal = a[sortField] as number;
+            const bVal = b[sortField] as number;
+
+            return aVal - bVal;
+        });
+    }
+
+    return sortArray.sort((a, b) => {
+        const aVal = a[sortField] as number;
+        const bVal = b[sortField] as number;
+
+        return bVal - aVal;
+    });
 }
 
 /**
@@ -39,7 +70,7 @@ function sortStringObject<T>(
  * Sort a-z
  */
 function sortStringObjectAsc<T>(sortArray: T[], sortField: keyof T) {
-    sortArray.sort((a, b) => {
+    sortArray.sort((a: T, b: T) => {
         const aVal = upperCase(a[sortField] as string);
         const bVal = upperCase(b[sortField] as string);
 
