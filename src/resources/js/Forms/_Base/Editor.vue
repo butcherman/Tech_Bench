@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import "@/tinyMce";
 import Editor from "@tinymce/tinymce-vue";
-import { ref, toRef, computed } from "vue";
+import { toRef, computed } from "vue";
 import { useField } from "vee-validate";
 
 defineEmits(["change"]);
@@ -35,6 +35,7 @@ const props = defineProps<{
     label?: string;
     disabled?: boolean;
     placeholder?: string;
+    imageFolder?: string;
 }>();
 
 /**
@@ -112,7 +113,7 @@ const editorInit = {
      */
     automatic_uploads: true,
     file_picker_types: "image",
-    images_upload_url: "#", // route("upload-image"),
+    images_upload_url: route("upload-image", [props.imageFolder]),
     image_dimensions: false,
     image_class_list: [
         {
