@@ -71,6 +71,7 @@ class LogSettingsTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->put(route('maint.log-settings.update'), $data);
+
         $response->assertStatus(302);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.days',

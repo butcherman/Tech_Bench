@@ -35,8 +35,8 @@ class LogSettingsRequest extends FormRequest
         $this->saveSettings('logging.log_level', $this->log_level);
 
         foreach ($logChannels as $channel) {
-            $this->saveSettings('logging.channels.' . $channel->channel . '.level', $this->log_level);
-            $this->saveSettings('logging.channels.' . $channel->channel . '.days', $this->days);
+            $this->saveSettings('logging.channels.' . $channel['channel'] . '.level', $this->log_level);
+            $this->saveSettings('logging.channels.' . $channel['channel'] . '.days', $this->days);
         }
     }
 }

@@ -200,16 +200,16 @@ class BuildAdminMenu
                     'icon' => 'fa-sliders',
                     'route' => route('maint.log-settings.show'),
                 ],
-                [
-                    'name' => 'Backups',
-                    'icon' => 'fa-hdd',
-                    'route' => '#', // route('admin.backups.index'),
-                ],
-                [
-                    'name' => 'Backup Settings',
-                    'icon' => 'fa-cog',
-                    'route' => '#', // route('admin.backups.settings.get'),
-                ],
+                // [
+                //     'name' => 'Backups',
+                //     'icon' => 'fa-hdd',
+                //     'route' => '#', // route('admin.backups.index'),
+                // ],
+                // [
+                //     'name' => 'Backup Settings',
+                //     'icon' => 'fa-cog',
+                //     'route' => '#', // route('admin.backups.settings.get'),
+                // ],
             ];
         }
 
