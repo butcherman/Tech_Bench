@@ -42,7 +42,12 @@
             text-field="equip_name"
             value-field="cust_equip_id"
         />
-        <Editor id="note" name="details" label="Note Details" />
+        <Editor
+            id="note"
+            name="details"
+            label="Note Details"
+            image-folder="customer_notes"
+        />
     </VueForm>
 </template>
 
