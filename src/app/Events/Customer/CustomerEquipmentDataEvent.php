@@ -10,7 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class CustomerEquipmentDataEvent implements ShouldBroadcast
+class CustomerEquipmentDataEvent // implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -32,11 +32,11 @@ class CustomerEquipmentDataEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Customer Equipment Data Event on channel `customer.'.
-            $this->customer->slug.'`');
+        Log::debug('Broadcasting Customer Equipment Data Event on channel `customer.' .
+            $this->customer->slug . '`');
 
         return [
-            new PrivateChannel('customer.'.$this->customer->slug),
+            new PrivateChannel('customer.' . $this->customer->slug),
         ];
     }
 }
