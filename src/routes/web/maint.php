@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Maintenance\BackupController;
 use App\Http\Controllers\Maintenance\BackupSettingsController;
 use App\Http\Controllers\Maintenance\DownloadLogController;
 use App\Http\Controllers\Maintenance\LogSettingsController;
 use App\Http\Controllers\Maintenance\LogsIndexController;
 use App\Http\Controllers\Maintenance\ViewLogController;
+use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -38,4 +40,7 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
         Route::put('settings', [BackupSettingsController::class, 'update'])
             ->name('settings.update');
     });
+    Route::resource('backup', BackupController::class)->breadcrumbs(function (ResourceBreadcrumbs $breadcrumb) {
+        $breadcrumb->index('Backups', 'admin.index');
+    })->except(['edit', 'update', 'create']);
 });

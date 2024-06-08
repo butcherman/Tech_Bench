@@ -64,6 +64,10 @@ return [
     /*
     |--------------------------------------------------------------------------
     | Queue Worker Configuration
+    |
+    |   Queues:
+    |       Default - Generic catch all
+    |       Backup - For all backup operations.  Only one worker allowed
     |--------------------------------------------------------------------------
     */
 
@@ -73,6 +77,18 @@ return [
             'queue' => ['default'],
             'balance' => 'auto',
             'maxProcesses' => 5,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 128,
+            'tries' => 1,
+            'timeout' => 60,
+            'nice' => 0,
+        ],
+        'backup-supervisor' => [
+            'connection' => 'redis',
+            'queue' => ['backups'],
+            'balance' => 'auto',
+            'maxProcesses' => 1,
             'maxTime' => 0,
             'maxJobs' => 0,
             'memory' => 128,

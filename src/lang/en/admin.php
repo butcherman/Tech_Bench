@@ -52,6 +52,7 @@ return [
 
     'backups' => [
         'settings-successful' => 'Backup Settings Saved',
+        'deleted' => 'Backup File Deleted',
     ],
 
     'file-type' => [
