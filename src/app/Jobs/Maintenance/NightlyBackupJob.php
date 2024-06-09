@@ -2,22 +2,25 @@
 
 namespace App\Jobs\Maintenance;
 
-use App\Service\Maint\BackupService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 /**
- * Triggered by manual backup command
+ * Nightly backup job.
+ * Backup will only run if enabled in config
  */
-class RunBackupJob implements ShouldQueue, ShouldBeUnique
+class NightlyBackupJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * Create a new job instance.
+     */
     public function __construct()
     {
         $this->onQueue('backups');
@@ -28,6 +31,9 @@ class RunBackupJob implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
-        Artisan::call('backup:run');
+        if (config('backup.nightly_backup')) {
+            Log::info('Calling nightly backup job');
+            Artisan::call('backup:run');
+        }
     }
 }
