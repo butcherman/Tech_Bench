@@ -51,9 +51,8 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import BackupSettingsForm from "@/Forms/Maintenance/BackupSettingsForm.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{
+defineProps<{
     nightly_backup: boolean;
     nightly_cleanup: boolean;
     encryption: boolean;

@@ -77,7 +77,6 @@ import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import Table from "@/Components/_Base/Table.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import prettyBytes from "pretty-bytes";
-import { ref, reactive, onMounted } from "vue";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
 
@@ -86,7 +85,7 @@ defineProps<{
     backupList: any[];
 }>();
 
-const deleteBackup = (fileName) => {
+const deleteBackup = (fileName: string) => {
     verifyModal("This cannot be undone").then((res) => {
         if (res) {
             router.delete(route("maint.backup.destroy", fileName));
