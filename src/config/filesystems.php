@@ -66,7 +66,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
@@ -81,10 +81,10 @@ return [
         /**
          * Application Backups
          */
-        // 'backups' => [
-        //     'driver' => 'local',
-        //     'root' => storage_path('backups'),
-        // ],
+        'backups' => [
+            'driver' => 'local',
+            'root' => storage_path('backups'),
+        ],
 
         /**
          * Security and SSL Certificates
@@ -94,9 +94,9 @@ return [
             'root' => base_path('keystore'),
         ],
 
-    /**
-     * Downloaded Update files will be stored here
-     */
+        /**
+         * Downloaded Update files will be stored here
+         */
         // 'updates' => [
         //     'driver' => 'local',
         //     'root' => storage_path('updates'),

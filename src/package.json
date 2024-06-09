@@ -30,7 +30,6 @@
         "dropzone": "^6.0.0-beta.2",
         "file-icon-vectors": "^1.0",
         "gsap": "^3.12",
-        "laravel-echo": "^1.15",
         "lodash": "^4.17",
         "pinia": "^2.1",
         "pretty-bytes": "^6.1",

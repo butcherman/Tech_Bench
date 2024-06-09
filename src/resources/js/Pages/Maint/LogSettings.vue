@@ -21,9 +21,8 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import LogSettingsForm from "@/Forms/Maintenance/LogSettingsForm.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{
+defineProps<{
     days: number;
     logLevel: string;
     levelList: logLevel[];
