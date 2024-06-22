@@ -1,5 +1,5 @@
 /**
- * All data for performing a customer search
+ * All data for performing a Tech Tip Search
  */
 
 import axios from "axios";
@@ -10,8 +10,9 @@ import { ref, reactive } from "vue";
  *                        Typescript Interfaces                                *
  *******************************************************************************/
 interface searchParams {
-    basic: boolean;
     searchFor: string;
+    typeList: number[];
+    equipList: number[];
     page: number;
     perPage: number;
 }
@@ -28,7 +29,7 @@ interface paginationData {
 interface axiosSearchResults {
     data: {
         current_page: number;
-        data: customer[];
+        data: never[]; // TODO - Type me
         first_page_url: string;
         from: number;
         last_page: number;
@@ -47,11 +48,11 @@ interface axiosSearchResults {
  *******************************************************************************/
 export const isLoading = ref<boolean>(false);
 export const isDirty = ref<boolean>(false);
-export const showSiteList = ref<boolean>(true);
-export const searchResults = ref<customer[]>([]);
-export const searchParams = reactive<searchParams>({
-    basic: false,
+export const searchResults = ref([]); // TODO - Type me
+export const searchParams = ref({
     searchFor: "",
+    typeList: [],
+    equipList: [],
     page: 1,
     perPage: 25,
 });
@@ -72,8 +73,10 @@ export const triggerSearch = async () => {
     isLoading.value = true;
     isDirty.value = true;
 
+    console.log(searchParams.value);
+
     await axios
-        .post(route("customers.search"), searchParams)
+        .post(route("tech-tips.search"), searchParams)
         .then((res) => processResults(res))
         .catch(() =>
             okModal(
@@ -84,8 +87,12 @@ export const triggerSearch = async () => {
 };
 
 export const resetSearch = () => {
-    searchParams.searchFor = "";
-    isDirty.value = false;
+    console.log("trigger reset");
+    searchParams.value.searchFor = "";
+    searchParams.value.typeList = [];
+    searchParams.value.equipList = [];
+    searchParams.value.page = 1;
+    searchParams.value.perPage = 25;
 };
 
 const processResults = (res: axiosSearchResults) => {

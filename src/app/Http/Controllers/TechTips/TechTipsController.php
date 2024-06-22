@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\TechTips;
 
 use App\Http\Controllers\Controller;
+use App\Models\EquipmentCategory;
+use App\Models\TechTip;
+use App\Models\TechTipType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,11 +14,15 @@ class TechTipsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        // return 'index';
-        return Inertia::render('TechTips/Index');
+        return Inertia::render('TechTips/Index', [
+            'filter-data' => [
+                'tip_types' => TechTipType::all(),
+                'equip_types' => EquipmentCategory::with('EquipmentType')->get(),
+            ],
+            'can-create' => $request->user()->can('create', TechTip::class),
+        ]);
     }
 
     /**
