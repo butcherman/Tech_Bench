@@ -1,4 +1,4 @@
-type techTips = {
+type techTip = {
     tip_id: number;
     user_id: number;
     updated_id: number;

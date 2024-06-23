@@ -13,6 +13,6 @@ class SearchTipsController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return TechTip::paginate(25);
+        return TechTip::where('sticky', true)->paginate(25);
     }
 }

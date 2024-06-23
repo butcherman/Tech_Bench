@@ -29,7 +29,7 @@ interface paginationData {
 interface axiosSearchResults {
     data: {
         current_page: number;
-        data: never[]; // TODO - Type me
+        data: techTip[];
         first_page_url: string;
         from: number;
         last_page: number;
@@ -48,7 +48,7 @@ interface axiosSearchResults {
  *******************************************************************************/
 export const isLoading = ref<boolean>(false);
 export const isDirty = ref<boolean>(false);
-export const searchResults = ref([]); // TODO - Type me
+export const searchResults = ref<techTip[]>([]);
 export const searchParams = ref({
     searchFor: "",
     typeList: [],
@@ -99,6 +99,7 @@ const processResults = (res: axiosSearchResults) => {
     console.log(res);
     // Assign results
     searchResults.value = res.data.data;
+
     // Build pagination footer
     paginationData.listFrom = res.data.from;
     paginationData.listTo = res.data.to;

@@ -46,7 +46,9 @@
             <div class="col-lg-9 col-12">
                 <div class="card">
                     <div class="card-body">
-                        {{ searchResults }}
+                        <Overlay :loading="isLoading">
+                            <TipSearchBody />
+                        </Overlay>
                     </div>
                 </div>
             </div>
@@ -58,17 +60,21 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import TipSearchForm from "@/Forms/TechTips/TipSearchForm.vue";
+import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import TipSearchFilters from "@/Forms/TechTips/TipSearchFilters.vue";
-import { ref, reactive, onMounted } from "vue";
-import { searchResults } from "@/Modules/TipSearch.module";
+import TipSearchBody from "@/Components/TechTips/TipSearchBody.vue";
+import { onMounted } from "vue";
+import { triggerSearch, isLoading } from "@/Modules/TipSearch.module";
 
-const props = defineProps<{
+defineProps<{
     canCreate: boolean;
     filterData: {
         tip_types: tipType[];
         equip_types: categoryList[];
     };
 }>();
+
+onMounted(() => triggerSearch());
 </script>
 
 <script lang="ts">
