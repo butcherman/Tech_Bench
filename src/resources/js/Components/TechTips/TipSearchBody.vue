@@ -1,11 +1,6 @@
 <template>
     <div>
-        <Table
-            :columns="cols"
-            :rows="searchResults"
-            row-clickable
-            @on-row-click="onRowClick"
-        >
+        <Table :columns="cols" :rows="searchResults" responsive>
             <template #column="{ columnName, rowData }">
                 <span v-if="columnName === 'sticky'">
                     <span v-if="rowData.sticky" class="text-danger">
@@ -20,11 +15,6 @@
 <script setup lang="ts">
 import Table from "../_Base/Table.vue";
 import { searchResults } from "@/Modules/TipSearch.module";
-import { router } from "@inertiajs/vue3";
-
-const onRowClick = (data: techTip) => {
-    router.get(route("tech-tips.show", data.slug));
-};
 
 const cols = [
     {

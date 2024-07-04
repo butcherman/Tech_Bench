@@ -14,6 +14,7 @@ class SearchTipsController extends Controller
      */
     public function __invoke(SearchTipsRequest $request)
     {
-        return response()->json($request->search());
+        // return response()->json($request->search());
+        return TechTip::search($request->searchFor)->paginate($request->perPage);
     }
 }
