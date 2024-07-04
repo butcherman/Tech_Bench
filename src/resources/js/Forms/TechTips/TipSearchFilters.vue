@@ -18,9 +18,9 @@
                 {{ type.description }}
             </label>
         </div>
-        <h6>Equipment Type:</h6>
+        <h6 class="mt-2 mb-0">Equipment Type:</h6>
         <template v-for="category in equipTypes" :key="category.cat_id">
-            <p class="mt-3 mb-0">{{ category.name }}</p>
+            <p class="mt-2 mb-0">{{ category.name }}</p>
             <div
                 v-for="equip in category.equipment_type"
                 :key="equip.equip_id"
@@ -33,6 +33,7 @@
                     :value="equip.equip_id"
                     name="articleType"
                     v-model="searchParams.equipList"
+                    @change="triggerSearch"
                 />
                 <label
                     :for="`equip-id-${equip.equip_id}`"
@@ -46,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { searchParams } from "@/Modules/TipSearch.module";
+import { searchParams, triggerSearch } from "@/Modules/TipSearch.module";
 
 defineProps<{
     tipTypes: tipType[];

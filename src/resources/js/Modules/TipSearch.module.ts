@@ -76,7 +76,7 @@ export const triggerSearch = async () => {
     console.log(searchParams.value);
 
     await axios
-        .post(route("tech-tips.search"), searchParams)
+        .post(route("tech-tips.search"), searchParams.value)
         .then((res) => processResults(res))
         .catch(() =>
             okModal(

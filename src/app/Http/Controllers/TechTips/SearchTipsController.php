@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\TechTips;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TechTips\SearchTipsRequest;
 use App\Models\TechTip;
 use Illuminate\Http\Request;
 
 class SearchTipsController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Perform a search for a tech tip
      */
-    public function __invoke(Request $request)
+    public function __invoke(SearchTipsRequest $request)
     {
-        return TechTip::where('sticky', true)->paginate(25);
+        return response()->json($request->search());
     }
 }

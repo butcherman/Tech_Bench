@@ -20,4 +20,21 @@ class TechTip extends Model
         'deleted_at' => 'datetime:M d, Y',
         'sticky' => 'boolean',
     ];
+
+    public function EquipmentType()
+    {
+        return $this->hasManyThrough(
+            EquipmentType::class,
+            TechTipEquipment::class,
+            'tip_id',
+            'equip_id',
+            'tip_id',
+            'equip_id'
+        );
+    }
+
+    public function TechTipType()
+    {
+        return $this->hasOne(TechTipType::class, 'tip_type_id', 'tip_type_id');
+    }
 }
