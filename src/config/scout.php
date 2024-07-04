@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => 'collection', //  env('SCOUT_DRIVER', 'algolia'),
+    'driver' => 'meilisearch', //  env('SCOUT_DRIVER', 'algolia'),
 
     /*
     |--------------------------------------------------------------------------
@@ -135,8 +135,8 @@ return [
     */
 
     'meilisearch' => [
-        'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
-        'key' => env('MEILISEARCH_KEY'),
+        'host' => 'meilisearch:7700', //  env('MEILISEARCH_HOST', 'http://localhost:7700'),
+        'key' => 'MeiliTBMaster', //  env('MEILISEARCH_KEY'),
         'index-settings' => [
             // 'users' => [
             //     'filterableAttributes'=> ['id', 'name', 'email'],

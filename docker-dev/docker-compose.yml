@@ -103,6 +103,18 @@ services:
             - database
             - redis
 
+    # Melisearch Container for Search Engine
+    meilisearch:
+        image: getmeili/meilisearch:v1.9.0
+        container_name: meilisearch
+        restart: unless-stopped
+        environment:
+            - MEILI_MASTER_KEY=MeiliTBMaster
+        networks:
+            - app-tier
+        ports:
+            - 7700:7700
+
     #  Soketi Container for Broadcasting Realtime Notifications via Websockets
     # soketi:
     #     image: "quay.io/soketi/soketi:latest-16-alpine"
