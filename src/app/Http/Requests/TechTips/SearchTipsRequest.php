@@ -28,12 +28,4 @@ class SearchTipsRequest extends FormRequest
             'perPage' => 'required|numeric',
         ];
     }
-
-    /**
-     * Perform the Search Process
-     */
-    public function search()
-    {
-        return TechTip::paginate($this->perPage);
-    }
 }

@@ -24,6 +24,7 @@ class SearchTipsController extends Controller
 
         $searchObj = new TechTipSearchService($request);
 
+
         return $searchObj->search();
     }
 }

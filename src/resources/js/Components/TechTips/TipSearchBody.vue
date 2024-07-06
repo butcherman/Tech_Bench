@@ -1,6 +1,11 @@
 <template>
     <div>
-        <Table :columns="cols" :rows="searchResults" responsive>
+        <Table
+            :columns="cols"
+            :rows="searchResults"
+            initial-sort="sticky"
+            responsive
+        >
             <template #column="{ columnName, rowData }">
                 <span v-if="columnName === 'sticky'">
                     <span v-if="rowData.sticky" class="text-danger">

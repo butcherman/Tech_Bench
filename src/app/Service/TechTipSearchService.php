@@ -49,7 +49,6 @@ class TechTipSearchService
     protected function textOnlySearch()
     {
         return TechTip::search($this->searchRequest->searchFor)
-            ->orderBy('sticky')
             ->paginate($this->searchRequest->perPage);
     }
 

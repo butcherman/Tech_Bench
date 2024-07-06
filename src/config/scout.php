@@ -43,11 +43,11 @@ return [
     |
     */
 
-    'queue' => false, // env('SCOUT_QUEUE', true),
-    // 'queue' => [
-    //     'connection' => 'redis',
-    //     'queue' => 'scout',
-    // ],
+    // 'queue' => false, // env('SCOUT_QUEUE', true),
+    'queue' => [
+        'connection' => 'redis',
+        'queue' => 'scout',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +141,15 @@ return [
         'index-settings' => [
             TechTip::class => [
                 'filterableAttributes' => ['EquipmentType', 'tip_type_id'],
-                'sortableAttributes' => ['tip_id', 'sticky', 'slug', 'created_at'],
+                'sortableAttributes' => ['sticky'],
+                'rankingRules' => [
+                    'sort',
+                    'words',
+                    'typo',
+                    'proximity',
+                    'attribute',
+                    'exactness',
+                ],
             ],
             // 'users' => [
             //     'filterableAttributes'=> ['id', 'name', 'email'],
