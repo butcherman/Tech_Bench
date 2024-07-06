@@ -13,6 +13,7 @@
                 :value="type.tip_type_id"
                 name="articleType"
                 v-model="searchParams.typeList"
+                @change="triggerSearch"
             />
             <label :for="`type-${type.tip_type_id}`" class="form-check-label">
                 {{ type.description }}
