@@ -95,6 +95,9 @@ export const resetSearch = () => {
     searchParams.value.perPage = 25;
 };
 
+/*******************************************************************************
+ *                    Work with returned results                               *
+ *******************************************************************************/
 const processResults = (res: axiosSearchResults) => {
     console.log(res);
     // Assign results
@@ -106,4 +109,12 @@ const processResults = (res: axiosSearchResults) => {
     paginationData.listTotal = res.data.total;
     paginationData.totalPages = res.data.last_page;
     paginationData.currentPage = res.data.current_page;
+};
+
+/*******************************************************************************
+ *                    Navigate through pagination                              *
+ *******************************************************************************/
+export const goToPage = (pageNumber: number) => {
+    searchParams.value.page = pageNumber;
+    triggerSearch();
 };

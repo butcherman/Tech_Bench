@@ -14,12 +14,24 @@
                 </span>
             </template>
         </Table>
+        <Pagination
+            :current-page="paginationData.currentPage"
+            :total-pages="paginationData.totalPages"
+            @next-page="goToPage(paginationData.currentPage + 1)"
+            @prev-page="goToPage(paginationData.currentPage - 1)"
+            @go-to-page="goToPage"
+        />
     </div>
 </template>
 
 <script setup lang="ts">
 import Table from "../_Base/Table.vue";
-import { searchResults } from "@/Modules/TipSearch.module";
+import Pagination from "../_Base/Pagination.vue";
+import {
+    searchResults,
+    paginationData,
+    goToPage,
+} from "@/Modules/TipSearch.module";
 
 const cols = [
     {
