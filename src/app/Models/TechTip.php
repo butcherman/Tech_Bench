@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -44,5 +45,24 @@ class TechTip extends Model
     public function TechTipType()
     {
         return $this->hasOne(TechTipType::class, 'tip_type_id', 'tip_type_id');
+    }
+
+    /**
+     * Search Results for Meilisearch
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'tip_id' => (int) $this->tip_id,
+            'subject' => $this->subject,
+            'details' => $this->details,
+            'tip_type_id' => $this->tip_type_id,
+            'EquipmentType' => $this->EquipmentType,
+        ];
+    }
+
+    protected function makeAllSearchableUsing(Builder $query)
+    {
+        return $query->with('EquipmentType');
     }
 }

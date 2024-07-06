@@ -1,4 +1,5 @@
 <?php
+use App\Models\TechTip;
 
 return [
 
@@ -42,11 +43,11 @@ return [
     |
     */
 
-    // 'queue' => env('SCOUT_QUEUE', true),
-    'queue' => [
-        'connection' => 'redis',
-        'queue' => 'scout',
-    ],
+    'queue' => false, // env('SCOUT_QUEUE', true),
+    // 'queue' => [
+    //     'connection' => 'redis',
+    //     'queue' => 'scout',
+    // ],
 
     /*
     |--------------------------------------------------------------------------
@@ -138,6 +139,10 @@ return [
         'host' => 'meilisearch:7700', //  env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => 'MeiliTBMaster', //  env('MEILISEARCH_KEY'),
         'index-settings' => [
+            TechTip::class => [
+                'filterableAttributes' => ['EquipmentType', 'tip_type_id'],
+                'sortableAttributes' => ['tip_id', 'sticky', 'slug', 'created_at'],
+            ],
             // 'users' => [
             //     'filterableAttributes'=> ['id', 'name', 'email'],
             // ],
