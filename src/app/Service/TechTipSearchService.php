@@ -20,6 +20,16 @@ class TechTipSearchService
     public function search()
     {
         if (
+            empty($this->searchRequest->searchFor) &&
+            empty($this->searchRequest->typeList) &&
+            empty($this->searchRequest->equipList)
+        ) {
+            return TechTip::orderBy('sticky', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate($this->searchRequest->perPage);
+        }
+
+        if (
             empty($this->searchRequest->typeList) &&
             empty($this->searchRequest->equipList)
         ) {

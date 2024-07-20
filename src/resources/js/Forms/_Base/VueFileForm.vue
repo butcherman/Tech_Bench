@@ -16,17 +16,20 @@
                 </div>
             </div>
             <slot />
-            <DropzoneInput
-                ref="dropzoneInput"
-                paramName="file"
-                :upload-url="submitRoute"
-                :max-files="maxFiles || 1"
-                :required="fileRequired"
-                :accepted-files="acceptedFiles"
-                @file-added="onFileAdded"
-                @file-removed="onFileRemoved"
-                @success="onSuccess"
-            />
+            <Collapse :visible="!hideFileInput">
+                <DropzoneInput
+                    ref="dropzoneInput"
+                    paramName="file"
+                    :upload-url="submitRoute"
+                    :max-files="maxFiles || 1"
+                    :required="fileRequired"
+                    :accepted-files="acceptedFiles"
+                    @file-added="onFileAdded"
+                    @file-removed="onFileRemoved"
+                    @success="onSuccess"
+                    @error="handleErrors"
+                />
+            </Collapse>
             <slot name="after-file" />
             <slot name="submit">
                 <SubmitButton
@@ -56,6 +59,7 @@ import SubmitButton from "@/Components/_Base/Buttons/SubmitButton.vue";
 import Loading from "vue3-loading-overlay";
 import TrinityRingsLoader from "@/Components/_Base/Loaders/TrinityRingsLoader.vue";
 import DropzoneInput from "./DropzoneInput.vue";
+import Collapse from "@/Components/_Base/Collapse.vue";
 import { ref, computed } from "vue";
 import { useForm } from "vee-validate";
 
@@ -66,6 +70,16 @@ import okModal from "@/Modules/okModal";
 
 interface formData {
     [key: string]: string;
+}
+
+interface errorBag {
+    file: InstanceType<typeof DropzoneInput>;
+    message: {
+        message: string;
+        errors: {
+            [key: string]: string[] | string;
+        };
+    };
 }
 
 const emit = defineEmits([
@@ -89,7 +103,10 @@ const props = defineProps<{
     fileRequired?: boolean;
     maxFiles?: number;
     acceptedFiles?: string[];
+    hideFileInput?: boolean;
 }>();
+
+const originalForm = ref<formData>({});
 
 /*******************************************************************************
  * Dropzone File Upload
@@ -130,11 +147,14 @@ const isDirty = computed(() => meta.value.dirty);
  * Handle the Form Submission
  *******************************************************************************/
 const isSubmitting = ref<boolean>(false);
-const onSubmit = handleSubmit((form): void => {
+const onSubmit = handleSubmit((form: formData): void => {
     clearErrorAlert();
+    originalForm.value = form;
+
     if (dropzoneInput.value?.validate()) {
         emit("submitting");
         isSubmitting.value = true;
+
         /**
          * During development, we can set the testing flag to only return the form
          * values, but not actually submit the form
@@ -154,28 +174,30 @@ const onSubmit = handleSubmit((form): void => {
     }
 });
 
-const onSuccess = () => {
-    emit("success");
+const onSuccess = (result: { file: string[]; res: string }) => {
+    emit("success", result);
     isSubmitting.value = false;
 };
 
-const handleErrors = (
-    originalForm: formData,
-    formErrors: Partial<Record<string | number, string>>
-) => {
+/**
+ * Process any validation errors that come up
+ */
+const handleErrors = (errorBag: errorBag) => {
+    isSubmitting.value = false;
     emit("has-errors");
-    const formKeys = Object.keys(originalForm);
 
-    for (const [key, value] of Object.entries(formErrors)) {
+    const formKeys = Object.keys(originalForm.value);
+    for (const [key, value] of Object.entries(errorBag.message.errors)) {
         if (value) {
-            console.log(typeof value);
-            if (typeof value === "object") {
-                handleErrors(originalForm, value);
+            if (formKeys.indexOf(key) != -1) {
+                console.log("has key", key);
+                setFieldError(key, value);
             } else {
-                if (formKeys.indexOf(key) != -1) {
-                    setFieldError(key, value);
+                console.log("no key", key);
+                if (Array.isArray(key)) {
+                    key.forEach((msg: string) => pushErrorAlert(msg));
                 } else {
-                    pushErrorAlert(value);
+                    pushErrorAlert(value.toString());
                 }
             }
         }

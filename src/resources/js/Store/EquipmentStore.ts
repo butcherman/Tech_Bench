@@ -56,8 +56,39 @@ export const useEquipmentStore = defineStore("equipmentStore", () => {
         return modifiedList;
     };
 
+    /**
+     * Modify the Equipment List for a Multi-Select Box
+     */
+    const getMultiSelectBox = () => {
+        initStore();
+
+        let modifiedList: {
+            label: string;
+            options: { text: string; value: string | number }[];
+        }[] = [];
+
+        equipmentList.value.forEach((category: categoryList) => {
+            let equipList: { text: string; value: string | number }[] = [];
+
+            category.equipment_type.forEach((equip: equipment) => {
+                equipList.push({
+                    text: equip.name,
+                    value: equip.equip_id,
+                });
+            });
+
+            modifiedList.push({
+                label: category.name,
+                options: equipList,
+            });
+        });
+
+        return modifiedList;
+    };
+
     return {
         getEquipmentList,
         getSelectBox,
+        getMultiSelectBox,
     };
 });

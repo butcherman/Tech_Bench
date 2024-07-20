@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\TechTips;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TechTips\TechTipRequest;
 use App\Models\EquipmentCategory;
 use App\Models\TechTip;
 use App\Models\TechTipType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class TechTipsController extends Controller
@@ -30,16 +32,20 @@ class TechTipsController extends Controller
      */
     public function create()
     {
-        //
-        return 'create';
+        $this->authorize('create', TechTip::class);
+
+        return Inertia::render('TechTips/Create', [
+            'tip-types' => TechTipType::all(),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TechTipRequest $request)
     {
         //
+        Log::critical('working');
         return 'store';
     }
 

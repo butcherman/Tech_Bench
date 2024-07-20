@@ -4,6 +4,7 @@ type techTip = {
     updated_id: number;
     tip_type_id: number;
     sticky: boolean;
+    public: boolean;
     subject: string;
     slug: string;
     details: string;

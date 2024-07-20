@@ -50,6 +50,7 @@
 
 <script setup lang="ts">
 import Dropzone from "dropzone";
+import axios from "axios";
 import { ref, onMounted, nextTick } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { getFileIcon } from "@/Modules/FileIcons.module";
@@ -100,7 +101,20 @@ let myFormData: object;
 const process = (form = {}) => {
     myFormData = form;
     isSubmitting.value = true;
-    myDrop.processQueue();
+
+    // If no files are present, we need to do axios submission
+    if (myDrop.files.length === 0) {
+        axios
+            .post(props.uploadUrl.toString(), myFormData)
+            .then((res) => {
+                emit("success", { file: [], res: res.data });
+            })
+            .catch((err) =>
+                emit("error", { file: [], message: err.response.data })
+            );
+    } else {
+        myDrop.processQueue();
+    }
 };
 
 /**
@@ -138,8 +152,8 @@ const validate = () => {
         //  If validation failed, get an error message to display to the user
         if (props.required && myDrop.getRejectedFiles().length) {
             if (props.maxFiles && myDrop.files.length > props.maxFiles) {
-                errMessage.value = `Maximum number of files has been exceeded.  
-                                    Only ${props.maxFiles} are allowed.  Please 
+                errMessage.value = `Maximum number of files has been exceeded.
+                                    Only ${props.maxFiles} are allowed.  Please
                                     remove ${
                                         myDrop.files.length - props.maxFiles
                                     }
@@ -256,6 +270,7 @@ onMounted(() => {
         emit("error", { file, message });
     });
     myDrop.on("success", (file, response) => {
+        console.log("success", file, response);
         emit("success", { file, response });
     });
     myDrop.on("complete", (file) => {

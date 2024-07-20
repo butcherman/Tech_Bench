@@ -14,6 +14,7 @@
             :valueProp="valueField"
             :label="textField"
             :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
+            :close-on-select="closeOnSelect"
         >
             <template #beforelist v-if="allowSelectAll">
                 <ul class="multiselect-options">
@@ -41,7 +42,7 @@ import "@vueform/multiselect/themes/default.css";
 const props = defineProps<{
     id: string;
     name: string;
-    list: any[];
+    list: any[] | any;
     mode: "multiple" | "tags" | "single" | undefined;
     label?: string;
     groups?: boolean;
@@ -71,6 +72,10 @@ const selectList = computed(() => {
 
     return newList;
 });
+
+const closeOnSelect = computed(() =>
+    props.mode === "multiple" || props.mode === "tags" ? false : true
+);
 
 const valueField = computed(() =>
     props.valueField ? props.valueField : "value"

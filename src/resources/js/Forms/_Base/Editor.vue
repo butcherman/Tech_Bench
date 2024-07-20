@@ -68,6 +68,7 @@ const editorInit = {
     placeholder: props.placeholder || null,
     relative_urls: false,
     resize_img_proportional: true,
+    license_key: "gpl",
 
     init_instance_callback: (editor: any) => editor.fire("focus"),
     setup: (editor: any) => {
