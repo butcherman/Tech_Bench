@@ -6,6 +6,7 @@
         :submit-route="submitRoute"
         :submit-text="submitText"
         :hide-file-input="hideFile"
+        :max-files="5"
         @success="handleSuccess"
     >
         <TextInput id="subject" name="subject" label="Subject" focus />
@@ -89,6 +90,7 @@ import Collapse from "@/Components/_Base/Collapse.vue";
 import { computed, ref } from "vue";
 import { array, boolean, object, string } from "yup";
 
+const emit = defineEmits(["success"]);
 const props = defineProps<{
     techTip?: techTip;
     tipTypes: tipType[];
@@ -102,13 +104,13 @@ const submitRoute = computed(() =>
     // props.techTip ? "#" : route("tech-tips.store")
     route("tech-tips.store")
 );
-const submitMethod = computed(() => (props.techTip ? "put" : "post"));
 const submitText = computed(() =>
     props.techTip ? "Edit Tech Tip" : "Create Tech Tip"
 );
 
-const showAdvanced = ref(false);
-const hideFile = ref(true);
+const showAdvanced = ref<boolean>(false);
+const hideFile = ref<boolean>(true);
+const tipSlug = ref<string | null>(null);
 
 const initValues = {
     subject: props.techTip?.subject || "",
@@ -131,7 +133,8 @@ const schema = object({
     public: boolean().required(),
 });
 
-const handleSuccess = (result: { file: string[]; res: string }) => {
-    console.log(result);
+const handleSuccess = (result: string) => {
+    console.log("success", result);
+    tipSlug.value = result;
 };
 </script>

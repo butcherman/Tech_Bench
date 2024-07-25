@@ -32,14 +32,12 @@ class TechTip extends Model
 
     public function EquipmentType()
     {
-        return $this->hasManyThrough(
+        return $this->belongsToMany(
             EquipmentType::class,
-            TechTipEquipment::class,
-            'tip_id',
-            'equip_id',
+            'tech_tip_equipment',
             'tip_id',
             'equip_id'
-        );
+        )->withTimestamps();
     }
 
     public function TechTipType()

@@ -7,12 +7,15 @@ use App\Http\Requests\TechTips\TechTipRequest;
 use App\Models\EquipmentCategory;
 use App\Models\TechTip;
 use App\Models\TechTipType;
+use App\Traits\FileTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class TechTipsController extends Controller
 {
+    use FileTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -44,9 +47,17 @@ class TechTipsController extends Controller
      */
     public function store(TechTipRequest $request)
     {
-        //
-        Log::critical('working');
-        return 'store';
+        if (!$request->file) {
+            $newTip = $request->createTechTip();
+            return $newTip->slug;
+        }
+
+        // if($request->session()->missing('techTip')) {
+        //     $newTip = $request->createTechTip();
+        //     $request->session()->put('techTip', $newTip);
+        // }
+
+        return 'has file';
     }
 
     /**

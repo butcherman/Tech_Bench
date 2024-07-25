@@ -1,3 +1,35 @@
+import type { DropzoneFile } from "dropzone";
+
+/**
+ * For Dropzone input only, push file icon to DOM
+ */
+export const processFileIcon = (file: DropzoneFile) => {
+    const mime = getFileMime(file);
+
+    if (mime && mime[0] !== "image") {
+        const ext = file.name.split(".").pop();
+        if (ext) {
+            let iconClass = getFileIcon(ext);
+            let innerSpan = "";
+            //  If not icon was found, insert the default class
+            if (!iconClass) {
+                iconClass = "fiv-cla fiv-icon-blank fiv-size-xl";
+                innerSpan = `<span class="ext-identifier">{.${ext}}</span>`;
+            }
+            const imgWrapper =
+                file.previewElement.getElementsByClassName("dz-image")[0];
+            imgWrapper.innerHTML = `<span class="${iconClass} w-100 h-100" />${innerSpan}`;
+        }
+    }
+};
+
+/**
+ * Return the MIME type of the selected file
+ */
+export const getFileMime = (file: DropzoneFile) => {
+    return file.type.split("/").pop();
+};
+
 export const getFileIcon = (extension: string): string | false => {
     //  TODO - Add some custom icons and test
     //  Check the base catalog (file-icon-vectors) to see if the icon exists

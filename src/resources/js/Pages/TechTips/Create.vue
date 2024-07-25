@@ -8,6 +8,7 @@
                         <TechTipForm
                             :tip-types="tipTypes"
                             :equip-list="equipStore.getMultiSelectBox()"
+                            @success="handleSuccess"
                         />
                     </div>
                 </div>
@@ -20,6 +21,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TechTipForm from "@/Forms/TechTips/TechTipForm.vue";
 import { ref, reactive, onMounted } from "vue";
+import { router } from "@inertiajs/vue3";
 import { useEquipmentStore } from "@/Store/EquipmentStore";
 
 const props = defineProps<{
@@ -28,6 +30,11 @@ const props = defineProps<{
 }>();
 
 const equipStore = useEquipmentStore();
+
+const handleSuccess = (newSlug: string) => {
+    console.log(newSlug);
+    router.get(route("tech-tips.show", newSlug));
+};
 </script>
 
 <script lang="ts">

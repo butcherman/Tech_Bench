@@ -26,8 +26,8 @@
                     :accepted-files="acceptedFiles"
                     @file-added="onFileAdded"
                     @file-removed="onFileRemoved"
-                    @success="onSuccess"
                     @error="handleErrors"
+                    @success="handleSuccess"
                 />
             </Collapse>
             <slot name="after-file" />
@@ -73,7 +73,8 @@ interface formData {
 }
 
 interface errorBag {
-    file: InstanceType<typeof DropzoneInput>;
+    file: string[];
+    status: number;
     message: {
         message: string;
         errors: {
@@ -90,6 +91,7 @@ const emit = defineEmits([
     "values",
     "file-added",
     "file-removed",
+    "queue-complete",
 ]);
 const props = defineProps<{
     validationSchema: object;
@@ -174,32 +176,43 @@ const onSubmit = handleSubmit((form: formData): void => {
     }
 });
 
-const onSuccess = (result: { file: string[]; res: string }) => {
+const handleSuccess = (result: string) => {
     emit("success", result);
-    isSubmitting.value = false;
 };
 
 /**
  * Process any validation errors that come up
  */
 const handleErrors = (errorBag: errorBag) => {
-    isSubmitting.value = false;
-    emit("has-errors");
+    console.log(errorBag);
+    // The form will only handle the errors if the form was submitting
+    if (isSubmitting.value) {
+        isSubmitting.value = false;
+        emit("has-errors");
 
-    const formKeys = Object.keys(originalForm.value);
-    for (const [key, value] of Object.entries(errorBag.message.errors)) {
-        if (value) {
-            if (formKeys.indexOf(key) != -1) {
-                console.log("has key", key);
-                setFieldError(key, value);
-            } else {
-                console.log("no key", key);
-                if (Array.isArray(key)) {
-                    key.forEach((msg: string) => pushErrorAlert(msg));
-                } else {
-                    pushErrorAlert(value.toString());
+        if (errorBag.status === 422) {
+            const formKeys = Object.keys(originalForm.value);
+            for (const [key, value] of Object.entries(
+                errorBag.message.errors
+            )) {
+                if (value) {
+                    if (formKeys.indexOf(key) != -1) {
+                        console.log("has key", key);
+                        setFieldError(key, value);
+                    } else {
+                        console.log("no key", key);
+                        if (Array.isArray(key)) {
+                            key.forEach((msg: string) => pushErrorAlert(msg));
+                        } else {
+                            pushErrorAlert(value.toString());
+                        }
+                    }
                 }
             }
+        } else {
+            okModal(
+                `Error ${errorBag.status}.  Please check logs for more details`
+            );
         }
     }
 };
