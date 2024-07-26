@@ -90,6 +90,7 @@ const initDropzone = () => {
         maxFiles: props.maxFiles || 5,
         maxFilesize: fileData.maxSize,
         method: "POST",
+        parallelUploads: 1,
         parallelChunkUploads: false,
         paramName: props.paramName || "file",
         previewTemplate: previewTemplate,
@@ -231,7 +232,7 @@ const process = (form: { [key: string]: any }) => {
         console.log("no file");
         axios
             .post(props.uploadUrl.toString(), fileFormData)
-            .then((res) => console.log(res))
+            .then((res) => emit("success", res.data))
             .catch((err) =>
                 emit("error", {
                     file: [],

@@ -56,7 +56,8 @@ const showWarning = () => {
 };
 
 const logoutUser = () => {
-    router.post(route("logout"), { reason: "timeout" });
+    // router.post(route("logout"), { reason: "timeout" });
+    console.log("logging user out");
 };
 
 const resetTimer = () => {

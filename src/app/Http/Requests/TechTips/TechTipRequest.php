@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TechTips;
 
 use App\Models\TechTip;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -44,8 +45,14 @@ class TechTipRequest extends FormRequest
         $this->mergeData();
         $this->setSlug();
 
-        $newTip = TechTip::create($this->except(['equipList']));
+        $newTip = TechTip::create($this->except(['equipList', 'suppress']));
         $newTip->EquipmentType()->sync($this->equipList);
+
+        if ($this->session()->has('tip-file')) {
+            $fileList = $this->session()->pull('tip-file');
+            Log::debug('Tech Tip file list for Tip ID ' . $newTip->tip_id, $fileList);
+            $newTip->FileUpload()->sync($fileList);
+        }
 
         return $newTip;
     }
@@ -55,14 +62,6 @@ class TechTipRequest extends FormRequest
      */
     protected function mergeData()
     {
-        if ($this->file) {
-            $this->merge([
-                'equipList' => json_decode($this->equipList),
-                'sticky' => (bool) $this->sticky,
-                'public' => (bool) $this->public,
-            ]);
-        }
-
         if ($this->techTip) {
             $this->merge([
                 'updated_id' => $this->user()->user_id,

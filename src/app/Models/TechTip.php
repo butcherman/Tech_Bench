@@ -40,6 +40,16 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
+    public function FileUpload()
+    {
+        return $this->belongsToMany(
+            FileUpload::class,
+            'tech_tip_files',
+            'tip_id',
+            'file_id'
+        )->withTimestamps();
+    }
+
     public function TechTipType()
     {
         return $this->hasOne(TechTipType::class, 'tip_type_id', 'tip_type_id');

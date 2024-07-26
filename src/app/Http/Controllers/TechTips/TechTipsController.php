@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\TechTips;
 
+use App\Enum\CrudAction;
+use App\Events\TechTips\TechTipEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\TechTipRequest;
 use App\Models\EquipmentCategory;
@@ -47,17 +49,13 @@ class TechTipsController extends Controller
      */
     public function store(TechTipRequest $request)
     {
-        if (!$request->file) {
-            $newTip = $request->createTechTip();
-            return $newTip->slug;
-        }
+        $newTip = $request->createTechTip();
 
-        // if($request->session()->missing('techTip')) {
-        //     $newTip = $request->createTechTip();
-        //     $request->session()->put('techTip', $newTip);
-        // }
+        Log::channel('tip')
+            ->info('New Tech Tip created by ' . $request->user()->username, $newTip->toArray());
+        event(new TechTipEvent($newTip, CrudAction::Create, !$request->suppress));
 
-        return 'has file';
+        return redirect()->route('tech-tips.show', $newTip->slug);
     }
 
     /**
@@ -66,7 +64,8 @@ class TechTipsController extends Controller
     public function show(string $id)
     {
         //
-        return 'show';
+        // return 'show';
+        return Inertia::render('TechTips/Show');
     }
 
     /**

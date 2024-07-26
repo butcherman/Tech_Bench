@@ -1,6 +1,6 @@
 <template>
     <VueFileForm
-        ref="form"
+        ref="techTipForm"
         :initial-values="initValues"
         :validation-schema="schema"
         :submit-route="submitRoute"
@@ -64,6 +64,7 @@
                         label="Make Sticky Tip"
                         help="Sticky Tips are prioritized to the top of the search list"
                     />
+                    <!-- TODO - TO BE ADDED
                     <CheckboxSwitch
                         id="public"
                         name="public"
@@ -71,7 +72,7 @@
                         help="When enabled, this Tech Tip will be available for 
                               anyone to see.  Be sure that this Tech Tip does not
                               contain any sensitive information."
-                    />
+                    /> -->
                 </div>
             </div>
         </Collapse>
@@ -89,6 +90,7 @@ import CheckboxSwitch from "../_Base/CheckboxSwitch.vue";
 import Collapse from "@/Components/_Base/Collapse.vue";
 import { computed, ref } from "vue";
 import { array, boolean, object, string } from "yup";
+import { useForm } from "@inertiajs/vue3";
 
 const emit = defineEmits(["success"]);
 const props = defineProps<{
@@ -100,9 +102,11 @@ const props = defineProps<{
     }[];
 }>();
 
+const techTipForm = ref<InstanceType<typeof VueFileForm> | null>(null);
+
 const submitRoute = computed(() =>
     // props.techTip ? "#" : route("tech-tips.store")
-    route("tech-tips.store")
+    route("tech-tips.upload")
 );
 const submitText = computed(() =>
     props.techTip ? "Edit Tech Tip" : "Create Tech Tip"
@@ -110,7 +114,7 @@ const submitText = computed(() =>
 
 const showAdvanced = ref<boolean>(false);
 const hideFile = ref<boolean>(true);
-const tipSlug = ref<string | null>(null);
+// const tipSlug = ref<string | null>(null);
 
 const initValues = {
     subject: props.techTip?.subject || "",
@@ -135,6 +139,15 @@ const schema = object({
 
 const handleSuccess = (result: string) => {
     console.log("success", result);
-    tipSlug.value = result;
+    console.log(techTipForm.value?.values);
+    // tipSlug.value = result;
+
+    // let formData = useForm()
+
+    let values;
+    if ((values = techTipForm.value?.values)) {
+        let formData = useForm(values);
+        formData.post(route("tech-tips.store"));
+    }
 };
 </script>

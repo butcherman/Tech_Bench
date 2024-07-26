@@ -79,6 +79,11 @@ class User extends Authenticatable
         return $this->hasOne(UserRole::class, 'role_id', 'role_id');
     }
 
+    public function UserSetting()
+    {
+        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
+    }
+
     /**
      * Determine the new expire date for an updated password
      */
@@ -122,7 +127,7 @@ class User extends Authenticatable
             'user_id' => $this->user_id,
             'token' => $token,
             'type' => $agent->device(),
-            'os' => $agent->platform().' '.$agent->platformVersion(),
+            'os' => $agent->platform() . ' ' . $agent->platformVersion(),
             'browser' => $agent->browser(),
             'registered_ip_address' => $ipAddr,
             'updated_ip_address' => $ipAddr,

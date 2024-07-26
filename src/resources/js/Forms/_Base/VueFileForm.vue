@@ -106,6 +106,7 @@ const props = defineProps<{
     maxFiles?: number;
     acceptedFiles?: string[];
     hideFileInput?: boolean;
+    inertiaSubmit?: boolean;
 }>();
 
 const originalForm = ref<formData>({});
@@ -240,5 +241,6 @@ defineExpose({
     handleReset,
     isDirty,
     isSubmitting,
+    values,
 });
 </script>
