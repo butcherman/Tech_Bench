@@ -1,24 +1,43 @@
 <template>
-    <div>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="text-center text-md-left">Hello World</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="text-center">This is a new page</p>
-                    </div>
-                </div>
-            </div>
+    <div id="tech-tip-wrapper">
+        <Head :title="tipData.subject" />
+        <div class="border-bottom border-secondary-subtle pb-2">
+            <TipManagement
+                v-if="showManage"
+                :tip-data="tipData"
+                :permissions="permissions"
+                class="float-end"
+            />
+            <TipDetailsTitle :tip-data="tipData" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted } from 'vue';
+import AppLayout from "@/Layouts/AppLayout.vue";
+import TipDetailsTitle from "@/Components/TechTips/TipDetailsTitle.vue";
+import TipManagement from "@/Components/TechTips/TipManagement.vue";
+import { ref, reactive, computed } from "vue";
 
-    const props = defineProps<{}>();
+const props = defineProps<{
+    tipData: techTip;
+    tipEquipment: equipment[];
+    permissions: basicPermissions;
+}>();
+
+const showManage = computed(() => {
+    if (
+        props.permissions.manage ||
+        props.permissions.update ||
+        props.permissions.delete
+    ) {
+        return true;
+    }
+
+    return false;
+});
+</script>
+
+<script lang="ts">
+export default { layout: AppLayout };
 </script>

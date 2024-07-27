@@ -4,6 +4,7 @@ use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 
 use App\Http\Controllers\TechTips\UploadTipFile;
+use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +14,9 @@ use Illuminate\Support\Facades\Route;
  *******************************************************************************/
 Route::middleware('auth.secure')->group(function () {
     Route::resource('tech-tips', TechTipsController::class)->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        $breadcrumbs->index('Tech Tips');
+        $breadcrumbs->index('Tech Tips')
+            ->create('Create Tech Tip')
+            ->show(fn(TechTip $tech_tip) => 'Tip Details - ' . $tech_tip->subject);
     });
 
     Route::post('tech-tips/search', SearchTipsController::class)->name('tech-tips.search');

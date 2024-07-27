@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\TechTips;
 
+use App\Actions\BuildTechTipPermissions;
 use App\Enum\CrudAction;
 use App\Events\TechTips\TechTipEvent;
 use App\Http\Controllers\Controller;
@@ -61,11 +62,24 @@ class TechTipsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, TechTip $tech_tip)
     {
-        //
-        // return 'show';
-        return Inertia::render('TechTips/Show');
+        // Increase the view counter
+        $tech_tip->increment('views');
+        // Load relationships
+        $tech_tip->load(['CreatedBy', 'UpdatedBy'])
+            ->CreatedBy->makeHidden(['email', 'initials', 'role_name', 'username']);
+
+        if ($tech_tip->UpdatedBy) {
+            $tech_tip->UpdatedBy
+                ->makeHidden(['email', 'initials', 'role_name', 'username']);
+        }
+
+        return Inertia::render('TechTips/Show', [
+            'tip-data' => $tech_tip,
+            'tip-equipment' => $tech_tip->EquipmentType,
+            'permissions' => BuildTechTipPermissions::build($request->user()),
+        ]);
     }
 
     /**

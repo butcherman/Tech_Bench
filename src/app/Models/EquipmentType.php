@@ -13,7 +13,7 @@ class EquipmentType extends Model
 
     protected $guarded = ['equip_id', 'created_at', 'updated_at'];
 
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at', 'pivot'];
 
     public function EquipmentCategory()
     {
