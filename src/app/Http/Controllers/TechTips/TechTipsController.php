@@ -78,6 +78,7 @@ class TechTipsController extends Controller
         return Inertia::render('TechTips/Show', [
             'tip-data' => $tech_tip,
             'tip-equipment' => $tech_tip->EquipmentType,
+            'tip-files' => $tech_tip->FileUpload,
             'permissions' => BuildTechTipPermissions::build($request->user()),
         ]);
     }
