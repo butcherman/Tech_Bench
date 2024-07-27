@@ -5,6 +5,7 @@ type techTip = {
     tip_type_id: number;
     sticky: boolean;
     public: boolean;
+    allow_comments: boolean;
     subject: string;
     slug: string;
     details: string;
@@ -19,4 +20,14 @@ type techTip = {
 type tipType = {
     tip_type_id: number;
     description: string;
+};
+
+type tipComment = {
+    id: number;
+    tip_id: number;
+    author: string;
+    comment: string;
+    flagged: boolean;
+    created_at: string;
+    updated_at: string;
 };

@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::table('tech_tips', function (Blueprint $table) {
             $table->boolean('public')->after('sticky')->default(false);
+            $table->boolean('allow_comments')->after('public')->default(true);
         });
     }
 

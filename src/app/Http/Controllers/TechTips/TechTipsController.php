@@ -79,6 +79,7 @@ class TechTipsController extends Controller
             'tip-data' => $tech_tip,
             'tip-equipment' => $tech_tip->EquipmentType,
             'tip-files' => $tech_tip->FileUpload,
+            'tip-comments' => $tech_tip->TechTipComment,
             'permissions' => BuildTechTipPermissions::build($request->user()),
         ]);
     }

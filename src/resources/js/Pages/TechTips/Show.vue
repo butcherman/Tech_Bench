@@ -13,6 +13,11 @@
         <TipEquipmentList :tip-equipment="tipEquipment" />
         <TipDetails :tip-data="tipData" class="mt-4" />
         <TipFiles :tip-files="tipFiles" class="mt-4" />
+        <!-- <TipComments
+            v-if="tipData.allow_comments || tipComments.length"
+            :tip-comments="tipComments"
+            class="mt-4"
+        /> -->
     </div>
 </template>
 
@@ -23,12 +28,14 @@ import TipManagement from "@/Components/TechTips/TipManagement.vue";
 import TipEquipmentList from "@/Components/TechTips/TipEquipmentList.vue";
 import TipDetails from "@/Components/TechTips/TipDetails.vue";
 import TipFiles from "@/Components/TechTips/TipFiles.vue";
+import TipComments from "@/Components/TechTips/TipComments.vue";
 import { ref, reactive, computed } from "vue";
 
 const props = defineProps<{
     tipData: techTip;
     tipEquipment: equipment[];
     tipFiles: fileUpload[];
+    tipComments: tipComment[];
     permissions: basicPermissions;
 }>();
 

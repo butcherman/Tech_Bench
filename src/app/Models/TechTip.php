@@ -79,6 +79,11 @@ class TechTip extends Model
         return $this->hasOne(TechTipType::class, 'tip_type_id', 'tip_type_id');
     }
 
+    public function TechTipComment()
+    {
+        return $this->hasMany(TechTipComment::class, 'tip_id', 'tip_id');
+    }
+
     /**
      * Search Results for Meilisearch
      */
