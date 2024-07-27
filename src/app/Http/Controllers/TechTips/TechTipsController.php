@@ -105,9 +105,15 @@ class TechTipsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, TechTip $tech_tip)
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $tech_tip);
+
+        $tech_tip->delete();
+
+        Log::channel('tip')
+            ->notice('Tech Tip deleted by ' . $request->user()->username, $tech_tip->toArray());
+
+        return redirect()->route('tech-tips.index');
     }
 }
