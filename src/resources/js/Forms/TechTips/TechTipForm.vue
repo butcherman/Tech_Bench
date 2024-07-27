@@ -3,7 +3,7 @@
         ref="techTipForm"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="submitRoute"
+        :submit-route="$route('tech-tips.upload')"
         :submit-text="submitText"
         :hide-file-input="hideFile"
         :max-files="5"
@@ -28,6 +28,42 @@
             allow-select-all
         />
         <Editor id="details" name="details" label="Tip Details" />
+        <div
+            v-if="techTip && techTip.file_upload?.length"
+            class="border rounded"
+        >
+            <h5 class="text-center">Tip Files:</h5>
+            <ul class="list-group m-4">
+                <li
+                    v-for="file in techTip.file_upload"
+                    :key="file.file_id"
+                    class="list-group-item"
+                    :class="{
+                        'bg-danger': removedFiles.includes(file.file_id),
+                    }"
+                >
+                    {{ file.file_name }}
+                    <span
+                        v-show="!removedFiles.includes(file.file_id)"
+                        class="float-end pointer"
+                        title="Remove File"
+                        v-tooltip
+                        @click="toggleFile(file.file_id)"
+                    >
+                        <fa-icon icon="trash-alt" class="text-danger" />
+                    </span>
+                    <span
+                        v-show="removedFiles.includes(file.file_id)"
+                        class="float-end pointer"
+                        title="Restore File"
+                        v-tooltip
+                        @click="toggleFile(file.file_id)"
+                    >
+                        <fa-icon icon="rotate" />
+                    </span>
+                </li>
+            </ul>
+        </div>
         <div class="row justify-content-center">
             <div class="col-md-4 col-10 my-2">
                 <button
@@ -55,8 +91,8 @@
                         id="suppress-notifications"
                         name="suppress"
                         label="Suppress Notification"
-                        help="When enabled, notification of a new Tech Tip being 
-                              created will not be sent out"
+                        help="When enabled, notification of a new or updated 
+                              Tech Tip will not be sent out"
                     />
                     <CheckboxSwitch
                         id="sticky"
@@ -103,24 +139,21 @@ const props = defineProps<{
 }>();
 
 const techTipForm = ref<InstanceType<typeof VueFileForm> | null>(null);
+const removedFiles = ref<number[]>([]);
 
-const submitRoute = computed(() =>
-    // props.techTip ? "#" : route("tech-tips.store")
-    route("tech-tips.upload")
-);
 const submitText = computed(() =>
     props.techTip ? "Edit Tech Tip" : "Create Tech Tip"
 );
 
 const showAdvanced = ref<boolean>(false);
 const hideFile = ref<boolean>(true);
-// const tipSlug = ref<string | null>(null);
 
 const initValues = {
     subject: props.techTip?.subject || "",
     tip_type_id: props.techTip?.tip_type_id || null,
-    equipList: [],
-    suppress: false,
+    equipList: props.techTip?.equipList || [],
+    details: props.techTip?.details || "",
+    suppress: props.techTip ? true : false,
     sticky: props.techTip?.sticky || false,
     public: props.techTip?.public || false,
 };
@@ -140,14 +173,28 @@ const schema = object({
 const handleSuccess = (result: string) => {
     console.log("success", result);
     console.log(techTipForm.value?.values);
-    // tipSlug.value = result;
-
-    // let formData = useForm()
 
     let values;
     if ((values = techTipForm.value?.values)) {
         let formData = useForm(values);
-        formData.post(route("tech-tips.store"));
+        if (props.techTip) {
+            console.log("update");
+            formData.transform((data) => ({
+                ...data,
+                removedFiles: removedFiles.value,
+            }));
+            formData.put(route("tech-tips.update", props.techTip.tip_id));
+        } else {
+            formData.post(route("tech-tips.store"));
+        }
+    }
+};
+
+const toggleFile = (file_id: number) => {
+    if (removedFiles.value.includes(file_id)) {
+        removedFiles.value.splice(removedFiles.value.indexOf(file_id), 1);
+    } else {
+        removedFiles.value.push(file_id);
     }
 };
 </script>

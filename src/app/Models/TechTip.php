@@ -18,7 +18,7 @@ class TechTip extends Model
     protected $primaryKey = 'tip_id';
     protected $guarded = ['tip_id', 'updated_at', 'created_at'];
     protected $hidden = ['deleted_at', 'tip_type_id'];
-    protected $appends = ['href'];
+    protected $appends = ['href', 'equipList', 'fileList'];
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',
@@ -40,6 +40,16 @@ class TechTip extends Model
     public function getHrefAttribute()
     {
         return route('tech-tips.show', $this->slug);
+    }
+
+    protected function getEquipListAttribute()
+    {
+        return $this->EquipmentType->pluck('equip_id')->toArray();
+    }
+
+    protected function getFileListAttribute()
+    {
+        return $this->FileUpload->pluck('file_id')->toArray();
     }
 
     public function CreatedBy()

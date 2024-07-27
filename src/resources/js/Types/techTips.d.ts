@@ -15,6 +15,9 @@ type techTip = {
     updated_at: string;
     created_by: user;
     updated_by: user;
+    equipList?: number[];
+    fileList?: number[];
+    file_upload?: fileUpload[];
 };
 
 type tipType = {

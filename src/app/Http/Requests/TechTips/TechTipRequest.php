@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\TechTips;
 
+use App\Events\File\FileDataDeletedEvent;
 use App\Models\TechTip;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -14,8 +15,8 @@ class TechTipRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->techTip) {
-            return $this->user()->can('update', $this->techTip);
+        if ($this->tech_tip) {
+            return $this->user()->can('update', $this->tech_tip);
         }
 
         return $this->user()->can('create', TechTip::class);
@@ -48,6 +49,7 @@ class TechTipRequest extends FormRequest
         $newTip = TechTip::create($this->except(['equipList', 'suppress']));
         $newTip->EquipmentType()->sync($this->equipList);
 
+        // Handle any files uploaded with the tip
         if ($this->session()->has('tip-file')) {
             $fileList = $this->session()->pull('tip-file');
             Log::debug('Tech Tip file list for Tip ID ' . $newTip->tip_id, $fileList);
@@ -58,11 +60,42 @@ class TechTipRequest extends FormRequest
     }
 
     /**
+     * Update an existing Tech Tip
+     */
+    public function updateTechTip()
+    {
+        $this->mergeData();
+        if ($this->subject !== $this->tech_tip->subject) {
+            $this->setSlug();
+        }
+
+        $this->tech_tip
+            ->update($this->except(['equipList', 'suppress', 'removedFiles']));
+        $this->tech_tip->EquipmentType()->sync($this->equipList);
+
+        // Handle any files added or removed from the tip
+        $existingFiles = $this->tech_tip->FileUpload->pluck('file_id')->toArray();
+        foreach ($this->removedFiles as $fileId) {
+            unset($existingFiles[array_search($fileId, $existingFiles)]);
+        }
+
+        $newFiles = $this->session()->pull('tip-file', []);
+        $allFiles = array_merge($existingFiles, $newFiles);
+        $this->tech_tip->FileUpload()->sync($allFiles);
+
+        foreach ($this->removedFiles as $fileId) {
+            event(new FileDataDeletedEvent($fileId));
+        }
+
+        return $this->tech_tip;
+    }
+
+    /**
      * Re-format any necessary data
      */
     protected function mergeData()
     {
-        if ($this->techTip) {
+        if ($this->tech_tip) {
             $this->merge([
                 'updated_id' => $this->user()->user_id,
             ]);

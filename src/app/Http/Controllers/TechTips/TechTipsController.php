@@ -87,19 +87,29 @@ class TechTipsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(TechTip $tech_tip)
     {
-        //
-        return 'edit';
+        $this->authorize('update', $tech_tip);
+
+        return Inertia::render('TechTips/Edit', [
+            'tip-data' => $tech_tip->load(['EquipmentType', 'FileUpload'])
+                ->makeVisible('tip_type_id'),
+            'tip-types' => TechTipType::all(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TechTipRequest $request, TechTip $tech_tip)
     {
-        //
-        return 'update';
+        $tipData = $request->updateTechTip();
+
+        Log::channel('tip')
+            ->info('Tech Tip updated by ' . $request->user()->username, $tipData->toArray());
+        event(new TechTipEvent($tipData, CrudAction::Update, !$request->suppress));
+
+        return redirect()->route('tech-tips.show', $tipData->slug);
     }
 
     /**

@@ -1,11 +1,12 @@
 <template>
     <div>
-        <Head title="Create New Tech Tip" />
+        <Head title="Edit Tech Tip" />
         <div class="row justify-content-center">
             <div class="col">
                 <div class="card">
                     <div class="card-body">
                         <TechTipForm
+                            :tech-tip="tipData"
                             :tip-types="tipTypes"
                             :equip-list="equipStore.getMultiSelectBox()"
                         />
@@ -23,6 +24,7 @@ import { useEquipmentStore } from "@/Store/EquipmentStore";
 
 defineProps<{
     tipTypes: tipType[];
+    tipData: techTip;
 }>();
 
 const equipStore = useEquipmentStore();
