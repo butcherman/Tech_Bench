@@ -11,6 +11,7 @@
             <TipDetailsTitle :tip-data="tipData" />
         </div>
         <TipEquipmentList :tip-equipment="tipEquipment" />
+        <TipDetails :tip-data="tipData" class="mt-4" />
     </div>
 </template>
 
@@ -19,6 +20,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import TipDetailsTitle from "@/Components/TechTips/TipDetailsTitle.vue";
 import TipManagement from "@/Components/TechTips/TipManagement.vue";
 import TipEquipmentList from "@/Components/TechTips/TipEquipmentList.vue";
+import TipDetails from "@/Components/TechTips/TipDetails.vue";
 import { ref, reactive, computed } from "vue";
 
 const props = defineProps<{
