@@ -13,8 +13,19 @@
                     Show Stats
                 </span>
             </li>
-            <li v-if="permissions.update">Edit Tip</li>
-            <li v-if="permissions.delete">Delete Tip</li>
+            <li v-if="permissions.update">
+                <Link
+                    :href="$route('tech-tips.edit', tipData.slug)"
+                    class="dropdown-item"
+                >
+                    Edit Tip
+                </Link>
+            </li>
+            <li v-if="permissions.delete">
+                <span class="dropdown-item pointer" @click="confirmDelete">
+                    Delete Tip
+                </span>
+            </li>
         </ul>
         <Modal ref="statsModal" title="Tech Tip Stats">
             <TableStacked :rows="statsTable" title-case />
@@ -23,9 +34,11 @@
 </template>
 
 <script setup lang="ts">
+import verifyModal from "@/Modules/verifyModal";
 import Modal from "../_Base/Modal.vue";
 import TableStacked from "../_Base/TableStacked.vue";
 import { ref, reactive, onMounted } from "vue";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     tipData: techTip;
@@ -44,4 +57,12 @@ const statsTable = reactive({
     is_sticky: props.tipData.sticky,
     is_public: props.tipData.public,
 });
+
+const confirmDelete = () => {
+    verifyModal("Do you want to delete this Tech Tip?").then((res) => {
+        if (res) {
+            router.delete(route("tech-tips.destroy", props.tipData.slug));
+        }
+    });
+};
 </script>
