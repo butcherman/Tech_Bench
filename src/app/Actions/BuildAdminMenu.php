@@ -20,6 +20,7 @@ class BuildAdminMenu
     {
         $this->buildUserMenu();
         $this->buildCustomerMenu();
+        $this->buildTechTipMenu();
         $this->buildEquipmentMenu();
         $this->buildSettingsMenu();
         $this->buildMaintenanceMenu();
@@ -144,6 +145,41 @@ class BuildAdminMenu
         }
 
         $this->menu['Equipment'] = $nav;
+    }
+
+    /**
+     * Build Administration Menu for Tech Tips
+     */
+    protected function buildTechTipMenu()
+    {
+        $nav = [];
+
+        if ($this->checkPermission($this->user, 'Manage Tech Tips')) {
+            $nav = [
+                [
+                    'name' => 'Tech Tip Settings',
+                    'icon' => 'cog',
+                    'route' => route('tech-tips.settings.edit'),
+                ],
+                [
+                    'name' => 'Tech Tip Types',
+                    'icon' => 'file-alt',
+                    'route' => '#',
+                ],
+                [
+                    'name' => 'Deleted Tech Tips',
+                    'icon' => 'ban',
+                    'route' => '#',
+                ],
+                [
+                    'name' => 'View Flagged Comments',
+                    'icon' => 'flag',
+                    'route' => '#',
+                ],
+            ];
+
+            $this->menu['Tech Tips'] = $nav;
+        }
     }
 
     /**
