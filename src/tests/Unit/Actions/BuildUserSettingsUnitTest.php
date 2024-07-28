@@ -21,14 +21,11 @@ class BuildUserSettingsUnitTest extends TestCase
         foreach ($settings as $setting) {
             $shouldBe[] = [
                 'setting_type_id' => $setting->setting_type_id,
-                'value' => false,
+                'value' => true,
                 'name' => $setting->name,
             ];
         }
-        // $settingData = (new BuildUserSettings)->build($testUser)->toArray();
         $settingData = BuildUserSettings::build($testUser)->toArray();
-
-        // dd($settingData);
 
         $this->assertEquals($settingData, $shouldBe);
     }

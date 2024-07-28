@@ -15,15 +15,7 @@ class SearchTipsController extends Controller
      */
     public function __invoke(SearchTipsRequest $request)
     {
-        // return TechTip::search($request->searchFor)
-        //     ->whereIn(
-        //         'tip_type_id',
-        //         $request->typeList
-        //     )
-        //     ->paginate($request->perPage);
-
         $searchObj = new TechTipSearchService($request);
-
 
         return $searchObj->search();
     }

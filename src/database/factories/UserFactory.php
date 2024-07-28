@@ -26,10 +26,10 @@ class UserFactory extends Factory
 
         return [
             'role_id' => 4,
-            'username' => $first.'.'.$last,
+            'username' => $first . '.' . $last,
             'first_name' => $first,
             'last_name' => $last,
-            'email' => $first.'.'.$last.'@noEm.com',
+            'email' => $first . '.' . $last . '@noEm.com',
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
             'password_expires' => null,
@@ -48,7 +48,7 @@ class UserFactory extends Factory
                 UserSetting::create([
                     'user_id' => $user->user_id,
                     'setting_type_id' => $setting->setting_type_id,
-                    'value' => false,
+                    'value' => true,
                 ]);
             }
         });

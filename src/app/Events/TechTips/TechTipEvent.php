@@ -34,6 +34,8 @@ class TechTipEvent // implements ShouldBroadcast
 
     /**
      * Broadcast on Tech Tip Channel
+     * 
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {

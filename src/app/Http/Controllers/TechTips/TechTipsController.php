@@ -56,7 +56,9 @@ class TechTipsController extends Controller
             ->info('New Tech Tip created by ' . $request->user()->username, $newTip->toArray());
         event(new TechTipEvent($newTip, CrudAction::Create, !$request->suppress));
 
-        return redirect()->route('tech-tips.show', $newTip->slug);
+        return redirect()
+            ->route('tech-tips.show', $newTip->slug)
+            ->with('success', __('tips.created'));
     }
 
     /**
@@ -109,7 +111,8 @@ class TechTipsController extends Controller
             ->info('Tech Tip updated by ' . $request->user()->username, $tipData->toArray());
         event(new TechTipEvent($tipData, CrudAction::Update, !$request->suppress));
 
-        return redirect()->route('tech-tips.show', $tipData->slug);
+        return redirect()->route('tech-tips.show', $tipData->slug)
+            ->with('success', __('tips.updated'));
     }
 
     /**
@@ -124,6 +127,8 @@ class TechTipsController extends Controller
         Log::channel('tip')
             ->notice('Tech Tip deleted by ' . $request->user()->username, $tech_tip->toArray());
 
-        return redirect()->route('tech-tips.index');
+        return redirect()
+            ->route('tech-tips.index')
+            ->with('warning', __('tips.deleted'));
     }
 }
