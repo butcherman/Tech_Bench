@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">Tech Tip Settings</div>
-                    <TipSettingsForm />
+                    <TipSettingsForm :settings="settings" />
                 </div>
             </div>
         </div>
@@ -16,7 +16,12 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import TipSettingsForm from "@/Forms/TechTips/TipSettingsForm.vue";
 import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{}>();
+const props = defineProps<{
+    settings: {
+        allow_comments: boolean;
+        allow_public: boolean;
+    };
+}>();
 </script>
 
 <script lang="ts">
