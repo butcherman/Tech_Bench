@@ -11,4 +11,10 @@ return [
     'updated' => 'Tech Tip Updated',
     'deleted' => 'Tech Tip Deleted',
     'settings_updated' => 'Tech Tip Settings Updated',
+
+    'tip-type' => [
+        'created' => 'New Type Created',
+        'updated' => 'Type Updated',
+        'deleted' => 'Type Deleted',
+    ],
 ];

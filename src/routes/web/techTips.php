@@ -4,6 +4,7 @@ use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 
 use App\Http\Controllers\TechTips\TechTipsSettingsController;
+use App\Http\Controllers\TechTips\TechTipTypesController;
 use App\Http\Controllers\TechTips\UploadTipFile;
 use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -17,11 +18,17 @@ Route::middleware('auth.secure')->group(function () {
     /**
      * Tech Tip Administration Routes
      */
-    Route::get('tech-tips/settings', [TechTipsSettingsController::class, 'edit'])
-        ->name('tech-tips.settings.edit')
-        ->breadcrumb('Tech Tip Settings', 'admin.index');
-    Route::put('tech-tips/settings', [TechTipsSettingsController::class, 'update'])
-        ->name('tech-tip.settings.update');
+    Route::prefix('administration/tech-tips')->name('admin.tech-tips.')->group(function () {
+        Route::get('tech-tips/settings', [TechTipsSettingsController::class, 'edit'])
+            ->name('settings.edit')
+            ->breadcrumb('Tech Tip Settings', 'admin.index');
+        Route::put('tech-tips/settings', [TechTipsSettingsController::class, 'update'])
+            ->name('settings.update');
+        Route::resource('tip-types', TechTipTypesController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Tech Tip Types', 'admin.index');
+            })->except(['create', 'edit', 'show']);
+    });
 
 
     Route::resource('tech-tips', TechTipsController::class)

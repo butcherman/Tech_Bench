@@ -2,7 +2,7 @@
     <VueForm
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('tech-tips.settings.edit')"
+        :submit-route="$route('admin.tech-tips.settings.edit')"
         submit-method="put"
         submit-text="Update Tip Settings"
     >

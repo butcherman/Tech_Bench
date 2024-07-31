@@ -159,12 +159,12 @@ class BuildAdminMenu
                 [
                     'name' => 'Tech Tip Settings',
                     'icon' => 'cog',
-                    'route' => route('tech-tips.settings.edit'),
+                    'route' => route('admin.tech-tips.settings.edit'),
                 ],
                 [
                     'name' => 'Tech Tip Types',
                     'icon' => 'file-alt',
-                    'route' => '#',
+                    'route' => route('admin.tech-tips.tip-types.index'),
                 ],
                 [
                     'name' => 'Deleted Tech Tips',
