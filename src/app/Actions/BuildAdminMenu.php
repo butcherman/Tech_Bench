@@ -167,15 +167,15 @@ class BuildAdminMenu
                     'route' => route('admin.tech-tips.tip-types.index'),
                 ],
                 [
-                    'name' => 'Deleted Tech Tips',
+                    'name' => 'Disabled Tech Tips',
                     'icon' => 'ban',
-                    'route' => '#',
+                    'route' => route('admin.tech-tips.deleted-tips'),
                 ],
-                [
-                    'name' => 'View Flagged Comments',
-                    'icon' => 'flag',
-                    'route' => '#',
-                ],
+                // [
+                //     'name' => 'View Flagged Comments',
+                //     'icon' => 'flag',
+                //     'route' => '#',
+                // ],
             ];
 
             $this->menu['Tech Tips'] = $nav;

@@ -131,4 +131,30 @@ class TechTipsController extends Controller
             ->route('tech-tips.index')
             ->with('warning', __('tips.deleted'));
     }
+
+    public function restore(Request $request, TechTip $techTip)
+    {
+        $this->authorize('manage', TechTip::class);
+
+        $techTip->restore();
+
+        Log::channel('tip')->notice('Tech Tip restored by ' . $request->user()->username, $techTip->toArray());
+
+        return redirect()
+            ->route('tech-tips.show', $techTip->slug)
+            ->with('success', __('tips.restored'));
+    }
+
+    public function forceDelete(Request $request, TechTip $techTip)
+    {
+        $this->authorize('manage', TechTip::class);
+
+        // TODO - Trigger event to delete all files
+
+        $techTip->forceDelete();
+
+        Log::channel('tip')->notice('Tech Tip Force Deleted by ' . $request->user()->username, $techTip->toArray());
+
+        return redirect()->route('admin.tech-tips.deleted-tips')->with('warning', __('tips.deleted'));
+    }
 }

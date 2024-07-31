@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TechTips\DeletedTipsController;
+use App\Http\Controllers\TechTips\ShowDeletedTipController;
 use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 
@@ -28,6 +30,19 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Tech Tip Types', 'admin.index');
             })->except(['create', 'edit', 'show']);
+        Route::get('deleted-tips', DeletedTipsController::class)
+            ->name('deleted-tips')
+            ->breadcrumb('Deleted Tech Tips', 'admin.index');
+        Route::get('deleted-tips/{techTip}', ShowDeletedTipController::class)
+            ->withTrashed()
+            ->name('deleted-tips.show')
+            ->breadcrumb(fn(TechTip $techTip) => 'Tip Details - ' . $techTip->subject, 'admin.tech-tips.deleted-tips');
+        Route::get('restore-tip/{techTip}', [TechTipsController::class, 'restore'])
+            ->name('restore')
+            ->withTrashed();
+        Route::delete('force-delete/{techTip}', [TechTipsController::class, 'forceDelete'])
+            ->name('force-delete')
+            ->withTrashed();
     });
 
 
