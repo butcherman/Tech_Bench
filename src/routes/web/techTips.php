@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TechTips\DeletedTipsController;
 use App\Http\Controllers\TechTips\ShowDeletedTipController;
+use App\Http\Controllers\TechTips\TechTipCommentController;
 use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 
@@ -45,6 +46,12 @@ Route::middleware('auth.secure')->group(function () {
             ->withTrashed();
     });
 
+    Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
+        Route::post('search', SearchTipsController::class)->name('search');
+        Route::post('upload-file', UploadTipFile::class)->name('upload');
+        Route::resource('{tech_tip}/comments', TechTipCommentController::class);
+    });
+
 
     Route::resource('tech-tips', TechTipsController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
@@ -54,6 +61,4 @@ Route::middleware('auth.secure')->group(function () {
                 ->edit('Edit Tech Tip');
         });
 
-    Route::post('tech-tips/search', SearchTipsController::class)->name('tech-tips.search');
-    Route::post('tech-tips/upload-file', UploadTipFile::class)->name('tech-tips.upload');
 });

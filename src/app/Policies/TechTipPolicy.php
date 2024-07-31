@@ -39,4 +39,12 @@ class TechTipPolicy
     {
         return $this->checkPermission($user, 'Delete Tech Tip');
     }
+
+    /**
+     * Determine if a public Tech Tip can be created
+     */
+    public function public(User $user)
+    {
+        //
+    }
 }

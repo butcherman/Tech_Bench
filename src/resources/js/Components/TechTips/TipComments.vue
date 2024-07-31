@@ -22,6 +22,7 @@
                             </span>
                         </div>
                     </div>
+                    <TechTipCommentForm :tip-slug="tipSlug" />
                 </div>
             </div>
         </div>
@@ -29,9 +30,11 @@
 </template>
 
 <script setup lang="ts">
+import TechTipCommentForm from "@/Forms/TechTips/TechTipCommentForm.vue";
 import { ref, reactive, onMounted } from "vue";
 
 const props = defineProps<{
     tipComments: tipComment[];
+    tipSlug: string;
 }>();
 </script>
