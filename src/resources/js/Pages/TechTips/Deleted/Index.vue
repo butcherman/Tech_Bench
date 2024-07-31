@@ -66,7 +66,10 @@ const destroyTip = (techTip: techTip) => {
     verifyModal("This action cannot be undone").then((res) => {
         if (res) {
             router.delete(
-                route("admin.tech-tips.force-delete", techTip.tip_id)
+                route("admin.tech-tips.force-delete", techTip.tip_id),
+                {
+                    preserveScroll: true,
+                }
             );
         }
     });

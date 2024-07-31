@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TechTips;
 
 use App\Actions\BuildTechTipPermissions;
 use App\Enum\CrudAction;
+use App\Events\File\FileDataDeletedEvent;
 use App\Events\TechTips\TechTipEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\TechTipRequest;
@@ -149,9 +150,13 @@ class TechTipsController extends Controller
     {
         $this->authorize('manage', TechTip::class);
 
-        // TODO - Trigger event to delete all files
-
+        // Get any Files attached to tip
+        $fileList = $techTip->FileUpload->pluck('file_id')->toArray();
         $techTip->forceDelete();
+
+        foreach ($fileList as $fileId) {
+            event(new FileDataDeletedEvent($fileId));
+        }
 
         Log::channel('tip')->notice('Tech Tip Force Deleted by ' . $request->user()->username, $techTip->toArray());
 
