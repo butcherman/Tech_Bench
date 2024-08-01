@@ -49,9 +49,21 @@ Route::middleware('auth.secure')->group(function () {
     Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
         Route::post('search', SearchTipsController::class)->name('search');
         Route::post('upload-file', UploadTipFile::class)->name('upload');
-        Route::resource('{tech_tip}/comments', TechTipCommentController::class);
+        Route::prefix('{tech_tip}')->group(function () {
+            Route::resource('comments', TechTipCommentController::class)
+                ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                    $breadcrumbs->index('Flagged Comments', 'tech-tips.show');
+                })->except(['create', 'edit', 'destroy']);
+        });
+        Route::prefix('comments')->name('comments.')->group(function () {
+            Route::get('flagged-comments', [TechTipCommentController::class, 'create'])
+                ->name('show-flagged');
+            Route::get('restore/{comment}', [TechTipCommentController::class, 'restore'])
+                ->name('restore');
+            Route::delete('destroy/{comment}', [TechTipCommentController::class, 'destroy'])
+                ->name('destroy');
+        });
     });
-
 
     Route::resource('tech-tips', TechTipsController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

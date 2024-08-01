@@ -34,6 +34,7 @@ type tipComment = {
     flagged: boolean;
     created_at: string;
     updated_at: string;
+    tech_tip?: techTip;
 };
 
 type techTipPermissions = {

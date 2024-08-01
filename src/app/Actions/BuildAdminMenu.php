@@ -171,11 +171,11 @@ class BuildAdminMenu
                     'icon' => 'ban',
                     'route' => route('admin.tech-tips.deleted-tips'),
                 ],
-                // [
-                //     'name' => 'View Flagged Comments',
-                //     'icon' => 'flag',
-                //     'route' => '#',
-                // ],
+                [
+                    'name' => 'View Flagged Comments',
+                    'icon' => 'flag',
+                    'route' => route('tech-tips.comments.show-flagged'),
+                ],
             ];
 
             $this->menu['Tech Tips'] = $nav;

@@ -13,16 +13,19 @@ use App\Service\CheckDatabaseError;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class TechTipCommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TechTip $techTip)
     {
-        //
-        return 'index';
+        return Inertia::render('TechTips/Comments/Index', [
+            'tip-data' => $techTip,
+            'flagged-comments' => $techTip->TechTipComment()->has('Flags')->get(),
+        ]);
     }
 
     /**
@@ -30,7 +33,11 @@ class TechTipCommentController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('TechTips/Comments/Index', [
+            'flagged-comments' => TechTipComment::has('Flags')
+                ->with('TechTip')
+                ->get(),
+        ]);
     }
 
     /**
@@ -75,14 +82,6 @@ class TechTipCommentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -93,8 +92,36 @@ class TechTipCommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, TechTipComment $comment)
     {
-        //
+        $this->authorize('manage', TechTip::class);
+
+        $comment->delete();
+
+        Log::channel('tips')
+            ->notice(
+                'Tech Tip Comment deleted by ' . $request->user()->username,
+                $comment->toArray()
+            );
+
+        return back()->with('success', 'Comment Deleted');
+    }
+
+    public function restore(Request $request, TechTipComment $comment)
+    {
+        $this->authorize('manage', TechTip::class);
+
+        $flags = $comment->Flags;
+        foreach ($flags as $flag) {
+            $flag->delete();
+        }
+
+        Log::channel('tips')
+            ->notice(
+                'Tech Tip Comment restored by ' . $request->user()->username,
+                $comment->toArray()
+            );
+
+        return back()->with('success', 'Comment Restored');
     }
 }
