@@ -33,11 +33,6 @@
         </div>
         <TipDetails :tip-data="tipData" class="mt-4" />
         <TipFiles :tip-files="tipFiles" class="mt-4" />
-        <TipComments
-            v-if="tipData.allow_comments || tipComments.length"
-            :tip-comments="tipComments"
-            class="mt-4"
-        />
     </div>
 </template>
 
@@ -47,11 +42,9 @@ import TipDetailsTitle from "@/Components/TechTips/TipDetailsTitle.vue";
 import TipEquipmentList from "@/Components/TechTips/TipEquipmentList.vue";
 import TipDetails from "@/Components/TechTips/TipDetails.vue";
 import TipFiles from "@/Components/TechTips/TipFiles.vue";
-import TipComments from "@/Components/TechTips/TipComments.vue";
 import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
 
 import verifyModal from "@/Modules/verifyModal";
-import { ref, reactive, computed } from "vue";
 import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{

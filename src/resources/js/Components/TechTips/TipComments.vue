@@ -69,12 +69,10 @@ const props = defineProps<{
 const appData = useAppStore();
 
 const canEdit = (commentData: tipComment) => {
-    // return (
-    //     commentData.user_id === appData.user?.user_id ||
-    //     props.permissions.manage
-    // );
-
-    return false;
+    return (
+        commentData.user_id === appData.user?.user_id ||
+        props.permissions.manage
+    );
 };
 
 const flagComment = (commentData: tipComment) => {

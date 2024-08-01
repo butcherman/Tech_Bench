@@ -18,6 +18,7 @@ class BuildTechTipPermissionsTest extends TestCase
             'create' => true,
             'update' => true,
             'delete' => true,
+            'comment' => true,
         ];
 
         $this->assertEquals($permissions, $shouldBe);
@@ -33,6 +34,7 @@ class BuildTechTipPermissionsTest extends TestCase
             'create' => true,
             'update' => true,
             'delete' => true,
+            'comment' => true,
         ];
 
         $this->assertEquals($permissions, $shouldBe);
@@ -48,6 +50,7 @@ class BuildTechTipPermissionsTest extends TestCase
             'create' => true,
             'update' => false,
             'delete' => false,
+            'comment' => true,
         ];
 
         $this->assertEquals($permissions, $shouldBe);

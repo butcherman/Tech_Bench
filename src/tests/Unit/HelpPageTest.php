@@ -35,6 +35,7 @@ class HelpPageTest extends TestCase
         'file-types',
         'download',
         'test-email',
+        'tech-tips.comments'
     ];
 
     /**
