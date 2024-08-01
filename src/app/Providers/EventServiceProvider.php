@@ -36,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Auth\LogPasswordReset',
             'App\Listeners\Notify\User\PasswordResetListener',
         ],
+        'App\Events\Feature\FeatureChangedEvent' => [
+            'App\Listeners\Feature\RebuildFeaturePermissionsListener',
+        ],
 
         /**
          * User Profile Events

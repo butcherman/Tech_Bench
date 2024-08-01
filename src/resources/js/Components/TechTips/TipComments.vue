@@ -22,7 +22,11 @@
                             </span>
                         </div>
                     </div>
-                    <TechTipCommentForm :tip-slug="tipSlug" />
+                    <TechTipCommentForm
+                        v-if="permissions.comment"
+                        :tip-slug="tipSlug"
+                        class="mt-4"
+                    />
                 </div>
             </div>
         </div>
@@ -31,10 +35,35 @@
 
 <script setup lang="ts">
 import TechTipCommentForm from "@/Forms/TechTips/TechTipCommentForm.vue";
+import EditBadge from "../_Base/Badges/EditBadge.vue";
+import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
 import { ref, reactive, onMounted } from "vue";
+import { useAppStore } from "@/Store/AppStore";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     tipComments: tipComment[];
     tipSlug: string;
+    permissions: techTipPermissions;
 }>();
+
+const appData = useAppStore();
+
+const canEdit = (commentData: tipComment) => {
+    // return (
+    //     commentData.user_id === appData.user?.user_id ||
+    //     props.permissions.manage
+    // );
+
+    return false;
+};
+
+const flagComment = (commentData: tipComment) => {
+    router.get(
+        route("tech-tips.comments.show", [props.tipSlug, commentData.id]),
+        {
+            preserveScroll: true,
+        }
+    );
+};
 </script>

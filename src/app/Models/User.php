@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Karmendra\LaravelAgentDetector\AgentDetector;
+use Laravel\Pennant\Concerns\HasFeatures;
 
 class User extends Authenticatable
 {
@@ -19,6 +20,7 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
+    use HasFeatures;
 
     protected $primaryKey = 'user_id';
 

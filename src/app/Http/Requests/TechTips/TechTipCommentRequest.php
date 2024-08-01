@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\TechTips;
 
+use App\Features\TechTipComment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TechTipCommentRequest extends FormRequest
@@ -11,7 +12,7 @@ class TechTipCommentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->features()->active(TechTipComment::class);
     }
 
     /**

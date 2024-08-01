@@ -14,9 +14,13 @@
         <TipDetails :tip-data="tipData" class="mt-4" />
         <TipFiles :tip-files="tipFiles" class="mt-4" />
         <TipComments
-            v-if="tipData.allow_comments || tipComments.length"
+            v-if="
+                (tipData.allow_comments && permissions.comment) ||
+                tipComments.length
+            "
             :tip-comments="tipComments"
             :tip-slug="tipData.slug"
+            :permissions="permissions"
             class="mt-4"
         />
     </div>
@@ -37,7 +41,7 @@ const props = defineProps<{
     tipEquipment: equipment[];
     tipFiles: fileUpload[];
     tipComments: tipComment[];
-    permissions: basicPermissions;
+    permissions: techTipPermissions;
 }>();
 
 const showManage = computed(() => {

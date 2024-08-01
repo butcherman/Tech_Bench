@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Features\TechTipComment;
 use App\Models\TechTip;
 use App\Models\User;
 
@@ -14,6 +15,7 @@ class BuildTechTipPermissions
             'create' => $user->can('create', TechTip::class),
             'update' => $user->can('update', TechTip::class),
             'delete' => $user->can('delete', TechTip::class),
+            'comment' => $user->features()->active(TechTipComment::class),
         ];
     }
 }

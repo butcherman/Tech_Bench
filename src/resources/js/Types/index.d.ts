@@ -53,7 +53,6 @@ type breadcrumbs = {
 };
 
 type basicPermissions = {
-    manage: boolean;
     create: boolean;
     update: boolean;
     delete: boolean;

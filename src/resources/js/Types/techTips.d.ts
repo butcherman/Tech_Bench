@@ -28,9 +28,15 @@ type tipType = {
 type tipComment = {
     id: number;
     tip_id: number;
+    user_id: number;
     author: string;
     comment: string;
     flagged: boolean;
     created_at: string;
     updated_at: string;
 };
+
+type techTipPermissions = {
+    comment: boolean;
+    manage: boolean;
+} & basicPermissions;

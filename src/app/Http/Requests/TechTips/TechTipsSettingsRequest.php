@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests\TechTips;
 
+use App\Events\Feature\FeatureChangedEvent;
+use App\Features\TechTipComment;
 use App\Models\TechTip;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Laravel\Pennant\Feature;
 
 class TechTipsSettingsRequest extends FormRequest
 {
@@ -32,5 +35,8 @@ class TechTipsSettingsRequest extends FormRequest
     public function processSettings()
     {
         $this->saveSettingsArray($this->only(['allow_public', 'allow_comments']), 'techTips');
+
+        // Forget the feature settings to re-force checking
+        event(new FeatureChangedEvent());
     }
 }

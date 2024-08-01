@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\Feature\FeatureChangedEvent;
 use Illuminate\Database\Eloquent\Model;
 
 class UserRolePermission extends Model
@@ -22,6 +23,12 @@ class UserRolePermission extends Model
 
     protected $casts = [
         'allow' => 'boolean',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => FeatureChangedEvent::class,
+        'updated' => FeatureChangedEvent::class,
+        'deleted' => FeatureChangedEvent::class,
     ];
 
     /**

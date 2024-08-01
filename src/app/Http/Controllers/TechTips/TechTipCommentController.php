@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\TechTips;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TechTips\TechTipCommentRequest;
+use App\Models\TechTip;
+use App\Models\TechTipComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TechTipCommentController extends Controller
 {
@@ -26,10 +30,18 @@ class TechTipCommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TechTipCommentRequest $request, TechTip $techTip)
     {
-        //
-        return 'store';
+        $techTip->TechTipComment()->save(new TechTipComment([
+            'user_id' => $request->user()->user_id,
+            'comment' => $request->comment,
+        ]));
+
+        Log::channel('tips')->info('New Tech Tip Comment for Tip ID ' . $techTip->tip_id, [
+            'comment' => $request->comment,
+        ]);
+
+        return back()->with('success', __('tips.comment.created'));
     }
 
     /**
@@ -38,6 +50,7 @@ class TechTipCommentController extends Controller
     public function show(string $id)
     {
         //
+        return 'flag comment';
     }
 
     /**

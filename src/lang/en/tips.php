@@ -18,4 +18,9 @@ return [
         'updated' => 'Type Updated',
         'deleted' => 'Type Deleted',
     ],
+
+    'comment' => [
+        'created' => 'Comment Saved Successfully',
+        'updated' => 'Comment Updated Successfully',
+    ],
 ];
