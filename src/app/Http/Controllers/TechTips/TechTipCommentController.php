@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\TechTips;
 
+use App\Events\TechTips\TipCommentFlaggedEvent;
+use App\Exceptions\TechTips\CommentFlaggedAlreadyException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\TechTipCommentRequest;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
+use App\Models\TechTipCommentFlag;
+use App\Service\CheckDatabaseError;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -17,6 +22,7 @@ class TechTipCommentController extends Controller
     public function index()
     {
         //
+        return 'index';
     }
 
     /**
@@ -47,10 +53,25 @@ class TechTipCommentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, TechTip $techTip, TechTipComment $comment)
     {
-        //
-        return 'flag comment';
+        try {
+            $comment->flagComment();
+            Log::stack(['daily', 'tips'])
+                ->notice(
+                    'Tech Tip comment has been flagged by ' . $request->user()->username,
+                    $comment->toArray()
+                );
+            event(new TipCommentFlaggedEvent($comment));
+        } catch (QueryException $e) {
+            if (in_array($e->errorInfo[1], [1062])) {
+                throw new CommentFlaggedAlreadyException($request);
+            } else {
+                CheckDatabaseError::check($e);
+            }
+        }
+
+        return back()->with('warning', __('tips.comment.flagged'));
     }
 
     /**

@@ -34,7 +34,7 @@ import TipEquipmentList from "@/Components/TechTips/TipEquipmentList.vue";
 import TipDetails from "@/Components/TechTips/TipDetails.vue";
 import TipFiles from "@/Components/TechTips/TipFiles.vue";
 import TipComments from "@/Components/TechTips/TipComments.vue";
-import { ref, reactive, computed } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
     tipData: techTip;

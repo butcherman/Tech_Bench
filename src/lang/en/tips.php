@@ -22,5 +22,7 @@ return [
     'comment' => [
         'created' => 'Comment Saved Successfully',
         'updated' => 'Comment Updated Successfully',
+        'deleted' => 'Comment has been deleted',
+        'flagged' => 'Comment has been flagged for review',
     ],
 ];

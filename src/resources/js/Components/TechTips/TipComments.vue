@@ -9,10 +9,29 @@
                     </h5>
                     <div
                         v-for="comment in tipComments"
-                        :key="comment.id"
+                        :key="comment.comment_id"
                         class="border rounded m-2 p-2"
                     >
                         <div class="mb-2">
+                            <div>
+                                <DeleteBadge
+                                    v-if="canEdit(comment)"
+                                    class="float-end"
+                                />
+                                <EditBadge
+                                    v-if="canEdit(comment)"
+                                    class="float-end"
+                                />
+                                <span
+                                    v-if="!canEdit(comment)"
+                                    class="float-end text-muted pointer"
+                                    title="Flag this comment as inappropriate"
+                                    v-tooltip
+                                    @click="flagComment(comment)"
+                                >
+                                    <fa-icon icon="flag" />
+                                </span>
+                            </div>
                             {{ comment.comment }}
                         </div>
                         <div class="border-top text-secondary">
@@ -60,7 +79,10 @@ const canEdit = (commentData: tipComment) => {
 
 const flagComment = (commentData: tipComment) => {
     router.get(
-        route("tech-tips.comments.show", [props.tipSlug, commentData.id]),
+        route("tech-tips.comments.show", [
+            props.tipSlug,
+            commentData.comment_id,
+        ]),
         {
             preserveScroll: true,
         }

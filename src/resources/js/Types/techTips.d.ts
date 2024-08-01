@@ -26,7 +26,7 @@ type tipType = {
 };
 
 type tipComment = {
-    id: number;
+    comment_id: number;
     tip_id: number;
     user_id: number;
     author: string;
