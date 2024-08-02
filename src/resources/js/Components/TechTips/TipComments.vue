@@ -17,10 +17,12 @@
                                 <DeleteBadge
                                     v-if="canEdit(comment)"
                                     class="float-end"
+                                    @click="deleteComment(comment)"
                                 />
                                 <EditBadge
                                     v-if="canEdit(comment)"
                                     class="float-end"
+                                    @click="editComment(comment)"
                                 />
                                 <span
                                     v-if="!canEdit(comment)"
@@ -49,6 +51,18 @@
                 </div>
             </div>
         </div>
+        <Modal
+            ref="editCommentModal"
+            title="Edit comment"
+            @hidden="activeComment = null"
+        >
+            <TechTipCommentForm
+                v-if="activeComment"
+                :tip-slug="tipSlug"
+                :comment-data="activeComment"
+                @success="editCommentModal?.hide()"
+            />
+        </Modal>
     </div>
 </template>
 
@@ -56,9 +70,11 @@
 import TechTipCommentForm from "@/Forms/TechTips/TechTipCommentForm.vue";
 import EditBadge from "../_Base/Badges/EditBadge.vue";
 import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
-import { ref, reactive, onMounted } from "vue";
+import Modal from "../_Base/Modal.vue";
+import { ref } from "vue";
 import { useAppStore } from "@/Store/AppStore";
 import { router } from "@inertiajs/vue3";
+import verifyModal from "@/Modules/verifyModal";
 
 const props = defineProps<{
     tipComments: tipComment[];
@@ -67,6 +83,8 @@ const props = defineProps<{
 }>();
 
 const appData = useAppStore();
+const editCommentModal = ref<InstanceType<typeof Modal> | null>(null);
+const activeComment = ref<tipComment | null>(null);
 
 const canEdit = (commentData: tipComment) => {
     return (
@@ -85,5 +103,23 @@ const flagComment = (commentData: tipComment) => {
             preserveScroll: true,
         }
     );
+};
+
+const editComment = (commentData: tipComment) => {
+    activeComment.value = commentData;
+    editCommentModal.value?.show();
+};
+
+const deleteComment = (commentData: tipComment) => {
+    verifyModal("Do you want to delete this comment?").then((res) => {
+        if (res) {
+            router.delete(
+                route("tech-tips.comments.destroy", commentData.comment_id),
+                {
+                    preserveScroll: true,
+                }
+            );
+        }
+    });
 };
 </script>

@@ -3,9 +3,9 @@
         ref="tipCommentForm"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('tech-tips.comments.store', tipSlug)"
-        submit-method="post"
-        submit-text="Add Comment"
+        :submit-route="submitRoute"
+        :submit-method="submitMethod"
+        :submit-text="submitText"
         @success="handleSuccess"
     >
         <TextAreaInput
@@ -19,17 +19,32 @@
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextAreaInput from "../_Base/TextAreaInput.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { object, string } from "yup";
 
-defineProps<{
+const emit = defineEmits(["success"]);
+const props = defineProps<{
     tipSlug: string;
+    commentData?: tipComment;
 }>();
 
 const tipCommentForm = ref<InstanceType<typeof VueForm> | null>(null);
 
+const submitRoute = computed(() =>
+    props.commentData
+        ? route("tech-tips.comments.update", [
+              props.tipSlug,
+              props.commentData.comment_id,
+          ])
+        : route("tech-tips.comments.store", props.tipSlug)
+);
+const submitMethod = computed(() => (props.commentData ? "put" : "post"));
+const submitText = computed(() =>
+    props.commentData ? "Edit Comment" : "Create Comment"
+);
+
 const initValues = {
-    comment: "",
+    comment: props.commentData?.comment || "",
 };
 const schema = object({
     comment: string().required(),
@@ -37,5 +52,6 @@ const schema = object({
 
 const handleSuccess = () => {
     tipCommentForm.value?.resetForm();
+    emit("success");
 };
 </script>

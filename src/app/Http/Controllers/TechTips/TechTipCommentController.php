@@ -53,6 +53,7 @@ class TechTipCommentController extends Controller
         Log::channel('tips')->info('New Tech Tip Comment for Tip ID ' . $techTip->tip_id, [
             'comment' => $request->comment,
         ]);
+        // TODO - Dispatch event to email
 
         return back()->with('success', __('tips.comment.created'));
     }
@@ -84,9 +85,17 @@ class TechTipCommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TechTipCommentRequest $request, TechTip $techTip, TechTipComment $comment)
     {
-        //
+        $comment->update($request->only(['comment']));
+
+        Log::channel('tips')
+            ->info(
+                'Tech Tip Comment updated by ' . $request->user()->username,
+                $comment->toArray()
+            );
+
+        return back()->with('success', __('tips.comment.updated'));
     }
 
     /**
