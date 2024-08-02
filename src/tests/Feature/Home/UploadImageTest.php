@@ -3,8 +3,6 @@
 namespace Tests\Feature\Home;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -35,6 +33,6 @@ class UploadImageTest extends TestCase
         $response->assertSuccessful();
 
         $file = last(explode('/', json_decode($response->getContent())->location));
-        Storage::disk('public')->assertExists('images/uploaded/' . $file);
+        Storage::disk('public')->assertExists('images/uploaded/'.$file);
     }
 }

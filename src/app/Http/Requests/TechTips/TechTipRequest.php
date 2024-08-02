@@ -4,9 +4,9 @@ namespace App\Http\Requests\TechTips;
 
 use App\Events\File\FileDataDeletedEvent;
 use App\Models\TechTip;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Illuminate\Foundation\Http\FormRequest;
 
 class TechTipRequest extends FormRequest
 {
@@ -52,7 +52,7 @@ class TechTipRequest extends FormRequest
         // Handle any files uploaded with the tip
         if ($this->session()->has('tip-file')) {
             $fileList = $this->session()->pull('tip-file');
-            Log::debug('Tech Tip file list for Tip ID ' . $newTip->tip_id, $fileList);
+            Log::debug('Tech Tip file list for Tip ID '.$newTip->tip_id, $fileList);
             $newTip->FileUpload()->sync($fileList);
         }
 
@@ -115,7 +115,7 @@ class TechTipRequest extends FormRequest
         $slug = Str::slug($this->subject);
 
         while (TechTip::where('slug', $slug)->first()) {
-            $slug = Str::slug($this->subject . '-' . $index);
+            $slug = Str::slug($this->subject.'-'.$index);
             $index++;
         }
 

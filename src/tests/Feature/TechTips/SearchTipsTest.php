@@ -2,12 +2,8 @@
 
 namespace Tests\Feature\TechTips;
 
-use App\Models\EquipmentType;
 use App\Models\TechTip;
-use App\Models\TechTipEquipment;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class SearchTipsTest extends TestCase

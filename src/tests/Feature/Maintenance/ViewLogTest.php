@@ -4,8 +4,6 @@ namespace Tests\Feature\Maintenance;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ViewLogTest extends TestCase
@@ -16,11 +14,11 @@ class ViewLogTest extends TestCase
     public function test_invoke_guest()
     {
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->get(route('maint.logs.view', [
             'Application',
-            $filename
+            $filename,
         ]));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
@@ -30,7 +28,7 @@ class ViewLogTest extends TestCase
     public function test_invoke_no_permission()
     {
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->actingAs(User::factory()->create())
             ->get(route('maint.logs.view', ['Application', $filename]));
@@ -40,7 +38,7 @@ class ViewLogTest extends TestCase
     public function test_invoke_bad_channel()
     {
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('maint.logs.view', ['YourMom', $filename]));
@@ -50,7 +48,7 @@ class ViewLogTest extends TestCase
     public function test_invoke_bad_file_name()
     {
         $date = date('Y-m-d', strtotime(Carbon::now()->addDays(30)));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('maint.logs.view', ['Application', 'yourmom.com']));
@@ -60,7 +58,7 @@ class ViewLogTest extends TestCase
     public function test_invoke()
     {
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('maint.logs.view', ['daily', $filename]));

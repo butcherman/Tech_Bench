@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Maintenance;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maintenance\BackupSettingsRequest;
 use App\Models\AppSettings;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -34,7 +33,7 @@ class BackupSettingsController extends Controller
     {
         $request->processBackupSettings();
 
-        Log::info('Backup Settings updated by ' . $request->user()->username);
+        Log::info('Backup Settings updated by '.$request->user()->username);
 
         return back()->with('success', __('admin.backups.settings-successful'));
     }

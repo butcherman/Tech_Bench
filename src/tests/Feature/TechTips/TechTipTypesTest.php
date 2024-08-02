@@ -5,8 +5,6 @@ namespace Tests\Feature\TechTips;
 use App\Models\TechTip;
 use App\Models\TechTipType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class TechTipTypesTest extends TestCase

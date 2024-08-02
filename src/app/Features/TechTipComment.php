@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Lottery;
 
 class TechTipComment
 {
@@ -20,9 +19,10 @@ class TechTipComment
 
         // If feature is disabled, just return false
         $isEnabled = (bool) config('techTips.allow_comments');
-        if (!$isEnabled) {
+        if (! $isEnabled) {
             Log::stack(['tips', 'daily'])
                 ->debug('Feature - Comment on Tech Tip - is Disabled');
+
             return false;
         }
 
@@ -35,8 +35,8 @@ class TechTipComment
             ->first()->allow;
 
         Log::stack(['tips', 'daily'])
-            ->debug('User ' . $user->username . ' is ' .
-                $allowed ? 'allowed' : 'not allowed' .
+            ->debug('User '.$user->username.' is '.
+                $allowed ? 'allowed' : 'not allowed'.
                 'to use this feature');
 
         return $allowed;

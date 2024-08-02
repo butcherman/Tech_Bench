@@ -3,8 +3,6 @@
 namespace Tests\Feature\Maintenance;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
@@ -80,8 +78,8 @@ class BackupTest extends TestCase
     public function test_show_guest()
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->get(route('maint.backup.show', 'backup.zip'));
         $response->assertStatus(302);
@@ -92,8 +90,8 @@ class BackupTest extends TestCase
     public function test_show_no_permission()
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->actingAs(User::factory()->create())
             ->get(route('maint.backup.show', 'backup.zip'));
@@ -103,8 +101,8 @@ class BackupTest extends TestCase
     public function test_show()
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('maint.backup.show', 'backup.zip'));
@@ -114,8 +112,8 @@ class BackupTest extends TestCase
     public function test_show_missing_file()
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('maint.backup.show', 'backup2.zip'));
@@ -128,8 +126,8 @@ class BackupTest extends TestCase
     public function test_destroy_guest()
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->delete(route('maint.backup.destroy', 'backup.zip'));
         $response->assertStatus(302);
@@ -140,37 +138,37 @@ class BackupTest extends TestCase
     public function test_destroy_no_permission()
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->actingAs(User::factory()->create())
             ->delete(route('maint.backup.destroy', 'backup.zip'));
         $response->assertForbidden();
 
-        Storage::disk('backups')->assertExists(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip');
+        Storage::disk('backups')->assertExists(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip');
     }
 
     public function test_destroy()
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('maint.backup.destroy', 'backup.zip'));
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.backups.deleted'));
 
-        Storage::disk('backups')->assertMissing(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip');
+        Storage::disk('backups')->assertMissing(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip');
     }
 
     public function test_destroy_missing_file()
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('maint.backup.destroy', 'backup2.zip'));

@@ -13,8 +13,11 @@ class TechTipComment extends Model
     protected $primaryKey = 'comment_id';
 
     protected $guarded = ['id', 'updated_at', 'created_at'];
+
     protected $appends = ['author'];
+
     protected $hidden = ['User'];
+
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',

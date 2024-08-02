@@ -8,8 +8,6 @@ use App\Models\User;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -78,6 +76,6 @@ class UploadTipFileTest extends TestCase
         ]);
 
         Storage::disk('tips')
-            ->assertExists('tmp' . DIRECTORY_SEPARATOR . 'testPhoto.png');
+            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
     }
 }

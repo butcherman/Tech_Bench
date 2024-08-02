@@ -20,7 +20,7 @@ class UploadImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'mimes:jpeg,bmp,png,jpb,gif,webp'
+            'file' => 'mimes:jpeg,bmp,png,jpb,gif,webp',
         ];
     }
 }

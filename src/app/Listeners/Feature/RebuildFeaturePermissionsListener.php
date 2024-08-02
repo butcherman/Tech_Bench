@@ -3,8 +3,6 @@
 namespace App\Listeners\Feature;
 
 use App\Events\Feature\FeatureChangedEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Laravel\Pennant\Feature;
 
 class RebuildFeaturePermissionsListener

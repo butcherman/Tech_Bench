@@ -2,18 +2,12 @@
 
 namespace Tests\Feature\TechTips;
 
-use App\Events\TechTips\TechTipEvent;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;
 use App\Models\User;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
-use App\Notifications\TechTips\NewTechTipNotification;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class TechTipsTest extends TestCase
@@ -121,7 +115,7 @@ class TechTipsTest extends TestCase
             'subject',
             'tip_type_id',
             'details',
-            'sticky'
+            'sticky',
         ]));
     }
 
@@ -140,7 +134,7 @@ class TechTipsTest extends TestCase
 
         $this->assertDatabaseHas('tech_tips', [
             'subject' => $data->subject,
-            'slug' => $data->slug . '-1',
+            'slug' => $data->slug.'-1',
         ]);
     }
 

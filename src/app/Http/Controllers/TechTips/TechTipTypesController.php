@@ -35,7 +35,7 @@ class TechTipTypesController extends Controller
 
         Log::channel('tips')
             ->info(
-                'New Tech Tip Type created by ' . $request->user()->username,
+                'New Tech Tip Type created by '.$request->user()->username,
                 $newType->toArray()
             );
 
@@ -51,7 +51,7 @@ class TechTipTypesController extends Controller
 
         Log::channel('tips')
             ->info(
-                'Tech Tip Type updated by ' . $request->user()->username,
+                'Tech Tip Type updated by '.$request->user()->username,
                 $tipType->toArray()
             );
 
@@ -69,7 +69,7 @@ class TechTipTypesController extends Controller
             $tipType->delete();
             Log::channel('tips')
                 ->notice(
-                    'Tech Tip Type deleted by ' . $request->user()->username,
+                    'Tech Tip Type deleted by '.$request->user()->username,
                     $tipType->toArray()
                 );
         } catch (QueryException $e) {

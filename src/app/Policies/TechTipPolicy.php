@@ -8,8 +8,8 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TechTipPolicy
 {
-    use HandlesAuthorization;
     use AllowTrait;
+    use HandlesAuthorization;
 
     public function manage(User $user)
     {

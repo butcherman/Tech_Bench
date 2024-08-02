@@ -4,9 +4,7 @@ namespace App\Policies;
 
 use App\Models\TechTipComment;
 use App\Models\User;
-use App\Models\UserRolePermissionType;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\Response;
 
 class TechTipCommentPolicy
 {

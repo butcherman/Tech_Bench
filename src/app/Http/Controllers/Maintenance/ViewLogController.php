@@ -24,11 +24,11 @@ class ViewLogController extends Controller
         $fileArray = $this->getFileToArray($filePath);
 
         return Inertia::render('Maint/LogView', [
-            'levels' => fn() => $this->logLevels,
-            'channel' => fn() => $channel,
-            'filename' => fn() => $logFile,
-            'file-stats' => fn() => [$this->getFileStats($fileArray)],
-            'file-entries' => fn() => array_reverse($this->parseLogFile($fileArray)),
+            'levels' => fn () => $this->logLevels,
+            'channel' => fn () => $channel,
+            'filename' => fn () => $logFile,
+            'file-stats' => fn () => [$this->getFileStats($fileArray)],
+            'file-entries' => fn () => array_reverse($this->parseLogFile($fileArray)),
         ]);
     }
 }

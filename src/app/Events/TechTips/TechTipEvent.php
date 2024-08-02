@@ -6,7 +6,6 @@ use App\Enum\CrudAction;
 use App\Models\TechTip;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -34,7 +33,7 @@ class TechTipEvent // implements ShouldBroadcast
 
     /**
      * Broadcast on Tech Tip Channel
-     * 
+     *
      * @codeCoverageIgnore
      */
     public function broadcastOn(): array

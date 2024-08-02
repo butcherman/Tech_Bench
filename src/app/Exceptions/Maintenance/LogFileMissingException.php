@@ -15,8 +15,8 @@ class LogFileMissingException extends Exception
 
     public function report(Request $request)
     {
-        Log::error('User ' . $request->user()->username .
-            ' tried to access invalid log file - ' . $this->badLogFile);
+        Log::error('User '.$request->user()->username.
+            ' tried to access invalid log file - '.$this->badLogFile);
     }
 
     public function render()

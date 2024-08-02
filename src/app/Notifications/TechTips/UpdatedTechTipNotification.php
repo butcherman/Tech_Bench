@@ -45,8 +45,8 @@ class UpdatedTechTipNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Updated Tech Tip')
-            ->greeting('Hello ' . $notifiable->full_name)
-            ->line('Subject:  ' . $this->techTip->subject)
+            ->greeting('Hello '.$notifiable->full_name)
+            ->line('Subject:  '.$this->techTip->subject)
             ->line('This Tech Tip has been updated with new information')
             ->action('Click to View the Tech Tip', url(route('tech-tips.show', $this->techTip->slug)));
     }

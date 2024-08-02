@@ -3,12 +3,11 @@
 namespace App\Exceptions\TechTips;
 
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CommentFlaggedAlreadyException extends Exception
 {
-
     public function __construct(protected Request $request)
     {
         //
@@ -18,7 +17,7 @@ class CommentFlaggedAlreadyException extends Exception
     {
         Log::stack(['tips', 'daily'])
             ->notice(
-                'User ' . $this->request->user()->username . ' is re-submitting a Tech Tip Comment as flagged'
+                'User '.$this->request->user()->username.' is re-submitting a Tech Tip Comment as flagged'
             );
     }
 

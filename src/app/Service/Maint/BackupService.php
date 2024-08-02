@@ -6,12 +6,14 @@ use Illuminate\Support\Facades\Storage;
 
 class BackupService
 {
-    protected $storage, $backupName;
+    protected $storage;
+
+    protected $backupName;
 
     public function __construct()
     {
         $this->storage = Storage::disk('backups');
-        $this->backupName = config('backup.backup.name') . DIRECTORY_SEPARATOR;
+        $this->backupName = config('backup.backup.name').DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -28,7 +30,7 @@ class BackupService
      */
     public function validateBackupFile(string $fileName)
     {
-        return $this->storage->exists($this->backupName . $fileName);
+        return $this->storage->exists($this->backupName.$fileName);
     }
 
     /**
@@ -36,7 +38,7 @@ class BackupService
      */
     public function deleteBackupFile(string $fileName)
     {
-        $this->storage->delete($this->backupName . $fileName);
+        $this->storage->delete($this->backupName.$fileName);
     }
 
     /**

@@ -3,10 +3,7 @@
 namespace Tests\Feature\TechTips;
 
 use App\Models\TechTip;
-use App\Models\TechTipComment;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class TechTipCommentTest extends TestCase
@@ -45,5 +42,4 @@ class TechTipCommentTest extends TestCase
     /**
      * Store Method
      */
-
 }

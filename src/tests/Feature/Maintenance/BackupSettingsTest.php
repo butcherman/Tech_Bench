@@ -3,8 +3,6 @@
 namespace Tests\Feature\Maintenance;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class BackupSettingsTest extends TestCase
@@ -84,23 +82,23 @@ class BackupSettingsTest extends TestCase
         $response->assertSessionHas('success', __('admin.backups.settings-successful'));
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.nightly_backup',
-            'value' => '1'
+            'value' => '1',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.nightly_cleanup',
-            'value' => '1'
+            'value' => '1',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.backup.encryption',
-            'value' => 'default'
+            'value' => 'default',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.backup.password',
-            'value' => $data['password']
+            'value' => $data['password'],
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.notifications.mail.to',
-            'value' => $data['mail_to']
+            'value' => $data['mail_to'],
         ]);
     }
 }

@@ -5,10 +5,9 @@ use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -24,7 +23,7 @@ return new class extends Migration {
         ]);
 
         /**
-         * Add this new permission to all roles.  Installer and Admin Roles  
+         * Add this new permission to all roles.  Installer and Admin Roles
          * will be allow, others will be false
          */
         $allRoles = UserRole::get();

@@ -10,5 +10,4 @@ class TechTipCommentFlag extends Model
     use HasFactory;
 
     protected $guarded = ['id', 'updated_at', 'created_at'];
-
 }

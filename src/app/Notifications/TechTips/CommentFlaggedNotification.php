@@ -35,7 +35,7 @@ class CommentFlaggedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('A Tech Tip Comment has been flagged')
-            ->greeting('Hello ' . $notifiable->full_name)
+            ->greeting('Hello '.$notifiable->full_name)
             ->line('A comment on a Tech Tip has been flagged as inappropriate.')
             ->line('The comment is: ')
             ->line($this->comment->comment)

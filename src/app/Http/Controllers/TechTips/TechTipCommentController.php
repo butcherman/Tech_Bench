@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\TechTipCommentRequest;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
-use App\Models\TechTipCommentFlag;
 use App\Service\CheckDatabaseError;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -40,7 +39,7 @@ class TechTipCommentController extends Controller
             'comment' => $request->comment,
         ]));
 
-        Log::channel('tips')->info('New Tech Tip Comment for Tip ID ' . $techTip->tip_id, [
+        Log::channel('tips')->info('New Tech Tip Comment for Tip ID '.$techTip->tip_id, [
             'comment' => $request->comment,
         ]);
         // TODO - Dispatch event to email
@@ -57,7 +56,7 @@ class TechTipCommentController extends Controller
             $comment->flagComment();
             Log::stack(['daily', 'tips'])
                 ->notice(
-                    'Tech Tip comment has been flagged by ' . $request->user()->username,
+                    'Tech Tip comment has been flagged by '.$request->user()->username,
                     $comment->toArray()
                 );
             event(new TipCommentFlaggedEvent($comment));
@@ -81,7 +80,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tips')
             ->info(
-                'Tech Tip Comment updated by ' . $request->user()->username,
+                'Tech Tip Comment updated by '.$request->user()->username,
                 $comment->toArray()
             );
 
@@ -99,7 +98,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tips')
             ->notice(
-                'Tech Tip Comment deleted by ' . $request->user()->username,
+                'Tech Tip Comment deleted by '.$request->user()->username,
                 $comment->toArray()
             );
 
@@ -117,7 +116,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tips')
             ->notice(
-                'Tech Tip Comment restored by ' . $request->user()->username,
+                'Tech Tip Comment restored by '.$request->user()->username,
                 $comment->toArray()
             );
 

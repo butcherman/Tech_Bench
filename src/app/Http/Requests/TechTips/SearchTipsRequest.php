@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\TechTips;
 
-use App\Models\TechTip;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SearchTipsRequest extends FormRequest

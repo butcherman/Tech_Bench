@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-
 class TechTipsSettingsController extends Controller
 {
     /**
@@ -34,7 +33,7 @@ class TechTipsSettingsController extends Controller
     {
         $request->processSettings();
 
-        Log::notice('Tech Tip Settings updated by ' . $request->user()->username);
+        Log::notice('Tech Tip Settings updated by '.$request->user()->username);
 
         return back()->with('success', __('tips.settings_updated'));
     }

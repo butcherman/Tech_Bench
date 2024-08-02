@@ -19,8 +19,8 @@ trait AllowTrait
             })
             ->first();
 
-        Log::channel('auth')->debug('User ' . $user->username . ' is trying to get permission for ' .
-            $description . '.  Result - ' . $allowed);
+        Log::channel('auth')->debug('User '.$user->username.' is trying to get permission for '.
+            $description.'.  Result - '.$allowed);
         if ($allowed) {
             return $allowed->allow;
         }

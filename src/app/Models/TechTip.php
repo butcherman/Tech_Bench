@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,13 +11,17 @@ use Laravel\Scout\Searchable;
 class TechTip extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use Searchable;
+    use SoftDeletes;
 
     protected $primaryKey = 'tip_id';
+
     protected $guarded = ['tip_id', 'updated_at', 'created_at'];
+
     protected $hidden = ['deleted_at', 'tip_type_id'];
+
     protected $appends = ['href', 'equipList', 'fileList'];
+
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
         'updated_at' => 'datetime:M d, Y',

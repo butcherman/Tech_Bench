@@ -22,7 +22,7 @@ class DownloadLogController extends Controller
 
         $filePath = $this->getLogFile($channel, $logFile);
 
-        Log::info($request->user()->username . ' is downloading log file ' . $filePath);
+        Log::info($request->user()->username.' is downloading log file '.$filePath);
 
         return $this->storage->download($filePath);
     }

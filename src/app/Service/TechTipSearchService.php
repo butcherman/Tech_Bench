@@ -4,8 +4,6 @@ namespace App\Service;
 
 use App\Http\Requests\TechTips\SearchTipsRequest;
 use App\Models\TechTip;
-use App\Models\TechTipType;
-use Illuminate\Support\Facades\Log;
 
 class TechTipSearchService
 {
@@ -37,7 +35,7 @@ class TechTipSearchService
         }
 
         if (
-            !empty($this->searchRequest->typeList) &&
+            ! empty($this->searchRequest->typeList) &&
             empty($this->searchRequest->equipList)
         ) {
             return $this->articleTypeFilter();
@@ -45,7 +43,7 @@ class TechTipSearchService
 
         if (
             empty($this->searchRequest->typeList) &&
-            !empty($this->searchRequest->equipList)
+            ! empty($this->searchRequest->equipList)
         ) {
             return $this->equipmentTypeFilter();
         }

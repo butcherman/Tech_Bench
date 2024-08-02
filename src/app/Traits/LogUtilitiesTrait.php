@@ -17,9 +17,10 @@ trait LogUtilitiesTrait
 
     protected $logLevelPattern = '/\.(.*?): /i';
 
-
     protected $logLevels;
+
     protected $logChannels;
+
     protected $storage;
 
     /**
@@ -88,7 +89,7 @@ trait LogUtilitiesTrait
      */
     protected function validateChannel(string $channelName)
     {
-        if (!$this->getChannel($channelName)) {
+        if (! $this->getChannel($channelName)) {
             throw new BadLogChannelException($channelName);
         }
     }
@@ -108,12 +109,12 @@ trait LogUtilitiesTrait
     {
         $channelData = $this->getChannel($channel);
 
-        // Because users suck, we have to validate the channel 
+        // Because users suck, we have to validate the channel
         if ($channelData === null) {
             return null;
         }
 
-        // Get the list of Log Files for the selected channel 
+        // Get the list of Log Files for the selected channel
         $fileList = $this->storage->files($channelData['folder']);
 
         return $fileList;
@@ -125,7 +126,7 @@ trait LogUtilitiesTrait
     protected function getLogFile(string $channel, string $fileName)
     {
         $channel = $this->getChannel($channel);
-        $logFile = $channel['folder'] . DIRECTORY_SEPARATOR . $fileName . '.log';
+        $logFile = $channel['folder'].DIRECTORY_SEPARATOR.$fileName.'.log';
 
         if ($this->storage->missing($logFile)) {
             throw new LogFileMissingException($logFile);
@@ -153,7 +154,7 @@ trait LogUtilitiesTrait
         //  Go through each line of the file
         foreach ($logFile as $line) {
             $parse = $this->parseLine($line);
-            if (!$parse) {
+            if (! $parse) {
                 $parse = $this->parseErrorLine($line);
                 if ($parse) {
                     $parsed[] = $parse;
@@ -218,7 +219,7 @@ trait LogUtilitiesTrait
         $stats = $this->getCleanStats();
 
         // If file was not parsed to array, do it now
-        if (!is_array($logFile)) {
+        if (! is_array($logFile)) {
             $logFile = $this->getFileToArray($logFile);
         }
 

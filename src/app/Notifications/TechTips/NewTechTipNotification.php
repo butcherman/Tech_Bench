@@ -8,7 +8,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 
 class NewTechTipNotification extends Notification implements ShouldQueue
 {
@@ -46,9 +45,9 @@ class NewTechTipNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('A New Tech Tip Has Been Created')
-            ->greeting('Hello ' . $notifiable->full_name)
+            ->greeting('Hello '.$notifiable->full_name)
             ->line('A new Tech Tip has recently been created')
-            ->line('Subject:  ' . $this->techTip->subject)
+            ->line('Subject:  '.$this->techTip->subject)
             ->action(
                 'Click to View the Tech Tip',
                 url(route('tech-tips.show', $this->techTip->slug))
