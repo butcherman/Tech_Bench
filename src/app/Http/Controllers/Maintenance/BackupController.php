@@ -8,7 +8,6 @@ use App\Jobs\Maintenance\RunBackupJob;
 use App\Models\AppSettings;
 use App\Service\Maint\BackupService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -25,8 +24,8 @@ class BackupController extends Controller
         $obj = new BackupService;
 
         return Inertia::render('Maint/Backup', [
-            'backup-running' => fn() => $obj->isBackupRunning(),
-            'backup-list' => fn() => $obj->getBackupFiles(),
+            'backup-running' => fn () => $obj->isBackupRunning(),
+            'backup-list' => fn () => $obj->getBackupFiles(),
         ]);
     }
 
@@ -37,8 +36,8 @@ class BackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        dispatch(new RunBackupJob())->onQueue('backups');
-        Log::info('Backup Operation called by ' . $request->user()->username);
+        dispatch(new RunBackupJob)->onQueue('backups');
+        Log::info('Backup Operation called by '.$request->user()->username);
 
         return back();
     }
@@ -50,16 +49,16 @@ class BackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        $bakObj = new BackupService();
+        $bakObj = new BackupService;
 
-        if (!$bakObj->validateBackupFile($backupName)) {
+        if (! $bakObj->validateBackupFile($backupName)) {
             throw new BackupFileMissingException($backupName);
         }
 
-        Log::info('Download file - ' . $backupName . ' downloaded by ' . $request->user()->username);
+        Log::info('Download file - '.$backupName.' downloaded by '.$request->user()->username);
 
-        return Storage::disk('backups')->download(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . $backupName);
+        return Storage::disk('backups')->download(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.$backupName);
     }
 
     /**
@@ -69,15 +68,15 @@ class BackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        $bakObj = new BackupService();
+        $bakObj = new BackupService;
 
-        if (!$bakObj->validateBackupFile($backupName)) {
+        if (! $bakObj->validateBackupFile($backupName)) {
             throw new BackupFileMissingException($backupName);
         }
 
         $bakObj->deleteBackupFile($backupName);
 
-        Log::notice('Backup File ' . $backupName . ' deleted by ' . $request->user()->username);
+        Log::notice('Backup File '.$backupName.' deleted by '.$request->user()->username);
 
         return back()->with('success', __('admin.backups.deleted'));
 

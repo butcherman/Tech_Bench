@@ -1,6 +1,10 @@
+/**
+ * All data for performing a customer search
+ */
+
 import axios from "axios";
-import { ref, reactive } from "vue";
 import okModal from "./okModal";
+import { ref, reactive } from "vue";
 
 /*******************************************************************************
  *                        Typescript Interfaces                                *

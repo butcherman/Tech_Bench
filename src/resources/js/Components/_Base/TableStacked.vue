@@ -15,7 +15,21 @@
                         </th>
                         <td>
                             <slot name="value" :row-data="{ value, index }">
-                                {{ value }}
+                                <span v-if="typeof value === 'boolean'">
+                                    <fa-icon
+                                        v-if="value"
+                                        icon="check"
+                                        class="text-success"
+                                    />
+                                    <fa-icon
+                                        v-else
+                                        icon="xmark"
+                                        class="text-danger"
+                                    />
+                                </span>
+                                <span v-else>
+                                    {{ value }}
+                                </span>
                             </slot>
                         </td>
                     </slot>

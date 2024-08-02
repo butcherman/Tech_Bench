@@ -16,17 +16,20 @@
                 </div>
             </div>
             <slot />
-            <DropzoneInput
-                ref="dropzoneInput"
-                paramName="file"
-                :upload-url="submitRoute"
-                :max-files="maxFiles || 1"
-                :required="fileRequired"
-                :accepted-files="acceptedFiles"
-                @file-added="onFileAdded"
-                @file-removed="onFileRemoved"
-                @success="onSuccess"
-            />
+            <Collapse :visible="!hideFileInput">
+                <DropzoneInput
+                    ref="dropzoneInput"
+                    paramName="file"
+                    :upload-url="submitRoute"
+                    :max-files="maxFiles || 1"
+                    :required="fileRequired"
+                    :accepted-files="acceptedFiles"
+                    @file-added="onFileAdded"
+                    @file-removed="onFileRemoved"
+                    @error="handleErrors"
+                    @success="handleSuccess"
+                />
+            </Collapse>
             <slot name="after-file" />
             <slot name="submit">
                 <SubmitButton
@@ -56,6 +59,7 @@ import SubmitButton from "@/Components/_Base/Buttons/SubmitButton.vue";
 import Loading from "vue3-loading-overlay";
 import TrinityRingsLoader from "@/Components/_Base/Loaders/TrinityRingsLoader.vue";
 import DropzoneInput from "./DropzoneInput.vue";
+import Collapse from "@/Components/_Base/Collapse.vue";
 import { ref, computed } from "vue";
 import { useForm } from "vee-validate";
 
@@ -68,6 +72,17 @@ interface formData {
     [key: string]: string;
 }
 
+interface errorBag {
+    file: string[];
+    status: number;
+    message: {
+        message: string;
+        errors: {
+            [key: string]: string[] | string;
+        };
+    };
+}
+
 const emit = defineEmits([
     "submitting",
     "success",
@@ -76,6 +91,7 @@ const emit = defineEmits([
     "values",
     "file-added",
     "file-removed",
+    "queue-complete",
 ]);
 const props = defineProps<{
     validationSchema: object;
@@ -89,7 +105,11 @@ const props = defineProps<{
     fileRequired?: boolean;
     maxFiles?: number;
     acceptedFiles?: string[];
+    hideFileInput?: boolean;
+    inertiaSubmit?: boolean;
 }>();
+
+const originalForm = ref<formData>({});
 
 /*******************************************************************************
  * Dropzone File Upload
@@ -130,11 +150,14 @@ const isDirty = computed(() => meta.value.dirty);
  * Handle the Form Submission
  *******************************************************************************/
 const isSubmitting = ref<boolean>(false);
-const onSubmit = handleSubmit((form): void => {
+const onSubmit = handleSubmit((form: formData): void => {
     clearErrorAlert();
+    originalForm.value = form;
+
     if (dropzoneInput.value?.validate()) {
         emit("submitting");
         isSubmitting.value = true;
+
         /**
          * During development, we can set the testing flag to only return the form
          * values, but not actually submit the form
@@ -154,30 +177,43 @@ const onSubmit = handleSubmit((form): void => {
     }
 });
 
-const onSuccess = () => {
-    emit("success");
-    isSubmitting.value = false;
+const handleSuccess = (result: string) => {
+    emit("success", result);
 };
 
-const handleErrors = (
-    originalForm: formData,
-    formErrors: Partial<Record<string | number, string>>
-) => {
-    emit("has-errors");
-    const formKeys = Object.keys(originalForm);
+/**
+ * Process any validation errors that come up
+ */
+const handleErrors = (errorBag: errorBag) => {
+    console.log(errorBag);
+    // The form will only handle the errors if the form was submitting
+    if (isSubmitting.value) {
+        isSubmitting.value = false;
+        emit("has-errors");
 
-    for (const [key, value] of Object.entries(formErrors)) {
-        if (value) {
-            console.log(typeof value);
-            if (typeof value === "object") {
-                handleErrors(originalForm, value);
-            } else {
-                if (formKeys.indexOf(key) != -1) {
-                    setFieldError(key, value);
-                } else {
-                    pushErrorAlert(value);
+        if (errorBag.status === 422) {
+            const formKeys = Object.keys(originalForm.value);
+            for (const [key, value] of Object.entries(
+                errorBag.message.errors
+            )) {
+                if (value) {
+                    if (formKeys.indexOf(key) != -1) {
+                        console.log("has key", key);
+                        setFieldError(key, value);
+                    } else {
+                        console.log("no key", key);
+                        if (Array.isArray(key)) {
+                            key.forEach((msg: string) => pushErrorAlert(msg));
+                        } else {
+                            pushErrorAlert(value.toString());
+                        }
+                    }
                 }
             }
+        } else {
+            okModal(
+                `Error ${errorBag.status}.  Please check logs for more details`
+            );
         }
     }
 };
@@ -205,5 +241,6 @@ defineExpose({
     handleReset,
     isDirty,
     isSubmitting,
+    values,
 });
 </script>

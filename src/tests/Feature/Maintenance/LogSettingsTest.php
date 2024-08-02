@@ -3,8 +3,6 @@
 namespace Tests\Feature\Maintenance;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class LogSettingsTest extends TestCase
@@ -75,27 +73,27 @@ class LogSettingsTest extends TestCase
         $response->assertStatus(302);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.days',
-            'value' => '30'
+            'value' => '30',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.auth.level',
-            'value' => 'debug'
+            'value' => 'debug',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.cust.level',
-            'value' => 'debug'
+            'value' => 'debug',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.daily.level',
-            'value' => 'debug'
+            'value' => 'debug',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.tip.level',
-            'value' => 'debug'
+            'value' => 'debug',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.user.level',
-            'value' => 'debug'
+            'value' => 'debug',
         ]);
     }
 }

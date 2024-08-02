@@ -3,8 +3,6 @@
 namespace Tests\Feature\Maintenance;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -22,7 +20,7 @@ class DownloadLogTest extends TestCase
 
         $response = $this->get(route('maint.logs.download', [
             'Application',
-            'logFile'
+            'logFile',
         ]));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));

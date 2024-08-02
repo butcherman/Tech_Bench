@@ -12,7 +12,7 @@
             :value="true"
             :unchecked-value="false"
             :disabled="disabled"
-            @change="$emit('change')"
+            @change="$emit('change', value)"
         />
         <label :for="id" class="form-check-label">
             <slot name="label">

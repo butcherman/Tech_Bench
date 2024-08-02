@@ -48,7 +48,7 @@ class UserFactory extends Factory
                 UserSetting::create([
                     'user_id' => $user->user_id,
                     'setting_type_id' => $setting->setting_type_id,
-                    'value' => false,
+                    'value' => true,
                 ]);
             }
         });

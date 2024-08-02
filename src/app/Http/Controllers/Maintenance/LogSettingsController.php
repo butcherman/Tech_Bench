@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Maintenance;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maintenance\LogSettingsRequest;
 use App\Models\AppSettings;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use App\Traits\LogUtilitiesTrait;
+use Inertia\Inertia;
 
 class LogSettingsController extends Controller
 {

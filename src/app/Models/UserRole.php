@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\Feature\FeatureChangedEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,10 @@ class UserRole extends Model
         'created_at',
         'updated_at',
         'UserRolePermission',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => FeatureChangedEvent::class,
     ];
 
     protected $casts = [

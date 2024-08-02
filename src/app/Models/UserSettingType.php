@@ -13,5 +13,5 @@ class UserSettingType extends Model
 
     protected $guarded = ['setting_type_id', 'created_at', 'updated_at'];
 
-    protected $hidden = ['setting_type_id', 'perm_type_id', 'created_at', 'updated_at'];
+    protected $hidden = ['perm_type_id', 'created_at', 'updated_at'];
 }

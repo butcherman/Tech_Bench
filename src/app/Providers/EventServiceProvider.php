@@ -36,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Auth\LogPasswordReset',
             'App\Listeners\Notify\User\PasswordResetListener',
         ],
+        'App\Events\Feature\FeatureChangedEvent' => [
+            'App\Listeners\Feature\RebuildFeaturePermissionsListener',
+        ],
 
         /**
          * User Profile Events
@@ -81,6 +84,16 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Customer\CustomerNoteEvent' => [],
         'App\Events\Customer\CustomerFileEvent' => [],
 
+        /**
+         * Tech Tip Events
+         */
+        'App\Events\TechTips\TechTipEvent' => [
+            'App\Listeners\TechTips\UpdateTipFilesListener',
+            'App\Listeners\Notify\TechTips\TechTipNotification',
+        ],
+        'App\Events\TechTips\TipCommentFlaggedEvent' => [
+            'App\Listeners\Notify\TechTips\NotifyOfFlaggedTipListener',
+        ],
     ];
 
     /**

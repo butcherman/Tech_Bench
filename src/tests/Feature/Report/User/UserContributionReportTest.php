@@ -48,7 +48,7 @@ class UserContributionReportTest extends TestCase
         $data = [
             'start_date' => Carbon::today()->subDays(30)->format('Y-d-m'),
             'end_date' => Carbon::today()->format('Y-d-m'),
-            'user_list' => User::all()->map(fn($user) => $user->username)->toArray(),
+            'user_list' => User::all()->map(fn ($user) => $user->username)->toArray(),
         ];
 
         $response = $this->put(route('reports.user.run-contribution'), $data);
@@ -62,7 +62,7 @@ class UserContributionReportTest extends TestCase
         $data = [
             'start_date' => Carbon::today()->subDays(30)->format('Y-d-m'),
             'end_date' => Carbon::today()->format('Y-d-m'),
-            'user_list' => User::all()->map(fn($user) => $user->username)->toArray(),
+            'user_list' => User::all()->map(fn ($user) => $user->username)->toArray(),
         ];
 
         $response = $this->ActingAs(User::factory()->create())
@@ -75,7 +75,7 @@ class UserContributionReportTest extends TestCase
         $data = [
             'start_date' => Carbon::today()->subDays(30)->format('Y-m-d'),
             'end_date' => Carbon::today()->format('Y-m-d'),
-            'user_list' => User::all()->map(fn($user) => $user->username)->toArray(),
+            'user_list' => User::all()->map(fn ($user) => $user->username)->toArray(),
         ];
 
         $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))

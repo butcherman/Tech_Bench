@@ -47,7 +47,7 @@ class BuildCustomerPermissionsUnitTest extends TestCase
 
     public function test_build_admin()
     {
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->create(['role_id' => 2]);
 
         $permissions = BuildCustomerPermissions::build($user);
         $shouldBe = [

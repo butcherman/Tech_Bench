@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadImageRequest;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UploadImageController extends Controller
@@ -16,7 +15,7 @@ class UploadImageController extends Controller
      */
     public function __invoke(UploadImageRequest $request, ?string $folderName = null)
     {
-        $path = 'images/uploaded/' . $folderName;
+        $path = 'images/uploaded/'.$folderName;
         $location = Storage::disk('public')->putFile($path, new File($request->file));
 
         return ['location' => Storage::url($location)];

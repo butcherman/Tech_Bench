@@ -9,7 +9,7 @@ class BackupFileMissingException extends Exception
 {
     public function report()
     {
-        Log::alert('Backup file missing - ' . $this->getMessage());
+        Log::alert('Backup file missing - '.$this->getMessage());
     }
 
     public function render()

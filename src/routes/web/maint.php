@@ -26,7 +26,7 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
         ->breadcrumb('Logs', 'admin.index');
     Route::get('logs/{channel}', LogsIndexController::class)
         ->name('logs.show')
-        ->breadcrumb(fn(string $channel) => ucfirst($channel), 'maint.logs.index');
+        ->breadcrumb(fn (string $channel) => ucfirst($channel), 'maint.logs.index');
     Route::get('logs/{channel}/{logFile}', ViewLogController::class)
         ->name('logs.view')
         ->breadcrumb('View Log File', 'maint.logs.show');

@@ -1,6 +1,8 @@
 <template>
     <div class="mb-3">
-        <label :for="id" class="form-label w-100"> {{ label }}: </label>
+        <label v-if="label" :for="id" class="form-label w-100">
+            {{ label }}:
+        </label>
         <textarea
             v-model="value"
             :name="name"
@@ -9,6 +11,7 @@
             :disabled="disabled"
             :class="{ 'is-valid': isValid, is_invalid: isInvalid }"
             class="form-control"
+            :placeholder="placeholder"
             @change="$emit('change', value)"
         />
         <span
@@ -29,7 +32,7 @@ defineEmits(["change"]);
 const props = defineProps<{
     id: string;
     name: string;
-    label: string;
+    label?: string;
     placeholder?: string;
     disabled?: boolean;
     help?: string;

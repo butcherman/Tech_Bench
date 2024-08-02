@@ -8,6 +8,7 @@
     min-height: 200px;
     z-index: 0;
     margin: 5px 0;
+    text-align: center;
     &:hover {
         background-color: rgba(57, 187, 247, 0.25);
     }
@@ -21,6 +22,7 @@
     .dz-message {
         margin: 5em auto;
         text-align: center;
+        width: 100%;
     }
     //  Move drag & drop message to top when a file is added to save room
     &.dz-started {
@@ -39,6 +41,7 @@
     *   Image Preview Panel
     **/
     .dz-preview-wrapper {
+        display: inline-block;
         .dz-preview {
             border-radius: 20px;
             cursor: default;

@@ -29,7 +29,10 @@ sleep 45
 #  Start the Horizon and PHP-FPM Services and run the Scheduler script based on server purppose
 if [ $SERVICE = "app" ]
 then
-     php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
+    echo "Importing Meilisearch Data"
+    php artisan scout:sync-index-settings
+    php artisan scout:import "App\Models\TechTip"
+    php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
 elif [ $SERVICE = "horizon" ]
 then
     php /app/artisan horizon

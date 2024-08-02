@@ -15,8 +15,8 @@ class BadLogChannelException extends Exception
 
     public function report(Request $request)
     {
-        Log::error('User ' . $request->user()->username .
-            ' tried to visit an invalid log channel - ' . $this->badChannel);
+        Log::error('User '.$request->user()->username.
+            ' tried to visit an invalid log channel - '.$this->badChannel);
     }
 
     public function render(Request $request)

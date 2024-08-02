@@ -12,11 +12,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Karmendra\LaravelAgentDetector\AgentDetector;
+use Laravel\Pennant\Concerns\HasFeatures;
 
 class User extends Authenticatable
 {
     use CanResetPassword;
     use HasFactory;
+    use HasFeatures;
     use Notifiable;
     use SoftDeletes;
 
@@ -77,6 +79,11 @@ class User extends Authenticatable
     public function UserRole()
     {
         return $this->hasOne(UserRole::class, 'role_id', 'role_id');
+    }
+
+    public function UserSetting()
+    {
+        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
     }
 
     /**

@@ -29,4 +29,6 @@ trait AllowTrait
         return false;
         // @codeCoverageIgnoreEnd
     }
+
+    // protected function checkFeature($)
 }

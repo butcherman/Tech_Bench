@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Maintenance;
 
-use App\Enum\LogChannel;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Traits\LogUtilitiesTrait;
@@ -16,7 +15,7 @@ class LogsIndexController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(string $channel = null)
+    public function __invoke(?string $channel = null)
     {
         $this->authorize('viewAny', AppSettings::class);
         if ($channel) {

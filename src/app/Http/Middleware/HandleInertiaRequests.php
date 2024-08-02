@@ -57,7 +57,7 @@ class HandleInertiaRequests extends Middleware
         if ($request->user()) {
             $userShare = [
                 //  Current logged in user
-                'current_user' => fn () => $request->user(),
+                'current_user' => fn () => $request->user()->makeVisible('user_id'),
                 'idle_timeout' => fn () => intval(config('auth.auto_logout_timer')),
                 'user_notifications' => [
                     'list' => fn () => $request->user()->notifications,

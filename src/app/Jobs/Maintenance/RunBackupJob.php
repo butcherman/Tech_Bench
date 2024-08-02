@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Maintenance;
 
-use App\Service\Maint\BackupService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,7 @@ use Illuminate\Support\Facades\Artisan;
 /**
  * Triggered by manual backup command
  */
-class RunBackupJob implements ShouldQueue, ShouldBeUnique
+class RunBackupJob implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

@@ -37,8 +37,8 @@ class UserSettingsController extends Controller
         $request->checkForEmailChange();
         $user->update($request->only(['first_name', 'last_name', 'email']));
 
-        Log::channel('user')->info('User Information for ' . $user->username .
-            ' has been updated by ' . $request->user()->username, $request->toArray());
+        Log::channel('user')->info('User Information for '.$user->username.
+            ' has been updated by '.$request->user()->username, $request->toArray());
 
         return back()->with('success', __('user.updated'));
     }
@@ -50,8 +50,8 @@ class UserSettingsController extends Controller
     {
         $request->updateSettings();
 
-        Log::channel('user')->info('User Settings for ' . $user->username .
-            ' have been updated by ' . $request->user()->username, $user->toArray());
+        Log::channel('user')->info('User Settings for '.$user->username.
+            ' have been updated by '.$request->user()->username, $user->toArray());
 
         return back()->with('success', __('user.updated'));
     }
