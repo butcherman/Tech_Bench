@@ -75,7 +75,7 @@ class TechTipTypesController extends Controller
         } catch (QueryException $e) {
             CheckDatabaseError::check(
                 $e,
-                'Unable to delete, this Tech Tip Type is in use by at least one Tech Tip'
+                __('tips.tip-type.in-use')
             );
         }
 

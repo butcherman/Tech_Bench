@@ -337,4 +337,77 @@ class TechTipsTest extends TestCase
 
         $this->assertSoftDeleted('tech_tips', $tip->only(['tip_id']));
     }
+
+    /**
+     * Restore Method
+     */
+    public function test_restore_guest()
+    {
+        $tip = TechTip::factory()->create();
+
+        $response = $this->get(route('admin.tech-tips.restore', $tip->tip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_restore_no_permission()
+    {
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())
+            ->get(route('admin.tech-tips.restore', $tip->tip_id));
+        $response->assertForbidden();
+    }
+
+    public function test_restore()
+    {
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('admin.tech-tips.restore', $tip->tip_id));
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('tips.restored'));
+
+        $this->assertDatabaseHas('tech_tips', [
+            'tip_id' => $tip->tip_id,
+            'deleted_at' => null,
+        ]);
+    }
+
+    /**
+     * Force Delete Method
+     */
+    public function test_force_delete_guest()
+    {
+        $tip = TechTip::factory()->create();
+
+        $response = $this->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_force_delete_no_permission()
+    {
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())
+            ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
+        $response->assertForbidden();
+    }
+
+    public function test_force_delete()
+    {
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', __('tips.deleted'));
+
+        $this->assertDatabaseMissing('tech_tips', [
+            'tip_id' => $tip->tip_id,
+        ]);
+    }
 }

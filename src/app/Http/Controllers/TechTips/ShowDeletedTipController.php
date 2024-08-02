@@ -14,6 +14,8 @@ class ShowDeletedTipController extends Controller
      */
     public function __invoke(Request $request, TechTip $techTip)
     {
+        $this->authorize('manage', TechTip::class);
+
         return Inertia::render('TechTips/Deleted/Show', [
             'tip-data' => $techTip,
             'tip-equipment' => $techTip->EquipmentType,

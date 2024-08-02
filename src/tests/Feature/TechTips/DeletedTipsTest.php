@@ -1,0 +1,36 @@
+<?php
+
+namespace Tests\Feature\TechTips;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class DeletedTipsTest extends TestCase
+{
+    /**
+     * Invoke Method
+     */
+    public function test_invoke_guest()
+    {
+        $response = $this->get(route('admin.tech-tips.deleted-tips'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_invoke_no_permission()
+    {
+        $response = $this->ActingAs(User::factory()->create())
+            ->get(route('admin.tech-tips.deleted-tips'));
+        $response->assertForbidden();
+    }
+
+    public function test_invoke()
+    {
+        $response = $this->ActingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('admin.tech-tips.deleted-tips'));
+        $response->assertSuccessful();
+    }
+}

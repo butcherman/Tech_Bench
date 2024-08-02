@@ -17,6 +17,7 @@ return [
         'created' => 'New Type Created',
         'updated' => 'Type Updated',
         'deleted' => 'Type Deleted',
+        'in-use' => 'Unable to delete, this Tech Tip Type is in use by at least one Tech Tip',
     ],
 
     'comment' => [
