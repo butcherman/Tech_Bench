@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TechTips\DeletedTipsController;
 use App\Http\Controllers\TechTips\ShowDeletedTipController;
+use App\Http\Controllers\TechTips\ShowFlaggedCommentsController;
 use App\Http\Controllers\TechTips\TechTipCommentController;
 use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\SearchTipsController;
@@ -56,7 +57,7 @@ Route::middleware('auth.secure')->group(function () {
                 })->except(['create', 'edit', 'destroy']);
         });
         Route::prefix('comments')->name('comments.')->group(function () {
-            Route::get('flagged-comments', [TechTipCommentController::class, 'create'])
+            Route::get('flagged-comments', ShowFlaggedCommentsController::class)
                 ->name('show-flagged');
             Route::get('restore/{comment}', [TechTipCommentController::class, 'restore'])
                 ->name('restore');

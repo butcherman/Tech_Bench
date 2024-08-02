@@ -156,11 +156,11 @@ class BuildAdminMenu
 
         if ($this->checkPermission($this->user, 'Manage Tech Tips')) {
             $nav = [
-                [
-                    'name' => 'Tech Tip Settings',
-                    'icon' => 'cog',
-                    'route' => route('admin.tech-tips.settings.edit'),
-                ],
+                // [
+                //     'name' => 'Tech Tip Settings',
+                //     'icon' => 'cog',
+                //     'route' => route('admin.tech-tips.settings.edit'),
+                // ],
                 [
                     'name' => 'Tech Tip Types',
                     'icon' => 'file-alt',
@@ -171,11 +171,11 @@ class BuildAdminMenu
                     'icon' => 'ban',
                     'route' => route('admin.tech-tips.deleted-tips'),
                 ],
-                [
-                    'name' => 'View Flagged Comments',
-                    'icon' => 'flag',
-                    'route' => route('tech-tips.comments.show-flagged'),
-                ],
+                // [
+                //     'name' => 'View Flagged Comments',
+                //     'icon' => 'flag',
+                //     'route' => route('tech-tips.comments.show-flagged'),
+                // ],
             ];
 
             $this->menu['Tech Tips'] = $nav;

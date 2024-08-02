@@ -22,21 +22,11 @@ class TechTipCommentController extends Controller
      */
     public function index(TechTip $techTip)
     {
+        $this->authorize('manage', TechTip::class);
+
         return Inertia::render('TechTips/Comments/Index', [
             'tip-data' => $techTip,
             'flagged-comments' => $techTip->TechTipComment()->has('Flags')->get(),
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return Inertia::render('TechTips/Comments/Index', [
-            'flagged-comments' => TechTipComment::has('Flags')
-                ->with('TechTip')
-                ->get(),
         ]);
     }
 
