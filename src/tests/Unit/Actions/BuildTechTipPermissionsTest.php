@@ -11,6 +11,7 @@ class BuildTechTipPermissionsTest extends TestCase
     public function test_build_installer()
     {
         $user = User::factory()->create(['role_id' => 1]);
+        $this->actingAs($user);
 
         $permissions = BuildTechTipPermissions::build($user);
         $shouldBe = [
@@ -27,6 +28,7 @@ class BuildTechTipPermissionsTest extends TestCase
     public function test_build_admin()
     {
         $user = User::factory()->create(['role_id' => 2]);
+        $this->actingAs($user);
 
         $permissions = BuildTechTipPermissions::build($user);
         $shouldBe = [
@@ -43,6 +45,7 @@ class BuildTechTipPermissionsTest extends TestCase
     public function test_build_tech()
     {
         $user = User::factory()->create(['role_id' => 4]);
+        $this->actingAs($user);
 
         $permissions = BuildTechTipPermissions::build($user);
         $shouldBe = [
