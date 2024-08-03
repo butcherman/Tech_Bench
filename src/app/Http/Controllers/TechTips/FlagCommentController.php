@@ -21,7 +21,7 @@ class FlagCommentController extends Controller
     {
         try {
             $comment->flagComment();
-            Log::stack(['daily', 'tips'])
+            Log::stack(['daily', 'tip'])
                 ->notice(
                     'Tech Tip comment has been flagged by ' . $request->user()->username,
                     $comment->toArray()
@@ -31,7 +31,9 @@ class FlagCommentController extends Controller
             if (in_array($e->errorInfo[1], [1062])) {
                 throw new CommentFlaggedAlreadyException($request);
             } else {
+                // @codeCoverageIgnoreStart
                 CheckDatabaseError::check($e);
+                // @codeCoverageIgnoreEnd
             }
         }
 

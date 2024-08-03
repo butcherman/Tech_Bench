@@ -21,10 +21,6 @@ class UserRole extends Model
         'UserRolePermission',
     ];
 
-    protected $dispatchesEvents = [
-        'created' => FeatureChangedEvent::class,
-    ];
-
     protected $casts = [
         'allow_edit' => 'boolean',
     ];

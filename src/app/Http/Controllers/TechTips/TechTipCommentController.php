@@ -22,7 +22,7 @@ class TechTipCommentController extends Controller
      */
     public function index(TechTip $techTip)
     {
-        $this->authorize('manage', TechTip::class);
+        $this->authorize('manage', TechTipComment::class);
 
         return Inertia::render('TechTips/Comments/Index', [
             'tip-data' => $techTip,
@@ -40,7 +40,7 @@ class TechTipCommentController extends Controller
     {
         $newComment = $techTip->TechTipComment()->save(new TechTipComment([
             'user_id' => $request->user()->user_id,
-            'comment' => $request->comment,
+            'comment' => $request->comment_data,
         ]));
 
         Log::channel('tip')
@@ -59,9 +59,9 @@ class TechTipCommentController extends Controller
      */
     public function update(TechTipCommentRequest $request, TechTip $techTip, TechTipComment $comment)
     {
-        $comment->update($request->only(['comment']));
+        $comment->update(['comment' => $request->comment_data]);
 
-        Log::channel('tips')
+        Log::channel('tip')
             ->info(
                 'Tech Tip Comment updated by ' . $request->user()->username,
                 $comment->toArray()
@@ -75,11 +75,11 @@ class TechTipCommentController extends Controller
      */
     public function destroy(Request $request, TechTipComment $comment)
     {
-        $this->authorize('manage', TechTip::class);
+        $this->authorize('delete', $comment);
 
         $comment->delete();
 
-        Log::channel('tips')
+        Log::channel('tip')
             ->notice(
                 'Tech Tip Comment deleted by ' . $request->user()->username,
                 $comment->toArray()
@@ -90,14 +90,14 @@ class TechTipCommentController extends Controller
 
     public function restore(Request $request, TechTipComment $comment)
     {
-        $this->authorize('manage', TechTip::class);
+        $this->authorize('manage', TechTipComment::class);
 
         $flags = $comment->Flags;
         foreach ($flags as $flag) {
             $flag->delete();
         }
 
-        Log::channel('tips')
+        Log::channel('tip')
             ->notice(
                 'Tech Tip Comment restored by ' . $request->user()->username,
                 $comment->toArray()

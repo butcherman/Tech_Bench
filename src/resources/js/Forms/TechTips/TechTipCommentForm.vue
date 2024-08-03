@@ -10,7 +10,7 @@
     >
         <TextAreaInput
             id="comment"
-            name="comment"
+            name="comment_data"
             placeholder="Join the Discussion..."
         />
     </VueForm>
@@ -44,10 +44,10 @@ const submitText = computed(() =>
 );
 
 const initValues = {
-    comment: props.commentData?.comment || "",
+    comment_data: props.commentData?.comment || "",
 };
 const schema = object({
-    comment: string().required(),
+    comment_data: string().required(),
 });
 
 const handleSuccess = () => {

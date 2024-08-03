@@ -33,7 +33,10 @@ class TechTipsSettingsRequest extends FormRequest
 
     public function processSettings()
     {
-        $this->saveSettingsArray($this->only(['allow_public', 'allow_comments']), 'techTips');
+        $this->saveSettingsArray(
+            $this->only(['allow_public', 'allow_comments']),
+            'techTips'
+        );
 
         // Forget the feature settings to re-force checking
         event(new FeatureChangedEvent);

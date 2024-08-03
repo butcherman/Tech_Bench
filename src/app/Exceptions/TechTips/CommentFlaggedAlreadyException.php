@@ -15,9 +15,9 @@ class CommentFlaggedAlreadyException extends Exception
 
     public function report()
     {
-        Log::stack(['tips', 'daily'])
+        Log::stack(['tip', 'daily'])
             ->notice(
-                'User '.$this->request->user()->username.' is re-submitting a Tech Tip Comment as flagged'
+                'User ' . $this->request->user()->username . ' is re-submitting a Tech Tip Comment as flagged'
             );
     }
 
