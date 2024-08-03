@@ -31,10 +31,15 @@ type tipComment = {
     user_id: number;
     author: string;
     comment: string;
-    flagged: boolean;
+    is_flagged: boolean;
     created_at: string;
     updated_at: string;
     tech_tip?: techTip;
+    flags?: {
+        comment_id: number;
+        created_at: string;
+        flagged_by: string;
+    }[];
 };
 
 type techTipPermissions = {

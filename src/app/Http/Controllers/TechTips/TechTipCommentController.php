@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\TechTips;
 
+use App\Events\TechTips\TipCommentedEvent;
 use App\Events\TechTips\TipCommentFlaggedEvent;
 use App\Exceptions\TechTips\CommentFlaggedAlreadyException;
 use App\Http\Controllers\Controller;
@@ -17,7 +18,7 @@ use Inertia\Inertia;
 class TechTipCommentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of any Flagged Comments for a specific Tech Tip
      */
     public function index(TechTip $techTip)
     {
@@ -25,7 +26,10 @@ class TechTipCommentController extends Controller
 
         return Inertia::render('TechTips/Comments/Index', [
             'tip-data' => $techTip,
-            'flagged-comments' => $techTip->TechTipComment()->has('Flags')->get(),
+            'flagged-comments' => $techTip->TechTipComment()
+                ->has('Flags')
+                ->get()
+                ->makeVisible('Flags'),
         ]);
     }
 
@@ -34,41 +38,20 @@ class TechTipCommentController extends Controller
      */
     public function store(TechTipCommentRequest $request, TechTip $techTip)
     {
-        $techTip->TechTipComment()->save(new TechTipComment([
+        $newComment = $techTip->TechTipComment()->save(new TechTipComment([
             'user_id' => $request->user()->user_id,
             'comment' => $request->comment,
         ]));
 
-        Log::channel('tips')->info('New Tech Tip Comment for Tip ID '.$techTip->tip_id, [
-            'comment' => $request->comment,
-        ]);
-        // TODO - Dispatch event to email
+        Log::channel('tip')
+            ->info(
+                'New Tech Tip Comment for Tip ID ' . $techTip->tip_id,
+                $newComment->toArray()
+            );
+
+        event(new TipCommentedEvent($newComment));
 
         return back()->with('success', __('tips.comment.created'));
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Request $request, TechTip $techTip, TechTipComment $comment)
-    {
-        try {
-            $comment->flagComment();
-            Log::stack(['daily', 'tips'])
-                ->notice(
-                    'Tech Tip comment has been flagged by '.$request->user()->username,
-                    $comment->toArray()
-                );
-            event(new TipCommentFlaggedEvent($comment));
-        } catch (QueryException $e) {
-            if (in_array($e->errorInfo[1], [1062])) {
-                throw new CommentFlaggedAlreadyException($request);
-            } else {
-                CheckDatabaseError::check($e);
-            }
-        }
-
-        return back()->with('warning', __('tips.comment.flagged'));
     }
 
     /**
@@ -80,7 +63,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tips')
             ->info(
-                'Tech Tip Comment updated by '.$request->user()->username,
+                'Tech Tip Comment updated by ' . $request->user()->username,
                 $comment->toArray()
             );
 
@@ -98,11 +81,11 @@ class TechTipCommentController extends Controller
 
         Log::channel('tips')
             ->notice(
-                'Tech Tip Comment deleted by '.$request->user()->username,
+                'Tech Tip Comment deleted by ' . $request->user()->username,
                 $comment->toArray()
             );
 
-        return back()->with('success', 'Comment Deleted');
+        return back()->with('warning', 'Comment Deleted');
     }
 
     public function restore(Request $request, TechTipComment $comment)
@@ -116,7 +99,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tips')
             ->notice(
-                'Tech Tip Comment restored by '.$request->user()->username,
+                'Tech Tip Comment restored by ' . $request->user()->username,
                 $comment->toArray()
             );
 

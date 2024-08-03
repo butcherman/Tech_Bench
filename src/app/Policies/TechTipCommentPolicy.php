@@ -25,8 +25,7 @@ class TechTipCommentPolicy
      */
     public function update(User $user, TechTipComment $techTipComment): bool
     {
-        return $this->checkPermission($user, 'Manage Tech Tips')
-            || $techTipComment->user_id === $user->user_id;
+        return $techTipComment->user_id === $user->user_id;
     }
 
     /**

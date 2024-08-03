@@ -17,7 +17,9 @@ class ShowFlaggedCommentsController extends Controller
         return Inertia::render('TechTips/Comments/Index', [
             'flagged-comments' => TechTipComment::has('Flags')
                 ->with('TechTip')
-                ->get(),
+                ->get()
+                ->makeVisible('Flags'),
+
         ]);
     }
 }

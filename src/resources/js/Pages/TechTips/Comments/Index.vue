@@ -46,9 +46,15 @@
                                             <fa-icon icon="rotate" />
                                         </Link>
                                         <div
-                                            class="border-bottom text-secondary"
+                                            class="border-bottom text-secondary pb-2"
                                         >
-                                            <span v-if="!tipData">
+                                            <div v-for="flag in comment.flags">
+                                                Flagged on
+                                                {{ flag.created_at }} by
+                                                {{ flag.flagged_by }}
+                                            </div>
+
+                                            <div v-if="!tipData">
                                                 For tip:
                                                 <Link
                                                     :href="
@@ -64,7 +70,7 @@
                                                             ?.subject
                                                     }}
                                                 </Link>
-                                            </span>
+                                            </div>
                                         </div>
                                     </div>
                                     {{ comment.comment }}

@@ -14,9 +14,9 @@ class TechTipComment extends Model
 
     protected $guarded = ['id', 'updated_at', 'created_at'];
 
-    protected $appends = ['author'];
+    protected $appends = ['author', 'is_flagged'];
 
-    protected $hidden = ['User'];
+    protected $hidden = ['User', 'Flags'];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
@@ -37,6 +37,11 @@ class TechTipComment extends Model
     public function Flags()
     {
         return $this->hasMany(TechTipCommentFlag::class, 'comment_id', 'comment_id');
+    }
+
+    public function getIsFlaggedAttribute()
+    {
+        return $this->Flags->count() > 0 ? true : false;
     }
 
     public function getAuthorAttribute()
