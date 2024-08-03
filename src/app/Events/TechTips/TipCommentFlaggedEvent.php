@@ -12,7 +12,7 @@ class TipCommentFlaggedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is triggered when a Tech Tip Comment is flagged as inappropriate
      */
     public function __construct(public TechTipComment $comment)
     {

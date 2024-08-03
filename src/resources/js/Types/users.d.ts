@@ -41,6 +41,7 @@ type userRolePermission = {
     description: string;
     group: string;
     allow: boolean;
+    feature_enabled: boolean;
 };
 
 type userRolePermissionGroup = { [key: string]: userRolePermission[] };

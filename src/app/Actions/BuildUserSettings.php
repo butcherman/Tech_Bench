@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Models\User;
 use App\Models\UserRolePermission;
 use App\Models\UserSetting;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Build a list of user settings that the user can make adjustments to.
@@ -12,7 +13,7 @@ use App\Models\UserSetting;
  */
 class BuildUserSettings
 {
-    public static function build(User $user)
+    public static function build(User $user): Collection
     {
         $userSettings = UserSetting::where('user_id', $user->user_id)->get();
 

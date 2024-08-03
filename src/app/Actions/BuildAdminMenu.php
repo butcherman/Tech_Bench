@@ -29,7 +29,7 @@ class BuildAdminMenu
     /**
      * Return the completed menu
      */
-    public function getAdminMenu()
+    public function getAdminMenu(): array
     {
         return $this->menu;
     }
@@ -37,7 +37,7 @@ class BuildAdminMenu
     /**
      * Get the administration links for Users
      */
-    protected function buildUserMenu()
+    protected function buildUserMenu(): void
     {
         $userBuild = [];
         if ($this->checkPermission($this->user, 'Manage Users')) {
@@ -85,7 +85,7 @@ class BuildAdminMenu
     /**
      * Build Administration menu for Customers
      */
-    protected function buildCustomerMenu()
+    protected function buildCustomerMenu(): void
     {
         $nav = [];
 
@@ -125,7 +125,7 @@ class BuildAdminMenu
     /**
      * Build administration menu for Equipment, Categories and Data Types
      */
-    protected function buildEquipmentMenu()
+    protected function buildEquipmentMenu(): void
     {
         $nav = [];
 
@@ -150,17 +150,17 @@ class BuildAdminMenu
     /**
      * Build Administration Menu for Tech Tips
      */
-    protected function buildTechTipMenu()
+    protected function buildTechTipMenu(): void
     {
         $nav = [];
 
         if ($this->checkPermission($this->user, 'Manage Tech Tips')) {
             $nav = [
-                // [
-                //     'name' => 'Tech Tip Settings',
-                //     'icon' => 'cog',
-                //     'route' => route('admin.tech-tips.settings.edit'),
-                // ],
+                [
+                    'name' => 'Tech Tip Settings',
+                    'icon' => 'cog',
+                    'route' => route('admin.tech-tips.settings.edit'),
+                ],
                 [
                     'name' => 'Tech Tip Types',
                     'icon' => 'file-alt',
@@ -171,11 +171,11 @@ class BuildAdminMenu
                     'icon' => 'ban',
                     'route' => route('admin.tech-tips.deleted-tips'),
                 ],
-                // [
-                //     'name' => 'View Flagged Comments',
-                //     'icon' => 'flag',
-                //     'route' => route('tech-tips.comments.show-flagged'),
-                // ],
+                [
+                    'name' => 'View Flagged Comments',
+                    'icon' => 'flag',
+                    'route' => route('tech-tips.comments.show-flagged'),
+                ],
             ];
 
             $this->menu['Tech Tips'] = $nav;
@@ -185,7 +185,7 @@ class BuildAdminMenu
     /**
      * BUild Administration Menu for Application Settings
      */
-    protected function buildSettingsMenu()
+    protected function buildSettingsMenu(): void
     {
         $nav = [];
 
@@ -220,7 +220,7 @@ class BuildAdminMenu
     /**
      * Build administration menu for Application Maintenance
      */
-    protected function buildMaintenanceMenu()
+    protected function buildMaintenanceMenu(): void
     {
         $nav = [];
 

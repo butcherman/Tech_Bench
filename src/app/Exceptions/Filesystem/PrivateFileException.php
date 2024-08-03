@@ -18,7 +18,7 @@ class PrivateFileException extends Exception
         parent::__construct();
     }
 
-    public function report(Request $request)
+    public function report(Request $request): void
     {
         Log::alert('A non-user is trying to download a private file', [
             'file' => $this->fileData->toArray(),
@@ -27,7 +27,7 @@ class PrivateFileException extends Exception
         ]);
     }
 
-    public function render()
+    public function render(): never
     {
         abort(403, 'You do not have permission to download this file');
     }

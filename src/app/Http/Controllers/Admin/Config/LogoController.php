@@ -6,17 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LogoRequest;
 use App\Models\AppSettings;
 use App\Traits\AppSettingsTrait;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class LogoController extends Controller
 {
     use AppSettingsTrait;
 
     /**
-     * Display the resource.
+     * Display the current logo.
      */
-    public function show()
+    public function show(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
@@ -24,9 +26,9 @@ class LogoController extends Controller
     }
 
     /**
-     * Update the resource in storage.
+     * Update the current logo
      */
-    public function update(LogoRequest $request)
+    public function update(LogoRequest $request): RedirectResponse
     {
         $logoLocation = $request->processLogo();
         $this->saveSettings('app.logo', $logoLocation);

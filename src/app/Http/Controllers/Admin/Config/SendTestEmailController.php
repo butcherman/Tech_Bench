@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Config;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Notifications\Admin\SendTestEmail;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -13,9 +14,9 @@ use Symfony\Component\Mailer\Exception\TransportException;
 class SendTestEmailController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Send a test email to the currently logged in user
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): RedirectResponse
     {
         $this->authorize('viewAny', AppSettings::class);
 

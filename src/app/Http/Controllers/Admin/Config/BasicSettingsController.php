@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BasicSettingsRequest;
 use App\Models\AppSettings;
 use App\Service\TimezoneList;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class BasicSettingsController extends Controller
 {
     /**
-     * Display the resource.
+     * Display the Application Settings.
      */
-    public function show()
+    public function show(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
@@ -29,9 +31,9 @@ class BasicSettingsController extends Controller
     }
 
     /**
-     * Update the resource in storage.
+     * Update the Applications Settings
      */
-    public function update(BasicSettingsRequest $request)
+    public function update(BasicSettingsRequest $request): RedirectResponse
     {
         $request->processSettings();
 

@@ -20,7 +20,7 @@ class InvalidResetPasswordTokenException extends Exception
         $this->requestData = $requestData;
     }
 
-    public function report()
+    public function report(): void
     {
         Log::alert('Someone tried to access a Reset Password link with an invalid Password Reset token', [
             'token' => $this->requestData->token,
@@ -29,7 +29,7 @@ class InvalidResetPasswordTokenException extends Exception
         ]);
     }
 
-    public function render()
+    public function render(): never
     {
         abort(404);
     }

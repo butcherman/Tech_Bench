@@ -15,7 +15,7 @@
                         <div class="mb-2">
                             <div>
                                 <DeleteBadge
-                                    v-if="canEdit(comment)"
+                                    v-if="canDelete(comment)"
                                     class="float-end"
                                     @click="deleteComment(comment)"
                                 />
@@ -25,7 +25,9 @@
                                     @click="editComment(comment)"
                                 />
                                 <span
-                                    v-if="!canEdit(comment)"
+                                    v-if="
+                                        !canEdit(comment) && !canDelete(comment)
+                                    "
                                     class="float-end text-muted pointer"
                                     title="Flag this comment as inappropriate"
                                     v-tooltip
@@ -34,7 +36,14 @@
                                     <fa-icon icon="flag" />
                                 </span>
                             </div>
-                            {{ comment.comment }}
+                            <span v-if="comment.is_flagged" class="text-danger">
+                                <fa-icon icon="triangle-exclamation" />
+                                This comment has been flagged for review
+                                <fa-icon icon="triangle-exclamation" />
+                            </span>
+                            <span v-else>
+                                {{ comment.comment }}
+                            </span>
                         </div>
                         <div class="border-top text-secondary">
                             {{ comment.author }}
@@ -87,6 +96,10 @@ const editCommentModal = ref<InstanceType<typeof Modal> | null>(null);
 const activeComment = ref<tipComment | null>(null);
 
 const canEdit = (commentData: tipComment) => {
+    return commentData.user_id === appData.user?.user_id;
+};
+
+const canDelete = (commentData: tipComment) => {
     return (
         commentData.user_id === appData.user?.user_id ||
         props.permissions.manage
@@ -94,8 +107,8 @@ const canEdit = (commentData: tipComment) => {
 };
 
 const flagComment = (commentData: tipComment) => {
-    router.get(
-        route("tech-tips.comments.show", [
+    router.post(
+        route("tech-tips.comments.flag", [
             props.tipSlug,
             commentData.comment_id,
         ]),

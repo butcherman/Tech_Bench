@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Admin\Config;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EmailSettingsRequest;
 use App\Models\AppSettings;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class EmailSettingsController extends Controller
 {
     /**
-     * Display the resource.
+     * Display the Email Settings.
      */
-    public function show()
+    public function show(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
@@ -31,9 +33,9 @@ class EmailSettingsController extends Controller
     }
 
     /**
-     * Update the resource in storage.
+     * Update the Email Settings
      */
-    public function update(EmailSettingsRequest $request)
+    public function update(EmailSettingsRequest $request): RedirectResponse
     {
         $request->processSettings();
 

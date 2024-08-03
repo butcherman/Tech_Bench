@@ -5,6 +5,7 @@ namespace App\Exceptions\Customer;
 use App\Http\Middleware\HandleInertiaRequests;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -21,7 +22,7 @@ class CustomerNotFoundException extends Exception
         $this->request = $request;
     }
 
-    public function report()
+    public function report(): void
     {
         Log::stack(['daily', 'cust'])->warning('Unable to find request customer page', [
             'user' => $this->request->user()->username,
@@ -29,7 +30,7 @@ class CustomerNotFoundException extends Exception
         ]);
     }
 
-    public function render()
+    public function render(): Response
     {
         $middlewareData = (new HandleInertiaRequests)->share($this->request);
 

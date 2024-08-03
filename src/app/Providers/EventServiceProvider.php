@@ -91,6 +91,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\TechTips\UpdateTipFilesListener',
             'App\Listeners\Notify\TechTips\TechTipNotification',
         ],
+        'App\Events\TechTips\TipCommentedEvent' => [
+            'App\Listeners\Notify\TechTips\NotifyOfCommentListener',
+        ],
         'App\Events\TechTips\TipCommentFlaggedEvent' => [
             'App\Listeners\Notify\TechTips\NotifyOfFlaggedTipListener',
         ],

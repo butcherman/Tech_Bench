@@ -18,7 +18,7 @@ class FileMissingException extends Exception
         parent::__construct();
     }
 
-    public function report(Request $request)
+    public function report(Request $request): void
     {
         Log::error('File Missing Exception found', [
             'file' => $this->fileData->toArray(),
@@ -27,7 +27,7 @@ class FileMissingException extends Exception
         ]);
     }
 
-    public function render(Request $request)
+    public function render(Request $request): never
     {
         // TODO - the message does not show with Laravel Error page
         abort(404, 'The requested file was not found');

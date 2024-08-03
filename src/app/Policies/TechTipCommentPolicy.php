@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Features\TechTipCommentFeature;
 use App\Models\TechTipComment;
 use App\Models\User;
 use App\Traits\AllowTrait;
@@ -13,27 +14,50 @@ class TechTipCommentPolicy
     protected $permName = 'Comment on Tech Tip';
 
     /**
-     * Determine whether the user can create models.
+     * Determine who has management abilities for comments
+     */
+    public function manage(User $user)
+    {
+        if ($user->features()->inactive(TechTipCommentFeature::class)) {
+            return false;
+        }
+
+        return $this->checkPermission($user, 'Manage Tech Tips');
+    }
+
+    /**
+     * Determine whether the user can create comments.
      */
     public function create(User $user): bool
     {
-        return $this->checkPermission($user, $this->permName);
+        if ($user->features()->inactive(TechTipCommentFeature::class)) {
+            return false;
+        }
+
+        return $this->checkPermission($user, 'Comment on Tech Tip');
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update the comment.
      */
     public function update(User $user, TechTipComment $techTipComment): bool
     {
-        return $this->checkPermission($user, 'Manage Tech Tips')
-            || $techTipComment->user_id === $user->user_id;
+        if ($user->features()->inactive(TechTipCommentFeature::class)) {
+            return false;
+        }
+
+        return $techTipComment->user_id === $user->user_id;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can delete the comment.
      */
     public function delete(User $user, TechTipComment $techTipComment): bool
     {
+        if ($user->features()->inactive(TechTipCommentFeature::class)) {
+            return false;
+        }
+
         return $this->checkPermission($user, 'Manage Tech Tips')
             || $techTipComment->user_id === $user->user_id;
     }

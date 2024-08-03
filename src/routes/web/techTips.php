@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TechTips\DeletedTipsController;
+use App\Http\Controllers\TechTips\FlagCommentController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 use App\Http\Controllers\TechTips\ShowDeletedTipController;
 use App\Http\Controllers\TechTips\ShowFlaggedCommentsController;
@@ -45,14 +46,22 @@ Route::middleware('auth.secure')->group(function () {
             ->withTrashed();
     });
 
+    /**
+     * Tech Tip Service Routes
+     */
     Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
         Route::post('search', SearchTipsController::class)->name('search');
         Route::post('upload-file', UploadTipFile::class)->name('upload');
+        /**
+         * Tech Tip Comments Routes
+         */
         Route::prefix('{tech_tip}')->group(function () {
+            Route::post('flag-comment/{comment}', FlagCommentController::class)
+                ->name('comments.flag');
             Route::resource('comments', TechTipCommentController::class)
                 ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                     $breadcrumbs->index('Flagged Comments', 'tech-tips.show');
-                })->except(['create', 'edit', 'destroy']);
+                })->except(['create', 'show', 'edit', 'destroy']);
         });
         Route::prefix('comments')->name('comments.')->group(function () {
             Route::get('flagged-comments', ShowFlaggedCommentsController::class)

@@ -12,5 +12,5 @@ Schedule::command('auth:clear-resets')->everyFifteenMinutes();
 Schedule::command('horizon:snapshot')->everyFifteenMinutes();
 Schedule::command('model:prune')->daily();
 Schedule::job(new CheckCertificateJob)->daily();
-Schedule::job(new NightlyBackupJob())->dailyAt('03:00');
-Schedule::job(new DailyCleanupJob())->dailyAt('06:00');
+Schedule::job(new NightlyBackupJob)->dailyAt('03:00');
+Schedule::job(new DailyCleanupJob)->dailyAt('06:00');

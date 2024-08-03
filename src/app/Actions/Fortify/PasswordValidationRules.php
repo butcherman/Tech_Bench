@@ -17,7 +17,8 @@ trait PasswordValidationRules
     {
         // @codeCoverageIgnoreStart
         $minLength = config('auth.passwords.settings.disable_compromised') ?
-            Password::min(config('auth.passwords.settings.min_length'))->uncompromised(3) :
+            Password::min(config('auth.passwords.settings.min_length'))
+                ->uncompromised(3) :
             Password::min(config('auth.passwords.settings.min_length'));
         // @codeCoverageIgnoreEnd
 
