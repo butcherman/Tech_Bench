@@ -19,10 +19,13 @@ class TechTipEvent // implements ShouldBroadcast
     public string $action;
 
     /**
-     * Create a new event instance.
+     * Event is triggered on Created or Updated Tech Tip
      */
-    public function __construct(public TechTip $techTip, CrudAction $action, public bool $sendNotification)
-    {
+    public function __construct(
+        public TechTip $techTip,
+        CrudAction $action,
+        public bool $sendNotification
+    ) {
         $this->action = $action->name;
 
         Log::debug('Tech Tip Event called', [

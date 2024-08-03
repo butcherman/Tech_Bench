@@ -3,6 +3,7 @@
 namespace App\Exceptions\Database;
 
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Log;
  */
 class RecordInUseException extends Exception
 {
-    public function report()
+    public function report(): void
     {
         Log::alert('Record In Use Exception', [
             'message' => $this->getMessage(),
@@ -19,7 +20,7 @@ class RecordInUseException extends Exception
         ]);
     }
 
-    public function render()
+    public function render(): RedirectResponse
     {
         return back()->withErrors(['query_error' => $this->getMessage()]);
     }

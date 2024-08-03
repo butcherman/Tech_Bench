@@ -15,23 +15,29 @@
                                 class="row"
                             >
                                 <h6 class="mt-2">{{ name }}</h6>
-                                <div
-                                    class="col-12 col-lg-4"
+                                <template
                                     v-for="opt in group"
                                     :key="opt.perm_type_id"
                                 >
-                                    <fa-icon
-                                        :icon="
-                                            opt.allow ? 'fa-check' : 'fa-xmark'
-                                        "
-                                        :class="
-                                            opt.allow
-                                                ? 'text-success'
-                                                : 'text-danger'
-                                        "
-                                    />
-                                    {{ opt.description }}
-                                </div>
+                                    <div
+                                        v-show="opt.feature_enabled"
+                                        class="col-12 col-lg-4"
+                                    >
+                                        <fa-icon
+                                            :icon="
+                                                opt.allow
+                                                    ? 'fa-check'
+                                                    : 'fa-xmark'
+                                            "
+                                            :class="
+                                                opt.allow
+                                                    ? 'text-success'
+                                                    : 'text-danger'
+                                            "
+                                        />
+                                        {{ opt.description }}
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>

@@ -19,7 +19,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserRoleForm from "@/Forms/Admin/User/UserRoleForm.vue";
-import { ref, reactive, onMounted } from "vue";
 
 defineProps<{
     permissionList: userRolePermissionGroup;

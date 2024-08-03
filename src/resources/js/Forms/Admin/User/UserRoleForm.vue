@@ -25,17 +25,18 @@
             class="row mb-2"
         >
             <h6>{{ name }}</h6>
-            <div
-                v-for="opt in group"
-                :key="opt.perm_type_id"
-                class="col-12 col-lg-4 col-md-6"
-            >
-                <CheckboxSwitch
-                    :id="`permissions-${opt.perm_type_id}`"
-                    :name="`permissions[${opt.perm_type_id}]`"
-                    :label="opt.description"
-                />
-            </div>
+            <template v-for="opt in group" :key="opt.perm_type_id">
+                <div
+                    v-show="opt.feature_enabled"
+                    class="col-12 col-lg-4 col-md-6"
+                >
+                    <CheckboxSwitch
+                        :id="`permissions-${opt.perm_type_id}`"
+                        :name="`permissions[${opt.perm_type_id}]`"
+                        :label="opt.description"
+                    />
+                </div>
+            </template>
         </div>
     </VueForm>
 </template>

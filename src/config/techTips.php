@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'allow_comments' => false,
+    'allow_comments' => true,
     'allow_public' => false,
 ];

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\Feature\FeatureChangedEvent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class UserRolePermission extends Model
 {
@@ -19,17 +20,17 @@ class UserRolePermission extends Model
         'UserRolePermissionType',
     ];
 
-    protected $appends = ['description'];
+    protected $appends = ['description', 'feature_enabled'];
 
     protected $casts = [
         'allow' => 'boolean',
     ];
 
-    protected $dispatchesEvents = [
-        'created' => FeatureChangedEvent::class,
-        'updated' => FeatureChangedEvent::class,
-        'deleted' => FeatureChangedEvent::class,
-    ];
+    // protected $dispatchesEvents = [
+    //     'created' => FeatureChangedEvent::class,
+    //     'updated' => FeatureChangedEvent::class,
+    //     'deleted' => FeatureChangedEvent::class,
+    // ];
 
     /**
      * Additional Attributes
@@ -37,6 +38,17 @@ class UserRolePermission extends Model
     public function getDescriptionAttribute()
     {
         return $this->UserRolePermissionType->description;
+    }
+
+    public function getFeatureEnabledAttribute()
+    {
+        if ($this->UserRolePermissionType->feature_name) {
+            return Auth::user()
+                ->features()
+                ->active($this->UserRolePermissionType->feature_name);
+        }
+
+        return true;
     }
 
     /**

@@ -14,10 +14,14 @@ class ShowFlaggedCommentsController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $this->authorize('manage', TechTipComment::class);
+
         return Inertia::render('TechTips/Comments/Index', [
             'flagged-comments' => TechTipComment::has('Flags')
                 ->with('TechTip')
-                ->get(),
+                ->get()
+                ->makeVisible('Flags'),
+
         ]);
     }
 }

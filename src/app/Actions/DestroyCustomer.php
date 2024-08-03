@@ -19,12 +19,12 @@ class DestroyCustomer
         $this->handleJob();
     }
 
-    public function wasSuccessful()
+    public function wasSuccessful(): bool
     {
         return $this->isSuccessful;
     }
 
-    protected function handleJob()
+    protected function handleJob(): void
     {
         $this->destroyFiles();
         $this->destroySites();
@@ -37,21 +37,20 @@ class DestroyCustomer
     /**
      * Remove all Customer Files from the disk if not in use by other items
      */
-    protected function destroyFiles()
+    protected function destroyFiles(): void
     {
         $fileList = $this->customer->CustomerFile;
 
         foreach ($fileList as $fileData) {
             $fileData->forceDelete();
             event(new FileDataDeletedEvent($fileData->FileUpload->file_id));
-
         }
     }
 
     /**
      * Remove all related sites from the customer
      */
-    protected function destroySites()
+    protected function destroySites(): void
     {
         // Clear out the primary site id so that all sites can be destroyed
         $this->customer->primary_site_id = null;

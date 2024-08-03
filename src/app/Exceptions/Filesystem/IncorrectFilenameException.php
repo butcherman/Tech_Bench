@@ -18,7 +18,7 @@ class IncorrectFilenameException extends Exception
         parent::__construct();
     }
 
-    public function report(Request $request)
+    public function report(Request $request): void
     {
         Log::error('File download prevented.  Filename does not match file ID', [
             'file' => $this->fileData->toArray(),
@@ -28,7 +28,7 @@ class IncorrectFilenameException extends Exception
         ]);
     }
 
-    public function render()
+    public function render(): never
     {
         abort(403, 'Incorrect File Data');
     }
