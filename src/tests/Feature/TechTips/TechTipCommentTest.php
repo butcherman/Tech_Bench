@@ -138,7 +138,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->put(
             route('tech-tips.comments.update', [
                 $comment->TechTip->tip_id,
-                $comment->comment_id
+                $comment->comment_id,
             ]),
             $data
         );
@@ -165,7 +165,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->put(route('tech-tips.comments.update', [
                 $comment->TechTip->tip_id,
-                $comment->comment_id
+                $comment->comment_id,
             ]), $data);
         $response->assertForbidden();
     }
@@ -181,7 +181,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->put(route('tech-tips.comments.update', [
                 $comment->TechTip->tip_id,
-                $comment->comment_id
+                $comment->comment_id,
             ]), $data);
         $response->assertForbidden();
     }
@@ -197,7 +197,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->put(route('tech-tips.comments.update', [
                 $comment->TechTip->tip_id,
-                $comment->comment_id
+                $comment->comment_id,
             ]), $data);
         $response->assertForbidden();
     }
@@ -214,7 +214,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)
             ->put(route('tech-tips.comments.update', [
                 $comment->TechTip->tip_id,
-                $comment->comment_id
+                $comment->comment_id,
             ]), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.comment.updated'));

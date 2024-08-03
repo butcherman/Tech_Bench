@@ -11,7 +11,7 @@ class FeatureChangedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is Fired whenever an event is enabled or disabled
      */
     public function __construct()
     {

@@ -15,7 +15,7 @@ use App\Models\User;
  */
 class BuildCustomerPermissions
 {
-    public static function build(User $user)
+    public static function build(User $user): array
     {
         return [
             'details' => [

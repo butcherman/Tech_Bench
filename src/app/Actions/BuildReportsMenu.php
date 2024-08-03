@@ -4,7 +4,7 @@ namespace App\Actions;
 
 class BuildReportsMenu
 {
-    public static function getMenu()
+    public static function getMenu(): array
     {
         return [
             'User Reports' => [

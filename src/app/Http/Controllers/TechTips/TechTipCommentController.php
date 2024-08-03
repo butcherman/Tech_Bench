@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\TechTips;
 
 use App\Events\TechTips\TipCommentedEvent;
-use App\Events\TechTips\TipCommentFlaggedEvent;
-use App\Exceptions\TechTips\CommentFlaggedAlreadyException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\TechTipCommentRequest;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
-use App\Service\CheckDatabaseError;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -45,7 +41,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tip')
             ->info(
-                'New Tech Tip Comment for Tip ID ' . $techTip->tip_id,
+                'New Tech Tip Comment for Tip ID '.$techTip->tip_id,
                 $newComment->toArray()
             );
 
@@ -63,7 +59,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tip')
             ->info(
-                'Tech Tip Comment updated by ' . $request->user()->username,
+                'Tech Tip Comment updated by '.$request->user()->username,
                 $comment->toArray()
             );
 
@@ -81,7 +77,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tip')
             ->notice(
-                'Tech Tip Comment deleted by ' . $request->user()->username,
+                'Tech Tip Comment deleted by '.$request->user()->username,
                 $comment->toArray()
             );
 
@@ -99,7 +95,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tip')
             ->notice(
-                'Tech Tip Comment restored by ' . $request->user()->username,
+                'Tech Tip Comment restored by '.$request->user()->username,
                 $comment->toArray()
             );
 

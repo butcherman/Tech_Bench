@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Gate;
 class BuildNavbar
 {
     // TODO - Unit Test Class
-    public static function build(User $user)
+    public static function build(User $user): array
     {
         $primaryNav = [
             [
@@ -50,7 +50,7 @@ class BuildNavbar
     /**
      * If the user has any Administrative Abilities, include Admin Link
      */
-    protected static function getAdminNav(User $user)
+    protected static function getAdminNav(User $user): bool|array
     {
         if (Gate::allows('admin-link', $user)) {
             return [
@@ -66,7 +66,7 @@ class BuildNavbar
     /**
      * If the user can access the Reports link, include that link
      */
-    protected static function getReportsNav(User $user)
+    protected static function getReportsNav(User $user): bool|array
     {
         if (Gate::allows('reports-link', $user)) {
             return [

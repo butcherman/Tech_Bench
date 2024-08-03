@@ -18,8 +18,9 @@ class AuthorizeUser
 
     /**
      * Try to authenticate the new user
+     * TODO - Type-hint $socUser
      */
-    public function processUser($socUser)
+    public function processUser($socUser): bool|User
     {
         if ($this->doesUserExist($socUser)) {
             Auth::login($this->user, true);
@@ -51,7 +52,7 @@ class AuthorizeUser
     /**
      * Determine if the user already exists in the database
      */
-    protected function doesUserExist($socUser)
+    protected function doesUserExist($socUser): bool
     {
         $user = User::where('email', $socUser->email)->first();
         if ($user) {
@@ -66,7 +67,7 @@ class AuthorizeUser
     /**
      * Create the new user in the database
      */
-    protected function buildUser($socUser)
+    protected function buildUser($socUser): void
     {
         $newUser = User::create([
             'role_id' => config('services.azure.default_role_id'),
@@ -85,7 +86,7 @@ class AuthorizeUser
     /**
      * Determine if the user can bypass 2FA and set necessary session
      */
-    protected function canBypassTwoFa()
+    protected function canBypassTwoFa(): void
     {
         if (config('services.azure.allow_bypass_2fa')) {
             session()->put('2fa_verified', true);

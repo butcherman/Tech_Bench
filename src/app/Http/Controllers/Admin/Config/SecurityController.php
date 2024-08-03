@@ -7,17 +7,18 @@ use App\Http\Requests\Admin\CsrRequest;
 use App\Http\Requests\Admin\SecurityRequest;
 use App\Models\AppSettings;
 use App\Service\CertificateService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class SecurityController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a Current SSL Certificate
      */
-    public function index()
+    public function index(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
         $certObj = new CertificateService;
@@ -29,9 +30,9 @@ class SecurityController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for uploading a new SSL Certificate
      */
-    public function create()
+    public function create(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
         $certObj = new CertificateService;
@@ -42,9 +43,9 @@ class SecurityController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store the uploaded SSL Certificate
      */
-    public function store(SecurityRequest $request)
+    public function store(SecurityRequest $request): RedirectResponse
     {
         $certObj = new CertificateService(false);
         $certObj->processNewCertificate($request);
@@ -65,9 +66,9 @@ class SecurityController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for creating a SSL CSR Request
      */
-    public function edit()
+    public function edit(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
@@ -75,9 +76,9 @@ class SecurityController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Generate a CSR Request
      */
-    public function update(CsrRequest $request, string $id)
+    public function update(CsrRequest $request, string $id): Response
     {
         $certObj = new CertificateService(false);
 
@@ -89,9 +90,9 @@ class SecurityController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the Current SSL Certificate
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
         $this->authorize('update', AppSettings::class);
 

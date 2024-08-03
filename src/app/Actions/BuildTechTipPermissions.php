@@ -2,13 +2,13 @@
 
 namespace App\Actions;
 
-use App\Models\TechTipComment;
 use App\Models\TechTip;
+use App\Models\TechTipComment;
 use App\Models\User;
 
 class BuildTechTipPermissions
 {
-    public static function build(User $user)
+    public static function build(User $user): array
     {
         return [
             'manage' => $user->can('manage', TechTip::class),

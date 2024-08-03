@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\TechTips;
 
 use App\Events\TechTips\TipCommentFlaggedEvent;
+use App\Exceptions\TechTips\CommentFlaggedAlreadyException;
 use App\Http\Controllers\Controller;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
+use App\Service\CheckDatabaseError;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Service\CheckDatabaseError;
-use App\Exceptions\TechTips\CommentFlaggedAlreadyException;
 
 class FlagCommentController extends Controller
 {
@@ -23,7 +23,7 @@ class FlagCommentController extends Controller
             $comment->flagComment();
             Log::stack(['daily', 'tip'])
                 ->notice(
-                    'Tech Tip comment has been flagged by ' . $request->user()->username,
+                    'Tech Tip comment has been flagged by '.$request->user()->username,
                     $comment->toArray()
                 );
             event(new TipCommentFlaggedEvent($comment));

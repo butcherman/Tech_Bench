@@ -5,8 +5,6 @@ namespace Tests\Feature\TechTips;
 use App\Models\TechTipComment;
 use App\Models\TechTipCommentFlag;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class FlagCommentTest extends TestCase
@@ -21,7 +19,7 @@ class FlagCommentTest extends TestCase
         $response = $this->post(
             route('tech-tips.comments.flag', [
                 $comment->TechTip->tip_id,
-                $comment->comment_id
+                $comment->comment_id,
             ])
         );
         $response->assertStatus(302);
@@ -36,7 +34,7 @@ class FlagCommentTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->post(route('tech-tips.comments.flag', [
                 $comment->TechTip->tip_id,
-                $comment->comment_id
+                $comment->comment_id,
             ]));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('tips.comment.flagged'));
@@ -58,7 +56,7 @@ class FlagCommentTest extends TestCase
         $response = $this->actingAs($user)
             ->post(route('tech-tips.comments.flag', [
                 $comment->TechTip->tip_id,
-                $comment->comment_id
+                $comment->comment_id,
             ]));
         $response->assertStatus(302);
         $response->assertSessionHas(

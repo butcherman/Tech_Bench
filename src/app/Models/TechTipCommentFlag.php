@@ -12,6 +12,7 @@ class TechTipCommentFlag extends Model
     protected $guarded = ['id', 'updated_at', 'created_at'];
 
     protected $appends = ['flagged_by'];
+
     protected $hidden = ['User'];
 
     protected $casts = [

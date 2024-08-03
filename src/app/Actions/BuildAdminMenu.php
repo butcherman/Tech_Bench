@@ -29,7 +29,7 @@ class BuildAdminMenu
     /**
      * Return the completed menu
      */
-    public function getAdminMenu()
+    public function getAdminMenu(): array
     {
         return $this->menu;
     }
@@ -37,7 +37,7 @@ class BuildAdminMenu
     /**
      * Get the administration links for Users
      */
-    protected function buildUserMenu()
+    protected function buildUserMenu(): void
     {
         $userBuild = [];
         if ($this->checkPermission($this->user, 'Manage Users')) {
@@ -85,7 +85,7 @@ class BuildAdminMenu
     /**
      * Build Administration menu for Customers
      */
-    protected function buildCustomerMenu()
+    protected function buildCustomerMenu(): void
     {
         $nav = [];
 
@@ -125,7 +125,7 @@ class BuildAdminMenu
     /**
      * Build administration menu for Equipment, Categories and Data Types
      */
-    protected function buildEquipmentMenu()
+    protected function buildEquipmentMenu(): void
     {
         $nav = [];
 
@@ -150,7 +150,7 @@ class BuildAdminMenu
     /**
      * Build Administration Menu for Tech Tips
      */
-    protected function buildTechTipMenu()
+    protected function buildTechTipMenu(): void
     {
         $nav = [];
 
@@ -185,7 +185,7 @@ class BuildAdminMenu
     /**
      * BUild Administration Menu for Application Settings
      */
-    protected function buildSettingsMenu()
+    protected function buildSettingsMenu(): void
     {
         $nav = [];
 
@@ -220,7 +220,7 @@ class BuildAdminMenu
     /**
      * Build administration menu for Application Maintenance
      */
-    protected function buildMaintenanceMenu()
+    protected function buildMaintenanceMenu(): void
     {
         $nav = [];
 

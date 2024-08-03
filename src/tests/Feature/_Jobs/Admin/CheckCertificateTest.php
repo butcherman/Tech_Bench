@@ -59,7 +59,7 @@ class CheckCertificateTest extends TestCase
     {
         Notification::fake();
 
-        dispatch(new CheckCertificateJob());
+        dispatch(new CheckCertificateJob);
 
         Notification::assertNothingSent();
     }
@@ -70,7 +70,7 @@ class CheckCertificateTest extends TestCase
 
         $this->travel(29)->days();
 
-        dispatch(new CheckCertificateJob());
+        dispatch(new CheckCertificateJob);
 
         Notification::assertSentTo(User::find(1), CertificateExpiresSoonNotification::class);
     }
@@ -81,7 +81,7 @@ class CheckCertificateTest extends TestCase
 
         $this->travel(59)->days();
 
-        dispatch(new CheckCertificateJob());
+        dispatch(new CheckCertificateJob);
 
         Notification::assertSentTo(User::find(1), CertificateExpiresSoonNotification::class);
     }
@@ -92,7 +92,7 @@ class CheckCertificateTest extends TestCase
 
         $this->travel(89)->days();
 
-        dispatch(new CheckCertificateJob());
+        dispatch(new CheckCertificateJob);
 
         Notification::assertSentTo(User::find(1), CertificateExpiresSoonNotification::class);
     }
@@ -103,7 +103,7 @@ class CheckCertificateTest extends TestCase
 
         $this->travel(90)->days();
 
-        dispatch(new CheckCertificateJob());
+        dispatch(new CheckCertificateJob);
 
         Notification::assertNothingSent();
     }
@@ -114,7 +114,7 @@ class CheckCertificateTest extends TestCase
 
         $this->travel(104)->days();
 
-        dispatch(new CheckCertificateJob());
+        dispatch(new CheckCertificateJob);
 
         Notification::assertSentTo(User::find(1), CertificateExpiresSoonNotification::class);
     }
@@ -125,7 +125,7 @@ class CheckCertificateTest extends TestCase
 
         $this->travel(180)->days();
 
-        dispatch(new CheckCertificateJob());
+        dispatch(new CheckCertificateJob);
 
         Notification::assertSentTo(User::find(1), CertificateExpiredNotification::class);
     }
@@ -137,7 +137,7 @@ class CheckCertificateTest extends TestCase
 
         $this->travel(180)->days();
 
-        dispatch(new CheckCertificateJob());
+        dispatch(new CheckCertificateJob);
 
         Notification::assertSentTo(User::find(1), CertificateInvalidNotification::class);
     }

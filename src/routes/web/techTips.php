@@ -37,7 +37,7 @@ Route::middleware('auth.secure')->group(function () {
         Route::get('deleted-tips/{techTip}', ShowDeletedTipController::class)
             ->withTrashed()
             ->name('deleted-tips.show')
-            ->breadcrumb(fn(TechTip $techTip) => 'Tip Details - ' . $techTip->subject, 'admin.tech-tips.deleted-tips');
+            ->breadcrumb(fn (TechTip $techTip) => 'Tip Details - '.$techTip->subject, 'admin.tech-tips.deleted-tips');
         Route::get('restore-tip/{techTip}', [TechTipsController::class, 'restore'])
             ->name('restore')
             ->withTrashed();
@@ -77,7 +77,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Tech Tips')
                 ->create('Create Tech Tip')
-                ->show(fn(TechTip $tech_tip) => 'Tip Details - ' . $tech_tip->subject)
+                ->show(fn (TechTip $tech_tip) => 'Tip Details - '.$tech_tip->subject)
                 ->edit('Edit Tech Tip');
         });
 

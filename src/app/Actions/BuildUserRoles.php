@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\User;
 use App\Service\Cache;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * This Action will return a list of roles that the logged in user can assign
@@ -12,18 +13,15 @@ use App\Service\Cache;
  */
 class BuildUserRoles
 {
-    public static function build(User $user)
+    public static function build(User $user): Collection
     {
         $userRole = $user->role_id;
         $roleList = Cache::userRoles();
 
-        switch ($userRole) {
-            case 1:
-                return $roleList->append('href');
-            case 2:
-                return $roleList->where('role_id', '>=', 2)->append('href');
-            default:
-                return $roleList->where('role_id', '>=', 2)->append('href');
-        }
+        return match ($userRole) {
+            1 => $roleList->append('href'),
+            2 => $roleList->where('role_id', '>=', 2)->append('href'),
+            default => $roleList->where('role_id', '>=', 2)->append('href'),
+        };
     }
 }
