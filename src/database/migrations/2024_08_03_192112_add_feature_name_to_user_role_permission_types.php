@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\PublicTechTipFeature;
 use App\Features\TechTipCommentFeature;
 use App\Models\UserRolePermissionType;
 use Illuminate\Database\Migrations\Migration;
@@ -18,6 +19,8 @@ return new class extends Migration {
 
         UserRolePermissionType::where('description', 'Comment on Tech Tip')
             ->update(['feature_name' => TechTipCommentFeature::class]);
+        UserRolePermissionType::where('description', 'Add Public Tech Tip')
+            ->update(['feature_name' => PublicTechTipFeature::class]);
     }
 
     /**

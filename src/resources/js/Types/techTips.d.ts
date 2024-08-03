@@ -44,5 +44,6 @@ type tipComment = {
 
 type techTipPermissions = {
     comment: boolean;
+    public: boolean;
     manage: boolean;
 } & basicPermissions;
