@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Customer extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Searchable;
 
     protected $primaryKey = 'cust_id';
 
@@ -79,4 +81,16 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerFile::class, 'cust_id', 'cust_id');
     }
+
+    /**
+     * Search Results for Meilisearch
+     */
+    // public function toSearchableArray()
+    // {
+    //     return [
+    //         'cust_id' => (int) $this->cust_id,
+    //         'name' => $this->name,
+
+    //     ];
+    // }
 }
