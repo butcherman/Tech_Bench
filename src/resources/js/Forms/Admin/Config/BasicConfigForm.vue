@@ -12,6 +12,7 @@
                 <span class="input-group-text">https://</span>
             </template>
         </TextInput>
+        <TextInput id="company-name" name="company_name" label="Company Name" />
         <SelectInput
             id="timezone"
             name="timezone"
@@ -41,6 +42,7 @@ defineEmits(["success"]);
 const props = defineProps<{
     tzList: TimezoneList;
     url: string;
+    company_name: string;
     timezone: string;
     maxFilesize: number;
     init?: boolean;
@@ -54,11 +56,13 @@ const submitRoute = computed(() =>
 
 const initValues = {
     url: props.url,
+    company_name: props.company_name,
     timezone: props.timezone,
     max_filesize: props.maxFilesize,
 };
 const schema = object({
     url: string().required(),
+    company_name: string().required().label("Company Name"),
     timezone: string().required(),
     max_filesize: number().required(),
 });

@@ -8,6 +8,7 @@
                     <EquipmentForm
                         :category-list="categoryList"
                         :data-list="dataList"
+                        :public-tips="publicTips"
                     />
                     <div class="text-center">
                         Click the
@@ -28,6 +29,7 @@ import { ref, reactive, onMounted } from "vue";
 const props = defineProps<{
     categoryList: categoryList[];
     dataList: string[];
+    publicTips: boolean;
 }>();
 </script>
 

@@ -10,6 +10,7 @@
                             :category-list="categoryList"
                             :data-list="dataList"
                             :equipment="equipment"
+                            :public-tips="publicTips"
                         />
                         <div class="text-center">
                             Click the
@@ -51,6 +52,7 @@ const props = defineProps<{
     equipment: equipment;
     categoryList: categoryList[];
     dataList: string[];
+    publicTips: boolean;
 }>();
 
 const deleteEquipment = () => {

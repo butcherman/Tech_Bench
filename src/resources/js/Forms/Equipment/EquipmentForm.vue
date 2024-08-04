@@ -17,6 +17,14 @@
         />
 
         <TextInput id="equip-name" name="name" label="Equipment Name" />
+        <div v-if="publicTips" class="text-center">
+            <CheckboxSwitch
+                id="allow-public"
+                name="allow_public_tip"
+                label="Allow Public Tech Tips for this Equipment"
+                inline
+            />
+        </div>
         <fieldset>
             <legend>
                 Customer Information to Gather<small>(drag to re-order)</small>
@@ -37,13 +45,15 @@ import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import TextFieldArray from "../_Base/TextFieldArray.vue";
+import CheckboxSwitch from "../_Base/CheckboxSwitch.vue";
 import { computed } from "vue";
-import { array, number, object, string } from "yup";
+import { array, boolean, number, object, string } from "yup";
 
 const props = defineProps<{
     categoryList: categoryList[];
     dataList: string[];
     equipment?: equipment;
+    publicTips: boolean;
 }>();
 
 const removeWarning = computed(() =>
@@ -65,6 +75,7 @@ const submitText = computed(() =>
 const initValues = {
     cat_id: props.equipment?.cat_id || null,
     name: props.equipment?.name || null,
+    allow_public_tip: props.equipment?.allow_public_tip || false,
     custData: props.equipment?.data_field_type?.map((obj) => obj.name) || [
         null,
         null,
@@ -74,6 +85,7 @@ const initValues = {
 const schema = object({
     cat_id: number().required().label("Category"),
     name: string().required(),
+    allow_public_tip: boolean().required(),
     custData: array().nullable(),
 });
 </script>
