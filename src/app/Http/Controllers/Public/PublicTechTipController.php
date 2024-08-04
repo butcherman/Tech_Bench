@@ -34,7 +34,6 @@ class PublicTechTipController extends Controller
     {
         // return TechTip::paginate();
         $searchObj = new TechTipSearchService($request);
-
         return $searchObj->publicSearch();
     }
 

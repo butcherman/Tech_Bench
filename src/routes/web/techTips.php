@@ -92,4 +92,6 @@ Route::prefix('knowledge-base')->name('publicTips.')->group(function () {
         ->name('index');
     Route::post('/', [PublicTechTipController::class, 'search'])
         ->name('search');
+    Route::get('{tip_slug}', [PublicTechTipController::class, 'show'])
+        ->name('show');
 });
