@@ -36,7 +36,9 @@
             <div class="col-md-9 col-12">
                 <div class="card">
                     <div class="card-body">
-                        <TipSearchBody />
+                        <Overlay :loading="isLoading">
+                            <TipSearchBody />
+                        </Overlay>
                     </div>
                 </div>
             </div>
@@ -46,10 +48,11 @@
 
 <script setup lang="ts">
 import KbLayout from "@/Layouts/KbLayout.vue";
+import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import TechTipSearchForm from "@/Forms/Public/TechTips/TechTipSearchForm.vue";
 import TipSearchFilters from "@/Forms/Public/TechTips/TipSearchFilters.vue";
 import TipSearchBody from "@/Components/TechTips/TipSearchBody.vue";
-import { triggerPublicSearch } from "@/Modules/TipSearch.module";
+import { triggerPublicSearch, isLoading } from "@/Modules/TipSearch.module";
 import { ref, reactive, onMounted } from "vue";
 
 const props = defineProps<{
