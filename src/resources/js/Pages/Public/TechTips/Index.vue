@@ -49,11 +49,14 @@ import KbLayout from "@/Layouts/KbLayout.vue";
 import TechTipSearchForm from "@/Forms/Public/TechTips/TechTipSearchForm.vue";
 import TipSearchFilters from "@/Forms/Public/TechTips/TipSearchFilters.vue";
 import TipSearchBody from "@/Components/TechTips/TipSearchBody.vue";
+import { triggerPublicSearch } from "@/Modules/TipSearch.module";
 import { ref, reactive, onMounted } from "vue";
 
 const props = defineProps<{
     equipTypes: categoryList[];
 }>();
+
+onMounted(() => triggerPublicSearch());
 </script>
 
 <script lang="ts">

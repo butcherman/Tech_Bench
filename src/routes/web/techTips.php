@@ -90,4 +90,6 @@ Route::middleware('auth.secure')->group(function () {
 Route::prefix('knowledge-base')->name('publicTips.')->group(function () {
     Route::get('/', [PublicTechTipController::class, 'index'])
         ->name('index');
+    Route::post('/', [PublicTechTipController::class, 'search'])
+        ->name('search');
 });

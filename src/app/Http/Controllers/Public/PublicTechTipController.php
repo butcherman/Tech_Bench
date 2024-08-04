@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TechTips\SearchTipsRequest;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use App\Models\TechTip;
+use App\Service\TechTipSearchService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -25,19 +28,14 @@ class PublicTechTipController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function search(SearchTipsRequest $request)
     {
-        //
+        // return TechTip::paginate();
+        $searchObj = new TechTipSearchService($request);
+
+        return $searchObj->publicSearch();
     }
 
     /**
@@ -46,29 +44,6 @@ class PublicTechTipController extends Controller
     public function show(string $id)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return 'show';
     }
 }

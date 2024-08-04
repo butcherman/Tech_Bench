@@ -35,7 +35,7 @@ class TechTipSearchService
         }
 
         if (
-            ! empty($this->searchRequest->typeList) &&
+            !empty($this->searchRequest->typeList) &&
             empty($this->searchRequest->equipList)
         ) {
             return $this->articleTypeFilter();
@@ -43,7 +43,7 @@ class TechTipSearchService
 
         if (
             empty($this->searchRequest->typeList) &&
-            ! empty($this->searchRequest->equipList)
+            !empty($this->searchRequest->equipList)
         ) {
             return $this->equipmentTypeFilter();
         }
@@ -52,11 +52,38 @@ class TechTipSearchService
     }
 
     /**
+     * Only allow public tech tip searches
+     */
+    public function publicSearch()
+    {
+        if (
+            empty($this->searchRequest->searchFor) &&
+            empty($this->searchRequest->equipList)
+        ) {
+            return TechTip::where('public', true)
+                ->orderBy('sticky', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate($this->searchRequest->perPage);
+        }
+
+        if (
+            empty($this->searchRequest->equipList)
+        ) {
+            return $this->textOnlySearch(true);
+        }
+
+        return $this->equipmentTypeFilter(true);
+    }
+
+    /**
      * Basic search that only filters by text
      */
-    protected function textOnlySearch()
+    protected function textOnlySearch($publicOnly = false)
     {
         return TechTip::search($this->searchRequest->searchFor)
+            ->when($publicOnly, function ($q) {
+                $q->where('public', true);
+            })
             ->paginate($this->searchRequest->perPage);
     }
 
@@ -76,13 +103,16 @@ class TechTipSearchService
     /**
      * Filter by Equipment Type only
      */
-    protected function equipmentTypeFilter()
+    protected function equipmentTypeFilter($publicOnly = false)
     {
         return TechTip::search($this->searchRequest->searchFor)
             ->whereIn(
                 'EquipmentType.equip_id',
                 $this->searchRequest->equipList
             )
+            ->when($publicOnly, function ($q) {
+                $q->where('public', true);
+            })
             ->paginate($this->searchRequest->perPage);
     }
 

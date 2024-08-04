@@ -141,7 +141,7 @@ return [
         'key' => 'MeiliTBMaster', //  env('MEILISEARCH_KEY'),
         'index-settings' => [
             TechTip::class => [
-                'filterableAttributes' => ['EquipmentType', 'tip_type_id'],
+                'filterableAttributes' => ['EquipmentType', 'tip_type_id', 'public'],
                 'sortableAttributes' => ['sticky'],
                 'rankingRules' => [
                     'sort',

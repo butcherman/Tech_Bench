@@ -16,7 +16,7 @@
                         :value="equip.equip_id"
                         name="articleType"
                         v-model="searchParams.equipList"
-                        @change="triggerSearch"
+                        @change="triggerPublicSearch"
                     />
                     <label
                         :for="`equip-id-${equip.equip_id}`"
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { searchParams, triggerSearch } from "@/Modules/TipSearch.module";
+import { searchParams, triggerPublicSearch } from "@/Modules/TipSearch.module";
 
 defineProps<{
     equipTypes: categoryList[];

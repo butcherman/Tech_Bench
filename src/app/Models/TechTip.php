@@ -106,6 +106,7 @@ class TechTip extends Model
             'tip_id' => (int) $this->tip_id,
             'subject' => $this->subject,
             'details' => $this->details,
+            'public' => $this->public,
             'tip_type_id' => $this->tip_type_id,
             'EquipmentType' => $this->EquipmentType,
         ];

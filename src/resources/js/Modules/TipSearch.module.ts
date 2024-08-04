@@ -93,7 +93,7 @@ export const triggerPublicSearch = async () => {
     console.log(searchParams.value);
 
     await axios
-        .post(route("tech-tips.search"), searchParams.value)
+        .post(route("publicTips.search"), searchParams.value)
         .then((res) => processResults(res))
         .catch(() =>
             okModal(
