@@ -12,6 +12,9 @@ export const useAppStore = defineStore("appStore", () => {
      * Standard App Info
      ***************************************************************************/
     const name = computed<string>(() => usePage<pageProps>().props.app.name);
+    const companyName = computed<string>(
+        () => usePage<pageProps>().props.app.company_name
+    );
     const logo = computed<string>(() => usePage<pageProps>().props.app.logo);
     const version = computed<string>(
         () => usePage<pageProps>().props.app.version
@@ -109,6 +112,7 @@ export const useAppStore = defineStore("appStore", () => {
     /***************************************************************************/
     return {
         name,
+        companyName,
         logo,
         user,
         userNotifications,

@@ -86,6 +86,23 @@ export const triggerSearch = async () => {
         .finally(() => (isLoading.value = false));
 };
 
+export const triggerPublicSearch = async () => {
+    isLoading.value = true;
+    isDirty.value = true;
+
+    console.log(searchParams.value);
+
+    await axios
+        .post(route("tech-tips.search"), searchParams.value)
+        .then((res) => processResults(res))
+        .catch(() =>
+            okModal(
+                "Unable to process request at this time.  Pleas try again later."
+            )
+        )
+        .finally(() => (isLoading.value = false));
+};
+
 export const resetSearch = () => {
     console.log("trigger reset");
     searchParams.value.searchFor = "";
