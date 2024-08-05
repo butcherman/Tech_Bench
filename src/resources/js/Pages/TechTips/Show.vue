@@ -8,6 +8,12 @@
                 :permissions="permissions"
                 class="float-end"
             />
+            <h3 class="float-start mx-2">
+                <BookmarkItem
+                    :is-bookmark="isFav"
+                    :toggle-route="$route('tech-tips.bookmark', tipData.slug)"
+                />
+            </h3>
             <TipDetailsTitle :tip-data="tipData" />
         </div>
         <TipEquipmentList :tip-equipment="tipEquipment" />
@@ -34,6 +40,7 @@ import TipEquipmentList from "@/Components/TechTips/TipEquipmentList.vue";
 import TipDetails from "@/Components/TechTips/TipDetails.vue";
 import TipFiles from "@/Components/TechTips/TipFiles.vue";
 import TipComments from "@/Components/TechTips/TipComments.vue";
+import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import { computed } from "vue";
 
 const props = defineProps<{
@@ -42,6 +49,7 @@ const props = defineProps<{
     tipFiles: fileUpload[];
     tipComments: tipComment[];
     permissions: techTipPermissions;
+    isFav: boolean;
 }>();
 
 const showManage = computed(() => {

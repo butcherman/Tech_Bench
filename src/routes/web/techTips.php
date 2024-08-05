@@ -7,6 +7,7 @@ use App\Http\Controllers\TechTips\FlagCommentController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 use App\Http\Controllers\TechTips\ShowDeletedTipController;
 use App\Http\Controllers\TechTips\ShowFlaggedCommentsController;
+use App\Http\Controllers\TechTips\TechTipBookmarkController;
 use App\Http\Controllers\TechTips\TechTipCommentController;
 use App\Http\Controllers\TechTips\TechTipsController;
 use App\Http\Controllers\TechTips\TechTipsSettingsController;
@@ -56,6 +57,8 @@ Route::middleware('auth.secure')->group(function () {
         Route::post('upload-file', UploadTipFile::class)->name('upload');
         Route::get('download/{techTip}', DownloadTipController::class)
             ->name('download');
+        Route::post('bookmark/{techTip}', TechTipBookmarkController::class)
+            ->name('bookmark');
         /**
          * Tech Tip Comments Routes
          */

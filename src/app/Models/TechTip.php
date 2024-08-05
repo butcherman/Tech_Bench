@@ -18,7 +18,7 @@ class TechTip extends Model
 
     protected $guarded = ['tip_id', 'updated_at', 'created_at'];
 
-    protected $hidden = ['deleted_at', 'tip_type_id'];
+    protected $hidden = ['deleted_at', 'tip_type_id', 'Bookmarks'];
 
     protected $appends = ['href', 'public_href', 'equipList', 'fileList'];
 
@@ -102,6 +102,22 @@ class TechTip extends Model
     public function TechTipComment()
     {
         return $this->hasMany(TechTipComment::class, 'tip_id', 'tip_id');
+    }
+
+    public function Bookmarks()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_tech_tip_bookmarks',
+            'tip_id',
+            'user_id',
+        );
+    }
+
+    public function isFav(User $user)
+    {
+        $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
+        return in_array($user->user_id, $bookmarks);
     }
 
     /**

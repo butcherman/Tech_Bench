@@ -85,6 +85,7 @@ class TechTipsController extends Controller
             'tip-files' => $tech_tip->FileUpload,
             'tip-comments' => $tech_tip->TechTipComment,
             'permissions' => BuildTechTipPermissions::build($request->user()),
+            'is-fav' => $tech_tip->isFav($request->user()),
         ]);
     }
 
