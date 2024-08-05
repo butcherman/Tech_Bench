@@ -27,7 +27,12 @@
             groups
             allow-select-all
         />
-        <Editor id="details" name="details" label="Tip Details" />
+        <Editor
+            id="details"
+            name="details"
+            label="Tip Details"
+            image-folder="tech_tips"
+        />
         <div
             v-if="techTip && techTip.file_upload?.length"
             class="border rounded"

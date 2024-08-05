@@ -19,6 +19,10 @@ class PublicTechTipController extends Controller
      */
     public function index()
     {
+        if (!config('techTips.allow_public')) {
+            abort(404);
+        }
+
         return Inertia::render('Public/TechTips/Index', [
             'equip-types' => EquipmentCategory::with([
                 'EquipmentType' => function ($q) {
@@ -33,6 +37,10 @@ class PublicTechTipController extends Controller
      */
     public function search(SearchTipsRequest $request)
     {
+        if (!config('techTips.allow_public')) {
+            abort(404);
+        }
+
         $searchObj = new TechTipSearchService($request);
         return $searchObj->publicSearch();
     }
@@ -42,7 +50,9 @@ class PublicTechTipController extends Controller
      */
     public function show(TechTip $tip_slug)
     {
-        $this->authorize('view', $tip_slug);
+        if (!config('techTips.allow_public') || !$tip_slug->public) {
+            abort(404);
+        }
 
         $tip_slug->makeHidden([
             'user_id',
@@ -51,13 +61,9 @@ class PublicTechTipController extends Controller
             'allow_comments',
             'slug',
             'views',
-            // 'created_at',
-            // 'updated_at',
             'href',
             'equipList',
             'fileList',
-            // 'equipment_type',
-            'file_upload',
         ]);
         $tip_slug->load([
             'EquipmentType' => function ($q) {

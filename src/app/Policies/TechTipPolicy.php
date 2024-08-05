@@ -18,15 +18,6 @@ class TechTipPolicy
         return $this->checkPermission($user, 'Manage Tech Tips');
     }
 
-    public function view(User $user, TechTip $techTip)
-    {
-        if ($techTip->public) {
-            return true;
-        }
-
-        return $user ? true : false;
-    }
-
     /**
      * Determine whether the user can create models
      */
