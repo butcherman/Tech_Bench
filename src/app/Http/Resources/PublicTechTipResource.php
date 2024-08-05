@@ -14,7 +14,6 @@ class PublicTechTipResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'details' => $this->details,
             'href' => $this->public_href,
             'subject' => $this->subject,
             'slug' => $this->slug,

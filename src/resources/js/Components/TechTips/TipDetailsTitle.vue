@@ -14,7 +14,10 @@
                 <strong>Last Updated: </strong>
                 {{ tipData.updated_at }}
             </span>
-            <span v-if="tipData.public" class="d-block d-sm-inline-block">
+            <span
+                v-if="tipData.public && !publicShown"
+                class="d-block d-sm-inline-block"
+            >
                 <fa-icon icon="star" class="text-success" />
                 <strong>Public Tech Tip </strong>
             </span>
@@ -25,6 +28,7 @@
 <script setup lang="ts">
 defineProps<{
     tipData: techTip;
+    publicShown?: boolean;
 }>();
 </script>
 

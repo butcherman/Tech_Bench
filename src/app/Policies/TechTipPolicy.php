@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Features\PublicTechTipFeature;
+use App\Models\TechTip;
 use App\Models\User;
 use App\Traits\AllowTrait;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -15,6 +16,15 @@ class TechTipPolicy
     public function manage(User $user)
     {
         return $this->checkPermission($user, 'Manage Tech Tips');
+    }
+
+    public function view(User $user, TechTip $techTip)
+    {
+        if ($techTip->public) {
+            return true;
+        }
+
+        return $user ? true : false;
     }
 
     /**
