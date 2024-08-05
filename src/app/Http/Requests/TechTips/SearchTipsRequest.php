@@ -11,6 +11,10 @@ class SearchTipsRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if ($this->routeIs('publicTips.search')) {
+            return true;
+        }
+
         return $this->user() ? true : false;
     }
 

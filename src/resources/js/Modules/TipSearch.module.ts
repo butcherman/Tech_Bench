@@ -6,6 +6,8 @@ import axios from "axios";
 import okModal from "./okModal";
 import { ref, reactive } from "vue";
 
+import type { AxiosResponse } from "axios";
+
 /*******************************************************************************
  *                        Typescript Interfaces                                *
  *******************************************************************************/
@@ -27,9 +29,9 @@ interface paginationData {
 }
 
 interface axiosSearchResults {
-    data: {
+    data: techTip[];
+    meta: {
         current_page: number;
-        data: techTip[];
         first_page_url: string;
         from: number;
         last_page: number;
@@ -77,7 +79,24 @@ export const triggerSearch = async () => {
 
     await axios
         .post(route("tech-tips.search"), searchParams.value)
-        .then((res) => processResults(res))
+        .then((res: AxiosResponse<axiosSearchResults>) => processResults(res))
+        .catch(() =>
+            okModal(
+                "Unable to process request at this time.  Pleas try again later."
+            )
+        )
+        .finally(() => (isLoading.value = false));
+};
+
+export const triggerPublicSearch = async () => {
+    isLoading.value = true;
+    isDirty.value = true;
+
+    console.log(searchParams.value);
+
+    await axios
+        .post(route("publicTips.search"), searchParams.value)
+        .then((res: AxiosResponse<axiosSearchResults>) => processResults(res))
         .catch(() =>
             okModal(
                 "Unable to process request at this time.  Pleas try again later."
@@ -98,17 +117,17 @@ export const resetSearch = () => {
 /*******************************************************************************
  *                    Work with returned results                               *
  *******************************************************************************/
-const processResults = (res: axiosSearchResults) => {
+const processResults = (res: AxiosResponse<axiosSearchResults>) => {
     console.log(res);
     // Assign results
     searchResults.value = res.data.data;
 
     // Build pagination footer
-    paginationData.listFrom = res.data.from;
-    paginationData.listTo = res.data.to;
-    paginationData.listTotal = res.data.total;
-    paginationData.totalPages = res.data.last_page;
-    paginationData.currentPage = res.data.current_page;
+    paginationData.listFrom = res.data.meta.from;
+    paginationData.listTo = res.data.meta.to;
+    paginationData.listTotal = res.data.meta.total;
+    paginationData.totalPages = res.data.meta.last_page;
+    paginationData.currentPage = res.data.meta.current_page;
 };
 
 /*******************************************************************************

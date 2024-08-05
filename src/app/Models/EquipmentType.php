@@ -15,6 +15,10 @@ class EquipmentType extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'pivot'];
 
+    protected $casts = [
+        'allow_public_tip' => 'boolean',
+    ];
+
     public function EquipmentCategory()
     {
         return $this->belongsTo(EquipmentCategory::class, 'cat_id', 'cat_id');

@@ -21,7 +21,6 @@ class ShowFlaggedCommentsController extends Controller
                 ->with('TechTip')
                 ->get()
                 ->makeVisible('Flags'),
-
         ]);
     }
 }

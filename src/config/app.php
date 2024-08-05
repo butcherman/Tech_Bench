@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 
 return [
     'name' => env('APP_NAME', 'Tech Bench'),
+    'company_name' => '',
     'logo' => '/images/TechBenchLogo.png',
     'env' => env('APP_ENV', 'production'),
     'debug' => (bool) env('APP_DEBUG', false),

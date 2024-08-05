@@ -18,6 +18,7 @@ type techTip = {
     equipList?: number[];
     fileList?: number[];
     file_upload?: fileUpload[];
+    equipment_type: equipment[];
 };
 
 type tipType = {
@@ -44,5 +45,6 @@ type tipComment = {
 
 type techTipPermissions = {
     comment: boolean;
+    public: boolean;
     manage: boolean;
 } & basicPermissions;

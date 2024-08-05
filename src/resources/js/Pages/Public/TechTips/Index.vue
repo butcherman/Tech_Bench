@@ -1,19 +1,12 @@
 <template>
     <div>
-        <Head title="Tech Tips" />
-        <div v-if="canCreate" class="row justify-content-center my-2">
-            <div class="col">
-                <Link :href="$route('tech-tips.create')">
-                    <AddButton class="float-end" small pill>
-                        Add New Tech Tip
-                    </AddButton>
-                </Link>
-            </div>
-        </div>
+        <h2 class="text-center">End User Knowledge Base</h2>
         <div class="row my-4">
             <div class="col">
                 <div class="card">
-                    <div class="card-body"><TipSearchForm /></div>
+                    <div class="card-body">
+                        <TechTipSearchForm />
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,10 +28,7 @@
                             Search Filters
                         </div>
                         <div class="collapse d-md-block" id="filter-list">
-                            <TipSearchFilters
-                                :tip-types="filterData.tip_types"
-                                :equip-types="filterData.equip_types"
-                            />
+                            <TipSearchFilters :equip-types="equipTypes" />
                         </div>
                     </div>
                 </div>
@@ -57,26 +47,21 @@
 </template>
 
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import TipSearchForm from "@/Forms/TechTips/TipSearchForm.vue";
+import KbLayout from "@/Layouts/KbLayout.vue";
 import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
-import TipSearchFilters from "@/Forms/TechTips/TipSearchFilters.vue";
+import TechTipSearchForm from "@/Forms/Public/TechTips/TechTipSearchForm.vue";
+import TipSearchFilters from "@/Forms/Public/TechTips/TipSearchFilters.vue";
 import TipSearchBody from "@/Components/TechTips/TipSearchBody.vue";
-import { onMounted } from "vue";
-import { triggerSearch, isLoading } from "@/Modules/TipSearch.module";
+import { triggerPublicSearch, isLoading } from "@/Modules/TipSearch.module";
+import { ref, reactive, onMounted } from "vue";
 
-defineProps<{
-    canCreate: boolean;
-    filterData: {
-        tip_types: tipType[];
-        equip_types: categoryList[];
-    };
+const props = defineProps<{
+    equipTypes: categoryList[];
 }>();
 
-onMounted(() => triggerSearch());
+onMounted(() => triggerPublicSearch());
 </script>
 
 <script lang="ts">
-export default { layout: AppLayout };
+export default { layout: KbLayout };
 </script>

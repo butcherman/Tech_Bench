@@ -20,7 +20,7 @@ class TechTip extends Model
 
     protected $hidden = ['deleted_at', 'tip_type_id'];
 
-    protected $appends = ['href', 'equipList', 'fileList'];
+    protected $appends = ['href', 'public_href', 'equipList', 'fileList'];
 
     protected $casts = [
         'created_at' => 'datetime:M d, Y',
@@ -43,6 +43,13 @@ class TechTip extends Model
     public function getHrefAttribute()
     {
         return route('tech-tips.show', $this->slug);
+    }
+
+    public function getPublicHrefAttribute()
+    {
+        if ($this->public) {
+            return route('publicTips.show', $this->slug);
+        }
     }
 
     protected function getEquipListAttribute()
@@ -106,6 +113,7 @@ class TechTip extends Model
             'tip_id' => (int) $this->tip_id,
             'subject' => $this->subject,
             'details' => $this->details,
+            'public' => $this->public,
             'tip_type_id' => $this->tip_type_id,
             'EquipmentType' => $this->EquipmentType,
         ];

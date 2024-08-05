@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LogoRequest;
 use App\Models\AppSettings;
 use App\Traits\AppSettingsTrait;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -28,12 +28,12 @@ class LogoController extends Controller
     /**
      * Update the current logo
      */
-    public function update(LogoRequest $request): RedirectResponse
+    public function update(LogoRequest $request): HttpResponse
     {
         $logoLocation = $request->processLogo();
         $this->saveSettings('app.logo', $logoLocation);
 
-        Log::notice('New Tech Bench Logo uploaded by '.$request->user()->username, [
+        Log::notice('New Tech Bench Logo uploaded by ' . $request->user()->username, [
             'file-location' => $logoLocation,
         ]);
 

@@ -27,7 +27,12 @@
             groups
             allow-select-all
         />
-        <Editor id="details" name="details" label="Tip Details" />
+        <Editor
+            id="details"
+            name="details"
+            label="Tip Details"
+            image-folder="tech_tips"
+        />
         <div
             v-if="techTip && techTip.file_upload?.length"
             class="border rounded"
@@ -100,15 +105,16 @@
                         label="Make Sticky Tip"
                         help="Sticky Tips are prioritized to the top of the search list"
                     />
-                    <!-- TODO - TO BE ADDED
                     <CheckboxSwitch
+                        v-if="allowPublic"
                         id="public"
                         name="public"
                         label="Make Public Tip"
                         help="When enabled, this Tech Tip will be available for 
                               anyone to see.  Be sure that this Tech Tip does not
                               contain any sensitive information."
-                    /> -->
+                        @change="verifyPublic"
+                    />
                 </div>
             </div>
         </Collapse>
@@ -127,11 +133,13 @@ import Collapse from "@/Components/_Base/Collapse.vue";
 import { computed, ref } from "vue";
 import { array, boolean, object, string } from "yup";
 import { useForm } from "@inertiajs/vue3";
+import verifyModal from "@/Modules/verifyModal";
 
 const emit = defineEmits(["success"]);
 const props = defineProps<{
     techTip?: techTip;
     tipTypes: tipType[];
+    allowPublic: boolean;
     equipList: {
         label: string;
         options: { text: string; value: string | number }[];
@@ -195,6 +203,21 @@ const toggleFile = (file_id: number) => {
         removedFiles.value.splice(removedFiles.value.indexOf(file_id), 1);
     } else {
         removedFiles.value.push(file_id);
+    }
+};
+
+const verifyPublic = (value: boolean) => {
+    if (value) {
+        verifyModal(
+            `This Tech Tip will be available to non-registered visitors to this 
+             site.  Have you verified there is no confidential information in 
+             this Tech Tip?`,
+            "Please Verify"
+        ).then((res) => {
+            if (!res) {
+                techTipForm.value?.setFieldValue("public", false);
+            }
+        });
     }
 };
 </script>

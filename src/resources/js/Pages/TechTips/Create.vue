@@ -8,6 +8,7 @@
                         <TechTipForm
                             :tip-types="tipTypes"
                             :equip-list="equipStore.getMultiSelectBox()"
+                            :allow-public="permissions.public"
                         />
                     </div>
                 </div>
@@ -23,6 +24,7 @@ import { useEquipmentStore } from "@/Store/EquipmentStore";
 
 defineProps<{
     tipTypes: tipType[];
+    permissions: techTipPermissions;
 }>();
 
 const equipStore = useEquipmentStore();

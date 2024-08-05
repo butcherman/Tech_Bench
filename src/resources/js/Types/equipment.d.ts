@@ -8,6 +8,7 @@ type equipment = {
     cat_id: number;
     equip_id: number;
     name: string;
+    allow_public_tip: boolean;
     data_field_type?: dataTypes[];
 };
 

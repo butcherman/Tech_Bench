@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Features\PublicTechTipFeature;
+use App\Models\TechTip;
 use App\Models\User;
 use App\Traits\AllowTrait;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -45,6 +47,10 @@ class TechTipPolicy
      */
     public function public(User $user)
     {
-        //
+        if ($user->features()->inactive(PublicTechTipFeature::class)) {
+            return false;
+        }
+
+        return $this->checkPermission($user, 'Add Public Tech Tip');
     }
 }

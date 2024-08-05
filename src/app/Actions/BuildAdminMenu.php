@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Features\TechTipCommentFeature;
 use App\Models\User;
 use App\Traits\AllowTrait;
 
@@ -171,12 +172,15 @@ class BuildAdminMenu
                     'icon' => 'ban',
                     'route' => route('admin.tech-tips.deleted-tips'),
                 ],
-                [
+            ];
+
+            if ($this->user->features()->active(TechTipCommentFeature::class)) {
+                $nav[] = [
                     'name' => 'View Flagged Comments',
                     'icon' => 'flag',
                     'route' => route('tech-tips.comments.show-flagged'),
-                ],
-            ];
+                ];
+            }
 
             $this->menu['Tech Tips'] = $nav;
         }

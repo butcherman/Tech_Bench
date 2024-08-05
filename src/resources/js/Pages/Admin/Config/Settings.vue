@@ -7,6 +7,7 @@
                     <BasicConfigForm
                         :tz-list="timezoneList"
                         :url="settings.url"
+                        :company_name="settings.company_name"
                         :timezone="settings.timezone"
                         :max-filesize="settings.max_filesize"
                     />
@@ -24,6 +25,7 @@ import { ref, reactive, onMounted } from "vue";
 const props = defineProps<{
     settings: {
         url: string;
+        company_name: string;
         timezone: string;
         max_filesize: number;
     };

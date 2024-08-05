@@ -6,7 +6,6 @@
         submit-method="put"
         submit-text="Update Tip Settings"
     >
-        <!-- <TextInput id="input" name="input" label="Input" focus /> -->
         <div class="d-flex justify-content-center mb-2">
             <div>
                 <CheckboxSwitch
@@ -17,13 +16,13 @@
                           enabled globally, Administrators can enable and disable 
                           commenting based on the users Role."
                 />
-                <!-- <CheckboxSwitch
+                <CheckboxSwitch
                     id="public"
                     name="allow_public"
                     label="Allow Public Tech Tips"
                     help="Once enabled, users with the proper permission can make 
                           a Tech Tip available to the general public."
-                /> -->
+                />
             </div>
         </div>
     </VueForm>

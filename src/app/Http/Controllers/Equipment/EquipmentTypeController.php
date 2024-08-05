@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Equipment;
 
 use App\Exceptions\Database\GeneralQueryException;
 use App\Exceptions\Database\RecordInUseException;
+use App\Features\PublicTechTipFeature;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentTypeRequest;
 use App\Jobs\Customer\UpdateCustomerDataFieldsJob;
@@ -25,20 +26,23 @@ class EquipmentTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/Index', [
-            'equipment-list' => fn () => Cache::equipmentCategories(),
+            'equipment-list' => fn() => Cache::equipmentCategories(),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $this->authorize('create', EquipmentType::class);
 
         return Inertia::render('Equipment/Create', [
-            'category-list' => fn () => Cache::equipmentCategories(),
-            'data-list' => fn () => DataFieldType::all()->pluck('name'),
+            'category-list' => fn() => Cache::equipmentCategories(),
+            'data-list' => fn() => DataFieldType::all()->pluck('name'),
+            'public-tips' => fn() => $request->user()
+                ->features()
+                ->active(PublicTechTipFeature::class),
         ]);
     }
 
@@ -47,12 +51,12 @@ class EquipmentTypeController extends Controller
      */
     public function store(EquipmentTypeRequest $request)
     {
-        $newEquipment = EquipmentType::create($request->only(['cat_id', 'name']));
+        $newEquipment = EquipmentType::create($request->only(['cat_id', 'name', 'allow_public_tip']));
         $request->processCustomerFields($newEquipment);
 
         Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
         Log::info(
-            'New Equipment Type created by '.$request->user()->username,
+            'New Equipment Type created by ' . $request->user()->username,
             $request->toArray()
         );
 
@@ -75,14 +79,17 @@ class EquipmentTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(EquipmentType $equipment)
+    public function edit(Request $request, EquipmentType $equipment)
     {
         $this->authorize('update', $equipment);
 
         return Inertia::render('Equipment/Edit', [
-            'equipment' => fn () => $equipment->load('DataFieldType'),
-            'category-list' => fn () => Cache::equipmentCategories(),
-            'data-list' => fn () => DataFieldType::all()->pluck('name'),
+            'equipment' => fn() => $equipment->load('DataFieldType'),
+            'category-list' => fn() => Cache::equipmentCategories(),
+            'data-list' => fn() => DataFieldType::all()->pluck('name'),
+            'public-tips' => fn() => $request->user()
+                ->features()
+                ->active(PublicTechTipFeature::class),
         ]);
     }
 
@@ -91,11 +98,11 @@ class EquipmentTypeController extends Controller
      */
     public function update(EquipmentTypeRequest $request, EquipmentType $equipment)
     {
-        $equipment->update($request->only(['cat_id', 'name']));
+        $equipment->update($request->only(['cat_id', 'name', 'allow_public_tip']));
         $request->processCustomerFields($equipment);
 
         Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-        Log::info('Equipment Type '.$equipment->name.' updated by '.
+        Log::info('Equipment Type ' . $equipment->name . ' updated by ' .
             $request->user()->username, $request->toArray());
 
         UpdateCustomerDataFieldsJob::dispatch($equipment);
@@ -116,7 +123,7 @@ class EquipmentTypeController extends Controller
         } catch (QueryException $e) {
             if (in_array($e->errorInfo[1], [19, 1451])) {
                 throw new RecordInUseException(
-                    $equipment->name.' is still in use and cannot be deleted',
+                    $equipment->name . ' is still in use and cannot be deleted',
                     0,
                     $e
                 );
@@ -127,7 +134,7 @@ class EquipmentTypeController extends Controller
             }
         }
 
-        Log::notice('Equipment Type '.$equipment->name.' was deleted by '.
+        Log::notice('Equipment Type ' . $equipment->name . ' was deleted by ' .
             $request->user()->username);
 
         return redirect(route('equipment.index'))->with('warning', __('equipment.destroyed'));

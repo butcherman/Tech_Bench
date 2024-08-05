@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\User;
 use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use Tests\TestCase;
@@ -30,6 +31,9 @@ class UserRoleUnitTest extends TestCase
      */
     public function test_user_role_permission_relationship()
     {
+        $user = User::factory()->create(['role_id' => 2]);
+        $this->actingAs($user);
+
         $rolePermissions = UserRolePermission::where('role_id', $this->model->role_id)
             ->get();
         $this->assertEquals(

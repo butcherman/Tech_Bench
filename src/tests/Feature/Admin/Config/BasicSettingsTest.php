@@ -41,6 +41,7 @@ class BasicSettingsTest extends TestCase
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
             'max_filesize' => 123456,
+            'company_name' => 'Bobs Fancy Cats',
         ];
 
         $response = $this->put(route('admin.basic-settings.update'), $data);
@@ -55,6 +56,7 @@ class BasicSettingsTest extends TestCase
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
             'max_filesize' => 123456,
+            'company_name' => 'Bobs Fancy Cats',
         ];
 
         $response = $this->actingAs(User::factory()->create())
@@ -68,6 +70,7 @@ class BasicSettingsTest extends TestCase
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
             'max_filesize' => 123456,
+            'company_name' => 'Bobs Fancy Cats',
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
@@ -86,6 +89,10 @@ class BasicSettingsTest extends TestCase
         $this->assertDatabaseHas('app_settings', [
             'key' => 'filesystems.max_filesize',
             'value' => $data['max_filesize'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.company_name',
+            'value' => 'Bobs Fancy Cats',
         ]);
     }
 }

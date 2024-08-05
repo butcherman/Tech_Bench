@@ -15,6 +15,7 @@ class BuildTechTipPermissions
             'create' => $user->can('create', TechTip::class),
             'update' => $user->can('update', TechTip::class),
             'delete' => $user->can('delete', TechTip::class),
+            'public' => $user->can('public', TechTip::class),
             'comment' => $user->can('create', TechTipComment::class),
         ];
     }

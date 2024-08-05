@@ -37,16 +37,17 @@ class HandleInertiaRequests extends Middleware
             'flash' => $this->getFlashData(),
             // App information that is shared and used on all pages
             'app' => [
-                'name' => fn () => config('app.name'),
-                'logo' => fn () => config('app.logo'),
-                'version' => fn () => Cache::version(),
-                'copyright' => fn () => Cache::copyright(),
-                'current_route' => fn () => $request->route()->getName(),
+                'name' => fn() => config('app.name'),
+                'company_name' => fn() => config('app.company_name'),
+                'logo' => fn() => config('app.logo'),
+                'version' => fn() => Cache::version(),
+                'copyright' => fn() => Cache::copyright(),
+                'current_route' => fn() => $request->route()->getName(),
                 //  File information
                 'fileData' => [
-                    'maxSize' => fn () => config('filesystems.max_filesize'),
-                    'chunkSize' => fn () => config('filesystems.chunk_size'),
-                    'token' => fn () => csrf_token(),
+                    'maxSize' => fn() => config('filesystems.max_filesize'),
+                    'chunkSize' => fn() => config('filesystems.chunk_size'),
+                    'token' => fn() => csrf_token(),
                 ],
             ],
         ]);
@@ -57,14 +58,14 @@ class HandleInertiaRequests extends Middleware
         if ($request->user()) {
             $userShare = [
                 //  Current logged in user
-                'current_user' => fn () => $request->user()->makeVisible('user_id'),
-                'idle_timeout' => fn () => intval(config('auth.auto_logout_timer')),
+                'current_user' => fn() => $request->user()->makeVisible('user_id'),
+                'idle_timeout' => fn() => intval(config('auth.auto_logout_timer')),
                 'user_notifications' => [
-                    'list' => fn () => $request->user()->notifications,
-                    'new' => fn () => $request->user()->unreadNotifications->count(),
+                    'list' => fn() => $request->user()->notifications,
+                    'new' => fn() => $request->user()->unreadNotifications->count(),
                 ],
                 //  Dynamically built navigation menu
-                'navbar' => fn () => BuildNavbar::build($request->user()),
+                'navbar' => fn() => BuildNavbar::build($request->user()),
             ];
         }
 

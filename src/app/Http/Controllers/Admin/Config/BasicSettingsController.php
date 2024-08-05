@@ -23,6 +23,7 @@ class BasicSettingsController extends Controller
         return Inertia::render('Admin/Config/Settings', [
             'settings' => [
                 'url' => preg_replace('(^https?://)', '', config('app.url')),
+                'company_name' => config('app.company_name'),
                 'timezone' => config('app.timezone'),
                 'max_filesize' => (int) config('filesystems.max_filesize'),
             ],
@@ -38,7 +39,7 @@ class BasicSettingsController extends Controller
         $request->processSettings();
 
         Log::notice(
-            'Application Configuration updated by '.$request->user()->username,
+            'Application Configuration updated by ' . $request->user()->username,
             $request->toArray()
         );
 
