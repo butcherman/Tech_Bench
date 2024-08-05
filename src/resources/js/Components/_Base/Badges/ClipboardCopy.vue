@@ -2,7 +2,7 @@
     <span
         class="badge rounded-pill pointer mx-1"
         :class="bgVariant"
-        title="Copy to Clipboard"
+        :title="title || `Copy to Clipboard`"
         v-tooltip
         @click="copyToClipboard"
     >
@@ -15,6 +15,7 @@ import { ref } from "vue";
 
 const props = defineProps<{
     value: any | any[];
+    title?: string;
 }>();
 
 const bgVariant = ref("bg-primary");

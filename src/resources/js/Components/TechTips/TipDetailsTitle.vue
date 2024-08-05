@@ -12,6 +12,12 @@
             >
                 <fa-icon icon="download" />
             </a>
+            <ClipboardCopy
+                v-if="tipData.public && !publicShown"
+                class="p-2 float-end"
+                title="Copy Public Link to Clipboard"
+                :value="$route('publicTips.show', tipData.slug)"
+            />
             <span class="d-block d-sm-inline-block">
                 <strong>ID: </strong>
                 {{ tipData.tip_id }}
@@ -36,6 +42,8 @@
 </template>
 
 <script setup lang="ts">
+import ClipboardCopy from "../_Base/Badges/ClipboardCopy.vue";
+
 defineProps<{
     tipData: techTip;
     publicShown?: boolean;
