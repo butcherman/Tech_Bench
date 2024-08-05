@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Public\PublicTechTipController;
 use App\Http\Controllers\TechTips\DeletedTipsController;
+use App\Http\Controllers\TechTips\DownloadTipController;
 use App\Http\Controllers\TechTips\FlagCommentController;
 use App\Http\Controllers\TechTips\SearchTipsController;
 use App\Http\Controllers\TechTips\ShowDeletedTipController;
@@ -53,6 +54,8 @@ Route::middleware('auth.secure')->group(function () {
     Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
         Route::post('search', SearchTipsController::class)->name('search');
         Route::post('upload-file', UploadTipFile::class)->name('upload');
+        Route::get('download/{techTip}', DownloadTipController::class)
+            ->name('download');
         /**
          * Tech Tip Comments Routes
          */

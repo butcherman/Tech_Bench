@@ -91,7 +91,7 @@ class TechTipsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TechTip $tech_tip)
+    public function edit(Request $request, TechTip $tech_tip)
     {
         $this->authorize('update', $tech_tip);
 
@@ -99,6 +99,7 @@ class TechTipsController extends Controller
             'tip-data' => $tech_tip->load(['EquipmentType', 'FileUpload'])
                 ->makeVisible('tip_type_id'),
             'tip-types' => TechTipType::all(),
+            'permissions' => BuildTechTipPermissions::build($request->user()),
         ]);
     }
 

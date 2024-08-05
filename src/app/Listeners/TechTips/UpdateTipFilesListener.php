@@ -28,5 +28,6 @@ class UpdateTipFilesListener implements ShouldQueue
         $tipFiles = $event->techTip->FileUpload;
 
         $service->moveTmpFile('tips', $event->techTip->tip_id, $tipFiles);
+        $service->setPublicFlag($tipFiles, $event->techTip->public);
     }
 }
