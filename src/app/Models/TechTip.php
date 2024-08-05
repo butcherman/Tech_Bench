@@ -114,10 +114,33 @@ class TechTip extends Model
         );
     }
 
+    public function Recent()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_tech_tip_recents',
+            'tip_id',
+            'user_id'
+        )->withTimestamps();
+    }
+
     public function isFav(User $user)
     {
         $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
         return in_array($user->user_id, $bookmarks);
+    }
+
+    /**
+     * Update the Users Recent Tech Tip activity
+     */
+    public function touchRecent(User $user)
+    {
+        $isRecent = $this->Recent->where('user_id', $user->user_id)->first();
+        if ($isRecent) {
+            $this->Recent()->detach($user);
+        }
+        $this->Recent()->attach($user);
+
     }
 
     /**

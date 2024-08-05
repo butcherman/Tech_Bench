@@ -70,6 +70,10 @@ class TechTipsController extends Controller
     {
         // Increase the view counter
         $tech_tip->increment('views');
+
+        // Add Tip to users Recent visits
+        $tech_tip->touchRecent($request->user());
+
         // Load relationships
         $tech_tip->load(['CreatedBy', 'UpdatedBy'])
             ->CreatedBy->makeHidden(['email', 'initials', 'role_name', 'username']);
