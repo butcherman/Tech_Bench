@@ -9,11 +9,28 @@
                         <div class="card-body">
                             <div class="text-center">
                                 <img :src="app.logo" class="img-fluid w-50" />
-                                <hr v-if="welcomeMessage || homeLinks.length" />
+                                <hr
+                                    v-if="
+                                        welcomeMessage ||
+                                        homeLinks.length ||
+                                        publicLink
+                                    "
+                                />
                                 <h6 v-if="welcomeMessage" class="text-center">
                                     {{ welcomeMessage }}
                                 </h6>
-                                <ul v-if="homeLinks.length" class="list-group">
+                                <ul
+                                    v-if="homeLinks.length || publicLink"
+                                    class="list-group"
+                                >
+                                    <li
+                                        v-if="publicLink"
+                                        class="list-group-item"
+                                    >
+                                        <Link :href="publicLink.url">
+                                            {{ publicLink.text }}
+                                        </Link>
+                                    </li>
                                     <li
                                         v-for="link in homeLinks"
                                         :key="link.url"
@@ -77,6 +94,7 @@ interface homeLinks {
 defineProps<{
     welcomeMessage?: string;
     homeLinks: homeLinks[];
+    publicLink: homeLinks;
     allowOath: boolean;
 }>();
 
