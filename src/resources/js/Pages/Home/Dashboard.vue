@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -24,14 +24,20 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+
+        <UserNotifications />
     </div>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
+import Collapse from "@/Components/_Base/Collapse.vue";
+import UserNotifications from "@/Components/User/UserNotifications.vue";
 import { useAppStore } from "@/Store/AppStore";
 import { ref, reactive, onMounted } from "vue";
+
+const showCollapse = ref(true);
 
 // const props = defineProps<{}>();
 
