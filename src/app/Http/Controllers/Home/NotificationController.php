@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Mark a notification as read, or delete a notification
      */
     public function __invoke(NotificationRequest $request)
     {

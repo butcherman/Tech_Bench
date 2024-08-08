@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import { gsap } from "gsap/gsap-core";
+import axios from "axios";
 
 export const loading = ref<boolean>(false);
 export const markedNotifications = ref<string[]>([]);
@@ -25,6 +26,7 @@ export const handleNotifications = (action: "read" | "delete") => {
             idList: markedNotifications.value,
         },
         {
+            only: ["user_notifications"],
             preserveScroll: true,
             onFinish: () => {
                 loading.value = false;
@@ -32,6 +34,13 @@ export const handleNotifications = (action: "read" | "delete") => {
             },
         }
     );
+};
+
+export const markSingleNotification = (id: string) => {
+    router.post(route("handle-notifications"), {
+        action: "read",
+        idList: [id],
+    });
 };
 
 /**
@@ -43,13 +52,13 @@ export const showNotification = () => {
     let timeline = gsap.timeline();
     timeline.to("#notification-list", {
         width: 0,
-        duration: 0.8,
+        duration: 0.5,
     });
     timeline.to(
         "#notification-data",
         {
             width: "100%",
-            duration: 0.8,
+            duration: 0.5,
             delay: 0.01,
         },
         "<"
@@ -58,17 +67,18 @@ export const showNotification = () => {
 
 export const hideNotification = () => {
     console.log("hide notification");
+    activeNotification.value = undefined;
 
     let timeline = gsap.timeline();
     timeline.to("#notification-data", {
         width: 0,
-        duration: 0.8,
+        duration: 0.5,
     });
     timeline.to(
         "#notification-list",
         {
             width: "100%",
-            duration: 0.8,
+            duration: 0.5,
             delay: 0.01,
         },
         "<"
