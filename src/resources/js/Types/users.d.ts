@@ -22,10 +22,10 @@ type userNotification = {
     created_at: string;
     id: string;
     read_at: string | null;
+    type: string;
     data: {
-        component: string;
         subject: string;
-        props: object;
+        data: { [key: string]: any | any[] };
     };
 };
 

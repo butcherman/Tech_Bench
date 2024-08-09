@@ -1,7 +1,6 @@
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import { gsap } from "gsap/gsap-core";
-import axios from "axios";
 
 export const loading = ref<boolean>(false);
 export const markedNotifications = ref<string[]>([]);
@@ -39,6 +38,13 @@ export const handleNotifications = (action: "read" | "delete") => {
 export const markSingleNotification = (id: string) => {
     router.post(route("handle-notifications"), {
         action: "read",
+        idList: [id],
+    });
+};
+
+export const deleteSingleNotification = (id: string) => {
+    router.post(route("handle-notifications"), {
+        action: "delete",
         idList: [id],
     });
 };

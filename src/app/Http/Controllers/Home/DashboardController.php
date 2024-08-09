@@ -14,21 +14,6 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request)
     {
-        // $userAgent = $_SERVER['HTTP_USER_AGENT'];
-
-        // return $userAgent;
-
-        // $ad = new AgentDetector($userAgent);
-
-        // dd($ad);
-
-        // return $ad;
-
-        return Inertia::render('Home/Dashboard', [
-            // 'agent' => $userAgent,
-            // 'ad' => $ad,
-            // 'platform' => $ad->platformVersion(),
-            // 'browser' => $ad->browserVersion(),
-        ]);
+        return Inertia::render('Home/Dashboard', []);
     }
 }

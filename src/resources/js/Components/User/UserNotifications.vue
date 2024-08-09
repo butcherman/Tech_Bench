@@ -36,7 +36,6 @@ import UserNotificationList from "./UserNotificationList.vue";
 import UserNotificationView from "./UserNotificationView.vue";
 import CheckmarkBadge from "@/Components/_Base/Badges/CheckmarkBadge.vue";
 import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
-import { ref, reactive, onMounted } from "vue";
 import {
     loading,
     setActiveNotification,

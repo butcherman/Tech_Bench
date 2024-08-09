@@ -7,7 +7,7 @@ use Illuminate\Notifications\DatabaseNotification;
 
 class Notification extends DatabaseNotification
 {
-    protected $hidden = ['notifiable_id', 'notifiable_type', 'updated_at', 'type'];
+    protected $hidden = ['notifiable_id', 'notifiable_type', 'updated_at'];
 
     /**
      * @codeCoverageIgnore
