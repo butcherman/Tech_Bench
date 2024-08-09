@@ -18,6 +18,11 @@
                 </tr>
             </thead>
             <tbody>
+                <tr v-if="!app.userNotifications.list.length">
+                    <td colspan="3">
+                        <h5 class="text-center">No Notifications</h5>
+                    </td>
+                </tr>
                 <tr
                     v-for="(notification, index) in app.userNotifications.list"
                     :key="index"
@@ -52,13 +57,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { markedNotifications } from "@/State/NotificationState";
+import { computed } from "vue";
+import { markedNotifications, allChecked } from "@/State/NotificationState";
 import { useAppStore } from "@/Store/AppStore";
 
 defineEmits(["show-notification"]);
 const app = useAppStore();
-const allChecked = ref<boolean>(false);
 const indeterminate = computed<boolean>(
     () => markedNotifications.value.length > 0 && !allChecked.value
 );

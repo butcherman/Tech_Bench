@@ -5,6 +5,7 @@ import { gsap } from "gsap/gsap-core";
 export const loading = ref<boolean>(false);
 export const markedNotifications = ref<string[]>([]);
 export const activeNotification = ref<userNotification | undefined>();
+export const allChecked = ref<boolean>(false);
 
 /**
  * Assign the notification data that the view page will use to build view
@@ -30,6 +31,7 @@ export const handleNotifications = (action: "read" | "delete") => {
             onFinish: () => {
                 loading.value = false;
                 markedNotifications.value = [];
+                allChecked.value = false;
             },
         }
     );
