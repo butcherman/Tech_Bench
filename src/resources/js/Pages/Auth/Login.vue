@@ -94,7 +94,7 @@ interface homeLinks {
 defineProps<{
     welcomeMessage?: string;
     homeLinks: homeLinks[];
-    publicLink: homeLinks;
+    publicLink: homeLinks | boolean;
     allowOath: boolean;
 }>();
 
