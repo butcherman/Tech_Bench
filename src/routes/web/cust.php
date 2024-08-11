@@ -3,6 +3,7 @@
 use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerAdminController;
 use App\Http\Controllers\Customer\CustomerAlertsController;
+use App\Http\Controllers\Customer\CustomerBookmarkController;
 use App\Http\Controllers\Customer\CustomerContactController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
@@ -42,6 +43,8 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumb('New Customer Site', 'customers.index');
         Route::post('create-site', [CustomerSiteController::class, 'store'])
             ->name('store-site');
+        Route::post('bookmark/{customer}', CustomerBookmarkController::class)
+            ->name('bookmark');
 
         /***********************************************************************
          * Customer Administration
@@ -73,7 +76,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object' ? $customer->name : $customer
+                    fn(Customer|string $customer) => gettype($customer) === 'object' ? $customer->name : $customer
                 )->edit('Edit Customer Details');
         })->missing(function (Request $request) {
             throw new CustomerNotFoundException($request);
@@ -127,7 +130,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
-                    ->show(fn (Customer $customer, CustomerSite $site) => $site->site_name)
+                    ->show(fn(Customer $customer, CustomerSite $site) => $site->site_name)
                     ->edit('Edit Site');
             });
 
@@ -141,7 +144,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
-                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
             })->except(['create', 'edit']);
         Route::put('equipment-data', CustomerEquipmentDataController::class)

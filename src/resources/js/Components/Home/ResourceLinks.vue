@@ -24,13 +24,28 @@
             <h5 v-if="!customers.length" class="text-center">
                 Nothing to see here...
             </h5>
+            <ul class="list-group">
+                <li
+                    v-for="cust in customers"
+                    :key="cust.slug"
+                    class="list-group-item quick-link"
+                >
+                    <Link :href="$route('tech-tips.show', cust.slug)">
+                        {{ cust.name }}
+                    </Link>
+                </li>
+            </ul>
         </div>
         <div ref="tipsRef" style="display: none; opacity: 0">
             <h5 v-if="!techTips.length" class="text-center">
                 Nothing to see here...
             </h5>
             <ul class="list-group">
-                <li v-for="tip in techTips" class="list-group-item quick-link">
+                <li
+                    v-for="tip in techTips"
+                    :key="tip.slug"
+                    class="list-group-item quick-link"
+                >
                     <Link :href="$route('tech-tips.show', tip.slug)">
                         {{ tip.subject }}
                     </Link>

@@ -106,6 +106,26 @@ class User extends Authenticatable
         )->select(['slug', 'subject']);
     }
 
+    public function CustomerBookmarks()
+    {
+        return $this->belongsToMany(
+            Customer::class,
+            'user_customer_bookmarks',
+            'user_id',
+            'cust_id',
+        )->select(['slug', 'name']);
+    }
+
+    public function CustomerRecent()
+    {
+        return $this->belongsToMany(
+            Customer::class,
+            'user_customer_recents',
+            'user_id',
+            'cust_id',
+        )->select(['slug', 'name']);
+    }
+
     /**
      * Determine the new expire date for an updated password
      */

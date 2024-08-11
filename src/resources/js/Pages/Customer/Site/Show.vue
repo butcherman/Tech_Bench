@@ -3,6 +3,12 @@
         <Head :title="customer.name" />
         <div class="border-bottom border-secondary-subtle mb-2">
             <CustomerManagement v-if="showManagement" class="float-end" />
+            <h3 class="float-start me-2">
+                <BookmarkItem
+                    :is-bookmark="isFav"
+                    :toggle-route="$route('customers.bookmark', customer.slug)"
+                />
+            </h3>
             <CustomerDetails />
         </div>
         <CustomerAlerts />
@@ -40,8 +46,13 @@ import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
 import CustomerContact from "@/Components/Customer/CustomerContact.vue";
 import CustomerNote from "@/Components/Customer/CustomerNote.vue";
 import CustomerFile from "@/Components/Customer/CustomerFile.vue";
+import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import { computed } from "vue";
 import { customer, permissions } from "@/State/CustomerState";
+
+defineProps<{
+    isFav: boolean;
+}>();
 
 const showManagement = computed(
     () =>

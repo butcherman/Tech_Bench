@@ -17,10 +17,12 @@ class DashboardController extends Controller
         return Inertia::render('Home/Dashboard', [
             'bookmarks' => [
                 'techTips' => $request->user()->TechTipBookmarks,
+                'customers' => $request->user()->CustomerBookmarks,
             ],
             'recent' => [
                 'techTips' => $request->user()->TechTipRecent,
-            ]
+                'customers' => $request->user()->CustomerRecent,
+            ],
         ]);
     }
 }

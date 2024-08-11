@@ -24,7 +24,7 @@ class CustomerController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('Customer/Index', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
         ]);
     }
 
@@ -36,8 +36,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'selectId' => fn () => (bool) config('customer.select_id'),
-            'default-state' => fn () => config('customer.default_state'),
+            'selectId' => fn() => (bool) config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
         ]);
     }
 
@@ -49,8 +49,8 @@ class CustomerController extends Controller
         $newCustomer = $request->createNewCustomer();
 
         Log::channel('cust')
-            ->info('New Customer '.$newCustomer->name.' created by '
-                .$request->user()->username, $newCustomer->toArray());
+            ->info('New Customer ' . $newCustomer->name . ' created by '
+                . $request->user()->username, $newCustomer->toArray());
 
         event(new CustomerEvent($newCustomer, CrudAction::Create));
 
@@ -65,31 +65,36 @@ class CustomerController extends Controller
      */
     public function show(Request $request, Customer $customer): Response
     {
+        // Update the users recent activity
+        $customer->touchRecent($request->user());
+
         // If the customer has multiple sites, show the Customer Home Page
         if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
             return Inertia::render('Customer/Show', [
-                'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
-                'customer' => fn () => $customer,
-                'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
-                'alerts' => fn () => $customer->CustomerAlert,
-                'equipmentList' => fn () => $customer->CustomerEquipment,
-                'contacts' => fn () => $customer->CustomerContact,
-                'notes' => fn () => $customer->CustomerNote,
-                'files' => fn () => $customer->CustomerFile->append('href'),
+                'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
+                'customer' => fn() => $customer,
+                'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
+                'alerts' => fn() => $customer->CustomerAlert,
+                'equipmentList' => fn() => $customer->CustomerEquipment,
+                'contacts' => fn() => $customer->CustomerContact,
+                'notes' => fn() => $customer->CustomerNote,
+                'files' => fn() => $customer->CustomerFile->append('href'),
+                'is-fav' => fn() => $customer->isFav($request->user()),
             ]);
         }
 
         // If the customer only has a single site, show that sites details
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn () => $customer,
-            'site' => fn () => $customer->CustomerSite[0],
-            'siteList' => fn () => $customer->CustomerSite,
-            'alerts' => fn () => $customer->CustomerAlert,
-            'equipmentList' => fn () => $customer->CustomerEquipment,
-            'contacts' => fn () => $customer->CustomerContact,
-            'notes' => fn () => $customer->CustomerNote,
-            'files' => fn () => $customer->CustomerFile->append('href'),
+            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn() => $customer,
+            'site' => fn() => $customer->CustomerSite[0],
+            'siteList' => fn() => $customer->CustomerSite,
+            'alerts' => fn() => $customer->CustomerAlert,
+            'equipmentList' => fn() => $customer->CustomerEquipment,
+            'contacts' => fn() => $customer->CustomerContact,
+            'notes' => fn() => $customer->CustomerNote,
+            'files' => fn() => $customer->CustomerFile->append('href'),
+            'is-fav' => fn() => $customer->isFav($request->user()),
         ]);
     }
 
@@ -101,10 +106,10 @@ class CustomerController extends Controller
         $this->authorize('update', $customer);
 
         return Inertia::render('Customer/Edit', [
-            'selectId' => fn () => (bool) config('customer.select_id'),
-            'default-state' => fn () => config('customer.default_state'),
-            'customer' => fn () => $customer,
-            'siteList' => fn () => $customer->CustomerSite,
+            'selectId' => fn() => (bool) config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $customer->CustomerSite,
         ]);
     }
 
@@ -116,8 +121,8 @@ class CustomerController extends Controller
         $updatedCustomer = $request->updateCustomer($customer);
 
         Log::channel('cust')
-            ->info('Customer information updated for '.$customer->name
-                .' by '.$request->user()->username, $customer->toArray());
+            ->info('Customer information updated for ' . $customer->name
+                . ' by ' . $request->user()->username, $customer->toArray());
 
         event(new CustomerEvent($updatedCustomer, CrudAction::Update));
 
@@ -135,7 +140,7 @@ class CustomerController extends Controller
         $customer->update(['deleted_reason' => $request->reason]);
         $customer->delete();
 
-        Log::channel('cust')->alert('Customer '.$customer->name.' has been disabled by '.
+        Log::channel('cust')->alert('Customer ' . $customer->name . ' has been disabled by ' .
             $request->user()->username);
 
         event(new CustomerEvent($customer, CrudAction::Destroy));
@@ -154,8 +159,8 @@ class CustomerController extends Controller
 
         $customer->restore();
 
-        Log::channel('cust')->notice('Customer '.$customer->name.
-            ' has been restored by '.$request->user()->username);
+        Log::channel('cust')->notice('Customer ' . $customer->name .
+            ' has been restored by ' . $request->user()->username);
 
         event(new CustomerEvent($customer, CrudAction::Restore));
 
@@ -171,8 +176,8 @@ class CustomerController extends Controller
 
         dispatch(new DestroyCustomerJob($customer));
 
-        Log::channel('cust')->warning('Customer '.$customer->name.
-            ' has been permanently removed by '.$request->user()->username);
+        Log::channel('cust')->warning('Customer ' . $customer->name .
+            ' has been permanently removed by ' . $request->user()->username);
 
         event(new CustomerEvent($customer, CrudAction::ForceDelete));
 

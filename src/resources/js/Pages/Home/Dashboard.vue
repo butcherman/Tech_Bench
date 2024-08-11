@@ -8,7 +8,7 @@
                         <div class="card-title">Bookmarks:</div>
                         <ResourceLinks
                             :tech-tips="bookmarks.techTips"
-                            :customers="[]"
+                            :customers="bookmarks.customers"
                         />
                     </div>
                 </div>
@@ -21,7 +21,7 @@
                         <div class="card-title">Recent:</div>
                         <ResourceLinks
                             :tech-tips="recent.techTips"
-                            :customers="[]"
+                            :customers="recent.customers"
                         />
                     </div>
                 </div>
@@ -38,9 +38,11 @@ import ResourceLinks from "@/Components/Home/ResourceLinks.vue";
 defineProps<{
     bookmarks: {
         techTips: techTip[];
+        customers: customer[];
     };
     recent: {
         techTips: techTip[];
+        customers: customer[];
     };
 }>();
 </script>
