@@ -54,7 +54,7 @@ const openNotification = (notification: userNotification) => {
 
 <style scoped lang="scss">
 #notification-wrapper {
-    height: 45vh;
+    height: 35vh;
     position: relative;
     #notification-list {
         display: block;
