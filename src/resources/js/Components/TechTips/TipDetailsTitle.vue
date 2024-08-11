@@ -1,7 +1,7 @@
 <template>
     <div>
         <h3>{{ tipData.subject }}</h3>
-        <div class="tip-details">
+        <div class="tip-details mb-2">
             <a
                 v-if="!publicShown"
                 :href="$route('tech-tips.download', tipData.slug)"
@@ -21,6 +21,10 @@
             <span class="d-block d-sm-inline-block">
                 <strong>ID: </strong>
                 {{ tipData.tip_id }}
+            </span>
+            <span class="d-block d-sm-inline-block">
+                <strong>Tip Type: </strong>
+                {{ tipData.tech_tip_type.description }}
             </span>
             <span class="d-block d-sm-inline-block">
                 <strong>Created: </strong>

@@ -13,8 +13,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row my-4 resource-links">
             <div class="col">
                 <div class="card">
                     <div class="card-body">

@@ -15,8 +15,6 @@ class DownloadTipController extends Controller
      */
     public function __invoke(Request $request, TechTip $techTip)
     {
-        $this->authorize('view', $techTip);
-
         Log::channel('tip')
             ->info('Tech Tip ID ' . $techTip->tip_id . ' downloaded by ' .
                 $request->user()->username);

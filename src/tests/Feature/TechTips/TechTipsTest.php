@@ -5,9 +5,12 @@ namespace Tests\Feature\TechTips;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;
+use App\Models\TechTipFile;
 use App\Models\User;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class TechTipsTest extends TestCase
@@ -134,7 +137,7 @@ class TechTipsTest extends TestCase
 
         $this->assertDatabaseHas('tech_tips', [
             'subject' => $data->subject,
-            'slug' => $data->slug.'-1',
+            'slug' => $data->slug . '-1',
         ]);
     }
 
@@ -393,7 +396,11 @@ class TechTipsTest extends TestCase
 
     public function test_force_delete()
     {
+        Storage::fake('tips');
+        Event::fake();
+
         $tip = TechTip::factory()->create();
+        TechTipFile::factory()->count(5)->create(['tip_id' => $tip->tip_id]);
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));

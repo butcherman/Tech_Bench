@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Public;
 
+use App\Models\EquipmentType;
 use App\Models\TechTip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,6 +26,9 @@ class PublicTechTipTest extends TestCase
     public function test_index()
     {
         config(['techTips.allow_public' => true]);
+
+        EquipmentType::factory()->count(5)->create(['allow_public_tip' => true]);
+
 
         $response = $this->actingAs(User::factory()->create())
             ->get(route('publicTips.index'));

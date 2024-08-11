@@ -145,6 +145,8 @@ class TechTip extends Model
 
     /**
      * Search Results for Meilisearch
+     * 
+     * @codeCoverageIgnore
      */
     public function toSearchableArray()
     {
@@ -158,6 +160,11 @@ class TechTip extends Model
         ];
     }
 
+    /**
+     * Add Relationships to search
+     * 
+     * @codeCoverageIgnore
+     */
     protected function makeAllSearchableUsing(Builder $query)
     {
         return $query->with('EquipmentType');
