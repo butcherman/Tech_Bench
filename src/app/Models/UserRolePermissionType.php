@@ -17,7 +17,7 @@ class UserRolePermissionType extends Model
         'UserRolePermissionCategory',
     ];
 
-    protected $guarded = ['perm_type_id', 'created_at', 'updated_at'];
+    protected $guarded = []; // ['perm_type_id', 'created_at', 'updated_at'];
 
     protected $appends = ['group', 'feature_enabled'];
 

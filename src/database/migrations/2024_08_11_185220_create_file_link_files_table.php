@@ -13,7 +13,7 @@ return new class extends Migration {
         if (!Schema::hasTable('file_link_files')) {
 
             Schema::create('file_link_files', function (Blueprint $table) {
-                $table->id();
+                $table->id('link_file_id');
                 $table->unsignedBigInteger('link_id');
                 $table->unsignedBigInteger('file_id');
                 $table->unsignedBigInteger('user_id')->nullable();

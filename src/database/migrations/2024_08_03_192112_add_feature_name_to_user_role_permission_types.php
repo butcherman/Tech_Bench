@@ -17,6 +17,10 @@ return new class extends Migration {
             $table->string('feature_name')->after('is_admin_link')->nullable();
         });
 
+        Schema::table('user_role_permission_categories', function (Blueprint $table) {
+            $table->string('feature_name')->after('category')->nullable();
+        });
+
         UserRolePermissionType::where('description', 'Comment on Tech Tip')
             ->update(['feature_name' => TechTipCommentFeature::class]);
         UserRolePermissionType::where('description', 'Add Public Tech Tip')

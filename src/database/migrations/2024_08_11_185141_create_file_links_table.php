@@ -11,10 +11,10 @@ return new class extends Migration {
     public function up(): void
     {
         if (!Schema::hasTable('file_links')) {
-            Schema::create('file_link', function (Blueprint $table) {
-                $table->id();
+            Schema::create('file_links', function (Blueprint $table) {
+                $table->id('link_id');
                 $table->unsignedBigInteger('user_id');
-                $table->text('link_hash')->unique();
+                $table->text('link_hash');
                 $table->text('link_name');
                 $table->date('expire');
                 $table->longText('instructions')->nullable();
