@@ -86,25 +86,25 @@ class User extends Authenticatable
         return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
     }
 
-    // public function TechTipBookmarks()
-    // {
-    //     return $this->belongsToMany(
-    //         TechTip::class,
-    //         'user_tech_tip_bookmarks',
-    //         'user_id',
-    //         'tip_id'
-    //     );
-    // }
+    public function TechTipBookmarks()
+    {
+        return $this->belongsToMany(
+            TechTip::class,
+            'user_tech_tip_bookmarks',
+            'user_id',
+            'tip_id'
+        )->select(['slug', 'subject']);
+    }
 
-    // public function TechTipRecent()
-    // {
-    //     return $this->belongsToMany(
-    //         TechTip::class,
-    //         'user_tech_tip_recents',
-    //         'user_id',
-    //         'tip_id'
-    //     );
-    // }
+    public function TechTipRecent()
+    {
+        return $this->belongsToMany(
+            TechTip::class,
+            'user_tech_tip_recents',
+            'user_id',
+            'tip_id'
+        )->select(['slug', 'subject']);
+    }
 
     /**
      * Determine the new expire date for an updated password

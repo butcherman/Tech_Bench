@@ -7,14 +7,14 @@ current:
   patch: 0
   prerelease: dev
   buildmetadata: null
-  commit: 85c
+  commit: 85d
   timestamp:
     year: 2024
     month: 8
-    day: 10
-    hour: 18
-    minute: 39
-    second: 30
+    day: 11
+    hour: 0
+    minute: 27
+    second: 51
     timezone: UTC
 commit:
   mode: git-local
