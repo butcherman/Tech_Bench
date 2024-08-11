@@ -23,6 +23,7 @@ class BuildAdminMenu
         $this->buildCustomerMenu();
         $this->buildTechTipMenu();
         $this->buildEquipmentMenu();
+        $this->buildFileLinkMenu();
         $this->buildSettingsMenu();
         $this->buildMaintenanceMenu();
     }
@@ -215,6 +216,11 @@ class BuildAdminMenu
                     'icon' => 'fa-lock',
                     'route' => route('admin.security.index'),
                 ],
+                [
+                    'name' => 'Enable/Disable Features',
+                    'icon' => 'gears',
+                    'route' => route('admin.features.show'),
+                ],
             ];
         }
 
@@ -254,5 +260,29 @@ class BuildAdminMenu
         }
 
         $this->menu['Maintenance'] = $nav;
+    }
+
+    /**
+     * Administrative menu for File Links
+     */
+    protected function buildFileLinkMenu(): void
+    {
+        $nav = [];
+
+        if (
+            config('fileLink.feature_enabled') &&
+            $this->checkPermission($this->user, 'Manage File Links')
+        ) {
+
+            $nav = [
+                [
+                    'name' => 'Manage File Links',
+                    'icon' => 'tools',
+                    'route' => '#',
+                ]
+            ];
+        }
+
+        $this->menu['File Links'] = $nav;
     }
 }
