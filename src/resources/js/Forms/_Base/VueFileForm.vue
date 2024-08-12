@@ -43,6 +43,7 @@
         </form>
         <slot name="cancel">
             <button
+                v-if="isSubmitting"
                 type="button"
                 class="btn btn-danger my-2 w-100"
                 :disabled="!isSubmitting"

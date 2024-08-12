@@ -11,7 +11,6 @@ return new class extends Migration {
     public function up(): void
     {
         if (!Schema::hasTable('file_link_files')) {
-
             Schema::create('file_link_files', function (Blueprint $table) {
                 $table->id('link_file_id');
                 $table->unsignedBigInteger('link_id');
@@ -36,6 +35,10 @@ return new class extends Migration {
                     ->onUpdate('cascade');
             });
         }
+
+        Schema::table('file_link_files', function (Blueprint $table) {
+            $table->boolean('upload')->default(false)->change();
+        });
     }
 
     /**

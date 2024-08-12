@@ -93,7 +93,7 @@ class BuildNavbar
             return [
                 'name' => 'File Links',
                 'icon' => 'link',
-                'route' => '#',
+                'route' => route('links.index'),
             ];
         }
 
