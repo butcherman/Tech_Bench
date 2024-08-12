@@ -50,6 +50,7 @@ import { array, object, string } from "yup";
 
 const props = defineProps<{
     permissionList: userRolePermissionGroup;
+    permissionValues: userRolePermission[];
     baseRole?: userRole;
     edit?: boolean;
 }>();
@@ -74,7 +75,10 @@ const roleInitialPermissions = () => {
 
     Object.values(props.permissionList).forEach((perm) => {
         perm.forEach((item) => {
-            init[item.perm_type_id] = item.allow || false;
+            let value = props.permissionValues.find(
+                (perm) => perm.perm_type_id === item.perm_type_id
+            );
+            init[item.perm_type_id] = value?.allow || false;
         });
     });
 

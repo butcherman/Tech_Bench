@@ -25,12 +25,12 @@
                                     >
                                         <fa-icon
                                             :icon="
-                                                opt.allow
+                                                isAllowed(opt)
                                                     ? 'fa-check'
                                                     : 'fa-xmark'
                                             "
                                             :class="
-                                                opt.allow
+                                                isAllowed(opt)
                                                     ? 'text-success'
                                                     : 'text-danger'
                                             "
@@ -91,7 +91,15 @@ import { router } from "@inertiajs/vue3";
 const props = defineProps<{
     role: userRole;
     permissionList: userRolePermissionGroup;
+    permissionValues: userRolePermission[];
 }>();
+
+const isAllowed = (permission: userRolePermission) => {
+    let value = props.permissionValues.find(
+        (perm) => perm.perm_type_id === permission.perm_type_id
+    );
+    return value?.allow || false;
+};
 
 const deleteRole = () => {
     verifyModal("This Operation Cannot Be Undone").then((res) => {
