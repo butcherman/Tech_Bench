@@ -3,6 +3,7 @@ type fileLink = {
     link_hash: string;
     link_name: string;
     href: string;
+    public_href: string;
     expire: string;
     is_expired: boolean;
     instructions: string | null;

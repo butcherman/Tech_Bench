@@ -59,6 +59,12 @@
                                             >
                                                 <fa-icon icon="link-slash" />
                                             </span>
+                                            <ClipboardCopy
+                                                v-if="!link.is_expired"
+                                                :value="link.public_href"
+                                                title="Copy Public Link to Clipboard"
+                                                class="mt-2"
+                                            />
                                         </td>
                                     </tr>
                                 </template>
@@ -76,11 +82,11 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import Table from "@/Components/_Base/Table.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import { ref, reactive, onMounted } from "vue";
+import ClipboardCopy from "@/Components/_Base/Badges/ClipboardCopy.vue";
 import { router } from "@inertiajs/vue3";
 import verifyModal from "@/Modules/verifyModal";
 
-const props = defineProps<{
+defineProps<{
     linkList: fileLink[];
 }>();
 

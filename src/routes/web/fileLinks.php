@@ -3,6 +3,7 @@
 use App\Http\Controllers\FileLink\ExpireFileLinkController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\UploadFileController;
+use App\Models\FileLink;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -17,4 +18,9 @@ Route::middleware('auth.secure')->group(function () {
             $breadcrumbs->index('File Links')
                 ->create('New File Link');
         });
+
 });
+
+Route::get('file-links/{link}', function ($link) {
+    return $link;
+})->name('guest-link.show');
