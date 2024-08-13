@@ -62,8 +62,8 @@
                                             <ClipboardCopy
                                                 v-if="!link.is_expired"
                                                 :value="link.public_href"
-                                                title="Copy Public Link to Clipboard"
-                                                class="mt-2"
+                                                title="Copy Public URL to Clipboard"
+                                                class="mt-2 float-end"
                                             />
                                         </td>
                                     </tr>

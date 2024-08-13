@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkRequest;
+use App\Http\Resources\FileLinkTableResource;
 use App\Models\FileLink;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -55,10 +56,12 @@ class FileLinkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(FileLink $link)
     {
-        //
-        return 'show';
+        return Inertia::render('FileLinks/Show', [
+            'link' => $link,
+            'table-data' => FileLinkTableResource::make($link),
+        ]);
     }
 
     /**
@@ -66,8 +69,7 @@ class FileLinkController extends Controller
      */
     public function edit(string $id)
     {
-        //
-        return 'edit';
+        return Inertia::render('FileLinks/Edit');
     }
 
     /**
