@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\FileLink;
 
+use App\Enum\CrudAction;
+use App\Events\FileLinks\FileLinkEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkRequest;
 use App\Http\Resources\FileLinkTableResource;
@@ -44,12 +46,13 @@ class FileLinkController extends Controller
     {
         $newLink = $request->createFileLink();
 
+        event(new FileLinkEvent($newLink, CrudAction::Create));
         Log::info(
             'New File Link created by ' . $request->user()->username,
             $newLink->toArray()
         );
 
-        return redirect(route('links.show', $newLink->link_hash))
+        return redirect(route('links.show', $newLink->link_id))
             ->with('success', 'File Link Created');
     }
 
@@ -61,6 +64,7 @@ class FileLinkController extends Controller
         return Inertia::render('FileLinks/Show', [
             'link' => $link,
             'table-data' => FileLinkTableResource::make($link),
+            'link-files' => $link->FileUpload,
         ]);
     }
 

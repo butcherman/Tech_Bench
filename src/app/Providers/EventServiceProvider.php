@@ -62,7 +62,7 @@ class EventServiceProvider extends ServiceProvider
          * Office 365 Authentication Events
          */
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-            \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
+            \SocialiteProviders\Azure\AzureExtendSocialite::class . '@handle',
         ],
 
         /**
@@ -96,6 +96,13 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\TechTips\TipCommentFlaggedEvent' => [
             'App\Listeners\Notify\TechTips\NotifyOfFlaggedTipListener',
+        ],
+
+        /**
+         * File Link Events
+         */
+        'App\Events\FileLinks\FileLinkEvent' => [
+            'App\Listeners\FileLinks\UpdateLinkFilesListener'
         ],
     ];
 

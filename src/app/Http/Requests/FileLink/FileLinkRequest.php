@@ -43,7 +43,9 @@ class FileLinkRequest extends FormRequest
 
         if ($this->session()->has('link-file')) {
             $fileList = $this->session()->pull('link-file');
-            $newLink->FileUpload()->sync($fileList);
+            $newLink->FileUpload()->syncWithPivotValues($fileList, [
+                'user_id' => $this->user()->user_id,
+            ]);
         }
 
         return $newLink;
