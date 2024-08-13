@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkRequest;
+use App\Models\FileLink;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -14,9 +15,13 @@ class FileLinkController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('FileLinks/Index');
+        $this->authorize('viewAny', FileLink::class);
+
+        return Inertia::render('FileLinks/Index', [
+            'link-list' => $request->user()->FileLink,
+        ]);
     }
 
     /**
@@ -77,9 +82,18 @@ class FileLinkController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, FileLink $link)
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $link);
+
+        $link->delete();
+
+        Log::info(
+            'File Link deleted by ' . $request->user()->username,
+            $link->toArray()
+        );
+
+
+        return redirect(route('links.index'))->with('danger', 'File Link Deleted');
     }
 }

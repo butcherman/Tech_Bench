@@ -126,6 +126,11 @@ class User extends Authenticatable
         )->select(['slug', 'name']);
     }
 
+    public function FileLink()
+    {
+        return $this->hasMany(FileLink::class, 'user_id', 'user_id');
+    }
+
     /**
      * Determine the new expire date for an updated password
      */

@@ -1,6 +1,6 @@
 <template>
     <div :class="{ 'table-responsive': responsive }">
-        <table class="table">
+        <table class="table" :class="{ 'table-striped': striped }">
             <thead>
                 <tr>
                     <th v-for="col in columns" :key="col.field">
@@ -174,6 +174,7 @@ const props = defineProps<{
     noResultsText?: string;
     noInertiaLink?: boolean;
     loading?: boolean;
+    striped?: boolean;
 }>();
 
 const columnCount = computed(
