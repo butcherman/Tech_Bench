@@ -167,6 +167,7 @@ const props = defineProps<{
     rows: any[];
     responsive?: boolean;
     initialSort?: string;
+    initialSortDirection?: "asc" | "desc";
     rowClickable?: boolean;
     paginate?: boolean;
     perPageArray?: number[];
@@ -218,7 +219,7 @@ const getRowClass = (row: any) => {
  * Sorting Properties
  *******************************************************************************/
 const sortBy = ref<string>(props.initialSort || "");
-const sortOrder = ref<"asc" | "desc">("asc");
+const sortOrder = ref<"asc" | "desc">(props.initialSortDirection || "asc");
 
 const updateSort = (field: string) => {
     let newOrder: "asc" | "desc" = "asc";

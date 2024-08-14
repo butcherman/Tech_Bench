@@ -13,6 +13,8 @@
                         :columns="tableCols"
                         :rows="linkList"
                         :row-style-class="rowBgClassFn"
+                        initial-sort="is_expired"
+                        initial-sort-direction="desc"
                         responsive
                         striped
                     >
@@ -73,6 +75,7 @@ const tableCols = [
         label: "Expires",
         field: "expire",
         sort: true,
+        sortField: "created_stamp",
     },
 ];
 

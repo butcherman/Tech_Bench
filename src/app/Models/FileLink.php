@@ -14,7 +14,7 @@ class FileLink extends Model
 
     protected $guarded = ['link_id', 'created_at', 'updated_at'];
     protected $hidden = ['user_id', 'created_at', 'updated_at'];
-    protected $appends = ['is_expired', 'href', 'public_href'];
+    protected $appends = ['is_expired', 'href', 'public_href', 'created_stamp'];
 
     protected $casts = [
         'allow_upload' => 'boolean',
@@ -49,6 +49,11 @@ class FileLink extends Model
     public function getPublicHrefAttribute()
     {
         return route('guest-link.show', $this->link_hash);
+    }
+
+    public function getCreatedStampAttribute()
+    {
+        return $this->created_at;
     }
 
     public function expireLink()
