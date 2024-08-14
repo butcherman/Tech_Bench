@@ -64,7 +64,7 @@ class FileLinkController extends Controller
         return Inertia::render('FileLinks/Show', [
             'link' => $link,
             'table-data' => FileLinkTableResource::make($link),
-            'link-files' => $link->FileUpload,
+            'link-files' => $link->FileUpload->makeVisible(['created_at']),
         ]);
     }
 

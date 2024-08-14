@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Head title="File Link Details" />
         <div v-if="link.is_expired" class="alert alert-danger text-center">
             Link Has Expired
         </div>
@@ -67,11 +68,27 @@
                 </div>
             </div>
         </div>
+        <div class="row justify-content-center my-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">Files:</div>
+                        <Table
+                            :columns="fileColumns"
+                            :rows="linkFiles"
+                            no-inertia-link
+                        >
+                        </Table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
+import Table from "@/Components/_Base/Table.vue";
 import TableStacked from "@/Components/_Base/TableStacked.vue";
 import ClipboardCopy from "@/Components/_Base/Badges/ClipboardCopy.vue";
 import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
@@ -85,7 +102,27 @@ const props = defineProps<{
     tableData: {
         data: fileLink;
     };
+    linkFiles: fileUpload[];
 }>();
+
+const fileColumns = [
+    {
+        label: "File Name",
+        field: "file_name",
+    },
+    {
+        label: "Date Added",
+        field: "created_at",
+    },
+    {
+        label: "Added By",
+        field: "upload",
+    },
+    {
+        label: "Size",
+        field: "file_size",
+    },
+];
 
 const disableLink = () => {
     verifyModal(

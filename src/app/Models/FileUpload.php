@@ -20,6 +20,18 @@ class FileUpload extends Model
 
     protected $hidden = ['disk', 'created_at', 'folder', 'updated_at', 'public'];
 
+    protected $appends = ['href'];
+
+    protected $casts = [
+        'created_at' => 'datetime:M d, Y',
+        'updated_at' => 'datetime:M d, Y',
+    ];
+
+    public function getHrefAttribute()
+    {
+        return route('download', [$this->file_id, $this->file_name]);
+    }
+
     public function validateFile($fileName)
     {
         $this->verifyFileName($fileName);
@@ -42,7 +54,7 @@ class FileUpload extends Model
      */
     protected function verifyPublicDownload()
     {
-        if (! Auth::check() && ! $this->public) {
+        if (!Auth::check() && !$this->public) {
             throw new PrivateFileException($this);
         }
     }
@@ -54,7 +66,7 @@ class FileUpload extends Model
     {
         if (
             Storage::disk($this->disk)
-                ->missing($this->folder.DIRECTORY_SEPARATOR.$this->file_name)
+                ->missing($this->folder . DIRECTORY_SEPARATOR . $this->file_name)
         ) {
             throw new FileMissingException($this);
         }
@@ -66,6 +78,6 @@ class FileUpload extends Model
     public function getFilePath()
     {
         return Storage::disk($this->disk)
-            ->path($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
+            ->path($this->folder . DIRECTORY_SEPARATOR . $this->file_name);
     }
 }

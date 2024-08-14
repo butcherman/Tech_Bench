@@ -30,7 +30,10 @@ class FileLink extends Model
             'file_link_files',
             'link_id',
             'file_id',
-        );
+        )->withPivot([
+                    'added_by',
+                    'upload'
+                ])->withTimestamps();
     }
 
     public function getIsExpiredAttribute()
