@@ -15,10 +15,10 @@ return new class extends Migration {
                 $table->id('link_file_id');
                 $table->unsignedBigInteger('link_id');
                 $table->unsignedBigInteger('file_id');
+                $table->unsignedBigInteger('link_note_id')->nullable();
                 $table->unsignedBigInteger('user_id')->nullable();
                 $table->text('added_by')->nullable();
                 $table->boolean('upload');
-                $table->longText('note')->nullable();
                 $table->timestamps();
                 $table->foreign('link_id')
                     ->references('link_id')
@@ -33,6 +33,22 @@ return new class extends Migration {
                     ->references('user_id')
                     ->on('users')
                     ->onUpdate('cascade');
+                $table->foreign('link_note_id')
+                    ->references('link_note_id')
+                    ->on('file_link_notes')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            });
+        } else {
+            Schema::table('file_link_files', function (Blueprint $table) {
+                $table->unsignedBigInteger('link_note_id')
+                    ->after('file_id')
+                    ->nullable();
+                $table->foreign('link_note_id')
+                    ->references('link_note_id')
+                    ->on('file_link_notes')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
             });
         }
 

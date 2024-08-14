@@ -19,6 +19,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr v-if="!linkList.length">
+                                    <td colspan="3">
+                                        <h5 class="text-center">
+                                            No File Links
+                                        </h5>
+                                    </td>
+                                </tr>
                                 <template
                                     v-for="link in linkList"
                                     :key="link.link_id"
