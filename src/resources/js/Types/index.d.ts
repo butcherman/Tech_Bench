@@ -69,6 +69,7 @@ type fileUpload = {
     file_id: number;
     file_name: string;
     file_size: number;
+    href: string;
 };
 
 interface tableColumn {

@@ -251,8 +251,10 @@ const process = (form: { [key: string]: any }) => {
  *******************************************************************************/
 const reset = () => {
     myDrop.removeAllFiles();
-    errMessage.value = null;
-    isDirty.value = false;
+    nextTick(() => {
+        errMessage.value = null;
+        isDirty.value = false;
+    });
 };
 
 /*******************************************************************************
