@@ -46,7 +46,7 @@
                 <tr
                     v-for="(row, index) in paginatedData"
                     :key="index"
-                    :class="{ pointer: rowClickable, 'row-link': row.href }"
+                    :class="getRowClass(row)"
                 >
                     <template v-for="col in columns">
                         <td @click="$emit('on-row-click', row, $event)">
@@ -175,6 +175,7 @@ const props = defineProps<{
     noInertiaLink?: boolean;
     loading?: boolean;
     striped?: boolean;
+    rowStyleClass?: ((row: any) => string) | string;
 }>();
 
 const columnCount = computed(
@@ -187,6 +188,31 @@ const columnCount = computed(
 const sortedData = computed(() =>
     sortDataObject(filteredData.value, sortOrder.value, sortBy.value)
 );
+
+/*******************************************************************************
+ * Styling for Table Rows
+ *******************************************************************************/
+const getRowClass = (row: any) => {
+    let fullClass = [];
+
+    if (props.rowClickable) {
+        fullClass.push("pointer");
+    }
+
+    if (row.href) {
+        fullClass.push("row-link");
+    }
+
+    if (props.rowStyleClass) {
+        if (typeof props.rowStyleClass === "function") {
+            fullClass.push(props.rowStyleClass(row));
+        } else {
+            fullClass.push(props.rowStyleClass);
+        }
+    }
+
+    return fullClass.join(" ");
+};
 
 /*******************************************************************************
  * Sorting Properties

@@ -1,6 +1,6 @@
 <template>
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
@@ -9,75 +9,37 @@
                         </Link>
                         File Upload Links
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Link Name</th>
-                                    <th>Expires</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-if="!linkList.length">
-                                    <td colspan="3">
-                                        <h5 class="text-center">
-                                            No File Links
-                                        </h5>
-                                    </td>
-                                </tr>
-                                <template
-                                    v-for="link in linkList"
-                                    :key="link.link_id"
+                    <Table
+                        :columns="tableCols"
+                        :rows="linkList"
+                        :row-style-class="rowBgClassFn"
+                        responsive
+                        striped
+                    >
+                        <template #action="{ rowData }">
+                            <div>
+                                <DeleteBadge
+                                    class="mt-2 float-end"
+                                    @click="deleteLink(rowData)"
+                                />
+                                <span
+                                    v-if="!rowData.is_expired"
+                                    class="badge bg-warning rounded-pill pointer mx-1 mt-2 float-end"
+                                    title="Disable Link"
+                                    v-tooltip
+                                    @click="disableLink(rowData)"
                                 >
-                                    <tr
-                                        class="row-link"
-                                        :class="{
-                                            'table-danger': link.is_expired,
-                                        }"
-                                    >
-                                        <td>
-                                            <Link
-                                                :href="link.href"
-                                                class="block-link"
-                                            >
-                                                {{ link.link_name }}
-                                            </Link>
-                                        </td>
-                                        <td>
-                                            <Link
-                                                :href="link.href"
-                                                class="block-link"
-                                            >
-                                                {{ link.expire }}
-                                            </Link>
-                                        </td>
-                                        <td>
-                                            <DeleteBadge
-                                                class="mt-2 float-end"
-                                                @click="deleteLink(link)"
-                                            />
-                                            <span
-                                                v-if="!link.is_expired"
-                                                class="badge bg-warning rounded-pill pointer mx-1 mt-2 float-end"
-                                                title="Disable Link"
-                                                v-tooltip
-                                                @click="disableLink(link)"
-                                            >
-                                                <fa-icon icon="link-slash" />
-                                            </span>
-                                            <ClipboardCopy
-                                                v-if="!link.is_expired"
-                                                :value="link.public_href"
-                                                title="Copy Public URL to Clipboard"
-                                                class="mt-2 float-end"
-                                            />
-                                        </td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
+                                    <fa-icon icon="link-slash" />
+                                </span>
+                                <ClipboardCopy
+                                    v-if="!rowData.is_expired"
+                                    :value="rowData.public_href"
+                                    title="Copy Public URL to Clipboard"
+                                    class="mt-2 float-end"
+                                />
+                            </div>
+                        </template>
+                    </Table>
                 </div>
             </div>
         </div>
@@ -96,6 +58,25 @@ import verifyModal from "@/Modules/verifyModal";
 defineProps<{
     linkList: fileLink[];
 }>();
+
+const tableCols = [
+    {
+        label: "Link Name",
+        field: "link_name",
+        sort: true,
+        filterOptions: {
+            enabled: true,
+            placeholder: "Filter Link Name",
+        },
+    },
+    {
+        label: "Expires",
+        field: "expire",
+        sort: true,
+    },
+];
+
+const rowBgClassFn = (row: fileLink) => (row.is_expired ? "table-danger" : "");
 
 const disableLink = (link: fileLink) => {
     verifyModal(
