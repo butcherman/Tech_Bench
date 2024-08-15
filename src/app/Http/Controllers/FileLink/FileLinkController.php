@@ -74,18 +74,25 @@ class FileLinkController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(FileLink $link)
     {
-        return Inertia::render('FileLinks/Edit');
+        $this->authorize('update', $link);
+
+        return Inertia::render('FileLinks/Edit', [
+            'link' => $link->getRawOriginal(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(FileLinkRequest $request, FileLink $link)
     {
-        //
-        return 'update';
+        $link->update($request->all());
+
+        Log::info('File Link Information updated by ' . $request->user()->username, $link->toArray());
+
+        return redirect(route('links.show', $link->link_id))->with('success', 'Link Information Updated');
     }
 
     /**
@@ -101,7 +108,6 @@ class FileLinkController extends Controller
             'File Link deleted by ' . $request->user()->username,
             $link->toArray()
         );
-
 
         return redirect(route('links.index'))->with('danger', 'File Link Deleted');
     }

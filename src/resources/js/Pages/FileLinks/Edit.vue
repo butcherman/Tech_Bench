@@ -1,9 +1,10 @@
 <template>
     <div class="row justify-content-center">
-        <div class="col">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h1>Hello World</h1>
+                    <div class="card-title">New File Link</div>
+                    <FileLinkForm :file-link="link" />
                 </div>
             </div>
         </div>
@@ -12,9 +13,11 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { ref, reactive, onMounted } from "vue";
+import FileLinkForm from "@/Forms/FileLink/FileLinkForm.vue";
 
-const props = defineProps<{}>();
+defineProps<{
+    link: fileLink;
+}>();
 </script>
 
 <script lang="ts">

@@ -6,6 +6,7 @@
         :submit-route="$route('links.upload')"
         :submit-text="submitText"
         :max-files="5"
+        :hide-file-input="fileLink ? true : false"
         @success="handleSuccess"
     >
         <TextInput id="link-name" name="link_name" label="Link Name" focus />
@@ -17,7 +18,7 @@
                 label="Allow Visitors to Upload Files"
             />
         </div>
-        <div class="text-center">
+        <div class="text-center mb-2">
             <button
                 type="button"
                 class="btn btn-primary btn-sm rounded-5"
@@ -41,20 +42,20 @@ import VueFileForm from "../_Base/VueFileForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import CheckboxSwitch from "../_Base/CheckboxSwitch.vue";
 import Editor from "../_Base/Editor.vue";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { boolean, date, object, string } from "yup";
 import { gsap } from "gsap";
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps<{
-    fileLink?: any;
+    fileLink?: fileLink;
     defaultExpire?: string;
 }>();
 
 const fileLinkForm = ref<InstanceType<typeof VueFileForm> | null>(null);
 
 const submitText = computed(() =>
-    props.fileLink ? "Edit Resource" : "Create File Link"
+    props.fileLink ? "Update File Link" : "Create File Link"
 );
 
 const initValues = {
@@ -86,7 +87,7 @@ const toggleInstructions = () => {
 
     showInstructions.value = !showInstructions.value;
 
-    if (!showInstructions) {
+    if (!showInstructions.value) {
         fileLinkForm.value?.setFieldValue("instructions", "");
     }
 };
@@ -99,12 +100,18 @@ const handleSuccess = (result: string) => {
         let formData = useForm(values);
 
         if (props.fileLink) {
-            console.log("edit");
+            formData.put(route("links.update", props.fileLink.link_id));
         } else {
             formData.post(route("links.store"));
         }
     }
 };
+
+onMounted(() => {
+    if (props.fileLink?.instructions) {
+        toggleInstructions();
+    }
+});
 </script>
 
 <style scoped lang="scss">

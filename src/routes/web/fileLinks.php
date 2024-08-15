@@ -17,6 +17,7 @@ Route::middleware('auth.secure')->group(function () {
     Route::get('{link}/extend', ExtendLinkController::class)
         ->name('links.extend');
 
+    // File Link Files
     Route::post('{link}/add-file', [FileLinkFileController::class, 'store'])
         ->name('links.add-file');
     Route::delete('{link}/delete-file/{linkFile}', [FileLinkFileController::class, 'destroy'])
@@ -26,9 +27,9 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('File Links')
                 ->create('New File Link')
-                ->show('Link Details');
+                ->show('Link Details')
+                ->edit('Edit Link');
         });
-
 });
 
 Route::get('file-links/{link}', function ($link) {

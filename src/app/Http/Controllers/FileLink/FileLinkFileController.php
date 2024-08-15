@@ -21,7 +21,7 @@ class FileLinkFileController extends Controller
     {
         $this->authorize('update', $link);
 
-        $this->setFileData('fileLinks', $link->link_id);
+        $this->setFileData('fileLinks', $link->link_id, true);
 
         if ($request->file) {
             if ($savedFile = $this->getChunk($request)) {
