@@ -3,6 +3,7 @@
 use App\Http\Controllers\FileLink\ExpireFileLinkController;
 use App\Http\Controllers\FileLink\ExtendLinkController;
 use App\Http\Controllers\FileLink\FileLinkController;
+use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\UploadFileController;
 use App\Models\FileLink;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -15,6 +16,11 @@ Route::middleware('auth.secure')->group(function () {
         ->name('links.expire');
     Route::get('{link}/extend', ExtendLinkController::class)
         ->name('links.extend');
+
+    Route::post('{link}/add-file', [FileLinkFileController::class, 'store'])
+        ->name('links.add-file');
+    Route::delete('{link}/delete-file/{linkFile}', [FileLinkFileController::class, 'destroy'])
+        ->name('links.destroy-file');
 
     Route::resource('links', FileLinkController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

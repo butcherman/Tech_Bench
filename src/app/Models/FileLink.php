@@ -32,7 +32,8 @@ class FileLink extends Model
             'file_id',
         )->withPivot([
                     'added_by',
-                    'upload'
+                    'upload',
+                    'link_file_id',
                 ])->withTimestamps();
     }
 

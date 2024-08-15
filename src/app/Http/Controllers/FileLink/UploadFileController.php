@@ -21,7 +21,7 @@ class UploadFileController extends Controller
         if ($request->file) {
 
             if ($savedFile = $this->getChunk($request)) {
-                Log::debug('Tech Tip file saved', $savedFile->toArray());
+                Log::debug('File Link file saved', $savedFile->toArray());
                 $request->session()->push('link-file', $savedFile->file_id);
                 Log::debug(
                     'Current session file list',

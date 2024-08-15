@@ -11,3 +11,17 @@ type fileLink = {
     created_at: string;
     updated_at: string;
 };
+
+type fileLinkFile = {
+    added_by: string | null;
+    created_at: string;
+    file_id: number;
+    link_file_id: number;
+    link_id: number;
+    updated_at: number;
+    upload: boolean;
+};
+
+type fileLinkUpload = {
+    pivot: fileLinkFile;
+} & fileUpload;
