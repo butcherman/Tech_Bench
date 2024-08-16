@@ -14,9 +14,15 @@
         </div>
         <div class="row justify-content-center my-4">
             <div class="col">
+                <DownloadableFiles :link="link" :file-list="uploadedFiles" />
+            </div>
+        </div>
+        <div class="row justify-content-center my-4">
+            <div class="col">
                 <DownloadableFiles
                     :link="link"
                     :file-list="downloadableFiles"
+                    public
                 />
             </div>
         </div>
@@ -35,6 +41,7 @@ const props = defineProps<{
         data: fileLink;
     };
     downloadableFiles: fileLinkUpload[];
+    uploadedFiles: fileLinkUpload[];
 }>();
 </script>
 

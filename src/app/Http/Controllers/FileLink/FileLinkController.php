@@ -61,12 +61,15 @@ class FileLinkController extends Controller
      */
     public function show(FileLink $link)
     {
-        // TODO - Why are all files showing?
         return Inertia::render('FileLinks/Show', [
             'link' => $link,
             'table-data' => FileLinkTableResource::make($link),
             'downloadable-files' => $link->FileUpload()
                 ->wherePivot('upload', false)
+                ->get()
+                ->makeVisible(['created_at']),
+            'uploaded-files' => $link->FileUpload()
+                ->wherePivot('upload', true)
                 ->get()
                 ->makeVisible(['created_at']),
         ]);

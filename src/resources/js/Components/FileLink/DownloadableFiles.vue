@@ -3,16 +3,17 @@
         <div class="card-body">
             <div class="card-title">
                 <AddButton
+                    v-if="public"
                     text="Add File"
                     class="float-end"
                     small
                     pill
                     @click="addFileModal?.show()"
                 />
-                Public Downloadable Files
+                {{ title }}
             </div>
             <Table
-                :columns="fileColumns"
+                :columns="public ? publicFileColumns : fileColumns"
                 :rows="fileList"
                 no-results-text="No Downloadable Files"
                 striped
@@ -55,16 +56,20 @@ import Modal from "../_Base/Modal.vue";
 import FileLinkFileForm from "@/Forms/FileLink/FileLinkFileForm.vue";
 import verifyModal from "@/Modules/verifyModal";
 import prettyBytes from "pretty-bytes";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { router } from "@inertiajs/vue3";
 
-defineProps<{
+const props = defineProps<{
     link: fileLink;
     fileList: fileLinkUpload[];
+    public?: boolean;
 }>();
 
 const addFileModal = ref<InstanceType<typeof Modal> | null>(null);
 const showModal = ref(false);
+const title = computed(() =>
+    props.public ? "Public Downloadable Files" : "Uploaded Files"
+);
 
 const handleFileAdded = () => {
     router.reload();
@@ -86,6 +91,25 @@ const deleteFile = (file: fileLinkUpload) => {
 };
 
 const fileColumns = [
+    {
+        label: "File Name",
+        field: "file_name",
+        sort: true,
+    },
+    {
+        label: "Date Added",
+        field: "created_at",
+        sort: true,
+        sort_field: "created_stamp",
+    },
+    {
+        label: "Size",
+        field: "file_size",
+        sort: true,
+    },
+];
+
+const publicFileColumns = [
     {
         label: "File Name",
         field: "file_name",
