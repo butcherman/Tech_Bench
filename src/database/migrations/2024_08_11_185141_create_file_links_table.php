@@ -19,6 +19,7 @@ return new class extends Migration {
                 $table->date('expire');
                 $table->longText('instructions')->nullable();
                 $table->boolean('allow_upload');
+                $table->boolean('email_on_visit')->default(false);
                 $table->timestamps();
                 $table->foreign('user_id')
                     ->references('user_id')

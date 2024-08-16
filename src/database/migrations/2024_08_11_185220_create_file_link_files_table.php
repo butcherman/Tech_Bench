@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\FileLinkFile;
+use App\Models\FileLinkNote;
+use App\Models\FileLinkTimeline;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +18,7 @@ return new class extends Migration {
                 $table->id('link_file_id');
                 $table->unsignedBigInteger('link_id');
                 $table->unsignedBigInteger('file_id');
-                $table->unsignedBigInteger('link_note_id')->nullable();
-                $table->unsignedBigInteger('user_id')->nullable();
-                $table->text('added_by')->nullable();
+                $table->unsignedBigInteger('timeline_id');
                 $table->boolean('upload');
                 $table->timestamps();
                 $table->foreign('link_id')
@@ -29,27 +30,43 @@ return new class extends Migration {
                     ->references('file_id')
                     ->on('file_uploads')
                     ->onUpdate('cascade');
-                $table->foreign('user_id')
-                    ->references('user_id')
-                    ->on('users')
-                    ->onUpdate('cascade');
-                $table->foreign('link_note_id')
-                    ->references('link_note_id')
-                    ->on('file_link_notes')
+                $table->foreign('timeline_id')
+                    ->references('timeline_id')
+                    ->on('file_link_timelines')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             });
         } else {
             Schema::table('file_link_files', function (Blueprint $table) {
-                $table->unsignedBigInteger('link_note_id')
+                $table->dropForeign(['user_id']);
+                $table->dropColumn('user_id');
+                $table->unsignedBigInteger('timeline_id')
                     ->after('file_id')
                     ->nullable();
-                $table->foreign('link_note_id')
-                    ->references('link_note_id')
-                    ->on('file_link_notes')
+                $table->foreign('timeline_id')
+                    ->references('timeline_id')
+                    ->on('file_link_timelines')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             });
+
+            // Migrate any existing File Link Files
+            $addedFiles = FileLinkFile::all()->groupBy('created_at');
+            // dd($addedFiles);
+            foreach ($addedFiles as $group) {
+                $addedBy = $group[0]->user_id || $group[0]->added_by;
+                $key = FileLinkTimeline::create(['added_by' => $addedBy]);
+
+                foreach ($group as $individualFile) {
+                    $individualFile->timeline_id = $key->timeline_id;
+                    if ($individualFile->note) {
+                        FileLinkNote::create([
+                            'note' => $individualFile->note,
+                            'timeline_id' => $key->timeline_id
+                        ]);
+                    }
+                }
+            }
         }
 
         Schema::table('file_link_files', function (Blueprint $table) {

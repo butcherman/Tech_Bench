@@ -35,6 +35,9 @@ Route::middleware('auth.secure')->group(function () {
         });
 });
 
+/**
+ * Guest Routes
+ */
 Route::get('file-links/{link:link_hash}', [PublicFileLinkController::class, 'show'])
     ->name('guest-link.show')
     ->missing(function (Request $request) {
