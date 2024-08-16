@@ -18,8 +18,8 @@ class UploadFileController extends Controller
     public function __invoke(FileLinkRequest $request)
     {
         $this->setFileData('fileLinks', 'tmp');
-        if ($request->file) {
 
+        if ($request->file) {
             if ($savedFile = $this->getChunk($request)) {
                 Log::debug('File Link file saved', $savedFile->toArray());
                 $request->session()->push('link-file', $savedFile->file_id);
