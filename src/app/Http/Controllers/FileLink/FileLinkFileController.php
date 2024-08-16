@@ -6,6 +6,7 @@ use App\Events\File\FileDataDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\FileLink;
 use App\Models\FileLinkFile;
+use App\Models\FileLinkTimeline;
 use App\Traits\FileTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -28,9 +29,11 @@ class FileLinkFileController extends Controller
                 Log::debug('File Link file saved', $savedFile->toArray());
             }
 
+            $timeline = FileLinkTimeline::create([
+                'added_by' => $request->user()->user_id
+            ]);
             $link->FileUpload()->attach($savedFile, [
-
-                'user_id' => $request->user()->user_id,
+                'timeline_id' => $timeline->timeline_id,
             ]);
         }
 
