@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Events\FileLinks\FileUploadedFromPublicEvent;
 use App\Exceptions\FileLink\FileLinkExpiredException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\PublicFileLinkRequest;
@@ -46,7 +47,7 @@ class PublicFileLinkController extends Controller
      */
     public function update(PublicFileLinkRequest $request, FileLink $link)
     {
-        $this->setFileData('fileLinks', $link->link_id);
+        $this->setFileData('fileLinks', $link->link_id, true);
 
         if ($request->file) {
             if ($savedFile = $this->getChunk($request)) {
@@ -61,12 +62,14 @@ class PublicFileLinkController extends Controller
             return response()->noContent();
         }
 
+        $timeline = FileLinkTimeline::create(['added_by' => $request->name]);
+
         // Once file is loaded, update other information
         if ($request->session()->has('link-file')) {
             $fileList = $request->session()->pull('link-file');
-            $timeline = FileLinkTimeline::create(['added_by' => $request->name]);
             $link->FileUpload()->attach($fileList, [
                 'timeline_id' => $timeline->timeline_id,
+                'upload' => true,
             ]);
         }
 
@@ -77,10 +80,8 @@ class PublicFileLinkController extends Controller
             ]);
         }
 
+        event(new FileUploadedFromPublicEvent($link, $timeline));
 
-
-
-        // todo - add flash to template
         return back()->with('success', 'Files Uploaded Successfully');
     }
 }

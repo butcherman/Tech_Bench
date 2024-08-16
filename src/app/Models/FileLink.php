@@ -37,6 +37,11 @@ class FileLink extends Model
                 ])->withTimestamps();
     }
 
+    public function User()
+    {
+        return $this->hasOne(User::class, 'user_id', 'user_id');
+    }
+
     public function getIsExpiredAttribute()
     {
         return $this->expire < Carbon::now();

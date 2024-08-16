@@ -61,6 +61,7 @@ class FileLinkController extends Controller
      */
     public function show(FileLink $link)
     {
+        // TODO - Why are all files showing?
         return Inertia::render('FileLinks/Show', [
             'link' => $link,
             'table-data' => FileLinkTableResource::make($link),
