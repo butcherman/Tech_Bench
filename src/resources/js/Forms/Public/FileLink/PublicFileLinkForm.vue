@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import VueFileForm from "@/Forms/_Base/VueFileForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-import TextAreaInput from "../_Base/TextAreaInput.vue";
+import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
 import { ref } from "vue";
 import { object, string } from "yup";
 import { useForm } from "@inertiajs/vue3";
@@ -46,8 +46,6 @@ const schema = object({
 });
 
 const handleSuccess = () => {
-    console.log("success");
-
     let values;
     if ((values = fileLinkForm.value?.values)) {
         const nameField = values.name;
@@ -56,7 +54,7 @@ const handleSuccess = () => {
             preserveScroll: true,
             only: ["flash"],
             onFinish: () => {
-                // fileLinkForm.value?.resetFileForm();
+                fileLinkForm.value?.resetFileForm();
                 fileLinkForm.value?.setFieldValue("name", nameField);
                 console.log("finished");
             },

@@ -72,7 +72,7 @@
 
 <script setup lang="ts">
 import KbLayout from "@/Layouts/KbLayout.vue";
-import PublicFileLinkForm from "@/Forms/FileLink/PublicFileLinkForm.vue";
+import PublicFileLinkForm from "@/Forms/Public/FileLink/PublicFileLinkForm.vue";
 import { ref, reactive, onMounted, computed } from "vue";
 import { useAppStore } from "@/Store/AppStore";
 

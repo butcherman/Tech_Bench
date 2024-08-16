@@ -183,6 +183,15 @@ const handleSuccess = (result: string) => {
 };
 
 /**
+ * Reset Form and remove dropzone files
+ */
+const resetFileForm = () => {
+    isSubmitting.value = false;
+    resetForm();
+    dropzoneInput.value?.reset();
+};
+
+/**
  * Process any validation errors that come up
  */
 const handleErrors = (errorBag: errorBag) => {
@@ -240,6 +249,7 @@ defineExpose({
     setFieldError,
     resetForm,
     handleReset,
+    resetFileForm,
     isDirty,
     isSubmitting,
     values,

@@ -17,12 +17,14 @@
                 <slot />
             </div>
             <AppFooter />
+            <AppFlash />
         </main>
     </div>
 </template>
 
 <script setup lang="ts">
 import AppFooter from "./AppLayout/AppFooter.vue";
+import AppFlash from "./AppLayout/AppFlash.vue";
 import { useAppStore } from "@/Store/AppStore";
 import "../../scss/Layouts/kbLayout.scss";
 
