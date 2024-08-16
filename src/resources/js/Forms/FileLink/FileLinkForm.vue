@@ -18,14 +18,16 @@
                 label="Allow Visitors to Upload Files"
             />
         </div>
-        <div class="text-center mb-2">
-            <button
-                type="button"
-                class="btn btn-primary btn-sm rounded-5"
-                @click="toggleInstructions"
-            >
-                {{ instructionText }}
-            </button>
+        <div class="tmb-2">
+            <div class="text-center">
+                <button
+                    type="button"
+                    class="btn btn-primary btn-sm rounded-5"
+                    @click="toggleInstructions"
+                >
+                    {{ instructionText }}
+                </button>
+            </div>
             <div ref="instructionBox" id="instruction-box">
                 <Editor
                     id="instructions"

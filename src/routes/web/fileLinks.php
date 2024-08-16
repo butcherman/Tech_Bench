@@ -1,13 +1,16 @@
 <?php
 
+use App\Exceptions\FileLink\FileLinkMissingException;
 use App\Http\Controllers\FileLink\ExpireFileLinkController;
 use App\Http\Controllers\FileLink\ExtendLinkController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\UploadFileController;
+use App\Http\Controllers\Public\PublicFileLinkController;
 use App\Models\FileLink;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::middleware('auth.secure')->group(function () {
     Route::post('links/upload', UploadFileController::class)
@@ -32,6 +35,10 @@ Route::middleware('auth.secure')->group(function () {
         });
 });
 
-Route::get('file-links/{link}', function ($link) {
-    return $link;
-})->name('guest-link.show');
+Route::get('file-links/{link:link_hash}', [PublicFileLinkController::class, 'show'])
+    ->name('guest-link.show')
+    ->missing(function (Request $request) {
+        throw new FileLinkMissingException($request);
+    });
+Route::post('file-links/{link:link_hash}', [PublicFileLinkController::class, 'update'])
+    ->name('guest-link.update');
