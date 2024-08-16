@@ -38,8 +38,6 @@ return new class extends Migration {
             });
         } else {
             Schema::table('file_link_files', function (Blueprint $table) {
-                $table->dropForeign(['user_id']);
-                $table->dropColumn('user_id');
                 $table->unsignedBigInteger('timeline_id')
                     ->after('file_id')
                     ->nullable();
@@ -52,13 +50,17 @@ return new class extends Migration {
 
             // Migrate any existing File Link Files
             $addedFiles = FileLinkFile::all()->groupBy('created_at');
-            // dd($addedFiles);
             foreach ($addedFiles as $group) {
-                $addedBy = $group[0]->user_id || $group[0]->added_by;
-                $key = FileLinkTimeline::create(['added_by' => $addedBy]);
+                $addedBy = (string) $group[0]->user_id ? $group[0]->user_id : $group[0]->added_by;
+                $key = FileLinkTimeline::create([
+                    'added_by' => $addedBy,
+                    'created_at' => $group[0]->created_at
+                ]);
 
                 foreach ($group as $individualFile) {
                     $individualFile->timeline_id = $key->timeline_id;
+                    $individualFile->save();
+
                     if ($individualFile->note) {
                         FileLinkNote::create([
                             'note' => $individualFile->note,
@@ -67,6 +69,17 @@ return new class extends Migration {
                     }
                 }
             }
+
+            // Cleanup Table
+            Schema::table('file_link_files', function (Blueprint $table) {
+                $table->dropForeign(['user_id']);
+                $table->dropColumn('user_id');
+                $table->dropColumn('added_by');
+                $table->dropColumn('note');
+                $table->unsignedBigInteger('timeline_id')
+                    ->after('file_id')
+                    ->change();
+            });
         }
 
         Schema::table('file_link_files', function (Blueprint $table) {

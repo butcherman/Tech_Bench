@@ -11,5 +11,5 @@ class FileLinkTimeline extends Model
 
     protected $primaryKey = 'timeline_id';
 
-    protected $guarded = ['timeline_id', 'created_at', 'updated_at'];
+    protected $guarded = ['timeline_id', 'updated_at'];
 }
