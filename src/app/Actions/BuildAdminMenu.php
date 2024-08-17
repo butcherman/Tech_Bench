@@ -276,10 +276,15 @@ class BuildAdminMenu
 
             $nav = [
                 [
+                    'name' => 'File Link Settings',
+                    'icon' => 'cog',
+                    'route' => route('admin.links.settings.show'),
+                ],
+                [
                     'name' => 'Manage File Links',
                     'icon' => 'tools',
                     'route' => '#',
-                ]
+                ],
             ];
         }
 

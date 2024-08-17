@@ -12,6 +12,11 @@ class FileLinkPolicy
 {
     use AllowTrait;
 
+    public function manage(User $user)
+    {
+        return $this->checkPermission($user, 'Manage File Links');
+    }
+
     /**
      * Determine whether the user can view any models.
      */

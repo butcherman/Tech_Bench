@@ -5,6 +5,7 @@ use App\Http\Controllers\FileLink\ExpireFileLinkController;
 use App\Http\Controllers\FileLink\ExtendLinkController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkFileController;
+use App\Http\Controllers\FileLink\FileLinkSettingsController;
 use App\Http\Controllers\FileLink\UploadFileController;
 use App\Http\Controllers\Public\PublicFileLinkController;
 use App\Models\FileLink;
@@ -12,6 +13,9 @@ use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+/**
+ * Routes for File Link Usage
+ */
 Route::middleware('auth.secure')->group(function () {
     Route::post('links/upload', UploadFileController::class)
         ->name('links.upload');
@@ -33,6 +37,17 @@ Route::middleware('auth.secure')->group(function () {
                 ->show('Link Details')
                 ->edit('Edit Link');
         });
+
+    /**
+     * Routes for File Link Administration
+     */
+    Route::prefix('administration/file-links')->name('admin.links.')->group(function () {
+        Route::get('settings', [FileLinkSettingsController::class, 'show'])
+            ->name('settings.show')
+            ->breadcrumb('File Link Settings', 'admin.index');
+        Route::put('settings', [FileLinkSettingsController::class, 'update'])
+            ->name('settings.update');
+    });
 });
 
 /**

@@ -15,6 +15,7 @@
                         :row-style-class="rowBgClassFn"
                         initial-sort="is_expired"
                         initial-sort-direction="desc"
+                        no-results-text="No File Links Found"
                         responsive
                         striped
                     >
