@@ -12,4 +12,6 @@ class FileLinkNote extends Model
     protected $primaryKey = 'link_note_id';
 
     protected $guarded = ['link_note_id', 'created_at', 'updated_at'];
+
+    protected $hidden = ['updated_at'];
 }

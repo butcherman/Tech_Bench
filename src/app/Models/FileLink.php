@@ -42,6 +42,11 @@ class FileLink extends Model
         return $this->hasOne(User::class, 'user_id', 'user_id');
     }
 
+    public function Timeline()
+    {
+        return $this->hasMany(FileLinkTimeline::class, 'link_id', 'link_id');
+    }
+
     public function getIsExpiredAttribute()
     {
         return $this->expire < Carbon::now();

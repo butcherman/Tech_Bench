@@ -64,6 +64,7 @@ class FileLinkController extends Controller
         return Inertia::render('FileLinks/Show', [
             'link' => $link,
             'table-data' => FileLinkTableResource::make($link),
+            'timeline' => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
             'downloadable-files' => $link->FileUpload()
                 ->wherePivot('upload', false)
                 ->get()

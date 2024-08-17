@@ -10,7 +10,7 @@
                     pill
                     @click="addFileModal?.show()"
                 />
-                {{ title }}
+                {{ title }}:
             </div>
             <Table
                 :columns="public ? publicFileColumns : fileColumns"

@@ -12,7 +12,12 @@
                 <FileLinkActions :link="link" />
             </div>
         </div>
-        <div class="row justify-content-center my-4">
+        <div v-if="link.allow_upload" class="row justify-content-center my-4">
+            <div class="col">
+                <FileLinkTimeline :timeline="timeline" />
+            </div>
+        </div>
+        <div v-if="link.allow_upload" class="row justify-content-center my-4">
             <div class="col">
                 <DownloadableFiles :link="link" :file-list="uploadedFiles" />
             </div>
@@ -34,12 +39,14 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import FileLinkDetails from "@/Components/FileLink/FileLinkDetails.vue";
 import FileLinkActions from "@/Components/FileLink/FileLinkActions.vue";
 import DownloadableFiles from "@/Components/FileLink/DownloadableFiles.vue";
+import FileLinkTimeline from "@/Components/FileLink/FileLinkTimeline.vue";
 
-const props = defineProps<{
+defineProps<{
     link: fileLink;
     tableData: {
         data: fileLink;
     };
+    timeline: fileLinkTimeline[];
     downloadableFiles: fileLinkUpload[];
     uploadedFiles: fileLinkUpload[];
 }>();
