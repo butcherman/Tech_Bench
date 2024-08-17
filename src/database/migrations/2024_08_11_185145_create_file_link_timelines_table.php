@@ -12,8 +12,14 @@ return new class extends Migration {
     {
         Schema::create('file_link_timelines', function (Blueprint $table) {
             $table->id('timeline_id');
+            $table->unsignedBigInteger('link_id');
             $table->string('added_by');
             $table->timestamps();
+            $table->foreign('link_id')
+                ->references('link_id')
+                ->on('file_links')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

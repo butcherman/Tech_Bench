@@ -53,6 +53,7 @@ return new class extends Migration {
             foreach ($addedFiles as $group) {
                 $addedBy = (string) $group[0]->user_id ? $group[0]->user_id : $group[0]->added_by;
                 $key = FileLinkTimeline::create([
+                    'link_id' => $group[0]->link_id,
                     'added_by' => $addedBy,
                     'created_at' => $group[0]->created_at
                 ]);

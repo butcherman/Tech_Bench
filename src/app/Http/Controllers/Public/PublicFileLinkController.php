@@ -62,7 +62,10 @@ class PublicFileLinkController extends Controller
             return response()->noContent();
         }
 
-        $timeline = FileLinkTimeline::create(['added_by' => $request->name]);
+        $timeline = FileLinkTimeline::create([
+            'link_id' => $link->link_id,
+            'added_by' => $request->name
+        ]);
 
         // Once file is loaded, update other information
         if ($request->session()->has('link-file')) {

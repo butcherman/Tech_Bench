@@ -15,7 +15,7 @@
             <Table
                 :columns="public ? publicFileColumns : fileColumns"
                 :rows="fileList"
-                no-results-text="No Downloadable Files"
+                :no-results-text="noResultsText"
                 striped
                 responsive
                 no-inertia-link
@@ -69,6 +69,9 @@ const addFileModal = ref<InstanceType<typeof Modal> | null>(null);
 const showModal = ref(false);
 const title = computed(() =>
     props.public ? "Public Downloadable Files" : "Uploaded Files"
+);
+const noResultsText = computed(() =>
+    props.public ? "No Downloadable Files" : "No Uploaded Files"
 );
 
 const handleFileAdded = () => {
