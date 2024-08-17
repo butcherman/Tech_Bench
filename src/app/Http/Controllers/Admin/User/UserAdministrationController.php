@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Actions\BuildUserRoles;
+use App\Events\Feature\FeatureChangedEvent;
 use App\Events\User\UserCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserAdministrationRequest;
@@ -47,7 +48,7 @@ class UserAdministrationController extends Controller
         event(new UserCreatedEvent($newUser));
         Log::stack(['daily', 'user'])
             ->notice(
-                'New User created by '.$request->user()->username,
+                'New User created by ' . $request->user()->username,
                 $newUser->toArray()
             );
 
@@ -81,7 +82,7 @@ class UserAdministrationController extends Controller
 
         return Inertia::render('Admin/User/Edit', [
             'roles' => BuildUserRoles::build($request->user()),
-            'user' => $user,
+            'user' => $user->makeVisible('role_id'),
         ]);
     }
 
@@ -93,8 +94,9 @@ class UserAdministrationController extends Controller
         $user->update($request->toArray());
 
         Log::stack(['daily', 'user'])
-            ->info('User information for '.$user->username.' has been updated by '.
+            ->info('User information for ' . $user->username . ' has been updated by ' .
                 $request->user()->username, $request->toArray());
+        event(new FeatureChangedEvent());
 
         // This function is also used during first time setup
         if (config('app.first_time_setup')) {
@@ -118,7 +120,7 @@ class UserAdministrationController extends Controller
 
         $user->delete();
         Log::stack(['daily', 'user'])
-            ->notice('User '.$user->username.' has been deactivated by '.
+            ->notice('User ' . $user->username . ' has been deactivated by ' .
                 $request->user()->username);
 
         return redirect(route('admin.user.index'))
@@ -136,7 +138,7 @@ class UserAdministrationController extends Controller
 
         $user->restore();
         Log::stack(['daily', 'user'])
-            ->notice('User '.$user->username.' has been reactivated by '.
+            ->notice('User ' . $user->username . ' has been reactivated by ' .
                 $request->user()->username);
 
         return back()->with('success', __('admin.user.restored', [
