@@ -5,6 +5,7 @@ use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
+use App\Models\UserSettingType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -42,6 +43,18 @@ return new class extends Migration {
                 'is_admin_link' => true,
                 'feature_name' => FileLinkFeature::class,
             ]
+        );
+
+        UserSettingType::updateOrCreate(
+            [
+                'name' => 'Auto Delete Expired Links (after 30 days)',
+                'perm_type_id' => $usePerm->perm_type_id,
+            ],
+            [
+                'name' => 'Auto Delete Expired File Links',
+                'feature_name' => FileLinkFeature::class,
+                'config_key' => 'fileLink.auto_delete_override',
+            ],
         );
 
         // Add File Link permissions to all roles

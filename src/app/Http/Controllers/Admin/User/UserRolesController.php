@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Actions\BuildUserRoles;
+use App\Events\Feature\FeatureChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserRoleRequest;
 use App\Models\UserRole;
@@ -54,6 +55,7 @@ class UserRolesController extends Controller
 
         Log::info('New User Role created by ' .
             $request->user()->username, $newRole->toArray());
+        event(new FeatureChangedEvent());
 
         return redirect(route('admin.user-roles.show', $newRole->role_id))
             ->with('success', __('admin.user-role.created'));
@@ -106,6 +108,7 @@ class UserRolesController extends Controller
             'User Role Updated by ' . $request->user()->username,
             $modifiedRole->toArray()
         );
+        event(new FeatureChangedEvent());
 
         return back()->with('success', __('admin.user-role.updated'));
     }

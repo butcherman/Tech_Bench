@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\FileLink;
 
+use App\Events\Feature\FeatureChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkSettingsRequest;
 use App\Models\FileLink;
@@ -37,6 +38,7 @@ class FileLinkSettingsController extends Controller
         $request->updateFileLinkSettings();
 
         Log::info('File Link Settings updated by ' . $request->user()->username, $request->toArray());
+        event(new FeatureChangedEvent());
 
         return back()->with('success', 'File Link Settings Updated');
     }
