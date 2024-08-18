@@ -23,7 +23,7 @@ class FileLinkController extends Controller
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLinks/Index', [
-            'link-list' => $request->user()->FileLink,
+            'link-list' => fn() => $request->user()->FileLink,
         ]);
     }
 
@@ -66,14 +66,14 @@ class FileLinkController extends Controller
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLinks/Show', [
-            'link' => $link,
-            'table-data' => FileLinkTableResource::make($link),
-            'timeline' => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
-            'downloadable-files' => $link->FileUpload()
+            'link' => fn() => $link,
+            'table-data' => fn() => FileLinkTableResource::make($link),
+            'timeline' => fn() => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
+            'downloadable-files' => fn() => $link->FileUpload()
                 ->wherePivot('upload', false)
                 ->get()
                 ->makeVisible(['created_at']),
-            'uploaded-files' => $link->FileUpload()
+            'uploaded-files' => fn() => $link->FileUpload()
                 ->wherePivot('upload', true)
                 ->get()
                 ->makeVisible(['created_at']),
@@ -99,9 +99,13 @@ class FileLinkController extends Controller
     {
         $link->update($request->all());
 
-        Log::info('File Link Information updated by ' . $request->user()->username, $link->toArray());
+        Log::info(
+            'File Link Information updated by ' . $request->user()->username,
+            $link->toArray()
+        );
 
-        return redirect(route('links.show', $link->link_id))->with('success', 'Link Information Updated');
+        return redirect(route('links.show', $link->link_id))
+            ->with('success', 'Link Information Updated');
     }
 
     /**
@@ -118,6 +122,7 @@ class FileLinkController extends Controller
             $link->toArray()
         );
 
-        return redirect(route('links.index'))->with('danger', 'File Link Deleted');
+        return redirect(route('links.index'))
+            ->with('danger', 'File Link Deleted');
     }
 }

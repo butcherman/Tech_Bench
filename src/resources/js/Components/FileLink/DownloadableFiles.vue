@@ -10,6 +10,10 @@
                     pill
                     @click="addFileModal?.show()"
                 />
+                <RefreshButton
+                    v-if="!public"
+                    :only="['timeline', 'uploaded-files']"
+                />
                 {{ title }}:
             </div>
             <Table
@@ -50,6 +54,7 @@
 
 <script setup lang="ts">
 import Table from "../_Base/Table.vue";
+import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 import AddButton from "../_Base/Buttons/AddButton.vue";
 import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
 import Modal from "../_Base/Modal.vue";
