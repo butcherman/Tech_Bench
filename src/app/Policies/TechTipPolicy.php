@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Features\PublicTechTipFeature;
-use App\Models\TechTip;
 use App\Models\User;
 use App\Traits\AllowTrait;
 use Illuminate\Auth\Access\HandlesAuthorization;

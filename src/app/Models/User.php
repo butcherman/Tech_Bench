@@ -174,7 +174,7 @@ class User extends Authenticatable
             'user_id' => $this->user_id,
             'token' => $token,
             'type' => $agent->device(),
-            'os' => $agent->platform() . ' ' . $agent->platformVersion(),
+            'os' => $agent->platform().' '.$agent->platformVersion(),
             'browser' => $agent->browser(),
             'registered_ip_address' => $ipAddr,
             'updated_ip_address' => $ipAddr,

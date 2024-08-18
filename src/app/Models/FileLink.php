@@ -13,7 +13,9 @@ class FileLink extends Model
     protected $primaryKey = 'link_id';
 
     protected $guarded = ['link_id', 'created_at', 'updated_at'];
+
     protected $hidden = ['user_id', 'created_at', 'updated_at'];
+
     protected $appends = ['is_expired', 'href', 'public_href', 'created_stamp'];
 
     protected $casts = [
@@ -31,10 +33,10 @@ class FileLink extends Model
             'link_id',
             'file_id',
         )->withPivot([
-                    'timeline_id',
-                    'upload',
-                    'link_file_id',
-                ])->withTimestamps();
+            'timeline_id',
+            'upload',
+            'link_file_id',
+        ])->withTimestamps();
     }
 
     // TODO - Make Prunable

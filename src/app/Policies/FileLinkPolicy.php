@@ -6,7 +6,6 @@ use App\Features\FileLinkFeature;
 use App\Models\FileLink;
 use App\Models\User;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\Response;
 
 class FileLinkPolicy
 {

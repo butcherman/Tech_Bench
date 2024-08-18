@@ -7,8 +7,6 @@ use App\Models\FileLinkFile;
 use App\Models\FileLinkTimeline;
 use App\Models\FileUpload;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
@@ -99,9 +97,9 @@ class FileLinkFileTest extends TestCase
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
             'link_id' => $link->link_id,
-            'added_by' => 'Outside User'
+            'added_by' => 'Outside User',
         ]);
-        $attachedFile = new FileLinkFile();
+        $attachedFile = new FileLinkFile;
         $attachedFile->link_id = $link->link_id;
         $attachedFile->file_id = $file->file_id;
         $attachedFile->timeline_id = $timeline->timeline_id;
@@ -125,9 +123,9 @@ class FileLinkFileTest extends TestCase
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
             'link_id' => $link->link_id,
-            'added_by' => 'Outside User'
+            'added_by' => 'Outside User',
         ]);
-        $attachedFile = new FileLinkFile();
+        $attachedFile = new FileLinkFile;
         $attachedFile->link_id = $link->link_id;
         $attachedFile->file_id = $file->file_id;
         $attachedFile->timeline_id = $timeline->timeline_id;
@@ -149,9 +147,9 @@ class FileLinkFileTest extends TestCase
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
             'link_id' => $link->link_id,
-            'added_by' => 'Outside User'
+            'added_by' => 'Outside User',
         ]);
-        $attachedFile = new FileLinkFile();
+        $attachedFile = new FileLinkFile;
         $attachedFile->link_id = $link->link_id;
         $attachedFile->file_id = $file->file_id;
         $attachedFile->timeline_id = $timeline->timeline_id;
@@ -174,9 +172,9 @@ class FileLinkFileTest extends TestCase
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
             'link_id' => $link->link_id,
-            'added_by' => 'Outside User'
+            'added_by' => 'Outside User',
         ]);
-        $attachedFile = new FileLinkFile();
+        $attachedFile = new FileLinkFile;
         $attachedFile->link_id = $link->link_id;
         $attachedFile->file_id = $file->file_id;
         $attachedFile->timeline_id = $timeline->timeline_id;
@@ -200,9 +198,9 @@ class FileLinkFileTest extends TestCase
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
             'link_id' => $link->link_id,
-            'added_by' => 'Outside User'
+            'added_by' => 'Outside User',
         ]);
-        $attachedFile = new FileLinkFile();
+        $attachedFile = new FileLinkFile;
         $attachedFile->link_id = $link->link_id;
         $attachedFile->file_id = $file->file_id;
         $attachedFile->timeline_id = $timeline->timeline_id;

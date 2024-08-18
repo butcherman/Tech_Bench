@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Customer;
 
-use App\Models\Customer;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 
 class CustomerSearchRequest extends FormRequest
 {

@@ -23,9 +23,9 @@ class BuildUserSettings
              * (i.e. should not be displayed if the user cannot access the feature)
              */
             if (
-                !is_null($setting->UserSettingType->perm_type_id) ||
-                !is_null($setting->UserSettingType->feature_name) ||
-                !is_null($setting->UserSettingType->config_key)
+                ! is_null($setting->UserSettingType->perm_type_id) ||
+                ! is_null($setting->UserSettingType->feature_name) ||
+                ! is_null($setting->UserSettingType->config_key)
             ) {
                 // Check a configuration setting
                 $config = (bool) config($setting->UserSettingType->config_key) ?? true;
@@ -39,7 +39,7 @@ class BuildUserSettings
                 $allowed = UserRolePermission::where('role_id', $user->role_id)
                     ->where('perm_type_id', $setting->UserSettingType->perm_type_id)->first()->allow ?? true;
 
-                if (!$allowed || !$enabled || !$config) {
+                if (! $allowed || ! $enabled || ! $config) {
                     $userSettings->forget($key);
                 }
             }

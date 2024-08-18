@@ -7,10 +7,9 @@ use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
 use App\Models\UserSettingType;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -63,14 +62,14 @@ return new class extends Migration {
             UserRolePermission::updateOrCreate(
                 [
                     'role_id' => $role->role_id,
-                    'perm_type_id' => $usePerm->perm_type_id
+                    'perm_type_id' => $usePerm->perm_type_id,
                 ],
                 ['allow' => true],
             );
             UserRolePermission::updateOrCreate(
                 [
                     'role_id' => $role->role_id,
-                    'perm_type_id' => $managePerm->perm_type_id
+                    'perm_type_id' => $managePerm->perm_type_id,
                 ],
                 ['allow' => $role->role_id <= 2 ? true : false],
             );

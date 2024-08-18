@@ -3,7 +3,6 @@
 namespace App\Features;
 
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Lottery;
 
 class PublicTechTipFeature
 {

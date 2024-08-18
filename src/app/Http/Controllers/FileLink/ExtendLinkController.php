@@ -22,12 +22,12 @@ class ExtendLinkController extends Controller
             'expire' => $currentExpire->addDays(30),
         ]);
 
-        Log::info('A File Link has been extended 30 days by ' . $request->user()->username, $link->toArray());
+        Log::info('A File Link has been extended 30 days by '.$request->user()->username, $link->toArray());
 
         return back()
             ->with(
                 'success',
-                'Link Extended until ' . $link->expire->format('M d, Y')
+                'Link Extended until '.$link->expire->format('M d, Y')
             );
     }
 }

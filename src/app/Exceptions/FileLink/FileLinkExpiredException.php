@@ -4,13 +4,14 @@ namespace App\Exceptions\FileLink;
 
 use App\Models\FileLink;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class FileLinkExpiredException extends Exception
 {
     protected $request;
+
     protected $link;
 
     public function __construct(Request $request, FileLink $link)

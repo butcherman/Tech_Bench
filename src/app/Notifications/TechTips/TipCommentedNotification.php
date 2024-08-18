@@ -39,17 +39,17 @@ class TipCommentedNotification extends Notification
 
     /**
      * Get the mail representation of the notification.
-     * 
+     *
      * TODO - Test message sent and ignore this
      */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject('Someone Commented On A Tech Tip')
-            ->greeting('Hello ' . $notifiable->full_name)
+            ->greeting('Hello '.$notifiable->full_name)
             ->line(
-                $this->comment->User->full_name .
-                ' has commented on Tech Tip - .' .
+                $this->comment->User->full_name.
+                ' has commented on Tech Tip - .'.
                 $this->comment->TechTip->subject
             )
             ->line('The comment is: ')

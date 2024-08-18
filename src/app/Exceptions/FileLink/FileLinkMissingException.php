@@ -3,7 +3,6 @@
 namespace App\Exceptions\FileLink;
 
 use App\Http\Middleware\HandleInertiaRequests;
-use App\Models\FileLink;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +11,7 @@ use Inertia\Inertia;
 class FileLinkMissingException extends Exception
 {
     protected $request;
+
     protected $link;
 
     public function __construct(Request $request)

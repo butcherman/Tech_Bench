@@ -5,8 +5,8 @@ namespace App\Http\Requests\FileLink;
 use App\Features\FileLinkFeature;
 use App\Models\FileLink;
 use App\Models\FileLinkTimeline;
-use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class FileLinkRequest extends FormRequest
 {
@@ -39,13 +39,13 @@ class FileLinkRequest extends FormRequest
             'link_name' => $this->link_name,
             'expire' => $this->expire,
             'instructions' => $this->instructions,
-            'allow_upload' => $this->boolean('allow_upload')
+            'allow_upload' => $this->boolean('allow_upload'),
         ]);
 
         if ($this->session()->has('link-file')) {
             $fileList = $this->session()->pull('link-file');
             $timeline = FileLinkTimeline::create([
-                'added_by' => $this->user()->user_id
+                'added_by' => $this->user()->user_id,
             ]);
             $newLink->FileUpload()->syncWithPivotValues($fileList, [
                 'timeline_id' => $timeline->timeline_id,

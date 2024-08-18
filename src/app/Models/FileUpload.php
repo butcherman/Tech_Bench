@@ -59,7 +59,7 @@ class FileUpload extends Model
      */
     protected function verifyPublicDownload()
     {
-        if (!Auth::check() && !$this->public) {
+        if (! Auth::check() && ! $this->public) {
             throw new PrivateFileException($this);
         }
     }
@@ -71,7 +71,7 @@ class FileUpload extends Model
     {
         if (
             Storage::disk($this->disk)
-                ->missing($this->folder . DIRECTORY_SEPARATOR . $this->file_name)
+                ->missing($this->folder.DIRECTORY_SEPARATOR.$this->file_name)
         ) {
             throw new FileMissingException($this);
         }
@@ -83,6 +83,6 @@ class FileUpload extends Model
     public function getFilePath()
     {
         return Storage::disk($this->disk)
-            ->path($this->folder . DIRECTORY_SEPARATOR . $this->file_name);
+            ->path($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
     }
 }

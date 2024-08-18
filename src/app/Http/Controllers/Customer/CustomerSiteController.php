@@ -24,10 +24,10 @@ class CustomerSiteController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Site/Index', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
-            'alerts' => fn() => $customer->CustomerAlert,
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
+            'alerts' => fn () => $customer->CustomerAlert,
         ]);
     }
 
@@ -39,8 +39,8 @@ class CustomerSiteController extends Controller
         $this->authorize('create', CustomerSite::class);
 
         return Inertia::render('Customer/Site/Create', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
         ]);
     }
 
@@ -57,8 +57,8 @@ class CustomerSiteController extends Controller
         $request->setSlug();
         $newSite = CustomerSite::create($request->except(['cust_name']));
 
-        Log::channel('cust')->info('New Customer Site created for ' . $request->cust_name .
-            ' by ' . $request->user()->username, $newSite->toArray());
+        Log::channel('cust')->info('New Customer Site created for '.$request->cust_name.
+            ' by '.$request->user()->username, $newSite->toArray());
 
         event(new CustomerSiteEvent($customer, $newSite, CrudAction::Create));
 
@@ -66,8 +66,8 @@ class CustomerSiteController extends Controller
             $newSite->Customer->slug,
             $newSite->site_slug,
         ]))->with('success', __('cust.site.created', [
-                        'name' => $newSite->site_name,
-                    ]));
+            'name' => $newSite->site_name,
+        ]));
     }
 
     /**
@@ -79,16 +79,16 @@ class CustomerSiteController extends Controller
         $customer->touchRecent($request->user());
 
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn() => BuildCustomerPermissions::build($request->user()),
-            'customer' => fn() => $customer,
-            'site' => fn() => $site,
-            'siteList' => fn() => $customer->CustomerSite,
-            'alerts' => fn() => $customer->CustomerAlert,
-            'equipmentList' => fn() => $site->SiteEquipment,
-            'contacts' => fn() => $customer->CustomerContact,
-            'notes' => fn() => $site->getNotes(),
-            'files' => fn() => $site->getFiles()->append('href'),
-            'is-fav' => fn() => $customer->isFav($request->user()),
+            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'customer' => fn () => $customer,
+            'site' => fn () => $site,
+            'siteList' => fn () => $customer->CustomerSite,
+            'alerts' => fn () => $customer->CustomerAlert,
+            'equipmentList' => fn () => $site->SiteEquipment,
+            'contacts' => fn () => $customer->CustomerContact,
+            'notes' => fn () => $site->getNotes(),
+            'files' => fn () => $site->getFiles()->append('href'),
+            'is-fav' => fn () => $customer->isFav($request->user()),
         ]);
     }
 
@@ -100,9 +100,9 @@ class CustomerSiteController extends Controller
         $this->authorize('update', $site);
 
         return Inertia::render('Customer/Site/Edit', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
-            'site' => fn() => $site,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
+            'site' => fn () => $site,
         ]);
     }
 
@@ -114,8 +114,8 @@ class CustomerSiteController extends Controller
         $request->setSlug();
         $site->update($request->except(['cust_name']));
 
-        Log::channel('cust')->info('Customer Site ' . $site->site_name . ' updated for ' .
-            $request->cust_name . ' by ' . $request->user()->username, $site->toArray());
+        Log::channel('cust')->info('Customer Site '.$site->site_name.' updated for '.
+            $request->cust_name.' by '.$request->user()->username, $site->toArray());
 
         event(new CustomerSiteEvent($customer, $site, CrudAction::Update));
 
@@ -133,8 +133,8 @@ class CustomerSiteController extends Controller
         $site->update(['deleted_reason' => $request->reason]);
         $site->delete();
 
-        Log::channel('cust')->alert('Customer Site ' . $site->site_name . ' for ' .
-            $customer->name . ' has been disabled by ' . $request->user()->username);
+        Log::channel('cust')->alert('Customer Site '.$site->site_name.' for '.
+            $customer->name.' has been disabled by '.$request->user()->username);
 
         event(new CustomerSiteEvent($customer, $site, CrudAction::Destroy));
 

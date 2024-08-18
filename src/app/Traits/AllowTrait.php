@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Support\Facades\Log;
 
 /**
  *  AllowTrait only has one function to check permission for the policies

@@ -40,16 +40,16 @@ class NewTechTipNotification extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
-     * 
+     *
      * TODO - Test message sent and ignore this
      */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject('A New Tech Tip Has Been Created')
-            ->greeting('Hello ' . $notifiable->full_name)
+            ->greeting('Hello '.$notifiable->full_name)
             ->line('A new Tech Tip has recently been created')
-            ->line('Subject:  ' . $this->techTip->subject)
+            ->line('Subject:  '.$this->techTip->subject)
             ->action(
                 'Click to View the Tech Tip',
                 url(route('tech-tips.show', $this->techTip->slug))

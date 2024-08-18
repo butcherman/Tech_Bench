@@ -62,7 +62,7 @@ class EventServiceProvider extends ServiceProvider
          * Office 365 Authentication Events
          */
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-            \SocialiteProviders\Azure\AzureExtendSocialite::class . '@handle',
+            \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
         ],
 
         /**
@@ -102,11 +102,11 @@ class EventServiceProvider extends ServiceProvider
          * File Link Events
          */
         'App\Events\FileLinks\FileLinkEvent' => [
-            'App\Listeners\FileLinks\UpdateLinkFilesListener'
+            'App\Listeners\FileLinks\UpdateLinkFilesListener',
         ],
         'App\Events\FileLinks\FileUploadedFromPublicEvent' => [
-            'App\Listeners\Notify\FileLinks\FileUploadFromPublicListener'
-        ]
+            'App\Listeners\Notify\FileLinks\FileUploadFromPublicListener',
+        ],
     ];
 
     /**

@@ -23,7 +23,7 @@ class FileLinkController extends Controller
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLinks/Index', [
-            'link-list' => fn() => $request->user()->FileLink,
+            'link-list' => fn () => $request->user()->FileLink,
         ]);
     }
 
@@ -50,7 +50,7 @@ class FileLinkController extends Controller
 
         event(new FileLinkEvent($newLink, CrudAction::Create));
         Log::info(
-            'New File Link created by ' . $request->user()->username,
+            'New File Link created by '.$request->user()->username,
             $newLink->toArray()
         );
 
@@ -66,14 +66,14 @@ class FileLinkController extends Controller
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLinks/Show', [
-            'link' => fn() => $link,
-            'table-data' => fn() => FileLinkTableResource::make($link),
-            'timeline' => fn() => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
-            'downloadable-files' => fn() => $link->FileUpload()
+            'link' => fn () => $link,
+            'table-data' => fn () => FileLinkTableResource::make($link),
+            'timeline' => fn () => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
+            'downloadable-files' => fn () => $link->FileUpload()
                 ->wherePivot('upload', false)
                 ->get()
                 ->makeVisible(['created_at']),
-            'uploaded-files' => fn() => $link->FileUpload()
+            'uploaded-files' => fn () => $link->FileUpload()
                 ->wherePivot('upload', true)
                 ->get()
                 ->makeVisible(['created_at']),
@@ -100,7 +100,7 @@ class FileLinkController extends Controller
         $link->update($request->all());
 
         Log::info(
-            'File Link Information updated by ' . $request->user()->username,
+            'File Link Information updated by '.$request->user()->username,
             $link->toArray()
         );
 
@@ -118,7 +118,7 @@ class FileLinkController extends Controller
         $link->delete();
 
         Log::info(
-            'File Link deleted by ' . $request->user()->username,
+            'File Link deleted by '.$request->user()->username,
             $link->toArray()
         );
 

@@ -7,13 +7,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        if (!Schema::hasTable('file_link_files')) {
+        if (! Schema::hasTable('file_link_files')) {
             Schema::create('file_link_files', function (Blueprint $table) {
                 $table->id('link_file_id');
                 $table->unsignedBigInteger('link_id');
@@ -55,7 +56,7 @@ return new class extends Migration {
                 $key = FileLinkTimeline::create([
                     'link_id' => $group[0]->link_id,
                     'added_by' => $addedBy,
-                    'created_at' => $group[0]->created_at
+                    'created_at' => $group[0]->created_at,
                 ]);
 
                 foreach ($group as $individualFile) {
@@ -65,7 +66,7 @@ return new class extends Migration {
                     if ($individualFile->note) {
                         FileLinkNote::create([
                             'note' => $individualFile->note,
-                            'timeline_id' => $key->timeline_id
+                            'timeline_id' => $key->timeline_id,
                         ]);
                     }
                 }

@@ -38,6 +38,6 @@ class FeatureConfigRequest extends FormRequest
         $this->saveSettings('techTips.allow_comments', $this->tip_comments);
 
         // Forget the feature settings to re-force checking
-        event(new FeatureChangedEvent());
+        event(new FeatureChangedEvent);
     }
 }

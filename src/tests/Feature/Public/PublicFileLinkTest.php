@@ -5,8 +5,6 @@ namespace Tests\Feature\Public;
 use App\Models\FileLink;
 use App\Models\User;
 use App\Notifications\FileLinks\GuestFileUploadedNotification;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -98,7 +96,7 @@ class PublicFileLinkTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists($link->link_id . DIRECTORY_SEPARATOR . 'testPhoto.png');
+            ->assertExists($link->link_id.DIRECTORY_SEPARATOR.'testPhoto.png');
     }
 
     public function test_update_guest_after_file()

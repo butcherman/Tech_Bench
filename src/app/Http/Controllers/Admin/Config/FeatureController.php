@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Config;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FeatureConfigRequest;
 use App\Models\AppSettings;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -34,7 +33,7 @@ class FeatureController extends Controller
     {
         $request->updateFeatureSettings();
 
-        Log::info('Application Features updated by ' . $request->user()->username);
+        Log::info('Application Features updated by '.$request->user()->username);
 
         return back()->with('success', 'Feature Settings Updated');
     }

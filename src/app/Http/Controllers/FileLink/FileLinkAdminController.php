@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\FileLinkAdminResource;
 use App\Http\Resources\FileLinkTableResource;
 use App\Models\FileLink;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -57,7 +56,7 @@ class FileLinkAdminController extends Controller
         $link->delete();
 
         Log::info(
-            'File Link deleted by ' . $request->user()->username,
+            'File Link deleted by '.$request->user()->username,
             $link->toArray()
         );
 

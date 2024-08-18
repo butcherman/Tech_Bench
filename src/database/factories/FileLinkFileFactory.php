@@ -22,7 +22,7 @@ class FileLinkFileFactory extends Factory
             'file_id' => FileUpload::factory(),
             'timeline_id' => FileLinkTimeline::create([
                 'link_id' => $link->link_id,
-                'added_by' => 'Some Dude'
+                'added_by' => 'Some Dude',
             ]),
             'upload' => true,
         ];

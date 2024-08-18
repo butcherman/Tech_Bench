@@ -6,13 +6,11 @@ use App\Events\Feature\FeatureChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkSettingsRequest;
 use App\Models\FileLink;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class FileLinkSettingsController extends Controller
 {
-
     /**
      * Display the resource.
      */
@@ -26,7 +24,7 @@ class FileLinkSettingsController extends Controller
                 'auto_delete' => (bool) config('fileLink.auto_delete'),
                 'auto_delete_days' => config('fileLink.auto_delete_days'),
                 'auto_delete_override' => (bool) config('fileLink.auto_delete_override'),
-            ]
+            ],
         ]);
     }
 
@@ -37,8 +35,8 @@ class FileLinkSettingsController extends Controller
     {
         $request->updateFileLinkSettings();
 
-        Log::info('File Link Settings updated by ' . $request->user()->username, $request->toArray());
-        event(new FeatureChangedEvent());
+        Log::info('File Link Settings updated by '.$request->user()->username, $request->toArray());
+        event(new FeatureChangedEvent);
 
         return back()->with('success', 'File Link Settings Updated');
     }

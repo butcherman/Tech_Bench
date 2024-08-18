@@ -9,10 +9,9 @@ use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
 use App\Http\Controllers\FileLink\UploadFileController;
 use App\Http\Controllers\Public\PublicFileLinkController;
-use App\Models\FileLink;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Routes for File Link Usage

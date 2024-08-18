@@ -18,7 +18,7 @@ abstract class TestCase extends BaseTestCase
         UserRolePermission::where('role_id', $roleId)
             ->where('perm_type_id', $permId)
             ->update([
-                'allow' => $value
+                'allow' => $value,
             ]);
     }
 }

@@ -69,7 +69,7 @@ class PublicFileLinkController extends Controller
 
         $timeline = FileLinkTimeline::create([
             'link_id' => $link->link_id,
-            'added_by' => $request->name
+            'added_by' => $request->name,
         ]);
 
         // Once file is loaded, update other information

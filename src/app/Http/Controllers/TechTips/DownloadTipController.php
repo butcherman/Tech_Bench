@@ -18,7 +18,7 @@ class DownloadTipController extends Controller
         $this->authorize('view', $techTip);
 
         Log::channel('tip')
-            ->info('Tech Tip ID ' . $techTip->tip_id . ' downloaded by ' .
+            ->info('Tech Tip ID '.$techTip->tip_id.' downloaded by '.
                 $request->user()->username);
 
         return Pdf::loadView('pdf.tech_tip', [
