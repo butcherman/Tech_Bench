@@ -18,6 +18,8 @@ class FileLinkAdminController extends Controller
      */
     public function index()
     {
+        $this->authorize('manage', FileLink::class);
+
         return Inertia::render('FileLinks/Manage/Index', [
             'link-list' => FileLinkAdminResource::collection(FileLink::all()),
         ]);
@@ -28,6 +30,8 @@ class FileLinkAdminController extends Controller
      */
     public function show(FileLink $link)
     {
+        $this->authorize('manage', FileLink::class);
+
         return Inertia::render('FileLinks/Manage/Show', [
             'link' => $link,
             'table-data' => FileLinkTableResource::make($link),

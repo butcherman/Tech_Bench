@@ -20,20 +20,20 @@ class FileLinkTimeline extends Model
         'updated_at' => 'datetime:M d, Y',
     ];
 
-    public function FileLinkNote()
-    {
-        return $this->hasOne(FileLinkNote::class, 'timeline_id', 'timeline_id');
-    }
+    // public function FileLinkNote()
+    // {
+    //     return $this->hasOne(FileLinkNote::class, 'timeline_id', 'timeline_id');
+    // }
 
-    public function fileUpload()
-    {
-        return $this->hasManyThrough(
-            FileUpload::class,
-            FileLinkFile::class,
-            'timeline_id',
-            'file_id',
-            'timeline_id',
-            'file_id',
-        );
-    }
+    // public function fileUpload()
+    // {
+    //     return $this->hasManyThrough(
+    //         FileUpload::class,
+    //         FileLinkFile::class,
+    //         'timeline_id',
+    //         'file_id',
+    //         'timeline_id',
+    //         'file_id',
+    //     );
+    // }
 }

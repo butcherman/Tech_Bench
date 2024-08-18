@@ -177,34 +177,48 @@ class FileLinkTest extends TestCase
 
     public function test_show_feature_disabled()
     {
-        $link = FileLink::factory()->create();
+        $user = User::factory()->create();
+        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
         config(['fileLink.feature_enabled' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('links.show', $link->link_id));
         $response->assertForbidden();
     }
 
     public function test_show_no_permission()
     {
-        $link = FileLink::factory()->create();
+        $user = User::factory()->create();
+        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
         config(['fileLink.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('links.show', $link->link_id));
         $response->assertForbidden();
     }
 
-    public function test_show()
+    public function test_show_other_user()
     {
         $link = FileLink::factory()->create();
 
         config(['fileLink.feature_enabled' => true]);
 
         $response = $this->actingAs(User::factory()->create())
+            ->get(route('links.show', $link->link_id));
+        $response->assertSuccessful();
+    }
+
+    public function test_show()
+    {
+        $user = User::factory()->create();
+        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
+
+        config(['fileLink.feature_enabled' => true]);
+
+        $response = $this->actingAs($user)
             ->get(route('links.show', $link->link_id));
         $response->assertSuccessful();
     }
@@ -246,6 +260,8 @@ class FileLinkTest extends TestCase
             ->get(route('links.edit', $link->link_id));
         $response->assertForbidden();
     }
+
+    // TODO - test edit other user
 
     public function test_edit()
     {

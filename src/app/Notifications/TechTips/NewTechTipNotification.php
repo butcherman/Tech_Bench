@@ -40,6 +40,8 @@ class NewTechTipNotification extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
+     * 
+     * TODO - Test message sent and ignore this
      */
     public function toMail(object $notifiable): MailMessage
     {

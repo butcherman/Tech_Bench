@@ -1,7 +1,10 @@
 <template>
     <div class="card">
         <div class="card-body">
-            <div class="card-title">Timeline:</div>
+            <div class="card-title">
+                <RefreshButton :only="['timeline', 'uploaded-files']" />
+                Timeline:
+            </div>
             <h5 v-if="!timeline.length" class="text-center">
                 No Timeline Events Yet
             </h5>
@@ -37,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 defineProps<{
     timeline: fileLinkTimeline[];
 }>();

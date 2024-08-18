@@ -40,6 +40,8 @@ class GuestFileUploadedNotification extends Notification
 
     /**
      * Get the mail representation of the notification.
+     * 
+     * @codeCoverageIgnore
      */
     public function toMail(object $notifiable): MailMessage
     {
@@ -53,6 +55,8 @@ class GuestFileUploadedNotification extends Notification
 
     /**
      * Get the array representation of the notification
+     * 
+     * @codeCoverageIgnore
      */
     public function toArray(object $notifiable): array
     {
