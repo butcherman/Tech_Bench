@@ -37,6 +37,9 @@ class HelpPageTest extends TestCase
         'test-email',
         'tech-tips.comments',
         'publicTips',
+        'expire',
+        'extend',
+        'guest-link',
     ];
 
     /**
@@ -53,6 +56,8 @@ class HelpPageTest extends TestCase
 
             return count(array_intersect($this->bypassRoutes, $exploded)) == 0;
         });
+
+        // dd($routeList);
 
         foreach ($routeList as $route) {
             $this->assertFileExists(resource_path('js/Help/Pages/' . $route . '.vue'));

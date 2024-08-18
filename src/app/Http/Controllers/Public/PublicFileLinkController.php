@@ -47,7 +47,12 @@ class PublicFileLinkController extends Controller
      */
     public function update(PublicFileLinkRequest $request, FileLink $link)
     {
-        $this->setFileData('fileLinks', $link->link_id, true);
+        $this->setFileData('fileLinks', $link->link_id);
+
+        // Make sure link is valid
+        if (Carbon::parse($link->expire) < Carbon::now()) {
+            throw new FileLinkExpiredException($request, $link);
+        }
 
         if ($request->file) {
             if ($savedFile = $this->getChunk($request)) {

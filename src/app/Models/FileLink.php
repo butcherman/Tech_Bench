@@ -37,6 +37,8 @@ class FileLink extends Model
                 ])->withTimestamps();
     }
 
+    // TODO - Make Prunable
+
     public function User()
     {
         return $this->hasOne(User::class, 'user_id', 'user_id');

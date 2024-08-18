@@ -30,7 +30,8 @@ class FileLinkFileController extends Controller
             }
 
             $timeline = FileLinkTimeline::create([
-                'added_by' => $request->user()->user_id
+                'added_by' => $request->user()->user_id,
+                'link_id' => $link->link_id,
             ]);
             $link->FileUpload()->attach($savedFile, [
                 'timeline_id' => $timeline->timeline_id,

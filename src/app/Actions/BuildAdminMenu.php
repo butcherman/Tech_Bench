@@ -280,11 +280,11 @@ class BuildAdminMenu
                     'icon' => 'cog',
                     'route' => route('admin.links.settings.show'),
                 ],
-                [
-                    'name' => 'Manage File Links',
-                    'icon' => 'tools',
-                    'route' => '#',
-                ],
+                // [
+                //     'name' => 'Manage File Links',
+                //     'icon' => 'tools',
+                //     'route' => '#',
+                // ],
             ];
         }
 

@@ -32,6 +32,8 @@ class FileLinkController extends Controller
      */
     public function create()
     {
+        $this->authorize('viewAny', FileLink::class);
+
         return Inertia::render('FileLinks/Create', [
             'default-expire' => Carbon::now()
                 ->addDays(config('fileLink.default_link_life'))
@@ -61,6 +63,8 @@ class FileLinkController extends Controller
      */
     public function show(FileLink $link)
     {
+        $this->authorize('viewAny', FileLink::class);
+
         return Inertia::render('FileLinks/Show', [
             'link' => $link,
             'table-data' => FileLinkTableResource::make($link),

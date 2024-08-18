@@ -30,6 +30,8 @@ class FileLinkExpiredException extends Exception
 
     public function render()
     {
-        return Inertia::render('Public/FileLinks/Expired');
+        return Inertia::render('Public/FileLinks/Expired')
+            ->toResponse($this->request)
+            ->setStatusCode(410);
     }
 }
