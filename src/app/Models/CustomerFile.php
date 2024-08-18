@@ -42,9 +42,9 @@ class CustomerFile extends Model
         'deleted_at' => 'datetime:M d, Y',
     ];
 
-    /**
+    /***************************************************************************
      * Model Attributes
-     */
+     ***************************************************************************/
     public function getFileTypeAttribute()
     {
         return $this->CustomerFileType->description;
@@ -67,12 +67,13 @@ class CustomerFile extends Model
 
     public function getEquipNameAttribute()
     {
-        return $this->CustomerEquipment ? $this->CustomerEquipment->equip_name : null;
+        return $this->CustomerEquipment ?
+            $this->CustomerEquipment->equip_name : null;
     }
 
-    /**
-     * Each file is attached to a specific file entry
-     */
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function FileUpload()
     {
         return $this->hasOne(FileUpload::class, 'file_id', 'file_id');
@@ -90,22 +91,31 @@ class CustomerFile extends Model
 
     public function CustomerFileType()
     {
-        return $this->hasOne(CustomerFileType::class, 'file_type_id', 'file_type_id');
+        return $this->hasOne(
+            CustomerFileType::class,
+            'file_type_id',
+            'file_type_id'
+        );
     }
 
     public function User()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id')->withTrashed();
+        return $this->belongsTo(User::class, 'user_id', 'user_id')
+            ->withTrashed();
     }
 
     public function CustomerEquipment()
     {
-        return $this->belongsTo(CustomerEquipment::class, 'cust_equip_id', 'cust_equip_id');
+        return $this->belongsTo(
+            CustomerEquipment::class,
+            'cust_equip_id',
+            'cust_equip_id'
+        );
     }
 
-    /**
-     * Automatically remove soft deleted models after 90 days
-     */
+    /***************************************************************************
+     * Prune soft deleted models after 90 days
+     ***************************************************************************/
     public function prunable()
     {
         if (config('customer.auto_purge')) {

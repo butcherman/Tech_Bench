@@ -30,11 +30,17 @@ class CustomerEquipment extends Model
         'deleted_at' => 'datetime:M d, Y',
     ];
 
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getEquipNameAttribute()
     {
         return $this->EquipmentType->name;
     }
 
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function EquipmentType()
     {
         return $this->belongsTo(EquipmentType::class, 'equip_id', 'equip_id');
@@ -60,17 +66,14 @@ class CustomerEquipment extends Model
         return $this->hasMany(CustomerFile::class, 'cust_equip_id', 'cust_equip_id');
     }
 
-    /**
-     * Site specific information for the selected piece of equipment
-     */
     public function CustomerEquipmentData()
     {
         return $this->hasMany(CustomerEquipmentData::class, 'cust_equip_id', 'cust_equip_id');
     }
 
-    /**
-     * Automatically remove soft deleted models after 90 days
-     */
+    /***************************************************************************
+     * Prune soft deleted models after 90 days
+     ***************************************************************************/
     public function prunable()
     {
         if (config('customer.auto_purge')) {

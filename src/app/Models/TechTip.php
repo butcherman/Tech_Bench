@@ -30,9 +30,9 @@ class TechTip extends Model
         'public' => 'boolean',
     ];
 
-    /**
+    /***************************************************************************
      * For Route/Model binding, we will use either the slug or tip_id
-     */
+     ***************************************************************************/
     public function resolveRouteBinding($value, $field = null)
     {
         return $this->where('slug', $value)
@@ -40,6 +40,9 @@ class TechTip extends Model
             ->firstOrFail();
     }
 
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getHrefAttribute()
     {
         return route('tech-tips.show', $this->slug);
@@ -62,6 +65,9 @@ class TechTip extends Model
         return $this->FileUpload->pluck('file_id')->toArray();
     }
 
+    /****************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function CreatedBy()
     {
         return $this->hasOne(User::class, 'user_id', 'user_id')
@@ -111,7 +117,7 @@ class TechTip extends Model
             'user_tech_tip_bookmarks',
             'tip_id',
             'user_id',
-        );
+        )->withTimestamps();
     }
 
     public function Recent()
@@ -124,6 +130,13 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
+    /***************************************************************************
+     * Additional Model Methods
+     ***************************************************************************/
+
+    /**
+     * Determine if the Tech Tip is bookmarked by this user
+     */
     public function isFav(User $user)
     {
         $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
@@ -146,7 +159,7 @@ class TechTip extends Model
 
     /**
      * Search Results for Meilisearch
-     * 
+     *
      * @codeCoverageIgnore
      */
     public function toSearchableArray()
@@ -162,8 +175,8 @@ class TechTip extends Model
     }
 
     /**
-     * Add Relationships to search
-     * 
+     * Add Relationships to Meilisearch search results
+     *
      * @codeCoverageIgnore
      */
     protected function makeAllSearchableUsing(Builder $query)

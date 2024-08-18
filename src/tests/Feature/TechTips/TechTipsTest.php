@@ -137,7 +137,7 @@ class TechTipsTest extends TestCase
 
         $this->assertDatabaseHas('tech_tips', [
             'subject' => $data->subject,
-            'slug' => $data->slug . '-1',
+            'slug' => $data->slug.'-1',
         ]);
     }
 

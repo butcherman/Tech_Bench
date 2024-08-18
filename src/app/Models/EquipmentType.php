@@ -19,14 +19,14 @@ class EquipmentType extends Model
         'allow_public_tip' => 'boolean',
     ];
 
+    /**
+     * Model Relationships
+     */
     public function EquipmentCategory()
     {
         return $this->belongsTo(EquipmentCategory::class, 'cat_id', 'cat_id');
     }
 
-    /**
-     * When assigning equipment to a customer, specific data fields are used to enter customer specific information
-     */
     public function DataFieldType()
     {
         return $this->hasManyThrough(

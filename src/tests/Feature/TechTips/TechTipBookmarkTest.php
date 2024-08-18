@@ -4,8 +4,6 @@ namespace Tests\Feature\TechTips;
 
 use App\Models\TechTip;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class TechTipBookmarkTest extends TestCase
@@ -17,7 +15,7 @@ class TechTipBookmarkTest extends TestCase
     {
         $tip = TechTip::factory()->create();
         $data = [
-            'value' => true
+            'value' => true,
         ];
 
         $response = $this->post(route('tech-tips.bookmark', $tip->slug), $data);
@@ -31,7 +29,7 @@ class TechTipBookmarkTest extends TestCase
         $user = User::factory()->create();
         $tip = TechTip::factory()->create();
         $data = [
-            'value' => true
+            'value' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -48,7 +46,7 @@ class TechTipBookmarkTest extends TestCase
         $user = User::factory()->create();
         $tip = TechTip::factory()->create();
         $data = [
-            'value' => true
+            'value' => true,
         ];
 
         $tip->Bookmarks()->attach($user);
@@ -63,7 +61,7 @@ class TechTipBookmarkTest extends TestCase
         $user = User::factory()->create();
         $tip = TechTip::factory()->create();
         $data = [
-            'value' => false
+            'value' => false,
         ];
 
         $tip->Bookmarks()->attach($user);
@@ -82,7 +80,7 @@ class TechTipBookmarkTest extends TestCase
         $user = User::factory()->create();
         $tip = TechTip::factory()->create();
         $data = [
-            'value' => false
+            'value' => false,
         ];
 
         $response = $this->actingAs($user)

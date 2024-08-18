@@ -34,9 +34,9 @@ class Customer extends Model
         'deleted_at' => 'datetime:M d, Y',
     ];
 
-    /**
+    /***************************************************************************
      * For Route/Model binding we will use either the slug or cust_id columns
-     */
+     ***************************************************************************/
     public function resolveRouteBinding($value, $field = null)
     {
         return $this->where('slug', $value)
@@ -44,14 +44,17 @@ class Customer extends Model
             ->firstOrFail();
     }
 
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getSiteCountAttribute()
     {
         return $this->CustomerSite->count();
     }
 
-    /**
+    /***************************************************************************
      * Model Relationships
-     */
+     ***************************************************************************/
     public function CustomerSite()
     {
         return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
@@ -102,6 +105,9 @@ class Customer extends Model
         )->withTimestamps();
     }
 
+    /***************************************************************************
+     * Additional Model Methods
+     ***************************************************************************/
     public function isFav(User $user)
     {
         $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
@@ -121,16 +127,4 @@ class Customer extends Model
         $this->Recent()->attach($user);
 
     }
-
-    /**
-     * Search Results for Meilisearch
-     */
-    // public function toSearchableArray()
-    // {
-    //     return [
-    //         'cust_id' => (int) $this->cust_id,
-    //         'name' => $this->name,
-
-    //     ];
-    // }
 }

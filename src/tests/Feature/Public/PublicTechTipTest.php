@@ -27,7 +27,6 @@ class PublicTechTipTest extends TestCase
 
         EquipmentType::factory()->count(5)->create(['allow_public_tip' => true]);
 
-
         $response = $this->actingAs(User::factory()->create())
             ->get(route('publicTips.index'));
         $response->assertSuccessful();

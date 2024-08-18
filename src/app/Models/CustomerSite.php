@@ -33,9 +33,9 @@ class CustomerSite extends Model
         'deleted_at' => 'datetime:M d, Y',
     ];
 
-    /**
+    /***************************************************************************
      * For Route/Model binding we will use either the slug or cust_id columns
-     */
+     ***************************************************************************/
     public function resolveRouteBinding($value, $field = null)
     {
         return $this->where('site_slug', $value)
@@ -43,6 +43,9 @@ class CustomerSite extends Model
             ->firstOrFail();
     }
 
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getIsPrimaryAttribute()
     {
         if ($this->Customer) {
@@ -56,9 +59,15 @@ class CustomerSite extends Model
 
     public function getHrefAttribute()
     {
-        return route('customers.sites.show', [$this->Customer->slug, $this->site_slug]);
+        return route('customers.sites.show', [
+            $this->Customer->slug,
+            $this->site_slug,
+        ]);
     }
 
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function Customer()
     {
         return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
@@ -104,16 +113,23 @@ class CustomerSite extends Model
         );
     }
 
+    /***************************************************************************
+     * Additional Methods
+     ***************************************************************************/
     public function EquipmentNote()
     {
-        return CustomerNote::whereIn('cust_equip_id', $this->SiteEquipment->pluck('cust_equip_id'))
-            ->get();
+        return CustomerNote::whereIn(
+            'cust_equip_id',
+            $this->SiteEquipment->pluck('cust_equip_id')
+        )->get();
     }
 
     public function EquipmentFile()
     {
-        return CustomerFile::whereIn('cust_equip_id', $this->SiteEquipment->pluck('cust_equip_id'))
-            ->get();
+        return CustomerFile::whereIn(
+            'cust_equip_id',
+            $this->SiteEquipment->pluck('cust_equip_id')
+        )->get();
     }
 
     public function GeneralNote()

@@ -24,6 +24,22 @@ class TechTipComment extends Model
         'flagged' => 'boolean',
     ];
 
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
+    public function getIsFlaggedAttribute()
+    {
+        return $this->Flags->count() > 0 ? true : false;
+    }
+
+    public function getAuthorAttribute()
+    {
+        return $this->User->full_name;
+    }
+
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function User()
     {
         return $this->hasOne(User::class, 'user_id', 'user_id')->withTrashed();
@@ -39,15 +55,9 @@ class TechTipComment extends Model
         return $this->hasMany(TechTipCommentFlag::class, 'comment_id', 'comment_id');
     }
 
-    public function getIsFlaggedAttribute()
-    {
-        return $this->Flags->count() > 0 ? true : false;
-    }
-
-    public function getAuthorAttribute()
-    {
-        return $this->User->full_name;
-    }
+    /**
+     * Additional Model Methods
+     */
 
     /**
      * Flag a comment as inappropriate

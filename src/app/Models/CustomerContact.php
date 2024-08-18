@@ -27,9 +27,9 @@ class CustomerContact extends Model
         'decision_maker' => 'boolean',
     ];
 
-    /**
-     * Each Contact can be assigned to multiple Customer Sites
-     */
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function CustomerSite()
     {
         return $this->belongsToMany(
@@ -40,17 +40,14 @@ class CustomerContact extends Model
         );
     }
 
-    /**
-     * Each customer contact can have several phone numbers attached
-     */
     public function CustomerContactPhone()
     {
         return $this->hasMany(CustomerContactPhone::class, 'cont_id', 'cont_id');
     }
 
-    /**
-     * Automatically remove soft deleted models after 90 days
-     */
+    /***************************************************************************
+     * Prune soft deleted models after 90 days
+     ***************************************************************************/
     public function prunable()
     {
         if (config('customer.auto_purge')) {

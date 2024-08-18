@@ -24,27 +24,19 @@ class UserRole extends Model
         'allow_edit' => 'boolean',
     ];
 
-    /**
-     * Key for Route/Model binding
-     */
-    public function getRouteKeyName()
-    {
-        return 'role_id';
-    }
-
-    /**
-     * Model Relationships
-     */
-    public function UserRolePermission()
-    {
-        return $this->hasMany(UserRolePermission::class, 'role_id', 'role_id');
-    }
-
-    /**
-     * Appended Accessors
-     */
+    /***************************************************************************
+     * Additional Attributes
+     ***************************************************************************/
     public function getHrefAttribute()
     {
         return route('admin.user-roles.show', $this->role_id);
+    }
+
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
+    public function UserRolePermission()
+    {
+        return $this->hasMany(UserRolePermission::class, 'role_id', 'role_id');
     }
 }

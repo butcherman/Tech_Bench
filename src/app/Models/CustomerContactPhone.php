@@ -17,19 +17,24 @@ class CustomerContactPhone extends Model
 
     protected $with = ['PhoneNumberType'];
 
-    /**
-     * Mobile Work, Home, etc
-     */
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function PhoneNumberType()
     {
         return $this->hasOne(PhoneNumberType::class, 'phone_type_id', 'phone_type_id');
     }
 
-    /**
-     * Get a readable number in a familiar NA format
-     */
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getFormattedAttribute()
     {
-        return preg_replace('~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~', '($1) $2-$3', $this->phone_number);
+        // Get a readable number in a familiar NA format
+        return preg_replace(
+            '~.*(\d{3})[^\d]*(\d{3})[^\d]*(\d{4}).*~',
+            '($1) $2-$3',
+            $this->phone_number
+        );
     }
 }

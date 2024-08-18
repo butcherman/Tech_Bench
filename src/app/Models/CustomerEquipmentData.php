@@ -15,22 +15,24 @@ class CustomerEquipmentData extends Model
 
     protected $appends = ['field_name', 'order'];
 
-    /**
-     * The name of the field this value data belongs to
-     */
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getFieldNameAttribute()
     {
+        // The name of the field this value data belongs to
         return $this->DataFieldType->name;
     }
 
-    /**
-     * The order that the data field should be in
-     */
     public function getOrderAttribute()
     {
+        // The order that the data field should be in
         return $this->DataField->order;
     }
 
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function DataField()
     {
         return $this->hasOne(DataField::class, 'field_id', 'field_id');
@@ -38,6 +40,13 @@ class CustomerEquipmentData extends Model
 
     public function DataFieldType()
     {
-        return $this->hasOneThrough(DataFieldType::class, DataField::class, 'field_id', 'type_id', 'field_id', 'type_id');
+        return $this->hasOneThrough(
+            DataFieldType::class,
+            DataField::class,
+            'field_id',
+            'type_id',
+            'field_id',
+            'type_id'
+        );
     }
 }

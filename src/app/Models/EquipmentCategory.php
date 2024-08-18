@@ -15,6 +15,9 @@ class EquipmentCategory extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
+    /**
+     * Model Relationships
+     */
     public function EquipmentType()
     {
         return $this->hasMany(EquipmentType::class, 'cat_id', 'cat_id')

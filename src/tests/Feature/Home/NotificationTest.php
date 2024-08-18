@@ -2,12 +2,9 @@
 
 namespace Tests\Feature\Home;
 
-use App\Models\Notification;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class NotificationTest extends TestCase
@@ -40,7 +37,7 @@ class NotificationTest extends TestCase
         ];
 
         DB::table('notifications')->insert([
-            $notificationData
+            $notificationData,
         ]);
 
         $data = [
@@ -53,7 +50,7 @@ class NotificationTest extends TestCase
         $response->assertStatus(302);
 
         $this->assertDatabaseHas('notifications', [
-            'id' => $notificationData['id']
+            'id' => $notificationData['id'],
         ]);
         $this->assertDatabaseMissing('notifications', [
             'id' => $notificationData['id'],
@@ -73,7 +70,7 @@ class NotificationTest extends TestCase
         ];
 
         DB::table('notifications')->insert([
-            $notificationData
+            $notificationData,
         ]);
 
         $data = [
@@ -102,7 +99,7 @@ class NotificationTest extends TestCase
         ];
 
         DB::table('notifications')->insert([
-            $notificationData
+            $notificationData,
         ]);
 
         $data = [

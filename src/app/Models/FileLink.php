@@ -62,10 +62,10 @@ class FileLink extends Model
             'link_id',
             'file_id',
         )->withPivot([
-                    'timeline_id',
-                    'upload',
-                    'link_file_id',
-                ])->withTimestamps();
+            'timeline_id',
+            'upload',
+            'link_file_id',
+        ])->withTimestamps();
     }
 
     public function User()
@@ -77,8 +77,6 @@ class FileLink extends Model
     {
         return $this->hasMany(FileLinkTimeline::class, 'link_id', 'link_id');
     }
-
-
 
     /***************************************************************************
      * Additional Model Methods
@@ -102,7 +100,7 @@ class FileLink extends Model
                 ->subDays(config('fileLink.auto_delete_days')));
             Log::debug('List of prunable File Links', $linkList->get()->toArray());
 
-            if (!config('fileLink.auto_delete_override')) {
+            if (! config('fileLink.auto_delete_override')) {
                 return $linkList;
             }
 
@@ -118,7 +116,7 @@ class FileLink extends Model
                     ->first()
                     ->value;
 
-                Log::debug('User ID ' . $link->User->user_id . ' has Override Value set to ' . (bool) $settingValue);
+                Log::debug('User ID '.$link->User->user_id.' has Override Value set to '.(bool) $settingValue);
                 if ((bool) $settingValue) {
                     $delList[] = $link;
                 }

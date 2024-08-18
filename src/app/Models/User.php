@@ -24,7 +24,7 @@ class User extends Authenticatable
 
     protected $primaryKey = 'user_id';
 
-    protected $guarded = ['created_at', 'updated_at'];
+    protected $guarded = ['user_id', 'created_at', 'updated_at'];
 
     protected $hidden = [
         'role_id',
@@ -47,17 +47,17 @@ class User extends Authenticatable
 
     protected $appends = ['full_name', 'initials', 'role_name'];
 
-    /**
+    /***************************************************************************
      * Key for Route/Model binding
-     */
+     ***************************************************************************/
     public function getRouteKeyName()
     {
         return 'username';
     }
 
-    /**
-     * Additional User Attributes
-     */
+    /***************************************************************************
+     * Additional Attributes
+     ***************************************************************************/
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
@@ -73,9 +73,9 @@ class User extends Authenticatable
         return $this->UserRole->name;
     }
 
-    /**
-     * Relationships
-     */
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function UserRole()
     {
         return $this->hasOne(UserRole::class, 'role_id', 'role_id');
@@ -86,6 +86,14 @@ class User extends Authenticatable
         return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
     }
 
+    public function FileLink()
+    {
+        return $this->hasMany(FileLink::class, 'user_id', 'user_id');
+    }
+
+    /***************************************************************************
+     * Bookmark Relationships
+     ***************************************************************************/
     public function TechTipBookmarks()
     {
         return $this->belongsToMany(
@@ -126,10 +134,9 @@ class User extends Authenticatable
         )->select(['slug', 'name']);
     }
 
-    public function FileLink()
-    {
-        return $this->hasMany(FileLink::class, 'user_id', 'user_id');
-    }
+    /***************************************************************************
+     * Additional Methods for User Model
+     ***************************************************************************/
 
     /**
      * Determine the new expire date for an updated password

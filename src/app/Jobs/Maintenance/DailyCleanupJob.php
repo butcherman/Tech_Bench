@@ -27,6 +27,7 @@ class DailyCleanupJob implements ShouldQueue
      */
     public function handle(): void
     {
+        // Determine if Backup Files are to be cleaned up
         if (config('backup.nightly_cleanup')) {
             Log::info('Calling backup cleanup job');
             Artisan::call('backup:cleanup');

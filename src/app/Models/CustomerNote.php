@@ -28,6 +28,9 @@ class CustomerNote extends Model
         'urgent' => 'boolean',
     ];
 
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getAuthorAttribute()
     {
         return User::withTrashed()->find($this->created_by)->full_name;
@@ -40,6 +43,9 @@ class CustomerNote extends Model
         }
     }
 
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function CustomerSite()
     {
         return $this->belongsToMany(
@@ -52,12 +58,16 @@ class CustomerNote extends Model
 
     public function CustomerEquipment()
     {
-        return $this->hasOne(CustomerEquipment::class, 'cust_equip_id', 'cust_equip_id');
+        return $this->hasOne(
+            CustomerEquipment::class,
+            'cust_equip_id',
+            'cust_equip_id'
+        );
     }
 
-    /**
-     * Automatically remove soft deleted models after 90 days
-     */
+    /***************************************************************************
+     * Prune soft deleted models after 90 days
+     ***************************************************************************/
     public function prunable()
     {
         if (config('customer.auto_purge')) {

@@ -17,13 +17,13 @@ class UserRolePermissionType extends Model
         'UserRolePermissionCategory',
     ];
 
-    protected $guarded = []; // ['perm_type_id', 'created_at', 'updated_at'];
+    protected $guarded = []; // ['perm_type_id', 'created_at', 'updated_at']; TODO - Why do I have to remove this?
 
     protected $appends = ['group', 'feature_enabled'];
 
-    /**
+    /***************************************************************************
      * Model Attributes
-     */
+     ***************************************************************************/
     public function getGroupAttribute()
     {
         return $this->UserRolePermissionCategory ?
@@ -41,9 +41,9 @@ class UserRolePermissionType extends Model
         return true;
     }
 
-    /**
+    /***************************************************************************
      * Model Relationships
-     */
+     ***************************************************************************/
     public function UserRolePermissionCategory()
     {
         return $this->belongsTo(

@@ -15,9 +15,9 @@ class DataField extends Model
 
     protected $hidden = ['updated_at', 'created_at'];
 
-    /**
-     * Name of the data field that is attached to this equipment type
-     */
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
     public function DataFieldType()
     {
         return $this->hasOne(DataFieldType::class, 'type_id', 'type_id');

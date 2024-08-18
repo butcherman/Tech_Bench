@@ -27,6 +27,9 @@ class FileUpload extends Model
         'updated_at' => 'datetime:M d, Y',
     ];
 
+    /****************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getHrefAttribute()
     {
         return route('download', [$this->file_id, $this->file_name]);
@@ -43,6 +46,10 @@ class FileUpload extends Model
         $this->verifyPublicDownload();
         $this->verifyFileExists();
     }
+
+    /***************************************************************************
+     * Additional Methods
+     ***************************************************************************/
 
     /**
      * Verify that the File Name passed to download route matches file

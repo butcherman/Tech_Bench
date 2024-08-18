@@ -22,11 +22,12 @@ class DataFieldType extends Model
         'masked' => 'boolean',
     ];
 
-    /**
-     * Shows if this field is being used by any equipment
-     */
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getInUseAttribute()
     {
-        return DataField::where('type_id', $this->type_id)->count() > 0 ? true : false;
+        return DataField::where('type_id', $this->type_id)
+            ->count() > 0 ? true : false;
     }
 }

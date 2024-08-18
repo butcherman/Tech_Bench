@@ -4,8 +4,6 @@ namespace Tests\Feature\Customer;
 
 use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerBookmarkTest extends TestCase
@@ -17,7 +15,7 @@ class CustomerBookmarkTest extends TestCase
     {
         $customer = Customer::factory()->create();
         $data = [
-            'value' => true
+            'value' => true,
         ];
 
         $response = $this->post(route('customers.bookmark', $customer->slug), $data);
@@ -31,7 +29,7 @@ class CustomerBookmarkTest extends TestCase
         $user = User::factory()->create();
         $customer = Customer::factory()->create();
         $data = [
-            'value' => true
+            'value' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -48,7 +46,7 @@ class CustomerBookmarkTest extends TestCase
         $user = User::factory()->create();
         $customer = Customer::factory()->create();
         $data = [
-            'value' => true
+            'value' => true,
         ];
 
         $customer->Bookmarks()->attach($user);
@@ -63,7 +61,7 @@ class CustomerBookmarkTest extends TestCase
         $user = User::factory()->create();
         $customer = Customer::factory()->create();
         $data = [
-            'value' => false
+            'value' => false,
         ];
 
         $customer->Bookmarks()->attach($user);
@@ -82,7 +80,7 @@ class CustomerBookmarkTest extends TestCase
         $user = User::factory()->create();
         $customer = Customer::factory()->create();
         $data = [
-            'value' => false
+            'value' => false,
         ];
 
         $response = $this->actingAs($user)
