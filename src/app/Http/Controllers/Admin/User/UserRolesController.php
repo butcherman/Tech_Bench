@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Actions\BuildUserRoles;
+use App\Events\Feature\FeatureChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserRoleRequest;
 use App\Models\UserRole;
@@ -32,13 +33,16 @@ class UserRolesController extends Controller
     {
         $this->authorize('create', UserRole::class);
 
+        $baseRole = $request->role_id ?
+            UserRole::find($request->role_id) : null;
+
         return Inertia::render('Admin/Role/Create', [
-            'base-role' => $request->role_id ?
-                UserRole::find($request->role_id) : null,
-            'permission-list' => $request->role_id ?
-                UserRole::find($request->role_id)->UserRolePermission
-                    ->groupBy('UserRolePermissionType.group') :
-                UserRolePermissionType::all()->groupBy('group'),
+            'base-role' => $baseRole,
+            'permission-list' => UserRolePermissionType::all()
+                ->filter(function ($perm) {
+                    return $perm->feature_enabled;
+                })->groupBy('group'),
+            'permission-values' => $baseRole ? $baseRole->UserRolePermission : [],
         ]);
     }
 
@@ -49,8 +53,9 @@ class UserRolesController extends Controller
     {
         $newRole = $request->processNewRole();
 
-        Log::info('New User Role created by ' .
+        Log::info('New User Role created by '.
             $request->user()->username, $newRole->toArray());
+        event(new FeatureChangedEvent);
 
         return redirect(route('admin.user-roles.show', $newRole->role_id))
             ->with('success', __('admin.user-role.created'));
@@ -63,11 +68,15 @@ class UserRolesController extends Controller
     {
         $this->authorize('view', $user_role);
 
+        $permList = $user_role->UserRolePermission;
+
         return Inertia::render('Admin/Role/Show', [
             'role' => $user_role->makeVisible(['allow_edit']),
-            'permission-list' => $user_role
-                ->UserRolePermission
-                ->groupBy('UserRolePermissionType.group'),
+            'permission-list' => UserRolePermissionType::all()
+                ->filter(function ($perm) {
+                    return $perm->feature_enabled;
+                })->groupBy('group'),
+            'permission-values' => $user_role->UserRolePermission,
         ]);
     }
 
@@ -80,8 +89,11 @@ class UserRolesController extends Controller
 
         return Inertia::render('Admin/Role/Edit', [
             'base-role' => $user_role,
-            'permission-list' => $user_role->UserRolePermission
-                ->groupBy('UserRolePermissionType.group'),
+            'permission-list' => UserRolePermissionType::all()
+                ->filter(function ($perm) {
+                    return $perm->feature_enabled;
+                })->groupBy('group'),
+            'permission-values' => $user_role->UserRolePermission,
         ]);
     }
 
@@ -93,9 +105,10 @@ class UserRolesController extends Controller
         $modifiedRole = $request->processExistingRole();
 
         Log::info(
-            'User Role Updated by ' . $request->user()->username,
+            'User Role Updated by '.$request->user()->username,
             $modifiedRole->toArray()
         );
+        event(new FeatureChangedEvent);
 
         return back()->with('success', __('admin.user-role.updated'));
     }
@@ -108,7 +121,7 @@ class UserRolesController extends Controller
         $request->destroyRole();
 
         Log::stack(['daily', 'user'])
-            ->notice('Role ' . $user_role->name . ' has been deleted by ' .
+            ->notice('Role '.$user_role->name.' has been deleted by '.
                 $request->user()->username);
 
         return redirect(route('admin.user-roles.index'))

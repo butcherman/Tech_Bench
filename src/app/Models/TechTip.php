@@ -127,6 +127,7 @@ class TechTip extends Model
     public function isFav(User $user)
     {
         $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
+
         return in_array($user->user_id, $bookmarks);
     }
 

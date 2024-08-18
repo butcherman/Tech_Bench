@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Features\FileLinkFeature;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
@@ -43,6 +44,10 @@ class BuildNavbar
             array_splice($primaryNav, 1, 0, [$adminNav]);
         }
 
+        if ($featureNav = self::getFileLinkNav($user)) {
+            $primaryNav[] = $featureNav;
+        }
+
         return $primaryNav;
 
     }
@@ -73,6 +78,22 @@ class BuildNavbar
                 'name' => 'Reports',
                 'icon' => 'chart-bar',
                 'route' => route('reports.index'),
+            ];
+        }
+
+        return false;
+    }
+
+    /**
+     * If the user can access File Links, include that link
+     */
+    protected static function getFileLinkNav(User $user): bool|array
+    {
+        if ($user->features()->active(FileLinkFeature::class)) {
+            return [
+                'name' => 'File Links',
+                'icon' => 'link',
+                'route' => route('links.index'),
             ];
         }
 

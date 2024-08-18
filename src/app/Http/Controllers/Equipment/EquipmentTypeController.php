@@ -26,7 +26,7 @@ class EquipmentTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/Index', [
-            'equipment-list' => fn() => Cache::equipmentCategories(),
+            'equipment-list' => fn () => Cache::equipmentCategories(),
         ]);
     }
 
@@ -38,9 +38,9 @@ class EquipmentTypeController extends Controller
         $this->authorize('create', EquipmentType::class);
 
         return Inertia::render('Equipment/Create', [
-            'category-list' => fn() => Cache::equipmentCategories(),
-            'data-list' => fn() => DataFieldType::all()->pluck('name'),
-            'public-tips' => fn() => $request->user()
+            'category-list' => fn () => Cache::equipmentCategories(),
+            'data-list' => fn () => DataFieldType::all()->pluck('name'),
+            'public-tips' => fn () => $request->user()
                 ->features()
                 ->active(PublicTechTipFeature::class),
         ]);
@@ -56,7 +56,7 @@ class EquipmentTypeController extends Controller
 
         Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
         Log::info(
-            'New Equipment Type created by ' . $request->user()->username,
+            'New Equipment Type created by '.$request->user()->username,
             $request->toArray()
         );
 
@@ -84,10 +84,10 @@ class EquipmentTypeController extends Controller
         $this->authorize('update', $equipment);
 
         return Inertia::render('Equipment/Edit', [
-            'equipment' => fn() => $equipment->load('DataFieldType'),
-            'category-list' => fn() => Cache::equipmentCategories(),
-            'data-list' => fn() => DataFieldType::all()->pluck('name'),
-            'public-tips' => fn() => $request->user()
+            'equipment' => fn () => $equipment->load('DataFieldType'),
+            'category-list' => fn () => Cache::equipmentCategories(),
+            'data-list' => fn () => DataFieldType::all()->pluck('name'),
+            'public-tips' => fn () => $request->user()
                 ->features()
                 ->active(PublicTechTipFeature::class),
         ]);
@@ -102,7 +102,7 @@ class EquipmentTypeController extends Controller
         $request->processCustomerFields($equipment);
 
         Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-        Log::info('Equipment Type ' . $equipment->name . ' updated by ' .
+        Log::info('Equipment Type '.$equipment->name.' updated by '.
             $request->user()->username, $request->toArray());
 
         UpdateCustomerDataFieldsJob::dispatch($equipment);
@@ -123,7 +123,7 @@ class EquipmentTypeController extends Controller
         } catch (QueryException $e) {
             if (in_array($e->errorInfo[1], [19, 1451])) {
                 throw new RecordInUseException(
-                    $equipment->name . ' is still in use and cannot be deleted',
+                    $equipment->name.' is still in use and cannot be deleted',
                     0,
                     $e
                 );
@@ -134,7 +134,7 @@ class EquipmentTypeController extends Controller
             }
         }
 
-        Log::notice('Equipment Type ' . $equipment->name . ' was deleted by ' .
+        Log::notice('Equipment Type '.$equipment->name.' was deleted by '.
             $request->user()->username);
 
         return redirect(route('equipment.index'))->with('warning', __('equipment.destroyed'));

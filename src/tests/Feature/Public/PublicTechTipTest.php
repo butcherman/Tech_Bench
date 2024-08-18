@@ -5,8 +5,6 @@ namespace Tests\Feature\Public;
 use App\Models\EquipmentType;
 use App\Models\TechTip;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PublicTechTipTest extends TestCase

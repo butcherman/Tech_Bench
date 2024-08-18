@@ -30,6 +30,8 @@ class CommentFlaggedNotification extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
+     *
+     * TODO - Assert Message sent and ignore this
      */
     public function toMail(object $notifiable): MailMessage
     {

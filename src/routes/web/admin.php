@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
+use App\Http\Controllers\Admin\Config\FeatureController;
 use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
@@ -105,6 +106,12 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     Route::put('email-settings', [EmailSettingsController::class, 'update'])
         ->name('email-settings.update');
     Route::get('test-email', SendTestEmailController::class)->name('test-email');
+
+    Route::get('features', [FeatureController::class, 'show'])
+        ->name('features.show')
+        ->breadcrumb('App Features', 'admin.index');
+    Route::put('features', [FeatureController::class, 'update'])
+        ->name('features.update');
 
     Route::resource('security', SecurityController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

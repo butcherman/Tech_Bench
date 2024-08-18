@@ -7,6 +7,7 @@
                     <div class="card-title">Modify Role</div>
                     <UserRoleForm
                         :permission-list="permissionList"
+                        :permission-values="permissionValues"
                         :base-role="baseRole"
                         edit
                     />
@@ -22,6 +23,7 @@ import UserRoleForm from "@/Forms/Admin/User/UserRoleForm.vue";
 
 defineProps<{
     permissionList: userRolePermissionGroup;
+    permissionValues: userRolePermission[];
     baseRole?: userRole;
 }>();
 </script>

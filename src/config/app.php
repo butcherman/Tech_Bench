@@ -24,7 +24,7 @@ return [
 
     /**
      * Login Page additional data/links
-     * 
+     *
      * Links must be in form of [
      *      'url' => 'site_url'
      *      'text' => 'text to display'

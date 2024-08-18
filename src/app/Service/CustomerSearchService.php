@@ -10,7 +10,6 @@ use App\Models\Customer;
  */
 class CustomerSearchService
 {
-
     public function __construct(protected CustomerSearchRequest $searchRequest)
     {
         //

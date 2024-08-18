@@ -97,6 +97,16 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\TechTips\TipCommentFlaggedEvent' => [
             'App\Listeners\Notify\TechTips\NotifyOfFlaggedTipListener',
         ],
+
+        /**
+         * File Link Events
+         */
+        'App\Events\FileLinks\FileLinkEvent' => [
+            'App\Listeners\FileLinks\UpdateLinkFilesListener',
+        ],
+        'App\Events\FileLinks\FileUploadedFromPublicEvent' => [
+            'App\Listeners\Notify\FileLinks\FileUploadFromPublicListener',
+        ],
     ];
 
     /**

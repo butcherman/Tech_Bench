@@ -20,6 +20,23 @@ class FileUpload extends Model
 
     protected $hidden = ['disk', 'created_at', 'folder', 'updated_at', 'public'];
 
+    protected $appends = ['href', 'created_stamp'];
+
+    protected $casts = [
+        'created_at' => 'datetime:M d, Y',
+        'updated_at' => 'datetime:M d, Y',
+    ];
+
+    public function getHrefAttribute()
+    {
+        return route('download', [$this->file_id, $this->file_name]);
+    }
+
+    public function getCreatedStampAttribute()
+    {
+        return $this->created_at;
+    }
+
     public function validateFile($fileName)
     {
         $this->verifyFileName($fileName);

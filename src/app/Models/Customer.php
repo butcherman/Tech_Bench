@@ -10,8 +10,8 @@ use Laravel\Scout\Searchable;
 class Customer extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use Searchable;
+    use SoftDeletes;
 
     protected $primaryKey = 'cust_id';
 
@@ -105,6 +105,7 @@ class Customer extends Model
     public function isFav(User $user)
     {
         $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
+
         return in_array($user->user_id, $bookmarks);
     }
 

@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Support\Facades\Log;
 
 /**
  *  AllowTrait only has one function to check permission for the policies
@@ -19,10 +18,8 @@ trait AllowTrait
             })
             ->first();
 
-        Log::channel('auth')->debug('User '.$user->username.' is trying to get permission for '.
-            $description.'.  Result - '.$allowed);
         if ($allowed) {
-            return $allowed->allow;
+            return (bool) $allowed->allow;
         }
 
         // @codeCoverageIgnoreStart

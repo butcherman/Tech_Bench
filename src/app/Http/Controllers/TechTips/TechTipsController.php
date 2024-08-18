@@ -55,8 +55,8 @@ class TechTipsController extends Controller
         $newTip = $request->createTechTip();
 
         Log::channel('tip')
-            ->info('New Tech Tip created by ' . $request->user()->username, $newTip->toArray());
-        event(new TechTipEvent($newTip, CrudAction::Create, !$request->suppress));
+            ->info('New Tech Tip created by '.$request->user()->username, $newTip->toArray());
+        event(new TechTipEvent($newTip, CrudAction::Create, ! $request->suppress));
 
         return redirect()
             ->route('tech-tips.show', $newTip->slug)
@@ -116,8 +116,8 @@ class TechTipsController extends Controller
         $tipData = $request->updateTechTip();
 
         Log::channel('tip')
-            ->info('Tech Tip updated by ' . $request->user()->username, $tipData->toArray());
-        event(new TechTipEvent($tipData, CrudAction::Update, !$request->suppress));
+            ->info('Tech Tip updated by '.$request->user()->username, $tipData->toArray());
+        event(new TechTipEvent($tipData, CrudAction::Update, ! $request->suppress));
 
         return redirect()->route('tech-tips.show', $tipData->slug)
             ->with('success', __('tips.updated'));
@@ -133,7 +133,7 @@ class TechTipsController extends Controller
         $tech_tip->delete();
 
         Log::channel('tip')
-            ->notice('Tech Tip deleted by ' . $request->user()->username, $tech_tip->toArray());
+            ->notice('Tech Tip deleted by '.$request->user()->username, $tech_tip->toArray());
 
         return redirect()
             ->route('tech-tips.index')
@@ -146,7 +146,7 @@ class TechTipsController extends Controller
 
         $techTip->restore();
 
-        Log::channel('tip')->notice('Tech Tip restored by ' . $request->user()->username, $techTip->toArray());
+        Log::channel('tip')->notice('Tech Tip restored by '.$request->user()->username, $techTip->toArray());
 
         return redirect()
             ->route('tech-tips.show', $techTip->slug)
@@ -165,7 +165,7 @@ class TechTipsController extends Controller
             event(new FileDataDeletedEvent($fileId));
         }
 
-        Log::channel('tip')->notice('Tech Tip Force Deleted by ' . $request->user()->username, $techTip->toArray());
+        Log::channel('tip')->notice('Tech Tip Force Deleted by '.$request->user()->username, $techTip->toArray());
 
         return redirect()->route('admin.tech-tips.deleted-tips')->with('warning', __('tips.deleted'));
     }

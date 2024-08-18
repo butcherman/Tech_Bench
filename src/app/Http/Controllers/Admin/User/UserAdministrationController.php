@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Actions\BuildUserRoles;
+use App\Events\Feature\FeatureChangedEvent;
 use App\Events\User\UserCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserAdministrationRequest;
@@ -81,7 +82,7 @@ class UserAdministrationController extends Controller
 
         return Inertia::render('Admin/User/Edit', [
             'roles' => BuildUserRoles::build($request->user()),
-            'user' => $user,
+            'user' => $user->makeVisible('role_id'),
         ]);
     }
 
@@ -95,6 +96,7 @@ class UserAdministrationController extends Controller
         Log::stack(['daily', 'user'])
             ->info('User information for '.$user->username.' has been updated by '.
                 $request->user()->username, $request->toArray());
+        event(new FeatureChangedEvent);
 
         // This function is also used during first time setup
         if (config('app.first_time_setup')) {

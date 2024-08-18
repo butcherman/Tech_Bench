@@ -16,7 +16,7 @@ class TechTipCommentFeature
 
         // If feature is disabled, return false
         $isEnabled = (bool) config('techTips.allow_comments');
-        if (!$isEnabled) {
+        if (! $isEnabled) {
             Log::stack(['tip', 'daily'])
                 ->debug('Feature - Comment on Tech Tip - is Disabled');
 

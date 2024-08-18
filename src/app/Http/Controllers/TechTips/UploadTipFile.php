@@ -23,7 +23,10 @@ class UploadTipFile extends Controller
             if ($savedFile = $this->getChunk($request)) {
                 Log::debug('Tech Tip file saved', $savedFile->toArray());
                 $request->session()->push('tip-file', $savedFile->file_id);
-                Log::debug('Current session file list', $request->session()->get('tip-file'));
+                Log::debug(
+                    'Current session file list',
+                    $request->session()->get('tip-file')
+                );
             }
         }
 

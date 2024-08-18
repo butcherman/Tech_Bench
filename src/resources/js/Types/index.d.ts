@@ -14,9 +14,6 @@ type pageProps = {
     navbar: navbar[];
     breadcrumbs: breadcrumbs[];
     errors: { [key: string]: string }[];
-    // notifications: notificationProps;
-    // alerts: alert[];
-    // stepId?: number;
 };
 
 type appProps = {
@@ -69,6 +66,8 @@ type fileUpload = {
     file_id: number;
     file_name: string;
     file_size: number;
+    href: string;
+    created_stamp: string;
 };
 
 interface tableColumn {

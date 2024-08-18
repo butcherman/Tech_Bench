@@ -21,7 +21,7 @@ class NotificationRequest extends FormRequest
     {
         return [
             'action' => 'required|string',
-            'idList' => 'required|array'
+            'idList' => 'required|array',
         ];
     }
 

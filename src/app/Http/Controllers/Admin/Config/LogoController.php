@@ -33,7 +33,7 @@ class LogoController extends Controller
         $logoLocation = $request->processLogo();
         $this->saveSettings('app.logo', $logoLocation);
 
-        Log::notice('New Tech Bench Logo uploaded by ' . $request->user()->username, [
+        Log::notice('New Tech Bench Logo uploaded by '.$request->user()->username, [
             'file-location' => $logoLocation,
         ]);
 

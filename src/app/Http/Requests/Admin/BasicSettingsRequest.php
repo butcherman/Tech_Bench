@@ -47,7 +47,7 @@ class BasicSettingsRequest extends FormRequest
             'app.company_name' => $this->company_name,
             'app.schedule_timezone' => $this->timezone,
             'filesystems.max_filesize' => $this->max_filesize,
-            'services.azure.redirect' => $this->url . '/auth/callback',
+            'services.azure.redirect' => $this->url.'/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);

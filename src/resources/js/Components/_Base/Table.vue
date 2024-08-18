@@ -1,6 +1,6 @@
 <template>
     <div :class="{ 'table-responsive': responsive }">
-        <table class="table">
+        <table class="table" :class="{ 'table-striped': striped }">
             <thead>
                 <tr>
                     <th v-for="col in columns" :key="col.field">
@@ -46,7 +46,7 @@
                 <tr
                     v-for="(row, index) in paginatedData"
                     :key="index"
-                    :class="{ pointer: rowClickable, 'row-link': row.href }"
+                    :class="getRowClass(row)"
                 >
                     <template v-for="col in columns">
                         <td @click="$emit('on-row-click', row, $event)">
@@ -167,6 +167,7 @@ const props = defineProps<{
     rows: any[];
     responsive?: boolean;
     initialSort?: string;
+    initialSortDirection?: "asc" | "desc";
     rowClickable?: boolean;
     paginate?: boolean;
     perPageArray?: number[];
@@ -174,6 +175,8 @@ const props = defineProps<{
     noResultsText?: string;
     noInertiaLink?: boolean;
     loading?: boolean;
+    striped?: boolean;
+    rowStyleClass?: ((row: any) => string) | string;
 }>();
 
 const columnCount = computed(
@@ -188,10 +191,35 @@ const sortedData = computed(() =>
 );
 
 /*******************************************************************************
+ * Styling for Table Rows
+ *******************************************************************************/
+const getRowClass = (row: any) => {
+    let fullClass = [];
+
+    if (props.rowClickable) {
+        fullClass.push("pointer");
+    }
+
+    if (row.href) {
+        fullClass.push("row-link");
+    }
+
+    if (props.rowStyleClass) {
+        if (typeof props.rowStyleClass === "function") {
+            fullClass.push(props.rowStyleClass(row));
+        } else {
+            fullClass.push(props.rowStyleClass);
+        }
+    }
+
+    return fullClass.join(" ");
+};
+
+/*******************************************************************************
  * Sorting Properties
  *******************************************************************************/
 const sortBy = ref<string>(props.initialSort || "");
-const sortOrder = ref<"asc" | "desc">("asc");
+const sortOrder = ref<"asc" | "desc">(props.initialSortDirection || "asc");
 
 const updateSort = (field: string) => {
     let newOrder: "asc" | "desc" = "asc";

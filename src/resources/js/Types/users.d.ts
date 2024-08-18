@@ -7,10 +7,10 @@ type user = {
     full_name: string;
     initials: string;
     role_id: string;
-    user_role: userRole;
     created_at: string;
     updated_at: string;
     deleted_at: string;
+    user_role: userRole;
 };
 
 type userNotificationProp = {
