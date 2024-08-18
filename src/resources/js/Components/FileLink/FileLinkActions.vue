@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-body justify-content-center">
             <a
-                v-if="!link.is_expired"
+                v-if="!link.is_expired && !isAdmin"
                 :href="`mailto:?subject=A File Link Has Been Created For You
                                 &body=View the link details here: ${link.public_href}`"
                 class="btn btn-info rounded-5 m-1 w-100"
@@ -10,7 +10,11 @@
                 <fa-icon icon="envelope" />
                 Email Link
             </a>
-            <Link :href="$route('links.edit', link.link_id)" class="w-100 my-1">
+            <Link
+                v-if="!isAdmin"
+                :href="$route('links.edit', link.link_id)"
+                class="w-100 my-1"
+            >
                 <EditButton class="w-100" text="Edit Link" pill />
             </Link>
             <Link
@@ -47,6 +51,7 @@ import verifyModal from "@/Modules/verifyModal";
 
 const props = defineProps<{
     link: fileLink;
+    isAdmin?: boolean;
 }>();
 
 /**
@@ -68,7 +73,13 @@ const disableLink = () => {
 const deleteLink = () => {
     verifyModal("This link and its files will be destroyed").then((res) => {
         if (res) {
-            router.delete(route("links.destroy", props.link.link_id));
+            if (props.isAdmin) {
+                router.delete(
+                    route("admin.links.manage.destroy", props.link.link_id)
+                );
+            } else {
+                router.delete(route("links.destroy", props.link.link_id));
+            }
         }
     });
 };

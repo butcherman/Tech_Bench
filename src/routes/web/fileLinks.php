@@ -3,6 +3,7 @@
 use App\Exceptions\FileLink\FileLinkMissingException;
 use App\Http\Controllers\FileLink\ExpireFileLinkController;
 use App\Http\Controllers\FileLink\ExtendLinkController;
+use App\Http\Controllers\FileLink\FileLinkAdminController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
@@ -47,6 +48,15 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumb('File Link Settings', 'admin.index');
         Route::put('settings', [FileLinkSettingsController::class, 'update'])
             ->name('settings.update');
+
+        Route::get('manage', [FileLinkAdminController::class, 'index'])
+            ->name('manage.index')
+            ->breadcrumb('Manage File Links');
+        Route::get('manage/{link}', [FileLinkAdminController::class, 'show'])
+            ->name('manage.show')
+            ->breadcrumb('Link Details', 'admin.links.manage.index');
+        Route::delete('manage/{link}', [FileLinkAdminController::class, 'destroy'])
+            ->name('manage.destroy');
     });
 });
 

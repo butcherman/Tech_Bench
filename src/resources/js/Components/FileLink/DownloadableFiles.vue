@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="card-title">
                 <AddButton
-                    v-if="public"
+                    v-if="public && !isAdmin"
                     text="Add File"
                     class="float-end"
                     small
@@ -63,6 +63,7 @@ const props = defineProps<{
     link: fileLink;
     fileList: fileLinkUpload[];
     public?: boolean;
+    isAdmin?: boolean;
 }>();
 
 const addFileModal = ref<InstanceType<typeof Modal> | null>(null);
