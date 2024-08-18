@@ -19,6 +19,7 @@ type techTip = {
     fileList?: number[];
     file_upload?: fileUpload[];
     equipment_type: equipment[];
+    tech_tip_type: tipType;
 };
 
 type tipType = {

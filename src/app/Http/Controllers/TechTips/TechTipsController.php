@@ -75,7 +75,7 @@ class TechTipsController extends Controller
         $tech_tip->touchRecent($request->user());
 
         // Load relationships
-        $tech_tip->load(['CreatedBy', 'UpdatedBy'])
+        $tech_tip->load(['CreatedBy', 'UpdatedBy', 'TechTipType'])
             ->CreatedBy->makeHidden(['email', 'initials', 'role_name', 'username']);
 
         if ($tech_tip->UpdatedBy) {
