@@ -5,10 +5,13 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Support\Facades\Log;
 
 class FileLink extends Model
 {
     use HasFactory;
+    use Prunable;
 
     protected $primaryKey = 'link_id';
 
@@ -25,32 +28,9 @@ class FileLink extends Model
         'expire' => 'datetime:M d, Y',
     ];
 
-    public function FileUpload()
-    {
-        return $this->belongsToMany(
-            FileUpload::class,
-            'file_link_files',
-            'link_id',
-            'file_id',
-        )->withPivot([
-            'timeline_id',
-            'upload',
-            'link_file_id',
-        ])->withTimestamps();
-    }
-
-    // TODO - Make Prunable
-
-    public function User()
-    {
-        return $this->hasOne(User::class, 'user_id', 'user_id');
-    }
-
-    public function Timeline()
-    {
-        return $this->hasMany(FileLinkTimeline::class, 'link_id', 'link_id');
-    }
-
+    /***************************************************************************
+     * Model Attributes
+     ***************************************************************************/
     public function getIsExpiredAttribute()
     {
         return $this->expire < Carbon::now();
@@ -71,10 +51,82 @@ class FileLink extends Model
         return $this->created_at;
     }
 
+    /***************************************************************************
+     * Model Relationships
+     ***************************************************************************/
+    public function FileUpload()
+    {
+        return $this->belongsToMany(
+            FileUpload::class,
+            'file_link_files',
+            'link_id',
+            'file_id',
+        )->withPivot([
+                    'timeline_id',
+                    'upload',
+                    'link_file_id',
+                ])->withTimestamps();
+    }
+
+    public function User()
+    {
+        return $this->hasOne(User::class, 'user_id', 'user_id');
+    }
+
+    public function Timeline()
+    {
+        return $this->hasMany(FileLinkTimeline::class, 'link_id', 'link_id');
+    }
+
+
+
+    /***************************************************************************
+     * Additional Model Methods
+     ***************************************************************************/
     public function expireLink()
     {
         $this->update([
             'expire' => Carbon::yesterday(),
         ]);
+    }
+
+    /***************************************************************************
+     * Prune expired models after xx days
+     ***************************************************************************/
+    public function prunable()
+    {
+        Log::debug('Prunable File Links Event Triggered');
+
+        if (config('fileLink.auto_delete')) {
+            $linkList = static::whereDate('expire', '<', now()
+                ->subDays(config('fileLink.auto_delete_days')));
+            Log::debug('List of prunable File Links', $linkList->get()->toArray());
+
+            if (!config('fileLink.auto_delete_override')) {
+                return $linkList;
+            }
+
+            $delList = [];
+            $settingId = UserSettingType::where('name', 'Auto Delete Expired File Links')
+                ->first()
+                ->setting_type_id;
+
+            Log::debug('Checking Each Link to see if user has overridden Auto Delete');
+            foreach ($linkList->get() as $link) {
+                $settingValue = UserSetting::where('user_id', $link->User->user_id)
+                    ->where('setting_type_id', $settingId)
+                    ->first()
+                    ->value;
+
+                Log::debug('User ID ' . $link->User->user_id . ' has Override Value set to ' . (bool) $settingValue);
+                if ((bool) $settingValue) {
+                    $delList[] = $link;
+                }
+            }
+
+            return collect($delList);
+        }
+
+        return static::whereLinkId(0);
     }
 }
