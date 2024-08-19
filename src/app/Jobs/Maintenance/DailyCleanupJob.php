@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Maintenance;
 
-use App\Service\GarbageCollectionService;
+use App\Service\Maint\GarbageCollectionService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
