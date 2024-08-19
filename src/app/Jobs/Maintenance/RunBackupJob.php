@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Maintenance;
 
+use App\Actions\Maintenance\RunDatabaseBackup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,6 +28,7 @@ class RunBackupJob implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        Artisan::call('backup:run');
+        // Artisan::call('backup:run');
+        new RunDatabaseBackup();
     }
 }

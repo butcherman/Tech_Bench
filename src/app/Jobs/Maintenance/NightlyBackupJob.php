@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Maintenance;
 
+use App\Actions\Maintenance\RunDatabaseBackup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,7 +34,8 @@ class NightlyBackupJob implements ShouldQueue
     {
         if (config('backup.nightly_backup')) {
             Log::info('Calling nightly backup job');
-            Artisan::call('backup:run');
+            // Artisan::call('backup:run');
+            new RunDatabaseBackup();
         }
     }
 }
