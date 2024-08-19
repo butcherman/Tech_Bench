@@ -111,7 +111,9 @@ class User extends Authenticatable
             'user_tech_tip_recents',
             'user_id',
             'tip_id'
-        )->select(['slug', 'subject']);
+        )->latest('user_tech_tip_recents.created_at')
+            ->select(['slug', 'subject'])
+            ->limit(10);
     }
 
     public function CustomerBookmarks()
@@ -131,7 +133,9 @@ class User extends Authenticatable
             'user_customer_recents',
             'user_id',
             'cust_id',
-        )->select(['slug', 'name']);
+        )->latest('user_customer_recents.created_at')
+            ->select(['slug', 'name'])
+            ->limit(10);
     }
 
     /***************************************************************************
@@ -181,7 +185,7 @@ class User extends Authenticatable
             'user_id' => $this->user_id,
             'token' => $token,
             'type' => $agent->device(),
-            'os' => $agent->platform().' '.$agent->platformVersion(),
+            'os' => $agent->platform() . ' ' . $agent->platformVersion(),
             'browser' => $agent->browser(),
             'registered_ip_address' => $ipAddr,
             'updated_ip_address' => $ipAddr,

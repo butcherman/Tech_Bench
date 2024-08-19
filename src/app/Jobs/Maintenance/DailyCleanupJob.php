@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Maintenance;
 
+use App\Service\GarbageCollectionService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -32,5 +33,8 @@ class DailyCleanupJob implements ShouldQueue
             Log::info('Calling backup cleanup job');
             Artisan::call('backup:cleanup');
         }
+
+        // Run Garbage Collection Service
+        new GarbageCollectionService();
     }
 }

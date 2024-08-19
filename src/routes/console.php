@@ -2,6 +2,7 @@
 
 use App\Jobs\Admin\CheckCertificateJob;
 use App\Jobs\Maintenance\DailyCleanupJob;
+use App\Jobs\Maintenance\ImageFileCleanupJob;
 use App\Jobs\Maintenance\NightlyBackupJob;
 use Illuminate\Support\Facades\Schedule;
 
@@ -14,3 +15,4 @@ Schedule::command('model:prune')->daily();
 Schedule::job(new CheckCertificateJob)->daily();
 Schedule::job(new NightlyBackupJob)->dailyAt('03:00');
 Schedule::job(new DailyCleanupJob)->dailyAt('06:00');
+Schedule::job(new ImageFileCleanupJob)->monthly();

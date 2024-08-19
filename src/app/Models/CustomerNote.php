@@ -33,13 +33,13 @@ class CustomerNote extends Model
      ***************************************************************************/
     public function getAuthorAttribute()
     {
-        return User::withTrashed()->find($this->created_by)->full_name;
+        return User::withTrashed()->find($this->created_by)->full_name ?? 'unknown';
     }
 
     public function getUpdatedAuthorAttribute()
     {
         if ($this->updated_by) {
-            return User::withTrashed()->find($this->updated_by)->full_name;
+            return User::withTrashed()->find($this->updated_by)->full_name ?? 'unknown';
         }
     }
 

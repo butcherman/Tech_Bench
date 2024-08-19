@@ -5,10 +5,11 @@ namespace App\Models;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 
 class UserLogins extends Model
 {
-    use HasFactory;
+    use Prunable;
 
     protected $primaryKey = 'id';
 
@@ -29,5 +30,17 @@ class UserLogins extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->toDayDateTimeString();
+    }
+
+    /***************************************************************************
+     * Prune activity older than xx days (730 by default)
+     ***************************************************************************/
+    public function prunable()
+    {
+        return static::whereDate(
+            'updated_at',
+            '<',
+            now()->subDays(config('auth.login_history_lifespan'))
+        );
     }
 }

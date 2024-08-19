@@ -19,6 +19,8 @@ return [
     ],
     'auto_logout_timer' => 15,
 
+    'login_history_lifespan' => 730,
+
     /*
     |--------------------------------------------------------------------------
     | Two-Factor Authentication Settings
