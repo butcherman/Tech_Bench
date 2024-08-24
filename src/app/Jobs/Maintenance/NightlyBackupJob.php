@@ -34,7 +34,6 @@ class NightlyBackupJob implements ShouldQueue
     {
         if (config('backup.nightly_backup')) {
             Log::info('Calling nightly backup job');
-            // Artisan::call('backup:run');
             new RunDatabaseBackup();
         }
     }

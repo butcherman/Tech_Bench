@@ -8,16 +8,12 @@ use Illuminate\Console\Command;
 class AppBackupCommand extends Command
 {
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * The name and signature of the console command
      */
     protected $signature = 'app:backup';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * The console command description
      */
     protected $description = 'Manual Tech Bench Backup';
 
@@ -26,10 +22,6 @@ class AppBackupCommand extends Command
      */
     public function handle()
     {
-        $this->line('Running Database Backup');
-
         new RunDatabaseBackup();
-
-        $this->info('Backup Complete');
     }
 }

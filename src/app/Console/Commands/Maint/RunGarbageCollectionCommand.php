@@ -13,9 +13,7 @@ class RunGarbageCollectionCommand extends Command
     protected $signature = 'app:collect-garbage';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * The console command description
      */
     protected $description = 'Command description';
 

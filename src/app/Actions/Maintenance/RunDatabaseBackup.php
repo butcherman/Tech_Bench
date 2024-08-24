@@ -2,6 +2,7 @@
 
 namespace App\Actions\Maintenance;
 use App\Exceptions\Maintenance\BackupFailedException;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
@@ -21,9 +22,7 @@ class RunDatabaseBackup
             throw new BackupFailedException('Not enough disk space');
         }
 
-        Log::notice('Running Backup');
-        Artisan::call('backup:run');
-        Log::notice('Backup Completed');
+        Artisan::call('backup:run', [], new ConsoleOutput());
     }
 
     /**
