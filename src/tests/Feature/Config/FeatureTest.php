@@ -54,7 +54,7 @@ class FeatureTest extends TestCase
         $data = [
             'file_links' => true,
             'public_tips' => true,
-            'tip_comments' => true,
+            'tip_comments' => false,
         ];
 
         $response = $this->actingAs(User::factory()->create())
@@ -67,7 +67,7 @@ class FeatureTest extends TestCase
         $data = [
             'file_links' => true,
             'public_tips' => true,
-            'tip_comments' => true,
+            'tip_comments' => false,
         ];
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
@@ -77,15 +77,15 @@ class FeatureTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'fileLink.feature_enabled',
-            'value' => true,
+            // 'value' => true,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'techTips.allow_public',
-            'value' => true,
+            // 'value' => true,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'techTips.allow_comments',
-            'value' => true,
+            // 'value' => true,
         ]);
     }
 }

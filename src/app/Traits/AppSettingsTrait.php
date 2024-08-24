@@ -17,16 +17,21 @@ trait AppSettingsTrait
      */
     protected function saveSettings($key, $value)
     {
+        // Verify that we are not trying to save over a fake password
         if ($value !== __('admin.fake-password') && $value !== null) {
-            AppSettings::firstOrCreate(
-                ['key' => $key],
-                ['value' => $value]
-            )->update(['value' => $value]);
 
-            Log::debug('App Settings Updated', [
-                'key' => $key,
-                'value' => $value,
-            ]);
+            // Verify that the value has actually changed
+            if (config($key) != $value) {
+                AppSettings::firstOrCreate(
+                    ['key' => $key],
+                    ['value' => json_encode($value)]
+                )->update(['value' => json_encode($value)]);
+
+                Log::debug('App Settings Updated', [
+                    'key' => $key,
+                    'value' => $value,
+                ]);
+            }
         }
 
         $this->cacheConfig();
@@ -51,7 +56,7 @@ trait AppSettingsTrait
     protected function saveSettingsArray($settingArray, $prefix = '')
     {
         foreach ($settingArray as $key => $value) {
-            $newKey = $prefix !== '' ? $prefix.'.'.$key : $key;
+            $newKey = $prefix !== '' ? $prefix . '.' . $key : $key;
 
             $this->saveSettings($newKey, $value);
         }

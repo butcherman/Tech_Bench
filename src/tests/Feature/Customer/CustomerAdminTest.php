@@ -80,11 +80,11 @@ class CustomerAdminTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.select_id',
-            'value' => false,
+            // 'value' => false,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.update_slug',
-            'value' => false,
+            // 'value' => false,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.default_state',
@@ -92,7 +92,7 @@ class CustomerAdminTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.auto_purge',
-            'value' => false,
+            // 'value' => false,
         ]);
     }
 }

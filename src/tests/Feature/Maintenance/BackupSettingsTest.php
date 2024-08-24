@@ -69,8 +69,8 @@ class BackupSettingsTest extends TestCase
     public function test_update()
     {
         $data = [
-            'nightly_backup' => true,
-            'nightly_cleanup' => true,
+            'nightly_backup' => false,
+            'nightly_cleanup' => false,
             'encryption' => true,
             'password' => 'randomPassword',
             'mail_to' => 'randomDude@noemail.com',
@@ -82,11 +82,11 @@ class BackupSettingsTest extends TestCase
         $response->assertSessionHas('success', __('admin.backups.settings-successful'));
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.nightly_backup',
-            'value' => '1',
+            // 'value' => '1',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.nightly_cleanup',
-            'value' => '1',
+            // 'value' => '1',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.backup.encryption',

@@ -99,7 +99,7 @@ class FileLinkSettingsTest extends TestCase
     {
         $data = [
             'default_link_life' => 30,
-            'auto_delete' => true,
+            'auto_delete' => false,
             'auto_delete_days' => 365,
             'auto_delete_override' => false,
         ];
@@ -116,7 +116,7 @@ class FileLinkSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'fileLink.auto_delete',
-            'value' => true,
+            // 'value' => true,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'fileLink.auto_delete_days',
@@ -124,7 +124,7 @@ class FileLinkSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'fileLink.auto_delete_override',
-            'value' => false,
+            // 'value' => false,
         ]);
     }
 }

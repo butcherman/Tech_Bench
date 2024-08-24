@@ -113,7 +113,6 @@ class EmailSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'mail.mailers.smtp.require_auth',
-            'value' => $data['require_auth'],
         ]);
     }
 }

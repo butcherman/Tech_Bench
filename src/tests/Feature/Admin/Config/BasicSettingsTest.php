@@ -68,7 +68,7 @@ class BasicSettingsTest extends TestCase
     {
         $data = [
             'url' => 'https://someUrl.noSite',
-            'timezone' => 'UTC',
+            'timezone' => 'America/LosAngeles',
             'max_filesize' => 123456,
             'company_name' => 'Bobs Fancy Cats',
         ];
@@ -92,7 +92,7 @@ class BasicSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.company_name',
-            'value' => 'Bobs Fancy Cats',
+            'value' => $data['company_name'],
         ]);
     }
 }
