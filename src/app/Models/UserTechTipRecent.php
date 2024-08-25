@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Support\Facades\Log;
 
 class UserTechTipRecent extends Model
 {
@@ -15,6 +16,8 @@ class UserTechTipRecent extends Model
      ***************************************************************************/
     public function prunable()
     {
+        Log::debug('Calling Prune User Tech Tip Recents');
+
         return static::whereDate('updated_at', '<', now()->subDays(90));
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class CustomerEquipment extends Model
 {
@@ -76,6 +77,8 @@ class CustomerEquipment extends Model
      ***************************************************************************/
     public function prunable()
     {
+        Log::debug('Calling Prune Customer Equipment');
+
         if (config('customer.auto_purge')) {
             return static::whereDate('deleted_at', '<=', now()->subDays(90));
         }

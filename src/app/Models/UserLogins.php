@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Support\Facades\Log;
 
 class UserLogins extends Model
 {
@@ -37,6 +38,8 @@ class UserLogins extends Model
      ***************************************************************************/
     public function prunable()
     {
+        Log::debug('Calling Prune User Logins');
+
         return static::whereDate(
             'updated_at',
             '<',
