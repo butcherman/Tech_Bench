@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function getRoleNameAttribute()
     {
-        return $this->UserRole->name;
+        return $this->UserRole->name ?? null;
     }
 
     /***************************************************************************
