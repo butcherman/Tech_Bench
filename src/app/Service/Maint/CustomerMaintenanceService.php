@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Service\Maint;
+use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use App\Models\EquipmentType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class CustomerMaintenanceService
 {
@@ -16,10 +18,36 @@ class CustomerMaintenanceService
     }
 
     /**
+     * Cycle through all customers and make sure that they have at least one child site
+     */
+    public function verifyCustomerChildren(ProgressBar $progressBar)
+    {
+        Log::debug('Verifying all Customers have at least one site');
+
+        $failed = [];
+        $customerList = Customer::withTrashed()->get();
+        foreach ($customerList as $customer) {
+            if ($customer->site_count === 0) {
+                Log::debug('Customer ' . $customer->name . ' has no sites attached');
+                $failed[] = $customer->only(['cust_id', 'name']);
+
+                if ($this->fix) {
+                    Log::notice('Deleting Customer without any attached sites', $customer->toArray());
+                    $customer->forceDelete();
+                }
+            }
+
+            $progressBar->advance();
+        }
+
+        return $failed;
+    }
+
+    /**
      * Cycle through all equipment and customers to validate all Equipment Data 
      * Fields exist
      */
-    public function verifyEquipmentDataFields()
+    public function verifyEquipmentDataFields(ProgressBar $progressBar)
     {
         Log::debug('Verifying Customer Equipment Data Fields for all equipment');
         $equipList = EquipmentType::all();
@@ -31,6 +59,7 @@ class CustomerMaintenanceService
             if (count($missing) > 0) {
                 $missingData = array_merge($missingData, $missing);
             }
+            $progressBar->advance();
         }
 
         return $missingData;

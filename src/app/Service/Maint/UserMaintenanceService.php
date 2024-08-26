@@ -59,13 +59,14 @@ class UserMaintenanceService
         return match ($type) {
             'active' => User::all()->count(),
             'disabled' => User::onlyTrashed()->get()->count(),
+            'all' => User::withTrashed()->get()->count(),
         };
     }
 
     /**
      * Verify that all users have all available settings options
      */
-    public function verifyUserSettings()
+    public function verifyUserSettings($progressBar)
     {
         $failed = [];
         $settingType = UserSettingType::all()->pluck('setting_type_id');
@@ -83,6 +84,8 @@ class UserMaintenanceService
                     'setting_type_id' => $missing->flatten(),
                 ];
             }
+
+            $progressBar->advance();
         }
 
         return $failed;

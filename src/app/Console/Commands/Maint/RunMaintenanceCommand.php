@@ -2,7 +2,12 @@
 
 namespace App\Console\Commands\Maint;
 
+use App\Models\Customer;
+use App\Models\EquipmentType;
+use App\Models\FileUpload;
+use App\Models\User;
 use App\Service\Maint\CustomerMaintenanceService;
+use App\Service\Maint\FileMaintenanceService;
 use App\Service\Maint\UserMaintenanceService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -29,13 +34,16 @@ class RunMaintenanceCommand extends Command
         $this->newLine();
         $this->userCheck();
         $this->customerCheck();
+        $this->fileSystemCheck();
 
-
+        $this->newLine();
+        $this->info('Database Check Complete');
+        $this->line('If errors were found, run check again to clear additional errors');
     }
 
-    /**
+    /***************************************************************************
      * Run User Portion of DB Check
-     */
+     ***************************************************************************/
     protected function userCheck()
     {
         $userObj = new UserMaintenanceService($this->fix);
@@ -64,7 +72,11 @@ class RunMaintenanceCommand extends Command
         $this->line('Checking User Profiles');
 
         // Check to see if any users are missing Settings Options
-        $missingSettings = $userObj->verifyUserSettings();
+        $progressBar = $this->output
+            ->createProgressBar($userObj->getUserCount('all'));
+        $missingSettings = $userObj->verifyUserSettings($progressBar);
+        $this->newLine();
+
         if ($missingSettings) {
             $this->newLine();
             $this->error('Users missing User Settings Data');
@@ -82,16 +94,20 @@ class RunMaintenanceCommand extends Command
         }
     }
 
-    /**
+    /***************************************************************************
      * Run Customer Portion of DB Check
-     */
+     ***************************************************************************/
     protected function customerCheck()
     {
+        $custObj = new CustomerMaintenanceService($this->fix);
+
+        // Check for missing data fields in all customer equipment
         $this->newLine();
         $this->line('Checking Customer Equipment for Missing Data Fields');
 
-        $custObj = new CustomerMaintenanceService($this->fix);
-        $missingDataFields = $custObj->verifyEquipmentDataFields();
+        $progressBar = $this->output->createProgressBar(EquipmentType::all()->count());
+        $missingDataFields = $custObj->verifyEquipmentDataFields($progressBar);
+        $this->newLine();
 
         if ($missingDataFields) {
             $this->error('Customer Equipment Data Fields Missing');
@@ -105,6 +121,126 @@ class RunMaintenanceCommand extends Command
             }
         } else {
             $this->info('No missing Customer Equipment Data Fields');
+        }
+
+        // Check for customers that have no child sites
+        $this->newLine();
+        $this->line('Checking for Abandoned Customers');
+        $progressBar = $this->output->createProgressBar(Customer::withTrashed()->count());
+        $lonelyCustomers = $custObj->verifyCustomerChildren($progressBar);
+        $this->newLine();
+
+        if ($lonelyCustomers) {
+            $this->error('Found ' . count($lonelyCustomers) . ' Customers without a site attached');
+            $this->table(
+                ['Customer ID', 'Customer Name'],
+                $lonelyCustomers,
+            );
+
+            if ($this->fix) {
+                $this->info('Deleted ' . count($lonelyCustomers) . ' Customer Profiles');
+            }
+        } else {
+            $this->info('Customer Check OK');
+        }
+    }
+
+    /***************************************************************************
+     * Filesystem Portion of the DB Check
+     ***************************************************************************/
+    protected function fileSystemCheck()
+    {
+        $fileObj = new FileMaintenanceService($this->fix);
+
+        // Show Disk Stats
+        $this->newLine();
+        $this->line('Available Drive Space');
+        $this->table(
+            ['Drive Size', 'Free Space', 'Used Space', '% Used'],
+            [$fileObj->getDiskSpace()],
+        );
+
+        $this->findEmptyDirectories($fileObj);
+        $this->findMissingFiles($fileObj);
+        $this->findOrphanedFiles($fileObj);
+    }
+
+    /**
+     * Find Directories without any files inside
+     */
+    protected function findEmptyDirectories($fileObj)
+    {
+        $this->newLine();
+        $this->line('Checking for empty Directories');
+
+        $directoryList = $fileObj->getDirectoryList();
+        $progressBar = $this->output->createProgressBar(count($directoryList) - 2);
+        $emptyDirectories = $fileObj->getEmptyDirectories($directoryList, $progressBar);
+        $this->newLine();
+
+        if ($emptyDirectories) {
+            $this->error('The following directories are empty and can be deleted');
+            foreach ($emptyDirectories as $dir) {
+                $this->line('     ' . $dir);
+            }
+
+            if ($this->fix) {
+                $this->info('Deleted ' . count($emptyDirectories) . ' empty directories');
+            }
+        } else {
+            $this->info('No Empty Directories Found');
+        }
+    }
+
+    /**
+     * Find Database Entries that do not have a file in the file system
+     */
+    protected function findMissingFiles($fileObj)
+    {
+        $this->newLine();
+        $this->line('Checking for Missing Files');
+        $progressBar = $this->output->createProgressBar(FileUpload::count());
+        $missingFiles = $fileObj->findMissingFiles($progressBar);
+        $this->newLine();
+
+        if ($missingFiles) {
+            $this->error('Found ' . count($missingFiles) . ' files missing from filesystem');
+            $this->table(
+                ['File ID', 'Disk', 'File Name'],
+                $missingFiles
+            );
+
+            if ($this->fix) {
+                $this->info('Deleted ' . count($missingFiles) . ' file entries from File Uploads');
+            }
+        } else {
+            $this->info('No Missing Files');
+        }
+    }
+
+    /**
+     * Find Files in filesystem that do not have a database pointer
+     */
+    protected function findOrphanedFiles($fileObj)
+    {
+        $this->newLine();
+        $this->line('Checking for Orphaned Files');
+        $fileList = $fileObj->getFileList();
+        $progressBar = $this->output->createProgressBar(count($fileList));
+        $orphanedFiles = $fileObj->getOrphanedFiles($fileList, $progressBar);
+        $this->newLine();
+
+        if ($orphanedFiles) {
+            $this->error('Found ' . count($orphanedFiles) . ' Orphaned Files');
+            foreach ($orphanedFiles as $orphan) {
+                $this->line('     ' . $orphan);
+            }
+
+            if ($this->fix) {
+                $this->info('Deleted ' . count($fileList) . ' Orphaned Files');
+            }
+        } else {
+            $this->info('No Orphaned Files Found');
         }
     }
 }
