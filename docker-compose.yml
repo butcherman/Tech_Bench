@@ -22,7 +22,7 @@ networks:
 #   volumes:
 #     - appData:/app
 #     - ./storageData/disks:/app/storage/app/
-#     - ./storageData/backups:/app/storage/backups/
+#     - ./backups:/app/storage/backups/
 #     - ./storageData/logs:/app/storage/logs
 #     - ./storageData/keystore:/app/keystore
 #   environment:

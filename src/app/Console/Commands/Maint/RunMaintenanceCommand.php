@@ -237,7 +237,7 @@ class RunMaintenanceCommand extends Command
             }
 
             if ($this->fix) {
-                $this->info('Deleted ' . count($fileList) . ' Orphaned Files');
+                $this->info('Deleted ' . count($orphanedFiles) . ' Orphaned Files');
             }
         } else {
             $this->info('No Orphaned Files Found');
