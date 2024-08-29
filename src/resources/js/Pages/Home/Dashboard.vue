@@ -1,7 +1,7 @@
 <template>
     <div>
         <Head title="Dashboard" />
-        <h4>Hello {{ app.user?.full_name }}</h4>
+        <h5>Hello {{ app.user?.full_name }}</h5>
         <p>
             You have
             <span class="text-primary">{{ app.userNotifications.new }}</span>
