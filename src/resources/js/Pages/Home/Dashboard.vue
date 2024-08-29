@@ -1,6 +1,19 @@
 <template>
     <div>
-        <UserNotifications />
+        <Head title="Dashboard" />
+        <h5>Hello {{ app.user?.full_name }}</h5>
+        <p>
+            You have
+            <span class="text-primary">{{ app.userNotifications.new }}</span>
+            new notifications
+        </p>
+        <Link
+            :href="$route('notifications.index')"
+            type="button"
+            class="btn btn-primary btn-sm rounded-5"
+        >
+            View Notifications
+        </Link>
         <div class="row my-4 resource-links">
             <div class="col">
                 <div class="card">
@@ -13,6 +26,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row my-4 resource-links">
             <div class="col">
                 <div class="card">
                     <div class="card-body">
@@ -30,8 +45,8 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import UserNotifications from "@/Components/User/UserNotifications.vue";
 import ResourceLinks from "@/Components/Home/ResourceLinks.vue";
+import { useAppStore } from "@/Store/AppStore";
 
 defineProps<{
     bookmarks: {
@@ -43,6 +58,8 @@ defineProps<{
         customers: customer[];
     };
 }>();
+
+const app = useAppStore();
 </script>
 
 <script lang="ts">

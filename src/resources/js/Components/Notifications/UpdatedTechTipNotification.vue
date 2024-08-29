@@ -1,7 +1,6 @@
 <template>
     <div>
-        <p class="text-center">Hello {{ app.user?.full_name }},</p>
-        <p class="text-center">Subject:</p>
+        <p>Hello {{ app.user?.full_name }},</p>
         <h4 class="text-center my-2">{{ tip_data.subject }}</h4>
         <p class="text-center">
             This Tech Tip has been updated with new information.

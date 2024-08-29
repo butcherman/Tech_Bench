@@ -33,7 +33,7 @@
                 </li>
                 <li class="nav-item">
                     <Link
-                        :href="$route('dashboard')"
+                        :href="$route('notifications.index')"
                         as="button"
                         title="Notifications"
                         class="btn btn-primary btn-sm rounded-circle position-relative"
