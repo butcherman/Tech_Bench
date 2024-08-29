@@ -13,8 +13,22 @@
                             @change="toggleCheckAll"
                         />
                     </th>
-                    <th>Subject:</th>
-                    <th>Date:</th>
+                    <th>
+                        <span
+                            v-if="markedNotifications.length"
+                            class="float-end"
+                        >
+                            <CheckmarkBadge
+                                tooltip="Mark Notifications as Read"
+                                @click="handleNotifications('read')"
+                            />
+                            <DeleteBadge
+                                tooltip="Delete Notifications"
+                                @click="handleNotifications('delete')"
+                            />
+                        </span>
+                        Subject:
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -42,13 +56,9 @@
                         @click="$emit('show-notification', notification)"
                     >
                         {{ notification.data.subject }}
-                    </td>
-                    <td
-                        class="pointer"
-                        :class="{ bold: notification.read_at === null }"
-                        @click="$emit('show-notification', notification)"
-                    >
-                        {{ notification.created_at }}
+                        <span class="float-end date-text">
+                            {{ notification.created_at }}
+                        </span>
                     </td>
                 </tr>
             </tbody>
@@ -57,12 +67,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { markedNotifications, allChecked } from "@/State/NotificationState";
+import CheckmarkBadge from "../_Base/Badges/CheckmarkBadge.vue";
+import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
 import { useAppStore } from "@/Store/AppStore";
+import { computed } from "vue";
+import {
+    markedNotifications,
+    allChecked,
+    handleNotifications,
+} from "@/State/NotificationState";
 
 defineEmits(["show-notification"]);
 const app = useAppStore();
+
 const indeterminate = computed<boolean>(
     () => markedNotifications.value.length > 0 && !allChecked.value
 );
@@ -79,5 +96,9 @@ const toggleCheckAll = (): void => {
 <style scoped lang="scss">
 .bold {
     font-weight: bold;
+}
+
+.date-text {
+    color: #999999;
 }
 </style>

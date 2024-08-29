@@ -1,6 +1,5 @@
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
-import { gsap } from "gsap/gsap-core";
 
 export const loading = ref<boolean>(false);
 export const markedNotifications = ref<string[]>([]);
@@ -8,10 +7,18 @@ export const activeNotification = ref<userNotification | undefined>();
 export const allChecked = ref<boolean>(false);
 
 /**
- * Assign the notification data that the view page will use to build view
+ * Show a selected notification
  */
-export const setActiveNotification = (notification: userNotification) => {
+export const openNotification = (notification: userNotification) => {
     activeNotification.value = notification;
+    markSingleNotification(notification.id);
+};
+
+/**
+ * Close the active notification
+ */
+export const closeNotification = () => {
+    activeNotification.value = undefined;
 };
 
 /**
@@ -37,6 +44,9 @@ export const handleNotifications = (action: "read" | "delete") => {
     );
 };
 
+/**
+ * Mark a single notification as read
+ */
 export const markSingleNotification = (id: string) => {
     router.post(route("handle-notifications"), {
         action: "read",
@@ -44,51 +54,12 @@ export const markSingleNotification = (id: string) => {
     });
 };
 
+/**
+ * Delete a single notification
+ */
 export const deleteSingleNotification = (id: string) => {
     router.post(route("handle-notifications"), {
         action: "delete",
         idList: [id],
     });
-};
-
-/**
- * Notification Animations
- */
-export const showNotification = () => {
-    console.log("show notification");
-
-    let timeline = gsap.timeline();
-    timeline.to("#notification-list", {
-        width: 0,
-        duration: 0.5,
-    });
-    timeline.to(
-        "#notification-data",
-        {
-            width: "100%",
-            duration: 0.5,
-            delay: 0.01,
-        },
-        "<"
-    );
-};
-
-export const hideNotification = () => {
-    console.log("hide notification");
-    activeNotification.value = undefined;
-
-    let timeline = gsap.timeline();
-    timeline.to("#notification-data", {
-        width: 0,
-        duration: 0.5,
-    });
-    timeline.to(
-        "#notification-list",
-        {
-            width: "100%",
-            duration: 0.5,
-            delay: 0.01,
-        },
-        "<"
-    );
 };
