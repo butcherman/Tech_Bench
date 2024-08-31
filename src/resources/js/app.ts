@@ -24,6 +24,11 @@ import { vTooltipDirective } from "./Directives/TooltipDirective";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "./Modules/FontAwesome.module";
 
+/**
+ * Import Laravel Echo
+ */
+import "./echo";
+
 /*
  *   Initialize App
  */

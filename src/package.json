@@ -8,7 +8,9 @@
     "devDependencies": {
         "axios": "^1.6",
         "chokidar": "^3.6",
+        "laravel-echo": "^1.16.1",
         "laravel-vite-plugin": "^1.0",
+        "pusher-js": "^8.4.0-rc2",
         "vite": "^5.2",
         "vite-plugin-mkcert": "^1.17.5"
     },
@@ -33,8 +35,7 @@
         "lodash": "^4.17",
         "pinia": "^2.1",
         "pretty-bytes": "^6.1",
-        "pusher-js": "^8.3",
-        "sass": "^1.63",
+        "sass": "1.77.6",
         "sass-loader": "^14.2",
         "tinymce": "^7.2",
         "typescript": "^5.4",
