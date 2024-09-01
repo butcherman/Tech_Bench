@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\TechTipObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy([TechTipObserver::class])]
 class TechTip extends Model
 {
     use HasFactory;
@@ -130,6 +133,11 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
+    public function TechTipView()
+    {
+        return $this->hasOne(TechTipView::class, 'tip_id', 'tip_id');
+    }
+
     /***************************************************************************
      * Additional Model Methods
      ***************************************************************************/
@@ -154,7 +162,32 @@ class TechTip extends Model
             $this->Recent()->detach($user);
         }
         $this->Recent()->attach($user);
+    }
 
+    /**
+     * Load data needed to show the Tech Tip to user
+     */
+    public function loadShowData(bool $isDeleted = false)
+    {
+        $this->load(['CreatedBy', 'UpdatedBy', 'TechTipType', 'TechTipView'])
+            ->CreatedBy->makeHidden(['email', 'initials', 'role_name', 'username']);
+
+        // If Tip has been updated, load user data for who updated it
+        if ($this->UpdatedBy) {
+            $this->UpdatedBy
+                ->makeHidden(['email', 'initials', 'role_name', 'username']);
+        }
+
+        if (!$isDeleted) {
+
+            // Increase Views counter
+            $this->TechTipView->increment('views');
+
+            // Add Tip to users Recent visits
+            if (request()->user()) {
+                $this->touchRecent(request()->user());
+            }
+        }
     }
 
     /**

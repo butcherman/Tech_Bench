@@ -22,7 +22,7 @@
                 <strong>ID: </strong>
                 {{ tipData.tip_id }}
             </span>
-            <span class="d-block d-sm-inline-block">
+            <span v-if="!publicShown" class="d-block d-sm-inline-block">
                 <strong>Tip Type: </strong>
                 {{ tipData.tech_tip_type.description }}
             </span>

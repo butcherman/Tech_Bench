@@ -37,12 +37,12 @@
 import verifyModal from "@/Modules/verifyModal";
 import Modal from "../_Base/Modal.vue";
 import TableStacked from "../_Base/TableStacked.vue";
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive } from "vue";
 import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     tipData: techTip;
-    permissions: basicPermissions;
+    permissions: techTipPermissions;
 }>();
 
 const statsModal = ref<InstanceType<typeof Modal> | null>(null);
@@ -53,7 +53,7 @@ const statsTable = reactive({
     updated_by: props.tipData.updated_id
         ? props.tipData.updated_by.full_name
         : "N/A",
-    views: props.tipData.views,
+    views: props.tipData.tech_tip_view.views,
     is_sticky: props.tipData.sticky,
     is_public: props.tipData.public,
 });

@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class TechTipEvent // implements ShouldBroadcast
+class TechTipEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -41,10 +41,11 @@ class TechTipEvent // implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Tech Tip Event on tech-tips channel');
+        Log::debug('Broadcasting Tech Tip Event on tech-tips channel ' .
+            $this->techTip->tip_id);
 
         return [
-            new PrivateChannel('tech-tips'),
+            new PrivateChannel('tech-tips.' . $this->techTip->tip_id),
         ];
     }
 }

@@ -20,6 +20,10 @@ type techTip = {
     file_upload?: fileUpload[];
     equipment_type: equipment[];
     tech_tip_type: tipType;
+    tech_tip_view: {
+        tip_id: number;
+        views: number;
+    };
 };
 
 type tipType = {
