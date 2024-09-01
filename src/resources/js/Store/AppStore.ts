@@ -77,38 +77,6 @@ export const useAppStore = defineStore("appStore", () => {
         newFlash.forEach((newAlert) => pushFlashMsg(newAlert));
     });
 
-    /***************************************************************************
-     * Notification Toast shows notifications across bottom right corner
-     ***************************************************************************/
-    const notificationToasts = ref<toastData[]>([]);
-
-    // Manually push a new Toast Message
-    const pushToastMsg = (
-        message: string,
-        title: string = "New Notification"
-    ) => {
-        let toastId = uuidv4();
-
-        notificationToasts.value.push({
-            id: toastId,
-            title,
-            message,
-        });
-        setToastTimeout(toastId);
-    };
-    // Manually Remove a Toast Message
-    const removeToastMsg = (id: string) => {
-        notificationToasts.value = notificationToasts.value.filter(
-            (toast) => toast.id !== id
-        );
-    };
-    // Auto Delete Toast after 15 seconds
-    const setToastTimeout = (id: string) => {
-        setTimeout(() => {
-            removeToastMsg(id);
-        }, 15000);
-    };
-
     /***************************************************************************/
     return {
         name,
@@ -126,9 +94,5 @@ export const useAppStore = defineStore("appStore", () => {
         flashAlerts,
         pushFlashMsg,
         removeFlashMsg,
-
-        notificationToasts,
-        pushToastMsg,
-        removeToastMsg,
     };
 });

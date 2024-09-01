@@ -14,7 +14,7 @@
             <AppFooter />
         </main>
         <AppNotificationToast />
-        <AppAutoLogout />
+        <!-- <AppAutoLogout /> -->
     </div>
 </template>
 

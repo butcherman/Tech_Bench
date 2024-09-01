@@ -42,6 +42,7 @@ type toastData = {
     id: string;
     title: string;
     message: string;
+    href?: string;
 };
 
 type breadcrumbs = {
