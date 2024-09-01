@@ -14,6 +14,11 @@
         >
             View Notifications
         </Link>
+
+        <br />
+        <Link href="/notification-test" class="btn btn-info mt-4"
+            >Test Notification</Link
+        >
         <div class="row my-4 resource-links">
             <div class="col">
                 <div class="card">
