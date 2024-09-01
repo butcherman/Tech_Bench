@@ -2,20 +2,7 @@
     <div>
         <Head title="Dashboard" />
         <h5>Hello {{ app.user?.full_name }}</h5>
-        <p>
-            You have
-            <span class="text-primary">{{ app.userNotifications.new }}</span>
-            new notifications
-        </p>
-        <Link
-            :href="$route('notifications.index')"
-            type="button"
-            class="btn btn-primary btn-sm rounded-5"
-        >
-            View Notifications
-        </Link>
 
-        <br />
         <Link href="/notification-test" class="btn btn-info mt-4"
             >Test Notification</Link
         >

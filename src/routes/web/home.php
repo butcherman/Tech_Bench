@@ -16,14 +16,9 @@ Route::middleware('auth.secure')->group(function () {
     Route::get('dashboard', DashboardController::class)
         ->name('dashboard')
         ->breadcrumb('Dashboard');
-    Route::get('notifications', [NotificationController::class, 'index'])
-        ->name('notifications.index')
-        ->breadcrumb('Notifications', 'dashboard');
     Route::get('about', AboutController::class)
         ->name('about')
         ->breadcrumb('About', 'dashboard');
-    Route::post('handle-notification', [NotificationController::class, 'update'])
-        ->name('handle-notifications');
     Route::get('phone-types', [PhoneTypesController::class, 'create'])
         ->name('phone-types');
     Route::get('file-types', [FileTypesController::class, 'create'])

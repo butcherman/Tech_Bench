@@ -32,22 +32,6 @@
                     </Link>
                 </li>
                 <li class="nav-item">
-                    <Link
-                        :href="$route('notifications.index')"
-                        as="button"
-                        title="Notifications"
-                        class="btn btn-primary btn-sm rounded-circle position-relative"
-                        v-tooltip
-                    >
-                        <fa-icon icon="fa-bell" />
-                        <span
-                            class="badge bg-warning position-absolute top-0 start-100 translate-middle rounded-pill"
-                        >
-                            {{ app.userNotifications.new }}
-                        </span>
-                    </Link>
-                </li>
-                <li class="nav-item">
                     <div class="dropdown">
                         <button
                             type="button"

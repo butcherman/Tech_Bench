@@ -37,9 +37,6 @@ export const useAppStore = defineStore("appStore", () => {
     const user = computed<user | null>(
         () => usePage<pageProps>().props.current_user
     );
-    const userNotifications = computed<userNotificationProp>(
-        () => usePage<pageProps>().props.user_notifications
-    );
 
     /***************************************************************************
      * User Session Data
@@ -83,7 +80,6 @@ export const useAppStore = defineStore("appStore", () => {
         companyName,
         logo,
         user,
-        userNotifications,
         idleTimeout,
         navbar,
         version,
