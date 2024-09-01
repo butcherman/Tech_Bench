@@ -17,7 +17,12 @@
             <TipDetailsTitle :tip-data="tipData" />
         </div>
         <TipEquipmentList :tip-equipment="tipEquipment" />
-        <TipDetails :tip-data="tipData" class="mt-4" />
+        <TipDetails
+            :tip-data="tipData"
+            :out-of-date="outOfDate"
+            class="mt-4"
+            @refreshed="outOfDate = false"
+        />
         <TipFiles :tip-files="tipFiles" class="mt-4" />
         <TipComments
             v-if="
@@ -41,7 +46,8 @@ import TipDetails from "@/Components/TechTips/TipDetails.vue";
 import TipFiles from "@/Components/TechTips/TipFiles.vue";
 import TipComments from "@/Components/TechTips/TipComments.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
-import { computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useAppStore } from "@/Store/AppStore";
 
 const props = defineProps<{
     tipData: techTip;
@@ -52,6 +58,21 @@ const props = defineProps<{
     isFav: boolean;
 }>();
 
+const appStore = useAppStore();
+
+onMounted(() => {
+    Echo.private(`tech-tips.${props.tipData.tip_id}`).listen(
+        ".TechTipEvent",
+        function (event: techTip) {
+            console.log(event);
+            if (event.updated_id !== appStore.user?.user_id) {
+                outOfDate.value = true;
+            }
+        }
+    );
+});
+
+const outOfDate = ref(false);
 const showManage = computed(() => {
     if (
         props.permissions.manage ||

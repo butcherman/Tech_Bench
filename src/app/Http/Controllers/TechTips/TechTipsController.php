@@ -70,12 +70,12 @@ class TechTipsController extends Controller
         $tech_tip->loadShowData();
 
         return Inertia::render('TechTips/Show', [
-            'tip-data' => $tech_tip,
-            'tip-equipment' => $tech_tip->EquipmentType,
-            'tip-files' => $tech_tip->FileUpload,
-            'tip-comments' => $tech_tip->TechTipComment,
-            'permissions' => BuildTechTipPermissions::build($request->user()),
-            'is-fav' => $tech_tip->isFav($request->user()),
+            'tip-data' => fn() => $tech_tip,
+            'tip-equipment' => fn() => $tech_tip->EquipmentType,
+            'tip-files' => fn() => $tech_tip->FileUpload,
+            'tip-comments' => fn() => $tech_tip->TechTipComment,
+            'permissions' => fn() => BuildTechTipPermissions::build($request->user()),
+            'is-fav' => fn() => $tech_tip->isFav($request->user()),
         ]);
     }
 

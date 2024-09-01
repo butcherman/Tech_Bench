@@ -6,7 +6,6 @@ use App\Events\File\FileDataDeletedEvent;
 use App\Models\TechTip;
 use App\Models\TechTipView;
 use Illuminate\Support\Facades\Log;
-use SebastianBergmann\Type\VoidType;
 
 class TechTipObserver
 {

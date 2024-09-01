@@ -36,8 +36,6 @@ class TechTipEvent implements ShouldBroadcast
 
     /**
      * Broadcast on Tech Tip Channel
-     *
-     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
@@ -47,5 +45,23 @@ class TechTipEvent implements ShouldBroadcast
         return [
             new PrivateChannel('tech-tips.' . $this->techTip->tip_id),
         ];
+    }
+
+    /**
+     * Since the model includes files, we will only broadcast some data
+     */
+    public function broadcastWith()
+    {
+        return [
+            'tip_id' => $this->techTip->tip_id,
+            'subject' => $this->techTip->subject,
+            'user_id' => $this->techTip->user_id,
+            'updated_id' => $this->techTip->updated_id,
+        ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'TechTipEvent';
     }
 }
