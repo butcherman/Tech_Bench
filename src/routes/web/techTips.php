@@ -88,7 +88,7 @@ Route::middleware('auth.secure')->group(function () {
                 ->create('Create Tech Tip')
                 ->show(
                     fn(TechTip|string $tech_tip) =>
-                    'Tip Details - ' . gettype($tech_tip) === 'object' ? $tech_tip->subject : $tech_tip
+                    gettype($tech_tip) === 'object' ? $tech_tip->subject : $tech_tip
                 )
                 ->edit('Edit Tech Tip');
         })->missing(function (Request $request) {
