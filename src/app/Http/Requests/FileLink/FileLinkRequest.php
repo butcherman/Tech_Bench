@@ -45,6 +45,7 @@ class FileLinkRequest extends FormRequest
         if ($this->session()->has('link-file')) {
             $fileList = $this->session()->pull('link-file');
             $timeline = FileLinkTimeline::create([
+                'link_id' => $newLink->link_id,
                 'added_by' => $this->user()->user_id,
             ]);
             $newLink->FileUpload()->syncWithPivotValues($fileList, [

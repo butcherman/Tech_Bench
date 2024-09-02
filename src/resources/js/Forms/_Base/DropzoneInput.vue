@@ -254,6 +254,7 @@ const reset = () => {
     nextTick(() => {
         errMessage.value = null;
         isDirty.value = false;
+        myDrop.options.autoProcessQueue = false;
     });
 };
 

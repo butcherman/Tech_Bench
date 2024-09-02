@@ -3,25 +3,25 @@
 namespace App\Events\FileLinks;
 
 use App\Models\FileLink;
-use App\Models\FileLinkTimeline;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class FileUploadedFromPublicEvent implements ShouldBroadcast
+class FileUploadedFromPrivateEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public FileLink $link, public FileLinkTimeline $timeline)
+    public function __construct(public FileLink $fileLink)
     {
-        Log::debug('File Uploaded from Public Event Called');
+        Log::debug('File Uploaded from Private Connection Event Called');
     }
 
     /**
@@ -30,12 +30,21 @@ class FileUploadedFromPublicEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('file-link.' . $this->link->link_id),
+            new Channel('file-links.' . $this->fileLink->link_hash),
         ];
     }
 
     public function broadcastAs()
     {
         return 'FileUploadedEvent';
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            // 'link_hash' => $this->fileLink->link_hash
+            'title' => 'New File Available',
+            'message' => 'Refresh page to see new file',
+        ];
     }
 }

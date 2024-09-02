@@ -63,6 +63,8 @@ const onLeave = (el: Element, done: () => void) => {
         onComplete: done,
     });
 };
+
+defineExpose({ pushMessage: notifications.pushToastMsg });
 </script>
 
 <style scoped lang="scss">

@@ -109,9 +109,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\FileLinks\UpdateLinkFilesListener',
         ],
         'App\Events\FileLinks\FileUploadedFromPublicEvent' => [
-            'App\Listeners\Notify\FileLinks\FileUploadFromPublicListener',
-            //////////////////// Move Me ////////////////////////////
+            'App\Listeners\FileLinks\FileUploadFromPublicListener',
         ],
+        'App\Events\FileLinks\FileUploadedFromPrivateEvent' => [],
     ];
 
     /**

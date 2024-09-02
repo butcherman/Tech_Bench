@@ -18,18 +18,10 @@ export const useBroadcastStore = defineStore("broadcastStore", () => {
         if (app.user) {
             Echo.private(`App.Models.User.${app.user.user_id}`).notification(
                 (data: toastData) => {
-                    console.log(data);
                     pushToastMsg(data.message, data.title, data.href);
                 }
             );
         }
-    };
-
-    /**
-     * Register to any private channel
-     */
-    const registerChannel = (channelName: string) => {
-        console.log(channelName);
     };
 
     /***************************************************************************
@@ -67,8 +59,8 @@ export const useBroadcastStore = defineStore("broadcastStore", () => {
 
     return {
         registerNotificationChannel,
-        registerChannel,
         notificationToasts,
         removeToastMsg,
+        pushToastMsg,
     };
 });

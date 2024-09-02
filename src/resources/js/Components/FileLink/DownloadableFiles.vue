@@ -10,9 +10,15 @@
                     pill
                     @click="addFileModal?.show()"
                 />
+                <AlertButton
+                    v-if="!public && !upToDate"
+                    text-variant="warning"
+                    title="Refresh to see new file uploaded"
+                />
                 <RefreshButton
                     v-if="!public"
                     :only="['timeline', 'uploaded-files']"
+                    @loading-complete="$emit('refreshed')"
                 />
                 {{ title }}:
             </div>
@@ -56,6 +62,7 @@
 import Table from "../_Base/Table.vue";
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
 import AddButton from "../_Base/Buttons/AddButton.vue";
+import AlertButton from "@/Components/_Base/Buttons/AlertButton.vue";
 import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
 import Modal from "../_Base/Modal.vue";
 import FileLinkFileForm from "@/Forms/FileLink/FileLinkFileForm.vue";
@@ -64,11 +71,13 @@ import prettyBytes from "pretty-bytes";
 import { ref, computed } from "vue";
 import { router } from "@inertiajs/vue3";
 
+defineEmits(["refreshed"]);
 const props = defineProps<{
     link: fileLink;
     fileList: fileLinkUpload[];
     public?: boolean;
     isAdmin?: boolean;
+    upToDate?: boolean;
 }>();
 
 const addFileModal = ref<InstanceType<typeof Modal> | null>(null);

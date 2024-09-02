@@ -9,7 +9,6 @@ type pageProps = {
     app: appProps;
     flash: flashData[];
     current_user: user | null;
-    user_notifications: userNotificationProp;
     idle_timeout: number;
     navbar: navbar[];
     breadcrumbs: breadcrumbs[];

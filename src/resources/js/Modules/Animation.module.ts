@@ -1,29 +1,43 @@
 import { gsap } from "gsap/gsap-core";
 
-export const growShow = (divId: string) => {
+export const growShow = (el: Element, done: () => void) => {
     let timeline = gsap.timeline();
 
     timeline
-        .to(`#${divId}`, {
-            height: "auto",
-            duration: 0.6,
-        })
-        .to(`#${divId}`, {
-            opacity: 1,
-            duration: 0.4,
-        });
+        .fromTo(
+            el,
+            {
+                height: 0,
+            },
+            {
+                height: "auto",
+                duration: 0.6,
+            }
+        )
+        .fromTo(
+            el,
+            {
+                opacity: 0,
+            },
+            {
+                opacity: 1,
+                duration: 0.4,
+                onComplete: done,
+            }
+        );
 };
 
-export const shrinkHide = (divId: string) => {
+export const shrinkHide = (el: Element, done: () => void) => {
     let timeline = gsap.timeline();
 
     timeline
-        .to(`#${divId}`, {
+        .to(el, {
             opacity: 0,
             duration: 0.4,
         })
-        .to(`#${divId}`, {
+        .to(el, {
             height: 0,
             duration: 0.6,
+            onComplete: done,
         });
 };

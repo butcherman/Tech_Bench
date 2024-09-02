@@ -30,7 +30,6 @@ const refresh = (): void => {
 
     router.reload({
         only: only,
-        preserveScroll: true,
         onFinish: () => {
             emit("loading-complete");
             loading.value = false;

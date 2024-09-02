@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\FileLinkObserver;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Support\Facades\Log;
 
+#[ObservedBy([FileLinkObserver::class])]
 class FileLink extends Model
 {
     use HasFactory;

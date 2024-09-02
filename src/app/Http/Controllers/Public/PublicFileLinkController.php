@@ -24,18 +24,15 @@ class PublicFileLinkController extends Controller
      */
     public function show(Request $request, FileLink $link)
     {
-        // Make sure link is valid
-        if (Carbon::parse($link->expire) < Carbon::now()) {
-            throw new FileLinkExpiredException($request, $link);
-        }
+        $this->validatePublicLink($request, $link);
 
         return Inertia::render('Public/FileLinks/Show', [
-            'link-data' => $link->only([
+            'link-data' => fn() => $link->only([
                 'instructions',
                 'allow_upload',
                 'link_hash',
             ]),
-            'link-files' => $link->FileUpload()
+            'link-files' => fn() => $link->FileUpload()
                 ->wherePivot('upload', false)
                 ->get()
                 ->makeHidden('pivot'),
@@ -43,16 +40,12 @@ class PublicFileLinkController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Upload a public file to the File Link
      */
     public function update(PublicFileLinkRequest $request, FileLink $link)
     {
+        $this->validatePublicLink($request, $link);
         $this->setFileData('fileLinks', $link->link_id);
-
-        // Make sure link is valid
-        if (Carbon::parse($link->expire) < Carbon::now()) {
-            throw new FileLinkExpiredException($request, $link);
-        }
 
         if ($request->file) {
             if ($savedFile = $this->getChunk($request)) {
@@ -91,5 +84,15 @@ class PublicFileLinkController extends Controller
         event(new FileUploadedFromPublicEvent($link, $timeline));
 
         return back()->with('success', 'Files Uploaded Successfully');
+    }
+
+    /**
+     * Verify that the link is valid
+     */
+    protected function validatePublicLink(Request $request, FileLink $fileLink)
+    {
+        if (Carbon::parse($fileLink->expire) < Carbon::now()) {
+            throw new FileLinkExpiredException($request, $fileLink);
+        }
     }
 }
