@@ -25,11 +25,18 @@ class FileLinkTimeline extends Model
      */
     public function FileUpload()
     {
-        return $this->hasMany(FileUpload::class, 'file_id', 'file_id');
+        return $this->hasManyThrough(
+            FileUpload::class,
+            FileLinkFile::class,
+            'timeline_id',
+            'file_id',
+            'timeline_id',
+            'file_id',
+        );
     }
 
     public function FileLinkNote()
     {
-        return $this->hasOne(FileLinkNote::class, 'link_note_id', 'link_note_id');
+        return $this->hasOne(FileLinkNote::class, 'timeline_id', 'timeline_id');
     }
 }
