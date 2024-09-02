@@ -24,11 +24,7 @@
             <h5 v-if="!timeline.length" class="text-center">
                 No Timeline Events Yet
             </h5>
-            <Transition
-                @before-enter="growShow"
-                @leave="shrinkHide"
-                :css="false"
-            >
+            <Transition @enter="growShow" @leave="shrinkHide" :css="false">
                 <ul v-if="showTimeline" class="list-group">
                     <li
                         v-for="event in timeline"
