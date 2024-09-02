@@ -4,7 +4,6 @@ namespace App\Events\FileLinks;
 
 use App\Models\FileLink;
 use App\Models\FileLinkTimeline;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -30,7 +29,7 @@ class FileUploadedFromPublicEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('file-link.' . $this->link->link_id),
+            new PrivateChannel('file-link.'.$this->link->link_id),
         ];
     }
 

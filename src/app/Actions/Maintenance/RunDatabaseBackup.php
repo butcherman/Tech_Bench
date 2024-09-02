@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Actions\Maintenance;
+
 use App\Exceptions\Maintenance\BackupFailedException;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class RunDatabaseBackup
 {
@@ -22,7 +23,7 @@ class RunDatabaseBackup
             throw new BackupFailedException('Not enough disk space');
         }
 
-        Artisan::call('backup:run', [], new ConsoleOutput());
+        Artisan::call('backup:run', [], new ConsoleOutput);
     }
 
     /**
@@ -35,10 +36,10 @@ class RunDatabaseBackup
         $usedSpace = $totalSpace - $freeSpace;
         $percentage = round(($usedSpace / $totalSpace * 100), 2);
 
-        Log::debug('Disk Free Space - ' . $freeSpace);
-        Log::debug('Total Disk Space - ' . $totalSpace);
-        Log::debug('Disk Used Space - ' . $usedSpace);
-        Log::debug('Disk Percentage Used - ' . $percentage . '%');
+        Log::debug('Disk Free Space - '.$freeSpace);
+        Log::debug('Total Disk Space - '.$totalSpace);
+        Log::debug('Disk Used Space - '.$usedSpace);
+        Log::debug('Disk Percentage Used - '.$percentage.'%');
 
         return $percentage > 70;
     }

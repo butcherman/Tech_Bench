@@ -1,15 +1,11 @@
 <?php
 
-use App\Enum\CrudAction;
-use App\Events\TechTips\TechTipEvent;
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Home\DownloadFileController;
 use App\Http\Controllers\Home\FileTypesController;
-use App\Http\Controllers\Home\NotificationController;
 use App\Http\Controllers\Home\PhoneTypesController;
 use App\Http\Controllers\Home\UploadImageController;
-use App\Models\TechTip;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth.secure')->group(function () {

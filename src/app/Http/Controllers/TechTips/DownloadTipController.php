@@ -15,7 +15,7 @@ class DownloadTipController extends Controller
      */
     public function __invoke(Request $request, TechTip $techTip)
     {
-        Log::info('Tech Tip ID ' . $techTip->tip_id . ' downloaded by ' .
+        Log::info('Tech Tip ID '.$techTip->tip_id.' downloaded by '.
             $request->user()->username);
 
         return Pdf::loadView('pdf.tech_tip', [

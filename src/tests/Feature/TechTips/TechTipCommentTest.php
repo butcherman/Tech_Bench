@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
 use App\Notifications\TechTips\TipCommentedNotification;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 

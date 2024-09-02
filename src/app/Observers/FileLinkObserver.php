@@ -25,7 +25,7 @@ class FileLinkObserver
     public function created(FileLink $fileLink): void
     {
         Log::info(
-            'New File Link created by ' . $this->user,
+            'New File Link created by '.$this->user,
             $fileLink->toArray()
         );
     }
@@ -36,7 +36,7 @@ class FileLinkObserver
     public function updated(FileLink $fileLink): void
     {
         Log::info(
-            'File Link Information updated by ' . $this->user,
+            'File Link Information updated by '.$this->user,
             $fileLink->toArray()
         );
     }
@@ -59,7 +59,7 @@ class FileLinkObserver
     public function deleted(FileLink $fileLink): void
     {
         Log::info(
-            'File Link deleted by ' . $this->user,
+            'File Link deleted by '.$this->user,
             $fileLink->toArray()
         );
     }

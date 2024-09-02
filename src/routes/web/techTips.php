@@ -16,8 +16,8 @@ use App\Http\Controllers\TechTips\TechTipTypesController;
 use App\Http\Controllers\TechTips\UploadTipFile;
 use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*******************************************************************************
  *                          Tech Tip Based Routes                              *
@@ -42,7 +42,7 @@ Route::middleware('auth.secure')->group(function () {
         Route::get('deleted-tips/{techTip}', ShowDeletedTipController::class)
             ->withTrashed()
             ->name('deleted-tips.show')
-            ->breadcrumb(fn(TechTip $techTip) => 'Tip Details - ' . $techTip->subject, 'admin.tech-tips.deleted-tips');
+            ->breadcrumb(fn (TechTip $techTip) => 'Tip Details - '.$techTip->subject, 'admin.tech-tips.deleted-tips');
         Route::get('restore-tip/{techTip}', [TechTipsController::class, 'restore'])
             ->name('restore')
             ->withTrashed();
@@ -87,8 +87,7 @@ Route::middleware('auth.secure')->group(function () {
             $breadcrumbs->index('Tech Tips')
                 ->create('Create Tech Tip')
                 ->show(
-                    fn(TechTip|string $tech_tip) =>
-                    gettype($tech_tip) === 'object' ? $tech_tip->subject : $tech_tip
+                    fn (TechTip|string $tech_tip) => gettype($tech_tip) === 'object' ? $tech_tip->subject : $tech_tip
                 )
                 ->edit('Edit Tech Tip');
         })->missing(function (Request $request) {

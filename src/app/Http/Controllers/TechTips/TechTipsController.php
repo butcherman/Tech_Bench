@@ -4,7 +4,6 @@ namespace App\Http\Controllers\TechTips;
 
 use App\Actions\BuildTechTipPermissions;
 use App\Enum\CrudAction;
-use App\Events\File\FileDataDeletedEvent;
 use App\Events\TechTips\TechTipEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\TechTipRequest;
@@ -13,7 +12,6 @@ use App\Models\TechTip;
 use App\Models\TechTipType;
 use App\Traits\FileTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class TechTipsController extends Controller
@@ -54,7 +52,7 @@ class TechTipsController extends Controller
     {
         $newTip = $request->createTechTip();
 
-        event(new TechTipEvent($newTip, CrudAction::Create, !$request->suppress));
+        event(new TechTipEvent($newTip, CrudAction::Create, ! $request->suppress));
 
         return redirect()
             ->route('tech-tips.show', $newTip->slug)
@@ -70,12 +68,12 @@ class TechTipsController extends Controller
         $tech_tip->loadShowData();
 
         return Inertia::render('TechTips/Show', [
-            'tip-data' => fn() => $tech_tip,
-            'tip-equipment' => fn() => $tech_tip->EquipmentType,
-            'tip-files' => fn() => $tech_tip->FileUpload,
-            'tip-comments' => fn() => $tech_tip->TechTipComment,
-            'permissions' => fn() => BuildTechTipPermissions::build($request->user()),
-            'is-fav' => fn() => $tech_tip->isFav($request->user()),
+            'tip-data' => fn () => $tech_tip,
+            'tip-equipment' => fn () => $tech_tip->EquipmentType,
+            'tip-files' => fn () => $tech_tip->FileUpload,
+            'tip-comments' => fn () => $tech_tip->TechTipComment,
+            'permissions' => fn () => BuildTechTipPermissions::build($request->user()),
+            'is-fav' => fn () => $tech_tip->isFav($request->user()),
         ]);
     }
 
@@ -101,7 +99,7 @@ class TechTipsController extends Controller
     {
         $tipData = $request->updateTechTip();
 
-        event(new TechTipEvent($tipData, CrudAction::Update, !$request->suppress));
+        event(new TechTipEvent($tipData, CrudAction::Update, ! $request->suppress));
 
         return redirect()->route('tech-tips.show', $tipData->slug)
             ->with('success', __('tips.updated'));
@@ -142,11 +140,7 @@ class TechTipsController extends Controller
     {
         $this->authorize('manage', TechTip::class);
 
-
         $techTip->forceDelete();
-
-
-
 
         return redirect()->route('admin.tech-tips.deleted-tips')->with('warning', __('tips.deleted'));
     }

@@ -24,7 +24,7 @@ class RunGarbageCollectionCommand extends Command
     {
         $this->line('Running Garbage Collection');
 
-        new GarbageCollectionService();
+        new GarbageCollectionService;
 
         $this->info('Garbage Collection Completed');
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Maint;
+
 use App\Models\CustomerFile;
 use App\Models\FileLinkFile;
 use App\Models\FileUpload;
@@ -38,7 +39,7 @@ class FileMaintenanceService
 
         // Remove any special files
         foreach ($specialFiles as $spFile) {
-            $specialList = preg_grep('/' . $spFile . '/i', $allFiles);
+            $specialList = preg_grep('/'.$spFile.'/i', $allFiles);
             foreach ($specialList as $key => $special) {
                 unset($allFiles[$key]);
             }
@@ -46,7 +47,7 @@ class FileMaintenanceService
 
         // Remove any special folders
         foreach ($specialFolder as $spFolder) {
-            $specialList = preg_grep('/^' . $spFolder . '\//i', $allFiles);
+            $specialList = preg_grep('/^'.$spFolder.'\//i', $allFiles);
             foreach ($specialList as $key => $special) {
                 unset($allFiles[$key]);
             }
@@ -68,11 +69,11 @@ class FileMaintenanceService
             $dbFile = FileUpload::where('file_name', $parts['basename'])->get();
 
             // If file was not found, move on to the next
-            if (!$dbFile) {
+            if (! $dbFile) {
                 $orphaned[] = $fileUpload;
 
                 if ($this->fix) {
-                    Log::notice('Deleting Orphaned File - ' . $fileUpload);
+                    Log::notice('Deleting Orphaned File - '.$fileUpload);
                     Storage::disk('local')->delete($fileUpload);
                 }
             } else {
@@ -80,18 +81,19 @@ class FileMaintenanceService
                 $valid = false;
                 foreach ($dbFile as $db) {
                     $dbPath = Storage::disk($db->disk)
-                        ->path($db->folder . DIRECTORY_SEPARATOR . $db->file_name);
+                        ->path($db->folder.DIRECTORY_SEPARATOR.$db->file_name);
                     $stPath = Storage::disk('local')->path($fileUpload);
 
-                    if ($dbPath === $stPath)
+                    if ($dbPath === $stPath) {
                         $valid = true;
+                    }
                 }
 
-                if (!$valid) {
+                if (! $valid) {
                     $orphaned[] = $fileUpload;
 
                     if ($this->fix) {
-                        Log::notice('Deleting Orphaned File - ' . $fileUpload);
+                        Log::notice('Deleting Orphaned File - '.$fileUpload);
                         Storage::disk('local')->delete($fileUpload);
                     }
                 }
@@ -120,17 +122,17 @@ class FileMaintenanceService
 
             $files = count(Storage::files($directory));
             $dirList = count(Storage::directories($directory));
-            Log::debug('Directory ' . $directory . ' files:', [
+            Log::debug('Directory '.$directory.' files:', [
                 'files' => $files,
                 'sub-directories' => $dirList,
             ]);
 
-            if (!$files && !$dirList) {
+            if (! $files && ! $dirList) {
                 $emptyList[] = $directory;
-                Log::debug('Empty Directory Found ' . $directory);
+                Log::debug('Empty Directory Found '.$directory);
 
                 if ($this->fix) {
-                    Log::notice('Deleting empty Directory - ' . $directory);
+                    Log::notice('Deleting empty Directory - '.$directory);
                     Storage::deleteDirectory($directory);
                 }
             }
@@ -158,12 +160,12 @@ class FileMaintenanceService
             }
 
             // Verify that the file exists
-            if (Storage::disk($dbFile->disk)->missing($dbFile->folder . DIRECTORY_SEPARATOR . $dbFile->file_name)) {
+            if (Storage::disk($dbFile->disk)->missing($dbFile->folder.DIRECTORY_SEPARATOR.$dbFile->file_name)) {
                 Log::notice('Found Missing File', $dbFile->toArray());
                 $missingList[] = [
                     'file_id' => $dbFile->file_id,
                     'disk' => $dbFile->disk,
-                    'file_name' => $dbFile->file_name
+                    'file_name' => $dbFile->file_name,
                 ];
 
                 if ($this->fix) {
@@ -191,7 +193,7 @@ class FileMaintenanceService
         try {
             $fileUpload->delete();
         } catch (Exception $e) {
-            Log::error('Problem while trying to delete file - ' . $e->getMessage());
+            Log::error('Problem while trying to delete file - '.$e->getMessage());
         }
     }
 
@@ -208,7 +210,7 @@ class FileMaintenanceService
             'free_space' => $this->readableFileSize($freeSpace),
             'used_space' => $this->readableFileSize($usedSpace),
             'total_space' => $this->readableFileSize($totalSpace),
-            'percentage' => round(($usedSpace / $totalSpace * 100), 2) . '%',
+            'percentage' => round(($usedSpace / $totalSpace * 100), 2).'%',
         ];
     }
 
@@ -220,6 +222,6 @@ class FileMaintenanceService
         $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $factor = floor((strlen($bytes) - 1) / 3);
 
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).@$size[$factor];
     }
 }

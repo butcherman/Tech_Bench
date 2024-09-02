@@ -3,9 +3,7 @@
 namespace App\Service\Maint;
 
 use Exception;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,7 +43,7 @@ class GarbageCollectionService
         $fileList = Storage::files('chunks');
 
         if (count($fileList)) {
-            Log::info('Found ' . count($fileList) . ' leftover file Chunks');
+            Log::info('Found '.count($fileList).' leftover file Chunks');
 
             try {
                 Log::info('Deleting File chunks');

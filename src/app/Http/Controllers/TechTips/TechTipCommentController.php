@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use App\Events\TechTips\TipCommentedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\TechTipCommentRequest;
 use App\Models\TechTip;
@@ -74,7 +73,7 @@ class TechTipCommentController extends Controller
         }
 
         Log::notice(
-            'Tech Tip Comment restored by ' . $request->user()->username,
+            'Tech Tip Comment restored by '.$request->user()->username,
             $comment->toArray()
         );
 

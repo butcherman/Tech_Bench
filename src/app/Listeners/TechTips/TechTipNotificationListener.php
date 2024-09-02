@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Notifications\TechTips\NewTechTipNotification;
 use App\Notifications\TechTips\UpdatedTechTipNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 

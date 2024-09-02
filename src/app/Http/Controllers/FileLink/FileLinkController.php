@@ -10,7 +10,6 @@ use App\Http\Resources\FileLinkTableResource;
 use App\Models\FileLink;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class FileLinkController extends Controller
@@ -23,7 +22,7 @@ class FileLinkController extends Controller
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLinks/Index', [
-            'link-list' => fn() => $request->user()->FileLink,
+            'link-list' => fn () => $request->user()->FileLink,
         ]);
     }
 
@@ -62,14 +61,14 @@ class FileLinkController extends Controller
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLinks/Show', [
-            'link' => fn() => $link,
-            'table-data' => fn() => FileLinkTableResource::make($link),
-            'timeline' => fn() => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
-            'downloadable-files' => fn() => $link->FileUpload()
+            'link' => fn () => $link,
+            'table-data' => fn () => FileLinkTableResource::make($link),
+            'timeline' => fn () => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
+            'downloadable-files' => fn () => $link->FileUpload()
                 ->wherePivot('upload', false)
                 ->get()
                 ->makeVisible(['created_at']),
-            'uploaded-files' => fn() => $link->FileUpload()
+            'uploaded-files' => fn () => $link->FileUpload()
                 ->wherePivot('upload', true)
                 ->get()
                 ->makeVisible(['created_at']),
@@ -84,7 +83,7 @@ class FileLinkController extends Controller
         $this->authorize('update', $link);
 
         return Inertia::render('FileLinks/Edit', [
-            'link' => $link->mergeCasts(['expire' => 'datetime:Y-m-d'])
+            'link' => $link->mergeCasts(['expire' => 'datetime:Y-m-d']),
         ]);
     }
 
@@ -94,8 +93,6 @@ class FileLinkController extends Controller
     public function update(FileLinkRequest $request, FileLink $link)
     {
         $link->update($request->all());
-
-
 
         return redirect(route('links.show', $link->link_id))
             ->with('success', 'Link Information Updated');
@@ -109,8 +106,6 @@ class FileLinkController extends Controller
         $this->authorize('delete', $link);
 
         $link->delete();
-
-
 
         return redirect(route('links.index'))
             ->with('danger', 'File Link Deleted');

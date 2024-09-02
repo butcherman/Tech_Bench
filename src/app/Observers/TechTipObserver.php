@@ -34,13 +34,12 @@ class TechTipObserver
                 'tip_id' => $techTip->tip_id,
                 'user' => $this->user,
             ]);
-        } else if (request()->route() !== null && !request()->routeIs('dashboard')) {
+        } elseif (request()->route() !== null && ! request()->routeIs('dashboard')) {
             // We do not log a tip being retrieved as part of a queued job
             Log::debug('Tech Tip being viewed', [
                 'tip_id' => $techTip->tip_id,
                 'user' => $this->user,
             ]);
-
 
         }
     }
@@ -51,7 +50,7 @@ class TechTipObserver
     public function created(TechTip $techTip): void
     {
         Log::info(
-            'New Tech Tip created by ' . $this->user,
+            'New Tech Tip created by '.$this->user,
             $techTip->toArray()
         );
 
@@ -65,7 +64,7 @@ class TechTipObserver
     public function updated(TechTip $techTip): void
     {
         Log::info(
-            'Tech Tip has been updated by ' . $this->user,
+            'Tech Tip has been updated by '.$this->user,
             $techTip->toArray()
         );
     }
@@ -76,7 +75,7 @@ class TechTipObserver
     public function deleted(TechTip $techTip): void
     {
         Log::notice(
-            'Tech Tip has been disabled by ' . $this->user,
+            'Tech Tip has been disabled by '.$this->user,
             [
                 'tip_id' => $techTip->tip_id,
                 'subject' => $techTip->subject,
@@ -90,7 +89,7 @@ class TechTipObserver
     public function restored(TechTip $techTip): void
     {
         Log::notice(
-            'A Disabled Tech Tip has been restored by ' . $this->user,
+            'A Disabled Tech Tip has been restored by '.$this->user,
             [
                 'tip_id' => $techTip->tip_id,
                 'subject' => $techTip->subject,
@@ -117,7 +116,7 @@ class TechTipObserver
     public function forceDeleted(TechTip $techTip): void
     {
         Log::notice(
-            'A Tech Tip has been deleted by ' . $this->user,
+            'A Tech Tip has been deleted by '.$this->user,
             [
                 'tip_id' => $techTip->tip_id,
                 'subject' => $techTip->subject,

@@ -5,7 +5,6 @@ namespace App\Listeners\FileLinks;
 use App\Events\FileLinks\FileUploadedFromPublicEvent;
 use App\Notifications\FileLinks\GuestFileUploadedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
 class FileUploadFromPublicListener implements ShouldQueue

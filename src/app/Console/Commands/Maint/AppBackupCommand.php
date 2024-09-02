@@ -22,6 +22,6 @@ class AppBackupCommand extends Command
      */
     public function handle()
     {
-        new RunDatabaseBackup();
+        new RunDatabaseBackup;
     }
 }

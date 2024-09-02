@@ -52,7 +52,7 @@ class CheckCertificateJob // implements ShouldQueue
         $this->notifyUsers = User::where('role_id', 1)->get();
 
         // Check if the certificate is valid or not
-        if (!$this->certData) {
+        if (! $this->certData) {
             Notification::send($this->notifyUsers, new CertificateInvalidNotification);
             Log::critical('SSL Certificate is invalid.  Please upload a valid SSL Certificate!!');
 
@@ -72,7 +72,7 @@ class CheckCertificateJob // implements ShouldQueue
 
         if (in_array($daysToExpire, $this->notifyDays)) {
             Notification::send($this->notifyUsers, new CertificateExpiresSoonNotification($daysToExpire));
-            Log::warning('SSL Certificate will expire in ' . $daysToExpire . ' days.  Please take action before certificate is expired');
+            Log::warning('SSL Certificate will expire in '.$daysToExpire.' days.  Please take action before certificate is expired');
 
             return;
         }

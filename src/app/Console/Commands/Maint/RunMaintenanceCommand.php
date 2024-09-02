@@ -9,15 +9,16 @@ use App\Models\User;
 use App\Service\Maint\CustomerMaintenanceService;
 use App\Service\Maint\FileMaintenanceService;
 use App\Service\Maint\UserMaintenanceService;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class RunMaintenanceCommand extends Command
 {
     protected $signature = 'app:maintenance {--f|fix : Automatically fix any issues}';
+
     protected $description = 'Check for missing data keys in DB and missing/rogue files in filesystem';
 
     protected $fix = false;
+
     protected $reportData = [];
 
     /**
@@ -87,7 +88,7 @@ class RunMaintenanceCommand extends Command
 
             if ($this->fix) {
                 $userObj->fixUserSettings($missingSettings);
-                $this->info(count($missingSettings) . ' User Profiles Fixed');
+                $this->info(count($missingSettings).' User Profiles Fixed');
             }
         } else {
             $this->info('User Profiles OK');
@@ -131,14 +132,14 @@ class RunMaintenanceCommand extends Command
         $this->newLine();
 
         if ($lonelyCustomers) {
-            $this->error('Found ' . count($lonelyCustomers) . ' Customers without a site attached');
+            $this->error('Found '.count($lonelyCustomers).' Customers without a site attached');
             $this->table(
                 ['Customer ID', 'Customer Name'],
                 $lonelyCustomers,
             );
 
             if ($this->fix) {
-                $this->info('Deleted ' . count($lonelyCustomers) . ' Customer Profiles');
+                $this->info('Deleted '.count($lonelyCustomers).' Customer Profiles');
             }
         } else {
             $this->info('Customer Check OK');
@@ -181,11 +182,11 @@ class RunMaintenanceCommand extends Command
         if ($emptyDirectories) {
             $this->error('The following directories are empty and can be deleted');
             foreach ($emptyDirectories as $dir) {
-                $this->line('     ' . $dir);
+                $this->line('     '.$dir);
             }
 
             if ($this->fix) {
-                $this->info('Deleted ' . count($emptyDirectories) . ' empty directories');
+                $this->info('Deleted '.count($emptyDirectories).' empty directories');
             }
         } else {
             $this->info('No Empty Directories Found');
@@ -204,14 +205,14 @@ class RunMaintenanceCommand extends Command
         $this->newLine();
 
         if ($missingFiles) {
-            $this->error('Found ' . count($missingFiles) . ' files missing from filesystem');
+            $this->error('Found '.count($missingFiles).' files missing from filesystem');
             $this->table(
                 ['File ID', 'Disk', 'File Name'],
                 $missingFiles
             );
 
             if ($this->fix) {
-                $this->info('Deleted ' . count($missingFiles) . ' file entries from File Uploads');
+                $this->info('Deleted '.count($missingFiles).' file entries from File Uploads');
             }
         } else {
             $this->info('No Missing Files');
@@ -231,13 +232,13 @@ class RunMaintenanceCommand extends Command
         $this->newLine();
 
         if ($orphanedFiles) {
-            $this->error('Found ' . count($orphanedFiles) . ' Orphaned Files');
+            $this->error('Found '.count($orphanedFiles).' Orphaned Files');
             foreach ($orphanedFiles as $orphan) {
-                $this->line('     ' . $orphan);
+                $this->line('     '.$orphan);
             }
 
             if ($this->fix) {
-                $this->info('Deleted ' . count($orphanedFiles) . ' Orphaned Files');
+                $this->info('Deleted '.count($orphanedFiles).' Orphaned Files');
             }
         } else {
             $this->info('No Orphaned Files Found');

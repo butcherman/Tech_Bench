@@ -27,7 +27,7 @@ class TechTipCommentObserver
         event(new TipCommentedEvent($techTipComment));
 
         Log::info(
-            'New Tech Tip Comment created by ' . $this->user,
+            'New Tech Tip Comment created by '.$this->user,
             $techTipComment->toArray()
         );
     }
@@ -38,7 +38,7 @@ class TechTipCommentObserver
     public function updated(TechTipComment $techTipComment): void
     {
         Log::info(
-            'A Tech Tip Comment has been updated by ' . $this->user,
+            'A Tech Tip Comment has been updated by '.$this->user,
             $techTipComment->toArray()
         );
     }
@@ -49,7 +49,7 @@ class TechTipCommentObserver
     public function deleted(TechTipComment $techTipComment): void
     {
         Log::notice(
-            'Tech Tip Comment has been deleted by ' . $this->user,
+            'Tech Tip Comment has been deleted by '.$this->user,
             $techTipComment->toArray()
         );
     }

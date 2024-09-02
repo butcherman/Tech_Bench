@@ -29,16 +29,16 @@ class CleanupImageFoldersCommand extends Command
         $service->handle();
 
         $this->newLine();
-        $this->info('Found ' . $service->getFileCount() . ' orphaned image files.');
+        $this->info('Found '.$service->getFileCount().' orphaned image files.');
         $this->newLine();
 
         if ($this->option('read-only')) {
             $this->info('File List: ');
             foreach ($service->getFileList() as $fileData) {
-                $this->line('    ' . $fileData);
+                $this->line('    '.$fileData);
             }
         } else {
-            $this->info('Deleted ' . $service->getFileCount() . ' files');
+            $this->info('Deleted '.$service->getFileCount().' files');
         }
 
         $this->newLine();

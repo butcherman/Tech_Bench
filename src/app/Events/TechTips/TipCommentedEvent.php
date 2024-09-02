@@ -3,7 +3,6 @@
 namespace App\Events\TechTips;
 
 use App\Models\TechTipComment;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -28,11 +27,11 @@ class TipCommentedEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Tech Tip Event on tech-tips channel ' .
+        Log::debug('Broadcasting Tech Tip Event on tech-tips channel '.
             $this->comment->tip_id);
 
         return [
-            new PrivateChannel('tech-tips.' . $this->comment->tip_id),
+            new PrivateChannel('tech-tips.'.$this->comment->tip_id),
         ];
     }
 

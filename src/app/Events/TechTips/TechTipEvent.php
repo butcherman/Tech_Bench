@@ -39,11 +39,11 @@ class TechTipEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Tech Tip Event on tech-tips channel ' .
+        Log::debug('Broadcasting Tech Tip Event on tech-tips channel '.
             $this->techTip->tip_id);
 
         return [
-            new PrivateChannel('tech-tips.' . $this->techTip->tip_id),
+            new PrivateChannel('tech-tips.'.$this->techTip->tip_id),
         ];
     }
 

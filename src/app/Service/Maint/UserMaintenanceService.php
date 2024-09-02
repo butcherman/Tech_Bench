@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Service\Maint;
+
 use App\Models\User;
 use App\Models\UserRole;
-use App\Models\UserRolePermissionType;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
 

@@ -5,8 +5,6 @@ namespace App\Events\FileLinks;
 use App\Models\FileLink;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -30,7 +28,7 @@ class FileUploadedFromPrivateEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('file-links.' . $this->fileLink->link_hash),
+            new Channel('file-links.'.$this->fileLink->link_hash),
         ];
     }
 

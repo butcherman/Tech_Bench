@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Maint;
+
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
@@ -28,7 +29,7 @@ class CustomerMaintenanceService
         $customerList = Customer::withTrashed()->get();
         foreach ($customerList as $customer) {
             if ($customer->site_count === 0) {
-                Log::debug('Customer ' . $customer->name . ' has no sites attached');
+                Log::debug('Customer '.$customer->name.' has no sites attached');
                 $failed[] = $customer->only(['cust_id', 'name']);
 
                 if ($this->fix) {
@@ -44,7 +45,7 @@ class CustomerMaintenanceService
     }
 
     /**
-     * Cycle through all equipment and customers to validate all Equipment Data 
+     * Cycle through all equipment and customers to validate all Equipment Data
      * Fields exist
      */
     public function verifyEquipmentDataFields(ProgressBar $progressBar)
@@ -54,7 +55,7 @@ class CustomerMaintenanceService
         $missingData = [];
 
         foreach ($equipList as $equip) {
-            Log::debug('Verifying Customer Equipment Data Fields for ' . $equip->name);
+            Log::debug('Verifying Customer Equipment Data Fields for '.$equip->name);
             $missing = $this->verifyCustomerData($equip);
             if (count($missing) > 0) {
                 $missingData = array_merge($missingData, $missing);
@@ -81,7 +82,7 @@ class CustomerMaintenanceService
             if (count($missingFields) > 0) {
                 $missingData[] = [
                     'cust_equip_id' => $custEquip->cust_equip_id,
-                    'missing_field_id' => $missingFields->flatten()
+                    'missing_field_id' => $missingFields->flatten(),
                 ];
 
                 if ($this->fix) {

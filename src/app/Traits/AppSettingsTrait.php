@@ -56,7 +56,7 @@ trait AppSettingsTrait
     protected function saveSettingsArray($settingArray, $prefix = '')
     {
         foreach ($settingArray as $key => $value) {
-            $newKey = $prefix !== '' ? $prefix . '.' . $key : $key;
+            $newKey = $prefix !== '' ? $prefix.'.'.$key : $key;
 
             $this->saveSettings($newKey, $value);
         }

@@ -33,7 +33,7 @@ class CertificateExpiresSoonNotification extends Notification implements ShouldQ
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The SSL Certificate is set to expire in ' . $this->days . ' days.')
+            ->line('The SSL Certificate is set to expire in '.$this->days.' days.')
             ->line('Please take action before the certificate expires!')
             ->action('Take Action', route('admin.security.index'));
     }

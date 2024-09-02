@@ -10,13 +10,12 @@ class BackupFailedException extends Exception
     public function report()
     {
 
-        Log::error('Backup Process Failed.  Reason - ' . $this->getMessage());
-
+        Log::error('Backup Process Failed.  Reason - '.$this->getMessage());
 
     }
 
     public function render()
     {
-        return back()->withErrors('Backup Failed.  Reason - ' . $this->getMessage());
+        return back()->withErrors('Backup Failed.  Reason - '.$this->getMessage());
     }
 }

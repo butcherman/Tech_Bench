@@ -29,6 +29,6 @@ class RunBackupJob implements ShouldBeUnique, ShouldQueue
     public function handle(): void
     {
         // Artisan::call('backup:run');
-        new RunDatabaseBackup();
+        new RunDatabaseBackup;
     }
 }

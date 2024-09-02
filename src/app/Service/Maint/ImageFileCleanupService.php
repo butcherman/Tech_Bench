@@ -2,18 +2,20 @@
 
 namespace App\Service\Maint;
 
-use DOMDocument;
 use App\Models\CustomerNote;
 use App\Models\FileLink;
 use App\Models\FileLinkNote;
 use App\Models\TechTip;
+use DOMDocument;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ImageFileCleanupService
 {
     protected $storage;
+
     protected $logoFiles;
+
     protected $uploadedFiles;
 
     public function __construct(protected bool $readOnly = false)
@@ -26,7 +28,7 @@ class ImageFileCleanupService
         $this->logoFiles = $this->cleanLogoFolder();
         $this->uploadedFiles = $this->cleanUploadedFolder();
 
-        if (!$this->readOnly) {
+        if (! $this->readOnly) {
             $this->removeFiles($this->logoFiles);
             $this->removeFiles($this->uploadedFiles);
         }
@@ -60,7 +62,7 @@ class ImageFileCleanupService
             Log::debug('File Data from Logo Folder', $logoData);
 
             if ($logoData['filename'] !== $currentLogo) {
-                Log::debug('Unused Logo File Found -' . $logoFile);
+                Log::debug('Unused Logo File Found -'.$logoFile);
                 $clearList[] = $logoFile;
             }
         }
@@ -83,8 +85,8 @@ class ImageFileCleanupService
         foreach ($fileList as $imgFile) {
             $imgData = pathinfo($imgFile);
 
-            if (!in_array($imgData['filename'], $foundList)) {
-                Log::debug('Unused Uploaded File found - ' . $imgFile);
+            if (! in_array($imgData['filename'], $foundList)) {
+                Log::debug('Unused Uploaded File found - '.$imgFile);
                 $clearList[] = $imgFile;
             }
         }
@@ -98,11 +100,11 @@ class ImageFileCleanupService
     protected function removeFiles(array $fileList)
     {
         foreach ($fileList as $fileData) {
-            Log::debug('Deleting File - ' . $fileData);
+            Log::debug('Deleting File - '.$fileData);
             $this->storage->delete($fileData);
         }
 
-        Log::info('Deleted ' . count($fileList) . ' files from Public Disk', $fileList);
+        Log::info('Deleted '.count($fileList).' files from Public Disk', $fileList);
     }
 
     /**
@@ -110,7 +112,7 @@ class ImageFileCleanupService
      */
     protected function getImageTags()
     {
-        $document = new DOMDocument();
+        $document = new DOMDocument;
         $modelList = [
             CustomerNote::class => 'details',
             FileLink::class => 'instructions',
@@ -131,7 +133,7 @@ class ImageFileCleanupService
 
                     foreach ($tagList as $tag) {
                         // If the entire image is stored in the database, we will not parse it
-                        if (!preg_match('/^data:image/', $tag->getAttribute('src'))) {
+                        if (! preg_match('/^data:image/', $tag->getAttribute('src'))) {
                             $img = $tag->getAttribute('src');
                             $imgProperties = pathinfo($img);
                             $foundImages[] = $imgProperties['filename'];

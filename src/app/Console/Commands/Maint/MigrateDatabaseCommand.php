@@ -2,19 +2,17 @@
 
 namespace App\Console\Commands\Maint;
 
-use Exception;
 use App\Models\CustomerFile;
 use App\Models\TechTipFile;
-use Illuminate\Console\Command;
-
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Schema;
-
 use App\Traits\FileTrait;
+use Exception;
+use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @codeCoverageIgnore
@@ -24,9 +22,11 @@ class MigrateDatabaseCommand extends Command
     use FileTrait;
 
     protected $signature = 'database:migrate {--y|yes}';
+
     protected $description = 'Because of the massive changes from version 5 to 6, this script is needed to properly update the database';
 
     protected $database;
+
     protected $latestVersion;
 
     //  All of the tables in the Version 5 database
@@ -86,43 +86,47 @@ class MigrateDatabaseCommand extends Command
         $this->line('---------------------------------------------------------------');
 
         //  Make sure that this process is actually needed
-        if (!$this->isMigrationNecessary()) {
+        if (! $this->isMigrationNecessary()) {
             $this->newLine();
             $this->info('Your Database is at the proper version');
             $this->info('Run `php artisan migrate` to update the tables');
             $this->newLine();
+
             return 0;
         }
 
         //  Using the --yes option will bypass the confirmation message
-        if (!$this->option('yes')) {
+        if (! $this->option('yes')) {
             $this->error('-------------------------------------------------------------');
             $this->error('| VERY IMPORTANT:  PLEASE BACKUP ALL DATA BEFORE PROCEEDING |');
             $this->error('|            POSSIBLE DATA LOSS MAY OCCUR                   |');
             $this->error('-------------------------------------------------------------');
 
-            if (!$this->confirm('Are you sure you want to continue?')) {
+            if (! $this->confirm('Are you sure you want to continue?')) {
                 $this->line('Exiting');
+
                 return 0;
             }
         }
 
         //  Check if the _old database already exists
-        $database = DB::select('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '_old"');
+        $database = DB::select('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "'.$this->database.'_old"');
         if (count($database) > 0) {
-            $this->error('ERROR - The MySQL Database already has a database named ' . $this->database . '_old');
+            $this->error('ERROR - The MySQL Database already has a database named '.$this->database.'_old');
             $this->error('You must manually delete this database in order to continue');
+
             return 0;
         }
 
         //  Check to make sure we can create a database and write to it
         try {
-            DB::statement('CREATE SCHEMA `' . $this->database . '_old`');
+            DB::statement('CREATE SCHEMA `'.$this->database.'_old`');
         } catch (Exception $e) {
             $this->error('Unable to create temporary database');
             $this->error('Please check that database user has permissions to create a new Schema');
             $this->newLine();
-            $this->error('Message - ' . $e);
+            $this->error('Message - '.$e);
+
             return 0;
         }
 
@@ -160,7 +164,7 @@ class MigrateDatabaseCommand extends Command
      */
     protected function isMigrationNecessary()
     {
-        if (!Schema::hasTable('app_settings')) {
+        if (! Schema::hasTable('app_settings')) {
             return true;
         }
 
@@ -174,10 +178,10 @@ class MigrateDatabaseCommand extends Command
     {
         foreach ($this->ver5Tables as $table) {
             try {
-                $this->line('Moving ' . $this->database . '.' . $table);
-                DB::statement('RENAME TABLE `' . $this->database . '`.`' . $table . '` TO `' . $this->database . '_old`.`' . $table . '`');
+                $this->line('Moving '.$this->database.'.'.$table);
+                DB::statement('RENAME TABLE `'.$this->database.'`.`'.$table.'` TO `'.$this->database.'_old`.`'.$table.'`');
             } catch (Exception $e) {
-                $this->line('Table ' . $this->database . '.' . $table . ' does not exist');
+                $this->line('Table '.$this->database.'.'.$table.' does not exist');
             }
         }
 
@@ -194,10 +198,10 @@ class MigrateDatabaseCommand extends Command
     {
         $this->info('Migrating App Settings');
 
-        $current = DB::select('SELECT * FROM `' . $this->database . '_old`.`settings`');
+        $current = DB::select('SELECT * FROM `'.$this->database.'_old`.`settings`');
 
         foreach ($current as $cur) {
-            $this->line('Adding Key - ' . $cur->key);
+            $this->line('Adding Key - '.$cur->key);
             DB::table('app_settings')->insert([
                 'key' => $cur->key,
                 'value' => $cur->value,
@@ -215,15 +219,15 @@ class MigrateDatabaseCommand extends Command
     protected function migrateUserRoles()
     {
         //  Determine if there are any roles other than the default roles
-        $current = DB::select('SELECT * FROM `' . $this->database . '_old`.`user_role_types`');
+        $current = DB::select('SELECT * FROM `'.$this->database.'_old`.`user_role_types`');
         if (count($current) == 4) {
             return false;
         }
 
         $this->info('Migrating User Roles');
-        $roles = DB::select('SELECT * FROM `' . $this->database . '_old`.`user_role_types` WHERE `role_id` > 4');
+        $roles = DB::select('SELECT * FROM `'.$this->database.'_old`.`user_role_types` WHERE `role_id` > 4');
         foreach ($roles as $role) {
-            $this->line('Creating ' . $role->name . ' Role');
+            $this->line('Creating '.$role->name.' Role');
             //  Create the Role
             DB::table('user_roles')->insert(
                 [
@@ -232,12 +236,12 @@ class MigrateDatabaseCommand extends Command
                     'description' => $role->description,
                     'allow_edit' => 1,
                     'created_at' => $role->created_at,
-                    'updated_at' => NOW()
+                    'updated_at' => NOW(),
                 ]
             );
 
             //  Create the permissions
-            $oldPermissions = DB::select('SELECT * FROM `' . $this->database . '_old`.`user_role_permissions` WHERE `role_id` =' . $role->role_id);
+            $oldPermissions = DB::select('SELECT * FROM `'.$this->database.'_old`.`user_role_permissions` WHERE `role_id` ='.$role->role_id);
             $newPermissions = [
                 1 => 0,
                 2 => $this->getPermissionValue($oldPermissions, 1),
@@ -301,16 +305,16 @@ class MigrateDatabaseCommand extends Command
     {
         $this->info('Migrating Users');
 
-        $userList = DB::select('SELECT * FROM `' . $this->database . '_old`.`users`');
+        $userList = DB::select('SELECT * FROM `'.$this->database.'_old`.`users`');
         foreach ($userList as $user) {
             if ($user->user_id === 1) {
                 DB::table('users')->where('user_id', 1)->update((array) $user);
             } else {
-                $this->line('Adding User ' . $user->first_name . ' ' . $user->last_name);
+                $this->line('Adding User '.$user->first_name.' '.$user->last_name);
                 DB::table('users')->insert((array) $user);
 
                 //  Migrate the users settings
-                $settings = DB::select('SELECT * FROM `' . $this->database . '_old`.`user_settings` WHERE `user_id` = ' . $user->user_id);
+                $settings = DB::select('SELECT * FROM `'.$this->database.'_old`.`user_settings` WHERE `user_id` = '.$user->user_id);
                 $newSettings = [
                     1 => $settings[0]->em_notification,
                     2 => $settings[0]->em_notification,
@@ -330,7 +334,7 @@ class MigrateDatabaseCommand extends Command
 
         //  Migrate the User Logins table
         $this->line('Updated User Login Table');
-        $data = DB::select('SELECT * FROM `' . $this->database . '_old`.`user_logins`');
+        $data = DB::select('SELECT * FROM `'.$this->database.'_old`.`user_logins`');
         foreach ($data as $d) {
             DB::table('user_logins')->insert((array) $d);
         }
@@ -346,16 +350,16 @@ class MigrateDatabaseCommand extends Command
         $this->info('Migrating Equipment');
 
         //  Migrate Equipment Categories
-        $cat = DB::select('SELECT * FROM `' . $this->database . '_old`.`system_categories`');
+        $cat = DB::select('SELECT * FROM `'.$this->database.'_old`.`system_categories`');
         foreach ($cat as $c) {
-            $this->line('Adding Category - ' . $c->name);
+            $this->line('Adding Category - '.$c->name);
             DB::table('equipment_categories')->insert((array) $c);
         }
 
         //  Migrate Equipment Types
-        $equip = DB::select('SELECT * FROM `' . $this->database . '_old`.`system_types`');
+        $equip = DB::select('SELECT * FROM `'.$this->database.'_old`.`system_types`');
         foreach ($equip as $e) {
-            $this->line('Adding Equipment - ' . $e->name);
+            $this->line('Adding Equipment - '.$e->name);
             DB::table('equipment_types')->insert([
                 'equip_id' => $e->sys_id,
                 'cat_id' => $e->cat_id,
@@ -367,20 +371,20 @@ class MigrateDatabaseCommand extends Command
 
         //  Migrate Data Field Types
         DB::statement('DELETE FROM `data_field_types` WHERE `name` IS NOT NULL');
-        $types = DB::select('SELECT * FROM `' . $this->database . '_old`.`system_data_field_types`');
+        $types = DB::select('SELECT * FROM `'.$this->database.'_old`.`system_data_field_types`');
         foreach ($types as $t) {
-            $this->line('Adding Equipment Data Type - ' . $t->name);
+            $this->line('Adding Equipment Data Type - '.$t->name);
             DB::table('data_field_types')->insert([
                 'type_id' => $t->data_type_id,
                 'name' => $t->name,
                 'hidden' => $t->hidden,
                 'created_at' => $t->created_at,
-                'updated_at' => $t->updated_at
+                'updated_at' => $t->updated_at,
             ]);
         }
 
         $this->line('Adding Data Types to Equipment');
-        $fields = DB::select('SELECT * FROM `' . $this->database . '_old`.`system_data_fields`');
+        $fields = DB::select('SELECT * FROM `'.$this->database.'_old`.`system_data_fields`');
         foreach ($fields as $f) {
             DB::table('data_fields')->insert([
                 'field_id' => $f->field_id,
@@ -401,9 +405,9 @@ class MigrateDatabaseCommand extends Command
     protected function migrateFiles()
     {
         $this->info('Migrating Files');
-        $fileList = DB::select('SELECT * FROM `' . $this->database . '_old`.`files`');
+        $fileList = DB::select('SELECT * FROM `'.$this->database.'_old`.`files`');
         foreach ($fileList as $file) {
-            $this->line('Adding File ' . $file->file_name);
+            $this->line('Adding File '.$file->file_name);
             DB::table('file_uploads')->insert([
                 'file_id' => $file->file_id,
                 'disk' => 'local',
@@ -426,13 +430,13 @@ class MigrateDatabaseCommand extends Command
         $this->info('Migrating Customers');
 
         //  Migrate the primary customer information
-        $customers = DB::select('SELECT * FROM `' . $this->database . '_old`.`customers`');
+        $customers = DB::select('SELECT * FROM `'.$this->database.'_old`.`customers`');
 
         //  Temporarily disable all foreign keys
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
         foreach ($customers as $cust) {
-            $this->line('Adding Customer ' . $cust->name);
+            $this->line('Adding Customer '.$cust->name);
             DB::table('customers')->insert([
                 'cust_id' => $cust->cust_id,
                 'parent_id' => $cust->parent_id,
@@ -455,7 +459,7 @@ class MigrateDatabaseCommand extends Command
 
         //  Migrate customer equipment
         $this->line('Adding Customer Equipment');
-        $oldEquip = DB::select('SELECT * FROM `' . $this->database . '_old`.`customer_systems`');
+        $oldEquip = DB::select('SELECT * FROM `'.$this->database.'_old`.`customer_systems`');
         foreach ($oldEquip as $equip) {
             DB::table('customer_equipment')->insert([
                 'cust_equip_id' => $equip->cust_sys_id,
@@ -470,7 +474,7 @@ class MigrateDatabaseCommand extends Command
 
         //  Migrate customer equipment data
         $this->line('Adding Customer Equipment Data');
-        $oldData = DB::select('SELECT * FROM `' . $this->database . '_old`.`customer_system_data`');
+        $oldData = DB::select('SELECT * FROM `'.$this->database.'_old`.`customer_system_data`');
         foreach ($oldData as $data) {
             DB::table('customer_equipment_data')->insert([
                 'cust_equip_id' => $data->cust_sys_id,
@@ -483,13 +487,13 @@ class MigrateDatabaseCommand extends Command
 
         //  Migrate Customer Contacts
         $this->line('Adding Customer Contacts');
-        $oldCont = DB::select('SELECT * FROM `' . $this->database . '_old`.`customer_contacts`');
+        $oldCont = DB::select('SELECT * FROM `'.$this->database.'_old`.`customer_contacts`');
         foreach ($oldCont as $cont) {
             DB::table('customer_contacts')->insert((array) $cont);
         }
 
         //  Migrate Customer Contact Phone Numbers
-        $oldPhone = DB::select('SELECT * FROM `' . $this->database . '_old`.`customer_contact_phones`');
+        $oldPhone = DB::select('SELECT * FROM `'.$this->database.'_old`.`customer_contact_phones`');
         foreach ($oldPhone as $phone) {
             DB::table('customer_contact_phones')->insert((array) $phone);
         }
@@ -497,20 +501,20 @@ class MigrateDatabaseCommand extends Command
         //  Migrate Customer File Types
         $this->line('Adding Customer Files');
         DB::statement('DELETE FROM `customer_file_types` WHERE `description` IS NOT NULL');
-        $fileTypes = DB::select('SELECT * FROM `' . $this->database . '_old`.`customer_file_types`');
+        $fileTypes = DB::select('SELECT * FROM `'.$this->database.'_old`.`customer_file_types`');
         foreach ($fileTypes as $type) {
             DB::table('customer_file_types')->insert((array) $type);
         }
 
         //  Migrate Customer Files
-        $oldFiles = DB::select('SELECT * FROM `' . $this->database . '_old`.`customer_files`');
+        $oldFiles = DB::select('SELECT * FROM `'.$this->database.'_old`.`customer_files`');
         foreach ($oldFiles as $file) {
             DB::table('customer_files')->insert((array) $file);
         }
 
         //  Migrate Customer Notes
         $this->line('Adding Customer Notes');
-        $oldNotes = DB::select('SELECT * FROM `' . $this->database . '_old`.`customer_notes`');
+        $oldNotes = DB::select('SELECT * FROM `'.$this->database.'_old`.`customer_notes`');
         foreach ($oldNotes as $note) {
             DB::table('customer_notes')->insert([
                 'note_id' => $note->note_id,
@@ -529,7 +533,7 @@ class MigrateDatabaseCommand extends Command
 
         //  Migrate Customer Bookmarks
         $this->line('Adding Customer Bookmarks');
-        $oldBookmarks = DB::select('SELECT * FROM `' . $this->database . '_old`.`customer_favs`');
+        $oldBookmarks = DB::select('SELECT * FROM `'.$this->database.'_old`.`customer_favs`');
         foreach ($oldBookmarks as $b) {
             DB::table('user_customer_bookmarks')->insert((array) $b);
         }
@@ -546,14 +550,14 @@ class MigrateDatabaseCommand extends Command
 
         //  Add the Tech Tip Types
         DB::statement('DELETE FROM `tech_tip_types` WHERE `description` IS NOT NULL');
-        $oldTypes = DB::select('SELECT * FROM `' . $this->database . '_old`.`tech_tip_types`');
+        $oldTypes = DB::select('SELECT * FROM `'.$this->database.'_old`.`tech_tip_types`');
         foreach ($oldTypes as $type) {
             DB::table('tech_tip_types')->insert((array) $type);
         }
 
-        $oldTips = DB::select('SELECT * FROM `' . $this->database . '_old`.`tech_tips`');
+        $oldTips = DB::select('SELECT * FROM `'.$this->database.'_old`.`tech_tips`');
         foreach ($oldTips as $tip) {
-            $this->line('Adding Tech Tip ' . $tip->subject);
+            $this->line('Adding Tech Tip '.$tip->subject);
             DB::table('tech_tips')->insert([
                 'tip_id' => $tip->tip_id,
                 'user_id' => $tip->user_id,
@@ -572,7 +576,7 @@ class MigrateDatabaseCommand extends Command
         //  Add Tech Tip Equipment
         $this->newLine();
         $this->line('Adding Tech Tip Equipment');
-        $oldEquipment = DB::select('SELECT * FROM `' . $this->database . '_old`.`tech_tip_systems`');
+        $oldEquipment = DB::select('SELECT * FROM `'.$this->database.'_old`.`tech_tip_systems`');
         foreach ($oldEquipment as $equip) {
             DB::table('tech_tip_equipment')->insert([
                 'tip_equip_id' => $equip->tip_tag_id,
@@ -583,14 +587,14 @@ class MigrateDatabaseCommand extends Command
 
         //  Add Tech Tip Files
         $this->line('Adding Tech Tip Files');
-        $oldFiles = DB::select('SELECT * FROM `' . $this->database . '_old`.`tech_tip_files`');
+        $oldFiles = DB::select('SELECT * FROM `'.$this->database.'_old`.`tech_tip_files`');
         foreach ($oldFiles as $file) {
             DB::table('tech_tip_files')->insert((array) $file);
         }
 
         //  Add Tech Tip Comments
         $this->line('Adding Tech Tip Comments');
-        $oldComments = DB::select('SELECT * FROM `' . $this->database . '_old`.`tech_tip_comments`');
+        $oldComments = DB::select('SELECT * FROM `'.$this->database.'_old`.`tech_tip_comments`');
         foreach ($oldComments as $com) {
             DB::table('tech_tip_comments')->insert([
                 'id' => $com->comment_id,
@@ -604,7 +608,7 @@ class MigrateDatabaseCommand extends Command
 
         //  Add Tech Tip Bookmarks
         $this->line('Adding Tech Tip Bookmarks');
-        $oldBookmarks = DB::select('SELECT * FROM `' . $this->database . '_old`.`tech_tip_favs`');
+        $oldBookmarks = DB::select('SELECT * FROM `'.$this->database.'_old`.`tech_tip_favs`');
         foreach ($oldBookmarks as $b) {
             DB::table('user_tech_tip_bookmarks')->insert((array) $b);
         }
@@ -621,11 +625,12 @@ class MigrateDatabaseCommand extends Command
 
         $customerFiles = CustomerFile::all();
         foreach ($customerFiles as $file) {
-            $curPath = str_replace('//', '/', $file->FileUpload->folder . DIRECTORY_SEPARATOR . $file->FileUpload->file_name);
+            $curPath = str_replace('//', '/', $file->FileUpload->folder.DIRECTORY_SEPARATOR.$file->FileUpload->file_name);
 
             //  Verify that the file actually exists
-            if (!Storage::disk('local')->exists($curPath)) {
-                $this->error('FILE MISSING - ' . $curPath);
+            if (! Storage::disk('local')->exists($curPath)) {
+                $this->error('FILE MISSING - '.$curPath);
+
                 continue;
             }
 
@@ -635,7 +640,7 @@ class MigrateDatabaseCommand extends Command
             $newName = $this->checkForDuplicate($file->FileUpload->file_name);
 
             //  Move File
-            $newPath = 'customers' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $newName;
+            $newPath = 'customers'.DIRECTORY_SEPARATOR.$this->folder.DIRECTORY_SEPARATOR.$newName;
             Storage::disk('local')->move($curPath, $newPath);
 
             //  Update database to reflect new location
@@ -644,16 +649,17 @@ class MigrateDatabaseCommand extends Command
             $file->FileUpload->disk = 'customers';
             $file->FileUpload->save();
 
-            $this->info('Moved ' . $newPath);
+            $this->info('Moved '.$newPath);
         }
 
         $techTipFiles = TechTipFile::all();
         foreach ($techTipFiles as $file) {
-            $curPath = str_replace('//', '/', $file->FileUpload->folder . DIRECTORY_SEPARATOR . $file->FileUpload->file_name);
+            $curPath = str_replace('//', '/', $file->FileUpload->folder.DIRECTORY_SEPARATOR.$file->FileUpload->file_name);
 
             //  Verify that the file actually exists
-            if (!Storage::disk('local')->exists($curPath)) {
-                $this->error('FILE MISSING - ' . $curPath);
+            if (! Storage::disk('local')->exists($curPath)) {
+                $this->error('FILE MISSING - '.$curPath);
+
                 continue;
             }
 
@@ -663,7 +669,7 @@ class MigrateDatabaseCommand extends Command
             $newName = $this->checkForDuplicate($file->FileUpload->file_name);
 
             //  Move File
-            $newPath = 'tips' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $newName;
+            $newPath = 'tips'.DIRECTORY_SEPARATOR.$this->folder.DIRECTORY_SEPARATOR.$newName;
             Storage::disk('local')->move($curPath, $newPath);
 
             //  Update database to reflect new location
@@ -672,7 +678,7 @@ class MigrateDatabaseCommand extends Command
             $file->FileUpload->disk = 'tips';
             $file->FileUpload->save();
 
-            $this->info('Moved ' . $newPath);
+            $this->info('Moved '.$newPath);
         }
 
         $this->newLine();
@@ -686,7 +692,7 @@ class MigrateDatabaseCommand extends Command
     {
         $this->info('Checking for File Link Module');
 
-        if (!Storage::disk('modules')->exists('FileLinkModule/README.md')) {
+        if (! Storage::disk('modules')->exists('FileLinkModule/README.md')) {
             $this->line('File Link module not installed');
             $this->line('Continuing...');
             $this->newLine();
@@ -697,7 +703,7 @@ class MigrateDatabaseCommand extends Command
         $this->line('Found File Link Module');
         Artisan::call('tb_module:enable FileLinkModule -q');
 
-        $oldFileLinks = DB::select('SELECT * FROM `' . $this->database . '_old`.`file_links`');
+        $oldFileLinks = DB::select('SELECT * FROM `'.$this->database.'_old`.`file_links`');
         foreach ($oldFileLinks as $link) {
             DB::table('file_links')->insert([
                 'link_id' => $link->link_id,
@@ -712,7 +718,7 @@ class MigrateDatabaseCommand extends Command
             ]);
         }
 
-        $oldFiles = DB::select('SELECT * FROM `' . $this->database . '_old`.`file_link_files`');
+        $oldFiles = DB::select('SELECT * FROM `'.$this->database.'_old`.`file_link_files`');
         foreach ($oldFiles as $file) {
             DB::table('file_link_files')->insert((array) $file);
         }
@@ -727,6 +733,6 @@ class MigrateDatabaseCommand extends Command
     {
         $this->info('Cleaning Up');
 
-        DB::statement('DROP SCHEMA `' . $this->database . '_old`');
+        DB::statement('DROP SCHEMA `'.$this->database.'_old`');
     }
 }

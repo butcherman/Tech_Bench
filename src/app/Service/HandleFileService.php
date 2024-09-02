@@ -36,18 +36,18 @@ class HandleFileService
             $fileName = $this->checkForDuplicate($uploadedFile->file_name);
 
             if (
-                !Storage::disk($disk)
-                    ->exists($uploadedFile->folder . DIRECTORY_SEPARATOR . $uploadedFile->file_name)
+                ! Storage::disk($disk)
+                    ->exists($uploadedFile->folder.DIRECTORY_SEPARATOR.$uploadedFile->file_name)
             ) {
                 throw new FileMissingException($uploadedFile);
             }
 
             Storage::disk($disk)->move(
-                $uploadedFile->folder . DIRECTORY_SEPARATOR . $uploadedFile->file_name,
-                $newFolder . DIRECTORY_SEPARATOR . $fileName
+                $uploadedFile->folder.DIRECTORY_SEPARATOR.$uploadedFile->file_name,
+                $newFolder.DIRECTORY_SEPARATOR.$fileName
             );
 
-            Log::debug('Moved File ' . $uploadedFile->file_name, [
+            Log::debug('Moved File '.$uploadedFile->file_name, [
                 'file_id' => $uploadedFile->file_id,
                 'old_location' => $uploadedFile->folder,
                 'new_location' => $newFolder,

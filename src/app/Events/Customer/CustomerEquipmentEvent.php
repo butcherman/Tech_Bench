@@ -40,11 +40,11 @@ class CustomerEquipmentEvent // implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Customer Equipment Event on channel `customer.' .
-            $this->customer->slug . '`');
+        Log::debug('Broadcasting Customer Equipment Event on channel `customer.'.
+            $this->customer->slug.'`');
 
         return [
-            new PrivateChannel('customer.' . $this->customer->slug),
+            new PrivateChannel('customer.'.$this->customer->slug),
         ];
     }
 }

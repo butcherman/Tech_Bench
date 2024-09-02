@@ -55,7 +55,7 @@ class TechTipSearchService
         }
 
         if (
-            !empty($this->searchRequest->typeList) &&
+            ! empty($this->searchRequest->typeList) &&
             empty($this->searchRequest->equipList)
         ) {
             return $this->articleTypeFilter($onlyPublic);
@@ -63,7 +63,7 @@ class TechTipSearchService
 
         if (
             empty($this->searchRequest->typeList) &&
-            !empty($this->searchRequest->equipList)
+            ! empty($this->searchRequest->equipList)
         ) {
             return $this->equipmentTypeFilter($onlyPublic);
         }

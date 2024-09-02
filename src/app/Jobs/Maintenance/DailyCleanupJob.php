@@ -35,6 +35,6 @@ class DailyCleanupJob implements ShouldQueue
         }
 
         // Run Garbage Collection Service
-        new GarbageCollectionService();
+        new GarbageCollectionService;
     }
 }

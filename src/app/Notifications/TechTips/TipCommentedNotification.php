@@ -4,7 +4,6 @@ namespace App\Notifications\TechTips;
 
 use App\Models\TechTipComment;
 use App\Models\User;
-use App\Models\UserSettingType;
 use App\Traits\NotificationTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,8 +14,8 @@ use Illuminate\Support\Facades\Log;
 
 class TipCommentedNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
     use NotificationTrait;
+    use Queueable;
 
     /**
      * Create a new notification instance.
@@ -43,10 +42,10 @@ class TipCommentedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Someone Commented On A Tech Tip')
-            ->greeting('Hello ' . $notifiable->full_name)
+            ->greeting('Hello '.$notifiable->full_name)
             ->line(
-                $this->comment->User->full_name .
-                ' has commented on Tech Tip - .' .
+                $this->comment->User->full_name.
+                ' has commented on Tech Tip - .'.
                 $this->comment->TechTip->subject
             )
             ->line('The comment is: ')

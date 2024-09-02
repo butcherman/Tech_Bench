@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Observers\TechTipObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
 #[ObservedBy([TechTipObserver::class])]
 class TechTip extends Model
@@ -178,7 +178,7 @@ class TechTip extends Model
                 ->makeHidden(['email', 'initials', 'role_name', 'username']);
         }
 
-        if (!$isDeleted) {
+        if (! $isDeleted) {
             // Increase Views counter
             $this->TechTipView->increment('views');
 

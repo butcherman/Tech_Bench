@@ -4,10 +4,7 @@ namespace App\Jobs\Maintenance;
 
 use App\Service\Maint\ImageFileCleanupService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 class ImageFileCleanupJob implements ShouldQueue
@@ -21,7 +18,7 @@ class ImageFileCleanupJob implements ShouldQueue
     {
         Log::info('Starting Image File Cleanup Job');
 
-        $service = new ImageFileCleanupService();
+        $service = new ImageFileCleanupService;
         $service->handle();
 
         Log::info('Image Cleanup Job Completed');
