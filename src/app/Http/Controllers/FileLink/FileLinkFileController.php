@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FileLink;
 
 use App\Events\File\FileDataDeletedEvent;
+use App\Events\FileLinks\FileUploadedFromPrivateEvent;
 use App\Http\Controllers\Controller;
 use App\Models\FileLink;
 use App\Models\FileLinkFile;
@@ -35,6 +36,8 @@ class FileLinkFileController extends Controller
                 $link->FileUpload()->attach($savedFile, [
                     'timeline_id' => $timeline->timeline_id,
                 ]);
+
+                event(new FileUploadedFromPrivateEvent($link));
             }
         }
 

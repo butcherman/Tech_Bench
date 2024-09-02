@@ -27,12 +27,12 @@ class PublicFileLinkController extends Controller
         $this->validatePublicLink($request, $link);
 
         return Inertia::render('Public/FileLinks/Show', [
-            'link-data' => $link->only([
+            'link-data' => fn() => $link->only([
                 'instructions',
                 'allow_upload',
                 'link_hash',
             ]),
-            'link-files' => $link->FileUpload()
+            'link-files' => fn() => $link->FileUpload()
                 ->wherePivot('upload', false)
                 ->get()
                 ->makeHidden('pivot'),

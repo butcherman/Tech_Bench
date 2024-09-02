@@ -24,13 +24,6 @@ export const useBroadcastStore = defineStore("broadcastStore", () => {
         }
     };
 
-    /**
-     * Register to any private channel
-     */
-    const registerChannel = (channelName: string) => {
-        console.log(channelName);
-    };
-
     /***************************************************************************
      * Notification Toast shows notifications across bottom right corner
      ***************************************************************************/
@@ -66,8 +59,8 @@ export const useBroadcastStore = defineStore("broadcastStore", () => {
 
     return {
         registerNotificationChannel,
-        registerChannel,
         notificationToasts,
         removeToastMsg,
+        pushToastMsg,
     };
 });

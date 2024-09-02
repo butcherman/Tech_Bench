@@ -9,14 +9,30 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="text-center">
-                            Well this is embarrassing...
-                        </h5>
-                        <p class="text-center">
-                            It seems you were sent a link with nothing in it.
-                            Please contact the person who provided the link for
-                            additional information.
-                        </p>
+                        <div v-if="upToDate">
+                            <h5 class="text-center">
+                                Well this is embarrassing...
+                            </h5>
+                            <p class="text-center">
+                                It seems you were sent a link with nothing in
+                                it. Please contact the person who provided the
+                                link for additional information.
+                            </p>
+                        </div>
+                        <div v-else>
+                            <h5 class="text-center">
+                                <AlertButton />
+                                New File Available
+                                <AlertButton />
+                            </h5>
+                            <p class="text-center">
+                                <RefreshButton
+                                    :only="['link-files']"
+                                    @loading-complete="upToDate = true"
+                                />
+                                Please Refresh Page to view new data
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,6 +55,13 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">
+                            <span v-if="!upToDate">
+                                <AlertButton title="New File Available" />
+                                <RefreshButton
+                                    :only="['link-files']"
+                                    @loading-complete="upToDate = true"
+                                />
+                            </span>
                             You have files available to download
                         </div>
                         <ul class="list-group">
@@ -67,13 +90,17 @@
                 </div>
             </div>
         </div>
+        <AppNotificationToast ref="toast" />
     </div>
 </template>
 
 <script setup lang="ts">
 import KbLayout from "@/Layouts/KbLayout.vue";
+import AppNotificationToast from "@/Layouts/AppLayout/AppNotificationToast.vue";
 import PublicFileLinkForm from "@/Forms/Public/FileLink/PublicFileLinkForm.vue";
-import { ref, reactive, onMounted, computed } from "vue";
+import AlertButton from "@/Components/_Base/Buttons/AlertButton.vue";
+import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import { useAppStore } from "@/Store/AppStore";
 
 const props = defineProps<{
@@ -82,6 +109,10 @@ const props = defineProps<{
 }>();
 
 const app = useAppStore();
+
+/**
+ * If no information is shared, show error notification
+ */
 const blankLink = computed(() => {
     if (
         !props.linkData.instructions &&
@@ -93,6 +124,28 @@ const blankLink = computed(() => {
 
     return false;
 });
+
+/**
+ * Determine if the DOM is up to date with latest DB information
+ */
+const upToDate = ref(true);
+
+/**
+ * Broadcast Notifications for new information
+ */
+const toast = ref<InstanceType<typeof AppNotificationToast> | null>(null);
+onMounted(() => {
+    Echo.channel(`file-links.${props.linkData.link_hash}`).listen(
+        ".FileUploadedEvent",
+        (message: toastData) => {
+            console.log(message);
+            toast.value?.pushMessage(message.message, message.title);
+            upToDate.value = false;
+        }
+    );
+});
+
+onUnmounted(() => Echo.leave(`file-links.${props.linkData.link_hash}`));
 </script>
 
 <script lang="ts">
