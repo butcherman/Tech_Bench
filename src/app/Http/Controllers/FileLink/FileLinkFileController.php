@@ -27,15 +27,15 @@ class FileLinkFileController extends Controller
         if ($request->file) {
             if ($savedFile = $this->getChunk($request)) {
                 Log::debug('File Link file saved', $savedFile->toArray());
-            }
 
-            $timeline = FileLinkTimeline::create([
-                'added_by' => $request->user()->user_id,
-                'link_id' => $link->link_id,
-            ]);
-            $link->FileUpload()->attach($savedFile, [
-                'timeline_id' => $timeline->timeline_id,
-            ]);
+                $timeline = FileLinkTimeline::create([
+                    'added_by' => $request->user()->user_id,
+                    'link_id' => $link->link_id,
+                ]);
+                $link->FileUpload()->attach($savedFile, [
+                    'timeline_id' => $timeline->timeline_id,
+                ]);
+            }
         }
 
         return response()->noContent();
@@ -50,7 +50,7 @@ class FileLinkFileController extends Controller
 
         $linkFile->delete();
 
-        Log::info('File for File Link deleted by '.$request->user()->username, [
+        Log::info('File for File Link deleted by ' . $request->user()->username, [
             'link-data' => $link->toArray(),
             'file-data' => $linkFile->toArray(),
         ]);

@@ -3,7 +3,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">New File Link</div>
+                    <div class="card-title">Edit File Link</div>
                     <FileLinkForm :file-link="link" />
                 </div>
             </div>

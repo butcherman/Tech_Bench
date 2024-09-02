@@ -84,7 +84,7 @@ class FileLinkController extends Controller
         $this->authorize('update', $link);
 
         return Inertia::render('FileLinks/Edit', [
-            'link' => $link->getRawOriginal(),
+            'link' => $link->mergeCasts(['expire' => 'datetime:Y-m-d'])
         ]);
     }
 
