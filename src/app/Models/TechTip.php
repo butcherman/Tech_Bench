@@ -190,6 +190,43 @@ class TechTip extends Model
     }
 
     /**
+     * Load and hide data needed for Public Viewing
+     */
+    public function loadPublicData()
+    {
+        $this->makeHidden([
+            'user_id',
+            'updated_id',
+            'sticky',
+            'allow_comments',
+            'slug',
+            'views',
+            'href',
+            'equipList',
+            'fileList',
+        ]);
+        $this->load([
+            'EquipmentType' => function ($q) {
+                $q->where('allow_public_tip', true);
+            },
+        ]);
+        $this->EquipmentType->makeHidden([
+            'allow_public_tip',
+            'cat_id',
+            'equip_id',
+        ]);
+        $this->load([
+            'FileUpload' => function ($q) {
+                $q->where('public', true);
+            },
+        ]);
+        $this->FileUpload->makeHidden([
+            'file_size',
+            'pivot',
+        ]);
+    }
+
+    /**
      * Search Results for Meilisearch
      *
      * @codeCoverageIgnore

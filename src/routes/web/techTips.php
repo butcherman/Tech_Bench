@@ -87,17 +87,16 @@ Route::middleware('auth.secure')->group(function () {
                 ->show(fn(TechTip $tech_tip) => 'Tip Details - ' . $tech_tip->subject)
                 ->edit('Edit Tech Tip');
         });
-
 });
 
 /*******************************************************************************
  *                      Public Tech Tip Based Routes                           *
  *******************************************************************************/
-Route::prefix('knowledge-base')->name('publicTips.')->group(function () {
+Route::middleware('public-tips')->prefix('knowledge-base')->name('publicTips.')->group(function () {
     Route::get('/', [PublicTechTipController::class, 'index'])
         ->name('index');
     Route::post('/', [PublicTechTipController::class, 'search'])
         ->name('search');
-    Route::get('{tip_slug}', [PublicTechTipController::class, 'show'])
+    Route::get('{tech_tip}', [PublicTechTipController::class, 'show'])
         ->name('show');
 });
