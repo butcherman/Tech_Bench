@@ -46,7 +46,7 @@ import TipDetails from "@/Components/TechTips/TipDetails.vue";
 import TipFiles from "@/Components/TechTips/TipFiles.vue";
 import TipComments from "@/Components/TechTips/TipComments.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useAppStore } from "@/Store/AppStore";
 
 const props = defineProps<{
@@ -60,10 +60,12 @@ const props = defineProps<{
 
 const appStore = useAppStore();
 
+/**
+ * Setup Broadcast Listener for updates on Tech Tip
+ */
 onMounted(() => {
     Echo.private(`tech-tips.${props.tipData.tip_id}`)
         .listen(".TechTipEvent", function (tip: techTip) {
-            console.log(tip);
             if (tip.updated_id !== appStore.user?.user_id) {
                 outOfDate.value = true;
             }
@@ -76,13 +78,29 @@ onMounted(() => {
         );
 });
 
+/**
+ * Leave Broadcast Channel
+ */
+onUnmounted(() => {
+    Echo.leave(`tech-tips.${props.tipData.tip_id}`);
+});
+
+/**
+ * Live update Comments so user does not have to refresh page
+ */
 const newComments = ref<tipComment[]>([]);
 const commentList = computed<tipComment[]>(() =>
     props.tipComments.concat(newComments.value)
 );
 
+/**
+ * Determine if the Tech Tip information matches what is on the server
+ */
 const outOfDate = ref(false);
 
+/**
+ * Determine if the user is allowed to manage this Tech Tip
+ */
 const showManage = computed(() => {
     if (
         props.permissions.manage ||

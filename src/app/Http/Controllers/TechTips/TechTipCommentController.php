@@ -49,29 +49,17 @@ class TechTipCommentController extends Controller
     {
         $comment->update(['comment' => $request->comment_data]);
 
-        Log::channel('tip')
-            ->info(
-                'Tech Tip Comment updated by ' . $request->user()->username,
-                $comment->toArray()
-            );
-
         return back()->with('success', __('tips.comment.updated'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, TechTipComment $comment)
+    public function destroy(TechTipComment $comment)
     {
         $this->authorize('delete', $comment);
 
         $comment->delete();
-
-        Log::channel('tip')
-            ->notice(
-                'Tech Tip Comment deleted by ' . $request->user()->username,
-                $comment->toArray()
-            );
 
         return back()->with('warning', 'Comment Deleted');
     }
@@ -85,11 +73,10 @@ class TechTipCommentController extends Controller
             $flag->delete();
         }
 
-        Log::channel('tip')
-            ->notice(
-                'Tech Tip Comment restored by ' . $request->user()->username,
-                $comment->toArray()
-            );
+        Log::notice(
+            'Tech Tip Comment restored by ' . $request->user()->username,
+            $comment->toArray()
+        );
 
         return back()->with('success', 'Comment Restored');
     }

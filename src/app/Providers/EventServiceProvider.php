@@ -99,8 +99,7 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\TechTips\TechTipCommentNotificationListener',
         ],
         'App\Events\TechTips\TipCommentFlaggedEvent' => [
-            'App\Listeners\Notify\TechTips\NotifyOfFlaggedTipListener',
-            //////////////////// Move Me ////////////////////////////
+            'App\Listeners\\TechTips\TipCommentFlaggedListener',
         ],
 
         /**

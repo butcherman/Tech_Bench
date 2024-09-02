@@ -95,10 +95,24 @@ const appData = useAppStore();
 const editCommentModal = ref<InstanceType<typeof Modal> | null>(null);
 const activeComment = ref<tipComment | null>(null);
 
+/**
+ * only the author of the comment can edit
+ */
 const canEdit = (commentData: tipComment) => {
     return commentData.user_id === appData.user?.user_id;
 };
 
+/**
+ * Open the Modal for editing the comment
+ */
+const editComment = (commentData: tipComment) => {
+    activeComment.value = commentData;
+    editCommentModal.value?.show();
+};
+
+/**
+ * Author and Admin can delete a comment
+ */
 const canDelete = (commentData: tipComment) => {
     return (
         commentData.user_id === appData.user?.user_id ||
@@ -106,23 +120,9 @@ const canDelete = (commentData: tipComment) => {
     );
 };
 
-const flagComment = (commentData: tipComment) => {
-    router.post(
-        route("tech-tips.comments.flag", [
-            props.tipSlug,
-            commentData.comment_id,
-        ]),
-        {
-            preserveScroll: true,
-        }
-    );
-};
-
-const editComment = (commentData: tipComment) => {
-    activeComment.value = commentData;
-    editCommentModal.value?.show();
-};
-
+/**
+ * Remove the comment completely
+ */
 const deleteComment = (commentData: tipComment) => {
     verifyModal("Do you want to delete this comment?").then((res) => {
         if (res) {
@@ -134,5 +134,20 @@ const deleteComment = (commentData: tipComment) => {
             );
         }
     });
+};
+
+/**
+ * Flag a comment for Administrative Review
+ */
+const flagComment = (commentData: tipComment) => {
+    router.post(
+        route("tech-tips.comments.flag", [
+            props.tipSlug,
+            commentData.comment_id,
+        ]),
+        {
+            preserveScroll: true,
+        }
+    );
 };
 </script>

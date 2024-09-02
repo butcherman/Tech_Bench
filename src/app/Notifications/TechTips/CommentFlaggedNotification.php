@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
 class CommentFlaggedNotification extends Notification implements ShouldQueue
 {
@@ -17,13 +18,13 @@ class CommentFlaggedNotification extends Notification implements ShouldQueue
      */
     public function __construct(protected TechTipComment $comment)
     {
-        //
+        Log::debug('Sending Flagged Tech Tip Comment Notification');
     }
 
     /**
      * Get the notification's delivery channels
      */
-    public function via(object $notifiable): array
+    public function via(): array
     {
         return ['mail'];
     }
@@ -37,7 +38,7 @@ class CommentFlaggedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('A Tech Tip Comment has been flagged')
-            ->greeting('Hello '.$notifiable->full_name)
+            ->greeting('Hello ' . $notifiable->full_name)
             ->line('A comment on a Tech Tip has been flagged as inappropriate.')
             ->line('The comment is: ')
             ->line($this->comment->comment)

@@ -26,7 +26,10 @@ class TechTipCommentObserver
      */
     public function updated(TechTipComment $techTipComment): void
     {
-        //
+        Log::info(
+            'A Tech Tip Comment has been updated by ' . request()->user()->username,
+            $techTipComment->toArray()
+        );
     }
 
     /**
@@ -34,22 +37,9 @@ class TechTipCommentObserver
      */
     public function deleted(TechTipComment $techTipComment): void
     {
-        //
-    }
-
-    /**
-     * Handle the TechTipComment "restored" event.
-     */
-    public function restored(TechTipComment $techTipComment): void
-    {
-        //
-    }
-
-    /**
-     * Handle the TechTipComment "force deleted" event.
-     */
-    public function forceDeleted(TechTipComment $techTipComment): void
-    {
-        //
+        Log::notice(
+            'Tech Tip Comment has been deleted by ' . request()->user()->username,
+            $techTipComment->toArray()
+        );
     }
 }
