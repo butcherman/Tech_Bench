@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Log;
 
 class TechTipCommentObserver
 {
+    protected $user;
+
+    public function __construct()
+    {
+        $this->user = match (true) {
+            request()->user() !== null => request()->user()->username,
+            request()->ip() === '127.0.0.1' => 'Internal Service',
+            default => request()->ip(),
+        };
+    }
+
     /**
      * Handle the TechTipComment "created" event.
      */
@@ -16,7 +27,7 @@ class TechTipCommentObserver
         event(new TipCommentedEvent($techTipComment));
 
         Log::info(
-            'New Tech Tip Comment created by ' . request()->user()->username,
+            'New Tech Tip Comment created by ' . $this->user,
             $techTipComment->toArray()
         );
     }
@@ -27,7 +38,7 @@ class TechTipCommentObserver
     public function updated(TechTipComment $techTipComment): void
     {
         Log::info(
-            'A Tech Tip Comment has been updated by ' . request()->user()->username,
+            'A Tech Tip Comment has been updated by ' . $this->user,
             $techTipComment->toArray()
         );
     }
@@ -38,7 +49,7 @@ class TechTipCommentObserver
     public function deleted(TechTipComment $techTipComment): void
     {
         Log::notice(
-            'Tech Tip Comment has been deleted by ' . request()->user()->username,
+            'Tech Tip Comment has been deleted by ' . $this->user,
             $techTipComment->toArray()
         );
     }

@@ -8,6 +8,9 @@ use App\Models\TechTipCommentFlag;
 use App\Models\User;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
+use App\Notifications\TechTips\TipCommentedNotification;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class TechTipCommentTest extends TestCase
@@ -108,6 +111,8 @@ class TechTipCommentTest extends TestCase
 
     public function test_store()
     {
+        Notification::fake();
+
         config(['techTips.allow_comments' => true]);
         $tip = TechTip::factory()->create();
         $data = [
@@ -123,6 +128,11 @@ class TechTipCommentTest extends TestCase
             'tip_id' => $tip->tip_id,
             'comment' => $data['comment_data'],
         ]);
+
+        Notification::assertSentTo(
+            User::find($tip->user_id),
+            TipCommentedNotification::class
+        );
     }
 
     /**
