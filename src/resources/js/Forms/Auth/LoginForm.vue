@@ -13,6 +13,7 @@
             name="password"
             placeholder="Password"
             type="password"
+            allow-show-pass
         />
         <div class="text-center mb-2">
             <CheckboxSwitch
