@@ -2,10 +2,6 @@
     <div>
         <Head title="Dashboard" />
         <h5>Hello {{ app.user?.full_name }}</h5>
-
-        <Link href="/notification-test" class="btn btn-info mt-4"
-            >Test Notification</Link
-        >
         <div class="row my-4 resource-links">
             <div class="col">
                 <div class="card">
@@ -23,7 +19,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">Recent:</div>
+                        <div class="card-title">Recent Visits:</div>
                         <ResourceLinks
                             :tech-tips="recent.techTips"
                             :customers="recent.customers"

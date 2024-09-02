@@ -12,12 +12,9 @@
                 <li
                     v-for="cust in customers"
                     :key="cust.slug"
-                    class="list-group-item quick-link"
+                    class="list-group-item quick-link text-center"
                 >
-                    <Link
-                        :href="$route('customers.show', cust.slug)"
-                        class="btn btn-info rounded-5 m-2"
-                    >
+                    <Link :href="$route('customers.show', cust.slug)">
                         {{ cust.name }}
                     </Link>
                 </li>
@@ -31,13 +28,10 @@
                 </li>
                 <li
                     v-for="tip in techTips"
-                    class="list-group-item quick-link"
+                    class="list-group-item quick-link text-center"
                     :key="tip.slug"
                 >
-                    <Link
-                        :href="$route('tech-tips.show', tip.slug)"
-                        class="btn btn-info rounded-5 m-2"
-                    >
+                    <Link :href="$route('tech-tips.show', tip.slug)">
                         {{ tip.subject }}
                     </Link>
                 </li>
@@ -57,12 +51,13 @@ defineProps<{
 .quick-link {
     padding: 0;
     a {
+        color: #000000;
         display: block;
         padding: 0.5rem;
         text-decoration: none;
 
         &:hover {
-            background-color: #157f94;
+            background-color: #b1e0e9;
         }
     }
 }
