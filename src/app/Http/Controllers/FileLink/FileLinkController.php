@@ -23,7 +23,7 @@ class FileLinkController extends Controller
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLinks/Index', [
-            'link-list' => fn () => $request->user()->FileLink,
+            'link-list' => fn() => $request->user()->FileLink,
         ]);
     }
 
@@ -49,10 +49,6 @@ class FileLinkController extends Controller
         $newLink = $request->createFileLink();
 
         event(new FileLinkEvent($newLink, CrudAction::Create));
-        Log::info(
-            'New File Link created by '.$request->user()->username,
-            $newLink->toArray()
-        );
 
         return redirect(route('links.show', $newLink->link_id))
             ->with('success', 'File Link Created');
@@ -66,14 +62,14 @@ class FileLinkController extends Controller
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLinks/Show', [
-            'link' => fn () => $link,
-            'table-data' => fn () => FileLinkTableResource::make($link),
-            'timeline' => fn () => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
-            'downloadable-files' => fn () => $link->FileUpload()
+            'link' => fn() => $link,
+            'table-data' => fn() => FileLinkTableResource::make($link),
+            'timeline' => fn() => $link->Timeline->load(['FileUpload', 'FileLinkNote']),
+            'downloadable-files' => fn() => $link->FileUpload()
                 ->wherePivot('upload', false)
                 ->get()
                 ->makeVisible(['created_at']),
-            'uploaded-files' => fn () => $link->FileUpload()
+            'uploaded-files' => fn() => $link->FileUpload()
                 ->wherePivot('upload', true)
                 ->get()
                 ->makeVisible(['created_at']),
@@ -99,10 +95,7 @@ class FileLinkController extends Controller
     {
         $link->update($request->all());
 
-        Log::info(
-            'File Link Information updated by '.$request->user()->username,
-            $link->toArray()
-        );
+
 
         return redirect(route('links.show', $link->link_id))
             ->with('success', 'Link Information Updated');
@@ -117,10 +110,7 @@ class FileLinkController extends Controller
 
         $link->delete();
 
-        Log::info(
-            'File Link deleted by '.$request->user()->username,
-            $link->toArray()
-        );
+
 
         return redirect(route('links.index'))
             ->with('danger', 'File Link Deleted');

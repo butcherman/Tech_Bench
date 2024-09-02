@@ -2,7 +2,15 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-                <RefreshButton :only="['timeline', 'uploaded-files']" />
+                <AlertButton
+                    v-if="!upToDate"
+                    text-variant="warning"
+                    title="Refresh to see new file uploaded"
+                />
+                <RefreshButton
+                    :only="['timeline', 'uploaded-files']"
+                    @loading-complete="$emit('refreshed')"
+                />
                 Timeline:
             </div>
             <h5 v-if="!timeline.length" class="text-center">
@@ -41,7 +49,11 @@
 
 <script setup lang="ts">
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
+import AlertButton from "../_Base/Buttons/AlertButton.vue";
+
+defineEmits(["refreshed"]);
 defineProps<{
     timeline: fileLinkTimeline[];
+    upToDate: boolean;
 }>();
 </script>

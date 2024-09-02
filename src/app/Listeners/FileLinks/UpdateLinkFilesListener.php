@@ -4,18 +4,11 @@ namespace App\Listeners\FileLinks;
 
 use App\Events\FileLinks\FileLinkEvent;
 use App\Service\HandleFileService;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
-class UpdateLinkFilesListener
+class UpdateLinkFilesListener implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Handle the event.
      */

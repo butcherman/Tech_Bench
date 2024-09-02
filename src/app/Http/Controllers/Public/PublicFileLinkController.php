@@ -43,7 +43,7 @@ class PublicFileLinkController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Upload a public file to the File Link
      */
     public function update(PublicFileLinkRequest $request, FileLink $link)
     {
