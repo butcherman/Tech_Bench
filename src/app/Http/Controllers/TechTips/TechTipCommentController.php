@@ -34,18 +34,10 @@ class TechTipCommentController extends Controller
      */
     public function store(TechTipCommentRequest $request, TechTip $techTip)
     {
-        $newComment = $techTip->TechTipComment()->save(new TechTipComment([
+        $techTip->TechTipComment()->save(new TechTipComment([
             'user_id' => $request->user()->user_id,
             'comment' => $request->comment_data,
         ]));
-
-        Log::channel('tip')
-            ->info(
-                'New Tech Tip Comment for Tip ID '.$techTip->tip_id,
-                $newComment->toArray()
-            );
-
-        event(new TipCommentedEvent($newComment));
 
         return back()->with('success', __('tips.comment.created'));
     }
@@ -59,7 +51,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tip')
             ->info(
-                'Tech Tip Comment updated by '.$request->user()->username,
+                'Tech Tip Comment updated by ' . $request->user()->username,
                 $comment->toArray()
             );
 
@@ -77,7 +69,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tip')
             ->notice(
-                'Tech Tip Comment deleted by '.$request->user()->username,
+                'Tech Tip Comment deleted by ' . $request->user()->username,
                 $comment->toArray()
             );
 
@@ -95,7 +87,7 @@ class TechTipCommentController extends Controller
 
         Log::channel('tip')
             ->notice(
-                'Tech Tip Comment restored by '.$request->user()->username,
+                'Tech Tip Comment restored by ' . $request->user()->username,
                 $comment->toArray()
             );
 

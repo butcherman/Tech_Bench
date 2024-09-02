@@ -27,9 +27,9 @@
         <TipComments
             v-if="
                 (tipData.allow_comments && permissions.comment) ||
-                tipComments.length
+                commentList.length
             "
-            :tip-comments="tipComments"
+            :tip-comments="commentList"
             :tip-slug="tipData.slug"
             :permissions="permissions"
             class="mt-4"
@@ -61,18 +61,28 @@ const props = defineProps<{
 const appStore = useAppStore();
 
 onMounted(() => {
-    Echo.private(`tech-tips.${props.tipData.tip_id}`).listen(
-        ".TechTipEvent",
-        function (event: techTip) {
-            console.log(event);
-            if (event.updated_id !== appStore.user?.user_id) {
+    Echo.private(`tech-tips.${props.tipData.tip_id}`)
+        .listen(".TechTipEvent", function (tip: techTip) {
+            console.log(tip);
+            if (tip.updated_id !== appStore.user?.user_id) {
                 outOfDate.value = true;
             }
-        }
-    );
+        })
+        .listen(
+            ".TechTipCommentEvent",
+            function (comment: { comment: tipComment }) {
+                newComments.value.push(comment.comment);
+            }
+        );
 });
 
+const newComments = ref<tipComment[]>([]);
+const commentList = computed<tipComment[]>(() =>
+    props.tipComments.concat(newComments.value)
+);
+
 const outOfDate = ref(false);
+
 const showManage = computed(() => {
     if (
         props.permissions.manage ||

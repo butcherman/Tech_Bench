@@ -3,38 +3,35 @@
 namespace App\Notifications\TechTips;
 
 use App\Models\TechTipComment;
+use App\Models\User;
 use App\Models\UserSettingType;
+use App\Traits\NotificationTrait;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
-class TipCommentedNotification extends Notification
+class TipCommentedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+    use NotificationTrait;
 
     /**
      * Create a new notification instance.
      */
     public function __construct(protected TechTipComment $comment)
     {
-        //
+        Log::debug('Sending Tech Tip Comment Notification');
     }
 
     /**
      * Get the notification's delivery channels
      */
-    public function via(object $notifiable): array
+    public function via(User $notifiable): array
     {
-        // If the user has elected to not get Email Notifications, we will only send DB Notification
-        $settingsId = UserSettingType::where('name', 'Receive Email Notifications')
-            ->first()
-            ->setting_type_id;
-        $allow = (bool) $notifiable->UserSetting
-            ->where('setting_type_id', $settingsId)
-            ->first()
-            ->value;
-
-        return $allow ? ['mail', 'database'] : ['database'];
+        return $this->getViaArray($notifiable);
     }
 
     /**
@@ -46,10 +43,10 @@ class TipCommentedNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Someone Commented On A Tech Tip')
-            ->greeting('Hello '.$notifiable->full_name)
+            ->greeting('Hello ' . $notifiable->full_name)
             ->line(
-                $this->comment->User->full_name.
-                ' has commented on Tech Tip - .'.
+                $this->comment->User->full_name .
+                ' has commented on Tech Tip - .' .
                 $this->comment->TechTip->subject
             )
             ->line('The comment is: ')
@@ -60,18 +57,12 @@ class TipCommentedNotification extends Notification
             );
     }
 
-    /**
-     * Get the array representation of the notification
-     * TODO - Configure and verify DB Notification
-     */
-    public function toArray(object $notifiable): array
+    public function toBroadcast(): BroadcastMessage
     {
-        return [
-            'subject' => 'A New Tech Tip Comment Has Been Created',
-            'component' => 'TechTips/TipNotification',
-            'props' => [
-                'tip-data' => $this->comment->TechTip->toArray(),
-            ],
-        ];
+        return new BroadcastMessage([
+            'title' => 'New Tech Tip Comment',
+            'message' => 'Someone has commented on a Tech Tip',
+            'href' => route('tech-tips.show', $this->comment->tip_id),
+        ]);
     }
 }

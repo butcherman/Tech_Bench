@@ -99,7 +99,7 @@ class TechTipObserver
     }
 
     /**
-     * Handle the TechTip "force deleted" event.
+     * Before a Tech Tip is deleted, we queue all files for deletion
      */
     public function forceDeleting(TechTip $techTip): void
     {
@@ -111,6 +111,9 @@ class TechTipObserver
         }
     }
 
+    /**
+     * Handle the TechTip "force deleted" event.
+     */
     public function forceDeleted(TechTip $techTip): void
     {
         Log::notice(

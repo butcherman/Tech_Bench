@@ -179,7 +179,6 @@ class TechTip extends Model
         }
 
         if (!$isDeleted) {
-
             // Increase Views counter
             $this->TechTipView->increment('views');
 
