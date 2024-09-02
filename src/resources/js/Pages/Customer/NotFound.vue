@@ -30,8 +30,9 @@
                                     as="button"
                                     :href="$route('customers.index')"
                                     class="btn btn-info"
-                                    >Back to Search Page</Link
                                 >
+                                    Back to Search Page
+                                </Link>
                             </p>
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\TechTips\TechTipNotFoundException;
 use App\Http\Controllers\Public\PublicTechTipController;
 use App\Http\Controllers\TechTips\DeletedTipsController;
 use App\Http\Controllers\TechTips\DownloadTipController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\TechTips\UploadTipFile;
 use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*******************************************************************************
  *                          Tech Tip Based Routes                              *
@@ -40,7 +42,7 @@ Route::middleware('auth.secure')->group(function () {
         Route::get('deleted-tips/{techTip}', ShowDeletedTipController::class)
             ->withTrashed()
             ->name('deleted-tips.show')
-            ->breadcrumb(fn (TechTip $techTip) => 'Tip Details - '.$techTip->subject, 'admin.tech-tips.deleted-tips');
+            ->breadcrumb(fn(TechTip $techTip) => 'Tip Details - ' . $techTip->subject, 'admin.tech-tips.deleted-tips');
         Route::get('restore-tip/{techTip}', [TechTipsController::class, 'restore'])
             ->name('restore')
             ->withTrashed();
@@ -84,20 +86,24 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Tech Tips')
                 ->create('Create Tech Tip')
-                ->show(fn (TechTip $tech_tip) => 'Tip Details - '.$tech_tip->subject)
+                ->show(
+                    fn(TechTip|string $tech_tip) =>
+                    'Tip Details - ' . gettype($tech_tip) === 'object' ? $tech_tip->subject : $tech_tip
+                )
                 ->edit('Edit Tech Tip');
+        })->missing(function (Request $request) {
+            throw new TechTipNotFoundException($request);
         });
-
 });
 
 /*******************************************************************************
  *                      Public Tech Tip Based Routes                           *
  *******************************************************************************/
-Route::prefix('knowledge-base')->name('publicTips.')->group(function () {
+Route::middleware('public-tips')->prefix('knowledge-base')->name('publicTips.')->group(function () {
     Route::get('/', [PublicTechTipController::class, 'index'])
         ->name('index');
     Route::post('/', [PublicTechTipController::class, 'search'])
         ->name('search');
-    Route::get('{tip_slug}', [PublicTechTipController::class, 'show'])
+    Route::get('{tech_tip}', [PublicTechTipController::class, 'show'])
         ->name('show');
 });

@@ -35,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\PasswordReset' => [
             'App\Listeners\Auth\LogPasswordReset',
             'App\Listeners\Notify\User\PasswordResetListener',
+            //////////////////// Move Me ////////////////////////////
         ],
         'App\Events\Feature\FeatureChangedEvent' => [
             'App\Listeners\Feature\RebuildFeaturePermissionsListener',
@@ -48,21 +49,24 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\User\PasswordChangedEvent' => [
             'App\Listeners\Notify\User\PasswordChangedListener',
+            //////////////////// Move Me ////////////////////////////
             'App\Listeners\User\LogPasswordChanged',
         ],
         'App\Events\User\UserCreatedEvent' => [
             'App\Listeners\Notify\User\NotifyNewUser',
+            //////////////////// Move Me ////////////////////////////
             'App\Listeners\User\CreateUserSettingsEntry',
         ],
         'App\Events\User\ResendWelcomeEvent' => [
             'App\Listeners\Notify\User\ResendWelcomeEmail',
+            //////////////////// Move Me ////////////////////////////
         ],
 
         /**
          * Office 365 Authentication Events
          */
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-            \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
+            \SocialiteProviders\Azure\AzureExtendSocialite::class . '@handle',
         ],
 
         /**
@@ -89,13 +93,13 @@ class EventServiceProvider extends ServiceProvider
          */
         'App\Events\TechTips\TechTipEvent' => [
             'App\Listeners\TechTips\UpdateTipFilesListener',
-            'App\Listeners\Notify\TechTips\TechTipNotification',
+            'App\Listeners\TechTips\TechTipNotificationListener',
         ],
         'App\Events\TechTips\TipCommentedEvent' => [
-            'App\Listeners\Notify\TechTips\NotifyOfCommentListener',
+            'App\Listeners\TechTips\TechTipCommentNotificationListener',
         ],
         'App\Events\TechTips\TipCommentFlaggedEvent' => [
-            'App\Listeners\Notify\TechTips\NotifyOfFlaggedTipListener',
+            'App\Listeners\\TechTips\TipCommentFlaggedListener',
         ],
 
         /**
@@ -106,6 +110,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\FileLinks\FileUploadedFromPublicEvent' => [
             'App\Listeners\Notify\FileLinks\FileUploadFromPublicListener',
+            //////////////////// Move Me ////////////////////////////
         ],
     ];
 

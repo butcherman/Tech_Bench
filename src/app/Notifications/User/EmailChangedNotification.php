@@ -28,14 +28,12 @@ class EmailChangedNotification extends Notification
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @codeCoverageIgnore
      */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject('Email Address Changed')
-            ->line('This is a notification to let you know that the email address assigned to your account has been changed to '.$this->newEmail.'.')
+            ->line('This is a notification to let you know that the email address assigned to your account has been changed to ' . $this->newEmail . '.')
             ->line('If this was not done by you, please contact your System Administrator to regain access to your account')
             ->line('If this was you, you can safely ignore this email');
     }

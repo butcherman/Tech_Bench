@@ -1,13 +1,9 @@
 <template>
     <Teleport to="body">
         <div class="toast-container p-3">
-            <TransitionGroup
-                @enter="onEnter"
-                @before-leave="onLeave"
-                :css="false"
-            >
+            <TransitionGroup @enter="onEnter" @leave="onLeave" :css="false">
                 <div
-                    v-for="toast in app.notificationToasts"
+                    v-for="toast in notifications.notificationToasts"
                     :key="toast.id"
                     class="toast align-items-center w-100"
                 >
@@ -16,13 +12,25 @@
                         <button
                             type="button"
                             class="btn-close"
-                            @click="app.removeToastMsg(toast.id)"
+                            @click="notifications.removeToastMsg(toast.id)"
                         />
                     </div>
                     <div class="toast-body text-center">
                         <div class="row align-items-center m-0 p-0">
-                            <div class="col-1 pe-4"></div>
-                            <div class="col">{{ toast.message }}</div>
+                            <div class="col">
+                                <Link
+                                    v-if="toast.href"
+                                    :href="toast.href"
+                                    @click="
+                                        notifications.removeToastMsg(toast.id)
+                                    "
+                                >
+                                    {{ toast.message }}
+                                </Link>
+                                <span v-else>
+                                    {{ toast.message }}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -32,10 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from "@/Store/AppStore";
+import { useBroadcastStore } from "@/Store/BroadcastStore";
 import { gsap } from "gsap";
 
-const app = useAppStore();
+const notifications = useBroadcastStore();
 
 /**
  * Animations
@@ -48,10 +56,11 @@ const onEnter = (el: Element) => {
     });
 };
 
-const onLeave = (el: Element) => {
+const onLeave = (el: Element, done: () => void) => {
     gsap.to(el, {
         x: 1000,
         ease: "back.in",
+        onComplete: done,
     });
 };
 </script>
@@ -73,6 +82,14 @@ const onLeave = (el: Element) => {
         font-size: 1.2em;
         display: block;
         opacity: 0.9;
+    }
+}
+
+a {
+    color: #000000;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
     }
 }
 </style>

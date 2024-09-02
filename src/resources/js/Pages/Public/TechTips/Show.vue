@@ -1,5 +1,9 @@
 <template>
     <div>
+        <Link :href="$route('publicTips.index')" class="btn btn-info">
+            <fa-icon icon="left-long" />
+            Back to Search
+        </Link>
         <div class="border-bottom border-secondary-subtle pb-2">
             <TipDetailsTitle :tip-data="tipData" public-shown />
         </div>

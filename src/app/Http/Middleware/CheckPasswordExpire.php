@@ -27,9 +27,12 @@ class CheckPasswordExpire
     public function handle(Request $request, Closure $next): Response
     {
         //  Check to see if we are logged in and not visiting a bypass route
-        if ($request->user()->password_expires && $request->user()->password_expires < Carbon::now()) {
+        if (
+            $request->user()->password_expires &&
+            $request->user()->password_expires < Carbon::now()
+        ) {
             Log::stack(['auth', 'user'])
-                ->notice('User '.$request->user()->full_name.' is being forced to change their password');
+                ->notice('User ' . $request->user()->full_name . ' is being forced to change their password');
 
             return redirect()
                 ->route('user.change-password.show')

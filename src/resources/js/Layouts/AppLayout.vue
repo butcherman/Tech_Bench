@@ -14,7 +14,7 @@
             <AppFooter />
         </main>
         <AppNotificationToast />
-        <AppAutoLogout />
+        <!-- <AppAutoLogout /> -->
     </div>
 </template>
 
@@ -27,8 +27,9 @@ import AppAlerts from "./AppLayout/AppAlerts.vue";
 import AppFlash from "./AppLayout/AppFlash.vue";
 import AppNotificationToast from "./AppLayout/AppNotificationToast.vue";
 import AppAutoLogout from "./AppLayout/AppAutoLogout.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { router } from "@inertiajs/vue3";
+import { useBroadcastStore } from "@/Store/BroadcastStore";
 import "../../scss/Layouts/appLayout.scss";
 
 /**
@@ -42,4 +43,10 @@ router.on("navigate", () => {
     navbarActive.value = false;
     console.log("current route - ", route().current());
 });
+
+/**
+ * User Broadcast Notifications
+ */
+const broadStore = useBroadcastStore();
+onMounted(() => broadStore.registerNotificationChannel());
 </script>

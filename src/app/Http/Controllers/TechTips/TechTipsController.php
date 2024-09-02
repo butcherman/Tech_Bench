@@ -21,7 +21,7 @@ class TechTipsController extends Controller
     use FileTrait;
 
     /**
-     * Display a listing of the resource.
+     * Display Search Page for Tech Tips
      */
     public function index(Request $request)
     {
@@ -35,7 +35,7 @@ class TechTipsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Tech Tip.
      */
     public function create(Request $request)
     {
@@ -48,15 +48,13 @@ class TechTipsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Tech Tip in storage.
      */
     public function store(TechTipRequest $request)
     {
         $newTip = $request->createTechTip();
 
-        Log::channel('tip')
-            ->info('New Tech Tip created by '.$request->user()->username, $newTip->toArray());
-        event(new TechTipEvent($newTip, CrudAction::Create, ! $request->suppress));
+        event(new TechTipEvent($newTip, CrudAction::Create, !$request->suppress));
 
         return redirect()
             ->route('tech-tips.show', $newTip->slug)
@@ -64,37 +62,25 @@ class TechTipsController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified Tech Tip.
      */
     public function show(Request $request, TechTip $tech_tip)
     {
-        // Increase the view counter
-        $tech_tip->increment('views');
-
-        // Add Tip to users Recent visits
-        $tech_tip->touchRecent($request->user());
-
         // Load relationships
-        $tech_tip->load(['CreatedBy', 'UpdatedBy', 'TechTipType'])
-            ->CreatedBy->makeHidden(['email', 'initials', 'role_name', 'username']);
-
-        if ($tech_tip->UpdatedBy) {
-            $tech_tip->UpdatedBy
-                ->makeHidden(['email', 'initials', 'role_name', 'username']);
-        }
+        $tech_tip->loadShowData();
 
         return Inertia::render('TechTips/Show', [
-            'tip-data' => $tech_tip,
-            'tip-equipment' => $tech_tip->EquipmentType,
-            'tip-files' => $tech_tip->FileUpload,
-            'tip-comments' => $tech_tip->TechTipComment,
-            'permissions' => BuildTechTipPermissions::build($request->user()),
-            'is-fav' => $tech_tip->isFav($request->user()),
+            'tip-data' => fn() => $tech_tip,
+            'tip-equipment' => fn() => $tech_tip->EquipmentType,
+            'tip-files' => fn() => $tech_tip->FileUpload,
+            'tip-comments' => fn() => $tech_tip->TechTipComment,
+            'permissions' => fn() => BuildTechTipPermissions::build($request->user()),
+            'is-fav' => fn() => $tech_tip->isFav($request->user()),
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Tech Tip.
      */
     public function edit(Request $request, TechTip $tech_tip)
     {
@@ -109,63 +95,58 @@ class TechTipsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Tech Tip in storage.
      */
     public function update(TechTipRequest $request, TechTip $tech_tip)
     {
         $tipData = $request->updateTechTip();
 
-        Log::channel('tip')
-            ->info('Tech Tip updated by '.$request->user()->username, $tipData->toArray());
-        event(new TechTipEvent($tipData, CrudAction::Update, ! $request->suppress));
+        event(new TechTipEvent($tipData, CrudAction::Update, !$request->suppress));
 
         return redirect()->route('tech-tips.show', $tipData->slug)
             ->with('success', __('tips.updated'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft Delete the specified Tech Tip.
      */
-    public function destroy(Request $request, TechTip $tech_tip)
+    public function destroy(TechTip $tech_tip)
     {
         $this->authorize('delete', $tech_tip);
 
         $tech_tip->delete();
-
-        Log::channel('tip')
-            ->notice('Tech Tip deleted by '.$request->user()->username, $tech_tip->toArray());
 
         return redirect()
             ->route('tech-tips.index')
             ->with('warning', __('tips.deleted'));
     }
 
-    public function restore(Request $request, TechTip $techTip)
+    /**
+     * Restore a Soft Deleted Tech Tip
+     */
+    public function restore(TechTip $techTip)
     {
         $this->authorize('manage', TechTip::class);
 
         $techTip->restore();
-
-        Log::channel('tip')->notice('Tech Tip restored by '.$request->user()->username, $techTip->toArray());
 
         return redirect()
             ->route('tech-tips.show', $techTip->slug)
             ->with('success', __('tips.restored'));
     }
 
-    public function forceDelete(Request $request, TechTip $techTip)
+    /**
+     * Remove a Tech Tip from the Database
+     */
+    public function forceDelete(TechTip $techTip)
     {
         $this->authorize('manage', TechTip::class);
 
-        // Get any Files attached to tip
-        $fileList = $techTip->FileUpload->pluck('file_id')->toArray();
+
         $techTip->forceDelete();
 
-        foreach ($fileList as $fileId) {
-            event(new FileDataDeletedEvent($fileId));
-        }
 
-        Log::channel('tip')->notice('Tech Tip Force Deleted by '.$request->user()->username, $techTip->toArray());
+
 
         return redirect()->route('admin.tech-tips.deleted-tips')->with('warning', __('tips.deleted'));
     }

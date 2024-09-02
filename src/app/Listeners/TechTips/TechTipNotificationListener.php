@@ -1,31 +1,24 @@
 <?php
 
-namespace App\Listeners\Notify\TechTips;
+namespace App\Listeners\TechTips;
 
 use App\Events\TechTips\TechTipEvent;
 use App\Models\User;
 use App\Notifications\TechTips\NewTechTipNotification;
 use App\Notifications\TechTips\UpdatedTechTipNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
-class TechTipNotification implements ShouldQueue
+class TechTipNotificationListener implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Send the Create or Updated Email Notification
      */
     public function handle(TechTipEvent $event): void
     {
-        $author = $event->techTip->updated_id || $event->techTip->user_id;
+        $author = $event->techTip->updated_id ?? $event->techTip->user_id;
 
         if ($event->sendNotification) {
             $userList = User::whereNot('user_id', $author)->get();

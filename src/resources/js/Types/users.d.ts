@@ -13,22 +13,6 @@ type user = {
     user_role: userRole;
 };
 
-type userNotificationProp = {
-    list: userNotification[];
-    new: number;
-};
-
-type userNotification = {
-    created_at: string;
-    id: string;
-    read_at: string | null;
-    type: string;
-    data: {
-        subject: string;
-        data: { [key: string]: any | any[] };
-    };
-};
-
 type userRole = {
     role_id: number;
     name: string;

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\TechTipCommentObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+#[ObservedBy([TechTipCommentObserver::class])]
 class TechTipComment extends Model
 {
     use HasFactory;
@@ -55,9 +58,9 @@ class TechTipComment extends Model
         return $this->hasMany(TechTipCommentFlag::class, 'comment_id', 'comment_id');
     }
 
-    /**
+    /***************************************************************************
      * Additional Model Methods
-     */
+     ***************************************************************************/
 
     /**
      * Flag a comment as inappropriate
@@ -65,7 +68,7 @@ class TechTipComment extends Model
     public function flagComment()
     {
         $this->Flags()->save(new TechTipCommentFlag([
-            'user_id' => Auth::user()->user_id,
+            'user_id' => request()->user()->user_id,
             'comment_id' => $this->comment_id,
         ]));
     }

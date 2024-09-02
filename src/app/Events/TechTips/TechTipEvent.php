@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class TechTipEvent // implements ShouldBroadcast
+class TechTipEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -36,15 +36,32 @@ class TechTipEvent // implements ShouldBroadcast
 
     /**
      * Broadcast on Tech Tip Channel
-     *
-     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Tech Tip Event on tech-tips channel');
+        Log::debug('Broadcasting Tech Tip Event on tech-tips channel ' .
+            $this->techTip->tip_id);
 
         return [
-            new PrivateChannel('tech-tips'),
+            new PrivateChannel('tech-tips.' . $this->techTip->tip_id),
         ];
+    }
+
+    /**
+     * Since the model includes files, we will only broadcast some data
+     */
+    public function broadcastWith()
+    {
+        return [
+            'tip_id' => $this->techTip->tip_id,
+            'subject' => $this->techTip->subject,
+            'user_id' => $this->techTip->user_id,
+            'updated_id' => $this->techTip->updated_id,
+        ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'TechTipEvent';
     }
 }

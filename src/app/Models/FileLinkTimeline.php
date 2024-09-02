@@ -19,4 +19,17 @@ class FileLinkTimeline extends Model
         'created_at' => 'datetime:M d, Y h:i A',
         'updated_at' => 'datetime:M d, Y',
     ];
+
+    /**
+     * Model Relationships
+     */
+    public function FileUpload()
+    {
+        return $this->hasMany(FileUpload::class, 'file_id', 'file_id');
+    }
+
+    public function FileLinkNote()
+    {
+        return $this->hasOne(FileLinkNote::class, 'link_note_id', 'link_note_id');
+    }
 }

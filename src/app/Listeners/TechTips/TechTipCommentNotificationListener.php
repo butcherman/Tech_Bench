@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Listeners\Notify\TechTips;
+namespace App\Listeners\TechTips;
 
 use App\Events\TechTips\TipCommentedEvent;
 use App\Models\User;
 use App\Notifications\TechTips\TipCommentedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
-class NotifyOfCommentListener implements ShouldQueue
+class TechTipCommentNotificationListener
 {
     /**
      * Handle the event.

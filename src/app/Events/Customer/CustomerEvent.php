@@ -32,16 +32,14 @@ class CustomerEvent // implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on
-     *
-     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
-        Log::debug('Broadcasting Customer Event on channel `customer.'.
-            $this->customer->slug.'`');
+        Log::debug('Broadcasting Customer Event on channel `customer.' .
+            $this->customer->slug . '`');
 
         return [
-            new PrivateChannel('customer.'.$this->customer->slug),
+            new PrivateChannel('customer.' . $this->customer->slug),
         ];
     }
 }

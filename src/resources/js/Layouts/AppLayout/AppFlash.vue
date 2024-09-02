@@ -1,11 +1,7 @@
 <template>
     <Teleport to="body">
         <div class="toast-container translate-middle-x fade show p-3">
-            <TransitionGroup
-                @enter="onEnter"
-                @before-leave="onLeave"
-                :css="false"
-            >
+            <TransitionGroup @enter="onEnter" @leave="onLeave" :css="false">
                 <div
                     v-for="alert in app.flashAlerts"
                     :key="alert.id"
@@ -54,10 +50,11 @@ const onEnter = (el: Element) => {
     });
 };
 
-const onLeave = (el: Element) => {
+const onLeave = (el: Element, done: () => void) => {
     gsap.to(el, {
         x: 2000,
         ease: "back.in",
+        onComplete: done,
     });
 };
 </script>
