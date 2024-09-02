@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\TechTips\TechTipNotFoundException;
 use App\Http\Controllers\Public\PublicTechTipController;
 use App\Http\Controllers\TechTips\DeletedTipsController;
 use App\Http\Controllers\TechTips\DownloadTipController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\TechTips\UploadTipFile;
 use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*******************************************************************************
  *                          Tech Tip Based Routes                              *
@@ -84,8 +86,13 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Tech Tips')
                 ->create('Create Tech Tip')
-                ->show(fn(TechTip $tech_tip) => 'Tip Details - ' . $tech_tip->subject)
+                ->show(
+                    fn(TechTip|string $tech_tip) =>
+                    'Tip Details - ' . gettype($tech_tip) === 'object' ? $tech_tip->subject : $tech_tip
+                )
                 ->edit('Edit Tech Tip');
+        })->missing(function (Request $request) {
+            throw new TechTipNotFoundException($request);
         });
 });
 

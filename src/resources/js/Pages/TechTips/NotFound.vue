@@ -18,7 +18,7 @@
                                 Well this is embarrassing...
                             </h5>
                             <p class="text-center">
-                                It seems I cannot find the customer you are
+                                It seems I cannot find the Tech Tip you are
                                 looking for.
                             </p>
                             <p class="text-center">
@@ -28,7 +28,7 @@
                             <p class="text-center">
                                 <Link
                                     as="button"
-                                    :href="$route('customers.index')"
+                                    :href="$route('tech-tips.index')"
                                     class="btn btn-info"
                                 >
                                     Back to Search Page
