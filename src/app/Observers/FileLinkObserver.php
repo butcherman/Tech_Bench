@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\File\FileDataDeletedEvent;
 use App\Models\FileLink;
 use Illuminate\Support\Facades\Log;
 
@@ -38,6 +39,18 @@ class FileLinkObserver
             'File Link Information updated by ' . $this->user,
             $fileLink->toArray()
         );
+    }
+
+    /**
+     * Before a File Link is deleted, we queue all files for deletion
+     */
+    public function deleting(FileLink $fileLink)
+    {
+        $fileList = $fileLink->FileUpload->pluck('file_id')->toArray();
+
+        foreach ($fileList as $fileId) {
+            event(new FileDataDeletedEvent($fileId));
+        }
     }
 
     /**
