@@ -21,8 +21,6 @@ class CertificateExpiredNotification extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @codeCoverageIgnore
      */
     public function toMail(object $notifiable): MailMessage
     {

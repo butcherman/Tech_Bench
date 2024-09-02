@@ -30,17 +30,15 @@ class SendAuthCode extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @codeCoverageIgnore
      */
     public function toMail(object $notifiable): MailMessage
     {
-        Log::info('Sending two factor authentication code to '.$notifiable->full_name);
+        Log::info('Sending two factor authentication code to ' . $notifiable->full_name);
 
         return (new MailMessage)
             ->subject('Tech Bench Verification Code')
-            ->greeting('Hello '.$notifiable->full_name)
+            ->greeting('Hello ' . $notifiable->full_name)
             ->line('For security reasons, please enter the verification code to complete your two-factor authentication to sign into the Tech Bench')
-            ->line('Verification Code: '.$this->authCode);
+            ->line('Verification Code: ' . $this->authCode);
     }
 }

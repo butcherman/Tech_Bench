@@ -39,28 +39,24 @@ class GuestFileUploadedNotification extends Notification
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @codeCoverageIgnore
      */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('File Uploaded to File Link: '.$this->link->link_name)
+            ->subject('File Uploaded to File Link: ' . $this->link->link_name)
             ->greeting('Hello,')
-            ->line('A file has been uploaded to the File Link - '.
-                $this->link->link_name.'. by '.$this->timeline->added_by)
+            ->line('A file has been uploaded to the File Link - ' .
+                $this->link->link_name . '. by ' . $this->timeline->added_by)
             ->action('Click to View File', route('links.show', $this->link->link_id));
     }
 
     /**
      * Get the array representation of the notification
-     *
-     * @codeCoverageIgnore
      */
     public function toArray(object $notifiable): array
     {
         return [
-            'subject' => 'New file uploaded to File Link '.$this->link->link_name,
+            'subject' => 'New file uploaded to File Link ' . $this->link->link_name,
             'data' => [
                 'link' => $this->link->toArray(),
                 'name' => $this->timeline->added_by,
