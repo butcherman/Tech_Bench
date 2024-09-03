@@ -11,15 +11,15 @@ echo "New installation of Tech Bench detected"
 echo "Setting up the application for the first time"
 echo "Please wait...."
 
-# Install Composer and NPM dependencies
-echo "Installing Dependencies"
-composer install
-npm install
-
 #  Create .env file
 cp /app/.env.example /app/.env
 #  Add App URL to the .env file
 sed -i "s/localhost/$TB_URL/g" /app/.env
+
+# Install Composer and NPM dependencies
+echo "Installing Dependencies"
+composer install
+npm install
 
 #  Create Encryption Key
 echo "Creating Encryption Key"

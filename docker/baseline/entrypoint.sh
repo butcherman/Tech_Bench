@@ -81,8 +81,9 @@ then
 elif [ $SERVICE = "scheduler" ]
 then
     /scripts/scheduler.sh
+elif [ $SERVICE = "reverb" ]
+then 
+    php /app/artisan reverb:start
 else
-    php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf &
-    /scripts/scheduler.sh &&
-    fg
+    php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
 fi

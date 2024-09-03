@@ -17,8 +17,10 @@ cd /tmp/downloads
 #  Determine if we are using a Github Branch, or downloading an official release
 if [ "${BRANCH}" != false ];
 then
+    echo "Downloading Branch $BRANCH"
     URL=https://github.com/butcherman/tech_bench/archive/$BRANCH.zip;
 else
+    echo "Downloading Latest Version"
     URL=$(curl -s https://api.github.com/repos/butcherman/tech_bench/releases/$VERSION | grep zipball_url | cut -d : -f 2,3 | tr -d \" | tr -d \,)
 fi
 
@@ -32,8 +34,8 @@ unzip -o $FILE_ROOT
 #  Copy files to the /app directory
 DIRNAME=$(zipinfo -1 $FILE_ROOT | grep -o "^[^/]\+[/]" | sort -u | tr -d \/)
 cd $DIRNAME
-cp -R * /app/
-cp .env.example /app/.env.example
+cp -R src/* /app/
+cp src/.env.example /app/.env.example
 
 #  Copy everything from this /app directory to the /staging directory
 #  This is done in case the user installs a newer Docker Image in to an existing volume

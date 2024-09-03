@@ -10,31 +10,28 @@ version: "3.8"
 networks:
     app-tier:
         driver: bridge
-# volumes:
-#     appData:
-# services:
-
-#  Application Container
-# tech_bench:
-#   container_name: tech_bench
-#   restart: unless-stopped
-#   image: butcherman/tech_bench_app:latest
-#   volumes:
-#     - appData:/app
-#     - ./storageData/disks:/app/storage/app/
-#     - ./backups:/app/storage/backups/
-#     - ./storageData/logs:/app/storage/logs
-#     - ./storageData/keystore:/app/keystore
-#   environment:
-#     - TB_URL=${TB_URL}
-#     - ENABLE_HTTPS=${ENABLE_HTTPS}
-#     - SERVICE=app
-#   networks:
-#     - app-tier
-#   depends_on:
-#     - database
-#     - redis
-
+volumes:
+    appData:
+services:
+    #  Application Container
+    tech_bench:
+        container_name: tech_bench
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:latest
+        volumes:
+            - appData/src:/app
+            - ./storageData/disks:/app/storage/app/
+            - ./backups:/app/storage/backups/
+            - ./storageData/logs:/app/storage/logs
+            - ./storageData/keystore:/app/keystore
+        environment:
+            - TB_URL=${TB_URL}
+            - ENABLE_HTTPS=${ENABLE_HTTPS}
+            - SERVICE=app
+        networks:
+            - app-tier
+        # depends_on:
+        # - nginx
 #  Horizon Container
 # horizon:
 #   container_name: horizon
