@@ -18,6 +18,7 @@ sed -i "s/localhost/$TB_URL/g" /app/.env
 
 # Install Composer and NPM dependencies
 echo "Installing Dependencies"
+cd /app
 composer install
 npm install
 
