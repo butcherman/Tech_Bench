@@ -26,11 +26,20 @@ be stored and shared for quick centralized access. Information includes:
 
 ### Tech Tips (Knowledge Base) and Documentation
 
-TODO - Add info
+While working in the field, all service technicians run across tips and tricks that they use to make their jobs easier.
+Tech Tips allows for users to create and share these tips with coworkers. This creates a custom Knowledge Base for all
+registered users.
+
+An optional Public Knowledge Base is also available to give your customers an easy place to find information such as Quick
+Reference Guides, or custom documentation that has been put together for customers.
 
 ## Additional Features
 
-TODO - Add Features
+### File Links
+
+Sometimes customers need access to files, or need to provide technicians with files that may be too large to email. File
+Links allows users to create a custom URL to deliver files, or have files uploaded to. Each File Link has an expiration
+dates and is only available for a limited time.
 
 ## Installation and Setup of Tech Bench
 
