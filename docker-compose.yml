@@ -32,6 +32,25 @@ services:
             - app-tier
         # depends_on:
         # - nginx
+    #  NGINX Web Server
+    nginx:
+        image: butcherman/tech_bench_nginx:1.0
+        container_name: nginx
+        restart: unless-stopped
+        volumes:
+            - appData:/app
+            - ./storageData/keystore:/app/keystore
+            - ./storageData/disks/public:/app/public/storage
+        environment:
+            - TB_URL=${TB_URL}
+            - ENABLE_HTTPS=${ENABLE_HTTPS}
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-tier
+#   depends_on:
+#     - tech_bench
 #  Horizon Container
 # horizon:
 #   container_name: horizon
@@ -69,26 +88,6 @@ services:
 #   depends_on:
 #     - database
 #     - redis
-
-#  NGINX Web Server
-# nginx:
-#   image: butcherman/tech_bench_nginx:1.0
-#   container_name: nginx
-#   restart: unless-stopped
-#   volumes:
-#     - appData:/app
-#     - ./storageData/keystore:/app/keystore
-#     - ./storageData/disks/public:/app/public/storage
-#   environment:
-#     - TB_URL=${TB_URL}
-#     - ENABLE_HTTPS=${ENABLE_HTTPS}
-#   ports:
-#     - '80:80'
-#     - '443:443'
-#   networks:
-#     - app-tier
-#   depends_on:
-#     - tech_bench
 
 #  MySQL Database Container
 # database:
