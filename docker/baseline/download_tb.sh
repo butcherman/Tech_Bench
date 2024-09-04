@@ -34,8 +34,15 @@ unzip -o $FILE_ROOT
 #  Copy files to the /app directory
 DIRNAME=$(zipinfo -1 $FILE_ROOT | grep -o "^[^/]\+[/]" | sort -u | tr -d \/)
 cd $DIRNAME
-cp -R src/* /app/
-cp src/.env.example /app/.env.example
+
+if test -d src; 
+then 
+    cp -R src/* /app/
+    cp src/.env.example /app/.env.example
+else 
+    cp -R s* /app/
+    cp s.env.example /app/.env.example
+fi
 
 #  Copy everything from this /app directory to the /staging directory
 #  This is done in case the user installs a newer Docker Image in to an existing volume
