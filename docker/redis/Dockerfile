@@ -12,6 +12,4 @@ USER root
 
 RUN apt update && apt upgrade -y --no-install-recommends
 
-USER 1001
-
 WORKDIR /app

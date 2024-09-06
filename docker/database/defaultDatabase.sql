@@ -6,6 +6,6 @@
 
 CREATE SCHEMA `tech-bench`;
 USE `tech-bench`;
-CREATE USER `tbUser`@`localhost` IDENTIFIED BY 'techBenchDatabase';
-GRANT ALL PRIVILEGES ON `tech-bench`.* TO 'tbUser'@'localhost';
+CREATE USER `tbUser`@`% IDENTIFIED BY 'techBenchDatabase';
+GRANT ALL PRIVILEGES ON `tech-bench` TO 'tbUser' WITH GRANT OPTION;
 FLUSH PRIVILEGES; 
