@@ -1,11 +1,8 @@
-/*******************************************************************************
-*
-*       Create Initial Database and Tech Bench User
-*
-********************************************************************************/
+################################################################################
+#                Create Initial Database and Tech Bench User                   #
+################################################################################
 
-CREATE SCHEMA `tech-bench`;
-USE `tech-bench`;
-CREATE USER `tbUser`@`% IDENTIFIED BY 'techBenchDatabase';
-GRANT ALL PRIVILEGES ON `tech-bench` TO 'tbUser' WITH GRANT OPTION;
+CREATE SCHEMA IF NOT EXISTS `tech-bench`;
+CREATE USER `tbUser`@`%` IDENTIFIED BY 'techBenchDatabase';
+GRANT ALL PRIVILEGES ON `tech-bench`.* TO 'tbUser'@'%';
 FLUSH PRIVILEGES; 
