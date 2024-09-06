@@ -25,11 +25,8 @@ then
     mkdir -p /app/keystore/private
     mv /tmp/server.crt /app/keystore/server.crt
     mv /tmp/server.key /app/keystore/private/server.key
-    chmod 755 -R /app/keystore
 
     #  Cleanup unneeded files
     rm -rf /tmp/server.csr /tmp/server.key.org /tmp/passphrase.txt
 fi
 
-#  Run the original entrypoint script
-/opt/bitnami/scripts/nginx/entrypoint.sh /opt/bitnami/scripts/nginx/run.sh
