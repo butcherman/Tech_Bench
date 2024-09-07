@@ -7,9 +7,9 @@
 #                                                                                               #
 #################################################################################################
 
-echo "Starting NGINX"
+echo "Starting NGINX Setup Script"
 
-#  If the SSL file does not exist, create a self signed SSL cert
+# If the SSL file does not exist, create a self signed SSL cert
 if [ ! -f "/app/keystore/server.crt" ]
 then
     #  Generate self signed SSL Certificate

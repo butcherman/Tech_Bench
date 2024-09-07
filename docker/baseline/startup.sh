@@ -44,6 +44,8 @@ set -m
 
 echo "Starting Tech Bench"
 
+# If this is the primary container, verify that we are not doing an update and 
+# that all of the necessary files exist in the /app folder
 if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
 then
     #  If the .env file does not exist, run the setup script to create the database and configuration
@@ -51,27 +53,29 @@ then
     then
         /scripts/setup.sh
     #  Check if the version file is available in the /staging/config/ directory
-    elif [ -f "/staging/version" ]
-    then
-        STAGED_VERSION=$(head -n 1 /staging/version)
-        APP_VERSION=$(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g')
+    # elif [ -f "/staging/version" ]
+    # then
+    #     STAGED_VERSION=$(head -n 1 /staging/version)
+    #     APP_VERSION=$(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g')
 
-        vercomp $STAGED_VERSION $APP_VERSION
-        NEED_UPDATE=$?
+    #     vercomp $STAGED_VERSION $APP_VERSION
+    #     NEED_UPDATE=$?
 
-        if [ $NEED_UPDATE == 1 ]
-        then
-            /scripts/update.sh
-        fi
+    #     if [ $NEED_UPDATE == 1 ]
+    #     then
+    #         /scripts/update.sh
+    #     fi
     fi
 fi
 
-#  During startup process, the MySQL container runs a self update command
-#  To allow this update to finish properly and not cause issues with TB Boot
-#  process, we will pause the TB startup process for 45 seconds
-sleep 45
+# If this is not the master service, pause for 30 seconds to allow all setup scripts to complete
+if [ ! $SERVICE = "app" ]
+then
+    sleep 30
+fi
 
 #  Start the Horizon and PHP-FPM Services and run the Scheduler script based on server purppose
+echo "Tech Bench $SERVICE is now running"
 if [ $SERVICE = "app" ]
 then
      php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
