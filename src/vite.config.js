@@ -27,16 +27,16 @@ export default defineConfig(({ mode }) => {
         ],
         server: {
             https: {
-                key: fs.readFileSync("./keystore/private/server.key"),
-                cert: fs.readFileSync("./keystore/server.crt"),
+                key: fs.readFileSync("/app/keystore/private/server.key"),
+                cert: fs.readFileSync("/app/keystore/server.crt"),
             },
             host: "0.0.0.0",
             hmr: {
                 protocol: "wss",
                 host: wsHost,
                 https: {
-                    key: fs.readFileSync("./keystore/private/server.key"),
-                    cert: fs.readFileSync("./keystore/server.crt"),
+                    key: fs.readFileSync("/app/keystore/private/server.key"),
+                    cert: fs.readFileSync("/app/keystore/server.crt"),
                 },
             },
         },
