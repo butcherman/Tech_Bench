@@ -24,9 +24,10 @@ services:
             - keystore:/app/keystore
             - ./storageData/disks:/app/storage/app/
             - ./storageData/logs/app:/app/storage/logs
+            - ./.env:/app/.env
         environment:
             - SERVICE=app
-            - TB_URL=${TB_URL}
+            - TB_URL=${BASE_URL}
         networks:
             - app-tier
 
@@ -40,7 +41,7 @@ services:
             - keystore:/app/keystore
             - ./storageData/logs/nginx:/app/storage/logs/nginx
         environment:
-            - TB_URL=${TB_URL}
+            - TB_URL=${BASE_URL}
         ports:
             - "80:80"
             - "443:443"
@@ -69,26 +70,34 @@ services:
         networks:
             - app-tier
 
-    # #  Scheduler Container
-    # scheduler:
-    #     container_name: scheduler
-    #     restart: unless-stopped
-    #     image: butcherman/tech_bench_app:dev7
-    #     # volumes:
-    #     #     - assetData:/app
-    #     environment:
-    #         - SERVICE=scheduler
-    #     networks:
-    #         - app-tier
+    #  Scheduler Container
+    scheduler:
+        container_name: scheduler
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:dev7
+        volumes:
+            - assetData:/app/public
+            - keystore:/app/keystore
+            - ./storageData/disks:/app/storage/app/
+            - ./storageData/logs/scheduler:/app/storage/logs
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=scheduler
+        networks:
+            - app-tier
 
-    # #  Reverb Container for Websockets
-    # reverb:
-    #     container_name: reverb
-    #     restart: unless-stopped
-    #     image: butcherman/tech_bench_app:dev7
-    #     # volumes:
-    #     #     - assetData:/app
-    #     environment:
-    #         - SERVICE=reverb
-    #     networks:
-    #         - app-tier
+    #  Reverb Container for Websockets
+    reverb:
+        container_name: reverb
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:dev7
+        volumes:
+            - assetData:/app/public
+            - keystore:/app/keystore
+            - ./storageData/disks:/app/storage/app/
+            - ./storageData/logs/reverb:/app/storage/logs
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=reverb
+        networks:
+            - app-tier
