@@ -8,6 +8,9 @@
 #                                                                                               #
 #################################################################################################
 
+# Load .env file variables
+source /app/.env
+
 #  Fuction to compare version numbers
 vercomp () {
     if [[ $1 == $2 ]]
@@ -44,12 +47,15 @@ set -m
 
 echo "Starting Tech Bench"
 
-# If this is the primary container, verify that we are not doing an update and 
-# that all of the necessary files exist in the /app folder
+echo "###################################################################"
+echo                    $APP_KEY
+echo "###################################################################"
+
+# If this is the primary container, perform additional Checks
 if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
 then
-    #  If the .env file does not exist, run the setup script to create the database and configuration
-    if [ ! -f "/app/.env" ]
+    # Do we need to run the first time setup script?
+    if [ ! $APP_KEY ]
     then
         /scripts/setup.sh
     #  Check if the version file is available in the /staging/config/ directory

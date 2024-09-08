@@ -10,89 +10,44 @@ networks:
     app-tier:
         driver: bridge
 volumes:
-    appData:
+    assetData:
+    keystore:
+
 services:
-    #  Application Container
+    # Application Container
     tech_bench:
         container_name: tech_bench
         restart: unless-stopped
-        image: butcherman/tech_bench_app:dev
+        image: butcherman/tech_bench_app:dev7
         volumes:
-            # - appData/src:/app
+            - assetData:/app/public
+            - keystore:/app/keystore
             - ./storageData/disks:/app/storage/app/
-            - ./backups:/app/storage/backups/
-            - ./storageData/logs:/app/storage/logs
-            - ./storageData/keystore:/app/keystore
+            - ./storageData/logs/app:/app/storage/logs
         environment:
-            - TB_URL=${TB_URL}
-            - ENABLE_HTTPS=${ENABLE_HTTPS}
             - SERVICE=app
+            - TB_URL=${TB_URL}
         networks:
             - app-tier
 
-    #  NGINX Web Server
+    # NGINX Web Server
     nginx:
         image: butcherman/tech_bench_nginx:1.0
         container_name: nginx
         restart: unless-stopped
         volumes:
-            # - appData:/app
-            - ./storageData/keystore:/app/keystore
-            - ./storageData/disks/public:/app/public/storage
+            - assetData:/app/public:ro
+            - keystore:/app/keystore
+            - ./storageData/logs/nginx:/app/storage/logs/nginx
         environment:
             - TB_URL=${TB_URL}
-            - ENABLE_HTTPS=${ENABLE_HTTPS}
         ports:
             - "80:80"
             - "443:443"
         networks:
             - app-tier
 
-    #  Horizon Container
-    horizon:
-        container_name: horizon
-        restart: unless-stopped
-        image: butcherman/tech_bench_app:dev
-        volumes:
-            # - appData:/app
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/backups:/app/storage/backups/
-            - ./storageData/logs:/app/storage/logs
-            - ./storageData/keystore:/app/keystore
-        environment:
-            - SERVICE=horizon
-        networks:
-            - app-tier
-
-    #  Scheduler Container
-    scheduler:
-        container_name: scheduler
-        restart: unless-stopped
-        image: butcherman/tech_bench_app:dev
-        volumes:
-            # - appData:/app
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/backups:/app/storage/backups/
-            - ./storageData/logs:/app/storage/logs
-            - ./storageData/keystore:/app/keystore
-        environment:
-            - SERVICE=scheduler
-        networks:
-            - app-tier
-
-    #  Reverb Container for Websockets
-    reverb:
-        container_name: reverb
-        restart: unless-stopped
-        image: butcherman/tech_bench_app:dev
-        # volumes:
-        # - appData:/app
-        environment:
-            - SERVICE=reverb
-        networks:
-            - app-tier
-
-    #  MySQL Database Container
+    # MySQL Database Container
     database:
         image: butcherman/tech_bench_database:1.0
         container_name: database
@@ -102,7 +57,7 @@ services:
         networks:
             - app-tier
         environment:
-            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=tbRootPasswd
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:
@@ -113,3 +68,27 @@ services:
             - ./appData/redis:/bitnami/redis/data
         networks:
             - app-tier
+
+    # #  Scheduler Container
+    # scheduler:
+    #     container_name: scheduler
+    #     restart: unless-stopped
+    #     image: butcherman/tech_bench_app:dev7
+    #     # volumes:
+    #     #     - assetData:/app
+    #     environment:
+    #         - SERVICE=scheduler
+    #     networks:
+    #         - app-tier
+
+    # #  Reverb Container for Websockets
+    # reverb:
+    #     container_name: reverb
+    #     restart: unless-stopped
+    #     image: butcherman/tech_bench_app:dev7
+    #     # volumes:
+    #     #     - assetData:/app
+    #     environment:
+    #         - SERVICE=reverb
+    #     networks:
+    #         - app-tier

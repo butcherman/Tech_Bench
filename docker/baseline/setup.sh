@@ -11,12 +11,6 @@ echo "New installation of Tech Bench detected"
 echo "Setting up the application for the first time"
 echo "Please wait...."
 
-#  Create .env file
-cp /app/.env.example /app/.env
-
-#  Add App URL to the .env file
-sed -i "s/localhost/$TB_URL/g" /app/.env
-
 #  Create new Pusher Credentials
 PUSHER_ID=`openssl rand -base64 8`
 PUSHER_KEY=`openssl rand -base64 10`
