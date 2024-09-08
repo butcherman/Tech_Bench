@@ -1,17 +1,16 @@
-#################################################################################################################
-#                                                                                                               #
-#                                                                                                               #
-#                                      Tech Bench Docker Development                                            #
-#         NOTE:  Modify .env file to change default passwords before executing `docker-compose up` command      #
-#                                                                                                               #
-#                                                                                                               #
-#################################################################################################################
+################################################################################
+#                                                                              #
+#                                                                              #
+#                          Tech Bench Docker Development                       #
+#           NOTE:  Check .env file for necessary fields to modify to           #
+#                        secure this Tech Bench installation                   #
+#                                                                              #
+#                                                                              #
+################################################################################
 version: "3.8"
 networks:
     app-tier:
         driver: bridge
-volumes:
-    appData:
 services:
     #  Application Container
     tech_bench:
@@ -22,9 +21,10 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ../src:/app
+            - ./.env:/app/.env
         environment:
             - SERVICE=app
-            - TB_URL=${TB_URL}
+            - TB_URL=${BASE_URL}
         networks:
             - app-tier
 
@@ -41,8 +41,6 @@ services:
             - "443:443"
         networks:
             - app-tier
-        depends_on:
-            - tech_bench
 
     #  MySQL Database Container
     database:
@@ -78,6 +76,7 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ../src:/app
+            - ./.env:/app/.env
         environment:
             - SERVICE=horizon
         networks:
@@ -96,13 +95,11 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ../src:/app
+            - ./.env:/app/.env
         environment:
             - SERVICE=scheduler
         networks:
             - app-tier
-        depends_on:
-            - database
-            - redis
 
     #  Reverb Container for Websockets
     reverb:
@@ -113,6 +110,7 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ../src:/app
+            - ./.env:/app/.env
         networks:
             - app-tier
         depends_on:
@@ -157,14 +155,11 @@ services:
         user: root
         volumes:
             - ../src:/app
-            # - ../appData/ca-certificates:/usr/local/share/ca-certificates
+            - ./.env:/app/.env
         environment:
             - SERVICE=app
         networks:
             - app-tier
         ports:
             - "5173:5173"
-        # depends_on:
-        #     - database
-        #     - redis
         entrypoint: npm run dev

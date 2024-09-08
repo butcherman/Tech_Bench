@@ -10,25 +10,25 @@
 
 set -m
 
-echo "Starting Tech Bench"
+echo "Starting Tech Bench Development Container"
 
 if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
 then
     #  If the .env file does not exist, run the setup script to create the database and configuration
-    if [ ! -f "/app/.env" ]
+    if [ ! -f /app/keystore/version ]
     then
         /scripts/setup.dev.sh
     fi
 fi
 
-#  During startup process, the MySQL container runs a self update command
-#  To allow this update to finish properly and not cause issues with TB Boot
-#  process, we will pause the TB startup process for 45 seconds
-sleep 45
+# pause for 30 seconds to allow all setup scripts to complete
+sleep 30
 
 #  Start the Horizon and PHP-FPM Services and run the Scheduler script based on server purppose
+echo "Tech Bench $SERVICE is now running"
 if [ $SERVICE = "app" ]
 then
+    # Import all Scout data
     echo "Importing Meilisearch Data"
     php artisan scout:sync-index-settings
     php artisan scout:import "App\Models\TechTip"
@@ -40,8 +40,9 @@ then
 elif [ $SERVICE = "scheduler" ]
 then
     /scripts/scheduler.sh
+elif [ $SERVICE = "reverb" ]
+then 
+    php /app/artisan reverb:start
 else
-    php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf &
-    /scripts/scheduler.sh &&
-    fg
+    php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
 fi
