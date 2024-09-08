@@ -1,11 +1,12 @@
-#################################################################################################################
-#                                                                                                               #
-#                                                                                                               #
-#                                      Tech Bench Docker Installation                                           #
-#         NOTE:  Modify .env file to change default passwords before executing `docker-compose up` command      #
-#                                                                                                               #
-#                                                                                                               #
-#################################################################################################################
+################################################################################
+#                                                                              #
+#                                                                              #
+#                          Tech Bench Docker Installation                      #
+#           NOTE:  Check .env file for necessary fields to modify to           #
+#                        secure this Tech Bench installation                   #
+#                                                                              #
+#                                                                              #
+################################################################################
 networks:
     app-tier:
         driver: bridge
@@ -67,6 +68,32 @@ services:
         restart: unless-stopped
         volumes:
             - ./appData/redis:/bitnami/redis/data
+        networks:
+            - app-tier
+
+    # Melisearch Container for Search Engine
+    meilisearch:
+        image: getmeili/meilisearch:v1.9.0
+        container_name: meilisearch
+        restart: unless-stopped
+        environment:
+            - MEILI_MASTER_KEY=MeiliTBMaster
+        networks:
+            - app-tier
+
+    #  Horizon Container to run background jobs
+    horizon:
+        container_name: horizon
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:dev7
+        volumes:
+            - assetData:/app/public
+            - keystore:/app/keystore
+            - ./storageData/disks:/app/storage/app/
+            - ./storageData/logs/horizon:/app/storage/logs
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=horizon
         networks:
             - app-tier
 

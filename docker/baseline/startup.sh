@@ -86,7 +86,12 @@ fi
 echo "Tech Bench $SERVICE is now running"
 if [ $SERVICE = "app" ]
 then
-     php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
+    # Import all Scout data
+    echo "Importing Meilisearch Data"
+    php artisan scout:sync-index-settings
+    php artisan scout:import "App\Models\TechTip"
+    php artisan scout:import "App\Models\Customer"
+    php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
 elif [ $SERVICE = "horizon" ]
 then
     php /app/artisan horizon
