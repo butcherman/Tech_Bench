@@ -37,8 +37,11 @@ php /app/artisan breadcrumbs:cache
 php /app/artisan optimize
 
 # Install Composer and NPM dependencies
-echo "Installing Dependencies"
+echo "Building Application"
 cd /app
 npm run build
+
+# Store the version information in the keystore volume
+echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /app/keystore/version
 
 echo "Tech Bench Setup Complete"

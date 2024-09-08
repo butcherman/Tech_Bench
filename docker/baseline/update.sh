@@ -8,36 +8,24 @@
 #                                                                                               #
 #################################################################################################
 
-echo 'Completing system update'
+echo "Starting Update"
 
-#  Move the existing application files to a tmp directory that will be deleted later
-# mkdir /app/tmp
-# mv /app/app /app/tmp/
-# mv /app/config /app/tmp/
-# mv /app/database /app/tmp/
-# mv /app/resources /app/tmp/
-# mv /app/routes /app/tmp/
+#  Update the database
+echo "Waiting for Database to finish Startup"
+sleep 15
+php /app/artisan migrate --force
 
-# #  Copy all staged files to /app directory
-# cp -R /staging/* /app/
+#  Cache configuration files
+php /app/artisan optimize:clear
+php /app/artisan breadcrumbs:cache
+php /app/artisan optimize
 
-# #  Delete the temporary directory
-# rm -rf /app/tmp/
+# Install Composer and NPM dependencies
+echo "Building Application"
+cd /app
+npm run build
 
-# #  Update and compile all dependencies
-# cd /app
-# composer install --no-dev --no-interaction --optimize-autoloader  --no-ansi >> /dev/null 2>&1
-# npm install >> /dev/null 2>&1
-# npm run production
+# Store the version information in the keystore volume
+echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /app/keystore/version
 
-# #  Create the database
-# php /app/artisan migrate --force
-
-# #  Cache configuration files
-# # php /app/artisan config:cache
-# php /app/artisan route:clear
-# php /app/artisan breadcrumbs:cache
-# php /app/artisan route:cache
-# php /app/artisan view:cache
-
-# echo 'Update Completed'
+echo 'Update Completed'

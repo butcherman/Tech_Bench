@@ -8,8 +8,9 @@
 #                                                                                               #
 #################################################################################################
 
-# Load .env file variables
-source /app/.env
+#  Color's for text
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
 #  Fuction to compare version numbers
 vercomp () {
@@ -47,30 +48,31 @@ set -m
 
 echo "Starting Tech Bench"
 
-echo "###################################################################"
-echo                    $APP_KEY
-echo "###################################################################"
-
 # If this is the primary container, perform additional Checks
 if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
 then
     # Do we need to run the first time setup script?
-    if [ ! $APP_KEY ]
+    if [ ! -f /app/keystore/version ]
     then
         /scripts/setup.sh
-    #  Check if the version file is available in the /staging/config/ directory
-    # elif [ -f "/staging/version" ]
-    # then
-    #     STAGED_VERSION=$(head -n 1 /staging/version)
-    #     APP_VERSION=$(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g')
+    else
+        # Check if the version file is available in the /staging/config/ directory
+        STAGED_VERSION=$(head -n 1 /app/keystore/version)
+        APP_VERSION=$(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g')
 
-    #     vercomp $STAGED_VERSION $APP_VERSION
-    #     NEED_UPDATE=$?
+        vercomp $APP_VERSION $STAGED_VERSION 
+        NEED_UPDATE=$?
 
-    #     if [ $NEED_UPDATE == 1 ]
-    #     then
-    #         /scripts/update.sh
-    #     fi
+        if [ $NEED_UPDATE == 1 ]
+        then
+            echo -e "${RED} New Version found.  Please wait will we update ${NC}"
+            /scripts/update.sh
+        elif [ $NEED_UPDATE == 2 ]
+        then
+            echo -e "${RED} ERROR: VERSION MISMATCH"
+            echo -e "${RED} TECH BENCH VERSION IS OLDER THAN DATABASE VERSION"
+            echo -e "${RED} PLEASE UPGRADE TO VERSION $STAGED_VERSION OR HIGHER TO CONTINUE ${NC}"
+        fi
     fi
 fi
 
