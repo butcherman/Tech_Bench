@@ -1,13 +1,12 @@
 ################################################################################
 #                                                                              #
 #                                                                              #
-#                          Tech Bench Docker Development                       #
+#                         Tech Bench Docker Development                        #
 #           NOTE:  Check .env file for necessary fields to modify to           #
-#                        secure this Tech Bench installation                   #
+#                      secure this Tech Bench installation                     #
 #                                                                              #
 #                                                                              #
 ################################################################################
-version: "3.8"
 networks:
     app-tier:
         driver: bridge

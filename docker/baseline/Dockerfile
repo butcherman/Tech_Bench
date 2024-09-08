@@ -7,7 +7,7 @@
 #                                                                                               #
 #################################################################################################
 
-FROM bitnami/php-fpm:8.3
+FROM bitnami/php-fpm:8.2
 
 ENV TB_URL=localhost
 ENV ENABLE_HTTPS=true
