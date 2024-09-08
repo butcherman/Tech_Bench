@@ -22,6 +22,7 @@ class StepFour extends Controller
                 'contains_lowercase' => (bool) config('auth.passwords.settings.contains_lowercase'),
                 'contains_number' => (bool) config('auth.passwords.settings.contains_number'),
                 'contains_special' => (bool) config('auth.passwords.settings.contains_special'),
+                'disable_compromised' => (bool) config('auth.passwords.settings.disable_compromised'),
             ],
         ]);
     }

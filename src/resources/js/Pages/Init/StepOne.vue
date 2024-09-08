@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 mt-3">
+        <div v-if="step1b" class="col-md-6 mt-3">
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">Password Rules</div>

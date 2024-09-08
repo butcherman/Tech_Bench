@@ -2,7 +2,6 @@
     <div id="auth-layout-wrapper" class="container-fluid">
         <div class="row align-items-center h-100">
             <div class="col">
-                <AppFlash />
                 <StepNavigation :step-list="stepList" :current-step="step" />
                 <AppAlerts />
                 <slot />
@@ -12,11 +11,10 @@
 </template>
 
 <script setup lang="ts">
-import AppFlash from "./AppLayout/AppFlash.vue";
 import AppAlerts from "./AppLayout/AppAlerts.vue";
 import StepNavigation from "@/Components/_Base/StepNavigation.vue";
 import { ref, computed } from "vue";
-import { router, usePage } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import "../../scss/Layouts/authLayout.scss";
 
 const step = computed<number>(() => usePage<initProps>().props.step || 0);

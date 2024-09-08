@@ -19,6 +19,7 @@
             :list="roles"
             text-field="name"
             value-field="role_id"
+            :disabled="init"
         />
     </VueForm>
 </template>

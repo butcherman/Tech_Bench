@@ -14,6 +14,7 @@
                         :url="settings.url"
                         :timezone="settings.timezone"
                         :max-filesize="settings.max_filesize"
+                        :company_name="settings.company_name"
                         init
                         @success="router.get($route('init.step-3'))"
                     />
@@ -33,6 +34,7 @@ defineProps<{
         url: string;
         timezone: string;
         max_filesize: number;
+        company_name: string;
     };
     timezoneList: TimezoneList;
 }>();
