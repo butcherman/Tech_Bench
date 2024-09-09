@@ -12,20 +12,20 @@
                     </p>
                     <div class="row justify-content-center">
                         <div class="col-md-4">
-                            <Link
+                            <a
                                 :href="$route('dashboard')"
                                 class="btn btn-info w-100"
                             >
                                 Go To Dashboard
-                            </Link>
+                            </a>
                         </div>
                         <div class="col-md-4">
-                            <Link
+                            <a
                                 :href="$route('admin.index')"
                                 class="btn btn-info w-100"
                             >
                                 Go To Administration
-                            </Link>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -36,8 +36,6 @@
 
 <script setup lang="ts">
 import InitLayout from "@/Layouts/InitLayout.vue";
-import UserPasswordForm from "@/Forms/User/UserPasswordForm.vue";
-import { router } from "@inertiajs/vue3";
 
 defineProps<{}>();
 </script>

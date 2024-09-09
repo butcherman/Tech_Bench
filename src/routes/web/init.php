@@ -17,16 +17,20 @@ Route::middleware(['auth', 'init'])
     ->name('init.')
     ->group(function () {
         Route::inertia('/', 'Init/Welcome')->name('welcome');
-        Route::get('secure-administrator-account', StepOne::class)->name('step-1');
+        Route::get('secure-administrator-account', StepOne::class)
+            ->name('step-1');
         Route::get('basic-settings', StepTwo::class)->name('step-2');
         Route::get('email-settings', StepThree::class)->name('step-3');
         Route::get('user-settings', StepFour::class)->name('step-4');
-        Route::get('finish', Finish::class)->name('finish');
+        Route::get('finish', Finish::class)->name('finish')
+            ->withoutMiddleware('init');
 
-        Route::get('test-email', SendTestEmailController::class)->name('test-email');
+        Route::get('test-email', SendTestEmailController::class)
+            ->name('test-email');
 
         Route::put('secure-administrator-account/{user}', [
-            UserAdministrationController::class, 'update',
+            UserAdministrationController::class,
+            'update',
         ])->name('step-1.submit');
         Route::put('basic-settings', [BasicSettingsController::class, 'update'])
             ->name('step-2.submit');

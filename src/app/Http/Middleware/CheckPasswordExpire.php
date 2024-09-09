@@ -14,13 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CheckPasswordExpire
 {
-    //  Routes that are not affected by the password expiring
-    protected $bypassRoutes = [
-        // 'user.password.show',
-        // 'user-password.update',
-        'logout',
-    ];
-
     /**
      * Check to see if the users password has expired
      */
@@ -32,7 +25,7 @@ class CheckPasswordExpire
             $request->user()->password_expires < Carbon::now()
         ) {
             Log::stack(['auth', 'user'])
-                ->notice('User '.$request->user()->full_name.' is being forced to change their password');
+                ->notice('User ' . $request->user()->full_name . ' is being forced to change their password');
 
             return redirect()
                 ->route('user.change-password.show')

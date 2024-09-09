@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Events\Config\UrlChangedEvent;
 use App\Models\AppSettings;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Foundation\Http\FormRequest;
@@ -36,9 +37,9 @@ class BasicSettingsRequest extends FormRequest
      */
     public function processSettings()
     {
-        if (config('app.url') !== $this->url) {
-            // TODO - Add this back in
-            // event(new AppUrlChangedEvent($this->url, config('app.url')));
+        $baseUrl = str_replace('https://', '', config('app.url'));
+        if ($baseUrl !== $this->url) {
+            event(new UrlChangedEvent($this->url, $baseUrl));
             $this->saveSettings('app.url', $this->url);
         }
 
@@ -47,7 +48,7 @@ class BasicSettingsRequest extends FormRequest
             'app.company_name' => $this->company_name,
             'app.schedule_timezone' => $this->timezone,
             'filesystems.max_filesize' => $this->max_filesize,
-            'services.azure.redirect' => $this->url.'/auth/callback',
+            'services.azure.redirect' => $this->url . '/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);
