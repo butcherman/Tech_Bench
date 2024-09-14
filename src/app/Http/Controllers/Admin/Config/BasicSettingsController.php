@@ -39,7 +39,7 @@ class BasicSettingsController extends Controller
         $request->processSettings();
 
         Log::notice(
-            'Application Configuration updated by ' . $request->user()->username,
+            'Application Configuration updated by '.$request->user()->username,
             $request->toArray()
         );
 

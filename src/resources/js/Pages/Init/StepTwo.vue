@@ -14,24 +14,6 @@
                         init
                         @success="router.get($route('init.step-3'))"
                     />
-                    <!-- <Link
-                        v-if="allowNext"
-                        as="button"
-                        :href="$route('init.test-email')"
-                        class="btn btn-warning w-100 my-2"
-                        preserve-state
-                    >
-                        Send Test Email (uses saved values)
-                    </Link> -->
-                    <!-- <div v-if="allowNext" class="separator"></div> -->
-                    <!-- <Link
-                        v-if="allowNext"
-                        as="button"
-                        :href="$route('init.step-4')"
-                        class="btn btn-info w-100 my-2"
-                    >
-                        Continue
-                    </Link> -->
                 </div>
             </div>
         </div>

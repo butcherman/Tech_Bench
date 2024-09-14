@@ -6,7 +6,6 @@ use App\Rules\ContainsLowerCase;
 use App\Rules\ContainsNumber;
 use App\Rules\ContainsSpecialChar;
 use App\Rules\ContainsUpperCase;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rules\Password;
 
 /**

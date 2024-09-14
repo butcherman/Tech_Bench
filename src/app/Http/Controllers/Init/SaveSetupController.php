@@ -13,7 +13,7 @@ class SaveSetupController extends Controller
      */
     public function __invoke(Request $request)
     {
-        new BuildApplication($request->session()->get('setup')); // TODO - Change back to pull
+        new BuildApplication($request->session()->pull('setup'));
 
         return response()->json(['success' => true, 'url' => config('app.url')]);
     }

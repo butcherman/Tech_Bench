@@ -31,6 +31,4 @@ defineProps<{
 
 <script lang="ts">
 export default { layout: InitLayout };
-
-//    @success="router.get($route('init.step-4'))"
 </script>

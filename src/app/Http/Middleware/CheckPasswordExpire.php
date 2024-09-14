@@ -25,7 +25,7 @@ class CheckPasswordExpire
             $request->user()->password_expires < Carbon::now()
         ) {
             Log::stack(['auth', 'user'])
-                ->notice('User ' . $request->user()->full_name . ' is being forced to change their password');
+                ->notice('User '.$request->user()->full_name.' is being forced to change their password');
 
             return redirect()
                 ->route('user.change-password.show')

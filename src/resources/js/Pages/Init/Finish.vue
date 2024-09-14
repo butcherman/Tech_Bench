@@ -74,12 +74,4 @@ export default { layout: InitLayout };
 .card {
     min-height: 60vh;
 }
-
-.vld-parent {
-    height: 100%;
-}
-
-.small-dots {
-    line-height: 10px;
-}
 </style>

@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Init;
 
 use App\Http\Controllers\Controller;
 use App\Service\TimezoneList;
-use App\Models\UserRole;
-use App\Service\Cache;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

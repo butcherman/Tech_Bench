@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Init;
 
 use App\Http\Controllers\Controller;
-use App\Service\TimezoneList;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

@@ -20,10 +20,10 @@
 <script setup lang="ts">
 import AppAlerts from "./AppLayout/AppAlerts.vue";
 import StepNavigation from "@/Components/_Base/StepNavigation.vue";
-import { ref, computed, nextTick } from "vue";
+import { ref, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { gsap } from "gsap";
-import "../../scss/Layouts/authLayout.scss";
+import "../../scss/Layouts/initLayout.scss";
 
 const enterAnimation = (el: Element) => {
     console.log("entering");
