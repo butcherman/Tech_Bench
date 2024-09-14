@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Init;
 
 use App\Http\Controllers\Controller;
-use App\Traits\AppSettingsTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class Finish extends Controller
+class StepFive extends Controller
 {
-    use AppSettingsTrait;
-
     /**
      * Handle the incoming request.
      */
     public function __invoke(Request $request)
     {
-        return Inertia::render('Init/Finish', ['step' => 6]);
+        return Inertia::render(
+            'Init/StepFive',
+            array_merge($request->session()->get('setup'), ['step' => 5])
+        );
     }
 }

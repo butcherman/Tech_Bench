@@ -7,8 +7,6 @@ declare global {
     var Echo: Echo;
 }
 
-// declare
-
 declare module "@vue/runtime-core" {
     interface ComponentCustomProperties {
         $route: typeof routeFn;

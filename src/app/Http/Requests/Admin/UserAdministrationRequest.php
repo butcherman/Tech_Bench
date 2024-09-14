@@ -25,6 +25,16 @@ class UserAdministrationRequest extends FormRequest
      */
     public function rules(): array
     {
+        if (is_null($this->user)) {
+            return [
+                'username' => 'required',
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'email' => 'required|email',
+                'role_id' => 'required|exists:user_roles',
+            ];
+        }
+
         return [
             'username' => [
                 'required',

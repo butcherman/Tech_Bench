@@ -4,7 +4,7 @@
             <tbody>
                 <tr v-for="(value, index) in computedRows" :key="index">
                     <slot name="default" :row-data="{ value, index }">
-                        <th :class="alignText">
+                        <th :class="[alignText, { 'w-50': limitWidth }]">
                             <slot name="index" :row-data="{ value, index }">
                                 {{
                                     titleCase
@@ -52,6 +52,7 @@ const props = defineProps<{
     headers?: rowHeaders[];
     alignLeft?: boolean;
     titleCase?: boolean;
+    limitWidth?: boolean;
 }>();
 
 const alignText = computed(() => (props.alignLeft ? "text-start" : "text-end"));

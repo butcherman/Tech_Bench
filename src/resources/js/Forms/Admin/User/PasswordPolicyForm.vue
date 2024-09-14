@@ -3,13 +3,9 @@
         ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="
-            init
-                ? $route('init.step-4.submit')
-                : $route('admin.user.password-policy.update')
-        "
+        :submit-route="submitRoute"
+        :submit-text="submitText"
         submit-method="put"
-        submit-text="Update Password Policy"
         @success="$emit('success')"
     >
         <TextInput
@@ -67,12 +63,23 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import RangeInput from "@/Forms/_Base/RangeInput.vue";
 import CheckboxSwitch from "@/Forms/_Base/CheckboxSwitch.vue";
 import { object, boolean, number } from "yup";
+import { computed } from "vue";
 
 defineEmits(["success"]);
 const props = defineProps<{
     policy: passwordPolicy;
     init?: boolean;
 }>();
+
+const submitRoute = computed(() =>
+    props.init
+        ? route("init.step-3.submit")
+        : route("admin.user.password-policy.update")
+);
+
+const submitText = computed(() =>
+    props.init ? "Save and Continue" : "Update Password Policy"
+);
 
 const initValues = {
     expire: props.policy.expire,

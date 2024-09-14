@@ -6,6 +6,7 @@ use App\Rules\ContainsLowerCase;
 use App\Rules\ContainsNumber;
 use App\Rules\ContainsSpecialChar;
 use App\Rules\ContainsUpperCase;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rules\Password;
 
 /**
@@ -33,5 +34,19 @@ trait PasswordValidationRules
             new ContainsSpecialChar,
             $minLength,
         ];
+    }
+
+    protected function tmpPasswordRules(array $passRules): array
+    {
+        config([
+            'auth.passwords.settings.disable_compromised' => $passRules['disable_compromised'],
+            'auth.passwords.settings.min_length' => $passRules['min_length'],
+            'auth.passwords.settings.contains_uppercase' => $passRules['contains_uppercase'],
+            'auth.passwords.settings.contains_lowercase' => $passRules['contains_lowercase'],
+            'auth.passwords.settings.contains_number' => $passRules['contains_number'],
+            'auth.passwords.settings.contains_special' => $passRules['contains_special'],
+        ]);
+
+        return $this->passwordRules();
     }
 }

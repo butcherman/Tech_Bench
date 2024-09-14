@@ -23,6 +23,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Config\UrlChangedEvent' => [
             'App\Listeners\Config\UrlChangedListener',
         ],
+        'App\Events\Admin\AdministrationEvent' => [],
 
         /**
          * Authentication Events
@@ -73,7 +74,7 @@ class EventServiceProvider extends ServiceProvider
          * Office 365 Authentication Events
          */
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
-            \SocialiteProviders\Azure\AzureExtendSocialite::class . '@handle',
+            \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
         ],
 
         /**

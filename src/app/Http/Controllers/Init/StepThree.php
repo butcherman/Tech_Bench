@@ -13,17 +13,23 @@ class StepThree extends Controller
      */
     public function __invoke(Request $request)
     {
+        $settingsData = [
+            'expire' => config('auth.passwords.settings.expire'),
+            'min_length' => config('auth.passwords.settings.min_length'),
+            'contains_uppercase' => (bool) config('auth.passwords.settings.contains_uppercase'),
+            'contains_lowercase' => (bool) config('auth.passwords.settings.contains_lowercase'),
+            'contains_number' => (bool) config('auth.passwords.settings.contains_number'),
+            'contains_special' => (bool) config('auth.passwords.settings.contains_special'),
+            'disable_compromised' => (bool) config('auth.passwords.settings.disable_compromised'),
+        ];
+
+        if ($request->session()->has('setup.user-settings')) {
+            $settingsData = $request->session()->get('setup.user-settings');
+        }
+
         return Inertia::render('Init/StepThree', [
             'step' => 3,
-            'settings' => [
-                'from_address' => config('mail.from.address'),
-                'host' => config('mail.mailers.smtp.host'),
-                'port' => config('mail.mailers.smtp.port'),
-                'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
-                'username' => config('mail.mailers.smtp.username'),
-                'password' => config('mail.mailers.smtp.password') ? __('admin.fake_password') : '',
-                'require_auth' => (bool) config('mail.mailers.smtp.require_auth'),
-            ],
+            'policy' => $settingsData,
         ]);
     }
 }

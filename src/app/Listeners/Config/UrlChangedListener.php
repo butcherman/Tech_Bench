@@ -2,9 +2,8 @@
 
 namespace App\Listeners\Config;
 
+use App\Events\Admin\AdministrationEvent;
 use App\Events\Config\UrlChangedEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
@@ -30,21 +29,29 @@ class UrlChangedListener
             file_put_contents(
                 $this->envPath,
                 str_replace(
-                    'BASE_URL=' . $event->oldUrl,
-                    'BASE_URL=' . $event->newUrl,
+                    'BASE_URL='.$event->oldUrl,
+                    'BASE_URL='.$event->newUrl,
                     file_get_contents($this->envPath)
                 )
             );
         }
 
-        // Clear and re-cache all config data
-        Log::debug('Re-Caching application configuration');
-        Artisan::call('optimize:clear');
-        Process::run('php /app/artisan breadcrumbs:cache');
-        Artisan::call('optimize');
+        event(new AdministrationEvent('Configuration Updated'));
 
-        // Rebuild all JS application files
-        Log::debug('Rebuilding Application Files');
-        Process::run('npm run build');
+        if (App::environment('production')) {
+            // Clear and re-cache all config data
+            Log::debug('Re-Caching application configuration');
+            Artisan::call('optimize:clear');
+            Process::run('php /app/artisan breadcrumbs:cache');
+            Artisan::call('optimize');
+
+            event(new AdministrationEvent('Application Data Cached'));
+
+            // Rebuild all JS application files
+            event(new AdministrationEvent('Building Application'));
+            Log::debug('Rebuilding Application Files');
+            Process::run('npm run build');
+            event(new AdministrationEvent('Application Built'));
+        }
     }
 }

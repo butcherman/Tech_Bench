@@ -14,15 +14,23 @@ class StepTwo extends Controller
      */
     public function __invoke(Request $request)
     {
+        $settingsData = [
+            'from_address' => config('mail.from.address'),
+            'host' => config('mail.mailers.smtp.host'),
+            'port' => config('mail.mailers.smtp.port'),
+            'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
+            'username' => config('mail.mailers.smtp.username'),
+            'password' => config('mail.mailers.smtp.password') ? __('admin.fake_password') : '',
+            'require_auth' => (bool) config('mail.mailers.smtp.require_auth'),
+        ];
+
+        if ($request->session()->has('setup.email-settings')) {
+            $settingsData = $request->session()->get('setup.email-settings');
+        }
+
         return Inertia::render('Init/StepTwo', [
             'step' => 2,
-            'settings' => [
-                'url' => preg_replace('(^https?://)', '', config('app.url')),
-                'timezone' => config('app.timezone'),
-                'max_filesize' => (int) config('filesystems.max_filesize'),
-                'company_name' => config('app.company_name'),
-            ],
-            'timezone-list' => TimezoneList::Build(),
+            'settings' => $settingsData,
         ]);
     }
 }

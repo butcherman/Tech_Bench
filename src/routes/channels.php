@@ -3,6 +3,7 @@
 use App\Features\FileLinkFeature;
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -33,4 +34,13 @@ Broadcast::channel('file-link.{link_id}', function (User $user, int $link_id) {
     }
 
     return $user->features()->active(FileLinkFeature::class);
+});
+
+/**
+ * Administrative Channel for Broadcasting Admin Level Events
+ */
+Broadcast::channel('administration-channel', function (User $user) {
+    Log::debug('User '.$user->username.' connecting to Administration Broadcast Channel');
+
+    return Gate::allows('admin-link', $user);
 });
