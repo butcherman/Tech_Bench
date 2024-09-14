@@ -3,7 +3,7 @@
         ref="userPasswordForm"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('user-password.update')"
+        :submit-route="submitRoute"
         submit-method="put"
         submit-text="Update Password"
         @success="$emit('success')"
@@ -33,10 +33,17 @@
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { object, string, ref as reference } from "yup";
 
 defineEmits(["success"]);
+const props = defineProps<{
+    init?: boolean;
+}>();
+
+const submitRoute = computed(() =>
+    props.init ? route("init.step-4b.submit") : route("user-password.update")
+);
 
 const userPasswordForm = ref<InstanceType<typeof VueForm> | null>(null);
 const initValues = {

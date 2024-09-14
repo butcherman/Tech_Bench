@@ -3,35 +3,16 @@
         <div class="col-md-7">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">Email Settings</div>
+                    <div class="card-title">User Settings</div>
                     <p class="text-center">
-                        The Tech Bench requires email settings in order to send
-                        notification emails. Please enter the proper email
-                        server information below.
+                        Now we will setup User Security Settings. Adjust the
+                        password policy as you see fit.
                     </p>
-                    <EmailConfigForm
-                        :settings="settings"
+                    <PasswordPolicyForm
+                        :policy="policy"
                         init
-                        @success="allowNext = true"
+                        @success="router.get($route('init.step-4'))"
                     />
-                    <Link
-                        v-if="allowNext"
-                        as="button"
-                        :href="$route('init.test-email')"
-                        class="btn btn-warning w-100 my-2"
-                        preserve-state
-                    >
-                        Send Test Email (uses saved values)
-                    </Link>
-                    <div v-if="allowNext" class="separator"></div>
-                    <Link
-                        v-if="allowNext"
-                        as="button"
-                        :href="$route('init.step-4')"
-                        class="btn btn-info w-100 my-2"
-                    >
-                        Continue
-                    </Link>
                 </div>
             </div>
         </div>
@@ -40,14 +21,12 @@
 
 <script setup lang="ts">
 import InitLayout from "@/Layouts/InitLayout.vue";
-import EmailConfigForm from "@/Forms/Admin/Config/EmailConfigForm.vue";
-import { ref } from "vue";
+import PasswordPolicyForm from "@/Forms/Admin/User/PasswordPolicyForm.vue";
+import { router } from "@inertiajs/vue3";
 
 defineProps<{
-    settings: { [key: string]: string };
+    policy: passwordPolicy;
 }>();
-
-const allowNext = ref(false);
 </script>
 
 <script lang="ts">

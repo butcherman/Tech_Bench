@@ -3,17 +3,14 @@
         <div class="col-md-7">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">Basic Settings</div>
+                    <div class="card-title">Email Settings</div>
                     <p class="text-center">
-                        Now we need some basic information about the site.
-                        Please enter the Full URL, the Timezone and the maximum
-                        filesize upload that will be allowed.
+                        The Tech Bench requires email settings in order to send
+                        notification emails. Please enter the proper email
+                        server information below.
                     </p>
-                    <BasicConfigForm
-                        :tz-list="timezoneList"
-                        :url="settings.url"
-                        :timezone="settings.timezone"
-                        :max-filesize="settings.max_filesize"
+                    <EmailConfigForm
+                        :settings="settings"
                         init
                         @success="router.get($route('init.step-3'))"
                     />
@@ -25,16 +22,19 @@
 
 <script setup lang="ts">
 import InitLayout from "@/Layouts/InitLayout.vue";
-import BasicConfigForm from "@/Forms/Admin/Config/BasicConfigForm.vue";
+import EmailConfigForm from "@/Forms/Admin/Config/EmailConfigForm.vue";
 import { router } from "@inertiajs/vue3";
 
 defineProps<{
     settings: {
-        url: string;
-        timezone: string;
-        max_filesize: number;
+        from_address: string;
+        host: string;
+        port: number;
+        encryption: string;
+        require_auth: boolean;
+        username: string;
+        password: string;
     };
-    timezoneList: TimezoneList;
 }>();
 </script>
 

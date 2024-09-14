@@ -14,13 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CheckPasswordExpire
 {
-    //  Routes that are not affected by the password expiring
-    protected $bypassRoutes = [
-        // 'user.password.show',
-        // 'user-password.update',
-        'logout',
-    ];
-
     /**
      * Check to see if the users password has expired
      */

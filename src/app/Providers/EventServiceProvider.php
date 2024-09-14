@@ -18,6 +18,14 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         /**
+         * Application Level Events
+         */
+        'App\Events\Config\UrlChangedEvent' => [
+            'App\Listeners\Config\UrlChangedListener',
+        ],
+        'App\Events\Admin\AdministrationEvent' => [],
+
+        /**
          * Authentication Events
          */
         'Illuminate\Auth\Events\Login' => [

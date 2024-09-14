@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Init;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserRole;
+use App\Service\Cache;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,16 +15,18 @@ class StepFour extends Controller
      */
     public function __invoke(Request $request)
     {
+        $user = $request->user()->makeVisible(['role_id']);
+
+        if ($request->session()->has('setup.administrator-account')) {
+            $user = $request->session()->get('setup.administrator-account');
+        }
+
         return Inertia::render('Init/StepFour', [
             'step' => 4,
-            'policy' => [
-                'expire' => config('auth.passwords.settings.expire'),
-                'min_length' => config('auth.passwords.settings.min_length'),
-                'contains_uppercase' => (bool) config('auth.passwords.settings.contains_uppercase'),
-                'contains_lowercase' => (bool) config('auth.passwords.settings.contains_lowercase'),
-                'contains_number' => (bool) config('auth.passwords.settings.contains_number'),
-                'contains_special' => (bool) config('auth.passwords.settings.contains_special'),
-            ],
+            'rules' => Cache::PasswordRules(),
+            'roles' => [UserRole::find(1)],
+            'user' => $user,
+            'has-pass' => $request->session()->has('setup.administrator-password'),
         ]);
     }
 }
