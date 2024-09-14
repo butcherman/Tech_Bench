@@ -23,6 +23,8 @@ class UrlChangedListener
      */
     public function handle(UrlChangedEvent $event): void
     {
+        event(new AdministrationEvent('Writing New URL'));
+
         // Write new URL to the .env file so Vite can build properly
         if (file_exists($this->envPath)) {
             Log::debug('Updating .env file with new URL');
@@ -36,22 +38,19 @@ class UrlChangedListener
             );
         }
 
-        event(new AdministrationEvent('Configuration Updated'));
-
         if (App::environment('production')) {
             // Clear and re-cache all config data
+            event(new AdministrationEvent('Building Application Cache'));
             Log::debug('Re-Caching application configuration');
             Artisan::call('optimize:clear');
             Process::run('php /app/artisan breadcrumbs:cache');
             Artisan::call('optimize');
 
-            event(new AdministrationEvent('Application Data Cached'));
-
             // Rebuild all JS application files
-            event(new AdministrationEvent('Building Application'));
+            event(new AdministrationEvent('Building Application Files'));
             Log::debug('Rebuilding Application Files');
             Process::run('npm run build');
-            event(new AdministrationEvent('Application Built'));
+            event(new AdministrationEvent('Build Complete'));
         }
     }
 }

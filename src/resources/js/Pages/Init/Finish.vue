@@ -7,9 +7,9 @@
 
                     <div>
                         <h6>Building Application...</h6>
-                        <HollowDots v-show="!isComplete" />
                         <div class="ms-4 mt-4">
                             <div v-for="msg in setupMsg">{{ msg }}</div>
+                            <EllipsisLoader v-if="!isComplete" />
                         </div>
                     </div>
                     <div v-if="isComplete">
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import HollowDots from "@/Components/_Base/Loaders/HollowDots.vue";
+import EllipsisLoader from "@/Components/_Base/Loaders/EllipsisLoader.vue";
 import InitLayout from "@/Layouts/InitLayout.vue";
 import axios from "axios";
 import { ref, onMounted } from "vue";
@@ -77,5 +77,9 @@ export default { layout: InitLayout };
 
 .vld-parent {
     height: 100%;
+}
+
+.small-dots {
+    line-height: 10px;
 }
 </style>

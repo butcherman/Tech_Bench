@@ -39,10 +39,11 @@ class BuildApplication
      */
     protected function buildBasicSettings()
     {
+        event(new AdministrationEvent('Saving App Settings'));
+
         $process = new BasicSettingsRequest($this->appSettingsData['basic-settings']);
         $process->processSettings();
 
-        event(new AdministrationEvent('Settings Saved'));
     }
 
     /**
@@ -50,10 +51,11 @@ class BuildApplication
      */
     protected function buildEmailSettings()
     {
+        event(new AdministrationEvent('Saving Email Settings'));
+
         $process = new EmailSettingsRequest($this->appSettingsData['email-settings']);
         $process->processSettings();
 
-        event(new AdministrationEvent('Email Settings Updated'));
     }
 
     /**
@@ -61,10 +63,11 @@ class BuildApplication
      */
     protected function buildUserSettings()
     {
+        event(new AdministrationEvent('Saving Password Policy'));
+
         $process = new PasswordPolicyRequest($this->appSettingsData['user-settings']);
         $process->processPasswordSettings();
 
-        event(new AdministrationEvent('User Settings Updated'));
     }
 
     /**
@@ -72,9 +75,10 @@ class BuildApplication
      */
     protected function buildAdminAccount()
     {
+        event(new AdministrationEvent('Saving Admin Account'));
+
         User::find(1)->update($this->appSettingsData['admin']);
 
-        event(new AdministrationEvent('Admin Account Updated'));
     }
 
     /**
@@ -82,6 +86,8 @@ class BuildApplication
      */
     protected function setAdminPassword()
     {
+        event(new AdministrationEvent('Saving Administrator Password'));
+
         $pass = $this->appSettingsData['administrator-password']['password'];
         $user = User::find(1);
         $user->forceFill([
@@ -89,6 +95,5 @@ class BuildApplication
             'password_expires' => $user->getNewExpireTime(),
         ])->save();
 
-        event(new AdministrationEvent('Admin Password Updated'));
     }
 }
