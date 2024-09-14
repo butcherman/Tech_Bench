@@ -4,7 +4,14 @@
             <div class="col">
                 <StepNavigation :step-list="stepList" :current-step="step" />
                 <AppAlerts />
-                <slot />
+
+                <Transition
+                    @enter="enterAnimation"
+                    @leave="leaveAnimation"
+                    :css="false"
+                >
+                    <slot class="wizard" />
+                </Transition>
             </div>
         </div>
     </div>
@@ -13,9 +20,30 @@
 <script setup lang="ts">
 import AppAlerts from "./AppLayout/AppAlerts.vue";
 import StepNavigation from "@/Components/_Base/StepNavigation.vue";
-import { ref, computed } from "vue";
+import { ref, computed, nextTick } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import { gsap } from "gsap";
 import "../../scss/Layouts/authLayout.scss";
+
+const enterAnimation = (el: Element) => {
+    console.log("entering");
+
+    gsap.from(el, {
+        x: 2000,
+        opacity: 0,
+        duration: 0.5,
+        delay: 0.5,
+    });
+};
+
+const leaveAnimation = (el: Element, done: () => void) => {
+    console.log("leaving");
+    gsap.to(el, {
+        x: -2000,
+        duration: 0.5,
+        onComplete: done,
+    });
+};
 
 const step = computed<number>(() => usePage<initProps>().props.step || 0);
 
@@ -52,3 +80,9 @@ const stepList = ref([
     },
 ]);
 </script>
+
+<style scoped lang="scss">
+.wizard {
+    display: inline-block;
+}
+</style>
