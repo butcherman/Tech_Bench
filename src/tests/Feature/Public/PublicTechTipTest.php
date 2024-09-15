@@ -61,6 +61,7 @@ class PublicTechTipTest extends TestCase
     public function test_search()
     {
         config(['techTips.allow_public' => true]);
+        TechTip::factory()->count(5)->create(['public' => true]);
 
         $searchData = [
             'perPage' => 25,
@@ -132,4 +133,6 @@ class PublicTechTipTest extends TestCase
         $response->assertStatus(404);
         $this->assertGuest();
     }
+
+    // TODO - Test show missing tech tip
 }

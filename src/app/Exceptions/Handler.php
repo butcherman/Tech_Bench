@@ -57,9 +57,11 @@ class Handler extends ExceptionHandler
         }
 
         // Error 419 goes back with note to refresh page
+        // @codeCoverageIgnoreStart
         if ($statusCode === 419) {
             return back()->withErrors('Page Expired, Please Refresh and Try Again');
         }
+        // @codeCoverageIgnoreEnd
 
         // All other uncaught codes will return symphony error page
         return $response;

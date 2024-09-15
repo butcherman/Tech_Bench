@@ -3,7 +3,10 @@
 namespace Tests\Feature\FileLink;
 
 use App\Models\FileLink;
+use App\Models\FileUpload;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class FileLinkTest extends TestCase
@@ -149,6 +152,38 @@ class FileLinkTest extends TestCase
         config(['fileLink.feature_enabled' => true]);
 
         $response = $this->actingAs(User::factory()->create())
+            ->post(route('links.store'), $data);
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('file_links', [
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ]);
+    }
+
+    public function test_store_with_file()
+    {
+        Storage::fake('fileLinks');
+        Storage::disk('fileLinks')->put('tmp/tmp.png', UploadedFile::fake()->image('tmp.png'));
+        $fileList = FileUpload::factory()->create([
+            'disk' => 'fileLinks',
+            'folder' => 'tmp',
+            'file_name' => 'tmp.png',
+        ]);
+
+        $data = [
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ];
+
+        config(['fileLink.feature_enabled' => true]);
+
+        $response = $this->actingAs(User::factory()->create())
+            ->withSession(['link-file' => [$fileList->file_id]])
             ->post(route('links.store'), $data);
         $response->assertStatus(302);
 

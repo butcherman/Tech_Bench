@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\FileLink;
 
 use App\Models\FileLink;
 use App\Models\User;
@@ -40,6 +40,7 @@ class FileLinkAdminTest extends TestCase
     public function test_index()
     {
         config(['fileLink.feature_enabled' => true]);
+        FileLink::factory()->count(5)->create();
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('admin.links.manage.index'));

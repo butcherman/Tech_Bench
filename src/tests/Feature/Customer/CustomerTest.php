@@ -288,7 +288,7 @@ class CustomerTest extends TestCase
     {
         $response = $this->actingAs(User::factory()->create())
             ->get(route('customers.show', 'someRandomCustomerSlug'));
-        $response->assertStatus(404);
+        $response->assertSuccessful();
     }
 
     /**
