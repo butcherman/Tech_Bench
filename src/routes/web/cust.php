@@ -32,8 +32,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth.secure')->group(function () {
 
     Route::prefix('customers')->name('customers.')->group(function () {
-        Route::inertia('customer-not-found', 'Customer/NotFound')
-            ->name('notFound');
         Route::post('search', CustomerSearchController::class)
             ->name('search');
         Route::get('check-id/{custId}', CustomerIdController::class)
@@ -130,8 +128,10 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
-                    ->show(fn (Customer $customer, CustomerSite $site) => $site->site_name)
-                    ->edit('Edit Site');
+                    ->show(fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object' ? $site->site_name : $site
+                    )->edit('Edit Site');
+            })->missing(function (Request $request) {
+                throw new CustomerNotFoundException($request);
             });
 
         /***********************************************************************

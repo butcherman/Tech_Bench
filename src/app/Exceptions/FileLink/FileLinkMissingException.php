@@ -31,8 +31,6 @@ class FileLinkMissingException extends Exception
     {
         $middlewareData = (new HandleInertiaRequests)->share($this->request);
 
-        return Inertia::render('Public/FileLinks/Missing', $middlewareData)
-            ->toResponse($this->request)
-            ->setStatusCode(404);
+        return Inertia::render('Public/FileLinks/Missing', $middlewareData);
     }
 }

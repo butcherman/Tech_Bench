@@ -6,7 +6,7 @@
         @shown="isShown = true"
         @hidden="isShown = false"
     >
-        <HelpComponent v-if="isShown" :key="app.currentRoute" />
+        <HelpComponent v-if="isShown" :key="curRoute" />
     </Modal>
 </template>
 
@@ -15,17 +15,14 @@ import Modal from "@/Components/_Base/Modal.vue";
 import HelpLoader from "./HelpLoader.vue";
 import HelpError from "./HelpError.vue";
 import { ref, computed, defineAsyncComponent } from "vue";
-import { useAppStore } from "@/Store/AppStore";
 
 const isShown = ref(false);
-const app = useAppStore();
+const curRoute = ref(route().current());
 
 const helpModal = ref<InstanceType<typeof Modal> | null>(null);
 const HelpComponent = computed(() => {
-    const curRoute = app.currentRoute;
-
     return defineAsyncComponent({
-        loader: () => import(`./Pages/${curRoute}.vue`),
+        loader: () => import(`./Pages/${curRoute.value}.vue`),
         loadingComponent: HelpLoader,
         errorComponent: HelpError,
         delay: 200,
@@ -34,7 +31,6 @@ const HelpComponent = computed(() => {
 });
 
 const show = () => {
-    console.log(app.currentRoute);
     helpModal.value?.show();
 };
 

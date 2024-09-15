@@ -30,12 +30,10 @@ class CustomerNotFoundException extends Exception
         ]);
     }
 
-    public function render(): Response
+    public function render() // : Response
     {
         $middlewareData = (new HandleInertiaRequests)->share($this->request);
 
-        return Inertia::render('Customer/NotFound', $middlewareData)
-            ->toResponse($this->request)
-            ->setStatusCode(404);
+        return Inertia::render('Customer/NotFound', $middlewareData);
     }
 }
