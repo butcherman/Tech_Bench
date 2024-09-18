@@ -51,7 +51,7 @@ class UserSettingsTest extends TestCase
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
                 'secret_expires' => '2099-01-01',
-                'redirectUri' => 'localhost/auth/callback',
+                'redirect' => 'localhost/auth/callback',
             ],
         ];
 
@@ -77,7 +77,7 @@ class UserSettingsTest extends TestCase
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
                 'secret_expires' => '2099-01-01',
-                'redirectUri' => 'localhost/auth/callback',
+                'redirect' => 'localhost/auth/callback',
             ],
         ];
 
@@ -102,7 +102,7 @@ class UserSettingsTest extends TestCase
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
                 'secret_expires' => '2099-01-01',
-                'redirectUri' => 'localhost/auth/callback',
+                'redirect' => 'localhost/auth/callback',
             ],
         ];
 
@@ -154,8 +154,8 @@ class UserSettingsTest extends TestCase
             'value' => $data['oath']['secret_expires'],
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'services.azure.redirectUri',
-            'value' => $data['oath']['redirectUri'],
+            'key' => 'services.azure.redirect',
+            'value' => $data['oath']['redirect'],
         ]);
     }
 
@@ -175,7 +175,7 @@ class UserSettingsTest extends TestCase
                 'client_id' => 'someRandomID',
                 'client_secret' => __('admin.fake-password'),
                 'secret_expires' => '2099-01-01',
-                'redirectUri' => 'localhost/auth/callback',
+                'redirect' => 'localhost/auth/callback',
             ],
         ];
 
@@ -222,8 +222,8 @@ class UserSettingsTest extends TestCase
             'value' => $data['oath']['secret_expires'],
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'services.azure.redirectUri',
-            'value' => $data['oath']['redirectUri'],
+            'key' => 'services.azure.redirect',
+            'value' => $data['oath']['redirect'],
         ]);
 
         $this->assertDatabaseMissing('app_settings', [
