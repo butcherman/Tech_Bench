@@ -34,7 +34,7 @@ class UserSettingsRequest extends FormRequest
             'oath.client_id' => 'required_if:oath.allow_login,true',
             'oath.client_secret' => 'required_if:oath.allow_login,true',
             'oath.secret_expires' => 'required_if:oath.allow_login,true',
-            'oath.redirectUri' => 'required_if:oath.allow_login,true',
+            'oath.redirect' => 'required_if:oath.allow_login,true',
         ];
     }
 

@@ -31,7 +31,7 @@ class UserSettingsController extends Controller
                 'client_id' => config('services.azure.client_id'),
                 'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',
                 'secret_expires' => config('services.azure.secret_expires'),
-                'redirectUri' => config('app.url').'/auth/callback',
+                'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
             ],
         ]);
     }
