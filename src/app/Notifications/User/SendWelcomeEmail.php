@@ -38,6 +38,7 @@ class SendWelcomeEmail extends Notification implements ShouldQueue
             ->line('A new '.config('app.name').' account has been created for you.')
             ->line('Your new username is:  **'.$notifiable->username.'**')
             ->line('You can click the link below to finish setting up your account.')
-            ->action('Setup Account', url(route('initialize', $this->token)));
+            ->action('Setup Account', url(route('initialize', $this->token)))
+            ->line('Please note, this link is good for 7 days.');
     }
 }

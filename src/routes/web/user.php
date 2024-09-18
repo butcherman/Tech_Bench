@@ -33,7 +33,10 @@ Route::middleware('auth.secure')->prefix('user')->name('user.')->group(function 
  */
 Route::middleware('guest')->group(function () {
     Route::get('initialize-account/{token}', [InitializeUserController::class, 'show'])
-        ->name('initialize');
+        ->name('initialize')
+        ->missing(function () {
+            abort(404, 'Cannot Find the Requested Page');
+        });
     Route::put('initialize-account/{token}', [InitializeUserController::class, 'update'])
         ->name('initialize.update');
 });
