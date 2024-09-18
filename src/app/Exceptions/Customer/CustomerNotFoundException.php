@@ -23,7 +23,7 @@ class CustomerNotFoundException extends Exception
 
     public function report(): void
     {
-        Log::stack(['daily', 'cust'])->warning('Unable to find request customer page', [
+        Log::warning('Unable to find request customer page', [
             'user' => $this->request->user()->username,
             'path' => $this->request->path(),
         ]);

@@ -19,7 +19,7 @@ class LogSuccessfulLogin
                 'ip_address' => \Request::ip(),
             ]);
 
-        Log::stack(['daily', 'auth', 'user'])->info('User '.$event->user->full_name.' successfully logged in from IP Address '.\Request::ip(), [
+        Log::stack(['daily', 'auth'])->info('User '.$event->user->full_name.' successfully logged in from IP Address '.\Request::ip(), [
             'User ID' => $event->user->user_id,
             'Username' => $event->user->username,
             'IP Address' => \Request::ip(),

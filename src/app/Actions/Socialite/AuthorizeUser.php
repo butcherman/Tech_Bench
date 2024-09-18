@@ -25,7 +25,7 @@ class AuthorizeUser
         if ($this->doesUserExist($socUser)) {
             Auth::login($this->user, true);
             $this->canBypassTwoFa();
-            Log::stack(['user', 'auth'])
+            Log::stack(['daily', 'auth'])
                 ->info('User '.$this->user->username.' logged in via Microsoft Azure');
 
             return $this->user;
@@ -36,13 +36,13 @@ class AuthorizeUser
             $this->buildUser($socUser);
             Auth::login($this->user, true);
             $this->canBypassTwoFa();
-            Log::stack(['user', 'auth'])
+            Log::stack(['daily', 'auth'])
                 ->info('User '.$this->user->username.' logged in via Microsoft Azure');
 
             return $this->user;
         }
 
-        Log::stack(['user', 'auth'])->info('User '.$socUser->user['userPrincipalName'].
+        Log::stack(['daily', 'auth'])->info('User '.$socUser->user['userPrincipalName'].
             ' tried to login via Microsoft Azure, but failed because this user does not'.
             ' exist in the database.');
 
@@ -79,8 +79,7 @@ class AuthorizeUser
         ]);
 
         $this->user = $newUser;
-        Log::channel('user')
-            ->info('New User '.$this->user->username.' created via Microsoft Azure driver');
+        Log::info('New User '.$this->user->username.' created via Microsoft Azure driver');
     }
 
     /**

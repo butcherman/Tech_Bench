@@ -19,7 +19,7 @@ class RemoveDeviceController extends Controller
 
         $device->delete();
 
-        Log::stack(['auth', 'user'])->info('User '.$request->user()->username.
+        Log::stack(['auth', 'daily'])->info('User '.$request->user()->username.
             ' has removed Device Token for '.$user->username, $device->toArray());
 
         return back()->with('success', __('user.device-removed'));

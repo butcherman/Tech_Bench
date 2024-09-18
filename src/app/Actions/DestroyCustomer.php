@@ -56,14 +56,13 @@ class DestroyCustomer
         $this->customer->primary_site_id = null;
         $this->customer->save();
 
-        Log::channel('cust')->debug('Destroying Customer Sites for '.$this->customer->name);
+        Log::debug('Destroying Customer Sites for '.$this->customer->name);
         $siteList = $this->customer->CustomerSite;
 
         // Remove all sites associated with this customer
         $siteList->each(function ($site) {
             $site->forceDelete();
-            Log::channel('cust')
-                ->debug('Customer Site '.$site->site_name.' destroyed');
+            Log::debug('Customer Site '.$site->site_name.' destroyed');
         });
     }
 }

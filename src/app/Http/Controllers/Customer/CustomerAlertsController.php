@@ -40,7 +40,7 @@ class CustomerAlertsController extends Controller
             'type' => $request->type,
         ]);
 
-        Log::channel('cust')->info(
+        Log::info(
             'New Customer Alert created for '.
             $customer->name.' by '.$request->user()->username,
             $newAlert->toArray()
@@ -64,7 +64,7 @@ class CustomerAlertsController extends Controller
             'type' => $request->type,
         ]);
 
-        Log::channel('cust')->info('Customer Alert Updated for '.$customer->name.
+        Log::info('Customer Alert Updated for '.$customer->name.
             ' by '.$request->user()->username, $alert->toArray());
 
         event(new CustomerAlertEvent($customer, $alert, CrudAction::Update));
@@ -84,7 +84,7 @@ class CustomerAlertsController extends Controller
 
         $alert->delete();
 
-        Log::channel('cust')->info('Customer Alert for '.$customer->name.
+        Log::info('Customer Alert for '.$customer->name.
             ' deleted by '.$request->user()->username, $alert->toArray());
 
         event(new CustomerAlertEvent($customer, $alert, CrudAction::Destroy));

@@ -36,7 +36,7 @@ class InitializeUserController extends Controller
         // Log the user in and send them to the Dashboard
         Auth::login($token->User, true);
 
-        Log::stack(['daily', 'auth', 'user'])
+        Log::stack(['daily', 'auth'])
             ->info('User '.$token->User->full_name.' has finished setting up their account');
         $token->delete();
 

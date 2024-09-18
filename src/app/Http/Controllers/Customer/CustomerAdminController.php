@@ -37,7 +37,7 @@ class CustomerAdminController extends Controller
     {
         $this->saveSettingsArray($request->toArray(), 'customer');
 
-        Log::stack(['daily', 'cust'])->info('Customer Settings Updated By '.
+        Log::info('Customer Settings Updated By '.
             $request->user()->username, $request->toArray());
 
         return back()->with('success', 'Customer Settings Updated');

@@ -33,11 +33,10 @@ class TechTipTypesController extends Controller
     {
         $newType = TechTipType::create($request->toArray());
 
-        Log::channel('tip')
-            ->info(
-                'New Tech Tip Type created by '.$request->user()->username,
-                $newType->toArray()
-            );
+        Log::info(
+            'New Tech Tip Type created by '.$request->user()->username,
+            $newType->toArray()
+        );
 
         return back()->with('success', __('tips.tip-type.created'));
     }
@@ -49,11 +48,10 @@ class TechTipTypesController extends Controller
     {
         $tipType->update($request->toArray());
 
-        Log::channel('tip')
-            ->info(
-                'Tech Tip Type updated by '.$request->user()->username,
-                $tipType->toArray()
-            );
+        Log::info(
+            'Tech Tip Type updated by '.$request->user()->username,
+            $tipType->toArray()
+        );
 
         return back()->with('success', __('tips.tip-type.updated'));
     }
@@ -67,11 +65,10 @@ class TechTipTypesController extends Controller
 
         try {
             $tipType->delete();
-            Log::channel('tip')
-                ->notice(
-                    'Tech Tip Type deleted by '.$request->user()->username,
-                    $tipType->toArray()
-                );
+            Log::notice(
+                'Tech Tip Type deleted by '.$request->user()->username,
+                $tipType->toArray()
+            );
         } catch (QueryException $e) {
             CheckDatabaseError::check(
                 $e,

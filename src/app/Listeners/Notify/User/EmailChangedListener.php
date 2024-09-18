@@ -19,7 +19,7 @@ class EmailChangedListener implements ShouldQueue
         $oldUser = new User;
         $oldUser->email = $event->oldEmail;
 
-        Log::stack(['auth', 'user'])->notice('Email Address for '.$event->user->username.
+        Log::stack(['auth', 'daily'])->notice('Email Address for '.$event->user->username.
             ' has been changed', $event->user->toArray());
         Notification::send($oldUser, new EmailChangedNotification($event->user->email));
     }

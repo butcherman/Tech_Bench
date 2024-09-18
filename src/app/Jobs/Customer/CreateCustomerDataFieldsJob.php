@@ -21,7 +21,7 @@ class CreateCustomerDataFieldsJob implements ShouldQueue
      */
     public function __construct(protected CustomerEquipment $equipment)
     {
-        Log::channel('cust')->info('Creating new Data Fields for Customer Equipment', $equipment->toArray());
+        Log::info('Creating new Data Fields for Customer Equipment', $equipment->toArray());
     }
 
     /**
@@ -38,7 +38,7 @@ class CreateCustomerDataFieldsJob implements ShouldQueue
                 'value' => null,
             ]);
 
-            Log::channel('cust')->debug('New Equipment Data Created', [
+            Log::debug('New Equipment Data Created', [
                 'cust_equip_id' => $this->equipment->cust_equip_id,
                 'field_id' => $field->field_id,
                 'value' => null,

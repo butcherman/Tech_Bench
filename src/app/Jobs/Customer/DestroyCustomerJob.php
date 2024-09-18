@@ -31,10 +31,10 @@ class DestroyCustomerJob implements ShouldQueue
         $jobData = new DestroyCustomer($this->customer);
 
         if ($jobData->wasSuccessful()) {
-            Log::channel('cust')->info('Force Deleting Customer'.$this->customer->name.' was Successful');
+            Log::info('Force Deleting Customer'.$this->customer->name.' was Successful');
         } else {
             // @codeCoverageIgnoreStart
-            Log::channel('cust')->error('Force Deleting Customer'.$this->customer->name.' Failed');
+            Log::error('Force Deleting Customer'.$this->customer->name.' Failed');
             // @codeCoverageIgnoreEnd
         }
     }

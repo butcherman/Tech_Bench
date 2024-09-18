@@ -40,7 +40,7 @@ class CustomerEquipmentController extends Controller
         $equip = $request->createEquipment();
         dispatch(new CreateCustomerDataFieldsJob($equip));
 
-        Log::channel('cust')->info('New Customer Equipment added to '.$customer->name.
+        Log::info('New Customer Equipment added to '.$customer->name.
             ' by '.$request->user()->username, $equip->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equip, CrudAction::Create));
@@ -77,7 +77,7 @@ class CustomerEquipmentController extends Controller
     ): RedirectResponse {
         $equipment->CustomerSite()->sync($request->site_list);
 
-        Log::channel('cust')->info('Customer Sites updated for Customer Equipment by '.
+        Log::info('Customer Sites updated for Customer Equipment by '.
             $request->user()->username, $equipment->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equipment, CrudAction::Update));
@@ -94,7 +94,7 @@ class CustomerEquipmentController extends Controller
 
         $equipment->delete();
 
-        Log::channel('cust')->notice('Customer Equipment Disabled for '.$customer->name.
+        Log::notice('Customer Equipment Disabled for '.$customer->name.
             ' by '.$request->user()->username, $equipment->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equipment, CrudAction::Destroy));
@@ -113,8 +113,7 @@ class CustomerEquipmentController extends Controller
         $this->authorize('restore', $equipment);
 
         $equipment->restore();
-        Log::channel('cust')
-            ->info('Customer Equipment restored for '.$customer->name.' by '.
+        Log::info('Customer Equipment restored for '.$customer->name.' by '.
                 $request->user()->username, $equipment->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equipment, CrudAction::Restore));
@@ -133,8 +132,7 @@ class CustomerEquipmentController extends Controller
         $this->authorize('forceDelete', $equipment);
 
         $equipment->forceDelete();
-        Log::channel('cust')
-            ->notice('Customer Equipment force deleted for '.$customer->name.
+        Log::notice('Customer Equipment force deleted for '.$customer->name.
                 ' by '.$request->user()->username, $equipment->toArray());
 
         event(new CustomerEquipmentEvent($customer, $equipment, CrudAction::ForceDelete));

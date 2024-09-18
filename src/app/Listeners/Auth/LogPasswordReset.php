@@ -12,7 +12,7 @@ class LogPasswordReset
      */
     public function handle(PasswordReset $event): void
     {
-        Log::stack(['daily', 'auth', 'user'])->info('User '.$event->user->full_name.' has reset their forgotten password', [
+        Log::stack(['daily', 'auth'])->info('User '.$event->user->full_name.' has reset their forgotten password', [
             'User ID' => $event->user->user_id,
             'Username' => $event->user->username,
             'IP Address' => \Request::ip(),

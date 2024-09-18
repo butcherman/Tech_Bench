@@ -27,34 +27,10 @@ return [
             'days' => 14,
             'permission' => 0777,
         ],
-        //  All User related logging
-        'user' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/Users/User.log'),
-            'level' => env('LOG_LEVEL', 'info'),
-            'days' => 14,
-            'permission' => 0777,
-        ],
         //  All authentication - login/logout logging
         'auth' => [
             'driver' => 'daily',
             'path' => storage_path('logs/Auth/Auth.log'),
-            'level' => env('LOG_LEVEL', 'info'),
-            'days' => 14,
-            'permission' => 0777,
-        ],
-        //  All customer specific logging
-        'cust' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/Cust/Cust.log'),
-            'level' => env('LOG_LEVEL', 'info'),
-            'days' => 14,
-            'permission' => 0777,
-        ],
-        //  All Tech Tip specific logging
-        'tip' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/TechTip/TechTip.log'),
             'level' => env('LOG_LEVEL', 'info'),
             'days' => 14,
             'permission' => 0777,

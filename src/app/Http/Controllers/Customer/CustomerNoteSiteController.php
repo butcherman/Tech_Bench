@@ -41,7 +41,7 @@ class CustomerNoteSiteController extends Controller
     {
         $newNote = $request->createNote();
 
-        Log::channel('cust')->info('New Customer Note created for '.$customer->name.
+        Log::info('New Customer Note created for '.$customer->name.
             ' by '.$request->user()->username, $newNote->toArray());
 
         event(new CustomerNoteEvent($customer, $newNote, CrudAction::Create));
@@ -92,7 +92,7 @@ class CustomerNoteSiteController extends Controller
     ): RedirectResponse {
         $updatedNote = $request->updateNote();
 
-        Log::channel('cust')->info('Customer Note for '.$customer->name.
+        Log::info('Customer Note for '.$customer->name.
             ' updated by '.$request->user()->username, $updatedNote->toArray());
 
         event(new CustomerNoteEvent($customer, $updatedNote, CrudAction::Update));
@@ -117,7 +117,7 @@ class CustomerNoteSiteController extends Controller
 
         $note->delete();
 
-        Log::channel('cust')->notice('Customer Note for '.$customer->name.
+        Log::notice('Customer Note for '.$customer->name.
             ' deleted by '.$request->user()->username, $note->toArray());
 
         event(new CustomerNoteEvent($customer, $note, CrudAction::ForceDelete));

@@ -11,14 +11,12 @@ class TechTipCommentFeature
      */
     public function resolve(): bool
     {
-        Log::stack(['tip', 'daily'])
-            ->debug('Checking status of Feature - Comment on Tech Tip');
+        Log::debug('Checking status of Feature - Comment on Tech Tip');
 
         // If feature is disabled, return false
         $isEnabled = (bool) config('techTips.allow_comments');
         if (! $isEnabled) {
-            Log::stack(['tip', 'daily'])
-                ->debug('Feature - Comment on Tech Tip - is Disabled');
+            Log::debug('Feature - Comment on Tech Tip - is Disabled');
 
             return false;
         }

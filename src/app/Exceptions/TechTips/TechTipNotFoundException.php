@@ -20,7 +20,7 @@ class TechTipNotFoundException extends Exception
 
     public function report(): void
     {
-        Log::stack(['daily', 'cust'])->warning('Unable to find requested Tech Tip page', [
+        Log::warning('Unable to find requested Tech Tip page', [
             'user' => $this->request->user()->username,
             'path' => $this->request->path(),
         ]);
