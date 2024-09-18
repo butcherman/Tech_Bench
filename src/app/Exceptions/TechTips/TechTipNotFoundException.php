@@ -5,7 +5,6 @@ namespace App\Exceptions\TechTips;
 use App\Http\Middleware\HandleInertiaRequests;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -27,12 +26,10 @@ class TechTipNotFoundException extends Exception
         ]);
     }
 
-    public function render(): Response
+    public function render()
     {
         $middlewareData = (new HandleInertiaRequests)->share($this->request);
 
-        return Inertia::render('TechTips/NotFound', $middlewareData)
-            ->toResponse($this->request)
-            ->setStatusCode(404);
+        return Inertia::render('TechTips/NotFound', $middlewareData);
     }
 }

@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Notification;
  * If the cert is close to expiration, a warning email will be sent to
  * all users with the Installer role at 90, 60, 30, and 15 days.
  */
-class CheckCertificateJob // implements ShouldQueue
+class CheckCertificateJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

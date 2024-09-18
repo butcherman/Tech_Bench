@@ -9,6 +9,7 @@ use App\Models\TechTipFile;
 use App\Models\User;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -122,6 +123,28 @@ class TechTipsTest extends TestCase
         ]));
     }
 
+    public function test_store_no_public_permission()
+    {
+        $permId = UserRolePermissionType::where('description', 'Add Public Tech Tip')
+            ->first()->perm_type_id;
+        UserRolePermission::where('role_id', 3)
+            ->where('perm_type_id', $permId)
+            ->update([
+                'allow' => false,
+            ]);
+
+        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
+        $dataArr['public'] = true;
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 3]))
+            ->post(route('tech-tips.store'), $dataArr);
+        $response->assertForbidden();
+    }
+
     public function test_store_duplicate_slug()
     {
         $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
@@ -141,41 +164,39 @@ class TechTipsTest extends TestCase
         ]);
     }
 
-    // TODO - Fix this test
-    // public function test_store_with_files()
-    // {
-    //     $fileList = FileUpload::factory()
-    //         ->count(3)
-    //         ->create()
-    //         ->pluck('file_id')
-    //         ->toArray();
+    public function test_store_with_files()
+    {
+        Storage::fake('tips');
+        Storage::disk('tips')->put('tmp/tmp.png', UploadedFile::fake()->image('tmp.png'));
+        $fileList = FileUpload::factory()->create([
+            'disk' => 'tips',
+            'folder' => 'tmp',
+            'file_name' => 'tmp.png',
+        ]);
 
-    //     $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
-    //     $dataArr = $data->toArray();
-    //     $equipList = EquipmentType::factory()->count(2)->create();
-    //     $dataArr['suppress'] = false;
-    //     $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
 
-    //     $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
-    //         // ->withSession(['tip-file' => $fileList])
-    //         ->post(route('tech-tips.store'), $dataArr);
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('success', __('tips.created'));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->withSession(['tip-file' => [$fileList->file_id]])
+            ->post(route('tech-tips.store'), $dataArr);
 
-    //     $this->assertDatabaseHas('tech_tips', [
-    //         'subject' => $data->subject,
-    //         'slug' => $data->slug . '-1',
-    //     ]);
-    //     $this->assertDatabaseHas('tech_tip_files', [
-    //         'file_id' => $fileList[0],
-    //     ]);
-    //     $this->assertDatabaseHas('tech_tip_files', [
-    //         'file_id' => $fileList[1],
-    //     ]);
-    //     $this->assertDatabaseHas('tech_tip_files', [
-    //         'file_id' => $fileList[2],
-    //     ]);
-    // }
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('tips.created'));
+
+        $this->assertDatabaseHas('tech_tips', $data->only([
+            'subject',
+            'tip_type_id',
+            'details',
+            'sticky',
+        ]));
+        $this->assertDatabaseHas('tech_tip_files', [
+            'file_id' => $fileList->file_id,
+        ]);
+    }
 
     /**
      * Show Method
@@ -205,6 +226,13 @@ class TechTipsTest extends TestCase
 
         $response = $this->actingAs(User::factory()->create())
             ->get(route('tech-tips.show', $tip->tip_id));
+        $response->assertSuccessful();
+    }
+
+    public function test_show_missing_tip()
+    {
+        $response = $this->actingAs(User::factory()->create())
+            ->get(route('tech-tips.show', 'random-tip'));
         $response->assertSuccessful();
     }
 
@@ -299,7 +327,77 @@ class TechTipsTest extends TestCase
         ]);
     }
 
-    // TODO - TEst with adding and removing files
+    public function test_update_no_public_permission()
+    {
+        $permId = UserRolePermissionType::where('description', 'Add Public Tech Tip')
+            ->first()->perm_type_id;
+        UserRolePermission::where('role_id', 2)
+            ->where('perm_type_id', $permId)
+            ->update([
+                'allow' => false,
+            ]);
+
+        $tip = TechTip::factory()->create();
+        $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['removedFiles'] = [];
+        $dataArr['public'] = true;
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))
+            ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
+        $response->assertForbidden();
+    }
+
+    public function test_update_with_files()
+    {
+        Storage::fake('tips');
+        $tip = TechTip::factory()->create();
+        Storage::disk('tips')->putFileAs($tip->tip_id, UploadedFile::fake()->image('add.png'), '/add.png');
+        Storage::disk('tips')->putFileAs($tip->tip_id, UploadedFile::fake()->image('remove.png'), '/remove.png');
+        $file1 = FileUpload::factory()->create([
+            'disk' => 'tips',
+            'folder' => $tip->tip_id,
+            'file_name' => 'add.png',
+        ]);
+        $file2 = FileUpload::factory()->create([
+            'disk' => 'tips',
+            'folder' => $tip->tip_id,
+            'file_name' => 'remove.png',
+        ]);
+        $tip->FileUpload()->sync([$file2->file_id]);
+
+        $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['removedFiles'] = [$file2->file_id];
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->withSession(['tip-file' => [$file1->file_id]])
+            ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('tips.updated'));
+
+        $this->assertDatabaseHas('tech_tips', [
+            'tip_id' => $tip->tip_id,
+            'subject' => $data->subject,
+        ]);
+        $this->assertDatabaseHas('tech_tip_files', [
+            'tip_id' => $tip->tip_id,
+            'file_id' => $file1->file_id,
+        ]);
+        $this->assertDatabaseMissing('tech_tip_files', [
+            'tip_id' => $tip->tip_id,
+            'file_id' => $file2->file_id,
+        ]);
+
+        Storage::disk('tips')->assertExists($tip->tip_id.'/add.png');
+        Storage::disk('tips')->assertMissing($tip->tip_id.'/remove.png');
+    }
 
     /**
      * Destroy Method

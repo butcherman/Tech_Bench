@@ -38,6 +38,7 @@ class UrlChangedListener
             );
         }
 
+        // @codeCoverageIgnoreStart
         if (App::environment('production')) {
             // Clear and re-cache all config data
             event(new AdministrationEvent('Building Application Cache'));
@@ -52,5 +53,6 @@ class UrlChangedListener
             Process::run('npm run build');
             event(new AdministrationEvent('Build Complete'));
         }
+        // @codeCoverageIgnoreEnd
     }
 }

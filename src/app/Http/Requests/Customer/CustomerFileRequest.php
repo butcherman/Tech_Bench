@@ -5,6 +5,7 @@ namespace App\Http\Requests\Customer;
 use App\Models\CustomerFile;
 use App\Models\FileUpload;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class CustomerFileRequest extends FormRequest
 {
@@ -39,13 +40,17 @@ class CustomerFileRequest extends FormRequest
      */
     public function createFile(FileUpload $fileData)
     {
+        Log::debug('Creating new customer file', $fileData->toArray());
         $this->mergeData($fileData);
         $this->addAttributes();
+        Log::debug('Request Data - ', $this->all());
 
         $newFile = CustomerFile::create($this->except(['file_type', 'site_list']));
+        Log::debug('New Customer File Created', $newFile->toArray());
 
         if ($this->file_type === 'site') {
             $newFile->CustomerSite()->sync($this->site_list);
+            Log::debug('Synced new customer file to Customer Sites', $this->site_list);
         }
 
         return $newFile;
@@ -94,8 +99,8 @@ class CustomerFileRequest extends FormRequest
             'cust_id' => $this->customer->cust_id,
             'site_list' => json_decode($this->site_list),
             'cust_equip_id' => json_decode($this->cust_equip_id),
-            'name' => json_decode($this->name),
-            'file_type' => json_decode($this->file_type),
+            'name' => $this->name,
+            'file_type' => $this->file_type,
         ]);
     }
 }

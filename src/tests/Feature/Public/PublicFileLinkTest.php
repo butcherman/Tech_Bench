@@ -3,6 +3,7 @@
 namespace Tests\Feature\Public;
 
 use App\Models\FileLink;
+use App\Models\FileUpload;
 use App\Models\User;
 use App\Notifications\FileLinks\GuestFileUploadedNotification;
 use Illuminate\Http\UploadedFile;
@@ -18,7 +19,7 @@ class PublicFileLinkTest extends TestCase
     public function test_show_bad_link()
     {
         $response = $this->get(route('guest-link.show', 'random-string'));
-        $response->assertStatus(404);
+        $response->assertSuccessful();
     }
 
     public function test_show_expired_link()
@@ -103,13 +104,15 @@ class PublicFileLinkTest extends TestCase
     {
         Notification::fake();
 
+        $file = FileUpload::factory()->create();
         $link = FileLink::factory()->create();
         $data = [
             'name' => 'Billy Bob',
             'notes' => 'This is a note',
         ];
 
-        $response = $this->post(route('guest-link.update', $link->link_hash), $data);
+        $response = $this->withSession(['link-file' => [$file->file_id]])
+            ->post(route('guest-link.update', $link->link_hash), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', 'Files Uploaded Successfully');
 

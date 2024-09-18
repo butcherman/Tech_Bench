@@ -42,7 +42,6 @@ class HandleInertiaRequests extends Middleware
                 'logo' => fn () => config('app.logo'),
                 'version' => fn () => Cache::version(),
                 'copyright' => fn () => Cache::copyright(),
-                'current_route' => fn () => $request->route()->getName(),
                 //  File information
                 'fileData' => [
                     'maxSize' => fn () => config('filesystems.max_filesize'),

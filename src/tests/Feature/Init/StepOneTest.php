@@ -26,7 +26,28 @@ class StepOneTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('init.step-1'));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('init.step-1'));
+        $response->assertSuccessful();
+    }
+
+    public function test_invoke_with_session_data()
+    {
+        config(['app.first_time_setup' => true]);
+        config(['app.env' => 'local']);
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->withSession([
+                'setup' => [
+                    'basic-settings' => [
+                        'url' => 'https://someUrl.noSite',
+                        'timezone' => 'UTC',
+                        'max_filesize' => 123456,
+                        'company_name' => 'Bobs Fancy Cats',
+                    ],
+                ],
+            ])
+            ->get(route('init.step-1'));
         $response->assertSuccessful();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Laravel\Horizon\Horizon;
 use Laravel\Horizon\HorizonApplicationServiceProvider;
 
@@ -33,10 +34,11 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      *
      * This gate determines who can access Horizon in non-local environments
      */
-    protected function gate()
+    protected function gate(): void
     {
+        Log::debug('Checking to see if user can access Horizon link');
         Gate::define('viewHorizon', function (User $user) {
-            return $user->role_id == 1;
+            return $user->role_id === 1;
         });
     }
 }

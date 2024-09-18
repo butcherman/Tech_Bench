@@ -29,7 +29,6 @@ class FileMissingException extends Exception
 
     public function render(Request $request): never
     {
-        // TODO - the message does not show with Laravel Error page
         abort(404, 'The requested file was not found');
     }
 }

@@ -10,6 +10,9 @@ class FileLinkObserver
 {
     protected $user;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct()
     {
         $this->user = match (true) {

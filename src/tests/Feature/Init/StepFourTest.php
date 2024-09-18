@@ -26,7 +26,23 @@ class StepFourTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('init.step-4'));
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->get(route('init.step-4'));
+        $response->assertSuccessful();
+    }
+
+    public function test_invoke_with_session_data()
+    {
+        config(['app.first_time_setup' => true]);
+        config(['app.env' => 'local']);
+
+        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+            ->withSession([
+                'setup' => [
+                    'administrator-account' => User::factory()->make(),
+                ],
+            ])
+            ->get(route('init.step-4'));
         $response->assertSuccessful();
     }
 }

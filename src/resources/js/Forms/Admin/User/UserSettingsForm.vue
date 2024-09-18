@@ -81,7 +81,7 @@
                 <TextInput
                     id="azure-redirect"
                     type="url"
-                    name="oath.redirectUri"
+                    name="oath.redirect"
                     label="Azure Redirect URI"
                     disabled
                 />
@@ -153,7 +153,7 @@ const schema = object({
                 ),
             otherwise: (schema) => schema.nullable(),
         }),
-        redirectUri: string().required(),
+        redirect: string().required(),
     }),
 });
 </script>

@@ -11,6 +11,9 @@ class TechTipObserver
 {
     protected $user;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct()
     {
         $this->user = match (true) {

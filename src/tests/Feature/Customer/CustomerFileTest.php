@@ -71,8 +71,8 @@ class CustomerFileTest extends TestCase
         $customer = Customer::factory()->create();
         $fileName = 'This is a test file';
         $data = [
-            'name' => json_encode($fileName),
-            'file_type' => json_encode('general'),
+            'name' => $fileName,
+            'file_type' => 'general',
             'file_type_id' => CustomerFileType::inRandomOrder()
                 ->first()
                 ->file_type_id,
@@ -114,8 +114,8 @@ class CustomerFileTest extends TestCase
             ->create(['cust_id' => $customer->cust_id]);
         $fileName = 'This is a test file';
         $data = [
-            'name' => json_encode($fileName),
-            'file_type' => json_encode('site'),
+            'name' => $fileName,
+            'file_type' => 'site',
             'file_type_id' => CustomerFileType::inRandomOrder()->first()->file_type_id,
             'cust_equip_id' => json_encode(null),
             'site_list' => json_encode($sites->pluck('cust_site_id')),

@@ -7,14 +7,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CertificateExpiredNotification extends Notification implements ShouldQueue
+class AzureCertificateExpiredNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Get the notification's delivery channels
      */
-    public function via(): array
+    public function via(object $notifiable): array
     {
         return ['mail'];
     }
@@ -22,11 +22,10 @@ class CertificateExpiredNotification extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(): MailMessage
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The SSL Certificate has expired and is no longer valid.')
-            ->line('Please take action to ensure Tech Bench communication remains secure')
-            ->action('Take Action', route('admin.security.index'));
+            ->line('The Azure Secret for Single Sign On has expired.')
+            ->line('Office 365 Single Sign on will not work until a new secret is generated');
     }
 }

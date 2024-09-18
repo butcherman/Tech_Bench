@@ -10,5 +10,5 @@ type oathConfig = {
     client_id: string;
     client_secret: string;
     secret_expires: string;
-    redirectUri: string;
+    redirect: string;
 };

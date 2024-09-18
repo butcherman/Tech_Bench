@@ -16,7 +16,15 @@ class TechTipRequest extends FormRequest
     public function authorize(): bool
     {
         if ($this->tech_tip) {
+            if ($this->public) {
+                return $this->user()->can('update', $this->tech_tip) && $this->user()->can('public', TechTip::class);
+            }
+
             return $this->user()->can('update', $this->tech_tip);
+        }
+
+        if ($this->public) {
+            return $this->user()->can('create', TechTip::class) && $this->user()->can('public', TechTip::class);
         }
 
         return $this->user()->can('create', TechTip::class);

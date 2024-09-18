@@ -44,9 +44,6 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { ref, reactive, onMounted } from "vue";
-
-const props = defineProps<{}>();
 </script>
 
 <script lang="ts">
