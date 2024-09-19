@@ -4,10 +4,10 @@
         <div class="row justify-content-center">
             <div v-for="channel in channels" class="col">
                 <Link
-                    :href="$route('maint.logs.show', channel.channel)"
+                    :href="$route('maint.logs.show', channel)"
                     class="btn btn-info w-100"
                 >
-                    {{ channel.name }}
+                    {{ channel }}
                 </Link>
             </div>
         </div>
@@ -45,7 +45,7 @@ interface logList {
 }
 
 const props = defineProps<{
-    channels: logChannel[];
+    channels: string[];
     levels: logLevel[];
     channel?: string | null;
     logList?: logList[];

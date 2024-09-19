@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Exceptions\Maintenance\BadLogChannelException;
 use App\Exceptions\Maintenance\LogFileMissingException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 trait LogUtilitiesTrait
@@ -29,6 +30,11 @@ trait LogUtilitiesTrait
     public function __construct()
     {
         /**
+         * Storage location for the logs
+         */
+        $this->storage = Storage::disk('logs');
+
+        /**
          * Build Log Levels
          */
         $this->logLevels = collect([
@@ -45,18 +51,9 @@ trait LogUtilitiesTrait
         /**
          * Build Log Channels
          */
-        $this->logChannels = collect([
-            ['name' => 'Application', 'folder' => 'Application', 'channel' => 'daily'],
-            ['name' => 'Authentication', 'folder' => 'Auth', 'channel' => 'auth'],
-            ['name' => 'User', 'folder' => 'Users', 'channel' => 'user'],
-            ['name' => 'Customer', 'folder' => 'Cust', 'channel' => 'cust'],
-            ['name' => 'Tech Tip', 'folder' => 'TechTip', 'channel' => 'tip'],
-        ]);
-
-        /**
-         * Storage location for the logs
-         */
-        $this->storage = Storage::disk('logs');
+        $this->logChannels = $this->storage->directories();
+        sort($this->logChannels);
+        Log::debug('List of available Log Channels - ', $this->logChannels);
     }
 
     /**
@@ -64,12 +61,14 @@ trait LogUtilitiesTrait
      */
     protected function getChannelLogs(string $channelName)
     {
+        Log::debug('Getting list of Log FIles for Channel '.$channelName);
         $logFiles = $this->getLogList($channelName);
 
         if (is_null($logFiles)) {
             return null;
         }
 
+        Log::debug('Parsing Statistic Data for Log File List');
         $statArray = [];
         foreach ($logFiles as $log) {
             $pathInfo = pathinfo($log);
@@ -89,17 +88,11 @@ trait LogUtilitiesTrait
      */
     protected function validateChannel(string $channelName)
     {
-        if (! $this->getChannel($channelName)) {
+        if (! in_array($channelName, $this->logChannels)) {
             throw new BadLogChannelException($channelName);
         }
-    }
 
-    /**
-     * Return the Channel Object based on the channel name
-     */
-    protected function getChannel(string $channelName)
-    {
-        return $this->logChannels->where('channel', $channelName)->first();
+        return true;
     }
 
     /**
@@ -107,15 +100,10 @@ trait LogUtilitiesTrait
      */
     protected function getLogList(string $channel)
     {
-        $channelData = $this->getChannel($channel);
+        // // Because users suck, we have to validate the channel
+        $this->validateChannel($channel);
 
-        // Because users suck, we have to validate the channel
-        if ($channelData === null) {
-            return null;
-        }
-
-        // Get the list of Log Files for the selected channel
-        $fileList = $this->storage->files($channelData['folder']);
+        $fileList = $this->storage->files($channel);
 
         return $fileList;
     }
@@ -125,8 +113,10 @@ trait LogUtilitiesTrait
      */
     protected function getLogFile(string $channel, string $fileName)
     {
-        $channel = $this->getChannel($channel);
-        $logFile = $channel['folder'].DIRECTORY_SEPARATOR.$fileName.'.log';
+        $this->validateChannel($channel);
+        $logFile = $channel.DIRECTORY_SEPARATOR.$fileName.'.log';
+
+        Log::critical($channel.' '.$fileName);
 
         if ($this->storage->missing($logFile)) {
             throw new LogFileMissingException($logFile);

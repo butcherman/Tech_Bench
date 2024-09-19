@@ -36,8 +36,9 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      */
     protected function gate(): void
     {
-        Log::debug('Checking to see if user can access Horizon link');
         Gate::define('viewHorizon', function (User $user) {
+            Log::debug('Checking to see if user can access Horizon link', $user->toArray());
+
             return $user->role_id === 1;
         });
     }
