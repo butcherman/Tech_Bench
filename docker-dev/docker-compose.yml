@@ -172,9 +172,11 @@ services:
             - ../src/vendor:/app/vendor
             - ../src/storage/app:/app/storage/app
             - ../src/storage/backups:/app/storage/backups
+            - ../src/storage/debugbar:/app/storage/debugbar
             - ../src/storage/framework:/app/storage/framework
             - ../src/storage/logs/Reverb:/app/storage/logs/Application
             - ../src/storage/pail:/app/storage/pail
+            - ../src/tests:/app/tests
             - ../src/artisan:/app/artisan
             - ../src/composer.json:/app/composer.json
             - ../src/composer.lock:/app/composer.lock
