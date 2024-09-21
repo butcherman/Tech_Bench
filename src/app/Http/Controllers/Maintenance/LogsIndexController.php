@@ -4,29 +4,30 @@ namespace App\Http\Controllers\Maintenance;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
-use App\Traits\LogUtilitiesTrait;
+use App\Service\Maint\LogUtilitiesService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class LogsIndexController extends Controller
 {
-    use LogUtilitiesTrait;
-
     /**
      * Handle the incoming request.
      */
     public function __invoke(?string $channel = null)
     {
         $this->authorize('viewAny', AppSettings::class);
+        $logObj = new LogUtilitiesService;
+
         if ($channel) {
-            $this->validateChannel($channel);
+            $logObj->validateLogChannel($channel);
         }
 
         return Inertia::render('Maint/LogsIndex', [
-            'channels' => $this->logChannels,
-            'levels' => $this->logLevels,
+            'channels' => $logObj->getLogChannels(),
+            'levels' => $logObj->getLogLevels(),
             'channel' => $channel,
-            'log-list' => $channel ? $this->getChannelLogs($channel) : null,
+            'channel-type' => $channel ? $logObj->getChannelType($channel) : null,
+            'log-list' => $channel ? $logObj->getLogList($channel) : [],
         ]);
     }
 }

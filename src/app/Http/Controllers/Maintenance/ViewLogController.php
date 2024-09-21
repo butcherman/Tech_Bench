@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Maintenance;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
+use App\Service\Maint\LogParsingService;
 use App\Traits\LogUtilitiesTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ViewLogController extends Controller
 {
-    use LogUtilitiesTrait;
+    // use LogUtilitiesTrait;
 
     /**
      * Handle the incoming request.
@@ -18,17 +19,13 @@ class ViewLogController extends Controller
     public function __invoke(Request $request, string $channel, string $logFile)
     {
         $this->authorize('viewAny', AppSettings::class);
-        $this->validateChannel($channel);
+        $logObj = new LogParsingService;
 
-        $filePath = $this->getLogFile($channel, $logFile);
-        $fileArray = $this->getFileToArray($filePath);
+        $logObj->validateLogFile($channel, $logFile);
 
-        return Inertia::render('Maint/LogView', [
-            'levels' => fn () => $this->logLevels,
-            'channel' => fn () => $channel,
-            'filename' => fn () => $logFile,
-            'file-stats' => fn () => [$this->getFileStats($fileArray)],
-            'file-entries' => fn () => array_reverse($this->parseLogFile($fileArray)),
-        ]);
+        return match ($logObj->getChannelType($channel)) {
+            'app' => Inertia::render('Maint/LogAppView', $logObj->getLogFileData($channel, $logFile)),
+            default => abort(404),
+        };
     }
 }
