@@ -3,6 +3,7 @@
 namespace App\Service\Maint;
 
 use App\Exceptions\Maintenance\LogFileMissingException;
+use Carbon\Carbon;
 
 class LogParsingService extends LogUtilitiesService
 {
@@ -84,7 +85,9 @@ class LogParsingService extends LogUtilitiesService
         if (preg_match($this->appLogEntryPattern, $line, $data)) {
             return [
                 'date' => $data[1],
-                'time' => $data[2],
+                'time' => Carbon::parse($data[2])
+                    ->setTimezone(config('app.timezone'))
+                    ->format('m/d h:mA'),
                 'env' => $data[3],
                 'level' => $data[4],
                 'message' => $data[5],
@@ -103,7 +106,9 @@ class LogParsingService extends LogUtilitiesService
         if (preg_match($this->appLogErrorPattern, $line, $data)) {
             return [
                 'date' => $data[1],
-                'time' => $data[2],
+                'time' => Carbon::parse($data[2])
+                    ->setTimezone(config('app.timezone'))
+                    ->format('m/d h:mA'),
                 'env' => $data[3],
                 'level' => $data[4],
                 'message' => $data[5],

@@ -29,14 +29,12 @@ class LogSettingsRequest extends FormRequest
         ];
     }
 
-    public function saveLogSettings($logChannels)
+    public function saveLogSettings()
     {
-        $this->saveSettings('logging.days', $this->days);
-        $this->saveSettings('logging.log_level', $this->log_level);
+        $this->saveSettings('logging.channels.daily.days', $this->days);
+        $this->saveSettings('logging.channels.daily.level', $this->log_level);
 
-        foreach ($logChannels as $channel) {
-            $this->saveSettings('logging.channels.'.$channel['channel'].'.level', $this->log_level);
-            $this->saveSettings('logging.channels.'.$channel['channel'].'.days', $this->days);
-        }
+        $this->saveSettings('logging.channels.auth.days', $this->days);
+        $this->saveSettings('logging.channels.auth.level', $this->log_level);
     }
 }

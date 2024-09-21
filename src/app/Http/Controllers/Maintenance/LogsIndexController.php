@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Maintenance;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Service\Maint\LogUtilitiesService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class LogsIndexController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * List all log channels and log files for the selected channel
      */
     public function __invoke(?string $channel = null)
     {

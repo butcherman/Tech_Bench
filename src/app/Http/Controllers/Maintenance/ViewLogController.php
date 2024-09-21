@@ -5,16 +5,13 @@ namespace App\Http\Controllers\Maintenance;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Service\Maint\LogParsingService;
-use App\Traits\LogUtilitiesTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ViewLogController extends Controller
 {
-    // use LogUtilitiesTrait;
-
     /**
-     * Handle the incoming request.
+     * Show entries for a specific log file
      */
     public function __invoke(Request $request, string $channel, string $logFile)
     {

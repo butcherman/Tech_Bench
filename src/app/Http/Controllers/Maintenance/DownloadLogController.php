@@ -4,26 +4,25 @@ namespace App\Http\Controllers\Maintenance;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
-use App\Traits\LogUtilitiesTrait;
+use App\Service\Maint\LogParsingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DownloadLogController extends Controller
 {
-    use LogUtilitiesTrait;
-
     /**
-     * Handle the incoming request.
+     * Download a raw log file
      */
     public function __invoke(Request $request, string $channel, string $logFile)
     {
         $this->authorize('viewAny', AppSettings::class);
-        $this->validateChannel($channel);
+        $logObj = new LogParsingService;
+        $logObj->validateLogFile($channel, $logFile);
 
-        $filePath = $this->getLogFile($channel, $logFile);
-
+        $filePath = $channel.DIRECTORY_SEPARATOR.$logFile.'.log';
         Log::info($request->user()->username.' is downloading log file '.$filePath);
 
-        return $this->storage->download($filePath);
+        return Storage::disk('logs')->download($filePath);
     }
 }
