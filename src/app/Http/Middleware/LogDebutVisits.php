@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,38 +14,55 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LogDebutVisits
 {
-    //  These items should never be logged
+    /**
+     * These items should never be logged
+     */
     protected $ignore = ['_token', 'token'];
 
-    //  These items are logged with masked input to show that they did exist during the session
+    /**
+     * Sensitive data is logged as received, but the values will be redacted
+     */
     protected $redact = ['password', 'password_confirmation', 'current_password'];
 
-    //  These route prefixes are not logged
-    protected $doNotLog = ['horizon', 'telescope'];
+    /**
+     * These Route prefixes are not logged
+     */
+    protected $doNotLog = ['broadcasting/*', 'administration/horizon/*'];    // ['horizon', 'telescope'];
 
     /**
-     * When Debug Logging is one, log every page visit and all $request data - Except Horizon Routes
+     * When Debug Logging is one, log every page visit and all $request data
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = isset($request->user()->user_id) ? $request->user()->full_name : $request->ip();
-        $requestData = $request->request->all();
+        // If log level is not set to debug, continue on
+        if (config('logging.channels.daily.level') === 'debug') {
 
-        $routeArray = explode('.', Route::currentRouteName());
-        if ($routeArray[0] !== 'horizon') {
-            Log::debug('Route '.Route::currentRouteName().' visited by '.$user);
+            // Determine if we need to bypass this URL
+            foreach ($this->doNotLog as $bypass) {
+                if ($request->is($bypass)) {
+                    return $next($request);
+                }
+            }
 
-            if (! empty($requestData)) {
-                foreach ($this->redact as $i) {
-                    if (Arr::exists($requestData, $i)) {
-                        $requestData[$i] = '[REDACTED]';
+            // Collect information needed for logging
+            $user = $request->user()->full_name ?? $request->ip();
+            $requestData = $request->all();
+            $currentRoute = Route::currentRouteName() ?? $request->path();
+
+            Log::debug('Route '.$currentRoute.' visited by '.$user);
+
+            if ($requestData) {
+                // Verify we do not log any sensitive data
+                foreach ($requestData as $index => $data) {
+                    if (in_array($data, $this->ignore)) {
+                        unset($requestData[$index]);
+                    }
+
+                    if (in_array($data, $this->redact)) {
+                        $requestData[$index] = '[REDACTED]';
                     }
                 }
-                foreach ($this->ignore as $i) {
-                    if (Arr::exists($requestData, $i)) {
-                        unset($requestData[$i]);
-                    }
-                }
+
                 Log::debug('Submitted Data ', $requestData);
             }
         }
