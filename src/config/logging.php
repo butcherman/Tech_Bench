@@ -58,6 +58,13 @@ return [
         'emergency' => [
             'path' => storage_path('logs/Emergency/EmergencyLog.log'),
         ],
+
+        // Deprecation Warnings used in Development
+        'deprecation' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/Deprecation/Deprecation.log'),
+            'permission' => 0777,
+        ],
     ],
 
     'deprecations' => [
