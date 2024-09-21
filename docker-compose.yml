@@ -12,6 +12,9 @@ networks:
         driver: bridge
 volumes:
     assetData:
+    dbData:
+    redisData:
+    storageData:
     keystore:
 
 services:
@@ -23,14 +26,16 @@ services:
         volumes:
             - assetData:/app/public
             - keystore:/app/keystore
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/logs/app:/app/storage/logs
+            - storageData:/app/storage
             - ./.env:/app/.env
         environment:
             - SERVICE=app
             - TB_URL=${BASE_URL}
         networks:
             - app-tier
+        depends_on:
+            - database
+            - nginx
 
     # NGINX Web Server
     nginx:
@@ -40,7 +45,7 @@ services:
         volumes:
             - assetData:/app/public:ro
             - keystore:/app/keystore
-            - ./storageData/logs/nginx:/app/storage/logs/nginx
+            - storageData:/app/storage
         environment:
             - TB_URL=${BASE_URL}
         ports:
@@ -55,7 +60,7 @@ services:
         container_name: database
         restart: unless-stopped
         volumes:
-            - ./appData/database:/bitnami/mysql/data
+            - dbData:/bitnami/mysql/data
         networks:
             - app-tier
         environment:
@@ -67,7 +72,7 @@ services:
         container_name: redis
         restart: unless-stopped
         volumes:
-            - ./appData/redis:/bitnami/redis/data
+            - redisData:/bitnami/redis/data
         networks:
             - app-tier
 
@@ -89,8 +94,7 @@ services:
         volumes:
             - assetData:/app/public
             - keystore:/app/keystore
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/logs/horizon:/app/storage/logs
+            - storageData:/app/storage
             - ./.env:/app/.env
         environment:
             - SERVICE=horizon
@@ -105,8 +109,7 @@ services:
         volumes:
             - assetData:/app/public
             - keystore:/app/keystore
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/logs/scheduler:/app/storage/logs
+            - storageData:/app/storage
             - ./.env:/app/.env
         environment:
             - SERVICE=scheduler
@@ -121,8 +124,7 @@ services:
         volumes:
             - assetData:/app/public
             - keystore:/app/keystore
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/logs/reverb:/app/storage/logs
+            - storageData:/app/storage
             - ./.env:/app/.env
         environment:
             - SERVICE=reverb
