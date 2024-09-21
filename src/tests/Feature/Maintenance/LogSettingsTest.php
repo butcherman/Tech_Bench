@@ -72,15 +72,7 @@ class LogSettingsTest extends TestCase
 
         $response->assertStatus(302);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'logging.days',
-            'value' => 120,
-        ]);
-        $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.auth.level',
-            'value' => 'critical',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'logging.channels.cust.level',
             'value' => 'critical',
         ]);
         $this->assertDatabaseHas('app_settings', [
@@ -88,12 +80,12 @@ class LogSettingsTest extends TestCase
             'value' => 'critical',
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'logging.channels.tip.level',
-            'value' => 'critical',
+            'key' => 'logging.channels.auth.days',
+            'value' => 120,
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'logging.channels.user.level',
-            'value' => 'critical',
+            'key' => 'logging.channels.daily.days',
+            'value' => 120,
         ]);
     }
 }

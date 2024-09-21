@@ -9,6 +9,13 @@
 
 echo "Starting NGINX Setup Script"
 
+# Verify that the Logs Folder exists and is writable
+if [ ! -d "/app/storage/logs/NGINX" ]
+then
+    mkdir /app/storage/logs/NGINX
+    chmod 777 /app/storage/logs/NGINX
+fi
+
 # If the SSL file does not exist, create a self signed SSL cert
 if [ ! -f "/app/keystore/server.crt" ]
 then

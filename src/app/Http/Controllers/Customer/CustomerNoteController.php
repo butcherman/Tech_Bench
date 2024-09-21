@@ -53,7 +53,7 @@ class CustomerNoteController extends Controller
     {
         $newNote = $request->createNote();
 
-        Log::channel('cust')->info('New Customer Note created for '.$customer->name.
+        Log::info('New Customer Note created for '.$customer->name.
             ' by '.$request->user()->username, $newNote->toArray());
 
         event(new CustomerNoteEvent($customer, $newNote, CrudAction::Create));
@@ -98,7 +98,7 @@ class CustomerNoteController extends Controller
     {
         $updatedNote = $request->updateNote();
 
-        Log::channel('cust')->info('Customer Note for '.$customer->name.
+        Log::info('Customer Note for '.$customer->name.
             ' updated by '.$request->user()->username, $updatedNote->toArray());
 
         event(new CustomerNoteEvent($customer, $updatedNote, CrudAction::Update));
@@ -118,7 +118,7 @@ class CustomerNoteController extends Controller
 
         $note->delete();
 
-        Log::channel('cust')->notice('Customer Note for '.$customer->name.
+        Log::notice('Customer Note for '.$customer->name.
             ' deleted by '.$request->user()->username, $note->toArray());
 
         event(new CustomerNoteEvent($customer, $note, CrudAction::Destroy));
@@ -136,8 +136,7 @@ class CustomerNoteController extends Controller
 
         $note->restore();
 
-        Log::channel('cust')
-            ->info('Customer Note restored for '.$customer->name.' by '.
+        Log::info('Customer Note restored for '.$customer->name.' by '.
                 $request->user()->username, $note->toArray());
 
         event(new CustomerNoteEvent($customer, $note, CrudAction::Restore));
@@ -155,8 +154,7 @@ class CustomerNoteController extends Controller
 
         $note->forceDelete();
 
-        Log::channel('cust')
-            ->notice('Customer NOte force deleted for '.$customer->name.
+        Log::notice('Customer NOte force deleted for '.$customer->name.
                 ' by '.$request->user()->username, $note->toArray());
 
         event(new CustomerNoteEvent($customer, $note, CrudAction::ForceDelete));

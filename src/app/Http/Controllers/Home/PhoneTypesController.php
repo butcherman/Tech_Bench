@@ -40,11 +40,10 @@ class PhoneTypesController extends Controller
         $phoneType = PhoneNumberType::create($request->only(['description', 'icon_class']));
         Cache::clearCache('phoneTypes');
 
-        Log::stack(['daily', 'cust'])
-            ->info(
-                'New Phone Number Type created by '.$request->user()->username,
-                $phoneType->toArray()
-            );
+        Log::info(
+            'New Phone Number Type created by '.$request->user()->username,
+            $phoneType->toArray()
+        );
 
         return back()->with('success', __('admin.phone-type.created'));
     }
@@ -57,11 +56,10 @@ class PhoneTypesController extends Controller
         $phone_type->update($request->only(['description', 'icon_class']));
         Cache::clearCache('phoneTypes');
 
-        Log::stack(['daily', 'cust'])
-            ->info(
-                'Phone Number Type updated by '.$request->user()->username,
-                $phone_type->toArray()
-            );
+        Log::info(
+            'Phone Number Type updated by '.$request->user()->username,
+            $phone_type->toArray()
+        );
 
         return back()->with('success', __('admin.phone-type.updated'));
     }
@@ -81,7 +79,7 @@ class PhoneTypesController extends Controller
             CheckDatabaseError::check($e, 'Unable to delete, Phone Number Type is in use by at least one customer');
         }
 
-        Log::stack(['daily', 'cust'])->notice('Phone Number Type deleted by '.
+        Log::notice('Phone Number Type deleted by '.
             $request->user()->username, $phone_type->toArray());
 
         return back()->with('warning', __('admin.phone-type.destroyed'));

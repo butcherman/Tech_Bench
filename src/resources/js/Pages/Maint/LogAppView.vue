@@ -72,7 +72,8 @@
             size="xl"
             @hidden="activeDetails = null"
         >
-            <pre>{{ activeDetails }}</pre>
+            <pre v-if="isStackTrace">{{ activeDetails }}</pre>
+            <TableStacked v-else :rows="activeDetails" title-case />
         </Modal>
     </div>
 </template>
@@ -80,6 +81,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Table from "@/Components/_Base/Table.vue";
+import TableStacked from "@/Components/_Base/TableStacked.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import { ref, onMounted } from "vue";
@@ -92,13 +94,16 @@ const props = defineProps<{
     fileEntries: logLine[];
 }>();
 
+const isStackTrace = ref(false);
 const detailsModal = ref<InstanceType<typeof Modal> | null>(null);
 const activeDetails = ref<string[] | null>(null);
 
 const showDetails = (rowData: logLine) => {
     if (rowData.stack_trace) {
+        isStackTrace.value = true;
         activeDetails.value = rowData.stack_trace;
     } else {
+        isStackTrace.value = false;
         activeDetails.value = rowData.details;
     }
     detailsModal.value?.show();

@@ -48,8 +48,7 @@ class CustomerController extends Controller
     {
         $newCustomer = $request->createNewCustomer();
 
-        Log::channel('cust')
-            ->info('New Customer '.$newCustomer->name.' created by '
+        Log::info('New Customer '.$newCustomer->name.' created by '
                 .$request->user()->username, $newCustomer->toArray());
 
         event(new CustomerEvent($newCustomer, CrudAction::Create));
@@ -120,8 +119,7 @@ class CustomerController extends Controller
     {
         $updatedCustomer = $request->updateCustomer($customer);
 
-        Log::channel('cust')
-            ->info('Customer information updated for '.$customer->name
+        Log::info('Customer information updated for '.$customer->name
                 .' by '.$request->user()->username, $customer->toArray());
 
         event(new CustomerEvent($updatedCustomer, CrudAction::Update));
@@ -140,7 +138,7 @@ class CustomerController extends Controller
         $customer->update(['deleted_reason' => $request->reason]);
         $customer->delete();
 
-        Log::channel('cust')->alert('Customer '.$customer->name.' has been disabled by '.
+        Log::alert('Customer '.$customer->name.' has been disabled by '.
             $request->user()->username);
 
         event(new CustomerEvent($customer, CrudAction::Destroy));
@@ -159,7 +157,7 @@ class CustomerController extends Controller
 
         $customer->restore();
 
-        Log::channel('cust')->notice('Customer '.$customer->name.
+        Log::notice('Customer '.$customer->name.
             ' has been restored by '.$request->user()->username);
 
         event(new CustomerEvent($customer, CrudAction::Restore));
@@ -176,7 +174,7 @@ class CustomerController extends Controller
 
         dispatch(new DestroyCustomerJob($customer));
 
-        Log::channel('cust')->warning('Customer '.$customer->name.
+        Log::warning('Customer '.$customer->name.
             ' has been permanently removed by '.$request->user()->username);
 
         event(new CustomerEvent($customer, CrudAction::ForceDelete));

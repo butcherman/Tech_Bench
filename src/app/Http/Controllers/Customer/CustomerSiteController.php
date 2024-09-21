@@ -57,7 +57,7 @@ class CustomerSiteController extends Controller
         $request->setSlug();
         $newSite = CustomerSite::create($request->except(['cust_name']));
 
-        Log::channel('cust')->info('New Customer Site created for '.$request->cust_name.
+        Log::info('New Customer Site created for '.$request->cust_name.
             ' by '.$request->user()->username, $newSite->toArray());
 
         event(new CustomerSiteEvent($customer, $newSite, CrudAction::Create));
@@ -114,7 +114,7 @@ class CustomerSiteController extends Controller
         $request->setSlug();
         $site->update($request->except(['cust_name']));
 
-        Log::channel('cust')->info('Customer Site '.$site->site_name.' updated for '.
+        Log::info('Customer Site '.$site->site_name.' updated for '.
             $request->cust_name.' by '.$request->user()->username, $site->toArray());
 
         event(new CustomerSiteEvent($customer, $site, CrudAction::Update));
@@ -133,7 +133,7 @@ class CustomerSiteController extends Controller
         $site->update(['deleted_reason' => $request->reason]);
         $site->delete();
 
-        Log::channel('cust')->alert('Customer Site '.$site->site_name.' for '.
+        Log::alert('Customer Site '.$site->site_name.' for '.
             $customer->name.' has been disabled by '.$request->user()->username);
 
         event(new CustomerSiteEvent($customer, $site, CrudAction::Destroy));

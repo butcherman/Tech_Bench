@@ -36,12 +36,11 @@ class ReAssignSiteJob implements ShouldQueue
         $fromCustomer = $this->moveSite->Customer;
         $this->isSolo = $fromCustomer->site_count === 1;
 
-        Log::stack(['daily', 'cust'])
-            ->notice('Re-Assign Customer job called by '.$request->user()->username, [
-                'site_moving' => $this->moveSite->toArray(),
-                'from_customer' => $this->moveSite->Customer->toArray(),
-                'to_customer' => $this->toCustomer->toArray(),
-            ]);
+        Log::notice('Re-Assign Customer job called by '.$request->user()->username, [
+            'site_moving' => $this->moveSite->toArray(),
+            'from_customer' => $this->moveSite->Customer->toArray(),
+            'to_customer' => $this->toCustomer->toArray(),
+        ]);
     }
 
     /**
@@ -74,7 +73,7 @@ class ReAssignSiteJob implements ShouldQueue
         if ($modelList) {
             foreach ($modelList as $model) {
                 if ($model->CustomerSite->count() === 1) {
-                    Log::channel('cust')->info(
+                    Log::info(
                         'Moving data from Customer ID'.$model->cust_id.
                         ' to Customer ID '.$this->toCustomer->cust_id,
                         $model->toArray()
@@ -93,7 +92,7 @@ class ReAssignSiteJob implements ShouldQueue
      */
     protected function moveSiteEquipment()
     {
-        Log::channel('cust')->debug('Checking for Customer Equipment that can be moved');
+        Log::debug('Checking for Customer Equipment that can be moved');
 
         $availableEquipment = $this->moveSite->SiteEquipment;
         foreach ($availableEquipment as $equip) {
@@ -102,7 +101,7 @@ class ReAssignSiteJob implements ShouldQueue
              * If not, it will be detached from the site
              */
             if ($equip->CustomerSite->count() === 1) {
-                Log::channel('cust')->info('Moving Customer Equipment ID '.
+                Log::info('Moving Customer Equipment ID '.
                     $equip->cust_equip_id.' from Customer ID '.$equip->cust_id.
                     ' to Customer ID'.$this->toCustomer->cust_id);
 
@@ -133,7 +132,7 @@ class ReAssignSiteJob implements ShouldQueue
      */
     protected function moveSiteContacts()
     {
-        Log::channel('cust')->debug('Checking for Customer Contacts that can be moved');
+        Log::debug('Checking for Customer Contacts that can be moved');
 
         $availableContacts = $this->moveSite->SiteContact;
         $this->cycleModel($availableContacts);
@@ -144,7 +143,7 @@ class ReAssignSiteJob implements ShouldQueue
      */
     protected function moveSiteNotes()
     {
-        Log::channel('cust')->debug('Checking for Customer Notes that can be moved');
+        Log::debug('Checking for Customer Notes that can be moved');
 
         /**
          * If this is the only site attached to the customer, move all notes
@@ -167,7 +166,7 @@ class ReAssignSiteJob implements ShouldQueue
      */
     protected function moveSiteFiles()
     {
-        Log::channel('cust')->debug('Checking for Customer Files that can be moved');
+        Log::debug('Checking for Customer Files that can be moved');
 
         /**
          * If this is the only site attached to customer, move all files
@@ -198,7 +197,7 @@ class ReAssignSiteJob implements ShouldQueue
             $customer->primary_site_id = null;
             $customer->save();
 
-            Log::channel('cust')->notice('Primary Site for '.$customer->name.' has been removed');
+            Log::notice('Primary Site for '.$customer->name.' has been removed');
         }
 
         if ($this->isSolo) {
@@ -206,7 +205,7 @@ class ReAssignSiteJob implements ShouldQueue
             $customer->save();
             $customer->delete();
 
-            Log::channel('cust')->notice('Customer '.$customer->name.' has been disabled due to no active sites.');
+            Log::notice('Customer '.$customer->name.' has been disabled due to no active sites.');
         }
 
         $this->moveSite->cust_id = $this->toCustomer->cust_id;

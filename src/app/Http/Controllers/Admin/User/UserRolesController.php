@@ -120,7 +120,7 @@ class UserRolesController extends Controller
     {
         $request->destroyRole();
 
-        Log::stack(['daily', 'user'])
+        Log::stack(['daily', 'auth'])
             ->notice('Role '.$user_role->name.' has been deleted by '.
                 $request->user()->username);
 

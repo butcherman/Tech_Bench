@@ -46,7 +46,7 @@ class UserAdministrationController extends Controller
         $newUser = User::create($request->toArray());
 
         event(new UserCreatedEvent($newUser));
-        Log::stack(['daily', 'user'])
+        Log::stack(['daily', 'auth'])
             ->notice(
                 'New User created by '.$request->user()->username,
                 $newUser->toArray()
@@ -93,7 +93,7 @@ class UserAdministrationController extends Controller
     {
         $user->update($request->toArray());
 
-        Log::stack(['daily', 'user'])
+        Log::stack(['daily', 'auth'])
             ->info('User information for '.$user->username.' has been updated by '.
                 $request->user()->username, $request->toArray());
         event(new FeatureChangedEvent);
@@ -119,7 +119,7 @@ class UserAdministrationController extends Controller
         $this->authorize('delete', $user);
 
         $user->delete();
-        Log::stack(['daily', 'user'])
+        Log::stack(['daily', 'auth'])
             ->notice('User '.$user->username.' has been deactivated by '.
                 $request->user()->username);
 
@@ -137,7 +137,7 @@ class UserAdministrationController extends Controller
         $this->authorize('delete', $user);
 
         $user->restore();
-        Log::stack(['daily', 'user'])
+        Log::stack(['daily', 'auth'])
             ->notice('User '.$user->username.' has been reactivated by '.
                 $request->user()->username);
 

@@ -21,11 +21,10 @@ class FlagCommentController extends Controller
     {
         try {
             $comment->flagComment();
-            Log::stack(['daily', 'tip'])
-                ->notice(
-                    'Tech Tip comment has been flagged by '.$request->user()->username,
-                    $comment->toArray()
-                );
+            Log::notice(
+                'Tech Tip comment has been flagged by '.$request->user()->username,
+                $comment->toArray()
+            );
             event(new TipCommentFlaggedEvent($comment));
         } catch (QueryException $e) {
             if (in_array($e->errorInfo[1], [1062])) {

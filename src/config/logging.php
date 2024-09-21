@@ -5,21 +5,15 @@ use Monolog\Handler\StreamHandler;
 
 return [
     'default' => env('LOG_CHANNEL', 'daily'),
-    'days' => 14,
-    'log_level' => env('LOG_LEVEL', 'info'),
     'channels' => [
-        'stack' => [
-            'driver' => 'stack',
-            'channels' => ['single'],
-            'ignore_exceptions' => false,
-        ],
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/Application/TechBench.log'),
             'level' => env('LOG_LEVEL', 'info'),
             'permission' => 0777,
         ],
-        //  Default logging channel
+
+        // Default logging channel
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/Application/TechBench.log'),
@@ -27,34 +21,11 @@ return [
             'days' => 14,
             'permission' => 0777,
         ],
-        //  All User related logging
-        'user' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/Users/User.log'),
-            'level' => env('LOG_LEVEL', 'info'),
-            'days' => 14,
-            'permission' => 0777,
-        ],
-        //  All authentication - login/logout logging
+
+        // All authentication - login/logout logging
         'auth' => [
             'driver' => 'daily',
             'path' => storage_path('logs/Auth/Auth.log'),
-            'level' => env('LOG_LEVEL', 'info'),
-            'days' => 14,
-            'permission' => 0777,
-        ],
-        //  All customer specific logging
-        'cust' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/Cust/Cust.log'),
-            'level' => env('LOG_LEVEL', 'info'),
-            'days' => 14,
-            'permission' => 0777,
-        ],
-        //  All Tech Tip specific logging
-        'tip' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/TechTip/TechTip.log'),
             'level' => env('LOG_LEVEL', 'info'),
             'days' => 14,
             'permission' => 0777,
@@ -87,6 +58,18 @@ return [
         'emergency' => [
             'path' => storage_path('logs/Emergency/EmergencyLog.log'),
         ],
+
+        // Deprecation Warnings used in Development
+        'deprecation' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/Deprecation/Deprecation.log'),
+            'permission' => 0777,
+        ],
+    ],
+
+    'deprecations' => [
+        'channel' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
+        'trace' => env('LOG_DEPRECATIONS_TRACE', false),
     ],
 
 ];

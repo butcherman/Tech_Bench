@@ -36,17 +36,16 @@ class CheckCertificateJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
-    {
-        $this->certObj = new CertificateService;
-        $this->certData = $this->certObj->getCertData();
-    }
+    public function __construct() {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
+        $this->certObj = new CertificateService;
+        $this->certData = $this->certObj->getCertData();
+
         Log::info('Check Certificate Job starting');
 
         $this->notifyUsers = User::where('role_id', 1)->get();

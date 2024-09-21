@@ -18,7 +18,7 @@ class SendWelcomeEmailController extends Controller
         $this->authorize('update', $user);
 
         event(new ResendWelcomeEvent($user));
-        Log::stack(['daily', 'user'])->info('Resending Welcome Email to '.
+        Log::stack(['daily', 'auth'])->info('Resending Welcome Email to '.
             $user->full_name.'.  Triggered by '.$request->user()->username);
 
         return back()->with('success', __('admin.user.welcome_sent'));

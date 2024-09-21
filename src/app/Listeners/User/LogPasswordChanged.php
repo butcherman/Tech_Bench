@@ -12,7 +12,7 @@ class LogPasswordChanged
      */
     public function handle(PasswordChangedEvent $event): void
     {
-        Log::stack(['user', 'auth'])->info('User '.$event->user->username.
+        Log::stack(['daily', 'auth'])->info('User '.$event->user->username.
             ' has updated their password');
 
     }

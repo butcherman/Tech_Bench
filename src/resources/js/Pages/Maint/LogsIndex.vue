@@ -4,10 +4,10 @@
         <div class="row justify-content-center">
             <div v-for="channel in channels" class="col">
                 <Link
-                    :href="$route('maint.logs.show', channel.channel)"
+                    :href="$route('maint.logs.show', channel)"
                     class="btn btn-info w-100"
                 >
-                    {{ channel.name }}
+                    {{ channel }}
                 </Link>
             </div>
         </div>
@@ -16,7 +16,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">Log Files</div>
-                        <h5 v-if="!logList?.length" class="text-center">
+                        <h5 v-if="!channel" class="text-center">
                             Select A Channel Above To See Log Files
                         </h5>
                         <Table
@@ -24,6 +24,7 @@
                             :columns="tableCols"
                             :rows="logList"
                             row-clickable
+                            no-results-text="No Log Files Found For This Channel"
                             @on-row-click="onRowClick"
                         />
                     </div>
@@ -45,10 +46,11 @@ interface logList {
 }
 
 const props = defineProps<{
-    channels: logChannel[];
+    channels: string[];
     levels: logLevel[];
-    channel?: string | null;
-    logList?: logList[];
+    logList: logList[];
+    channel: string | null;
+    channelType: string | null;
 }>();
 
 const tableCols = ref<tableColumn[]>([
@@ -68,15 +70,17 @@ const tableCols = ref<tableColumn[]>([
 ]);
 
 onMounted(() => {
-    props.levels.forEach((level) => {
-        tableCols.value.push({
-            label: level.name,
-            field: level.name,
-            icon: level.icon,
-            textVariant: level.color,
-            sort: true,
+    if (props.channelType === "app") {
+        props.levels.forEach((level) => {
+            tableCols.value.push({
+                label: level.name,
+                field: level.name,
+                icon: level.icon,
+                textVariant: level.color,
+                sort: true,
+            });
         });
-    });
+    }
 });
 
 const onRowClick = (rowData: logList) => {

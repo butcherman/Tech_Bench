@@ -1,8 +1,8 @@
 # Tech Bench
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub release](https://img.shields.io/github/release/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/releases/)
-[![GitHub issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
+[![GitHub Release](https://img.shields.io/github/release/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/releases/)
+[![GitHub Issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
 
 ## About Tech Bench
 
@@ -18,11 +18,11 @@ even those unfamiliar with the customer - quick and centralized access to all of
 Customer accounts can be created as stand alone or with multiple attached sites. Customer specific information can then
 be stored and shared for quick centralized access. Information includes:
 
--   Equipment Types Installed
--   Equipment Specific Information (such as IP Addresses, login information, etc.)
--   Contacts, including onsite and offsite contacts
--   Notes for the customer, their specific site, or specific to the installed equipment
--   Files such as backups, site maps, etc.
+- Equipment Types Installed
+- Equipment Specific Information (such as IP Addresses, login information, etc.)
+- Contacts, including onsite and offsite contacts
+- Notes for the customer, their specific site, or specific to the installed equipment
+- Files such as backups, site maps, etc.
 
 ### Tech Tips (Knowledge Base) and Documentation
 
@@ -43,7 +43,8 @@ dates and is only available for a limited time.
 
 ## Installation and Setup of Tech Bench
 
-TODO - Add Me
+Tech Bench is a Docker based application.  Follow the instructions in the [Installation Guide](INSTALLATION.md) for
+detailed instructions to setup the Tech Bench.
 
 ## Copyright © 2016-2024 Ron Butcher
 
@@ -56,4 +57,4 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
 License for more details.
 
 You should have received a copy of the GNU General Public License along with this program. If not, see
-www.gnu.org/licenses.
+<www.gnu.org/licenses>.

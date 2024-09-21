@@ -56,7 +56,7 @@ class DownloadLogTest extends TestCase
         Storage::disk('logs')->putFileAs('Application', $file, 'logFile.log');
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
-            ->get(route('maint.logs.download', ['daily', 'logFile']));
+            ->get(route('maint.logs.download', ['Application', 'logFile']));
         $response->assertSuccessful();
         $response->assertDownload();
     }

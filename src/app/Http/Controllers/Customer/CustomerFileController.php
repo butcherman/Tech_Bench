@@ -28,7 +28,7 @@ class CustomerFileController extends Controller
         if ($savedFile = $this->getChunk($request)) {
             $newFile = $request->createFile($savedFile);
 
-            Log::channel('cust')->info(
+            Log::info(
                 'New Customer File created for '.
                 $customer->name.' by '.$request->user()->username,
                 $newFile->toArray()
@@ -50,11 +50,10 @@ class CustomerFileController extends Controller
     ): RedirectResponse {
         $request->updateFile();
 
-        Log::channel('cust')
-            ->info(
-                'Customer File Information updated by '.$request->user()->username,
-                $file->toArray()
-            );
+        Log::info(
+            'Customer File Information updated by '.$request->user()->username,
+            $file->toArray()
+        );
 
         event(new CustomerFileEvent($customer, $file, CrudAction::Update));
 
@@ -70,8 +69,7 @@ class CustomerFileController extends Controller
 
         $file->delete();
 
-        Log::channel('cust')
-            ->notice('Customer File deleted for '.$customer->name.' by '.
+        Log::notice('Customer File deleted for '.$customer->name.' by '.
                 $request->user()->username, $file->toArray());
 
         event(new CustomerFileEvent($customer, $file, CrudAction::Destroy));
@@ -88,8 +86,7 @@ class CustomerFileController extends Controller
 
         $file->restore();
 
-        Log::channel('cust')
-            ->info('Customer File restored for '.$customer->name.' by '.
+        Log::info('Customer File restored for '.$customer->name.' by '.
                 $request->user()->username, $file->toArray());
 
         event(new CustomerFileEvent($customer, $file, CrudAction::Restore));
@@ -106,8 +103,7 @@ class CustomerFileController extends Controller
 
         $file->forceDelete();
 
-        Log::channel('cust')
-            ->notice('Customer File force deleted for '.$customer->name.
+        Log::notice('Customer File force deleted for '.$customer->name.
                 ' by '.$request->user()->username, $file->toArray());
 
         event(new CustomerFileEvent($customer, $file, CrudAction::ForceDelete));
