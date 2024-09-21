@@ -61,7 +61,7 @@ class ViewLogTest extends TestCase
         $filename = 'TechBench-'.$date;
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
-            ->get(route('maint.logs.view', ['daily', $filename]));
+            ->get(route('maint.logs.view', ['Application', $filename]));
         $response->assertSuccessful();
     }
 }

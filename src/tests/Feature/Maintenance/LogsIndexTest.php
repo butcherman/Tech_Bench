@@ -57,7 +57,7 @@ class LogsIndexTest extends TestCase
     public function test_invoke_with_channel()
     {
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
-            ->get(route('maint.logs.show', ['daily']));
+            ->get(route('maint.logs.show', ['Application']));
         $response->assertSuccessful();
     }
 }

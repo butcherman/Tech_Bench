@@ -94,6 +94,7 @@ services:
             - ../src/storage/backups:/app/storage/backups
             - ../src/storage/framework:/app/storage/framework
             - ../src/storage/logs/Horizon:/app/storage/logs/Application
+            - ../src/storage/logs/Deprecation:/app/storage/logs/Deprecation
             - ../src/storage/pail:/app/storage/pail
             - ../src/artisan:/app/artisan
             - ../src/composer.json:/app/composer.json
@@ -136,6 +137,7 @@ services:
             - ../src/storage/backups:/app/storage/backups
             - ../src/storage/framework:/app/storage/framework
             - ../src/storage/logs/Scheduler:/app/storage/logs/Application
+            - ../src/storage/logs/Deprecation:/app/storage/logs/Deprecation
             - ../src/storage/pail:/app/storage/pail
             - ../src/artisan:/app/artisan
             - ../src/composer.json:/app/composer.json
@@ -175,6 +177,7 @@ services:
             - ../src/storage/debugbar:/app/storage/debugbar
             - ../src/storage/framework:/app/storage/framework
             - ../src/storage/logs/Reverb:/app/storage/logs/Application
+            - ../src/storage/logs/Deprecation:/app/storage/logs/Deprecation
             - ../src/storage/pail:/app/storage/pail
             - ../src/tests:/app/tests
             - ../src/artisan:/app/artisan
