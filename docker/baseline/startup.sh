@@ -60,7 +60,7 @@ then
         STAGED_VERSION=$(head -n 1 /app/keystore/version)
         APP_VERSION=$(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g')
 
-        vercomp $APP_VERSION $STAGED_VERSION 
+        vercomp $APP_VERSION $STAGED_VERSION
         NEED_UPDATE=$?
 
         if [ $NEED_UPDATE == 1 ]
@@ -74,12 +74,14 @@ then
             echo -e "${RED} PLEASE UPGRADE TO VERSION $STAGED_VERSION OR HIGHER TO CONTINUE ${NC}"
         fi
     fi
+
+    sleep 15
 fi
 
 # If this is not the master service, pause for 30 seconds to allow all setup scripts to complete
 if [ ! $SERVICE = "app" ]
 then
-    sleep 30
+    sleep 60
 fi
 
 #  Start the Horizon and PHP-FPM Services and run the Scheduler script based on server purppose
@@ -99,7 +101,7 @@ elif [ $SERVICE = "scheduler" ]
 then
     /scripts/scheduler.sh
 elif [ $SERVICE = "reverb" ]
-then 
+then
     php /app/artisan reverb:start
 else
     php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
