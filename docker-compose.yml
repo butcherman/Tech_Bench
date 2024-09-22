@@ -11,8 +11,9 @@ networks:
     app-tier:
         driver: bridge
 volumes:
-    assetData:
-    keystore:
+    appData:
+    dbData:
+    redisData:
 
 services:
     # Application Container
@@ -21,10 +22,7 @@ services:
         restart: unless-stopped
         image: butcherman/tech_bench_app:dev7
         volumes:
-            - assetData:/app/public
-            - keystore:/app/keystore
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/logs/app:/app/storage/logs
+            - appData:/app
             - ./.env:/app/.env
         environment:
             - SERVICE=app
@@ -38,9 +36,8 @@ services:
         container_name: nginx
         restart: unless-stopped
         volumes:
-            - assetData:/app/public:ro
-            - keystore:/app/keystore
-            - ./storageData/logs/nginx:/app/storage/logs/nginx
+            - appData:/app
+            - ./.env:/app/.env
         environment:
             - TB_URL=${BASE_URL}
         ports:
@@ -48,6 +45,53 @@ services:
             - "443:443"
         networks:
             - app-tier
+        depends_on:
+            - tech_bench
+
+    #  Reverb Container for Websockets
+    reverb:
+        container_name: reverb
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:dev7
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=reverb
+        networks:
+            - app-tier
+        depends_on:
+            - tech_bench
+
+    #  Horizon Container to run background jobs
+    horizon:
+        container_name: horizon
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:dev7
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=horizon
+        networks:
+            - app-tier
+        depends_on:
+            - tech_bench
+
+    #  Scheduler Container
+    scheduler:
+        container_name: scheduler
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:dev7
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=scheduler
+        networks:
+            - app-tier
+        depends_on:
+            - tech_bench
 
     # MySQL Database Container
     database:
@@ -55,7 +99,7 @@ services:
         container_name: database
         restart: unless-stopped
         volumes:
-            - ./appData/database:/bitnami/mysql/data
+            - dbData:/bitnami/mysql/data
         networks:
             - app-tier
         environment:
@@ -67,7 +111,7 @@ services:
         container_name: redis
         restart: unless-stopped
         volumes:
-            - ./appData/redis:/bitnami/redis/data
+            - redisData:/bitnami/redis/data
         networks:
             - app-tier
 
@@ -78,53 +122,5 @@ services:
         restart: unless-stopped
         environment:
             - MEILI_MASTER_KEY=MeiliTBMaster
-        networks:
-            - app-tier
-
-    #  Horizon Container to run background jobs
-    horizon:
-        container_name: horizon
-        restart: unless-stopped
-        image: butcherman/tech_bench_app:dev7
-        volumes:
-            - assetData:/app/public
-            - keystore:/app/keystore
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/logs/horizon:/app/storage/logs
-            - ./.env:/app/.env
-        environment:
-            - SERVICE=horizon
-        networks:
-            - app-tier
-
-    #  Scheduler Container
-    scheduler:
-        container_name: scheduler
-        restart: unless-stopped
-        image: butcherman/tech_bench_app:dev7
-        volumes:
-            - assetData:/app/public
-            - keystore:/app/keystore
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/logs/scheduler:/app/storage/logs
-            - ./.env:/app/.env
-        environment:
-            - SERVICE=scheduler
-        networks:
-            - app-tier
-
-    #  Reverb Container for Websockets
-    reverb:
-        container_name: reverb
-        restart: unless-stopped
-        image: butcherman/tech_bench_app:dev7
-        volumes:
-            - assetData:/app/public
-            - keystore:/app/keystore
-            - ./storageData/disks:/app/storage/app/
-            - ./storageData/logs/reverb:/app/storage/logs
-            - ./.env:/app/.env
-        environment:
-            - SERVICE=reverb
         networks:
             - app-tier
