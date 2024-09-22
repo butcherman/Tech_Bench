@@ -19,7 +19,7 @@ class GenerateReverbConfigCommand extends Command
     /**
      * The console command description
      */
-    protected $description = 'Generate new Credentials for Pusher App';
+    protected $description = 'Generate new Credentials for Reverb App';
 
     /**
      * Execute the console command.
@@ -34,11 +34,11 @@ class GenerateReverbConfigCommand extends Command
             return;
         }
 
-        $this->line('working so far');
-
         $this->writeNewEnvironmentFileWith('REVERB_APP_ID', $currentId);
         $this->writeNewEnvironmentFileWith('REVERB_APP_KEY', $currentKey);
         $this->writeNewEnvironmentFileWith('REVERB_APP_SECRET', $currentSecret);
+
+        $this->components->info('Reverb credentials created successfully.');
     }
 
     /**
