@@ -61,7 +61,7 @@ onMounted(() => {
             console.log("success");
         }
 
-        newUrl.value = `https://${res.data.url}`;
+        newUrl.value = `${res.data.url}`;
     });
 });
 </script>
