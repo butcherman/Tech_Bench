@@ -57,10 +57,10 @@ then
         /scripts/setup.sh
     else
         # Check if the version file is available in the /staging/config/ directory
-        STAGED_VERSION=$(head -n 1 /app/keystore/version)
+        STAGED_VERSION=$(head -n 1 /staging/version)
         APP_VERSION=$(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g')
 
-        vercomp $APP_VERSION $STAGED_VERSION
+        vercomp $STAGED_VERSION $APP_VERSION
         NEED_UPDATE=$?
 
         if [ $NEED_UPDATE == 1 ]
@@ -71,7 +71,7 @@ then
         then
             echo -e "${RED} ERROR: VERSION MISMATCH"
             echo -e "${RED} TECH BENCH VERSION IS OLDER THAN DATABASE VERSION"
-            echo -e "${RED} PLEASE UPGRADE TO VERSION $STAGED_VERSION OR HIGHER TO CONTINUE ${NC}"
+            echo -e "${RED} PLEASE UPGRADE TO VERSION $APP_VERSION OR HIGHER TO CONTINUE ${NC}"
         fi
     fi
 

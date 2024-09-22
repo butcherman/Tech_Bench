@@ -10,6 +10,25 @@
 
 echo "Starting Update"
 
+#  Move the existing application files to a tmp directory that will be deleted later
+mkdir /app/tmp
+mv /app/app /app/tmp/
+mv /app/config /app/tmp/
+mv /app/database /app/tmp/
+mv /app/resources /app/tmp/
+mv /app/routes /app/tmp/
+
+#  Copy all staged files to /app directory
+cp -R /staging/* /app/
+
+#  Delete the temporary directory
+rm -rf /app/tmp/
+
+#  Update and compile all dependencies
+cd /app
+composer install --no-dev --no-interaction --optimize-autoloader  --no-ansi >> /dev/null 2>&1
+npm install >> /dev/null 2>&1
+
 #  Update the database
 echo "Waiting for Database to finish Startup"
 sleep 15
